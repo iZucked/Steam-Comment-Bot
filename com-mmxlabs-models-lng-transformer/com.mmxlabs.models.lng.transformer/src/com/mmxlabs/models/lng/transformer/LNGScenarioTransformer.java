@@ -1175,6 +1175,15 @@ public class LNGScenarioTransformer {
 					builder.bindDischargeSlotsToDESPurchase(load, marketPortsMap);
 				}
 			}
+			
+			final List<ERouteOption> allowedRoutes = new LinkedList<>();
+			if (shippingDaysRestrictionSpeedProvider != null) {
+				for (final Route route : shippingDaysRestrictionSpeedProvider.getValidRoutes(ScenarioModelUtil.getPortModel(rootObject), loadSlot)) {
+					allowedRoutes.add(mapRouteOption(route));
+				}
+			}
+			builder.setDivertableDESAllowedRoute(load, allowedRoutes);
+			
 		}
 	}
 
@@ -2458,13 +2467,6 @@ public class LNGScenarioTransformer {
 
 			vesselClassAssociation.add(eVc, vc);
 
-			final List<ERouteOption> allowedRoutes = new LinkedList<>();
-			if (shippingDaysRestrictionSpeedProvider != null) {
-				for (final Route route : shippingDaysRestrictionSpeedProvider.getValidRoutes(portModel, eVc)) {
-					allowedRoutes.add(mapRouteOption(route));
-				}
-			}
-			builder.setDivertableDESAllowedRoute(vc, allowedRoutes);
 			/*
 			 * set up inaccessible ports by applying resource allocation constraints
 			 */
