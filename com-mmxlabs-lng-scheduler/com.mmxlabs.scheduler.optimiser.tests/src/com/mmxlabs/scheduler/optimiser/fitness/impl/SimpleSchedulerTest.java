@@ -103,7 +103,7 @@ public class SimpleSchedulerTest {
 		final int baseFuelEquivalence = 228000;
 		final IBaseFuel baseFuel = builder.createBaseFuel("test", baseFuelEquivalence);
 		baseFuCurveProviderEditor.setBaseFuelCurve(baseFuel, new ConstantValueCurve(7000));
-		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
 
 		// set up basefuel curve
 		final StepwiseIntegerCurve baseFuelCurve = new StepwiseIntegerCurve();

@@ -174,7 +174,7 @@ public class SchedulerBuilderTest {
 
 		final IBaseFuel baseFuel = new BaseFuel("test");
 		baseFuel.setEquivalenceFactor(1000);
-		final IVesselClass vesselClass = builder.createVesselClass("name", minSpeed, maxSpeed, capacity, safetyHeel, baseFuel, 0, 35353, 10101, 0);
+		final IVesselClass vesselClass = builder.createVesselClass("name", minSpeed, maxSpeed, capacity, safetyHeel, baseFuel, 0, 35353, 10101, 0, false);
 		// createVesselClass("name", minSpeed,
 		// maxSpeed, capacity, safetyHeel, 700;
 

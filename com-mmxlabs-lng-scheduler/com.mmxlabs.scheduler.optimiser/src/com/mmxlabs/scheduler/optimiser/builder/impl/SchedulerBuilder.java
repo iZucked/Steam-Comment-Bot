@@ -424,7 +424,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}, "UTC"/* no timezone */, 0, Integer.MAX_VALUE);
 
 		// setup fake vessels for virtual elements.
-		virtualClass = createVesselClass("virtual", 0, 0, Long.MAX_VALUE, 0, createBaseFuel("fakeFuel", 0), 0, 0, 0, 0);
+		virtualClass = createVesselClass("virtual", 0, 0, Long.MAX_VALUE, 0, createBaseFuel("fakeFuel", 0), 0, 0, 0, 0, false);
 	}
 
 	/**
@@ -1294,7 +1294,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	@NonNull
 	public IVesselClass createVesselClass(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final long safetyHeelInM3, final IBaseFuel baseFuel,
-			final int pilotLightRate, final int warmupTimeHours, final long cooldownVolumeM3, final int minBaseFuelConsumptionPerDay) {
+			final int pilotLightRate, final int warmupTimeHours, final long cooldownVolumeM3, final int minBaseFuelConsumptionPerDay, boolean hasReliqCapability) {
 
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setName(name);
@@ -1312,6 +1312,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vesselClass.setMinBaseFuelConsumptionInMTPerDay(minBaseFuelConsumptionPerDay);
 
 		vesselClass.setBaseFuel(baseFuel);
+
+		vesselClass.setHasReliqCapability(hasReliqCapability);
+
 		vesselClasses.add(vesselClass);
 
 		return vesselClass;
@@ -2096,10 +2099,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setDivertableDESAllowedRoute(@NonNull final IVesselClass vc, @NonNull final List<ERouteOption> allowedRoutes) {
+	public void setDivertableDESAllowedRoute(@NonNull final ILoadOption loadOption, @NonNull final List<ERouteOption> allowedRoutes) {
 		for (final ERouteOption route : allowedRoutes) {
 			assert route != null;
-			shippingHoursRestrictionProviderEditor.setDivertableDESAllowedRoute(vc, route);
+			shippingHoursRestrictionProviderEditor.setDivertableDESAllowedRoute(loadOption, route);
 		}
 	}
 
