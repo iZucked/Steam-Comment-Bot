@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -21,6 +22,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
@@ -29,6 +32,7 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
+import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -256,4 +260,29 @@ public class PriceExpressionUtils {
 		}
 		return null;
 	}
+	
+	public static <T extends LNGPriceCalculatorParameters> void checkPriceExpressionInPricingParams(final IValidationContext ctx, final List<IStatus> failures, T target, EAttribute attribute, String expression, SeriesParser parser) {
+		if (target instanceof LNGPriceCalculatorParameters) {
+			if (parser == null) {
+				parser = PriceExpressionUtils.getCommodityParser(null);
+			}
+			ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, target, attribute, expression, parser);
+			if (!result.isOk()) {
+				EObject eContainer = target.eContainer();
+				final DetailConstraintStatusDecorator dsd;
+				if (eContainer instanceof Contract) {
+					Contract contract = (Contract) eContainer;
+					final String message = String.format("[Contract|'%s']%s", contract.getName(), result.getErrorDetails());
+					dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+					dsd.addEObjectAndFeature(eContainer, attribute);
+				} else {
+					final String message = String.format("%s", result.getErrorDetails());
+					dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+				}
+				dsd.addEObjectAndFeature(target, attribute);
+				failures.add(dsd);
+			}
+		}
+	}
+
 }
