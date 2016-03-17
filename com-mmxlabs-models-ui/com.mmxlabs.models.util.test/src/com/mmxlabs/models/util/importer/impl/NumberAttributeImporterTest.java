@@ -74,7 +74,6 @@ public class NumberAttributeImporterTest {
 			}
 		}
 	}
-
 	@Test
 	public void testReadWriteDoubleWithExportFormat() throws ParseException {
 
