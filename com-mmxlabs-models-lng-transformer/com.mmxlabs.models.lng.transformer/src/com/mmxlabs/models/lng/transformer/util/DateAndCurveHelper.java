@@ -52,7 +52,7 @@ public class DateAndCurveHelper {
 	public DateAndCurveHelper(@NonNull final ZonedDateTime earliest, @NonNull final ZonedDateTime latest) {
 
 		this.earliestTime = earliest.withZoneSameInstant(ZoneId.of("UTC")).truncatedTo(ChronoUnit.HOURS);
-		assert!earliestTime.isAfter(earliest);
+		assert !earliestTime.isAfter(earliest);
 		this.latestTime = latest;
 	}
 
@@ -241,5 +241,38 @@ public class DateAndCurveHelper {
 
 	public static YearMonth createYearMonth(final int year, final int month) {
 		return YearMonth.of(year, month);
+	}
+
+	@NonNull
+	public StepwiseIntegerCurve createDateShiftCurve(int dayOfMonth) {
+		// Create a curve, shifting the current date forwards or backwards depending on whether or not it is on or after the dayOfMonth.
+		final StepwiseIntegerCurve dateShiftCurve = new StepwiseIntegerCurve();
+		{
+			ZonedDateTime currentDate = getEarliestTime();
+
+			// Find the previous dayOfMonth
+			if (currentDate.getDayOfMonth() < dayOfMonth) {
+				currentDate = currentDate.minusMonths(1);
+			}
+			currentDate = currentDate.withDayOfMonth(dayOfMonth);
+			// Ensure midnight
+			currentDate = currentDate.withHour(0);
+
+			// Hmm, not sure how to get to the true latest date - perhaps better as a lazy treemap?
+			final ZonedDateTime end = getLatestTime();
+			while (currentDate.isBefore(end)) {
+
+				// We want to move anything after dayOfMonth to start of the next month
+				final int time = convertTime(currentDate);
+				// Set to start of current month *then* shift to the next month
+				final ZonedDateTime c = currentDate.withDayOfMonth(1).plusMonths(1);
+
+				final int startOfMonth = convertTime(c);
+				dateShiftCurve.setValueAfter(time, startOfMonth);
+
+				currentDate = currentDate.plusMonths(1);
+			}
+		}
+		return dateShiftCurve;
 	}
 }
