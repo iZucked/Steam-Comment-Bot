@@ -55,8 +55,9 @@ public final class AssignmentInlineEditor extends ReferenceInlineEditor {
 								// assign to a new spot
 								if (rootObject instanceof LNGScenarioModel) {
 
-									final CargoModel cargoModel = ((LNGScenarioModel) rootObject).getCargoModel();
-									final int maxSpot = AssignmentEditorHelper.getMaxSpot(cargoModel) + 1;
+									// Always assign to first element
+//									final CargoModel cargoModel = ((LNGScenarioModel) rootObject).getCargoModel();
+									final int maxSpot = 0;//AssignmentEditorHelper.getMaxSpot(cargoModel) + 1;
 
 									commandHandler.handleCommand(
 											AssignableElementCommandHelper.reassignElement(commandHandler.getEditingDomain(), (VesselAssignmentType) vessel, elementAssignment, maxSpot),

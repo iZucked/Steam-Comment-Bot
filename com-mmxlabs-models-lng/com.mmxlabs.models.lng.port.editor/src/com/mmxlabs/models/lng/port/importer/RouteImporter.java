@@ -59,7 +59,7 @@ public class RouteImporter {
 						continue;
 					}
 					try {
-						final int distance = nai.stringToInt(entry.getValue());
+						final int distance = nai.stringToInt(entry.getValue(), PortPackage.Literals.ROUTE_LINE__DISTANCE);
 						final RouteLine line = PortFactory.eINSTANCE.createRouteLine();
 						line.setDistance(distance);
 						row.get(entry.getKey());
@@ -67,7 +67,7 @@ public class RouteImporter {
 						lines.add(line);
 					} catch (final ParseException nfe) {
 						try {
-							final double distance = nai.stringToDouble(entry.getValue());
+							final double distance = nai.stringToDouble(entry.getValue(), PortPackage.Literals.ROUTE_LINE__DISTANCE);
 							final RouteLine line = PortFactory.eINSTANCE.createRouteLine();
 							line.setDistance((int) distance);
 							row.get(entry.getKey());
@@ -158,7 +158,7 @@ public class RouteImporter {
 
 			}
 
-			row.put(line.getTo().getName(), nai.intToString(line.getDistance()));
+			row.put(line.getTo().getName(), nai.intToString(line.getDistance(), PortPackage.Literals.ROUTE_LINE__DISTANCE));
 		}
 
 		final ArrayList<Map<String, String>> result = new ArrayList<Map<String, String>>(rows.values());

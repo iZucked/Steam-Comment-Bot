@@ -345,6 +345,15 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getVesselClass_HasReliqCapability() {
+		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(14);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getFleetModel() {
 		return fleetModelEClass;
 	}
@@ -668,6 +677,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEReference(vesselClassEClass, VESSEL_CLASS__ROUTE_PARAMETERS);
 		createEAttribute(vesselClassEClass, VESSEL_CLASS__PILOT_LIGHT_RATE);
 		createEAttribute(vesselClassEClass, VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION);
+		createEAttribute(vesselClassEClass, VESSEL_CLASS__HAS_RELIQ_CAPABILITY);
 
 		vesselGroupEClass = createEClass(VESSEL_GROUP);
 		createEReference(vesselGroupEClass, VESSEL_GROUP__VESSELS);
@@ -791,6 +801,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEReference(getVesselClass_RouteParameters(), this.getVesselClassRouteParameters(), null, "routeParameters", null, 0, -1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClass_PilotLightRate(), ecorePackage.getEDouble(), "pilotLightRate", null, 1, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClass_MinBaseFuelConsumption(), ecorePackage.getEDouble(), "minBaseFuelConsumption", null, 0, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselClass_HasReliqCapability(), ecorePackage.getEBoolean(), "hasReliqCapability", null, 0, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(vesselGroupEClass, VesselGroup.class, "VesselGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getVesselGroup_Vessels(), this.getVessel(), null, "vessels", null, 0, -1, VesselGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -826,6 +837,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		// Create annotations
 		// http://www.mmxlabs.com/models/ui/numberFormat
 		createNumberFormatAnnotations();
+		// http://www.mmxlabs.com/models/ui/featureEnablement
+		createFeatureEnablementAnnotations();
 	}
 
 	/**
@@ -1026,6 +1039,22 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		   new String[] {
 			 "unit", "m\u00b3/day",
 			 "formatString", "##0.###"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/ui/featureEnablement</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createFeatureEnablementAnnotations() {
+		String source = "http://www.mmxlabs.com/models/ui/featureEnablement";	
+		addAnnotation
+		  (getVesselClass_HasReliqCapability(), 
+		   source, 
+		   new String[] {
+			 "feature", "reliq-support"
 		   });
 	}
 
