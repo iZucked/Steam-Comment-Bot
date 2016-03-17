@@ -88,7 +88,7 @@ public class NonShippedCargoSwapOptiTests extends AbstractOptimisationResultTest
 		Slot load1 = cargo1.getSlots().get(0);
 		Slot discharge1 = cargo1.getSlots().get(1);
 
-		final Slot load2 = cargoModelBuilder.makeDESPurchase("L2", false, LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "1", null) //
+		final Slot load2 = cargoModelBuilder.makeDESPurchase("L2", false, LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "1", null, null) //
 				.withOptional(true) //
 				.build();
 

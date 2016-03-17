@@ -31,6 +31,7 @@ import com.mmxlabs.lingo.reports.views.standard.CooldownReportView;
 import com.mmxlabs.lingo.reports.views.standard.HeadlineReportView;
 import com.mmxlabs.lingo.reports.views.standard.KPIReportView;
 import com.mmxlabs.lingo.reports.views.standard.LatenessReportView;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 
@@ -96,7 +97,7 @@ public class ReportTesterHelper {
 	@Nullable
 	public IReportContents getReportContents(final @NonNull ScenarioInstance pinScenario, @NonNull final ScenarioInstance ref, final String reportID) throws InterruptedException {
 		return getReportContents(reportID, (v, p) -> {
-			p.deselectAll();
+			p.deselectAll(true);
 			p.select(pinScenario, true);
 			p.setPinnedInstance(pinScenario, true);
 			p.select(ref, true);
@@ -138,13 +139,10 @@ public class ReportTesterHelper {
 			// Step two set the new selection, release UI thread
 			Thread.sleep(1000);
 			Thread.yield();
-			Display.getDefault().syncExec(new Runnable() {
 
-				@Override
-				public void run() {
-					callable.updateSelection(view[0], provider);
-				}
-			});
+			RunnerHelper.exec(() -> {
+				callable.updateSelection(view[0], provider);
+			} , true);
 			Thread.yield();
 			Thread.sleep(1000);
 
