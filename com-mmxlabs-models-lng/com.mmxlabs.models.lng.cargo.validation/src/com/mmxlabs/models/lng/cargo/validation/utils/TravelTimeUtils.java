@@ -29,12 +29,12 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class TravelTimeUtils {
-	public static int getMinRouteTimeInHours(final Slot from, final Slot to, final IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider, final LNGScenarioModel lngScenarioModel,
+	public static int getMinRouteTimeInHours(final LoadSlot desPurchase, Slot from,  final Slot to, final IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider, final LNGScenarioModel lngScenarioModel,
 			final Vessel vessel, final double referenceSpeed) {
 		Collection<Route> allowedRoutes = null;
 		final PortModel portModel = lngScenarioModel.getReferenceModel().getPortModel();
 		try {
-			allowedRoutes = shippingDaysSpeedProvider.getValidRoutes(portModel, vessel.getVesselClass());
+			allowedRoutes = shippingDaysSpeedProvider.getValidRoutes(portModel, desPurchase);
 		} catch (final org.ops4j.peaberry.ServiceUnavailableException e) {
 		}
 
