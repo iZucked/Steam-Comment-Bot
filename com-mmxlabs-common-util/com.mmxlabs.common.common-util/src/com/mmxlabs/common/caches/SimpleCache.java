@@ -62,7 +62,7 @@ public final class SimpleCache<K, V> extends AbstractCache<K, V> {
 	@Override
 	public final V get(final K key) {
 		final int hash = key.hashCode();
-		final int hashPosition = Math.abs(hash) % entries.length;
+		final int hashPosition = hash == Integer.MIN_VALUE ? 0: Math.abs(hash) % entries.length;
 		final Entry e = (Entry) entries[hashPosition];
 
 		return e.getAndUpdate(evaluator, key);
