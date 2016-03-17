@@ -2099,10 +2099,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setDivertableDESAllowedRoute(@NonNull final IVesselClass vc, @NonNull final List<ERouteOption> allowedRoutes) {
+	public void setDivertableDESAllowedRoute(@NonNull final ILoadOption loadOption, @NonNull final List<ERouteOption> allowedRoutes) {
 		for (final ERouteOption route : allowedRoutes) {
 			assert route != null;
-			shippingHoursRestrictionProviderEditor.setDivertableDESAllowedRoute(vc, route);
+			shippingHoursRestrictionProviderEditor.setDivertableDESAllowedRoute(loadOption, route);
 		}
 	}
 

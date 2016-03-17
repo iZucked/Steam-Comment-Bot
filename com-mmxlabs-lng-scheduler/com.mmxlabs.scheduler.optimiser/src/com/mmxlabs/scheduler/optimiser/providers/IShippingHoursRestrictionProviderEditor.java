@@ -8,8 +8,8 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 
 /**
@@ -34,9 +34,9 @@ public interface IShippingHoursRestrictionProviderEditor extends IShippingHoursR
 	void setReferenceSpeed(@NonNull IVessel vessel, VesselState vesselState, int referenceSpeed);
 
 	/**
-	 * Set an allowed route that a DES cargo can follow
+	 * Add an allowed route that a DES cargo can follow
 	 * 
 	 * @param route
 	 */
-	void setDivertableDESAllowedRoute(@NonNull IVesselClass vc, @NonNull ERouteOption route);
+	void setDivertableDESAllowedRoute(@NonNull ILoadOption loadOption, @NonNull ERouteOption route);
 }
