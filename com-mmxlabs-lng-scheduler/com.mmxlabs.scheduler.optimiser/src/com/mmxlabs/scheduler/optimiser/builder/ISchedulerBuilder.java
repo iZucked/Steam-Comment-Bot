@@ -757,6 +757,6 @@ public interface ISchedulerBuilder {
 	@NonNull
 	SequenceElement createSequenceElement(@NonNull String name);
 
-	void setDivertableDESAllowedRoute(@NonNull IVesselClass vc, @NonNull List<ERouteOption> allowedRoutes);
+	void setDivertableDESAllowedRoute(@NonNull ILoadOption loadOption, @NonNull List<ERouteOption> allowedRoutes);
 
 }
