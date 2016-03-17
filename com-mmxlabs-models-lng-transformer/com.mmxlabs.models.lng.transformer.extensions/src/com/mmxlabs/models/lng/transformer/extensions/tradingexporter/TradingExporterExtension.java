@@ -45,7 +45,6 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
@@ -206,7 +205,7 @@ public class TradingExporterExtension implements IExporterExtension {
 		EndEvent endEvent = null;
 		//
 		// for (int i = 0; i < annotatedSolution.getFullSequences().size(); ++i) {
-		for (final Map.Entry<IResource, ISequence> e : annotatedSolution.getFullSequences().getSequences().entrySet()) {
+		LOOP_OUTER: for (final Map.Entry<IResource, ISequence> e : annotatedSolution.getFullSequences().getSequences().entrySet()) {
 			final IResource res = e.getKey();
 			final ISequence seq = e.getValue();
 			if (seq.get(0) == element) {
@@ -215,17 +214,20 @@ public class TradingExporterExtension implements IExporterExtension {
 					if (vesselAvailability == null) {
 						continue;
 					}
+					// Find the matching
+					final IVesselAvailability o_VesselAvailability = modelEntityMap.getOptimiserObject(vesselAvailability, IVesselAvailability.class);
 
-					final IVessel iVessel = modelEntityMap.getOptimiserObject(vesselAvailability, IVessel.class);
-					if (iVessel == res) {
+					// Look up correct instance (NOTE: Even though IVessel extends IResource, they seem to be different instances.
+					if (o_VesselAvailability == vesselProvider.getVesselAvailability(res)) {
 						if (sequence.getEvents().size() > 0) {
 							final Event evt = sequence.getEvents().get(sequence.getEvents().size() - 1);
 							if (evt instanceof EndEvent) {
 								endEvent = (EndEvent) evt;
-								break;
+								break LOOP_OUTER;
 							}
 						}
 					}
+
 				}
 			}
 		}
