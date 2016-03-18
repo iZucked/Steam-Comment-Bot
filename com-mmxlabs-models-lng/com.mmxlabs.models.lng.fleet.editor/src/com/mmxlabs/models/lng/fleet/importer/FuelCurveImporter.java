@@ -55,6 +55,18 @@ public class FuelCurveImporter {
 
 				final List<FuelConsumption> consumptions = new LinkedList<FuelConsumption>();
 				for (final Map.Entry<String, String> column : row.entrySet()) {
+					if (column.getKey() == null || column.getKey().isEmpty()) {
+						continue;
+					}
+					if ("class".equals(column.getKey())) {
+						continue;
+					}
+					if ("state".equals(column.getKey())) {
+						continue;
+					}
+					if (column.getValue() == null || column.getValue().isEmpty()) {
+						continue;
+					}
 					try {
 						final double speed = nai.stringToDouble(column.getKey(), FleetPackage.Literals.FUEL_CONSUMPTION__SPEED);
 						final double consumption = nai.stringToDouble(column.getValue(), FleetPackage.Literals.FUEL_CONSUMPTION__CONSUMPTION);

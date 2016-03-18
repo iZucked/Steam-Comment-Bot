@@ -54,6 +54,15 @@ public class LegalEntityBookImporter extends DefaultClassImporter {
 		// now read the tax rates out of the CSV data row
 		final LinkedList<TaxRate> rates = new LinkedList<TaxRate>();
 		for (final String key : row.keySet()) {
+			if ("kind".equalsIgnoreCase(key)) {
+				continue;
+			}
+			if ("entity".equalsIgnoreCase(key)) {
+				continue;
+			}
+			if ("type".equalsIgnoreCase(key)) {
+				continue;
+			}
 			final String value = row.get(key);
 			if (value.equals("")) {
 				continue;
