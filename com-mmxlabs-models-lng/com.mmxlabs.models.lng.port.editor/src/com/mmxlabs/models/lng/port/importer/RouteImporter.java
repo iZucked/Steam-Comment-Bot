@@ -58,29 +58,34 @@ public class RouteImporter {
 					if (entry.getValue().isEmpty()) {
 						continue;
 					}
-					try {
-						final int distance = nai.stringToInt(entry.getValue(), PortPackage.Literals.ROUTE_LINE__DISTANCE);
-						final RouteLine line = PortFactory.eINSTANCE.createRouteLine();
-						line.setDistance(distance);
-						row.get(entry.getKey());
-						context.doLater(new SetReference(line, PortPackage.eINSTANCE.getRouteLine_To(), reader.getCasedColumnName(entry.getKey()), context));
-						lines.add(line);
-					} catch (final ParseException nfe) {
+					if ("from".equals(entry.getKey())) {
+						if (entry.getValue().isEmpty() == false) {
+							fromName = entry.getValue();
+						}
+					} else {
 						try {
-							final double distance = nai.stringToDouble(entry.getValue(), PortPackage.Literals.ROUTE_LINE__DISTANCE);
+							final int distance = nai.stringToInt(entry.getValue(), PortPackage.Literals.ROUTE_LINE__DISTANCE);
 							final RouteLine line = PortFactory.eINSTANCE.createRouteLine();
-							line.setDistance((int) distance);
+							line.setDistance(distance);
 							row.get(entry.getKey());
 							context.doLater(new SetReference(line, PortPackage.eINSTANCE.getRouteLine_To(), reader.getCasedColumnName(entry.getKey()), context));
 							lines.add(line);
-						} catch (final ParseException nfe2) {
-							if (entry.getValue().isEmpty() == false) {
-								fromName = entry.getValue();
+						} catch (final ParseException nfe) {
+							try {
+								final double distance = nai.stringToDouble(entry.getValue(), PortPackage.Literals.ROUTE_LINE__DISTANCE);
+								final RouteLine line = PortFactory.eINSTANCE.createRouteLine();
+								line.setDistance((int) distance);
+								row.get(entry.getKey());
+								context.doLater(new SetReference(line, PortPackage.eINSTANCE.getRouteLine_To(), reader.getCasedColumnName(entry.getKey()), context));
+								lines.add(line);
+							} catch (final ParseException nfe2) {
+								if (entry.getValue().isEmpty() == false) {
+									fromName = entry.getValue();
+								}
 							}
 						}
 					}
 				}
-
 				if (fromName != null) {
 					for (final RouteLine line : lines) {
 						context.doLater(new SetReference(line, PortPackage.eINSTANCE.getRouteLine_From(), fromName, context));

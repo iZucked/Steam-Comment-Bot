@@ -107,6 +107,9 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 				if (columnsToIgnore.contains(s)) {
 					continue;
 				}
+				if ("units".equals(s)) {
+					continue;
+				}
 				final YearMonth date;
 				try {
 					date = parseDateString(s);
