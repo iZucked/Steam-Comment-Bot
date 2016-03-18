@@ -115,12 +115,14 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="country" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="lat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="formatString" value="-###.###"/>
+        <details key="formatString" value="-##0.###"/>
+        <details key="exportFormatString" value="##0.###"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="lon" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="formatString" value="-###.###"/>
+        <details key="formatString" value="-##0.###"/>
+        <details key="exportFormatString" value="##0.###"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
