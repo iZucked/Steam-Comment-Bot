@@ -76,7 +76,7 @@ public class CargoEditingCommands {
 				return (T) setting.getInstance();
 			}
 		}
-		return null;
+		return (T)null;
 	}
 
 	public Cargo createNewCargo(final List<Command> setCommands, final CargoModel cargoModel) {

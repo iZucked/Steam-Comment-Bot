@@ -4,10 +4,12 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.util;
 
+import com.mmxlabs.models.lng.spotmarkets.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
@@ -81,8 +83,8 @@ public class SpotMarketsAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected SpotMarketsSwitch<Adapter> modelSwitch =
-		new SpotMarketsSwitch<Adapter>() {
+	protected SpotMarketsSwitch<@Nullable Adapter> modelSwitch =
+		new SpotMarketsSwitch<@Nullable Adapter>() {
 			@Override
 			public Adapter caseSpotMarketsModel(SpotMarketsModel object) {
 				return createSpotMarketsModelAdapter();

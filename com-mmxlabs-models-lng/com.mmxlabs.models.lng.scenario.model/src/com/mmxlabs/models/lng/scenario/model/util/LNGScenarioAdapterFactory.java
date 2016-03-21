@@ -6,10 +6,12 @@
  */
 package com.mmxlabs.models.lng.scenario.model.util;
 
+import com.mmxlabs.models.lng.scenario.model.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -72,8 +74,8 @@ public class LNGScenarioAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected LNGScenarioSwitch<Adapter> modelSwitch =
-		new LNGScenarioSwitch<Adapter>() {
+	protected LNGScenarioSwitch<@Nullable Adapter> modelSwitch =
+		new LNGScenarioSwitch<@Nullable Adapter>() {
 			@Override
 			public Adapter caseLNGScenarioModel(LNGScenarioModel object) {
 				return createLNGScenarioModelAdapter();

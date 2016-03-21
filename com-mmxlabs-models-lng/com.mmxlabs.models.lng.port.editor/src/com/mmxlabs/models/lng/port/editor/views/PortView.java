@@ -75,10 +75,10 @@ public class PortView extends ScenarioTableViewerView<PortEditorPane> {
 	}
 
 	@Override
-	public Object getAdapter(final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 
 		if (IScenarioEditingLocation.class.isAssignableFrom(adapter)) {
-			return this;
+			return (T)this;
 		}
 		return super.getAdapter(adapter);
 	}

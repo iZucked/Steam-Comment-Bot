@@ -179,121 +179,6 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.RouteCost} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected RouteCostItemProvider routeCostItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.RouteCost}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createRouteCostAdapter() {
-		if (routeCostItemProvider == null) {
-			routeCostItemProvider = new RouteCostItemProvider(this);
-		}
-
-		return routeCostItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.BaseFuelCost} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected BaseFuelCostItemProvider baseFuelCostItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.BaseFuelCost}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createBaseFuelCostAdapter() {
-		if (baseFuelCostItemProvider == null) {
-			baseFuelCostItemProvider = new BaseFuelCostItemProvider(this);
-		}
-
-		return baseFuelCostItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.PortCost} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected PortCostItemProvider portCostItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.PortCost}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createPortCostAdapter() {
-		if (portCostItemProvider == null) {
-			portCostItemProvider = new PortCostItemProvider(this);
-		}
-
-		return portCostItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.PortCostEntry} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected PortCostEntryItemProvider portCostEntryItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.PortCostEntry}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createPortCostEntryAdapter() {
-		if (portCostEntryItemProvider == null) {
-			portCostEntryItemProvider = new PortCostEntryItemProvider(this);
-		}
-
-		return portCostEntryItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.CooldownPrice} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected CooldownPriceItemProvider cooldownPriceItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.CooldownPrice}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createCooldownPriceAdapter() {
-		if (cooldownPriceItemProvider == null) {
-			cooldownPriceItemProvider = new CooldownPriceItemProvider(this);
-		}
-
-		return cooldownPriceItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.CommodityIndex} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -406,6 +291,121 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		}
 
 		return costModelItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.RouteCost} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected RouteCostItemProvider routeCostItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.RouteCost}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createRouteCostAdapter() {
+		if (routeCostItemProvider == null) {
+			routeCostItemProvider = new RouteCostItemProvider(this);
+		}
+
+		return routeCostItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.BaseFuelCost} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BaseFuelCostItemProvider baseFuelCostItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.BaseFuelCost}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBaseFuelCostAdapter() {
+		if (baseFuelCostItemProvider == null) {
+			baseFuelCostItemProvider = new BaseFuelCostItemProvider(this);
+		}
+
+		return baseFuelCostItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.PortCost} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PortCostItemProvider portCostItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.PortCost}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPortCostAdapter() {
+		if (portCostItemProvider == null) {
+			portCostItemProvider = new PortCostItemProvider(this);
+		}
+
+		return portCostItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.PortCostEntry} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PortCostEntryItemProvider portCostEntryItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.PortCostEntry}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPortCostEntryAdapter() {
+		if (portCostEntryItemProvider == null) {
+			portCostEntryItemProvider = new PortCostEntryItemProvider(this);
+		}
+
+		return portCostEntryItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.CooldownPrice} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CooldownPriceItemProvider cooldownPriceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.CooldownPrice}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCooldownPriceAdapter() {
+		if (cooldownPriceItemProvider == null) {
+			cooldownPriceItemProvider = new CooldownPriceItemProvider(this);
+		}
+
+		return cooldownPriceItemProvider;
 	}
 
 	/**

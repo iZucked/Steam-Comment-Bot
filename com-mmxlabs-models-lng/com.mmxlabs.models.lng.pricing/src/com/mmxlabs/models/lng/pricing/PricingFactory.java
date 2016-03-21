@@ -60,51 +60,6 @@ public interface PricingFactory extends EFactory {
 	<Value> IndexPoint<Value> createIndexPoint();
 
 	/**
-	 * Returns a new object of class '<em>Route Cost</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Route Cost</em>'.
-	 * @generated
-	 */
-	RouteCost createRouteCost();
-
-	/**
-	 * Returns a new object of class '<em>Base Fuel Cost</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Base Fuel Cost</em>'.
-	 * @generated
-	 */
-	BaseFuelCost createBaseFuelCost();
-
-	/**
-	 * Returns a new object of class '<em>Port Cost</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Port Cost</em>'.
-	 * @generated
-	 */
-	PortCost createPortCost();
-
-	/**
-	 * Returns a new object of class '<em>Port Cost Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Port Cost Entry</em>'.
-	 * @generated
-	 */
-	PortCostEntry createPortCostEntry();
-
-	/**
-	 * Returns a new object of class '<em>Cooldown Price</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Cooldown Price</em>'.
-	 * @generated
-	 */
-	CooldownPrice createCooldownPrice();
-
-	/**
 	 * Returns a new object of class '<em>Commodity Index</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -148,6 +103,51 @@ public interface PricingFactory extends EFactory {
 	 * @generated
 	 */
 	CostModel createCostModel();
+
+	/**
+	 * Returns a new object of class '<em>Route Cost</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Route Cost</em>'.
+	 * @generated
+	 */
+	RouteCost createRouteCost();
+
+	/**
+	 * Returns a new object of class '<em>Base Fuel Cost</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Base Fuel Cost</em>'.
+	 * @generated
+	 */
+	BaseFuelCost createBaseFuelCost();
+
+	/**
+	 * Returns a new object of class '<em>Port Cost</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Port Cost</em>'.
+	 * @generated
+	 */
+	PortCost createPortCost();
+
+	/**
+	 * Returns a new object of class '<em>Port Cost Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Port Cost Entry</em>'.
+	 * @generated
+	 */
+	PortCostEntry createPortCostEntry();
+
+	/**
+	 * Returns a new object of class '<em>Cooldown Price</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Cooldown Price</em>'.
+	 * @generated
+	 */
+	CooldownPrice createCooldownPrice();
 
 	/**
 	 * Returns a new object of class '<em>Ports Price Map</em>'.

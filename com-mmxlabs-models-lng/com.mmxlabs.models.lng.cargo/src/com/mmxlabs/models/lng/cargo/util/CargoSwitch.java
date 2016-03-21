@@ -4,9 +4,11 @@
  */
 package com.mmxlabs.models.lng.cargo.util;
 
+import com.mmxlabs.models.lng.cargo.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -47,7 +49,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @see com.mmxlabs.models.lng.cargo.CargoPackage
  * @generated
  */
-public class CargoSwitch<T1> extends Switch<T1> {
+public class CargoSwitch<@Nullable T1> extends Switch<T1> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->

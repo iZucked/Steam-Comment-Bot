@@ -296,7 +296,7 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 							point.setValue(0);
 							newPoint = point;
 						} else {
-							final IndexPoint<?> point = PricingFactory.eINSTANCE.createIndexPoint();
+							final IndexPoint point = PricingFactory.eINSTANCE.createIndexPoint();
 							point.setValue(null);
 							newPoint = point;
 						}
