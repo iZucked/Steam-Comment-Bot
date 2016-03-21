@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.ops4j.peaberry.util.TypeLiterals;
 
 import com.google.inject.AbstractModule;
@@ -53,12 +54,14 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 public class TransformerITSOptimiserInjectorService implements IOptimiserInjectorService {
 
 	@Override
-	public List<Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<String> hints) {
+	@Nullable
+	public List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 		return null;
 	}
 
 	@Override
-	public Module requestModule(final ModuleType moduleType, @NonNull final Collection<String> hints) {
+	@Nullable
+	public Module requestModule(final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 		if (moduleType == ModuleType.Module_LNGTransformerModule) {
 
 			return new AbstractModule() {

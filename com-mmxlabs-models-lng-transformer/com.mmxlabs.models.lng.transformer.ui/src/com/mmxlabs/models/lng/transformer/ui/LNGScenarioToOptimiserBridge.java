@@ -56,7 +56,7 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 /**
  * The {@link LNGScenarioToOptimiserBridge} creates and maintains the mapping between the original {@link LNGScenarioModel} and the optimiser data structures to allow saving of the results. This class
  * also handles the Period Optimisation transformation. Call {@link #overwrite(int, ISequences, Map)} to save into the current {@link ScenarioInstance}. Call
- * {@link #storeAsCopy(ISequences, String, Container, Map)} to save the result in a copy of the {@link SIPINFO}
+ * {@link #storeAsCopy(ISequences, String, Container, Map)} to save the result in a copy of the {@link ScenarioInstance}
  * 
  * 
  * @author Simon Goodall
@@ -170,11 +170,16 @@ public class LNGScenarioToOptimiserBridge {
 			final NonNullPair<LNGScenarioModel, EditingDomain> p = t.transform(originalScenario, optimiserSettings, periodMapping);
 
 			// DEBUGGING - store sub scenario as a "fork"
-			if (false && scenarioInstance != null) {
-				try {
-					LNGScenarioRunnerUtils.saveScenarioAsChild(scenarioInstance, scenarioInstance, p.getFirst(), "Period Scenario");
-				} catch (final Exception e) {
-					e.printStackTrace();
+			if (scenarioInstance != null) {
+				@NonNull
+				ScenarioInstance pScenarioInstance = scenarioInstance;
+				if (false) {
+					try {
+						assert scenarioInstance != null;
+						LNGScenarioRunnerUtils.saveScenarioAsChild(pScenarioInstance, pScenarioInstance, p.getFirst(), "Period Scenario");
+					} catch (final Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			return new Triple<>(p.getFirst(), p.getSecond(), periodMapping);

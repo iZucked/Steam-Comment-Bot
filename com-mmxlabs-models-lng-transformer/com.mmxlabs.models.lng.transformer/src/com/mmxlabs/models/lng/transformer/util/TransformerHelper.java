@@ -48,7 +48,7 @@ public class TransformerHelper {
 
 	@NonNull
 	public static IBaseFuel buildBaseFuel(@NonNull final ISchedulerBuilder builder, @NonNull final BaseFuel eBF) {
-		IBaseFuel bf = builder.createBaseFuel(eBF.getName(), OptimiserUnitConvertor.convertToInternalConversionFactor(eBF.getEquivalenceFactor()));
+		final IBaseFuel bf = builder.createBaseFuel(eBF.getName(), OptimiserUnitConvertor.convertToInternalConversionFactor(eBF.getEquivalenceFactor()));
 		return bf;
 	}
 
@@ -64,8 +64,8 @@ public class TransformerHelper {
 	 * @param ladenAttributes
 	 *            the {@link VesselStateAttributes} from the EMF model
 	 */
-	public static void buildVesselStateAttributes(@NonNull final ISchedulerBuilder builder, @NonNull final IVesselClass vc,
-			@NonNull final com.mmxlabs.scheduler.optimiser.components.VesselState state, final VesselStateAttributes attrs) {
+	public static void buildVesselStateAttributes(@NonNull final ISchedulerBuilder builder, @NonNull final IVesselClass vc, final com.mmxlabs.scheduler.optimiser.components.@NonNull VesselState state,
+			final VesselStateAttributes attrs) {
 		final TreeMap<Integer, Long> keypoints = new TreeMap<>();
 
 		int minSpeed = Integer.MAX_VALUE;
