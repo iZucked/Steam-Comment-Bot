@@ -13,12 +13,12 @@ import com.mmxlabs.scenario.service.ReloadScenarioException;
 public class ReloadScenarioExceptionReasonProviderApaterFactory implements IAdapterFactory {
 
 	@Override
-	public Object getAdapter(Object adaptableObject, Class adapterType) {
+	public <T> T getAdapter(Object adaptableObject, Class<T> adapterType) {
 		if (adaptableObject instanceof ReloadScenarioException) {
 			ReloadScenarioException reloadScenarioException = (ReloadScenarioException) adaptableObject;
-			return Platform.getAdapterManager().loadAdapter(reloadScenarioException.getCause(), IReasonProvider.class.getCanonicalName());
+			return (T) Platform.getAdapterManager().loadAdapter(reloadScenarioException.getCause(), IReasonProvider.class.getCanonicalName());
 		}
-		return null;
+		return (T) null;
 	}
 
 	@Override

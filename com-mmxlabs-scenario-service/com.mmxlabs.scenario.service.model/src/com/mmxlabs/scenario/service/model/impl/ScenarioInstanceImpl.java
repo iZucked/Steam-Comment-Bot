@@ -37,6 +37,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getUuid <em>Uuid</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getRootObjectURI <em>Root Object URI</em>}</li>
@@ -57,7 +58,6 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isLoadFailure <em>Load Failure</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getLoadException <em>Load Exception</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
@@ -624,7 +624,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public synchronized EList<ModelReference> getModelReferences() {
+	public EList<ModelReference> getModelReferences() {
 		if (modelReferences == null) {
 			modelReferences = new EObjectContainmentWithInverseEList<ModelReference>(ModelReference.class, this, ScenarioServicePackage.SCENARIO_INSTANCE__MODEL_REFERENCES,
 					ScenarioServicePackage.MODEL_REFERENCE__SCENARIO_INSTANCE);
@@ -883,7 +883,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	public void unload() {
 
 		final IScenarioService scenarioService = getScenarioService();
-		if (scenarioService == null ) {
+		if (scenarioService == null) {
 			if (instance != null) {
 				log.error("Request #unload() on a ScenarioInstance with no ScenarioService");
 			}
@@ -896,10 +896,10 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 				return;
 			}
 			// Model references are still present! (note revert command will now break!)
-//			if (!getModelReferences().isEmpty()) {
-//				log.error("Attempting to unload a scenario which still has open model references");
-//				return;
-//			}
+			//			if (!getModelReferences().isEmpty()) {
+			//				log.error("Attempting to unload a scenario which still has open model references");
+			//				return;
+			//			}
 			scenarioService.unload(this);
 		}
 	}

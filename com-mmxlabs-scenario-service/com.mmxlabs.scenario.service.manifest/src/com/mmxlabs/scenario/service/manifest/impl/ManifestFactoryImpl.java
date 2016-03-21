@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.manifest.impl;
 
+import com.mmxlabs.scenario.service.manifest.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;

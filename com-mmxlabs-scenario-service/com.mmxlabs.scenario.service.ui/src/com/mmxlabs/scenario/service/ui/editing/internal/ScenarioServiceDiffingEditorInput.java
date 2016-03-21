@@ -17,7 +17,7 @@ import com.mmxlabs.scenario.service.ui.editing.IDiffEditHandler;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceDiffingEditorInput;
 import com.mmxlabs.scenario.service.ui.internal.DefaultDiffEditHandler;
 
-public class ScenarioServiceDiffingEditorInput implements IScenarioServiceDiffingEditorInput /* , IPersistableElement */{
+public class ScenarioServiceDiffingEditorInput implements IScenarioServiceDiffingEditorInput /* , IPersistableElement */ {
 
 	private final ScenarioServiceItemProviderAdapterFactory adapterFactory = new ScenarioServiceItemProviderAdapterFactory();
 
@@ -82,9 +82,9 @@ public class ScenarioServiceDiffingEditorInput implements IScenarioServiceDiffin
 	}
 
 	@Override
-	public Object getAdapter(@SuppressWarnings("rawtypes") final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 		if (ScenarioInstance.class.isAssignableFrom(adapter)) {
-			return scenarioInstance;
+			return (T) scenarioInstance;
 		}
 
 		return Platform.getAdapterManager().getAdapter(this, adapter);

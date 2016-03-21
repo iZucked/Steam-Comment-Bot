@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.model.impl;
 
+import com.mmxlabs.scenario.service.model.*;
 import java.io.IOException;
 
 import org.eclipse.emf.ecore.EClass;

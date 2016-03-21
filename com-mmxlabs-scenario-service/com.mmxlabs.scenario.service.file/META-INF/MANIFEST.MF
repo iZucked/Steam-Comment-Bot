@@ -17,7 +17,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.scenario.service.util;bundle-version="[3.11.6,4.0.0)",
  com.mmxlabs.common.common-util;bundle-version="[3.11.6,4.0.0)",
  com.google.guava,
- org.eclipse.jdt.annotation;bundle-version="[1.1.0,2.0.0)";resolution:=optional
+ org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)";resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/*

@@ -12,11 +12,11 @@ import com.mmxlabs.scenario.service.util.encryption.ScenarioEncryptionException;
 public class ScenarioEncryptionExceptionReasonProviderApaterFactory implements IAdapterFactory {
 
 	@Override
-	public Object getAdapter(Object adaptableObject, Class adapterType) {
+	public <T> T getAdapter(Object adaptableObject, Class<T> adapterType) {
 		if (adaptableObject instanceof ScenarioEncryptionException) {
 			final ScenarioEncryptionException exception = (ScenarioEncryptionException) adaptableObject;
 
-			return new IReasonProvider() {
+			return (T) new IReasonProvider() {
 
 				@Override
 				public String getTitle() {
@@ -39,7 +39,7 @@ public class ScenarioEncryptionExceptionReasonProviderApaterFactory implements I
 				}
 			};
 		}
-		return null;
+		return (T) null;
 	}
 
 	@Override

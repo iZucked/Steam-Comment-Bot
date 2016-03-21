@@ -14,13 +14,13 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioFragment#getScenarioInstance <em>Scenario Instance</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioFragment#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioFragment#getFragment <em>Fragment</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioFragment#getContentType <em>Content Type</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioFragment()
  * @model

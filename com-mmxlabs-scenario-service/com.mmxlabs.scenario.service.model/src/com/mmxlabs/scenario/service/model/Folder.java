@@ -11,10 +11,10 @@ package com.mmxlabs.scenario.service.model;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.model.Folder#getMetadata <em>Metadata</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getFolder()
  * @model
