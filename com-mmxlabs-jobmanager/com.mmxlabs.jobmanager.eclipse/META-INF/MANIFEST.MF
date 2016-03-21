@@ -7,7 +7,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.jobmanager;bundle-version="[3.11.6,4.0.0)",
  org.eclipse.core.resources;bundle-version="3.7.100",
  org.slf4j.api;bundle-version="1.6.4",
- org.eclipse.jdt.annotation;bundle-version="[1.1.100,2.0.0)";resolution:=optional
+ org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: com.mmxlabs.jobmanager.eclipse.jobs.impl,
  com.mmxlabs.jobmanager.eclipse.manager,
