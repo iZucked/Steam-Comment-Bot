@@ -617,7 +617,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public Object getAdapter(final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 
 		// if (SortData.class.isAssignableFrom(adapter)) {
 		// return sortData;
