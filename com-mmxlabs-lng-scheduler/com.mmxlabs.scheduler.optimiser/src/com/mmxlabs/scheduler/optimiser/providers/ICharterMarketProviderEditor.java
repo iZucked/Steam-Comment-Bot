@@ -16,9 +16,9 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
  */
 public interface ICharterMarketProviderEditor extends ICharterMarketProvider {
 
-	void addCharterInOption(IVesselClass vesselClass, @NonNull ICurve charterInCurve);
+	void addCharterInOption(@NonNull IVesselClass vesselClass, @NonNull ICurve charterInCurve);
 
-	void addCharterOutOption(IVesselClass vesselClass,@NonNull  ICurve charterOutCurve, int minDuration, Set<IPort> allowedPorts);
+	void addCharterOutOption(@NonNull IVesselClass vesselClass, @NonNull ICurve charterOutCurve, int minDuration, @NonNull Set<@NonNull IPort> allowedPorts);
 
 	void setCharterOutStartTime(int startTime);
 }

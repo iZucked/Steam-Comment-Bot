@@ -35,7 +35,7 @@ public interface ICharterMarketProvider extends IDataComponentProvider {
 		int getCharterPrice(int date);
 
 		@NonNull
-		Set<IPort> getAllowedPorts();
+		Set<@NonNull IPort> getAllowedPorts();
 	};
 
 	@NonNull
@@ -52,6 +52,6 @@ public interface ICharterMarketProvider extends IDataComponentProvider {
 	int getCharterOutStartTime();
 
 	@NonNull
-	Set<IPort> getCharteringPortsForVesselClass(IVesselClass vesselClass);
+	Set<IPort> getCharteringPortsForVesselClass(@NonNull IVesselClass vesselClass);
 
 }

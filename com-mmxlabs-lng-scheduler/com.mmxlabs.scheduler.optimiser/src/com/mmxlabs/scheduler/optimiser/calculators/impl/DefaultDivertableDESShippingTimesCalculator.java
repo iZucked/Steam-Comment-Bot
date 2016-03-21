@@ -48,8 +48,8 @@ public class DefaultDivertableDESShippingTimesCalculator implements IDivertableD
 	@Inject
 	private IDistanceProvider distanceProvider;
 
-	private Pair<Integer, ERouteOption> getDischargeTimeAndRoute(final @NonNull ILoadOption buyOption, final @NonNull IDischargeOption sellOption, final @NonNull IVessel nominatedVessel,
-			final @NonNull IResource resource) {
+	private Pair<@NonNull Integer, @NonNull ERouteOption> getDischargeTimeAndRoute(final @NonNull ILoadOption buyOption, final @NonNull IDischargeOption sellOption,
+			final @NonNull IVessel nominatedVessel, final @NonNull IResource resource) {
 		final ISequenceElement buyElement = portSlotProvider.getElement(buyOption);
 		final int fobLoadTime = shippingHoursRestrictionProvider.getBaseTime(buyElement).getStart();
 		final int loadDuration = durationProvider.getElementDuration(buyElement, resource);
@@ -69,7 +69,8 @@ public class DefaultDivertableDESShippingTimesCalculator implements IDivertableD
 	}
 
 	@Override
-	public Pair<Integer, Integer> getDivertableDESTimes(final ILoadOption buyOption, final IDischargeOption sellOption, final IVessel nominatedVessel, final IResource resource) {
+	public Pair<@NonNull Integer, @NonNull Integer> getDivertableDESTimes(final @NonNull ILoadOption buyOption, final @NonNull IDischargeOption sellOption, final @NonNull IVessel nominatedVessel,
+			final @NonNull IResource resource) {
 		final Pair<Integer, ERouteOption> dischargeJourney = getDischargeTimeAndRoute(buyOption, sellOption, nominatedVessel, resource);
 		final ERouteOption ballastRoute = dischargeJourney.getSecond();
 
@@ -99,7 +100,8 @@ public class DefaultDivertableDESShippingTimesCalculator implements IDivertableD
 	 * @return
 	 */
 	@Nullable
-	private Triple<Integer, ERouteOption, Integer> getShortestTravelTimeToPort(ILoadOption loadOption, final IPort to, final IPort from, final IVessel vessel, final int referenceSpeed, int voyageStartTime) {
+	private Triple<Integer, ERouteOption, Integer> getShortestTravelTimeToPort(@NonNull final ILoadOption loadOption, final @NonNull IPort to, final @NonNull IPort from, final IVessel vessel,
+			final int referenceSpeed, final int voyageStartTime) {
 		int distance = Integer.MAX_VALUE;
 		int shortestTime = Integer.MAX_VALUE;
 		ERouteOption route = ERouteOption.DIRECT;
@@ -108,7 +110,7 @@ public class DefaultDivertableDESShippingTimesCalculator implements IDivertableD
 		for (final Pair<ERouteOption, Integer> d : distances) {
 			final ERouteOption routeOption = d.getFirst();
 			if (allowedRoutes == null || allowedRoutes.isEmpty() || allowedRoutes.contains(routeOption)) {
-				int thisDistance = d.getSecond();
+				final int thisDistance = d.getSecond();
 				if (thisDistance == Integer.MAX_VALUE) {
 					continue;
 				}
@@ -126,7 +128,7 @@ public class DefaultDivertableDESShippingTimesCalculator implements IDivertableD
 		return new Triple<>(distance, route, shortestTime);
 	}
 
-	protected int getReferenceSpeed(final IPortSlot slot, final IVessel nominatedVessel, final VesselState vesselState) {
+	protected int getReferenceSpeed(final @NonNull IPortSlot slot, final @NonNull IVessel nominatedVessel, final @NonNull VesselState vesselState) {
 		return shippingHoursRestrictionProvider.getReferenceSpeed(nominatedVessel, vesselState);
 	}
 

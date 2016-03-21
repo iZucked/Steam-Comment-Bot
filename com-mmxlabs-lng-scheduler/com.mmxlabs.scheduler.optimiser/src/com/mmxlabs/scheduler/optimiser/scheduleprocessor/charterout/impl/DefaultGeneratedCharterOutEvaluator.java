@@ -250,7 +250,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			Set<IPort> ports = option.getAllowedPorts();
 			if (ports.isEmpty()) {
 				// If no ports, charter out at next load port (this is primarily for ITS cases)
-				ports = new HashSet<IPort>();
+				ports = new HashSet<>();
 				ports.add(nextLoad);
 			} else {
 				// end slot exceptions

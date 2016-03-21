@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.calculators;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -18,5 +20,5 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
  */
 public interface IDivertableDESShippingTimesCalculator {
 
-	public Pair<Integer, Integer> getDivertableDESTimes(final ILoadOption buyOption, final IDischargeOption sellOption, final IVessel nominatedVessel, final IResource resource);
+	Pair<@NonNull Integer, @NonNull Integer> getDivertableDESTimes(@NonNull ILoadOption buyOption, @NonNull IDischargeOption sellOption, @NonNull IVessel nominatedVessel, @NonNull IResource resource);
 }
