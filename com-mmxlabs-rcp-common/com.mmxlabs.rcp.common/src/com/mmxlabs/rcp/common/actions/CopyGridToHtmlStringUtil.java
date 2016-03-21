@@ -176,8 +176,7 @@ public class CopyGridToHtmlStringUtil {
 		return "";
 	}
 
-	@NonNull
-	private int[] getAllColumns(final Grid table) {
+	private int @NonNull [] getAllColumns(final @NonNull Grid table) {
 		final int[] indicies = new int[table.getColumnCount()];
 		for (int i = 0; i < indicies.length; ++i) {
 			indicies[i] = i;
@@ -253,8 +252,7 @@ public class CopyGridToHtmlStringUtil {
 		return null;
 	}
 
-	@Nullable
-	private String[] getAdditionalPreRows() {
+	private @NonNull String @Nullable [] getAdditionalPreRows() {
 		if (additionalAttributeProvider != null) {
 			return additionalAttributeProvider.getAdditionalPreRows();
 		}
