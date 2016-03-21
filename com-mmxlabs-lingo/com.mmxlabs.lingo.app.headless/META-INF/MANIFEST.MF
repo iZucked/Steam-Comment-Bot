@@ -27,7 +27,7 @@ Require-Bundle: com.mmxlabs.models.lng.transformer;bundle-version="[3.11.6,4.0.0
  com.mmxlabs.optimiser.optimiser-core;bundle-version="[3.11.6,4.0.0)",
  com.mmxlabs.optimiser.optimiser-lso;bundle-version="[3.11.6,4.0.0)",
  com.mmxlabs.models.lng.transformer.ui;bundle-version="[3.11.6,4.0.0)",
- org.eclipse.jdt.annotation;bundle-version="[1.1.0,2.0.0)";resolution:=optional,
+ org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.license.features;bundle-version="[3.11.6,4.0.0)",
  org.apache.shiro.core,
  com.mmxlabs.rcp.common;bundle-version="[3.11.6,4.0.0)",
