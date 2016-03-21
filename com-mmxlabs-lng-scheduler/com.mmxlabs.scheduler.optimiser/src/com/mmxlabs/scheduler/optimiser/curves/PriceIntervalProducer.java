@@ -28,7 +28,7 @@ public class PriceIntervalProducer implements IPriceIntervalProducer {
 	PriceIntervalProviderHelper priceIntervalProviderUtil;
 
 	@Override
-	public List<int[]> getLoadIntervalsIndependentOfDischarge(final ILoadOption portSlot, final IPortTimeWindowsRecord portTimeWindowRecord) {
+	public List<int @NonNull []> getLoadIntervalsIndependentOfDischarge(final ILoadOption portSlot, final IPortTimeWindowsRecord portTimeWindowRecord) {
 		assert portSlot.getLoadPriceCalculator() instanceof IPriceIntervalProvider;
 		final int start = portSlot.getTimeWindow().getStart();
 		final ITimeWindow feasibletimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(portSlot);
@@ -37,7 +37,7 @@ public class PriceIntervalProducer implements IPriceIntervalProducer {
 	}
 
 	@Override
-	public List<int[]> getLoadIntervalsBasedOnDischarge(@NonNull final ILoadOption portSlot, @NonNull final IPortTimeWindowsRecord portTimeWindowRecord) {
+	public List<int @NonNull []> getLoadIntervalsBasedOnDischarge(@NonNull final ILoadOption portSlot, @NonNull final IPortTimeWindowsRecord portTimeWindowRecord) {
 		final IDischargeOption discharge = priceIntervalProviderUtil.getFirstDischargeOption(portTimeWindowRecord.getSlots());
 		assert discharge != null;
 		assert discharge.getDischargePriceCalculator() instanceof IPriceIntervalProvider;
@@ -48,7 +48,7 @@ public class PriceIntervalProducer implements IPriceIntervalProducer {
 	}
 
 	@Override
-	public List<int[]> getDischargeWindowIndependentOfLoad(@NonNull final IDischargeOption portSlot, @NonNull final IPortTimeWindowsRecord portTimeWindowRecord) {
+	public List<int @NonNull []> getDischargeWindowIndependentOfLoad(@NonNull final IDischargeOption portSlot, @NonNull final IPortTimeWindowsRecord portTimeWindowRecord) {
 		assert portSlot.getDischargePriceCalculator() instanceof IPriceIntervalProvider;
 		final int start = portSlot.getTimeWindow().getStart();
 		final ITimeWindow feasibletimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(portSlot);
@@ -58,7 +58,7 @@ public class PriceIntervalProducer implements IPriceIntervalProducer {
 	}
 
 	@Override
-	public List<int[]> getDischargeWindowBasedOnLoad(final IDischargeOption portSlot, final IPortTimeWindowsRecord portTimeWindowRecord) {
+	public List<int @NonNull []> getDischargeWindowBasedOnLoad(final IDischargeOption portSlot, final IPortTimeWindowsRecord portTimeWindowRecord) {
 		final ILoadOption loadOption = priceIntervalProviderUtil.getFirstLoadOption(portTimeWindowRecord.getSlots());
 		assert loadOption != null;
 		assert loadOption.getLoadPriceCalculator() instanceof IPriceIntervalProvider;
@@ -69,8 +69,9 @@ public class PriceIntervalProducer implements IPriceIntervalProducer {
 	}
 
 	@Override
-	public List<int[]> getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(final ILoadOption load, final IDischargeOption discharge, final IPriceIntervalProvider loadPriceIntervalProvider,
-			final IPriceIntervalProvider dischargePriceIntervalProvider, final IPortTimeWindowsRecord portTimeWindowsRecord, final boolean dateFromLoad) {
+	public List<int @NonNull []> getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(final @NonNull ILoadOption load, final @NonNull IDischargeOption discharge,
+			final @NonNull IPriceIntervalProvider loadPriceIntervalProvider, final @NonNull IPriceIntervalProvider dischargePriceIntervalProvider,
+			final @NonNull IPortTimeWindowsRecord portTimeWindowsRecord, final boolean dateFromLoad) {
 		final int start = load.getTimeWindow().getStart();
 		final ITimeWindow loadFeasibletimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
 		final ITimeWindow dischargeFeasibletimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);

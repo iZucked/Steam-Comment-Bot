@@ -95,10 +95,9 @@ public interface ILoadPriceCalculator extends ICalculator {
 	static final int IDX_SHIPPING_VALUE = 1;
 	static final int IDX_UPSIDE_VALUE = 2;
 	static final int ADDITIONAL_PNL_COMPONENT_SIZE = 3;
-	static final @NonNull long[] EMPTY_ADDITIONAL_PNL_RESULT = new long[ADDITIONAL_PNL_COMPONENT_SIZE];
+	static final long @NonNull [] EMPTY_ADDITIONAL_PNL_RESULT = new long[ADDITIONAL_PNL_COMPONENT_SIZE];
 
-	@NonNull
-	default long[] calculateAdditionalProfitAndLoss(@NonNull ILoadOption loadOption, @NonNull IAllocationAnnotation allocationAnnotation, @NonNull int[] slotPricesPerMMBTu,
+	default long @NonNull [] calculateAdditionalProfitAndLoss(@NonNull ILoadOption loadOption, @NonNull IAllocationAnnotation allocationAnnotation, int @NonNull [] slotPricesPerMMBTu,
 			@NonNull IVesselAvailability vesselAvailability, int vesselStartTime, @NonNull VoyagePlan plan, @Nullable IDetailTree annotations) {
 		return EMPTY_ADDITIONAL_PNL_RESULT;
 	}
@@ -108,26 +107,31 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * any cached data prior to the real calculations.
 	 */
 	public void prepareRealPNL();
-	
+
 	/**
 	 * Provides a set PricingEventType for a calculator
-	 * @param loadOption TODO
-	 * @param dischargeOption TODO
+	 * 
+	 * @param loadOption
+	 *            TODO
+	 * @param dischargeOption
+	 *            TODO
 	 */
 	PricingEventType getCalculatorPricingEventType(ILoadOption loadOption, IPortTimeWindowsRecord portTimeWindowsRecord);
-	
+
 	/**
-	 * Get a rough estimate of the price at a given point in time
-	 * Note that this is assumed to be in price curve time
+	 * Get a rough estimate of the price at a given point in time Note that this is assumed to be in price curve time
+	 * 
 	 * @param loadOption
-	 * @param dischargeOption TODO
+	 * @param dischargeOption
+	 *            TODO
 	 * @param timeInHours
 	 * @return
 	 */
 	int getEstimatedPurchasePrice(ILoadOption loadOption, IDischargeOption dischargeOption, int timeInHours);
-	
+
 	/**
 	 * A contract may specify the pricing date of a purchase
+	 * 
 	 * @param loadOption
 	 * @param dischargeOption
 	 * @return

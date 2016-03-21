@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.inject.Inject;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -20,6 +22,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 /**
  * A caching version of the {@link IPriceIntervalProducer}
+ * 
  * @author achurchill
  *
  */
@@ -34,6 +37,7 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 		protected final int endTime;
 		protected final IPortSlot[] determiningSlots;
 		protected final IPortSlot[] allSlots;
+
 		public CacheKey(int start, int end, IPortSlot[] determiningSlots, IPortSlot[] allSlots) {
 			this.startTime = start;
 			this.endTime = end;
@@ -75,7 +79,7 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 		public final CacheKey cacheKey;
 		// FIXME: This is never set to anything
 		public List<int[]> result = null;
-		
+
 		public Entry(int startTime, int endTime, IPortSlot[] determiningSlots, IPortSlot[] allSlots) {
 			this.startTime = startTime;
 			this.endTime = endTime;
@@ -93,14 +97,15 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 	}
 
 	@Override
-	public List<int[]> getLoadIntervalsIndependentOfDischarge(ILoadOption portSlot, IPortTimeWindowsRecord portTimeWindowRecord) {
+	public @NonNull List<int @NonNull []> getLoadIntervalsIndependentOfDischarge(ILoadOption portSlot, IPortTimeWindowsRecord portTimeWindowRecord) {
 		int start = portSlot.getTimeWindow().getStart();
 		ITimeWindow feasibletimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(portSlot);
 		int end = findBestEnd(start, feasibletimeWindow.getStart(), portSlot.getTimeWindow().getEnd(), feasibletimeWindow.getEnd());
 
-		Entry entry = getCacheEntry(start, end, new IPortSlot[] {portSlot}, portTimeWindowRecord);
+		Entry entry = getCacheEntry(start, end, new IPortSlot[] { portSlot }, portTimeWindowRecord);
 		if (entry.result == null) {
-			List<int[]> intervals = delegate.getLoadIntervalsIndependentOfDischarge(portSlot, portTimeWindowRecord);
+			@NonNull
+			List<int @NonNull []> intervals = delegate.getLoadIntervalsIndependentOfDischarge(portSlot, portTimeWindowRecord);
 			cache.put(entry.cacheKey, intervals);
 			return intervals;
 		} else {
@@ -109,12 +114,12 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 	}
 
 	@Override
-	public List<int[]> getLoadIntervalsBasedOnDischarge(ILoadOption portSlot, IPortTimeWindowsRecord portTimeWindowRecord) {
+	public @NonNull List<int @NonNull []> getLoadIntervalsBasedOnDischarge(ILoadOption portSlot, IPortTimeWindowsRecord portTimeWindowRecord) {
 		int start = portSlot.getTimeWindow().getStart();
 		ITimeWindow feasibletimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(portSlot);
 		int end = findBestEnd(start, feasibletimeWindow.getStart(), portSlot.getTimeWindow().getEnd(), feasibletimeWindow.getEnd());
-		
-		Entry entry = getCacheEntry(start, end, new IPortSlot[] {portSlot}, portTimeWindowRecord);
+
+		Entry entry = getCacheEntry(start, end, new IPortSlot[] { portSlot }, portTimeWindowRecord);
 		if (entry.result == null) {
 			List<int[]> intervals = delegate.getLoadIntervalsBasedOnDischarge(portSlot, portTimeWindowRecord);
 			cache.put(entry.cacheKey, intervals);
@@ -125,12 +130,12 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 	}
 
 	@Override
-	public List<int[]> getDischargeWindowIndependentOfLoad(IDischargeOption portSlot, IPortTimeWindowsRecord portTimeWindowRecord) {
+	public List<int @NonNull []> getDischargeWindowIndependentOfLoad(IDischargeOption portSlot, IPortTimeWindowsRecord portTimeWindowRecord) {
 		int start = portSlot.getTimeWindow().getStart();
 		ITimeWindow feasibletimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(portSlot);
 		int end = findBestEnd(start, feasibletimeWindow.getStart(), portSlot.getTimeWindow().getEnd(), feasibletimeWindow.getEnd());
 
-		Entry entry = getCacheEntry(start, end, new IPortSlot[] {portSlot}, portTimeWindowRecord);
+		Entry entry = getCacheEntry(start, end, new IPortSlot[] { portSlot }, portTimeWindowRecord);
 		if (entry.result == null) {
 			List<int[]> intervals = delegate.getDischargeWindowIndependentOfLoad(portSlot, portTimeWindowRecord);
 			cache.put(entry.cacheKey, intervals);
@@ -141,12 +146,12 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 	}
 
 	@Override
-	public List<int[]> getDischargeWindowBasedOnLoad(IDischargeOption portSlot, IPortTimeWindowsRecord portTimeWindowRecord) {
+	public List<int @NonNull []> getDischargeWindowBasedOnLoad(IDischargeOption portSlot, IPortTimeWindowsRecord portTimeWindowRecord) {
 		int start = portSlot.getTimeWindow().getStart();
 		ITimeWindow feasibletimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(portSlot);
 		int end = findBestEnd(start, feasibletimeWindow.getStart(), portSlot.getTimeWindow().getEnd(), feasibletimeWindow.getEnd());
 
-		Entry entry = getCacheEntry(start, end, new IPortSlot[] {portSlot}, portTimeWindowRecord);
+		Entry entry = getCacheEntry(start, end, new IPortSlot[] { portSlot }, portTimeWindowRecord);
 		if (entry.result == null) {
 			List<int[]> intervals = delegate.getDischargeWindowBasedOnLoad(portSlot, portTimeWindowRecord);
 			cache.put(entry.cacheKey, intervals);
@@ -157,16 +162,17 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 	}
 
 	@Override
-	public List<int[]> getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(ILoadOption load, IDischargeOption discharge, IPriceIntervalProvider loadPriceIntervalProvider,
+	public List<int @NonNull []> getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(ILoadOption load, IDischargeOption discharge, IPriceIntervalProvider loadPriceIntervalProvider,
 			IPriceIntervalProvider dischargePriceIntervalProvider, IPortTimeWindowsRecord portTimeWindowsRecord, boolean dateFromLoad) {
 		int start = load.getTimeWindow().getStart();
 		ITimeWindow loadFeasibletimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
 		ITimeWindow dischargeFeasibletimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 		int end = findBestEnd(start, loadFeasibletimeWindow.getStart(), discharge.getTimeWindow().getEnd(), dischargeFeasibletimeWindow.getEnd());
-		
-		Entry entry = getCacheEntry(start, end, new IPortSlot[] {load, discharge}, portTimeWindowsRecord);
+
+		Entry entry = getCacheEntry(start, end, new IPortSlot[] { load, discharge }, portTimeWindowsRecord);
 		if (entry.result == null) {
-			List<int[]> intervals = delegate.getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(load, discharge, loadPriceIntervalProvider, dischargePriceIntervalProvider, portTimeWindowsRecord, dateFromLoad);
+			List<int[]> intervals = delegate.getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(load, discharge, loadPriceIntervalProvider, dischargePriceIntervalProvider,
+					portTimeWindowsRecord, dateFromLoad);
 			cache.put(entry.cacheKey, intervals);
 			return intervals;
 		} else {
@@ -185,12 +191,12 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 	}
 
 	private Entry getCacheEntry(int start, int end, IPortSlot[] determiningSlots, IPortTimeWindowsRecord portTimeWindowsRecord) {
-		return new Entry(start, end, determiningSlots,
-				portTimeWindowsRecord.getSlots().toArray(new IPortSlot[portTimeWindowsRecord.getSlots().size()]));
+		return new Entry(start, end, determiningSlots, portTimeWindowsRecord.getSlots().toArray(new IPortSlot[portTimeWindowsRecord.getSlots().size()]));
 	}
-	
+
 	/**
 	 * Return the max of the window end and the feasbile end (if late). Add 1 hour if start == end
+	 * 
 	 * @param windowStart
 	 * @param feasibleStart
 	 * @param windowEnd

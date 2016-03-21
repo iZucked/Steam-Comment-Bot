@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.indexedobjects.IIndexedObject;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 
@@ -20,6 +22,7 @@ public interface IPort extends IIndexedObject {
 	 * 
 	 * @return the port's name
 	 */
+	@NonNull
 	String getName();
 
 	/**
@@ -27,6 +30,7 @@ public interface IPort extends IIndexedObject {
 	 * 
 	 * @return the port's time zone id
 	 */
+	@NonNull
 	String getTimeZoneId();
 	
 	/**

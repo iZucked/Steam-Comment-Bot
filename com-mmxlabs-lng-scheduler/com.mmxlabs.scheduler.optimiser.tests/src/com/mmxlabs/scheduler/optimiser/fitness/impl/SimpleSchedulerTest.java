@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.TreeMap;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -171,13 +172,13 @@ public class SimpleSchedulerTest {
 		final IDischargeSlot discharge7 = builder.createDischargeSlot("discharge7", port6, tw7, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24,
 				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 
-		builder.createCargo(Lists.<IPortSlot> newArrayList(load1, discharge1), false);
-		builder.createCargo(Lists.<IPortSlot> newArrayList(load2, discharge2), false);
-		builder.createCargo(Lists.<IPortSlot> newArrayList(load3, discharge3), false);
-		builder.createCargo(Lists.<IPortSlot> newArrayList(load4, discharge4), false);
-		builder.createCargo(Lists.<IPortSlot> newArrayList(load5, discharge5), false);
-		builder.createCargo(Lists.<IPortSlot> newArrayList(load6, discharge6), false);
-		builder.createCargo(Lists.<IPortSlot> newArrayList(load7, discharge7), false);
+		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load1, discharge1), false);
+		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load2, discharge2), false);
+		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load3, discharge3), false);
+		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load4, discharge4), false);
+		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load5, discharge5), false);
+		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load6, discharge6), false);
+		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load7, discharge7), false);
 
 		// TODO: Set port durations
 

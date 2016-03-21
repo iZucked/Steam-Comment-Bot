@@ -88,12 +88,14 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 		}
 		boolean valid = true;
 		for (int j = 0; j < sequence.size(); j++) {
-			if (excludedPorts.contains(portProvider.getPortForElement(sequence.get(j)))) {
+			@Nullable
+			IPort portForElement = portProvider.getPortForElement(sequence.get(j));
+			if (excludedPorts.contains(portForElement)) {
 				if (messages == null) {
 					return false; // fail fast.
 				} else {
 					messages.add("Vessel " + vesselProvider.getVesselAvailability(resource).getVessel().getName() + " is excluded from port "
-							+ portProvider.getPortForElement(sequence.get(j)).getName());
+							+ (portForElement == null ? "(unknown port)" : portForElement.getName()));
 					valid = false;
 				}
 			}

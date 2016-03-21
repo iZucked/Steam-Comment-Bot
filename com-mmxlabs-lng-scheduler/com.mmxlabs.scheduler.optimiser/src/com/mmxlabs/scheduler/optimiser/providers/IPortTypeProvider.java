@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
@@ -24,5 +26,6 @@ public interface IPortTypeProvider extends IDataComponentProvider {
 	 * @param sequenceElement
 	 * @return
 	 */
-	PortType getPortType(ISequenceElement sequenceElement);
+	@NonNull
+	PortType getPortType(@NonNull ISequenceElement sequenceElement);
 }
