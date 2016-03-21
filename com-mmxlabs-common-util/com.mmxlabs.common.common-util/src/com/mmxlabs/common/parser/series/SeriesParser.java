@@ -231,7 +231,7 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 		final SeriesParser parser = new SeriesParser();
 		parser.addConstant("X", 1);
 		parser.addConstant("Y", 10);
-		parser.addSeriesData("Z", new int[] { 0, 10, 20 }, new Double[] { -5d, 4d, 9.4 });
+		parser.addSeriesData("Z", new int[] { 0, 10, 20 }, new @NonNull Number[] { -5d, 4d, 9.4 });
 		System.err.println(SeriesUtil.toString(parser.parse(args[0]).evaluate()));
 	}
 }

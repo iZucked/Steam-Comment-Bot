@@ -33,7 +33,7 @@ public final class ObjectRegistry {
 				return cls.cast(o);
 			}
 		}
-		return (T) null;
+		return cls.cast(null);
 	}
 
 	/**
