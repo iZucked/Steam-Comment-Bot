@@ -19,7 +19,7 @@ public class Pair<A, B> {
 	private B second;
 
 	public Pair() {
-		this(null, null);
+		this((A) null, (B) null);
 	}
 
 	public Pair(final A first, final B second) {

@@ -198,7 +198,7 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 		}
 	}
 
-	public void addSeriesData(@NonNull final String name, @NonNull final int[] points, @NonNull final Number[] values) {
+	public void addSeriesData(@NonNull final String name, final int @NonNull [] points, @NonNull final Number[] values) {
 		evaluatedSeries.put(name, new ISeries() {
 			@Override
 			public int[] getChangePoints() {

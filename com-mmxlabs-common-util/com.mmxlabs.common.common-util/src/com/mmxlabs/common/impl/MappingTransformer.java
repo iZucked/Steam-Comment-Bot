@@ -27,7 +27,7 @@ public final class MappingTransformer<T, U> implements ITransformer<T, U> {
 		if (mapping.containsKey(t)) {
 			return mapping.get(t);
 		}
-		return null;
+		return (U) null;
 	}
 
 	/**
