@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.common.dcproviders;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
@@ -23,7 +25,7 @@ public interface IElementDurationProvider extends IDataComponentProvider {
 	 * @param resource
 	 * @return
 	 */
-	int getElementDuration(ISequenceElement element, IResource resource);
+	int getElementDuration(@NonNull ISequenceElement element, @NonNull IResource resource);
 
 	/**
 	 * The default element duration.

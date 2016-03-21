@@ -30,13 +30,13 @@ public final class UnmodifiableSequenceWrapper implements ISequence {
 	}
 
 	@Override
-	public final Iterator<ISequenceElement> iterator() {
+	public final Iterator<@NonNull ISequenceElement> iterator() {
 
 		/**
 		 * A new anonymous Iterator wrapping iterator from the 'wrapped' ISequence to forbid calls to #remove()
 		 */
-		return new Iterator<ISequenceElement>() {
-			private final Iterator<ISequenceElement> i = wrapped.iterator();
+		return new Iterator<@NonNull ISequenceElement>() {
+			private final Iterator<@NonNull ISequenceElement> i = wrapped.iterator();
 
 			@Override
 			public final boolean hasNext() {
@@ -44,7 +44,7 @@ public final class UnmodifiableSequenceWrapper implements ISequence {
 			}
 
 			@Override
-			public final ISequenceElement next() {
+			public final @NonNull ISequenceElement next() {
 				return i.next();
 			}
 

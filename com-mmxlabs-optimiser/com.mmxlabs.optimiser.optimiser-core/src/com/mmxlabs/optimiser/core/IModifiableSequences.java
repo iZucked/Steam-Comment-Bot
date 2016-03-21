@@ -38,11 +38,11 @@ public interface IModifiableSequences extends ISequences {
 	 * @return
 	 */
 	@NonNull
-	Map<IResource, IModifiableSequence> getModifiableSequences();
+	Map<@NonNull IResource, @NonNull IModifiableSequence> getModifiableSequences();
 
 	/**
 	 * @return a modifiable list of unused elements.
 	 */
 	@NonNull
-	List<ISequenceElement> getModifiableUnusedElements();
+	List<@NonNull ISequenceElement> getModifiableUnusedElements();
 }

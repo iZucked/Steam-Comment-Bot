@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.common.dcproviders;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
 public interface IOrderedSequenceElementsDataComponentProviderEditor extends IOrderedSequenceElementsDataComponentProvider {
@@ -14,6 +16,6 @@ public interface IOrderedSequenceElementsDataComponentProviderEditor extends IOr
 	 * @param previousElement
 	 * @param nextElement
 	 */
-	void setElementOrder(ISequenceElement previousElement, ISequenceElement nextElement);
+	void setElementOrder(@NonNull ISequenceElement previousElement, @NonNull ISequenceElement nextElement);
 
 }

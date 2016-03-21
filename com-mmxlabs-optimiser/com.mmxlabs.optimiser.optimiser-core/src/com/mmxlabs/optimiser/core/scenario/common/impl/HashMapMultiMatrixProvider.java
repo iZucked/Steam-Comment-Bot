@@ -121,8 +121,8 @@ public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements I
 		 * This does not actually return the maximum value, but instead either (a) the maximum non-default value if there is a non-default value or (b) the first default value encountered if there is
 		 * no non-default value.
 		 */
-		U invalid = null;
-		U minimum = null;
+		U invalid = (U) null;
+		U minimum = (U) null;
 		String minKey = null;
 
 		for (final String key : getKeys()) {

@@ -84,7 +84,7 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements IG
 
 		// Reset best state to unknown
 		bestFitness = Long.MAX_VALUE;
-		bestIndividual = null;
+		bestIndividual = (I) null;
 
 		// Calculate initial population fitness - update best state and populate
 		// good/bad arrays

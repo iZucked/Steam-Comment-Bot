@@ -6,6 +6,9 @@ package com.mmxlabs.optimiser.common.dcproviders;
 
 import java.util.Collection;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
@@ -25,6 +28,7 @@ public interface IResourceAllocationConstraintDataComponentProvider extends IDat
 	 * @param element
 	 * @return
 	 */
-	Collection<IResource> getAllowedResources(final ISequenceElement element);
+	@Nullable
+	Collection<@NonNull IResource> getAllowedResources(@NonNull final ISequenceElement element);
 
 }
