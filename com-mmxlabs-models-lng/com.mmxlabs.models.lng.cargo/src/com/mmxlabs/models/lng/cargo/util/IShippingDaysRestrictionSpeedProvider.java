@@ -32,5 +32,5 @@ public interface IShippingDaysRestrictionSpeedProvider {
 	double getSpeed(@NonNull LoadSlot loadSlot, @NonNull VesselClass vesselClass, boolean isLaden);
 
 	@NonNull
-	Collection<Route> getValidRoutes(@NonNull PortModel portModel, @NonNull final LoadSlot loadSlot);
+	Collection<@NonNull Route> getValidRoutes(@NonNull PortModel portModel, @NonNull final LoadSlot loadSlot);
 }
