@@ -149,9 +149,12 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				// if (!getOuterType().equals(other.getOuterType()))
 				// return false;
 
-				return dischargePrice == other.dischargePrice && startHeel == other.startHeel && (vessel == other.vessel) && Arrays.equals(voyageTimes, other.voyageTimes) && (// loadPrice ==
-																																												// other.loadPrice &&
-				Arrays.equals(durations, other.durations)) && Equality.shallowEquals(slots, other.slots);
+				return dischargePrice == other.dischargePrice//
+						&& startHeel == other.startHeel //
+						&& (vessel == other.vessel) //
+						&& Arrays.equals(voyageTimes, other.voyageTimes) //
+						&& Arrays.equals(durations, other.durations)//
+						&& Equality.shallowEquals(slots, other.slots);
 			}
 			return false;
 		}
