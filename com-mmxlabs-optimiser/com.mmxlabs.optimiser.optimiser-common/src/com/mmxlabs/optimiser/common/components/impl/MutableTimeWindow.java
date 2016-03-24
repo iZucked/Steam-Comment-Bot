@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.common.components.impl;
 
+import java.util.Objects;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 
 /**
@@ -17,7 +19,7 @@ public final class MutableTimeWindow implements ITimeWindow {
 	private int start;
 	private int end;
 	private int endFlex;
-	
+
 	public MutableTimeWindow() {
 
 	}
@@ -27,6 +29,7 @@ public final class MutableTimeWindow implements ITimeWindow {
 		this.end = end;
 		this.endFlex = endFlex;
 	}
+
 	public MutableTimeWindow(final int start, final int end) {
 		this(start, end, 0);
 	}
@@ -53,7 +56,7 @@ public final class MutableTimeWindow implements ITimeWindow {
 	public int getEndFlex() {
 		return endFlex;
 	}
-	
+
 	public void setEndFlex(final int endFlex) {
 		this.endFlex = endFlex;
 	}
@@ -62,6 +65,30 @@ public final class MutableTimeWindow implements ITimeWindow {
 	public int getEndWithoutFlex() {
 		return end - endFlex;
 	}
-	
-	
+
+	@Override
+	public final boolean equals(final Object obj) {
+		if (obj instanceof MutableTimeWindow) {
+			final MutableTimeWindow tw = (MutableTimeWindow) obj;
+			if (start != tw.start) {
+				return false;
+			}
+			if (end != tw.end) {
+				return false;
+			}
+			if (endFlex != tw.endFlex) {
+				return false;
+			}
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	public final int hashCode() {
+		// Based on Arrays.hashCode(int[])
+		return Objects.hash(start, end, endFlex);
+	}
+
 }

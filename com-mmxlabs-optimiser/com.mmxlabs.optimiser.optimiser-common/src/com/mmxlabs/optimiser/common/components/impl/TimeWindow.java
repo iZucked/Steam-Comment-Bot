@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.common.components.impl;
 
+import java.util.Objects;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 
 /**
@@ -63,6 +65,9 @@ public final class TimeWindow implements ITimeWindow {
 			if (end != tw.end) {
 				return false;
 			}
+			if (endFlex != tw.endFlex) {
+				return false;
+			}
 			return true;
 		}
 
@@ -72,7 +77,7 @@ public final class TimeWindow implements ITimeWindow {
 	@Override
 	public final int hashCode() {
 		// Based on Arrays.hashCode(int[])
-		return (31 * start) + end;
+		return Objects.hash(start, end, endFlex);
 	}
 	
 	@Override
