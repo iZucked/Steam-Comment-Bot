@@ -32,6 +32,7 @@ public class FileDeleterTest {
 		for (int i = 0; i < 20000; ++i) {
 
 			Runnable r = new Runnable() {
+				@Override
 				public void run() {
 					try {
 						File f = File.createTempFile("junit", "dat");
