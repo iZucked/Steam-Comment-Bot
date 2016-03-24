@@ -17,6 +17,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
@@ -392,6 +393,7 @@ public class ScheduleCalculator {
 
 		// Perform capacity violations analysis
 		capacityViolationChecker.calculateCapacityViolations(scheduledSequences, annotatedSolution);
+
 		// Perform capacity violations analysis
 		latenessChecker.calculateLateness(scheduledSequences, annotatedSolution);
 	}
@@ -441,17 +443,22 @@ public class ScheduleCalculator {
 					final boolean isDesFobCase = ((vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE
 							|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) && plan.getSequence().length == 2);
 					if (currentAllocation != null) {
-						final CargoValueAnnotation cargoValueAnnotation = new CargoValueAnnotation(currentAllocation);
+						final CargoValueAnnotation cargoValueAnnotation;// = new CargoValueAnnotation(currentAllocation);
 						cargo = true;
 						if (isDesFobCase) {
 							// for now, only handle single load/discharge case
 							assert (currentAllocation.getSlots().size() == 2);
 							final ILoadOption loadSlot = (ILoadOption) currentAllocation.getSlots().get(0);
-							final long cargoGroupValue = entityValueCalculator.evaluate(plan, cargoValueAnnotation, vesselAvailability, currentAllocation.getSlotTime(loadSlot), annotatedSolution);
+							Pair<CargoValueAnnotation, Long> p = entityValueCalculator.evaluate(plan, currentAllocation, vesselAvailability, currentAllocation.getSlotTime(loadSlot),
+									annotatedSolution);
+							cargoValueAnnotation = p.getFirst();
+							final long cargoGroupValue = p.getSecond();
 							scheduledSequences.setVoyagePlanGroupValue(plan, cargoGroupValue);
 
 						} else {
-							final long cargoGroupValue = entityValueCalculator.evaluate(plan, cargoValueAnnotation, vesselAvailability, sequence.getStartTime(), annotatedSolution);
+							Pair<CargoValueAnnotation, Long> p = entityValueCalculator.evaluate(plan, currentAllocation, vesselAvailability, sequence.getStartTime(), annotatedSolution);
+							cargoValueAnnotation = p.getFirst();
+							final long cargoGroupValue = p.getSecond();
 							scheduledSequences.setVoyagePlanGroupValue(plan, cargoGroupValue);
 						}
 

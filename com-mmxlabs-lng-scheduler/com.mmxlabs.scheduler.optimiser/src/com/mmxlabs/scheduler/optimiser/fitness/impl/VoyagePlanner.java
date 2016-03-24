@@ -897,6 +897,7 @@ public class VoyagePlanner {
 
 				if (!isShortCargoEnd) {
 					// Available time, as determined by inputs.
+					assert prevPortSlot != null;
 					availableTime = portTimesRecord.getSlotTime(thisPortSlot) - portTimesRecord.getSlotTime(prevPortSlot) - prevVisitDuration;
 				} else { // shorts cargo end on shorts sequence
 					assert prev2Port != null;

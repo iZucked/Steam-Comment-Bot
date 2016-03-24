@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -68,9 +70,10 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 
 	@Inject
 	private IVesselBaseFuelCalculator vesselBaseFuelCalculator;
-	
+
 	@Override
-	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(final int vesselStartTime, final IVesselAvailability vesselAvailability, final VoyagePlan vp, final IPortTimesRecord portTimesRecord) {
+	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(final int vesselStartTime, final IVesselAvailability vesselAvailability, final VoyagePlan vp,
+			final IPortTimesRecord portTimesRecord) {
 		final long startingHeelInM3 = vp.getStartingHeelInM3();
 
 		boolean isCargoPlan = false;
@@ -269,8 +272,11 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 
 		final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vesselAvailability, vesselStartTime, newVoyagePlan, portTimesRecord);
 		assert newAllocation != null;
-		final CargoValueAnnotation cargoValueAnnotation = new CargoValueAnnotation(newAllocation);
-		final long newPnLValue = entityValueCalculator.evaluate(newVoyagePlan, cargoValueAnnotation, vesselAvailability, vesselStartTime, null);
+
+		final Pair<@NonNull CargoValueAnnotation, @NonNull Long> cargoAnnotation = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vesselAvailability, vesselStartTime, null);
+		assert cargoAnnotation != null;
+
+		final long newPnLValue = cargoAnnotation.getSecond();
 		return newPnLValue;
 	}
 

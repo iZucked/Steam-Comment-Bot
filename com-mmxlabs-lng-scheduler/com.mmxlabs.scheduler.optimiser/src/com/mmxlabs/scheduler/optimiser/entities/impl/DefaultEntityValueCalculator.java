@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.detailtree.DetailTree;
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -44,6 +45,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProvider;
@@ -129,8 +131,10 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @return
 	 */
 	@Override
-	public long evaluate(@NonNull final VoyagePlan plan, @NonNull final CargoValueAnnotation cargoPNLData, @NonNull final IVesselAvailability vesselAvailability, final int vesselStartTime,
-			@Nullable final IAnnotatedSolution annotatedSolution) {
+	public Pair<@NonNull CargoValueAnnotation, @NonNull Long> evaluate(@NonNull final VoyagePlan plan, @NonNull final IAllocationAnnotation currentAllocation,
+			@NonNull final IVesselAvailability vesselAvailability, final int vesselStartTime, @Nullable final IAnnotatedSolution annotatedSolution) {
+
+		final CargoValueAnnotation cargoPNLData = new CargoValueAnnotation(currentAllocation);
 
 		final List<IPortSlot> slots = cargoPNLData.getSlots();
 
@@ -348,21 +352,21 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 
 		// Finally handle any charter out generation stuff.
-//		{
-//			final long generatedCharterOutRevenue = shippingCostHelper.getGeneratedCharterOutRevenue(plan, vesselAvailability);
-//			final long generatedCharterOutCosts = shippingCostHelper.getGeneratedCharterOutCosts(plan);
-//
-//			result += shippingEntity.getShippingBook().getTaxedProfit(generatedCharterOutRevenue - generatedCharterOutCosts, utcEquivTaxTime);
-//
-//			if (annotatedSolution != null && exportElement != null) {
-//				if (shippingCostHelper.hasGeneratedCharterOut(plan)) {
-//					// Calculate P&L
-//					generateCharterOutAnnotations(plan, vesselAvailability, vesselStartTime, annotatedSolution, shippingEntity, utcEquivTaxTime, generatedCharterOutRevenue, firstSlot);
-//				}
-//			}
-//		}
+		// {
+		// final long generatedCharterOutRevenue = shippingCostHelper.getGeneratedCharterOutRevenue(plan, vesselAvailability);
+		// final long generatedCharterOutCosts = shippingCostHelper.getGeneratedCharterOutCosts(plan);
+		//
+		// result += shippingEntity.getShippingBook().getTaxedProfit(generatedCharterOutRevenue - generatedCharterOutCosts, utcEquivTaxTime);
+		//
+		// if (annotatedSolution != null && exportElement != null) {
+		// if (shippingCostHelper.hasGeneratedCharterOut(plan)) {
+		// // Calculate P&L
+		// generateCharterOutAnnotations(plan, vesselAvailability, vesselStartTime, annotatedSolution, shippingEntity, utcEquivTaxTime, generatedCharterOutRevenue, firstSlot);
+		// }
+		// }
+		// }
 
-		return result;
+		return new Pair<>(cargoPNLData, result);
 	}
 
 	/**
@@ -416,7 +420,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @return
 	 */
 	@Override
-	public long evaluate(final VoyagePlan plan, final IVesselAvailability vesselAvailability, final int planStartTime, final int vesselStartTime, @Nullable final IAnnotatedSolution annotatedSolution) {
+	public long evaluate(final VoyagePlan plan, final IVesselAvailability vesselAvailability, final int planStartTime, final int vesselStartTime,
+			@Nullable final IAnnotatedSolution annotatedSolution) {
 		final IEntity shippingEntity = entityProvider.getEntityForVesselAvailability(vesselAvailability);
 		if (shippingEntity == null) {
 			return 0L;
@@ -462,7 +467,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final IEntity shippingEntity, final long revenue, final long cost, final int utcEquivTaxTime, final ISequenceElement exportElement, final boolean includeLNG) {
 		{
 			final long shippingCosts = shippingCostHelper.getShippingCosts(plan, vesselAvailability, includeLNG, true);
-			final long shippingTotalPretaxProfit = revenue /* +additionProfitAndLoss */- cost - shippingCosts;
+			final long shippingTotalPretaxProfit = revenue /* +additionProfitAndLoss */ - cost - shippingCosts;
 			final long shippingProfit = shippingEntity.getShippingBook().getTaxedProfit(shippingTotalPretaxProfit, utcEquivTaxTime);
 
 			final DetailTree shippingDetails = new DetailTree();

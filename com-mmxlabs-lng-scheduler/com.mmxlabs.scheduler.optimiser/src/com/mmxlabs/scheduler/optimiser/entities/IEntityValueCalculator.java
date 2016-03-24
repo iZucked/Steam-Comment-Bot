@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.entities;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -22,13 +23,15 @@ public interface IEntityValueCalculator {
 	 * Evaluate a Cargo based {@link VoyagePlan} - returning the post tax P&L value
 	 * 
 	 * @param plan
-	 * @param cargoValueAllocation - empty {@link CargoValueAnnotation} object to populate. Initialised with an existing {@link IAllocationAnnotation}.
+	 * @param cargoValueAllocation
+	 *            - empty {@link CargoValueAnnotation} object to populate. Initialised with an existing {@link IAllocationAnnotation}.
 	 * @param vessel
 	 * @param vesselStartTime
 	 * @param annotatedSolution
 	 * @return
 	 */
-	long evaluate(@NonNull VoyagePlan plan, @NonNull CargoValueAnnotation currentAllocation, @NonNull IVesselAvailability vesselAvailability, int vesselStartTime, @Nullable IAnnotatedSolution annotatedSolution);
+	Pair<@NonNull CargoValueAnnotation, @NonNull Long> evaluate(@NonNull VoyagePlan plan, @NonNull IAllocationAnnotation currentAllocation, @NonNull IVesselAvailability vesselAvailability,
+			int vesselStartTime, @Nullable IAnnotatedSolution annotatedSolution);
 
 	/**
 	 * Evaluate a non-cargo based {@link VoyagePlan} returning the post tax P&L value

@@ -22,6 +22,7 @@ import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCa
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
@@ -134,7 +135,15 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 						return false;
 					}
 
-					final Pair<Integer, Integer> desTimes = dischargeTimeCalculator.getDivertableDESTimes(desPurchase, desSale, nominatedVesselProvider.getNominatedVessel(first), resource);
+					@Nullable
+					final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(first);
+					if (nominatedVessel == null) {
+						return false;
+					}
+					final Pair<Integer, Integer> desTimes = dischargeTimeCalculator.getDivertableDESTimes(desPurchase, desSale, nominatedVessel, resource);
+					if (desTimes == null) {
+						return false;
+					}
 					final int returnTime = desTimes.getSecond();
 					if (returnTime - fobLoadDate.getStart() > shippingHours) {
 						return false;
