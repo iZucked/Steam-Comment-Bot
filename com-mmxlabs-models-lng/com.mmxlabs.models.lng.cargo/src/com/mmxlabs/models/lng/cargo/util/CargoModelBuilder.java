@@ -101,6 +101,9 @@ public class CargoModelBuilder {
 
 		final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
 		configureSlot(slot, name, windowStart, port, purchaseContract, entity, priceExpression);
+		if (cv != null) {
+			slot.setCargoCV(cv);
+		}
 
 		cargoModel.getLoadSlots().add(slot);
 		return slot;
@@ -188,6 +191,7 @@ public class CargoModelBuilder {
 			throw new IllegalArgumentException("Divertable FOB sale need a nominated vessel");
 		}
 		slot.setFOBSale(true);
+		slot.setDivertible(divertable);
 		cargoModel.getDischargeSlots().add(slot);
 
 		return slot;

@@ -140,7 +140,7 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @see #setFillCapacity(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_FillCapacity()
 	 * @model default="1" unsettable="true" required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat scale='100' formatString='###.#' unit='%'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat scale='100' formatString='###.#' unit='%' exportFormatString='#.###'"
 	 * @generated
 	 */
 	double getFillCapacity();

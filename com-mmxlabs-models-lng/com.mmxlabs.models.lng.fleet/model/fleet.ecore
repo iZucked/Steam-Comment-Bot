@@ -44,6 +44,7 @@
         <details key="scale" value="100"/>
         <details key="formatString" value="###.#"/>
         <details key="unit" value="%"/>
+        <details key="exportFormatString" value="#.###"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
@@ -71,6 +72,7 @@
         <details key="scale" value="100"/>
         <details key="formatString" value="###.#"/>
         <details key="unit" value="%"/>
+        <details key="exportFormatString" value="#.###"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ladenAttributes" lowerBound="1"

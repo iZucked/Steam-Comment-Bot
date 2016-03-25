@@ -869,7 +869,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		   new String[] {
 			 "scale", "100",
 			 "formatString", "###.#",
-			 "unit", "%"
+			 "unit", "%",
+			 "exportFormatString", "#.###"
 		   });	
 		addAnnotation
 		  (getVesselClass_Capacity(), 
@@ -884,7 +885,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		   new String[] {
 			 "scale", "100",
 			 "formatString", "###.#",
-			 "unit", "%"
+			 "unit", "%",
+			 "exportFormatString", "#.###"
 		   });	
 		addAnnotation
 		  (getVesselClass_MinSpeed(), 
