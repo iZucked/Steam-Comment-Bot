@@ -263,6 +263,22 @@ public class PriceIntervalProviderHelper {
 				}
 			}
 		}
+		if (bestCanal == null) {
+			long fastest = Long.MAX_VALUE;
+			for (final LadenRouteData canal : sortedCanalTimes) {
+				if (canal.ladenMaxSpeed < fastest) {
+					bestCanal = canal;
+				}
+			}
+			if (bestCanal != null) {
+				int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) bestCanal.ladenMaxSpeed, (int) bestCanal.ladenMaxSpeed);
+				int ladenLength = (times[1] - times[0]) / 24;
+				final long boiloffMMBTU = Calculator
+						.convertM3ToMMBTu((ladenLength) * boiloffRateM3, cv);
+				final long boiloffCost = Calculator.costFromVolume(boiloffMMBTU, sales.price);
+				bestBoiloffCostMMBTU = OptimiserUnitConvertor.convertToInternalDailyCost(boiloffCost);
+			}
+		}
 		assert bestCanal != null;
 		return new NonNullPair<>(bestCanal, bestBoiloffCostMMBTU);
 	}
