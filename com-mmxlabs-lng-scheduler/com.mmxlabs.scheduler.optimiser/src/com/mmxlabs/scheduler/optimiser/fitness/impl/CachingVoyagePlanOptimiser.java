@@ -55,9 +55,9 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		private final int vesselCharterInRatePerDay;
 		private final IVessel vessel;
 		protected final long startHeel;
+		private final int baseFuelPricePerMT;
 
 		// Non hashcode fields
-		private final int baseFuelPricePerMT;
 		private final List<IOptionsSequenceElement> sequence;
 		private final List<IVoyagePlanChoice> choices;
 		protected IPortTimesRecord portTimesRecord;
@@ -121,6 +121,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 			// result = prime * result + loadPrice;
 			result = (prime * result) + dischargePrice;
+			result = (prime * result) + baseFuelPricePerMT;
 			result = (prime * result) + vesselCharterInRatePerDay;
 
 			result = (prime * result) + ((vessel == null) ? 0 : vessel.hashCode());
@@ -151,6 +152,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 				return dischargePrice == other.dischargePrice//
 						&& startHeel == other.startHeel //
+						&& baseFuelPricePerMT == other.baseFuelPricePerMT//
 						&& (vessel == other.vessel) //
 						&& Arrays.equals(voyageTimes, other.voyageTimes) //
 						&& Arrays.equals(durations, other.durations)//
