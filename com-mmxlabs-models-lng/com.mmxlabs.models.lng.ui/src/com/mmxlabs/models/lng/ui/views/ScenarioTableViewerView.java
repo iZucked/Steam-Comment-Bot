@@ -8,7 +8,6 @@ import java.util.EventObject;
 
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
-import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
@@ -127,8 +126,10 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 
 	@Override
 	public void setFocus() {
-		if (viewerPane != null) {
-			viewerPane.setFocus();
+		@Nullable
+		T pViewerPane = viewerPane;
+		if (pViewerPane != null) {
+			pViewerPane.setFocus();
 		} else if (childComposite != null) {
 			childComposite.setFocus();
 		}
@@ -137,8 +138,10 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 
 	@Override
 	public void setLocked(final boolean locked) {
-		if (viewerPane != null) {
-			viewerPane.setLocked(locked);
+		@Nullable
+		T pViewerPane = viewerPane;
+		if (pViewerPane != null) {
+			pViewerPane.setLocked(locked);
 		}
 
 		// Disable while locked.
@@ -157,8 +160,10 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 	 * @see org.eclipse.jface.viewers.Viewer#setSelection(org.eclipse.jface.viewers.ISelection, boolean)
 	 */
 	protected void setSelection(final ISelection selection, final boolean reveal) {
-		if (viewerPane != null) {
-			viewerPane.getScenarioViewer().setSelection(selection, reveal);
+		@Nullable
+		T pViewerPane = viewerPane;
+		if (pViewerPane != null) {
+			pViewerPane.getScenarioViewer().setSelection(selection, reveal);
 		}
 	}
 
@@ -170,8 +175,9 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 
 	@Override
 	public void dispose() {
-		if (currentCommandStack != null) {
-			currentCommandStack.removeCommandStackListener(this);
+		CommandStack pCurrentCommandStack = currentCommandStack;
+		if (pCurrentCommandStack != null) {
+			pCurrentCommandStack.removeCommandStackListener(this);
 			currentCommandStack = null;
 		}
 		super.dispose();
