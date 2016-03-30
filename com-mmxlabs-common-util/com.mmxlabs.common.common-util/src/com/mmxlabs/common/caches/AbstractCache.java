@@ -8,7 +8,7 @@ import com.mmxlabs.common.Pair;
 
 public abstract class AbstractCache<K, V> {
 
-	private static final int SAMPLE = 100000;
+	private static final int SAMPLE = 100_000;
 	private final String name;
 
 	int hits = 0;
