@@ -858,8 +858,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						return super.renderSetValue(container, setValue);
 					}
 				}), new RowDataEMFPath(false, Type.LOAD_ALLOCATION));
-		final GridViewerColumn loadVol = addTradesColumn(loadColumns, "Volume", new VolumeAttributeManipulator(pkg.getSlot_MaxQuantity(), editingDomain), new RowDataEMFPath(false, Type.LOAD));
-		loadVol.getColumn().setHeaderTooltip("in 1000's m³");
+		final GridViewerColumn loadVol = addTradesColumn(loadColumns, "Vol", new VolumeAttributeManipulator(pkg.getSlot_MaxQuantity(), editingDomain), new RowDataEMFPath(false, Type.LOAD));
+		loadVol.getColumn().setHeaderTooltip("in m³ or mmBtu");
 
 		final GridViewerColumn loadDateColumn = addTradesColumn(loadColumns, "Date", new LocalDateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
 			@Override
@@ -906,8 +906,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					}
 				}), new RowDataEMFPath(false, Type.DISCHARGE_ALLOCATION));
 
-		addTradesColumn(dischargeColumns, "Volume", new VolumeAttributeManipulator(pkg.getSlot_MaxQuantity(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE)).getColumn()
-				.setHeaderTooltip("in 1000's m³");
+		addTradesColumn(dischargeColumns, "Vol", new VolumeAttributeManipulator(pkg.getSlot_MaxQuantity(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE)).getColumn()
+				.setHeaderTooltip("in m³ or mmBtu");
 		addTradesColumn(dischargeColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 		// addTradesColumn(dischargeColumns, "D-ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 		{
@@ -937,7 +937,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		{
 			final AssignmentManipulator assignmentManipulator = new AssignmentManipulator(scenarioEditingLocation);
 			final RowDataEMFPath assignmentPath = new RowDataEMFPath(true, Type.SLOT_OR_CARGO);
-			final GridViewerColumn assignmentColumn = addTradesColumn("Assignment", assignmentManipulator, assignmentPath);
+			final GridViewerColumn assignmentColumn = addTradesColumn("Vessel", assignmentManipulator, assignmentPath);
 			assignmentColumn.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), assignmentManipulator, assignmentPath) {
 				@Override
 				public Image getImage(final Object element) {
