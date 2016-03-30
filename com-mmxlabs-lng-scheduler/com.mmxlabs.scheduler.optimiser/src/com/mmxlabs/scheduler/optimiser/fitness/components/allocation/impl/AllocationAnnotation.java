@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.common.base.Objects;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -29,6 +30,25 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 		public int cargoCV;
 		public int startTime;
 		public int duration;
+
+		@Override
+		public boolean equals(Object obj) {
+
+			if (obj == this) {
+				return true;
+			}
+			if (obj instanceof SlotAllocationAnnotation) {
+				final SlotAllocationAnnotation other = (SlotAllocationAnnotation) obj;
+				return volumeInM3 == other.volumeInM3 //
+						&& volumeInMMBTu == other.volumeInMMBTu //
+						&& cargoCV == other.cargoCV //
+						&& startTime == other.startTime //
+						&& duration == other.duration;
+
+			}
+
+			return false;
+		}
 	}
 
 	private final Map<IPortSlot, SlotAllocationAnnotation> slotAllocations = new HashMap<IPortSlot, SlotAllocationAnnotation>();
@@ -222,5 +242,25 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	@Override
 	public IPortSlot getReturnSlot() {
 		return returnPortSlot;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
+			return true;
+		}
+
+		if (obj instanceof AllocationAnnotation) {
+			AllocationAnnotation other = (AllocationAnnotation) obj;
+			return this.firstSlotTime == other.firstSlotTime //
+					&& this.startHeelVolumeInM3 == other.startHeelVolumeInM3 //
+					&& this.fuelVolumeInM3 == other.fuelVolumeInM3 //
+					&& this.remainingHeelVolumeInM3 == other.remainingHeelVolumeInM3 //
+					&& Objects.equal(this.returnPortSlot, other.returnPortSlot) //
+					&& Objects.equal(this.slotAllocations, other.slotAllocations)//
+					&& Objects.equal(this.slots, other.slots);
+		}
+
+		return false;
 	}
 }

@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.common.base.Objects;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -32,6 +33,26 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 		public long additionalShippingPNL;
 		public int pricePerMMBTu;
 		public IEntity entity;
+
+		@Override
+		public boolean equals(final Object obj) {
+
+			if (obj == this) {
+				return true;
+			}
+			if (obj instanceof SlotAllocationAnnotation) {
+				final SlotAllocationAnnotation other = (SlotAllocationAnnotation) obj;
+				return this.value == other.value //
+						&& this.additionalOtherPNL == other.additionalOtherPNL //
+						&& this.additionalUpsidePNL == other.additionalUpsidePNL //
+						&& this.additionalShippingPNL == other.additionalShippingPNL //
+						&& this.pricePerMMBTu == other.pricePerMMBTu //
+						&& Objects.equal(this.entity, other.entity);
+
+			}
+
+			return false;
+		}
 	}
 
 	private final Map<IPortSlot, SlotAllocationAnnotation> slotAllocations = new HashMap<IPortSlot, SlotAllocationAnnotation>();
@@ -138,7 +159,7 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	@Override
-	public List<IPortSlot> getSlots() {
+	public List<@NonNull IPortSlot> getSlots() {
 		return allocationAnnotation.getSlots();
 	}
 
@@ -209,4 +230,18 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 		return allocationAnnotation.getReturnSlot();
 	}
 
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj == this) {
+			return true;
+		}
+
+		if (obj instanceof CargoValueAnnotation) {
+			final CargoValueAnnotation other = (CargoValueAnnotation) obj;
+			return Objects.equal(this.allocationAnnotation, other.allocationAnnotation) //
+					&& Objects.equal(this.slotAllocations, other.slotAllocations);
+		}
+
+		return false;
+	}
 }

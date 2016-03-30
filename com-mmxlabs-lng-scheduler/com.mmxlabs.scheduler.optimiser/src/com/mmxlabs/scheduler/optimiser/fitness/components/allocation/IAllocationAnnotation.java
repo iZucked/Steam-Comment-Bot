@@ -6,6 +6,8 @@ package com.mmxlabs.scheduler.optimiser.fitness.components.allocation;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -20,7 +22,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 public interface IAllocationAnnotation extends IPortTimesRecord {
 
 	@Override
-	List<IPortSlot> getSlots();
+	@NonNull List<@NonNull IPortSlot> getSlots();
 
 	/**
 	 * Returns the total LNG in m3 used as fuel during this cargo.
