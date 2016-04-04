@@ -50,14 +50,14 @@ public class CheckingEntityValueCalculator implements IEntityValueCalculator {
 		if (value_d.getSecond().longValue() != value_r.getSecond().longValue()) {
 			
 			boolean data = Objects.equals(value_d.getFirst(), value_r.getFirst());
-			log.error("Checking EVC Error: (Evaluate shipped P&L differs)");
+			log.error("Checking EVC Error: (Evaluate cargo P&L differs)");
 			log.error("   reference value:" + value_r.getSecond());
 			log.error("    delegate value:" + value_d.getSecond());
 			throw new RuntimeException("Cache consistency failure");
 
 		}
 		if (!Objects.equals(value_d.getFirst(), value_r.getFirst())) {
-			log.error("Checking EVC Error: (Evaluate shipped allocation differs)");
+			log.error("Checking EVC Error: (Evaluate cargo allocation differs)");
 			log.error("   reference value:" + value_r.getFirst());
 			log.error("    delegate value:" + value_d.getFirst());
 			throw new RuntimeException("Cache consistency failure");
@@ -80,7 +80,7 @@ public class CheckingEntityValueCalculator implements IEntityValueCalculator {
 		referenceSeconds += (c - b);
 		check();
 		if (value_d != value_r) {
-			log.error("Checking EVC Error: (Evaluate non-shipped P&L differs)");
+			log.error("Checking EVC Error: (Evaluate non-cargo P&L differs)");
 			log.error("   reference value:" + value_r);
 			log.error("    delegate value:" + value_d);
 			throw new RuntimeException("Cache consistency failure");
