@@ -573,7 +573,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 		if (annotation != null) {
 			String requiredFeature = annotation.getDetails().get("feature");
 			if (requiredFeature != null) {
-				return LicenseFeatures.isPermitted(String.format("feature:%s", requiredFeature));
+				return LicenseFeatures.isPermitted(String.format("features:%s", requiredFeature));
 			}
 		}
 		return true;
