@@ -5,7 +5,6 @@
 package com.mmxlabs.scheduler.optimiser.entities.impl;
 
 import java.util.List;
-import java.util.Random;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -16,9 +15,9 @@ import com.mmxlabs.common.caches.AbstractCache;
 import com.mmxlabs.common.caches.LHMCache;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.cache.CacheKey;
+import com.mmxlabs.scheduler.optimiser.cache.DepCacheKey;
 import com.mmxlabs.scheduler.optimiser.cache.FunctionalCacheKeyEvaluator;
 import com.mmxlabs.scheduler.optimiser.cache.ICacheKeyDependencyLinker;
-import com.mmxlabs.scheduler.optimiser.cache.ICacheKeyDependencyLinker.CacheType;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
@@ -31,9 +30,9 @@ public final class CachingEntityValueCalculator implements IEntityValueCalculato
 	@Inject
 	private ICacheKeyDependencyLinker linker;
 
-	private final IEntityValueCalculator delegate;
+	private final @NonNull IEntityValueCalculator delegate;
 
-	private final AbstractCache<CacheKey<@NonNull CargoPNLCacheRecord>, @Nullable Pair<@NonNull CargoValueAnnotation, @NonNull Long>> cache;
+	private final @NonNull AbstractCache<CacheKey<@NonNull CargoPNLCacheRecord>, @Nullable Pair<@NonNull CargoValueAnnotation, @NonNull Long>> cache;
 
 	public CachingEntityValueCalculator(final @NonNull IEntityValueCalculator delegate) {
 		this(delegate, 500_000);
@@ -56,10 +55,8 @@ public final class CachingEntityValueCalculator implements IEntityValueCalculato
 		}
 		final CargoPNLCacheRecord record = new CargoPNLCacheRecord(plan, currentAllocation, vesselAvailability, vesselStartTime);
 
-		// final List<CacheKey<@NonNull CargoPNLCacheRecord>> depKeys = linker.link(Phase.PNL, currentAllocation);
-		// final CacheKey<@NonNull CargoPNLCacheRecord> key = new CacheKey<>(vesselAvailability, currentAllocation.getStartHeelVolumeInM3(), currentAllocation, record, depKeys);
-
-		final CacheKey<@NonNull CargoPNLCacheRecord> key = new CacheKey<>(vesselAvailability, currentAllocation.getStartHeelVolumeInM3(), currentAllocation, record);
+		final List<@NonNull DepCacheKey> depKeys = linker.link(ICacheKeyDependencyLinker.CacheType.PNL, currentAllocation);
+		final CacheKey<@NonNull CargoPNLCacheRecord> key = new CacheKey<>(vesselAvailability, currentAllocation.getStartHeelVolumeInM3(), currentAllocation, record, depKeys);
 
 		return cache.get(key);
 	}

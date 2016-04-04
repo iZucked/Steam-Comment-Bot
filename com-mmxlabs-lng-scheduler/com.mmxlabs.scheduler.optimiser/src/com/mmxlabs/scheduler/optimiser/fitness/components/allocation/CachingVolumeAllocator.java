@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation;
 
+import java.util.List;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -11,6 +13,7 @@ import com.google.inject.Inject;
 import com.mmxlabs.common.caches.AbstractCache;
 import com.mmxlabs.common.caches.LHMCache;
 import com.mmxlabs.scheduler.optimiser.cache.CacheKey;
+import com.mmxlabs.scheduler.optimiser.cache.DepCacheKey;
 import com.mmxlabs.scheduler.optimiser.cache.FunctionalCacheKeyEvaluator;
 import com.mmxlabs.scheduler.optimiser.cache.ICacheKeyDependencyLinker;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -19,12 +22,13 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public final class CachingVolumeAllocator implements IVolumeAllocator {
+
 	@Inject
-	private ICacheKeyDependencyLinker linker;
+	private @NonNull ICacheKeyDependencyLinker linker;
 
-	private final IVolumeAllocator delegate;
+	private final @NonNull IVolumeAllocator delegate;
 
-	private final AbstractCache<CacheKey<@NonNull CargoVolumeCacheRecord>, @Nullable IAllocationAnnotation> cache;
+	private final @NonNull AbstractCache<CacheKey<@NonNull CargoVolumeCacheRecord>, @Nullable IAllocationAnnotation> cache;
 
 	public CachingVolumeAllocator(final @NonNull IVolumeAllocator delegate) {
 		this(delegate, 500_000);
@@ -42,12 +46,11 @@ public final class CachingVolumeAllocator implements IVolumeAllocator {
 	@Override
 	public IAllocationAnnotation allocate(final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, final @NonNull VoyagePlan plan,
 			final @NonNull IPortTimesRecord portTimesRecord) {
+
 		final CargoVolumeCacheRecord record = new CargoVolumeCacheRecord(vesselAvailability, vesselStartTime, plan, portTimesRecord);
 
-		// final List<CacheKey<@NonNull CargoVolumeCacheRecord>> depKeys = linker.link(CacheType.Volume, portTimesRecord);
-		// final CacheKey<@NonNull CargoVolumeCacheRecord> key = new CacheKey<>(vesselAvailability, plan.getStartingHeelInM3(), portTimesRecord, record, depKeys);
-
-		final CacheKey<@NonNull CargoVolumeCacheRecord> key = new CacheKey<>(vesselAvailability, plan.getStartingHeelInM3(), portTimesRecord, record);
+		final List<@NonNull DepCacheKey> depKeys = linker.link(ICacheKeyDependencyLinker.CacheType.Volume, portTimesRecord);
+		final CacheKey<@NonNull CargoVolumeCacheRecord> key = new CacheKey<>(vesselAvailability, plan.getStartingHeelInM3(), portTimesRecord, record, depKeys);
 
 		return cache.get(key);
 	}
