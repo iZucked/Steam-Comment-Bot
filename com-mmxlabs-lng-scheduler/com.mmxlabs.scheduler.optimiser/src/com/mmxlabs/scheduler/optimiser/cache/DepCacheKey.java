@@ -46,26 +46,28 @@ public final class DepCacheKey {
 
 		if (obj instanceof DepCacheKey) {
 			final DepCacheKey other = (DepCacheKey) obj;
-			final IPortSlot returnSlot = portTimesRecord.getReturnSlot();
+			
+			final IPortSlot thisReturnSlot = portTimesRecord.getReturnSlot();
 			final IPortSlot otherReturnSlot = other.portTimesRecord.getReturnSlot();
 			// Do some quicker comparisons first
 			final boolean partA = (this.startHeelInM3 == other.startHeelInM3) //
-					&& Objects.equals(vesselAvailability, other.vesselAvailability) //
-					&& Objects.equals(returnSlot, otherReturnSlot) //
-					&& Objects.equals(portTimesRecord.getSlots(), other.portTimesRecord.getSlots());
+					&& Objects.equals(this.vesselAvailability, other.vesselAvailability) //
+					&& Objects.equals(thisReturnSlot, otherReturnSlot) //
+					&& Objects.equals(this.portTimesRecord.getSlots(), other.portTimesRecord.getSlots());
 
 			// Then do more detailed comparisons
 			if (partA) {
-				for (final IPortSlot slot : portTimesRecord.getSlots()) {
-					if (portTimesRecord.getSlotDuration(slot) != other.portTimesRecord.getSlotDuration(slot)) {
+				for (final IPortSlot slot : this.portTimesRecord.getSlots()) {
+					if (this.portTimesRecord.getSlotDuration(slot) != other.portTimesRecord.getSlotDuration(slot)) {
 						return false;
 					}
-					if (portTimesRecord.getSlotTime(slot) != other.portTimesRecord.getSlotTime(slot)) {
+					if (this.portTimesRecord.getSlotTime(slot) != other.portTimesRecord.getSlotTime(slot)) {
 						return false;
 					}
 				}
-				if (returnSlot != null && otherReturnSlot != null) {
-					if (portTimesRecord.getSlotTime(returnSlot) != other.portTimesRecord.getSlotTime(otherReturnSlot)) {
+				
+				if (thisReturnSlot != null && otherReturnSlot != null) {
+					if (this.portTimesRecord.getSlotTime(thisReturnSlot) != other.portTimesRecord.getSlotTime(otherReturnSlot)) {
 						return false;
 					}
 				}
