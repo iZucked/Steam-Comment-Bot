@@ -17,7 +17,7 @@ public interface ICacheKeyDependencyLinker {
 	 * The different types of cache
 	 *
 	 */
-	enum CacheType {
+	public enum CacheType {
 		/* VoyagePlan, */Volume, PNL
 	}
 
