@@ -90,6 +90,17 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 		return -Integer.MAX_VALUE;
 	}
 
+	protected String renderSetValue(final Object container, final Object setValue) {
+		if (setValue == null) {
+			return null;
+		}
+		formatter.setValue(setValue);
+//		return setValue == null ? null : 
+			return formatter.getDisplayString();//setValue.toString();
+	}
+
+	
+
 	@Override
 	protected CellEditor createCellEditor(final Composite c, final Object object) {
 		final FormattedTextCellEditor editor = new FormattedTextCellEditor(c);
@@ -99,6 +110,11 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 	}
 
 	private Object scale(final Object internalValue) {
+		
+		if (scale == 1) {
+			return internalValue;
+		}
+		
 		if (internalValue instanceof Integer) {
 			return ((Integer) internalValue).intValue() * (double) scale;
 		} else if (internalValue instanceof Long) {
@@ -112,6 +128,10 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 	}
 
 	private Object descale(final Object displayValue) {
+		if (scale == 1) {
+			return displayValue;
+		}
+		
 		if (displayValue instanceof Integer) {
 			return ((Integer) displayValue).intValue() / (double) scale;
 		} else if (displayValue instanceof Long) {
