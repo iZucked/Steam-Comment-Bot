@@ -23,6 +23,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.DefaultVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -248,8 +249,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 		if (baseSalesMarketPort.equals(dischargeOption.getPort())) {
 			return marketPurchasePricePerMMBTu;
 		} else {
-			final DefaultVesselAvailability notionalVesselAvailability = new DefaultVesselAvailability();
-			notionalVesselAvailability.setVessel(vessel);
+			final DefaultVesselAvailability notionalVesselAvailability = new DefaultVesselAvailability(vessel, VesselInstanceType.FLEET);
 			final int originalLoadTime = shippingHoursRestrictionProvider.getBaseTime(loadElement).getStart();
 
 			long baseShippingCosts = Long.MAX_VALUE;
