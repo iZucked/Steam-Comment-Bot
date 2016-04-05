@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,12 +64,12 @@ public class CheckingVPO implements IVoyagePlanOptimiser {
 	}
 
 	@Override
-	public List<IOptionsSequenceElement> getBasicSequence() {
+	public List<@NonNull IOptionsSequenceElement> getBasicSequence() {
 		return delegate.getBasicSequence();
 	}
 
 	@Override
-	public void setBasicSequence(final List<IOptionsSequenceElement> basicSequence) {
+	public void setBasicSequence(final List<@NonNull IOptionsSequenceElement> basicSequence) {
 		delegate.setBasicSequence(basicSequence);
 		reference.setBasicSequence(basicSequence);
 	}
