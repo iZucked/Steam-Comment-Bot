@@ -51,9 +51,9 @@ public class MarkToMarketVesselAvailability implements IVesselAvailability {
 	}
 
 	@Override
-	@Nullable
+	@NonNull
 	public IVessel getVessel() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

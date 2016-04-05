@@ -909,10 +909,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final String name = vessel.getName();// + vesselAvailabilities.size();
 
-		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability();
-		vesselAvailability.setVessel(vessel);
-
-		vesselAvailability.setVesselInstanceType(vesselInstanceType);
+		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability(vessel, vesselInstanceType);
 
 		vesselAvailability.setDailyCharterInRate(dailyCharterInRate);
 

@@ -45,6 +45,7 @@ import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.DefaultVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
@@ -185,8 +186,7 @@ public final class VoyagePlannerTest {
 		vesselClass.setConsumptionRate(VesselState.Laden, consumptionRateCalculator);
 		vesselClass.setConsumptionRate(VesselState.Ballast, consumptionRateCalculator);
 
-		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability();
-		vesselAvailability.setVessel(vessel);
+		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability(vessel, VesselInstanceType.FLEET);
 
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		vesselProvider.setVesselAvailabilityResource(resource, vesselAvailability);
@@ -444,8 +444,7 @@ public final class VoyagePlannerTest {
 		vesselClass.setConsumptionRate(VesselState.Laden, consumptionRateCalculator);
 		vesselClass.setConsumptionRate(VesselState.Ballast, consumptionRateCalculator);
 
-		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability();
-		vesselAvailability.setVessel(vessel);
+		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability(vessel, VesselInstanceType.FLEET);
 
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		vesselProvider.setVesselAvailabilityResource(resource, vesselAvailability);
