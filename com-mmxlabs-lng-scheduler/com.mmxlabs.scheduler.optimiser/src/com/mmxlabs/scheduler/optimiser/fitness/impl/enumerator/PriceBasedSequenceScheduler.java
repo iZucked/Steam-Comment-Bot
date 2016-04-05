@@ -38,12 +38,7 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 			setTimeWindowsToEarliest(index);
 		}
 		synchroniseShipToShipBindings();
-		if (RE_EVALUATE_SOLUTION) {
-			evaluate(null);
-			return reEvaluateAndGetBestResult(sequences, solution);
-		} else {
-			return evaluate(solution);
-		}
+		return evaluate(solution);
 	}
 
 	private void sequentialEarliestTimePriceBasedWindowTrimming(ISequences sequences, List<List<IPortTimeWindowsRecord>> portTimeWindowsRecords) {
@@ -53,16 +48,17 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 				setFeasibleTimeWindowsUsingPrevious(portTimeWindowsRecord, seqIndex);
 				timeWindowsTrimming.processCargo(portTimeWindowsRecord);
 				updateTimeWindows(portTimeWindowsRecord, seqIndex);
-				IPortSlot lastSlot = portTimeWindowsRecord.getSlots().get(portTimeWindowsRecord.getSlots().size()-1);
+				IPortSlot lastSlot = portTimeWindowsRecord.getSlots().get(portTimeWindowsRecord.getSlots().size() - 1);
 				setTimeWindowsToEarliest(seqIndex, portTimeWindowsRecord.getIndex(lastSlot), portTimeWindowsRecord.getSlotFeasibleTimeWindow(lastSlot));
 			}
 		}
 	}
 
 	private void updateFollowingPortTimeRecordStartTime(IPortTimeWindowsRecord first, IPortTimeWindowsRecord second) {
-		IPortSlot lastSlotFirst = first.getSlots().get(first.getSlots().size()-1);
+		IPortSlot lastSlotFirst = first.getSlots().get(first.getSlots().size() - 1);
 		IPortSlot firstSlotSecond = second.getFirstSlot();
-		ITimeWindow timeWindow = new TimeWindow(first.getSlotFeasibleTimeWindow(lastSlotFirst).getStart(), second.getFirstSlotFeasibleTimeWindow().getStart(), second.getFirstSlotFeasibleTimeWindow().getEndFlex());
+		ITimeWindow timeWindow = new TimeWindow(first.getSlotFeasibleTimeWindow(lastSlotFirst).getStart(), second.getFirstSlotFeasibleTimeWindow().getStart(),
+				second.getFirstSlotFeasibleTimeWindow().getEndFlex());
 		second.setSlotFeasibleTimeWindow(firstSlotSecond, timeWindow);
 	}
 
@@ -89,11 +85,12 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 			final ITimeWindow timeWindow;
 			if (portTimeWindowsRecord.getFirstSlot().equals(portSlot) && portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot()) > 0) {
 				// first load
-				timeWindow = new TimeWindow(Math.max(windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot()) - 1] + minTimeToNextElement[seqIndex][portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot()) - 1], windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot())]),
-						windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)]);
+				timeWindow = new TimeWindow(Math.max(
+						windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot()) - 1]
+								+ minTimeToNextElement[seqIndex][portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot()) - 1],
+						windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot())]), windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)]);
 			} else {
-				timeWindow = new TimeWindow(windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)],
-						windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)]);
+				timeWindow = new TimeWindow(windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)], windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)]);
 			}
 			portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, timeWindow);
 		}
@@ -101,24 +98,9 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 
 	private void setFeasibleTimeWindows(IPortTimeWindowsRecord portTimeWindowsRecord, int seqIndex) {
 		for (IPortSlot portSlot : portTimeWindowsRecord.getSlots()) {
-			ITimeWindow timeWindow = new TimeWindow(windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)],
-					windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)]);
+			ITimeWindow timeWindow = new TimeWindow(windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)], windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)]);
 			portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, timeWindow);
 		}
-	}
-
-	protected final ScheduledSequences reEvaluateAndGetBestResult(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
-
-		setSequences(sequences);
-
-		prepare();
-
-		sequentialEarliestTimePriceBasedWindowTrimming(sequences, portTimeWindowsRecords);
-		for (int index = 0; index < sequences.size(); ++index) {
-			setTimeWindowsToEarliest(index);
-		}
-		synchroniseShipToShipBindings();
-		return evaluate(solution);
 	}
 
 	private void synchroniseShipToShipBindings() {
@@ -135,7 +117,7 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 		}
 
 	}
-	
+
 	private void setTimeWindowsToEarliest(final int seq) {
 		if (arrivalTimes[seq] == null) {
 			return;

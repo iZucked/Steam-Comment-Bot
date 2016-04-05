@@ -56,11 +56,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimeWindowsRecord;
  * 
  */
 public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequenceScheduler {
-	public final static String OPTIMISER_REEVALUATE = "enableReEvaluationInOptimiser";
-
-	@Inject
-	@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
-	protected boolean RE_EVALUATE_SOLUTION;
 
 	private static final int DISCHARGE_SEQUENCE_INDEX_OFFSET = 0;
 	private static final int DISCHARGE_WITHIN_SEQUENCE_INDEX_OFFSET = 1;
@@ -137,7 +132,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 	// ArrayList<Integer>();
 
 	protected List<List<IPortTimeWindowsRecord>> portTimeWindowsRecords = new ArrayList<>();
-	
+
 	@Inject
 	private IShipToShipBindingProvider shipToShipProvider;
 
@@ -454,7 +449,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 		int index = 0;
 		ISequenceElement prevElement = null;
 		final boolean[] breakSequence = findSequenceBreaks(sequence);
-		
+
 		// from voyageplanner --->
 		IPortSlot prevPortSlot = null;
 		// Used for end of sequence checks
@@ -466,7 +461,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 		// first pass, collecting start time windows
 		for (final ISequenceElement element : sequence) {
 			final IPortSlot slot = portSlotProvider.getPortSlot(element);
-			
+
 			// from voyageplanner --->
 			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
 			final PortType portType = portTypeProvider.getPortType(element);
@@ -474,7 +469,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 			// --->
 
 			final List<ITimeWindow> windows;
-			
+
 			// Take element start window into account
 			if (portTypeProvider.getPortType(element) == PortType.Start) {
 				final IStartEndRequirement startRequirement = startEndRequirementProvider.getStartRequirement(resource);
@@ -540,7 +535,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 			} else {
 				portTimeWindowsRecord.setSlot(thisPortSlot, null, visitDuration, index);
 			}
-			
+
 			isVirtual[index] = portTypeProvider.getPortType(element) == PortType.Virtual;
 			useTimeWindow[index] = prevElement == null ? false : portTypeProvider.getPortType(prevElement) == PortType.Short_Cargo_End;
 			// Calculate minimum inter-element durations
@@ -552,7 +547,8 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 
 				int minTravelTime = Integer.MAX_VALUE;
 				int maxTravelTime = 0;
-				for (final Pair<ERouteOption, Integer> entry : distanceProvider.getDistanceValues(prevPort, port, windowStartTime[index - 1] + durationProvider.getElementDuration(element, resource))) {
+				for (final Pair<ERouteOption, Integer> entry : distanceProvider.getDistanceValues(prevPort, port,
+						windowStartTime[index - 1] + durationProvider.getElementDuration(element, resource))) {
 					final int distance = entry.getSecond();
 					if (distance != Integer.MAX_VALUE) {
 						final int extraTime = routeCostProvider.getRouteTransitTime(entry.getFirst(), vesselAvailability.getVessel());
