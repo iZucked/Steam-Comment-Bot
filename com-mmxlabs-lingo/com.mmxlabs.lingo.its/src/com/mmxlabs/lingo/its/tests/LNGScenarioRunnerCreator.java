@@ -254,12 +254,6 @@ public class LNGScenarioRunnerCreator {
 						protected void configure() {
 
 						}
-
-						@Provides
-						@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
-						private boolean isOptimiserReevaluating() {
-							return false;
-						}
 					});
 				}
 				if (moduleType == ModuleType.Module_OptimisationParametersModule) {
