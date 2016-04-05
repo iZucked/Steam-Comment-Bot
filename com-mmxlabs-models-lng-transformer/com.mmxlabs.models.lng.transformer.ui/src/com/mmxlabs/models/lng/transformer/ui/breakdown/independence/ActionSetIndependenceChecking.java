@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
@@ -39,6 +40,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
@@ -553,17 +555,21 @@ public class ActionSetIndependenceChecking {
 		}
 	}
 
-	private long calculateScheduleLateness(final ISequences fullSequences, final ScheduledSequences scheduledSequences) {
+	private long calculateScheduleLateness(final @NonNull ISequences fullSequences, final @NonNull ScheduledSequences scheduledSequences) {
 		long sumCost = 0;
 
 		for (final IPortSlot lateSlot : scheduledSequences.getLateSlotsSet()) {
-			sumCost += scheduledSequences.getLatenessCost(lateSlot).getSecond();
+			@Nullable
+			final Pair<Interval, Long> latenessCost = scheduledSequences.getLatenessCost(lateSlot);
+			if (latenessCost != null) {
+				sumCost += latenessCost.getSecond();
+			}
 		}
 		return sumCost;
 
 	}
 
-	public long calculateScheduleCapacity(final ISequences fullSequences, final ScheduledSequences scheduledSequences) {
+	public long calculateScheduleCapacity(final @NonNull ISequences fullSequences, final @NonNull ScheduledSequences scheduledSequences) {
 		long sumCost = 0;
 
 		for (final ISequence seq : fullSequences.getSequences().values()) {
