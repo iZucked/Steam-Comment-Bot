@@ -10,6 +10,6 @@ package com.mmxlabs.optimiser.lso;
  * @author Simon Goodall
  * 
  */
-public interface INullMove extends IMove{
+public interface INullMove extends IMove {
 
 }

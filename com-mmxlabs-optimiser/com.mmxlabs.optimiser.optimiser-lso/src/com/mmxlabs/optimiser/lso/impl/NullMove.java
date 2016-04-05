@@ -17,7 +17,7 @@ import com.mmxlabs.optimiser.lso.INullMove;
 public class NullMove implements INullMove {
 
 	@Override
-	public Collection<IResource> getAffectedResources() {
+	public Collection<@NonNull IResource> getAffectedResources() {
 		// returns an empty list
 		return Collections.emptyList();
 	}
