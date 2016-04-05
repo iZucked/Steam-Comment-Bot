@@ -22,10 +22,11 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
  */
 public final class DefaultVesselAvailability implements IVesselAvailability {
 
-	private IVessel vessel;
+	@NonNull
+	private final IVessel vessel;
 
 	@NonNull
-	private VesselInstanceType vesselInstanceType = VesselInstanceType.UNKNOWN;
+	private final VesselInstanceType vesselInstanceType;
 
 	private ICurve dailyCharterInRate;
 
@@ -36,23 +37,21 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 
 	private int spotIndex;
 
-	@Override
-	public IVessel getVessel() {
-		return vessel;
+	public DefaultVesselAvailability(@NonNull final IVessel vessel, @NonNull final VesselInstanceType vesselInstanceType) {
+		this.vessel = vessel;
+		this.vesselInstanceType = vesselInstanceType;
 	}
 
-	public void setVessel(final IVessel vessel) {
-		this.vessel = vessel;
+	@Override
+	@NonNull
+	public IVessel getVessel() {
+		return vessel;
 	}
 
 	@Override
 	@NonNull
 	public VesselInstanceType getVesselInstanceType() {
 		return vesselInstanceType;
-	}
-
-	public void setVesselInstanceType(@NonNull final VesselInstanceType vesselInstanceType) {
-		this.vesselInstanceType = vesselInstanceType;
 	}
 
 	@Override

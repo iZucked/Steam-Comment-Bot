@@ -16,6 +16,7 @@ import com.mmxlabs.common.curves.ICurve;
  */
 public interface IVesselAvailability {
 
+	@NonNull
 	IVessel getVessel();
 
 	@Nullable
