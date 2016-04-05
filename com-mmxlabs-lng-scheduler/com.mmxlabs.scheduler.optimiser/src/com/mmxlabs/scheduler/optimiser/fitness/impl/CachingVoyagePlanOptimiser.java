@@ -53,18 +53,19 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		private final int[] voyageTimes;
 		private final int dischargePrice;
 		private final int vesselCharterInRatePerDay;
-		private final IVessel vessel;
+		private final @NonNull IVessel vessel;
 		protected final long startHeel;
 		private final int baseFuelPricePerMT;
 
 		// Non hashcode fields
-		private final List<IOptionsSequenceElement> sequence;
-		private final List<IVoyagePlanChoice> choices;
-		protected IPortTimesRecord portTimesRecord;
-		protected IResource resource;
+		private final @NonNull List<@NonNull IOptionsSequenceElement> sequence;
+		private final @NonNull List<@NonNull IVoyagePlanChoice> choices;
+		protected @NonNull IPortTimesRecord portTimesRecord;
+		protected @NonNull IResource resource;
 
-		public CacheKey(final IVessel vessel, final IResource resource, final int vesselCharterInRatePerDay, final int baseFuelPricePerMT, final List<IOptionsSequenceElement> sequence,
-				final IPortTimesRecord portTimesRecord, final List<IVoyagePlanChoice> choices, final long startHeel) {
+		public CacheKey(final @NonNull IVessel vessel, final @NonNull IResource resource, final int vesselCharterInRatePerDay, final int baseFuelPricePerMT,
+				final @NonNull List<@NonNull IOptionsSequenceElement> sequence, final @NonNull IPortTimesRecord portTimesRecord, final @NonNull List<@NonNull IVoyagePlanChoice> choices,
+				final long startHeel) {
 			super();
 			this.vessel = vessel;
 			this.resource = resource;
@@ -183,7 +184,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	private IResource resource;
 
-	public CachingVoyagePlanOptimiser(final IVoyagePlanOptimiser delegate, final int cacheSize) {
+	public CachingVoyagePlanOptimiser(final @NonNull IVoyagePlanOptimiser delegate, final int cacheSize) {
 		super();
 		this.delegate = delegate;
 		final IKeyEvaluator<@NonNull CacheKey, @NonNull Pair<@NonNull VoyagePlan, @NonNull Long>> evaluator = new IKeyEvaluator<@NonNull CacheKey, @NonNull Pair<@NonNull VoyagePlan, @NonNull Long>>() {
@@ -240,12 +241,12 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	}
 
 	@Override
-	public List<IOptionsSequenceElement> getBasicSequence() {
+	public @NonNull List<@NonNull IOptionsSequenceElement> getBasicSequence() {
 		return basicSequence;
 	}
 
 	@Override
-	public void setBasicSequence(@NonNull final List<IOptionsSequenceElement> basicSequence) {
+	public void setBasicSequence(final List<@NonNull IOptionsSequenceElement> basicSequence) {
 		this.basicSequence = basicSequence;
 	}
 
@@ -284,12 +285,12 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	}
 
 	@Override
-	public void addChoice(final IVoyagePlanChoice choice) {
+	public void addChoice(final @NonNull IVoyagePlanChoice choice) {
 		choices.add(choice);
 	}
 
 	@Override
-	public void setPortTimesRecord(final IPortTimesRecord portTimesRecord) {
+	public void setPortTimesRecord(final @NonNull IPortTimesRecord portTimesRecord) {
 		this.portTimesRecord = portTimesRecord;
 	}
 
@@ -307,5 +308,4 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	public void setVesselCharterInRatePerDay(int charterInRatePerDay) {
 		this.vesselCharterInRatePerDay = charterInRatePerDay;
 	}
-
 }

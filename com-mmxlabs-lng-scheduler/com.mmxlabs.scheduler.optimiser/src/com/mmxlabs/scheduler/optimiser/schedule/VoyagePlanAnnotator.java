@@ -6,6 +6,8 @@ package com.mmxlabs.scheduler.optimiser.schedule;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -53,21 +55,21 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 	private final FuelComponent[] idleFuelComponents = FuelComponent.getIdleFuelComponents();
 	private final FuelComponent[] travelFuelComponents = FuelComponent.getTravelFuelComponents();
 
-	public void annotateFromScheduledSequences(final ScheduledSequences scheduledSequences, final IAnnotatedSolution solution) {
+	public void annotateFromScheduledSequences(final @NonNull ScheduledSequences scheduledSequences, final @NonNull IAnnotatedSolution solution) {
 		for (final ScheduledSequence s : scheduledSequences) {
 			annotateFromScheduledSequence(s, solution);
 		}
 		// add volume annotations
 	}
 
-	public void annotateFromScheduledSequence(final ScheduledSequence scheduledSequence, final IAnnotatedSolution solution) {
+	public void annotateFromScheduledSequence(final @NonNull ScheduledSequence scheduledSequence, final @NonNull IAnnotatedSolution solution) {
 		annotateFromVoyagePlan(scheduledSequence, solution);
 	}
 
 	/**
 	 */
 	@Override
-	public void annotateFromVoyagePlan(final ScheduledSequence scheduledSequence, final IAnnotatedSolution solution) {
+	public void annotateFromVoyagePlan(final @NonNull ScheduledSequence scheduledSequence, final @NonNull IAnnotatedSolution solution) {
 		final VoyagePlanIterator vpi = new VoyagePlanIterator(scheduledSequence);
 
 		while (vpi.hasNextObject()) {

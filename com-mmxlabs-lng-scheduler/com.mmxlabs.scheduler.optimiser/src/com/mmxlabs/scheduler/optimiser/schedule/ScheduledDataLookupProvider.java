@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
@@ -34,6 +35,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 @PerChainUnitScope
 public class ScheduledDataLookupProvider {
+
 	@Inject
 	private IVesselProvider vesselProvider;
 
@@ -66,14 +68,14 @@ public class ScheduledDataLookupProvider {
 	}
 
 	@Nullable
-	public ScheduledSequence getScheduledSequence(final IPortSlot portSlot) {
+	public ScheduledSequence getScheduledSequence(final @NonNull IPortSlot portSlot) {
 		if (dirty) {
 			buildCache();
 		}
 		return slotToSequenceCache.get(portSlot);
 	}
 
-	public VoyagePlan getVoyagePlan(final IPortSlot portSlot) {
+	public VoyagePlan getVoyagePlan(final @NonNull IPortSlot portSlot) {
 
 		final ScheduledSequence scheduledSequence = getScheduledSequence(portSlot);
 		if (scheduledSequence != null) {
@@ -83,7 +85,7 @@ public class ScheduledDataLookupProvider {
 		return null;
 	}
 
-	public IVesselAvailability getVesselAvailability(final IPortSlot portSlot) {
+	public IVesselAvailability getVesselAvailability(final @NonNull IPortSlot portSlot) {
 
 		final ScheduledSequence scheduledSequence = getScheduledSequence(portSlot);
 		if (scheduledSequence != null) {
@@ -93,7 +95,7 @@ public class ScheduledDataLookupProvider {
 		return null;
 	}
 
-	public Integer getVesselStartTime(final IPortSlot portSlot) {
+	public Integer getVesselStartTime(final @NonNull IPortSlot portSlot) {
 		final ScheduledSequence scheduledSequence = getScheduledSequence(portSlot);
 		if (scheduledSequence != null) {
 			return scheduledSequence.getStartTime();
@@ -101,7 +103,7 @@ public class ScheduledDataLookupProvider {
 		return null;
 	}
 
-	public IAllocationAnnotation getAllocationAnnotation(final IPortSlot portSlot) {
+	public IAllocationAnnotation getAllocationAnnotation(final @NonNull IPortSlot portSlot) {
 
 		final ScheduledSequence scheduledSequence = getScheduledSequence(portSlot);
 		if (scheduledSequence != null) {
@@ -115,7 +117,7 @@ public class ScheduledDataLookupProvider {
 	 */
 	public void reset() {
 		dirty = false;
-
+		this.currentScheduledSequences = null;
 		slotToSequenceCache.clear();
 	}
 }

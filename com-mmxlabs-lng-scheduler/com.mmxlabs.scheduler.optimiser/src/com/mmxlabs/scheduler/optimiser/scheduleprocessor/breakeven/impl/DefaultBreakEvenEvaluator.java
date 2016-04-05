@@ -253,7 +253,9 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 			// final IDischargeOption beSlot;
 			((IBreakEvenPriceCalculator) originalDischarge.getDischargePriceCalculator()).setPrice(breakEvenPricePerMMBtu);
 			// Redundant? Search should have found this....
-			final VoyagePlan newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vesselAvailability), sequenceElements, vesselCharterRatePerDay, portTimesRecord, 0);
+			final VoyagePlan newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vesselAvailability), vesselCharterRatePerDay, portTimesRecord, 0);
+			assert newVoyagePlan != null;
+
 			final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vesselAvailability, vesselStartTime, newVoyagePlan, portTimesRecord);
 			return new Pair<>(newVoyagePlan, newAllocation);
 			// seq.getVoyagePlans().set(vpIdx, newVoyagePlan);
@@ -269,7 +271,8 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 		// Overwrite current break even price with test price
 		((IBreakEvenPriceCalculator) originalDischarge.getDischargePriceCalculator()).setPrice(currentPricePerMMBTu);
 
-		final VoyagePlan newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vesselAvailability), sequenceElements, vesselCharterRatePerDay, portTimesRecord, 0);
+		final VoyagePlan newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vesselAvailability), vesselCharterRatePerDay, portTimesRecord, 0);
+		assert newVoyagePlan != null;
 
 		final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vesselAvailability, vesselCharterRatePerDay, newVoyagePlan, portTimesRecord);
 		assert newAllocation != null;

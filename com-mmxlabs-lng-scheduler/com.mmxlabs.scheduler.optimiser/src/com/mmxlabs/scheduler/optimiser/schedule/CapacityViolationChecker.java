@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
@@ -78,7 +79,7 @@ public class CapacityViolationChecker {
 	 * @param allocations
 	 * @param annotatedSolution
 	 */
-	public void calculateCapacityViolations(final ScheduledSequences scheduledSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
+	public void calculateCapacityViolations(final @NonNull ScheduledSequences scheduledSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
 
 		// Loop over all sequences
 		for (final ScheduledSequence scheduledSequence : scheduledSequences) {
@@ -127,11 +128,13 @@ public class CapacityViolationChecker {
 
 							if (loadOption.isVolumeSetInM3()) {
 								if (volumeInM3 > loadOption.getMaxLoadVolume()) {
-									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_LOAD, volumeInM3 - loadOption.getMaxLoadVolume(), scheduledSequences);
+									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_LOAD, volumeInM3 - loadOption.getMaxLoadVolume(),
+											scheduledSequences);
 								} else if (volumeInM3 < loadOption.getMinLoadVolume()) {
-									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_LOAD, loadOption.getMinLoadVolume() - volumeInM3, scheduledSequences);
+									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_LOAD, loadOption.getMinLoadVolume() - volumeInM3,
+											scheduledSequences);
 								}
-	
+
 								if (remainingHeelInM3 + volumeInM3 > vesselCapacityInM3) {
 									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, remainingHeelInM3 + volumeInM3 - vesselCapacityInM3,
 											scheduledSequences);
@@ -151,7 +154,8 @@ public class CapacityViolationChecker {
 								}
 								if (cargoCV > 0) {
 									if (volumeInM3 > vesselCapacityInM3) {
-										addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, volumeInM3 - vesselCapacityInM3, scheduledSequences);
+										addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, volumeInM3 - vesselCapacityInM3,
+												scheduledSequences);
 									}
 								}
 							}
@@ -170,7 +174,7 @@ public class CapacityViolationChecker {
 									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_DISCHARGE, dischargeOption.getMinDischargeVolume() - volumeInM3,
 											scheduledSequences);
 								}
-	
+
 								if (volumeInM3 > vesselCapacityInM3) {
 									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, volumeInM3 - vesselCapacityInM3, scheduledSequences);
 								}
@@ -187,10 +191,11 @@ public class CapacityViolationChecker {
 									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_DISCHARGE, getViolationInM3(violationInMMBTu, cargoCV),
 											scheduledSequences);
 								}
-	
+
 								if (cargoCV > 0) {
 									if (volumeInM3 > vesselCapacityInM3) {
-										addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, volumeInM3 - vesselCapacityInM3, scheduledSequences);
+										addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, volumeInM3 - vesselCapacityInM3,
+												scheduledSequences);
 									}
 								}
 
@@ -218,8 +223,8 @@ public class CapacityViolationChecker {
 
 								// Check the voyage requirements are within the heel level
 								if (voyagePlan.getLNGFuelVolume() + remainingHeelInM3 > initialHeelInM3) {
-									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_HEEL, voyagePlan.getLNGFuelVolume() + remainingHeelInM3
-											- initialHeelInM3, scheduledSequences);
+									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_HEEL,
+											voyagePlan.getLNGFuelVolume() + remainingHeelInM3 - initialHeelInM3, scheduledSequences);
 								}
 							}
 						}
@@ -300,15 +305,15 @@ public class CapacityViolationChecker {
 	 * @param cvt
 	 * @param volume
 	 */
-	private void addEntryToCapacityViolationAnnotation(@Nullable final IAnnotatedSolution annotatedSolution, final PortDetails portDetails, final CapacityViolationType cvt, final long volume,
-			final ScheduledSequences scheduledSequences) {
+	private void addEntryToCapacityViolationAnnotation(@Nullable final IAnnotatedSolution annotatedSolution, final @NonNull PortDetails portDetails, final @NonNull CapacityViolationType cvt,
+			final long volume, final @NonNull ScheduledSequences scheduledSequences) {
 		// Set port details entry
 		scheduledSequences.addCapacityViolation(portDetails.getOptions().getPortSlot());
 
 		if (annotatedSolution != null) {
 
 			// Set annotation
-			final List<ICapacityEntry> entries = new ArrayList<>(1);
+			final List<@NonNull ICapacityEntry> entries = new ArrayList<>(1);
 			final ISequenceElement element = portSlotProvider.getElement(portDetails.getOptions().getPortSlot());
 			// Add in existing entries as we will replace the annotation
 			{
@@ -327,6 +332,6 @@ public class CapacityViolationChecker {
 
 	private long getViolationInM3(long violationInMMBTu, int cargoCV) {
 		return cargoCV > 0 ? Calculator.convertMMBTuToM3(violationInMMBTu, cargoCV) : violationInMMBTu;
- 
+
 	}
 }

@@ -45,9 +45,9 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	private static final int RELAXATION_STEP = 6;
 
-	private final List<IVoyagePlanChoice> choices = new ArrayList<>();
+	private final List<@NonNull IVoyagePlanChoice> choices = new ArrayList<>();
 
-	private List<IOptionsSequenceElement> basicSequence;
+	private List<@NonNull IOptionsSequenceElement> basicSequence;
 
 	private IPortTimesRecord portTimesRecord;
 
@@ -396,7 +396,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 * @return
 	 */
 	@Override
-	public List<IOptionsSequenceElement> getBasicSequence() {
+	public List<@NonNull IOptionsSequenceElement> getBasicSequence() {
 		return basicSequence;
 	}
 
@@ -407,7 +407,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 * @param basicSequence
 	 */
 	@Override
-	public void setBasicSequence(final List<IOptionsSequenceElement> basicSequence) {
+	public void setBasicSequence(final List<@NonNull IOptionsSequenceElement> basicSequence) {
 		this.basicSequence = basicSequence;
 	}
 

@@ -4,13 +4,12 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
-import javax.inject.Inject;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -25,10 +24,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class ShippingCostHelper {
 
-	@Inject
-	private IPortCostProvider portCostProvider;
-
-	public long getFuelCosts(final VoyagePlan plan, boolean includeLNG) {
+	public long getFuelCosts(final @NonNull VoyagePlan plan, boolean includeLNG) {
 		// @formatter:off
 		long fuelCost = plan.getTotalFuelCost(FuelComponent.Base)
 				+ plan.getTotalFuelCost(FuelComponent.Base_Supplemental)
@@ -43,7 +39,7 @@ public class ShippingCostHelper {
 		return fuelCost;
 	}
 
-	public long getPortCosts(final IVessel vessel, final VoyagePlan plan) {
+	public long getPortCosts(final @NonNull IVessel vessel, final @NonNull VoyagePlan plan) {
 
 		long portCosts = 0;
 		final Object[] sequence = plan.getSequence();
@@ -59,26 +55,25 @@ public class ShippingCostHelper {
 		return portCosts;
 	}
 
-	public long getRouteExtraCosts(final VoyagePlan plan) {
+	public long getRouteExtraCosts(final @NonNull VoyagePlan plan) {
 
 		return plan.getTotalRouteCost();
 	}
 
-	public long getHireCosts(final VoyagePlan plan) {
+	public long getHireCosts(final @NonNull VoyagePlan plan) {
 		final long planDuration = getPlanDurationInHours(plan);
 
 		final int hireRatePerDay = plan.getCharterInRatePerDay();
 		long hireCosts = (long) hireRatePerDay * planDuration / 24L;
 		return hireCosts;
 	}
-	
-	private long getDurationInDays(final VoyagePlan plan) {
+
+	private long getDurationInDays(final @NonNull VoyagePlan plan) {
 		final long planDuration = getPlanDurationInHours(plan);
 		return Calculator.ScaleFactor * planDuration / 24L;
 	}
 
-	
-	public int getPlanDurationInHours(final VoyagePlan plan) {
+	public int getPlanDurationInHours(final @NonNull VoyagePlan plan) {
 		int planDuration = 0;
 		final Object[] sequence = plan.getSequence();
 		final int k = sequence.length - 1;
@@ -88,7 +83,7 @@ public class ShippingCostHelper {
 				final VoyageDetails voyageDetails = (VoyageDetails) o;
 				planDuration += voyageDetails.getTravelTime();
 				planDuration += voyageDetails.getIdleTime();
-			} else  {
+			} else {
 				planDuration += ((PortDetails) o).getOptions().getVisitDuration();
 			}
 		}
@@ -102,7 +97,7 @@ public class ShippingCostHelper {
 	 * @param vesselAvailability
 	 * @return
 	 */
-	public long getIdleTimeGeneratedCharterOutRevenue(final VoyagePlan plan, final IVesselAvailability vesselAvailability) {
+	public long getIdleTimeGeneratedCharterOutRevenue(final @NonNull VoyagePlan plan, final @NonNull IVesselAvailability vesselAvailability) {
 		long charterRevenue = 0;
 
 		for (final Object obj : plan.getSequence()) {
@@ -124,7 +119,7 @@ public class ShippingCostHelper {
 	 * @param plan
 	 * @return
 	 */
-	public boolean hasIdleTimeGeneratedCharterOut(final VoyagePlan plan) {
+	public boolean hasIdleTimeGeneratedCharterOut(final @NonNull VoyagePlan plan) {
 		for (final Object obj : plan.getSequence()) {
 			if (obj instanceof VoyageDetails) {
 				final VoyageDetails voyageDetails = (VoyageDetails) obj;
@@ -136,14 +131,13 @@ public class ShippingCostHelper {
 		return false;
 	}
 
-
 	/**
 	 * Calculate costs for the idle time method of generating charter outs
 	 * 
 	 * @param plan
 	 * @return
 	 */
-	public long getIdleTimeGeneratedCharterOutCosts(final VoyagePlan plan) {
+	public long getIdleTimeGeneratedCharterOutCosts(final @NonNull VoyagePlan plan) {
 		int planDuration = 0;
 		for (final Object obj : plan.getSequence()) {
 
@@ -159,13 +153,14 @@ public class ShippingCostHelper {
 
 		return hireCosts;
 	}
-	
+
 	/**
 	 * Check if a plan has a generated charter out event at the start
+	 * 
 	 * @param plan
 	 * @return
 	 */
-	public boolean hasGeneratedCharterOut(final VoyagePlan plan) {
+	public boolean hasGeneratedCharterOut(final @NonNull VoyagePlan plan) {
 		Object obj = plan.getSequence()[0];
 		if (obj instanceof PortDetails) {
 			final PortDetails portDetails = (PortDetails) obj;
@@ -175,8 +170,8 @@ public class ShippingCostHelper {
 		}
 		return false;
 	}
-	
-	public long getShippingCosts(final VoyagePlan plan, final IVesselAvailability vesselAvailability, final boolean includeLNG, final boolean includeCharterInCosts) {
+
+	public long getShippingCosts(final @NonNull VoyagePlan plan, final @NonNull IVesselAvailability vesselAvailability, final boolean includeLNG, final boolean includeCharterInCosts) {
 
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 			return 0L;
@@ -188,9 +183,10 @@ public class ShippingCostHelper {
 
 		return shippingCosts + portCosts + hireCosts;
 	}
-	
-	public long[] getSeperatedShippingCosts(final VoyagePlan plan, final IVesselAvailability vesselAvailability, final boolean includeLNG, final boolean includeCharterInCosts) {
-		long[] costs = new long[4];
+
+	public long @NonNull [] getSeperatedShippingCosts(final @NonNull VoyagePlan plan, final @NonNull IVesselAvailability vesselAvailability, final boolean includeLNG,
+			final boolean includeCharterInCosts) {
+		long @NonNull [] costs = new long[4];
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 			return costs;
 		}
@@ -198,14 +194,13 @@ public class ShippingCostHelper {
 		final long shippingCosts = getRouteExtraCosts(plan) + getFuelCosts(plan, includeLNG);
 		final long portCosts = getPortCosts(vesselAvailability.getVessel(), plan);
 		final long hireCosts = includeCharterInCosts ? getHireCosts(plan) : 0L;
-		final long shippingDays = includeCharterInCosts ? getDurationInDays(plan): 0L;
-		
+		final long shippingDays = includeCharterInCosts ? getDurationInDays(plan) : 0L;
+
 		costs[0] = shippingCosts;
 		costs[1] = portCosts;
 		costs[2] = hireCosts;
 		costs[3] = shippingDays;
-		
+
 		return costs;
 	}
-
 }

@@ -1,11 +1,9 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+* Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,16 +31,13 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
@@ -51,13 +46,11 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.PortTimesPlanner;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
-import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
-import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
@@ -107,18 +100,10 @@ public class ScheduleCalculator {
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	private INominatedVesselProvider nominatedVesselProvider;
-
-	@Inject
 	private VoyagePlanner voyagePlanner;
 
 	@Inject
-	private IActualsDataProvider actualsDataProvider;
-
-	@Inject(optional = true)
-	private ICustomNonShippedScheduler customNonShippedScheduler;
-	@Inject
-	private IShippingHoursRestrictionProvider shippingHoursRestrictionProvider;
+	private PortTimesPlanner portTimesPlanner;
 
 	/**
 	 * Schedule an {@link ISequence} using the given array of arrivalTimes, indexed according to sequence elements. These times will be used as the base arrival time. However is some cases the time
@@ -132,27 +117,35 @@ public class ScheduleCalculator {
 	 * @return
 	 * @throws InfeasibleVoyageException
 	 */
-	private ScheduledSequence schedule(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
+	@Nullable
+	private ScheduledSequence schedule(final @NonNull IResource resource, final @NonNull ISequence sequence, final int @NonNull [] arrivalTimes) {
+
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+
+			@Nullable
+			final IPortTimesRecord portTimesRecord = portTimesPlanner.makeDESOrFOBPortTimesRecord(resource, sequence);
+
 			// Virtual vessels are those operated by a third party, for FOB and DES situations.
 			// Should we compute a schedule for them anyway? The arrival times don't mean much,
 			// but contracts need this kind of information to make up numbers with.
-			return desOrFobSchedule(resource, sequence);
+			return desOrFobSchedule(resource, sequence, portTimesRecord);
 		}
 
 		// If this is the cargo shorts sequence, but we have no data (i.e. there are no short cargoes), return the basic data structure to avoid any exceptions
 		final boolean isShortsSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 		if (isShortsSequence && arrivalTimes.length == 0) {
-			return new ScheduledSequence(resource, sequence, 0, Collections.<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> emptyList());
+			return new ScheduledSequence(resource, sequence, 0, Collections.<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> emptyList());
 		}
 
 		// Get start time
 		final int startTime = arrivalTimes[0];
 
+		final @NonNull List<@NonNull IPortTimesRecord> portTimesRecords = portTimesPlanner.makeShippedPortTimesRecords(resource, sequence, arrivalTimes);
+
 		// Generate all the voyageplans and extra annotations for this sequence
-		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans = voyagePlanner.makeVoyagePlans(resource, sequence, arrivalTimes);
+		final List<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans = voyagePlanner.makeVoyagePlans(resource, sequence, portTimesRecords);
 		if (voyagePlans == null) {
 			return null;
 		}
@@ -171,137 +164,32 @@ public class ScheduleCalculator {
 	 * @param sequence
 	 * @return
 	 */
-	private ScheduledSequence desOrFobSchedule(final IResource resource, final ISequence sequence) {
-		// Virtual vessels are those operated by a third party, for FOB and DES situations.
-		// Should we compute a schedule for them anyway? The arrival times don't mean much,
-		// but contracts need this kind of information to make up numbers with.
-		final List<IDetailsSequenceElement> currentSequence = new ArrayList<IDetailsSequenceElement>(5);
-		final VoyagePlan currentPlan = new VoyagePlan();
-		currentPlan.setIgnoreEnd(false);
-		boolean dischargeOptionInMMBTU = false;
-		final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(resource);
-		if (nominatedVessel != null) {
-			// Set a start and end heel for BOG estimations
+	@NonNull
+	private ScheduledSequence desOrFobSchedule(final @NonNull IResource resource, final @NonNull ISequence sequence, final @Nullable IPortTimesRecord portTimesRecord) {
 
-			currentPlan.setStartingHeelInM3(nominatedVessel.getVesselClass().getSafetyHeel());
-			currentPlan.setRemainingHeelInM3(nominatedVessel.getVesselClass().getSafetyHeel());
+		if (portTimesRecord == null) {
+			return new ScheduledSequence(resource, sequence, 0, Collections.<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> emptyList());
 		}
-		boolean startSet = false;
-		int startTime = 0;
-		for (final ISequenceElement element : sequence) {
-
-			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
-			if (thisPortSlot instanceof StartPortSlot) {
-				continue;
-			}
-			if (thisPortSlot instanceof EndPortSlot) {
-				continue;
-			}
-
-			// Determine transfer time
-			if (!startSet && !(thisPortSlot instanceof StartPortSlot)) {
-
-				// Find latest window start for all slots in FOB/DES combo. However if DES divertable, ignore.
-				if (thisPortSlot instanceof ILoadOption) {
-					// Divertible DES has real time window.
-					if (!shippingHoursRestrictionProvider.isDivertable(element)) {
-						if (actualsDataProvider.hasActuals(thisPortSlot)) {
-							startTime = actualsDataProvider.getArrivalTime(thisPortSlot);
-						} else {
-							final int windowStart = thisPortSlot.getTimeWindow().getStart();
-							startTime = Math.max(windowStart, startTime);
-						}
-					}
-				}
-				if (thisPortSlot instanceof IDischargeOption) {
-					if (actualsDataProvider.hasActuals(thisPortSlot)) {
-						startTime = actualsDataProvider.getArrivalTime(thisPortSlot);
-					} else {
-						// Divertible FOB has sales time window
-						// if (!shippingHoursRestrictionProvider.isDivertable(element)) {
-						final int windowStart = thisPortSlot.getTimeWindow().getStart();
-						startTime = Math.max(windowStart, startTime);
-					}
-					// }
-					if (dischargeOptionInMMBTU == false && !(((IDischargeOption) thisPortSlot).isVolumeSetInM3())) {
-						dischargeOptionInMMBTU = true;
-					}
-				}
-
-				// Actuals Data...
-				if (thisPortSlot instanceof ILoadOption) {
-					// overwrite with actuals if need be
-					if (actualsDataProvider.hasActuals(thisPortSlot)) {
-						currentPlan.setStartingHeelInM3(actualsDataProvider.getStartHeelInM3(thisPortSlot));
-					}
-				}
-				// overwrite with actuals if need be
-				if (actualsDataProvider.hasReturnActuals(thisPortSlot)) {
-					currentPlan.setRemainingHeelInM3(actualsDataProvider.getReturnHeelInM3(thisPortSlot));
-				}
-			}
-
-			if (thisPortSlot instanceof IDischargeSlot) {
-				// Break here to avoid processing further
-				startSet = true;
-			}
-
-			final PortOptions portOptions = new PortOptions();
-			final PortDetails portDetails = new PortDetails();
-			portDetails.setOptions(portOptions);
-			portOptions.setVisitDuration(0);
-			portOptions.setPortSlot(thisPortSlot);
-			currentSequence.add(portDetails);
-
-		}
-
-		if (currentSequence.size() == 0) {
-			return new ScheduledSequence(resource, sequence, 0, Collections.<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> emptyList());
-		}
-
-		// TODO: This should come from the ISequencesScheduler
-		final int times[] = new int[sequence.size()];
-		Arrays.fill(times, startTime);
-		final PortTimesRecord portTimesRecord = new PortTimesRecord();
-		for (final ISequenceElement element : sequence) {
-			final IPortSlot slot = portSlotProvider.getPortSlot(element);
-			portTimesRecord.setSlotTime(slot, startTime);
-			portTimesRecord.setSlotDuration(slot, 0);
-		}
-		currentPlan.setSequence(currentSequence.toArray(new IDetailsSequenceElement[0]));
-
-		if (customNonShippedScheduler != null) {
-			customNonShippedScheduler.modifyArrivalTimes(resource, startTime, currentPlan, portTimesRecord);
-
-			// Back apply any modified times to times array
-			int idx = 0;
-			for (final ISequenceElement element : sequence) {
-				final IPortSlot slot = portSlotProvider.getPortSlot(element);
-				times[idx++] = portTimesRecord.getSlotTime(slot);
-			}
-		}
+		@NonNull
+		final VoyagePlan plan = voyagePlanner.makeDESOrFOBVoyagePlan(resource, sequence, portTimesRecord);
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		final int vesselStartTime = startTime;
+		final int vesselStartTime = portTimesRecord.getFirstSlotTime();
 
-		if (dischargeOptionInMMBTU) {
-			// now we have the load and discharge pair, if an mmbtu discharge, convert to m3
-			voyagePlanner.setDesPurchaseOrFobPurchaseM3VolumeDetails(currentSequence);
-		}
-		// TODO: This is not the place!
-		final IAllocationAnnotation annotation = volumeAllocator.allocate(vesselAvailability, vesselStartTime, currentPlan, portTimesRecord);
+		final IAllocationAnnotation annotation = volumeAllocator.allocate(vesselAvailability, vesselStartTime, plan, portTimesRecord);
 
-		final ScheduledSequence scheduledSequence = new ScheduledSequence(resource, sequence, startTime,
-				Collections.singletonList(new Triple<>(currentPlan, Collections.<IPortSlot, IHeelLevelAnnotation> emptyMap(), (IPortTimesRecord) annotation)));
+		final ScheduledSequence scheduledSequence = new ScheduledSequence(resource, sequence, vesselStartTime,
+				Collections.singletonList(new Triple<>(plan, Collections.<IPortSlot, IHeelLevelAnnotation> emptyMap(), (IPortTimesRecord) annotation)));
 
 		return scheduledSequence;
 	}
 
-	public ScheduledSequences schedule(@NonNull final ISequences sequences, final int @NonNull [][] arrivalTimes, @Nullable final IAnnotatedSolution solution) {
+	@Nullable
+	public ScheduledSequences schedule(@NonNull final ISequences sequences, final int @NonNull [] @NonNull [] arrivalTimes, @Nullable final IAnnotatedSolution solution) {
 		final ScheduledSequences result = new ScheduledSequences();
 
 		if (scheduledDataLookupProviderProvider != null) {
-			ScheduledDataLookupProvider scheduledDataLookupProvider = scheduledDataLookupProviderProvider.get();
+			final ScheduledDataLookupProvider scheduledDataLookupProvider = scheduledDataLookupProviderProvider.get();
 			scheduledDataLookupProvider.reset();
 		}
 
@@ -314,7 +202,7 @@ public class ScheduleCalculator {
 			calculator.prepareEvaluation(sequences);
 		}
 
-		final List<IResource> resources = sequences.getResources();
+		final List<@NonNull IResource> resources = sequences.getResources();
 
 		for (int i = 0; i < sequences.size(); i++) {
 			final ISequence sequence = sequences.getSequence(i);
@@ -332,10 +220,10 @@ public class ScheduleCalculator {
 		return result;
 	}
 
-	private void calculateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences, final IAnnotatedSolution annotatedSolution) {
+	private void calculateSchedule(final @NonNull ISequences sequences, final @NonNull ScheduledSequences scheduledSequences, final @Nullable IAnnotatedSolution annotatedSolution) {
 
 		if (scheduledDataLookupProviderProvider != null) {
-			ScheduledDataLookupProvider scheduledDataLookupProvider = scheduledDataLookupProviderProvider.get();
+			final ScheduledDataLookupProvider scheduledDataLookupProvider = scheduledDataLookupProviderProvider.get();
 			scheduledDataLookupProvider.reset();
 		}
 
@@ -385,7 +273,7 @@ public class ScheduleCalculator {
 		}
 
 		if (scheduledDataLookupProviderProvider != null) {
-			ScheduledDataLookupProvider scheduledDataLookupProvider = scheduledDataLookupProviderProvider.get();
+			final ScheduledDataLookupProvider scheduledDataLookupProvider = scheduledDataLookupProviderProvider.get();
 			scheduledDataLookupProvider.setInputs(scheduledSequences);
 		}
 
@@ -399,8 +287,7 @@ public class ScheduleCalculator {
 	}
 
 	// TODO: Push into entity value calculator?
-	private void calculateProfitAndLoss(final ISequences sequences, final ScheduledSequences scheduledSequences, // final Map<VoyagePlan, IAllocationAnnotation> allocations,
-			final IAnnotatedSolution annotatedSolution) {
+	private void calculateProfitAndLoss(final @NonNull ISequences sequences, final @NonNull ScheduledSequences scheduledSequences, final @Nullable IAnnotatedSolution annotatedSolution) {
 
 		if (entityValueCalculator == null) {
 			return;
@@ -432,7 +319,7 @@ public class ScheduleCalculator {
 				if (plan.getSequence().length >= 2) {
 
 					// Extract list of all the PortDetails encountered
-					final List<PortDetails> portDetails = new LinkedList<PortDetails>();
+					final List<@NonNull PortDetails> portDetails = new LinkedList<>();
 					for (final Object obj : plan.getSequence()) {
 						if (obj instanceof PortDetails) {
 							portDetails.add((PortDetails) obj);
@@ -449,14 +336,14 @@ public class ScheduleCalculator {
 							// for now, only handle single load/discharge case
 							assert (currentAllocation.getSlots().size() == 2);
 							final ILoadOption loadSlot = (ILoadOption) currentAllocation.getSlots().get(0);
-							Pair<CargoValueAnnotation, Long> p = entityValueCalculator.evaluate(plan, currentAllocation, vesselAvailability, currentAllocation.getSlotTime(loadSlot),
-									annotatedSolution);
+							final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculator.evaluate(plan, currentAllocation, vesselAvailability,
+									currentAllocation.getSlotTime(loadSlot), annotatedSolution);
 							cargoValueAnnotation = p.getFirst();
 							final long cargoGroupValue = p.getSecond();
 							scheduledSequences.setVoyagePlanGroupValue(plan, cargoGroupValue);
-
 						} else {
-							Pair<CargoValueAnnotation, Long> p = entityValueCalculator.evaluate(plan, currentAllocation, vesselAvailability, sequence.getStartTime(), annotatedSolution);
+							final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculator.evaluate(plan, currentAllocation, vesselAvailability, sequence.getStartTime(),
+									annotatedSolution);
 							cargoValueAnnotation = p.getFirst();
 							final long cargoGroupValue = p.getSecond();
 							scheduledSequences.setVoyagePlanGroupValue(plan, cargoGroupValue);
@@ -466,11 +353,9 @@ public class ScheduleCalculator {
 						if (annotatedSolution != null) {
 							// now add some more data for each load slot
 							final IElementAnnotationsMap elementAnnotations = annotatedSolution.getElementAnnotations();
-							final List<IPortSlot> slots = currentAllocation.getSlots();
+							final List<@NonNull IPortSlot> slots = currentAllocation.getSlots();
 							for (final IPortSlot portSlot : slots) {
-								assert portSlot != null;
 								final ISequenceElement portElement = portSlotProvider.getElement(portSlot);
-								assert portElement != null;
 								elementAnnotations.setAnnotation(portElement, SchedulerConstants.AI_cargoValueAllocationInfo, cargoValueAnnotation);
 							}
 						}
@@ -483,7 +368,6 @@ public class ScheduleCalculator {
 				}
 				time += getPlanDuration(plan);
 			}
-
 		}
 
 		calculateUnusedSlotPNL(sequences, scheduledSequences, annotatedSolution);
@@ -496,9 +380,6 @@ public class ScheduleCalculator {
 	protected void calculateUnusedSlotPNL(final ISequences sequences, final ScheduledSequences scheduledSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
 
 		for (final ISequenceElement element : sequences.getUnusedElements()) {
-			if (element == null) {
-				continue;
-			}
 			final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 			if (portSlot instanceof ILoadOption || portSlot instanceof IDischargeOption) {
 				// Calculate P&L
@@ -511,9 +392,6 @@ public class ScheduleCalculator {
 	protected void calculateMarkToMarketPNL(final ISequences sequences, final IAnnotatedSolution annotatedSolution) {
 		// Mark-to-Market Calculations
 		for (final ISequenceElement element : sequences.getUnusedElements()) {
-			if (element == null) {
-				continue;
-			}
 			final IMarkToMarket market = markToMarketProvider.getMarketForElement(element);
 			if (market == null) {
 				continue;
@@ -576,9 +454,10 @@ public class ScheduleCalculator {
 			final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vesselAvailability, time, voyagePlan, portTimesRecord);
 			if (allocationAnnotation != null) {
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
-				final CargoValueAnnotation cargoValueAnnotation = new CargoValueAnnotation(allocationAnnotation);
 				// Calculate P&L
-				entityValueCalculator.evaluate(voyagePlan, cargoValueAnnotation, vesselAvailability, time, annotatedSolution);
+				Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculator.evaluate(voyagePlan, allocationAnnotation, vesselAvailability, time, annotatedSolution);
+				final CargoValueAnnotation cargoValueAnnotation = p.getFirst();
+
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_cargoValueAllocationInfo, cargoValueAnnotation);
 			}
 		}
