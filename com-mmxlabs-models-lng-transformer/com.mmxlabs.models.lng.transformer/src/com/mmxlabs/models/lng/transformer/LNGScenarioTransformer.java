@@ -118,6 +118,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.transformer.contracts.IVesselAvailabilityTransformer;
 import com.mmxlabs.models.lng.transformer.contracts.IVesselEventTransformer;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.TransformerHelper;
@@ -312,9 +313,10 @@ public class LNGScenarioTransformer {
 
 	// @NonNull
 	// private final OptimiserSettings optimiserParameters;
-	// @Inject
-	@Named("OptimisationShippingOnly")
-	private final boolean shippingOnly = false;
+	 
+	@Inject
+	@Named(LNGTransformerHelper.HINT_SHIPPING_ONLY)
+	private boolean shippingOnly ;
 
 	@Inject
 	@NonNull

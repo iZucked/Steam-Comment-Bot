@@ -77,15 +77,14 @@ public class SlotOverridesTest {
 		public SlotTester(@NonNull final LNGScenarioModel scenario, final boolean failSilently) {
 
 			final OptimiserSettings settings = ScenarioUtils.createDefaultSettings();
-			final Set<String> hints = LNGTransformerHelper.getHints(settings);
+			final @NonNull Set<@NonNull String> hints = LNGTransformerHelper.getHints(settings);
 
 			final Collection<IOptimiserInjectorService> services = LNGTransformerHelper.getOptimiserInjectorServices(new TransformerExtensionTestBootstrapModule(), null);
 
 			final List<Module> modules = new LinkedList<>();
 			modules.add(new PerChainUnitScopeModule());
 			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
-			modules.addAll(
-					LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenario, settings), services, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, hints));
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenario, hints), services, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, hints));
 
 			parentInjector = Guice.createInjector(modules);
 

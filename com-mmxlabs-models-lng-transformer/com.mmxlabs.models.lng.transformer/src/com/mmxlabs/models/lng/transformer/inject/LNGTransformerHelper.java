@@ -35,27 +35,34 @@ public class LNGTransformerHelper {
 
 	/**
 	 */
-	public static final String HINT_OPTIMISE_LSO = "hint-lngtransformer-optimise-lso";
+	public static final @NonNull String HINT_OPTIMISE_LSO = "hint-lngtransformer-optimise-lso";
 	/**
 	 */
-	public static final String HINT_OPTIMISE_BREAKDOWN = "hint-lngtransformer-optimise-breakdown";
+	public static final @NonNull String HINT_OPTIMISE_BREAKDOWN = "hint-lngtransformer-optimise-breakdown";
 
-	public static final String HINT_GENERATE_CHARTER_OUTS = "hint-lngtransformer-generate-charter-outs";
+	public static final @NonNull String HINT_GENERATE_CHARTER_OUTS = "hint-lngtransformer-generate-charter-outs";
+
+	public static final @NonNull String HINT_SHIPPING_ONLY = "hint-lngtransformer-shipping-only";
 
 	@NonNull
-	public static Set<String> getHints(@NonNull final OptimiserSettings settings, @Nullable final String... initialHints) {
+	public static Set<@NonNull String> getHints(@NonNull final OptimiserSettings settings, @Nullable final String... initialHints) {
 
-		final Set<String> hints = new HashSet<String>();
+		final Set<@NonNull String> hints = new HashSet<>();
 		// Check hints
 		if (initialHints != null) {
 			for (final String hint : initialHints) {
-				hints.add(hint);
+				if (hint != null) {
+					hints.add(hint);
+				}
 			}
 		}
 		if (settings.isGenerateCharterOuts()) {
 			if (LicenseFeatures.isPermitted("features:optimisation-charter-out-generation")) {
 				hints.add(HINT_GENERATE_CHARTER_OUTS);
 			}
+		}
+		if (settings.isShippingOnly()) {
+			hints.add(HINT_SHIPPING_ONLY);
 		}
 
 		// Too late for LNGScenarioRunner, but add to hints for modules in case it is needed in the future.

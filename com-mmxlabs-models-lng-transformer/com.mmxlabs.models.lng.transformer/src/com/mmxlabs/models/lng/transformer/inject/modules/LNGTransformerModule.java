@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.inject.modules;
 
 import java.time.ZonedDateTime;
+import java.util.Collection;
 
 import javax.inject.Singleton;
 
@@ -23,6 +24,7 @@ import com.mmxlabs.models.lng.transformer.DefaultModelEntityMap;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.IntegerIntervalCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
@@ -51,7 +53,6 @@ import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowS
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 
-
 /**
  * Main entry point to create {@link LNGScenarioTransformer}. This uses injection to populate the data structures.
  * 
@@ -72,22 +73,23 @@ public class LNGTransformerModule extends AbstractModule {
 
 	private final LNGScenarioModel scenario;
 
-	private final OptimiserSettings optimiserSettings;
-
 	public final static String MONTH_ALIGNED_INTEGER_INTERVAL_CURVE = "MonthAlignedIntegerCurve";
-	
+
+	private boolean shippingOnly;
+
 	/**
 	 */
-	public LNGTransformerModule(@NonNull final LNGScenarioModel scenario, @NonNull final OptimiserSettings optimiserSettings) {
+	public LNGTransformerModule(@NonNull final LNGScenarioModel scenario, @NonNull Collection<@NonNull String> hints) {
 		this.scenario = scenario;
-		this.optimiserSettings = optimiserSettings;
+		this.shippingOnly = hints.contains(LNGTransformerHelper.HINT_SHIPPING_ONLY);
 		assert scenario != null;
-		assert optimiserSettings != null;
 	}
 
 	@Override
 	protected void configure() {
 		install(new ScheduleBuilderModule());
+
+		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_SHIPPING_ONLY)).toInstance(shippingOnly);
 
 		bind(LNGScenarioModel.class).toInstance(scenario);
 		// bind(OptimiserSettings.class).toInstance(optimiserSettings);
@@ -150,7 +152,7 @@ public class LNGTransformerModule extends AbstractModule {
 		injector.injectMembers(cachingPriceIntervalProducer);
 		return cachingPriceIntervalProducer;
 	}
-	
+
 	@Provides
 	@Singleton
 	ITimeWindowSchedulingCanalDistanceProvider provideTimeWindowSchedulingCanalDistanceProvider(@NonNull Injector injector) {
@@ -167,11 +169,9 @@ public class LNGTransformerModule extends AbstractModule {
 
 		IIntegerIntervalCurve months = integerIntervalCurveHelper.getMonthAlignedIntegerIntervalCurve(
 				integerIntervalCurveHelper.getPreviousMonth(dateAndCurveHelper.convertTime(dateAndCurveHelper.getEarliestTime())),
-				integerIntervalCurveHelper.getNextMonth(dateAndCurveHelper.convertTime(dateAndCurveHelper.getLatestTime())),
-				0);
+				integerIntervalCurveHelper.getNextMonth(dateAndCurveHelper.convertTime(dateAndCurveHelper.getLatestTime())), 0);
 
 		return months;
 	}
-
 
 }
