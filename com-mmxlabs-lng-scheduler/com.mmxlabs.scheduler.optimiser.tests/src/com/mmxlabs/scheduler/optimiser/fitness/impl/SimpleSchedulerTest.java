@@ -17,8 +17,6 @@ import org.junit.Test;
 import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.Provides;
-import com.google.inject.name.Named;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
@@ -57,7 +55,6 @@ import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionR
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.EnumeratingSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
@@ -213,14 +210,7 @@ public class SimpleSchedulerTest {
 	public void testLSO() {
 
 		final long seed = 1;
-		final Injector parentInjector = Guice.createInjector(new DataComponentProviderModule() {
-			@Provides
-			@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
-			private boolean isOptimiserReevaluating() {
-				return true;
-			}
-
-		});
+		final Injector parentInjector = Guice.createInjector(new DataComponentProviderModule());
 
 		final IOptimisationData data = createProblem(parentInjector);
 		// Build opt data

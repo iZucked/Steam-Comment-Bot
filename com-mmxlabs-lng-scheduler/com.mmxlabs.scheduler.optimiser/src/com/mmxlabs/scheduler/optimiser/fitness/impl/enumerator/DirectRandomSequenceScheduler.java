@@ -39,27 +39,6 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 		}
 		synchroniseShipToShipBindings();
 
-		if (RE_EVALUATE_SOLUTION) {
-			evaluate(null);
-			return reEvaluateAndGetBestResult(sequences, solution);
-		} else {
-			return evaluate(solution);
-		}
-	}
-
-	protected final ScheduledSequences reEvaluateAndGetBestResult(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
-
-		random = new Random(seed);
-
-		setSequences(sequences);
-
-		prepare();
-
-		for (int index = 0; index < sequences.size(); ++index) {
-			random.setSeed(seed);
-			randomise(index);
-		}
-		synchroniseShipToShipBindings();
 		return evaluate(solution);
 	}
 

@@ -47,12 +47,8 @@ public class RandomPriceBasedSequenceScheduler extends EnumeratingSequenceSchedu
 			randomise(index);
 		}
 		synchroniseShipToShipBindings();
-		if (RE_EVALUATE_SOLUTION) {
-			evaluate(null);
-			return reEvaluateAndGetBestResult(sequences, solution);
-		} else {
-			return evaluate(solution);
-		}
+
+		return evaluate(solution);
 	}
 
 	private void priceBasedWindowTrimming(ISequences sequences, List<List<IPortTimeWindowsRecord>> portTimeWindowsRecords) {
@@ -75,27 +71,9 @@ public class RandomPriceBasedSequenceScheduler extends EnumeratingSequenceSchedu
 
 	private void setFeasibleTimeWindows(IPortTimeWindowsRecord portTimeWindowsRecord, int seqIndex) {
 		for (IPortSlot portSlot : portTimeWindowsRecord.getSlots()) {
-			ITimeWindow timeWindow = new TimeWindow(windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)],
-					windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)]);
+			ITimeWindow timeWindow = new TimeWindow(windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)], windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)]);
 			portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, timeWindow);
 		}
-	}
-
-	protected final ScheduledSequences reEvaluateAndGetBestResult(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
-
-		// final long lastValue = getBestValue();
-		random = new Random(seed);
-
-		setSequences(sequences);
-
-		prepare();
-
-		for (int index = 0; index < sequences.size(); ++index) {
-			random.setSeed(seed);
-			randomise(index);
-		}
-		synchroniseShipToShipBindings();
-		return evaluate(solution);
 	}
 
 	private void synchroniseShipToShipBindings() {
