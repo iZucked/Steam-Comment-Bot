@@ -54,7 +54,7 @@ public interface IVoyagePlanOptimiser {
 	 * 
 	 * @return
 	 */
-	List<IOptionsSequenceElement> getBasicSequence();
+	List<@NonNull IOptionsSequenceElement> getBasicSequence();
 
 	/**
 	 * Sets the basic voyage plan sequence. This should be {@link IPortSlot} instances separated by {@link VoyageOptions} instances implementing {@link Cloneable}. The {@link VoyageOptions} objects

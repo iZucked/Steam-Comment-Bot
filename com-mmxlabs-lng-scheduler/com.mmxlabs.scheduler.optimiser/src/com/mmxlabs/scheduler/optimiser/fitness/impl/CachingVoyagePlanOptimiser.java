@@ -240,7 +240,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	}
 
 	@Override
-	public List<IOptionsSequenceElement> getBasicSequence() {
+	public List<@NonNull IOptionsSequenceElement> getBasicSequence() {
 		return basicSequence;
 	}
 

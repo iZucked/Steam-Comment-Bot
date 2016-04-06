@@ -498,6 +498,7 @@ public class VoyagePlanner {
 					// int shortCargoReturnArrivalTime = arrivalTimes[idx - 1] + prevVisitDuration + availableTime;
 					// portTimesRecord.setReturnSlotTime(prevPrevPortSlot, shortCargoReturnArrivalTime);
 				} else {
+					assert prevPortSlot != null;
 					portTimesRecord.setReturnSlotTime(prevPortSlot, arrivalTimes[idx]);
 				}
 			}

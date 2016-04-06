@@ -396,7 +396,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 * @return
 	 */
 	@Override
-	public List<IOptionsSequenceElement> getBasicSequence() {
+	public List<@NonNull IOptionsSequenceElement> getBasicSequence() {
 		return basicSequence;
 	}
 
