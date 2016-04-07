@@ -323,7 +323,9 @@ public class IdleImpl extends EventImpl implements Idle {
 						return ((SlotVisit) namedObject).name();
 					} else if (namedObject instanceof VesselEventVisit) {
 						return ((VesselEventVisit) namedObject).name();
-					}
+					} else if (namedObject instanceof StartEventImpl) {
+						return ((StartEventImpl) namedObject).name();
+					} 
 				}
 			}
 		}
