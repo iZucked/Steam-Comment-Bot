@@ -20,6 +20,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
+import com.mmxlabs.scheduler.optimiser.schedule.IdleTimeChecker;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -41,6 +42,8 @@ public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 	private final Map<VoyagePlan, Long> voyagePlanGroupValue = new HashMap<>();
 	private final Map<IResource, ScheduledSequence> resourceToScheduledSequenceMap = new HashMap<>();
 	private final Set<IPortSlot> lateSlots = new HashSet<>();
+	private final Map<IPortSlot, Integer> violatingIdleHours = new HashMap<>();
+	private final Map<IPortSlot, Long> weightedIdleCost = new HashMap<>();
 	
 	/**
 	 * 
@@ -144,6 +147,28 @@ public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 		lateSlots.add(slot);
 	}
 	
+	public void addIdleHoursViolation(IPortSlot slot, int violatingHours) {
+		violatingIdleHours.put(slot, violatingHours);
+	}
+
+	public long getIdleTimeViolationHours(final IPortSlot portSlot) {
+		if (violatingIdleHours.containsKey(portSlot)) {
+			return violatingIdleHours.get(portSlot);
+		}
+		return 0L;
+	}
+
+	public void addIdleWeightedCost(IPortSlot slot, long cost) {
+		weightedIdleCost.put(slot, cost);
+	}
+	
+	public long getIdleWeightedCost(final IPortSlot portSlot) {
+		if (weightedIdleCost.containsKey(portSlot)) {
+			return weightedIdleCost.get(portSlot);
+		}
+		return 0L;
+	}
+
 	public boolean isLateSlot(IPortSlot slot) {
 		return lateSlots.contains(slot);
 	}
