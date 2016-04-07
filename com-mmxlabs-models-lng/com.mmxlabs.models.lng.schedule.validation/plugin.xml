@@ -68,6 +68,20 @@
                 </message>
                 <target class="Event"/>
             </constraint>
+                        <constraint
+                      class="com.mmxlabs.models.lng.schedule.validation.NegativePriceConstraint"
+                      id="com.mmxlabs.models.lng.schedule.validation.NegativePriceConstraint"
+                      isEnabledByDefault="true"
+                      lang="Java"
+                      mode="Batch"
+                      name="Negative Error"
+                      severity="ERROR"
+                      statusCode="1">
+                <message>
+                    {0}
+                </message>
+                <target class="Event"/>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
