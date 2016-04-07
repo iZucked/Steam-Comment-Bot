@@ -21,6 +21,8 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.modules.ConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluationProcessInstantiatorModule;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ExcessIdleTimeComponentParameters;
+import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
@@ -107,6 +109,20 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 		lcp.setHighWeight(Interval.BEYOND, 1000000);
 
 		return lcp;
+	}
+
+	@Provides
+	@Singleton
+	private IExcessIdleTimeComponentParameters provideIdleComponentParameters() {
+		final ExcessIdleTimeComponentParameters idleParams = new ExcessIdleTimeComponentParameters();
+
+		idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, 13*24);
+		idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, 15*24);
+		idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, 2_500);
+		idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, 10_000);
+		idleParams.setEndWeight(10_000);
+
+		return idleParams;
 	}
 
 }
