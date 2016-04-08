@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * All rights reserved.
+ */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation;
 
 import org.eclipse.jdt.annotation.NonNull;
