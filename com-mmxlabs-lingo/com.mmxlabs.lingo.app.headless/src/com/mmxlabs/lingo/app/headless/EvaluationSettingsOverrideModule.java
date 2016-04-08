@@ -38,10 +38,17 @@ public class EvaluationSettingsOverrideModule extends AbstractModule {
 	}
 
 	@Provides
+	@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
+	private boolean isOptimiserReevaluating() {
+		return false;
+	}
+
+	@Provides
 	@Named(TravelTimeConstraintChecker.OPTIMISER_START_ELEMENT_FIX)
 	private boolean enableStartOfSequenceFix() {
 		return true;
 	}
+
 
 	@Provides
 	@Singleton
@@ -63,5 +70,5 @@ public class EvaluationSettingsOverrideModule extends AbstractModule {
 
 		return lcp;
 	}
-
+	
 }
