@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_OptimiserSettingsModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
@@ -44,7 +45,6 @@ import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.EnumeratingSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class LNGScenarioRunnerCreator {
@@ -256,7 +256,7 @@ public class LNGScenarioRunnerCreator {
 						}
 
 						@Provides
-						@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
+						@Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE)
 						private boolean isOptimiserReevaluating() {
 							return false;
 						}
