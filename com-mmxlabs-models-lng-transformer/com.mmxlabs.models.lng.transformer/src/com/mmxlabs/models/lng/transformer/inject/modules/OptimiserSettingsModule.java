@@ -120,6 +120,12 @@ public class OptimiserSettingsModule extends AbstractModule {
 	}
 
 	@Provides
+	@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
+	private boolean isOptimiserReevaluating() {
+		return true;
+	}
+
+	@Provides
 	@Named(SequencesConstrainedMoveGeneratorUnit.OPTIMISER_ENABLE_FOUR_OPT_2)
 	private boolean enableFourOpt2() {
 		return true;
@@ -148,7 +154,7 @@ public class OptimiserSettingsModule extends AbstractModule {
 	private int actionPlanInRunSearchDepth() {
 		return 5_000;
 	}
-
+	
 	@Provides
 	@Named(LocalSearchOptimiserModule.LSO_NUMBER_OF_ITERATIONS)
 	private int getNumberOfIterations(final OptimiserSettings settings) {

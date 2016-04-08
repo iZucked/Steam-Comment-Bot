@@ -69,9 +69,9 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 	private List<String> provideEnabledEvaluationProcessNames(final IEvaluationProcessRegistry registry) {
 		final List<String> result = new ArrayList<String>();
 
-		// registry.getEvaluationProcessNames().stream()//.filter(c->c.isEnabled())
-		// .map(IEvaluationProcessFactory::getName()).collect(Collectors.toList());
-
+//		registry.getEvaluationProcessNames().stream()//.filter(c->c.isEnabled())
+//		.map(IEvaluationProcessFactory::getName()).collect(Collectors.toList());
+		
 		// Enable all processes.
 		for (final IEvaluationProcessFactory f : registry.getEvaluationProcessFactories()) {
 			result.add(f.getName());
@@ -83,6 +83,12 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 		// }
 
 		return result;
+	}
+
+	@Provides
+	@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
+	private boolean isOptimiserReevaluating() {
+		return true;
 	}
 
 	@Provides
