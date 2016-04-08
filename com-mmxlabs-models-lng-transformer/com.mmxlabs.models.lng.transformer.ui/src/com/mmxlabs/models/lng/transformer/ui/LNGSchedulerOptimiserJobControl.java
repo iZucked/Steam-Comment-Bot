@@ -165,7 +165,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	@Override
 	protected void doRunJob(IProgressMonitor progressMonitor) {
-
+		long start = System.currentTimeMillis();
 		progressMonitor.beginTask("Optimise", 100);
 		try {
 			// TODO Auto-generated method stub
@@ -176,6 +176,9 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 			super.setProgress(100);
 		} finally {
 			progressMonitor.done();
+			if (false) {
+				System.out.println("done in:"+(System.currentTimeMillis() - start));
+			}
 		}
 		// if (scenarioRunner.isFinished()) {
 		// return false;
