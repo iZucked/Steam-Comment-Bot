@@ -9,9 +9,11 @@
 package com.mmxlabs.scheduler.optimiser.schedule;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.inject.Provider;
 
@@ -73,6 +75,38 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class ScheduleCalculator {
 
+	static class Key {
+		private final @NonNull IResource availability;
+		private final @NonNull ISequence sequence;
+
+		public Key(final @NonNull IResource availability, final @NonNull ISequence sequence) {
+			this.availability = availability;
+			this.sequence = sequence;
+		}
+
+		@Override
+		public int hashCode() {
+			// TODO Auto-generated method stub
+			return Objects.hash(availability, sequence);
+		}
+
+		@Override
+		public boolean equals(final Object obj) {
+
+			if (obj == this) {
+				return true;
+			}
+			if (obj instanceof Key) {
+				final Key other = (Key) obj;
+				return Objects.equals(this.availability, other.availability) //
+						&& Objects.equals(this.sequence, other.sequence);
+			}
+			return false;
+		}
+	}
+
+	private final Map<@NonNull Key, @NonNull ScheduledSequence> cache = new HashMap<>();
+
 	@Inject(optional = true)
 	private Provider<ScheduledDataLookupProvider> scheduledDataLookupProviderProvider;
 
@@ -86,7 +120,7 @@ public class ScheduleCalculator {
 	private IdleTimeChecker idleTimeChecker;
 
 	@Inject
-	private IVolumeAllocator volumeAllocator;
+	private Provider<IVolumeAllocator> volumeAllocatorProvider;
 
 	@Inject
 	private ICalculatorProvider calculatorProvider;
@@ -95,7 +129,7 @@ public class ScheduleCalculator {
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject(optional = true)
-	private IEntityValueCalculator entityValueCalculator;
+	private Provider<IEntityValueCalculator> entityValueCalculatorProvider;
 
 	@Inject
 	private VoyagePlanAnnotator voyagePlanAnnotator;
@@ -183,7 +217,7 @@ public class ScheduleCalculator {
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		final int vesselStartTime = portTimesRecord.getFirstSlotTime();
 
-		final IAllocationAnnotation annotation = volumeAllocator.allocate(vesselAvailability, vesselStartTime, plan, portTimesRecord);
+		final IAllocationAnnotation annotation = volumeAllocatorProvider.get().allocate(vesselAvailability, vesselStartTime, plan, portTimesRecord);
 
 		final ScheduledSequence scheduledSequence = new ScheduledSequence(resource, sequence, vesselStartTime,
 				Collections.singletonList(new Triple<>(plan, Collections.<IPortSlot, IHeelLevelAnnotation> emptyMap(), (IPortTimesRecord) annotation)));
@@ -215,11 +249,33 @@ public class ScheduleCalculator {
 			final ISequence sequence = sequences.getSequence(i);
 			final IResource resource = resources.get(i);
 
-			final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
-			if (scheduledSequence == null) {
-				return null;
+			// Is this a good key? Is ISequence the same instance each time (equals will be different...)?
+			final Key key = new Key(resource, sequence);
+			if (false && cache.containsKey(key)) {
+				@NonNull
+				ScheduledSequence cachedResult = cache.get(key);
+				if (false) {
+					final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
+
+					if (scheduledSequence == null && cachedResult == null) {
+						return null;
+					}
+
+					if (scheduledSequence != null && !scheduledSequence.isEqual(cachedResult)) {
+						scheduledSequence.isEqual(cachedResult);
+						throw new RuntimeException("Cache consistency error");
+					}
+				}
+				result.add(cachedResult);
+			} else {
+
+				final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
+				if (scheduledSequence == null) {
+					return null;
+				}
+				result.add(scheduledSequence);
+				cache.put(key, scheduledSequence);
 			}
-			result.add(scheduledSequence);
 		}
 
 		calculateSchedule(sequences, result, solution);
@@ -263,22 +319,15 @@ public class ScheduleCalculator {
 				for (final IPortSlot portSlot : scheduledSequence.getSequenceSlots()) {
 					assert portSlot != null;
 
+					final ISequenceElement portElement = portSlotProvider.getElement(portSlot);
+					assert portElement != null;
 
 					final IAllocationAnnotation allocationAnnotation = scheduledSequence.getAllocationAnnotation(portSlot);
-					final IHeelLevelAnnotation heelLevelAnnotation = scheduledSequence.getHeelLevelAnnotation(portSlot);
-					final ISequenceElement  portElement		= portSlotProvider.getElement(portSlot);
-						
-			
-					
-//					 = portSlotProvider.getElement(portSlot);
-					if (portElement == null) {
-						int ii = 0;
-					}
-					assert portElement != null;
 					if (allocationAnnotation != null) {
 						elementAnnotations.setAnnotation(portElement, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
 					}
 
+					final IHeelLevelAnnotation heelLevelAnnotation = scheduledSequence.getHeelLevelAnnotation(portSlot);
 					if (heelLevelAnnotation != null) {
 						elementAnnotations.setAnnotation(portElement, SchedulerConstants.AI_heelLevelInfo, heelLevelAnnotation);
 					}
@@ -298,7 +347,7 @@ public class ScheduleCalculator {
 
 		// Perform capacity violations analysis
 		latenessChecker.calculateLateness(scheduledSequences, annotatedSolution);
-		
+
 		// Idle time checker
 		idleTimeChecker.calculateIdleTime(scheduledSequences, annotatedSolution);
 	}
@@ -306,9 +355,9 @@ public class ScheduleCalculator {
 	// TODO: Push into entity value calculator?
 	private void calculateProfitAndLoss(final @NonNull ISequences sequences, final @NonNull ScheduledSequences scheduledSequences, final @Nullable IAnnotatedSolution annotatedSolution) {
 
-		if (entityValueCalculator == null) {
-			return;
-		}
+		// if (entityValueCalculatorProvider.get() == null) {
+		// return;
+		// }
 
 		// 2014-02-12 - SG
 		// Back hack to allow a custom contract to reset cached data AFTER any charter out generation / break -even code has run.
@@ -353,14 +402,14 @@ public class ScheduleCalculator {
 							// for now, only handle single load/discharge case
 							assert (currentAllocation.getSlots().size() == 2);
 							final ILoadOption loadSlot = (ILoadOption) currentAllocation.getSlots().get(0);
-							final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculator.evaluate(plan, currentAllocation, vesselAvailability,
+							final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculatorProvider.get().evaluate(plan, currentAllocation, vesselAvailability,
 									currentAllocation.getSlotTime(loadSlot), annotatedSolution);
 							cargoValueAnnotation = p.getFirst();
 							final long cargoGroupValue = p.getSecond();
 							scheduledSequences.setVoyagePlanGroupValue(plan, cargoGroupValue);
 						} else {
-							final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculator.evaluate(plan, currentAllocation, vesselAvailability, sequence.getStartTime(),
-									annotatedSolution);
+							final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculatorProvider.get().evaluate(plan, currentAllocation, vesselAvailability,
+									sequence.getStartTime(), annotatedSolution);
 							cargoValueAnnotation = p.getFirst();
 							final long cargoGroupValue = p.getSecond();
 							scheduledSequences.setVoyagePlanGroupValue(plan, cargoGroupValue);
@@ -380,7 +429,7 @@ public class ScheduleCalculator {
 				}
 
 				if (!cargo) {
-					final long otherGroupValue = entityValueCalculator.evaluate(plan, vesselAvailability, time, sequence.getStartTime(), annotatedSolution);
+					final long otherGroupValue = entityValueCalculatorProvider.get().evaluate(plan, vesselAvailability, time, sequence.getStartTime(), annotatedSolution);
 					scheduledSequences.setVoyagePlanGroupValue(plan, otherGroupValue);
 				}
 				time += getPlanDuration(plan);
@@ -400,7 +449,7 @@ public class ScheduleCalculator {
 			final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 			if (portSlot instanceof ILoadOption || portSlot instanceof IDischargeOption) {
 				// Calculate P&L
-				final long groupValue = entityValueCalculator.evaluateUnusedSlot(portSlot, annotatedSolution);
+				final long groupValue = entityValueCalculatorProvider.get().evaluateUnusedSlot(portSlot, annotatedSolution);
 				scheduledSequences.setUnusedSlotGroupValue(portSlot, groupValue);
 			}
 		}
@@ -468,11 +517,11 @@ public class ScheduleCalculator {
 			}
 			voyagePlan.setIgnoreEnd(false);
 			// Create an allocation annotation.
-			final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vesselAvailability, time, voyagePlan, portTimesRecord);
+			final IAllocationAnnotation allocationAnnotation = volumeAllocatorProvider.get().allocate(vesselAvailability, time, voyagePlan, portTimesRecord);
 			if (allocationAnnotation != null) {
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
 				// Calculate P&L
-				Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculator.evaluate(voyagePlan, allocationAnnotation, vesselAvailability, time, annotatedSolution);
+				Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculatorProvider.get().evaluate(voyagePlan, allocationAnnotation, vesselAvailability, time, annotatedSolution);
 				final CargoValueAnnotation cargoValueAnnotation = p.getFirst();
 
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_cargoValueAllocationInfo, cargoValueAnnotation);

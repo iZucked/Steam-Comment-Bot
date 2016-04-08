@@ -13,7 +13,6 @@ import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;

@@ -82,7 +82,7 @@ public class VoyagePlanner {
 	private IRouteCostProvider routeCostProvider;
 
 	@Inject
-	private IVolumeAllocator volumeAllocator;
+	private Provider<IVolumeAllocator> volumeAllocator;
 
 	@com.google.inject.Inject(optional = true)
 	private IBreakEvenEvaluator breakEvenEvaluator;
@@ -629,9 +629,9 @@ public class VoyagePlanner {
 
 		voyagePlansList.add(plan);
 
-		final AllocationRecord allocationRecord = volumeAllocator.createAllocationRecord(vesselAvailability, vesselStartTime, plan, portTimesRecord);
+		final AllocationRecord allocationRecord = volumeAllocator.get().createAllocationRecord(vesselAvailability, vesselStartTime, plan, portTimesRecord);
 		allocationRecord.allocationMode = AllocationMode.Actuals;
-		final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(allocationRecord);
+		final IAllocationAnnotation allocationAnnotation = volumeAllocator.get().allocate(allocationRecord);
 		if (allocationAnnotation != null) {
 			// Sanity check
 			assert plan.getRemainingHeelInM3() == allocationAnnotation.getRemainingHeelVolumeInM3();
@@ -709,7 +709,7 @@ public class VoyagePlanner {
 
 			evalData.plan = plan;
 			voyagePlansList.add(evalData.plan);
-			evalData.allocation = volumeAllocator.allocate(vesselAvailability, vesselStartTime, plan, portTimesRecord);
+			evalData.allocation = volumeAllocator.get().allocate(vesselAvailability, vesselStartTime, plan, portTimesRecord);
 			if (evalData.allocation != null) {
 				evalData.portTimesRecord = evalData.allocation;
 			} else {

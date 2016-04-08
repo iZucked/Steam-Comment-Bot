@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -71,7 +72,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	private ILNGVoyageCalculator voyageCalculator;
 
 	@Inject
-	private IVolumeAllocator cargoAllocator;
+	private Provider<IVolumeAllocator> volumeAllocator;
 
 	@Inject
 	private ICharterMarketProvider charterMarketProvider;
@@ -187,7 +188,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			// remaining heel may have been overwritten
 			upToCharterPlan.setRemainingHeelInM3(firstPlanRemainingHeel);
 
-			final IAllocationAnnotation preCharterAllocation = cargoAllocator.allocate(vesselAvailability, vesselStartTime, upToCharterPlan, preCharteringTimes);
+			final IAllocationAnnotation preCharterAllocation = volumeAllocator.get().allocate(vesselAvailability, vesselStartTime, upToCharterPlan, preCharteringTimes);
 
 			// add on delta to starting heel and remaining heel
 			if (preCharterAllocation != null) {

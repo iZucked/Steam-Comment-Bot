@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.annotations.impl;
 
+import java.util.Objects;
+
+import com.mmxlabs.scheduler.optimiser.annotations.IHedgingAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 
 /**
@@ -32,5 +35,25 @@ public final class HeelLevelAnnotation implements IHeelLevelAnnotation {
 	@Override
 	public String toString() {
 		return String.format("Heel [start: %d, end %d]", startHeelInM3, endHeelInM3);
+	}
+
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(startHeelInM3, endHeelInM3);
+	}
+	@Override
+	public boolean equals(Object obj) {
+
+		if (obj == this) {
+			return true;
+		}
+		if (obj instanceof IHeelLevelAnnotation) {
+			IHeelLevelAnnotation other = (IHeelLevelAnnotation) obj;
+			return this.startHeelInM3 == other.getStartHeelInM3() && this.endHeelInM3 == other.getEndHeelInM3();
+		}
+
+		// TODO Auto-generated method stub
+		return false;// super.equals(obj);
 	}
 }
