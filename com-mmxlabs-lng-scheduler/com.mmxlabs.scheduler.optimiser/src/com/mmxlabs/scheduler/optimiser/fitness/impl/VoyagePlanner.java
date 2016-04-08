@@ -439,6 +439,7 @@ public class VoyagePlanner {
 					// Needed?
 					// voyageOrPortOptions.add(portOptions);
 				}
+					assert prevPortSlot != null;
 			}
 		}
 

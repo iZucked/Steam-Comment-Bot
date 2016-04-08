@@ -79,6 +79,9 @@ public class ScheduleCalculator {
 	private LatenessChecker latenessChecker;
 
 	@Inject
+	private IdleTimeChecker idleTimeChecker;
+
+	@Inject
 	private IVolumeAllocator volumeAllocator;
 
 	@Inject
@@ -284,6 +287,9 @@ public class ScheduleCalculator {
 
 		// Perform capacity violations analysis
 		latenessChecker.calculateLateness(scheduledSequences, annotatedSolution);
+		
+		// Idle time checker
+		idleTimeChecker.calculateIdleTime(scheduledSequences, annotatedSolution);
 	}
 
 	// TODO: Push into entity value calculator?
