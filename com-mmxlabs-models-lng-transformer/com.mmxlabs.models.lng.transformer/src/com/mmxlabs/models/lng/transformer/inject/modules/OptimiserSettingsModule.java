@@ -120,7 +120,7 @@ public class OptimiserSettingsModule extends AbstractModule {
 	}
 
 	@Provides
-	@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
+	@Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE)
 	private boolean isOptimiserReevaluating() {
 		return true;
 	}

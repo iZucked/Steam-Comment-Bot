@@ -24,7 +24,6 @@ public final class ChangeSetFinderJob implements Callable<Collection<JobState>> 
 	private final JobStore jobStore;
 	private final long seed;
 	private final Injector injector;
-	private BreakdownOptimiserMover optimiser;
 	private int depthStart;
 	private int depthEnd;
 

@@ -23,6 +23,7 @@ import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.models.lng.transformer.inject.modules.ActionPlanModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeChecker.DifferenceType;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.independence.DischargeRewireChange;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.independence.InsertUnusedCargoChange;
@@ -76,6 +77,10 @@ public class BagMover extends BreakdownOptimiserMover {
 	@NonNull
 	IResourceAllocationConstraintDataComponentProvider resourceAllocationProvider;
 
+	@Inject
+	@Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE)
+	private boolean isReevaluating;
+	
 	int max = 0;
 	@Override
 	public Collection<JobState> search(@NonNull final ISequences currentRawSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
@@ -148,12 +153,23 @@ public class BagMover extends BreakdownOptimiserMover {
 				if (!failedEvaluation) {
 
 					if (true) {
-
-						final IEvaluationState evaluationState = new EvaluationState();
+						IEvaluationState evaluationState = new EvaluationState();
 						for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
 							if (!evaluationProcess.evaluate(currentFullSequences, evaluationState)) {
 								failedEvaluation = true;
 								break;
+							}
+						}
+						/*
+						 * This is to increase runtime temporarily
+						 */
+						if (isReevaluating) {
+							evaluationState = new EvaluationState();
+							for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
+								if (!evaluationProcess.evaluate(currentFullSequences, evaluationState)) {
+									failedEvaluation = true;
+									break;
+								}
 							}
 						}
 

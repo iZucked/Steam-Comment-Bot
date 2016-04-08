@@ -34,6 +34,8 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.EnumeratingSequen
  */
 public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 
+	public static final String OPTIMISER_REEVALUATE = "LNGParameters_EvaluationSettingsModule_OPTIMISER_REEVALUATE";
+	
 	@NonNull
 	private final OptimiserSettings settings;
 
@@ -86,7 +88,7 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 	}
 
 	@Provides
-	@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
+	@Named(OPTIMISER_REEVALUATE)
 	private boolean isOptimiserReevaluating() {
 		return true;
 	}
