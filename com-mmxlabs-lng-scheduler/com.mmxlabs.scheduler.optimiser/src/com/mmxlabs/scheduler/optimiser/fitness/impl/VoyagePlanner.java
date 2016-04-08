@@ -312,7 +312,9 @@ public class VoyagePlanner {
 		@Nullable
 		VoyagePlan lastPlan = null;
 
+		int idx = 0;
 		for (final IPortTimesRecord portTimesRecord : portTimesRecords) {
+			++idx;
 			final List<@NonNull IOptionsSequenceElement> voyageOrPortOptions = new ArrayList<>(5);
 			boolean sequenceContainsMMBTUVolumeOption = false;
 
@@ -422,6 +424,9 @@ public class VoyagePlanner {
 						}
 						lastPlan = plan;
 
+						if (idx == portTimesRecords.size()) {
+							plan.setIgnoreEnd(false);
+						}
 						heelVolumeInM3 = evaluateVoyagePlan(vesselAvailability, vesselStartTime, voyagePlansMap, voyagePlansList, portTimesRecord, heelVolumeInM3, plan);
 						assert heelVolumeInM3 >= 0;
 					}
