@@ -24,7 +24,7 @@ public class GeneratedCharterOutOption {
 	private Triple<Integer, ERouteOption, Integer> toCharterPort;
 	private Triple<Integer, ERouteOption, Integer> fromCharterPort;
 	private long maxCharteringRevenue = -1;
-	
+
 	// Data for setting cached options
 	private PortOptions portOptions = null;
 	private IVessel gcoVessel = null;
@@ -43,46 +43,59 @@ public class GeneratedCharterOutOption {
 	public int getCharterStartTime() {
 		return charterStartTime;
 	}
-	
+
 	public void setCharterStartTime(int charterStartTime) {
 		this.charterStartTime = charterStartTime;
 	}
+
 	public int getCharterDuration() {
 		return charterDuration;
 	}
+
 	public void setCharterDuration(int charterDuration) {
 		this.charterDuration = charterDuration;
 	}
+
 	public CharterMarketOptions getOption() {
 		return option;
 	}
+
 	public void setOption(CharterMarketOptions option) {
 		this.option = option;
 	}
+
 	public IPort getPort() {
 		return port;
 	}
+
 	public void setPort(IPort port) {
 		this.port = port;
 	}
+
 	public Triple<Integer, ERouteOption, Integer> getToCharterPort() {
 		return toCharterPort;
 	}
+
 	public void setToCharterPort(Triple<Integer, ERouteOption, Integer> toCharterPort) {
 		this.toCharterPort = toCharterPort;
 	}
+
 	public Triple<Integer, ERouteOption, Integer> getFromCharterPort() {
 		return fromCharterPort;
 	}
+
 	public void setFromCharterPort(Triple<Integer, ERouteOption, Integer> fromCharterPort) {
 		this.fromCharterPort = fromCharterPort;
 	}
+
 	public long getMaxCharteringRevenue() {
 		return maxCharteringRevenue;
 	}
+
 	public void setMaxCharteringRevenue(long maxCharteringRevenue) {
 		this.maxCharteringRevenue = maxCharteringRevenue;
 	}
+
 	public IVessel getGCOVessel() {
 		return gcoVessel;
 	}
@@ -146,7 +159,7 @@ public class GeneratedCharterOutOption {
 	public void setGCOEventDurationHours(int gcoEventDurationHours) {
 		this.gcoEventDurationHours = gcoEventDurationHours;
 	}
-	
+
 	public int getGCOEventHeelPrice() {
 		return gcoEventHeelPrice;
 	}
@@ -170,7 +183,7 @@ public class GeneratedCharterOutOption {
 	public void setGCOEventHeelVolume(long gcoEventHeelVolume) {
 		this.gcoEventHeelVolume = gcoEventHeelVolume;
 	}
-	
+
 	public PortOptions getPortOptions() {
 		return portOptions;
 	}
@@ -178,6 +191,5 @@ public class GeneratedCharterOutOption {
 	public void setPortOptions(PortOptions portOptions) {
 		this.portOptions = portOptions;
 	}
-
 
 }

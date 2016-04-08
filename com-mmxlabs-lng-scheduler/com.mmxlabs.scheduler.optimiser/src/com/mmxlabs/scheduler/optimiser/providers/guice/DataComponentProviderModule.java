@@ -61,8 +61,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IGeneratedCharterOutSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IGeneratedCharterOutSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProvider;
@@ -124,7 +122,6 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCancellationFeeProv
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapDiscountCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapGeneratedCharterOutPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapLoadPriceCalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapMarkToMarketProviderEditor;
@@ -376,10 +373,6 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashMapBaseFuelCurveEditor baseFuelCurveEditor = new HashMapBaseFuelCurveEditor();
 		bind(IBaseFuelCurveProvider.class).toInstance(baseFuelCurveEditor);
 		bind(IBaseFuelCurveProviderEditor.class).toInstance(baseFuelCurveEditor);
-
-		final HashMapGeneratedCharterOutPortSlotEditor generatedCharterOutPortSlotEditor = new HashMapGeneratedCharterOutPortSlotEditor();
-		bind(IGeneratedCharterOutSlotProvider.class).toInstance(generatedCharterOutPortSlotEditor);
-		bind(IGeneratedCharterOutSlotProviderEditor.class).toInstance(generatedCharterOutPortSlotEditor);
 
 		bind(DefaultPromptPeriodProviderEditor.class).in(Singleton.class);
 		bind(IPromptPeriodProvider.class).to(DefaultPromptPeriodProviderEditor.class);

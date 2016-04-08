@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -30,6 +31,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.GeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
@@ -41,7 +43,6 @@ import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider.CharterMarketOptions;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IGeneratedCharterOutSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
@@ -63,6 +64,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOutEvaluator {
 
 	@Inject
+	Injector injector;
+
+	@Inject
 	private ILNGVoyageCalculator voyageCalculator;
 
 	@Inject
@@ -82,9 +86,6 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 	@Inject
 	private IRouteCostProvider routeCostProvider;
-
-	@Inject
-	private IGeneratedCharterOutSlotProviderEditor generatedCharterOutSlotProviderEditor;
 
 	private final GeneratedCharterOutOptionCache generatedCharterOutOptionCache = new GeneratedCharterOutOptionCache();
 
@@ -375,13 +376,14 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		final VoyageDetails originalBallast = (VoyageDetails) currentSequence[ballastIdx];
 		final IPortSlot existingSlotUsedToGenerateCharterOut = originalBallast.getOptions().getFromPortSlot();
 
-		final IGeneratedCharterOutVesselEventPortSlot charterOutPortSlot = generatedCharterOutSlotProviderEditor.getPortSlotGeneratedByPortSlot(existingSlotUsedToGenerateCharterOut);
-		assert (charterOutOption != null);
+		// now update port slot
+		final GeneratedCharterOutVesselEventPortSlot charterOutPortSlot = new GeneratedCharterOutVesselEventPortSlot(
+				String.format("gco-%s-%s", originalBallast.getOptions().getFromPortSlot().getPort(), originalBallast.getOptions().getToPortSlot().getPort()), charterOutOption.getPort());
+		injector.injectMembers(charterOutPortSlot);
 
 		// copy port times record
 		final Triple<IPortSlot, Integer, Integer> charterOutTimesRecord = new Triple<IPortSlot, Integer, Integer>(charterOutPortSlot, charterOutOption.getCharterStartTime(),
 				charterOutOption.getCharterDuration());
-		final IPortTimesRecord bigPlanPortTimesRecord = createPortTimesRecordForExtendedPlan(portTimesRecord, charterOutTimesRecord);
 
 		// (1) ballast to charter out
 
@@ -409,9 +411,6 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		final PortOptions generatedCharterPortOptions = new PortOptions();
 		generatedCharterPortOptions.setVessel(originalBallast.getOptions().getVessel());
 		generatedCharterPortOptions.setVisitDuration(charterOutOption.getCharterDuration());
-		// now update port slot
-		charterOutPortSlot.setId(String.format("gco-%s-%s", originalBallast.getOptions().getFromPortSlot().getPort(), originalBallast.getOptions().getToPortSlot().getPort()));
-		charterOutPortSlot.setPort(charterOutOption.getPort());
 
 		final IGeneratedCharterOutVesselEvent charterOutEvent = charterOutPortSlot.getVesselEvent();
 		charterOutEvent.setStartPort(charterOutOption.getPort());
@@ -443,6 +442,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		newRawSequence.add(generatedCharterPortOptions);
 		newRawSequence.add(charterToReturnPortVoyageOptions);
 		newRawSequence.add(((PortDetails) currentSequence[currentSequence.length - 1]).getOptions().clone());
+		final IPortTimesRecord bigPlanPortTimesRecord = createPortTimesRecordForExtendedPlan(portTimesRecord, charterOutTimesRecord);
 
 		// store data in extended sequence data structure
 		setExtendedSequence(newRawSequence, bigSequence, bigPlanPortTimesRecord, dischargeToCharterPortVoyageOptions, generatedCharterPortOptions, charterToReturnPortVoyageOptions);

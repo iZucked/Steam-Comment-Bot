@@ -221,6 +221,9 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 
 		final IPortSlot slot = portSlotProvider.getPortSlot(element);
 		final IPortSlot converseSlot = shipToShipProvider.getConverseTransferElement(slot);
+		if (converseSlot == null) {
+			return;
+		}
 		final ISequenceElement transferConverseElement = portSlotProvider.getElement(converseSlot);
 
 		if (transferConverseElement != null) {
