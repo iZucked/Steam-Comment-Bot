@@ -4,37 +4,37 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import java.util.List;
+import java.util.Objects;
+
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class GeneratedCharterOutVesselEventPortSlot implements IGeneratedCharterOutVesselEventPortSlot {
 
-	@Inject
 	@NonNull
-	private Provider<GeneratedVesselEventFactory> eventFactory;
+	private final String id;
 
 	@NonNull
-	private String id;
-
-	@NonNull
-	private IPort fromPort;
+	private GeneratedCharterOutVesselEvent event;
 
 	public GeneratedCharterOutVesselEventPortSlot(@NonNull final String id, @NonNull final IPort fromPort) {
 		this.id = id;
-		this.fromPort = fromPort;
+		this.event = new GeneratedCharterOutVesselEvent();
+		this.event.setStartPort(fromPort);
 	}
 
 	@Override
 	public IGeneratedCharterOutVesselEvent getVesselEvent() {
-		return eventFactory.get().getEvent(this, fromPort);
+		return event;
 	}
 
 	@Override
@@ -78,8 +78,22 @@ public class GeneratedCharterOutVesselEventPortSlot implements IGeneratedCharter
 	}
 
 	@Override
-	public void setId(String id) {
-		// TODO: Is changing this thread safe?
-		this.id = id;
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return obj == this;
+	}
+
+	@Override
+	public @NonNull List<@NonNull ISequenceElement> getEventSequenceElements() {
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+
+	@Override
+	public @NonNull List<@NonNull IPortSlot> getEventPortSlots() {
+		throw new UnsupportedOperationException("Not yet implemented");
 	}
 }

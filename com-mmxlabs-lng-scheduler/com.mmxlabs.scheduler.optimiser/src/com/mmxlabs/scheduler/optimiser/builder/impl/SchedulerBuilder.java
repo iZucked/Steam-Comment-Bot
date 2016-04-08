@@ -1378,14 +1378,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		return createVesselEvent(id, PortType.CharterOut, arrival, fromPort, toPort, durationHours, maxHeelOut, heelCVValue, heelUnitPrice, totalHireRevenue, repositioning);
 	}
 
-	/**
-	 */
-	@Override
-	@NonNull
-	public IGeneratedCharterOutVesselEventPortSlot createGeneratedCharterOutEvent(final String id, final IPort fromPort) {
-		return createGeneratedCharterOutVesselEvent(id, fromPort);
-	}
-
 	@Override
 	@NonNull
 	public IVesselEventPortSlot createDrydockEvent(final String id, final ITimeWindow arrival, final IPort port, final int durationHours) {
@@ -1428,34 +1420,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		slotVesselClassRestrictions.put(slot, new HashSet<IVesselClass>());
 
 		buildVesselEvent(slot);
-		return slot;
-	}
-
-	/**
-	 */
-	@NonNull
-	private IGeneratedCharterOutVesselEventPortSlot createGeneratedCharterOutVesselEvent(final String id, final IPort fromPort) {
-		// final GeneratedCharterOutVesselEvent event = new GeneratedCharterOutVesselEvent();
-		//
-		// // TODO should start port and end port be set on this single sequence
-		// // element,
-		// // or should there be a second invisible sequence element for
-		// // repositioning, and something
-		// // which rigs the distance to be zero between repositioning elements?
-		//
-		// event.setTimeWindow(arrival); // TODO: this may fail...
-		// event.setDurationHours(durationHours);
-		// event.setStartPort(fromPort);
-		// event.setEndPort(toPort);
-		// event.setMaxHeelOut(maxHeelOut);
-		// event.setHeelCVValue(heelCVValue);
-		// event.setHeelUnitPrice(heelUnitPrice);
-		// event.setHireOutRevenue(hireCost);
-		// event.setRepositioning(repositioning);
-
-		final GeneratedCharterOutVesselEventPortSlot slot = new GeneratedCharterOutVesselEventPortSlot(id, fromPort);
-		injector.injectMembers(slot);
-		// slot.setPortType(PortType.GeneratedCharterOut);
 		return slot;
 	}
 

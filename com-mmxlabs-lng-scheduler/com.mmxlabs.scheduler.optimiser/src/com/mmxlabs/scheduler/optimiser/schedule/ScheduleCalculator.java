@@ -259,15 +259,22 @@ public class ScheduleCalculator {
 				for (final IPortSlot portSlot : scheduledSequence.getSequenceSlots()) {
 					assert portSlot != null;
 
-					final ISequenceElement portElement = portSlotProvider.getElement(portSlot);
-					assert portElement != null;
 
 					final IAllocationAnnotation allocationAnnotation = scheduledSequence.getAllocationAnnotation(portSlot);
+					final IHeelLevelAnnotation heelLevelAnnotation = scheduledSequence.getHeelLevelAnnotation(portSlot);
+					final ISequenceElement  portElement		= portSlotProvider.getElement(portSlot);
+						
+			
+					
+//					 = portSlotProvider.getElement(portSlot);
+					if (portElement == null) {
+						int ii = 0;
+					}
+					assert portElement != null;
 					if (allocationAnnotation != null) {
 						elementAnnotations.setAnnotation(portElement, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
 					}
 
-					final IHeelLevelAnnotation heelLevelAnnotation = scheduledSequence.getHeelLevelAnnotation(portSlot);
 					if (heelLevelAnnotation != null) {
 						elementAnnotations.setAnnotation(portElement, SchedulerConstants.AI_heelLevelInfo, heelLevelAnnotation);
 					}
