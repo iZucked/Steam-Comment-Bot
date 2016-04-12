@@ -15,7 +15,6 @@ import org.ops4j.peaberry.util.TypeLiterals;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
-import com.mmxlabs.models.lng.transformer.extensions.charterout.GeneratedCharterOutTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsTransformerFactory;
@@ -78,7 +77,6 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 						// transformerExtensionFactories.add(new StandardContractTransformerExtensionFactory());
 						transformerExtensionFactories.add(new RestrictedElementsTransformerFactory());
 						transformerExtensionFactories.add(new ShippingTypeRequirementTransformerFactory());
-						transformerExtensionFactories.add(new GeneratedCharterOutTransformerFactory());
 						bind(TypeLiterals.iterable(ITransformerExtensionFactory.class)).toInstance(transformerExtensionFactories);
 
 						// TODO - Remove once we have explicit use of export stage
@@ -104,7 +102,7 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 					}
 					// This bit is always needed for LiNGO ITS
 					// TODO: Split this into two classes, one for transformer ITS and one for LiNGO ITS
-//					bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
+					// bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
 				}
 			};
 		} else if (moduleType == ModuleType.Module_Optimisation) {

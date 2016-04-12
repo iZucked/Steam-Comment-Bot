@@ -34,7 +34,6 @@ import com.mmxlabs.scheduler.optimiser.cache.ICacheKeyDependencyLinker;
 import com.mmxlabs.scheduler.optimiser.cache.NullCacheKeyDependencyLinker;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertableDESShippingTimesCalculator;
-import com.mmxlabs.scheduler.optimiser.components.impl.GeneratedVesselEventFactory;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
@@ -126,8 +125,6 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(IVolumeAllocator.class).to(UnconstrainedVolumeAllocator.class).in(Singleton.class);
 		bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
 		bind(ICacheKeyDependencyLinker.class).to(NullCacheKeyDependencyLinker.class);
-
-		bind(GeneratedVesselEventFactory.class).in(PerChainUnitScope.class);
 	}
 
 	@Provides
