@@ -130,6 +130,7 @@ public class DefaultScenarioCreator {
 		final LegalEntity entity = CommercialFactory.eINSTANCE.createLegalEntity();
 		entity.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		entity.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+		entity.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		commercialModel.getEntities().add(entity);
 		return entity;
 	}

@@ -122,9 +122,11 @@ public class CustomScenarioCreator {
 		contractEntity = CommercialFactory.eINSTANCE.createLegalEntity();
 		contractEntity.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		contractEntity.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+		contractEntity.setUpstreamBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		shippingEntity = CommercialFactory.eINSTANCE.createLegalEntity();
 		shippingEntity.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		shippingEntity.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+		shippingEntity.setUpstreamBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		final TaxRate taxRate = CommercialFactory.eINSTANCE.createTaxRate();
 		taxRate.setDate(createLocalDate(2000, Calendar.JANUARY, 1));
 		shippingEntity.getShippingBook().getTaxRates().add(EcoreUtil.copy(taxRate));
