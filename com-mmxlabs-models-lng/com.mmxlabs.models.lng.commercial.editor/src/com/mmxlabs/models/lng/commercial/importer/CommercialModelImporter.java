@@ -97,6 +97,9 @@ public class CommercialModelImporter implements ISubmodelImporter {
 					if (baseLegalEntity.getTradingBook() == null) {
 						baseLegalEntity.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 					}
+					if (baseLegalEntity.getUpstreamBook() == null) {
+						baseLegalEntity.setUpstreamBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+					}
 				}
 
 			}

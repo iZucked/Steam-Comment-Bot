@@ -116,7 +116,6 @@ import com.mmxlabs.models.lng.port.provider.PortItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.types.provider.TypesItemProviderAdapterFactory;
 import com.mmxlabs.models.mmxcore.provider.MMXCoreItemProviderAdapterFactory;
 
-
 /**
  * This is an example of a Commercial model editor.
  * <!-- begin-user-doc -->
@@ -310,7 +309,7 @@ public class CommercialEditor
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected EContentAdapter problemIndicationAdapter = 
+	protected EContentAdapter problemIndicationAdapter =
 		new EContentAdapter() {
 			@Override
 			public void notifyChanged(Notification notification) {
@@ -514,7 +513,7 @@ public class CommercialEditor
 			updateProblemIndication();
 		}
 	}
-  
+
 	/**
 	 * Updates the problems indication with the information described in the specified diagnostic.
 	 * <!-- begin-user-doc -->
