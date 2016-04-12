@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -202,7 +203,11 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 
 		portTimeWindowsRecords.clear();
 		for (int i = 0; i < size; i++) {
-			portTimeWindowsRecords.add(new LinkedList<IPortTimeWindowsRecord>());
+			// Reset arrival time array. (Needed for some caching items)
+			if (arrivalTimes[i] != null) {
+				Arrays.fill(arrivalTimes[i], 0);
+			}
+			portTimeWindowsRecords.add(new LinkedList<>());
 			prepare(i);
 		}
 
