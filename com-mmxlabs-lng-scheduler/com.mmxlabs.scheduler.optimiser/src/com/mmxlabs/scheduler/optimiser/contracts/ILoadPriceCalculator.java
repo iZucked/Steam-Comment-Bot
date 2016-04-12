@@ -94,7 +94,8 @@ public interface ILoadPriceCalculator extends ICalculator {
 	static final int IDX_OTHER_VALUE = 0;
 	static final int IDX_SHIPPING_VALUE = 1;
 	static final int IDX_UPSIDE_VALUE = 2;
-	static final int ADDITIONAL_PNL_COMPONENT_SIZE = 3;
+	static final int IDX_UPSTREAM_VALUE = 3;
+	static final int ADDITIONAL_PNL_COMPONENT_SIZE = 4;
 	static final long @NonNull [] EMPTY_ADDITIONAL_PNL_RESULT = new long[ADDITIONAL_PNL_COMPONENT_SIZE];
 
 	default long @NonNull [] calculateAdditionalProfitAndLoss(@NonNull ILoadOption loadOption, @NonNull IAllocationAnnotation allocationAnnotation, int @NonNull [] slotPricesPerMMBTu,

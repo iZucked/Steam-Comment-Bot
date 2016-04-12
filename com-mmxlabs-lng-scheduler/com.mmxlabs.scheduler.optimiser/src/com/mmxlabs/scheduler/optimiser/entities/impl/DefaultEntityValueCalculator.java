@@ -267,9 +267,12 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 				final long[] additionProfitAndLossComponents = loadOption.getLoadPriceCalculator().calculateAdditionalProfitAndLoss(loadOption, cargoPNLData, slotPricesPerMMBTu, vesselAvailability,
 						vesselStartTime, plan, portSlotDetails);
+
 				cargoPNLData.setSlotAdditionalOtherPNL(slot, additionProfitAndLossComponents[ILoadPriceCalculator.IDX_OTHER_VALUE]);
 				cargoPNLData.setSlotAdditionalUpsidePNL(slot, additionProfitAndLossComponents[ILoadPriceCalculator.IDX_UPSIDE_VALUE]);
 				cargoPNLData.setSlotAdditionalShippingPNL(slot, additionProfitAndLossComponents[ILoadPriceCalculator.IDX_SHIPPING_VALUE]);
+
+				cargoPNLData.setSlotUpstreamPNL(slot, additionProfitAndLossComponents[ILoadPriceCalculator.IDX_UPSTREAM_VALUE]);
 			}
 			idx++;
 		}
@@ -332,6 +335,17 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 							final long postTaxValue = (postTaxProfit == null ? 0 : postTaxProfit.longValue()) + entity.getTradingBook().getTaxedProfit(preTaxValue, utcEquivTaxTime);
 							final IDetailTree entityDetails = entityBookDetailTreeMap.get(entity.getTradingBook());
 							final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getTradingBook(), postTaxValue, preTaxValue, entityDetails);
+							entries.add(entry);
+						}
+					}
+					{
+						final Long postTaxProfit = entityPostTaxProfit.get(entity.getUpstreamBook());
+						final Long preTaxProfit = entityPreTaxProfit.get(entity.getUpstreamBook());
+						if (preTaxProfit != null || postTaxProfit != null) {
+							final long preTaxValue = preTaxProfit == null ? 0 : preTaxProfit.longValue();
+							final long postTaxValue = (postTaxProfit == null ? 0 : postTaxProfit.longValue()) + entity.getUpstreamBook().getTaxedProfit(preTaxValue, utcEquivTaxTime);
+							final IDetailTree entityDetails = entityBookDetailTreeMap.get(entity.getUpstreamBook());
+							final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getUpstreamBook(), postTaxValue, preTaxValue, entityDetails);
 							entries.add(entry);
 						}
 					}
@@ -399,6 +413,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				addEntityBookProfit(entityPreTaxProfit, entity.getTradingBook(), cargoPNLData.getSlotAdditionalShippingPNL(slot));
 				addEntityBookProfit(entityPreTaxProfit, entity.getTradingBook(), cargoPNLData.getSlotAdditionalUpsidePNL(slot));
 				addEntityBookProfit(entityPreTaxProfit, entity.getTradingBook(), cargoPNLData.getSlotAdditionalOtherPNL(slot));
+
+				addEntityBookProfit(entityPreTaxProfit, entity.getUpstreamBook(), cargoPNLData.getSlotUpstreamPNL(slot));
 
 			} else if (slot instanceof IDischargeOption) {
 

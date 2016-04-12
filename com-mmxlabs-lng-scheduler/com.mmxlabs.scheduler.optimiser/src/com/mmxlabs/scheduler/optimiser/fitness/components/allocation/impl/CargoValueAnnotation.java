@@ -31,6 +31,7 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 		public long additionalOtherPNL;
 		public long additionalUpsidePNL;
 		public long additionalShippingPNL;
+		public long upstreamPNL;
 		public int pricePerMMBTu;
 		public IEntity entity;
 
@@ -46,6 +47,7 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 						&& this.additionalOtherPNL == other.additionalOtherPNL //
 						&& this.additionalUpsidePNL == other.additionalUpsidePNL //
 						&& this.additionalShippingPNL == other.additionalShippingPNL //
+						&& this.upstreamPNL == other.upstreamPNL //
 						&& this.pricePerMMBTu == other.pricePerMMBTu //
 						&& Objects.equal(this.entity, other.entity);
 
@@ -119,6 +121,21 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
 		if (allocation != null) {
 			return allocation.additionalUpsidePNL;
+		}
+
+		return 0;
+	}
+
+	public void setSlotUpstreamPNL(final IPortSlot slot, final long upstreamPNL) {
+		getOrCreateSlotAllocation(slot).upstreamPNL = upstreamPNL;
+	}
+
+	@Override
+	public long getSlotUpstreamPNL(final IPortSlot slot) {
+
+		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
+		if (allocation != null) {
+			return allocation.upstreamPNL;
 		}
 
 		return 0;

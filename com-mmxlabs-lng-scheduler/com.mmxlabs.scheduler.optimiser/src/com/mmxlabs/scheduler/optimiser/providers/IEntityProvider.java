@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -28,9 +30,11 @@ public interface IEntityProvider extends IDataComponentProvider {
 	 *            a calculator
 	 * @return the entity which owns the contract at the given slot
 	 */
-	IEntity getEntityForSlot(IPortSlot slot);
+	IEntity getEntityForSlot(@NonNull IPortSlot slot);
 
-	IEntity getEntityForVesselAvailability(IVesselAvailability vesselAvailability);
+	@NonNull
+	IEntity getEntityForVesselAvailability(@NonNull IVesselAvailability vesselAvailability);
 
-	IEntityBook getEntityBook(IEntity entity, EntityBookType shipping);
+	@NonNull
+	IEntityBook getEntityBook(@NonNull IEntity entity, @NonNull EntityBookType bookType);
 }
