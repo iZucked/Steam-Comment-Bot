@@ -16,7 +16,7 @@ public interface IEvaluationProcess {
 	 * 
 	 * @param sequences
 	 * @param evaluationState
-	 * @return Return false is {@link ISequences} is invalid in some way
+	 * @return Return false if {@link ISequences} is invalid in some way
 	 */
 	boolean evaluate(@NonNull ISequences sequences, @NonNull IEvaluationState evaluationState);
 
