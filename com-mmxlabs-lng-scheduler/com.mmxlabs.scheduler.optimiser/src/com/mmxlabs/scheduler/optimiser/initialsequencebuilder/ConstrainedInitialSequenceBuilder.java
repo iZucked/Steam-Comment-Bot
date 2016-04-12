@@ -18,6 +18,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -189,7 +190,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		}
 
 		// Determine the set of elements remaining that will not be sequenced.
-		final List<ISequenceElement> unusedElements = new ArrayList<ISequenceElement>();
+		final List<@NonNull ISequenceElement> unusedElements = new ArrayList<>();
 		unusedElements.addAll(optionalElements);
 		unusedElements.retainAll(unsequencedElements);
 
@@ -583,8 +584,8 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 		if (chunks.isEmpty() == false) {
 			log.error("Could not schedule the following " + chunks.size() + " elements anywhere: " + chunks);
-			throw new RuntimeException("Scenario is too hard for ConstrainedInitialSequenceBuilder.\n\n Try manually assigning vessels.\n\n" + chunks.size() + " chunks "
-					+ "could not be scheduled anywhere: " + chunks);
+			throw new RuntimeException(
+					"Scenario is too hard for ConstrainedInitialSequenceBuilder.\n\n Try manually assigning vessels.\n\n" + chunks.size() + " chunks " + "could not be scheduled anywhere: " + chunks);
 		}
 
 		// OK, we have done our best, now build the modifiablesequences

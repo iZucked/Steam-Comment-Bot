@@ -1488,10 +1488,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		slotVesselClassRestrictions.get(charterOut).add(vesselClass);
 	}
 
-	protected void buildVesselEvent(final IVesselEventPortSlot slot) {
+	protected void buildVesselEvent(final VesselEventPortSlot slot) {
 		final IVesselEvent vesselEvent = slot.getVesselEvent();
 
 		final SequenceElement endElement = new SequenceElement(indexingContext, slot.getId());
+
+		List<@NonNull ISequenceElement> eventSequenceElements = new LinkedList<>();
+		List<@NonNull IPortSlot> eventPortSlots = new LinkedList<>();
 
 		if (vesselEvent.getStartPort() != vesselEvent.getEndPort()) {
 			// We insert two extra elements and slots, so that we go
@@ -1542,7 +1545,18 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				constrainSlotAdjacency(startSlot, redirectSlot);
 				constrainSlotAdjacency(redirectSlot, slot);
 			}
+			eventPortSlots.add(startSlot);
+			eventSequenceElements.add(startElement);
+
+			eventPortSlots.add(redirectSlot);
+			eventSequenceElements.add(redirectElement);
+
 		}
+		eventPortSlots.add(slot);
+		eventSequenceElements.add(endElement);
+
+		slot.setEventPortSlots(eventPortSlots);
+		slot.setEventSequenceElements(eventSequenceElements);
 
 		sequenceElements.add(endElement);
 
