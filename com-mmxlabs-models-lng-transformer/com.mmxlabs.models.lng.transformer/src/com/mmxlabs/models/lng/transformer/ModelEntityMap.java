@@ -39,7 +39,7 @@ public interface ModelEntityMap {
 
 	/**
 	 */
-	<T extends EObject> Collection<T> getAllModelObjects(@NonNull final Class<? extends T> clz);
+	<T extends EObject> Collection<@NonNull T> getAllModelObjects(@NonNull final Class<? extends T> clz);
 
 	@NonNull
 	ZonedDateTime getDateFromHours(final int hours, final String tz);
