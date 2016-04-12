@@ -959,22 +959,15 @@ public class VoyagePlanner {
 	@Nullable
 	final public VoyagePlan getOptimisedVoyagePlan(final @NonNull List<@NonNull IOptionsSequenceElement> voyageOrPortOptionsSubsequence, final @NonNull IPortTimesRecord portTimesRecord,
 			final @NonNull IVoyagePlanOptimiser optimiser, final long startHeelVolumeInM3, final int vesselCharterInRatePerDay, final @NonNull VesselInstanceType vesselInstanceType,
-			final boolean setM3Volumes, Triple<IVessel, IResource, Integer> vesselTriple, List<@NonNull IVoyagePlanChoice> vpoChoices) {
+			final boolean setM3Volumes, Triple<IVessel, IResource, Integer> vesselTriple, @NonNull List<@NonNull IVoyagePlanChoice> vpoChoices) {
 		// set MBTUVolume in M3 for a FOB to DES cargo
 		if (vesselInstanceType != VesselInstanceType.DES_PURCHASE && setM3Volumes) {
 			setDesPurchaseOrFobPurchaseM3Volume(voyageOrPortOptionsSubsequence);
 		}
 		// Run sequencer evaluation
-		//// optimiser.setVesselCharterInRatePerDay(vesselCharterInRatePerDay);
-		//// optimiser.setBasicSequence(voyageOrPortOptionsSubsequence);
-		//// optimiser.setPortTimesRecord(portTimesRecord);
-		//// optimiser.setStartHeel(startHeelVolumeInM3);
-		//// optimiser.init();
-		// IResource resource, IVessel vessel, long startHeel, int baseFuelPricePerMT, int vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
-		// List<@NonNull IOptionsSequenceElement> basicSequence, List<@NonNull IVoyagePlanChoice> choices
-		//
 		final VoyagePlan result = optimiser.optimise(vesselTriple.getSecond(), vesselTriple.getFirst(), startHeelVolumeInM3, vesselTriple.getThird(), vesselCharterInRatePerDay, portTimesRecord,
 				voyageOrPortOptionsSubsequence, vpoChoices);
+
 		if (result == null) {
 			return null;
 		}
@@ -1000,9 +993,6 @@ public class VoyagePlanner {
 			}
 		}
 
-		// Reset VPO ready for next iteration
-		// optimiser.reset();
-
 		// Fix up final arrival time. The VPO is permitted to change the final arrival time of certain vessels and we need to alter the arrival time array and the portTimesRecord with the new
 		// arrival time.
 		{
@@ -1013,7 +1003,6 @@ public class VoyagePlanner {
 				final IPortSlot fromSlot = lastVoyage.getOptions().getFromPortSlot();
 				final int newTime = portTimesRecord.getSlotTime(fromSlot) + portTimesRecord.getSlotDuration(fromSlot) + lastVoyage.getTravelTime() + lastVoyage.getIdleTime();
 				portTimesRecord.setSlotTime(portTimesRecord.getReturnSlot(), newTime);
-
 			}
 		}
 
