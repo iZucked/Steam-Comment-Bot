@@ -17,7 +17,10 @@ public class DefaultVesselAvailabilityTest {
 
 	@Test
 	public void testGetSetDailyCharterInRate() {
-		final DefaultVesselAvailability vesselAvailavility = new DefaultVesselAvailability();
+		final IVessel vessel = Mockito.mock(IVessel.class);
+		final VesselInstanceType vesselInstanceType = VesselInstanceType.FLEET;
+
+		final DefaultVesselAvailability vesselAvailavility = new DefaultVesselAvailability(vessel, vesselInstanceType);
 		Assert.assertNull(vesselAvailavility.getDailyCharterInRate());
 		final ICurve curve = Mockito.mock(ICurve.class);
 		vesselAvailavility.setDailyCharterInRate(curve);
@@ -26,7 +29,10 @@ public class DefaultVesselAvailabilityTest {
 
 	@Test
 	public void testGetSetStartRequirement() {
-		final DefaultVesselAvailability vesselAvailavility = new DefaultVesselAvailability();
+		final IVessel vessel = Mockito.mock(IVessel.class);
+		final VesselInstanceType vesselInstanceType = VesselInstanceType.FLEET;
+
+		final DefaultVesselAvailability vesselAvailavility = new DefaultVesselAvailability(vessel, vesselInstanceType);
 		Assert.assertNull(vesselAvailavility.getStartRequirement());
 		final IStartEndRequirement requirement = Mockito.mock(IStartEndRequirement.class);
 		vesselAvailavility.setStartRequirement(requirement);
@@ -35,7 +41,10 @@ public class DefaultVesselAvailabilityTest {
 
 	@Test
 	public void testGetSetEndRequirement() {
-		final DefaultVesselAvailability vesselAvailavility = new DefaultVesselAvailability();
+		final IVessel vessel = Mockito.mock(IVessel.class);
+		final VesselInstanceType vesselInstanceType = VesselInstanceType.FLEET;
+
+		final DefaultVesselAvailability vesselAvailavility = new DefaultVesselAvailability(vessel, vesselInstanceType);
 		Assert.assertNull(vesselAvailavility.getEndRequirement());
 		final IStartEndRequirement requirement = Mockito.mock(IStartEndRequirement.class);
 		vesselAvailavility.setEndRequirement(requirement);
@@ -43,20 +52,13 @@ public class DefaultVesselAvailabilityTest {
 	}
 
 	@Test
-	public void testGetSetVessel() {
-		final DefaultVesselAvailability vesselAvailavility = new DefaultVesselAvailability();
-		Assert.assertNull(vesselAvailavility.getVessel());
+	public void testGetVesselAndType() {
 		final IVessel vessel = Mockito.mock(IVessel.class);
-		vesselAvailavility.setVessel(vessel);
-		Assert.assertSame(vessel, vesselAvailavility.getVessel());
-	}
+		final VesselInstanceType vesselInstanceType = VesselInstanceType.FLEET;
 
-	@Test
-	public void testGetSetVesselInstanceType() {
-		final DefaultVesselAvailability vesselAvailavility = new DefaultVesselAvailability();
-		Assert.assertSame(VesselInstanceType.UNKNOWN, vesselAvailavility.getVesselInstanceType());
-		final VesselInstanceType value = VesselInstanceType.FLEET;
-		vesselAvailavility.setVesselInstanceType(value);
-		Assert.assertSame(value, vesselAvailavility.getVesselInstanceType());
+		final DefaultVesselAvailability vesselAvailavility = new DefaultVesselAvailability(vessel, vesselInstanceType);
+
+		Assert.assertSame(vessel, vesselAvailavility.getVessel());
+		Assert.assertSame(vesselInstanceType, vesselAvailavility.getVesselInstanceType());
 	}
 }

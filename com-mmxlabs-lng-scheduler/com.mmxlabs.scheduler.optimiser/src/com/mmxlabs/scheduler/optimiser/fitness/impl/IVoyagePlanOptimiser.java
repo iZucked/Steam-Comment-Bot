@@ -62,7 +62,7 @@ public interface IVoyagePlanOptimiser {
 	 * 
 	 * @param basicSequence
 	 */
-	void setBasicSequence(@NonNull final List<IOptionsSequenceElement> basicSequence);
+	void setBasicSequence(@NonNull final List<@NonNull IOptionsSequenceElement> basicSequence);
 
 	void setPortTimesRecord(@NonNull final IPortTimesRecord portTimesRecord);
 
@@ -108,6 +108,7 @@ public interface IVoyagePlanOptimiser {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	ILNGVoyageCalculator getVoyageCalculator();
 
 	/**
@@ -115,7 +116,7 @@ public interface IVoyagePlanOptimiser {
 	 * 
 	 * @param choice
 	 */
-	void addChoice(final IVoyagePlanChoice choice);
+	void addChoice(final @NonNull IVoyagePlanChoice choice);
 
 	/**
 	 * The start heel for this particular voyage.

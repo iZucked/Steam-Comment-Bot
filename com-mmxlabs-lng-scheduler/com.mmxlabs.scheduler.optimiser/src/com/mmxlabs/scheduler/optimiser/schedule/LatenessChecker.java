@@ -50,13 +50,13 @@ public class LatenessChecker {
 	@NonNull
 	private ILatenessComponentParameters latenessParameters;
 
-	public static String GA_TOTAL_LATENESS_IN_HOURS = "total-lateness-hours";
-	public static String GA_TOTAL_PROMPT_LATENESS_LOW_IN_HOURS = "total-prompt-low-lateness-hours";
-	public static String GA_TOTAL_PROMPT_LATENESS_HIGH_IN_HOURS = "total-prompt-high-lateness-hours";
-	public static String GA_TOTAL_MIDTERM_LATENESS_LOW_IN_HOURS = "total-midterm-low-lateness-hours";
-	public static String GA_TOTAL_MIDTERM_LATENESS_HIGH_IN_HOURS = "total-midterm-high-lateness-hours";
-	public static String GA_TOTAL_BEYOND_LATENESS_LOW_IN_HOURS = "total-beyond-low-lateness-hours";
-	public static String GA_TOTAL_BEYOND_LATENESS_HIGH_IN_HOURS = "total-beyond-high-lateness-hours";
+	public static final @NonNull String GA_TOTAL_LATENESS_IN_HOURS = "total-lateness-hours";
+	public static final @NonNull String GA_TOTAL_PROMPT_LATENESS_LOW_IN_HOURS = "total-prompt-low-lateness-hours";
+	public static final @NonNull String GA_TOTAL_PROMPT_LATENESS_HIGH_IN_HOURS = "total-prompt-high-lateness-hours";
+	public static final @NonNull String GA_TOTAL_MIDTERM_LATENESS_LOW_IN_HOURS = "total-midterm-low-lateness-hours";
+	public static final @NonNull String GA_TOTAL_MIDTERM_LATENESS_HIGH_IN_HOURS = "total-midterm-high-lateness-hours";
+	public static final @NonNull String GA_TOTAL_BEYOND_LATENESS_LOW_IN_HOURS = "total-beyond-low-lateness-hours";
+	public static final @NonNull String GA_TOTAL_BEYOND_LATENESS_HIGH_IN_HOURS = "total-beyond-high-lateness-hours";
 
 	/**
 	 * TODO: Break out into separate class Calculate the various capacity violation check - min/max load & discharge volumes, max heel, vessel capacity and cooldown. Note the {@link IVolumeAllocator}
@@ -67,19 +67,22 @@ public class LatenessChecker {
 	 * @param allocations
 	 * @param annotatedSolution
 	 */
-	public void calculateLateness(final ScheduledSequences scheduledSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
+	public void calculateLateness(final @NonNull ScheduledSequences scheduledSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
 		// clear late slots
 		scheduledSequences.resetLateSlots();
 		// Loop over all sequences
 		for (final ScheduledSequence scheduledSequence : scheduledSequences) {
 			final IResource resource = scheduledSequence.getResource();
 			assert resource != null;
-			for (IPortSlot portSlot : scheduledSequence.getSequenceSlots()) {
+			for (final IPortSlot portSlot : scheduledSequence.getSequenceSlots()) {
 				final ITimeWindow tw = getTW(portSlot, resource);
-				int latenessInHours = getLateness(portSlot, resource, tw, scheduledSequence.getArrivalTime(portSlot));
+				if (tw == null) {
+					continue;
+				}
+				final int latenessInHours = getLateness(portSlot, resource, tw, scheduledSequence.getArrivalTime(portSlot));
 				addLateSlot(portSlot, latenessInHours, scheduledSequences);
-				if (latenessInHours > 0 || (annotatedSolution != null && tw != null)) {
-					Pair<ILatenessComponentParameters.Interval, Long> weightedLatenessPair = getWeightedLateness(tw, latenessInHours);
+				if (latenessInHours > 0 || annotatedSolution != null) {
+					final Pair<ILatenessComponentParameters.Interval, Long> weightedLatenessPair = getWeightedLateness(tw, latenessInHours);
 					addEntryToLatenessAnnotation(annotatedSolution, portSlot, tw, weightedLatenessPair.getFirst(), latenessInHours,
 							getLatenessWithoutFlex(portSlot, resource, tw, scheduledSequence.getArrivalTime(portSlot)), weightedLatenessPair.getSecond(), scheduledSequences);
 				}
@@ -87,13 +90,13 @@ public class LatenessChecker {
 		}
 	}
 
-	private void addLateSlot(IPortSlot portSlot, int latenessInHours, ScheduledSequences scheduledSequences) {
+	private void addLateSlot(final @NonNull IPortSlot portSlot, final int latenessInHours, final @NonNull ScheduledSequences scheduledSequences) {
 		if (latenessInHours > 0) {
 			scheduledSequences.addLateSlot(portSlot);
 		}
 	}
 
-	private ITimeWindow getTW(IPortSlot portSlot, IResource resource) {
+	private ITimeWindow getTW(@NonNull final IPortSlot portSlot, @NonNull final IResource resource) {
 		ITimeWindow tw = null;
 
 		if (portSlot instanceof StartPortSlot) {
@@ -108,24 +111,24 @@ public class LatenessChecker {
 		return tw;
 	}
 
-	private int getLateness(IPortSlot portSlot, IResource resource, ITimeWindow tw, int time) {
+	private int getLateness(@NonNull final IPortSlot portSlot, @NonNull final IResource resource, @Nullable final ITimeWindow tw, final int time) {
 		if ((tw != null) && (time > tw.getEnd())) {
-			int latenessInHours = time - tw.getEnd();
+			final int latenessInHours = time - tw.getEnd();
 			return latenessInHours;
 		}
 		return 0;
 	}
 
-	private int getLatenessWithoutFlex(IPortSlot portSlot, IResource resource, ITimeWindow tw, int time) {
+	private int getLatenessWithoutFlex(@NonNull final IPortSlot portSlot, @NonNull final IResource resource, @Nullable final ITimeWindow tw, final int time) {
 		if ((tw != null) && (time > tw.getEndWithoutFlex())) {
-			int latenessInHours = time - tw.getEndWithoutFlex();
+			final int latenessInHours = time - tw.getEndWithoutFlex();
 			return latenessInHours;
 		}
 		return 0;
 	}
 
-	private Pair<ILatenessComponentParameters.Interval, Long> getWeightedLateness(ITimeWindow tw, int latenessInHours) {
-		ILatenessComponentParameters.Interval interval = Interval.BEYOND;
+	private @NonNull Pair<ILatenessComponentParameters.@NonNull Interval, @NonNull Long> getWeightedLateness(@NonNull final ITimeWindow tw, final int latenessInHours) {
+		ILatenessComponentParameters.@NonNull Interval interval = Interval.BEYOND;
 		long weightedLateness;
 		if (tw.getStart() < promptPeriodProvider.getEndOfPromptPeriod()) {
 			interval = Interval.PROMPT;
@@ -137,22 +140,23 @@ public class LatenessChecker {
 			// Hit low penalty value
 			weightedLateness = (long) latenessParameters.getLowWeight(interval) * (long) latenessInHours;
 		} else {
-			weightedLateness = ((long) latenessParameters.getLowWeight(interval) * (long) latenessParameters.getThreshold(interval)) + (long) latenessParameters.getHighWeight(interval) * ((long) latenessInHours - (long) latenessParameters.getThreshold(interval));
+			weightedLateness = ((long) latenessParameters.getLowWeight(interval) * (long) latenessParameters.getThreshold(interval))
+					+ (long) latenessParameters.getHighWeight(interval) * ((long) latenessInHours - (long) latenessParameters.getThreshold(interval));
 		}
-		
+
 		return new Pair<>(interval, weightedLateness);
 
 	}
 
-	private void addEntryToLatenessAnnotation(@Nullable final IAnnotatedSolution annotatedSolution, final IPortSlot portSlot, final ITimeWindow tw, final Interval interval, final int latenessInHours,
-			final int latenessInHoursWithoutFlex, final long weightedLateness, final ScheduledSequences scheduledSequences) {
+	private void addEntryToLatenessAnnotation(@Nullable final IAnnotatedSolution annotatedSolution, final @NonNull IPortSlot portSlot, final @NonNull ITimeWindow tw, final Interval interval,
+			final int latenessInHours, final int latenessInHoursWithoutFlex, final long weightedLateness, final @NonNull ScheduledSequences scheduledSequences) {
 		// Set port details entry
 		scheduledSequences.addWeightedLatenessCost(portSlot, weightedLateness);
 		scheduledSequences.addLatenessCost(portSlot, new Pair<>(interval, (long) latenessInHours));
 
 		if (annotatedSolution != null && latenessInHoursWithoutFlex > 0) {
 			// set interval without flex
-			Interval intervalWithoutFlex = getWeightedLateness(tw, latenessInHoursWithoutFlex).getFirst();
+			final Interval intervalWithoutFlex = getWeightedLateness(tw, latenessInHoursWithoutFlex).getFirst();
 			// Set annotation
 			final ISequenceElement element = portSlotProvider.getElement(portSlot);
 			final ILatenessAnnotation annotation = new LatenessAnnotation(latenessInHours, weightedLateness, interval, latenessInHoursWithoutFlex, intervalWithoutFlex);
@@ -161,9 +165,12 @@ public class LatenessChecker {
 		}
 	}
 
-	private void setLatenessAnnotationsOnAnnotatedSolution(@NonNull final IAnnotatedSolution annotatedSolution, @NonNull ILatenessAnnotation latenessAnnotation) {
-		int lateness = latenessAnnotation.getLateness();
-		String key = getKey(latenessAnnotation, lateness);
+	private void setLatenessAnnotationsOnAnnotatedSolution(@NonNull final IAnnotatedSolution annotatedSolution, @NonNull final ILatenessAnnotation latenessAnnotation) {
+		final int lateness = latenessAnnotation.getLateness();
+		final String key = getKey(latenessAnnotation, lateness);
+		if (key == null) {
+			return;
+		}
 		// Store specific lateness
 		Integer individualLateness = annotatedSolution.getGeneralAnnotation(key, Integer.class);
 		if (individualLateness == null) {
@@ -171,7 +178,7 @@ public class LatenessChecker {
 		}
 		individualLateness += lateness;
 		annotatedSolution.setGeneralAnnotation(key, individualLateness);
-		
+
 		// Store total lateness
 		Integer totalLateness = annotatedSolution.getGeneralAnnotation(GA_TOTAL_LATENESS_IN_HOURS, Integer.class);
 		if (totalLateness == null) {
@@ -181,7 +188,8 @@ public class LatenessChecker {
 		annotatedSolution.setGeneralAnnotation(GA_TOTAL_LATENESS_IN_HOURS, totalLateness);
 	}
 
-	private String getKey(ILatenessAnnotation latenessAnnotation, int lateness) {
+	@Nullable
+	private String getKey(final @NonNull ILatenessAnnotation latenessAnnotation, final int lateness) {
 		if (latenessAnnotation.getInterval() == Interval.PROMPT) {
 			if (lateness < latenessParameters.getThreshold(Interval.PROMPT)) {
 				return GA_TOTAL_PROMPT_LATENESS_LOW_IN_HOURS;

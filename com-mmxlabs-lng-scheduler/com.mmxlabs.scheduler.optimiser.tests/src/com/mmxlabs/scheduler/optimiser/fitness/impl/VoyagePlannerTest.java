@@ -9,12 +9,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
+import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -43,6 +45,7 @@ import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.DefaultVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
@@ -183,8 +186,7 @@ public final class VoyagePlannerTest {
 		vesselClass.setConsumptionRate(VesselState.Laden, consumptionRateCalculator);
 		vesselClass.setConsumptionRate(VesselState.Ballast, consumptionRateCalculator);
 
-		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability();
-		vesselAvailability.setVessel(vessel);
+		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability(vessel, VesselInstanceType.FLEET);
 
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		vesselProvider.setVesselAvailabilityResource(resource, vesselAvailability);
@@ -311,16 +313,20 @@ public final class VoyagePlannerTest {
 
 		Mockito.when(voyagePlanOptimiser.optimise()).thenReturn(testVoyagePlan);
 
-		// Final set of arrival times
-		final int[] arrivalTimes = new int[] { 5, 10, 15, 20 };
-
 		// Expected arrival times per plan
-		// final int[] arrivalTimes1 = new int[] { 5, 10, 15 };
-		// final int[] arrivalTimes2 = new int[] { 15, 20 };
+		final PortTimesRecord portTimesRecord1 = new PortTimesRecord();
+		portTimesRecord1.setSlotTime(loadSlot1, 5);
+		portTimesRecord1.setSlotTime(dischargeSlot1, 10);
+		portTimesRecord1.setSlotTime(loadSlot2, 15);
+
+		final PortTimesRecord portTimesRecord2 = new PortTimesRecord();
+		portTimesRecord1.setSlotTime(loadSlot2, 15);
+		portTimesRecord1.setSlotTime(dischargeSlot2, 20);
+
+		List<@NonNull IPortTimesRecord> portTimesRecords = Lists.<@NonNull IPortTimesRecord> newArrayList(portTimesRecord1, portTimesRecord2);
 
 		// Schedule sequence
-		// final LinkedHashMap<VoyagePlan, IAllocationAnnotation> plans =
-		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> plans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
+		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> plans = planner.makeVoyagePlans(resource, sequence, portTimesRecords);
 		//
 		// Rely upon objects equals() methods to aid JMock equal(..) case
 		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, resource, 0);
@@ -346,18 +352,6 @@ public final class VoyagePlannerTest {
 		Mockito.verify(voyagePlanOptimiser).optimise();
 		Mockito.verify(voyagePlanOptimiser).reset();
 
-		// Expected arrival times per plan
-		// final int[] arrivalTimes1 = new int[] { 5, 10, 15 };
-		// final int[] arrivalTimes2 = new int[] { 15, 20 };
-
-		final PortTimesRecord portTimesRecord1 = new PortTimesRecord();
-		portTimesRecord1.setSlotTime(loadSlot1, 5);
-		portTimesRecord1.setSlotTime(dischargeSlot1, 10);
-		portTimesRecord1.setSlotTime(loadSlot2, 15);
-
-		final PortTimesRecord portTimesRecord2 = new PortTimesRecord();
-		portTimesRecord1.setSlotTime(loadSlot2, 15);
-		portTimesRecord1.setSlotTime(dischargeSlot2, 20);
 		Mockito.verify(voyagePlanOptimiser).setPortTimesRecord(Matchers.eq(portTimesRecord1));
 		Mockito.verify(voyagePlanOptimiser).setPortTimesRecord(Matchers.eq(portTimesRecord2));
 
@@ -450,8 +444,7 @@ public final class VoyagePlannerTest {
 		vesselClass.setConsumptionRate(VesselState.Laden, consumptionRateCalculator);
 		vesselClass.setConsumptionRate(VesselState.Ballast, consumptionRateCalculator);
 
-		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability();
-		vesselAvailability.setVessel(vessel);
+		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability(vessel, VesselInstanceType.FLEET);
 
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		vesselProvider.setVesselAvailabilityResource(resource, vesselAvailability);
@@ -559,10 +552,15 @@ public final class VoyagePlannerTest {
 
 		Mockito.when(voyagePlanOptimiser.optimise()).thenReturn(testVoyagePlan);
 
-		final int[] arrivalTimes = new int[] { 5, 10, 15 };
+		final PortTimesRecord portTimesRecord = new PortTimesRecord();
+		portTimesRecord.setSlotTime(loadSlot1, 5);
+		portTimesRecord.setSlotTime(dischargeSlot1, 10);
+		portTimesRecord.setSlotTime(loadSlot2, 15);
+
+		List<@NonNull IPortTimesRecord> portTimesRecords = Lists.<@NonNull IPortTimesRecord> newArrayList(portTimesRecord);
 
 		// Schedule sequence
-		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
+		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans = planner.makeVoyagePlans(resource, sequence, portTimesRecords);
 
 		// Rely upon objects equals() methods to aid JMock equal(..) case
 		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, resource, 0);
@@ -586,13 +584,6 @@ public final class VoyagePlannerTest {
 		Mockito.verify(voyagePlanOptimiser).reset();
 
 		// Expected arrival times per plan
-
-		// final int[] arrivalTimes = new int[] { 5, 10, 15 };
-
-		final PortTimesRecord portTimesRecord = new PortTimesRecord();
-		portTimesRecord.setSlotTime(loadSlot1, 5);
-		portTimesRecord.setSlotTime(dischargeSlot1, 10);
-		portTimesRecord.setSlotTime(loadSlot2, 15);
 
 		Mockito.verify(voyagePlanOptimiser).setPortTimesRecord(Matchers.eq(portTimesRecord));
 

@@ -135,7 +135,7 @@ public class GeneratedCharterOutOptionCache {
 						event.setDurationHours(gcoo.getGCOEventDurationHours());
 						event.setHireOutRevenue(gcoo.getGCOEventHireOutRevenue());
 						event.setStartPort(gcoo.getGCOEventStartPort());
-						event.setStartPort(gcoo.getGCOEventEndPort());
+						event.setEndPort(gcoo.getGCOEventEndPort());
 						event.setHeelOptions(gcoo.getGCOEventHeelPrice(), gcoo.getGCOEventHeelCV(), gcoo.getGCOEventHeelVolume());
 					}
 				}

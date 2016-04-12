@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
@@ -32,7 +33,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author hinton
  * 
  */
-public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
+public final class ScheduledSequences extends ArrayList<@NonNull ScheduledSequence> {
 	private static final long serialVersionUID = 1L;
 
 	private final Map<IPortSlot, Long> unusedSlotGroupValue = new HashMap<>();
@@ -41,10 +42,10 @@ public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 	private final Map<IPortSlot, Long> weightedLatenessSum = new HashMap<>();
 	private final Map<VoyagePlan, Long> voyagePlanGroupValue = new HashMap<>();
 	private final Map<IResource, ScheduledSequence> resourceToScheduledSequenceMap = new HashMap<>();
-	private final Set<IPortSlot> lateSlots = new HashSet<>();
+	private final Set<@NonNull IPortSlot> lateSlots = new HashSet<>();
 	private final Map<IPortSlot, Integer> violatingIdleHours = new HashMap<>();
 	private final Map<IPortSlot, Long> weightedIdleCost = new HashMap<>();
-	
+
 	/**
 	 * 
 	 * @param resource
@@ -52,19 +53,19 @@ public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 	 * @param voyagePlans
 	 * @param arrivalTimes
 	 */
-	public void addScheduledSequence(final IResource resource, final ISequence sequence, final int startTime,
-			final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans) {
+	public void addScheduledSequence(final @NonNull IResource resource, final @NonNull ISequence sequence, final int startTime,
+			final List<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans) {
 		final ScheduledSequence scheduledSequence = new ScheduledSequence(resource, sequence, startTime, voyagePlans);
 		resourceToScheduledSequenceMap.put(resource, scheduledSequence);
 		add(scheduledSequence);
 	}
 
 	@Override
-	public boolean add(ScheduledSequence scheduledSequence) {
+	public boolean add(@NonNull final ScheduledSequence scheduledSequence) {
 		resourceToScheduledSequenceMap.put(scheduledSequence.getResource(), scheduledSequence);
 		return super.add(scheduledSequence);
 	}
-	
+
 	public void setUnusedSlotGroupValue(@NonNull final IPortSlot portSlot, final long groupValue) {
 		unusedSlotGroupValue.put(portSlot, groupValue);
 	}
@@ -88,7 +89,7 @@ public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 
 	}
 
-	public void addCapacityViolation(final IPortSlot portSlot) {
+	public void addCapacityViolation(final @NonNull IPortSlot portSlot) {
 		long sum = 0L;
 		if (capacityViolationSum.containsKey(portSlot)) {
 			sum = capacityViolationSum.get(portSlot);
@@ -96,85 +97,85 @@ public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 		capacityViolationSum.put(portSlot, 1 + sum);
 	}
 
-	public long getCapacityViolationCount(final IPortSlot portSlot) {
+	public long getCapacityViolationCount(final @NonNull IPortSlot portSlot) {
 		if (capacityViolationSum.containsKey(portSlot)) {
 			return capacityViolationSum.get(portSlot);
 		}
 		return 0L;
 	}
-	
-	public ScheduledSequence getScheduledSequenceForResource(final IResource resource) {
+
+	public ScheduledSequence getScheduledSequenceForResource(final @NonNull IResource resource) {
 		return resourceToScheduledSequenceMap.get(resource);
 	}
-	
-	public void addLatenessCost(IPortSlot portSlot, Pair<Interval, Long> lateness) {
+
+	public void addLatenessCost(@NonNull final IPortSlot portSlot, final Pair<Interval, Long> lateness) {
 		latenessSum.put(portSlot, lateness);
 	}
 
-	public void addWeightedLatenessCost(IPortSlot portSlot, long weightedLateness) {
+	public void addWeightedLatenessCost(@NonNull final IPortSlot portSlot, final long weightedLateness) {
 		weightedLatenessSum.put(portSlot, (long) weightedLateness);
 	}
-	
-	public Pair<Interval, Long> getLatenessCost(IPortSlot portSlot) {
+
+	public @Nullable Pair<Interval, Long> getLatenessCost(@NonNull final IPortSlot portSlot) {
 		if (latenessSum.containsKey(portSlot)) {
 			return latenessSum.get(portSlot);
 		} else {
 			return null;
 		}
 	}
-	
-	public long getWeightedLatenessCost(IPortSlot portSlot) {
+
+	public long getWeightedLatenessCost(final @NonNull IPortSlot portSlot) {
 		if (weightedLatenessSum.containsKey(portSlot)) {
 			return weightedLatenessSum.get(portSlot);
 		} else {
 			return 0L;
 		}
 	}
-	
+
 	public long getTotalWeightedLateness() {
 		long sum = 0L;
-		for (long lateness : weightedLatenessSum.values()) {
+		for (final long lateness : weightedLatenessSum.values()) {
 			sum += lateness;
 		}
 		return sum;
 	}
-	
+
 	public void resetLateSlots() {
 		lateSlots.clear();
 	}
-	
-	public void addLateSlot(IPortSlot slot) {
+
+	public void addLateSlot(final @NonNull IPortSlot slot) {
 		lateSlots.add(slot);
 	}
-	
-	public void addIdleHoursViolation(IPortSlot slot, int violatingHours) {
+
+	public void addIdleHoursViolation(@NonNull IPortSlot slot, int violatingHours) {
 		violatingIdleHours.put(slot, violatingHours);
 	}
 
-	public long getIdleTimeViolationHours(final IPortSlot portSlot) {
+	public long getIdleTimeViolationHours(final @NonNull IPortSlot portSlot) {
 		if (violatingIdleHours.containsKey(portSlot)) {
 			return violatingIdleHours.get(portSlot);
 		}
 		return 0L;
 	}
 
-	public void addIdleWeightedCost(IPortSlot slot, long cost) {
+	public void addIdleWeightedCost(@NonNull IPortSlot slot, long cost) {
 		weightedIdleCost.put(slot, cost);
 	}
 	
-	public long getIdleWeightedCost(final IPortSlot portSlot) {
+	public long getIdleWeightedCost(final @NonNull IPortSlot portSlot) {
 		if (weightedIdleCost.containsKey(portSlot)) {
 			return weightedIdleCost.get(portSlot);
 		}
 		return 0L;
 	}
 
-	public boolean isLateSlot(IPortSlot slot) {
+	public boolean isLateSlot(@NonNull IPortSlot slot) {
 		return lateSlots.contains(slot);
 	}
-	
-	public Set<IPortSlot> getLateSlotsSet() {
-		Set<IPortSlot> duplicateSet = new HashSet<IPortSlot>();
+
+	public @NonNull Set<@NonNull IPortSlot> getLateSlotsSet() {
+		final Set<@NonNull IPortSlot> duplicateSet = new HashSet<>();
 		duplicateSet.addAll(lateSlots);
 		return duplicateSet;
 	}

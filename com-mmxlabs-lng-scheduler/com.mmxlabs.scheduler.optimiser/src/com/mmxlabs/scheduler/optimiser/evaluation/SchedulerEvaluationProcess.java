@@ -57,6 +57,8 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 
 	private boolean evaluate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @Nullable final IAnnotatedSolution solution) {
 
+		// Calculate arrival times for sequences
+		
 		final ScheduledSequences scheduledSequences = scheduler.schedule(sequences, solution);
 		if (scheduledSequences == null) {
 			return false;
