@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.lingo.reports/src" editDirectory=""
-    editorDirectory="" modelPluginID="com.mmxlabs.lingo.reports" modelName="Changeset"
-    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" testsDirectory=""
-    importerID="org.eclipse.emf.importer.ecore" complianceLevel="7.0" copyrightFields="false"
-    runtimeVersion="2.8" usedGenPackages="../../com.mmxlabs.models.lng.cargo/model/cargo.genmodel#//cargo ../../com.mmxlabs.models.lng.commercial/model/commercial.genmodel#//commercial ../../com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime ../../com.mmxlabs.models.lng.fleet/model/fleet.genmodel#//fleet ../../com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types ../../com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore ../../com.mmxlabs.models.lng.port/model/port.genmodel#//port ../../com.mmxlabs.models.lng.pricing/model/pricing.genmodel#//pricing ../../com.mmxlabs.scenario.service.model/model/scenario.service.genmodel#//model ../../com.mmxlabs.models.lng.schedule/model/schedule.genmodel#//schedule ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.genmodel#//spotmarkets"
+    editorDirectory="" modelPluginID="com.mmxlabs.lingo.reports" dynamicTemplates="true"
+    modelName="Changeset" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    testsDirectory="" importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0"
+    copyrightFields="false" runtimeVersion="2.11" usedGenPackages="../../com.mmxlabs.models.lng.cargo/model/cargo.genmodel#//cargo ../../com.mmxlabs.models.lng.commercial/model/commercial.genmodel#//commercial ../../com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime ../../com.mmxlabs.models.lng.fleet/model/fleet.genmodel#//fleet ../../com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types ../../com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore ../../com.mmxlabs.models.lng.port/model/port.genmodel#//port ../../com.mmxlabs.models.lng.pricing/model/pricing.genmodel#//pricing ../../com.mmxlabs.scenario.service.model/model/scenario.service.genmodel#//model ../../com.mmxlabs.models.lng.schedule/model/schedule.genmodel#//schedule ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.genmodel#//spotmarkets"
     operationReflection="true" runtimePlatform="RCP" importOrganizing="true">
   <foreignModel>changeset.ecore</foreignModel>
   <genPackages prefix="Changeset" basePackage="com.mmxlabs.lingo.reports.views.changeset"
@@ -13,8 +13,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRoot/changeSets"/>
     </genClasses>
     <genClasses ecoreClass="changeset.ecore#//ChangeSet">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/changesToBase"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/changesToPrevious"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/metricsToBase"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/metricsToPrevious"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/baseScenarioRef"/>
@@ -25,57 +23,39 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/currentScenario"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/changeSetRowsToBase"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/changeSetRowsToPrevious"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSet/currentMetrics"/>
     </genClasses>
     <genClasses ecoreClass="changeset.ecore#//Metrics">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//Metrics/pnlDelta"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//Metrics/latenessDelta"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//Metrics/capacityDelta"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//Metrics/pnl"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//Metrics/lateness"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//Metrics/capacity"/>
     </genClasses>
-    <genClasses ecoreClass="changeset.ecore#//Change"/>
-    <genClasses ecoreClass="changeset.ecore#//EventVesselChange">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//EventVesselChange/loadSlot_base"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//EventVesselChange/loadSlot_target"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//EventVesselChange/originalVessel"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//EventVesselChange/newVessel"/>
-    </genClasses>
-    <genClasses ecoreClass="changeset.ecore#//WiringChange">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//WiringChange/loadSlot_base"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//WiringChange/loadSlot_target"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//WiringChange/originalDischargeSlot"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//WiringChange/newDischargeSlot"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//WiringChange/originalLoadAllocation"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//WiringChange/newLoadAllocation"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//WiringChange/originalDischargeAllocation"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//WiringChange/newDischargeAllocation"/>
-    </genClasses>
-    <genClasses ecoreClass="changeset.ecore#//VesselChange">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//VesselChange/loadSlot_base"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//VesselChange/loadSlot_target"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//VesselChange/originalVessel"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//VesselChange/newVessel"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//VesselChange/dischargeSlot_base"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//VesselChange/dischargeSlot_target"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//VesselChange/originalLoadAllocation"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//VesselChange/newLoadAllocation"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//VesselChange/originalDischargeAllocation"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//VesselChange/newDischargeAllocation"/>
+    <genClasses ecoreClass="changeset.ecore#//DeltaMetrics">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//DeltaMetrics/pnlDelta"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//DeltaMetrics/latenessDelta"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//DeltaMetrics/capacityDelta"/>
     </genClasses>
     <genClasses ecoreClass="changeset.ecore#//ChangeSetRow">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/lhsName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/rhsName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/lhsVesselName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/rhsVesselName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/originalVesselName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/newVesselName"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/lhsWiringLink"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/rhsWiringLink"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/lhsWiringChange"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/rhsWiringChange"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/lhsVesselChange"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/loadSlot"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/dischargeSlot"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/originalLoadAllocation"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/newLoadAllocation"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/originalDischargeAllocation"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/newDischargeAllocation"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/wiringChange"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/vesselChange"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/originalGroupProfitAndLoss"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/newGroupProfitAndLoss"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/originalEventGrouping"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/newEventGrouping"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/originalVesselShortName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/newVesselShortName"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

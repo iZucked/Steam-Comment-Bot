@@ -204,11 +204,16 @@ public class ChangeSetView implements IAdaptable {
 
 			// TODO: Extract vessel columns and generate.
 			final Set<String> vesselnames = new LinkedHashSet<>();
+			final Map<String, String> shortNameMap = new HashMap<>();
+
 			if (newRoot != null) {
 				for (final ChangeSet cs : newRoot.getChangeSets()) {
 					for (final ChangeSetRow csr : cs.getChangeSetRowsToPrevious()) {
 						vesselnames.add(csr.getOriginalVesselName());
 						vesselnames.add(csr.getNewVesselName());
+
+						shortNameMap.put(csr.getOriginalVesselName(), csr.getOriginalVesselShortName());
+						shortNameMap.put(csr.getNewVesselName(), csr.getNewVesselShortName());
 					}
 				}
 			}
@@ -221,7 +226,8 @@ public class ChangeSetView implements IAdaptable {
 				assert name != null;
 				final GridColumn gc = new GridColumn(vesselColumnGroup, SWT.NONE);
 				final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-				gvc.getColumn().setText(name);
+				gvc.getColumn().setText(shortNameMap.get(name));
+				gvc.getColumn().setHeaderTooltip(name);
 				gvc.getColumn().setWidth(22);
 				gvc.getColumn().setResizeable(false);
 				gvc.setLabelProvider(createVesselLabelProvider(name));
@@ -1287,17 +1293,18 @@ public class ChangeSetView implements IAdaptable {
 		};
 
 	}
+
 	private CellLabelProvider createUpstreamDeltaLabelProvider() {
 		return new CellLabelProvider() {
-			
+
 			@Override
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
 				cell.setText("");
-				
+
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
-					
+
 					Number f = null;
 					{
 						final SlotAllocation originalLoadAllocation = change.getOriginalLoadAllocation();
@@ -1331,11 +1338,11 @@ public class ChangeSetView implements IAdaptable {
 					if (delta != 0) {
 						cell.setText(String.format("%s %,.3f", delta < 0 ? "↓" : "↑", Math.abs(delta)));
 					}
-					
+
 				}
 			}
 		};
-		
+
 	}
 
 	private CellLabelProvider createAdditionalShippingPNLDeltaLabelProvider() {
