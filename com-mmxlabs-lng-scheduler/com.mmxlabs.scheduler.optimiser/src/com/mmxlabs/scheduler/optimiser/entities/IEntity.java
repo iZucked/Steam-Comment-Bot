@@ -21,4 +21,7 @@ public interface IEntity {
 
 	@NonNull
 	IEntityBook getTradingBook();
+
+	@NonNull
+	IEntityBook getUpstreamBook();
 }

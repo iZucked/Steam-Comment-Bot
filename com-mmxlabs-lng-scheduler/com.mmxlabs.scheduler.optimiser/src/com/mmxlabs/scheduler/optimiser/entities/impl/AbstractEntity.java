@@ -46,4 +46,9 @@ public abstract class AbstractEntity implements IEntity {
 	public IEntityBook getTradingBook() {
 		return enityProvider.getEntityBook(this, EntityBookType.Trading);
 	}
+
+	@Override
+	public IEntityBook getUpstreamBook() {
+		return enityProvider.getEntityBook(this, EntityBookType.Upstream);
+	}
 }
