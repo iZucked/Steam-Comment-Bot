@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -22,6 +24,6 @@ public interface IVoyagePlanAnnotator {
 	 * @param Sequence
 	 * @param annotatedSequence
 	 */
-	void annotateFromVoyagePlan(ScheduledSequence scheduledSequence, IAnnotatedSolution annotatedSolution);
+	void annotateFromVoyagePlan(@NonNull ScheduledSequence scheduledSequence, @NonNull IAnnotatedSolution annotatedSolution);
 
 }

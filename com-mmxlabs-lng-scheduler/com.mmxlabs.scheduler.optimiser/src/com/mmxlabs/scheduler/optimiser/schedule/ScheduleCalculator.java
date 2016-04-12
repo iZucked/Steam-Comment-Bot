@@ -263,23 +263,41 @@ public class ScheduleCalculator {
 		}
 
 		// TODO: This should come from the ISequencesScheduler
-		final int times[] = new int[sequence.size()];
+		final int times[] = new int[2];
 		Arrays.fill(times, startTime);
 		final PortTimesRecord portTimesRecord = new PortTimesRecord();
 		for (final ISequenceElement element : sequence) {
+			
 			final IPortSlot slot = portSlotProvider.getPortSlot(element);
+			
+			if (slot instanceof StartPortSlot) {
+				continue;
+			}
+			if (slot instanceof EndPortSlot) {
+				continue;
+			}
+			
 			portTimesRecord.setSlotTime(slot, startTime);
 			portTimesRecord.setSlotDuration(slot, 0);
 		}
 		currentPlan.setSequence(currentSequence.toArray(new IDetailsSequenceElement[0]));
 
 		if (customNonShippedScheduler != null) {
-			customNonShippedScheduler.modifyArrivalTimes(resource, startTime, currentPlan, portTimesRecord);
+			customNonShippedScheduler.modifyArrivalTimes(resource, portTimesRecord);
 
 			// Back apply any modified times to times array
 			int idx = 0;
 			for (final ISequenceElement element : sequence) {
 				final IPortSlot slot = portSlotProvider.getPortSlot(element);
+				
+				
+				if (slot instanceof StartPortSlot) {
+					continue;
+				}
+				if (slot instanceof EndPortSlot) {
+					continue;
+				}
+				
 				times[idx++] = portTimesRecord.getSlotTime(slot);
 			}
 		}
@@ -371,22 +389,15 @@ public class ScheduleCalculator {
 				for (final IPortSlot portSlot : scheduledSequence.getSequenceSlots()) {
 					assert portSlot != null;
 
+					final ISequenceElement portElement = portSlotProvider.getElement(portSlot);
+					assert portElement != null;
 
 					final IAllocationAnnotation allocationAnnotation = scheduledSequence.getAllocationAnnotation(portSlot);
-					final IHeelLevelAnnotation heelLevelAnnotation = scheduledSequence.getHeelLevelAnnotation(portSlot);
-					final ISequenceElement  portElement		= portSlotProvider.getElement(portSlot);
-						
-			
-					
-//					 = portSlotProvider.getElement(portSlot);
-					if (portElement == null) {
-						int ii = 0;
-					}
-					assert portElement != null;
 					if (allocationAnnotation != null) {
 						elementAnnotations.setAnnotation(portElement, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
 					}
 
+					final IHeelLevelAnnotation heelLevelAnnotation = scheduledSequence.getHeelLevelAnnotation(portSlot);
 					if (heelLevelAnnotation != null) {
 						elementAnnotations.setAnnotation(portElement, SchedulerConstants.AI_heelLevelInfo, heelLevelAnnotation);
 					}
@@ -406,7 +417,7 @@ public class ScheduleCalculator {
 
 		// Perform capacity violations analysis
 		latenessChecker.calculateLateness(scheduledSequences, annotatedSolution);
-		
+
 		// Idle time checker
 		idleTimeChecker.calculateIdleTime(scheduledSequences, annotatedSolution);
 	}

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Triple;
@@ -23,21 +24,22 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public final class ScheduledSequence {
-	private final IResource resource;
-	private final ISequence sequence;
+	private final @NonNull IResource resource;
+	private final @NonNull ISequence sequence;
 	private final int startTime;
-	private final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans;
+	private final List<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans;
 
 	// Cached Lookup data
 	private final Map<IPortSlot, Integer> portSlotToTimeMap = new HashMap<>();
 	private final Map<IPortSlot, VoyagePlan> portSlotToVoyagePlanMap = new HashMap<>();
 	private final Map<IPortSlot, IPortTimesRecord> portSlotToPortTimesRecordMap = new HashMap<>();
 	private final Map<IPortSlot, IHeelLevelAnnotation> portSlotToHeelLevelAnnotationMap = new HashMap<>();
-	private final List<IPortSlot> sequencePortSlots;
+	private final List<@NonNull IPortSlot> sequencePortSlots;
 
 	/**
 	 */
-	public ScheduledSequence(final IResource resource, final ISequence sequence, final int startTime, final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans) {
+	public ScheduledSequence(final @NonNull IResource resource, final @NonNull ISequence sequence, final int startTime,
+			final List<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans) {
 		super();
 		this.sequence = sequence;
 		this.startTime = startTime;
@@ -49,11 +51,11 @@ public final class ScheduledSequence {
 		buildLookup();
 	}
 
-	protected ISequence getSequence() {
+	protected @NonNull ISequence getSequence() {
 		return sequence;
 	}
 
-	public IResource getResource() {
+	public @NonNull IResource getResource() {
 		return resource;
 	}
 
@@ -61,11 +63,11 @@ public final class ScheduledSequence {
 		return startTime;
 	}
 
-	public List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> getVoyagePlans() {
+	public List<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> getVoyagePlans() {
 		return voyagePlans;
 	}
 
-	public int getArrivalTime(final IPortSlot portSlot) {
+	public int getArrivalTime(final @NonNull IPortSlot portSlot) {
 		final Integer time = portSlotToTimeMap.get(portSlot);
 		if (time == null) {
 			throw new IllegalArgumentException("Port slot is not part of this sequence");
@@ -73,21 +75,21 @@ public final class ScheduledSequence {
 		return time.intValue();
 	}
 
-	public VoyagePlan getVoyagePlan(final IPortSlot portSlot) {
+	public VoyagePlan getVoyagePlan(final @NonNull IPortSlot portSlot) {
 		return portSlotToVoyagePlanMap.get(portSlot);
 	}
 
-	public List<IPortSlot> getSequenceSlots() {
+	public List<@NonNull IPortSlot> getSequenceSlots() {
 		return sequencePortSlots;
 	}
 
-	public IPortTimesRecord getPortTimesRecord(final IPortSlot portSlot) {
+	public IPortTimesRecord getPortTimesRecord(final @NonNull IPortSlot portSlot) {
 		return portSlotToPortTimesRecordMap.get(portSlot);
 
 	}
 
 	@Nullable
-	public IAllocationAnnotation getAllocationAnnotation(final IPortSlot portSlot) {
+	public IAllocationAnnotation getAllocationAnnotation(final @NonNull IPortSlot portSlot) {
 		final IPortTimesRecord portTimesRecord = getPortTimesRecord(portSlot);
 		if (portTimesRecord instanceof IAllocationAnnotation) {
 			return (IAllocationAnnotation) portTimesRecord;
@@ -96,7 +98,7 @@ public final class ScheduledSequence {
 
 	}
 
-	public IHeelLevelAnnotation getHeelLevelAnnotation(final IPortSlot portSlot) {
+	public IHeelLevelAnnotation getHeelLevelAnnotation(final @NonNull IPortSlot portSlot) {
 		return portSlotToHeelLevelAnnotationMap.get(portSlot);
 	}
 

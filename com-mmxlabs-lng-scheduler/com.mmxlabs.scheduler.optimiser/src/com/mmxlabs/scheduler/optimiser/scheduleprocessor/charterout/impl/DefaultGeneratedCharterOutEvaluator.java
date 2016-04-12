@@ -36,6 +36,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.FBOVoyagePlanChoice;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IdleNBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.NBOTravelVoyagePlanChoice;
@@ -517,31 +518,36 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	 * @return
 	 */
 	private VoyagePlan runVPOOnBigSequence(@NonNull final IVessel vessel, final VoyagePlan originalVoyagePlan, final long startHeelInM3, final ExtendedCharterOutSequence bigSequence) {
-		// We will use the VPO to optimise fuel and route choices
-		vpo.reset();
+		// // We will use the VPO to optimise fuel and route choices
+		// vpo.reset();
+		//
+		int baseFuelPricePerMT = vesselBaseFuelCalculator.getBaseFuelPrice(vessel, bigSequence.getPortTimesRecord());
+		// vpo.setVessel(vessel, null, baseFuelPrice);
+		// vpo.setVesselCharterInRatePerDay();
+		//
+		// // Install our new alternative sequence
+		// vpo.setBasicSequence(bigSequence.getSequence());
+		// vpo.setStartHeel(startHeelInM3);
+		//
+		// // Rebuilt the arrival times list
+		// vpo.setPortTimesRecord(bigSequence.getPortTimesRecord());
 
-		vpo.setVessel(vessel, null, vesselBaseFuelCalculator.getBaseFuelPrice(vessel, bigSequence.getPortTimesRecord()));
-		vpo.setVesselCharterInRatePerDay(originalVoyagePlan.getCharterInRatePerDay());
-
-		// Install our new alternative sequence
-		vpo.setBasicSequence(bigSequence.getSequence());
-		vpo.setStartHeel(startHeelInM3);
-
-		// Rebuilt the arrival times list
-		vpo.setPortTimesRecord(bigSequence.getPortTimesRecord());
-
+		List<@NonNull IVoyagePlanChoice> vpoChoices = new LinkedList<>();
 		// Add in NBO etc choices (ballast 1)
-		vpo.addChoice(new NBOTravelVoyagePlanChoice(bigSequence.getLaden() == null ? null : bigSequence.getLaden(), bigSequence.getToCharter()));
-		vpo.addChoice(new FBOVoyagePlanChoice(bigSequence.getToCharter()));
-		vpo.addChoice(new IdleNBOVoyagePlanChoice(bigSequence.getToCharter()));
+		vpoChoices.add(new NBOTravelVoyagePlanChoice(bigSequence.getLaden() == null ? null : bigSequence.getLaden(), bigSequence.getToCharter()));
+		vpoChoices.add(new FBOVoyagePlanChoice(bigSequence.getToCharter()));
+		vpoChoices.add(new IdleNBOVoyagePlanChoice(bigSequence.getToCharter()));
 
 		// Add in NBO etc choices (ballast 2)
-		vpo.addChoice(new NBOTravelVoyagePlanChoice(bigSequence.getToCharter(), bigSequence.getFromCharter()));
-		vpo.addChoice(new FBOVoyagePlanChoice(bigSequence.getFromCharter()));
-		vpo.addChoice(new IdleNBOVoyagePlanChoice(bigSequence.getFromCharter()));
+		vpoChoices.add(new NBOTravelVoyagePlanChoice(bigSequence.getToCharter(), bigSequence.getFromCharter()));
+		vpoChoices.add(new FBOVoyagePlanChoice(bigSequence.getFromCharter()));
+		vpoChoices.add(new IdleNBOVoyagePlanChoice(bigSequence.getFromCharter()));
 
 		// Calculate our new plan
-		final VoyagePlan newVoyagePlan = vpo.optimise();
+		// final VoyagePlan newVoyagePlan = vpo.optimise();
+
+		final VoyagePlan newVoyagePlan = vpo.optimise(null, vessel, startHeelInM3, baseFuelPricePerMT, originalVoyagePlan.getCharterInRatePerDay(), bigSequence.getPortTimesRecord(),
+				bigSequence.getSequence(), vpoChoices);
 
 		return newVoyagePlan;
 	}

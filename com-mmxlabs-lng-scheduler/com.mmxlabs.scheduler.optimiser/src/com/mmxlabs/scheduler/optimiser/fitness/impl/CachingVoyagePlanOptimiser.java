@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,7 +20,6 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
@@ -53,18 +51,19 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		private final int[] voyageTimes;
 		private final int dischargePrice;
 		private final int vesselCharterInRatePerDay;
-		private final IVessel vessel;
+		private final @NonNull IVessel vessel;
 		protected final long startHeel;
 		private final int baseFuelPricePerMT;
 
 		// Non hashcode fields
-		private final List<IOptionsSequenceElement> sequence;
-		private final List<IVoyagePlanChoice> choices;
-		protected IPortTimesRecord portTimesRecord;
-		protected IResource resource;
+		private final @NonNull List<@NonNull IOptionsSequenceElement> sequence;
+		private final @NonNull List<@NonNull IVoyagePlanChoice> choices;
+		protected @NonNull IPortTimesRecord portTimesRecord;
+		protected @Nullable IResource resource;
 
-		public CacheKey(final IVessel vessel, final IResource resource, final int vesselCharterInRatePerDay, final int baseFuelPricePerMT, final List<IOptionsSequenceElement> sequence,
-				final IPortTimesRecord portTimesRecord, final List<IVoyagePlanChoice> choices, final long startHeel) {
+		public CacheKey(final @NonNull IVessel vessel, final @Nullable IResource resource, final int vesselCharterInRatePerDay, final int baseFuelPricePerMT,
+				final @NonNull List<@NonNull IOptionsSequenceElement> sequence, final @NonNull IPortTimesRecord portTimesRecord, final @NonNull List<@NonNull IVoyagePlanChoice> choices,
+				final long startHeel) {
 			super();
 			this.vessel = vessel;
 			this.resource = resource;
@@ -124,7 +123,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			result = (prime * result) + baseFuelPricePerMT;
 			result = (prime * result) + vesselCharterInRatePerDay;
 
-			result = (prime * result) + ((vessel == null) ? 0 : vessel.hashCode());
+			result = (prime * result) + vessel.hashCode();
 
 			result = (prime * result) + (int) startHeel;
 
@@ -164,148 +163,33 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	private final IVoyagePlanOptimiser delegate;
 
-	// private final ConcurrentMap<CacheKey, Pair<VoyagePlan, Long>> cache;// =
-	// null;
-	private final AbstractCache<@NonNull CacheKey, @NonNull Pair<@NonNull VoyagePlan, Long>> cache;
+	private final AbstractCache<@NonNull CacheKey, VoyagePlan> cache;
 
-	VoyagePlan bestPlan;
-	long bestCost;
-
-	private List<@NonNull IOptionsSequenceElement> basicSequence;
-	private IVessel vessel;
-	private int vesselCharterInRatePerDay;
-	private int baseFuelPricePerMT;
-	private final List<@NonNull IVoyagePlanChoice> choices = new ArrayList<>();
-
-	private IPortTimesRecord portTimesRecord;
-
-	private long startHeel;
-
-	private IResource resource;
-
-	public CachingVoyagePlanOptimiser(final IVoyagePlanOptimiser delegate, final int cacheSize) {
+	public CachingVoyagePlanOptimiser(final @NonNull IVoyagePlanOptimiser delegate, final int cacheSize) {
 		super();
 		this.delegate = delegate;
-		final IKeyEvaluator<@NonNull CacheKey, @NonNull Pair<@NonNull VoyagePlan, @NonNull Long>> evaluator = new IKeyEvaluator<@NonNull CacheKey, @NonNull Pair<@NonNull VoyagePlan, @NonNull Long>>() {
+		final IKeyEvaluator<@NonNull CacheKey, VoyagePlan> evaluator = new IKeyEvaluator<@NonNull CacheKey, VoyagePlan>() {
 
 			@Override
-			final public @NonNull Pair<@NonNull CacheKey, @NonNull Pair<@NonNull VoyagePlan, @NonNull Long>> evaluate(final CacheKey arg) {
-				final Pair<VoyagePlan, Long> answer = new Pair<VoyagePlan, Long>();
+			final public @NonNull Pair<@NonNull CacheKey, VoyagePlan> evaluate(final CacheKey arg) {
 
-				delegate.reset();
-				for (final IVoyagePlanChoice c : arg.choices) {
-					delegate.addChoice(c);
-				}
-				delegate.setVessel(arg.vessel, arg.resource, arg.baseFuelPricePerMT);
-				delegate.setVesselCharterInRatePerDay(arg.vesselCharterInRatePerDay);
-				delegate.setBasicSequence(arg.sequence);
-				delegate.setPortTimesRecord(arg.portTimesRecord);
-				delegate.setStartHeel(arg.startHeel);
-				delegate.init();
-				delegate.optimise();
-
-				answer.setBoth(delegate.getBestPlan(), delegate.getBestCost());
+				final VoyagePlan plan = delegate.optimise(arg.resource, arg.vessel, arg.startHeel, arg.baseFuelPricePerMT, arg.vesselCharterInRatePerDay, arg.portTimesRecord, arg.sequence,
+						arg.choices);
 
 				// don't clone key
-				return new Pair<@NonNull CacheKey, Pair<@NonNull VoyagePlan, @NonNull Long>>(arg, answer);
+				return new Pair<@NonNull CacheKey, VoyagePlan>(arg, plan);
 			}
 		};
-		this.cache = new LHMCache<@NonNull CacheKey, @NonNull Pair<@NonNull VoyagePlan, @NonNull Long>>("VPO", evaluator, cacheSize);
+		this.cache = new LHMCache<@NonNull CacheKey, VoyagePlan>("VPO", evaluator, cacheSize);
 	}
 
 	@Override
-	public VoyagePlan optimise() {
+	@Nullable
+	public VoyagePlan optimise(@Nullable final IResource resource, final IVessel vessel, final long startHeel, final int baseFuelPricePerMT, final int vesselCharterInRatePerDay,
+			final IPortTimesRecord portTimesRecord, final List<@NonNull IOptionsSequenceElement> basicSequence, final List<@NonNull IVoyagePlanChoice> choices) {
 
-		final Pair<VoyagePlan, Long> best = cache.get(new CacheKey(vessel, resource, vesselCharterInRatePerDay, baseFuelPricePerMT, basicSequence, portTimesRecord, choices, startHeel));
+		final VoyagePlan best = cache.get(new CacheKey(vessel, resource, vesselCharterInRatePerDay, baseFuelPricePerMT, basicSequence, portTimesRecord, choices, startHeel));
 
-		bestPlan = best.getFirst();
-		bestCost = best.getSecond();
-		choices.clear();
-		return bestPlan;
+		return best;
 	}
-
-	@Override
-	public void init() {
-
-	}
-
-	@Override
-	public void reset() {
-		choices.clear();
-	}
-
-	@Override
-	public void dispose() {
-		delegate.dispose();
-	}
-
-	@Override
-	public List<@NonNull IOptionsSequenceElement> getBasicSequence() {
-		return basicSequence;
-	}
-
-	@Override
-	public void setBasicSequence(@NonNull final List<IOptionsSequenceElement> basicSequence) {
-		this.basicSequence = basicSequence;
-	}
-
-	@Override
-	public IVessel getVessel() {
-		return this.vessel;
-	}
-
-	/**
-	 */
-	@Override
-	public void setVessel(@NonNull final IVessel vessel, @Nullable final IResource resource, final int baseFuelPricePerMT) {
-		this.vessel = vessel;
-		this.resource = resource;
-		this.baseFuelPricePerMT = baseFuelPricePerMT;
-	}
-
-	@Override
-	public void setBaseFuelPricePerMT(int baseFuelPricePerMT) {
-		this.baseFuelPricePerMT = baseFuelPricePerMT;
-	}
-
-	@Override
-	public long getBestCost() {
-		return bestCost;
-	}
-
-	@Override
-	public VoyagePlan getBestPlan() {
-		return bestPlan;
-	}
-
-	@Override
-	public ILNGVoyageCalculator getVoyageCalculator() {
-		return delegate.getVoyageCalculator();
-	}
-
-	@Override
-	public void addChoice(final IVoyagePlanChoice choice) {
-		choices.add(choice);
-	}
-
-	@Override
-	public void setPortTimesRecord(final IPortTimesRecord portTimesRecord) {
-		this.portTimesRecord = portTimesRecord;
-	}
-
-	@Override
-	public void setStartHeel(long heelVolumeInM3) {
-		startHeel = heelVolumeInM3;
-	}
-
-	@Override
-	public long getStartHeel() {
-		return startHeel;
-	}
-
-	@Override
-	public void setVesselCharterInRatePerDay(int charterInRatePerDay) {
-		this.vesselCharterInRatePerDay = charterInRatePerDay;
-	}
-
 }

@@ -6,6 +6,8 @@ package com.mmxlabs.scheduler.optimiser.fitness.components.capacity;
 
 import java.util.Collection;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IElementAnnotation;
 
 /**
@@ -20,5 +22,6 @@ public interface ICapacityAnnotation extends IElementAnnotation {
 	 * 
 	 * @return
 	 */
-	Collection<ICapacityEntry> getEntries();
+	@NonNull
+	Collection<@NonNull ICapacityEntry> getEntries();
 }
