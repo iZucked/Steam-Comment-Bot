@@ -311,8 +311,6 @@ public final class VoyagePlannerTest {
 		final IDetailsSequenceElement[] testSequence = new IDetailsSequenceElement[] {};
 		testVoyagePlan.setSequence(testSequence);
 
-		Mockito.when(voyagePlanOptimiser.optimise()).thenReturn(testVoyagePlan);
-
 		// Expected arrival times per plan
 		final PortTimesRecord portTimesRecord1 = new PortTimesRecord();
 		portTimesRecord1.setSlotTime(loadSlot1, 5);
@@ -325,35 +323,25 @@ public final class VoyagePlannerTest {
 
 		List<@NonNull IPortTimesRecord> portTimesRecords = Lists.<@NonNull IPortTimesRecord> newArrayList(portTimesRecord1, portTimesRecord2);
 
+		// Set expected list of VPO choices
+		List<IVoyagePlanChoice> vpoChoices1 = new LinkedList<>();
+		List<IVoyagePlanChoice> vpoChoices2 = new LinkedList<>();
+
+		vpoChoices1.add(new FBOVoyagePlanChoice(expectedVoyageOptions1));
+		vpoChoices1.add(new IdleNBOVoyagePlanChoice(expectedVoyageOptions1));
+		vpoChoices1.add(new NBOTravelVoyagePlanChoice(expectedVoyageOptions1a, expectedVoyageOptions2));
+		vpoChoices1.add(new FBOVoyagePlanChoice(expectedVoyageOptions2));
+		vpoChoices1.add(new IdleNBOVoyagePlanChoice(expectedVoyageOptions2));
+
+		vpoChoices2.add(new FBOVoyagePlanChoice(expectedVoyageOptions3));
+		vpoChoices2.add(new IdleNBOVoyagePlanChoice(expectedVoyageOptions3));
+
+		// Matchers.eq!!
+		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, 0, 0, 0, portTimesRecord1, expectedBasicSequence1, vpoChoices1)).thenReturn(testVoyagePlan);
+		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, 0, 0, 0, portTimesRecord2, expectedBasicSequence2, vpoChoices2)).thenReturn(testVoyagePlan);
+
 		// Schedule sequence
 		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> plans = planner.makeVoyagePlans(resource, sequence, portTimesRecords);
-		//
-		// Rely upon objects equals() methods to aid JMock equal(..) case
-		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, resource, 0);
-
-		// Set expected list of VPO choices
-		Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new FBOVoyagePlanChoice(expectedVoyageOptions1)));
-		Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new IdleNBOVoyagePlanChoice(expectedVoyageOptions1)));
-		Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new NBOTravelVoyagePlanChoice(expectedVoyageOptions1a, expectedVoyageOptions2)));
-		Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new FBOVoyagePlanChoice(expectedVoyageOptions2)));
-		Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new IdleNBOVoyagePlanChoice(expectedVoyageOptions2)));
-		Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new FBOVoyagePlanChoice(expectedVoyageOptions3)));
-		Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new IdleNBOVoyagePlanChoice(expectedVoyageOptions3)));
-
-		// Expect two runs of the VPO
-		Mockito.verify(voyagePlanOptimiser).setBasicSequence(Matchers.eq(expectedBasicSequence1));
-
-		Mockito.verify(voyagePlanOptimiser).setBasicSequence(Matchers.eq(expectedBasicSequence2));
-
-		Mockito.verify(voyagePlanOptimiser).init();
-		Mockito.verify(voyagePlanOptimiser).optimise();
-		Mockito.verify(voyagePlanOptimiser).reset();
-		Mockito.verify(voyagePlanOptimiser).init();
-		Mockito.verify(voyagePlanOptimiser).optimise();
-		Mockito.verify(voyagePlanOptimiser).reset();
-
-		Mockito.verify(voyagePlanOptimiser).setPortTimesRecord(Matchers.eq(portTimesRecord1));
-		Mockito.verify(voyagePlanOptimiser).setPortTimesRecord(Matchers.eq(portTimesRecord2));
 
 		Assert.assertNotNull(plans);
 		Assert.assertEquals(2, plans.size());
@@ -550,7 +538,17 @@ public final class VoyagePlannerTest {
 		testVoyagePlan.setTotalFuelCost(FuelComponent.IdleBase, 100);
 		testVoyagePlan.setTotalFuelCost(FuelComponent.IdleNBO, 100);
 
-		Mockito.when(voyagePlanOptimiser.optimise()).thenReturn(testVoyagePlan);
+		List<IVoyagePlanChoice> vpoChoices = new LinkedList<>();
+		// Set expected list of VPO choices
+		vpoChoices.add(new FBOVoyagePlanChoice(expectedVoyageOptions1));
+
+		vpoChoices.add(new IdleNBOVoyagePlanChoice(expectedVoyageOptions1));
+
+		vpoChoices.add(new NBOTravelVoyagePlanChoice(expectedVoyageOptions1a, expectedVoyageOptions2));
+
+		vpoChoices.add(new FBOVoyagePlanChoice(expectedVoyageOptions2));
+
+		vpoChoices.add(new IdleNBOVoyagePlanChoice(expectedVoyageOptions2));
 
 		final PortTimesRecord portTimesRecord = new PortTimesRecord();
 		portTimesRecord.setSlotTime(loadSlot1, 5);
@@ -559,33 +557,39 @@ public final class VoyagePlannerTest {
 
 		List<@NonNull IPortTimesRecord> portTimesRecords = Lists.<@NonNull IPortTimesRecord> newArrayList(portTimesRecord);
 
+		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, 0, 0, 0, portTimesRecord, expectedBasicSequence1, vpoChoices)).thenReturn(testVoyagePlan);
+
 		// Schedule sequence
 		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans = planner.makeVoyagePlans(resource, sequence, portTimesRecords);
 
-		// Rely upon objects equals() methods to aid JMock equal(..) case
-		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, resource, 0);
+		// // Rely upon objects equals() methods to aid JMock equal(..) case
+		// Mockito.verify(voyagePlanOptimiser).setVessel(vessel, resource, 0);
+		//
+		// // Set expected list of VPO choices
+		// Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new FBOVoyagePlanChoice(expectedVoyageOptions1)));
+		//
+		// Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new IdleNBOVoyagePlanChoice(expectedVoyageOptions1)));
+		//
+		// Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new NBOTravelVoyagePlanChoice(expectedVoyageOptions1a, expectedVoyageOptions2)));
+		//
+		// Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new FBOVoyagePlanChoice(expectedVoyageOptions2)));
+		//
+		// Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new IdleNBOVoyagePlanChoice(expectedVoyageOptions2)));
+		//
+		// // Expect two runs of the VPO
+		// Mockito.verify(voyagePlanOptimiser).setBasicSequence(Matchers.eq(expectedBasicSequence1));
+		//
+		// Mockito.verify(voyagePlanOptimiser).init();
+		// Mockito.verify(voyagePlanOptimiser).optimise();
 
-		// Set expected list of VPO choices
-		Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new FBOVoyagePlanChoice(expectedVoyageOptions1)));
+		Mockito.verify(voyagePlanOptimiser).optimise(resource, vessel, 0, 0, 0, portTimesRecord, expectedBasicSequence1, vpoChoices);
 
-		Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new IdleNBOVoyagePlanChoice(expectedVoyageOptions1)));
-
-		Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new NBOTravelVoyagePlanChoice(expectedVoyageOptions1a, expectedVoyageOptions2)));
-
-		Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new FBOVoyagePlanChoice(expectedVoyageOptions2)));
-
-		Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new IdleNBOVoyagePlanChoice(expectedVoyageOptions2)));
-
-		// Expect two runs of the VPO
-		Mockito.verify(voyagePlanOptimiser).setBasicSequence(Matchers.eq(expectedBasicSequence1));
-
-		Mockito.verify(voyagePlanOptimiser).init();
-		Mockito.verify(voyagePlanOptimiser).optimise();
-		Mockito.verify(voyagePlanOptimiser).reset();
+		// Mockito.verify(voyagePlanOptimiser).reset();
+		Mockito.verifyNoMoreInteractions(voyagePlanOptimiser);
 
 		// Expected arrival times per plan
 
-		Mockito.verify(voyagePlanOptimiser).setPortTimesRecord(Matchers.eq(portTimesRecord));
+		// Mockito.verify(voyagePlanOptimiser).setPortTimesRecord(Matchers.eq(portTimesRecord));
 
 		Assert.assertNotNull(voyagePlans);
 		Assert.assertEquals(1, voyagePlans.size());
