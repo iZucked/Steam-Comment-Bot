@@ -97,7 +97,7 @@ public class CopiedModelEntityMap implements ModelEntityMap {
 	}
 
 	@Override
-	public <T extends EObject> Collection<T> getAllModelObjects(final Class<? extends T> clz) {
+	public <T extends EObject> Collection<@NonNull T> getAllModelObjects(final Class<? extends T> clz) {
 		final Collection<? extends T> allModelObjects = delegate.getAllModelObjects(clz);
 		return allModelObjects.stream().map(t -> (T) originalToNewCopy.get(t)).collect(Collectors.toList());
 	}
