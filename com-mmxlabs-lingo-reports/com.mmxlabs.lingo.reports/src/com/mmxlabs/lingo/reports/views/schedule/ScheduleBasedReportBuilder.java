@@ -216,7 +216,18 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 		return new EmfBlockColumnFactory() {
 			@Override
 			public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
-				final String book = bookContainmentFeature == null ? "Total" : (bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading");
+				final String book;
+				if (bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK) {
+					book = "Shipping";
+				} else if (bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK) {
+					book = "Trading";
+				} else if (bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK) {
+					book = "Upstream";
+				} else if (bookContainmentFeature == null) {
+					book = "Total";
+				} else {
+					throw new IllegalArgumentException("Unknown entity book type");
+				}
 				final String title = String.format("P&L (%s)", book);
 
 				final ColumnBlock block = blockManager.createBlock(columnId, title, ColumnType.NORMAL);
@@ -281,7 +292,8 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 		}, false, ScheduleReportPackage.Literals.ROW__TARGET);
 	}
 
-	private ColumnHandler addPNLColumn(final String blockId, final String entityLabel, final String entityKey, final EStructuralFeature bookContainmentFeature) { final String book = bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading";
+	private ColumnHandler addPNLColumn(final String blockId, final String entityLabel, final String entityKey, final EStructuralFeature bookContainmentFeature) {
+		final String book = bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading";
 		final String title = String.format("P&L (%s - %s)", entityLabel, book);
 
 		// HACK: don't the label to the entity column names if the column is for total group P&L

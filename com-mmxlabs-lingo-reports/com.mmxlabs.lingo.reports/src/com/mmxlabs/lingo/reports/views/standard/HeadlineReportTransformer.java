@@ -28,13 +28,14 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 class HeadlineReportTransformer {
 
 	public static class RowData {
-		public RowData(final String scheduleName, final Long totalPNL, final Long tradingPNL, final Long shippingPNL, final Long mtmPnl, final Long shippingCost, final Long idleTime,
-				final Long gcoTime, final Long gcoRevenue, final Long capacityViolationCount, final Long latenessIncludingFlex, final Long latenessExcludingFlex) {
+		public RowData(final String scheduleName, final Long totalPNL, final Long tradingPNL, final Long shippingPNL, final Long upstreamDownstreamPNL, final Long mtmPnl, final Long shippingCost,
+				final Long idleTime, final Long gcoTime, final Long gcoRevenue, final Long capacityViolationCount, final Long latenessIncludingFlex, final Long latenessExcludingFlex) {
 			super();
 			this.scheduleName = scheduleName;
 			this.totalPNL = totalPNL;
 			this.tradingPNL = tradingPNL;
 			this.shippingPNL = shippingPNL;
+			this.upstreamDownstreamPNL = upstreamDownstreamPNL;
 			this.mtmPnl = mtmPnl;
 			this.shippingCost = shippingCost;
 			this.idleTime = idleTime;
@@ -52,6 +53,7 @@ class HeadlineReportTransformer {
 			this.totalPNL = null;
 			this.tradingPNL = null;
 			this.shippingPNL = null;
+			this.upstreamDownstreamPNL = null;
 			this.mtmPnl = null;
 			this.shippingCost = null;
 			this.idleTime = null;
@@ -68,6 +70,7 @@ class HeadlineReportTransformer {
 		public final Long totalPNL;
 		public final Long tradingPNL;
 		public final Long shippingPNL;
+		public final Long upstreamDownstreamPNL;
 		public final Long mtmPnl;
 		public final Long shippingCost;
 		public final Long idleTime;
@@ -128,6 +131,7 @@ class HeadlineReportTransformer {
 		final long[] scheduleProfitAndLoss = ScheduleModelKPIUtils.getScheduleProfitAndLossSplit(schedule);
 		final long totalTradingPNL = scheduleProfitAndLoss[ScheduleModelKPIUtils.TRADING_PNL_IDX];
 		final long totalShippingPNL = scheduleProfitAndLoss[ScheduleModelKPIUtils.SHIPPING_PNL_IDX];
+		final long totalUpstreamPNL = scheduleProfitAndLoss[ScheduleModelKPIUtils.UPSTREAM_PNL_IDX];
 
 		final int[] scheduleLateness = ScheduleModelKPIUtils.getScheduleLateness(schedule);
 		final long totalLatenessHoursExcludingFlex = scheduleLateness[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
@@ -135,7 +139,7 @@ class HeadlineReportTransformer {
 
 		final long totalCapacityViolationCount = ScheduleModelKPIUtils.getScheduleViolationCount(schedule);
 
-		return new RowData(scenarioInstance.getName(), totalTradingPNL + totalShippingPNL, totalTradingPNL, totalShippingPNL, totalMtMPNL, totalCost, totalIdleHours, totalGCOHours, totalGCORevenue,
-				totalCapacityViolationCount, totalLatenessHoursIncludingFlex, totalLatenessHoursExcludingFlex);
+		return new RowData(scenarioInstance.getName(), totalTradingPNL + totalShippingPNL + totalUpstreamPNL, totalTradingPNL, totalShippingPNL, totalUpstreamPNL, totalMtMPNL, totalCost,
+				totalIdleHours, totalGCOHours, totalGCORevenue, totalCapacityViolationCount, totalLatenessHoursIncludingFlex, totalLatenessHoursExcludingFlex);
 	}
 }

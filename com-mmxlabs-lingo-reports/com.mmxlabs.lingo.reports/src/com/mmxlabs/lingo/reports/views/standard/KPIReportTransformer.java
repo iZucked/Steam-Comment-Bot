@@ -58,6 +58,8 @@ public class KPIReportTransformer {
 	@NonNull
 	private static final String TRADING_PNL = "Trading P&L";
 	@NonNull
+	private static final String UPSTREAM_PNL = "Upstream P&L";
+	@NonNull
 	private static final String MTM_PNL = "MtM P&L";
 
 	@NonNull
@@ -127,6 +129,7 @@ public class KPIReportTransformer {
 		final long[] scheduleProfitAndLoss = ScheduleModelKPIUtils.getScheduleProfitAndLossSplit(schedule);
 		final long totalTradingPNL = scheduleProfitAndLoss[ScheduleModelKPIUtils.TRADING_PNL_IDX];
 		final long totalShippingPNL = scheduleProfitAndLoss[ScheduleModelKPIUtils.SHIPPING_PNL_IDX];
+		final long totalUpstreamPNL = scheduleProfitAndLoss[ScheduleModelKPIUtils.UPSTREAM_PNL_IDX];
 
 		final int[] scheduleLateness = ScheduleModelKPIUtils.getScheduleLateness(schedule);
 		final long totalLatenessHoursExcludingFlex = scheduleLateness[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
@@ -134,9 +137,10 @@ public class KPIReportTransformer {
 
 		final long totalCapacityViolationCount = ScheduleModelKPIUtils.getScheduleViolationCount(schedule);
 
-		output.add(createRow(scenarioInstance.getName(), TOTAL_PNL, TYPE_COST, totalTradingPNL + totalShippingPNL, TotalsHierarchyView.ID, false, pinnedData));
+		output.add(createRow(scenarioInstance.getName(), TOTAL_PNL, TYPE_COST, totalTradingPNL + totalShippingPNL + totalUpstreamPNL, TotalsHierarchyView.ID, false, pinnedData));
 		output.add(createRow(scenarioInstance.getName(), TRADING_PNL, TYPE_COST, totalTradingPNL, TotalsHierarchyView.ID, false, pinnedData));
 		output.add(createRow(scenarioInstance.getName(), SHIPPING_PNL, TYPE_COST, totalShippingPNL, TotalsHierarchyView.ID, false, pinnedData));
+		output.add(createRow(scenarioInstance.getName(), UPSTREAM_PNL, TYPE_COST, totalUpstreamPNL, TotalsHierarchyView.ID, false, pinnedData));
 		output.add(createRow(scenarioInstance.getName(), MTM_PNL, TYPE_COST, totalMtMPNL, TotalsHierarchyView.ID, false, pinnedData));
 
 		output.add(createRow(scenarioInstance.getName(), TOTAL_COST, TYPE_COST, totalCost, TotalsHierarchyView.ID, true, pinnedData));

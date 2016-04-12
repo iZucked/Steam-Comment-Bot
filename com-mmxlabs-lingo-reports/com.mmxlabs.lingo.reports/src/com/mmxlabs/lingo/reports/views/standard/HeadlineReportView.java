@@ -7,9 +7,7 @@ package com.mmxlabs.lingo.reports.views.standard;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-import org.eclipse.core.runtime.preferences.IPreferenceFilter;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -91,6 +89,7 @@ public class HeadlineReportView extends ViewPart {
 		LABEL_PNL(ColumnType.Label, "P&L", null), VALUE_PNL(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
 		LABEL_TRADING(ColumnType.Label, "Trading", null), VALUE_TRADING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
 		LABEL_SHIPPING(ColumnType.Label, "Shipping", null), VALUE_SHIPPING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
+		LABEL_UPDOWN(ColumnType.Label, "Up/Down Stream", null), VALUE_UPDOWN(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
 		LABEL_GCO(ColumnType.Label, "Charter Out (virt)", null), VALUE_GCO_DAYS(ColumnType.Value, 2400l, KPIReportTransformer.TYPE_TIME), VALUE_GCO_REVENUE(ColumnType.Value, 1000000000l,
 				KPIReportTransformer.TYPE_COST), //
 				LABEL_VIOLATIONS(ColumnType.Label, "Violations", null), VALUE_VIOLATIONS(ColumnType.Value, 100l, ""), //
@@ -172,7 +171,7 @@ public class HeadlineReportView extends ViewPart {
 							rowElements.add(pPinnedData);
 							pPinnedData = null;
 						} else {
-							rowElements.add(new RowData("", null, null, null, null, null, null, null, null, null, null, null));
+							rowElements.add(new RowData("", null, null, null, null, null, null, null, null, null, null, null, null));
 						}
 					}
 
@@ -210,6 +209,8 @@ public class HeadlineReportView extends ViewPart {
 				return d.shippingPNL;
 			case VALUE_TRADING:
 				return d.tradingPNL;
+			case VALUE_UPDOWN:
+				return d.upstreamDownstreamPNL;
 			case VALUE_VIOLATIONS:
 				return d.capacityViolationCount;
 			default:
@@ -323,6 +324,13 @@ public class HeadlineReportView extends ViewPart {
 						color = SWT.COLOR_BLACK;
 					} else {
 						color = (d.shippingPNL - pinD.shippingPNL) >= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
+					}
+					break;
+				case VALUE_UPDOWN:
+					if (pinD == null) {
+						color = SWT.COLOR_BLACK;
+					} else {
+						color = (d.upstreamDownstreamPNL - pinD.upstreamDownstreamPNL) >= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
 					}
 					break;
 				case VALUE_GCO_DAYS:

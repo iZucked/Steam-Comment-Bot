@@ -197,6 +197,10 @@
       </ScheduleBasedColumn>
       <ScheduleBasedColumn
             handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_upstream">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_shipping">
       </ScheduleBasedColumn>
       <ScheduleBasedColumn
