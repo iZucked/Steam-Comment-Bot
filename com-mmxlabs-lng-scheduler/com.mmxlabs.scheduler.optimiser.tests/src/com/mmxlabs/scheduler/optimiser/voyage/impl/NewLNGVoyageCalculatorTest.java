@@ -6,10 +6,13 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.TreeMap;
 
+import javax.security.sasl.SaslException;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -25,6 +28,8 @@ import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
@@ -867,8 +872,8 @@ public class NewLNGVoyageCalculatorTest {
 		final IVessel vessel = Mockito.mock(IVessel.class);
 		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
-		final LoadSlot loadSlot = new LoadSlot();
-		final DischargeSlot dischargeSlot = new DischargeSlot();
+		final LoadSlot loadSlot = new LoadSlot("load", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 0, false, false);
+		final DischargeSlot dischargeSlot = new DischargeSlot("discharge", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
 
 		final PortDetails loadDetails = new PortDetails();
 		loadDetails.setOptions(new PortOptions(loadSlot));

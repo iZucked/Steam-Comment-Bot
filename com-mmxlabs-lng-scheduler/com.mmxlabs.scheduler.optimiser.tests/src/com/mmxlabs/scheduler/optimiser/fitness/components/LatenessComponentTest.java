@@ -19,18 +19,22 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.mmxlabs.common.Triple;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
@@ -99,8 +103,8 @@ public class LatenessComponentTest {
 				final ExcessIdleTimeComponentParameters idleParams = new ExcessIdleTimeComponentParameters();
 				int highPeriodInDays = 15;
 				int lowPeriodInDays = Math.max(0, highPeriodInDays - 2);
-				idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, lowPeriodInDays*24);
-				idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, highPeriodInDays*24);
+				idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, lowPeriodInDays * 24);
+				idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, highPeriodInDays * 24);
 				idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, 2_500);
 				idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, 10_000);
 				idleParams.setEndWeight(10_000);
@@ -127,7 +131,6 @@ public class LatenessComponentTest {
 				return lcp;
 			}
 		});
-		
 
 		final LatenessComponent c = new LatenessComponent(name, core);
 		final LatenessChecker checker = new LatenessChecker();
@@ -148,7 +151,7 @@ public class LatenessComponentTest {
 		final TimeWindow window1 = new TimeWindow(loadStartTime, loadEndTime);
 		final TimeWindow window2 = new TimeWindow(dischargeStartTime, dischargeEndTime);
 
-		final StartPortSlot startSlot = new StartPortSlot(null);
+		final StartPortSlot startSlot = new StartPortSlot("start", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), null);
 		final PortDetails startDetails = new PortDetails();
 		startDetails.setOptions(new PortOptions(startSlot));
 
@@ -156,10 +159,9 @@ public class LatenessComponentTest {
 		final EndPortSlot endSlot = new EndPortSlot(null, null, null, false, 0L);
 		endDetails.setOptions(new PortOptions(endSlot));
 
-		final LoadSlot loadSlot = new LoadSlot();
-		loadSlot.setTimeWindow(window1);
+		final LoadSlot loadSlot = new LoadSlot("l1", Mockito.mock(IPort.class), window1, 0L, 140_000_000L, Mockito.mock(ILoadPriceCalculator.class), 22400, false, true);
 
-		final DischargeSlot dischargeSlot = new DischargeSlot();
+		final DischargeSlot dischargeSlot = new DischargeSlot("d1", Mockito.mock(IPort.class), window2, 0L, 140_000_000L, Mockito.mock(ISalesPriceCalculator.class), 20_000, 30_000);
 		dischargeSlot.setTimeWindow(window2);
 
 		final PortDetails loadDetails = new PortDetails();

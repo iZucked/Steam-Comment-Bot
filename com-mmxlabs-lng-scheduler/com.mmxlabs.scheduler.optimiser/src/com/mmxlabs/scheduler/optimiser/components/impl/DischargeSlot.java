@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -16,13 +18,10 @@ import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
  * 
  */
 public final class DischargeSlot extends DischargeOption implements IDischargeSlot {
-	public DischargeSlot() {
-		super();
-	}
-
 	/**
 	 */
-	public DischargeSlot(final String id, final IPort port, final ITimeWindow timeWindow, final long minDischargeVolume, final long maxDischargeVolume, final ISalesPriceCalculator priceCalculator, final long minCvValue, final long maxCvValue, final int pricingDate) {
-		super(id, port, timeWindow, minDischargeVolume, maxDischargeVolume, minCvValue, maxCvValue, priceCalculator, pricingDate);
+	public DischargeSlot(final @NonNull String id, final @NonNull IPort port, final ITimeWindow timeWindow, final long minDischargeVolume, final long maxDischargeVolume,
+			final ISalesPriceCalculator priceCalculator, final long minCvValue, final long maxCvValue) {
+		super(id, port, timeWindow, minDischargeVolume, maxDischargeVolume, minCvValue, maxCvValue, priceCalculator);
 	}
 }

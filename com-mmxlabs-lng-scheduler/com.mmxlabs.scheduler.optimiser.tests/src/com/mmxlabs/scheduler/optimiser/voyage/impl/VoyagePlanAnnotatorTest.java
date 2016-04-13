@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.mmxlabs.common.Triple;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -34,6 +35,8 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
@@ -66,21 +69,13 @@ public class VoyagePlanAnnotatorTest {
 		final IPort port1 = Mockito.mock(IPort.class, "port-1");
 		final IPort port2 = Mockito.mock(IPort.class, "port-2");
 
-		final LoadSlot loadSlot1 = new LoadSlot();
-		loadSlot1.setPort(port1);
-		loadSlot1.setMaxLoadVolume(50000);
+		final LoadSlot loadSlot1 = new LoadSlot("load1", port1, Mockito.mock(ITimeWindow.class), 0L, 50_000, Mockito.mock(ILoadPriceCalculator.class), 0, false, false);
 
-		final DischargeSlot dischargeSlot1 = new DischargeSlot();
-		dischargeSlot1.setPort(port2);
-		dischargeSlot1.setMaxDischargeVolume(50000);
+		final DischargeSlot dischargeSlot1 = new DischargeSlot("discharge1", port2, Mockito.mock(ITimeWindow.class), 0L, 50_000L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
 
-		final LoadSlot loadSlot2 = new LoadSlot();
-		loadSlot2.setPort(port1);
-		loadSlot2.setMaxLoadVolume(50000);
+		final LoadSlot loadSlot2 = new LoadSlot("load2", port1, Mockito.mock(ITimeWindow.class), 0L, 50_000, Mockito.mock(ILoadPriceCalculator.class), 0, false, false);
 
-		final DischargeSlot dischargeSlot2 = new DischargeSlot();
-		dischargeSlot2.setPort(port2);
-		dischargeSlot2.setMaxDischargeVolume(50000);
+		final DischargeSlot dischargeSlot2 = new DischargeSlot("discharge2", port2, Mockito.mock(ITimeWindow.class), 0L, 50_000L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
 
 		final IPortSlotProviderEditor portSlotEditor = new HashMapPortSlotEditor();
 		portSlotEditor.setPortSlot(element1, loadSlot1);

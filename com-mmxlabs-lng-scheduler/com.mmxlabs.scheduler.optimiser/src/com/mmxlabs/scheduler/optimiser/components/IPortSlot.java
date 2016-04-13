@@ -24,6 +24,8 @@ public interface IPortSlot {
 	@NonNull
 	String getId();
 
+	@NonNull
+
 	IPort getPort();
 
 	ITimeWindow getTimeWindow();

@@ -14,22 +14,23 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public abstract class PortSlot implements IPortSlot {
 
-	private String id;
+	private @NonNull String id;
 
-	private IPort port;
+	private @NonNull IPort port;
 
-	private ITimeWindow timeWindow;
+	private @NonNull ITimeWindow timeWindow;
 
-	private PortType portType;
+	private @NonNull PortType portType;
 
-	public PortSlot() {
-
-	}
+	// public PortSlot() {
+	//
+	// }
 
 	public PortSlot(@NonNull final String id, @NonNull final IPort port, @NonNull final ITimeWindow timeWindow) {
 		this.id = id;
 		this.port = port;
 		this.timeWindow = timeWindow;
+		this.portType = PortType.Unknown;
 	}
 
 	@Override

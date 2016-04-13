@@ -46,8 +46,8 @@ public class PortSlotTest {
 		final int heelCVValue = 3;
 
 		final HeelOptions heelOptions = new HeelOptions(heelLimit, heelCVValue, heelUnitPrice);
-		final StartPortSlot slot = new StartPortSlot(heelOptions);
-		Assert.assertNull(slot.getPort());
+		final StartPortSlot slot = new StartPortSlot("id", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), heelOptions);
+		Assert.assertNotNull(slot.getPort());
 		slot.setPort(port);
 		Assert.assertSame(port, slot.getPort());
 
@@ -64,8 +64,8 @@ public class PortSlotTest {
 		final int heelCVValue = 3;
 
 		final HeelOptions heelOptions = new HeelOptions(heelLimit, heelCVValue, heelUnitPrice);
-		final StartPortSlot slot = new StartPortSlot(heelOptions);
-		Assert.assertNull(slot.getTimeWindow());
+		final StartPortSlot slot = new StartPortSlot("id", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), heelOptions);
+		Assert.assertNotNull(slot.getTimeWindow());
 		slot.setTimeWindow(window);
 		Assert.assertSame(window, slot.getTimeWindow());
 
@@ -82,9 +82,7 @@ public class PortSlotTest {
 		final int heelCVValue = 3;
 
 		final HeelOptions heelOptions = new HeelOptions(heelLimit, heelCVValue, heelUnitPrice);
-		final StartPortSlot slot = new StartPortSlot(heelOptions);
-		Assert.assertNull(slot.getId());
-		slot.setId(id);
+		final StartPortSlot slot = new StartPortSlot(id, Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), heelOptions);
 
 		Assert.assertSame(id, slot.getId());
 		Assert.assertEquals(heelLimit, slot.getHeelOptions().getHeelLimit());
