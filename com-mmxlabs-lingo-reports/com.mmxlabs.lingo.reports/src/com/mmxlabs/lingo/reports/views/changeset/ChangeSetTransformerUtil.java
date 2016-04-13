@@ -119,11 +119,13 @@ public final class ChangeSetTransformerUtil {
 			row.setNewEventGrouping(cargoAllocation);
 			row.setNewLoadAllocation(slotVisit.getSlotAllocation());
 			row.setNewVesselName(getName(slotVisit.getSequence()));
+			row.setNewVesselShortName(getShortName(slotVisit.getSequence()));
 		} else {
 			row.setOriginalGroupProfitAndLoss(cargoAllocation);
 			row.setOriginalEventGrouping(cargoAllocation);
 			row.setOriginalLoadAllocation(slotVisit.getSlotAllocation());
 			row.setOriginalVesselName(getName(slotVisit.getSequence()));
+			row.setOriginalVesselShortName(getShortName(slotVisit.getSequence()));
 		}
 		// Get discharge data
 		for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
@@ -292,6 +294,7 @@ public final class ChangeSetTransformerUtil {
 				row.setNewEventGrouping((EventGrouping) event);
 			}
 			row.setNewVesselName(getName(event.getSequence()));
+			row.setNewVesselShortName(getShortName(event.getSequence()));
 		} else {
 			ChangeSetRow row = lhsRowMap.get(eventName);
 			if (row == null) {
@@ -311,6 +314,7 @@ public final class ChangeSetTransformerUtil {
 				row.setOriginalEventGrouping((EventGrouping) event);
 			}
 			row.setOriginalVesselName(getName(event.getSequence()));
+			row.setOriginalVesselShortName(getShortName(event.getSequence()));
 		}
 	}
 
@@ -481,11 +485,35 @@ public final class ChangeSetTransformerUtil {
 	}
 
 	@NonNull
+	public static String getShortName(@NonNull final Sequence sequence) {
+		if (sequence.isSetCharterInMarket()) {
+			return getName(sequence.getCharterInMarket());
+		} else if (sequence.isSetVesselAvailability()) {
+			return getShortName(sequence.getVesselAvailability());
+		} else {
+			if (sequence.getSequenceType() == SequenceType.DES_PURCHASE) {
+				return "";
+			} else if (sequence.getSequenceType() == SequenceType.FOB_SALE) {
+				return "";
+			}
+			return sequence.getName();
+		}
+	}
+
+	@NonNull
 	public static String getName(@Nullable final VesselAssignmentType t) {
 		if (t instanceof VesselAvailability) {
 			return ((VesselAvailability) t).getVessel().getName();
 		} else if (t instanceof CharterInMarket) {
 			return ((CharterInMarket) t).getName();
+		}
+		throw new NullPointerException();
+	}
+
+	@NonNull
+	public static String getShortName(@Nullable final VesselAssignmentType t) {
+		if (t instanceof VesselAvailability) {
+			return ((VesselAvailability) t).getVessel().getShortenedName();
 		}
 		throw new NullPointerException();
 	}
@@ -799,6 +827,7 @@ public final class ChangeSetTransformerUtil {
 			head.setNewGroupProfitAndLoss(tail.getNewGroupProfitAndLoss());
 			head.setNewLoadAllocation(tail.getNewLoadAllocation());
 			head.setNewVesselName(tail.getNewVesselName());
+			head.setNewVesselShortName(tail.getNewVesselShortName());
 			head.setRhsName(tail.getRhsName());
 			head.setDischargeSlot(tail.getDischargeSlot());
 

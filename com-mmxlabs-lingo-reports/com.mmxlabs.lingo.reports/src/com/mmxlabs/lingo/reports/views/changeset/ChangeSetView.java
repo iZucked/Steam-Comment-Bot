@@ -204,11 +204,16 @@ public class ChangeSetView implements IAdaptable {
 
 			// TODO: Extract vessel columns and generate.
 			final Set<String> vesselnames = new LinkedHashSet<>();
+			final Map<String, String> shortNameMap = new HashMap<>();
+
 			if (newRoot != null) {
 				for (final ChangeSet cs : newRoot.getChangeSets()) {
 					for (final ChangeSetRow csr : cs.getChangeSetRowsToPrevious()) {
 						vesselnames.add(csr.getOriginalVesselName());
 						vesselnames.add(csr.getNewVesselName());
+
+						shortNameMap.put(csr.getOriginalVesselName(), csr.getOriginalVesselShortName());
+						shortNameMap.put(csr.getNewVesselName(), csr.getNewVesselShortName());
 					}
 				}
 			}
@@ -221,7 +226,8 @@ public class ChangeSetView implements IAdaptable {
 				assert name != null;
 				final GridColumn gc = new GridColumn(vesselColumnGroup, SWT.NONE);
 				final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-				gvc.getColumn().setText(name);
+				gvc.getColumn().setText(shortNameMap.get(name));
+				gvc.getColumn().setHeaderTooltip(name);
 				gvc.getColumn().setWidth(22);
 				gvc.getColumn().setResizeable(false);
 				gvc.setLabelProvider(createVesselLabelProvider(name));
@@ -553,6 +559,14 @@ public class ChangeSetView implements IAdaptable {
 			gvc.getColumn().setText("+ Cargo other");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createAdditionalPNLDeltaLabelProvider());
+			createWordWrapRenderer(gvc);
+		}
+		{
+			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
+			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setText("+ Upstream");
+			gvc.getColumn().setWidth(70);
+			gvc.setLabelProvider(createUpstreamDeltaLabelProvider());
 			createWordWrapRenderer(gvc);
 		}
 		{
@@ -1258,6 +1272,57 @@ public class ChangeSetView implements IAdaptable {
 							final CargoAllocation cargoAllocation = newLoadAllocation.getCargoAllocation();
 							if (cargoAllocation != null) {
 								final long addnPNL = ScheduleModelKPIUtils.getAdditionalProfitAndLoss(cargoAllocation);
+								t = addnPNL;
+							}
+						}
+					}
+					double delta = 0;
+					if (f != null) {
+						delta -= f.intValue();
+					}
+					if (t != null) {
+						delta += t.intValue();
+					}
+					delta = delta / 1000000.0;
+					if (delta != 0) {
+						cell.setText(String.format("%s %,.3f", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+					}
+
+				}
+			}
+		};
+
+	}
+
+	private CellLabelProvider createUpstreamDeltaLabelProvider() {
+		return new CellLabelProvider() {
+
+			@Override
+			public void update(final ViewerCell cell) {
+				final Object element = cell.getElement();
+				cell.setText("");
+
+				if (element instanceof ChangeSetRow) {
+					final ChangeSetRow change = (ChangeSetRow) element;
+
+					Number f = null;
+					{
+						final SlotAllocation originalLoadAllocation = change.getOriginalLoadAllocation();
+						if (originalLoadAllocation != null) {
+							final CargoAllocation cargoAllocation = originalLoadAllocation.getCargoAllocation();
+							if (cargoAllocation != null) {
+								final long addnPNL = ScheduleModelKPIUtils.getElementUpstreamPNL(cargoAllocation);
+								f = addnPNL;
+							}
+						}
+					}
+					Number t = null;
+					{
+						final SlotAllocation newLoadAllocation = change.getNewLoadAllocation();
+						if (newLoadAllocation != null) {
+							final CargoAllocation cargoAllocation = newLoadAllocation.getCargoAllocation();
+							if (cargoAllocation != null) {
+								final long addnPNL = ScheduleModelKPIUtils.getElementUpstreamPNL(cargoAllocation);
 								t = addnPNL;
 							}
 						}
