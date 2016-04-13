@@ -108,6 +108,8 @@ public class BaseLegalEntityTopLevelComposite extends DefaultTopLevelComposite {
 				g2.setText("Shipping Book");
 			} else if (ref == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK) {
 				g2.setText("Trading Book");
+			} else if (ref == CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK) {
+				g2.setText("Upstream Book");
 			} else {
 				final String groupName = EditorUtils.unmangle(value.eClass().getName());
 				g2.setText(groupName);

@@ -41,6 +41,7 @@ public class LegalEntityBookImporter extends DefaultClassImporter {
 	static final String TYPE_KEY = "type";
 	static final String TYPE_SHIPPING = "shipping";
 	static final String TYPE_TRADES = "trading";
+	static final String TYPE_UPSTREAM = "upstream";
 	final LocalDateAttributeImporter dateParser = new LocalDateAttributeImporter();
 
 	@Override
@@ -95,6 +96,8 @@ public class LegalEntityBookImporter extends DefaultClassImporter {
 						legalEntity.setShippingBook(entityBook);
 					} else if (TYPE_TRADES.equalsIgnoreCase(bookType)) {
 						legalEntity.setTradingBook(entityBook);
+					} else if (TYPE_UPSTREAM.equalsIgnoreCase(bookType)) {
+						legalEntity.setUpstreamBook(entityBook);
 					} else {
 						context.createProblem("Unknown book type " + bookType, true, true, true);
 					}
@@ -168,6 +171,13 @@ public class LegalEntityBookImporter extends DefaultClassImporter {
 					}
 					objectList.add(tradingBook);
 				}
+				final BaseEntityBook upstreamBook = baseLegalEntity.getUpstreamBook();
+				if (upstreamBook != null) {
+					for (final TaxRate taxRate : upstreamBook.getTaxRates()) {
+						dates.add(dateParser.formatLocalDate(taxRate.getDate()));
+					}
+					objectList.add(upstreamBook);
+				}
 			}
 		}
 
@@ -187,6 +197,8 @@ public class LegalEntityBookImporter extends DefaultClassImporter {
 				data.put(TYPE_KEY, TYPE_SHIPPING);
 			} else if (object.eContainmentFeature() == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK) {
 				data.put(TYPE_KEY, TYPE_TRADES);
+			} else if (object.eContainmentFeature() == CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK) {
+				data.put(TYPE_KEY, TYPE_UPSTREAM);
 			}
 
 			// add the data to the result

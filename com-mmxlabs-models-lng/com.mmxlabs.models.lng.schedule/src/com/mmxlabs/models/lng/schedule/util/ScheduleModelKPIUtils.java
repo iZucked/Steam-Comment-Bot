@@ -42,7 +42,8 @@ public class ScheduleModelKPIUtils {
 
 	public static final int SHIPPING_PNL_IDX = 0;
 	public static final int TRADING_PNL_IDX = 1;
-	private static final int PNL_COMPONENT_COUNT = 2;
+	public static final int UPSTREAM_PNL_IDX = 2;
+	private static final int PNL_COMPONENT_COUNT = 3;
 
 	public static final int LATENESS_WITHOUT_FLEX_IDX = 0;
 	public static final int LATENESS_WTH_FLEX_IDX = 1;
@@ -52,6 +53,7 @@ public class ScheduleModelKPIUtils {
 
 		long totalTradingPNL = 0L;
 		long totalShippingPNL = 0L;
+		long totalUpstreamPNL = 0L;
 
 		for (final Sequence seq : schedule.getSequences()) {
 
@@ -63,11 +65,13 @@ public class ScheduleModelKPIUtils {
 						final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
 						totalTradingPNL += getElementTradingPNL(cargoAllocation);
 						totalShippingPNL += getElementShippingPNL(cargoAllocation);
+						totalUpstreamPNL += getElementUpstreamPNL(cargoAllocation);
 					}
 
 				} else if (evt instanceof ProfitAndLossContainer) {
 					totalTradingPNL += getElementTradingPNL((ProfitAndLossContainer) evt);
 					totalShippingPNL += getElementShippingPNL((ProfitAndLossContainer) evt);
+					totalUpstreamPNL += getElementUpstreamPNL((ProfitAndLossContainer) evt);
 				}
 			}
 		}
@@ -78,11 +82,13 @@ public class ScheduleModelKPIUtils {
 		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
 			totalTradingPNL += getElementTradingPNL(openSlotAllocation);
 			totalShippingPNL += getElementShippingPNL(openSlotAllocation);
+			totalShippingPNL += getElementUpstreamPNL(openSlotAllocation);
 		}
 
 		final long[] result = new long[PNL_COMPONENT_COUNT];
 		result[SHIPPING_PNL_IDX] = totalShippingPNL;
 		result[TRADING_PNL_IDX] = totalTradingPNL;
+		result[UPSTREAM_PNL_IDX] = totalUpstreamPNL;
 
 		return result;
 	}
@@ -120,6 +126,10 @@ public class ScheduleModelKPIUtils {
 
 	public static long getElementTradingPNL(final @NonNull ProfitAndLossContainer container) {
 		return getElementPNL(container, CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
+	}
+
+	public static long getElementUpstreamPNL(final @NonNull ProfitAndLossContainer container) {
+		return getElementPNL(container, CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK);
 	}
 
 	public static long getElementPNL(final @NonNull ProfitAndLossContainer container, final @NonNull EStructuralFeature containmentFeature) {

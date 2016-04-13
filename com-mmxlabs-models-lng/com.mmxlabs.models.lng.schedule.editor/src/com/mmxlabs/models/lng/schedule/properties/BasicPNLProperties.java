@@ -82,6 +82,8 @@ public class BasicPNLProperties implements IDetailPropertyFactory {
 					entityBookDP.setName("Shipping Book");
 				} else if (entityBook.eContainmentFeature() == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK) {
 					entityBookDP.setName("Trading Book");
+				} else if (entityBook.eContainmentFeature() == CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK) {
+					entityBookDP.setName("Upstream Book");
 				}
 				dpNode = entityBookDP;
 			} else {

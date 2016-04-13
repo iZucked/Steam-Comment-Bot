@@ -111,7 +111,8 @@ public class LegalEntityItemProvider
 
 		boolean qualify =
 			childFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ||
-			childFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK;
+			childFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK ||
+			childFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK;
 
 		if (qualify) {
 			return getString
