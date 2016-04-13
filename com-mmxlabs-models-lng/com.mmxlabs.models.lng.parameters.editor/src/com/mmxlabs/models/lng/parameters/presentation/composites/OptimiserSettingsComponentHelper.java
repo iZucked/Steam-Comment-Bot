@@ -77,6 +77,7 @@ public class OptimiserSettingsComponentHelper extends BaseComponentHelper {
 		add_solutionImprovementSettingsEditor(detailComposite, topClass);
 		add_buildActionSetsEditor(detailComposite, topClass);
 		add_actionPlanSettingsEditor(detailComposite, topClass);
+		add_floatingDaysLimitEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the objectives feature on OptimiserSettings
@@ -179,5 +180,14 @@ public class OptimiserSettingsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_actionPlanSettingsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ParametersPackage.Literals.OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS));
+	}
+
+	/**
+	 * Create the editor for the floatingDaysLimit feature on OptimiserSettings
+	 *
+	 * @generated
+	 */
+	protected void add_floatingDaysLimitEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ParametersPackage.Literals.OPTIMISER_SETTINGS__FLOATING_DAYS_LIMIT));
 	}
 }

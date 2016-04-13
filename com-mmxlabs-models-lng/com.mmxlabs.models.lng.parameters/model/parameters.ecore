@@ -19,6 +19,8 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="similarityMode" eType="#//SimilarityMode"
         defaultValueLiteral="OFF"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="floatingDaysLimit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="15"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="SimilarityMode">
     <eLiterals name="ALL" literal="ALL"/>
@@ -59,6 +61,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="buildActionSets" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="actionPlanSettings" lowerBound="1"
         eType="#//ActionPlanSettings" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="floatingDaysLimit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="15"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Objective" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" lowerBound="1"

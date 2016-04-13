@@ -269,6 +269,15 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getUserSettings_FloatingDaysLimit() {
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EClass getIndividualSolutionImprovementSettings() {
 		return individualSolutionImprovementSettingsEClass;
@@ -452,6 +461,15 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	@Override
 	public EReference getOptimiserSettings_ActionPlanSettings() {
 		return (EReference)optimiserSettingsEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getOptimiserSettings_FloatingDaysLimit() {
+		return (EAttribute)optimiserSettingsEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -800,6 +818,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		createEAttribute(userSettingsEClass, USER_SETTINGS__GENERATE_CHARTER_OUTS);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__BUILD_ACTION_SETS);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__SIMILARITY_MODE);
+		createEAttribute(userSettingsEClass, USER_SETTINGS__FLOATING_DAYS_LIMIT);
 
 		individualSolutionImprovementSettingsEClass = createEClass(INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS);
 		createEAttribute(individualSolutionImprovementSettingsEClass, INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS__ITERATIONS);
@@ -822,6 +841,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		createEReference(optimiserSettingsEClass, OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS);
 		createEAttribute(optimiserSettingsEClass, OPTIMISER_SETTINGS__BUILD_ACTION_SETS);
 		createEReference(optimiserSettingsEClass, OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS);
+		createEAttribute(optimiserSettingsEClass, OPTIMISER_SETTINGS__FLOATING_DAYS_LIMIT);
 
 		objectiveEClass = createEClass(OBJECTIVE);
 		createEAttribute(objectiveEClass, OBJECTIVE__WEIGHT);
@@ -911,6 +931,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		initEAttribute(getUserSettings_GenerateCharterOuts(), ecorePackage.getEBoolean(), "generateCharterOuts", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_BuildActionSets(), ecorePackage.getEBoolean(), "buildActionSets", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_SimilarityMode(), this.getSimilarityMode(), "similarityMode", "OFF", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUserSettings_FloatingDaysLimit(), ecorePackage.getEInt(), "floatingDaysLimit", "15", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(individualSolutionImprovementSettingsEClass, IndividualSolutionImprovementSettings.class, "IndividualSolutionImprovementSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getIndividualSolutionImprovementSettings_Iterations(), ecorePackage.getEInt(), "iterations", null, 1, 1, IndividualSolutionImprovementSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -933,6 +954,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		initEReference(getOptimiserSettings_SolutionImprovementSettings(), this.getIndividualSolutionImprovementSettings(), null, "solutionImprovementSettings", null, 1, 1, OptimiserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getOptimiserSettings_BuildActionSets(), ecorePackage.getEBoolean(), "buildActionSets", null, 0, 1, OptimiserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptimiserSettings_ActionPlanSettings(), this.getActionPlanSettings(), null, "actionPlanSettings", null, 1, 1, OptimiserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOptimiserSettings_FloatingDaysLimit(), ecorePackage.getEInt(), "floatingDaysLimit", "15", 0, 1, OptimiserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(objectiveEClass, Objective.class, "Objective", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getObjective_Weight(), ecorePackage.getEDouble(), "weight", null, 1, 1, Objective.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
