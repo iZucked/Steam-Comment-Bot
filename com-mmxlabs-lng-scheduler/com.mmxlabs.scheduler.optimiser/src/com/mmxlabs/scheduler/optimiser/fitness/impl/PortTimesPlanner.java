@@ -251,14 +251,7 @@ public class PortTimesPlanner {
 			prev2Port = prevPort;
 			prevPort = thisPort;
 			prevVisitDuration = visitDuration;
-			// prevPrevPortSlot = prevPortSlot;
 			prevPortSlot = thisPortSlot;
-		}
-
-		if (prevPortSlot != null) {
-			// Populate final return time details
-			final int idx = arrivalTimes.length - 1;
-			portTimesRecord.setReturnSlotTime(prevPortSlot, arrivalTimes[idx]);
 		}
 
 		return portTimesRecords;
@@ -285,6 +278,7 @@ public class PortTimesPlanner {
 			case Other:
 			case Maintenance:
 			case Short_Cargo_End:
+			case End:
 				result[idx] = true;
 				break;
 			default:
