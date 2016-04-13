@@ -558,9 +558,10 @@ public final class VoyagePlannerTest {
 		List<@NonNull IPortTimesRecord> portTimesRecords = Lists.<@NonNull IPortTimesRecord> newArrayList(portTimesRecord);
 
 		Mockito.when(voyagePlanOptimiser.optimise(resource, vessel, 0, 0, 0, portTimesRecord, expectedBasicSequence1, vpoChoices)).thenReturn(testVoyagePlan);
+		final int[] arrivalTimes = new int[] { 5, 10, 15 };
 
 		// Schedule sequence
-		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans = planner.makeVoyagePlans(resource, sequence, portTimesRecords);
+		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
 
 		// // Rely upon objects equals() methods to aid JMock equal(..) case
 		// Mockito.verify(voyagePlanOptimiser).setVessel(vessel, resource, 0);

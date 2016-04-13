@@ -169,9 +169,27 @@ public class ScheduleCalculator {
 	 */
 	@NonNull
 	private ScheduledSequence desOrFobSchedule(final @NonNull IResource resource, final @NonNull ISequence sequence, final @Nullable IPortTimesRecord portTimesRecord) {
+			
+			
+			if (slot instanceof StartPortSlot) {
+				continue;
+			}
+			if (slot instanceof EndPortSlot) {
+				continue;
+			}
+			
 
 		if (portTimesRecord == null) {
 			return new ScheduledSequence(resource, sequence, 0, Collections.<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> emptyList());
+				
+				
+				if (slot instanceof StartPortSlot) {
+					continue;
+				}
+				if (slot instanceof EndPortSlot) {
+					continue;
+				}
+				
 		}
 		@NonNull
 		final VoyagePlan plan = voyagePlanner.makeDESOrFOBVoyagePlan(resource, sequence, portTimesRecord);
@@ -294,7 +312,7 @@ public class ScheduleCalculator {
 
 		// Perform capacity violations analysis
 		latenessChecker.calculateLateness(scheduledSequences, annotatedSolution);
-		
+
 		// Idle time checker
 		idleTimeChecker.calculateIdleTime(scheduledSequences, annotatedSolution);
 	}
