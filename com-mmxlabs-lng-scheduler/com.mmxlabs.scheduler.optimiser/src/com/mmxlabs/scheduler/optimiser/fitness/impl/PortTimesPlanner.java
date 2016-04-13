@@ -19,7 +19,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -171,7 +170,7 @@ public class PortTimesPlanner {
 				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER //
 				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 
-//		final boolean isShortsSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
+		final boolean isShortsSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 
 		final List<@NonNull IPortTimesRecord> portTimesRecords = new LinkedList<>();
 
@@ -182,39 +181,16 @@ public class PortTimesPlanner {
 		PortTimesRecord portTimesRecord = new PortTimesRecord();
 		portTimesRecords.add(portTimesRecord);
 
-//		IPort prevPort = null;
-//		IPort prev2Port = null;
-//		IPortSlot prevPortSlot = null;
-		// Used for end of sequence checks
-		// IPortSlot prevPrevPortSlot = null;
+		// Used for cargo short end of sequence checks
+		IPortSlot prevPortSlot = null;
 
-//		int prevVisitDuration = 0;
 		final Iterator<@NonNull ISequenceElement> itr = sequence.iterator();
 
 		for (int idx = 0; itr.hasNext(); ++idx) {
 			final ISequenceElement element = itr.next();
 
-//			final IPort thisPort = portProvider.getPortForElement(element);
 			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
-//			final PortType portType = portTypeProvider.getPortType(element);
-
-			// If this is the first port, then this will be null and there will
-			// be no voyage to plan.
-//			int shortCargoReturnArrivalTime = 0;
-//			if (prevPort != null) {
-//				final int availableTime;
-////				final boolean isShortCargoEnd = isShortsSequence && portType == PortType.Short_Cargo_End;
-//
-////				if (!isShortCargoEnd) {
-//					// Available time, as determined by inputs.
-//					availableTime = arrivalTimes[idx] - arrivalTimes[idx - 1] - prevVisitDuration;
-////				} else { // shorts cargo end on shorts sequence
-////					assert prev2Port != null;
-////					availableTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), prevPort, prev2Port, arrivalTimes[idx - 1] + prevVisitDuration,
-////							vesselAvailability.getVessel().getVesselClass().getMaxSpeed()).getSecond();
-////					shortCargoReturnArrivalTime = arrivalTimes[idx - 1] + prevVisitDuration + availableTime;
-////				}
-//			}
+			final PortType portType = portTypeProvider.getPortType(element);
 
 			final int visitDuration = actualsDataProvider.hasActuals(thisPortSlot) ? actualsDataProvider.getVisitDuration(thisPortSlot) : durationsProvider.getElementDuration(element, resource);
 			// Sequence scheduler should be using the actuals time
@@ -222,44 +198,44 @@ public class PortTimesPlanner {
 
 			// Set current slot arrival time and duration (if not end)
 			if (breakSequence[idx]) {
-//				if (isShortsSequence && portType == PortType.Short_Cargo_End) {
-//					portTimesRecord.setReturnSlotTime(thisPortSlot, shortCargoReturnArrivalTime);
-//				} else {
-					portTimesRecord.setReturnSlotTime(thisPortSlot, arrivalTimes[idx]);
-//				}
-				portTimesRecord.setSlotDuration(thisPortSlot, 0);
+				if (isShortsSequence && portType == PortType.Short_Cargo_End) {
+					assert prevPortSlot != null;
+					final IPortSlot startPortSlot = portTimesRecord.getSlots().get(0);
+					int prevArrivalTime = portTimesRecord.getSlotTime(prevPortSlot);
+					int prevVisitDuration = portTimesRecord.getSlotDuration(prevPortSlot);
+					final int availableTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), prevPortSlot.getPort(), startPortSlot.getPort(),
+							prevArrivalTime + prevVisitDuration, vesselAvailability.getVessel().getVesselClass().getMaxSpeed()).getSecond();
+					final int shortCargoReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime;
 
+					portTimesRecord.setReturnSlotTime(thisPortSlot, shortCargoReturnArrivalTime);
+				} else {
+					portTimesRecord.setReturnSlotTime(thisPortSlot, arrivalTimes[idx]);
+				}
+				// Return elements always have a duration of zero
+				portTimesRecord.setSlotDuration(thisPortSlot, 0);
 			} else {
-//				// Is this a valid check here?
-//				if (isShortsSequence && portType == PortType.Short_Cargo_End) {
-//					portTimesRecord.setSlotTime(thisPortSlot, shortCargoReturnArrivalTime);
-//				} else {
-					portTimesRecord.setSlotTime(thisPortSlot, arrivalTimes[idx]);
-//				}
+				portTimesRecord.setSlotTime(thisPortSlot, arrivalTimes[idx]);
 				portTimesRecord.setSlotDuration(thisPortSlot, visitDuration);
 			}
 
 			// Is this the end of the sequence? If so, start new port times record
 			if (breakSequence[idx]) {
-				
+
+				// Is this the last element? Do not start a new PortTimesRecord and break out instead
 				if (sequence.size() == idx + 1) {
 					break;
 				}
-				
+
 				// Reset object ref
 				portTimesRecord = new PortTimesRecord();
 				portTimesRecord.setSlotTime(thisPortSlot, arrivalTimes[idx]);
 				portTimesRecord.setSlotDuration(thisPortSlot, visitDuration);
 
-				
 				portTimesRecords.add(portTimesRecord);
 			}
 
 			// Setup for next iteration
-//			prev2Port = prevPort;
-//			prevPort = thisPort;
-//			prevVisitDuration = visitDuration;
-//			prevPortSlot = thisPortSlot;
+			prevPortSlot = thisPortSlot;
 		}
 
 		return portTimesRecords;
