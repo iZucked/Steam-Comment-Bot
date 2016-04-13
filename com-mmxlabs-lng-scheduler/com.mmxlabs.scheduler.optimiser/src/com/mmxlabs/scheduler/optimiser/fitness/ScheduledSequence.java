@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -129,4 +130,17 @@ public final class ScheduledSequence {
 		}
 	}
 
+	public final boolean isEqual(@NonNull ScheduledSequence other) {
+
+		return this.startTime == other.startTime //
+				&& Objects.deepEquals(this.resource, other.resource) //
+				&& Objects.deepEquals(this.portSlotToHeelLevelAnnotationMap, other.portSlotToHeelLevelAnnotationMap) //
+				&& Objects.deepEquals(this.portSlotToPortTimesRecordMap, other.portSlotToPortTimesRecordMap) //
+				&& Objects.deepEquals(this.portSlotToTimeMap, other.portSlotToTimeMap) //
+				&& Objects.deepEquals(this.portSlotToVoyagePlanMap, other.portSlotToVoyagePlanMap) //
+				&& Objects.deepEquals(this.sequencePortSlots, other.sequencePortSlots) //
+				&& Objects.deepEquals(this.sequence, other.sequence) //
+				&& Objects.deepEquals(this.voyagePlans, other.voyagePlans);
+
+	}
 }

@@ -26,10 +26,20 @@ public class GeneratedCharterOutVesselEventPortSlot implements IGeneratedCharter
 	@NonNull
 	private GeneratedCharterOutVesselEvent event;
 
-	public GeneratedCharterOutVesselEventPortSlot(@NonNull final String id, @NonNull final IPort fromPort) {
+	// public GeneratedCharterOutVesselEventPortSlot(@NonNull final String id, @NonNull final IPort fromPort) {
+	// this.id = id;
+	// this.event = new GeneratedCharterOutVesselEvent();
+	// this.event.setStartPort(fromPort);
+	// }
+
+	public GeneratedCharterOutVesselEventPortSlot(@NonNull String id, IPort port, long maxCharteringRevenue, long repositioningFee, int durationInHours) {
 		this.id = id;
 		this.event = new GeneratedCharterOutVesselEvent();
-		this.event.setStartPort(fromPort);
+		this.event.setStartPort(port);
+		this.event.setEndPort(port);
+		this.event.setHireOutRevenue(maxCharteringRevenue);
+		this.event.setRepositioning(repositioningFee);
+		this.event.setDurationHours(durationInHours);
 	}
 
 	@Override
@@ -69,12 +79,13 @@ public class GeneratedCharterOutVesselEventPortSlot implements IGeneratedCharter
 
 	@Override
 	public void setPort(IPort port) {
-		getVesselEvent().setEndPort(port);
-	}
+		throw new UnsupportedOperationException();
+		}
 
 	@Override
 	public void setTimeWindow(ITimeWindow timeWindow) {
-		getVesselEvent().setTimeWindow(timeWindow);
+ 		throw new UnsupportedOperationException();
+//		getVesselEvent().setTimeWindow(timeWindow);
 	}
 
 	@Override
@@ -84,6 +95,9 @@ public class GeneratedCharterOutVesselEventPortSlot implements IGeneratedCharter
 
 	@Override
 	public boolean equals(Object obj) {
+		if (obj instanceof GeneratedCharterOutVesselEventPortSlot) {
+			return Objects.equals(event, ((GeneratedCharterOutVesselEventPortSlot) obj).getVesselEvent());
+		}
 		return obj == this;
 	}
 

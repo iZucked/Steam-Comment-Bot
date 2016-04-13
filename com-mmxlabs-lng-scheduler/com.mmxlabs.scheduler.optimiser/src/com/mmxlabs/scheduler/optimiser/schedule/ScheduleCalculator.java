@@ -5,9 +5,11 @@
 package com.mmxlabs.scheduler.optimiser.schedule;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.inject.Provider;
 
@@ -68,6 +70,37 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author Simon Goodall
  */
 public class ScheduleCalculator {
+
+	private static class Key {
+		private final @NonNull IResource availability;
+		private final @NonNull ISequence sequence;
+
+		public Key(final @NonNull IResource availability, final @NonNull ISequence sequence) {
+			this.availability = availability;
+			this.sequence = sequence;
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(availability, sequence);
+		}
+
+		@Override
+		public boolean equals(final Object obj) {
+
+			if (obj == this) {
+				return true;
+			}
+			if (obj instanceof Key) {
+				final Key other = (Key) obj;
+				return Objects.equals(this.availability, other.availability) //
+						&& Objects.equals(this.sequence, other.sequence);
+			}
+			return false;
+		}
+	}
+
+	private final Map<@NonNull Key, @NonNull ScheduledSequence> cache = new HashMap<>();
 
 	@Inject(optional = true)
 	private Provider<ScheduledDataLookupProvider> scheduledDataLookupProviderProvider;
@@ -211,11 +244,39 @@ public class ScheduleCalculator {
 			final ISequence sequence = sequences.getSequence(i);
 			final IResource resource = resources.get(i);
 
-			final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
-			if (scheduledSequence == null) {
-				return null;
+			if (false) {
+				// Is this a good key? Is ISequence the same instance each time (equals will be different...)?
+				final Key key = new Key(resource, sequence);
+				if (cache.containsKey(key)) {
+					@NonNull
+					ScheduledSequence cachedResult = cache.get(key);
+
+					// Verify
+					if (true) {
+						final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
+
+						if (scheduledSequence != null && !scheduledSequence.isEqual(cachedResult)) {
+							scheduledSequence.isEqual(cachedResult);
+							throw new RuntimeException("Cachce consistency error");
+						}
+					}
+					result.add(cachedResult);
+				} else {
+
+					final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
+					if (scheduledSequence == null) {
+						return null;
+					}
+					result.add(scheduledSequence);
+					cache.put(key, scheduledSequence);
+				}
+			} else {
+				final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
+				if (scheduledSequence == null) {
+					return null;
+				}
+				result.add(scheduledSequence);
 			}
-			result.add(scheduledSequence);
 		}
 
 		calculateSchedule(sequences, result, solution);
