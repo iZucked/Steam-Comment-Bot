@@ -113,6 +113,8 @@ public final class OptimisationHelper {
 	public static final String SWTBOT_PERIOD_START = "swtbot.period.start";
 	public static final String SWTBOT_PERIOD_END = "swtbot.period.end";
 
+	public static final String SWTBOT_IDLE_DAYS = "swtbot.idledays";
+
 	public static Object evaluateScenarioInstance(@NonNull final IEclipseJobManager jobManager, @NonNull final ScenarioInstance instance, @Nullable final String parameterMode,
 			final boolean promptForOptimiserSettings, final boolean optimising, final String lockName, final boolean promptOnlyIfOptionsEnabled) {
 
@@ -398,8 +400,13 @@ public final class OptimisationHelper {
 			optionAdded = true;
 			enabledOptionAdded = choiceData.enabled;
 		}
-
 		if (!forEvaluation) {
+			{
+				if (LicenseFeatures.isPermitted("features:optimisation-idle-days")) {
+					final Option idleDays = dialog.addOption(DataSection.Toggles, null, editingDomain, "Netback idle days tolerated", copy, defaultSettings, DataType.PositiveInt, SWTBOT_IDLE_DAYS,
+							ParametersPackage.eINSTANCE.getUserSettings_FloatingDaysLimit());
+				}
+			}
 			// if (SecurityUtils.getSubject().isPermitted("features:optimisation-similarity")) {
 			{
 
@@ -591,7 +598,7 @@ public final class OptimisationHelper {
 				}
 			}
 		}
-
+		optimiserSettings.setFloatingDaysLimit(userSettings.getFloatingDaysLimit());
 		return optimiserSettings;
 	}
 
@@ -667,6 +674,8 @@ public final class OptimisationHelper {
 			to.setSimilarityMode(from.getSimilarityMode());
 		}
 		to.setBuildActionSets(from.isBuildActionSets());
+		
+		to.setFloatingDaysLimit(from.getFloatingDaysLimit());
 	}
 
 	public static boolean checkUserSettings(@NonNull final UserSettings to, final boolean quiet) {
