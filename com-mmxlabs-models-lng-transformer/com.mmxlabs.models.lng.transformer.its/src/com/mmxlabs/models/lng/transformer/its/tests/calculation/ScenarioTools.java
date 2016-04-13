@@ -362,10 +362,12 @@ public class ScenarioTools {
 		final LegalEntity e = CommercialFactory.eINSTANCE.createLegalEntity();
 		e.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		e.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+		e.setUpstreamBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		commercialModel.getEntities().add(e);
 		final LegalEntity s = CommercialFactory.eINSTANCE.createLegalEntity();
 		s.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		s.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+		s.setUpstreamBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		commercialModel.getEntities().add(s);
 		availablility.setEntity(s);
 
@@ -605,10 +607,12 @@ public class ScenarioTools {
 		final LegalEntity e = CommercialFactory.eINSTANCE.createLegalEntity();
 		e.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		e.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+		e.setUpstreamBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		commercialModel.getEntities().add(e);
 		final LegalEntity s = CommercialFactory.eINSTANCE.createLegalEntity();
 		s.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		s.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+		s.setUpstreamBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		commercialModel.getEntities().add(s);
 		availability.setEntity(s);
 

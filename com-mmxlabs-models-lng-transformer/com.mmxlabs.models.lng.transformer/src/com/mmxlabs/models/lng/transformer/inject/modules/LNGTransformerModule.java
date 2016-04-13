@@ -18,7 +18,6 @@ import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.SeriesParser;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.DefaultModelEntityMap;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
@@ -34,7 +33,6 @@ import com.mmxlabs.scheduler.optimiser.cache.ICacheKeyDependencyLinker;
 import com.mmxlabs.scheduler.optimiser.cache.NullCacheKeyDependencyLinker;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertableDESShippingTimesCalculator;
-import com.mmxlabs.scheduler.optimiser.components.impl.GeneratedVesselEventFactory;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
@@ -44,7 +42,11 @@ import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.curves.PriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.impl.CachingEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.impl.CheckingEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.CachingVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.CheckingVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.CachingTimeWindowSchedulingCanalDistanceProvider;
@@ -123,11 +125,47 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(DefaultDivertableDESShippingTimesCalculator.class).in(Singleton.class);
 
 		// Register default implementations
-		bind(IVolumeAllocator.class).to(UnconstrainedVolumeAllocator.class).in(Singleton.class);
-		bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
+		// bind(IVolumeAllocator.class).to(UnconstrainedVolumeAllocator.class).in(Singleton.class);
+		// bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
 		bind(ICacheKeyDependencyLinker.class).to(NullCacheKeyDependencyLinker.class);
+	}
 
-		bind(GeneratedVesselEventFactory.class).in(PerChainUnitScope.class);
+	@Provides
+	@PerChainUnitScope
+	private IVolumeAllocator provideVolumeAllocator(final @NonNull Injector injector) {
+
+		final UnconstrainedVolumeAllocator reference = injector.getInstance(UnconstrainedVolumeAllocator.class);
+
+		if (false) {
+			final CachingVolumeAllocator cacher = new CachingVolumeAllocator(reference);
+			injector.injectMembers(cacher);
+			if (false) {
+				return new CheckingVolumeAllocator(reference, cacher);
+			}
+			return cacher;
+		} else {
+			return reference;
+		}
+
+	}
+
+	@Provides
+	@PerChainUnitScope
+	private IEntityValueCalculator provideEntityValueCalculator(final @NonNull Injector injector) {
+
+		final DefaultEntityValueCalculator reference = injector.getInstance(DefaultEntityValueCalculator.class);
+		if (false) {
+			final CachingEntityValueCalculator cacher = new CachingEntityValueCalculator(reference);
+			injector.injectMembers(cacher);
+			if (false) {
+				return new CheckingEntityValueCalculator(reference, cacher);
+			} else {
+				return cacher;
+			}
+		} else {
+			return reference;
+		}
+
 	}
 
 	@Provides
