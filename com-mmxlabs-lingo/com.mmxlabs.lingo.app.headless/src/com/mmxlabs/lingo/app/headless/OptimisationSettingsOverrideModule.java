@@ -13,6 +13,8 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.mmxlabs.models.lng.transformer.inject.modules.ActionPlanModule;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ExcessIdleTimeComponentParameters;
+import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ISimilarityComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.SimilarityComponentParameters;
 import com.mmxlabs.scheduler.optimiser.lso.SequencesConstrainedMoveGeneratorUnit;
@@ -78,6 +80,21 @@ public class OptimisationSettingsOverrideModule extends AbstractModule {
 	@Named(ActionPlanModule.ACTION_PLAN_MAX_SEARCH_DEPTH)
 	private int actionPlanInRunSearchDepth() {
 		return settings.getActionPlanMaxSearchDepth();
+	}
+
+	@Provides
+	@Singleton
+	private IExcessIdleTimeComponentParameters provideIdleComponentParameters() {
+		final ExcessIdleTimeComponentParameters idleParams = new ExcessIdleTimeComponentParameters();
+		int highPeriodInDays = 15;
+		int lowPeriodInDays = Math.max(0, highPeriodInDays - 2);
+		idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, lowPeriodInDays*24);
+		idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, highPeriodInDays*24);
+		idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, 2_500);
+		idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, 10_000);
+		idleParams.setEndWeight(10_000);
+
+		return idleParams;
 	}
 
 }
