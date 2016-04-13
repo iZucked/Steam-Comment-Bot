@@ -379,7 +379,6 @@ public class VoyagePlanner {
 					assert actualsDataProvider.hasActuals(thisPortSlot) == false || actualsDataProvider.getVisitDuration(thisPortSlot) == visitDuration;
 				}
 
-				vpoChoices.clear();
 				voyageOrPortOptions.add(portOptions);
 
 				// Sequence scheduler should be using the actuals time
