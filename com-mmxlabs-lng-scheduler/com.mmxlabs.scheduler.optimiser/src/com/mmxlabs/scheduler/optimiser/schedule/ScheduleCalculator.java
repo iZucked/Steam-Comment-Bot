@@ -259,17 +259,10 @@ public class ScheduleCalculator {
 				for (final IPortSlot portSlot : scheduledSequence.getSequenceSlots()) {
 					assert portSlot != null;
 
-
 					final IAllocationAnnotation allocationAnnotation = scheduledSequence.getAllocationAnnotation(portSlot);
 					final IHeelLevelAnnotation heelLevelAnnotation = scheduledSequence.getHeelLevelAnnotation(portSlot);
-					final ISequenceElement  portElement		= portSlotProvider.getElement(portSlot);
-						
-			
-					
-//					 = portSlotProvider.getElement(portSlot);
-					if (portElement == null) {
-						int ii = 0;
-					}
+					final ISequenceElement portElement = portSlotProvider.getElement(portSlot);
+
 					assert portElement != null;
 					if (allocationAnnotation != null) {
 						elementAnnotations.setAnnotation(portElement, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
@@ -294,7 +287,7 @@ public class ScheduleCalculator {
 
 		// Perform capacity violations analysis
 		latenessChecker.calculateLateness(scheduledSequences, annotatedSolution);
-		
+
 		// Idle time checker
 		idleTimeChecker.calculateIdleTime(scheduledSequences, annotatedSolution);
 	}
