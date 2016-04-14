@@ -49,6 +49,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getContractType <em>Contract Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPricingEvent <em>Pricing Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getCancellationFee <em>Cancellation Fee</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getCancellationExpression <em>Cancellation Expression</em>}</li>
  * </ul>
  *
  * @generated
@@ -292,6 +293,26 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected int cancellationFee = CANCELLATION_FEE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getCancellationExpression() <em>Cancellation Expression</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCancellationExpression()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String CANCELLATION_EXPRESSION_EDEFAULT = "0";
+
+	/**
+	 * The cached value of the '{@link #getCancellationExpression() <em>Cancellation Expression</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCancellationExpression()
+	 * @generated
+	 * @ordered
+	 */
+	protected String cancellationExpression = CANCELLATION_EXPRESSION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -661,6 +682,27 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getCancellationExpression() {
+		return cancellationExpression;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCancellationExpression(String newCancellationExpression) {
+		String oldCancellationExpression = cancellationExpression;
+		cancellationExpression = newCancellationExpression;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION, oldCancellationExpression, cancellationExpression));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -710,6 +752,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return getPricingEvent();
 			case CommercialPackage.CONTRACT__CANCELLATION_FEE:
 				return getCancellationFee();
+			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
+				return getCancellationExpression();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -771,6 +815,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__CANCELLATION_FEE:
 				setCancellationFee((Integer)newValue);
 				return;
+			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
+				setCancellationExpression((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -828,6 +875,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__CANCELLATION_FEE:
 				setCancellationFee(CANCELLATION_FEE_EDEFAULT);
 				return;
+			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
+				setCancellationExpression(CANCELLATION_EXPRESSION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -870,6 +920,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return pricingEvent != PRICING_EVENT_EDEFAULT;
 			case CommercialPackage.CONTRACT__CANCELLATION_FEE:
 				return cancellationFee != CANCELLATION_FEE_EDEFAULT;
+			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
+				return CANCELLATION_EXPRESSION_EDEFAULT == null ? cancellationExpression != null : !CANCELLATION_EXPRESSION_EDEFAULT.equals(cancellationExpression);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -934,6 +986,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		result.append(pricingEvent);
 		result.append(", cancellationFee: ");
 		result.append(cancellationFee);
+		result.append(", cancellationExpression: ");
+		result.append(cancellationExpression);
 		result.append(')');
 		return result.toString();
 	}

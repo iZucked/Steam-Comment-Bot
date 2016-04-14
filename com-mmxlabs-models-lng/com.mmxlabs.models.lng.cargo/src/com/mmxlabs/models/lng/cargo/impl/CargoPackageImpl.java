@@ -530,7 +530,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSlot_OverrideRestrictions() {
+	public EAttribute getSlot_CancellationExpression() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(25);
 	}
 
@@ -539,8 +539,17 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getSlot_OverrideRestrictions() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(26);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getSlot_NominatedVessel() {
-		return (EReference)slotEClass.getEStructuralFeatures().get(26);
+		return (EReference)slotEClass.getEStructuralFeatures().get(27);
 	}
 
 	/**
@@ -549,7 +558,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getSlot_Locked() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(27);
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(28);
 	}
 
 	/**
@@ -683,7 +692,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getSlot__GetSlotOrContractCancellationFee() {
+	public EOperation getSlot__GetSlotOrContractCancellationExpression() {
 		return slotEClass.getEOperations().get(13);
 	}
 
@@ -1450,6 +1459,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(slotEClass, SLOT__HEDGES);
 		createEReference(slotEClass, SLOT__ALLOWED_VESSELS);
 		createEAttribute(slotEClass, SLOT__CANCELLATION_FEE);
+		createEAttribute(slotEClass, SLOT__CANCELLATION_EXPRESSION);
 		createEAttribute(slotEClass, SLOT__OVERRIDE_RESTRICTIONS);
 		createEReference(slotEClass, SLOT__NOMINATED_VESSEL);
 		createEAttribute(slotEClass, SLOT__LOCKED);
@@ -1466,7 +1476,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE);
-		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT);
 		createEOperation(slotEClass, SLOT___GET_PRICING_DATE_AS_DATE_TIME);
 		createEOperation(slotEClass, SLOT___GET_SLOT_CONTRACT_PARAMS);
@@ -1668,6 +1678,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		g1.getETypeArguments().add(g2);
 		initEReference(getSlot_AllowedVessels(), g1, null, "allowedVessels", null, 0, -1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_CancellationFee(), ecorePackage.getEInt(), "cancellationFee", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_CancellationExpression(), ecorePackage.getEString(), "cancellationExpression", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_OverrideRestrictions(), ecorePackage.getEBoolean(), "overrideRestrictions", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlot_NominatedVessel(), theFleetPackage.getVessel(), null, "nominatedVessel", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_Locked(), ecorePackage.getEBoolean(), "locked", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1698,7 +1709,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEOperation(getSlot__GetSlotOrContractRestrictedListsArePermissive(), ecorePackage.getEBoolean(), "getSlotOrContractRestrictedListsArePermissive", 0, 1, IS_UNIQUE, IS_ORDERED);
 
-		initEOperation(getSlot__GetSlotOrContractCancellationFee(), ecorePackage.getEInt(), "getSlotOrContractCancellationFee", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getSlot__GetSlotOrContractCancellationExpression(), ecorePackage.getEString(), "getSlotOrContractCancellationExpression", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getSlot__GetSlotOrDelegatedPricingEvent(), theCommercialPackage.getPricingEvent(), "getSlotOrDelegatedPricingEvent", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -1821,6 +1832,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		// Create annotations
 		// http://www.mmxlabs.com/models/ui/numberFormat
 		createNumberFormatAnnotations();
+		// http://www.mmxlabs.com/models/pricing/expressionType
+		createExpressionTypeAnnotations();
 	}
 
 	/**
@@ -1926,6 +1939,22 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   new String[] {
 			 "unit", "$/day",
 			 "formatString", "###,##0"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/pricing/expressionType</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createExpressionTypeAnnotations() {
+		String source = "http://www.mmxlabs.com/models/pricing/expressionType";	
+		addAnnotation
+		  (getSlot_CancellationExpression(), 
+		   source, 
+		   new String[] {
+			 "type", "commodity"
 		   });
 	}
 

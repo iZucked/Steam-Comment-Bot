@@ -635,13 +635,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT__CANCELLATION_FEE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 25;
 
 	/**
+	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
+
+	/**
 	 * The feature id for the '<em><b>Override Restrictions</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__OVERRIDE_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
+	int SLOT__OVERRIDE_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
 
 	/**
 	 * The feature id for the '<em><b>Nominated Vessel</b></em>' reference.
@@ -650,7 +659,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__NOMINATED_VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
+	int SLOT__NOMINATED_VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 28;
 
 	/**
 	 * The feature id for the '<em><b>Locked</b></em>' attribute.
@@ -659,7 +668,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__LOCKED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 28;
+	int SLOT__LOCKED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 29;
 
 	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
@@ -668,7 +677,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 29;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 30;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -824,13 +833,13 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 13;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Contract Cancellation Expression</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 14;
+	int SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 14;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegated Pricing Event</em>' operation.
@@ -1121,6 +1130,15 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__CANCELLATION_FEE = SLOT__CANCELLATION_FEE;
 
 	/**
+	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__CANCELLATION_EXPRESSION = SLOT__CANCELLATION_EXPRESSION;
+
+	/**
 	 * The feature id for the '<em><b>Override Restrictions</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1355,13 +1373,13 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Contract Cancellation Expression</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE;
+	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION = SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegated Pricing Event</em>' operation.
@@ -1670,6 +1688,15 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__CANCELLATION_FEE = SLOT__CANCELLATION_FEE;
 
 	/**
+	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__CANCELLATION_EXPRESSION = SLOT__CANCELLATION_EXPRESSION;
+
+	/**
 	 * The feature id for the '<em><b>Override Restrictions</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1904,13 +1931,13 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Contract Cancellation Expression</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE;
+	int DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION = SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegated Pricing Event</em>' operation.
@@ -2311,6 +2338,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__CANCELLATION_FEE = LOAD_SLOT__CANCELLATION_FEE;
 
 	/**
+	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__CANCELLATION_EXPRESSION = LOAD_SLOT__CANCELLATION_EXPRESSION;
+
+	/**
 	 * The feature id for the '<em><b>Override Restrictions</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2554,13 +2590,13 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Contract Cancellation Expression</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_LOAD_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = LOAD_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE;
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION = LOAD_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegated Pricing Event</em>' operation.
@@ -2879,6 +2915,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__CANCELLATION_FEE = DISCHARGE_SLOT__CANCELLATION_FEE;
 
 	/**
+	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__CANCELLATION_EXPRESSION = DISCHARGE_SLOT__CANCELLATION_EXPRESSION;
+
+	/**
 	 * The feature id for the '<em><b>Override Restrictions</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3123,13 +3168,13 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Contract Cancellation Expression</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE;
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION = DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegated Pricing Event</em>' operation.
@@ -4860,6 +4905,17 @@ public interface CargoPackage extends EPackage {
 
 	
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationExpression <em>Cancellation Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cancellation Expression</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getCancellationExpression()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_CancellationExpression();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isOverrideRestrictions <em>Override Restrictions</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5035,14 +5091,14 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetSlotOrContractRestrictedListsArePermissive();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractCancellationFee() <em>Get Slot Or Contract Cancellation Fee</em>}' operation.
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractCancellationExpression() <em>Get Slot Or Contract Cancellation Expression</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractCancellationFee()
+	 * @return the meta object for the '<em>Get Slot Or Contract Cancellation Expression</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractCancellationExpression()
 	 * @generated
 	 */
-	EOperation getSlot__GetSlotOrContractCancellationFee();
+	EOperation getSlot__GetSlotOrContractCancellationExpression();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegatedPricingEvent() <em>Get Slot Or Delegated Pricing Event</em>}' operation.
@@ -6142,6 +6198,14 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__CANCELLATION_FEE = eINSTANCE.getSlot_CancellationFee();
 
 		/**
+		 * The meta object literal for the '<em><b>Cancellation Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__CANCELLATION_EXPRESSION = eINSTANCE.getSlot_CancellationExpression();
+
+		/**
 		 * The meta object literal for the '<em><b>Override Restrictions</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6270,12 +6334,12 @@ public interface CargoPackage extends EPackage {
 		EOperation SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = eINSTANCE.getSlot__GetSlotOrContractRestrictedListsArePermissive();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Slot Or Contract Cancellation Fee</b></em>' operation.
+		 * The meta object literal for the '<em><b>Get Slot Or Contract Cancellation Expression</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = eINSTANCE.getSlot__GetSlotOrContractCancellationFee();
+		EOperation SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION = eINSTANCE.getSlot__GetSlotOrContractCancellationExpression();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegated Pricing Event</b></em>' operation.

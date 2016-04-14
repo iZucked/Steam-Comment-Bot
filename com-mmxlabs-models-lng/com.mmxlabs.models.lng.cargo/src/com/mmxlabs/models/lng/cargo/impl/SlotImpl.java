@@ -73,6 +73,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getHedges <em>Hedges</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCancellationFee <em>Cancellation Fee</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCancellationExpression <em>Cancellation Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isOverrideRestrictions <em>Override Restrictions</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getNominatedVessel <em>Nominated Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isLocked <em>Locked</em>}</li>
@@ -620,6 +621,35 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected boolean cancellationFeeESet;
+
+	/**
+	 * The default value of the '{@link #getCancellationExpression() <em>Cancellation Expression</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCancellationExpression()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String CANCELLATION_EXPRESSION_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getCancellationExpression() <em>Cancellation Expression</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCancellationExpression()
+	 * @generated
+	 * @ordered
+	 */
+	protected String cancellationExpression = CANCELLATION_EXPRESSION_EDEFAULT;
+
+	/**
+	 * This is true if the Cancellation Expression attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean cancellationExpressionESet;
 
 	/**
 	 * The default value of the '{@link #isOverrideRestrictions() <em>Override Restrictions</em>}' attribute.
@@ -1511,29 +1541,29 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__HEDGES, oldHedges, hedges));
 	}
+//
+//	/**
+//	 * <!-- begin-user-doc -->
+//	 * <!-- end-user-doc -->
+//	 * @generated
+//	 */
+//	public int getCancellationFee() {
+//		return cancellationFee;
+//	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public int getCancellationFee() {
-		return cancellationFee;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setCancellationFee(int newCancellationFee) {
-		int oldCancellationFee = cancellationFee;
-		cancellationFee = newCancellationFee;
-		boolean oldCancellationFeeESet = cancellationFeeESet;
-		cancellationFeeESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CANCELLATION_FEE, oldCancellationFee, cancellationFee, !oldCancellationFeeESet));
-	}
+//	/**
+//	 * <!-- begin-user-doc -->
+//	 * <!-- end-user-doc -->
+//	 * @generated
+//	 */
+//	public void setCancellationFee(int newCancellationFee) {
+//		int oldCancellationFee = cancellationFee;
+//		cancellationFee = newCancellationFee;
+//		boolean oldCancellationFeeESet = cancellationFeeESet;
+//		cancellationFeeESet = true;
+//		if (eNotificationRequired())
+//			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CANCELLATION_FEE, oldCancellationFee, cancellationFee, !oldCancellationFeeESet));
+//	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1559,6 +1589,52 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	}
 
         /**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getCancellationExpression() {
+		return cancellationExpression;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCancellationExpression(String newCancellationExpression) {
+		String oldCancellationExpression = cancellationExpression;
+		cancellationExpression = newCancellationExpression;
+		boolean oldCancellationExpressionESet = cancellationExpressionESet;
+		cancellationExpressionESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CANCELLATION_EXPRESSION, oldCancellationExpression, cancellationExpression, !oldCancellationExpressionESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetCancellationExpression() {
+		String oldCancellationExpression = cancellationExpression;
+		boolean oldCancellationExpressionESet = cancellationExpressionESet;
+		cancellationExpression = CANCELLATION_EXPRESSION_EDEFAULT;
+		cancellationExpressionESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__CANCELLATION_EXPRESSION, oldCancellationExpression, CANCELLATION_EXPRESSION_EDEFAULT, oldCancellationExpressionESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetCancellationExpression() {
+		return cancellationExpressionESet;
+	}
+
+								/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1652,6 +1728,29 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	
 	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getCancellationFee() {
+		return cancellationFee;
+	}
+
+								/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCancellationFee(int newCancellationFee) {
+		int oldCancellationFee = cancellationFee;
+		cancellationFee = newCancellationFee;
+		boolean oldCancellationFeeESet = cancellationFeeESet;
+		cancellationFeeESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CANCELLATION_FEE, oldCancellationFee, cancellationFee, !oldCancellationFeeESet));
+	}
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1806,6 +1905,17 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getSlotOrContractCancellationExpression() {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public int getSlotOrContractCancellationFee() {
@@ -1950,6 +2060,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getAllowedVessels();
 			case CargoPackage.SLOT__CANCELLATION_FEE:
 				return getCancellationFee();
+			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
+				return getCancellationExpression();
 			case CargoPackage.SLOT__OVERRIDE_RESTRICTIONS:
 				return isOverrideRestrictions();
 			case CargoPackage.SLOT__NOMINATED_VESSEL:
@@ -2050,6 +2162,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__CANCELLATION_FEE:
 				setCancellationFee((Integer)newValue);
 				return;
+			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
+				setCancellationExpression((String)newValue);
+				return;
 			case CargoPackage.SLOT__OVERRIDE_RESTRICTIONS:
 				setOverrideRestrictions((Boolean)newValue);
 				return;
@@ -2148,6 +2263,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__CANCELLATION_FEE:
 				unsetCancellationFee();
 				return;
+			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
+				unsetCancellationExpression();
+				return;
 			case CargoPackage.SLOT__OVERRIDE_RESTRICTIONS:
 				setOverrideRestrictions(OVERRIDE_RESTRICTIONS_EDEFAULT);
 				return;
@@ -2220,6 +2338,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return allowedVessels != null && !allowedVessels.isEmpty();
 			case CargoPackage.SLOT__CANCELLATION_FEE:
 				return isSetCancellationFee();
+			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
+				return isSetCancellationExpression();
 			case CargoPackage.SLOT__OVERRIDE_RESTRICTIONS:
 				return overrideRestrictions != OVERRIDE_RESTRICTIONS_EDEFAULT;
 			case CargoPackage.SLOT__NOMINATED_VESSEL:
@@ -2327,8 +2447,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getSlotOrContractRestrictedPorts();
 			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE:
 				return getSlotOrContractRestrictedListsArePermissive();
-			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE:
-				return getSlotOrContractCancellationFee();
+			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION:
+				return getSlotOrContractCancellationExpression();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT:
 				return getSlotOrDelegatedPricingEvent();
 			case CargoPackage.SLOT___GET_PRICING_DATE_AS_DATE_TIME:
@@ -2388,6 +2508,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		result.append(hedges);
 		result.append(", cancellationFee: ");
 		if (cancellationFeeESet) result.append(cancellationFee); else result.append("<unset>");
+		result.append(", cancellationExpression: ");
+		if (cancellationExpressionESet) result.append(cancellationExpression); else result.append("<unset>");
 		result.append(", overrideRestrictions: ");
 		result.append(overrideRestrictions);
 		result.append(", locked: ");
@@ -2411,8 +2533,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_MaxQuantity(), (Integer) 140000);
 		} else if (CargoPackage.Literals.SLOT__ENTITY == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_Entity(), null);
-		} else if (CargoPackage.Literals.SLOT__CANCELLATION_FEE == feature) {
-			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_CancellationFee(), (Integer)0);
+		} else if (CargoPackage.Literals.SLOT__CANCELLATION_EXPRESSION == feature) {
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_CancellationExpression(), (String)"");
 		} else if (CargoPackage.Literals.SLOT__VOLUME_LIMITS_UNIT == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_VolumeLimitsUnit(), VolumeUnits.M3);
 		}
