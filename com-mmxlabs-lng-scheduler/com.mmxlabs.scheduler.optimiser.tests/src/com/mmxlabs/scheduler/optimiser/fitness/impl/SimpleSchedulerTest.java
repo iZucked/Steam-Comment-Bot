@@ -19,6 +19,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.curves.ConstantValueCurve;
+import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -118,11 +119,11 @@ public class SimpleSchedulerTest {
 		final IVessel vessel2 = builder.createVessel("vessel-2", vesselClass1, 150000000);
 		final IVessel vessel3 = builder.createVessel("vessel-3", vesselClass1, 150000000);
 
-		builder.createVesselAvailability(vessel1, new ConstantValueCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
+		builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
 				builder.createEndRequirement(Collections.singleton(port2), null, false, 0));
-		builder.createVesselAvailability(vessel2, new ConstantValueCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
+		builder.createVesselAvailability(vessel2, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
 				builder.createEndRequirement(Collections.singleton(port2), null, false, 0));
-		builder.createVesselAvailability(vessel3, new ConstantValueCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
+		builder.createVesselAvailability(vessel3, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
 				builder.createEndRequirement(Collections.singleton(port6), null, false, 0));
 
 		final ITimeWindow tw1 = builder.createTimeWindow(5, 6);

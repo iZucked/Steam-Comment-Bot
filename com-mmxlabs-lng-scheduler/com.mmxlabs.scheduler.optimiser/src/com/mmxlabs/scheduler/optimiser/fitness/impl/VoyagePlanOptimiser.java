@@ -47,11 +47,11 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	public static class Record {
 
-		public Record(@Nullable IResource resource, @NonNull IVessel vessel, long startHeel, int baseFuelPricePerMT, int vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
+		public Record(@Nullable IResource resource, @NonNull IVessel vessel, long startHeel, int baseFuelPricePerMT, long vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
 				List<@NonNull IOptionsSequenceElement> basicSequence, List<@NonNull IVoyagePlanChoice> choices) {
 			this.resource = resource;
 			this.vessel = vessel;
-			this.startHeel = startHeel;
+			this.startHeelInM3 = startHeel;
 			this.baseFuelPricePerMT = baseFuelPricePerMT;
 			this.vesselCharterInRatePerDay = vesselCharterInRatePerDay;
 			this.portTimesRecord = portTimesRecord;
@@ -69,8 +69,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		public final int baseFuelPricePerMT;
 
-		public final int vesselCharterInRatePerDay;
-		public final long startHeel;
+		public final long vesselCharterInRatePerDay;
+		public final long startHeelInM3;
 
 		public final @Nullable IResource resource;
 	}
@@ -94,54 +94,13 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		this.voyageCalculator = voyageCalculator;
 	}
 
-	// /**
-	// * Check internal state is valid (i.e. all setters have been called).
-	// */
-	// @Override
-	// public void init() {
-	// if (vessel == null) {
-	// throw new IllegalStateException("Vessel has not been set");
-	// }
-	// if (voyageCalculator == null) {
-	// throw new IllegalStateException("Voyage Calculator has not been set");
-	// }
-	// if (basicSequence == null) {
-	// throw new IllegalStateException("Basic sequence has not been set");
-	// }
-	// if (portTimesRecord == null) {
-	// throw new IllegalStateException("Port times record has not been set");
-	// }
-	// }
-	//
-	// /**
-	// * Reset the state of this object ready for a new optimisation.
-	// */
-	// @Override
-	// public void reset() {
-	// // choices.clear();
-	// // basicSequence = null;
-	// // bestPlan = null;
-	// // bestPlanFitsInAvailableTime = false;
-	// // bestProblemCount = Integer.MAX_VALUE;
-	// // bestCost = Long.MAX_VALUE;
-	// // portTimesRecord = null;
-	// }
-	//
-	// /**
-	// * Clean up all references.
-	// */
-	// @Override
-	// public void dispose() {
-	// reset();
-	// }
-
 	/**
 	 * Optimise the voyage plan
 	 * 
 	 * @return
 	 */
 	@Override
-	public VoyagePlan optimise(IResource resource, IVessel vessel, long startHeel, int baseFuelPricePerMT, int vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
+	public VoyagePlan optimise(IResource resource, IVessel vessel, long startHeel, int baseFuelPricePerMT, long vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
 			List<@NonNull IOptionsSequenceElement> basicSequence, List<@NonNull IVoyagePlanChoice> choices) {
 
 		Record record = new Record(resource, vessel, startHeel, baseFuelPricePerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence, choices);
@@ -255,8 +214,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 					// This is not calculator.multiply, because hireRate is not scaled.
 					{
-						final int hireRatePerDay = currentPlan.getCharterInRatePerDay();
-						final long hireCost = (long) hireRatePerDay * (long) (lastVoyageDetails.getIdleTime() + lastVoyageDetails.getTravelTime()) / 24;
+						final long hireRatePerDay = currentPlan.getCharterInRatePerDay();
+						final long hireCost = hireRatePerDay * (long) (lastVoyageDetails.getIdleTime() + lastVoyageDetails.getTravelTime()) / 24;
 						currentCost += hireCost;
 					}
 
@@ -397,7 +356,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		currentPlan.setCharterInRatePerDay(record.vesselCharterInRatePerDay);
 
 		// Calculate voyage plan
-		voyageCalculator.calculateVoyagePlan(currentPlan, record.vessel, record.startHeel, record.baseFuelPricePerMT, record.portTimesRecord, currentSequence.toArray(new IDetailsSequenceElement[0]));
+		voyageCalculator.calculateVoyagePlan(currentPlan, record.vessel, record.startHeelInM3, record.baseFuelPricePerMT, record.portTimesRecord,
+				currentSequence.toArray(new IDetailsSequenceElement[0]));
 
 		return currentPlan;
 	}

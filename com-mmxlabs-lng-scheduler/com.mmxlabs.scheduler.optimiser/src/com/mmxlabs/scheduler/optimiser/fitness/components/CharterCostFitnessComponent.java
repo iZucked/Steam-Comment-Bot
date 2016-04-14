@@ -8,7 +8,7 @@ import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -32,7 +32,7 @@ public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnes
 
 	int firstLoadTime = -1;
 	int lastTime;
-	ICurve charterPrice;
+	ILongCurve charterPrice;
 	PortType loadPortType;
 
 	/*
@@ -45,7 +45,7 @@ public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnes
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
 		// FIXME: Use VoyagePlans to get charter in rate
-		final ICurve hireRate;
+		final ILongCurve hireRate;
 		switch (vesselAvailability.getVesselInstanceType()) {
 		case SPOT_CHARTER:
 			hireRate = vesselAvailability.getDailyCharterInRate();
@@ -107,8 +107,7 @@ public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnes
 	protected long endSequenceAndGetCost() {
 
 		// TODO: UTC!
-		return ((firstLoadTime == -1) || (lastTime == -1)) ? 0 : getDiscountedValue(firstLoadTime,
-				Calculator.quantityFromRateTime(charterPrice.getValueAtPoint(firstLoadTime), lastTime - firstLoadTime))
-				/ 24L / Calculator.ScaleFactor;
+		return ((firstLoadTime == -1) || (lastTime == -1)) ? 0
+				: getDiscountedValue(firstLoadTime, Calculator.quantityFromRateTime(charterPrice.getValueAtPoint(firstLoadTime), lastTime - firstLoadTime)) / 24L / Calculator.ScaleFactor;
 	}
 }

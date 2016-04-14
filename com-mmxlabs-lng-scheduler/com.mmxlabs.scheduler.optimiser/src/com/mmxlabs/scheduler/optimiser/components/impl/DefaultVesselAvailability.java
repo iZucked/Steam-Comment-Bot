@@ -7,7 +7,7 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -28,7 +28,7 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 	@NonNull
 	private final VesselInstanceType vesselInstanceType;
 
-	private ICurve dailyCharterInRate;
+	private ILongCurve dailyCharterInRate;
 
 	private IStartEndRequirement startRequirement;
 	private IStartEndRequirement endRequirement;
@@ -60,11 +60,11 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 	}
 
 	@Override
-	public ICurve getDailyCharterInRate() {
+	public ILongCurve getDailyCharterInRate() {
 		return dailyCharterInRate;
 	}
 
-	public void setDailyCharterInRate(final ICurve dailyCharterInRate) {
+	public void setDailyCharterInRate(final ILongCurve dailyCharterInRate) {
 		this.dailyCharterInRate = dailyCharterInRate;
 	}
 

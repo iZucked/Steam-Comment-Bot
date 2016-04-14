@@ -75,7 +75,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(final int vesselStartTime, final IVesselAvailability vesselAvailability, final VoyagePlan vp,
 			final IPortTimesRecord portTimesRecord) {
 		final long startingHeelInM3 = vp.getStartingHeelInM3();
-		final int vesselCharterRatePerDay = vp.getCharterInRatePerDay();
+		final long vesselCharterRatePerDay = vp.getCharterInRatePerDay();
 
 		boolean isCargoPlan = false;
 		boolean missingPurchasePrice = false;
@@ -265,7 +265,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 		return null;
 	}
 
-	private long evaluateSalesPrice(final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselCharterRatePerDay, final IPortTimesRecord portTimesRecord,
+	private long evaluateSalesPrice(final IVesselAvailability vesselAvailability, final int vesselStartTime, final long vesselCharterRatePerDay, final IPortTimesRecord portTimesRecord,
 			final List<ISequenceElement> sequenceElements, final IDischargeOption originalDischarge, final int currentPricePerMMBTu) {
 
 		// Overwrite current break even price with test price
@@ -274,7 +274,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 		final VoyagePlan newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vesselAvailability), vesselCharterRatePerDay, portTimesRecord, 0);
 		assert newVoyagePlan != null;
 
-		final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vesselAvailability, vesselCharterRatePerDay, newVoyagePlan, portTimesRecord);
+		final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vesselAvailability, vesselStartTime, newVoyagePlan, portTimesRecord);
 		assert newAllocation != null;
 
 		final Pair<@NonNull CargoValueAnnotation, @NonNull Long> cargoAnnotation = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vesselAvailability, vesselStartTime, null);
@@ -285,7 +285,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 	}
 
 	private int search(final int min, final long minValue, final int max, final long maxValue, final IVesselAvailability vesselAvailability, final int vesselStartTime,
-			final int vesselCharterRatePerDay, final IPortTimesRecord portTimesRecord, final List<ISequenceElement> sequenceElements, final IDischargeOption originalDischarge) {
+			final long vesselCharterRatePerDay, final IPortTimesRecord portTimesRecord, final List<ISequenceElement> sequenceElements, final IDischargeOption originalDischarge) {
 
 		final int mid = min + ((max - min) / 2);
 

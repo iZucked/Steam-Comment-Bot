@@ -106,7 +106,7 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	/**
 	 * Charter rate per day (from a {@link ILoadOption})
 	 */
-	int getCharterRatePerDay(IPortSlot slot);
+	long getCharterRatePerDay(IPortSlot slot);
 
 	long getPortBaseFuelConsumptionInMT(IPortSlot slot);
 
