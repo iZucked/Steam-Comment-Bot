@@ -4,12 +4,14 @@
  */
 package com.mmxlabs.common.parser.series;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.parser.IExpression;
 
 public class NamedSeriesExpression implements IExpression<ISeries> {
-	private ISeries series;
+	private @NonNull final ISeries series;
 
-	public NamedSeriesExpression(final ISeries series) {
+	public NamedSeriesExpression(final @NonNull ISeries series) {
 		this.series = series;
 	}
 
