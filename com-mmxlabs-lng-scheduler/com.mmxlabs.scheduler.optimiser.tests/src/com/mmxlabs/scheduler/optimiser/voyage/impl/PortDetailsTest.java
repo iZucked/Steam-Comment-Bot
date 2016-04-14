@@ -64,10 +64,9 @@ public class PortDetailsTest {
 	PortDetails make(final int duration, final IPortSlot portSlot, final FuelComponent fuel, final long consumption) {
 
 		final PortDetails d = new PortDetails();
-		d.setOptions(new PortOptions());
+		d.setOptions(new PortOptions(portSlot));
 
 		d.getOptions().setVisitDuration(duration);
-		d.getOptions().setPortSlot(portSlot);
 		d.setFuelConsumption(fuel, consumption);
 		return d;
 	}

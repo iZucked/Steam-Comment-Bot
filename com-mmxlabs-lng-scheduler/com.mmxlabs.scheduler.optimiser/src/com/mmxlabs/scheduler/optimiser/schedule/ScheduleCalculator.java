@@ -502,17 +502,15 @@ public class ScheduleCalculator {
 			// Create voyage plan
 			final VoyagePlan voyagePlan = new VoyagePlan();
 			{
-				final PortOptions loadOptions = new PortOptions();
+				final PortOptions loadOptions = new PortOptions(loadOption);
 				final PortDetails loadDetails = new PortDetails();
 				loadDetails.setOptions(loadOptions);
 				loadOptions.setVisitDuration(0);
-				loadOptions.setPortSlot(loadOption);
 
-				final PortOptions dischargeOptions = new PortOptions();
+				final PortOptions dischargeOptions = new PortOptions(dischargeOption);
 				final PortDetails dischargeDetails = new PortDetails();
 				dischargeDetails.setOptions(dischargeOptions);
 				dischargeOptions.setVisitDuration(0);
-				dischargeOptions.setPortSlot(dischargeOption);
 
 				voyagePlan.setSequence(new IDetailsSequenceElement[] { loadDetails, dischargeDetails });
 			}

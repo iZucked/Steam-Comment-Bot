@@ -115,7 +115,7 @@ public class LatenessComponentTest {
 		final LatenessComponent c = new LatenessComponent(name, core);
 		final LatenessChecker checker = new LatenessChecker();
 		injector.injectMembers(c);
-		
+
 		final IResource resource = Mockito.mock(IResource.class);
 
 		final IStartRequirement startRequirement = Mockito.mock(IStartRequirement.class, "Start");
@@ -131,14 +131,13 @@ public class LatenessComponentTest {
 		final TimeWindow window1 = new TimeWindow(loadStartTime, loadEndTime);
 		final TimeWindow window2 = new TimeWindow(dischargeStartTime, dischargeEndTime);
 
-		final PortDetails startDetails = new PortDetails();
-		startDetails.setOptions(new PortOptions());
 		final StartPortSlot startSlot = new StartPortSlot(null);
-		startDetails.getOptions().setPortSlot(startSlot);
+		final PortDetails startDetails = new PortDetails();
+		startDetails.setOptions(new PortOptions(startSlot));
+
 		final PortDetails endDetails = new PortDetails();
-		endDetails.setOptions(new PortOptions());
 		final EndPortSlot endSlot = new EndPortSlot(null, null, null, false, 0L);
-		endDetails.getOptions().setPortSlot(endSlot);
+		endDetails.setOptions(new PortOptions(endSlot));
 
 		final LoadSlot loadSlot = new LoadSlot();
 		loadSlot.setTimeWindow(window1);
@@ -147,12 +146,10 @@ public class LatenessComponentTest {
 		dischargeSlot.setTimeWindow(window2);
 
 		final PortDetails loadDetails = new PortDetails();
-		loadDetails.setOptions(new PortOptions());
-		loadDetails.getOptions().setPortSlot(loadSlot);
+		loadDetails.setOptions(new PortOptions(loadSlot));
 
 		final PortDetails dischargeDetails = new PortDetails();
-		dischargeDetails.setOptions(new PortOptions());
-		dischargeDetails.getOptions().setPortSlot(dischargeSlot);
+		dischargeDetails.setOptions(new PortOptions(dischargeSlot));
 
 		final IDetailsSequenceElement[] routeSequence = new IDetailsSequenceElement[] { startDetails, loadDetails, null, dischargeDetails, endDetails };
 		final VoyagePlan voyagePlan = new VoyagePlan();
@@ -162,11 +159,11 @@ public class LatenessComponentTest {
 		IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
 		Mockito.when(portTimesRecord.getSlotTime(startSlot)).thenReturn(0);
 		Mockito.when(portTimesRecord.getSlotTime(endSlot)).thenReturn(0);
-		Mockito.when(portTimesRecord.getSlotTime(loadSlot)).thenReturn(loadEndTime+1);
-		Mockito.when(portTimesRecord.getSlotTime(dischargeSlot)).thenReturn(dischargeEndTime+1);
-		ScheduledSequence scheduledSequence = new ScheduledSequence(resource, mockedSequence, voyageStartTime, new LinkedList<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>>(
-				Arrays.asList(new Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>(voyagePlan, null, portTimesRecord))
-				));
+		Mockito.when(portTimesRecord.getSlotTime(loadSlot)).thenReturn(loadEndTime + 1);
+		Mockito.when(portTimesRecord.getSlotTime(dischargeSlot)).thenReturn(dischargeEndTime + 1);
+		ScheduledSequence scheduledSequence = new ScheduledSequence(resource, mockedSequence, voyageStartTime,
+				new LinkedList<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>>(
+						Arrays.asList(new Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>(voyagePlan, null, portTimesRecord))));
 		final ScheduledSequences scheduledSequences = new ScheduledSequences();
 		scheduledSequences.add(scheduledSequence);
 		checker.calculateLateness(scheduledSequences, null);
@@ -185,5 +182,5 @@ public class LatenessComponentTest {
 		final long expectedCost = (dischargeLateTime + loadLateTime) * penalty;
 		Assert.assertEquals("Expected cost equals calculated cost.", expectedCost, cost);
 	}
-		
+
 }
