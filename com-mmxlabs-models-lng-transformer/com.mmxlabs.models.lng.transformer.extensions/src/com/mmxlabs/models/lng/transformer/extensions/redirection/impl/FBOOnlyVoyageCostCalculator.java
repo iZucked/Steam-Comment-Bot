@@ -43,7 +43,7 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 	@Override
 	public VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDuration, final int dischargeTime,
-			final int dischargeDuration, @NonNull final IVessel vessel, final int vesselCharterInRatePerDay, final long startHeelInM3, final int notionalSpeed, final int cargoCVValue,
+			final int dischargeDuration, @NonNull final IVessel vessel, final long vesselCharterInRatePerDay, final long startHeelInM3, final int notionalSpeed, final int cargoCVValue,
 			@NonNull final ERouteOption route, final int baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPrice) {
 
 		final VoyagePlan notionalPlan = new VoyagePlan();
@@ -120,7 +120,7 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 	@Override
 	@Nullable
 	public VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDuration, final int dischargeTime,
-			final int dischargeDuration, final int returnTime, @NonNull final IVessel vessel, final int vesselCharterInRatePerDay, final long startHeelInM3, final int cargoCVValue,
+			final int dischargeDuration, final int returnTime, @NonNull final IVessel vessel, final long vesselCharterInRatePerDay, final long startHeelInM3, final int cargoCVValue,
 			@NonNull final ERouteOption route, final int baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPrice) {
 
 		final VoyagePlan notionalPlan = new VoyagePlan();
@@ -136,7 +136,7 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 	@Override
 	public VoyagePlan calculateShippingCosts(IPort loadPort, IPort dischargePort, int loadTime, int loadDistance, int loadDuration, int dischargeTime, int dischargeDistance, int dischargeDuration,
-			int notionalReturnTime, IVessel vessel, int vesselCharterInRatePerDay, long startHeelInM3, int cargoCVValue, ERouteOption route, int baseFuelPricePerMT,
+			int notionalReturnTime, IVessel vessel, long vesselCharterInRatePerDay, long startHeelInM3, int cargoCVValue, ERouteOption route, int baseFuelPricePerMT,
 			ISalesPriceCalculator salesPriceCalculator) {
 		final VoyagePlan notionalPlan = new VoyagePlan();
 		notionalPlan.setCharterInRatePerDay(vesselCharterInRatePerDay);

@@ -145,7 +145,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 				final int loadDuration = durationProvider.getElementDuration(loadElement, vesselProvider.getResource(vesselAvailability));
 				final int dischargeDuration = portVisitDurationProvider.getVisitDuration(baseSalesMarketPort, PortType.Discharge);
 
-				final int vesselCharterInRatePerDay;
+				final long vesselCharterInRatePerDay;
 				if (actualsDataProvider.hasActuals(loadSlot)) {
 					vesselCharterInRatePerDay = actualsDataProvider.getCharterRatePerDay(loadSlot);
 				} else {
@@ -187,7 +187,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 				final ERouteOption route = ERouteOption.DIRECT;
 				final int loadDuration = durationProvider.getElementDuration(loadElement, vesselProvider.getResource(vesselAvailability));
 				final int dischargeDuration = durationProvider.getElementDuration(dischargeElement, vesselProvider.getResource(vesselAvailability));
-				final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, vesselStartTime, timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadSlot));
+				final long vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, vesselStartTime, timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadSlot));
 
 				final int utcLoadTime = timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadSlot);
 				final int baseFuelPriceInMT = vesselBaseFuelCalculator.getBaseFuelPrice(vesselAvailability.getVessel(), utcLoadTime);
@@ -272,7 +272,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 				final int loadDuration = portVisitDurationProvider.getVisitDuration(loadOption.getPort(), PortType.Load);
 				final int dischargeDuration = portVisitDurationProvider.getVisitDuration(baseSalesMarketPort, PortType.Discharge);
 
-				final int vesselCharterInRatePerDay;
+				final long vesselCharterInRatePerDay;
 				if (actualsDataProvider.hasActuals(loadOption)) {
 					vesselCharterInRatePerDay = actualsDataProvider.getCharterRatePerDay(loadOption);
 				} else {
@@ -310,7 +310,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 				final int loadDuration = portVisitDurationProvider.getVisitDuration(loadOption.getPort(), PortType.Load);
 				final int dischargeDuration = portVisitDurationProvider.getVisitDuration(dischargeOption.getPort(), PortType.Discharge);
 
-				final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(notionalVesselAvailability, timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadOption),
+				final long vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(notionalVesselAvailability, timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadOption),
 						timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadOption));
 
 				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadOption.getPort(), dischargeOption.getPort(), originalLoadTime, loadDuration, transferTime, dischargeDuration, vessel,

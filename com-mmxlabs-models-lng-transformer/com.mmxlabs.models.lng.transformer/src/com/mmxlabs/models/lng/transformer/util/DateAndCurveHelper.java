@@ -14,11 +14,13 @@ import java.util.TimeZone;
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
+import com.mmxlabs.common.curves.StepwiseLongCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
@@ -26,6 +28,7 @@ import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 
@@ -151,7 +154,8 @@ public class DateAndCurveHelper {
 		return curve;
 	}
 
-	public StepwiseIntegerCurve generateFixedCostExpressionCurve(final String priceExpression, final SeriesParser seriesParser) {
+	@Nullable
+	public StepwiseLongCurve generateLongExpressionCurve(final @Nullable String priceExpression, final @NonNull SeriesParser seriesParser) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return null;
@@ -160,18 +164,43 @@ public class DateAndCurveHelper {
 		final IExpression<ISeries> expression = seriesParser.parse(priceExpression);
 		final ISeries parsed = expression.evaluate();
 
-		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+		final StepwiseLongCurve curve = new StepwiseLongCurve();
 		if (parsed.getChangePoints().length == 0) {
-			curve.setDefaultValue((int) OptimiserUnitConvertor.convertToInternalFixedCost(parsed.evaluate(0).intValue()));
+			curve.setDefaultValue(Math.round(parsed.evaluate(0).doubleValue() * (double) Calculator.ScaleFactor));
 		} else {
 
-			curve.setDefaultValue(0);
+			curve.setDefaultValue(0L);
 			for (final int i : parsed.getChangePoints()) {
-				curve.setValueAfter(i, (int) OptimiserUnitConvertor.convertToInternalFixedCost(parsed.evaluate(i).intValue()));
+				curve.setValueAfter(i, Math.round(parsed.evaluate(i).doubleValue() * (double) Calculator.ScaleFactor));
 			}
 		}
 		return curve;
 	}
+
+//	@Nullable
+//	public StepwiseIntegerCurve generateFixedCostExpressionCurve(final @Nullable String priceExpression, final @NonNull SeriesParser seriesParser) {
+//
+//		if (priceExpression == null || priceExpression.isEmpty()) {
+//			return null;
+//		}
+//
+//		final IExpression<ISeries> expression = seriesParser.parse(priceExpression);
+//		final ISeries parsed = expression.evaluate();
+//
+//		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+//		if (parsed.getChangePoints().length == 0) {
+//			curve.setDefaultValue((int) OptimiserUnitConvertor.convertToInternalFixedCost(parsed.evaluate(0).intValue()));
+//		} else {
+//
+//			curve.setDefaultValue(0);
+//			for (final int i : parsed.getChangePoints()) {
+//				Number value = parsed.evaluate(i);
+//				assert value.longValue() == value.intValue();
+//				curve.setValueAfter(i, (int) OptimiserUnitConvertor.convertToInternalFixedCost(value.intValue()));
+//			}
+//		}
+//		return curve;
+//	}
 
 	public int convertTime(@NonNull final YearMonth time) {
 		return convertTime(yearMonthToDateTime(time));
