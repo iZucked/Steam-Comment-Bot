@@ -105,7 +105,6 @@ public class ScenarioUtils {
 
 			objectives.add(createObjective(parametersFactory, CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, 1));
 			objectives.add(createObjective(parametersFactory, CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, 0.1));
-//			objectives.add(createObjective(parametersFactory, CargoSchedulerFitnessCoreFactory.IDLE_TIME_HOURS_COMPONENT_NAME, 1));
 			objectives.add(createObjective(parametersFactory, NonOptionalSlotFitnessCoreFactory.NAME, 3_000_000));
 			objectives.add(createObjective(parametersFactory, "SimilarityFitnessCore", 1.0));
 		}
@@ -197,7 +196,7 @@ public class ScenarioUtils {
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
-
+		userSettings.setFloatingDaysLimit(15);
 		return userSettings;
 	}
 
