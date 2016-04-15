@@ -109,7 +109,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 		}
 		lastFitness = totalFitness;
 		// Step to the next threshold levels
-		thresholder.step();
+//		thresholder.step();
 		return accept;
 	}
 

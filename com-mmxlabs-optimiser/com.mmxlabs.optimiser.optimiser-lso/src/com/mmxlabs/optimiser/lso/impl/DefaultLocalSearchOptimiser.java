@@ -58,7 +58,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 	@Inject(optional = true)
 	protected ILoggingProvider loggingProvider;
 
-	protected Pair<Integer, Long> best = new Pair<>(0, 0L);
+	protected Pair<Integer, Long> best = new Pair<>(0, Long.MAX_VALUE);
 
 	protected boolean DO_SEQUENCE_LOGGING = false;
 
@@ -138,6 +138,10 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		final int iterationsThisStep = Math.min(Math.max(1, (getNumberOfIterations() * percentage) / 100), getNumberOfIterations() - getNumberOfIterationsCompleted());
 		MAIN_LOOP: for (int i = 0; i < iterationsThisStep; i++) {
 			++numberOfMovesTried;
+			if (numberOfMovesTried % 10000 == 0) {
+				System.out.println("iteration:" + numberOfMovesTried);
+			}
+			getFitnessEvaluator().step();
 			if (loggingDataStore != null && (numberOfMovesTried % loggingDataStore.getReportingInterval()) == 0) {
 				loggingDataStore.logProgress(getNumberOfMovesTried(), getNumberOfMovesAccepted(), getNumberOfRejectedMoves(), getNumberOfFailedEvaluations(), getNumberOfFailedToValidate(),
 						getFitnessEvaluator().getBestFitness(), getFitnessEvaluator().getCurrentFitness(), new Date().getTime());
@@ -235,7 +239,9 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 				if (getFitnessEvaluator().getBestFitness() < best.getSecond()) {
 					best.setFirst(getNumberOfMovesTried());
 					best.setSecond(getFitnessEvaluator().getBestFitness());
-					// System.out.println(best.getFirst()+":"+best.getSecond());
+					if (false) {
+						System.out.println(best.getFirst() + ":" + best.getSecond());
+					}
 				}
 			} else {
 				// Failed, reset state for old sequences
