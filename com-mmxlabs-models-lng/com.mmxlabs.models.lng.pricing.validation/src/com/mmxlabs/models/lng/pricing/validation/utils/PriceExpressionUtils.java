@@ -117,7 +117,7 @@ public class PriceExpressionUtils {
 
 		if (matcher.find()) {
 			final String message = String.format("[Price expression|'%s'] Contains unexpected character '%s'.", priceExpression, matcher.group(1));
-			return ValidationResult.createErrorStatus("Expression '%s' Contains unexpected character '%s'.");
+			return ValidationResult.createErrorStatus(message);
 		}
 
 		if (parser != null) {
@@ -260,8 +260,9 @@ public class PriceExpressionUtils {
 		}
 		return null;
 	}
-	
-	public static <T extends LNGPriceCalculatorParameters> void checkPriceExpressionInPricingParams(final IValidationContext ctx, final List<IStatus> failures, T target, EAttribute attribute, String expression, SeriesParser parser) {
+
+	public static <T extends LNGPriceCalculatorParameters> void checkPriceExpressionInPricingParams(final IValidationContext ctx, final List<IStatus> failures, T target, EAttribute attribute,
+			String expression, SeriesParser parser) {
 		if (target instanceof LNGPriceCalculatorParameters) {
 			if (parser == null) {
 				parser = PriceExpressionUtils.getCommodityParser(null);
