@@ -36,6 +36,12 @@ import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBoot
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 
+/**
+ * Test cases to make sure "shipping only" mode does not cause wiring changes.
+ * 
+ * @author Simon Goodall
+ *
+ */
 public class ShippingOnlyCargoOptiTests extends AbstractOptimisationResultTester {
 
 	@Test
