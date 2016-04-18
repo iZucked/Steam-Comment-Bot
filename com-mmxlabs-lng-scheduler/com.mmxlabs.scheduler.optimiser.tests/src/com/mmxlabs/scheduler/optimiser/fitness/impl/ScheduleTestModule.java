@@ -42,6 +42,8 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselStartDateCharterRate
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcessFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ExcessIdleTimeComponentParameters;
+import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
@@ -225,6 +227,21 @@ public class ScheduleTestModule extends AbstractModule {
 	private ISequences provideInputSequences(@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) ISequences initialSequences) {
 
 		return initialSequences;
+	}
+
+	@Provides
+	@Singleton
+	private IExcessIdleTimeComponentParameters provideIdleComponentParameters() {
+		final ExcessIdleTimeComponentParameters idleParams = new ExcessIdleTimeComponentParameters();
+		int highPeriodInDays = 15;
+		int lowPeriodInDays = Math.max(0, highPeriodInDays - 2);
+		idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, lowPeriodInDays*24);
+		idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, highPeriodInDays*24);
+		idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, 2_500);
+		idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, 10_000);
+		idleParams.setEndWeight(10_000);
+
+		return idleParams;
 	}
 
 	@Provides

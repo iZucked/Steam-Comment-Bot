@@ -64,6 +64,8 @@ import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.events.ILoadEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ExcessIdleTimeComponentParameters;
+import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
@@ -1469,6 +1471,22 @@ public class TestCalculations {
 
 				return lcp;
 			}
+			
+			@Provides
+			@Singleton
+			private IExcessIdleTimeComponentParameters provideIdleComponentParameters() {
+				final ExcessIdleTimeComponentParameters idleParams = new ExcessIdleTimeComponentParameters();
+				int highPeriodInDays = 15;
+				int lowPeriodInDays = Math.max(0, highPeriodInDays - 2);
+				idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, lowPeriodInDays*24);
+				idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, highPeriodInDays*24);
+				idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, 2_500);
+				idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, 10_000);
+				idleParams.setEndWeight(10_000);
+
+				return idleParams;
+			}
+
 
 			@Override
 			protected void configure() {
