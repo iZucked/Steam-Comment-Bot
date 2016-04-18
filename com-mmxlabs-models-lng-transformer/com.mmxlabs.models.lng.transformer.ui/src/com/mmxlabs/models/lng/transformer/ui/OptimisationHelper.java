@@ -88,8 +88,8 @@ public final class OptimisationHelper {
 
 	private static final Logger log = LoggerFactory.getLogger(OptimisationHelper.class);
 
-	public static final int EPOCH_LENGTH_PERIOD = 300;
-	public static final int EPOCH_LENGTH_FULL = 900;
+	public static final int EPOCH_LENGTH_PERIOD = 10_000;
+	public static final int EPOCH_LENGTH_FULL = 10_000;
 
 	// Note: SWTBOT ids are linked to the display string for radio buttons
 	public static final String SWTBOT_SHIPPING_ONLY_PREFIX = "swtbot.shippingonly";
