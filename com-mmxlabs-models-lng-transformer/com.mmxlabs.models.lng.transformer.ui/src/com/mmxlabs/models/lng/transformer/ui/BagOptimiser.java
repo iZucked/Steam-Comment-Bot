@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -64,6 +65,7 @@ import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCore;
 
 /**
  * An "optimiser" to generate the sequence of steps required by a user to go from one {@link ISequences} state to another one. I.e. from a pre-optimised state to an optimised state.
@@ -967,7 +969,7 @@ public class BagOptimiser {
 		List<NonNullPair<ISequences, Map<String, Object>>> processedSolution = new LinkedList<>();
 		// Alway add in the original solution
 		processedSolution.add(evaluateSolution(initialRawSequences));
-
+		List<IFitnessComponent> filteredComponents = getFilteredComponents(fitnessComponents);
 		long fitness = Long.MAX_VALUE;
 		long lastFitness = Long.MAX_VALUE;
 		int bestIdx = -1;
@@ -975,7 +977,7 @@ public class BagOptimiser {
 		for (final ChangeSet cs : solution.changeSetsAsList) {
 			final NonNullPair<ISequences, Map<String, Object>> ps = evaluateSolution(cs.getRawSequences());
 			// Ensure this is called directly after evaluate solution so fitnessComponents are in the correct state
-			final long currentFitness = fitnessCombiner.calculateFitness(fitnessComponents);
+			final long currentFitness = fitnessCombiner.calculateFitness(filteredComponents);
 
 			if (currentFitness == lastFitness) {
 				continue;
@@ -997,6 +999,10 @@ public class BagOptimiser {
 		}
 		final IMultiStateResult r = new MultiStateResult(processedSolution.get(processedSolution.size() - 1), processedSolution);
 		bestSolutions.add(r);
+	}
+
+	private List<IFitnessComponent> getFilteredComponents(@NonNull List<IFitnessComponent> fitnessComponents) {
+		return fitnessComponents.stream().filter(f -> (f.getFitnessCore() instanceof SimilarityFitnessCore) == false).collect(Collectors.toList());
 	}
 
 	private IMultiStateResult getBestSolution() {
