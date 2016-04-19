@@ -158,8 +158,9 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		if (slot != null) {
 			if (slot.getPortType() == PortType.End) {
 				ITimeWindow window = slot.getTimeWindow();
-				if (record.resource != null) {
-					final IEndRequirement requirement = startEndRequirementProvider.getEndRequirement(record.resource);
+				IResource resource = record.resource;
+				if (resource != null) {
+					final IEndRequirement requirement = startEndRequirementProvider.getEndRequirement(resource);
 					if (requirement != null) {
 						window = requirement.getTimeWindow();
 					}
