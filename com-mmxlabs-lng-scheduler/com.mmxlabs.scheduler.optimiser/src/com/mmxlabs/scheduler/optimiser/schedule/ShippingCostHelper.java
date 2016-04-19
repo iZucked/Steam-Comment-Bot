@@ -63,8 +63,8 @@ public class ShippingCostHelper {
 	public long getHireCosts(final @NonNull VoyagePlan plan) {
 		final long planDuration = getPlanDurationInHours(plan);
 
-		final int hireRatePerDay = plan.getCharterInRatePerDay();
-		long hireCosts = (long) hireRatePerDay * planDuration / 24L;
+		final long hireRatePerDay = plan.getCharterInRatePerDay();
+		long hireCosts = hireRatePerDay * planDuration / 24L;
 		return hireCosts;
 	}
 
@@ -148,8 +148,8 @@ public class ShippingCostHelper {
 				}
 			}
 		}
-		final int hireRatePerDay = plan.getCharterInRatePerDay();
-		final long hireCosts = (long) hireRatePerDay * (long) planDuration / 24L;
+		final long hireRatePerDay = plan.getCharterInRatePerDay();
+		final long hireCosts = hireRatePerDay * (long) planDuration / 24L;
 
 		return hireCosts;
 	}

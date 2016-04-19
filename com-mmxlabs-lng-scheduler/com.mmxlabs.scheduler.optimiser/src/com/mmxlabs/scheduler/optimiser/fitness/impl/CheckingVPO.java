@@ -30,7 +30,7 @@ public class CheckingVPO implements IVoyagePlanOptimiser {
 	}
 
 	@Override
-	public VoyagePlan optimise(@Nullable final IResource resource, @NonNull final IVessel vessel, final long startHeelInM3, final int baseFuelPricePerMT, final int vesselCharterInRatePerDay,
+	public VoyagePlan optimise(@Nullable final IResource resource, @NonNull final IVessel vessel, final long startHeelInM3, final int baseFuelPricePerMT, final long vesselCharterInRatePerDay,
 			@NonNull final IPortTimesRecord portTimesRecord, @NonNull final List<@NonNull IOptionsSequenceElement> basicSequence, @NonNull final List<@NonNull IVoyagePlanChoice> choices) {
 
 		final VoyagePlan ref = reference.optimise(resource, vessel, startHeelInM3, baseFuelPricePerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence, choices);

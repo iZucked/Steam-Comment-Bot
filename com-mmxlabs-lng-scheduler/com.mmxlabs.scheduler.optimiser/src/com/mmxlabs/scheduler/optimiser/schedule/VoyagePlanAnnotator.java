@@ -76,8 +76,8 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 			final Object e = vpi.nextObject();
 			//
 			final int currentTime = vpi.getCurrentTime();
-			VoyagePlan currentPlan = vpi.getCurrentPlan();
-			int charterRatePerDay = currentPlan.getCharterInRatePerDay();
+			final VoyagePlan currentPlan = vpi.getCurrentPlan();
+			final long charterRatePerDay = currentPlan.getCharterInRatePerDay();
 			if (e instanceof PortDetails) {
 				final PortDetails details = (PortDetails) e;
 				final IPortSlot currentPortSlot = details.getOptions().getPortSlot();
@@ -160,7 +160,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 						final long consumption = details.getFuelConsumption(fuel, unit) + details.getRouteAdditionalConsumption(fuel, unit);
 						journey.setFuelConsumption(fuel, unit, consumption);
 						if (unit == fuel.getPricingFuelUnit()) {
-							int fuelUnitPrice = details.getFuelUnitPrice(fuel);
+							final int fuelUnitPrice = details.getFuelUnitPrice(fuel);
 							final long cost = Calculator.costFromConsumption(consumption, fuelUnitPrice);
 
 							journey.setFuelCost(fuel, cost);

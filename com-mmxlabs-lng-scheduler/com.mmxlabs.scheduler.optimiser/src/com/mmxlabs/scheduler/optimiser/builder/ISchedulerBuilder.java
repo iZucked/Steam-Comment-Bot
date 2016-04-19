@@ -20,6 +20,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -31,7 +32,6 @@ import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
-import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -239,7 +239,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	IVesselAvailability createVesselAvailability(@NonNull IVessel vessel, @NonNull ICurve dailyCharterInPrice, @NonNull VesselInstanceType vesselInstanceType, @NonNull IStartRequirement start,
+	IVesselAvailability createVesselAvailability(@NonNull IVessel vessel, @NonNull ILongCurve dailyCharterInPrice, @NonNull VesselInstanceType vesselInstanceType, @NonNull IStartRequirement start,
 			@NonNull IEndRequirement end);
 
 	@NonNull
@@ -622,7 +622,7 @@ public interface ISchedulerBuilder {
 	 * @param minDuration
 	 *            The minimum duration in hours a charter out can be.
 	 */
-	void createCharterOutCurve(@NonNull IVesselClass vesselClass, @NonNull ICurve charterOutCurve, int minDuration, @NonNull Set<IPort> allowedPorts);
+	void createCharterOutCurve(@NonNull IVesselClass vesselClass, @NonNull ILongCurve charterOutCurve, int minDuration, @NonNull Set<IPort> allowedPorts);
 
 	/**
 	 * Set a flag to indicate that the given {@link IPortSlot} is to be treated as "soft required". That is generally optional, but not entirely. For example a fitness component may penalise such
@@ -724,7 +724,7 @@ public interface ISchedulerBuilder {
 	void setGeneratedCharterOutStartTime(int charterOutStartTime);
 
 	@NonNull
-	ISpotCharterInMarket createSpotCharterInMarket(@NonNull String name, @NonNull IVesselClass oVesselClass, @NonNull ICurve charterInCurve, int charterCount);
+	ISpotCharterInMarket createSpotCharterInMarket(@NonNull String name, @NonNull IVesselClass oVesselClass, @NonNull ILongCurve charterInCurve, int charterCount);
 
 	/***
 	 * Create a sequence element

@@ -104,6 +104,10 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 
 	@Override
 	public IMove generateMove() {
+		if (owner.validBreaks.isEmpty()) {
+			return new NullMove();
+		}
+
 		final Pair<ISequenceElement, ISequenceElement> newPair = RandomHelper.chooseElementFrom(owner.random, owner.validBreaks);
 		final Pair<IResource, Integer> pos1 = owner.reverseLookup.get(newPair.getFirst());
 		final Pair<IResource, Integer> pos2 = owner.reverseLookup.get(newPair.getSecond());
@@ -114,8 +118,6 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 		if ((pos1.getFirst() == null) || (pos2.getFirst() == null)) {
 			return new NullMove();
 		}
-
-		final List<IResource> resources = owner.sequences.getResources();
 
 		final IResource sequence1 = pos1.getFirst();
 		final IResource sequence2 = pos2.getFirst();

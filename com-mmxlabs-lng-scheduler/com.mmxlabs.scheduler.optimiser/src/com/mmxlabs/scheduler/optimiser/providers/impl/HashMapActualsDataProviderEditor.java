@@ -35,7 +35,7 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 
 	private final Map<IPortSlot, Integer> lngPricePerMMBTu = new HashMap<>();
 	private final Map<IPortSlot, Integer> baseFuelPricePerMT = new HashMap<>();
-	private final Map<IPortSlot, Integer> charterRatePerDay = new HashMap<>();
+	private final Map<IPortSlot, Long> charterRatePerDay = new HashMap<>();
 	private final Map<IPortSlot, Long> routeCosts = new HashMap<>();
 	private final Map<IPortSlot, Integer> distance = new HashMap<>();
 	private final Map<IPortSlot, ERouteOption> nextVoyageRoute = new HashMap<>();
@@ -119,7 +119,7 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 	}
 
 	@Override
-	public int getCharterRatePerDay(final IPortSlot slot) {
+	public long getCharterRatePerDay(final IPortSlot slot) {
 		return charterRatePerDay.get(slot);
 	}
 
@@ -136,7 +136,7 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 	@Override
 	public void createLoadSlotActuals(final ILoadOption slot, final int arrivalTime, final int visitDuration, final long portCosts, final int cargoCV, final long startHeelInM3,
 			final long lngLoadVolumeInM3, final long lngLoadVolumeInMMBTu, final int purchasePricePerMMBTu, final long portBaseFuelConsumptionInMT, final long ladenBaseFuelConsumptionInMT,
-			final int baseFuelPricePerMT, final int charterRatePerDay, final int distance, final long routeCosts, final ERouteOption route) {
+			final int baseFuelPricePerMT, final long charterRatePerDay, final int distance, final long routeCosts, final ERouteOption route) {
 
 		this.actualsPresent.put(slot, true);
 

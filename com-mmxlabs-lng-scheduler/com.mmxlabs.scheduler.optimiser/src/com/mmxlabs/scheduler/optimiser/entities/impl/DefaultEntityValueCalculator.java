@@ -18,6 +18,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.common.detailtree.DetailTree;
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -576,7 +577,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		long result = 0;
 		{
 			final long hedgeValue = hedgesProvider.getHedgeValue(portSlot);
-			final long cancellationCost = cancellationFeeProvider.getCancellationFee(portSlot);
+			final ILongCurve cancellationCurve = cancellationFeeProvider.getCancellationExpression(portSlot);
+			final long cancellationCost = cancellationCurve.getValueAtPoint(portSlot.getTimeWindow().getStart());
 
 			// Taxed P&L - use time window start as tax date
 			final long preTaxValue = hedgeValue - cancellationCost;
