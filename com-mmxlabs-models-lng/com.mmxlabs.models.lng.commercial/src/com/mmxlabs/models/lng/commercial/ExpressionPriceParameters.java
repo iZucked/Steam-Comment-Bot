@@ -34,6 +34,7 @@ public interface ExpressionPriceParameters extends LNGPriceCalculatorParameters 
 	 * @see #setPriceExpression(String)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getExpressionPriceParameters_PriceExpression()
 	 * @model default="" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='commodity'"
 	 * @generated
 	 */
 	String getPriceExpression();

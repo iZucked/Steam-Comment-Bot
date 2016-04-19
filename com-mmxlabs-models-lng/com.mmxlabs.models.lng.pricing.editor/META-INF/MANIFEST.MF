@@ -35,7 +35,10 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.apache.shiro.core,
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)";resolution:=optional,
  com.mmxlabs.models.datetime.ui;bundle-version="[2.1.0,3.0.0)",
- com.mmxlabs.license.features
+ com.mmxlabs.license.features,
+ com.google.guava;bundle-version="17.0.0",
+ com.mmxlabs.common.common-util
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"
+Service-Component: OSGI-INF/*.xml

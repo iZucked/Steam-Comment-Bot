@@ -1951,10 +1951,22 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	protected void createExpressionTypeAnnotations() {
 		String source = "http://www.mmxlabs.com/models/pricing/expressionType";	
 		addAnnotation
+		  (getSlot_PriceExpression(), 
+		   source, 
+		   new String[] {
+			 "type", "commodity"
+		   });	
+		addAnnotation
 		  (getSlot_CancellationExpression(), 
 		   source, 
 		   new String[] {
 			 "type", "commodity"
+		   });	
+		addAnnotation
+		  (getVesselAvailability_TimeCharterRate(), 
+		   source, 
+		   new String[] {
+			 "type", "charter"
 		   });
 	}
 

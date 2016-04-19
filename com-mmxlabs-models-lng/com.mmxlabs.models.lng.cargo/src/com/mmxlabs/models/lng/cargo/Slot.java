@@ -589,6 +589,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @see #setPriceExpression(String)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_PriceExpression()
 	 * @model unsettable="true"
+	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='commodity'"
 	 * @generated
 	 */
 	String getPriceExpression();
@@ -995,7 +996,38 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @generated
 	 */
 	EList<AVesselSet<Vessel>> getAllowedVessels();
-///**
+/**
+	 * Returns the value of the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cancellation Fee</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cancellation Fee</em>' attribute.
+	 * @see #isSetCancellationFee()
+	 * @see #unsetCancellationFee()
+	 * @see #setCancellationFee(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_CancellationFee()
+	 * @model unsettable="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unitPrefix='$' formatString='###,###,##0'"
+	 * @generated
+	 */
+	int getCancellationFee();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cancellation Fee</em>' attribute.
+	 * @see #isSetCancellationFee()
+	 * @see #unsetCancellationFee()
+	 * @see #getCancellationFee()
+	 * @generated
+	 */
+	void setCancellationFee(int value);
+
+	///**
 //	 * Returns the value of the '<em><b>Cancellation Fee</b></em>' attribute.
 //	 * <!-- begin-user-doc -->
 //	 * <p>

@@ -947,6 +947,12 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		   source, 
 		   new String[] {
 			 "type", "commodity"
+		   });	
+		addAnnotation
+		  (getExpressionPriceParameters_PriceExpression(), 
+		   source, 
+		   new String[] {
+			 "type", "commodity"
 		   });
 	}
 
