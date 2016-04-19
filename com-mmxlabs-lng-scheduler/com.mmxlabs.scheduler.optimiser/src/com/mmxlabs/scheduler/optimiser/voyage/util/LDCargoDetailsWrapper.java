@@ -140,7 +140,7 @@ public class LDCargoDetailsWrapper {
 	}
 	
 	public static final boolean isCargoVoyage(IDetailsSequenceElement[] sequence) {
-		if (sequence.length >= 5 && sequence[0] instanceof PortDetails && ((PortDetails) sequence[0]).getOptions().getPortSlot() instanceof ILoadOption) {
+		if (sequence.length == 5 && sequence[0] instanceof PortDetails && ((PortDetails) sequence[0]).getOptions().getPortSlot() instanceof ILoadOption) {
 			return true;
 		} else {
 			return false;
