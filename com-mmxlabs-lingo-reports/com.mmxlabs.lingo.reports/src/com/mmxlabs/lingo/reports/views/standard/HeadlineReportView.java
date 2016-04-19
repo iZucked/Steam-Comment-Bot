@@ -89,11 +89,11 @@ public class HeadlineReportView extends ViewPart {
 		LABEL_PNL(ColumnType.Label, "P&L", null), VALUE_PNL(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
 		LABEL_TRADING(ColumnType.Label, "Trading", null), VALUE_TRADING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
 		LABEL_SHIPPING(ColumnType.Label, "Shipping", null), VALUE_SHIPPING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
-		LABEL_UPDOWN(ColumnType.Label, "Up/Down Stream", null), VALUE_UPDOWN(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
+		LABEL_UPDOWN(ColumnType.Label, "Equity", null), VALUE_UPDOWN(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
 		LABEL_GCO(ColumnType.Label, "Charter Out (virt)", null), VALUE_GCO_DAYS(ColumnType.Value, 2400l, KPIReportTransformer.TYPE_TIME), VALUE_GCO_REVENUE(ColumnType.Value, 1000000000l,
 				KPIReportTransformer.TYPE_COST), //
-				LABEL_VIOLATIONS(ColumnType.Label, "Violations", null), VALUE_VIOLATIONS(ColumnType.Value, 100l, ""), //
-				LABEL_LATENESS(ColumnType.Label, "Late", null), VALUE_LATENESS(ColumnType.Value, 5200l, KPIReportTransformer.TYPE_TIME); //
+		LABEL_VIOLATIONS(ColumnType.Label, "Violations", null), VALUE_VIOLATIONS(ColumnType.Value, 100l, ""), //
+		LABEL_LATENESS(ColumnType.Label, "Late", null), VALUE_LATENESS(ColumnType.Value, 5200l, KPIReportTransformer.TYPE_TIME); //
 
 		private final ColumnType columnType;
 		private final Object labelOrDefaultLong;

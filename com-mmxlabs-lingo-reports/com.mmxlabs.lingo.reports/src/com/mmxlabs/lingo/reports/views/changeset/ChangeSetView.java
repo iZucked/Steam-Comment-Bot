@@ -564,7 +564,7 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setText("+ Upstream");
+			gvc.getColumn().setText("+ Equity");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createUpstreamDeltaLabelProvider());
 			createWordWrapRenderer(gvc);
