@@ -95,18 +95,15 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 					notionalDischargeSlot, notionalReturnSlot, cargoCVValue);
 
 			final PortDetails loadDetails = new PortDetails();
-			loadDetails.setOptions(new PortOptions());
-			loadDetails.getOptions().setPortSlot(notionalLoadSlot);
+			loadDetails.setOptions(new PortOptions(notionalLoadSlot));
 			loadDetails.getOptions().setVisitDuration(loadDuration);
 
 			final PortDetails dischargeDetails = new PortDetails();
-			dischargeDetails.setOptions(new PortOptions());
-			dischargeDetails.getOptions().setPortSlot(notionalDischargeSlot);
+			dischargeDetails.setOptions(new PortOptions(notionalDischargeSlot));
 			dischargeDetails.getOptions().setVisitDuration(dischargeDuration);
 
 			final PortDetails returnDetails = new PortDetails();
-			returnDetails.setOptions(new PortOptions());
-			returnDetails.getOptions().setPortSlot(notionalReturnSlot);
+			returnDetails.setOptions(new PortOptions(notionalReturnSlot));
 			returnDetails.getOptions().setVisitDuration(0);
 
 			final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, ladenDetails, dischargeDetails, ballastDetails, returnDetails };
@@ -176,18 +173,15 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 					notionalDischargeSlot, notionalReturnSlot, cargoCVValue);
 
 			final PortDetails loadDetails = new PortDetails();
-			loadDetails.setOptions(new PortOptions());
-			loadDetails.getOptions().setPortSlot(notionalLoadSlot);
+			loadDetails.setOptions(new PortOptions(notionalLoadSlot));
 			loadDetails.getOptions().setVisitDuration(loadDuration);
 
 			final PortDetails dischargeDetails = new PortDetails();
-			dischargeDetails.setOptions(new PortOptions());
-			dischargeDetails.getOptions().setPortSlot(notionalDischargeSlot);
+			dischargeDetails.setOptions(new PortOptions(notionalDischargeSlot));
 			dischargeDetails.getOptions().setVisitDuration(dischargeDuration);
 
 			final PortDetails returnDetails = new PortDetails();
-			returnDetails.setOptions(new PortOptions());
-			returnDetails.getOptions().setPortSlot(notionalReturnSlot);
+			returnDetails.setOptions(new PortOptions(notionalReturnSlot));
 			returnDetails.getOptions().setVisitDuration(0);
 
 			final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, ladenDetails, dischargeDetails, ballastDetails, returnDetails };
