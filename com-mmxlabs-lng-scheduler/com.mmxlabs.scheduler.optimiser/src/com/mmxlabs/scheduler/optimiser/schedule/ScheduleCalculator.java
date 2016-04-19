@@ -75,7 +75,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class ScheduleCalculator {
 
-	static class Key {
+	private static class Key {
 		private final @NonNull IResource availability;
 		private final @NonNull ISequence sequence;
 
@@ -86,7 +86,6 @@ public class ScheduleCalculator {
 
 		@Override
 		public int hashCode() {
-			// TODO Auto-generated method stub
 			return Objects.hash(availability, sequence);
 		}
 
@@ -106,6 +105,7 @@ public class ScheduleCalculator {
 	}
 
 	private final Map<@NonNull Key, @NonNull ScheduledSequence> cache = new HashMap<>();
+
 
 	@Inject(optional = true)
 	private Provider<ScheduledDataLookupProvider> scheduledDataLookupProviderProvider;
@@ -249,32 +249,39 @@ public class ScheduleCalculator {
 			final ISequence sequence = sequences.getSequence(i);
 			final IResource resource = resources.get(i);
 
-			// Is this a good key? Is ISequence the same instance each time (equals will be different...)?
-			final Key key = new Key(resource, sequence);
-			if (false && cache.containsKey(key)) {
-				@NonNull
-				ScheduledSequence cachedResult = cache.get(key);
-				if (false) {
-					final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
+			if (false) {
+				// Is this a good key? Is ISequence the same instance each time (equals will be different...)?
+				final Key key = new Key(resource, sequence);
+				if (cache.containsKey(key)) {
+					@NonNull
+					ScheduledSequence cachedResult = cache.get(key);
 
-					if (scheduledSequence == null && cachedResult == null) {
+					// Verify
+					if (true) {
+						final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
+
+						if (scheduledSequence != null && !scheduledSequence.isEqual(cachedResult)) {
+							scheduledSequence.isEqual(cachedResult);
+							throw new RuntimeException("Cachce consistency error");
+						}
+					}
+					result.add(cachedResult);
+				} else {
+
+
+					final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
+					if (scheduledSequence == null) {
 						return null;
 					}
-
-					if (scheduledSequence != null && !scheduledSequence.isEqual(cachedResult)) {
-						scheduledSequence.isEqual(cachedResult);
-						throw new RuntimeException("Cache consistency error");
-					}
+					result.add(scheduledSequence);
+					cache.put(key, scheduledSequence);
 				}
-				result.add(cachedResult);
 			} else {
-
 				final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
 				if (scheduledSequence == null) {
 					return null;
 				}
 				result.add(scheduledSequence);
-				cache.put(key, scheduledSequence);
 			}
 		}
 
@@ -320,6 +327,7 @@ public class ScheduleCalculator {
 					assert portSlot != null;
 
 					final ISequenceElement portElement = portSlotProvider.getElement(portSlot);
+
 					assert portElement != null;
 
 					final IAllocationAnnotation allocationAnnotation = scheduledSequence.getAllocationAnnotation(portSlot);
@@ -501,17 +509,15 @@ public class ScheduleCalculator {
 			// Create voyage plan
 			final VoyagePlan voyagePlan = new VoyagePlan();
 			{
-				final PortOptions loadOptions = new PortOptions();
+				final PortOptions loadOptions = new PortOptions(loadOption);
 				final PortDetails loadDetails = new PortDetails();
 				loadDetails.setOptions(loadOptions);
 				loadOptions.setVisitDuration(0);
-				loadOptions.setPortSlot(loadOption);
 
-				final PortOptions dischargeOptions = new PortOptions();
+				final PortOptions dischargeOptions = new PortOptions(dischargeOption);
 				final PortDetails dischargeDetails = new PortDetails();
 				dischargeDetails.setOptions(dischargeOptions);
 				dischargeOptions.setVisitDuration(0);
-				dischargeOptions.setPortSlot(dischargeOption);
 
 				voyagePlan.setSequence(new IDetailsSequenceElement[] { loadDetails, dischargeDetails });
 			}

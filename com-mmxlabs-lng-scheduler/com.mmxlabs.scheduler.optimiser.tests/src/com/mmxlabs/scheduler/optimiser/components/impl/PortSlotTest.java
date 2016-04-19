@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -75,7 +76,7 @@ public class PortSlotTest {
 
 	@Test
 	public void testGetSetID() {
-		final String id = "id";
+		final @NonNull String id = "id";
 		final long heelLimit = 1;
 		final int heelUnitPrice = 2;
 		final int heelCVValue = 3;
