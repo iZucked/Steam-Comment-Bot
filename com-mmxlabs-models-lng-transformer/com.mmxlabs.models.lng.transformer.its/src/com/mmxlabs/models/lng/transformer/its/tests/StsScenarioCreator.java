@@ -38,12 +38,12 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 	 * cargo, travel to the discharge port and discharge it. There is enough time at every stage to create some idling at the discharge port.
 	 */
 	public StsScenarioCreator() {
-		scenario = ManifestJointModel.createEmptyInstance(null);
-
-		// need to create a legal entity for contracts
-		contractEntity = addEntity("Third-parties");
-		// need to create a legal entity for shipping
-		shippingEntity = addEntity("Shipping");
+//		scenario = ManifestJointModel.createEmptyInstance(null);
+//
+//		// need to create a legal entity for contracts
+//		contractEntity = addEntity("Third-parties");
+//		// need to create a legal entity for shipping
+//		shippingEntity = addEntity("Shipping");
 
 		// need to create sales and purchase contracts
 		salesContract = addSalesContract("Sales Contract", dischargePrice);

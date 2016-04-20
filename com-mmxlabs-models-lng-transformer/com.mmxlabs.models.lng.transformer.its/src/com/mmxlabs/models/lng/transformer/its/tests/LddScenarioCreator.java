@@ -7,15 +7,20 @@ package com.mmxlabs.models.lng.transformer.its.tests;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.commercial.util.CommercialModelBuilder;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 
 /**
  */
@@ -40,14 +45,17 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 	 * cargo, travel to the discharge port and discharge it. There is enough time at every stage to create some idling at the discharge port.
 	 */
 	public LddScenarioCreator() {
-		scenario = ManifestJointModel.createEmptyInstance(null);
+		super();
+		// scenario = ManifestJointModel.createEmptyInstance(null);
+		// commercialModelBuilder = new CommercialModelBuilder(ScenarioModelUtil.getCommercialModel(scenario));
+
+		// need to create a legal entity for contracts
+		// contractEntity = addEntity("Third-parties");
+		// need to create a legal entity for shipping
+		// shippingEntity = addEntity("Shipping");
 
 		final CommercialModel commercialModel = scenario.getReferenceModel().getCommercialModel();
 		final FleetModel fleetModel = scenario.getReferenceModel().getFleetModel();
-		// need to create a legal entity for contracts
-		contractEntity = addEntity("Third-parties");
-		// need to create a legal entity for shipping
-		shippingEntity = addEntity("Shipping");
 
 		// need to create sales and purchase contracts
 		salesContract = addSalesContract("Sales Contract", dischargePrice);

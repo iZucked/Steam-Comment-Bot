@@ -51,10 +51,10 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 
 		final CommercialModel commercialModel = scenario.getReferenceModel().getCommercialModel();
 
-		// need to create a legal entity for contracts
-		contractEntity = addEntity("Third-parties");
-		// need to create a legal entity for shipping
-		shippingEntity = addEntity("Shipping");
+//		// need to create a legal entity for contracts
+//		contractEntity = addEntity("Third-parties");
+//		// need to create a legal entity for shipping
+//		shippingEntity = addEntity("Shipping");
 
 		// need to create sales and purchase contracts
 		salesContract = addSalesContract("Sales Contract", dischargePrice);
