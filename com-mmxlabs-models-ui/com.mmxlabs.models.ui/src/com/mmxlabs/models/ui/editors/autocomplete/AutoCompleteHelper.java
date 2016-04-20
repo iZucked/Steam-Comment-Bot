@@ -29,8 +29,9 @@ public class AutoCompleteHelper {
 					final IMMXContentProposalProvider proposalProvider = factory.create(attribute);
 					if (proposalProvider != null) {
 						final ContentProposalAdapter proposalAdapter = new ContentProposalAdapter(text, new TextContentAdapter(), proposalProvider, getActivationKeystroke(), getAutoactivationChars());
-						proposalAdapter.setFilterStyle(ContentProposalAdapter.FILTER_CHARACTER);
+						proposalAdapter.setFilterStyle(ContentProposalAdapter.FILTER_NONE);
 						proposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_INSERT);
+						proposalAdapter.setPropagateKeys(true);
 						return proposalProvider;
 					}
 				}
@@ -48,11 +49,10 @@ public class AutoCompleteHelper {
 	// this logic is from swt addons project
 	private static char[] getAutoactivationChars() {
 
-		// To enable content proposal on deleting a char
-		final String LCL = "abcdefghijklmnopqrstuvwxyz";
+		final String LCL = "abcdefghijklmnopqrstuvwxy";
 		final String UCL = LCL.toUpperCase();
-		final String NUMS = "0123456789";
-		final String[] items = new String[] { "Alpha", "Beta", "gaama", "pie", "alge", "bata" };
+		final String NUMS = "0123456789_+-*/%";
+		// To enable content proposal on deleting a char
 		final String delete = new String(new char[] { 8 });
 		final String allChars = LCL + UCL + NUMS + delete;
 		return allChars.toCharArray();
