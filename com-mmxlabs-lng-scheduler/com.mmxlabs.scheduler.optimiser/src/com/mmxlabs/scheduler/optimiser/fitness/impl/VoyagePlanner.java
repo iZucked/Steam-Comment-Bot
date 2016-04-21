@@ -336,6 +336,7 @@ public class VoyagePlanner {
 			if (returnSlot != null) {
 				recordSlots.add(returnSlot);
 			}
+			
 			for (final IPortSlot thisPortSlot : recordSlots) {
 				final int thisArrivalTime = portTimesRecord.getSlotTime(thisPortSlot);
 
@@ -391,7 +392,7 @@ public class VoyagePlanner {
 			// final PortOptions portOptions;
 			if (voyageOrPortOptions.size() > 1) {
 				// Use prev slot as "thisPortSlot" is the start of a new voyage plan and thus likely a different cargo
-				if (actualsDataProvider.hasActuals(prevPortSlot)) {
+				if (actualsDataProvider.hasActuals(recordSlots.get(0))) {
 					heelVolumeInM3 = generateActualsVoyagePlan(vesselAvailability, vesselStartTime, voyagePlansMap, voyagePlansList, voyageOrPortOptions, portTimesRecord, heelVolumeInM3);
 					assert heelVolumeInM3 >= 0;
 				} else {
