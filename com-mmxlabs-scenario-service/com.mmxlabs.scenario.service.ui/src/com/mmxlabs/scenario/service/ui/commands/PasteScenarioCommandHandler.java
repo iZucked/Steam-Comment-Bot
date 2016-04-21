@@ -154,8 +154,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 	private void scanTree(final File root, final java.util.List<File> scenarioFiles, final Container container, final Map<File, Container> scenarioContainerMap) {
 
 		@Nullable
-		final
-		File[] listFiles = root.listFiles();
+		final File[] listFiles = root.listFiles();
 		if (listFiles != null) {
 			for (final File f : listFiles) {
 				if (f == null) {
