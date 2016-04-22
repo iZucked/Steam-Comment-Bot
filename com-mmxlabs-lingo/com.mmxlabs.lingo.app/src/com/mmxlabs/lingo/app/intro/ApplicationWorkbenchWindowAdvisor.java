@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.app.intro;
 
+import org.eclipse.core.runtime.IProduct;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
@@ -33,10 +35,23 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setShowStatusLine(true);
 		configurer.setShowPerspectiveBar(true);
 
+		// Get the base product name
+		IProduct product = Platform.getProduct();
+		StringBuilder title = new StringBuilder(product.getName());
+
+		// Append modifiers
+		// Old (3.11.8(9?) Style.
 		if (LicenseFeatures.isPermitted("features:beta-cores-features")) {
-			configurer.setTitle("LiNGO - Cores - Beta");
-		} else if (LicenseFeatures.isPermitted("features:beta-features")) {
-			configurer.setTitle("LiNGO - Beta");
+			title.append(" - Cores - Beta");
+		} else {
+			// Newer style
+			if (LicenseFeatures.isPermitted("features:beta-features")) {
+				title.append(" - Beta");
+			}
+			if (LicenseFeatures.isPermitted("features:cores-features")) {
+				title.append(" - Cores");
+			}
 		}
+		configurer.setTitle(title.toString());
 	}
 }
