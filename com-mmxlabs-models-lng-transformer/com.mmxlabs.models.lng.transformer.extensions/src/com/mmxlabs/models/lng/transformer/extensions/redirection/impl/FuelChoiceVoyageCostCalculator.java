@@ -226,18 +226,15 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 				break;
 			}
 
-			final PortOptions loadOptions = new PortOptions();
-			loadOptions.setPortSlot(notionalLoadSlot);
+			final PortOptions loadOptions = new PortOptions(notionalLoadSlot);
 			loadOptions.setVisitDuration(loadDuration);
 			loadOptions.setVessel(vessel);
 
-			final PortOptions dischargeOptions = new PortOptions();
-			dischargeOptions.setPortSlot(notionalDischargeSlot);
+			final PortOptions dischargeOptions = new PortOptions(notionalDischargeSlot);
 			dischargeOptions.setVisitDuration(dischargeDuration);
 			dischargeOptions.setVessel(vessel);
 
-			final PortOptions returnOptions = new PortOptions();
-			returnOptions.setPortSlot(notionalReturnSlot);
+			final PortOptions returnOptions = new PortOptions(notionalReturnSlot);
 			returnOptions.setVisitDuration(0);
 			returnOptions.setVessel(vessel);
 
