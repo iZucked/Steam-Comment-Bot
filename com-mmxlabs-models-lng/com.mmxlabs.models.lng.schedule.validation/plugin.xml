@@ -110,6 +110,9 @@
                <message>
                   {0}
                </message>
+               <target
+                     class="PortModel">
+               </target>
             </constraint>
          </constraints>
       </constraintProvider>

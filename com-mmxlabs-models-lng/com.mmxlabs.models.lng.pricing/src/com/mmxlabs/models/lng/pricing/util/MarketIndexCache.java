@@ -4,21 +4,30 @@
  */
 package com.mmxlabs.models.lng.pricing.util;
 
+import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.models.lng.pricing.DataIndex;
+import com.mmxlabs.models.lng.pricing.Index;
+import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 
-public class MarketIndexCache extends MMXAdapterImpl {
+public class MarketIndexCache extends EContentAdapter {
 
 	private Map<@NonNull PriceIndexType, @NonNull SeriesParser> cache = null;
+
+	private Map<@NonNull NamedIndexContainer<?>, @Nullable YearMonth> earlyDateCache = null;
 
 	private final @NonNull PricingModel pricingModel;
 
@@ -27,18 +36,15 @@ public class MarketIndexCache extends MMXAdapterImpl {
 	}
 
 	@Override
-	public void reallyNotifyChanged(final Notification notification) {
+	public void notifyChanged(Notification notification) {
+		super.notifyChanged(notification);
+
 		if (notification.isTouch()) {
 			return;
 		}
 		if (notification.getEventType() == Notification.REMOVING_ADAPTER) {
 			return;
 		}
-		clearCache();
-	}
-
-	@Override
-	protected void missedNotifications(final List<Notification> missed) {
 		clearCache();
 	}
 
@@ -52,8 +58,31 @@ public class MarketIndexCache extends MMXAdapterImpl {
 		}
 	}
 
+	public synchronized void buildDateCache() {
+		if (earlyDateCache == null) {
+			earlyDateCache = new HashMap<>();
+
+			final Function<NamedIndexContainer<?>, @Nullable YearMonth> finder = (curve) -> {
+				final Index<?> data = curve.getData();
+				if (data instanceof DataIndex<?>) {
+					final DataIndex<?> indexData = (DataIndex<?>) data;
+					return indexData.getPoints().stream() //
+							.min((p1, p2) -> {
+								return p1.getDate().compareTo(p2.getDate());
+							}).get().getDate();
+				}
+				return null;
+			};
+
+			pricingModel.getCommodityIndices().forEach(c -> earlyDateCache.put(c, finder.apply(c)));
+			pricingModel.getCharterIndices().forEach(c -> earlyDateCache.put(c, finder.apply(c)));
+			pricingModel.getBaseFuelPrices().forEach(c -> earlyDateCache.put(c, finder.apply(c)));
+		}
+	}
+
 	public synchronized void clearCache() {
 		cache = null;
+		earlyDateCache = null;
 	}
 
 	public @NonNull SeriesParser getSeriesParser(final @NonNull PriceIndexType marketIndexType) {
@@ -63,5 +92,12 @@ public class MarketIndexCache extends MMXAdapterImpl {
 		}
 		return cache.get(marketIndexType);
 
+	}
+
+	public @Nullable YearMonth getEarliestDate(final @NonNull NamedIndexContainer<?> index) {
+		if (earlyDateCache == null) {
+			buildDateCache();
+		}
+		return earlyDateCache.getOrDefault(index, null);
 	}
 }

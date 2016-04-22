@@ -30,6 +30,7 @@ import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.port.util.RouteDistanceLineCache;
+import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.util.MarketIndexCache;
@@ -238,8 +239,22 @@ public class PriceExpressionUtils {
 			return null;
 		}
 		final MarketIndexCache cache = (MarketIndexCache) Platform.getAdapterManager().loadAdapter(pricingModel, MarketIndexCache.class.getName());
+		if (cache == null) {
+			throw new IllegalStateException("Unable to get market index cache");
+		}
 		return cache.getSeriesParser(priceIndexType);
-		// return PriceIndexUtils.getParserFor(pricingModel, priceIndexType);
+	}
+
+	public static @Nullable YearMonth getEarliestCurveDate(final @NonNull NamedIndexContainer<?> index) {
+		PricingModel pricingModel = getPricingModel();
+		if (pricingModel == null) {
+			return null;
+		}
+		final MarketIndexCache cache = (MarketIndexCache) Platform.getAdapterManager().loadAdapter(pricingModel, MarketIndexCache.class.getName());
+		if (cache == null) {
+			throw new IllegalStateException("Unable to get market index cache");
+		}
+		return cache.getEarliestDate(index);
 	}
 
 	public static <T extends LNGPriceCalculatorParameters> void checkPriceExpressionInPricingParams(final IValidationContext ctx, final List<IStatus> failures, T target, EAttribute attribute,
