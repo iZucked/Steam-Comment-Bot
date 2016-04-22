@@ -27,6 +27,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
+import com.google.inject.name.Names;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -59,6 +61,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentPara
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProvider;
@@ -116,8 +119,8 @@ public class ScheduleCalculatorTest {
 				final ExcessIdleTimeComponentParameters idleParams = new ExcessIdleTimeComponentParameters();
 				int highPeriodInDays = 15;
 				int lowPeriodInDays = Math.max(0, highPeriodInDays - 2);
-				idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, lowPeriodInDays*24);
-				idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, highPeriodInDays*24);
+				idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, lowPeriodInDays * 24);
+				idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, highPeriodInDays * 24);
 				idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, 2_500);
 				idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, 10_000);
 				idleParams.setEndWeight(10_000);
@@ -183,6 +186,10 @@ public class ScheduleCalculatorTest {
 				bind(IDistanceProviderEditor.class).to(DefaultDistanceProviderImpl.class);
 
 				bind(ITimeZoneToUtcOffsetProvider.class).to(TimeZoneToUtcOffsetProvider.class);
+
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(Boolean.FALSE);
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(Boolean.FALSE);
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(Boolean.FALSE);
 			}
 		}
 		final Injector injector = Guice.createInjector(new TestModule());
@@ -232,6 +239,8 @@ public class ScheduleCalculatorTest {
 		when(portSlot4.getTimeWindow()).thenReturn(timeWindow);
 		when(portSlot5.getTimeWindow()).thenReturn(timeWindow);
 
+		Pair<CargoValueAnnotation, Long> p = Mockito.mock(Pair.class);
+		when(entityValueCalculator.evaluate(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.anyInt(), Matchers.any())).thenReturn(p);
 		final ScheduleCalculator scheduleCalculator = new ScheduleCalculator();
 		injector.injectMembers(scheduleCalculator);
 

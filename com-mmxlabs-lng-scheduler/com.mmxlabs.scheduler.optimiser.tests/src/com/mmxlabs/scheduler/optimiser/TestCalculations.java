@@ -20,6 +20,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
+import com.google.inject.name.Names;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
@@ -1470,22 +1471,21 @@ public class TestCalculations {
 
 				return lcp;
 			}
-			
+
 			@Provides
 			@Singleton
 			private IExcessIdleTimeComponentParameters provideIdleComponentParameters() {
 				final ExcessIdleTimeComponentParameters idleParams = new ExcessIdleTimeComponentParameters();
 				int highPeriodInDays = 15;
 				int lowPeriodInDays = Math.max(0, highPeriodInDays - 2);
-				idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, lowPeriodInDays*24);
-				idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, highPeriodInDays*24);
+				idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, lowPeriodInDays * 24);
+				idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, highPeriodInDays * 24);
 				idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, 2_500);
 				idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, 10_000);
 				idleParams.setEndWeight(10_000);
 
 				return idleParams;
 			}
-
 
 			@Override
 			protected void configure() {
@@ -1506,6 +1506,10 @@ public class TestCalculations {
 				Mockito.when(baseFuelCalculator.getBaseFuelPrice(Matchers.any(IVessel.class), Matchers.anyInt())).thenReturn(baseFuelUnitPrice);
 
 				bind(VesselBaseFuelCalculator.class).toInstance(baseFuelCalculator);
+
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(Boolean.FALSE);
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(Boolean.FALSE);
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(Boolean.FALSE);
 
 			}
 		});
