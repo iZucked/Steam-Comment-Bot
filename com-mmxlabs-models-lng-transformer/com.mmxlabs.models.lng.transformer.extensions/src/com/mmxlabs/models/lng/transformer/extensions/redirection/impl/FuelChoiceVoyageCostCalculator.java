@@ -25,6 +25,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.LinkedFBOVoyagePlanChoice;
@@ -117,18 +118,15 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 			fuelChoice = FuelChoice.Optimal;
 		}
 
-		final LoadSlot notionalLoadSlot = new LoadSlot();
-		notionalLoadSlot.setPort(loadPort);
-		notionalLoadSlot.setTimeWindow(new TimeWindow(loadTime, loadTime));
-		notionalLoadSlot.setCargoCVValue(cargoCVValue);
-		notionalLoadSlot.setCooldownForbidden(true);
-		notionalLoadSlot.setMaxLoadVolume(vessel.getCargoCapacity());
-		notionalLoadSlot.setMinLoadVolume(vessel.getCargoCapacity());
+		final LoadSlot notionalLoadSlot = makeNotionalLoad(loadPort, loadTime, vessel, cargoCVValue);
+		// notionalLoadSlot.setPort(loadPort);
+		// notionalLoadSlot.setTimeWindow(new TimeWindow(loadTime, loadTime));
+		// notionalLoadSlot.setCargoCVValue(cargoCVValue);
+		// notionalLoadSlot.setCooldownForbidden(true);
+		// notionalLoadSlot.setMaxLoadVolume(vessel.getCargoCapacity());
+		// notionalLoadSlot.setMinLoadVolume(vessel.getCargoCapacity());
 
-		final DischargeSlot notionalDischargeSlot = new DischargeSlot();
-		notionalDischargeSlot.setPort(dischargePort);
-		notionalDischargeSlot.setTimeWindow(new TimeWindow(dischargeTime, dischargeTime));
-		notionalDischargeSlot.setDischargePriceCalculator(salesPriceCalculator);
+		final DischargeSlot notionalDischargeSlot = makeNotionalDischarge(dischargePort, dischargeTime, salesPriceCalculator);
 
 		final PortSlot notionalReturnSlot = new EndPortSlot("notional-return", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), true, vessel.getVesselClass().getSafetyHeel());
 
@@ -152,18 +150,9 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 			fuelChoice = FuelChoice.Optimal;
 		}
 
-		final LoadSlot notionalLoadSlot = new LoadSlot();
-		notionalLoadSlot.setPort(loadPort);
-		notionalLoadSlot.setTimeWindow(new TimeWindow(loadTime, loadTime));
-		notionalLoadSlot.setCargoCVValue(cargoCVValue);
-		notionalLoadSlot.setCooldownForbidden(true);
-		notionalLoadSlot.setMaxLoadVolume(vessel.getCargoCapacity());
-		notionalLoadSlot.setMinLoadVolume(vessel.getCargoCapacity());
+		final LoadSlot notionalLoadSlot = makeNotionalLoad(loadPort, loadTime, vessel, cargoCVValue);
 
-		final DischargeSlot notionalDischargeSlot = new DischargeSlot();
-		notionalDischargeSlot.setPort(dischargePort);
-		notionalDischargeSlot.setTimeWindow(new TimeWindow(dischargeTime, dischargeTime));
-		notionalDischargeSlot.setDischargePriceCalculator(createSalesPriceCalculator(salesPricePerMMBTu));
+		final DischargeSlot notionalDischargeSlot = makeNotionalDischarge(dischargePort, dischargeTime, salesPricePerMMBTu);
 
 		final PortSlot notionalReturnSlot = new EndPortSlot("notional-return", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), true, vessel.getVesselClass().getSafetyHeel());
 

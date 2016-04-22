@@ -10,13 +10,17 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.models.lng.transformer.extensions.redirection.IVoyageCostCalculator;
+import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -114,5 +118,19 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 
 		injector.injectMembers(contract);
 		return contract;
+	}
+
+	protected @NonNull DischargeSlot makeNotionalDischarge(@NonNull IPort dischargePort, int dischargeTime, @NonNull ISalesPriceCalculator salesPriceCalculator) {
+		DischargeSlot dischargeSlot = new DischargeSlot("notional-discharge", dischargePort, new TimeWindow(dischargeTime, dischargeTime), 0L, Long.MAX_VALUE, salesPriceCalculator, 0, 0);
+		
+		return dischargeSlot;
+	}
+
+	protected @NonNull DischargeSlot makeNotionalDischarge(final @NonNull IPort dischargePort, final int dischargeTime, final int salesPricePerMMBTu) {
+		return makeNotionalDischarge(dischargePort, dischargeTime, createSalesPriceCalculator(salesPricePerMMBTu));
+	}
+
+	protected @NonNull LoadSlot makeNotionalLoad(final @NonNull IPort loadPort, final int loadTime, final IVessel vessel, final int cargoCVValue) {
+		return new LoadSlot("notional-load", loadPort, new TimeWindow(loadTime, loadTime), vessel.getCargoCapacity(), vessel.getCargoCapacity(), new FixedPriceContract(0), cargoCVValue, false, true);
 	}
 }
