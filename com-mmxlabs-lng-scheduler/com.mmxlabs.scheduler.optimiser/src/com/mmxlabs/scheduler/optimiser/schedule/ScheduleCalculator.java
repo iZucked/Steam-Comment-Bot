@@ -366,9 +366,9 @@ public class ScheduleCalculator {
 	// TODO: Push into entity value calculator?
 	private void calculateProfitAndLoss(final @NonNull ISequences sequences, final @NonNull ScheduledSequences scheduledSequences, final @Nullable IAnnotatedSolution annotatedSolution) {
 
-		// if (entityValueCalculatorProvider.get() == null) {
-		// return;
-		// }
+		if (entityValueCalculatorProvider == null) {
+			return;
+		}
 
 		// 2014-02-12 - SG
 		// Back hack to allow a custom contract to reset cached data AFTER any charter out generation / break -even code has run.
