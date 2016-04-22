@@ -21,6 +21,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -74,6 +75,10 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author Simon Goodall
  */
 public class ScheduleCalculator {
+
+	@Inject
+	@Named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)
+	private boolean enableCache;
 
 	static class Key {
 		private final @NonNull IResource availability;
@@ -248,34 +253,42 @@ public class ScheduleCalculator {
 		for (int i = 0; i < sequences.size(); i++) {
 			final ISequence sequence = sequences.getSequence(i);
 			final IResource resource = resources.get(i);
+			final ScheduledSequence scheduledSequence;
+			if (enableCache) {
+				// Is this a good key? Is ISequence the same instance each time (equals will be different...)?
+				final Key key = new Key(resource, sequence);
+				if (cache.containsKey(key)) {
 
-			// Is this a good key? Is ISequence the same instance each time (equals will be different...)?
-			final Key key = new Key(resource, sequence);
-			if (false && cache.containsKey(key)) {
-				@NonNull
-				ScheduledSequence cachedResult = cache.get(key);
-				if (false) {
-					final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
+					scheduledSequence = cache.get(key);
 
-					if (scheduledSequence == null && cachedResult == null) {
+					// Verification
+					if (false) {
+						final ScheduledSequence reference = schedule(resource, sequence, arrivalTimes[i]);
+
+						if (scheduledSequence == null && reference == null) {
+							return null;
+						}
+
+						if (reference != null && !reference.isEqual(scheduledSequence)) {
+							reference.isEqual(scheduledSequence);
+							throw new RuntimeException("Cache consistency error");
+						}
+					}
+				} else {
+					scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
+					if (scheduledSequence == null) {
 						return null;
 					}
-
-					if (scheduledSequence != null && !scheduledSequence.isEqual(cachedResult)) {
-						scheduledSequence.isEqual(cachedResult);
-						throw new RuntimeException("Cache consistency error");
-					}
+					cache.put(key, scheduledSequence);
 				}
-				result.add(cachedResult);
 			} else {
-
-				final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
-				if (scheduledSequence == null) {
-					return null;
-				}
-				result.add(scheduledSequence);
-				cache.put(key, scheduledSequence);
+				scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
 			}
+
+			if (scheduledSequence == null) {
+				return null;
+			}
+			result.add(scheduledSequence);
 		}
 
 		calculateSchedule(sequences, result, solution);
@@ -296,9 +309,7 @@ public class ScheduleCalculator {
 
 			for (final ScheduledSequence scheduledSequence : scheduledSequences) {
 				final IResource resource = scheduledSequence.getResource();
-				assert resource != null;
 				final ISequence sequence = sequences.getSequence(resource);
-				assert sequence != null;
 
 				if (sequence.size() > 0) {
 					voyagePlanAnnotator.annotateFromScheduledSequence(scheduledSequence, annotatedSolution);
