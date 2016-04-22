@@ -80,7 +80,7 @@ public class ScheduleCalculator {
 	@Named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)
 	private boolean enableCache;
 
-	static class Key {
+	private static class Key {
 		private final @NonNull IResource availability;
 		private final @NonNull ISequence sequence;
 
@@ -91,7 +91,6 @@ public class ScheduleCalculator {
 
 		@Override
 		public int hashCode() {
-			// TODO Auto-generated method stub
 			return Objects.hash(availability, sequence);
 		}
 
@@ -111,6 +110,7 @@ public class ScheduleCalculator {
 	}
 
 	private final Map<@NonNull Key, @NonNull ScheduledSequence> cache = new HashMap<>();
+
 
 	@Inject(optional = true)
 	private Provider<ScheduledDataLookupProvider> scheduledDataLookupProviderProvider;
@@ -331,6 +331,7 @@ public class ScheduleCalculator {
 					assert portSlot != null;
 
 					final ISequenceElement portElement = portSlotProvider.getElement(portSlot);
+
 					assert portElement != null;
 
 					final IAllocationAnnotation allocationAnnotation = scheduledSequence.getAllocationAnnotation(portSlot);
@@ -512,17 +513,15 @@ public class ScheduleCalculator {
 			// Create voyage plan
 			final VoyagePlan voyagePlan = new VoyagePlan();
 			{
-				final PortOptions loadOptions = new PortOptions();
+				final PortOptions loadOptions = new PortOptions(loadOption);
 				final PortDetails loadDetails = new PortDetails();
 				loadDetails.setOptions(loadOptions);
 				loadOptions.setVisitDuration(0);
-				loadOptions.setPortSlot(loadOption);
 
-				final PortOptions dischargeOptions = new PortOptions();
+				final PortOptions dischargeOptions = new PortOptions(dischargeOption);
 				final PortDetails dischargeDetails = new PortDetails();
 				dischargeDetails.setOptions(dischargeOptions);
 				dischargeOptions.setVisitDuration(0);
-				dischargeOptions.setPortSlot(dischargeOption);
 
 				voyagePlan.setSequence(new IDetailsSequenceElement[] { loadDetails, dischargeDetails });
 			}

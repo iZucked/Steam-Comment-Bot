@@ -37,11 +37,11 @@ public final class HeelLevelAnnotation implements IHeelLevelAnnotation {
 		return String.format("Heel [start: %d, end %d]", startHeelInM3, endHeelInM3);
 	}
 
-	
 	@Override
 	public int hashCode() {
 		return Objects.hash(startHeelInM3, endHeelInM3);
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 
@@ -53,7 +53,6 @@ public final class HeelLevelAnnotation implements IHeelLevelAnnotation {
 			return this.startHeelInM3 == other.getStartHeelInM3() && this.endHeelInM3 == other.getEndHeelInM3();
 		}
 
-		// TODO Auto-generated method stub
-		return false;// super.equals(obj);
+		return false;
 	}
 }

@@ -369,8 +369,7 @@ public class VoyagePlanner {
 					previousOptions = options;
 				}
 
-				final PortOptions portOptions = new PortOptions();
-				portOptions.setPortSlot(thisPortSlot);
+				final PortOptions portOptions = new PortOptions(thisPortSlot);
 				portOptions.setVessel(vesselAvailability.getVessel());
 				if (thisPortSlot == returnSlot) {
 					portOptions.setVisitDuration(0);
@@ -806,9 +805,8 @@ public class VoyagePlanner {
 
 			final int visitDuration = portTimesRecord.getSlotDuration(thisPortSlot);
 
-			final PortOptions portOptions = new PortOptions();
+			final PortOptions portOptions = new PortOptions(thisPortSlot);
 			portOptions.setVisitDuration(visitDuration);
-			portOptions.setPortSlot(thisPortSlot);
 			portOptions.setVessel(vesselAvailability.getVessel());
 			voyageOrPortOptions.add(portOptions);
 
@@ -822,9 +820,8 @@ public class VoyagePlanner {
 		final IPortSlot thisPortSlot = portTimesRecord.getReturnSlot();
 		final PortOptions portOptions;
 		if (thisPortSlot != null) {
-			portOptions = new PortOptions();
+			portOptions = new PortOptions(thisPortSlot);
 			portOptions.setVisitDuration(0);
-			portOptions.setPortSlot(thisPortSlot);
 			portOptions.setVessel(vesselAvailability.getVessel());
 			voyageOrPortOptions.add(portOptions);
 		} else {
@@ -891,10 +888,9 @@ public class VoyagePlanner {
 				currentPlan.setRemainingHeelInM3(actualsDataProvider.getReturnHeelInM3(slot));
 			}
 
-			final PortOptions portOptions = new PortOptions();
+			final PortOptions portOptions = new PortOptions(slot);
 			final PortDetails portDetails = new PortDetails();
 			portDetails.setOptions(portOptions);
-			portOptions.setPortSlot(slot);
 			portOptions.setVisitDuration(0);
 			// Custom scheduling code may change this to non-zero, but we need it as zero for visualisation in reports
 			// portOptions.setVisitDuration(portTimesRecord.getSlotDuration(slot));

@@ -132,14 +132,14 @@ public final class ScheduledSequence {
 
 	public final boolean isEqual(@NonNull ScheduledSequence other) {
 
-		return Objects.deepEquals(this.portSlotToHeelLevelAnnotationMap, other.portSlotToHeelLevelAnnotationMap) //
+		return this.startTime == other.startTime //
+				&& Objects.deepEquals(this.resource, other.resource) //
+				&& Objects.deepEquals(this.portSlotToHeelLevelAnnotationMap, other.portSlotToHeelLevelAnnotationMap) //
 				&& Objects.deepEquals(this.portSlotToPortTimesRecordMap, other.portSlotToPortTimesRecordMap) //
 				&& Objects.deepEquals(this.portSlotToTimeMap, other.portSlotToTimeMap) //
 				&& Objects.deepEquals(this.portSlotToVoyagePlanMap, other.portSlotToVoyagePlanMap) //
 				&& Objects.deepEquals(this.sequencePortSlots, other.sequencePortSlots) //
-				&& Objects.deepEquals(this.resource, other.resource) //
 				&& Objects.deepEquals(this.sequence, other.sequence) //
-				&& this.startTime == other.startTime //
 				&& Objects.deepEquals(this.voyagePlans, other.voyagePlans);
 
 	}

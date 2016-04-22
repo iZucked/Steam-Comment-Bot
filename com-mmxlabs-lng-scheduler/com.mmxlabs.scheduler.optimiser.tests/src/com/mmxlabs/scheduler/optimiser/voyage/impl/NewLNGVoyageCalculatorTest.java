@@ -867,18 +867,14 @@ public class NewLNGVoyageCalculatorTest {
 		final IVessel vessel = Mockito.mock(IVessel.class);
 		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
-
-		final PortDetails loadDetails = new PortDetails();
-		loadDetails.setOptions(new PortOptions());
-
-		final PortDetails dischargeDetails = new PortDetails();
-		dischargeDetails.setOptions(new PortOptions());
-
 		final LoadSlot loadSlot = new LoadSlot();
 		final DischargeSlot dischargeSlot = new DischargeSlot();
 
-		loadDetails.getOptions().setPortSlot(loadSlot);
-		dischargeDetails.getOptions().setPortSlot(dischargeSlot);
+		final PortDetails loadDetails = new PortDetails();
+		loadDetails.setOptions(new PortOptions(loadSlot));
+
+		final PortDetails dischargeDetails = new PortDetails();
+		dischargeDetails.setOptions(new PortOptions(dischargeSlot));
 
 		loadSlot.setLoadPriceCalculator(new FixedPriceContract(-1));
 		dischargeSlot.setDischargePriceCalculator(new FixedPriceContract(-1));
@@ -951,17 +947,14 @@ public class NewLNGVoyageCalculatorTest {
 		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 
-		final PortDetails fromPortDetails = new PortDetails();
-		fromPortDetails.setOptions(new PortOptions());
-
-		final PortDetails toPortDetails = new PortDetails();
-		toPortDetails.setOptions(new PortOptions());
-
 		final PortSlot fromPortSlot = Mockito.mock(PortSlot.class);
 		final PortSlot toPortSlot = Mockito.mock(PortSlot.class);
 
-		fromPortDetails.getOptions().setPortSlot(fromPortSlot);
-		toPortDetails.getOptions().setPortSlot(toPortSlot);
+		final PortDetails fromPortDetails = new PortDetails();
+		fromPortDetails.setOptions(new PortOptions(fromPortSlot));
+
+		final PortDetails toPortDetails = new PortDetails();
+		toPortDetails.setOptions(new PortOptions(toPortSlot));
 
 		final VoyageDetails voyageDetails = new VoyageDetails();
 		final VoyageOptions voyageOptions = new VoyageOptions();
@@ -1018,17 +1011,14 @@ public class NewLNGVoyageCalculatorTest {
 		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 
-		final PortDetails fromPortDetails = new PortDetails();
-		fromPortDetails.setOptions(new PortOptions());
-
-		final PortDetails toPortDetails = new PortDetails();
-		toPortDetails.setOptions(new PortOptions());
-
 		final PortSlot fromPortSlot = Mockito.mock(PortSlot.class);
 		final ILoadSlot toPortSlot = Mockito.mock(ILoadSlot.class);
 
-		fromPortDetails.getOptions().setPortSlot(fromPortSlot);
-		toPortDetails.getOptions().setPortSlot(toPortSlot);
+		final PortDetails fromPortDetails = new PortDetails();
+		fromPortDetails.setOptions(new PortOptions(fromPortSlot));
+
+		final PortDetails toPortDetails = new PortDetails();
+		toPortDetails.setOptions(new PortOptions(toPortSlot));
 
 		final VoyageDetails voyageDetails = new VoyageDetails();
 		final VoyageOptions voyageOptions = new VoyageOptions();
@@ -1085,17 +1075,14 @@ public class NewLNGVoyageCalculatorTest {
 		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 
-		final PortDetails fromPortDetails = new PortDetails();
-		fromPortDetails.setOptions(new PortOptions());
-
-		final PortDetails toPortDetails = new PortDetails();
-		toPortDetails.setOptions(new PortOptions());
-
 		final PortSlot fromPortSlot = Mockito.mock(PortSlot.class);
 		final ILoadSlot toPortSlot = Mockito.mock(ILoadSlot.class);
 
-		fromPortDetails.getOptions().setPortSlot(fromPortSlot);
-		toPortDetails.getOptions().setPortSlot(toPortSlot);
+		final PortDetails fromPortDetails = new PortDetails();
+		fromPortDetails.setOptions(new PortOptions(fromPortSlot));
+
+		final PortDetails toPortDetails = new PortDetails();
+		toPortDetails.setOptions(new PortOptions(toPortSlot));
 
 		final VoyageDetails voyageDetails = new VoyageDetails();
 		final VoyageOptions voyageOptions = new VoyageOptions();
@@ -1197,9 +1184,8 @@ public class NewLNGVoyageCalculatorTest {
 
 		final IPortSlot slot = Mockito.mock(IPortSlot.class, "slot");
 
-		final PortOptions options = new PortOptions();
+		final PortOptions options = new PortOptions(slot);
 
-		options.setPortSlot(slot);
 		options.setVisitDuration(0);
 
 		final VesselClass vesselClass = createSampleVesselClass();

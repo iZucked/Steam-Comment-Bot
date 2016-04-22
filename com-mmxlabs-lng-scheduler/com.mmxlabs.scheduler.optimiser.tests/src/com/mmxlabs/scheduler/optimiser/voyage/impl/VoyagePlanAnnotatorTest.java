@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -332,11 +333,10 @@ public class VoyagePlanAnnotatorTest {
 
 	}
 
-	private PortDetails constructPortDetails(final IPortSlot slot, final int duration, final double fuelPrice, final long fuelConsumption) {
+	private PortDetails constructPortDetails(final @NonNull IPortSlot slot, final int duration, final double fuelPrice, final long fuelConsumption) {
 		final PortDetails result = new PortDetails();
 
-		final PortOptions options = new PortOptions();
-		options.setPortSlot(slot);
+		final PortOptions options = new PortOptions(slot);
 		options.setVisitDuration(duration);
 
 		result.setOptions(options);

@@ -380,8 +380,14 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 		// now update port slot
 		final GeneratedCharterOutVesselEventPortSlot charterOutPortSlot = new GeneratedCharterOutVesselEventPortSlot(
-				String.format("gco-%s-%s", originalBallast.getOptions().getFromPortSlot().getPort(), originalBallast.getOptions().getToPortSlot().getPort()), charterOutOption.getPort());
-		injector.injectMembers(charterOutPortSlot);
+							
+			/* ID */	String.format("gco-%s-%s", originalBallast.getOptions().getFromPortSlot().getPort(), originalBallast.getOptions().getToPortSlot().getPort()), //
+			/* Start / End Port */	 charterOutOption.getPort(), //
+			/* Hire Revenue */ charterOutOption.getMaxCharteringRevenue(), //
+			/* Repositioning */ 0,
+			/* Duration */ charterOutOption.getCharterDuration()
+				);
+//		injector.injectMembers(charterOutPortSlot);
 
 		// copy port times record
 		final Triple<IPortSlot, Integer, Integer> charterOutTimesRecord = new Triple<IPortSlot, Integer, Integer>(charterOutPortSlot, charterOutOption.getCharterStartTime(),
@@ -410,18 +416,17 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 		// (2) charter out
 
-		final PortOptions generatedCharterPortOptions = new PortOptions();
+		final PortOptions generatedCharterPortOptions = new PortOptions(charterOutPortSlot);
 		generatedCharterPortOptions.setVessel(originalBallast.getOptions().getVessel());
 		generatedCharterPortOptions.setVisitDuration(charterOutOption.getCharterDuration());
 
-		final IGeneratedCharterOutVesselEvent charterOutEvent = charterOutPortSlot.getVesselEvent();
-		charterOutEvent.setStartPort(charterOutOption.getPort());
-		charterOutEvent.setEndPort(charterOutOption.getPort());
-		charterOutEvent.setHireOutRevenue(charterOutOption.getMaxCharteringRevenue());
-		charterOutEvent.setRepositioning(0);
-		charterOutEvent.setDurationHours(charterOutOption.getCharterDuration());
+//		final IGeneratedCharterOutVesselEvent charterOutEvent = charterOutPortSlot.getVesselEvent();
+//		charterOutEvent.setStartPort(charterOutOption.getPort());
+//		charterOutEvent.setEndPort(charterOutOption.getPort());
+//		charterOutEvent.setHireOutRevenue(charterOutOption.getMaxCharteringRevenue());
+//		charterOutEvent.setRepositioning(0);
+//		charterOutEvent.setDurationHours(charterOutOption.getCharterDuration());
 
-		generatedCharterPortOptions.setPortSlot(charterOutPortSlot);
 		charterOutOption.setPortOptions(generatedCharterPortOptions);
 		// (3) ballast to return port
 
