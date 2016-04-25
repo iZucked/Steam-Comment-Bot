@@ -116,13 +116,19 @@ public class BreakdownOptimiserMover {
 
 	public Collection<JobState> search(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, final int moveType, final long[] currentMetrics, @NonNull final JobStore jobStore,
-			@Nullable List<ISequenceElement> targetElements, @NonNull List<Difference> differencesList, @NonNull BreakdownSearchData searchData) {
+			@Nullable List<ISequenceElement> targetElements, @NonNull List<Difference> differencesList, @NonNull BreakdownSearchData searchData,
+			@Nullable Collection<@NonNull IResource> currentChangedResources) {
 
 		final List<JobState> newStates = new LinkedList<>();
 		if (targetElements != null && targetElements.isEmpty()) {
 			targetElements = null;
 		}
 
+		// Remove nulls
+		if (currentChangedResources != null) {
+			while (currentChangedResources.remove(null));
+		}
+		
 		// Debugging quick exit, uncomment following line.
 		if (true) {
 			// return Collections.emptyList();
@@ -155,7 +161,7 @@ public class BreakdownOptimiserMover {
 
 			// Apply hard constraint checkers
 			for (final IConstraintChecker checker : constraintCheckers) {
-				if (checker.checkConstraints(currentFullSequences) == false) {
+				if (checker.checkConstraints(currentFullSequences, currentChangedResources) == false) {
 					// Break out
 					failedEvaluation = true;
 					break;
@@ -285,6 +291,10 @@ public class BreakdownOptimiserMover {
 			}
 		}
 
+		if (currentChangedResources == null) {
+			currentChangedResources = new HashSet<>();
+		}
+		
 		final StateManager stateManager = new StateManager(currentSequences, currentFullSequences);
 
 		// targetElements = null;
@@ -337,7 +347,7 @@ public class BreakdownOptimiserMover {
 							searchElements.remove(current);
 
 							newStates.addAll(removeElementsFromSequence(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentMetrics, jobStore,
-									searchElements, differencesList, searchData));
+									searchElements, differencesList, searchData, currentChangedResources));
 						} else if (matchedLoadElement == null && matchedDischargeElement != null) {
 							// Discharge was previous unused, but the load is in correct solution
 							wiringChange = true;
@@ -351,11 +361,11 @@ public class BreakdownOptimiserMover {
 								if (!(matchedDischargeSlot instanceof IDischargeSlot)) {
 									// The matched discharge is an unused FOB Sale. Create the new FOB Sale cargo and remove the open load.
 									newStates.addAll(insertFOBSale(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, matchedDischargeElement, currentMetrics,
-											jobStore, targetElements, differencesList, searchData));
+											jobStore, targetElements, differencesList, searchData, currentChangedResources));
 								} else {
 
 									newStates.addAll(swapUnusedDischarge(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, matchedDischargeElement,
-											currentMetrics, jobStore, targetElements, differencesList, searchData));
+											currentMetrics, jobStore, targetElements, differencesList, searchData, currentChangedResources));
 								}
 							} else {
 								// step (2) remove both slots
@@ -366,7 +376,7 @@ public class BreakdownOptimiserMover {
 								searchElements.add(matchedDischargeElement);
 
 								newStates.addAll(removeElementsFromSequence(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentMetrics, jobStore,
-										searchElements, differencesList, searchData));
+										searchElements, differencesList, searchData, currentChangedResources));
 							}
 						} else if (matchedDischargeElement == null && matchedLoadElement != null) {
 
@@ -378,10 +388,10 @@ public class BreakdownOptimiserMover {
 
 								if (!(portSlotProvider.getPortSlot(matchedLoadElement) instanceof ILoadSlot)) {
 									newStates.addAll(insertDESPurchase(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, matchedLoadElement, currentMetrics,
-											jobStore, targetElements, differencesList, searchData));
+											jobStore, targetElements, differencesList, searchData, currentChangedResources));
 								} else {
 									newStates.addAll(swapUnusedLoad(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, matchedLoadElement, currentMetrics,
-											jobStore, targetElements, differencesList, searchData));
+											jobStore, targetElements, differencesList, searchData, currentChangedResources));
 								}
 							} else {
 								// step (2)
@@ -392,7 +402,7 @@ public class BreakdownOptimiserMover {
 								searchElements.add(matchedLoadElement);
 
 								newStates.addAll(removeElementsFromSequence(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentMetrics, jobStore,
-										searchElements, differencesList, searchData));
+										searchElements, differencesList, searchData, currentChangedResources));
 
 							}
 						} else if (matchedDischargeElement != current) {
@@ -414,17 +424,17 @@ public class BreakdownOptimiserMover {
 										if (currentSequences.getUnusedElements().contains(matchedLoadElement)) {
 											if (!(matchedLoadSlot instanceof ILoadSlot)) {
 												newStates.addAll(insertDESPurchase(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, matchedLoadElement,
-														currentMetrics, jobStore, targetElements, differencesList, searchData));
+														currentMetrics, jobStore, targetElements, differencesList, searchData, currentChangedResources));
 											} else {
 												newStates.addAll(swapUnusedLoad(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, matchedLoadElement,
-														currentMetrics, jobStore, targetElements, differencesList, searchData));
+														currentMetrics, jobStore, targetElements, differencesList, searchData, currentChangedResources));
 											}
 										} else {
 											if (!(matchedLoadSlot instanceof ILoadSlot)) {
 												// Fall through to case 2 - swap discharge
 											} else {
 												newStates.addAll(swapLoad(stateManager, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentMetrics, jobStore,
-														targetElements, differencesList, searchData));
+														targetElements, differencesList, searchData, currentChangedResources));
 											}
 										}
 									}
@@ -439,18 +449,18 @@ public class BreakdownOptimiserMover {
 										if (currentSequences.getUnusedElements().contains(matchedDischargeElement)) {
 											if (!(matchedDischargeSlot instanceof IDischargeSlot)) {
 												newStates.addAll(insertFOBSale(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, matchedDischargeElement,
-														currentMetrics, jobStore, targetElements, differencesList, searchData));
+														currentMetrics, jobStore, targetElements, differencesList, searchData, currentChangedResources));
 											} else {
 												// TODO: Search states needs to keep in these elements!
 												newStates.addAll(swapUnusedDischarge(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, matchedDischargeElement,
-														currentMetrics, jobStore, targetElements, differencesList, searchData));
+														currentMetrics, jobStore, targetElements, differencesList, searchData, currentChangedResources));
 											}
 										} else {
 											if (!(matchedDischargeSlot instanceof IDischargeSlot)) {
 												// Should have been covered in case 1
 											} else {
 												newStates.addAll(swapDischarge(stateManager, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentMetrics, jobStore,
-														targetElements, differencesList, searchData));
+														targetElements, differencesList, searchData, currentChangedResources));
 											}
 										}
 									}
@@ -460,14 +470,14 @@ public class BreakdownOptimiserMover {
 									if (currentSequences.getUnusedElements().contains(matchedLoadElement)) {
 										if (!(portSlotProvider.getPortSlot(matchedLoadElement) instanceof ILoadSlot)) {
 											newStates.addAll(insertDESPurchase(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, matchedLoadElement,
-													currentMetrics, jobStore, targetElements, differencesList, searchData));
+													currentMetrics, jobStore, targetElements, differencesList, searchData, currentChangedResources));
 										} else {
 											newStates.addAll(swapUnusedLoad(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, matchedLoadElement,
-													currentMetrics, jobStore, targetElements, differencesList, searchData));
+													currentMetrics, jobStore, targetElements, differencesList, searchData, currentChangedResources));
 										}
 									} else {
 										newStates.addAll(swapLoad(stateManager, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentMetrics, jobStore, targetElements,
-												differencesList, searchData));
+												differencesList, searchData, currentChangedResources));
 									}
 								}
 							} else {
@@ -481,14 +491,14 @@ public class BreakdownOptimiserMover {
 									if (!(matchedDischargeSlot instanceof IDischargeSlot)) {
 
 										newStates.addAll(insertFOBSale(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, matchedDischargeElement,
-												currentMetrics, jobStore, targetElements, differencesList, searchData));
+												currentMetrics, jobStore, targetElements, differencesList, searchData, currentChangedResources));
 									} else {
 										newStates.addAll(swapUnusedDischarge(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, matchedDischargeElement,
-												currentMetrics, jobStore, targetElements, differencesList, searchData));
+												currentMetrics, jobStore, targetElements, differencesList, searchData, currentChangedResources));
 									}
 								} else {
 									newStates.addAll(swapDischarge(stateManager, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentMetrics, jobStore, targetElements,
-											differencesList, searchData));
+											differencesList, searchData, currentChangedResources));
 								}
 							}
 						}
@@ -510,7 +520,7 @@ public class BreakdownOptimiserMover {
 										if (portTypeProvider.getPortType(originalSequence.get(j)) != PortType.Discharge) {
 
 											newStates.addAll(swapVessel(currentSequences, similarityState, changes, changeSets, tryDepth, currentMetrics, resource, prev, current, j, jobStore,
-													targetElements, differencesList, searchData));
+													targetElements, differencesList, searchData, currentChangedResources));
 										}
 									}
 								} else {
@@ -526,7 +536,7 @@ public class BreakdownOptimiserMover {
 					// This is an unused element which should be in the final solution.
 					// different = true;
 					newStates.addAll(insertUnusedElementsIntoSequence(currentSequences, similarityState, stateManager, changes, changeSets, tryDepth, element, currentMetrics, unusedElements, jobStore,
-							targetElements, differencesList, searchData));
+							targetElements, differencesList, searchData, currentChangedResources));
 				}
 			}
 		}
@@ -654,7 +664,7 @@ public class BreakdownOptimiserMover {
 	protected Collection<JobState> swapVessel(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, final long[] currentMetrics, @NonNull final IResource resource, @NonNull final ISequenceElement prev,
 			@NonNull final ISequenceElement current, final int insertionIndex, @NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements,
-			@NonNull List<Difference> differencesList, @NonNull BreakdownSearchData searchData) {
+			@NonNull List<Difference> differencesList, @NonNull BreakdownSearchData searchData, @Nullable Collection<@NonNull IResource> currentChangedResources) {
 
 		// Make sure we have a element on a vessel
 		if (similarityState.getResourceForElement(prev) == resource) {
@@ -689,8 +699,12 @@ public class BreakdownOptimiserMover {
 		// TODO: Too much?
 		// Iterables.addAll(searchElements, copyTargetSequence);
 		// Iterables.addAll(searchElements, copy.getModifiableSequence(resource));
+		Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
+		changedResources.add(resource);
+		changedResources.add(similarityState.getResourceForElement(prev));
 
-		return search(copy, similarityState, changes2, new LinkedList<>(changeSets), depth, MOVE_TYPE_VESSEL_SWAP, currentMetrics, jobStore, searchElements, differencesList, searchData);
+		return search(copy, similarityState, changes2, new LinkedList<>(changeSets), depth, MOVE_TYPE_VESSEL_SWAP, currentMetrics, jobStore, searchElements, differencesList, searchData,
+				changedResources);
 	}
 
 	/**
@@ -699,7 +713,7 @@ public class BreakdownOptimiserMover {
 	protected Collection<JobState> swapLoad(@NonNull final StateManager currentState, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final IResource resource, @NonNull final ISequenceElement prev, @NonNull final ISequenceElement current,
 			final long[] currentMetrics, @NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements, @NonNull List<Difference> differencesList,
-			@NonNull BreakdownSearchData searchData) {
+			@NonNull BreakdownSearchData searchData, @Nullable Collection<@NonNull IResource> currentChangedResources) {
 
 		// Skip DES Purchases
 		if (!(portSlotProvider.getPortSlot(prev) instanceof ILoadSlot)) {
@@ -761,7 +775,14 @@ public class BreakdownOptimiserMover {
 		final List<Change> changes2 = new ArrayList<>(changes);
 		changes2.add(new Change(String.format("Load Swap %s onto %s with %s onto %s\n", prev.getName(), toResource.getName(), originalLoadElement.getName(), resource.getName()), originalLoadElement,
 				prev, current));
-		return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_LOAD_SWAP, currentMetrics, jobStore, searchElements, differencesList, searchData);
+
+		@Nullable
+		Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
+		changedResources.add(resource);
+		changedResources.add(toResource);
+
+		return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_LOAD_SWAP, currentMetrics, jobStore, searchElements, differencesList, searchData,
+				currentChangedResources);
 	}
 
 	/**
@@ -770,7 +791,7 @@ public class BreakdownOptimiserMover {
 	protected Collection<JobState> swapDischarge(@NonNull final StateManager currentState, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final IResource resource, @NonNull final ISequenceElement prev, @NonNull final ISequenceElement current,
 			final long[] currentMetrics, @NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements, @NonNull List<Difference> differencesList,
-			@NonNull BreakdownSearchData searchData) {
+			@NonNull BreakdownSearchData searchData, @Nullable Collection<@NonNull IResource> currentChangedResources) {
 
 		if (!(portSlotProvider.getPortSlot(current) instanceof IDischargeSlot)) {
 			// Do not move FOB sales
@@ -832,9 +853,14 @@ public class BreakdownOptimiserMover {
 		final List<Change> changes2 = new ArrayList<>(changes);
 		changes2.add(new Change(String.format("Discharge Swap %s (to %s) with %s ( to %s)\n", current.getName(), otherLoadElement.getName(), originalDischargeElement.getName(), prev.getName()), prev,
 				originalDischargeElement, current));
-		return
 
-		search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_DISCHARGE_SWAP, currentMetrics, jobStore, searchElements, differencesList, searchData);
+		@Nullable
+		Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
+		changedResources.add(resource);
+		changedResources.add(toResource);
+
+		return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_DISCHARGE_SWAP, currentMetrics, jobStore, searchElements, differencesList, searchData,
+				changedResources);
 	}
 
 	/**
@@ -843,7 +869,7 @@ public class BreakdownOptimiserMover {
 	private Collection<JobState> removeElementsFromSequence(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final IResource resource, @NonNull final ISequenceElement prev, @NonNull final ISequenceElement current,
 			final long[] currentMetrics, @NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements, @NonNull List<Difference> differencesList,
-			@NonNull BreakdownSearchData searchData) {
+			@NonNull BreakdownSearchData searchData, @Nullable Collection<@NonNull IResource> currentChangedResources) {
 
 		final IModifiableSequences copy = new ModifiableSequences(currentSequences);
 		final IModifiableSequence copyOfTargetSequence = copy.getModifiableSequence(resource);
@@ -855,7 +881,13 @@ public class BreakdownOptimiserMover {
 		final int depth = getNextDepth(tryDepth, searchData.getRandom());
 		final List<Change> changes2 = new ArrayList<>(changes);
 		changes2.add(new Change(String.format("Remove %s and %s\n", prev.getName(), current.getName()), current, prev));
-		return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentMetrics, jobStore, targetElements, differencesList, searchData);
+
+		@Nullable
+		Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
+		changedResources.add(resource);
+
+		return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentMetrics, jobStore, targetElements, differencesList, searchData,
+				changedResources);
 	}
 
 	/**
@@ -864,7 +896,8 @@ public class BreakdownOptimiserMover {
 	private Collection<JobState> processOneHalfOfCargoUnused(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final IResource resource, @NonNull final ISequenceElement prev, @NonNull final ISequenceElement current,
 			@NonNull final ISequenceElement matchedElement, final int elementIdx, final long[] currentMetrics, final boolean isLoadSwap, @NonNull final JobStore jobStore,
-			@Nullable final List<ISequenceElement> targetElements, @NonNull List<Difference> differencesList, @NonNull BreakdownSearchData searchData) {
+			@Nullable final List<ISequenceElement> targetElements, @NonNull List<Difference> differencesList, @NonNull BreakdownSearchData searchData,
+			@Nullable Collection<@NonNull IResource> currentChangedResources) {
 
 		// (1) is the correct discharge in the unused? Swap it in
 		if (currentSequences.getUnusedElements().contains(matchedElement)) {
@@ -887,18 +920,23 @@ public class BreakdownOptimiserMover {
 								current, prev, matchedElement));
 				moveType = MOVE_TYPE_UNUSED_DISCHARGE_SWAPPED;
 			}
-			return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, moveType, currentMetrics, jobStore, targetElements, differencesList, searchData);
+
+			@Nullable
+			Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
+			changedResources.add(resource);
+
+			return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, moveType, currentMetrics, jobStore, targetElements, differencesList, searchData, changedResources);
 		} else {
 			// (2) remove both slots
 			return removeElementsFromSequence(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentMetrics, jobStore, targetElements, differencesList,
-					searchData);
+					searchData, currentChangedResources);
 		}
 	}
 
 	private Collection<JobState> insertUnusedElementsIntoSequence(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final StateManager stateManager,
 			@NonNull final List<Change> changes, @NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final ISequenceElement element, final long[] currentMetrics,
 			final Collection<ISequenceElement> unusedElements, @NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements, @NonNull List<Difference> differencesList,
-			@NonNull BreakdownSearchData searchData) {
+			@NonNull BreakdownSearchData searchData, @Nullable Collection<@NonNull IResource> currentChangedResources) {
 		if (portTypeProvider.getPortType(element) == PortType.Load) {
 			final ISequenceElement otherDischargeElement = similarityState.getDischargeElementForLoad(element);
 			assert otherDischargeElement != null;
@@ -909,7 +947,7 @@ public class BreakdownOptimiserMover {
 				final IResource resource = similarityState.getResourceForElement(element);
 				// move as pair
 				return insertUnusedCargoIntoSequence(currentSequences, similarityState, changes, changeSets, tryDepth, resource, element, otherDischargeElement, currentMetrics, jobStore,
-						targetElements, differencesList, searchData);
+						targetElements, differencesList, searchData, currentChangedResources);
 			} else {
 
 				final Pair<IResource, Integer> p = stateManager.getPositionForElement(otherDischargeElement);
@@ -943,8 +981,12 @@ public class BreakdownOptimiserMover {
 						final List<Change> changes2 = new ArrayList<>(changes);
 						changes2.add(new Change(String.format("Remove %s and %s\n", load.getName(), otherDischargeElement.getName()), load, otherDischargeElement));
 
+						@Nullable
+						Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
+						changedResources.add(p.getFirst());
+
 						newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentMetrics, jobStore, searchElements, differencesList,
-								searchData));
+								searchData, changedResources));
 					}
 				}
 				if (!newStates.isEmpty()) {
@@ -953,7 +995,7 @@ public class BreakdownOptimiserMover {
 
 				// Discharge already used, give up on current search and clear hints
 				return search(currentSequences, similarityState, new LinkedList<>(changes), new LinkedList<>(changeSets), getNextDepth(tryDepth, searchData.getRandom()), 0, currentMetrics, jobStore,
-						null, differencesList, searchData);
+						null, differencesList, searchData, currentChangedResources);
 			}
 		} else if (portTypeProvider.getPortType(element) == PortType.Discharge) {
 			final ISequenceElement otherLoadElement = similarityState.getLoadElementForDischarge(element);
@@ -966,7 +1008,7 @@ public class BreakdownOptimiserMover {
 				assert resource != null;
 				// move as a pair
 				return insertUnusedCargoIntoSequence(currentSequences, similarityState, changes, changeSets, tryDepth, resource, otherLoadElement, element, currentMetrics, jobStore, targetElements,
-						differencesList, searchData);
+						differencesList, searchData, currentChangedResources);
 			} else {
 				final Pair<IResource, Integer> p = stateManager.getPositionForElement(otherLoadElement);
 
@@ -1003,8 +1045,12 @@ public class BreakdownOptimiserMover {
 						final List<Change> changes2 = new ArrayList<>(changes);
 						changes2.add(new Change(String.format("Remove %s and %s\n", otherLoadElement.getName(), discharge.getName()), otherLoadElement, discharge));
 
+						@Nullable
+						Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
+						changedResources.add(p.getFirst());
+
 						newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentMetrics, jobStore, searchElements, differencesList,
-								searchData));
+								searchData, changedResources));
 					}
 				}
 				// // Load already used, give up on current search and clear hints
@@ -1021,7 +1067,7 @@ public class BreakdownOptimiserMover {
 	protected Collection<JobState> insertUnusedCargoIntoSequence(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final IResource resource, @NonNull final ISequenceElement load, @NonNull final ISequenceElement discharge,
 			final long[] currentMetrics, @NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements, @NonNull List<Difference> differencesList,
-			@NonNull BreakdownSearchData searchData) {
+			@NonNull BreakdownSearchData searchData, @Nullable Collection<@NonNull IResource> currentChangedResources) {
 		final ISequence originalResource = currentSequences.getSequence(similarityState.getResourceForElement(load));
 		for (final int i : findInsertPoints(similarityState, originalResource, resource, load, discharge)) {
 			if (portTypeProvider.getPortType(originalResource.get(i)) != PortType.Discharge) {
@@ -1037,7 +1083,13 @@ public class BreakdownOptimiserMover {
 				final List<Change> changes2 = new ArrayList<>(changes);
 				changes2.add(new Change(String.format("Insert cargo %s -> %s on %s\n", load.getName(), discharge.getName(), similarityState.getResourceForElement(load).getName()), load, discharge));
 
-				return search(copy, similarityState, changes2, new LinkedList<>(changeSets), depth, MOVE_TYPE_CARGO_INSERT, currentMetrics, jobStore, targetElements, differencesList, searchData);
+				@Nullable
+				Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
+				changedResources.add(resource);
+				changedResources.add(similarityState.getResourceForElement(load));
+
+				return search(copy, similarityState, changes2, new LinkedList<>(changeSets), depth, MOVE_TYPE_CARGO_INSERT, currentMetrics, jobStore, targetElements, differencesList, searchData,
+						changedResources);
 			}
 		}
 		return new LinkedList<JobState>();
@@ -1205,7 +1257,7 @@ public class BreakdownOptimiserMover {
 	private Collection<JobState> insertFOBSale(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final IResource resource, @NonNull final ISequenceElement prev, @NonNull final ISequenceElement current,
 			@NonNull final ISequenceElement matchedDischargeElement, final long[] currentMetrics, @NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements,
-			@NonNull List<Difference> differencesList, @NonNull BreakdownSearchData searchData) {
+			@NonNull List<Difference> differencesList, @NonNull BreakdownSearchData searchData, @Nullable Collection<@NonNull IResource> currentChangedResources) {
 
 		final IModifiableSequences copy = new ModifiableSequences(currentSequences);
 
@@ -1241,14 +1293,19 @@ public class BreakdownOptimiserMover {
 		final List<Change> changes2 = new ArrayList<>(changes);
 		changes2.add(new Change(String.format("Insert FOB Sale  %s (unused in target solution) and remove  load %s (unused in base solution)\n", matchedDischargeElement.getName(), prev.getName()),
 				matchedDischargeElement, current, prev));
+		@Nullable
+		Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
+		changedResources.add(resource);
+		changedResources.add(fsResource);
 
-		return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_UNUSED_DISCHARGE_SWAPPED, currentMetrics, jobStore, searchElements, differencesList, searchData);
+		return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_UNUSED_DISCHARGE_SWAPPED, currentMetrics, jobStore, searchElements, differencesList, searchData,
+				changedResources);
 	}
 
 	private Collection<JobState> swapUnusedLoad(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final IResource resource, @NonNull final ISequenceElement prev, @NonNull final ISequenceElement current,
 			@NonNull final ISequenceElement matchedLoadElement, final long[] currentMetrics, @NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements,
-			@NonNull List<Difference> differencesList, @NonNull BreakdownSearchData searchData) {
+			@NonNull List<Difference> differencesList, @NonNull BreakdownSearchData searchData, @Nullable Collection<@NonNull IResource> currentChangedResources) {
 
 		final IModifiableSequences copy = new ModifiableSequences(currentSequences);
 		final IModifiableSequence currentResource = copy.getModifiableSequence(resource);
@@ -1272,13 +1329,18 @@ public class BreakdownOptimiserMover {
 		// Focus on the load
 		searchElements.add(prev);
 
-		return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_UNUSED_LOAD_SWAPPED, currentMetrics, jobStore, targetElements, differencesList, searchData);
+		@Nullable
+		Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
+		changedResources.add(resource);
+
+		return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_UNUSED_LOAD_SWAPPED, currentMetrics, jobStore, targetElements, differencesList, searchData,
+				changedResources);
 	}
 
 	private Collection<JobState> swapUnusedDischarge(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final IResource resource, @NonNull final ISequenceElement prev, @NonNull final ISequenceElement current,
 			@NonNull final ISequenceElement matchedDischargeElement, final long[] currentMetrics, @NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements,
-			@NonNull List<Difference> differencesList, @NonNull BreakdownSearchData searchData) {
+			@NonNull List<Difference> differencesList, @NonNull BreakdownSearchData searchData, @Nullable Collection<@NonNull IResource> currentChangedResources) {
 
 		final IModifiableSequences copy = new ModifiableSequences(currentSequences);
 		final IModifiableSequence currentResource = copy.getModifiableSequence(resource);
@@ -1303,13 +1365,18 @@ public class BreakdownOptimiserMover {
 		// Focus on the discharge
 		searchElements.add(current);
 
-		return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_UNUSED_DISCHARGE_SWAPPED, currentMetrics, jobStore, targetElements, differencesList, searchData);
+		@Nullable
+		Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
+		changedResources.add(resource);
+
+		return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_UNUSED_DISCHARGE_SWAPPED, currentMetrics, jobStore, targetElements, differencesList, searchData,
+				changedResources);
 	}
 
 	private Collection<JobState> insertDESPurchase(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final IResource resource, @NonNull final ISequenceElement prev, @NonNull final ISequenceElement current,
 			@NonNull final ISequenceElement matchedLoadElement, final long[] currentMetrics, @NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements,
-			@NonNull List<Difference> differencesList, @NonNull BreakdownSearchData searchData) {
+			@NonNull List<Difference> differencesList, @NonNull BreakdownSearchData searchData, @Nullable Collection<@NonNull IResource> currentChangedResources) {
 
 		final IModifiableSequences copy = new ModifiableSequences(currentSequences);
 
@@ -1345,6 +1412,12 @@ public class BreakdownOptimiserMover {
 				new Change(String.format("Insert DES Purchase %s (unused in target solution) and remove discharge %s (unused in base solution)\n", matchedLoadElement.getName(), current.getName()),
 						matchedLoadElement, current, prev));
 
-		return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_UNUSED_LOAD_SWAPPED, currentMetrics, jobStore, searchElements, differencesList, searchData);
+		@Nullable
+		Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
+		changedResources.add(allowedResources.iterator().next());
+		changedResources.add(resource);
+
+		return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_UNUSED_LOAD_SWAPPED, currentMetrics, jobStore, searchElements, differencesList, searchData,
+				changedResources);
 	}
 }
