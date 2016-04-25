@@ -155,7 +155,7 @@ public class BreakdownOptimiserMover {
 
 			// Apply hard constraint checkers
 			for (final IConstraintChecker checker : constraintCheckers) {
-				if (checker.checkConstraints(currentFullSequences) == false) {
+				if (checker.checkConstraints(currentFullSequences, null) == false) {
 					// Break out
 					failedEvaluation = true;
 					break;
