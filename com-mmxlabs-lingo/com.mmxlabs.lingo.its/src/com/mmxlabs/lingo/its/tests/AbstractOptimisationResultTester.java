@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.its.tests;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -31,7 +30,6 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
 import com.mmxlabs.common.NonNullPair;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalCalendarReportView;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
@@ -41,7 +39,6 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -134,7 +131,7 @@ public class AbstractOptimisationResultTester {
 	}
 
 	@AfterClass
-	public static void dregisterCipherProvider() {
+	public static void deregisterCipherProvider() {
 		if (cipherServiceRef != null) {
 			cipherServiceRef.unregister();
 			cipherServiceRef = null;
@@ -146,50 +143,37 @@ public class AbstractOptimisationResultTester {
 	}
 
 	@NonNull
-	public LNGScenarioRunner runScenario(@NonNull final URL url) throws IOException {
-		final LNGScenarioModel originalScenario = LNGScenarioRunnerCreator.getScenarioModelFromURL(url);
-		return runScenario(originalScenario, url);
-	}
+	public LNGScenarioRunner runScenario(@NonNull ITestDataProvider testDataProvider) throws IOException {
 
-	@NonNull
-	public LNGScenarioRunner runScenario(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException {
-
-		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, originalScenario, null, 10_000);
+		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, testDataProvider.getScenarioModel(), null, 10_000);
 		assert scenarioRunner != null;
 
-		optimiseScenario(scenarioRunner, origURL, ".properties");
+		optimiseScenario(scenarioRunner, testDataProvider);
 		return scenarioRunner;
 	}
 
 	@NonNull
-	public LNGScenarioRunner runScenarioWithGCO(@NonNull final URL url) throws IOException {
-		final LNGScenarioModel originalScenario = LNGScenarioRunnerCreator.getScenarioModelFromURL(url);
-		return runScenarioWithGCO(originalScenario, url);
-	}
+	public LNGScenarioRunner runScenarioWithGCO(ITestDataProvider testDataProvider) throws IOException {
 
-	@NonNull
-	public LNGScenarioRunner runScenarioWithGCO(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException {
-
-		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, originalScenario, true, 10_000);
+		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, testDataProvider.getScenarioModel(), true, 10_000);
 		assert scenarioRunner != null;
 
-		optimiseScenario(scenarioRunner, origURL, ".properties");
+		optimiseScenario(scenarioRunner, testDataProvider);
 		return scenarioRunner;
 	}
 
-	public static void optimiseBasicScenario(@NonNull final LNGScenarioRunner scenarioRunner, @NonNull final URL origURL, @NonNull final String propertiesSuffix) throws IOException {
+	public static void optimiseBasicScenario(@NonNull final LNGScenarioRunner scenarioRunner, @NonNull final ITestDataProvider testDataProvider) throws IOException {
 		scenarioRunner.evaluateInitialState();
-		optimiseScenario(scenarioRunner, origURL, propertiesSuffix);
+		optimiseScenario(scenarioRunner, testDataProvider);
 	}
 
-	public static void optimiseScenario(@NonNull final LNGScenarioRunner scenarioRunner, @NonNull final URL origURL, @NonNull final String propertiesSuffix) throws IOException {
+	public static void optimiseScenario(@NonNull final LNGScenarioRunner scenarioRunner, @NonNull final ITestDataProvider testDataProvider) throws IOException {
 
 		final Schedule intialSchedule = scenarioRunner.getSchedule();
 		Assert.assertNotNull(intialSchedule);
 
 		final EList<Fitness> currentOriginalFitnesses = intialSchedule.getFitnesses();
-		final URL propertiesURL = new URL(origURL.toString() + propertiesSuffix);
-		final Properties props = TesterUtil.getProperties(propertiesURL, storeFitnessMap);
+		final Properties props = TesterUtil.getProperties(testDataProvider.getFitnessDataAsURL(), storeFitnessMap);
 		if (!storeFitnessMap) {
 			// Assert old and new are equal
 			TesterUtil.testOriginalAndCurrentFitnesses(props, originalFitnessesMapName, currentOriginalFitnesses);
@@ -244,9 +228,7 @@ public class AbstractOptimisationResultTester {
 
 		if (storeFitnessMap) {
 			try {
-				final URL expectedReportOutput = new URL(FileLocator.toFileURL(origURL).toString().replaceAll(" ", "%20") + propertiesSuffix);
-				final File file2 = new File(expectedReportOutput.toURI());
-				TesterUtil.saveProperties(props, file2);
+				TesterUtil.saveProperties(props, testDataProvider.getFitnessDataAsFile());
 			} catch (final URISyntaxException e) {
 				e.printStackTrace();
 				Assert.fail();
@@ -280,7 +262,7 @@ public class AbstractOptimisationResultTester {
 	}
 
 	public ScenarioInstance loadScenario(URL url) throws Exception {
-		
+
 		final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
 
 		final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class).getBundleContext();

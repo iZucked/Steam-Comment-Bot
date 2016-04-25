@@ -313,7 +313,6 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 		if (runnerHook != null) {
 			scenarioRunner.setRunnerHook(runnerHook);
 		}
-		optimiseBasicScenario(scenarioRunner, url, String.format(".%s.properties", Joiner.on(".").join(components)));
 	}
 
 }

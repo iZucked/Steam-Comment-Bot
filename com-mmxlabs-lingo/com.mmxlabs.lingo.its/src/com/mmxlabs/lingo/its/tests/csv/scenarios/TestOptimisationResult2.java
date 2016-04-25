@@ -13,6 +13,7 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
+import com.mmxlabs.lingo.its.tests.CSVTestDataProvider;
 import com.mmxlabs.lingo.its.tests.category.OptimisationTest;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
@@ -29,8 +30,6 @@ public class TestOptimisationResult2 extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/des-cargo/");
 
-		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
-
-		runScenarioWithGCO(scenario, new URL(url.toString() + "fitness"));
+		runScenarioWithGCO(new CSVTestDataProvider(url));
 	}
 }
