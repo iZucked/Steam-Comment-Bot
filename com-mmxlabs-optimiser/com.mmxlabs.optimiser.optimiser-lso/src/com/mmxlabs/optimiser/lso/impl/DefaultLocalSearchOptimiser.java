@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.optimiser.lso.impl;
 
+import java.util.Collection;
 import java.util.Date;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -13,6 +14,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
@@ -104,9 +106,9 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 			// Apply hard constraint checkers
 			for (final IConstraintChecker checker : getConstraintCheckers()) {
-				if (checker.checkConstraints(potentialFullSequences) == false) {
+				if (checker.checkConstraints(potentialFullSequences, null) == false) {
 					// Set break point here!
-					checker.checkConstraints(potentialFullSequences);
+					checker.checkConstraints(potentialFullSequences, null);
 				}
 			}
 		}
@@ -183,7 +185,9 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 			// Apply hard constraint checkers
 			for (final IConstraintChecker checker : getConstraintCheckers()) {
-				if (checker.checkConstraints(potentialFullSequences) == false) {
+				Collection<@NonNull IResource> changedResources = null;// move.getAffectedResources();
+
+				if (checker.checkConstraints(potentialFullSequences, changedResources) == false) {
 					if (loggingDataStore != null) {
 						loggingDataStore.logFailedConstraints(checker, move);
 						if (DO_SEQUENCE_LOGGING) {

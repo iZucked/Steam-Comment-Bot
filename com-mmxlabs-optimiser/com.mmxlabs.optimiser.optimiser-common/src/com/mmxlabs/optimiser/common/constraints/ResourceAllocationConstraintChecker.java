@@ -41,16 +41,20 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences) {
-		return checkConstraints(sequences, null);
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
+		return checkConstraints(sequences, changedResources, null);
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
 
-		final List<IResource> resources = sequences.getResources();
-		for (final IResource resource : resources) {
-			assert resource != null;
+		final Collection<@NonNull IResource> loopResources;
+		if (changedResources == null) {
+			loopResources = sequences.getResources();
+		} else {
+			loopResources = changedResources;
+		}
+		for (final IResource resource : loopResources) {
 			final ISequence sequence = sequences.getSequence(resource);
 
 			final boolean ok = checkSequence(resource, sequence, messages);

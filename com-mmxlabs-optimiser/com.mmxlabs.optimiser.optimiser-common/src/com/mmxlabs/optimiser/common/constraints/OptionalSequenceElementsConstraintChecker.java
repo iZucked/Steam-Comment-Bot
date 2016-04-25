@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.optimiser.common.constraints;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -47,12 +48,12 @@ public class OptionalSequenceElementsConstraintChecker implements IConstraintChe
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences) {
-		return checkConstraints(sequences, null);
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
+		return checkConstraints(sequences, changedResources, null);
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
 		for (final ISequenceElement element : sequences.getUnusedElements()) {
 			if (optionalElementsProvider.isElementRequired(element)) {
 				if (messages != null) {
