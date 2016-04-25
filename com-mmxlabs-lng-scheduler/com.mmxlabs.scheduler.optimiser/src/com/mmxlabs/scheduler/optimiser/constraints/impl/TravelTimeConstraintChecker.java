@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -105,12 +106,17 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences) {
-		for (final Map.Entry<IResource, ISequence> entry : sequences.getSequences().entrySet()) {
-			final IResource resource = entry.getKey();
-			assert resource != null;
-			final ISequence sequence = entry.getValue();
-			assert sequence != null;
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
+
+		final Collection<@NonNull IResource> loopResources;
+		if (changedResources == null) {
+			loopResources = sequences.getResources();
+		} else {
+			loopResources = changedResources;
+		}
+
+		for (final IResource resource : loopResources) {
+			final ISequence sequence = sequences.getSequence(resource);
 			if (!checkSequence(sequence, resource)) {
 				return false;
 			}
@@ -139,8 +145,8 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
-		return checkConstraints(sequences);
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
+		return checkConstraints(sequences, changedResources);
 	}
 
 	@Override
