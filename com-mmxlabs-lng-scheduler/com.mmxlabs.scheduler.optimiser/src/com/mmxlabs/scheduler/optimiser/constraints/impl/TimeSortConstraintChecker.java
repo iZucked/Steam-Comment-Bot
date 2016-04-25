@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -64,20 +64,27 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
 
-		return checkConstraints(sequences, null);
+		return checkConstraints(sequences, changedResources, null);
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
 
-		for (final Map.Entry<IResource, ISequence> entry : sequences.getSequences().entrySet()) {
-			final VesselInstanceType vesselInstanceType = vesselProvider.getVesselAvailability(entry.getKey()).getVesselInstanceType();
+		final Collection<@NonNull IResource> loopResources;
+		if (changedResources == null) {
+			loopResources = sequences.getResources();
+		} else {
+			loopResources = changedResources;
+		}
+
+		for (final IResource resource : loopResources) {
+			final VesselInstanceType vesselInstanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
 			if (vesselInstanceType == VesselInstanceType.UNKNOWN || vesselInstanceType == VesselInstanceType.DES_PURCHASE || vesselInstanceType == VesselInstanceType.FOB_SALE) {
 				continue;
 			}
-			final ISequence sequence = entry.getValue();
+			final ISequence sequence = sequences.getSequence(resource);
 			assert sequence != null;
 			if (!checkSequence(sequence, messages, vesselInstanceType)) {
 				return false;
