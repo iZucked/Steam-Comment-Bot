@@ -39,7 +39,7 @@ public class MicroTestUtils {
 
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
-			if (!checker.checkConstraints(fullSequences)) {
+			if (!checker.checkConstraints(fullSequences,  null)) {
 				failedCheckers.add(checker);
 			}
 		}
