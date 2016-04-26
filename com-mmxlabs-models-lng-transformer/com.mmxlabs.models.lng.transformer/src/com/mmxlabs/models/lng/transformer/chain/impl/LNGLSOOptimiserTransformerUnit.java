@@ -251,10 +251,10 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 	private final IMultiStateResult inputState;
 
 	public LNGLSOOptimiserTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final OptimiserSettings settings, @NonNull final ISequences inputSequences,
-			@NonNull final Collection<String> hints) {
+			@NonNull final Collection<@NonNull String> hints) {
 		this.dataTransformer = dataTransformer;
 
-		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
+		final Collection<@NonNull IOptimiserInjectorService> services = dataTransformer.getModuleServices();
 
 		final List<Module> modules = new LinkedList<>();
 
