@@ -263,7 +263,7 @@ public class LNGScenarioRunnerCreator {
 					});
 				}
 				if (moduleType == ModuleType.Module_OptimisationParametersModule) {
-					return Collections.<Module> singletonList(new AbstractModule() {
+					return Collections.<@NonNull Module> singletonList(new AbstractModule() {
 
 						@Override
 						protected void configure() {
