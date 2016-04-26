@@ -101,7 +101,7 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 		}
 		for (final NamedIndexContainer<?> index : curves) {
 			final String proposal = index.getName();
-			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
+			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equals(contents)) {
 				final String c = proposal.substring(contents.length());
 				list.add(new ContentProposal(c, proposal, null, c.length()));
 			}
