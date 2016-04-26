@@ -82,19 +82,19 @@ public class OptimisationSettingsOverrideModule extends AbstractModule {
 		return settings.getActionPlanMaxSearchDepth();
 	}
 
-	@Provides
-	@Singleton
-	private IExcessIdleTimeComponentParameters provideIdleComponentParameters() {
-		final ExcessIdleTimeComponentParameters idleParams = new ExcessIdleTimeComponentParameters();
-		int highPeriodInDays = 15;
-		int lowPeriodInDays = Math.max(0, highPeriodInDays - 2);
-		idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, lowPeriodInDays*24);
-		idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, highPeriodInDays*24);
-		idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, 2_500);
-		idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, 10_000);
-		idleParams.setEndWeight(10_000);
-
-		return idleParams;
-	}
+//	@Provides
+//	@Singleton
+//	private IExcessIdleTimeComponentParameters provideIdleComponentParameters() {
+//		final ExcessIdleTimeComponentParameters idleParams = new ExcessIdleTimeComponentParameters();
+//		int highPeriodInDays = 15;
+//		int lowPeriodInDays = Math.max(0, highPeriodInDays - 2);
+//		idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, lowPeriodInDays*24);
+//		idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, highPeriodInDays*24);
+//		idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, 2_500);
+//		idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, 10_000);
+//		idleParams.setEndWeight(10_000);
+//
+//		return idleParams;
+//	}
 
 }
