@@ -25,8 +25,8 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.CapacityEvaluatedStateChecker;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
-import com.mmxlabs.scheduler.optimiser.fitness.components.CapacityComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CharterCostFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CostComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.IdleTimeComponent;
@@ -65,7 +65,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		final List<ICargoSchedulerFitnessComponent> localComponents = new ArrayList<>(8);
 		localComponents.add(new LatenessComponent(CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, this));
 
-		localComponents.add(new CapacityComponent(CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, this));
+//		localComponents.add(new CapacityComponent(CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, this));
 
 		localComponents.add(new IdleTimeComponent(CargoSchedulerFitnessCoreFactory.IDLE_TIME_HOURS_COMPONENT_NAME, this));
 
@@ -120,7 +120,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 	@Override
 	public boolean evaluate(final ISequences sequences, @NonNull final IEvaluationState evaluationState) {
 
-		final ScheduledSequences scheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
+		final ProfitAndLossSequences scheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.PROFIT_AND_LOSS_SEQUENCES, ProfitAndLossSequences.class);
 		if (scheduledSequences != null) {
 			return evaluator.evaluateSchedule(sequences, scheduledSequences) != Long.MAX_VALUE;
 		}
@@ -129,7 +129,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 
 	@Override
 	public boolean evaluate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @Nullable final Collection<IResource> affectedResources) {
-		final ScheduledSequences scheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
+		final ProfitAndLossSequences scheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.PROFIT_AND_LOSS_SEQUENCES, ProfitAndLossSequences.class);
 		if (scheduledSequences != null) {
 			return evaluator.evaluateSchedule(sequences, scheduledSequences) != Long.MAX_VALUE;
 		}

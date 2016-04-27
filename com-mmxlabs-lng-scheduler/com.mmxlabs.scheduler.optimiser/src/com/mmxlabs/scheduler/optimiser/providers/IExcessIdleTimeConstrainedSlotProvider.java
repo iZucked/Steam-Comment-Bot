@@ -16,16 +16,15 @@ public interface IExcessIdleTimeConstrainedSlotProvider {
 
 	/**
 	 * Check whether the idle time for this cargo should be constrained
+	 * 
 	 * @param slot
 	 * @return
 	 */
+	@NonNull
 	eIdleDetails getSlotIdleConstraintDetails(@NonNull final ILoadSlot load, @NonNull final IDischargeOption discharge, @NonNull IPortSlot returnSlot);
 
 	public enum eIdleDetails {
-		NONE,
-		LADEN,
-		BALLAST,
-		BOTH
+		NONE, LADEN, BALLAST, BOTH
 	}
 
 }

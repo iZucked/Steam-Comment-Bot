@@ -10,6 +10,8 @@ import java.util.List;
 
 import javax.inject.Singleton;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
@@ -21,6 +23,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
@@ -31,6 +34,7 @@ import com.mmxlabs.optimiser.core.fitness.impl.FitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessHelper;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeModule;
 import com.mmxlabs.optimiser.core.modules.ConstraintCheckerInstantiatorModule;
+import com.mmxlabs.optimiser.core.modules.EvaluatedStateConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluationProcessInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.FitnessFunctionInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.OptimiserContextModule;
@@ -113,7 +117,7 @@ public class ScheduleTestModule extends AbstractModule {
 	}
 
 	@Provides
-	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(final VoyagePlanOptimiser delegate) {
+	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(final @NonNull VoyagePlanOptimiser delegate) {
 		final CachingVoyagePlanOptimiser cachingVoyagePlanOptimiser = new CachingVoyagePlanOptimiser(delegate, DEFAULT_VPO_CACHE_SIZE);
 		return cachingVoyagePlanOptimiser;
 	}
@@ -206,6 +210,14 @@ public class ScheduleTestModule extends AbstractModule {
 	@Named(EvaluationProcessInstantiatorModule.ENABLED_EVALUATION_PROCESS_NAMES)
 	private List<String> provideEnabledEvaluationProcessNames(final IEvaluationProcessRegistry registry) {
 		final List<String> result = new ArrayList<String>(registry.getEvaluationProcessNames());
+		return result;
+	}
+
+	@Provides
+	@Singleton
+	@Named(EvaluatedStateConstraintCheckerInstantiatorModule.ENABLED_EVALUATED_STATE_CONSTRAINT_NAMES)
+	private List<String> provideEnabledEvaluationProcessNames(final IEvaluatedStateConstraintCheckerRegistry registry) {
+		final List<String> result = new ArrayList<String>(registry.getConstraintCheckerNames());
 		return result;
 	}
 

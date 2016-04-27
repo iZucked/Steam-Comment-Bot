@@ -380,14 +380,12 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 		// now update port slot
 		final GeneratedCharterOutVesselEventPortSlot charterOutPortSlot = new GeneratedCharterOutVesselEventPortSlot(
-							
-			/* ID */	String.format("gco-%s-%s", originalBallast.getOptions().getFromPortSlot().getPort(), originalBallast.getOptions().getToPortSlot().getPort()), //
-			/* Start / End Port */	 charterOutOption.getPort(), //
-			/* Hire Revenue */ charterOutOption.getMaxCharteringRevenue(), //
-			/* Repositioning */ 0,
-			/* Duration */ charterOutOption.getCharterDuration()
-				);
-//		injector.injectMembers(charterOutPortSlot);
+
+				/* ID */ String.format("gco-%s-%s", originalBallast.getOptions().getFromPortSlot().getPort(), originalBallast.getOptions().getToPortSlot().getPort()), //
+				/* Start / End Port */ charterOutOption.getPort(), //
+				/* Hire Revenue */ charterOutOption.getMaxCharteringRevenue(), //
+				/* Repositioning */ 0, /* Duration */ charterOutOption.getCharterDuration());
+		// injector.injectMembers(charterOutPortSlot);
 
 		// copy port times record
 		final Triple<IPortSlot, Integer, Integer> charterOutTimesRecord = new Triple<IPortSlot, Integer, Integer>(charterOutPortSlot, charterOutOption.getCharterStartTime(),
@@ -402,13 +400,11 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		}
 		final long dischargeToCharterPortRouteCosts = routeCostProvider.getRouteCost(charterOutOption.getToCharterPort().getSecond(), vessel, CostType.Ballast);
 
-		final VoyageOptions dischargeToCharterPortVoyageOptions = new VoyageOptions();
+		final VoyageOptions dischargeToCharterPortVoyageOptions = new VoyageOptions(originalBallast.getOptions().getFromPortSlot(), charterOutPortSlot);
 		dischargeToCharterPortVoyageOptions.setRoute(charterOutOption.getToCharterPort().getSecond(), charterOutOption.getToCharterPort().getFirst(), dischargeToCharterPortRouteCosts);
 		dischargeToCharterPortVoyageOptions.setAvailableTime(charterOutOption.getToCharterPort().getThird());
 		dischargeToCharterPortVoyageOptions.setVesselState(VesselState.Ballast);
 		dischargeToCharterPortVoyageOptions.setVessel(originalBallast.getOptions().getVessel());
-		dischargeToCharterPortVoyageOptions.setFromPortSlot(originalBallast.getOptions().getFromPortSlot());
-		dischargeToCharterPortVoyageOptions.setToPortSlot(charterOutPortSlot);
 		dischargeToCharterPortVoyageOptions.setShouldBeCold(originalBallast.getOptions().shouldBeCold());
 		dischargeToCharterPortVoyageOptions.setWarm(originalBallast.getOptions().isWarm());
 		dischargeToCharterPortVoyageOptions.setAllowCooldown(false);
@@ -420,25 +416,23 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		generatedCharterPortOptions.setVessel(originalBallast.getOptions().getVessel());
 		generatedCharterPortOptions.setVisitDuration(charterOutOption.getCharterDuration());
 
-//		final IGeneratedCharterOutVesselEvent charterOutEvent = charterOutPortSlot.getVesselEvent();
-//		charterOutEvent.setStartPort(charterOutOption.getPort());
-//		charterOutEvent.setEndPort(charterOutOption.getPort());
-//		charterOutEvent.setHireOutRevenue(charterOutOption.getMaxCharteringRevenue());
-//		charterOutEvent.setRepositioning(0);
-//		charterOutEvent.setDurationHours(charterOutOption.getCharterDuration());
+		// final IGeneratedCharterOutVesselEvent charterOutEvent = charterOutPortSlot.getVesselEvent();
+		// charterOutEvent.setStartPort(charterOutOption.getPort());
+		// charterOutEvent.setEndPort(charterOutOption.getPort());
+		// charterOutEvent.setHireOutRevenue(charterOutOption.getMaxCharteringRevenue());
+		// charterOutEvent.setRepositioning(0);
+		// charterOutEvent.setDurationHours(charterOutOption.getCharterDuration());
 
 		charterOutOption.setPortOptions(generatedCharterPortOptions);
 		// (3) ballast to return port
 
 		final long charterToReturnPortRouteCosts = routeCostProvider.getRouteCost(charterOutOption.getFromCharterPort().getSecond(), vessel, CostType.Ballast);
 
-		final VoyageOptions charterToReturnPortVoyageOptions = new VoyageOptions();
+		final VoyageOptions charterToReturnPortVoyageOptions = new VoyageOptions(charterOutPortSlot, originalBallast.getOptions().getToPortSlot());
 		charterToReturnPortVoyageOptions.setRoute(charterOutOption.getFromCharterPort().getSecond(), charterOutOption.getFromCharterPort().getFirst(), charterToReturnPortRouteCosts);
 		charterToReturnPortVoyageOptions.setAvailableTime(charterOutOption.getFromCharterPort().getThird());
 		charterToReturnPortVoyageOptions.setVesselState(VesselState.Ballast);
 		charterToReturnPortVoyageOptions.setVessel(originalBallast.getOptions().getVessel());
-		charterToReturnPortVoyageOptions.setFromPortSlot(charterOutPortSlot);
-		charterToReturnPortVoyageOptions.setToPortSlot(originalBallast.getOptions().getToPortSlot());
 		charterToReturnPortVoyageOptions.setShouldBeCold(originalBallast.getOptions().shouldBeCold());
 		charterToReturnPortVoyageOptions.setWarm(originalBallast.getOptions().isWarm());
 		charterToReturnPortVoyageOptions.setAllowCooldown(originalBallast.getOptions().getAllowCooldown());

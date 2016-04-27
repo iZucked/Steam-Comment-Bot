@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -18,7 +19,7 @@ public class PortDetailsTest {
 
 		final FuelComponent c = FuelComponent.Base;
 		final long value = 100L;
-		final PortDetails details = new PortDetails();
+		final PortDetails details = new PortDetails(new PortOptions(Mockito.mock(IPortSlot.class)));
 		Assert.assertEquals(0, details.getFuelConsumption(c));
 		details.setFuelConsumption(c, value);
 		Assert.assertEquals(value, details.getFuelConsumption(c));
@@ -61,10 +62,9 @@ public class PortDetailsTest {
 		Assert.assertFalse(details1.equals(new Object()));
 	}
 
-	PortDetails make(final int duration, final IPortSlot portSlot, final FuelComponent fuel, final long consumption) {
+	PortDetails make(final int duration, final @NonNull IPortSlot portSlot, final FuelComponent fuel, final long consumption) {
 
-		final PortDetails d = new PortDetails();
-		d.setOptions(new PortOptions(portSlot));
+		final PortDetails d = new PortDetails(new PortOptions(portSlot));
 
 		d.getOptions().setVisitDuration(duration);
 		d.setFuelConsumption(fuel, consumption);

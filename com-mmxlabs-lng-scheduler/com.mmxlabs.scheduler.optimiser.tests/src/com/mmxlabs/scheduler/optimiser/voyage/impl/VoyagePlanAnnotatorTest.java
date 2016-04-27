@@ -40,7 +40,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -104,15 +104,12 @@ public class VoyagePlanAnnotatorTest {
 		final long dischargeFuelConsumption2 = 600L;
 		final PortDetails dischargeDetails2 = constructPortDetails(dischargeSlot2, dischargeVisitDuration2, dischargeFuelPrice2, dischargeFuelConsumption2);
 
-		final VoyageDetails voyageDetails1 = new VoyageDetails();
-		final VoyageOptions options1 = new VoyageOptions();
-		options1.setFromPortSlot(loadSlot1);
-		options1.setToPortSlot(dischargeSlot1);
+		final VoyageOptions options1 = new VoyageOptions(loadSlot1, dischargeSlot1);
 		options1.setRoute(ERouteOption.DIRECT, 500, 0L);
 		options1.setAvailableTime(90);
 		options1.setVesselState(VesselState.Laden);
 
-		voyageDetails1.setOptions(options1);
+		final VoyageDetails voyageDetails1 = new VoyageDetails(options1);
 
 		voyageDetails1.setSpeed(15000);
 		// voyageDetails1.setStartTime(110);
@@ -124,10 +121,8 @@ public class VoyagePlanAnnotatorTest {
 
 		voyageFuelInfo1.setVoyageFuelDetails(voyageDetails1);
 
-		final VoyageDetails voyageDetails2 = new VoyageDetails();
-		final VoyageOptions options2 = new VoyageOptions();
-		options2.setFromPortSlot(dischargeSlot1);
-		options2.setToPortSlot(loadSlot2);
+		final VoyageOptions options2 = new VoyageOptions(dischargeSlot1, loadSlot2);
+		final VoyageDetails voyageDetails2 = new VoyageDetails(options2);
 		options2.setRoute(ERouteOption.DIRECT, 1000, 0L);
 		options2.setAvailableTime(80);
 		options2.setVesselState(VesselState.Ballast);
@@ -137,31 +132,26 @@ public class VoyagePlanAnnotatorTest {
 
 		voyageFuelInfo2.setVoyageFuelDetails(voyageDetails2);
 
-		voyageDetails2.setOptions(options2);
-
 		voyageDetails2.setSpeed(16000);
 		// voyageDetails2.setStartTime(220);
 		voyageDetails2.setTravelTime(50);
 		voyageDetails2.setIdleTime(30);
 
-		final VoyageDetails voyageDetails3 = new VoyageDetails();
-		final VoyageOptions options3 = new VoyageOptions();
-		options3.setFromPortSlot(loadSlot2);
-		options3.setToPortSlot(dischargeSlot2);
+		final VoyageOptions options3 = new VoyageOptions(loadSlot2, dischargeSlot2);
 		options3.setRoute(ERouteOption.DIRECT, 1500, 0L);
 		options3.setAvailableTime(70);
 		options3.setVesselState(VesselState.Laden);
 
-		final FuelInfo voyageFuelInfo3 = new FuelInfo(FuelComponent.Base, 1200L, 1.20, FuelComponent.Base_Supplemental, 2200L, 2.20, FuelComponent.NBO, 3200L, 3.20, FuelComponent.FBO, 4200L, 4.20,
-				FuelComponent.IdleBase, 5200L, 5.20, FuelComponent.IdleNBO, 6200L, 6.20);
-		voyageFuelInfo3.setVoyageFuelDetails(voyageDetails3);
-
-		voyageDetails3.setOptions(options3);
+		final VoyageDetails voyageDetails3 = new VoyageDetails(options3);
 
 		voyageDetails3.setSpeed(17000);
 		// voyageDetails3.setStartTime(330);
 		voyageDetails3.setTravelTime(50);
 		voyageDetails3.setIdleTime(20);
+
+		final FuelInfo voyageFuelInfo3 = new FuelInfo(FuelComponent.Base, 1200L, 1.20, FuelComponent.Base_Supplemental, 2200L, 2.20, FuelComponent.NBO, 3200L, 3.20, FuelComponent.FBO, 4200L, 4.20,
+				FuelComponent.IdleBase, 5200L, 5.20, FuelComponent.IdleNBO, 6200L, 6.20);
+		voyageFuelInfo3.setVoyageFuelDetails(voyageDetails3);
 
 		final IPortCostProvider portCostProvider = Mockito.mock(IPortCostProvider.class);
 		final VoyagePlanAnnotator annotator = createVoyagePlanAnnotator(portSlotEditor, portCostProvider, vesselProvider);
@@ -198,7 +188,7 @@ public class VoyagePlanAnnotatorTest {
 
 		final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, context, evaluationState);
 		ISequence sequence = Mockito.mock(ISequence.class);
-		ScheduledSequence scheduledSequence = new ScheduledSequence(resource, sequence, 0, plans);
+		VolumeAllocatedSequence scheduledSequence = new VolumeAllocatedSequence(resource, sequence, 0, plans);
 		annotator.annotateFromVoyagePlan(scheduledSequence, annotatedSolution);
 
 		{
@@ -329,12 +319,11 @@ public class VoyagePlanAnnotatorTest {
 	}
 
 	private PortDetails constructPortDetails(final @NonNull IPortSlot slot, final int duration, final double fuelPrice, final long fuelConsumption) {
-		final PortDetails result = new PortDetails();
 
 		final PortOptions options = new PortOptions(slot);
 		options.setVisitDuration(duration);
+		final PortDetails result = new PortDetails(options);
 
-		result.setOptions(options);
 		result.setFuelUnitPrice(FuelComponent.Base, OptimiserUnitConvertor.convertToInternalPrice(fuelPrice));
 		result.setFuelConsumption(FuelComponent.Base, fuelConsumption);
 

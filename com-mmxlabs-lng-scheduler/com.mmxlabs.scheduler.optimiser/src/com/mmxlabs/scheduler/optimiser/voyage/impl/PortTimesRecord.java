@@ -185,7 +185,11 @@ public final class PortTimesRecord implements IPortTimesRecord {
 
 	@Override
 	public IPortSlot getFirstSlot() {
-		return firstPortSlot;
+		final IPortSlot pFirstPortSlot = firstPortSlot;
+		if (pFirstPortSlot == null) {
+			throw new IllegalStateException("#getFirstSlot called before slots have been added");
+		}
+		return pFirstPortSlot;
 	}
 
 	@Override

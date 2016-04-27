@@ -121,7 +121,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			// result = prime * result + loadPrice;
 			result = (prime * result) + dischargePrice;
 			result = (prime * result) + baseFuelPricePerMT;
-			result = (prime * result) + (int)vesselCharterInRatePerDay;
+			result = (prime * result) + (int) vesselCharterInRatePerDay;
 
 			result = (prime * result) + vessel.hashCode();
 
@@ -161,13 +161,10 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		}
 	}
 
-	private final IVoyagePlanOptimiser delegate;
-
 	private final AbstractCache<@NonNull CacheKey, VoyagePlan> cache;
 
 	public CachingVoyagePlanOptimiser(final @NonNull IVoyagePlanOptimiser delegate, final int cacheSize) {
 		super();
-		this.delegate = delegate;
 		final IKeyEvaluator<@NonNull CacheKey, VoyagePlan> evaluator = new IKeyEvaluator<@NonNull CacheKey, VoyagePlan>() {
 
 			@Override

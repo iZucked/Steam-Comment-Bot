@@ -73,8 +73,8 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 	private IVesselBaseFuelCalculator vesselBaseFuelCalculator;
 
 	@Override
-	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(final int vesselStartTime, final IVesselAvailability vesselAvailability, final VoyagePlan vp,
-			final IPortTimesRecord portTimesRecord) {
+	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(final int vesselStartTime, final @NonNull IVesselAvailability vesselAvailability, final @NonNull VoyagePlan vp,
+			final @NonNull IPortTimesRecord portTimesRecord) {
 		final long startingHeelInM3 = vp.getStartingHeelInM3();
 		final long vesselCharterRatePerDay = vp.getCharterInRatePerDay();
 
@@ -266,8 +266,9 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 		return null;
 	}
 
-	private long evaluateSalesPrice(final IVesselAvailability vesselAvailability, final int vesselStartTime, final long vesselCharterRatePerDay, final IPortTimesRecord portTimesRecord,
-			final List<ISequenceElement> sequenceElements, final IDischargeOption originalDischarge, final int currentPricePerMMBTu) {
+	private long evaluateSalesPrice(final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, final long vesselCharterRatePerDay,
+			final @NonNull IPortTimesRecord portTimesRecord, final @NonNull List<@NonNull ISequenceElement> sequenceElements, final @NonNull IDischargeOption originalDischarge,
+			final int currentPricePerMMBTu) {
 
 		// Overwrite current break even price with test price
 		((IBreakEvenPriceCalculator) originalDischarge.getDischargePriceCalculator()).setPrice(currentPricePerMMBTu);
@@ -278,15 +279,16 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 		final IAllocationAnnotation newAllocation = volumeAllocator.get().allocate(vesselAvailability, vesselStartTime, newVoyagePlan, portTimesRecord);
 		assert newAllocation != null;
 
-		final Pair<@NonNull CargoValueAnnotation, @NonNull Long> cargoAnnotation = entityValueCalculator.get().evaluate(newVoyagePlan, newAllocation, vesselAvailability, vesselStartTime, null);
+		final Pair<@NonNull CargoValueAnnotation, @NonNull Long> cargoAnnotation = entityValueCalculator.get().evaluate(newVoyagePlan, newAllocation, vesselAvailability, vesselStartTime, null, null);
 		assert cargoAnnotation != null;
 
 		final long newPnLValue = cargoAnnotation.getSecond();
 		return newPnLValue;
 	}
 
-	private int search(final int min, final long minValue, final int max, final long maxValue, final IVesselAvailability vesselAvailability, final int vesselStartTime,
-			final long vesselCharterRatePerDay, final IPortTimesRecord portTimesRecord, final List<ISequenceElement> sequenceElements, final IDischargeOption originalDischarge) {
+	private int search(final int min, final long minValue, final int max, final long maxValue, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime,
+			final long vesselCharterRatePerDay, final @NonNull IPortTimesRecord portTimesRecord, final @NonNull List<@NonNull ISequenceElement> sequenceElements,
+			final IDischargeOption originalDischarge) {
 
 		final int mid = min + ((max - min) / 2);
 

@@ -240,9 +240,9 @@ public class ScheduleCalculatorTest {
 		when(portSlot5.getTimeWindow()).thenReturn(timeWindow);
 
 		Pair<CargoValueAnnotation, Long> p = Mockito.mock(Pair.class);
-		when(entityValueCalculator.evaluate(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.anyInt(), Matchers.any())).thenReturn(p);
-		final ScheduleCalculator scheduleCalculator = new ScheduleCalculator();
-		injector.injectMembers(scheduleCalculator);
+		when(entityValueCalculator.evaluate(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.anyInt(), Matchers.any(), Matchers.any())).thenReturn(p);
+		final ProfitAndLossCalculator profitAndLossCalculator = new ProfitAndLossCalculator();
+		injector.injectMembers(profitAndLossCalculator);
 
 		final IMarkToMarket market1 = mock(IMarkToMarket.class);
 		when(markToMarketProvider.getMarketForElement(element1)).thenReturn(market1);
@@ -269,7 +269,7 @@ public class ScheduleCalculatorTest {
 		when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot4)), Matchers.<IPortTimesRecord> any()))
 				.thenReturn(allocationAnnotation);
 
-		scheduleCalculator.calculateMarkToMarketPNL(sequences, annotatedSolution);
+		profitAndLossCalculator.calculateMarkToMarketPNL(sequences, annotatedSolution);
 
 		// Verify that our slots were correctly matched against MTM slots
 		verify(volumeAllocator, times(1)).allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot1)),

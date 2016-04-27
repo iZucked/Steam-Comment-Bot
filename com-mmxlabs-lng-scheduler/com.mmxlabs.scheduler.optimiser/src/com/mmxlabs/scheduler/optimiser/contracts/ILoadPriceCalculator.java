@@ -13,9 +13,10 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -33,11 +34,12 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * 
 	 * @param sequences
 	 */
-	public void prepareEvaluation(@NonNull ISequences sequences);
+	default void preparePurchaseForEvaluation(@NonNull ISequences sequences) {
+	}
 
 	/**
-	 * Find the price (in $/M3) for loading at the given slot. Although every argument here except loadSlot and loadVolume can be found in the previous call to
-	 * {@link #prepareEvaluation(ScheduledSequences)}, the most relevant ones are reproduced here for convenience.
+	 * Find the price (in $/M3) for loading at the given slot. Although every argument here except loadSlot and loadVolume can be found in the previous call to {@link #prepareEvaluation(ISequences)},
+	 * the most relevant ones are reproduced here for convenience.
 	 * 
 	 * 
 	 * @param loadSlot
@@ -51,7 +53,8 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @return
 	 */
 	public int calculateFOBPricePerMMBTu(@NonNull ILoadSlot loadSlot, @NonNull IDischargeSlot dischargeSlot, int dischargePricePerMMBTu, @NonNull IAllocationAnnotation allocationAnnotation,
-			@NonNull IVesselAvailability vesselAvailability, int vesselStartTime, @NonNull VoyagePlan plan, @Nullable IDetailTree annotations);
+			@NonNull IVesselAvailability vesselAvailability, int vesselStartTime, @NonNull VoyagePlan plan, @Nullable VolumeAllocatedSequences volumeAllocatedSequences,
+			@Nullable IDetailTree annotations);
 
 	/**
 	 * Find the price in $/m3 for loading at the given slot and discharging at the given slot, when the cargo is a DES Purchase
@@ -67,7 +70,7 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @return
 	 */
 	public int calculateDESPurchasePricePerMMBTu(@NonNull ILoadOption loadOption, @NonNull IDischargeSlot dischargeSlot, int dischargePricePerMMBTu,
-			@NonNull IAllocationAnnotation allocationAnnotation, @Nullable IDetailTree annotations);
+			@NonNull IAllocationAnnotation allocationAnnotation, @Nullable VolumeAllocatedSequences volumeAllocatedSequences, @Nullable IDetailTree annotations);
 
 	/**
 	 * Find the price in $/m3 for loading at the given slot and discharging at the given slot, when a the cargo is a FOB Sale
@@ -82,7 +85,7 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @return
 	 */
 	public int calculatePriceForFOBSalePerMMBTu(@NonNull ILoadSlot loadSlot, @NonNull IDischargeOption dischargeOption, int dischargePricePerMMBTu, @NonNull IAllocationAnnotation allocationAnnotation,
-			@Nullable IDetailTree annotations);
+			@Nullable VolumeAllocatedSequences volumeAllocatedSequences, @Nullable IDetailTree annotations);
 
 	/**
 	 * Questions -> Volume allocator interaction? -> EntityValueCalcuator interaction -> Statefull/less?
@@ -99,15 +102,17 @@ public interface ILoadPriceCalculator extends ICalculator {
 	static final long @NonNull [] EMPTY_ADDITIONAL_PNL_RESULT = new long[ADDITIONAL_PNL_COMPONENT_SIZE];
 
 	default long @NonNull [] calculateAdditionalProfitAndLoss(@NonNull ILoadOption loadOption, @NonNull IAllocationAnnotation allocationAnnotation, int @NonNull [] slotPricesPerMMBTu,
-			@NonNull IVesselAvailability vesselAvailability, int vesselStartTime, @NonNull VoyagePlan plan, @Nullable IDetailTree annotations) {
+			@NonNull IVesselAvailability vesselAvailability, int vesselStartTime, @NonNull VoyagePlan plan, @Nullable VolumeAllocatedSequences volumeAllocatedSequences,
+			@Nullable IDetailTree annotations) {
 		return EMPTY_ADDITIONAL_PNL_RESULT;
 	}
 
 	/**
-	 * Invoked before P&L calculations are about to begin, but after {@link #prepareEvaluation(ISequences)}. The calculate methods may have been invoked to obtain P&L estimates, now we want to clean
-	 * any cached data prior to the real calculations.
+	 * Invoked before P&L calculations are about to begin, but after {@link #preparePurchaseForEvaluation(ISequences)}. The calculate methods may have been invoked to obtain P&L estimates, now we want
+	 * to clean any cached data prior to the real calculations.
 	 */
-	public void prepareRealPNL();
+	default void prepareRealPurchasePNL() {
+	}
 
 	/**
 	 * Provides a set PricingEventType for a calculator
@@ -117,7 +122,10 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @param dischargeOption
 	 *            TODO
 	 */
-	PricingEventType getCalculatorPricingEventType(ILoadOption loadOption, IPortTimeWindowsRecord portTimeWindowsRecord);
+	@Nullable
+	default PricingEventType getCalculatorPricingEventType(@NonNull ILoadOption loadOption, @NonNull IPortTimeWindowsRecord portTimeWindowsRecord) {
+		return null;
+	}
 
 	/**
 	 * Get a rough estimate of the price at a given point in time Note that this is assumed to be in price curve time
@@ -128,7 +136,9 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @param timeInHours
 	 * @return
 	 */
-	int getEstimatedPurchasePrice(ILoadOption loadOption, IDischargeOption dischargeOption, int timeInHours);
+	default int getEstimatedPurchasePrice(@NonNull ILoadOption loadOption, @NonNull IDischargeOption dischargeOption, int timeInHours) {
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
 
 	/**
 	 * A contract may specify the pricing date of a purchase
@@ -137,6 +147,7 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @param dischargeOption
 	 * @return
 	 */
-	public int getCalculatorPricingDate(ILoadOption loadOption, IPortTimeWindowsRecord portTimeWindowsRecord);
-
+	default int getCalculatorPricingDate(@NonNull ILoadOption loadOption, @NonNull IPortTimeWindowsRecord portTimeWindowsRecord) {
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
 }

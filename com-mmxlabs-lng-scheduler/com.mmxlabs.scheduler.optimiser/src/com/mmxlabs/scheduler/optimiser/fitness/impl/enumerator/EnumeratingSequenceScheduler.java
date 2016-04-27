@@ -30,7 +30,7 @@ import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractLoggingSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
@@ -161,9 +161,6 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 
 	@Inject
 	private IVesselProvider vesselProvider;
-
-	@Inject
-	private ScheduleCalculator scheduleCalculator;
 
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
@@ -504,7 +501,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 			} else {
 
 				final IPortSlot prevSlot = prevElement == null ? null : portSlotProvider.getPortSlot(prevElement);
-				if (actualsDataProvider.hasReturnActuals(prevSlot)) {
+				if (prevSlot != null && actualsDataProvider.hasReturnActuals(prevSlot)) {
 					windows = Collections.singletonList(actualsDataProvider.getReturnTimeAsTimeWindow(prevSlot));
 					if (actualsDataProvider.hasActuals(slot)) {
 						int a = actualsDataProvider.getArrivalTime(slot);
@@ -641,41 +638,6 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 		// }
 		//
 		// separationPoints.add(arrivalTimes.length - 1);
-	}
-
-	// /**
-	// * Recursively enumerate all the possibilities for arrival times from the given index (inclusive), evaluating each one and keeping the best.
-	// *
-	// * A randomised subclass could override this and take a random decision at each step, until it has evaluated a certain number of possibilities.
-	// *
-	// * @param index
-	// */
-	// protected ScheduledSequences enumerate(final int seq, final int index, @Nullable IAnnotatedSolution solution) {
-	// if ((seq == arrivalTimes.length) && (index < sizes[seq])) {
-	// evaluate(solution);
-	// return;
-	// } else if (seq == arrivalTimes.length) {
-	// enumerate(seq + 1, 0, solution);
-	// return;
-	// }
-	//
-	// final int min = getMinArrivalTime(seq, index);
-	// final int max = getMaxArrivalTime(seq, index);
-	//
-	// for (int time = min; time <= max; time++) {
-	// arrivalTimes[seq][index] = time;
-	// enumerate(seq, index + 1, solution);
-	// }
-	// }
-
-	protected ScheduledSequences evaluate(@Nullable final IAnnotatedSolution solution) {
-
-		final ScheduledSequences scheduledSequences = scheduleCalculator.schedule(sequences, arrivalTimes, solution);
-		if (scheduledSequences == null) {
-			return null;
-		}
-
-		return scheduledSequences;
 	}
 
 	/**

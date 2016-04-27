@@ -195,7 +195,7 @@ public class PriceIntervalProviderHelper {
 
 	public int[] getIdealLoadAndDischargeTimesGivenCanal(final int purchaseStart, final int purchaseEnd, int salesStart, final int salesEnd, final int loadDuration, final int canalMaxSpeed,
 			final int canalNBOSpeed) {
-		//  set min start dates
+		// set min start dates
 		int purchase = salesStart - canalMaxSpeed - loadDuration;
 		if (purchase < purchaseStart) {
 			salesStart = purchaseStart + canalMaxSpeed + loadDuration;
@@ -247,14 +247,13 @@ public class PriceIntervalProviderHelper {
 		LadenRouteData bestCanal = null;
 		for (final LadenRouteData canal : sortedCanalTimes) {
 			if (isFeasibleTravelTime(purchase, sales, loadDuration, canal.ladenMaxSpeed)) {
-				int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) canal.ladenMaxSpeed, (int) canal.ladenNBOSpeed);
-				int ladenLength = (times[1] - times[0]) / 24;
+				final int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) canal.ladenMaxSpeed, (int) canal.ladenNBOSpeed);
+				final int ladenLength = (times[1] - times[0]) / 24;
 
-				final long boiloffMMBTU = Calculator
-						.convertM3ToMMBTu((ladenLength) * boiloffRateM3, cv);
+				final long boiloffMMBTU = Calculator.convertM3ToMMBTu((ladenLength) * boiloffRateM3, cv);
 				final long boiloffCost = Calculator.costFromVolume(boiloffMMBTU, sales.price);
 				final long boiloffCostMMBTU = OptimiserUnitConvertor.convertToInternalDailyCost(boiloffCost);
-				long charterCost = 0;
+				final long charterCost = 0;
 				final long cost = canal.ladenRouteCost + boiloffCostMMBTU + charterCost;
 				if (cost < bestMargin) {
 					bestMargin = cost;
@@ -264,17 +263,17 @@ public class PriceIntervalProviderHelper {
 			}
 		}
 		if (bestCanal == null) {
-			long fastest = Long.MAX_VALUE;
+			final long fastest = Long.MAX_VALUE;
 			for (final LadenRouteData canal : sortedCanalTimes) {
 				if (canal.ladenMaxSpeed < fastest) {
 					bestCanal = canal;
 				}
 			}
 			if (bestCanal != null) {
-				int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) bestCanal.ladenMaxSpeed, (int) bestCanal.ladenMaxSpeed);
-				int ladenLength = (times[1] - times[0]) / 24;
-				final long boiloffMMBTU = Calculator
-						.convertM3ToMMBTu((ladenLength) * boiloffRateM3, cv);
+				final int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) bestCanal.ladenMaxSpeed,
+						(int) bestCanal.ladenMaxSpeed);
+				final int ladenLength = (times[1] - times[0]) / 24;
+				final long boiloffMMBTU = Calculator.convertM3ToMMBTu((ladenLength) * boiloffRateM3, cv);
 				final long boiloffCost = Calculator.costFromVolume(boiloffMMBTU, sales.price);
 				bestBoiloffCostMMBTU = OptimiserUnitConvertor.convertToInternalDailyCost(boiloffCost);
 			}
@@ -482,8 +481,9 @@ public class PriceIntervalProviderHelper {
 	}
 
 	boolean isLoadPricingEventTime(final @NonNull ILoadOption slot, final @NonNull IPortTimeWindowsRecord portTimeWindowsRecord) {
-		final PricingEventType pet = slot.getLoadPriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowsRecord) == null ? slot.getPricingEvent()
-				: slot.getLoadPriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowsRecord);
+		@Nullable
+		final PricingEventType pricingEventType = slot.getLoadPriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowsRecord);
+		final PricingEventType pet = pricingEventType == null ? slot.getPricingEvent() : pricingEventType;
 		return isLoadPricingEventTime(pet);
 	}
 
@@ -673,13 +673,13 @@ public class PriceIntervalProviderHelper {
 		if (slot instanceof ILoadOption && isLoadPricingEventTime((ILoadOption) slot, portTimeWindowsRecord)) {
 			duration = portTimeWindowsRecord.getSlotDuration(slot);
 		} else if (slot instanceof ILoadOption && isDischargePricingEventTime((ILoadOption) slot, portTimeWindowsRecord)) {
-			IDischargeOption firstDischargeOption = getFirstDischargeOption(portTimeWindowsRecord.getSlots());
+			final IDischargeOption firstDischargeOption = getFirstDischargeOption(portTimeWindowsRecord.getSlots());
 			assert firstDischargeOption != null;
 			duration = portTimeWindowsRecord.getSlotDuration(firstDischargeOption);
 		} else if (slot instanceof IDischargeOption && isDischargePricingEventTime((IDischargeOption) slot, portTimeWindowsRecord)) {
 			duration = portTimeWindowsRecord.getSlotDuration(slot);
 		} else if (slot instanceof IDischargeOption && isLoadPricingEventTime((IDischargeOption) slot, portTimeWindowsRecord)) {
-			ILoadOption firstLoadOption = getFirstLoadOption(portTimeWindowsRecord.getSlots());
+			final ILoadOption firstLoadOption = getFirstLoadOption(portTimeWindowsRecord.getSlots());
 			assert firstLoadOption != null;
 			duration = portTimeWindowsRecord.getSlotDuration(firstLoadOption);
 		}
@@ -720,14 +720,16 @@ public class PriceIntervalProviderHelper {
 
 	@NonNull
 	public static PricingEventType getPriceEventFromSlotOrContract(final @NonNull ILoadOption slot, final @NonNull IPortTimeWindowsRecord portTimeWindowRecord) {
-		return slot.getLoadPriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowRecord) == null ? slot.getPricingEvent()
-				: slot.getLoadPriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowRecord);
+		@Nullable
+		final PricingEventType pricingEventType = slot.getLoadPriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowRecord);
+
+		return pricingEventType == null ? slot.getPricingEvent() : pricingEventType;
 	}
 
 	@NonNull
 	public static PricingEventType getPriceEventFromSlotOrContract(final @NonNull IDischargeOption slot, final @NonNull IPortTimeWindowsRecord portTimeWindowRecord) {
-		return slot.getDischargePriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowRecord) == null ? slot.getPricingEvent()
-				: slot.getDischargePriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowRecord);
+		final PricingEventType pricingEventType = slot.getDischargePriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowRecord);
+		return pricingEventType == null ? slot.getPricingEvent() : pricingEventType;
 	}
 
 	/**

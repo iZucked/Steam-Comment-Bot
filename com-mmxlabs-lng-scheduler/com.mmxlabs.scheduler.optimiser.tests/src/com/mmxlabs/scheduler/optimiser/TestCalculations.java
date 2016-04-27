@@ -22,7 +22,6 @@ import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IEvaluationContext;
@@ -63,7 +62,8 @@ import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.events.ILoadEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
@@ -80,7 +80,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
-import com.mmxlabs.scheduler.optimiser.schedule.ScheduledDataLookupProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.VoyagePlanAnnotator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
@@ -233,14 +232,13 @@ public class TestCalculations {
 
 			final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, context, state);
 
-			final ScheduledSequences scheduledSequence;
 			// try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 			// scope.enter();
 			final ScheduleCalculator scheduler = injector.getInstance(ScheduleCalculator.class);
 
-			scheduledSequence = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
+			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
 			// }
-			Assert.assertNotNull(scheduledSequence);
+			Assert.assertNotNull(volumeAllocatedSequences);
 			// TODO: Start checking results
 			{
 				Assert.assertNull(annotatedSolution.getElementAnnotations().getAnnotation(startElement, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class));
@@ -681,8 +679,8 @@ public class TestCalculations {
 
 			final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, context, state);
 
-			final ScheduledSequences scheduledSequence = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
-			Assert.assertNotNull(scheduledSequence);
+			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
+			Assert.assertNotNull(volumeAllocatedSequences);
 
 			// TODO: Start checking results
 			{
@@ -1122,8 +1120,8 @@ public class TestCalculations {
 
 			final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, context, state);
 
-			final ScheduledSequences scheduledSequence = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
-			Assert.assertNotNull(scheduledSequence);
+			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
+			Assert.assertNotNull(volumeAllocatedSequences);
 			// TODO: Start checking results
 			{
 				Assert.assertNull(annotatedSolution.getElementAnnotations().getAnnotation(startElement, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class));
@@ -1493,7 +1491,6 @@ public class TestCalculations {
 				bind(VoyagePlanAnnotator.class);
 				bind(VoyagePlanner.class);
 				bind(ScheduleCalculator.class);
-				bind(ScheduledDataLookupProvider.class);
 				bind(ICharterRateCalculator.class).to(VesselStartDateCharterRateCalculator.class);
 				bind(IVolumeAllocator.class).toInstance(volumeAllocator);
 				bind(SchedulerBuilder.class);

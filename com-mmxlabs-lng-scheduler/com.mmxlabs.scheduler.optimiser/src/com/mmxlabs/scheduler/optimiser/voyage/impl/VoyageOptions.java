@@ -23,8 +23,8 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 	private int distance;
 	private long routeCost;
 	private IVessel vessel;
-	private IPortSlot fromPortSlot;
-	private IPortSlot toPortSlot;
+	private @NonNull IPortSlot fromPortSlot;
+	private @NonNull IPortSlot toPortSlot;
 	private int nboSpeed;
 
 	private boolean useNBOForIdle;
@@ -57,15 +57,16 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 
 	private int charterOutDailyRate;
 
-	public VoyageOptions() {
-
+	public VoyageOptions(@NonNull final IPortSlot from, @NonNull final IPortSlot to) {
+		this.fromPortSlot = from;
+		this.toPortSlot = to;
 	}
 
 	public VoyageOptions(final VoyageOptions options) {
+		this.fromPortSlot = options.getFromPortSlot();
+		this.toPortSlot = options.getToPortSlot();
 		setAvailableTime(options.getAvailableTime());
 		setVessel(options.getVessel());
-		setFromPortSlot(options.getFromPortSlot());
-		setToPortSlot(options.getToPortSlot());
 		setNBOSpeed(options.getNBOSpeed());
 		setUseNBOForTravel(options.useNBOForTravel());
 		setUseFBOForSupplement(options.useFBOForSupplement());
@@ -91,7 +92,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 		return routeCost;
 	}
 
-	public final IPortSlot getFromPortSlot() {
+	public final @NonNull IPortSlot getFromPortSlot() {
 		return fromPortSlot;
 	}
 
@@ -103,7 +104,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 		return route;
 	}
 
-	public final IPortSlot getToPortSlot() {
+	public final @NonNull IPortSlot getToPortSlot() {
 		return toPortSlot;
 	}
 
@@ -151,11 +152,13 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 		this.vessel = vessel;
 	}
 
-	public final void setFromPortSlot(final IPortSlot fromPortSlot) {
+	@Deprecated // Only used for Client E
+	public final void setFromPortSlot(final @NonNull IPortSlot fromPortSlot) {
 		this.fromPortSlot = fromPortSlot;
 	}
 
-	public final void setToPortSlot(final IPortSlot toPortSlot) {
+	@Deprecated // Only used for Client E
+	public final void setToPortSlot(final @NonNull IPortSlot toPortSlot) {
 		this.toPortSlot = toPortSlot;
 	}
 
@@ -229,7 +232,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 	}
 
 	@Override
-	public final VoyageOptions clone() {
+	public final @NonNull VoyageOptions clone() {
 		return new VoyageOptions(this);
 	}
 

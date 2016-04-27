@@ -185,7 +185,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					} else {
 						// Reliq vessels should not use base fuel supplement.
 						assert (!vessel.getVesselClass().hasReliqCapability());
-						
+
 						routeDiffInMT = routeRequiredConsumptionInMT - routeNboProvidedInMT;
 						routeFboProvidedInMT = 0;
 						routeFboProvidedInM3 = 0;
@@ -937,15 +937,13 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			if (element instanceof VoyageOptions) {
 				final VoyageOptions options = (VoyageOptions) element;
 
-				final VoyageDetails voyageDetails = new VoyageDetails();
-				voyageDetails.setOptions(options);
+				final VoyageDetails voyageDetails = new VoyageDetails(options);
 				// Calculate voyage cost
 				calculateVoyageFuelRequirements(options, voyageDetails);
 				result.add(voyageDetails);
 			} else if (element instanceof PortOptions) {
 				final PortOptions options = ((PortOptions) element).clone();
-				final PortDetails details = new PortDetails();
-				details.setOptions(options);
+				final PortDetails details = new PortDetails(options);
 				calculatePortFuelRequirements(options, details);
 
 				final long portCosts;

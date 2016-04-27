@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.TreeMap;
 
+import javax.management.relation.Role;
 import javax.security.sasl.SaslException;
 
 import org.junit.Assert;
@@ -236,7 +237,7 @@ public class NewLNGVoyageCalculatorTest {
 		// Sanity check that we are travelling slower than NBO rate so there will be no supplement
 		Assert.assertTrue(OptimiserUnitConvertor.convertToInternalSpeed(speed) < options.getNBOSpeed());
 
-		final VoyageDetails details = new VoyageDetails();
+		final VoyageDetails details = new VoyageDetails(options);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -281,7 +282,7 @@ public class NewLNGVoyageCalculatorTest {
 		final int internalSpeed = OptimiserUnitConvertor.convertToInternalSpeed(speed);
 		Assert.assertTrue(internalSpeed > options.getNBOSpeed());
 
-		final VoyageDetails details = new VoyageDetails();
+		final VoyageDetails details = new VoyageDetails(options);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -332,7 +333,7 @@ public class NewLNGVoyageCalculatorTest {
 		final int internalSpeed = OptimiserUnitConvertor.convertToInternalSpeed(speed);
 		Assert.assertTrue(internalSpeed > options.getNBOSpeed());
 
-		final VoyageDetails details = new VoyageDetails();
+		final VoyageDetails details = new VoyageDetails(options);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -380,7 +381,7 @@ public class NewLNGVoyageCalculatorTest {
 		final int internalSpeed = OptimiserUnitConvertor.convertToInternalSpeed(speed);
 		Assert.assertTrue(internalSpeed > options.getNBOSpeed());
 
-		final VoyageDetails details = new VoyageDetails();
+		final VoyageDetails details = new VoyageDetails(options);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -417,7 +418,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		final int idleTime = 48;
 
-		final VoyageDetails details = new VoyageDetails();
+		final VoyageDetails details = new VoyageDetails(options);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -456,7 +457,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		final int idleTime = 48;
 
-		final VoyageDetails details = new VoyageDetails();
+		final VoyageDetails details = new VoyageDetails(options);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -492,7 +493,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		final int idleTime = options.getVessel().getVesselClass().getWarmupTime() * 2;
 
-		final VoyageDetails details = new VoyageDetails();
+		final VoyageDetails details = new VoyageDetails(options);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -525,7 +526,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		final int idleTime = options.getVessel().getVesselClass().getWarmupTime() - 1;
 
-		final VoyageDetails details = new VoyageDetails();
+		final VoyageDetails details = new VoyageDetails(options);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -558,7 +559,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		final int idleTime = options.getVessel().getVesselClass().getWarmupTime() * 2;
 
-		final VoyageDetails details = new VoyageDetails();
+		final VoyageDetails details = new VoyageDetails(options);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -588,7 +589,7 @@ public class NewLNGVoyageCalculatorTest {
 		// Set heel to zero to avoid it getting in the way
 		((VesselClass) options.getVessel().getVesselClass()).setSafetyHeel(OptimiserUnitConvertor.convertToInternalVolume(0));
 
-		final VoyageDetails details = new VoyageDetails();
+		final VoyageDetails details = new VoyageDetails(options);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -620,7 +621,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		final int additionalRouteTime = 48;
 
-		final VoyageDetails details = new VoyageDetails();
+		final VoyageDetails details = new VoyageDetails(options);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -672,7 +673,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		final int additionalRouteTime = 48;
 
-		final VoyageDetails details = new VoyageDetails();
+		final VoyageDetails details = new VoyageDetails(options);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -722,7 +723,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		final int additionalRouteTime = 48;
 
-		final VoyageDetails details = new VoyageDetails();
+		final VoyageDetails details = new VoyageDetails(options);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -770,7 +771,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		final int additionalRouteTime = 48;
 
-		final VoyageDetails details = new VoyageDetails();
+		final VoyageDetails details = new VoyageDetails(options);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -806,10 +807,7 @@ public class NewLNGVoyageCalculatorTest {
 		final IPortSlot from = Mockito.mock(IPortSlot.class, "from");
 		final IPortSlot to = Mockito.mock(IPortSlot.class, "to");
 
-		final VoyageOptions options = new VoyageOptions();
-
-		options.setFromPortSlot(from);
-		options.setToPortSlot(to);
+		final VoyageOptions options = new VoyageOptions(from, to);
 
 		options.setNBOSpeed(OptimiserUnitConvertor.convertToInternalSpeed(VESSEL_NBO_SPEED));
 
@@ -844,7 +842,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		options.setVisitDuration(visitDuration);
 
-		final PortDetails details = new PortDetails();
+		final PortDetails details = new PortDetails(options);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -875,19 +873,17 @@ public class NewLNGVoyageCalculatorTest {
 		final LoadSlot loadSlot = new LoadSlot("load", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 0, false, false);
 		final DischargeSlot dischargeSlot = new DischargeSlot("discharge", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
 
-		final PortDetails loadDetails = new PortDetails();
-		loadDetails.setOptions(new PortOptions(loadSlot));
+		final PortDetails loadDetails = new PortDetails(new PortOptions(loadSlot));
 
-		final PortDetails dischargeDetails = new PortDetails();
-		dischargeDetails.setOptions(new PortOptions(dischargeSlot));
+		final PortDetails dischargeDetails = new PortDetails(new PortOptions(dischargeSlot));
 
 		loadSlot.setLoadPriceCalculator(new FixedPriceContract(-1));
 		dischargeSlot.setDischargePriceCalculator(new FixedPriceContract(-1));
 
-		final VoyageDetails details = new VoyageDetails();
-		final VoyageOptions options = new VoyageOptions();
+		final VoyageOptions options = new VoyageOptions(loadSlot, dischargeSlot);
 		options.setVesselState(VesselState.Laden);
-		details.setOptions(options);
+
+		final VoyageDetails details = new VoyageDetails(options);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -955,16 +951,13 @@ public class NewLNGVoyageCalculatorTest {
 		final PortSlot fromPortSlot = Mockito.mock(PortSlot.class);
 		final PortSlot toPortSlot = Mockito.mock(PortSlot.class);
 
-		final PortDetails fromPortDetails = new PortDetails();
-		fromPortDetails.setOptions(new PortOptions(fromPortSlot));
+		final PortDetails fromPortDetails = new PortDetails(new PortOptions(fromPortSlot));
 
-		final PortDetails toPortDetails = new PortDetails();
-		toPortDetails.setOptions(new PortOptions(toPortSlot));
+		final PortDetails toPortDetails = new PortDetails(new PortOptions(toPortSlot));
 
-		final VoyageDetails voyageDetails = new VoyageDetails();
-		final VoyageOptions voyageOptions = new VoyageOptions();
+		final VoyageOptions voyageOptions = new VoyageOptions(fromPortSlot, toPortSlot);
 		voyageOptions.setVesselState(VesselState.Ballast);
-		voyageDetails.setOptions(voyageOptions);
+		final VoyageDetails voyageDetails = new VoyageDetails(voyageOptions);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -989,7 +982,6 @@ public class NewLNGVoyageCalculatorTest {
 		Mockito.when(toPortSlot.getPort()).thenReturn(toPort);
 
 		final ICooldownCalculator cooldownCalculator = Mockito.mock(ICooldownCalculator.class);
-		voyageDetails.getOptions().setToPortSlot(toPortSlot);
 
 		Mockito.when(toPort.getCooldownCalculator()).thenReturn(cooldownCalculator);
 
@@ -1019,16 +1011,14 @@ public class NewLNGVoyageCalculatorTest {
 		final PortSlot fromPortSlot = Mockito.mock(PortSlot.class);
 		final ILoadSlot toPortSlot = Mockito.mock(ILoadSlot.class);
 
-		final PortDetails fromPortDetails = new PortDetails();
-		fromPortDetails.setOptions(new PortOptions(fromPortSlot));
+		final PortDetails fromPortDetails = new PortDetails(new PortOptions(fromPortSlot));
 
-		final PortDetails toPortDetails = new PortDetails();
-		toPortDetails.setOptions(new PortOptions(toPortSlot));
+		final PortDetails toPortDetails = new PortDetails(new PortOptions(toPortSlot));
 
-		final VoyageDetails voyageDetails = new VoyageDetails();
-		final VoyageOptions voyageOptions = new VoyageOptions();
+		final VoyageOptions voyageOptions = new VoyageOptions(fromPortSlot, toPortSlot);
 		voyageOptions.setVesselState(VesselState.Ballast);
-		voyageDetails.setOptions(voyageOptions);
+
+		final VoyageDetails voyageDetails = new VoyageDetails(voyageOptions);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -1053,7 +1043,6 @@ public class NewLNGVoyageCalculatorTest {
 		Mockito.when(toPortSlot.getPort()).thenReturn(toPort);
 
 		final ICooldownCalculator cooldownCalculator = Mockito.mock(ICooldownCalculator.class);
-		voyageDetails.getOptions().setToPortSlot(toPortSlot);
 
 		Mockito.when(toPort.getCooldownCalculator()).thenReturn(cooldownCalculator);
 
@@ -1083,16 +1072,13 @@ public class NewLNGVoyageCalculatorTest {
 		final PortSlot fromPortSlot = Mockito.mock(PortSlot.class);
 		final ILoadSlot toPortSlot = Mockito.mock(ILoadSlot.class);
 
-		final PortDetails fromPortDetails = new PortDetails();
-		fromPortDetails.setOptions(new PortOptions(fromPortSlot));
+		final PortDetails fromPortDetails = new PortDetails(new PortOptions(fromPortSlot));
 
-		final PortDetails toPortDetails = new PortDetails();
-		toPortDetails.setOptions(new PortOptions(toPortSlot));
+		final PortDetails toPortDetails = new PortDetails(new PortOptions(toPortSlot));
 
-		final VoyageDetails voyageDetails = new VoyageDetails();
-		final VoyageOptions voyageOptions = new VoyageOptions();
+		final VoyageOptions voyageOptions = new VoyageOptions(fromPortSlot, toPortSlot);
 		voyageOptions.setVesselState(VesselState.Ballast);
-		voyageDetails.setOptions(voyageOptions);
+		final VoyageDetails voyageDetails = new VoyageDetails(voyageOptions);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -1117,7 +1103,6 @@ public class NewLNGVoyageCalculatorTest {
 		Mockito.when(toPortSlot.getPort()).thenReturn(toPort);
 
 		final ICooldownCalculator cooldownCalculator = Mockito.mock(ICooldownCalculator.class);
-		voyageDetails.getOptions().setToPortSlot(toPortSlot);
 
 		Mockito.when(toPort.getCooldownCalculator()).thenReturn(cooldownCalculator);
 

@@ -79,6 +79,7 @@ public class VoyagePlanner {
 	private Provider<@NonNull IVoyagePlanOptimiser> voyagePlanOptimiserProvider;
 
 	@Inject
+	@NonNull
 	private IRouteCostProvider routeCostProvider;
 
 	@Inject
@@ -131,10 +132,8 @@ public class VoyagePlanner {
 		final IPort prevPort = prevPortSlot.getPort();
 		final PortType prevPortType = prevPortSlot.getPortType();
 
-		final VoyageOptions options = new VoyageOptions();
+		final VoyageOptions options = new VoyageOptions(prevPortSlot, thisPortSlot);
 		options.setVessel(vesselAvailability.getVessel());
-		options.setFromPortSlot(prevPortSlot);
-		options.setToPortSlot(thisPortSlot);
 		options.setVesselState(vesselState);
 		options.setAvailableTime(availableTime);
 
@@ -336,7 +335,7 @@ public class VoyagePlanner {
 			if (returnSlot != null) {
 				recordSlots.add(returnSlot);
 			}
-			
+
 			for (final IPortSlot thisPortSlot : recordSlots) {
 				final int thisArrivalTime = portTimesRecord.getSlotTime(thisPortSlot);
 
@@ -482,8 +481,7 @@ public class VoyagePlanner {
 				if (element instanceof PortOptions) {
 					final PortOptions portOptions = (PortOptions) element;
 
-					final PortDetails portDetails = new PortDetails();
-					portDetails.setOptions(portOptions);
+					final PortDetails portDetails = new PortDetails(portOptions);
 
 					if (actualsDataProvider.hasActuals(portOptions.getPortSlot())) {
 						portDetails.setPortCosts(actualsDataProvider.getPortCosts(portOptions.getPortSlot()));
@@ -517,8 +515,7 @@ public class VoyagePlanner {
 				} else if (element instanceof VoyageOptions) {
 					final VoyageOptions voyageOptions = (VoyageOptions) element;
 
-					final VoyageDetails voyageDetails = new VoyageDetails();
-					voyageDetails.setOptions(voyageOptions);
+					final VoyageDetails voyageDetails = new VoyageDetails(voyageOptions);
 
 					// No distinction between travel and idle
 					voyageDetails.setTravelTime(voyageOptions.getAvailableTime());
@@ -889,8 +886,7 @@ public class VoyagePlanner {
 			}
 
 			final PortOptions portOptions = new PortOptions(slot);
-			final PortDetails portDetails = new PortDetails();
-			portDetails.setOptions(portOptions);
+			final PortDetails portDetails = new PortDetails(portOptions);
 			portOptions.setVisitDuration(0);
 			// Custom scheduling code may change this to non-zero, but we need it as zero for visualisation in reports
 			// portOptions.setVisitDuration(portTimesRecord.getSlotDuration(slot));
@@ -907,7 +903,7 @@ public class VoyagePlanner {
 
 	}
 
-	final private Triple<@NonNull IVessel, @Nullable IResource, @NonNull Integer> setVesselAndBaseFuelPrice(@NonNull final IPortTimesRecord portTimesRecord, @NonNull final IVessel vessel,
+	final private @NonNull Triple<@NonNull IVessel, @Nullable IResource, @NonNull Integer> setVesselAndBaseFuelPrice(@NonNull final IPortTimesRecord portTimesRecord, @NonNull final IVessel vessel,
 			@NonNull final IResource resource) {
 
 		Triple<@NonNull IVessel, @Nullable IResource, @NonNull Integer> t = new Triple<>(vessel, resource, vesselBaseFuelCalculator.getBaseFuelPrice(vessel, portTimesRecord));

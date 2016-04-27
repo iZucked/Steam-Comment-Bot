@@ -30,6 +30,7 @@ import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.curves.IntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.PriceIntervalProducer;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -121,6 +122,8 @@ public class TestPriceExpressionContract {
 		final int vesselStartTime = 0;
 		final IVesselAvailability vesselAvailability = mock(IVesselAvailability.class);
 		final VoyagePlan plan = new VoyagePlan();
+		final VolumeAllocatedSequences volumeAllocatedSequences = Mockito.mock(VolumeAllocatedSequences.class);
+
 		final IDetailTree annotations = mock(IDetailTree.class);
 
 		final IAllocationAnnotation allocationAnnotation = mock(IAllocationAnnotation.class);
@@ -133,10 +136,10 @@ public class TestPriceExpressionContract {
 		when(allocationAnnotation.getSlotVolumeInM3(dischargeSlot)).thenReturn(dischargeVolumeInM3);
 
 		final int loadPriceWithPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotWithPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vesselAvailability,
-				vesselStartTime, plan, annotations);
+				vesselStartTime, plan, volumeAllocatedSequences, annotations);
 
 		final int loadPriceNoPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotNoPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vesselAvailability, vesselStartTime,
-				plan, annotations);
+				plan, volumeAllocatedSequences, annotations);
 
 		verify(curve).getValueAtPoint(loadPricingDate);
 		verify(curve).getValueAtPoint(loadTime);
@@ -224,7 +227,7 @@ public class TestPriceExpressionContract {
 				bind(IPriceIntervalProducer.class).to(PriceIntervalProducer.class);
 				bind(IVesselProvider.class).toInstance(vesselProvider);
 			}
-			
+
 		});
 
 		injector.injectMembers(contract);

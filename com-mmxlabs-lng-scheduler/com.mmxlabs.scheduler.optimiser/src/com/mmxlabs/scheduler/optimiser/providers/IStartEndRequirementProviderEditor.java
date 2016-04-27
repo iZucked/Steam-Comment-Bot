@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
@@ -11,7 +13,7 @@ import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 
 public interface IStartEndRequirementProviderEditor extends IStartEndRequirementProvider {
 
-	void setStartEndRequirements(IResource resource, IStartRequirement startRequirement, IEndRequirement endRequirement);
+	void setStartEndRequirements(@NonNull IResource resource, @NonNull IStartRequirement startRequirement, @NonNull IEndRequirement endRequirement);
 
-	void setStartEndElements(IResource resource, ISequenceElement startElement, ISequenceElement endElement);
+	void setStartEndElements(@NonNull IResource resource, @NonNull ISequenceElement startElement, @NonNull ISequenceElement endElement);
 }

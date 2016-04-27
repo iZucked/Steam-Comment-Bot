@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -14,7 +13,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -362,113 +360,4 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		return currentPlan;
 	}
-
-	// @Override
-	// public void setPortTimesRecord(final IPortTimesRecord portTimesRecord) {
-	// this.portTimesRecord = portTimesRecord;
-	// }
-
-	/**
-	 * Returns the basic sequence that is being optimised over.
-	 * 
-	 * @return
-	 */
-	// @Override
-	// public List<@NonNull IOptionsSequenceElement> getBasicSequence() {
-	// return basicSequence;
-	// }
-	//
-	// /**
-	// * Sets the basic voyage plan sequence. This should be {@link IPortSlot} instances separated by {@link VoyageOptions} instances implementing {@link Cloneable}. The {@link VoyageOptions} objects
-	// * will be modified during optimisation.
-	// *
-	// * @param basicSequence
-	// */
-	// @Override
-	// public void setBasicSequence(final List<@NonNull IOptionsSequenceElement> basicSequence) {
-	// this.basicSequence = basicSequence;
-	// }
-	//
-	// /**
-	// * Get the {@link IVessel} to evaluate voyages against.
-	// *
-	// * @return
-	// */
-	// @Override
-	// public IVessel getVessel() {
-	// return vessel;
-	// }
-	//
-	// /**
-	// * Set the {@link IVessel} to evaluate voyages against.
-	// *
-	// * @param vessel
-	// */
-	// @Override
-	// public void setVessel(@NonNull final IVessel vessel, @Nullable final IResource resource, final int baseFuelPricePerMT) {
-	// this.vessel = vessel;
-	// this.resource = resource;
-	// this.baseFuelPricePerMT = baseFuelPricePerMT;
-	// }
-
-	// @Override
-	// public void setBaseFuelPricePerMT(int baseFuelPricePerMT) {
-	// this.baseFuelPricePerMT = baseFuelPricePerMT;
-	// }
-
-	// /**
-	// * Once optimised, returns the best {@link VoyagePlan} cost.
-	// *
-	// * @return
-	// */
-	// @Override
-	// public long getBestCost() {
-	// return bestCost;
-	// }
-	//
-	// /**
-	// * Once optimised, returns the best {@link VoyagePlan}.
-	// *
-	// * @return
-	// */
-	// @Override
-	// public VoyagePlan getBestPlan() {
-	// return bestPlan;
-	// }
-	//
-	// /**
-	// * Returns the {@link ILNGVoyageCalculator} used in the {@link VoyagePlanOptimiser}.
-	// *
-	// * @return
-	// */
-	// @Override
-	// public ILNGVoyageCalculator getVoyageCalculator() {
-	// return voyageCalculator;
-	// }
-	//
-	// /**
-	// * Add a new choice to the ordered stack of choices. If this choice depends upon the choice of another {@link IVoyagePlanChoice}, then that object should have already been added.
-	// *
-	// * @param choice
-	// */
-	// @Override
-	// public void addChoice(final IVoyagePlanChoice choice) {
-	// choices.add(choice);
-	// }
-	//
-	// @Override
-	// public void setStartHeel(final long heelVolumeInM3) {
-	// startHeel = heelVolumeInM3;
-	// }
-	//
-	// @Override
-	// public long getStartHeel() {
-	// return startHeel;
-	// }
-	//
-	// @Override
-	// public void setVesselCharterInRatePerDay(final int vesselCharterInRatePerDay) {
-	// this.vesselCharterInRatePerDay = vesselCharterInRatePerDay;
-	// }
-
 }

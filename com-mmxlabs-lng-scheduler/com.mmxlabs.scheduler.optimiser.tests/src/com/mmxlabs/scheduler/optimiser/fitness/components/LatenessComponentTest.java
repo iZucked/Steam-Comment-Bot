@@ -29,6 +29,7 @@ import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
@@ -36,8 +37,9 @@ import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
@@ -137,6 +139,7 @@ public class LatenessComponentTest {
 		injector.injectMembers(c);
 
 		final IResource resource = Mockito.mock(IResource.class);
+		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
 
 		final IStartRequirement startRequirement = Mockito.mock(IStartRequirement.class, "Start");
 		final IEndRequirement endRequirement = Mockito.mock(IEndRequirement.class, "End");
@@ -152,23 +155,19 @@ public class LatenessComponentTest {
 		final TimeWindow window2 = new TimeWindow(dischargeStartTime, dischargeEndTime);
 
 		final StartPortSlot startSlot = new StartPortSlot("start", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), null);
-		final PortDetails startDetails = new PortDetails();
-		startDetails.setOptions(new PortOptions(startSlot));
+		final PortDetails startDetails = new PortDetails(new PortOptions(startSlot));
 
-		final PortDetails endDetails = new PortDetails();
 		final EndPortSlot endSlot = new EndPortSlot(null, null, null, false, 0L);
-		endDetails.setOptions(new PortOptions(endSlot));
+		final PortDetails endDetails = new PortDetails(new PortOptions(endSlot));
 
 		final LoadSlot loadSlot = new LoadSlot("l1", Mockito.mock(IPort.class), window1, 0L, 140_000_000L, Mockito.mock(ILoadPriceCalculator.class), 22400, false, true);
 
 		final DischargeSlot dischargeSlot = new DischargeSlot("d1", Mockito.mock(IPort.class), window2, 0L, 140_000_000L, Mockito.mock(ISalesPriceCalculator.class), 20_000, 30_000);
 		dischargeSlot.setTimeWindow(window2);
 
-		final PortDetails loadDetails = new PortDetails();
-		loadDetails.setOptions(new PortOptions(loadSlot));
+		final PortDetails loadDetails = new PortDetails(new PortOptions(loadSlot));
 
-		final PortDetails dischargeDetails = new PortDetails();
-		dischargeDetails.setOptions(new PortOptions(dischargeSlot));
+		final PortDetails dischargeDetails = new PortDetails(new PortOptions(dischargeSlot));
 
 		final IDetailsSequenceElement[] routeSequence = new IDetailsSequenceElement[] { startDetails, loadDetails, null, dischargeDetails, endDetails };
 		final VoyagePlan voyagePlan = new VoyagePlan();
@@ -180,14 +179,16 @@ public class LatenessComponentTest {
 		Mockito.when(portTimesRecord.getSlotTime(endSlot)).thenReturn(0);
 		Mockito.when(portTimesRecord.getSlotTime(loadSlot)).thenReturn(loadEndTime + 1);
 		Mockito.when(portTimesRecord.getSlotTime(dischargeSlot)).thenReturn(dischargeEndTime + 1);
-		ScheduledSequence scheduledSequence = new ScheduledSequence(resource, mockedSequence, voyageStartTime,
+		VolumeAllocatedSequence scheduledSequence = new VolumeAllocatedSequence(resource, mockedSequence, voyageStartTime,
 				new LinkedList<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>>(
 						Arrays.asList(new Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>(voyagePlan, null, portTimesRecord))));
-		final ScheduledSequences scheduledSequences = new ScheduledSequences();
-		scheduledSequences.add(scheduledSequence);
-		checker.calculateLateness(scheduledSequences, null);
-		c.startEvaluation(scheduledSequences);
-		c.startSequence(resource);
+
+		final VolumeAllocatedSequences volumeAllocatedSequences = new VolumeAllocatedSequences();
+		volumeAllocatedSequences.add(vesselAvailability, scheduledSequence);
+		final ProfitAndLossSequences profitAndLossSequences = new ProfitAndLossSequences(volumeAllocatedSequences);
+
+		checker.calculateLateness(scheduledSequence, null);
+		c.startEvaluation(profitAndLossSequences);
 		c.nextVoyagePlan(voyagePlan, voyageStartTime);
 		c.nextObject(startDetails, 0);
 		c.nextObject(loadDetails, loadEndTime + loadLateTime);

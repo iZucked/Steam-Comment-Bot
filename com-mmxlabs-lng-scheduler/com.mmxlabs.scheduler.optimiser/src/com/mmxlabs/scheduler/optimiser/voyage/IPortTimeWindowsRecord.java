@@ -27,7 +27,7 @@ public interface IPortTimeWindowsRecord extends IElementAnnotation {
 	 * @return
 	 */
 	@NonNull
-	List<IPortSlot> getSlots();
+	List<@NonNull IPortSlot> getSlots();
 
 	ITimeWindow getSlotFeasibleTimeWindow(@NonNull IPortSlot slot);
 
