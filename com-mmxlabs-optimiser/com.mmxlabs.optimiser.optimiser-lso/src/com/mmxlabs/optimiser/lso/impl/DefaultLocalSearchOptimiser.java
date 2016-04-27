@@ -18,9 +18,11 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IReducingConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess.Phase;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
@@ -213,7 +215,34 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 			final IEvaluationState evaluationState = new EvaluationState();
 			for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
-				if (!evaluationProcess.evaluate(potentialFullSequences, evaluationState)) {
+				if (!evaluationProcess.evaluate(Phase.Checked_Evaluation, potentialFullSequences, evaluationState)) {
+					// Problem evaluating, reject move
+					++numberOfFailedEvaluations;
+
+					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
+					continue MAIN_LOOP;
+				}
+			}
+			// Apply hard constraint checkers
+			for (final IEvaluatedStateConstraintChecker checker : getEvaluatedStateConstraintCheckers()) {
+				if (checker.checkConstraints(potentialRawSequences, potentialFullSequences, evaluationState) == false) {
+					// Problem evaluating, reject move
+					++numberOfFailedEvaluations;
+
+					// if (loggingDataStore != null) {
+					// loggingDataStore.logFailedEvaluatedStateConstraints(checker, move);
+					// if (DO_SEQUENCE_LOGGING) {
+					// loggingDataStore.logSequenceFailedEvaluatedStateConstraint(checker, pinnedPotentialRawSequences);
+					// }
+					// }
+					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
+					// Break out
+					continue MAIN_LOOP;
+				}
+			}
+
+			for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
+				if (!evaluationProcess.evaluate(Phase.Final_Evaluation, potentialFullSequences, evaluationState)) {
 					// Problem evaluating, reject move
 					++numberOfFailedEvaluations;
 
@@ -292,6 +321,10 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		final IEvaluationState evaluationState = new EvaluationState();
 		for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
 			evaluationProcess.evaluate(fullSequences, evaluationState);
+		}
+
+		for (final IEvaluatedStateConstraintChecker checker : getEvaluatedStateConstraintCheckers()) {
+			checker.checkConstraints(currentRawSequences, fullSequences, evaluationState);
 		}
 
 		// Prime fitness cores with initial sequences

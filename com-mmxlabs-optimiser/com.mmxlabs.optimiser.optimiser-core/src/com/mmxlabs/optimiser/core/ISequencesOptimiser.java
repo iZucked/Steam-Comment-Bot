@@ -10,6 +10,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IReducingConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
@@ -88,5 +89,8 @@ public interface ISequencesOptimiser extends IOptimiser {
 	boolean isFinished();
 
 	ISequences getBestRawSequences();
+
+	@NonNull
+	List<IEvaluatedStateConstraintChecker> getEvaluatedStateConstraintCheckers();
 
 }

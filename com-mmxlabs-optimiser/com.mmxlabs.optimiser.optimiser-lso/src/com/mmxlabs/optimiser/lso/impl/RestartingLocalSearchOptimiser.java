@@ -15,6 +15,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IReducingConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess.Phase;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.lso.IMove;
@@ -109,7 +110,15 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 
 			final IEvaluationState evaluationState = new EvaluationState();
 			for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
-				if (!evaluationProcess.evaluate(potentialFullSequences, evaluationState)) {
+				if (!evaluationProcess.evaluate(Phase.Checked_Evaluation, potentialFullSequences, evaluationState)) {
+					// Problem evaluating, reject move
+					setNumberOfFailedEvaluations(getNumberOfFailedEvaluations() + 1);
+
+					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
+					continue MAIN_LOOP;
+				}
+				// TODO: Latenes checker
+				if (!evaluationProcess.evaluate(Phase.Final_Evaluation, potentialFullSequences, evaluationState)) {
 					// Problem evaluating, reject move
 					setNumberOfFailedEvaluations(getNumberOfFailedEvaluations() + 1);
 

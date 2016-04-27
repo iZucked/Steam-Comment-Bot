@@ -14,6 +14,8 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerFactory;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerRegistry;
 
 /**
  * An implementation of {@link IConstraintCheckerRegistry}.
@@ -21,13 +23,13 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
  * @author Simon Goodall
  * 
  */
-public final class ConstraintCheckerRegistry implements IConstraintCheckerRegistry {
+public final class EvaluatedStateConstraintCheckerRegistry implements IEvaluatedStateConstraintCheckerRegistry {
 
 	@NonNull
-	private final Map<String, IConstraintCheckerFactory> constraintFactoriesByName = new HashMap<>();
+	private final Map<@NonNull String, @NonNull IEvaluatedStateConstraintCheckerFactory> constraintFactoriesByName = new HashMap<>();
 
 	@Override
-	public void registerConstraintCheckerFactory(@NonNull final IConstraintCheckerFactory factory) {
+	public void registerConstraintCheckerFactory(@NonNull final IEvaluatedStateConstraintCheckerFactory factory) {
 
 		if (constraintFactoriesByName.containsKey(factory.getName())) {
 			throw new RuntimeException("Constraint checker name already registered: " + factory.getName());
@@ -37,35 +39,33 @@ public final class ConstraintCheckerRegistry implements IConstraintCheckerRegist
 	}
 
 	@Override
-	public void deregisterConstraintCheckerFactory(@NonNull final IConstraintCheckerFactory factory) {
+	public void deregisterConstraintCheckerFactory(@NonNull final IEvaluatedStateConstraintCheckerFactory factory) {
 
 		constraintFactoriesByName.remove(factory.getName());
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	@NonNull
 	public Collection<@NonNull String> getConstraintCheckerNames() {
 		return constraintFactoriesByName.keySet();
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	@NonNull
-	public Collection<@NonNull IConstraintCheckerFactory> getConstraintCheckerFactories() {
+	public Collection<@NonNull IEvaluatedStateConstraintCheckerFactory> getConstraintCheckerFactories() {
 		return constraintFactoriesByName.values();
 	}
 
 	@Override
 	@NonNull
-	public Set<@NonNull IConstraintCheckerFactory> getConstraintCheckerFactories(@NonNull final Collection<String> names) {
+	public Set<@NonNull IEvaluatedStateConstraintCheckerFactory> getConstraintCheckerFactories(@NonNull final Collection<@NonNull String> names) {
 
-		final Set<IConstraintCheckerFactory> factories = new HashSet<IConstraintCheckerFactory>(names.size());
+		final Set<@NonNull IEvaluatedStateConstraintCheckerFactory> factories = new HashSet<>(names.size());
 
 		for (final String name : names) {
 
 			if (constraintFactoriesByName.containsKey(name)) {
-				final IConstraintCheckerFactory factory = constraintFactoriesByName.get(name);
+				final IEvaluatedStateConstraintCheckerFactory factory = constraintFactoriesByName.get(name);
 				factories.add(factory);
 			}
 		}
@@ -78,9 +78,9 @@ public final class ConstraintCheckerRegistry implements IConstraintCheckerRegist
 	 * 
 	 * @param factories
 	 */
-	public void setConstraintCheckerFactories(@NonNull final Collection<IConstraintCheckerFactory> factories) {
+	public void setConstraintCheckerFactories(@NonNull final Collection<@NonNull IEvaluatedStateConstraintCheckerFactory> factories) {
 
-		for (final IConstraintCheckerFactory factory : factories) {
+		for (final IEvaluatedStateConstraintCheckerFactory factory : factories) {
 			if (factory != null) {
 				registerConstraintCheckerFactory(factory);
 			}

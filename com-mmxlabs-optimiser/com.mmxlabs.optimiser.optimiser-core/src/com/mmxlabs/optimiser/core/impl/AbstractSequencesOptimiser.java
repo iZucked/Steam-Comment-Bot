@@ -25,6 +25,7 @@ import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.ISequencesOptimiser;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IReducingConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
@@ -38,6 +39,8 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	private int numberOfIterationsCompleted;
 
 	private List<IConstraintChecker> constraintCheckers;
+
+	private List<IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers;
 
 	private List<IEvaluationProcess> evaluationProcesses;
 
@@ -64,6 +67,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	public void init() {
 		checkState(numberOfIterations > 0, "Number of iterations is less than 1");
 		checkState(constraintCheckers != null, "Constraint Checkers list is not set");
+		checkState(evaluatedStateConstraintCheckers != null, "Evaluated State Constraint Checkers list is not set");
 		checkState(fitnessEvaluator != null, "Fitness Evaluator is not set");
 		checkState(sequenceManipulator != null, "Sequence Manipulator is not set");
 		checkState(progressMonitor != null, "Progress Monitor is not set");
@@ -184,6 +188,10 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 		}
 	}
 
+	public final void setEvaluatedStateConstraintCheckers(@NonNull final List<IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers) {
+		this.evaluatedStateConstraintCheckers = evaluatedStateConstraintCheckers;
+	}
+
 	public final void setEvaluationProcesses(@NonNull final List<IEvaluationProcess> evaluationProcesses) {
 		this.evaluationProcesses = evaluationProcesses;
 	}
@@ -192,6 +200,12 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	@NonNull
 	public final List<IConstraintChecker> getConstraintCheckers() {
 		return constraintCheckers;
+	}
+
+	@Override
+	@NonNull
+	public final List<IEvaluatedStateConstraintChecker> getEvaluatedStateConstraintCheckers() {
+		return evaluatedStateConstraintCheckers;
 	}
 
 	@Override
