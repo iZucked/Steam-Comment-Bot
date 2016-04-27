@@ -42,6 +42,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess.Phase;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.Sequences;
@@ -52,8 +53,9 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
@@ -164,7 +166,7 @@ public class BagMover extends BreakdownOptimiserMover {
 					if (true) {
 						IEvaluationState evaluationState = new EvaluationState();
 						for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-							if (!evaluationProcess.evaluate(currentFullSequences, evaluationState)) {
+							if (!evaluationProcess.evaluate(Phase.Checked_Evaluation, currentFullSequences, evaluationState)) {
 								failedEvaluation = true;
 								break;
 							}
@@ -175,24 +177,23 @@ public class BagMover extends BreakdownOptimiserMover {
 						if (isReevaluating) {
 							evaluationState = new EvaluationState();
 							for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-								if (!evaluationProcess.evaluate(currentFullSequences, evaluationState)) {
+								if (!evaluationProcess.evaluate(Phase.Checked_Evaluation, currentFullSequences, evaluationState)) {
 									failedEvaluation = true;
 									break;
 								}
 							}
 						}
+						final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
+						assert volumeAllocatedSequences != null;
 
-						final ScheduledSequences ss = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
-						assert ss != null;
-
-						final long thisLateness = calculateScheduleLateness(currentFullSequences, ss);
+						final long thisLateness = calculateScheduleLateness(currentFullSequences, volumeAllocatedSequences);
 						if (thisLateness > similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]) {
 							failedEvaluation = true;
 						} else {
 							// currentLateness = thisLateness;
 						}
 
-						final long thisCapacity = calculateScheduleCapacity(currentFullSequences, ss);
+						final long thisCapacity = calculateScheduleCapacity(currentFullSequences, volumeAllocatedSequences);
 						if (thisCapacity > similarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()]) {
 							failedEvaluation = true;
 						} else {
@@ -204,15 +205,18 @@ public class BagMover extends BreakdownOptimiserMover {
 						}
 						if (!failedEvaluation) {
 							searchStatistics.logEvaluationsPassed();
+
 							for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-								// Do PNL bit
-								if (evaluationProcess instanceof SchedulerEvaluationProcess) {
-									final SchedulerEvaluationProcess schedulerEvaluationProcess = (SchedulerEvaluationProcess) evaluationProcess;
-									// schedulerEvaluationProcess.doPNL(currentFullSequences, evaluationState);
+								if (!evaluationProcess.evaluate(Phase.Final_Evaluation, currentFullSequences, evaluationState)) {
+									failedEvaluation = true;
+									break;
 								}
 							}
 
-							thisPNL = calculateSchedulePNL(currentFullSequences, ss);
+							final ProfitAndLossSequences profitAndLossSequences = evaluationState.getData(SchedulerEvaluationProcess.PROFIT_AND_LOSS_SEQUENCES, ProfitAndLossSequences.class);
+							assert profitAndLossSequences != null;
+
+							thisPNL = calculateSchedulePNL(currentFullSequences, profitAndLossSequences);
 
 							if (thisPNL - currentMetrics[MetricType.PNL.ordinal()] < 0 && thisLateness >= similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]) {
 								failedEvaluation = true;
@@ -1131,12 +1135,12 @@ public class BagMover extends BreakdownOptimiserMover {
 		return newStates;
 	}
 
-	public long calculateSchedulePNL(@NonNull final IModifiableSequences fullSequences, @NonNull final ScheduledSequences scheduledSequences) {
+	public long calculateSchedulePNL(@NonNull final IModifiableSequences fullSequences, @NonNull final ProfitAndLossSequences scheduledSequences) {
 		long sumPNL = 0;
 
-		for (final ScheduledSequence scheduledSequence : scheduledSequences) {
+		for (final VolumeAllocatedSequence volumeAllocatedSequence : scheduledSequences.getVolumeAllocatedSequences()) {
 			long sumA = 0;
-			for (final Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord> p : scheduledSequence.getVoyagePlans()) {
+			for (final Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord> p : volumeAllocatedSequence.getVoyagePlans()) {
 				sumPNL += scheduledSequences.getVoyagePlanGroupValue(p.getFirst());
 				sumA += scheduledSequences.getVoyagePlanGroupValue(p.getFirst());
 				p.getFirst().getSequence();

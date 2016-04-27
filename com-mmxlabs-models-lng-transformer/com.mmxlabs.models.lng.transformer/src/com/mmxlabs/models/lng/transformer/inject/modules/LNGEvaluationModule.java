@@ -17,9 +17,12 @@ import com.google.inject.Provides;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.constraints.impl.EvaluatedStateConstraintCheckerInstantiator;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.modules.ConstraintCheckerInstantiatorModule;
+import com.mmxlabs.optimiser.core.modules.EvaluatedStateConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluationProcessInstantiatorModule;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.CachingVoyagePlanOptimiser;
@@ -52,10 +55,9 @@ public class LNGEvaluationModule extends AbstractModule {
 
 		install(new SequencesManipulatorModule());
 
-
 		bind(DirectRandomSequenceScheduler.class).in(PerChainUnitScope.class);
 		bind(ISequenceScheduler.class).to(DirectRandomSequenceScheduler.class);
-		
+
 		if (hints != null) {
 			if (LicenseFeatures.isPermitted("features:optimisation-charter-out-generation")) {
 
@@ -76,9 +78,11 @@ public class LNGEvaluationModule extends AbstractModule {
 			// bind(IFitnessFunctionRegistry.class).toProvider(service(IFitnessFunctionRegistry.class).single());
 			bind(IConstraintCheckerRegistry.class).toProvider(service(IConstraintCheckerRegistry.class).single());
 			bind(IEvaluationProcessRegistry.class).toProvider(service(IEvaluationProcessRegistry.class).single());
+			bind(IEvaluatedStateConstraintCheckerRegistry.class).toProvider(service(IEvaluatedStateConstraintCheckerRegistry.class).single());
 		}
 
 		install(new ConstraintCheckerInstantiatorModule());
+		install(new EvaluatedStateConstraintCheckerInstantiatorModule());
 		install(new EvaluationProcessInstantiatorModule());
 		bind(LegalSequencingChecker.class);
 	}

@@ -33,13 +33,15 @@ import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess.Phase;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -504,24 +506,24 @@ public class ActionSetIndependenceChecking {
 
 		final IEvaluationState evaluationState = new EvaluationState();
 		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-			if (!evaluationProcess.evaluate(currentFullSequences, evaluationState)) {
+			if (!evaluationProcess.evaluate(Phase.Checked_Evaluation, currentFullSequences, evaluationState)) {
 				failedEvaluation = true;
 				break;
 			}
 		}
 
 		if (!failedEvaluation) {
-			final ScheduledSequences ss = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
-			assert ss != null;
+			final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
+			assert volumeAllocatedSequences != null;
 
-			thisLateness = calculateScheduleLateness(currentFullSequences, ss);
+			thisLateness = calculateScheduleLateness(currentFullSequences, volumeAllocatedSequences);
 			if (thisLateness > similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]) {
 				failedEvaluation = true;
 			} else {
 				// currentLateness = thisLateness;
 			}
 
-			thisCapacity = calculateScheduleCapacity(currentFullSequences, ss);
+			thisCapacity = calculateScheduleCapacity(currentFullSequences, volumeAllocatedSequences);
 			if (thisCapacity > similarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()]) {
 				failedEvaluation = true;
 			} else {
@@ -532,14 +534,16 @@ public class ActionSetIndependenceChecking {
 			if (!failedEvaluation) {
 
 				for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-					// Do PNL bit
-					if (evaluationProcess instanceof SchedulerEvaluationProcess) {
-						final SchedulerEvaluationProcess schedulerEvaluationProcess = (SchedulerEvaluationProcess) evaluationProcess;
-						// schedulerEvaluationProcess.doPNL(currentFullSequences, evaluationState);
+					if (!evaluationProcess.evaluate(Phase.Final_Evaluation, currentSequences, evaluationState)) {
+						failedEvaluation = true;
+						break;
 					}
 				}
 
-				thisPNL = calculateSchedulePNL(currentFullSequences, ss);
+				final ProfitAndLossSequences profitAndLossSequences = evaluationState.getData(SchedulerEvaluationProcess.PROFIT_AND_LOSS_SEQUENCES, ProfitAndLossSequences.class);
+				assert profitAndLossSequences != null;
+
+				thisPNL = calculateSchedulePNL(currentFullSequences, profitAndLossSequences);
 
 				if (thisPNL - currentMetrics[MetricType.PNL.ordinal()] < 0 && thisLateness >= similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]) {
 					failedEvaluation = true;
@@ -555,36 +559,35 @@ public class ActionSetIndependenceChecking {
 		}
 	}
 
-	private long calculateScheduleLateness(final @NonNull ISequences fullSequences, final @NonNull ScheduledSequences scheduledSequences) {
+	public long calculateScheduleLateness(final @NonNull ISequences fullSequences, final @NonNull VolumeAllocatedSequences volumeAllocatedSequences) {
 		long sumCost = 0;
 
-		for (final IPortSlot lateSlot : scheduledSequences.getLateSlotsSet()) {
-			@Nullable
-			final Pair<Interval, Long> latenessCost = scheduledSequences.getLatenessCost(lateSlot);
-			if (latenessCost != null) {
-				sumCost += latenessCost.getSecond();
-			}
-		}
-		return sumCost;
-
-	}
-
-	public long calculateScheduleCapacity(final @NonNull ISequences fullSequences, final @NonNull ScheduledSequences scheduledSequences) {
-		long sumCost = 0;
-
-		for (final ISequence seq : fullSequences.getSequences().values()) {
-			for (final ISequenceElement e : seq) {
-				assert e != null;
-				sumCost += scheduledSequences.getCapacityViolationCount(portSlotProvider.getPortSlot(e));
+		for (final VolumeAllocatedSequence volumeAllocatedSequence : volumeAllocatedSequences) {
+			for (final IPortSlot lateSlot : volumeAllocatedSequence.getLateSlotsSet()) {
+				@Nullable
+				final Pair<Interval, Long> latenessCost = volumeAllocatedSequence.getLatenessCost(lateSlot);
+				if (latenessCost != null) {
+					sumCost += latenessCost.getSecond();
+				}
 			}
 		}
 		return sumCost;
 	}
 
-	public long calculateSchedulePNL(@NonNull final IModifiableSequences fullSequences, @NonNull final ScheduledSequences scheduledSequences) {
+	public long calculateScheduleCapacity(final @NonNull ISequences fullSequences, final @NonNull VolumeAllocatedSequences volumeAllocatedSequences) {
+		long sumCost = 0;
+		for (final VolumeAllocatedSequence volumeAllocatedSequence : volumeAllocatedSequences) {
+			for (final IPortSlot portSlot : volumeAllocatedSequence.getSequenceSlots()) {
+				sumCost += volumeAllocatedSequence.getCapacityViolationCount(portSlot);
+			}
+		}
+		return sumCost;
+	}
+
+	public long calculateSchedulePNL(@NonNull final IModifiableSequences fullSequences, @NonNull final ProfitAndLossSequences scheduledSequences) {
 		long sumPNL = 0;
 
-		for (final ScheduledSequence scheduledSequence : scheduledSequences) {
+		for (final VolumeAllocatedSequence scheduledSequence : scheduledSequences.getVolumeAllocatedSequences()) {
 			for (final Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord> p : scheduledSequence.getVoyagePlans()) {
 				sumPNL += scheduledSequences.getVoyagePlanGroupValue(p.getFirst());
 			}

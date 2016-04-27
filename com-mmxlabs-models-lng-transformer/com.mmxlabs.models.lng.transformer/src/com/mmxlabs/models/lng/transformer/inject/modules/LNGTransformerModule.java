@@ -30,7 +30,7 @@ import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.cache.ICacheKeyDependencyLinker;
+import com.mmxlabs.scheduler.optimiser.cache.IProfitAndLossCacheKeyDependencyLinker;
 import com.mmxlabs.scheduler.optimiser.cache.NullCacheKeyDependencyLinker;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertableDESShippingTimesCalculator;
@@ -128,7 +128,7 @@ public class LNGTransformerModule extends AbstractModule {
 		// Register default implementations
 		// bind(IVolumeAllocator.class).to(UnconstrainedVolumeAllocator.class).in(Singleton.class);
 		// bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
-		bind(ICacheKeyDependencyLinker.class).to(NullCacheKeyDependencyLinker.class);
+		bind(IProfitAndLossCacheKeyDependencyLinker.class).to(NullCacheKeyDependencyLinker.class);
 
 		// Default bindings for caches
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(Boolean.FALSE);

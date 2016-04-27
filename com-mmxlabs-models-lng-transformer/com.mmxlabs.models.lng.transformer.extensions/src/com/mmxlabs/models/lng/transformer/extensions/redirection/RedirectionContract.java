@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.redirection;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.google.inject.Inject;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.detailtree.IDetailTree;
@@ -12,7 +15,6 @@ import com.mmxlabs.common.detailtree.impl.UnitPriceDetailElement;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -28,6 +30,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.DefaultVesselAvailability
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
@@ -108,7 +111,8 @@ public class RedirectionContract implements ILoadPriceCalculator {
 
 	@Override
 	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan originalPlan, final IDetailTree annotation) {
+			final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan originalPlan, @Nullable VolumeAllocatedSequences volumeAllocatedSequences,
+			final IDetailTree annotation) {
 
 		final int loadTime = allocationAnnotation.getSlotTime(loadSlot);
 		final int dischargeTime = allocationAnnotation.getSlotTime(dischargeSlot);
@@ -353,29 +357,13 @@ public class RedirectionContract implements ILoadPriceCalculator {
 		}
 	}
 
-	@Override
-	public void prepareEvaluation(final ISequences sequences) {
-
-	}
-
-	@Override
-	public void prepareRealPNL() {
-
-	}
-
 	public int getNotionalSpeed() {
 		return notionalSpeed;
 	}
 
 	@Override
-	public long[] calculateAdditionalProfitAndLoss(final ILoadOption loadOption, final IAllocationAnnotation allocationAnnotation, final int[] dischargePricesPerMMBTu,
-			final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, final IDetailTree annotations) {
-		return EMPTY_ADDITIONAL_PNL_RESULT;
-	}
-
-	@Override
 	public int calculateDESPurchasePricePerMMBTu(final ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			final IDetailTree annotations) {
+			@Nullable VolumeAllocatedSequences volumeAllocatedSequences, final IDetailTree annotations) {
 		final int transferTime = allocationAnnotation.getSlotTime(dischargeSlot);
 		final long transferVolumeInM3 = allocationAnnotation.getSlotVolumeInM3(dischargeSlot);
 		return calculateLoadPricePerMMBTu(loadOption, dischargeSlot, transferTime, dischargeSlot.getPort(), dischargePricePerMMBTu, transferVolumeInM3, annotations);
@@ -383,7 +371,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 
 	@Override
 	public int calculatePriceForFOBSalePerMMBTu(final ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			final IDetailTree annotations) {
+			@Nullable VolumeAllocatedSequences volumeAllocatedSequences, final IDetailTree annotations) {
 		final int transferTime = allocationAnnotation.getSlotTime(loadSlot);
 		final long transferVolumeInM3 = allocationAnnotation.getSlotVolumeInM3(loadSlot);
 		return calculateLoadPricePerMMBTu(loadSlot, dischargeOption, transferTime, loadSlot.getPort(), dischargePricePerMMBTu, transferVolumeInM3, annotations);
@@ -406,6 +394,5 @@ public class RedirectionContract implements ILoadPriceCalculator {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
 
 }

@@ -44,6 +44,7 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 				cargoCVValue, route, basePricePerMT, createSalesPriceCalculator(salesPricePerMMBTu));
 	}
 
+	@Override
 	public @Nullable VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDuration, final int dischargeTime,
 			final int dischargeDuration, final int returnTime, @NonNull final IVessel vessel, final long vesselCharterInRatePerDay, final long startHeelInM3, final int cargoCVValue,
 			@NonNull final ERouteOption route, final int basePricePerMT, final int salesPricePerMMBTu) {
@@ -73,23 +74,21 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 
 	protected @NonNull VoyageDetails calculateVoyageDetails(@NonNull final VesselState vesselState, @NonNull final IVessel vessel, @NonNull final ERouteOption route, final int distance,
 			final long routeCost, final int availableTime, @NonNull final PortSlot from, @NonNull final PortSlot to, final int cargoCV) {
-		final VoyageDetails voyageDetails = new VoyageDetails();
-		{
-			final VoyageOptions voyageOptions = createVoyageOptions(vesselState, vessel, route, distance, routeCost, availableTime, from, to, cargoCV);
 
-			voyageCalculator.calculateVoyageFuelRequirements(voyageOptions, voyageDetails);
-		}
+		final VoyageOptions voyageOptions = createVoyageOptions(vesselState, vessel, route, distance, routeCost, availableTime, from, to, cargoCV);
+		final VoyageDetails voyageDetails = new VoyageDetails(voyageOptions);
+
+		voyageCalculator.calculateVoyageFuelRequirements(voyageOptions, voyageDetails);
+
 		return voyageDetails;
 	}
 
 	protected @NonNull VoyageOptions createVoyageOptions(final VesselState vesselState, final IVessel vessel, final @NonNull ERouteOption route, final int distance, final long routeCost,
-			final int availableTime, final PortSlot from, final PortSlot to, final int cargoCV) {
-		final VoyageOptions voyageOptions = new VoyageOptions();
+			final int availableTime, final @NonNull PortSlot from, final @NonNull PortSlot to, final int cargoCV) {
+		final VoyageOptions voyageOptions = new VoyageOptions(from, to);
 		voyageOptions.setAvailableTime(availableTime);
 		voyageOptions.setAllowCooldown(false);
-		voyageOptions.setFromPortSlot(from);
 		voyageOptions.setRoute(route, distance, routeCost);
-		voyageOptions.setToPortSlot(to);
 		voyageOptions.setShouldBeCold(true);
 		voyageOptions.setUseFBOForSupplement(true);
 		voyageOptions.setUseNBOForIdle(true);
@@ -122,7 +121,7 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 
 	protected @NonNull DischargeSlot makeNotionalDischarge(@NonNull IPort dischargePort, int dischargeTime, @NonNull ISalesPriceCalculator salesPriceCalculator) {
 		DischargeSlot dischargeSlot = new DischargeSlot("notional-discharge", dischargePort, new TimeWindow(dischargeTime, dischargeTime), 0L, Long.MAX_VALUE, salesPriceCalculator, 0, 0);
-		
+
 		return dischargeSlot;
 	}
 

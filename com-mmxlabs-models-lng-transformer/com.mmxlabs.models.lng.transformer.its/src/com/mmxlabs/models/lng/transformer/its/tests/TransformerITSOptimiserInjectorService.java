@@ -32,7 +32,10 @@ import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstrain
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.fitness.NonOptionalSlotFitnessCoreFactory;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerFactory;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.constraints.impl.EvaluatedStateConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
@@ -98,6 +101,7 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 
 					if (!Platform.isRunning()) {
 						bind(IConstraintCheckerRegistry.class).toInstance(createConstraintCheckerRegistry());
+						bind(IEvaluatedStateConstraintCheckerRegistry.class).toInstance(createEvaluatedStateConstraintCheckerRegistry());
 						bind(IEvaluationProcessRegistry.class).toInstance(createEvaluationProcessRegistry());
 					}
 					// This bit is always needed for LiNGO ITS
@@ -158,6 +162,11 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 		fitnessFunctionRegistry.registerFitnessCoreFactory(new NonOptionalSlotFitnessCoreFactory());
 
 		return fitnessFunctionRegistry;
+	}
+
+	public IEvaluatedStateConstraintCheckerRegistry createEvaluatedStateConstraintCheckerRegistry() {
+		final EvaluatedStateConstraintCheckerRegistry registry = new EvaluatedStateConstraintCheckerRegistry();
+		return registry;
 	}
 
 	/**

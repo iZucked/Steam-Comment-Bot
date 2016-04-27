@@ -23,7 +23,9 @@ import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
+import com.mmxlabs.optimiser.core.modules.EvaluatedStateConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.FitnessFunctionInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.OptimiserContextModule;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
@@ -48,7 +50,6 @@ public class LNGOptimisationModule extends AbstractModule {
 		if (Platform.isRunning()) {
 			bind(IFitnessFunctionRegistry.class).toProvider(service(IFitnessFunctionRegistry.class).single());
 		}
-
 		install(new FitnessFunctionInstantiatorModule());
 
 		install(new LocalSearchOptimiserModule());
@@ -86,7 +87,7 @@ public class LNGOptimisationModule extends AbstractModule {
 
 		final InstrumentingMoveGenerator instrumentingMoveGenerator = LocalSearchOptimiserModule.instrumenting ? new InstrumentingMoveGenerator(moveGenerator, true // profile moves (true) or just rate
 		// (false)
-		, false // don't log moves to file
+				, false // don't log moves to file
 		) : null;
 		return instrumentingMoveGenerator;
 
