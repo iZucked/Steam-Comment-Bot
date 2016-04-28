@@ -39,6 +39,7 @@ Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.ui,
  com.mmxlabs.models.ui.editorpart,
  com.mmxlabs.models.ui.editors,
+ com.mmxlabs.models.ui.editors.autocomplete,
  com.mmxlabs.models.ui.editors.dialogs,
  com.mmxlabs.models.ui.editors.impl,
  com.mmxlabs.models.ui.editors.util,
