@@ -4,11 +4,13 @@
  */
 package com.mmxlabs.optimiser.core.constraints;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
@@ -36,7 +38,7 @@ public interface IConstraintChecker {
 	 * @param sequences
 	 * @return Returns true if all constraints are satisfied.
 	 */
-	boolean checkConstraints(@NonNull ISequences sequences);
+	boolean checkConstraints(@NonNull ISequences sequences, @Nullable Collection<@NonNull IResource> changedResources);
 
 	/**
 	 * Check the {@link ISequences} object for constraint violations. Returns true if all constraints are satisfied. Returns false on a constraint violation. This version of {@link #checkConstraints}
@@ -47,7 +49,7 @@ public interface IConstraintChecker {
 	 *            List which may be used to store constraint violation messages.
 	 * @return Returns true if all constraints are satisfied.
 	 */
-	boolean checkConstraints(@NonNull ISequences sequences, @Nullable List<String> messages);
+	boolean checkConstraints(@NonNull ISequences sequences, @Nullable Collection<@NonNull IResource> changedResources, @Nullable List<String> messages);
 
 	/**
 	 * Provide the {@link IConstraintChecker} with the {@link IOptimisationData} object, where it can obtain it's source data.

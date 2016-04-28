@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.optimiser.lso.impl;
 
+import java.util.Collection;
 import java.util.Date;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -13,12 +14,15 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IReducingConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess.Phase;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
@@ -62,6 +66,8 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 	protected boolean DO_SEQUENCE_LOGGING = false;
 
+	protected boolean failedInitialConstraintCheckers;
+
 	@Override
 	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext, @NonNull final ISequences initialRawSequences, @NonNull final ISequences inputRawSequences) {
 		setCurrentContext(optimiserContext);
@@ -79,6 +85,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		// Evaluate initial sequences
 		setInitialSequences(initialRawSequences);
 
+		// FIXME: This is the only extra line in DefaultLocalSearchOptimiser compared to ArbitraryStateLSO #start methods
 		evaluateInputSequences(initialRawSequences);
 
 		evaluateInputSequences(inputRawSequences);
@@ -94,20 +101,19 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		annotatedBestSolution.setGeneralAnnotation(OptimiserConstants.G_AI_iterations, 0);
 		annotatedBestSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime, 0l);
 
-		// For debugging (don't commit as true) - check the initial sequence passes constraint checkers.
-		// Note: There are some cases (particularly with lateness) where the optimiser can correct in one move thus we don't always want this active.
-		// In all other cases, an error here is typically caused by a gap in the validation logic.
-		if (false) {
-			// Apply sequence manipulators
-			final IModifiableSequences potentialFullSequences = new ModifiableSequences(currentRawSequences);
-			getSequenceManipulator().manipulate(potentialFullSequences);
+		// For constraint checker changed resources functions, if initial solution is invalid, we want to always perform a full constraint checker set of checks.
+		this.failedInitialConstraintCheckers = false;
+		// Apply sequence manipulators
+		final IModifiableSequences potentialFullSequences = getSequenceManipulator().createManipulatedSequences(currentRawSequences);
 
-			// Apply hard constraint checkers
-			for (final IConstraintChecker checker : getConstraintCheckers()) {
-				if (checker.checkConstraints(potentialFullSequences) == false) {
-					// Set break point here!
-					checker.checkConstraints(potentialFullSequences);
-				}
+		// Apply hard constraint checkers
+		for (final IConstraintChecker checker : getConstraintCheckers()) {
+			if (checker.checkConstraints(potentialFullSequences, null) == false) {
+				// Set break point here!
+				// checker.checkConstraints(potentialFullSequences, null);
+
+				failedInitialConstraintCheckers = true;
+				break;
 			}
 		}
 		setStartTime(System.currentTimeMillis());
@@ -183,14 +189,17 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 			// Apply hard constraint checkers
 			for (final IConstraintChecker checker : getConstraintCheckers()) {
-				if (checker.checkConstraints(potentialFullSequences) == false) {
+				// For constraint checker changed resources functions, if initial solution is invalid, we want to always perform a full constraint checker set of checks until we accept a valid
+				// solution
+				final Collection<@NonNull IResource> changedResources = failedInitialConstraintCheckers ? null : move.getAffectedResources();
+
+				if (checker.checkConstraints(potentialFullSequences, changedResources) == false) {
 					if (loggingDataStore != null) {
 						loggingDataStore.logFailedConstraints(checker, move);
 						if (DO_SEQUENCE_LOGGING) {
 							loggingDataStore.logSequenceFailedConstraint(checker, pinnedPotentialRawSequences);
 						}
 					}
-
 					// Reject Move
 					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
 					// Break out
@@ -206,7 +215,34 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 			final IEvaluationState evaluationState = new EvaluationState();
 			for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
-				if (!evaluationProcess.evaluate(potentialFullSequences, evaluationState)) {
+				if (!evaluationProcess.evaluate(Phase.Checked_Evaluation, potentialFullSequences, evaluationState)) {
+					// Problem evaluating, reject move
+					++numberOfFailedEvaluations;
+
+					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
+					continue MAIN_LOOP;
+				}
+			}
+			// Apply hard constraint checkers
+			for (final IEvaluatedStateConstraintChecker checker : getEvaluatedStateConstraintCheckers()) {
+				if (checker.checkConstraints(potentialRawSequences, potentialFullSequences, evaluationState) == false) {
+					// Problem evaluating, reject move
+					++numberOfFailedEvaluations;
+
+					// if (loggingDataStore != null) {
+					// loggingDataStore.logFailedEvaluatedStateConstraints(checker, move);
+					// if (DO_SEQUENCE_LOGGING) {
+					// loggingDataStore.logSequenceFailedEvaluatedStateConstraint(checker, pinnedPotentialRawSequences);
+					// }
+					// }
+					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
+					// Break out
+					continue MAIN_LOOP;
+				}
+			}
+
+			for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
+				if (!evaluationProcess.evaluate(Phase.Final_Evaluation, potentialFullSequences, evaluationState)) {
 					// Problem evaluating, reject move
 					++numberOfFailedEvaluations;
 
@@ -243,6 +279,10 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 						System.out.println(best.getFirst() + ":" + best.getSecond());
 					}
 				}
+
+				// Current state is now accepted, set this flag to false to permit the constraint checker delta functionality
+				failedInitialConstraintCheckers = false;
+
 			} else {
 				// Failed, reset state for old sequences
 				++numberOfRejectedMoves;
@@ -252,6 +292,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 					}
 					loggingDataStore.logRejectedMove(move, getNumberOfMovesTried(), getFitnessEvaluator().getLastFitness());
 				}
+
 				updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
 			}
 		}
@@ -280,6 +321,10 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		final IEvaluationState evaluationState = new EvaluationState();
 		for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
 			evaluationProcess.evaluate(fullSequences, evaluationState);
+		}
+
+		for (final IEvaluatedStateConstraintChecker checker : getEvaluatedStateConstraintCheckers()) {
+			checker.checkConstraints(currentRawSequences, fullSequences, evaluationState);
 		}
 
 		// Prime fitness cores with initial sequences
