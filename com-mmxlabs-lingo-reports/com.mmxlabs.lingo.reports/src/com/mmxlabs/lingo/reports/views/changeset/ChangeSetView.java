@@ -61,6 +61,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
@@ -561,7 +562,7 @@ public class ChangeSetView implements IAdaptable {
 			gvc.setLabelProvider(createAdditionalPNLDeltaLabelProvider());
 			createWordWrapRenderer(gvc);
 		}
-		{
+		if (LicenseFeatures.isPermitted("features:report-equity-book")) {
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
 			gvc.getColumn().setText("+ Equity");
