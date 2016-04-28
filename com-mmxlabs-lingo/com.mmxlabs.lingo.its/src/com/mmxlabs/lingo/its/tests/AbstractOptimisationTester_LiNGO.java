@@ -14,7 +14,7 @@ import org.junit.runners.Parameterized;
  * Abstract class to run parameterised tests on optimisation results. Sub classes should create a method similar to the one below to run test cases. May need to also include the @RunWith annotation.
  * 
  * <pre>
- * @Parameters(name = "{0}")
+ * &#64;Parameters(name = "{0}")
  * 	public static Iterable<Object[]> generateTests() {
  * 		return Arrays.asList(new Object[][] {
  * 				{ "Test Prefix", "scenario path/" }, //
@@ -42,7 +42,7 @@ public abstract class AbstractOptimisationTester_LiNGO extends AbstractOptimisat
 	public void testOptimisation() throws Exception {
 
 		// Load the scenario to test
-		final URL url = getClass().getResource(scenario);
-		runScenarioWithGCO(url);
+		final URL scenarioURL = getClass().getResource(scenario);
+		runScenarioWithGCO(new LiNGOTestDataProvider(scenarioURL));
 	}
 }

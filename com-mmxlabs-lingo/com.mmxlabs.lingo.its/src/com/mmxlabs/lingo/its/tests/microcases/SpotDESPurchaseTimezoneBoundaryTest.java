@@ -10,11 +10,13 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
+import com.mmxlabs.lingo.its.tests.CSVTestDataProvider;
 import com.mmxlabs.lingo.its.tests.category.QuickTest;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -43,9 +45,9 @@ public class SpotDESPurchaseTimezoneBoundaryTest extends AbstractOptimisationRes
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/micro-cases/spot-slot-timezone/");
 
-		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
+		@NonNull
+		LNGScenarioRunner runner = runScenarioWithGCO(new CSVTestDataProvider(url));
 
-		final LNGScenarioRunner runner = runScenarioWithGCO(scenario, new URL(url.toString() + "fitness"));
 		// runner.updateScenario();
 		final Schedule schedule = runner.getSchedule();
 		Assert.assertNotNull(schedule);

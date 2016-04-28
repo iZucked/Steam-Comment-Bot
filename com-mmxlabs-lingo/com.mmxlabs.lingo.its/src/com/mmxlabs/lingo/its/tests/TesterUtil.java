@@ -73,10 +73,9 @@ public class TesterUtil {
 			};
 			return props;
 		} else {
-			final URL propsURL = new URL(FileLocator.toFileURL(propertiesURL).toString().replaceAll(" ", "%20"));
 
 			Properties props = new Properties();
-			props.load(propsURL.openStream());
+			props.load(propertiesURL.openStream());
 			return props;
 		}
 	}
@@ -92,10 +91,10 @@ public class TesterUtil {
 	 */
 	public static void testOriginalAndCurrentFitnesses(final Properties props, final String mapName, final List<Fitness> currentFitnesses) {
 
-		if (true){
+		if (true) {
 			return;
 		}
-		
+
 		long totalOriginalFitness = 0;
 		long totalCurrentFitness = 0;
 		System.out.println(">>>> " + mapName + " <<<<");

@@ -12,6 +12,7 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
+import com.mmxlabs.lingo.its.tests.LiNGOTestDataProvider;
 import com.mmxlabs.lingo.its.tests.category.OptimisationTest;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 
@@ -26,7 +27,7 @@ public class TestOptimisationResult2 extends AbstractOptimisationResultTester {
 		final URL url = getClass().getResource("/scenarios/des-cargo.lingo");
 		Assert.assertNotNull(url);
 
-		runScenarioWithGCO(url);
+		runScenarioWithGCO(new LiNGOTestDataProvider(url));
 	}
 
 }
