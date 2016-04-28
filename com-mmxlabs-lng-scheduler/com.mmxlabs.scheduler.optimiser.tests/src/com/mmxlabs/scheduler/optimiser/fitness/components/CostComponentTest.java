@@ -16,12 +16,15 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class CostComponentTest {
@@ -53,7 +56,7 @@ public class CostComponentTest {
 		IOptimisationData data = Mockito.mock(IOptimisationData.class);
 		c.init(data);
 
-		final VoyageDetails voyage = new VoyageDetails();
+		final VoyageDetails voyage = new VoyageDetails(new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class)));
 		// set consumptions
 		voyage.setFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit(), voyageBaseConsumption);
 		voyage.setFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit(), voyageNBOConsumption);
@@ -63,7 +66,7 @@ public class CostComponentTest {
 		voyage.setFuelUnitPrice(FuelComponent.NBO, NBOUnit);
 		voyage.setFuelUnitPrice(FuelComponent.FBO, FBOUnit);
 
-		final PortDetails port = new PortDetails();
+		final PortDetails port = new PortDetails(new PortOptions(Mockito.mock(IPortSlot.class)));
 		port.setFuelConsumption(FuelComponent.Base, portBaseConsumption);
 		port.setFuelUnitPrice(FuelComponent.Base, baseUnit);
 
@@ -75,7 +78,7 @@ public class CostComponentTest {
 
 		final IResource resource = Mockito.mock(IResource.class);
 
-		final ScheduledSequences scheduledSequences = new ScheduledSequences();
+		final ProfitAndLossSequences scheduledSequences = Mockito.mock(ProfitAndLossSequences.class);
 
 		c.startEvaluation(scheduledSequences);
 		c.startSequence(resource);

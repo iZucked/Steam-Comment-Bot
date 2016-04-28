@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -22,7 +23,7 @@ public class DefaultVesselAvailabilityTest {
 
 		final DefaultVesselAvailability vesselAvailavility = new DefaultVesselAvailability(vessel, vesselInstanceType);
 		Assert.assertNull(vesselAvailavility.getDailyCharterInRate());
-		final ICurve curve = Mockito.mock(ICurve.class);
+		final ILongCurve curve = Mockito.mock(ILongCurve.class);
 		vesselAvailavility.setDailyCharterInRate(curve);
 		Assert.assertSame(curve, vesselAvailavility.getDailyCharterInRate());
 	}

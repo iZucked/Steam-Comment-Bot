@@ -32,14 +32,14 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 	private final @NonNull VoyageOptions options;
 
-	private final @NonNull List<Pair<ERouteOption, Integer>> routeOptions;
+	private final @NonNull List<@NonNull Pair<@NonNull ERouteOption, @NonNull Integer>> routeOptions;
 
 	private final @NonNull IRouteCostProvider routeCostProvider;
 
 	private final @NonNull IVessel vessel;
 
-	public RouteVoyagePlanChoice(@Nullable final VoyageOptions previousOptions, @NonNull final VoyageOptions options, @NonNull final List<Pair<ERouteOption, Integer>> routeOptions,
-			@NonNull final IVessel vessel, @NonNull final IRouteCostProvider routeCostProvider) {
+	public RouteVoyagePlanChoice(@Nullable final VoyageOptions previousOptions, @NonNull final VoyageOptions options,
+			@NonNull final List<@NonNull Pair<@NonNull ERouteOption, @NonNull Integer>> routeOptions, @NonNull final IVessel vessel, @NonNull final IRouteCostProvider routeCostProvider) {
 		this.previousOptions = previousOptions;
 		this.options = options;
 		this.routeOptions = routeOptions;
@@ -78,7 +78,7 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 	public final boolean apply(final int choice) {
 		this.choice = choice;
 
-		final Pair<ERouteOption, Integer> entry = routeOptions.get(choice);
+		final Pair<@NonNull ERouteOption, @NonNull Integer> entry = routeOptions.get(choice);
 		final CostType costType;
 
 		VoyageOptions pPreviousOption = previousOptions;

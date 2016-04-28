@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -25,7 +27,7 @@ public class BreakEvenSalesPriceCalculator implements ISalesPriceCalculator, IBr
 	/**
 	 */
 	@Override
-	public void prepareEvaluation(final ISequences sequences) {
+	public void prepareSalesForEvaluation(final @NonNull ISequences sequences) {
 		price = 0;
 	}
 
@@ -42,11 +44,6 @@ public class BreakEvenSalesPriceCalculator implements ISalesPriceCalculator, IBr
 	@Override
 	public int calculateSalesUnitPrice(IDischargeOption option, final IAllocationAnnotation allocationAnnotation, IDetailTree annotations) {
 		return price;
-	}
-
-	@Override
-	public void prepareRealPNL() {
-
 	}
 
 	@Override

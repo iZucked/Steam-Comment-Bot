@@ -4,20 +4,40 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.google.inject.Inject;
 import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
+import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 
 /**
  * Implementation of a {@link ICooldownLumpSumPriceCalculator} which calculates the lump sum cost of a cooldown, for a given {@link ICurve}.
  * 
  * @author Alex Churchill
  */
-public class CooldownPriceIndexedCalculator extends AbstractCooldownCalculator {
+public class CooldownPriceIndexedCalculator implements ICooldownCalculator {
 
-	public CooldownPriceIndexedCalculator(final ICurve expressionCurve) {
-		super(expressionCurve);
+	private final ICurve expressionCurve;
+
+	@Inject
+	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
+
+	public CooldownPriceIndexedCalculator(final @NonNull ICurve expressionCurve) {
+		this.expressionCurve = expressionCurve;
+	}
+
+	@Override
+	public void prepareEvaluation(final ISequences sequences) {
+
+	}
+
+	protected int calculateUnitPriceAtUTCTime(final int localTime, final IPort port) {
+		return expressionCurve.getValueAtPoint(timeZoneToUtcOffsetProvider.UTC(localTime, port));
 	}
 
 	@Override

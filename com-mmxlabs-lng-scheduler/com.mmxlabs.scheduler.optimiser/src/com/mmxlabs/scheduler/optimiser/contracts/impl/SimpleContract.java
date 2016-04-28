@@ -4,9 +4,11 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.google.inject.Inject;
 import com.mmxlabs.common.detailtree.IDetailTree;
-import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -17,9 +19,9 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
-import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -36,14 +38,6 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	@Inject
 	private PricingEventHelper pricingEventHelper;
 
-	@Inject
-	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
-
-	@Override
-	public void prepareEvaluation(final ISequences sequences) {
-
-	}
-
 	/**
 	 */
 	protected abstract int calculateSimpleUnitPrice(final int time, final IPort port);
@@ -52,7 +46,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	 */
 	@Override
 	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, final IDetailTree annotations) {
+			final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, @Nullable VolumeAllocatedSequences volumeAllocatedSequences, final IDetailTree annotations) {
 
 		if (actualsDataProvider != null && actualsDataProvider.hasActuals(loadSlot)) {
 			return actualsDataProvider.getLNGPricePerMMBTu(loadSlot);
@@ -76,7 +70,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	}
 
 	@Override
-	public int getEstimatedPurchasePrice(ILoadOption loadOption, IDischargeOption dischargeOption, int timeInHours) {
+	public int getEstimatedPurchasePrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int timeInHours) {
 		if (actualsDataProvider.hasActuals(loadOption)) {
 			return actualsDataProvider.getLNGPricePerMMBTu(loadOption);
 		} else {
@@ -86,7 +80,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	}
 
 	@Override
-	public int getEstimatedSalesPrice(ILoadOption loadOption, IDischargeOption dischargeOption, int timeInHours) {
+	public int getEstimatedSalesPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int timeInHours) {
 		if (actualsDataProvider.hasActuals(loadOption)) {
 			return actualsDataProvider.getLNGPricePerMMBTu(loadOption);
 		} else {
@@ -94,7 +88,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 			return calculateSimpleUnitPrice(timeInHours, port);
 		}
 	}
-	
+
 	@Override
 	public int calculateSalesUnitPrice(final IDischargeOption dischargeOption, final IAllocationAnnotation allocationAnnotation, final IDetailTree annotations) {
 
@@ -110,16 +104,8 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	/**
 	 */
 	@Override
-	public long[] calculateAdditionalProfitAndLoss(final ILoadOption loadOption, final IAllocationAnnotation allocationAnnotation, final int[] dischargePricesPerMMBTu,
-			final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, final IDetailTree annotations) {
-		return EMPTY_ADDITIONAL_PNL_RESULT;
-	}
-
-	/**
-	 */
-	@Override
 	public int calculateDESPurchasePricePerMMBTu(final ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			final IDetailTree annotations) {
+			@Nullable VolumeAllocatedSequences volumeAllocatedSequences, final IDetailTree annotations) {
 
 		if (actualsDataProvider != null && actualsDataProvider.hasActuals(loadOption)) {
 			return actualsDataProvider.getLNGPricePerMMBTu(loadOption);
@@ -132,7 +118,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	 */
 	@Override
 	public int calculatePriceForFOBSalePerMMBTu(final ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			final IDetailTree annotations) {
+			@Nullable VolumeAllocatedSequences volumeAllocatedSequences, final IDetailTree annotations) {
 
 		if (actualsDataProvider != null && actualsDataProvider.hasActuals(loadSlot)) {
 			return actualsDataProvider.getLNGPricePerMMBTu(loadSlot);
@@ -143,21 +129,15 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	}
 
 	@Override
-	public void prepareRealPNL() {
-
-	}
-	
-	@Override
-	public PricingEventType getCalculatorPricingEventType(ILoadOption loadOption, IPortTimeWindowsRecord portTimeWindowsRecord) {
+	public PricingEventType getCalculatorPricingEventType(final ILoadOption loadOption, final IPortTimeWindowsRecord portTimeWindowsRecord) {
 		if (actualsDataProvider.hasActuals(loadOption)) {
 			return PricingEventType.DATE_SPECIFIED;
 		}
 		return null;
 	}
 
-
 	@Override
-	public PricingEventType getCalculatorPricingEventType(IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowsRecord) {
+	public PricingEventType getCalculatorPricingEventType(final IDischargeOption dischargeOption, final IPortTimeWindowsRecord portTimeWindowsRecord) {
 		if (actualsDataProvider.hasActuals(dischargeOption)) {
 			return PricingEventType.DATE_SPECIFIED;
 		}
@@ -165,7 +145,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	}
 
 	@Override
-	public int getCalculatorPricingDate(ILoadOption loadOption, IPortTimeWindowsRecord portTimeWindowsRecord) {
+	public int getCalculatorPricingDate(final ILoadOption loadOption, final IPortTimeWindowsRecord portTimeWindowsRecord) {
 		if (actualsDataProvider.hasActuals(loadOption)) {
 			return actualsDataProvider.getArrivalTime(loadOption);
 		} else {
@@ -174,7 +154,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	}
 
 	@Override
-	public int getCalculatorPricingDate(IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowsRecord) {
+	public int getCalculatorPricingDate(final IDischargeOption dischargeOption, final IPortTimeWindowsRecord portTimeWindowsRecord) {
 		if (actualsDataProvider.hasActuals(dischargeOption)) {
 			return actualsDataProvider.getArrivalTime(dischargeOption);
 		} else {

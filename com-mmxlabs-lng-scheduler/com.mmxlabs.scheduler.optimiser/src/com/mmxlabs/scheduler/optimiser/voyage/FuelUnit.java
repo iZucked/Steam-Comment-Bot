@@ -4,12 +4,15 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  * Units of Measure for Fuel / Gas etc
  * 
  * @author Simon Goodall
  * 
  */
+@NonNullByDefault
 public enum FuelUnit {
 
 	/**

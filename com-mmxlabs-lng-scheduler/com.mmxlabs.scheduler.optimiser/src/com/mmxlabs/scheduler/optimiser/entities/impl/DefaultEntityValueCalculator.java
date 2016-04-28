@@ -18,6 +18,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.common.detailtree.DetailTree;
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -45,6 +46,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICargoValueAnnotation;
@@ -89,40 +91,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	@Inject
 	private ITimeZoneToUtcOffsetProvider utcOffsetProvider;
 
-	// /**
-	// * Internal data structure to store handy data needed for Cargo P&L calculations. Note similarity to {@link IAllocationAnnotation} - and even {@link AllocationRecord} (which is not visible
-	// here).
-	// *
-	// */
-	// protected class CargoPNLData {
-	// public ISequenceElement exportElement;
-	// public final List<IPortSlot> slots;
-	// public final IAllocationAnnotation allocationAnnotation;
-	// public final int[] slotPricePerMMBTu;
-	// public final long[] slotVolumeInM3;
-	// public final long[] slotVolumeInMMBTu;
-	// public final long[] slotValue;
-	// public final int[] slotCargoCV;
-	// public final long[] slotAdditionalPNL;
-	// public final IEntity[] slotEntity;
-	// public final int[] arrivalTimes;
-	// public final int[] visitDurations;
-	//
-	// public CargoPNLData(final IAllocationAnnotation allocationAnnotation) {
-	// this.allocationAnnotation = allocationAnnotation;
-	// this.slots = new ArrayList<IPortSlot>(allocationAnnotation.getSlots());
-	// this.slotPricePerMMBTu = new int[slots.size()];
-	// this.slotVolumeInM3 = new long[slots.size()];
-	// this.slotVolumeInMMBTu = new long[slots.size()];
-	// this.slotValue = new long[slots.size()];
-	// this.slotCargoCV = new int[slots.size()];
-	// this.slotAdditionalPNL = new long[slots.size()];
-	// this.slotEntity = new IEntity[slots.size()];
-	// this.arrivalTimes = new int[slots.size()];
-	// this.visitDurations = new int[slots.size()];
-	// }
-	// }
-
 	/**
 	 * Evaluate the group value of the given cargo. This method first calculates sales prices, then purchase prices and additional P&L, then shipping costs and charter out revenue.
 	 * 
@@ -132,7 +100,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 */
 	@Override
 	public Pair<@NonNull CargoValueAnnotation, @NonNull Long> evaluate(@NonNull final VoyagePlan plan, @NonNull final IAllocationAnnotation currentAllocation,
-			@NonNull final IVesselAvailability vesselAvailability, final int vesselStartTime, @Nullable final IAnnotatedSolution annotatedSolution) {
+			@NonNull final IVesselAvailability vesselAvailability, final int vesselStartTime, @Nullable VolumeAllocatedSequences volumeAllocatedSequences,
+			@Nullable final IAnnotatedSolution annotatedSolution) {
 
 		final CargoValueAnnotation cargoPNLData = new CargoValueAnnotation(currentAllocation);
 
@@ -237,16 +206,16 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 						final ILoadSlot loadSlot = (ILoadSlot) loadOption;
 						final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeOption;
 						pricePerMMBTu = loadSlot.getLoadPriceCalculator().calculateFOBPricePerMMBTu(loadSlot, dischargeSlot, dischargePricePerMMBTu, cargoPNLData, vesselAvailability, vesselStartTime,
-								plan, portSlotDetails);
+								plan, volumeAllocatedSequences, portSlotDetails);
 					} else if (loadOption instanceof ILoadSlot) {
 						// FOB Sale
 						pricePerMMBTu = loadOption.getLoadPriceCalculator().calculatePriceForFOBSalePerMMBTu((ILoadSlot) loadOption, dischargeOption, dischargePricePerMMBTu, cargoPNLData,
-								portSlotDetails);
+								volumeAllocatedSequences, portSlotDetails);
 					} else {
 						// DES Purchase
 						assert dischargeOption instanceof IDischargeSlot;
 						pricePerMMBTu = loadOption.getLoadPriceCalculator().calculateDESPurchasePricePerMMBTu(loadOption, (IDischargeSlot) dischargeOption, dischargePricePerMMBTu, cargoPNLData,
-								portSlotDetails);
+								volumeAllocatedSequences, portSlotDetails);
 					}
 				}
 				cargoPNLData.setSlotPricePerMMBTu(slot, pricePerMMBTu);
@@ -266,7 +235,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				final ILoadOption loadOption = (ILoadOption) slot;
 
 				final long[] additionProfitAndLossComponents = loadOption.getLoadPriceCalculator().calculateAdditionalProfitAndLoss(loadOption, cargoPNLData, slotPricesPerMMBTu, vesselAvailability,
-						vesselStartTime, plan, portSlotDetails);
+						vesselStartTime, plan, volumeAllocatedSequences, portSlotDetails);
 
 				cargoPNLData.setSlotAdditionalOtherPNL(slot, additionProfitAndLossComponents[ILoadPriceCalculator.IDX_OTHER_VALUE]);
 				cargoPNLData.setSlotAdditionalUpsidePNL(slot, additionProfitAndLossComponents[ILoadPriceCalculator.IDX_UPSIDE_VALUE]);
@@ -437,7 +406,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 */
 	@Override
 	public long evaluate(final VoyagePlan plan, final IVesselAvailability vesselAvailability, final int planStartTime, final int vesselStartTime,
-			@Nullable final IAnnotatedSolution annotatedSolution) {
+			@Nullable final VolumeAllocatedSequences volumeAllocatedSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
 		final IEntity shippingEntity = entityProvider.getEntityForVesselAvailability(vesselAvailability);
 		if (shippingEntity == null) {
 			return 0L;
@@ -569,14 +538,15 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	}
 
 	@Override
-	public long evaluateUnusedSlot(@NonNull final IPortSlot portSlot, @Nullable final IAnnotatedSolution annotatedSolution) {
+	public long evaluateUnusedSlot(@NonNull final IPortSlot portSlot, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
 
 		final IEntity entity = entityProvider.getEntityForSlot(portSlot);
 
 		long result = 0;
 		{
 			final long hedgeValue = hedgesProvider.getHedgeValue(portSlot);
-			final long cancellationCost = cancellationFeeProvider.getCancellationFee(portSlot);
+			final ILongCurve cancellationCurve = cancellationFeeProvider.getCancellationExpression(portSlot);
+			final long cancellationCost = cancellationCurve.getValueAtPoint(portSlot.getTimeWindow().getStart());
 
 			// Taxed P&L - use time window start as tax date
 			final long preTaxValue = hedgeValue - cancellationCost;

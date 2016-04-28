@@ -154,14 +154,14 @@ public class LDShippingAnnotationHelper {
 		shippingAnnotation.ballastBOCost = Calculator.costFromConsumption(shippingAnnotation.ballastBOInMMBTu, lngCostPerMMBTu);
 	}
 
-	public static void updateCharterCosts(final @NonNull LDShippingAnnotation shippingAnnotation, final int charterCostPerDay) {
+	public static void updateCharterCosts(final @NonNull LDShippingAnnotation shippingAnnotation, final long charterCostPerDay) {
 		shippingAnnotation.loadCharterCost = Calculator.quantityFromRateTime(charterCostPerDay, shippingAnnotation.loadHireHours) / 24L;
 		shippingAnnotation.ladenCharterCost = Calculator.quantityFromRateTime(charterCostPerDay, shippingAnnotation.ladenHireHours) / 24L;
 		shippingAnnotation.dischargeCharterCost = Calculator.quantityFromRateTime(charterCostPerDay, shippingAnnotation.dischargeHireHours) / 24L;
 		shippingAnnotation.ballastCharterCost = Calculator.quantityFromRateTime(charterCostPerDay, shippingAnnotation.ballastHireHours) / 24L;
 	}
 
-	public static void updateCosts(final @NonNull LDShippingAnnotation shippingAnnotation, final int charterCostPerDay, final int lngCostPerMMBTu, final int bunkerPricePerMT) {
+	public static void updateCosts(final @NonNull LDShippingAnnotation shippingAnnotation, final long charterCostPerDay, final int lngCostPerMMBTu, final int bunkerPricePerMT) {
 		updateCharterCosts(shippingAnnotation, charterCostPerDay);
 		updateBunkerCosts(shippingAnnotation, bunkerPricePerMT);
 		updateLNGCosts(shippingAnnotation, lngCostPerMMBTu);

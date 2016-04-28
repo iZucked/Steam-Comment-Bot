@@ -18,8 +18,8 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
@@ -63,36 +63,31 @@ public class LatenessChecker {
 	 * and {@link LNGVoyageCalculator} generally feed into these checks.
 	 * 
 	 * @param sequences
-	 * @param scheduledSequences
+	 * @param profitAndLossSequences
 	 * @param allocations
 	 * @param annotatedSolution
 	 */
-	public void calculateLateness(final @NonNull ScheduledSequences scheduledSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
-		// clear late slots
-		scheduledSequences.resetLateSlots();
-		// Loop over all sequences
-		for (final ScheduledSequence scheduledSequence : scheduledSequences) {
-			final IResource resource = scheduledSequence.getResource();
-			assert resource != null;
-			for (final IPortSlot portSlot : scheduledSequence.getSequenceSlots()) {
-				final ITimeWindow tw = getTW(portSlot, resource);
-				if (tw == null) {
-					continue;
-				}
-				final int latenessInHours = getLateness(portSlot, resource, tw, scheduledSequence.getArrivalTime(portSlot));
-				addLateSlot(portSlot, latenessInHours, scheduledSequences);
-				if (latenessInHours > 0 || annotatedSolution != null) {
-					final Pair<ILatenessComponentParameters.Interval, Long> weightedLatenessPair = getWeightedLateness(tw, latenessInHours);
-					addEntryToLatenessAnnotation(annotatedSolution, portSlot, tw, weightedLatenessPair.getFirst(), latenessInHours,
-							getLatenessWithoutFlex(portSlot, resource, tw, scheduledSequence.getArrivalTime(portSlot)), weightedLatenessPair.getSecond(), scheduledSequences);
-				}
+	public void calculateLateness(final @NonNull VolumeAllocatedSequence volumeAllocatedSequence, @Nullable final IAnnotatedSolution annotatedSolution) {
+		final IResource resource = volumeAllocatedSequence.getResource();
+		assert resource != null;
+		for (final IPortSlot portSlot : volumeAllocatedSequence.getSequenceSlots()) {
+			final ITimeWindow tw = getTW(portSlot, resource);
+			if (tw == null) {
+				continue;
+			}
+			final int latenessInHours = getLateness(portSlot, resource, tw, volumeAllocatedSequence.getArrivalTime(portSlot));
+			addLateSlot(portSlot, latenessInHours, volumeAllocatedSequence);
+			if (latenessInHours > 0 || annotatedSolution != null) {
+				final Pair<ILatenessComponentParameters.Interval, Long> weightedLatenessPair = getWeightedLateness(tw, latenessInHours);
+				addEntryToLatenessAnnotation(annotatedSolution, portSlot, tw, weightedLatenessPair.getFirst(), latenessInHours,
+						getLatenessWithoutFlex(portSlot, resource, tw, volumeAllocatedSequence.getArrivalTime(portSlot)), weightedLatenessPair.getSecond(), volumeAllocatedSequence);
 			}
 		}
 	}
 
-	private void addLateSlot(final @NonNull IPortSlot portSlot, final int latenessInHours, final @NonNull ScheduledSequences scheduledSequences) {
+	private void addLateSlot(final @NonNull IPortSlot portSlot, final int latenessInHours, final @NonNull VolumeAllocatedSequence volumeAllocatedSequence) {
 		if (latenessInHours > 0) {
-			scheduledSequences.addLateSlot(portSlot);
+			volumeAllocatedSequence.addLateSlot(portSlot);
 		}
 	}
 
@@ -149,10 +144,10 @@ public class LatenessChecker {
 	}
 
 	private void addEntryToLatenessAnnotation(@Nullable final IAnnotatedSolution annotatedSolution, final @NonNull IPortSlot portSlot, final @NonNull ITimeWindow tw, final Interval interval,
-			final int latenessInHours, final int latenessInHoursWithoutFlex, final long weightedLateness, final @NonNull ScheduledSequences scheduledSequences) {
+			final int latenessInHours, final int latenessInHoursWithoutFlex, final long weightedLateness, final @NonNull VolumeAllocatedSequence volumeAllocatedSequence) {
 		// Set port details entry
-		scheduledSequences.addWeightedLatenessCost(portSlot, weightedLateness);
-		scheduledSequences.addLatenessCost(portSlot, new Pair<>(interval, (long) latenessInHours));
+		volumeAllocatedSequence.addWeightedLatenessCost(portSlot, weightedLateness);
+		volumeAllocatedSequence.addLatenessCost(portSlot, new Pair<>(interval, (long) latenessInHours));
 
 		if (annotatedSolution != null && latenessInHoursWithoutFlex > 0) {
 			// set interval without flex

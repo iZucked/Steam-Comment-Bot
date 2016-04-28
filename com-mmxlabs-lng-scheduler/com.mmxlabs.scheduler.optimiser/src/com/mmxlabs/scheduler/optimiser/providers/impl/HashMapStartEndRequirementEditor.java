@@ -6,6 +6,8 @@ package com.mmxlabs.scheduler.optimiser.providers.impl;
 
 import java.util.HashMap;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
@@ -21,28 +23,32 @@ public class HashMapStartEndRequirementEditor implements IStartEndRequirementPro
 	protected HashMap<IResource, ISequenceElement> endElements = new HashMap<IResource, ISequenceElement>();
 
 	@Override
-	public IStartRequirement getStartRequirement(final IResource resource) {
-		return startRequirements.get(resource);
+	public IStartRequirement getStartRequirement(final @NonNull IResource resource) {
+		IStartRequirement requirement = startRequirements.get(resource);
+		assert requirement != null;
+		return requirement;
 	}
 
 	@Override
 	public IEndRequirement getEndRequirement(final IResource resource) {
-		return endRequirements.get(resource);
+		IEndRequirement requirement = endRequirements.get(resource);
+		assert requirement != null;
+		return requirement;
 	}
 
 	@Override
-	public void setStartEndRequirements(final IResource resource, final IStartRequirement startRequirement, final IEndRequirement endRequirement) {
+	public void setStartEndRequirements(final @NonNull IResource resource, final @NonNull IStartRequirement startRequirement, final @NonNull IEndRequirement endRequirement) {
 		startRequirements.put(resource, startRequirement);
 		endRequirements.put(resource, endRequirement);
 	}
 
 	@Override
-	public ISequenceElement getEndElement(final IResource resource) {
+	public ISequenceElement getEndElement(final @NonNull IResource resource) {
 		return endElements.get(resource);
 	}
 
 	@Override
-	public ISequenceElement getStartElement(final IResource resource) {
+	public ISequenceElement getStartElement(final @NonNull IResource resource) {
 		return startElements.get(resource);
 	}
 

@@ -50,7 +50,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		private final int[] durations;
 		private final int[] voyageTimes;
 		private final int dischargePrice;
-		private final int vesselCharterInRatePerDay;
+		private final long vesselCharterInRatePerDay;
 		private final @NonNull IVessel vessel;
 		protected final long startHeel;
 		private final int baseFuelPricePerMT;
@@ -61,7 +61,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		protected @NonNull IPortTimesRecord portTimesRecord;
 		protected @Nullable IResource resource;
 
-		public CacheKey(final @NonNull IVessel vessel, final @Nullable IResource resource, final int vesselCharterInRatePerDay, final int baseFuelPricePerMT,
+		public CacheKey(final @NonNull IVessel vessel, final @Nullable IResource resource, final long vesselCharterInRatePerDay, final int baseFuelPricePerMT,
 				final @NonNull List<@NonNull IOptionsSequenceElement> sequence, final @NonNull IPortTimesRecord portTimesRecord, final @NonNull List<@NonNull IVoyagePlanChoice> choices,
 				final long startHeel) {
 			super();
@@ -121,7 +121,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			// result = prime * result + loadPrice;
 			result = (prime * result) + dischargePrice;
 			result = (prime * result) + baseFuelPricePerMT;
-			result = (prime * result) + vesselCharterInRatePerDay;
+			result = (prime * result) + (int) vesselCharterInRatePerDay;
 
 			result = (prime * result) + vessel.hashCode();
 
@@ -161,13 +161,10 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		}
 	}
 
-	private final IVoyagePlanOptimiser delegate;
-
 	private final AbstractCache<@NonNull CacheKey, VoyagePlan> cache;
 
 	public CachingVoyagePlanOptimiser(final @NonNull IVoyagePlanOptimiser delegate, final int cacheSize) {
 		super();
-		this.delegate = delegate;
 		final IKeyEvaluator<@NonNull CacheKey, VoyagePlan> evaluator = new IKeyEvaluator<@NonNull CacheKey, VoyagePlan>() {
 
 			@Override
@@ -185,7 +182,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	@Override
 	@Nullable
-	public VoyagePlan optimise(@Nullable final IResource resource, final IVessel vessel, final long startHeel, final int baseFuelPricePerMT, final int vesselCharterInRatePerDay,
+	public VoyagePlan optimise(@Nullable final IResource resource, final IVessel vessel, final long startHeel, final int baseFuelPricePerMT, final long vesselCharterInRatePerDay,
 			final IPortTimesRecord portTimesRecord, final List<@NonNull IOptionsSequenceElement> basicSequence, final List<@NonNull IVoyagePlanChoice> choices) {
 
 		final VoyagePlan best = cache.get(new CacheKey(vessel, resource, vesselCharterInRatePerDay, baseFuelPricePerMT, basicSequence, portTimesRecord, choices, startHeel));

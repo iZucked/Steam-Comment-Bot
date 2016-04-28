@@ -46,7 +46,7 @@ public interface IPortTimesRecord extends IElementAnnotation {
 	 */
 	int getFirstSlotTime();
 
-	IPortSlot getFirstSlot();
+	@NonNull IPortSlot getFirstSlot();
 
 	/**
 	 * Returns the final slot in the slots list

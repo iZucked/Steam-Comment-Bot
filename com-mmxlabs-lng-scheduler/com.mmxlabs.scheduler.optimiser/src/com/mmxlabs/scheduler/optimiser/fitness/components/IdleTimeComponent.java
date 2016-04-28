@@ -8,9 +8,12 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 
 /**
@@ -29,7 +32,7 @@ public final class IdleTimeComponent extends AbstractPerRouteSchedulerFitnessCom
 	}
 
 	@Override
-	public void startEvaluation(@NonNull ScheduledSequences scheduledSequences) {
+	public void startEvaluation(@NonNull ProfitAndLossSequences scheduledSequences) {
 		sequenceTotalExcessIdleCost = 0;
 		super.startEvaluation(scheduledSequences);
 	}
@@ -54,7 +57,15 @@ public final class IdleTimeComponent extends AbstractPerRouteSchedulerFitnessCom
 	protected boolean reallyEvaluateObject(@NonNull final Object object, final int time) {
 		if (object instanceof PortDetails) {
 			final PortDetails detail = (PortDetails) object;
-			sequenceTotalExcessIdleCost += scheduledSequences.getIdleWeightedCost(detail.getOptions().getPortSlot());
+
+			@NonNull
+			final IPortSlot portSlot = detail.getOptions().getPortSlot();
+
+			final VolumeAllocatedSequences volumeAllocatedSequences = profitAndLossSequences.getVolumeAllocatedSequences();
+			final VolumeAllocatedSequence volumeAllocatedSequence = volumeAllocatedSequences.getScheduledSequence(portSlot);
+			if (volumeAllocatedSequence != null) {
+				sequenceTotalExcessIdleCost += volumeAllocatedSequence.getIdleWeightedCost(portSlot);
+			}
 		}
 		return true;
 	}
@@ -68,7 +79,7 @@ public final class IdleTimeComponent extends AbstractPerRouteSchedulerFitnessCom
 	protected long endSequenceAndGetCost() {
 		return sequenceTotalExcessIdleCost;
 	}
-	
+
 	@Override
 	public long endEvaluationAndGetCost() {
 		return super.endEvaluationAndGetCost();

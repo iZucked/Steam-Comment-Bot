@@ -6,7 +6,7 @@ package com.mmxlabs.scheduler.optimiser.components;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.ILongCurve;
 
 public interface ISpotCharterInMarket {
 
@@ -17,7 +17,7 @@ public interface ISpotCharterInMarket {
 	IVesselClass getVesselClass();
 
 	@NonNull
-	ICurve getDailyCharterInRateCurve();
+	ILongCurve getDailyCharterInRateCurve();
 
 	int getAvailabilityCount();
 

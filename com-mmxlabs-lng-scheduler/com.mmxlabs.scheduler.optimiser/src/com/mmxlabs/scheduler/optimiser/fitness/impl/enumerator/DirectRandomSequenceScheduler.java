@@ -12,7 +12,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 
 /**
  * Another random sequence scheduler, which works by resting on top of the {@link EnumeratingSequenceScheduler} and replacing the exhaustive recursive loop with something randomised; for each element
@@ -26,7 +26,7 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 	private Random random;
 
 	@Override
-	public ScheduledSequences schedule(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
+	public int @Nullable [][] schedule(@NonNull final ISequences sequences) {
 		random = new Random(seed);
 
 		setSequences(sequences);
@@ -39,7 +39,7 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 		}
 		synchroniseShipToShipBindings();
 
-		return evaluate(solution);
+		return arrivalTimes;
 	}
 
 	private void synchroniseShipToShipBindings() {

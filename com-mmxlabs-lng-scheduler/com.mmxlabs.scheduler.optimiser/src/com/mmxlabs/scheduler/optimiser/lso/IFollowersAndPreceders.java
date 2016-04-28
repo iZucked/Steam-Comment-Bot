@@ -12,8 +12,8 @@ import com.mmxlabs.scheduler.optimiser.providers.Followers;
 public interface IFollowersAndPreceders {
 
 	@NonNull
-	Followers<ISequenceElement> getValidFollowers(@NonNull ISequenceElement e);
+	Followers<@NonNull  ISequenceElement> getValidFollowers(@NonNull ISequenceElement e);
 
 	@NonNull
-	Followers<ISequenceElement> getValidPreceders(@NonNull ISequenceElement e);
+	Followers<@NonNull  ISequenceElement> getValidPreceders(@NonNull ISequenceElement e);
 }

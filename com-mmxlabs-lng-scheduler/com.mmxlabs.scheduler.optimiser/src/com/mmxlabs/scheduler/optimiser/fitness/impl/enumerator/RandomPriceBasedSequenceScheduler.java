@@ -17,7 +17,7 @@ import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowsTrimming;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
@@ -35,7 +35,7 @@ public class RandomPriceBasedSequenceScheduler extends EnumeratingSequenceSchedu
 	TimeWindowsTrimming timeWindowsTrimming;
 
 	@Override
-	public ScheduledSequences schedule(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
+	public int @Nullable [][] schedule(@NonNull final ISequences sequences) {
 		random = new Random(seed);
 
 		setSequences(sequences);
@@ -48,12 +48,12 @@ public class RandomPriceBasedSequenceScheduler extends EnumeratingSequenceSchedu
 		}
 		synchroniseShipToShipBindings();
 
-		return evaluate(solution);
+		return arrivalTimes;
 	}
 
-	private void priceBasedWindowTrimming(ISequences sequences, List<List<IPortTimeWindowsRecord>> portTimeWindowsRecords) {
+	private void priceBasedWindowTrimming(final ISequences sequences, final List<List<IPortTimeWindowsRecord>> portTimeWindowsRecords) {
 		for (int seqIndex = 0; seqIndex < sequences.size(); seqIndex++) {
-			for (IPortTimeWindowsRecord portTimeWindowsRecord : portTimeWindowsRecords.get(seqIndex)) {
+			for (final IPortTimeWindowsRecord portTimeWindowsRecord : portTimeWindowsRecords.get(seqIndex)) {
 				setFeasibleTimeWindows(portTimeWindowsRecord, seqIndex);
 				timeWindowsTrimming.processCargo(portTimeWindowsRecord);
 				updateTimeWindows(portTimeWindowsRecord, seqIndex);
@@ -61,17 +61,17 @@ public class RandomPriceBasedSequenceScheduler extends EnumeratingSequenceSchedu
 		}
 	}
 
-	private void updateTimeWindows(IPortTimeWindowsRecord portTimeWindowsRecord, int seqIndex) {
-		for (IPortSlot portSlot : portTimeWindowsRecord.getSlots()) {
-			ITimeWindow timeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(portSlot);
+	private void updateTimeWindows(final IPortTimeWindowsRecord portTimeWindowsRecord, final int seqIndex) {
+		for (final IPortSlot portSlot : portTimeWindowsRecord.getSlots()) {
+			final ITimeWindow timeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(portSlot);
 			windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)] = timeWindow.getStart();
 			windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)] = timeWindow.getEnd();
 		}
 	}
 
-	private void setFeasibleTimeWindows(IPortTimeWindowsRecord portTimeWindowsRecord, int seqIndex) {
-		for (IPortSlot portSlot : portTimeWindowsRecord.getSlots()) {
-			ITimeWindow timeWindow = new TimeWindow(windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)], windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)]);
+	private void setFeasibleTimeWindows(final IPortTimeWindowsRecord portTimeWindowsRecord, final int seqIndex) {
+		for (final IPortSlot portSlot : portTimeWindowsRecord.getSlots()) {
+			final ITimeWindow timeWindow = new TimeWindow(windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)], windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)]);
 			portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, timeWindow);
 		}
 	}

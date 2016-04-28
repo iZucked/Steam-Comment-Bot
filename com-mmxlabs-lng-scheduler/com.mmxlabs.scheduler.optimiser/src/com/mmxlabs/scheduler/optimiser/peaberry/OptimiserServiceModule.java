@@ -22,7 +22,7 @@ public class OptimiserServiceModule extends PeaberryActivationModule {
 
 		install(new FitnessCoreServiceModule());
 		install(new ConstraintCheckerServiceModule());
-//		install(new EvaluationProcessServiceModule());
+		install(new EvaluatedStateConstraintCheckerServiceModule());
 		install(new EvaluationProcessServiceModule());
 	}
 }

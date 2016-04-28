@@ -19,7 +19,7 @@ public class VoyageOptionsTest {
 	@Test
 	public void testGetSetAvailableTime() {
 		final int value = 100;
-		final VoyageOptions options = new VoyageOptions();
+		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
 		Assert.assertEquals(0, options.getAvailableTime());
 		options.setAvailableTime(value);
 		Assert.assertEquals(value, options.getAvailableTime());
@@ -29,9 +29,7 @@ public class VoyageOptionsTest {
 	public void testGetSetFromPortSlot() {
 		final IPortSlot slot = Mockito.mock(IPortSlot.class);
 
-		final VoyageOptions options = new VoyageOptions();
-		Assert.assertNull(options.getFromPortSlot());
-		options.setFromPortSlot(slot);
+		final VoyageOptions options = new VoyageOptions(slot, Mockito.mock(IPortSlot.class));
 		Assert.assertSame(slot, options.getFromPortSlot());
 	}
 
@@ -39,16 +37,14 @@ public class VoyageOptionsTest {
 	public void testGetSetToPortSlot() {
 		final IPortSlot slot = Mockito.mock(IPortSlot.class);
 
-		final VoyageOptions options = new VoyageOptions();
-		Assert.assertNull(options.getToPortSlot());
-		options.setToPortSlot(slot);
+		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), slot);
 		Assert.assertSame(slot, options.getToPortSlot());
 	}
 
 	@Test
 	public void testGetSetNBOSpeed() {
 		final int value = 100;
-		final VoyageOptions options = new VoyageOptions();
+		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
 		Assert.assertEquals(0, options.getNBOSpeed());
 		options.setNBOSpeed(value);
 		Assert.assertEquals(value, options.getNBOSpeed());
@@ -60,7 +56,7 @@ public class VoyageOptionsTest {
 		final ERouteOption route = ERouteOption.PANAMA;
 		final int distance = 100;
 		final long cost = 2000L;
-		final VoyageOptions options = new VoyageOptions();
+		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
 		Assert.assertNull(options.getRoute());
 		options.setRoute(route, distance, cost);
 		Assert.assertSame(route, options.getRoute());
@@ -72,7 +68,7 @@ public class VoyageOptionsTest {
 	public void testGetSetVessel() {
 		final IVessel vessel = Mockito.mock(IVessel.class);
 
-		final VoyageOptions options = new VoyageOptions();
+		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
 		Assert.assertNull(options.getVessel());
 		options.setVessel(vessel);
 		Assert.assertSame(vessel, options.getVessel());
@@ -83,7 +79,7 @@ public class VoyageOptionsTest {
 	public void testGetVesselState() {
 		final VesselState state = VesselState.Laden;
 
-		final VoyageOptions options = new VoyageOptions();
+		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
 		Assert.assertNull(options.getVesselState());
 		options.setVesselState(state);
 		Assert.assertSame(state, options.getVesselState());
@@ -92,7 +88,7 @@ public class VoyageOptionsTest {
 
 	@Test
 	public void testUseFBOForSupplement() {
-		final VoyageOptions options = new VoyageOptions();
+		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
 		Assert.assertFalse(options.useFBOForSupplement());
 		options.setUseFBOForSupplement(true);
 		Assert.assertTrue(options.useFBOForSupplement());
@@ -100,7 +96,7 @@ public class VoyageOptionsTest {
 
 	@Test
 	public void testUseNBOForIdle() {
-		final VoyageOptions options = new VoyageOptions();
+		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
 		Assert.assertFalse(options.useNBOForIdle());
 		options.setUseNBOForIdle(true);
 		Assert.assertTrue(options.useNBOForIdle());
@@ -109,7 +105,7 @@ public class VoyageOptionsTest {
 
 	@Test
 	public void testUseNBOForTravel() {
-		final VoyageOptions options = new VoyageOptions();
+		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
 		Assert.assertFalse(options.useNBOForTravel());
 		options.setUseNBOForTravel(true);
 		Assert.assertTrue(options.useNBOForTravel());
@@ -187,11 +183,9 @@ public class VoyageOptionsTest {
 	VoyageOptions make(final int availableTime, final int distance, final IVessel vessel, final IPortSlot fromPortSlot, final IPortSlot toPortSlot, final int nboSpeed, final boolean useNBOForIdle,
 			final boolean useNBOForTravel, final boolean useFBOForSupplement, @NonNull final ERouteOption route, long routeCost, final VesselState vesselState) {
 
-		final VoyageOptions o = new VoyageOptions();
+		final VoyageOptions o = new VoyageOptions(fromPortSlot, toPortSlot);
 		o.setAvailableTime(availableTime);
 		o.setVessel(vessel);
-		o.setFromPortSlot(fromPortSlot);
-		o.setToPortSlot(toPortSlot);
 		o.setNBOSpeed(nboSpeed);
 		o.setUseNBOForIdle(useNBOForIdle);
 		o.setUseNBOForTravel(useNBOForTravel);

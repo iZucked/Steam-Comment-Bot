@@ -17,8 +17,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.providers.IExcessIdleTimeConstrainedSlotProvider;
@@ -30,72 +29,71 @@ import com.mmxlabs.scheduler.optimiser.voyage.util.LDCargoDetailsWrapper;
 
 /**
  * Idle time recorder
+ * 
  * @author achurchill
  *
  */
 public class IdleTimeChecker {
 
 	@Inject
-	IExcessIdleTimeComponentParameters idleTimeComponentParameters;
-	
+	private IExcessIdleTimeComponentParameters idleTimeComponentParameters;
+
 	/**
 	 * 
 	 * @param scheduledSequences
 	 * @param annotatedSolution
 	 */
-	public void calculateIdleTime(final ScheduledSequences scheduledSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
-		for (ScheduledSequence scheduledSequence : scheduledSequences) {
-			List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans = scheduledSequence.getVoyagePlans();
-			for (Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord> planStructure : voyagePlans) {
-				VoyagePlan plan = planStructure.getFirst();
-				applyPenaltyToPlan(scheduledSequences, plan);
-			}
+	public void calculateIdleTime(final VolumeAllocatedSequence volumeAllocatedSequence, @Nullable final IAnnotatedSolution annotatedSolution) {
+		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans = volumeAllocatedSequence.getVoyagePlans();
+		for (final Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord> planStructure : voyagePlans) {
+			final VoyagePlan plan = planStructure.getFirst();
+			applyPenaltyToPlan(volumeAllocatedSequence, plan);
 		}
 	}
 
-	public void applyPenaltyToPlan(final ScheduledSequences scheduledSequences, VoyagePlan plan) {
+	public void applyPenaltyToPlan(final VolumeAllocatedSequence volumeAllocatedSequence, final VoyagePlan plan) {
 		if (LDCargoDetailsWrapper.isCargoVoyage(plan.getSequence())) {
-			LDCargoDetailsWrapper cargoDetails = new LDCargoDetailsWrapper(plan.getSequence());
+			final LDCargoDetailsWrapper cargoDetails = new LDCargoDetailsWrapper(plan.getSequence());
 			if (cargoDetails.getLoadOption() instanceof ILoadSlot) {
-				ILoadSlot load = (ILoadSlot) cargoDetails.getLoadOption();
+				final ILoadSlot load = (ILoadSlot) cargoDetails.getLoadOption();
 				if (load.getLoadPriceCalculator() instanceof IExcessIdleTimeConstrainedSlotProvider) {
-					IDischargeOption discharge = cargoDetails.getDischargeOption();
-					IPortSlot returnSlot = cargoDetails.getBallast().getOptions().getToPortSlot();
+					final IDischargeOption discharge = cargoDetails.getDischargeOption();
+					final IPortSlot returnSlot = cargoDetails.getBallast().getOptions().getToPortSlot();
 					cargoDetails.getDischarge().getOptions().getPortSlot();
-					eIdleDetails idleDetails = ((IExcessIdleTimeConstrainedSlotProvider) load.getLoadPriceCalculator()).getSlotIdleConstraintDetails(load, discharge, returnSlot);
+					final eIdleDetails idleDetails = ((IExcessIdleTimeConstrainedSlotProvider) load.getLoadPriceCalculator()).getSlotIdleConstraintDetails(load, discharge, returnSlot);
 					if (idleDetails == eIdleDetails.LADEN || idleDetails == eIdleDetails.BOTH) {
 						// penalty on laden
-						addPenalty(scheduledSequences, cargoDetails.getLaden());
+						addPenalty(volumeAllocatedSequence, cargoDetails.getLaden());
 					}
 					if (idleDetails == eIdleDetails.BALLAST || idleDetails == eIdleDetails.BOTH) {
 						// penalty on ballast
-						addPenalty(scheduledSequences, cargoDetails.getBallast());
+						addPenalty(volumeAllocatedSequence, cargoDetails.getBallast());
 					}
 				}
 			}
 		}
 	}
 
-	public void addPenalty(final ScheduledSequences scheduledSequences, VoyageDetails voyageDetails) {
-		int idleTimeInHours = voyageDetails.getIdleTime();
-		int violatingHours = getViolatingHours(idleTimeInHours);
+	public void addPenalty(final VolumeAllocatedSequence volumeAllocatedSequence, final VoyageDetails voyageDetails) {
+		final int idleTimeInHours = voyageDetails.getIdleTime();
+		final int violatingHours = getViolatingHours(idleTimeInHours);
 		if (violatingHours > 0) {
-			IPortSlot idleTimeSlot = voyageDetails.getOptions().getFromPortSlot();
-			boolean isEnd = voyageDetails.getOptions().getToPortSlot() instanceof EndPortSlot;
-			long penalty = getIdleTimePenalty(idleTimeInHours, isEnd);
-			scheduledSequences.addIdleHoursViolation(idleTimeSlot, violatingHours);
-			scheduledSequences.addIdleWeightedCost(idleTimeSlot, penalty);
+			final IPortSlot idleTimeSlot = voyageDetails.getOptions().getFromPortSlot();
+			final boolean isEnd = voyageDetails.getOptions().getToPortSlot() instanceof EndPortSlot;
+			final long penalty = getIdleTimePenalty(idleTimeInHours, isEnd);
+			volumeAllocatedSequence.addIdleHoursViolation(idleTimeSlot, violatingHours);
+			volumeAllocatedSequence.addIdleWeightedCost(idleTimeSlot, penalty);
 		}
 	}
 
-	private long getIdleTimePenalty(int idleTimeInHours, boolean isEnd) {
-		int violatingHours = Math.max(idleTimeInHours - idleTimeComponentParameters.getThreshold(Interval.LOW), 0);
+	private long getIdleTimePenalty(final int idleTimeInHours, final boolean isEnd) {
+		final int violatingHours = Math.max(idleTimeInHours - idleTimeComponentParameters.getThreshold(Interval.LOW), 0);
 		if (violatingHours > 0) {
 			if (!isEnd) {
-				int lowHours = Math.min(idleTimeComponentParameters.getThreshold(Interval.HIGH) - idleTimeComponentParameters.getThreshold(Interval.LOW), violatingHours);
-				int highHours = violatingHours - lowHours;
-				long penaltyLow = lowHours * idleTimeComponentParameters.getWeight(Interval.LOW);
-				long penaltyHigh = highHours * idleTimeComponentParameters.getWeight(Interval.HIGH);
+				final int lowHours = Math.min(idleTimeComponentParameters.getThreshold(Interval.HIGH) - idleTimeComponentParameters.getThreshold(Interval.LOW), violatingHours);
+				final int highHours = violatingHours - lowHours;
+				final long penaltyLow = lowHours * idleTimeComponentParameters.getWeight(Interval.LOW);
+				final long penaltyHigh = highHours * idleTimeComponentParameters.getWeight(Interval.HIGH);
 				return penaltyLow + penaltyHigh;
 			} else {
 				return violatingHours * idleTimeComponentParameters.getEndWeight();
@@ -105,7 +103,7 @@ public class IdleTimeChecker {
 		}
 	}
 
-	private int getViolatingHours(int idleTimeInHours) {
+	private int getViolatingHours(final int idleTimeInHours) {
 		return Math.max(idleTimeInHours - idleTimeComponentParameters.getThreshold(Interval.LOW), 0);
 	}
 }

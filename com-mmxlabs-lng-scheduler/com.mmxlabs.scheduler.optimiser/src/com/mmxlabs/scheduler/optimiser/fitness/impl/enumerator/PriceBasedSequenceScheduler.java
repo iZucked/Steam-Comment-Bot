@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
 import java.util.List;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -14,7 +15,7 @@ import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowsTrimming;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
@@ -26,10 +27,10 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
  */
 public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 	@Inject
-	TimeWindowsTrimming timeWindowsTrimming;
+	private TimeWindowsTrimming timeWindowsTrimming;
 
 	@Override
-	public ScheduledSequences schedule(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
+	public int @Nullable [][] schedule(@NonNull final ISequences sequences) {
 		setSequences(sequences);
 
 		prepare();
@@ -38,7 +39,7 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 			setTimeWindowsToEarliest(index);
 		}
 		synchroniseShipToShipBindings();
-		return evaluate(solution);
+		return arrivalTimes;
 	}
 
 	private void sequentialEarliestTimePriceBasedWindowTrimming(ISequences sequences, List<List<IPortTimeWindowsRecord>> portTimeWindowsRecords) {

@@ -24,10 +24,10 @@ public final class StartPortSlot extends PortSlot implements IHeelOptionsPortSlo
 		this.heelOptions = heelOptions == null ? new HeelOptions() : heelOptions;
 	}
 
-	public StartPortSlot(final IHeelOptions heelOptions) {
-		setPortType(PortType.Start);
-		this.heelOptions = heelOptions == null ? new HeelOptions() : heelOptions;
-	}
+	// public StartPortSlot(final IHeelOptions heelOptions) {
+	// setPortType(PortType.Start);
+	// this.heelOptions = heelOptions == null ? new HeelOptions() : heelOptions;
+	// }
 
 	/*
 	 * (non-Javadoc)

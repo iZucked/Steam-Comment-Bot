@@ -10,11 +10,9 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -22,7 +20,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
@@ -36,7 +34,7 @@ import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
  * @author Simon Goodall
  * 
  */
-public final class SimpleSequenceScheduler extends AbstractLoggingSequenceScheduler {
+public final class SimpleSequenceScheduler implements ISequenceScheduler {
 
 	@Inject
 	private ITimeWindowDataComponentProvider timeWindowProvider;
@@ -57,29 +55,25 @@ public final class SimpleSequenceScheduler extends AbstractLoggingSequenceSchedu
 	private ICalculatorProvider calculatorProvider;
 
 	@Override
-	public ScheduledSequences schedule(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
+	public int[][] schedule(@NonNull final ISequences sequences) {
 
 		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
-			shippingCalculator.prepareEvaluation(sequences);
+			shippingCalculator.prepareSalesForEvaluation(sequences);
 		}
 		// Prime the load price calculators with the scheduled result
 		for (final ILoadPriceCalculator calculator : calculatorProvider.getLoadPriceCalculators()) {
-			calculator.prepareEvaluation(sequences);
+			calculator.preparePurchaseForEvaluation(sequences);
 		}
-
-		final ScheduledSequences answer = new ScheduledSequences();
 
 		final int[][] arrivalTimes = new int[sequences.size()][];
 		int idx = 0;
-		for (final Map.Entry<IResource, ISequence> entry : sequences.getSequences().entrySet()) {
+		for (final Map.Entry<@NonNull IResource, @NonNull ISequence> entry : sequences.getSequences().entrySet()) {
 			arrivalTimes[idx++] = schedule(entry.getKey(), entry.getValue());
 		}
-
-		scheduleCalculator.schedule(sequences, arrivalTimes, solution);
-		return answer;
+		return arrivalTimes;
 	}
 
-	private int[] schedule(final IResource resource, final ISequence sequence) {
+	private int[] schedule(final @NonNull IResource resource, final @NonNull ISequence sequence) {
 
 		final int[] arrivalTimes = new int[sequence.size()];
 

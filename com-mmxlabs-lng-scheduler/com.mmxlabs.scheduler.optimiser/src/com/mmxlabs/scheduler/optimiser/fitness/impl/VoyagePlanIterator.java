@@ -11,7 +11,7 @@ import java.util.Map;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
@@ -36,7 +36,7 @@ public class VoyagePlanIterator {
 
 	/**
 	 */
-	public VoyagePlanIterator(final ScheduledSequence scheduledSequence) {
+	public VoyagePlanIterator(final VolumeAllocatedSequence scheduledSequence) {
 		this.plans = scheduledSequence.getVoyagePlans();
 		reset();
 	}
