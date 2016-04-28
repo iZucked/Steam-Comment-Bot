@@ -29,7 +29,8 @@ import com.mmxlabs.models.lng.transformer.util.IntegerIntervalCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.cache.ICacheKeyDependencyLinker;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.cache.IProfitAndLossCacheKeyDependencyLinker;
 import com.mmxlabs.scheduler.optimiser.cache.NullCacheKeyDependencyLinker;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertableDESShippingTimesCalculator;
@@ -127,16 +128,22 @@ public class LNGTransformerModule extends AbstractModule {
 		// Register default implementations
 		// bind(IVolumeAllocator.class).to(UnconstrainedVolumeAllocator.class).in(Singleton.class);
 		// bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
-		bind(ICacheKeyDependencyLinker.class).to(NullCacheKeyDependencyLinker.class);
+		bind(IProfitAndLossCacheKeyDependencyLinker.class).to(NullCacheKeyDependencyLinker.class);
+
+		// Default bindings for caches
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(Boolean.FALSE);
+
 	}
 
 	@Provides
 	@PerChainUnitScope
-	private IVolumeAllocator provideVolumeAllocator(final @NonNull Injector injector) {
+	private IVolumeAllocator provideVolumeAllocator(final @NonNull Injector injector, @Named(SchedulerConstants.Key_VolumeAllocationCache) boolean enableCache) {
 
 		final UnconstrainedVolumeAllocator reference = injector.getInstance(UnconstrainedVolumeAllocator.class);
 
-		if (false) {
+		if (enableCache) {
 			final CachingVolumeAllocator cacher = new CachingVolumeAllocator(reference);
 			injector.injectMembers(cacher);
 			if (false) {
@@ -151,10 +158,10 @@ public class LNGTransformerModule extends AbstractModule {
 
 	@Provides
 	@PerChainUnitScope
-	private IEntityValueCalculator provideEntityValueCalculator(final @NonNull Injector injector) {
+	private IEntityValueCalculator provideEntityValueCalculator(final @NonNull Injector injector, @Named(SchedulerConstants.Key_ProfitandLossCache) boolean enableCache) {
 
 		final DefaultEntityValueCalculator reference = injector.getInstance(DefaultEntityValueCalculator.class);
-		if (false) {
+		if (enableCache) {
 			final CachingEntityValueCalculator cacher = new CachingEntityValueCalculator(reference);
 			injector.injectMembers(cacher);
 			if (false) {

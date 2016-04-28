@@ -39,6 +39,7 @@ import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.commercial.util.CommercialModelBuilder;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -68,6 +69,7 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
@@ -102,8 +104,8 @@ public class DefaultScenarioCreator {
 	public SalesContract salesContract;
 	public PurchaseContract purchaseContract;
 	// will need a contract entity and a shipping entity
-	public LegalEntity contractEntity;
-	public LegalEntity shippingEntity;
+	public final @NonNull LegalEntity contractEntity;
+	public final @NonNull LegalEntity shippingEntity;
 
 	public final DefaultFleetCreator fleetCreator = new DefaultFleetCreator();
 	public final DefaultPortCreator portCreator = new DefaultPortCreator();
@@ -111,28 +113,29 @@ public class DefaultScenarioCreator {
 	public final DefaultPricingCreator pricingCreator = new DefaultPricingCreator();
 	public final DefaultVesselEventCreator vesselEventCreator = new DefaultVesselEventCreator();
 
-	LNGScenarioModel scenario;
+	public final @NonNull LNGScenarioModel scenario;
 
 	/** A list of canal costs that will be added to every class of vessel when the scenario is retrieved for use. */
 	// private final ArrayList<VesselClassCost> canalCostsForAllVesselClasses = new ArrayList<VesselClassCost>();
 
 	private static final String timeZone = ZoneId.of("UTC").getId();
+	protected final @NonNull CommercialModelBuilder commercialModelBuilder;
 
 	public DefaultScenarioCreator() {
 		scenario = ManifestJointModel.createEmptyInstance(null);
-		// minimalScenarioSetup = new MinimalScenarioSetup();
+		commercialModelBuilder = new CommercialModelBuilder(ScenarioModelUtil.getCommercialModel(scenario));
+
+		// need to create a legal entity for contracts
+		contractEntity = addEntity("Third-parties");
+		// need to create a legal entity for shipping
+		shippingEntity = addEntity("Shipping");
 	}
 
 	/**
 	 */
-	public LegalEntity addEntity(final String name) {
-		final CommercialModel commercialModel = scenario.getReferenceModel().getCommercialModel();
-		final LegalEntity entity = CommercialFactory.eINSTANCE.createLegalEntity();
-		entity.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		entity.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		entity.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		commercialModel.getEntities().add(entity);
-		return entity;
+	public @NonNull LegalEntity addEntity(final @NonNull String name) {
+
+		return commercialModelBuilder.makeLegalEntityAndBooks(name);
 	}
 
 	/**
@@ -229,7 +232,7 @@ public class DefaultScenarioCreator {
 		 * 
 		 * @return
 		 */
-		public HeelOptions createDefaultHeelOptions() {
+		public @NonNull HeelOptions createDefaultHeelOptions() {
 			final HeelOptions result = FleetFactory.eINSTANCE.createHeelOptions();
 			result.setCvValue(portCreator.defaultCv);
 			result.setPricePerMMBTU(dischargePrice);
@@ -237,7 +240,7 @@ public class DefaultScenarioCreator {
 			return result;
 		}
 
-		public EndHeelOptions createDefaultEndHeelOptions() {
+		public @NonNull EndHeelOptions createDefaultEndHeelOptions() {
 			final EndHeelOptions result = CargoFactory.eINSTANCE.createEndHeelOptions();
 			result.unsetTargetEndHeel();
 			return result;
@@ -345,7 +348,7 @@ public class DefaultScenarioCreator {
 		 * @param vc
 		 * @return
 		 */
-		public Vessel createDefaultVessel(final String name, final VesselClass vc, final BaseLegalEntity shippingEntity) {
+		public Vessel createDefaultVessel(final @NonNull String name, final @NonNull VesselClass vc, final @NonNull BaseLegalEntity shippingEntity) {
 			final FleetModel fleetModel = scenario.getReferenceModel().getFleetModel();
 			final CargoModel cargoModel = scenario.getCargoModel();
 
@@ -373,7 +376,7 @@ public class DefaultScenarioCreator {
 		 * @param num
 		 * @return
 		 */
-		public Vessel[] createMultipleDefaultVessels(final VesselClass vc, final int num, final BaseLegalEntity shippingEntity) {
+		public Vessel[] createMultipleDefaultVessels(final VesselClass vc, final int num, final @NonNull BaseLegalEntity shippingEntity) {
 			final Vessel[] result = new Vessel[num];
 			for (int i = 0; i < num; i++) {
 				result[i] = createDefaultVessel(i + "(class " + vc.getName() + ")", vc, shippingEntity);

@@ -64,8 +64,9 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCore;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 
 /**
  * An "optimiser" to generate the sequence of steps required by a user to go from one {@link ISequences} state to another one. I.e. from a pre-optimised state to an optimised state.
@@ -217,13 +218,18 @@ public class BagOptimiser {
 				return r;
 			}
 
-			final ScheduledSequences initialScheduledSequences = evaluateAndGetScheduledSequences(initialFullSequences);
-			assert initialScheduledSequences != null;
+			final IEvaluationState initialEvaluationState = evaluateAndGetScheduledSequences(initialFullSequences);
+
+			assert initialEvaluationState != null;
+			final VolumeAllocatedSequences initialVolumeAllocatedSequences = initialEvaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
+			assert initialVolumeAllocatedSequences != null;
+			final ProfitAndLossSequences initialProfitAndLossSequences = initialEvaluationState.getData(SchedulerEvaluationProcess.PROFIT_AND_LOSS_SEQUENCES, ProfitAndLossSequences.class);
+			assert initialProfitAndLossSequences != null;
 
 			final long initialUnusedCompulsarySlot = bagMover.calculateUnusedCompulsarySlot(initialRawSequences);
-			final long initialLateness = bagMover.calculateScheduleLateness(initialFullSequences, initialScheduledSequences);
-			final long initialCapacity = bagMover.calculateScheduleCapacity(initialFullSequences, initialScheduledSequences);
-			final long initialPNL = bagMover.calculateSchedulePNL(initialFullSequences, initialScheduledSequences);
+			final long initialLateness = bagMover.calculateScheduleLateness(initialFullSequences, initialVolumeAllocatedSequences);
+			final long initialCapacity = bagMover.calculateScheduleCapacity(initialFullSequences, initialVolumeAllocatedSequences);
+			final long initialPNL = bagMover.calculateSchedulePNL(initialFullSequences, initialProfitAndLossSequences);
 
 			// Generate the initial set of changes, one level deep
 			final List<ChangeSet> changeSets = new LinkedList<>();
@@ -571,7 +577,7 @@ public class BagOptimiser {
 
 	private void searchChangeSetPopulation(final IProgressMonitor progressMonitor, int maxLeafs, final SimilarityState targetSimilarityState, Collection<JobState> finalPopulation,
 			Collection<JobState> promisingLimitedStates, Collection<JobState> allLimitedStates, List<List<JobState>> savedPopulations, List<JobState> population)
-					throws InterruptedException, ExecutionException {
+			throws InterruptedException, ExecutionException {
 		int rootIndex = 0;
 		List<JobState> states = new LinkedList<JobState>(population);
 		while (!foundLeaf(states) && states.size() != 0) {
@@ -744,10 +750,9 @@ public class BagOptimiser {
 		return leafs;
 	}
 
-	private ScheduledSequences evaluateAndGetScheduledSequences(final IModifiableSequences initialFullSequences) {
+	private IEvaluationState evaluateAndGetScheduledSequences(final IModifiableSequences initialFullSequences) {
 		final IEvaluationState evaluationState = evaluateAndGetIEvaluationState(initialFullSequences);
-		final ScheduledSequences initialScheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
-		return initialScheduledSequences;
+		return evaluationState;
 	}
 
 	private IEvaluationState evaluateAndGetIEvaluationState(final @NonNull ISequences initialFullSequences) {
@@ -958,7 +963,7 @@ public class BagOptimiser {
 				}
 			}
 			long end = System.currentTimeMillis();
-//			System.out.println("batch:"+(end-start));
+			// System.out.println("batch:"+(end-start));
 		}
 
 		return states;

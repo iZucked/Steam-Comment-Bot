@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.transformer.its.tests;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
@@ -21,7 +22,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 
 public class ManifestJointModel {
 
-	public static LNGScenarioModel createEmptyInstance(final List<EObject> models) {
+	public static @NonNull LNGScenarioModel createEmptyInstance(final List<EObject> models) {
 		final LNGScenarioModel rootObject = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
 		// rootObject.setParametersModel(ParametersFactory.eINSTANCE.createParametersModel());
 		rootObject.setCargoModel(CargoFactory.eINSTANCE.createCargoModel());

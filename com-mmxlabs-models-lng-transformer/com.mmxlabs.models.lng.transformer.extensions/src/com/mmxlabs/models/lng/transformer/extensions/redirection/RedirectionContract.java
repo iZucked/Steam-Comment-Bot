@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.redirection;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.google.inject.Inject;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.detailtree.IDetailTree;
@@ -12,7 +15,6 @@ import com.mmxlabs.common.detailtree.impl.UnitPriceDetailElement;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -28,6 +30,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.DefaultVesselAvailability
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
@@ -108,7 +111,8 @@ public class RedirectionContract implements ILoadPriceCalculator {
 
 	@Override
 	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan originalPlan, final IDetailTree annotation) {
+			final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan originalPlan, @Nullable VolumeAllocatedSequences volumeAllocatedSequences,
+			final IDetailTree annotation) {
 
 		final int loadTime = allocationAnnotation.getSlotTime(loadSlot);
 		final int dischargeTime = allocationAnnotation.getSlotTime(dischargeSlot);
@@ -145,7 +149,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 				final int loadDuration = durationProvider.getElementDuration(loadElement, vesselProvider.getResource(vesselAvailability));
 				final int dischargeDuration = portVisitDurationProvider.getVisitDuration(baseSalesMarketPort, PortType.Discharge);
 
-				final int vesselCharterInRatePerDay;
+				final long vesselCharterInRatePerDay;
 				if (actualsDataProvider.hasActuals(loadSlot)) {
 					vesselCharterInRatePerDay = actualsDataProvider.getCharterRatePerDay(loadSlot);
 				} else {
@@ -187,7 +191,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 				final ERouteOption route = ERouteOption.DIRECT;
 				final int loadDuration = durationProvider.getElementDuration(loadElement, vesselProvider.getResource(vesselAvailability));
 				final int dischargeDuration = durationProvider.getElementDuration(dischargeElement, vesselProvider.getResource(vesselAvailability));
-				final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, vesselStartTime, timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadSlot));
+				final long vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, vesselStartTime, timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadSlot));
 
 				final int utcLoadTime = timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadSlot);
 				final int baseFuelPriceInMT = vesselBaseFuelCalculator.getBaseFuelPrice(vesselAvailability.getVessel(), utcLoadTime);
@@ -272,7 +276,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 				final int loadDuration = portVisitDurationProvider.getVisitDuration(loadOption.getPort(), PortType.Load);
 				final int dischargeDuration = portVisitDurationProvider.getVisitDuration(baseSalesMarketPort, PortType.Discharge);
 
-				final int vesselCharterInRatePerDay;
+				final long vesselCharterInRatePerDay;
 				if (actualsDataProvider.hasActuals(loadOption)) {
 					vesselCharterInRatePerDay = actualsDataProvider.getCharterRatePerDay(loadOption);
 				} else {
@@ -310,7 +314,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 				final int loadDuration = portVisitDurationProvider.getVisitDuration(loadOption.getPort(), PortType.Load);
 				final int dischargeDuration = portVisitDurationProvider.getVisitDuration(dischargeOption.getPort(), PortType.Discharge);
 
-				final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(notionalVesselAvailability, timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadOption),
+				final long vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(notionalVesselAvailability, timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadOption),
 						timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadOption));
 
 				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadOption.getPort(), dischargeOption.getPort(), originalLoadTime, loadDuration, transferTime, dischargeDuration, vessel,
@@ -353,29 +357,13 @@ public class RedirectionContract implements ILoadPriceCalculator {
 		}
 	}
 
-	@Override
-	public void prepareEvaluation(final ISequences sequences) {
-
-	}
-
-	@Override
-	public void prepareRealPNL() {
-
-	}
-
 	public int getNotionalSpeed() {
 		return notionalSpeed;
 	}
 
 	@Override
-	public long[] calculateAdditionalProfitAndLoss(final ILoadOption loadOption, final IAllocationAnnotation allocationAnnotation, final int[] dischargePricesPerMMBTu,
-			final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, final IDetailTree annotations) {
-		return EMPTY_ADDITIONAL_PNL_RESULT;
-	}
-
-	@Override
 	public int calculateDESPurchasePricePerMMBTu(final ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			final IDetailTree annotations) {
+			@Nullable VolumeAllocatedSequences volumeAllocatedSequences, final IDetailTree annotations) {
 		final int transferTime = allocationAnnotation.getSlotTime(dischargeSlot);
 		final long transferVolumeInM3 = allocationAnnotation.getSlotVolumeInM3(dischargeSlot);
 		return calculateLoadPricePerMMBTu(loadOption, dischargeSlot, transferTime, dischargeSlot.getPort(), dischargePricePerMMBTu, transferVolumeInM3, annotations);
@@ -383,7 +371,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 
 	@Override
 	public int calculatePriceForFOBSalePerMMBTu(final ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			final IDetailTree annotations) {
+			@Nullable VolumeAllocatedSequences volumeAllocatedSequences, final IDetailTree annotations) {
 		final int transferTime = allocationAnnotation.getSlotTime(loadSlot);
 		final long transferVolumeInM3 = allocationAnnotation.getSlotVolumeInM3(loadSlot);
 		return calculateLoadPricePerMMBTu(loadSlot, dischargeOption, transferTime, loadSlot.getPort(), dischargePricePerMMBTu, transferVolumeInM3, annotations);
@@ -406,6 +394,5 @@ public class RedirectionContract implements ILoadPriceCalculator {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
 
 }

@@ -43,9 +43,11 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.Association;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.curves.ConstantValueCurve;
+import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
+import com.mmxlabs.common.curves.StepwiseLongCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
@@ -428,9 +430,9 @@ public class LNGScenarioTransformer {
 		 * First, create all the market curves (should these come through the builder?)
 		 */
 
-		final Association<CommodityIndex, ICurve> commodityIndexAssociation = new Association<CommodityIndex, ICurve>();
-		final Association<BaseFuelIndex, ICurve> baseFuelIndexAssociation = new Association<BaseFuelIndex, ICurve>();
-		final Association<CharterIndex, ICurve> charterIndexAssociation = new Association<CharterIndex, ICurve>();
+		final Association<CommodityIndex, ICurve> commodityIndexAssociation = new Association<>();
+		final Association<BaseFuelIndex, ICurve> baseFuelIndexAssociation = new Association<>();
+		final Association<CharterIndex, ILongCurve> charterIndexAssociation = new Association<>();
 
 		final PricingModel pricingModel = rootObject.getReferenceModel().getPricingModel();
 		// For each curve, register with the SeriesParser object
@@ -495,24 +497,18 @@ public class LNGScenarioTransformer {
 		for (final CharterIndex index : pricingModel.getCharterIndices()) {
 			try {
 				final ISeries parsed = charterIndices.getSeries(index.getName());
-				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
-				curve.setDefaultValue(0);
+				final StepwiseLongCurve curve = new StepwiseLongCurve();
+				curve.setDefaultValue(0L);
 
 				final int[] changePoints = parsed.getChangePoints();
 				if (changePoints.length == 0) {
 					final long dailyCost = OptimiserUnitConvertor.convertToInternalDailyCost(parsed.evaluate(0).intValue());
-					if (dailyCost != (int) dailyCost) {
-						throw new IllegalStateException(String.format("Daily Cost of %d is too big.", OptimiserUnitConvertor.convertToExternalDailyCost(dailyCost)));
-					}
-					curve.setValueAfter(0, (int) dailyCost);
+					curve.setValueAfter(0, dailyCost);
 				} else {
 
 					for (final int i : parsed.getChangePoints()) {
 						final long dailyCost = OptimiserUnitConvertor.convertToInternalDailyCost(parsed.evaluate(i).intValue());
-						if (dailyCost != (int) dailyCost) {
-							throw new IllegalStateException(String.format("Daily Cost of %d is too big.", OptimiserUnitConvertor.convertToExternalDailyCost(dailyCost)));
-						}
-						curve.setValueAfter(i, (int) dailyCost);
+						curve.setValueAfter(i, dailyCost);
 					}
 				}
 				modelEntityMap.addModelObject(index, curve);
@@ -547,7 +543,12 @@ public class LNGScenarioTransformer {
 			final ICooldownCalculator cooldownCalculator;
 			// Check here if price is indexed or expression
 			if (price.isLumpsum()) {
-				cooldownCalculator = new CooldownLumpSumCalculator(dateHelper.generateFixedCostExpressionCurve(price.getExpression(), commodityIndices));
+				@Nullable
+				ILongCurve cooldownCurve = dateHelper.generateLongExpressionCurve(price.getExpression(), commodityIndices);
+				if (cooldownCurve == null) {
+					throw new IllegalStateException("Unable to parse cooldown curve");
+				}
+				cooldownCalculator = new CooldownLumpSumCalculator(cooldownCurve);
 			} else {
 				cooldownCalculator = new CooldownPriceIndexedCalculator(dateHelper.generateExpressionCurve(price.getExpression(), commodityIndices));
 			}
@@ -1343,9 +1344,10 @@ public class LNGScenarioTransformer {
 			hedgesProviderEditor.setHedgeValue(discharge, hedgeValue);
 		}
 
-		final long cancellationFee = OptimiserUnitConvertor.convertToInternalFixedCost(dischargeSlot.getSlotOrContractCancellationFee());
-		cancellationFeeProviderEditor.setCancellationFee(discharge, cancellationFee);
-
+		final ILongCurve cancellationCurve = dateHelper.generateLongExpressionCurve(dischargeSlot.getCancellationExpression(), commodityIndices);
+		if (cancellationCurve != null) {
+			cancellationFeeProviderEditor.setCancellationExpression(discharge, cancellationCurve);
+		}
 		applySlotVesselRestrictions(dischargeSlot, discharge, vesselAssociation);
 
 		return discharge;
@@ -1483,8 +1485,10 @@ public class LNGScenarioTransformer {
 			hedgesProviderEditor.setHedgeValue(load, hedgeCost);
 		}
 
-		final long cancellationFee = OptimiserUnitConvertor.convertToInternalFixedCost(loadSlot.getSlotOrContractCancellationFee());
-		cancellationFeeProviderEditor.setCancellationFee(load, cancellationFee);
+		final ILongCurve cancellationCurve = dateHelper.generateLongExpressionCurve(loadSlot.getCancellationExpression(), commodityIndices);
+		if (cancellationCurve != null) {
+			cancellationFeeProviderEditor.setCancellationExpression(load, cancellationCurve);
+		}
 
 		applySlotVesselRestrictions(loadSlot, load, vesselAssociation);
 
@@ -2452,7 +2456,7 @@ public class LNGScenarioTransformer {
 	 */
 	private NonNullPair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> buildFleet(@NonNull final ISchedulerBuilder builder,
 			@NonNull final Association<Port, IPort> portAssociation, @NonNull final Association<BaseFuelIndex, ICurve> baseFuelIndexAssociation,
-			@NonNull final Association<CharterIndex, ICurve> charterIndexAssociation, @NonNull final ModelEntityMap modelEntityMap) {
+			@NonNull final Association<CharterIndex, ILongCurve> charterIndexAssociation, @NonNull final ModelEntityMap modelEntityMap) {
 
 		/*
 		 * Build the fleet model - first we must create the vessel classes from the model
@@ -2565,12 +2569,13 @@ public class LNGScenarioTransformer {
 			final IEndRequirement endRequirement = createEndRequirement(builder, portAssociation, eVesselAvailability.isSetEndAfter() ? eVesselAvailability.getEndAfterAsDateTime() : null,
 					eVesselAvailability.isSetEndBy() ? eVesselAvailability.getEndByAsDateTime() : null, SetUtils.getObjects(eVesselAvailability.getEndAt()), endCold, targetEndHeelInM3);
 
-			final ICurve dailyCharterInCurve;
+			final ILongCurve dailyCharterInCurve;
 			if (eVesselAvailability.isSetTimeCharterRate()) {
-				dailyCharterInCurve = dateHelper.generateFixedCostExpressionCurve(eVesselAvailability.getTimeCharterRate(), charterIndices);
+				dailyCharterInCurve = dateHelper.generateLongExpressionCurve(eVesselAvailability.getTimeCharterRate(), charterIndices);
 			} else {
-				dailyCharterInCurve = new ConstantValueCurve(0);
+				dailyCharterInCurve = new ConstantValueLongCurve(0);
 			}
+			assert dailyCharterInCurve != null;
 
 			final IVessel vessel = vesselAssociation.lookupNullChecked(eVessel);
 
@@ -2604,9 +2609,9 @@ public class LNGScenarioTransformer {
 				}
 
 				final VesselClass eVesselClass = charterCost.getVesselClass();
-				final ICurve charterInCurve;
+				final ILongCurve charterInCurve;
 				if (charterCost.getCharterInPrice() == null) {
-					charterInCurve = new ConstantValueCurve(0);
+					charterInCurve = new ConstantValueLongCurve(0);
 				} else {
 					charterInCurve = charterIndexAssociation.lookupNullChecked(charterCost.getCharterInPrice());
 				}
@@ -2644,7 +2649,7 @@ public class LNGScenarioTransformer {
 				final VesselClass eVesselClass = charterCost.getVesselClass();
 
 				if (charterCost.getCharterOutPrice() != null) {
-					final ICurve charterOutCurve = charterIndexAssociation.lookupNullChecked(charterCost.getCharterOutPrice());
+					final ILongCurve charterOutCurve = charterIndexAssociation.lookupNullChecked(charterCost.getCharterOutPrice());
 					final int minDuration = 24 * charterCost.getMinCharterOutDuration();
 
 					final Set<Port> portSet = SetUtils.getObjects(charterCost.getAvailablePorts());

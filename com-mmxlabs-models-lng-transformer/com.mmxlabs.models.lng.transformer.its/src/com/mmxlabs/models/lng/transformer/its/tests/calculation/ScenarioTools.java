@@ -44,6 +44,7 @@ import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.commercial.util.CommercialModelBuilder;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -68,6 +69,7 @@ import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -225,7 +227,11 @@ public class ScenarioTools {
 		final PricingModel pricingModel = scenario.getReferenceModel().getPricingModel();
 		final CostModel costModel = scenario.getReferenceModel().getCostModel();
 		final SpotMarketsModel spotMarketsModel = scenario.getReferenceModel().getSpotMarketsModel();
+		final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(scenario);
+		CommercialModelBuilder commercialModelBuilder = new CommercialModelBuilder(commercialModel);
 
+		final LegalEntity s = commercialModelBuilder.makeLegalEntityAndBooks("Shipping");
+		final LegalEntity e = commercialModelBuilder.makeLegalEntityAndBooks("Other");
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
 		final int warmupTime = Integer.MAX_VALUE;
@@ -331,6 +337,7 @@ public class ScenarioTools {
 		availablility.setVessel(vessel);
 		final HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
 		availablility.setStartHeel(heelOptions);
+		availablility.setEntity(s);
 
 		fleetModel.getVessels().add(vessel);
 		cargoModel.getVesselAvailabilities().add(availablility);
@@ -356,23 +363,6 @@ public class ScenarioTools {
 			distancLineBack.setDistance(distance);
 			r.getLines().add(distancLineBack);
 		}
-
-		final CommercialModel commercialModel = scenario.getReferenceModel().getCommercialModel();
-
-		final LegalEntity e = CommercialFactory.eINSTANCE.createLegalEntity();
-		e.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		e.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		e.setUpstreamBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		commercialModel.getEntities().add(e);
-		final LegalEntity s = CommercialFactory.eINSTANCE.createLegalEntity();
-		s.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		s.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		s.setUpstreamBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		commercialModel.getEntities().add(s);
-		availablility.setEntity(s);
-
-		e.setName("Other");
-		s.setName("Shipping");
 
 		final PurchaseContract pc = CommercialFactory.eINSTANCE.createPurchaseContract();
 		final ExpressionPriceParameters purchaseParams = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
@@ -489,6 +479,12 @@ public class ScenarioTools {
 		final CostModel costModel = scenario.getReferenceModel().getCostModel();
 		final SpotMarketsModel spotMarketsModel = scenario.getReferenceModel().getSpotMarketsModel();
 
+		final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(scenario);
+		CommercialModelBuilder commercialModelBuilder = new CommercialModelBuilder(commercialModel);
+
+		final LegalEntity s = commercialModelBuilder.makeLegalEntityAndBooks("Shipping");
+		final LegalEntity e = commercialModelBuilder.makeLegalEntityAndBooks("Other");
+		
 		final CargoModel cargoModel = scenario.getCargoModel();
 
 		// 'magic' numbers that could be set in the arguments.
@@ -578,6 +574,7 @@ public class ScenarioTools {
 		availability.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
 
 		availability.setVessel(vessel);
+		availability.setEntity(s);
 
 		fleetModel.getVessels().add(vessel);
 		cargoModel.getVesselAvailabilities().add(availability);
@@ -602,22 +599,6 @@ public class ScenarioTools {
 
 		r.getLines().add(distance);
 		r.getLines().add(distance2);
-
-		final CommercialModel commercialModel = scenario.getReferenceModel().getCommercialModel();
-		final LegalEntity e = CommercialFactory.eINSTANCE.createLegalEntity();
-		e.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		e.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		e.setUpstreamBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		commercialModel.getEntities().add(e);
-		final LegalEntity s = CommercialFactory.eINSTANCE.createLegalEntity();
-		s.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		s.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		s.setUpstreamBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		commercialModel.getEntities().add(s);
-		availability.setEntity(s);
-
-		e.setName("Other");
-		s.setName("Shipping");
 
 		final PurchaseContract pc = CommercialFactory.eINSTANCE.createPurchaseContract();
 		final ExpressionPriceParameters purchaseParams = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
