@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.common.parser;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 public interface IExpression<T> {
-	public T evaluate();
+	@NonNull
+	T evaluate();
 }

@@ -9,16 +9,16 @@ import java.util.TreeMap;
 
 /**
  * An implementation of ICurve which consists of a bunch of intervals on the x-axis with corresponding fixed values on the y-axis. Intervals are specified using
- * {@link StepwiseIntegerCurve#setValueAfter(int, int)}, proceeding from least x-value to greatest x-value.
+ * {@link StepwiseLongCurve#setValueAfter(int, int)}, proceeding from least x-value to greatest x-value.
  * 
  * @author hinton
  * 
  */
-public class StepwiseIntegerCurve implements ICurve {
-	private int defaultValue;
-	private final TreeMap<Integer, Integer> intervals = new TreeMap<>();
+public class StepwiseLongCurve implements ILongCurve {
+	private long defaultValue;
+	private final TreeMap<Integer, Long> intervals = new TreeMap<>();
 
-	public StepwiseIntegerCurve() {
+	public StepwiseLongCurve() {
 
 	}
 
@@ -27,11 +27,11 @@ public class StepwiseIntegerCurve implements ICurve {
 	 * 
 	 * @param defaultValue
 	 */
-	public void setDefaultValue(final int defaultValue) {
+	public void setDefaultValue(final long defaultValue) {
 		this.defaultValue = defaultValue;
 	}
 
-	public int getDefaultValue() {
+	public long getDefaultValue() {
 		return defaultValue;
 	}
 
@@ -41,7 +41,7 @@ public class StepwiseIntegerCurve implements ICurve {
 	 * @param lowerBound
 	 * @param value
 	 */
-	public void setValueAfter(final int lowerBound, final int value) {
+	public void setValueAfter(final int lowerBound, final long value) {
 		intervals.put(lowerBound, value);
 	}
 
@@ -51,9 +51,8 @@ public class StepwiseIntegerCurve implements ICurve {
 	 * @see com.mmxlabs.common.curves.ICurve#getValueAtPoint(double)
 	 */
 	@Override
-	public int getValueAtPoint(final int pointInt) {
-		final Map.Entry<Integer, Integer> value = intervals.lowerEntry(pointInt + 1);
-		return value == null ? defaultValue : value.getValue().intValue();
+	public long getValueAtPoint(final int pointInt) {
+		final Map.Entry<Integer, Long> value = intervals.lowerEntry(pointInt + 1);
+		return value == null ? defaultValue : value.getValue().longValue();
 	}
-
 }

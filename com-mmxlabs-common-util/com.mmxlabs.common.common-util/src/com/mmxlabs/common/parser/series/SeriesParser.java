@@ -102,7 +102,7 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 			@Override
 			public IExpression<ISeries> createTerm(final String term) {
 				try {
-					final int i = Integer.parseInt(term);
+					final long i = Long.parseLong(term);
 					return new ConstantSeriesExpression(i);
 				} catch (final NumberFormatException nfe) {
 					try {

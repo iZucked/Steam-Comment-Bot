@@ -14,6 +14,7 @@ public abstract class AbstractCache<K, V> {
 	int hits = 0;
 	int queries = 0;
 
+	@FunctionalInterface
 	public interface IKeyEvaluator<K, V> {
 		public Pair<K, V> evaluate(K key);
 	}
