@@ -55,6 +55,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getHedges <em>Hedges</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getAllowedVessels <em>Allowed Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationExpression <em>Cancellation Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isOverrideRestrictions <em>Override Restrictions</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getNominatedVessel <em>Nominated Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isLocked <em>Locked</em>}</li>
@@ -588,6 +589,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @see #setPriceExpression(String)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_PriceExpression()
 	 * @model unsettable="true"
+	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='commodity'"
 	 * @generated
 	 */
 	String getPriceExpression();
@@ -994,8 +996,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @generated
 	 */
 	EList<AVesselSet<Vessel>> getAllowedVessels();
-
-	/**
+/**
 	 * Returns the value of the '<em><b>Cancellation Fee</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -1026,6 +1027,69 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 */
 	void setCancellationFee(int value);
 
+	///**
+//	 * Returns the value of the '<em><b>Cancellation Fee</b></em>' attribute.
+//	 * <!-- begin-user-doc -->
+//	 * <p>
+//	 * If the meaning of the '<em>Cancellation Fee</em>' attribute isn't clear,
+//	 * there really should be more of a description here...
+//	 * </p>
+//	 * <!-- end-user-doc -->
+//	 * @return the value of the '<em>Cancellation Fee</em>' attribute.
+//	 * @see #isSetCancellationFee()
+//	 * @see #unsetCancellationFee()
+//	 * @see #setCancellationFee(int)
+//	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_CancellationFee()
+//	 * @model unsettable="true"
+//	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unitPrefix='$' formatString='###,###,##0'"
+//	 * @generated
+//	 */
+////	int getCancellationFee();
+//
+//	/**
+//	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}' attribute.
+//	 * <!-- begin-user-doc -->
+//	 * <!-- end-user-doc -->
+//	 * @param value the new value of the '<em>Cancellation Fee</em>' attribute.
+//	 * @see #isSetCancellationFee()
+//	 * @see #unsetCancellationFee()
+//	 * @see #getCancellationFee()
+//	 * @generated
+//	 */
+//	void setCancellationFee(int value);
+
+	//
+//	/**
+//	 * Returns the value of the '<em><b>Cancellation Fee</b></em>' attribute.
+//	 * <!-- begin-user-doc -->
+//	 * <p>
+//	 * If the meaning of the '<em>Cancellation Fee</em>' attribute isn't clear,
+//	 * there really should be more of a description here...
+//	 * </p>
+//	 * <!-- end-user-doc -->
+//	 * @return the value of the '<em>Cancellation Fee</em>' attribute.
+//	 * @see #isSetCancellationFee()
+//	 * @see #unsetCancellationFee()
+//	 * @see #setCancellationFee(int)
+//	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_CancellationFee()
+//	 * @model unsettable="true"
+//	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unitPrefix='$' formatString='###,###,##0'"
+//	 * @generated
+//	 */
+//	int getCancellationFee();
+//
+//	/**
+//	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}' attribute.
+//	 * <!-- begin-user-doc -->
+//	 * <!-- end-user-doc -->
+//	 * @param value the new value of the '<em>Cancellation Fee</em>' attribute.
+//	 * @see #isSetCancellationFee()
+//	 * @see #unsetCancellationFee()
+//	 * @see #getCancellationFee()
+//	 * @generated
+//	 */
+//	void setCancellationFee(int value);
+
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -1048,6 +1112,60 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @generated
 	 */
 	boolean isSetCancellationFee();
+
+	/**
+	 * Returns the value of the '<em><b>Cancellation Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cancellation Expression</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cancellation Expression</em>' attribute.
+	 * @see #isSetCancellationExpression()
+	 * @see #unsetCancellationExpression()
+	 * @see #setCancellationExpression(String)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_CancellationExpression()
+	 * @model unsettable="true"
+	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='commodity'"
+	 * @generated
+	 */
+	String getCancellationExpression();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationExpression <em>Cancellation Expression</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cancellation Expression</em>' attribute.
+	 * @see #isSetCancellationExpression()
+	 * @see #unsetCancellationExpression()
+	 * @see #getCancellationExpression()
+	 * @generated
+	 */
+	void setCancellationExpression(String value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationExpression <em>Cancellation Expression</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetCancellationExpression()
+	 * @see #getCancellationExpression()
+	 * @see #setCancellationExpression(String)
+	 * @generated
+	 */
+	void unsetCancellationExpression();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationExpression <em>Cancellation Expression</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Cancellation Expression</em>' attribute is set.
+	 * @see #unsetCancellationExpression()
+	 * @see #getCancellationExpression()
+	 * @see #setCancellationExpression(String)
+	 * @generated
+	 */
+	boolean isSetCancellationExpression();
 
 	/**
 	 * Returns the value of the '<em><b>Override Restrictions</b></em>' attribute.
@@ -1237,7 +1355,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	int getSlotOrContractCancellationFee();
+	String getSlotOrContractCancellationExpression();
 
 	/**
 	 * <!-- begin-user-doc -->

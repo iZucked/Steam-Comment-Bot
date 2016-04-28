@@ -75,6 +75,7 @@ public class SlotItemProvider
 			addHedgesPropertyDescriptor(object);
 			addAllowedVesselsPropertyDescriptor(object);
 			addCancellationFeePropertyDescriptor(object);
+			addCancellationExpressionPropertyDescriptor(object);
 			addOverrideRestrictionsPropertyDescriptor(object);
 			addNominatedVesselPropertyDescriptor(object);
 			addLockedPropertyDescriptor(object);
@@ -655,6 +656,28 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Cancellation Expression feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCancellationExpressionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_cancellationExpression_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_cancellationExpression_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__CANCELLATION_EXPRESSION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Override Restrictions feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -776,6 +799,7 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 			case CargoPackage.SLOT__HEDGES:
 			case CargoPackage.SLOT__CANCELLATION_FEE:
+			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
 			case CargoPackage.SLOT__OVERRIDE_RESTRICTIONS:
 			case CargoPackage.SLOT__LOCKED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

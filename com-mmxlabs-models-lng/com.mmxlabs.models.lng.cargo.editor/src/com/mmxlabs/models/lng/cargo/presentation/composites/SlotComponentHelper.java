@@ -15,6 +15,7 @@ import com.mmxlabs.models.datetime.ui.formatters.LocalDateTextFormatter;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.editor.SlotContractRestrictionsWrapper;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.NominatedVesselEditorWrapper;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
@@ -104,6 +105,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_hedgesEditor(detailComposite, topClass);
 		add_allowedVesselsEditor(detailComposite, topClass);
 		add_cancellationFeeEditor(detailComposite, topClass);
+		add_cancellationExpressionEditor(detailComposite, topClass);
 		add_overrideRestrictionsEditor(detailComposite, topClass);
 		add_nominatedVesselEditor(detailComposite, topClass);
 		add_lockedEditor(detailComposite, topClass);
@@ -207,6 +209,15 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_cancellationFeeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CANCELLATION_FEE));
+	}
+
+	/**
+	 * Create the editor for the cancellationExpression feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_cancellationExpressionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CANCELLATION_EXPRESSION));
 	}
 
 	/**

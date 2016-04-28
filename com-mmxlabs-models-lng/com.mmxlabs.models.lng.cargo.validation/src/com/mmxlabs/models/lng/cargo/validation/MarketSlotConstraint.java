@@ -72,7 +72,7 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 					failures.add(dsd);
 				}
 
-				if (slot.getCancellationFee() != 0) {
+				if (slot.isSetCancellationExpression()) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type
 							+ " should not have a cancellation fee set."));
 					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_CancellationFee());

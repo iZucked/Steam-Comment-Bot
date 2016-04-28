@@ -7,15 +7,9 @@ package com.mmxlabs.models.lng.commercial.parseutils;
 import java.time.YearMonth;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import com.mmxlabs.common.parser.ExpressionParser;
 import com.mmxlabs.common.parser.IExpression;
-import com.mmxlabs.common.parser.IFunctionFactory;
-import com.mmxlabs.common.parser.IInfixOperatorFactory;
-import com.mmxlabs.common.parser.IPrefixOperatorFactory;
-import com.mmxlabs.common.parser.ITermFactory;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -24,6 +18,8 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.parser.Node;
+import com.mmxlabs.models.lng.pricing.parser.RawTreeParser;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -55,120 +51,6 @@ public class Exposures {
 				put(key, value);
 			}
 		}
-	}
-
-	/**
-	 * Simple tree class because Java utils inexplicably doesn't provide one
-	 * 
-	 * @author Simon McGregor
-	 * 
-	 */
-	// TODO: move this out of here into a top-level class of its own somewhere useful.
-	static class Node {
-		public final String token;
-		public final Node[] children;
-
-		public Node(final String token, final Node[] children) {
-			this.token = token;
-			this.children = children;
-		}
-	}
-
-	/**
-	 * IExpression class for parser to produce raw tree objects
-	 */
-	static class NodeExpression implements IExpression<Node> {
-		Node node;
-
-		public NodeExpression(final Node node) {
-			this.node = node;
-		}
-
-		public NodeExpression(final String token, final Node[] children) {
-			this.node = new Node(token, children);
-		}
-
-		@Override
-		public Node evaluate() {
-			return node;
-		}
-	}
-
-	/**
-	 * Parser for price expressions returning a raw parse tree. NOTE: this class duplicates code in ISeriesParser and its ancestors so it will NOT automatically remain in synch.
-	 * 
-	 * @author Simon McGregor
-	 */
-	static class RawTreeParser extends ExpressionParser<Node> {
-		public RawTreeParser() {
-			setInfixOperatorFactory(new IInfixOperatorFactory<Node>() {
-
-				@Override
-				public IExpression<Node> createInfixOperator(final char operator, final IExpression<Node> lhs, final IExpression<Node> rhs) {
-					final Node[] children = { lhs.evaluate(), rhs.evaluate() };
-					return new NodeExpression("" + operator, children);
-				}
-
-				@Override
-				public boolean isOperatorHigherPriority(final char a, final char b) {
-					if (a == b)
-						return false;
-					switch (a) {
-					case '*':
-						return true;
-					case '%':
-						return b == '/' || b == '+' || b == '-';
-					case '/':
-						return b == '+' || b == '-';
-					case '+':
-						return b == '-';
-					case '-':
-						return false;
-					}
-					return false;
-				}
-
-				@Override
-				public boolean isInfixOperator(final char operator) {
-					return operator == '*' || operator == '/' || operator == '+' || operator == '-' || operator == '%';
-				}
-
-			});
-
-			setTermFactory(new ITermFactory<Node>() {
-
-				@Override
-				public IExpression<Node> createTerm(final String term) {
-					return new NodeExpression(term, new Node[0]);
-				}
-			});
-
-			setFunctionFactory(new IFunctionFactory<Node>() {
-				@Override
-				public IExpression<Node> createFunction(final String name, final List<IExpression<Node>> arguments) {
-					final Node[] children = new Node[arguments.size()];
-
-					for (int i = 0; i < arguments.size(); i++) {
-						children[i] = arguments.get(i).evaluate();
-					}
-
-					return new NodeExpression(name, children);
-				}
-			});
-
-			setPrefixOperatorFactory(new IPrefixOperatorFactory<Node>() {
-				@Override
-				public boolean isPrefixOperator(final char operator) {
-					return false;
-				}
-
-				@Override
-				public IExpression<Node> createPrefixOperator(final char operator, final IExpression<Node> argument) {
-					throw new RuntimeException("Unknown prefix op " + operator);
-				}
-			});
-		}
-
 	}
 
 	private static double getExposureCoefficient(final Node node, final CommodityIndex index) {

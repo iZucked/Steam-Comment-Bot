@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -18,21 +19,24 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Spinner;
 
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.pricing.DataIndex;
-import com.mmxlabs.models.lng.pricing.DerivedIndex;
-import com.mmxlabs.models.lng.pricing.Index;
+import com.mmxlabs.models.lng.port.util.RouteDistanceLineCache;
 import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.util.MarketIndexCache;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
+import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
-import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -80,11 +84,18 @@ public class PriceExpressionUtils {
 
 	}
 
-	static Pattern pattern = Pattern.compile("([^0-9 a-zA-Z_+-/*%()])");
+	private final @NonNull static Pattern pattern = Pattern.compile("([^0-9 a-zA-Z_+-/*%()])");
 
 	@NonNull
-	public static ValidationResult validatePriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression) {
-		return validatePriceExpression(ctx, object, feature, priceExpression, getCommodityParser(null));
+	public static ValidationResult validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull EObject object, final @NonNull EStructuralFeature feature,
+			final @Nullable String priceExpression) {
+		return validatePriceExpression(ctx, object, feature, priceExpression, PriceIndexType.COMMODITY);
+	}
+
+	@NonNull
+	public static ValidationResult validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull EObject object, final @NonNull EStructuralFeature feature,
+			final @Nullable String priceExpression, @NonNull PriceIndexType priceIndexType) {
+		return validatePriceExpression(ctx, object, feature, priceExpression, getIndexParser(priceIndexType));
 	}
 
 	/**
@@ -106,8 +117,8 @@ public class PriceExpressionUtils {
 	 *            The list of validation failures to append to.
 	 */
 	@NonNull
-	public static ValidationResult validatePriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression,
-			final SeriesParser parser) {
+	public static ValidationResult validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull EObject object, final @NonNull EStructuralFeature feature,
+			final @Nullable String priceExpression, final @NonNull SeriesParser parser) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return ValidationResult.createErrorStatus("Price Expression is missing.");
@@ -117,7 +128,7 @@ public class PriceExpressionUtils {
 
 		if (matcher.find()) {
 			final String message = String.format("[Price expression|'%s'] Contains unexpected character '%s'.", priceExpression, matcher.group(1));
-			return ValidationResult.createErrorStatus("Expression '%s' Contains unexpected character '%s'.");
+			return ValidationResult.createErrorStatus(message);
 		}
 
 		if (parser != null) {
@@ -160,7 +171,7 @@ public class PriceExpressionUtils {
 			return;
 		}
 
-		final SeriesParser parser = getCommodityParser(date);
+		final SeriesParser parser = getIndexParser(PriceIndexType.COMMODITY);
 		try {
 			final IExpression<ISeries> expression = parser.parse(priceExpression);
 			final ISeries parsed = expression.evaluate();
@@ -191,7 +202,7 @@ public class PriceExpressionUtils {
 
 	public static ISeries getParsedSeries(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final YearMonth date,
 			final List<IStatus> failures) {
-		final SeriesParser parser = getCommodityParser(date);
+		final SeriesParser parser = getIndexParser(PriceIndexType.COMMODITY);
 		try {
 			final IExpression<ISeries> expression = parser.parse(priceExpression);
 			final ISeries parsed = expression.evaluate();
@@ -205,34 +216,7 @@ public class PriceExpressionUtils {
 		}
 	}
 
-	/**
-	 * Provides a {@link SeriesParser} object based on the default activator (the one returned by {@link Activator.getDefault()}).
-	 * 
-	 * @return A {@link SeriesParser} object for use in validating price expressions.
-	 */
-	public static SeriesParser getCommodityParser(final YearMonth dateZero) {
-		return getIndexParser(dateZero, PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES);
-	}
-
-	/**
-	 * Provides a {@link SeriesParser} object based on the default activator (the one returned by {@link Activator.getDefault()}).
-	 * 
-	 * @return A {@link SeriesParser} object for use in validating price expressions.
-	 */
-	public static SeriesParser getCharterParser(final YearMonth dateZero) {
-		return getIndexParser(dateZero, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES);
-	}
-
-	/**
-	 * Provides a {@link SeriesParser} object based on the default activator (the one returned by {@link Activator.getDefault()}).
-	 * 
-	 * @return A {@link SeriesParser} object for use in validating price expressions.
-	 */
-	public static SeriesParser getBaseFuelIndexParser(final YearMonth dateZero) {
-		return getIndexParser(dateZero, PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES);
-	}
-
-	public static SeriesParser getIndexParser(final YearMonth dateZero, final EReference reference) {
+	public static @Nullable PricingModel getPricingModel() {
 		final Activator activator = Activator.getDefault();
 		if (activator == null) {
 			return null;
@@ -243,30 +227,40 @@ public class PriceExpressionUtils {
 
 			if (rootObject instanceof LNGScenarioModel) {
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-				final SeriesParser indices = new SeriesParser();
-
-				final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(lngScenarioModel);
-				final List<NamedIndexContainer<? extends Number>> namedIndexContainerList = (List<NamedIndexContainer<? extends Number>>) pricingModel.eGet(reference);
-				for (final NamedIndexContainer<? extends Number> namedIndexContainer : namedIndexContainerList) {
-					final Index<? extends Number> index = namedIndexContainer.getData();
-					if (index instanceof DataIndex) {
-						PriceIndexUtils.addSeriesDataFromDataIndex(indices, namedIndexContainer.getName(), dateZero, (DataIndex<? extends Number>) index);
-					} else if (index instanceof DerivedIndex) {
-						indices.addSeriesExpression(namedIndexContainer.getName(), ((DerivedIndex) index).getExpression());
-					}
-				}
-				return indices;
+				return ScenarioModelUtil.getPricingModel(lngScenarioModel);
 			}
 		}
 		return null;
 	}
-	
-	public static <T extends LNGPriceCalculatorParameters> void checkPriceExpressionInPricingParams(final IValidationContext ctx, final List<IStatus> failures, T target, EAttribute attribute, String expression, SeriesParser parser) {
+
+	public static SeriesParser getIndexParser(final @NonNull PriceIndexType priceIndexType) {
+		PricingModel pricingModel = getPricingModel();
+		if (pricingModel == null) {
+			return null;
+		}
+		final MarketIndexCache cache = (MarketIndexCache) Platform.getAdapterManager().loadAdapter(pricingModel, MarketIndexCache.class.getName());
+		if (cache == null) {
+			throw new IllegalStateException("Unable to get market index cache");
+		}
+		return cache.getSeriesParser(priceIndexType);
+	}
+
+	public static @Nullable YearMonth getEarliestCurveDate(final @NonNull NamedIndexContainer<?> index) {
+		PricingModel pricingModel = getPricingModel();
+		if (pricingModel == null) {
+			return null;
+		}
+		final MarketIndexCache cache = (MarketIndexCache) Platform.getAdapterManager().loadAdapter(pricingModel, MarketIndexCache.class.getName());
+		if (cache == null) {
+			throw new IllegalStateException("Unable to get market index cache");
+		}
+		return cache.getEarliestDate(index);
+	}
+
+	public static <T extends LNGPriceCalculatorParameters> void checkPriceExpressionInPricingParams(final IValidationContext ctx, final List<IStatus> failures, T target, EAttribute attribute,
+			String expression, @NonNull PriceIndexType priceIndexType) {
 		if (target instanceof LNGPriceCalculatorParameters) {
-			if (parser == null) {
-				parser = PriceExpressionUtils.getCommodityParser(null);
-			}
-			ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, target, attribute, expression, parser);
+			ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, target, attribute, expression, priceIndexType);
 			if (!result.isOk()) {
 				EObject eContainer = target.eContainer();
 				final DetailConstraintStatusDecorator dsd;

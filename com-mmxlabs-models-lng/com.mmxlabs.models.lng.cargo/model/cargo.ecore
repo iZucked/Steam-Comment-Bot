@@ -40,7 +40,7 @@
     <eOperations name="getSlotOrContractRestrictedContracts" upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//Contract"/>
     <eOperations name="getSlotOrContractRestrictedPorts" upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
     <eOperations name="getSlotOrContractRestrictedListsArePermissive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eOperations name="getSlotOrContractCancellationFee" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="getSlotOrContractCancellationExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eOperations name="getSlotOrDelegatedPricingEvent" eType="ecore:EEnum ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//PricingEvent"/>
     <eOperations name="getPricingDateAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
     <eOperations name="getSlotContractParams" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//SlotContractParams"/>
@@ -86,7 +86,11 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="optional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-        unsettable="true"/>
+        unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="commodity"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cargo" eType="#//Cargo"
         eOpposite="#//Cargo/slots"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingEvent" eType="ecore:EEnum ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//PricingEvent"
@@ -127,6 +131,12 @@
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unitPrefix" value="$"/>
         <details key="formatString" value="###,###,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cancellationExpression"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="commodity"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="overrideRestrictions" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
@@ -199,6 +209,9 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" unsettable="true">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="$/day"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="charter"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="startAt" upperBound="-1">

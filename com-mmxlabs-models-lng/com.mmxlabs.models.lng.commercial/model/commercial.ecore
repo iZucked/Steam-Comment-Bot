@@ -64,6 +64,12 @@
         <details key="unitPrefix" value="$"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cancellationExpression"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="0">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="commodity"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SalesContract" eSuperTypes="#//Contract">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minCvValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
@@ -106,7 +112,11 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ExpressionPriceParameters" eSuperTypes="#//LNGPriceCalculatorParameters">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral=""/>
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="commodity"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="ContractType">
     <eLiterals name="BOTH"/>

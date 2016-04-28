@@ -80,6 +80,7 @@ public class ContractComponentHelper extends BaseComponentHelper {
 		add_contractTypeEditor(detailComposite, topClass);
 		add_pricingEventEditor(detailComposite, topClass);
 		add_cancellationFeeEditor(detailComposite, topClass);
+		add_cancellationExpressionEditor(detailComposite, topClass);
 	}
 	
 	/**
@@ -113,10 +114,20 @@ public class ContractComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the cancellationFee feature on Contract
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_cancellationFeeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__CANCELLATION_FEE));
+		// DEPRECATED
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__CANCELLATION_FEE));
+	}
+
+	/**
+	 * Create the editor for the cancellationExpression feature on Contract
+	 *
+	 * @generated
+	 */
+	protected void add_cancellationExpressionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__CANCELLATION_EXPRESSION));
 	}
 
 	/**
