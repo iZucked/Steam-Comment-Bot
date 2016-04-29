@@ -85,7 +85,7 @@ public class LNGScenarioToOptimiserBridge {
 	private final IScenarioEntityMapping periodMapping;
 
 	@NonNull
-	private final Collection<String> hints;
+	private final Collection<@NonNull String> hints;
 
 	@Nullable
 	private final ScenarioInstance scenarioInstance;
@@ -322,7 +322,7 @@ public class LNGScenarioToOptimiserBridge {
 				if (periodMapping == null) {
 					final Injector evaluationInjector;
 					{
-						final Collection<IOptimiserInjectorService> services = optimiserDataTransformer.getModuleServices();
+						final Collection<@NonNull IOptimiserInjectorService> services = optimiserDataTransformer.getModuleServices();
 						final List<Module> modules = new LinkedList<>();
 						modules.add(new InputSequencesModule(rawSequences));
 						modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(optimiserDataTransformer.getOptimiserSettings()), services,

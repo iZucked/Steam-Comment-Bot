@@ -91,7 +91,7 @@ public class LNGTransformerHelper {
 	}
 
 	@NonNull
-	public static Collection<Module> collectModules(final IOptimiserInjectorService.@NonNull ModuleType moduleType, @NonNull final Collection<@NonNull IOptimiserInjectorService> services,
+	public static Collection<@NonNull Module> collectModules(final IOptimiserInjectorService.@NonNull ModuleType moduleType, @NonNull final Collection<@NonNull IOptimiserInjectorService> services,
 			@NonNull final Collection<@NonNull String> hints) {
 		final List<@NonNull Module> modules = new LinkedList<>();
 		for (final IOptimiserInjectorService s : services) {
@@ -129,7 +129,7 @@ public class LNGTransformerHelper {
 	 */
 	@SuppressWarnings("unchecked")
 	@NonNull
-	public static Collection<IOptimiserInjectorService> getOptimiserInjectorServices(@Nullable final Module bootstrapModule, @Nullable final IOptimiserInjectorService extraService) {
+	public static Collection<@NonNull IOptimiserInjectorService> getOptimiserInjectorServices(@Nullable final Module bootstrapModule, @Nullable final IOptimiserInjectorService extraService) {
 
 		final List<@NonNull IOptimiserInjectorService> services = new LinkedList<>();
 		final Injector tmpInjector;
@@ -157,7 +157,7 @@ public class LNGTransformerHelper {
 
 		if (tmpInjector != null) {
 			final Key<Iterable<? extends IOptimiserInjectorService>> key = Key.<Iterable<? extends IOptimiserInjectorService>> get(TypeLiterals.iterable(IOptimiserInjectorService.class));
-			for (final IOptimiserInjectorService service : (Iterable<IOptimiserInjectorService>) tmpInjector.getInstance(key)) {
+			for (final IOptimiserInjectorService service : (Iterable<@NonNull IOptimiserInjectorService>) tmpInjector.getInstance(key)) {
 				services.add(service);
 			}
 		}
