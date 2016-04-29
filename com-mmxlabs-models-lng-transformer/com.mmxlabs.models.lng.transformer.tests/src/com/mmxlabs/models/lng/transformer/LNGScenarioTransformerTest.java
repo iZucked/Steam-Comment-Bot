@@ -24,7 +24,6 @@ import com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
@@ -186,26 +185,7 @@ public class LNGScenarioTransformerTest {
 		Mockito.when(oVessel7.getVesselClass()).thenReturn(oVesselClass1);
 		Mockito.when(oVessel8.getVesselClass()).thenReturn(oVesselClass1);
 
-		final IVesselAvailability vesselAvailability1 = Mockito.mock(IVesselAvailability.class);
-		final IVesselAvailability vesselAvailability2 = Mockito.mock(IVesselAvailability.class);
-		final IVesselAvailability vesselAvailability3 = Mockito.mock(IVesselAvailability.class);
-		final IVesselAvailability vesselAvailability4 = Mockito.mock(IVesselAvailability.class);
-		final IVesselAvailability vesselAvailability5 = Mockito.mock(IVesselAvailability.class);
-		final IVesselAvailability vesselAvailability6 = Mockito.mock(IVesselAvailability.class);
-		final IVesselAvailability vesselAvailability7 = Mockito.mock(IVesselAvailability.class);
-		final IVesselAvailability vesselAvailability8 = Mockito.mock(IVesselAvailability.class);
-
-		Mockito.when(vesselAvailability1.getVessel()).thenReturn(oVessel1);
-		Mockito.when(vesselAvailability2.getVessel()).thenReturn(oVessel2);
-		Mockito.when(vesselAvailability3.getVessel()).thenReturn(oVessel3);
-		Mockito.when(vesselAvailability4.getVessel()).thenReturn(oVessel4);
-		Mockito.when(vesselAvailability5.getVessel()).thenReturn(oVessel5);
-		Mockito.when(vesselAvailability6.getVessel()).thenReturn(oVessel6);
-		Mockito.when(vesselAvailability7.getVessel()).thenReturn(oVessel7);
-		Mockito.when(vesselAvailability8.getVessel()).thenReturn(oVessel8);
-
-		final List<IVesselAvailability> vesselAvailabilities = Lists.newArrayList(vesselAvailability1, vesselAvailability2, vesselAvailability3, vesselAvailability4, vesselAvailability5,
-				vesselAvailability6, vesselAvailability7, vesselAvailability8);
+		final List<IVessel> vesselAvailabilities = Lists.newArrayList(oVessel1, oVessel2, oVessel3, oVessel4, oVessel5, oVessel6, oVessel7, oVessel8);
 
 		LNGScenarioTransformer.buildPanamaCosts(builder, vesselAssociation, vesselClassAssociation, vesselAvailabilities, panamaCanalTariff);
 
@@ -408,26 +388,7 @@ public class LNGScenarioTransformerTest {
 		Mockito.when(oVessel7.getVesselClass()).thenReturn(oVesselClass1);
 		Mockito.when(oVessel8.getVesselClass()).thenReturn(oVesselClass1);
 
-		final IVesselAvailability vesselAvailability1 = Mockito.mock(IVesselAvailability.class);
-		final IVesselAvailability vesselAvailability2 = Mockito.mock(IVesselAvailability.class);
-		final IVesselAvailability vesselAvailability3 = Mockito.mock(IVesselAvailability.class);
-		final IVesselAvailability vesselAvailability4 = Mockito.mock(IVesselAvailability.class);
-		final IVesselAvailability vesselAvailability5 = Mockito.mock(IVesselAvailability.class);
-		final IVesselAvailability vesselAvailability6 = Mockito.mock(IVesselAvailability.class);
-		final IVesselAvailability vesselAvailability7 = Mockito.mock(IVesselAvailability.class);
-		final IVesselAvailability vesselAvailability8 = Mockito.mock(IVesselAvailability.class);
-
-		Mockito.when(vesselAvailability1.getVessel()).thenReturn(oVessel1);
-		Mockito.when(vesselAvailability2.getVessel()).thenReturn(oVessel2);
-		Mockito.when(vesselAvailability3.getVessel()).thenReturn(oVessel3);
-		Mockito.when(vesselAvailability4.getVessel()).thenReturn(oVessel4);
-		Mockito.when(vesselAvailability5.getVessel()).thenReturn(oVessel5);
-		Mockito.when(vesselAvailability6.getVessel()).thenReturn(oVessel6);
-		Mockito.when(vesselAvailability7.getVessel()).thenReturn(oVessel7);
-		Mockito.when(vesselAvailability8.getVessel()).thenReturn(oVessel8);
-
-		final List<IVesselAvailability> vesselAvailabilities = Lists.newArrayList(vesselAvailability1, vesselAvailability2, vesselAvailability3, vesselAvailability4, vesselAvailability5,
-				vesselAvailability6, vesselAvailability7, vesselAvailability8);
+		final List<IVessel> vesselAvailabilities = Lists.newArrayList(oVessel1, oVessel2, oVessel3, oVessel4, oVessel5, oVessel6, oVessel7, oVessel8);
 
 		LNGScenarioTransformer.buildPanamaCosts(builder, vesselAssociation, vesselClassAssociation, vesselAvailabilities, panamaCanalTariff);
 
@@ -590,15 +551,8 @@ public class LNGScenarioTransformerTest {
 		Mockito.when(oVessel1.getVesselClass()).thenReturn(oVesselClass1);
 		Mockito.when(oVessel2.getVesselClass()).thenReturn(oVesselClass2);
 		Mockito.when(oVessel3.getVesselClass()).thenReturn(oVesselClass3);
-		final IVesselAvailability vesselAvailability1 = Mockito.mock(IVesselAvailability.class);
-		final IVesselAvailability vesselAvailability2 = Mockito.mock(IVesselAvailability.class);
-		final IVesselAvailability vesselAvailability3 = Mockito.mock(IVesselAvailability.class);
 
-		Mockito.when(vesselAvailability1.getVessel()).thenReturn(oVessel1);
-		Mockito.when(vesselAvailability2.getVessel()).thenReturn(oVessel2);
-		Mockito.when(vesselAvailability3.getVessel()).thenReturn(oVessel3);
-
-		final List<IVesselAvailability> vesselAvailabilities = Lists.newArrayList(vesselAvailability1, vesselAvailability2, vesselAvailability3);
+		final List<IVessel> vesselAvailabilities = Lists.newArrayList(oVessel1, oVessel2, oVessel3);
 
 		LNGScenarioTransformer.buildPanamaCosts(builder, vesselAssociation, vesselClassAssociation, vesselAvailabilities, panamaCanalTariff);
 

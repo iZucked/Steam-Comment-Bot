@@ -2386,7 +2386,7 @@ public class LNGScenarioTransformer {
 	}
 
 	public static void buildPanamaCosts(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation,
-			@NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation, final Set<IVessel> vesselAvailabilities, @NonNull final PanamaCanalTariff panamaCanalTariff) {
+			@NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation, final Collection<IVessel> vesselAvailabilities, @NonNull final PanamaCanalTariff panamaCanalTariff) {
 
 		// Extract band information into a sorted list
 		final List<Pair<Integer, PanamaCanalTariffBand>> bands = new LinkedList<>();
