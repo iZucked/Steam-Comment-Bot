@@ -544,6 +544,7 @@ public class LNGScenarioTransformer {
 			// Check here if price is indexed or expression
 			if (price.isLumpsum()) {
 				@Nullable
+				final
 				ILongCurve cooldownCurve = dateHelper.generateLongExpressionCurve(price.getExpression(), commodityIndices);
 				if (cooldownCurve == null) {
 					throw new IllegalStateException("Unable to parse cooldown curve");
@@ -1293,7 +1294,7 @@ public class LNGScenarioTransformer {
 			 * = 0; maxCv = Long.MAX_VALUE; }
 			 */
 
-			boolean slotLocked = dischargeSlot.isLocked() || shippingOnly && dischargeSlot.getCargo() == null;
+			final boolean slotLocked = dischargeSlot.isLocked() || shippingOnly && dischargeSlot.getCargo() == null;
 			if (dischargeSlot.isFOBSale()) {
 				final ITimeWindow localTimeWindow;
 				// if (dischargeSlot.isDivertable()) {
@@ -1324,8 +1325,8 @@ public class LNGScenarioTransformer {
 				}
 			} else {
 				discharge = builder.createDischargeSlot(name, portAssociation.lookupNullChecked(dischargeSlot.getPort()), dischargeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator,
-						dischargeSlot.getSlotOrPortDuration(), pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatedPricingEvent()), dischargeSlot.isOptional(), slotLocked,
-						isSpot, isVolumeLimitInM3);
+						dischargeSlot.getSlotOrPortDuration(), pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatedPricingEvent()), dischargeSlot.isOptional(), slotLocked, isSpot,
+						isVolumeLimitInM3);
 			}
 		}
 
@@ -1437,7 +1438,7 @@ public class LNGScenarioTransformer {
 
 		final boolean isVolumeLimitInM3 = loadSlot.getSlotOrContractVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
 
-		boolean slotLocked = loadSlot.isLocked() || shippingOnly && loadSlot.getCargo() == null;
+		final boolean slotLocked = loadSlot.isLocked() || shippingOnly && loadSlot.getCargo() == null;
 		if (loadSlot.isDESPurchase()) {
 			final ITimeWindow localTimeWindow;
 			if (loadSlot.isDivertible()) {
@@ -2306,12 +2307,21 @@ public class LNGScenarioTransformer {
 				builder.setPortToPortDistance(from, to, mapRouteOption(r), distance);
 			}
 
+			final Set<IVessel> optimiserVessels = new HashSet<>();
+			optimiserVessels.addAll(allVessels.values());
+			for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
+				final IVessel vessel = vesselAvailability.getVessel();
+				if (vessel != null) {
+					optimiserVessels.add(vessel);
+				}
+			}
+
 			// set canal route consumptions and toll info
 			final CostModel costModel = rootObject.getReferenceModel().getCostModel();
 
 			final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
 			if (panamaCanalTariff != null) {
-				buildPanamaCosts(builder, vesselAssociation, vesselClassAssociation, allVesselAvailabilities, panamaCanalTariff);
+				buildPanamaCosts(builder, vesselAssociation, vesselClassAssociation, optimiserVessels, panamaCanalTariff);
 				if (panamaCanalTariff.isSetAvailableFrom()) {
 					final LocalDate availableFrom = panamaCanalTariff.getAvailableFrom();
 					if (availableFrom != null) {
@@ -2323,15 +2333,6 @@ public class LNGScenarioTransformer {
 
 			final Map<VesselClass, List<RouteCost>> vesselClassToRouteCostMap = costModel.getRouteCosts().stream() //
 					.collect(Collectors.groupingBy(RouteCost::getVesselClass, Collectors.mapping(Function.identity(), Collectors.toList())));
-
-			final Set<IVessel> optimiserVessels = new HashSet<>();
-			optimiserVessels.addAll(allVessels.values());
-			for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
-				final IVessel vessel = vesselAvailability.getVessel();
-				if (vessel != null) {
-					optimiserVessels.add(vessel);
-				}
-			}
 
 			for (final IVessel vessel : optimiserVessels) {
 
@@ -2385,7 +2386,7 @@ public class LNGScenarioTransformer {
 	}
 
 	public static void buildPanamaCosts(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation,
-			@NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation, final List<IVesselAvailability> vesselAvailabilities, @NonNull final PanamaCanalTariff panamaCanalTariff) {
+			@NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation, final Set<IVessel> vesselAvailabilities, @NonNull final PanamaCanalTariff panamaCanalTariff) {
 
 		// Extract band information into a sorted list
 		final List<Pair<Integer, PanamaCanalTariffBand>> bands = new LinkedList<>();
@@ -2399,14 +2400,13 @@ public class LNGScenarioTransformer {
 		// Sort the bands smallest to largest
 		Collections.sort(bands, (b1, b2) -> b1.getFirst().compareTo(b2.getFirst()));
 
-		for (final IVesselAvailability availability : vesselAvailabilities) {
+		for (final IVessel vessel : vesselAvailabilities) {
 			final int capacityInM3;
-			final IVessel vessel = availability.getVessel();
 			assert vessel != null;
-			final Vessel eVessel = vesselAssociation.reverseLookup(availability.getVessel());
+			final Vessel eVessel = vesselAssociation.reverseLookup(vessel);
 			if (eVessel == null) {
 				// spot charter
-				final VesselClass eVesselClass = vesselClassAssociation.reverseLookupNullChecked(availability.getVessel().getVesselClass());
+				final VesselClass eVesselClass = vesselClassAssociation.reverseLookupNullChecked(vessel.getVesselClass());
 				capacityInM3 = eVesselClass.getCapacity();
 			} else {
 				capacityInM3 = eVessel.getVesselOrVesselClassCapacity();
