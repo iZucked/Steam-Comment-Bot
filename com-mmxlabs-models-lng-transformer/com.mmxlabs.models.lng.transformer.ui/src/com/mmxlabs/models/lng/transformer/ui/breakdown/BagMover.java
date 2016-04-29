@@ -174,10 +174,10 @@ public class BagMover extends BreakdownOptimiserMover {
 						/*
 						 * This is to increase runtime temporarily
 						 */
+						EvaluationState reEvaluationState = new EvaluationState();
 						if (isReevaluating) {
-							evaluationState = new EvaluationState();
 							for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-								if (!evaluationProcess.evaluate(Phase.Checked_Evaluation, currentFullSequences, evaluationState)) {
+								if (!evaluationProcess.evaluate(Phase.Checked_Evaluation, currentFullSequences, reEvaluationState)) {
 									failedEvaluation = true;
 									break;
 								}
@@ -211,6 +211,16 @@ public class BagMover extends BreakdownOptimiserMover {
 									failedEvaluation = true;
 									break;
 								}
+							}
+
+							if (isReevaluating) {
+								for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
+									if (!evaluationProcess.evaluate(Phase.Final_Evaluation, currentFullSequences, reEvaluationState)) {
+										failedEvaluation = true;
+										break;
+									}
+								}
+
 							}
 
 							final ProfitAndLossSequences profitAndLossSequences = evaluationState.getData(SchedulerEvaluationProcess.PROFIT_AND_LOSS_SEQUENCES, ProfitAndLossSequences.class);
