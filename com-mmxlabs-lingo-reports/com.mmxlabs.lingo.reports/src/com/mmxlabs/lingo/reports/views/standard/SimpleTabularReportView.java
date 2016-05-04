@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
@@ -124,10 +125,12 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 						if (instance != null) {
 							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
 							if (schedule != null) {
-								rowElements.addAll(transformer.createData(schedule, selectedDataProvider.getScenarioModel(schedule)));
-
-								// rowElements.addAll(transformer.transform(schedule, other, pinnedData));
-								numberOfSchedules++;
+								@Nullable
+								LNGScenarioModel scenarioModel = selectedDataProvider.getScenarioModel(schedule);
+								if (scenarioModel != null) {
+									rowElements.addAll(transformer.createData(schedule, scenarioModel));
+									numberOfSchedules++;
+								}
 							}
 						}
 					}
