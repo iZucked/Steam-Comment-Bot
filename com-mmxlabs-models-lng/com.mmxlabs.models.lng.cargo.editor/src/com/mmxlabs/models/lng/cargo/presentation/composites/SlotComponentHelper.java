@@ -205,10 +205,10 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the cancellationFee feature on Slot
 	 * 
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_cancellationFeeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CANCELLATION_FEE));
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CANCELLATION_FEE));
 	}
 
 	/**
