@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -1117,7 +1118,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// 1 == return to farthest in time load
 		// 2== end window
 		// 3 == discharge + 60
-		final int rule = 3;
+		// 4 == discharge (minus spot) + 60
+		final int rule = 4;
 		final int latestTime;
 		if (rule == 0) {
 			/**
@@ -1168,8 +1170,21 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			latestTime = Math.max(endOfLatestWindow + (24 * minDaysFromLastEventToEnd), maxFastReturnTime + latestDischarge);
 		} else if (rule == 2) {
 			latestTime = Math.max(endOfLatestWindow, latestDischarge);
-		} else {
+		} else if (rule == 3) {
 			latestTime = Math.max(endOfLatestWindow, latestDischarge) + 60 * 24;
+		} else if (rule == 4) {
+
+			// Include all time windows *except* spot market slots
+			int lastFoundTime = sequenceElements.stream() //
+					.filter(element -> !spotMarketSlots.isSpotMarketSlot(element)) //
+					.filter(element -> !timeWindowProvider.getTimeWindows(element).isEmpty()) //
+					.mapToInt(element -> timeWindowProvider.getTimeWindows(element).get(0).getEnd()) //
+					.max().getAsInt();
+
+			latestTime = Math.max(lastFoundTime, latestDischarge) + 60 * 24;
+		} else {
+			// Invalid rule
+			assert false;
 		}
 
 		for (final Pair<ISequenceElement, PortSlot> elementAndSlot : endSlots) {
