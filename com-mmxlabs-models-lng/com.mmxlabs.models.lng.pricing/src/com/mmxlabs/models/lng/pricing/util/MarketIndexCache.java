@@ -1,12 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.util;
 
 import java.time.YearMonth;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -21,7 +19,6 @@ import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
-import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 
 public class MarketIndexCache extends EContentAdapter {
 
