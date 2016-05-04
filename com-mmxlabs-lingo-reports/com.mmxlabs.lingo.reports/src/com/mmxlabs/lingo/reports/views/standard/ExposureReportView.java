@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -161,7 +162,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				overallExposures.clear();
 
 				for (final CommodityIndex index : indices) {
-					final Map<YearMonth, Double> exposures = Exposures.getExposuresByMonth(schedule, index);
+					final Map<YearMonth, Double> exposures = Exposures.getExposuresByMonth(schedule, index, ScenarioModelUtil.getPricingModel(rootObject));
 					overallExposures.put(index.getName(), exposures);
 					output.add(new IndexExposureData(schedule, index.getName(), exposures));
 				}
