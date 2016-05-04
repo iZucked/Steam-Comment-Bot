@@ -110,6 +110,16 @@ public class Exposures {
 		}
 	}
 
+	/**
+	 * Expands the node tree. Returns a new node if the parentNode has change and needs to be replaced in the upper chain. Returns null if the node does not need replacing (note: the children may
+	 * still have changed).
+	 * 
+	 * @param exposedIndexToken
+	 * @param parentNode
+	 * @param pricingModel
+	 * @param date
+	 * @return
+	 */
 	private static @Nullable Node expandNode(final @NonNull String exposedIndexToken, @NonNull final Node parentNode, final PricingModel pricingModel, final YearMonth date) {
 
 		// Match!, nothing to expand
