@@ -771,7 +771,15 @@ public class VoyagePlanner {
 		IPortSlot prevPortSlot = null;
 		boolean sequenceContainsMMBTUVolumeOption = false;
 
-		for (final IPortSlot thisPortSlot : portTimesRecord.getSlots()) {
+		// Create a list of all slots including the optional (not for shipped cargoes) return slot
+		final List<@NonNull IPortSlot> recordSlots = new ArrayList<>(portTimesRecord.getSlots().size() + 1);
+		recordSlots.addAll(portTimesRecord.getSlots());
+		final IPortSlot returnSlot = portTimesRecord.getReturnSlot();
+		if (returnSlot != null) {
+			recordSlots.add(returnSlot);
+		}
+
+		for (final IPortSlot thisPortSlot : recordSlots) {
 			final int thisArrivalTime = portTimesRecord.getSlotTime(thisPortSlot);
 			// If we are a heel options slots (i.e. Start or other vessel event slot, overwrite previous heel (assume lost) and replace with a new heel value
 			// TODO: Move (back?)into VPO code
@@ -800,29 +808,22 @@ public class VoyagePlanner {
 				previousOptions = options;
 			}
 
-			final int visitDuration = portTimesRecord.getSlotDuration(thisPortSlot);
-
 			final PortOptions portOptions = new PortOptions(thisPortSlot);
-			portOptions.setVisitDuration(visitDuration);
 			portOptions.setVessel(vesselAvailability.getVessel());
+
+			if (thisPortSlot == returnSlot) {
+				portOptions.setVisitDuration(0);
+			} else {
+				final int visitDuration = portTimesRecord.getSlotDuration(thisPortSlot);
+				portOptions.setVisitDuration(visitDuration);
+			}
 			voyageOrPortOptions.add(portOptions);
 
 			// Sequence scheduler should be using the actuals time
 			assert actualsDataProvider.hasActuals(thisPortSlot) == false || actualsDataProvider.getArrivalTime(thisPortSlot) == thisArrivalTime;
-			assert actualsDataProvider.hasActuals(thisPortSlot) == false || actualsDataProvider.getVisitDuration(thisPortSlot) == visitDuration;
+			// assert actualsDataProvider.hasActuals(thisPortSlot) == false || actualsDataProvider.getVisitDuration(thisPortSlot) == visitDuration;
 
 			prevPortSlot = thisPortSlot;
-		}
-
-		final IPortSlot thisPortSlot = portTimesRecord.getReturnSlot();
-		final PortOptions portOptions;
-		if (thisPortSlot != null) {
-			portOptions = new PortOptions(thisPortSlot);
-			portOptions.setVisitDuration(0);
-			portOptions.setVessel(vesselAvailability.getVessel());
-			voyageOrPortOptions.add(portOptions);
-		} else {
-			portOptions = null;
 		}
 
 		// TODO: Insert actuals VoyagePlan stuff here to allow this method to be used inside main makeVoyagePlans loop
