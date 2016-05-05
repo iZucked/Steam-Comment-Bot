@@ -223,6 +223,7 @@ public class CreateStripDialog extends FormDialog {
 		default:
 			break;
 		}
+		sample.eSet(MMXCorePackage.Literals.NAMED_OBJECT__NAME, "option");
 
 		// // Set a default window start
 		sample.eSet(CargoPackage.eINSTANCE.getSlot_WindowStart(), LocalDate.now());
