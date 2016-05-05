@@ -5,6 +5,12 @@
 package com.mmxlabs.scheduler.optimiser.components;
 
 public interface IEndRequirement extends IStartEndRequirement {
+	/**
+	 * Returns true if there is no user defined end date and we are using the notional end time.
+	 * 
+	 * @return
+	 */
+	boolean isOpen();
 
 	boolean isEndCold();
 

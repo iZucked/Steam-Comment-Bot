@@ -855,7 +855,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@NonNull
 	public IVesselAvailability createSpotVessel(final String name, final int spotIndex, @NonNull final ISpotCharterInMarket spotCharterInMarket) {
 		final IStartRequirement start = createStartRequirement(ANYWHERE, null, null);
-		final IEndRequirement end = createEndRequirement(Collections.singletonList(ANYWHERE), null, /* endCold */true, 0);
+		final IEndRequirement end = createEndRequirement(Collections.singletonList(ANYWHERE), null, /* endCold */true, 0, false);
 		final IVesselClass vesselClass = spotCharterInMarket.getVesselClass();
 		final ILongCurve dailyCharterInPrice = spotCharterInMarket.getDailyCharterInRateCurve();
 		final IVessel spotVessel = createVessel(name, vesselClass, vesselClass.getCargoCapacity());
@@ -996,7 +996,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@NonNull
 	public IEndRequirement createEndRequirement() {
-		return createEndRequirement(Collections.singletonList(ANYWHERE), null, false, 0);
+		return createEndRequirement(Collections.singletonList(ANYWHERE), null, false, 0, false);
 	}
 
 	@Override
@@ -1008,12 +1008,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	@NonNull
-	public IEndRequirement createEndRequirement(@Nullable final Collection<IPort> portSet, @Nullable final ITimeWindow timeWindow, final boolean endCold, final long targetHeelInM3) {
+	public IEndRequirement createEndRequirement(@Nullable final Collection<IPort> portSet, @Nullable final ITimeWindow timeWindow, final boolean endCold, final long targetHeelInM3,
+			boolean isOpenEnded) {
 
 		if (portSet == null || portSet.isEmpty()) {
-			return new EndRequirement(Collections.singleton(ANYWHERE), false, timeWindow, endCold, targetHeelInM3);
+			return new EndRequirement(Collections.singleton(ANYWHERE), false, timeWindow, endCold, targetHeelInM3, isOpenEnded);
 		} else {
-			return new EndRequirement(portSet, true, timeWindow, endCold, targetHeelInM3);
+			return new EndRequirement(portSet, true, timeWindow, endCold, targetHeelInM3, isOpenEnded);
 		}
 	}
 
@@ -1187,8 +1188,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			assert false;
 		}
 
+		startEndRequirementProvider.setNotionalEndTime(latestTime);
+
+		int windowAdder = (rule == 3 || rule == 4) ? 0 : 35 * 24;
 		for (final Pair<ISequenceElement, PortSlot> elementAndSlot : endSlots) {
-			final ITimeWindow endWindow = createTimeWindow(latestTime, latestTime + (35 * 24));
+			final ITimeWindow endWindow = createTimeWindow(latestTime, latestTime + windowAdder);
 			elementAndSlot.getSecond().setTimeWindow(endWindow);
 			timeWindowProvider.setTimeWindows(elementAndSlot.getFirst(), Collections.singletonList(endWindow));
 		}

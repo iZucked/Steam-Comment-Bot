@@ -14,13 +14,15 @@ import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
 
-public class HashMapStartEndRequirementEditor implements IStartEndRequirementProviderEditor {
+public final class HashMapStartEndRequirementEditor implements IStartEndRequirementProviderEditor {
+
+	private int notionalEndTime;
 
 	protected HashMap<IResource, IStartRequirement> startRequirements = new HashMap<>();
 	protected HashMap<IResource, IEndRequirement> endRequirements = new HashMap<>();
 
-	protected HashMap<IResource, ISequenceElement> startElements = new HashMap<IResource, ISequenceElement>();
-	protected HashMap<IResource, ISequenceElement> endElements = new HashMap<IResource, ISequenceElement>();
+	protected HashMap<IResource, ISequenceElement> startElements = new HashMap<>();
+	protected HashMap<IResource, ISequenceElement> endElements = new HashMap<>();
 
 	@Override
 	public IStartRequirement getStartRequirement(final @NonNull IResource resource) {
@@ -56,5 +58,15 @@ public class HashMapStartEndRequirementEditor implements IStartEndRequirementPro
 	public void setStartEndElements(final IResource resource, final ISequenceElement startElement, final ISequenceElement endElement) {
 		startElements.put(resource, startElement);
 		endElements.put(resource, endElement);
+	}
+
+	@Override
+	public int getNotionalEndTime() {
+		return notionalEndTime;
+	}
+
+	@Override
+	public void setNotionalEndTime(int endTime) {
+		this.notionalEndTime = endTime;
 	}
 }

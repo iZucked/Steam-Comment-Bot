@@ -156,7 +156,7 @@ public class TestCalculations {
 			builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, ballast_nboRateInM3PerHour, ballast_idleNBORateInM3PerHour, ballast_idleConsumptionRateInMTPerHour,
 					ballastConsumptionCalculator, 0);
 			final IStartRequirement startRequirement = builder.createStartRequirement(port1, builder.createTimeWindow(0, 0), null);
-			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), builder.createTimeWindow(75, 75), false, 0);
+			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), builder.createTimeWindow(75, 75), false, 0, false);
 
 			final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
 			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement);
@@ -604,7 +604,7 @@ public class TestCalculations {
 					ballastConsumptionCalculator, 0);
 
 			final IStartRequirement startRequirement = builder.createStartRequirement(port1, builder.createTimeWindow(0, 0), null);
-			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), builder.createTimeWindow(75, 75), false, 0);
+			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), builder.createTimeWindow(75, 75), false, 0, false);
 
 			final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
 			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement);
@@ -1046,7 +1046,7 @@ public class TestCalculations {
 					ballastConsumptionCalculator, 0);
 
 			final IStartRequirement startRequirement = builder.createStartRequirement(port1, builder.createTimeWindow(0, 0), null);
-			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), builder.createTimeWindow(75, 75), false, 0);
+			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), builder.createTimeWindow(75, 75), false, 0, false);
 
 			final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
 			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement);

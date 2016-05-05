@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.inject.Inject;
+import javax.management.RuntimeErrorException;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -67,7 +68,9 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 
 	@Override
 	public void annotate(@NonNull final Phase phase, @NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution) {
-		evaluate(phase, sequences, evaluationState, solution);
+		if (!evaluate(phase, sequences, evaluationState, solution)) {
+			throw new RuntimeException("Unable to evaluate state");
+		}
 	}
 
 	private boolean evaluate(@NonNull final Phase phase, @NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @Nullable final IAnnotatedSolution solution) {

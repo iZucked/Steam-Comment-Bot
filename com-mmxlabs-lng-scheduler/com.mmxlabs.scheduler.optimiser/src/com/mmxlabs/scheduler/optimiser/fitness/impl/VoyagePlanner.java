@@ -388,7 +388,7 @@ public class VoyagePlanner {
 
 			// final IPortSlot thisPortSlot = portTimesRecord.getReturnSlot();
 			// final PortOptions portOptions;
-			if (voyageOrPortOptions.size() > 1) {
+			if (voyageOrPortOptions.size() > 0) {
 				// Use prev slot as "thisPortSlot" is the start of a new voyage plan and thus likely a different cargo
 				if (actualsDataProvider.hasActuals(recordSlots.get(0))) {
 					heelVolumeInM3 = generateActualsVoyagePlan(vesselAvailability, vesselStartTime, voyagePlansMap, voyagePlansList, voyageOrPortOptions, portTimesRecord, heelVolumeInM3);
@@ -965,8 +965,8 @@ public class VoyagePlanner {
 
 		// Fix up final arrival time. The VPO is permitted to change the final arrival time of certain vessels and we need to alter the arrival time array and the portTimesRecord with the new
 		// arrival time.
-		{
-			final IDetailsSequenceElement[] vpSequence = result.getSequence();
+		final IDetailsSequenceElement[] vpSequence = result.getSequence();
+		if (vpSequence.length > 1){
 			final VoyageDetails lastVoyage = (VoyageDetails) vpSequence[vpSequence.length - 2];
 			if (lastVoyage.getOptions().getToPortSlot().getPortType() == PortType.End) {
 				// New arrival time = Previous element arrival time + visit duration + travel time + idle time.

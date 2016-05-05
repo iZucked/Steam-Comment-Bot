@@ -246,7 +246,7 @@ public interface ISchedulerBuilder {
 	public IStartRequirement createStartRequirement(@Nullable IPort fixedPort, @Nullable ITimeWindow timeWindow, @Nullable IHeelOptions heelOptions);
 
 	@NonNull
-	public IEndRequirement createEndRequirement(@Nullable Collection<IPort> portSet, @Nullable ITimeWindow timeWindow, boolean endCold, long targetHeelInM3);
+	public IEndRequirement createEndRequirement(@Nullable Collection<IPort> portSet, @Nullable ITimeWindow timeWindow, boolean endCold, long targetHeelInM3, boolean isOpenEnded);
 
 	/**
 	 * Create a port with the given name and cooldown requirement

@@ -1,4 +1,5 @@
 /**
+
  * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
@@ -171,7 +172,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		VoyageOptions optionsToRestore = null;
 		int availableTimeToRestore = 0;
 
-		if (timeExtent / RELAXATION_STEP > 0) {
+		if (timeExtent / RELAXATION_STEP > 0 && record.basicSequence.size() > 1) {
 
 			// There are some cases where we wish to evaluate the best time to
 			// end the sequence, rather than the specified value. Typically

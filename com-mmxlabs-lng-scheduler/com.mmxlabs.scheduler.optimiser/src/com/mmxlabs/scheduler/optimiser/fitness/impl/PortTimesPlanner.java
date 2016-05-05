@@ -65,6 +65,9 @@ public class PortTimesPlanner {
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
 
+	@Inject
+	private IEndEventScheduler endEventScheduler;
+
 	/**
 	 * This method replaces the normal shipped cargo calculation path with one specific to DES purchase or FOB sale cargoes. However this currently merges in behaviour from other classes - such as
 	 * scheduling and volume allocation - which should really stay in those other classes.
@@ -206,6 +209,12 @@ public class PortTimesPlanner {
 					final int shortCargoReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime;
 
 					portTimesRecord.setReturnSlotTime(thisPortSlot, shortCargoReturnArrivalTime);
+				} else if (portType == PortType.End) {
+					// Delegate to the end event schedule to determine correct end time.
+					portTimesRecords.addAll(endEventScheduler.scheduleEndEvent(resource, vesselAvailability, portTimesRecord, arrivalTimes[idx], thisPortSlot));
+					// Ensure this is the end of the loop
+					assert (sequence.size() == idx + 1);
+					break;
 				} else {
 					portTimesRecord.setReturnSlotTime(thisPortSlot, arrivalTimes[idx]);
 				}
@@ -219,6 +228,8 @@ public class PortTimesPlanner {
 			// Is this the end of the sequence? If so, start new port times record
 			if (breakSequence[idx]) {
 
+				// This should have been caught above!
+				assert (sequence.size() != idx + 1);
 				// Is this the last element? Do not start a new PortTimesRecord and break out instead
 				if (sequence.size() == idx + 1) {
 					break;

@@ -120,11 +120,11 @@ public class SimpleSchedulerTest {
 		final IVessel vessel3 = builder.createVessel("vessel-3", vesselClass1, 150000000);
 
 		builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
-				builder.createEndRequirement(Collections.singleton(port2), null, false, 0));
+				builder.createEndRequirement(Collections.singleton(port2), null, false, 0, false));
 		builder.createVesselAvailability(vessel2, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
-				builder.createEndRequirement(Collections.singleton(port2), null, false, 0));
+				builder.createEndRequirement(Collections.singleton(port2), null, false, 0, false));
 		builder.createVesselAvailability(vessel3, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
-				builder.createEndRequirement(Collections.singleton(port6), null, false, 0));
+				builder.createEndRequirement(Collections.singleton(port6), null, false, 0, false));
 
 		final ITimeWindow tw1 = builder.createTimeWindow(5, 6);
 		final ITimeWindow tw2 = builder.createTimeWindow(10, 11);

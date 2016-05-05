@@ -13,6 +13,8 @@ import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 
 public interface IStartEndRequirementProviderEditor extends IStartEndRequirementProvider {
 
+	void setNotionalEndTime(int endTime);
+	
 	void setStartEndRequirements(@NonNull IResource resource, @NonNull IStartRequirement startRequirement, @NonNull IEndRequirement endRequirement);
 
 	void setStartEndElements(@NonNull IResource resource, @NonNull ISequenceElement startElement, @NonNull ISequenceElement endElement);

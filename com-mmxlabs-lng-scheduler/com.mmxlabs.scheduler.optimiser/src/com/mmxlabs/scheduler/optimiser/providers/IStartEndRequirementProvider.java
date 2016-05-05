@@ -13,6 +13,9 @@ import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 
 public interface IStartEndRequirementProvider extends IDataComponentProvider {
+	
+	int getNotionalEndTime();
+	
 	@NonNull
 	IStartRequirement getStartRequirement(@NonNull IResource resource);
 
