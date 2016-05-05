@@ -72,9 +72,11 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/hedges"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/allowedVessels"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/cancellationFee"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/cancellationExpression"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/overrideRestrictions"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/nominatedVessel"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/locked"/>
+      <genFeatures createChild="false" propertyDescription="If selected, an open slot will be unable to form a cargo"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/locked"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrPortDuration"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrContractMinQuantity"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrContractMaxQuantity"/>
@@ -88,7 +90,7 @@
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrContractRestrictedContracts"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrContractRestrictedPorts"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrContractRestrictedListsArePermissive"/>
-      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrContractCancellationFee"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrContractCancellationExpression"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatedPricingEvent"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getPricingDateAsDateTime"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotContractParams"/>

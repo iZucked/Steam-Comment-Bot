@@ -88,7 +88,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		allFeatures = new HashSet<EStructuralFeature>();
 
 		nameFeatures = new ArrayList<EStructuralFeature[]>();
-		nameFeatures.add(new EStructuralFeature[] { MMXCorePackage.eINSTANCE.getNamedObject_Name(), CargoFeatures.getSlot_Optional() });
+		nameFeatures.add(new EStructuralFeature[] { MMXCorePackage.eINSTANCE.getNamedObject_Name(), CargoFeatures.getSlot_Optional(), CargoFeatures.getSlot_Locked() });
 		allFeatures.addAll(getAllFeatures(nameFeatures));
 
 		mainFeatures = new ArrayList<EStructuralFeature[]>();

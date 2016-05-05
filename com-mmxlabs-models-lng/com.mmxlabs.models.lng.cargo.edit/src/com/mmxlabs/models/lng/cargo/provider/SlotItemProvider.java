@@ -733,7 +733,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_locked_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_locked_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_locked_description"),
 				 CargoPackage.Literals.SLOT__LOCKED,
 				 true,
 				 false,
