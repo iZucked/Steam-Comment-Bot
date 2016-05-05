@@ -25,8 +25,9 @@ class JobManagerViewRefreshListener implements IEclipseJobManagerListener {
 
 	@Override
 	public void jobRemoved(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
-
-		control.removeListener(getJobListener());
+		if (control != null) {
+			control.removeListener(getJobListener());
+		}
 		view.refresh();
 	}
 
