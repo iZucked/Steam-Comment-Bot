@@ -128,7 +128,8 @@ public class Activator extends AbstractUIPlugin {
 
 			dirScanRegistration[idx].unregister();
 			dirScanRegistration[idx] = null;
-
+		}
+		if (dirScanService[idx] != null) {
 			dirScanService[idx].stop();
 			dirScanService[idx] = null;
 		}
