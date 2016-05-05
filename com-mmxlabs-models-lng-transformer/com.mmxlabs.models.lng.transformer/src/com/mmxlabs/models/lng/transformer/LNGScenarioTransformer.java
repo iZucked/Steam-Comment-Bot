@@ -544,8 +544,7 @@ public class LNGScenarioTransformer {
 			// Check here if price is indexed or expression
 			if (price.isLumpsum()) {
 				@Nullable
-				final
-				ILongCurve cooldownCurve = dateHelper.generateLongExpressionCurve(price.getExpression(), commodityIndices);
+				final ILongCurve cooldownCurve = dateHelper.generateLongExpressionCurve(price.getExpression(), commodityIndices);
 				if (cooldownCurve == null) {
 					throw new IllegalStateException("Unable to parse cooldown curve");
 				}
@@ -2725,12 +2724,16 @@ public class LNGScenarioTransformer {
 			@Nullable final ZonedDateTime to, @Nullable final Set<Port> ports, final boolean endCold, final long targetHeelInM3) {
 		ITimeWindow window = null;
 
+		boolean isOpenEnded = false;
 		if (from == null && to != null) {
 			window = builder.createTimeWindow(dateHelper.convertTime(dateHelper.getEarliestTime()), dateHelper.convertTime(to));
 		} else if (from != null && to == null) {
 			window = builder.createTimeWindow(dateHelper.convertTime(from), Integer.MIN_VALUE);
 		} else if (from != null && to != null) {
 			window = builder.createTimeWindow(dateHelper.convertTime(from), dateHelper.convertTime(to));
+		} else {
+			// No window
+			isOpenEnded = true;
 		}
 
 		final Set<IPort> portSet = new HashSet<IPort>();
@@ -2738,9 +2741,9 @@ public class LNGScenarioTransformer {
 			portSet.add(portAssociation.lookup(p));
 		}
 		if (ports.isEmpty()) {
-			return builder.createEndRequirement(null, window, endCold, targetHeelInM3);
+			return builder.createEndRequirement(null, window, endCold, targetHeelInM3, isOpenEnded);
 		} else {
-			return builder.createEndRequirement(portSet, window, endCold, targetHeelInM3);
+			return builder.createEndRequirement(portSet, window, endCold, targetHeelInM3, isOpenEnded);
 		}
 
 	}

@@ -50,6 +50,8 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.CachingVolu
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.CheckingVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.DefaultEndEventScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.IEndEventScheduler;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.CachingTimeWindowSchedulingCanalDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.ITimeWindowSchedulingCanalDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowSchedulingCanalDistanceProvider;
@@ -126,9 +128,9 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(DefaultDivertableDESShippingTimesCalculator.class).in(Singleton.class);
 
 		// Register default implementations
-		// bind(IVolumeAllocator.class).to(UnconstrainedVolumeAllocator.class).in(Singleton.class);
-		// bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
 		bind(IProfitAndLossCacheKeyDependencyLinker.class).to(NullCacheKeyDependencyLinker.class);
+
+		bind(IEndEventScheduler.class).to(DefaultEndEventScheduler.class);
 
 		// Default bindings for caches
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(Boolean.FALSE);
