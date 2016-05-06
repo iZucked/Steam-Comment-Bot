@@ -27,6 +27,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
+import com.google.inject.name.Names;
 import com.mmxlabs.lingo.its.internal.Activator;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -45,6 +46,7 @@ import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class LNGScenarioRunnerCreator {
@@ -247,6 +249,18 @@ public class LNGScenarioRunnerCreator {
 			@Override
 			@Nullable
 			public List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
+				if (moduleType == ModuleType.Module_LNGTransformerModule) {
+					return Collections.<@NonNull Module> singletonList(new AbstractModule() {
+
+						@Override
+						protected void configure() {
+							// Default bindings for caches
+							bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(Boolean.TRUE);
+							bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(Boolean.TRUE);
+							bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(Boolean.TRUE);
+						}
+					});
+				}
 				if (moduleType == ModuleType.Module_EvaluationParametersModule) {
 					return Collections.<@NonNull Module> singletonList(new AbstractModule() {
 
