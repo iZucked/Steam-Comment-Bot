@@ -56,7 +56,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
-import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -277,11 +276,23 @@ public class AnnotatedSolutionExporter {
 			final Comparator<Event> eventComparator = new Comparator<Event>() {
 				@Override
 				public int compare(final Event arg0, final Event arg1) {
+					if (arg0 instanceof StartEvent) {
+						return -1;
+					} else if (arg1 instanceof StartEvent) {
+						return 1;
+					}
+					
+					if (arg0 instanceof EndEvent) {
+						return 1;
+					} else if (arg1 instanceof EndEvent) {
+						return -1;
+					}
 					if (arg0.getStart().isBefore(arg1.getStart())) {
 						return -1;
 					} else if (arg0.getStart().isAfter(arg1.getStart())) {
 						return 1;
 					}
+
 
 					// Sort by Journey -> idle -> PortVisit
 					if (arg0 instanceof Journey) {
