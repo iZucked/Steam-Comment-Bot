@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProviderEditor;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -20,22 +22,22 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  * 
  */
 public final class TimeWindowDataComponentProvider implements ITimeWindowDataComponentProviderEditor {
-	private final Map<ISequenceElement, List<ITimeWindow>> timeWindowsMap;
+	private final Map<ISequenceElement, List<@NonNull ITimeWindow>> timeWindowsMap;
 
 	public TimeWindowDataComponentProvider() {
-		this.timeWindowsMap = new HashMap<ISequenceElement, List<ITimeWindow>>();
+		this.timeWindowsMap = new HashMap<>();
 	}
 
 	@Override
-	public List<ITimeWindow> getTimeWindows(final ISequenceElement element) {
+	public List<@NonNull ITimeWindow> getTimeWindows(final @NonNull ISequenceElement element) {
 		if (timeWindowsMap.containsKey(element)) {
-			return timeWindowsMap.get(element);
+			return timeWindowsMap.getOrDefault(element, Collections.emptyList());
 		}
 		return Collections.emptyList();
 	}
 
 	@Override
-	public void setTimeWindows(final ISequenceElement element, final List<ITimeWindow> timeWindows) {
+	public void setTimeWindows(final ISequenceElement element, final List<@NonNull ITimeWindow> timeWindows) {
 		this.timeWindowsMap.put(element, timeWindows);
 	}
 }
