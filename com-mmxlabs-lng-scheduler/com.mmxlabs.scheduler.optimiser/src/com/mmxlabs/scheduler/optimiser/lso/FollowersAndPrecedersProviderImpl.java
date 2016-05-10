@@ -44,32 +44,32 @@ public class FollowersAndPrecedersProviderImpl implements IFollowersAndPreceders
 	/**
 	 * A structure caching the output of the {@link LegalSequencingChecker}. If an element x is in the set mapped to by key y, x can legally follow y under some circumstance
 	 */
-	private final Map<ISequenceElement, Followers<ISequenceElement>> validFollowers = new HashMap<>();
-	private final Map<ISequenceElement, Followers<ISequenceElement>> validPreceders = new HashMap<>();
+	private final Map<@NonNull ISequenceElement, @NonNull Followers<@NonNull ISequenceElement>> validFollowers = new HashMap<>();
+	private final Map<@NonNull ISequenceElement, @NonNull Followers<@NonNull ISequenceElement>> validPreceders = new HashMap<>();
 
 	/**
 	 */
-	public Map<ISequenceElement, Followers<ISequenceElement>> getValidFollowers() {
+	public Map<@NonNull ISequenceElement, Followers<@NonNull ISequenceElement>> getValidFollowers() {
 		return validFollowers;
 	}
 
 	/**
 	 */
-	public Map<ISequenceElement, Followers<ISequenceElement>> getValidPreceeders() {
+	public Map<@NonNull ISequenceElement, Followers<@NonNull ISequenceElement>> getValidPreceeders() {
 		return validPreceders;
 	}
 
 	/**
 	 */
 	@Override
-	public Followers<ISequenceElement> getValidFollowers(@NonNull ISequenceElement element) {
+	public Followers<@NonNull ISequenceElement> getValidFollowers(@NonNull ISequenceElement element) {
 		return validFollowers.get(element);
 	}
 
 	/**
 	 */
 	@Override
-	public Followers<ISequenceElement> getValidPreceders(@NonNull ISequenceElement element) {
+	public Followers<@NonNull ISequenceElement> getValidPreceders(@NonNull ISequenceElement element) {
 		return validPreceders.get(element);
 	}
 
@@ -77,7 +77,7 @@ public class FollowersAndPrecedersProviderImpl implements IFollowersAndPreceders
 	public void buildCache() {
 
 		checker.disallowLateness();
-		
+
 		// Build of a map of special cargo elements for FOB/DES cargoes.
 		final Map<ISequenceElement, IResource> spotElementMap = new HashMap<>();
 		for (final IResource resource : optimisationData.getResources()) {
@@ -138,8 +138,8 @@ public class FollowersAndPrecedersProviderImpl implements IFollowersAndPreceders
 				}
 			}
 
-			validFollowers.put(e1, new Followers<ISequenceElement>(followers));
-			validPreceders.put(e1, new Followers<ISequenceElement>(preceders));
+			validFollowers.put(e1, new Followers<>(followers));
+			validPreceders.put(e1, new Followers<>(preceders));
 		}
 	}
 }

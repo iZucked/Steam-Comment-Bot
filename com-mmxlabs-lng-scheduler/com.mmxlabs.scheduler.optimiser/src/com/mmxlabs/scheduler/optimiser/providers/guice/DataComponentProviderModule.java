@@ -91,6 +91,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProvider;
@@ -101,6 +103,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProvide
 import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ISpotCharterInMarketProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ISpotCharterInMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
@@ -114,6 +118,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEdito
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImpl;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultNextLoadDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultPromptPeriodProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultRoundTripVesselPermissionProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultSpotCharterInMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultVesselCharterCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapActualsDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapAlternativeElementProviderEditor;
@@ -377,6 +383,14 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(DefaultPromptPeriodProviderEditor.class).in(Singleton.class);
 		bind(IPromptPeriodProvider.class).to(DefaultPromptPeriodProviderEditor.class);
 		bind(IPromptPeriodProviderEditor.class).to(DefaultPromptPeriodProviderEditor.class);
+
+		bind(DefaultRoundTripVesselPermissionProviderEditor.class).in(Singleton.class);
+		bind(IRoundTripVesselPermissionProvider.class).to(DefaultRoundTripVesselPermissionProviderEditor.class);
+		bind(IRoundTripVesselPermissionProviderEditor.class).to(DefaultRoundTripVesselPermissionProviderEditor.class);
+
+		bind(DefaultSpotCharterInMarketProviderEditor.class).in(Singleton.class);
+		bind(ISpotCharterInMarketProvider.class).to(DefaultSpotCharterInMarketProviderEditor.class);
+		bind(ISpotCharterInMarketProviderEditor.class).to(DefaultSpotCharterInMarketProviderEditor.class);
 	}
 
 	/**

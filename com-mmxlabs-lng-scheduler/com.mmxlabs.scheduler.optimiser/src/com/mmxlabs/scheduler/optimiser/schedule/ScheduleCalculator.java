@@ -235,9 +235,12 @@ public class ScheduleCalculator {
 			return desOrFobSchedule(resource, sequence, portTimesRecord);
 		}
 
-		// If this is the cargo shorts sequence, but we have no data (i.e. there are no short cargoes), return the basic data structure to avoid any exceptions
-		final boolean isShortsSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
-		if (isShortsSequence && arrivalTimes.length == 0) {
+		if (arrivalTimes == null) {
+			return new VolumeAllocatedSequence(resource, sequence, 0, Collections.<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> emptyList());
+		}
+		// If this a cargo round trip sequence, but we have no data (i.e. there are no cargoes), return the basic data structure to avoid any exceptions
+		final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
+		if (isRoundTripSequence && arrivalTimes.length == 0) {
 			return new VolumeAllocatedSequence(resource, sequence, 0, Collections.<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> emptyList());
 		}
 

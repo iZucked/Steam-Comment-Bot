@@ -6,6 +6,9 @@ package com.mmxlabs.scheduler.optimiser.components;
 
 import java.util.Collection;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 
 /**
@@ -27,22 +30,25 @@ public interface IStartEndRequirement {
 	 * 
 	 * @return
 	 */
-	public boolean hasTimeRequirement();
+	boolean hasTimeRequirement();
 
 	/**
 	 * Get the time window for this requirement, if there is one.
 	 * 
 	 * @return
 	 */
-	public ITimeWindow getTimeWindow();
+//	@Nullable
+	ITimeWindow getTimeWindow();
 
 	/**
 	 * The location from which this vessel must start or to which it must return
 	 * 
 	 * @return
 	 */
-	public IPort getLocation();
-	
-	public Collection<IPort> getLocations();
+	@Nullable
+	IPort getLocation();
+
+	@NonNull
+	Collection<@NonNull IPort> getLocations();
 
 }

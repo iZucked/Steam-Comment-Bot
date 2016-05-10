@@ -91,7 +91,7 @@ public class LatenessChecker {
 		}
 	}
 
-	private ITimeWindow getTW(@NonNull final IPortSlot portSlot, @NonNull final IResource resource) {
+	private @Nullable ITimeWindow getTW(@NonNull final IPortSlot portSlot, @NonNull final IResource resource) {
 		ITimeWindow tw = null;
 
 		if (portSlot instanceof StartPortSlot) {

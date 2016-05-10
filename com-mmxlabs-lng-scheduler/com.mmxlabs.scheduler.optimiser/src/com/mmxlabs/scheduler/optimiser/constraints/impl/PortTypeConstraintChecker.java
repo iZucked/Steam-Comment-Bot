@@ -142,7 +142,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		for (final ISequenceElement t : sequence) {
 			final PortType type = portTypeProvider.getPortType(t);
 			if (previous == null) {
-				if (!(((type == PortType.Start) && (instanceType != VesselInstanceType.SPOT_CHARTER)) || ((instanceType == VesselInstanceType.CARGO_SHORTS) && (type == PortType.Load))
+				if (!(((type == PortType.Start) && (instanceType != VesselInstanceType.SPOT_CHARTER)) || ((instanceType == VesselInstanceType.ROUND_TRIP) && (type == PortType.Load))
 						|| ((instanceType == VesselInstanceType.SPOT_CHARTER) && ((type == PortType.Load) || (type == PortType.End))))) {
 					// must either start with Start and be not a spot charter,
 					// or must start with a load or an End and be a spot charter
@@ -207,7 +207,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			case Waypoint:
 				break;
 			case CharterOut:
-			case Short_Cargo_End:
+			case Round_Trip_Cargo_End:
 			case DryDock:
 			case Maintenance:
 			case Other:
@@ -242,8 +242,8 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			previousType = type;
 		}
 
-		if ((instanceType == VesselInstanceType.CARGO_SHORTS && !(previousType == null || previousType == PortType.Short_Cargo_End))
-				|| (instanceType != VesselInstanceType.CARGO_SHORTS && previousType != PortType.End)) {
+		if ((instanceType == VesselInstanceType.ROUND_TRIP && !(previousType == null || previousType == PortType.Round_Trip_Cargo_End))
+				|| (instanceType != VesselInstanceType.ROUND_TRIP && previousType != PortType.End)) {
 			// Must end with an End type.
 			if (messages != null) {
 				messages.add("Sequence must end with PortType.End");

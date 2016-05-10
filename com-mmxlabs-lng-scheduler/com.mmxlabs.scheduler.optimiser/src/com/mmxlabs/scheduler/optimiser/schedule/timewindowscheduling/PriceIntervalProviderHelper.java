@@ -388,20 +388,6 @@ public class PriceIntervalProviderHelper {
 		return vessel;
 	}
 
-	@Nullable
-	IVesselClass getVesselClass(@NonNull final IResource resource) {
-		final IVesselAvailability availability = vesselProvider.getVesselAvailability(resource);
-		if (availability == null) {
-			return null;
-		}
-		final IVessel vessel = availability.getVessel();
-		if (vessel == null) {
-			return null;
-		}
-		final IVesselClass vesselClass = vessel.getVesselClass();
-		return vesselClass;
-	}
-
 	/**
 	 * Produce a list of the difference between purchase and sales price at hour points, when slots in a cargo are not price independent
 	 * 

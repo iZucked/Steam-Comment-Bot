@@ -207,7 +207,7 @@ public class TimeSortConstraintCheckerTest {
 		Mockito.when(vesselAvailability1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
 		Mockito.when(vesselProvider.getVesselAvailability(resource2)).thenReturn(vesselAvailability2);
-		Mockito.when(vesselAvailability2.getVesselInstanceType()).thenReturn(VesselInstanceType.CARGO_SHORTS);
+		Mockito.when(vesselAvailability2.getVesselInstanceType()).thenReturn(VesselInstanceType.ROUND_TRIP);
 
 		final IPortSlot slot1 = Mockito.mock(IPortSlot.class);
 		final IPortSlot slot2 = Mockito.mock(IPortSlot.class);

@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -18,6 +19,8 @@ public interface IBreakEvenEvaluator {
 
 	static final String MARKER = "?";
 
-	Pair<VoyagePlan, IAllocationAnnotation> processSchedule(int vesselStartTime, @NonNull IVesselAvailability vesselAvailability, @NonNull VoyagePlan vp, @NonNull IPortTimesRecord portTimesRecord);
+	@Nullable
+	Pair<@NonNull VoyagePlan, @NonNull IAllocationAnnotation> processSchedule(int vesselStartTime, @NonNull IVesselAvailability vesselAvailability, @NonNull VoyagePlan vp,
+			@NonNull IPortTimesRecord portTimesRecord);
 
 }

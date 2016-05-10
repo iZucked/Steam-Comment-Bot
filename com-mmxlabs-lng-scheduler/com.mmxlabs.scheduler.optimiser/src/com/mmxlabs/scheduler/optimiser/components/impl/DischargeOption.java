@@ -38,7 +38,7 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 
 	private int pricingDate = IPortSlot.NO_PRICING_DATE;
 
-	private PricingEventType pricingEvent = PricingEventType.START_OF_DISCHARGE;
+	private @NonNull PricingEventType pricingEvent = PricingEventType.START_OF_DISCHARGE;
 
 	// public DischargeOption() {
 	// setPortType(PortType.Discharge);
@@ -153,7 +153,7 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 		return pricingEvent;
 	}
 
-	public void setPricingEvent(PricingEventType pricingEvent) {
+	public void setPricingEvent(@NonNull PricingEventType pricingEvent) {
 		this.pricingEvent = pricingEvent;
 	}
 

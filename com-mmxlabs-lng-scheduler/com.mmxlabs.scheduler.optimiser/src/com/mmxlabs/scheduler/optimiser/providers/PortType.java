@@ -76,8 +76,8 @@ public enum PortType {
 	Virtual,
 
 	/**
-	 * Represents a type which is an end element for a cargo short. This will typically not be part of the normal sequence but added in. Such elements are not counted as must use.
+	 * Represents a type which is an end element for a round trip cargo. This will typically not be part of the normal sequence but added in. Such elements are not counted as must use.
 	 * 
 	 */
-	Short_Cargo_End;
+	Round_Trip_Cargo_End;
 }

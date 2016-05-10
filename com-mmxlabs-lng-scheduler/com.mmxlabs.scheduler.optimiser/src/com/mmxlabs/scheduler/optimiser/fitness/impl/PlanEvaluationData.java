@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -12,35 +15,39 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * Used for plan evaluation in the {@link VoyagePlanner} and Charter Out Generation
  */
 public class PlanEvaluationData {
-	
+
+	@NonNull
+	IPortTimesRecord portTimesRecord;
+	@NonNull
 	VoyagePlan plan;
+
+	@Nullable
+	IAllocationAnnotation allocation;
 	long endHeelVolumeInM3;
 	long startHeelVolumeInM3;
-	IAllocationAnnotation allocation;
-	IPortTimesRecord portTimesRecord;
 	boolean ignoreEndSet;
 
-	public PlanEvaluationData() {
-		plan = null;
-		endHeelVolumeInM3 = 0;
-		startHeelVolumeInM3 = 0;
-		allocation = null;
-		portTimesRecord = null;
-		ignoreEndSet = false;
+	public PlanEvaluationData(@NonNull IPortTimesRecord portTimesRecord, @NonNull VoyagePlan voyagePlan) {
+		this.plan = voyagePlan;
+		this.portTimesRecord = portTimesRecord;
+		this.ignoreEndSet = plan.isIgnoreEnd();
+		this.endHeelVolumeInM3 = plan.getRemainingHeelInM3();
+		this.startHeelVolumeInM3 = plan.getStartingHeelInM3();
+		this.allocation = null;
 	}
 
-	public VoyagePlan getPlan() {
+	public @NonNull VoyagePlan getPlan() {
 		return plan;
 	}
 
-	public void setPlan(VoyagePlan plan) {
+	public void setPlan(@NonNull VoyagePlan plan) {
 		this.plan = plan;
 	}
-	
+
 	public long getStartHeelVolumeInM3() {
 		return startHeelVolumeInM3;
 	}
-	
+
 	public void setStartHeelVolumeInM3(long startHeelVolumeInM3) {
 		this.startHeelVolumeInM3 = startHeelVolumeInM3;
 	}
@@ -61,11 +68,11 @@ public class PlanEvaluationData {
 		this.allocation = allocation;
 	}
 
-	public IPortTimesRecord getPortTimesRecord() {
+	public @NonNull IPortTimesRecord getPortTimesRecord() {
 		return portTimesRecord;
 	}
 
-	public void setPortTimesRecord(IPortTimesRecord portTimesRecord) {
+	public void setPortTimesRecord(@NonNull IPortTimesRecord portTimesRecord) {
 		this.portTimesRecord = portTimesRecord;
 	}
 

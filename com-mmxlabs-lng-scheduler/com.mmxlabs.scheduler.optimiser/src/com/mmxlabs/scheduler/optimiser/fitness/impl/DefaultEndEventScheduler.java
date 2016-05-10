@@ -114,7 +114,9 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 
 	private @Nullable List<@NonNull IPortTimesRecord> findBestRedeliveryTime(final IVesselAvailability vesselAvailability, final PortTimesRecord partialPortTimesRecord, final int scheduledTime,
 			final IPortSlot endEventSlot, final IEndRequirement endRequirement) {
-		final ITimeWindow window = endRequirement.getTimeWindow();
+		@Nullable
+		ITimeWindow timeWindow = endRequirement.getTimeWindow();
+		final ITimeWindow window = timeWindow;
 		final int extraExtent = window == null ? 1 : (scheduledTime >= window.getEnd() ? 0 : 1);
 		// Experimental speed - step code to replace VPO. -- WIP
 		if (false && extraExtent > 0) {
@@ -281,11 +283,11 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 						for (int speed = maxSpeed; speed >= loopMinSpeed; speed -= Math.min(100, Math.max(1, speed - loopMinSpeed))) {
 							final int availableTime = Calculator.getTimeFromSpeedDistance(speed, distance) + routeCostProvider.getRouteTransitTime(route, vessel);
 							/// Too soon, keep slowing down...
-							if (departureTime + availableTime < endRequirement.getTimeWindow().getStart()) {
+							if (departureTime + availableTime < timeWindow.getStart()) {
 								continue;
 							}
 							// Too slow now...
-							if (departureTime + availableTime > endRequirement.getTimeWindow().getEnd()) {
+							if (departureTime + availableTime > timeWindow.getEnd()) {
 								continue LOOP_ROUTE;
 							}
 
@@ -344,7 +346,7 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 
 			if (bestCost == Long.MAX_VALUE) {
 				// Lets return as fast as possible
-				final int availableTime = Math.max(endRequirement.getTimeWindow().getStart(),
+				final int availableTime = Math.max(timeWindow.getStart(),
 						prevArrivalTime + prevVisitDuration + distanceProvider.getQuickestTravelTime(vessel, from, to, prevArrivalTime + prevVisitDuration, maxSpeed).getSecond());
 				partialPortTimesRecord.setReturnSlotTime(endEventSlot, prevArrivalTime + prevVisitDuration + availableTime);
 				partialPortTimesRecord.setSlotDuration(endEventSlot, 0);

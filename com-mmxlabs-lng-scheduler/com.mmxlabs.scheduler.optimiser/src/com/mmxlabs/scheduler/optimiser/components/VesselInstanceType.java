@@ -45,8 +45,8 @@ public enum VesselInstanceType {
 	DES_PURCHASE,
 
 	/**
-	 * Sequence to store "short" cargoes.
+	 * Sequence cargoes evaluated on a round trip basis.
 	 * 
 	 */
-	CARGO_SHORTS
+	ROUND_TRIP
 }

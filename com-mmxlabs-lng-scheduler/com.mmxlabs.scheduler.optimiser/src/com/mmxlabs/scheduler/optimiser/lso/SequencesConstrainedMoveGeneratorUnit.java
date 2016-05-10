@@ -141,6 +141,11 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 			final ISequence sequence = owner.sequences.getSequence(sequence1);
 			final int beforeFirstCut = Math.min(position1, position2);
 			final int beforeSecondCut = Math.max(position1, position2) - 1;
+			// Zero length segment
+			if (beforeFirstCut == beforeSecondCut) {
+				return new NullMove3Over2();
+			}
+
 			final ISequenceElement firstElementInSegment = sequence.get(beforeFirstCut + 1);
 			final ISequenceElement lastElementInSegment = sequence.get(beforeSecondCut);
 
@@ -148,8 +153,9 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 			final Followers<ISequenceElement> followers = followersAndPreceders.getValidFollowers(lastElementInSegment);
 
 			// Pick one of these followers and find where it is at the moment
-			if (followers.size() == 0)
+			if (followers.size() == 0) {
 				return null;
+			}
 			final ISequenceElement precursor = followers.get(owner.random.nextInt(followers.size()));
 			final Pair<IResource, Integer> posPrecursor = owner.reverseLookup.get(precursor);
 

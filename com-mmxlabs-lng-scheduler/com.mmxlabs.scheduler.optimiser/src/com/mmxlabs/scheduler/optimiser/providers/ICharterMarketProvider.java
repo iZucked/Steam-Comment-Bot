@@ -52,6 +52,6 @@ public interface ICharterMarketProvider extends IDataComponentProvider {
 	int getCharterOutStartTime();
 
 	@NonNull
-	Set<IPort> getCharteringPortsForVesselClass(@NonNull IVesselClass vesselClass);
+	Set<@NonNull IPort> getCharteringPortsForVesselClass(@NonNull IVesselClass vesselClass);
 
 }

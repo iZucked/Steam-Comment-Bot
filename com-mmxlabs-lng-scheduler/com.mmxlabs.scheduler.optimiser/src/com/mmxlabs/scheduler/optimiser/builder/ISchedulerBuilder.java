@@ -224,7 +224,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	IVessel createVessel(String name, @NonNull IVesselClass vesselClass, long cargoCapacity);
+	IVessel createVessel(@NonNull String name, @NonNull IVesselClass vesselClass, long cargoCapacity);
 
 	@NonNull
 	IHeelOptions createHeelOptions(final long heelLimitInM3, final int heelCVValue, final int heelUnitPrice);
@@ -737,4 +737,10 @@ public interface ISchedulerBuilder {
 
 	void setDivertableDESAllowedRoute(@NonNull ILoadOption loadOption, @NonNull List<ERouteOption> allowedRoutes);
 
+	@NonNull
+	IVesselAvailability createRoundTripCargoVessel(@NonNull String name, @NonNull ISpotCharterInMarket market);
+
+	void bindSlotsToRoundTripVessel(@NonNull IVesselAvailability roundTripCargoVessel, @NonNull IPortSlot @NonNull... slots);
+
+	void setDefaultMarketForNominalCargoes(@NonNull ISpotCharterInMarket spotCharterInMarket);
 }

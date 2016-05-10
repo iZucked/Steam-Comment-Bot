@@ -7,6 +7,8 @@ package com.mmxlabs.scheduler.optimiser.providers.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -23,13 +25,13 @@ public class HashMapReturnElementProviderEditor implements IReturnElementProvide
 	final private HashMap<IPort, Map<IResource, ISequenceElement>> returnElements = new HashMap<IPort, Map<IResource, ISequenceElement>>();
 
 	@Override
-	public ISequenceElement getReturnElement(final IResource resource, final IPort port) {
+	public ISequenceElement getReturnElement(final @NonNull IResource resource, final @NonNull IPort port) {
 		final Map<IResource, ISequenceElement> byResource = returnElements.get(port);
 		return byResource == null ? null : byResource.get(resource);
 	}
 
 	@Override
-	public void setReturnElement(final IResource resource, final IPort port, final ISequenceElement element) {
+	public void setReturnElement(final @NonNull IResource resource, final @NonNull IPort port, final @NonNull ISequenceElement element) {
 		Map<IResource, ISequenceElement> byResource = returnElements.get(port);
 		if (byResource == null) {
 			byResource = new HashMap<IResource, ISequenceElement>();

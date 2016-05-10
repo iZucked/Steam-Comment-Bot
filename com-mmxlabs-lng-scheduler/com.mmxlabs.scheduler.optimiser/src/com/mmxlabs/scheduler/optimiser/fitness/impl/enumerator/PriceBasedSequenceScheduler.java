@@ -44,8 +44,9 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 
 	private void sequentialEarliestTimePriceBasedWindowTrimming(ISequences sequences, List<List<IPortTimeWindowsRecord>> portTimeWindowsRecords) {
 		for (int seqIndex = 0; seqIndex < sequences.size(); seqIndex++) {
-			for (int idx = 0; idx < portTimeWindowsRecords.get(seqIndex).size(); idx++) {
-				IPortTimeWindowsRecord portTimeWindowsRecord = portTimeWindowsRecords.get(seqIndex).get(idx);
+			List<IPortTimeWindowsRecord> list = portTimeWindowsRecords.get(seqIndex);
+			for (int idx = 0; idx < list.size(); idx++) {
+				IPortTimeWindowsRecord portTimeWindowsRecord = list.get(idx);
 				setFeasibleTimeWindowsUsingPrevious(portTimeWindowsRecord, seqIndex);
 				timeWindowsTrimming.processCargo(portTimeWindowsRecord);
 				updateTimeWindows(portTimeWindowsRecord, seqIndex);

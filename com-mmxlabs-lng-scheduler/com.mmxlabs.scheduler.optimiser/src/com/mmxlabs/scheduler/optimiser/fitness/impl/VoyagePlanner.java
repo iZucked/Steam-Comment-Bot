@@ -298,7 +298,7 @@ public class VoyagePlanner {
 		final List<@NonNull VoyagePlan> voyagePlansList = new LinkedList<>();
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		final boolean isShortsSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
+		final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
 
 		// Get starting heel for vessel
 		long heelVolumeInM3 = 0;
@@ -397,11 +397,11 @@ public class VoyagePlanner {
 					// set base fuel price in VPO
 					final Triple<IVessel, IResource, Integer> vesselTriple = setVesselAndBaseFuelPrice(portTimesRecord, vesselAvailability.getVessel(), resource);
 
-					final boolean shortCargoEnd = ((PortOptions) voyageOrPortOptions.get(0)).getPortSlot().getPortType() == PortType.Short_Cargo_End;
+					final boolean roundTripCargoEnd = ((PortOptions) voyageOrPortOptions.get(0)).getPortSlot().getPortType() == PortType.Round_Trip_Cargo_End;
 
-					// Special case for cargo shorts routes. There is no voyage between a Short_Cargo_End and the next load - which this current sequence will represent. However we do need to
-					// model the Short_Cargo_End for the VoyagePlanIterator to work correctly. Here we strip the voyage and make this a single element sequence.
-					if (!shortCargoEnd) {
+					// Special case for round trip cargo routes. There is no voyage between a Round_Trip_Cargo_End and the next load - which this current sequence will represent. However we do need to
+					// model the Round_Trip_Cargo_End for the VoyagePlanIterator to work correctly. Here we strip the voyage and make this a single element sequence.
+					if (!roundTripCargoEnd) {
 
 						final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, portTimesRecord, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay,
 								vesselAvailability.getVesselInstanceType(), sequenceContainsMMBTUVolumeOption, vesselTriple, vpoChoices);
@@ -418,7 +418,7 @@ public class VoyagePlanner {
 						assert heelVolumeInM3 >= 0;
 					}
 
-					if (isShortsSequence) {
+					if (isRoundTripSequence) {
 						voyagePlansList.get(voyagePlansList.size() - 1).setIgnoreEnd(false);
 					}
 				}
@@ -651,12 +651,13 @@ public class VoyagePlanner {
 		assert startHeelVolumeInM3 >= 0;
 		boolean planSet = false;
 		if (generatedCharterOutEvaluator != null) {
-			final List<Pair<VoyagePlan, IPortTimesRecord>> lp = generatedCharterOutEvaluator.processSchedule(vesselStartTime, startHeelVolumeInM3, vesselAvailability, plan, portTimesRecord);
+			final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> lp = generatedCharterOutEvaluator.processSchedule(vesselStartTime, startHeelVolumeInM3, vesselAvailability, plan,
+					portTimesRecord);
 			if (lp != null) {
-				for (final Pair<VoyagePlan, IPortTimesRecord> p : lp) {
-					final PlanEvaluationData evalData = new PlanEvaluationData();
-					evalData.plan = p.getFirst();
+				for (final Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> p : lp) {
+					final PlanEvaluationData evalData = new PlanEvaluationData(portTimesRecord, p.getFirst());
 					voyagePlansList.add(evalData.plan);
+
 					if (p.getSecond() instanceof IAllocationAnnotation) {
 						evalData.allocation = (IAllocationAnnotation) p.getSecond();
 					}
@@ -677,12 +678,11 @@ public class VoyagePlanner {
 
 		// Execute custom logic to manipulate the schedule and choices
 		if (breakEvenEvaluator != null) {
-			final Pair<VoyagePlan, IAllocationAnnotation> p = breakEvenEvaluator.processSchedule(vesselStartTime, vesselAvailability, plan, portTimesRecord);
+			final Pair<@NonNull VoyagePlan, @NonNull IAllocationAnnotation> p = breakEvenEvaluator.processSchedule(vesselStartTime, vesselAvailability, plan, portTimesRecord);
 			if (p != null) {
-				final PlanEvaluationData evalData = new PlanEvaluationData();
-
-				evalData.plan = p.getFirst();
+				final PlanEvaluationData evalData = new PlanEvaluationData(portTimesRecord, p.getFirst());
 				voyagePlansList.add(evalData.plan);
+
 				if (p.getSecond() instanceof IAllocationAnnotation) {
 					evalData.allocation = (IAllocationAnnotation) p.getSecond();
 					evalData.portTimesRecord = p.getSecond();
@@ -702,10 +702,9 @@ public class VoyagePlanner {
 		}
 
 		if (!planSet) {
-			final PlanEvaluationData evalData = new PlanEvaluationData();
-
-			evalData.plan = plan;
+			final PlanEvaluationData evalData = new PlanEvaluationData(portTimesRecord, plan);
 			voyagePlansList.add(evalData.plan);
+
 			evalData.allocation = volumeAllocator.get().allocate(vesselAvailability, vesselStartTime, plan, portTimesRecord);
 			if (evalData.allocation != null) {
 				evalData.portTimesRecord = evalData.allocation;
@@ -757,7 +756,7 @@ public class VoyagePlanner {
 			@NonNull final IVoyagePlanOptimiser voyagePlanOptimiser) {
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		final boolean isShortsSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
+		final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
 
 		final List<@NonNull IOptionsSequenceElement> voyageOrPortOptions = new ArrayList<>(5);
 
@@ -831,7 +830,7 @@ public class VoyagePlanner {
 		// Populate final plan details
 		if (voyageOrPortOptions.size() > 0) {
 			// set base fuel price in VPO
-			final Triple<IVessel, IResource, Integer> vesselTriple = setVesselAndBaseFuelPrice(portTimesRecord, vesselAvailability.getVessel(), resource);
+			final Triple<@NonNull IVessel, @Nullable IResource, @NonNull Integer> vesselTriple = setVesselAndBaseFuelPrice(portTimesRecord, vesselAvailability.getVessel(), resource);
 			final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, portTimesRecord, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay,
 					vesselAvailability.getVesselInstanceType(), sequenceContainsMMBTUVolumeOption, vesselTriple, vpoChoices);
 			// voyagePlanOptimiser.reset();
@@ -839,7 +838,7 @@ public class VoyagePlanner {
 				return null;
 			}
 
-			if (isShortsSequence) {
+			if (isRoundTripSequence) {
 				plan.setIgnoreEnd(false);
 			}
 			return plan;
@@ -1015,7 +1014,7 @@ public class VoyagePlanner {
 			case CharterOut:
 			case DryDock:
 			case Maintenance:
-			case Short_Cargo_End:
+			case Round_Trip_Cargo_End:
 				state = VesselState.Ballast;
 				possiblePartialDischargeIndex = -1; // forget about any previous discharge, it was correctly set to a full discharge
 				break;

@@ -115,8 +115,8 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 			final PortType currentType = portTypeProvider.getPortType(t);
 
 			final IPortSlot currentSlot = portSlotProvider.getPortSlot(t);
-			final ITimeWindow tw = currentSlot.getTimeWindow();
-			if (instanceType != VesselInstanceType.CARGO_SHORTS || (lastType == PortType.Load && currentType == PortType.Discharge)) {
+			final ITimeWindow tw = currentType == PortType.Round_Trip_Cargo_End ? null : currentSlot.getTimeWindow();
+			if (instanceType != VesselInstanceType.ROUND_TRIP || (lastType == PortType.Load && currentType == PortType.Discharge)) {
 
 				if (lastTimeWindow != null && tw != null) {
 					if (tw.getEnd() < lastTimeWindow.getStart()) {
@@ -138,7 +138,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 	@Override
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final VesselInstanceType instanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
-		if (instanceType == VesselInstanceType.CARGO_SHORTS) {
+		if (instanceType == VesselInstanceType.ROUND_TRIP) {
 			// Cargo pairs are independent of each other, so only check real load->discharge state and ignore rest
 			final PortType t1 = portTypeProvider.getPortType(first);
 			final PortType t2 = portTypeProvider.getPortType(second);

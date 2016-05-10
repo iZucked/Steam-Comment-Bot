@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IResource;
 
 /**
@@ -20,6 +22,7 @@ public interface IVessel {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	String getName();
 
 	/**
@@ -27,6 +30,7 @@ public interface IVessel {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	IVesselClass getVesselClass();
 
 	/**
@@ -35,6 +39,5 @@ public interface IVessel {
 	 * @return
 	 */
 	long getCargoCapacity();
-
 
 }

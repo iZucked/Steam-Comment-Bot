@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.components;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -25,10 +26,11 @@ public interface IPortSlot {
 	String getId();
 
 	@NonNull
-
 	IPort getPort();
 
+//	@Nullable
 	ITimeWindow getTimeWindow();
 
+	@NonNull
 	PortType getPortType();
 }

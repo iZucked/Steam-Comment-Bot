@@ -7,7 +7,6 @@ package com.mmxlabs.scheduler.optimiser.constraints.impl;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -26,7 +25,6 @@ import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
@@ -34,7 +32,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -62,10 +59,6 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 
 	@NonNull
 	private final String name;
-
-	@Inject
-	@NonNull
-	private IRouteCostProvider routeCostProvider;
 
 	@Inject
 	@NonNull
@@ -217,9 +210,12 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 			return true;
 		}
 
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS) {
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 			// Ignore problems with short cargoes between discharge and next load
 			if (firstType == PortType.Start && secondType == PortType.End) {
+				return true;
+			}
+			if (firstType == PortType.Round_Trip_Cargo_End || secondType == PortType.Round_Trip_Cargo_End) {
 				return true;
 			}
 			if (firstType == PortType.Discharge) {
@@ -236,7 +232,6 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 
 		final int voyageStartTime = tw1.getStart() + elementDurationProvider.getElementDuration(first, resource);
 		Integer travelTime = null;
-		IVessel vessel = vesselAvailability.getVessel();
 		// TODO: Use this loop once rest of code if verified correct.
 		// for (final String route : distanceProvider.getRoutes()) {
 		// int routeTravelTime = distanceProvider.getTravelTime(route, vessel, slot1.getPort(), slot2.getPort(), voyageStartTime, resourceMaxSpeed);
@@ -281,6 +276,9 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
 		final ITimeWindow tw1 = slot1.getTimeWindow();
 		final ITimeWindow tw2 = slot2.getTimeWindow();
+
+		assert tw1 != null;
+		assert tw2 != null;
 		final int visitDuration = elementDurationProvider.getElementDuration(first, resource);
 
 		final int distance = distanceProvider.getDistance(ERouteOption.DIRECT, slot1.getPort(), slot2.getPort(), tw1.getStart() + visitDuration);

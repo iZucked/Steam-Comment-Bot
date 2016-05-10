@@ -197,7 +197,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		}
 		for (final IResource resource : data.getResources()) {
 			final IVesselAvailability vessel = vesselProvider.getVesselAvailability(resource);
-			if (vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS) {
+			if (vessel.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 				this.swapElementsMoveGenerator = new SwapElementsInSequenceMoveGeneratorUnit(this);
 				injector.injectMembers(swapElementsMoveGenerator);
 				break;

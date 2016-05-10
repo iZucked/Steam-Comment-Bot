@@ -20,6 +20,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -218,7 +219,10 @@ public class ProfitAndLossCalculator {
 				} else {
 					dischargeOption = new MarkToMarketDischargeSlot(market, loadOption);
 				}
-				time = loadOption.getTimeWindow().getStart();
+				@Nullable
+				ITimeWindow timeWindow = loadOption.getTimeWindow();
+				assert timeWindow != null;
+				time = timeWindow.getStart();
 				vesselAvailability = new MarkToMarketVesselAvailability(market, loadOption);
 			} else if (portSlot instanceof IDischargeOption) {
 				dischargeOption = (IDischargeOption) portSlot;
@@ -227,7 +231,10 @@ public class ProfitAndLossCalculator {
 				} else {
 					loadOption = new MarkToMarketLoadSlot(market, dischargeOption);
 				}
-				time = dischargeOption.getTimeWindow().getStart();
+				@Nullable
+				ITimeWindow timeWindow = dischargeOption.getTimeWindow();
+				assert timeWindow != null;
+				time = timeWindow.getStart();
 				vesselAvailability = new MarkToMarketVesselAvailability(market, dischargeOption);
 			} else {
 				continue;

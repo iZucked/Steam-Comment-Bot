@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -105,13 +106,16 @@ public class PortTimesPlanner {
 			if (!startSet && !(thisPortSlot instanceof StartPortSlot)) {
 
 				// Find latest window start for all slots in FOB/DES combo. However if DES divertable, ignore.
+				@Nullable
+				ITimeWindow timeWindow = thisPortSlot.getTimeWindow();
+				assert timeWindow != null;
 				if (thisPortSlot instanceof ILoadOption) {
 					// Divertible DES has real time window.
 					if (!shippingHoursRestrictionProvider.isDivertable(element)) {
 						if (actualsDataProvider.hasActuals(thisPortSlot)) {
 							startTime = actualsDataProvider.getArrivalTime(thisPortSlot);
 						} else {
-							final int windowStart = thisPortSlot.getTimeWindow().getStart();
+							final int windowStart = timeWindow.getStart();
 							startTime = Math.max(windowStart, startTime);
 						}
 					}
@@ -122,7 +126,7 @@ public class PortTimesPlanner {
 					} else {
 						// Divertible FOB has sales time window
 						// if (!shippingHoursRestrictionProvider.isDivertable(element)) {
-						final int windowStart = thisPortSlot.getTimeWindow().getStart();
+						final int windowStart = timeWindow.getStart();
 						startTime = Math.max(windowStart, startTime);
 					}
 				}
@@ -169,18 +173,17 @@ public class PortTimesPlanner {
 		assert vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET //
 				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER //
 				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER //
-				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
+				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
 
-		final boolean isShortsSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
+		final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
 
 		final List<@NonNull IPortTimesRecord> portTimesRecords = new LinkedList<>();
 
 		// Find the break points for this sequence
-		final boolean[] breakSequence = findSequenceBreaks(sequence);
+		final boolean[] breakSequence = findSequenceBreaks(sequence, isRoundTripSequence);
 
 		// Create and add first record to the list.
 		PortTimesRecord portTimesRecord = new PortTimesRecord();
-		portTimesRecords.add(portTimesRecord);
 
 		// Used for cargo short end of sequence checks
 		IPortSlot prevPortSlot = null;
@@ -199,21 +202,24 @@ public class PortTimesPlanner {
 
 			// Set current slot arrival time and duration (if not end)
 			if (breakSequence[idx]) {
-				if (isShortsSequence && portType == PortType.Short_Cargo_End) {
+				if (isRoundTripSequence && portType == PortType.Round_Trip_Cargo_End) {
 					assert prevPortSlot != null;
 					final IPortSlot startPortSlot = portTimesRecord.getSlots().get(0);
 					int prevArrivalTime = portTimesRecord.getSlotTime(prevPortSlot);
 					int prevVisitDuration = portTimesRecord.getSlotDuration(prevPortSlot);
 					final int availableTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), prevPortSlot.getPort(), startPortSlot.getPort(),
 							prevArrivalTime + prevVisitDuration, vesselAvailability.getVessel().getVesselClass().getMaxSpeed()).getSecond();
-					final int shortCargoReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime;
+					final int roundTripReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime;
 
-					portTimesRecord.setReturnSlotTime(thisPortSlot, shortCargoReturnArrivalTime);
+					portTimesRecord.setReturnSlotTime(thisPortSlot, roundTripReturnArrivalTime);
+					prevPortSlot = null;
 				} else if (portType == PortType.End) {
+					portTimesRecords.add(portTimesRecord);
 					// Delegate to the end event schedule to determine correct end time.
 					portTimesRecords.addAll(endEventScheduler.scheduleEndEvent(resource, vesselAvailability, portTimesRecord, arrivalTimes[idx], thisPortSlot));
 					// Ensure this is the end of the loop
 					assert (sequence.size() == idx + 1);
+
 					break;
 				} else {
 					portTimesRecord.setReturnSlotTime(thisPortSlot, arrivalTimes[idx]);
@@ -227,9 +233,12 @@ public class PortTimesPlanner {
 
 			// Is this the end of the sequence? If so, start new port times record
 			if (breakSequence[idx]) {
+				portTimesRecords.add(portTimesRecord);
 
-				// This should have been caught above!
-				assert (sequence.size() != idx + 1);
+				if (!isRoundTripSequence) {
+					// This should have been caught above!
+					assert (sequence.size() != idx + 1);
+				}
 				// Is this the last element? Do not start a new PortTimesRecord and break out instead
 				if (sequence.size() == idx + 1) {
 					break;
@@ -237,10 +246,12 @@ public class PortTimesPlanner {
 
 				// Reset object ref
 				portTimesRecord = new PortTimesRecord();
-				portTimesRecord.setSlotTime(thisPortSlot, arrivalTimes[idx]);
-				portTimesRecord.setSlotDuration(thisPortSlot, visitDuration);
+				if (!isRoundTripSequence) {
+					// Round trip cargoes skip this element
+					portTimesRecord.setSlotTime(thisPortSlot, arrivalTimes[idx]);
+					portTimesRecord.setSlotDuration(thisPortSlot, visitDuration);
+				}
 
-				portTimesRecords.add(portTimesRecord);
 			}
 
 			// Setup for next iteration
@@ -256,7 +267,7 @@ public class PortTimesPlanner {
 	 * @param sequence
 	 * @return
 	 */
-	public boolean @NonNull [] findSequenceBreaks(final @NonNull ISequence sequence) {
+	public boolean @NonNull [] findSequenceBreaks(final @NonNull ISequence sequence, boolean isRoundTripSequence) {
 		final boolean @NonNull [] result = new boolean[sequence.size()];
 
 		int idx = 0;
@@ -264,13 +275,13 @@ public class PortTimesPlanner {
 			final PortType portType = portTypeProvider.getPortType(element);
 			switch (portType) {
 			case Load:
-				result[idx] = (idx > 0); // don't break on first load port
+				result[idx] = !isRoundTripSequence && (idx > 0); // don't break on first load port
 				break;
 			case CharterOut:
 			case DryDock:
 			case Other:
 			case Maintenance:
-			case Short_Cargo_End:
+			case Round_Trip_Cargo_End:
 			case End:
 				result[idx] = true;
 				break;
