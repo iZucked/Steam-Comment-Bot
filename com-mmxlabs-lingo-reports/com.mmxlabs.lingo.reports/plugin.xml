@@ -38,15 +38,6 @@
             name="Reports"
             id="com.mmxlabs.shiplingo.platform.reports">
       </category>
-      <!--
-      <view
-            name="Index Exposures"
-            icon="icons/cview16/exec_statistic_view.gif"
-            category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.views.standard.ExposureReportView"
-            id="com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView">
-      </view>
-      -->
       <view
             name="Volume Tracking"
             icon="icons/cview16/exec_statistic_view.gif"
@@ -587,6 +578,10 @@
       <PluginXMLEnablement
             feature="difftools"
             plugin.xml="difftools.plugin.xml">
+      </PluginXMLEnablement>
+      <PluginXMLEnablement
+            feature="exposures"
+            plugin.xml="exposures.plugin.xml">
       </PluginXMLEnablement>
       <PluginXMLEnablement
             feature="optimisation-charter-out-generation"
