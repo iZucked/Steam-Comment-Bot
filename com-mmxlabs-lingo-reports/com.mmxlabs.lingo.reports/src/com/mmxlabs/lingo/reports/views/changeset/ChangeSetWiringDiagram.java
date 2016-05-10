@@ -172,7 +172,7 @@ public class ChangeSetWiringDiagram implements PaintListener {
 		for (ChangeSet changeSet : root.getChangeSets()) {
 			EList<ChangeSetRow> rows = diffToBase ? changeSet.getChangeSetRowsToBase() : changeSet.getChangeSetRowsToPrevious();
 			for (final ChangeSetRow row : rows) {
-				
+
 				if (!row.isWiringChange()) {
 					continue;
 				}
@@ -343,7 +343,7 @@ public class ChangeSetWiringDiagram implements PaintListener {
 		// Find the row at the top of the table and get it's "height" so we can adjust it later
 		ScrollBar verticalBar = grid.getVerticalBar();
 		final int vPod = verticalBar == null ? 0 : verticalBar.getSelection();
-		final int hOffset = verticalBar == null ? 0 : (heights[vPod]) - grid.getHeaderHeight();
+		final int hOffset = (verticalBar == null || vPod >= heights.length) ? 0 : (heights[vPod]) - grid.getHeaderHeight();
 		// Pass 2 get mid-points
 		for (int idx = 0; idx < Math.min(heights.length, items.length); ++idx) {
 			final GridItem item = items[idx];
