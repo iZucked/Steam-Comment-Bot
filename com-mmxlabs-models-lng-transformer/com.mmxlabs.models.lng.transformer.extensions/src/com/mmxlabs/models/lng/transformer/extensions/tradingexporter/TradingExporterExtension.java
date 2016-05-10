@@ -244,6 +244,10 @@ public class TradingExporterExtension implements IExporterExtension {
 		LOOP_OUTER: for (final Map.Entry<IResource, ISequence> e : annotatedSolution.getFullSequences().getSequences().entrySet()) {
 			final IResource res = e.getKey();
 			final ISequence seq = e.getValue();
+			if (seq.size() == 0) {
+				continue;
+			}
+			
 			if (seq.get(0) == element) {
 				// Found the sequence, so no find the matching EMF sequence
 				for (final Sequence sequence : outputSchedule.getSequences()) {

@@ -161,7 +161,7 @@ public class RestrictedElementsConstraintCheckerTest {
 		Mockito.when(vesselAvailability1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
 		Mockito.when(vesselProvider.getVesselAvailability(resource2)).thenReturn(vesselAvailability2);
-		Mockito.when(vesselAvailability2.getVesselInstanceType()).thenReturn(VesselInstanceType.CARGO_SHORTS);
+		Mockito.when(vesselAvailability2.getVesselInstanceType()).thenReturn(VesselInstanceType.ROUND_TRIP);
 
 		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> emptySet());
 		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> singleton(element1));

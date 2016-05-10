@@ -88,7 +88,7 @@ public class RestrictedElementsConstraintChecker implements IPairwiseConstraintC
 	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 
 		final VesselInstanceType instanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
-		if (instanceType == VesselInstanceType.CARGO_SHORTS) {
+		if (instanceType == VesselInstanceType.ROUND_TRIP) {
 			// Cargo pairs are independent of each other, so only check real load->discharge state and ignore rest
 			final PortType t1 = portTypeProvider.getPortType(first);
 			final PortType t2 = portTypeProvider.getPortType(second);

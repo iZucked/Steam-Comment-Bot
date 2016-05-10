@@ -108,7 +108,6 @@ public class LNGEvaluationTransformerUnit implements ILNGStateTransformerUnit {
 		return injector;
 	}
 
-	@SuppressWarnings("null")
 	@NonNull
 	public IEvaluationContext getEvaluationContext() {
 		return injector.getInstance(IEvaluationContext.class);

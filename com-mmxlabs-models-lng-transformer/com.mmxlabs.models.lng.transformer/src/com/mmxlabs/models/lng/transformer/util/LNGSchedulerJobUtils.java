@@ -70,7 +70,6 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
-import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess.Phase;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
@@ -471,12 +470,12 @@ public class LNGSchedulerJobUtils {
 		if (cmd.isEmpty()) {
 			return IdentityCommand.INSTANCE;
 		}
-		
+
 		return cmd;
 
 	}
 
-	public static IAnnotatedSolution evaluateCurrentState(@NonNull final Injector injector, @NonNull final IOptimisationData data, @NonNull final ISequences rawSequences) {
+	public static @NonNull IAnnotatedSolution evaluateCurrentState(@NonNull final Injector injector, @NonNull final IOptimisationData data, @NonNull final ISequences rawSequences) {
 		/**
 		 * Start the full evaluation process.
 		 */

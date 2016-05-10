@@ -148,6 +148,8 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 
 						ILoadOption alternativeSlot;
 						final ITimeWindow currentWindow = loadOption.getTimeWindow();
+						assert currentWindow != null;
+
 						final String id = loadOption.getId() + "-alt";
 						if (loadSlot.isDESPurchase()) {
 							final ITimeWindow baseTimeWindow = shippingHoursRestrictionProvider.getBaseTime(elementA);
@@ -191,8 +193,8 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 							final int shippingHours = shippingHoursRestrictionProvider.getShippingHoursRestriction(elementA);
 
 							final ITimeWindow window = builder.createTimeWindow(currentWindow.getStart(), currentWindow.getEnd() + shippingHours);
-							alternativeSlot = builder.createDESPurchaseLoadSlot(id, loadOption.getPort(), window, minVolume, maxVolume, priceCalculator, cargoCVValue,
-									loadSlot.getSlotOrPortDuration(), IPortSlot.NO_PRICING_DATE, loadOption.getPricingEvent(), slotIsOptional, slotIsLocked, isSpotSlot, loadOption.isVolumeSetInM3());
+							alternativeSlot = builder.createDESPurchaseLoadSlot(id, loadOption.getPort(), window, minVolume, maxVolume, priceCalculator, cargoCVValue, loadSlot.getSlotOrPortDuration(),
+									IPortSlot.NO_PRICING_DATE, loadOption.getPricingEvent(), slotIsOptional, slotIsLocked, isSpotSlot, loadOption.isVolumeSetInM3());
 
 							generatedOptions.add(alternativeSlot);
 

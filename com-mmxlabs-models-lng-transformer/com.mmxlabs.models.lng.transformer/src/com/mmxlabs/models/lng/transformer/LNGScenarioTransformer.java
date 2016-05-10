@@ -131,6 +131,7 @@ import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
@@ -284,10 +285,8 @@ public class LNGScenarioTransformer {
 	private final Set<ITransformerExtension> allTransformerExtensions = new LinkedHashSet<ITransformerExtension>();
 
 	@NonNull
-	private final Map<VesselClass, List<IVesselAvailability>> spotVesselAvailabilitiesByClass = new HashMap<>();
-
-	@NonNull
 	private final Map<NonNullPair<CharterInMarket, Integer>, IVesselAvailability> spotCharterInToAvailability = new HashMap<>();
+	private final Map<CharterInMarket, IVesselAvailability> spotCharterInToShortCargoAvailability = new HashMap<>();
 
 	@NonNull
 	private final List<IVesselAvailability> allVesselAvailabilities = new ArrayList<IVesselAvailability>();
@@ -696,7 +695,7 @@ public class LNGScenarioTransformer {
 
 		buildDistances(builder, portAssociation, allPorts, portIndices, vesselAssociations.getSecond(), vesselAssociations.getFirst(), modelEntityMap);
 
-		buildCargoes(builder, portAssociation, vesselAssociations.getSecond(), contractTransformers, modelEntityMap);
+		buildCargoes(builder, portAssociation, vesselAssociations.getSecond(), vesselAssociations.getFirst(), contractTransformers, modelEntityMap);
 
 		buildVesselEvents(builder, portAssociation, vesselAssociations.getFirst(), modelEntityMap);
 
@@ -786,31 +785,40 @@ public class LNGScenarioTransformer {
 				continue;
 			}
 
-			final boolean freeze = assignableElement.isLocked();
-			final Set<Slot> lockedSlots = checkAndCollectLockedSlots(assignableElement);
-			if (!freeze && lockedSlots.isEmpty()) {
-				continue;
-			}
-
+			boolean isNominalVessel = false;
 			IVesselAvailability vesselAvailability = null;
 			if (vesselAssignmentType instanceof VesselAvailability) {
 				final VesselAvailability va = (VesselAvailability) vesselAssignmentType;
 				vesselAvailability = modelEntityMap.getOptimiserObject(va, IVesselAvailability.class);
 			}
 			if (vesselAssignmentType instanceof CharterInMarket) {
-				final NonNullPair<CharterInMarket, Integer> key = new NonNullPair<>((CharterInMarket) vesselAssignmentType, assignableElement.getSpotIndex());
+				final int spotIndex = assignableElement.getSpotIndex();
+				final NonNullPair<CharterInMarket, Integer> key = new NonNullPair<>((CharterInMarket) vesselAssignmentType, spotIndex);
 				vesselAvailability = spotCharterInToAvailability.get(key);
+				if (vesselAvailability == null) {
+					vesselAvailability = spotCharterInToShortCargoAvailability.get(vesselAssignmentType);
+				}
+				isNominalVessel = spotIndex == -1;
 			}
 
 			if (vesselAvailability == null) {
 				continue;
 			}
 
+			final boolean freeze = assignableElement.isLocked();
+			final Set<Slot> lockedSlots = checkAndCollectLockedSlots(assignableElement);
+			boolean freezeElements = (!(!freeze && lockedSlots.isEmpty()));
+
 			if (assignableElement instanceof Cargo) {
 				final Cargo cargo = (Cargo) assignableElement;
 				IPortSlot prevSlot = null;
 				for (final Slot slot : cargo.getSortedSlots()) {
 					final IPortSlot portSlot = modelEntityMap.getOptimiserObjectNullChecked(slot, IPortSlot.class);
+
+					if (isNominalVessel) {
+						builder.bindSlotsToRoundTripVessel(vesselAvailability, portSlot);
+					}
+
 					if (freeze || lockedSlots.contains(slot)) {
 						// bind slots to vessel
 						builder.freezeSlotToVesselAvailability(portSlot, vesselAvailability);
@@ -825,9 +833,11 @@ public class LNGScenarioTransformer {
 					prevSlot = portSlot;
 				}
 			} else if (assignableElement instanceof VesselEvent) {
-				final IVesselEventPortSlot slot = modelEntityMap.getOptimiserObject(assignableElement, IVesselEventPortSlot.class);
-				if (slot != null) {
-					builder.freezeSlotToVesselAvailability(slot, vesselAvailability);
+				if (freezeElements) {
+					final IVesselEventPortSlot slot = modelEntityMap.getOptimiserObject(assignableElement, IVesselEventPortSlot.class);
+					if (slot != null) {
+						builder.freezeSlotToVesselAvailability(slot, vesselAvailability);
+					}
 				}
 			}
 		}
@@ -911,7 +921,8 @@ public class LNGScenarioTransformer {
 	 * @param defaultRewiring
 	 */
 	private void buildCargoes(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @NonNull final Association<Vessel, IVessel> vesselAssociation,
-			@NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap) {
+			@NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation, @NonNull final Collection<IContractTransformer> contractTransformers,
+			@NonNull final ModelEntityMap modelEntityMap) {
 
 		// All Discharge ports - for use with
 		final Set<IPort> allDischargePorts = new HashSet<IPort>();
@@ -950,7 +961,7 @@ public class LNGScenarioTransformer {
 				if (slot instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) slot;
 					{
-						final ILoadOption load = createLoadOption(builder, portAssociation, vesselAssociation, contractTransformers, modelEntityMap, loadSlot);
+						final ILoadOption load = createLoadOption(builder, portAssociation, vesselAssociation, vesselClassAssociation, contractTransformers, modelEntityMap, loadSlot);
 						usedLoadSlots.add(loadSlot);
 						loadOptions.add(load);
 						slotMap.put(loadSlot, load);
@@ -960,7 +971,8 @@ public class LNGScenarioTransformer {
 				} else if (slot instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 					{
-						final IDischargeOption discharge = createDischargeOption(builder, portAssociation, vesselAssociation, contractTransformers, modelEntityMap, dischargeSlot);
+						final IDischargeOption discharge = createDischargeOption(builder, portAssociation, vesselAssociation, vesselClassAssociation, contractTransformers, modelEntityMap,
+								dischargeSlot);
 						usedDischargeSlots.add(dischargeSlot);
 						dischargeOptions.add(discharge);
 						slotMap.put(dischargeSlot, discharge);
@@ -1032,7 +1044,7 @@ public class LNGScenarioTransformer {
 			{
 
 				// Make optional
-				load = createLoadOption(builder, portAssociation, vesselAssociation, contractTransformers, modelEntityMap, loadSlot);
+				load = createLoadOption(builder, portAssociation, vesselAssociation, vesselClassAssociation, contractTransformers, modelEntityMap, loadSlot);
 				if (!loadSlot.isOptional()) {
 					builder.setSoftRequired(load);
 				}
@@ -1054,7 +1066,7 @@ public class LNGScenarioTransformer {
 
 			final IDischargeOption discharge;
 			{
-				discharge = createDischargeOption(builder, portAssociation, vesselAssociation, contractTransformers, modelEntityMap, dischargeSlot);
+				discharge = createDischargeOption(builder, portAssociation, vesselAssociation, vesselClassAssociation, contractTransformers, modelEntityMap, dischargeSlot);
 				if (!dischargeSlot.isOptional()) {
 					builder.setSoftRequired(discharge);
 				}
@@ -1081,7 +1093,10 @@ public class LNGScenarioTransformer {
 
 			return twUTC;
 		} else {
-			return optimiserSlot.getTimeWindow();
+			@Nullable
+			final ITimeWindow timeWindow = optimiserSlot.getTimeWindow();
+			assert timeWindow != null;
+			return timeWindow;
 		}
 
 	}
@@ -1192,8 +1207,8 @@ public class LNGScenarioTransformer {
 
 	@NonNull
 	private IDischargeOption createDischargeOption(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation,
-			@NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap,
-			@NonNull final DischargeSlot dischargeSlot) {
+			@NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation,
+			@NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap, @NonNull final DischargeSlot dischargeSlot) {
 		final IDischargeOption discharge;
 		final String elementName = String.format("%s-%s", dischargeSlot.isFOBSale() ? "FS" : "DS", dischargeSlot.getName());
 
@@ -1348,15 +1363,15 @@ public class LNGScenarioTransformer {
 		if (cancellationCurve != null) {
 			cancellationFeeProviderEditor.setCancellationExpression(discharge, cancellationCurve);
 		}
-		applySlotVesselRestrictions(dischargeSlot, discharge, vesselAssociation);
+		applySlotVesselRestrictions(dischargeSlot, discharge, vesselAssociation, vesselClassAssociation);
 
 		return discharge;
 	}
 
 	@NonNull
 	private ILoadOption createLoadOption(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation,
-			@NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap,
-			@NonNull final LoadSlot loadSlot) {
+			@NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation,
+			@NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap, @NonNull final LoadSlot loadSlot) {
 		final ILoadOption load;
 		final String elementName = String.format("%s-%s", loadSlot.isDESPurchase() ? "DP" : "FP", loadSlot.getName());
 		usedIDStrings.add(elementName);
@@ -1490,53 +1505,44 @@ public class LNGScenarioTransformer {
 			cancellationFeeProviderEditor.setCancellationExpression(load, cancellationCurve);
 		}
 
-		applySlotVesselRestrictions(loadSlot, load, vesselAssociation);
+		applySlotVesselRestrictions(loadSlot, load, vesselAssociation, vesselClassAssociation);
 
 		return load;
 	}
 
-	private void applySlotVesselRestrictions(final Slot modelSlot, final IPortSlot optimiserSlot, final Association<Vessel, IVessel> vesselAssociation) {
+	private void applySlotVesselRestrictions(final @NonNull Slot modelSlot, final @NonNull IPortSlot optimiserSlot, final Association<Vessel, IVessel> vesselAssociation,
+			final Association<VesselClass, IVesselClass> vesselClassAssociation) {
 
 		final EList<AVesselSet<Vessel>> allowedVessels = modelSlot.getAllowedVessels();
 		if (!allowedVessels.isEmpty()) {
-			final Set<IVesselAvailability> vesselsForSlot = new HashSet<>();
+			final Set<IVesselAvailability> vesselAvailabilitiesForSlot = new HashSet<>();
 			for (final AVesselSet<Vessel> vesselSet : allowedVessels) {
-				// Expand into vessels
+				// Expand into specific vessels
 				final Set<Vessel> eAllowedVessels = SetUtils.getObjects(vesselSet);
 				for (final Vessel eVessel : eAllowedVessels) {
 					final IVessel vessel = vesselAssociation.lookup(eVessel);
 					assert vessel != null;
 					if (vessel != null) {
-						vesselsForSlot.addAll(vesselToAvailabilities.get(vessel));
+						vesselAvailabilitiesForSlot.addAll(vesselToAvailabilities.get(vessel));
 					}
 				}
 				if (vesselSet instanceof VesselClass) {
-					final VesselClass vesselClass = (VesselClass) vesselSet;
-					final List<IVesselAvailability> list = spotVesselAvailabilitiesByClass.get(vesselClass);
-					if (list != null) {
-						vesselsForSlot.addAll(list);
-						{
+					VesselClass e_vesselClass = (VesselClass) vesselSet;
+					IVesselClass o_vesselClass = vesselClassAssociation.lookupNullChecked(e_vesselClass);
+					for (IVesselAvailability availability : allVesselAvailabilities) {
+						@Nullable
+						ISpotCharterInMarket spotCharterInMarket = availability.getSpotCharterInMarket();
+						if (spotCharterInMarket != null) {
+							if (spotCharterInMarket.getVesselClass() == o_vesselClass) {
+								vesselAvailabilitiesForSlot.add(availability);
+							}
 						}
 					}
-				}
 
+				}
 			}
-			builder.setSlotVesselAvailabilityRestriction(optimiserSlot, vesselsForSlot);
+			builder.setSlotVesselAvailabilityRestriction(optimiserSlot, vesselAvailabilitiesForSlot);
 		}
-		// ////////////
-		// final Set<Vessel> eAllowedVessels = SetUtils.getObjects(allowedVessels);
-		// if (!eAllowedVessels.isEmpty()) {
-		// final Set<IVesselAvailability> vesselsForSlot = new HashSet<>();
-		// for (final Vessel eVessel : eAllowedVessels) {
-		// final IVessel vessel = vesselAssociation.lookup(eVessel);
-		// assert vessel != null;
-		// if (vessel != null) {
-		// vesselsForSlot.addAll(vesselToAvailabilities.get(vessel));
-		// }
-		// }
-		// builder.setSlotVesselAvailabilityRestriction(optimiserSlot, vesselsForSlot);
-		// }
-		//
 	}
 
 	private void buildSpotCargoMarkets(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation,
@@ -2603,10 +2609,6 @@ public class LNGScenarioTransformer {
 
 			for (final CharterInMarket charterCost : spotMarketsModel.getCharterInMarkets()) {
 
-				if (!charterCost.isEnabled()) {
-					continue;
-				}
-
 				final VesselClass eVesselClass = charterCost.getVesselClass();
 				final ILongCurve charterInCurve;
 				if (charterCost.getCharterInPrice() == null) {
@@ -2616,27 +2618,36 @@ public class LNGScenarioTransformer {
 				}
 
 				charterCount = charterCost.getSpotCharterCount();
-				if (charterCount > 0) {
-					final IVesselClass oVesselClass = vesselClassAssociation.lookupNullChecked(eVesselClass);
-					final ISpotCharterInMarket spotCharterInMarket = builder.createSpotCharterInMarket(charterCost.getName(), oVesselClass, charterInCurve, charterCount);
-					modelEntityMap.addModelObject(charterCost, spotCharterInMarket);
+				final IVesselClass oVesselClass = vesselClassAssociation.lookupNullChecked(eVesselClass);
+				final ISpotCharterInMarket spotCharterInMarket = builder.createSpotCharterInMarket(charterCost.getName(), oVesselClass, charterInCurve, charterCount);
+				modelEntityMap.addModelObject(charterCost, spotCharterInMarket);
+
+				// Set the default market for nominal cargoes.
+				if (spotMarketsModel.getDefaultNominalMarket() == charterCost) {
+					builder.setDefaultMarketForNominalCargoes(spotCharterInMarket);
+				}
+
+				{
+					final IVesselAvailability roundTripOption = builder.createRoundTripCargoVessel("RoundTrip-" + charterCost.getName(), spotCharterInMarket);
+					final NonNullPair<CharterInMarket, Integer> key = new NonNullPair<>(charterCost, -1);
+					spotCharterInToAvailability.put(key, roundTripOption);
+					allVesselAvailabilities.add(roundTripOption);
+					vesselToAvailabilities.put(roundTripOption.getVessel(), Collections.singleton(roundTripOption));
+
+				}
+				if (charterCount > 0 && charterCost.isEnabled()) {
 
 					final List<IVesselAvailability> spots = builder.createSpotVessels("SPOT-" + charterCost.getName(), spotCharterInMarket);
 					for (int i = 0; i < spots.size(); ++i) {
 						final NonNullPair<CharterInMarket, Integer> key = new NonNullPair<>(charterCost, i);
-						spotCharterInToAvailability.put(key, spots.get(i));
-					}
+						IVesselAvailability spotAvailability = spots.get(i);
+						spotCharterInToAvailability.put(key, spotAvailability);
 
-					final List<IVesselAvailability> vesselClassAvailabilities = new LinkedList<>();
-					if (spotVesselAvailabilitiesByClass.containsKey(eVesselClass)) {
-						vesselClassAvailabilities.addAll(spotVesselAvailabilitiesByClass.get(eVesselClass));
-					}
-					vesselClassAvailabilities.addAll(spots);
-					spotVesselAvailabilitiesByClass.put(eVesselClass, vesselClassAvailabilities);
+						vesselToAvailabilities.put(spotAvailability.getVessel(), Collections.singleton(spotAvailability));
 
+					}
 					allVesselAvailabilities.addAll(spots);
 				}
-
 			}
 			for (final CharterOutMarket charterCost : spotMarketsModel.getCharterOutMarkets()) {
 				assert charterCost != null;
@@ -2674,6 +2685,7 @@ public class LNGScenarioTransformer {
 		}
 
 		return new NonNullPair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>>(vesselClassAssociation, vesselAssociation);
+
 	}
 
 	/**
@@ -2774,7 +2786,7 @@ public class LNGScenarioTransformer {
 			if (curve.containsKey(key)) {
 				slots = curve.get(key);
 			} else {
-				slots = new LinkedList<Slot>();
+				slots = new LinkedList<>();
 				curve.put(key, slots);
 			}
 			slots.add(slot);

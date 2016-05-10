@@ -207,20 +207,23 @@ public class AnnotatedSolutionExporter {
 				break;
 			case SPOT_CHARTER:
 				eSequence.setSequenceType(SequenceType.SPOT_VESSEL);
-				if (sequence.size() < 2)
+				if (sequence.size() < 2) {
 					continue;
+                                }
 
 				eSequence.setCharterInMarket(modelEntityMap.getModelObjectNullChecked(vesselAvailability.getSpotCharterInMarket(), CharterInMarket.class));
 				eSequence.unsetVesselAvailability();
 				eSequence.setSpotIndex(vesselAvailability.getSpotIndex());
 				break;
-			case CARGO_SHORTS:
+			case ROUND_TRIP:
 				eSequence.setSequenceType(SequenceType.ROUND_TRIP);
 				if (sequence.size() < 2) {
 					continue;
 				}
 
+				eSequence.setCharterInMarket(modelEntityMap.getModelObjectNullChecked(vesselAvailability.getSpotCharterInMarket(), CharterInMarket.class));
 				eSequence.unsetVesselAvailability();
+				eSequence.setSpotIndex(vesselAvailability.getSpotIndex());
 				break;
 			default:
 				break;
@@ -281,7 +284,7 @@ public class AnnotatedSolutionExporter {
 					} else if (arg1 instanceof StartEvent) {
 						return 1;
 					}
-					
+
 					if (arg0 instanceof EndEvent) {
 						return 1;
 					} else if (arg1 instanceof EndEvent) {
@@ -292,7 +295,6 @@ public class AnnotatedSolutionExporter {
 					} else if (arg0.getStart().isAfter(arg1.getStart())) {
 						return 1;
 					}
-
 
 					// Sort by Journey -> idle -> PortVisit
 					if (arg0 instanceof Journey) {
