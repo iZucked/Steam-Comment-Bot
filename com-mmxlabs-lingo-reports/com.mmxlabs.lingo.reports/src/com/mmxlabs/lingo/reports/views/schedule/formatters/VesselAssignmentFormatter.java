@@ -11,7 +11,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -69,10 +68,7 @@ public class VesselAssignmentFormatter extends BaseFormatter {
 					}
 				} else if (vesselAssignmentType instanceof CharterInMarket) {
 					final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
-					final VesselClass vesselClass = charterInMarket.getVesselClass();
-					if (vesselClass != null) {
-						return vesselClass.getName();
-					}
+					return String.format("%s (spot)", charterInMarket.getName());
 				}
 				break;
 			default:
