@@ -209,12 +209,12 @@ public class PortTimesPlanner {
 					final int shortCargoReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime;
 
 					portTimesRecord.setReturnSlotTime(thisPortSlot, shortCargoReturnArrivalTime);
-//				} else if (portType == PortType.End) {
-//					// Delegate to the end event schedule to determine correct end time.
-//					portTimesRecords.addAll(endEventScheduler.scheduleEndEvent(resource, vesselAvailability, portTimesRecord, arrivalTimes[idx], thisPortSlot));
-//					// Ensure this is the end of the loop
-//					assert (sequence.size() == idx + 1);
-//					break;
+				} else if (portType == PortType.End) {
+					// Delegate to the end event schedule to determine correct end time.
+					portTimesRecords.addAll(endEventScheduler.scheduleEndEvent(resource, vesselAvailability, portTimesRecord, arrivalTimes[idx], thisPortSlot));
+					// Ensure this is the end of the loop
+					assert (sequence.size() == idx + 1);
+					break;
 				} else {
 					portTimesRecord.setReturnSlotTime(thisPortSlot, arrivalTimes[idx]);
 				}
@@ -229,7 +229,7 @@ public class PortTimesPlanner {
 			if (breakSequence[idx]) {
 
 				// This should have been caught above!
-//				assert (sequence.size() != idx + 1);
+				assert (sequence.size() != idx + 1);
 				// Is this the last element? Do not start a new PortTimesRecord and break out instead
 				if (sequence.size() == idx + 1) {
 					break;
