@@ -403,7 +403,7 @@ public final class OptimisationHelper {
 		if (!forEvaluation) {
 			{
 				if (LicenseFeatures.isPermitted("features:optimisation-idle-days")) {
-					final Option idleDays = dialog.addOption(DataSection.Toggles, null, editingDomain, "Netback idle days tolerated", copy, defaultSettings, DataType.PositiveInt, SWTBOT_IDLE_DAYS,
+					final Option idleDays = dialog.addOption(DataSection.Toggles, null, editingDomain, "Netback idle day tolerance", copy, defaultSettings, DataType.PositiveInt, SWTBOT_IDLE_DAYS,
 							ParametersPackage.eINSTANCE.getUserSettings_FloatingDaysLimit());
 				}
 			}
