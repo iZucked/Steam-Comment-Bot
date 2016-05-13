@@ -254,15 +254,14 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 			// final IDischargeOption beSlot;
 			((IBreakEvenPriceCalculator) originalDischarge.getDischargePriceCalculator()).setPrice(breakEvenPricePerMMBtu);
 			// Redundant? Search should have found this....
-			final VoyagePlan newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vesselAvailability), vesselCharterRatePerDay, portTimesRecord, 0);
+			final VoyagePlan newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vesselAvailability), vesselCharterRatePerDay, portTimesRecord, startingHeelInM3);
 			assert newVoyagePlan != null;
+
+			newVoyagePlan.setIgnoreEnd(vp.isIgnoreEnd());
 
 			final IAllocationAnnotation newAllocation = volumeAllocator.get().allocate(vesselAvailability, vesselStartTime, newVoyagePlan, portTimesRecord);
 			return new Pair<>(newVoyagePlan, newAllocation);
-			// seq.getVoyagePlans().set(vpIdx, newVoyagePlan);
 		}
-		// }
-		// }
 		return null;
 	}
 

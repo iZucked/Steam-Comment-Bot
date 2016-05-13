@@ -25,6 +25,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public class ShippingCostHelper {
 
 	public long getFuelCosts(final @NonNull VoyagePlan plan, boolean includeLNG) {
+
 		// @formatter:off
 		long fuelCost = plan.getTotalFuelCost(FuelComponent.Base)
 				+ plan.getTotalFuelCost(FuelComponent.Base_Supplemental)
@@ -43,7 +44,8 @@ public class ShippingCostHelper {
 
 		long portCosts = 0;
 		final Object[] sequence = plan.getSequence();
-		for (int i = 0; i < sequence.length - 1; ++i) {
+		int offset = plan.isIgnoreEnd() ? 1 : 0;
+		for (int i = 0; i < sequence.length - offset; ++i) {
 			final Object obj = sequence[i];
 			if (obj instanceof PortDetails) {
 

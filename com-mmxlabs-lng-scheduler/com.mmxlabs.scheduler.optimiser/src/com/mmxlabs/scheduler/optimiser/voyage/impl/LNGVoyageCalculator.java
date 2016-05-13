@@ -413,7 +413,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				final PortDetails details = (PortDetails) sequence[i];
 
 				// DO NOT INCLUDE THE LAST SEQUENCE ELEMENT IN THE TOTAL COST FOR THE PLAN
-				if (i < sequence.length - 1) {
+				if (sequence.length == 1 || i < sequence.length - 1) {
 					for (final FuelComponent fc : FuelComponent.values()) {
 						fuelConsumptions[fc.ordinal()] += details.getFuelConsumption(fc);
 					}
@@ -782,7 +782,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 		// set the LNG values for the voyages
 		// final int numVoyages = sequence.length / 2;
-		for (int i = 0; i < sequence.length - 1; ++i) {
+		int offset = sequence.length > 1 ? 1 : 0;
+		for (int i = 0; i < sequence.length - offset; ++i) {
 			final Object element = sequence[i];
 			if (element instanceof VoyageDetails) {
 				final VoyageDetails details = (VoyageDetails) element;
@@ -996,6 +997,10 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		// temporary kludge: ignore non-load non-discharge ports for port consumption
 		if (portType == PortType.Load || portType == PortType.Discharge) {
 			consumptionRateInMTPerDay = vesselClass.getInPortConsumptionRateInMTPerDay(portType);
+		} else if (portType == PortType.End) {
+			// Maybe include hotel load for end events?
+			// consumptionRateInMTPerDay = vesselClass.getIdleConsumptionRate(VesselState.Ballast);
+			consumptionRateInMTPerDay = 0;
 		} else {
 			consumptionRateInMTPerDay = 0;
 		}

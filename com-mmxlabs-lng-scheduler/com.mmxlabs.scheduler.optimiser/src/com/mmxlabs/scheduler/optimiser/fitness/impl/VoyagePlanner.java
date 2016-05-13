@@ -829,7 +829,7 @@ public class VoyagePlanner {
 		// TODO: Insert actuals VoyagePlan stuff here to allow this method to be used inside main makeVoyagePlans loop
 
 		// Populate final plan details
-		if (voyageOrPortOptions.size() > 1) {
+		if (voyageOrPortOptions.size() > 0) {
 			// set base fuel price in VPO
 			final Triple<IVessel, IResource, Integer> vesselTriple = setVesselAndBaseFuelPrice(portTimesRecord, vesselAvailability.getVessel(), resource);
 			final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, portTimesRecord, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay,
@@ -966,7 +966,7 @@ public class VoyagePlanner {
 		// Fix up final arrival time. The VPO is permitted to change the final arrival time of certain vessels and we need to alter the arrival time array and the portTimesRecord with the new
 		// arrival time.
 		final IDetailsSequenceElement[] vpSequence = result.getSequence();
-		if (vpSequence.length > 1){
+		if (vpSequence.length > 1) {
 			final VoyageDetails lastVoyage = (VoyageDetails) vpSequence[vpSequence.length - 2];
 			if (lastVoyage.getOptions().getToPortSlot().getPortType() == PortType.End) {
 				// New arrival time = Previous element arrival time + visit duration + travel time + idle time.
