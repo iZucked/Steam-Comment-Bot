@@ -51,6 +51,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
@@ -452,6 +453,9 @@ public class ChangeSetTransformer {
 			if (vesselAvailability != null) {
 				row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(startEvent, vesselAvailability.getVessel()));
 			}
+		} else if (a instanceof EndEvent) {
+			final EndEvent endEvent = (EndEvent) a;
+			row.getInputEquivalents().add(endEvent);
 		} else if (a instanceof OpenSlotAllocation) {
 			final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) a;
 			row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(openSlotAllocation, openSlotAllocation.getSlot()));
@@ -509,6 +513,8 @@ public class ChangeSetTransformer {
 					includeEvent = true;
 
 				} else if (event instanceof StartEvent) {
+					includeEvent = true;
+				} else if (event instanceof EndEvent) {
 					includeEvent = true;
 
 				}

@@ -311,6 +311,9 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 								case "orphanlegs":
 									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_VESSEL_START_ROW.id);
 									break;
+								case "endevents":
+									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_VESSEL_END_ROW.id);
+									break;
 								}
 							}
 						}

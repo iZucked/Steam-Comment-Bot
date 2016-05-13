@@ -48,6 +48,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
@@ -535,6 +536,14 @@ public class ScenarioComparisonServiceTransformer {
 			if (vesselAvailability != null) {
 				equivalents.addAll(Lists.<EObject> newArrayList(startEvent, vesselAvailability.getVessel()));
 			}
+		} else if (a instanceof EndEvent) {
+			final EndEvent endEvent = (EndEvent) a;
+//			equivalents.addAll(startEvent.getEvents());
+//			final VesselAvailability vesselAvailability = startEvent.getSequence().getVesselAvailability();
+//			if (vesselAvailability != null) {
+//				equivalents.addAll(Lists.<EObject> newArrayList(startEvent, vesselAvailability.getVessel()));
+//			}
+			equivalents.add(endEvent);
 		} else if (a instanceof OpenSlotAllocation) {
 			final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) a;
 			equivalents.addAll(Lists.<EObject> newArrayList(openSlotAllocation, openSlotAllocation.getSlot()));
@@ -638,6 +647,8 @@ public class ScenarioComparisonServiceTransformer {
 
 	public boolean showEvent(final Event event) {
 		if (event instanceof StartEvent) {
+			return true;
+		} else if (event instanceof EndEvent) {
 			return true;
 		} else if (event instanceof VesselEventVisit) {
 			return true;

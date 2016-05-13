@@ -39,6 +39,7 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
@@ -66,6 +67,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 	public static final OptionInfo ROW_FILTER_LONG_CARGOES = new OptionInfo("ROW_FILTER_LONG_CARGOES", "Longs");
 	public static final OptionInfo ROW_FILTER_SHORT_CARGOES = new OptionInfo("ROW_FILTER_SHORT_CARGOES", "Shorts");
 	public static final OptionInfo ROW_FILTER_VESSEL_START_ROW = new OptionInfo("ROW_FILTER_VESSEL_START_ROW", "Start ballast legs");
+	public static final OptionInfo ROW_FILTER_VESSEL_END_ROW = new OptionInfo("ROW_FILTER_VESSEL_END_ROW", "End event legs");
 	public static final OptionInfo ROW_FILTER_VESSEL_EVENT_ROW = new OptionInfo("ROW_FILTER_VESSEL_EVENT_ROW", "Vessel Events");
 	public static final OptionInfo ROW_FILTER_CHARTER_OUT_ROW = new OptionInfo("ROW_FILTER_CHARTER_OUT_ROW", "Charter Outs (Virtual)");
 	public static final OptionInfo ROW_FILTER_CARGO_ROW = new OptionInfo("ROW_FILTER_CARGO_ROW", "Cargoes");
@@ -83,7 +85,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 
 		/** All filters (note this order is also used in the {@link ConfigurableScheduleReportView} dialog */
 		ROW_FILTER_ALL = new OptionInfo[] { ROW_FILTER_CARGO_ROW, ROW_FILTER_LONG_CARGOES, ROW_FILTER_SHORT_CARGOES, ROW_FILTER_VESSEL_EVENT_ROW, ROW_FILTER_CHARTER_OUT_ROW,
-				ROW_FILTER_VESSEL_START_ROW };
+				ROW_FILTER_VESSEL_START_ROW, ROW_FILTER_VESSEL_END_ROW };
 
 	}
 
@@ -117,6 +119,8 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 	public boolean showEvent(final Event event) {
 		if (event instanceof StartEvent) {
 			return rowFilterInfo.contains(ROW_FILTER_VESSEL_START_ROW.id);
+		} else if (event instanceof EndEvent) {
+			return rowFilterInfo.contains(ROW_FILTER_VESSEL_END_ROW.id);
 		} else if (event instanceof VesselEventVisit) {
 			return rowFilterInfo.contains(ROW_FILTER_VESSEL_EVENT_ROW.id);
 		} else if (event instanceof GeneratedCharterOut) {

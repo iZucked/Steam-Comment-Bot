@@ -23,6 +23,7 @@ import com.mmxlabs.lingo.reports.views.schedule.EquivalanceGroupBuilder;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -162,6 +163,8 @@ public class ActionSetTransformer {
 					includeEvent = true;
 
 				} else if (event instanceof StartEvent) {
+					includeEvent = true;
+				} else if (event instanceof EndEvent) {
 					includeEvent = true;
 
 				}
