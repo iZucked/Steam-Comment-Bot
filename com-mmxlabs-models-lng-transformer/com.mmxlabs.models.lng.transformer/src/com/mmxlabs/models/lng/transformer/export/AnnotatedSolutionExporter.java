@@ -418,6 +418,8 @@ public class AnnotatedSolutionExporter {
 					} else if (event instanceof StartEvent) {
 						eventGrouping = (StartEvent) event;
 						eventGrouping.getEvents().add(event);
+					} else if (event instanceof EndEvent) {
+						eventGrouping = null;
 					} else if (event instanceof VesselEventVisit) {
 						eventGrouping = (VesselEventVisit) event;
 						eventGrouping.getEvents().add(event);
