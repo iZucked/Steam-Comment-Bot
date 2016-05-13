@@ -76,7 +76,8 @@ public class ShippingCostHelper {
 	public int getPlanDurationInHours(final @NonNull VoyagePlan plan) {
 		int planDuration = 0;
 		final Object[] sequence = plan.getSequence();
-		final int k = sequence.length - 1;
+		int offset = plan.isIgnoreEnd() ? 1 : 0;
+		final int k = sequence.length - offset;
 		for (int i = 0; i < k; i++) {
 			final Object o = sequence[i];
 			if (o instanceof VoyageDetails) {
