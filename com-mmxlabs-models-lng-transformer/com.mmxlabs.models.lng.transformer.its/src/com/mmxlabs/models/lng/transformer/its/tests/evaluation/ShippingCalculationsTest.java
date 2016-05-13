@@ -1256,31 +1256,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		checker.check(sequence);
 	}
 
-	@Test
-	public void testUseDefaultFinalIdlingWhenEndTimeUnspecified() {
-		System.err.println("\n\nUnspecified end time should result in idling due to a defined minimum time between last event and end.");
-		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
-
-		msc.vesselAvailability.unsetEndAfter();
-		msc.vesselAvailability.unsetEndBy();
-
-		SequenceTester checker = getDefaultTester();
-
-		final int lastIdleHours = /* SchedulerBuilder.minDaysFromLastEventToEnd */60 * 24 - checker.getExpectedValues(Expectations.DURATIONS, Journey.class)[2];
-		;
-		checker.setExpectedValue(lastIdleHours, Expectations.DURATIONS, Idle.class, 2);
-		checker.setExpectedValue(lastIdleHours * 5, Expectations.BF_USAGE, Idle.class, 2);
-		checker.setupOrdinaryFuelCosts();
-
-		final Schedule schedule = ScenarioTools.evaluate(scenario);
-		ScenarioTools.printSequences(schedule);
-
-		final Sequence sequence = schedule.getSequences().get(0);
-
-		checker.check(sequence);
-	}
-
+	
 	@Test
 	public void testGeneratedCharterOut() {
 		System.err.println("\n\nIdle at end should permit generated charter out event.");
