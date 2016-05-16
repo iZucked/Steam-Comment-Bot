@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.pricing.edit;singleton:=true
-Bundle-Version: 3.12.2.RELEASE
+Bundle-Version: 3.12.3.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.pricing.provider.PricingEditPlugin$Implementation
 Bundle-Vendor: %providerName
