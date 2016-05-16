@@ -45,7 +45,7 @@ public class LNGTransformerHelper {
 	public static final @NonNull String HINT_SHIPPING_ONLY = "hint-lngtransformer-shipping-only";
 
 	@NonNull
-	public static Set<@NonNull String> getHints(@NonNull final OptimiserSettings settings, @Nullable final String... initialHints) {
+	public static Set<@NonNull String> getHints(@NonNull final OptimiserSettings settings, @NonNull final String @Nullable... initialHints) {
 
 		final Set<@NonNull String> hints = new HashSet<>();
 		// Check hints
@@ -76,7 +76,7 @@ public class LNGTransformerHelper {
 	}
 
 	@NonNull
-	public static Collection<Module> getModulesWithOverrides(@NonNull final Module mainModule, @NonNull final Collection<@NonNull IOptimiserInjectorService> services,
+	public static Collection<@NonNull Module> getModulesWithOverrides(@NonNull final Module mainModule, @NonNull final Collection<@NonNull IOptimiserInjectorService> services,
 			final IOptimiserInjectorService.@NonNull ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 		final List<@NonNull Module> overrides = new LinkedList<>();
 		collectModuleOverrides(moduleType, services, overrides, hints);

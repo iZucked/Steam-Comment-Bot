@@ -105,14 +105,14 @@ public class LNGScenarioToOptimiserBridge {
 
 	public LNGScenarioToOptimiserBridge(@NonNull final LNGScenarioModel scenario, @Nullable final ScenarioInstance scenarioInstance, @NonNull final OptimiserSettings optimiserSettings,
 			@NonNull final EditingDomain editingDomain, @Nullable final Module bootstrapModule, @Nullable final IOptimiserInjectorService localOverrides, boolean evaluationOnly,
-			final String... initialHints) {
+			final @NonNull String @Nullable... initialHints) {
 		this.originalScenario = scenario;
 		this.scenarioInstance = scenarioInstance;
 		this.optimiserSettings = optimiserSettings;
 		this.originalEditingDomain = editingDomain;
 		this.hints = LNGTransformerHelper.getHints(optimiserSettings, initialHints);
 
-		final Collection<IOptimiserInjectorService> services = LNGTransformerHelper.getOptimiserInjectorServices(bootstrapModule, localOverrides);
+		final Collection<@NonNull IOptimiserInjectorService> services = LNGTransformerHelper.getOptimiserInjectorServices(bootstrapModule, localOverrides);
 
 		originalDataTransformer = new LNGDataTransformer(this.originalScenario, optimiserSettings, hints, services);
 
@@ -125,7 +125,8 @@ public class LNGScenarioToOptimiserBridge {
 		overwrite(0, originalDataTransformer.getInitialSequences(), null);
 
 		if (!evaluationOnly) {
-			final Triple<LNGScenarioModel, EditingDomain, IScenarioEntityMapping> t = initPeriodOptimisationData(scenarioInstance, originalScenario, originalEditingDomain, optimiserSettings);
+			final Triple<@NonNull LNGScenarioModel, @NonNull EditingDomain, @Nullable IScenarioEntityMapping> t = initPeriodOptimisationData(scenarioInstance, originalScenario, originalEditingDomain,
+					optimiserSettings);
 
 			// TODO: Replaces the above with that return in the triple (this could be original or optimiser)
 			this.optimiserScenario = t.getFirst();
@@ -149,7 +150,7 @@ public class LNGScenarioToOptimiserBridge {
 	}
 
 	@NonNull
-	private static Triple<LNGScenarioModel, EditingDomain, IScenarioEntityMapping> initPeriodOptimisationData(@Nullable final ScenarioInstance scenarioInstance,
+	private static Triple<@NonNull LNGScenarioModel, @NonNull EditingDomain, @Nullable IScenarioEntityMapping> initPeriodOptimisationData(@Nullable final ScenarioInstance scenarioInstance,
 			@NonNull final LNGScenarioModel originalScenario, @NonNull final EditingDomain originalEditingDomain, @NonNull final OptimiserSettings optimiserSettings) {
 
 		IScenarioEntityMapping periodMapping = null;
@@ -345,8 +346,8 @@ public class LNGScenarioToOptimiserBridge {
 					{
 						final Injector evaluationInjector;
 						{
-							final Collection<IOptimiserInjectorService> services = optimiserDataTransformer.getModuleServices();
-							final List<Module> modules = new LinkedList<>();
+							final Collection<@NonNull IOptimiserInjectorService> services = optimiserDataTransformer.getModuleServices();
+							final List<@NonNull Module> modules = new LinkedList<>();
 							modules.add(new InputSequencesModule(rawSequences));
 							modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(optimiserDataTransformer.getOptimiserSettings()), services,
 									IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
@@ -381,7 +382,7 @@ public class LNGScenarioToOptimiserBridge {
 						evalSettings.getRange().unsetOptimiseAfter();
 						evalSettings.getRange().unsetOptimiseBefore();
 
-						final Set<String> hints = LNGTransformerHelper.getHints(evalSettings);
+						final Set<@NonNull String> hints = LNGTransformerHelper.getHints(evalSettings);
 
 						// final LNGDataTransformer subTransformer = originalDataTransformer;
 
@@ -396,7 +397,7 @@ public class LNGScenarioToOptimiserBridge {
 						// }
 
 						Injector evaluationInjector2;
-						final Collection<IOptimiserInjectorService> services = subTransformer.getModuleServices();
+						final Collection<@NonNull IOptimiserInjectorService> services = subTransformer.getModuleServices();
 						{
 							final List<Module> modules2 = new LinkedList<>();
 							modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(originalDataTransformer.getOptimiserSettings()), services,
