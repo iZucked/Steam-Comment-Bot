@@ -5,9 +5,11 @@
 package com.mmxlabs.models.lng.ui.tabular;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
@@ -17,6 +19,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
@@ -274,10 +277,9 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 				}
 			};
 
-			GridViewerEditor.create(scenarioViewer, actSupport,
-					ColumnViewerEditor.KEYBOARD_ACTIVATION | GridViewerEditor.SELECTION_FOLLOWS_EDITOR |
-							// ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK |
-							ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL | ColumnViewerEditor.KEYBOARD_ACTIVATION);
+			GridViewerEditor.create(scenarioViewer, actSupport, ColumnViewerEditor.KEYBOARD_ACTIVATION | GridViewerEditor.SELECTION_FOLLOWS_EDITOR |
+			// ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK |
+					ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL | ColumnViewerEditor.KEYBOARD_ACTIVATION);
 
 			return scenarioViewer;
 		} else {
@@ -444,7 +446,7 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
 		}
-		deleteAction = createDeleteAction();
+		deleteAction = createDeleteAction(null);
 		if (deleteAction != null) {
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, deleteAction);
 		}
@@ -524,7 +526,7 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 		return result;
 	}
 
-	protected Action createDeleteAction() {
+	protected Action createDeleteAction(@Nullable Function<Collection<?>, Collection<Object>> callback) {
 		return new ScenarioModifyingAction("Delete") {
 			{
 				setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
@@ -549,10 +551,15 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 							if (sel instanceof IStructuredSelection) {
 								final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
 								// Copy selection
-								final List<?> objects = new ArrayList<Object>(((IStructuredSelection) sel).toList());
+								final List<?> objects = new ArrayList<>(((IStructuredSelection) sel).toList());
 
 								// Ensure a unique collection of objects - no duplicates
-								final Set<Object> uniqueObjects = new HashSet<Object>(objects);
+								final Set<Object> uniqueObjects = new HashSet<>(objects);
+
+								// Pull in additional objects to delete.
+								if (callback != null) {
+									uniqueObjects.addAll(callback.apply(objects));
+								}
 
 								// Clear current selection
 								selectionChanged(new SelectionChangedEvent(viewer, StructuredSelection.EMPTY));

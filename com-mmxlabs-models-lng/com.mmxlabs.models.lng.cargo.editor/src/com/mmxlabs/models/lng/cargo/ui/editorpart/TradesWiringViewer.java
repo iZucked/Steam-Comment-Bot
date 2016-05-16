@@ -760,7 +760,24 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				toolbar.appendToGroup(ADD_REMOVE_GROUP, dupAction);
 			}
 		}
-		deleteAction = createDeleteAction();
+		deleteAction = createDeleteAction(objectsToDelete -> {
+
+			final List<Object> extraObjects = new LinkedList<>();
+			for (Object o : objectsToDelete) {
+				Cargo c = null;
+				if (o instanceof Slot) {
+					c = ((Slot) o).getCargo();
+				}
+				if (c != null) {
+					for (Slot s : c.getSlots()) {
+						if (s instanceof SpotSlot) {
+							extraObjects.add(s);
+						}
+					}
+				}
+			}
+			return extraObjects;
+		});
 		if (deleteAction != null) {
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, deleteAction);
 		}
@@ -1363,7 +1380,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 
 		executeCurrentWiringCommand(currentWiringCommand);
-		
+
 		// SANITTY CHECKING!
 		{
 			cec.verifyCargoModel(cargoModel);

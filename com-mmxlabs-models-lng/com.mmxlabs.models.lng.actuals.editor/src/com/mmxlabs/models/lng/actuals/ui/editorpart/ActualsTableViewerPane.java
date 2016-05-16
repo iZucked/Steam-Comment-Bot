@@ -524,7 +524,7 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 		// toolbar.appendToGroup(ADD_REMOVE_GROUP, dupAction);
 		// }
 		// }
-		deleteAction = createDeleteAction();
+		deleteAction = createDeleteAction(null);
 		if (deleteAction != null) {
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, deleteAction);
 		}
