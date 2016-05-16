@@ -17,6 +17,7 @@ import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
@@ -467,6 +468,10 @@ public class LNGSchedulerJobUtils {
 				processor.postProcess(domain, scenario, schedule, cmd);
 			}
 		}
+		if (cmd.isEmpty()) {
+			return IdentityCommand.INSTANCE;
+		}
+		
 		return cmd;
 
 	}
