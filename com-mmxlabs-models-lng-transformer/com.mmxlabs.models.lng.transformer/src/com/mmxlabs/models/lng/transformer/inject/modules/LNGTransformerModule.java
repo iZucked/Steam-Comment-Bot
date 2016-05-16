@@ -31,6 +31,7 @@ import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.cache.IProfitAndLossCacheKeyDependencyLinker;
+import com.mmxlabs.scheduler.optimiser.cache.NotCaching;
 import com.mmxlabs.scheduler.optimiser.cache.NullCacheKeyDependencyLinker;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertableDESShippingTimesCalculator;
@@ -132,6 +133,9 @@ public class LNGTransformerModule extends AbstractModule {
 
 		bind(IEndEventScheduler.class).to(DefaultEndEventScheduler.class);
 
+		bind(IVolumeAllocator.class).annotatedWith(NotCaching.class).to(UnconstrainedVolumeAllocator.class);
+		bind(IEntityValueCalculator.class).annotatedWith(NotCaching.class).to(DefaultEntityValueCalculator.class);
+
 		// Default bindings for caches
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(Boolean.FALSE);
@@ -141,10 +145,8 @@ public class LNGTransformerModule extends AbstractModule {
 
 	@Provides
 	@PerChainUnitScope
-	private IVolumeAllocator provideVolumeAllocator(final @NonNull Injector injector, @Named(SchedulerConstants.Key_VolumeAllocationCache) boolean enableCache) {
-
-		final UnconstrainedVolumeAllocator reference = injector.getInstance(UnconstrainedVolumeAllocator.class);
-
+	private IVolumeAllocator provideVolumeAllocator(@NonNull Injector injector, final @NotCaching IVolumeAllocator reference,
+			@Named(SchedulerConstants.Key_VolumeAllocationCache) boolean enableCache) {
 		if (enableCache) {
 			final CachingVolumeAllocator cacher = new CachingVolumeAllocator(reference);
 			injector.injectMembers(cacher);
@@ -160,9 +162,9 @@ public class LNGTransformerModule extends AbstractModule {
 
 	@Provides
 	@PerChainUnitScope
-	private IEntityValueCalculator provideEntityValueCalculator(final @NonNull Injector injector, @Named(SchedulerConstants.Key_ProfitandLossCache) boolean enableCache) {
+	private IEntityValueCalculator provideEntityValueCalculator(final @NonNull Injector injector, final @NotCaching IEntityValueCalculator reference,
+			@Named(SchedulerConstants.Key_ProfitandLossCache) boolean enableCache) {
 
-		final DefaultEntityValueCalculator reference = injector.getInstance(DefaultEntityValueCalculator.class);
 		if (enableCache) {
 			final CachingEntityValueCalculator cacher = new CachingEntityValueCalculator(reference);
 			injector.injectMembers(cacher);
