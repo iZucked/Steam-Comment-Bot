@@ -63,9 +63,11 @@ public class ScheduleModelKPIUtils {
 
 					if (visit.getSlotAllocation().getSlot() instanceof LoadSlot) {
 						final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
-						totalTradingPNL += getElementTradingPNL(cargoAllocation);
-						totalShippingPNL += getElementShippingPNL(cargoAllocation);
-						totalUpstreamPNL += getElementUpstreamPNL(cargoAllocation);
+						if (cargoAllocation != null) {
+							totalTradingPNL += getElementTradingPNL(cargoAllocation);
+							totalShippingPNL += getElementShippingPNL(cargoAllocation);
+							totalUpstreamPNL += getElementUpstreamPNL(cargoAllocation);
+						}
 					}
 
 				} else if (evt instanceof ProfitAndLossContainer) {
@@ -80,9 +82,11 @@ public class ScheduleModelKPIUtils {
 		// totalMtMPNL += getElementShippingPNL(marketAllocation);
 		// }
 		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
-			totalTradingPNL += getElementTradingPNL(openSlotAllocation);
-			totalShippingPNL += getElementShippingPNL(openSlotAllocation);
-			totalShippingPNL += getElementUpstreamPNL(openSlotAllocation);
+			if (openSlotAllocation != null) {
+				totalTradingPNL += getElementTradingPNL(openSlotAllocation);
+				totalShippingPNL += getElementShippingPNL(openSlotAllocation);
+				totalShippingPNL += getElementUpstreamPNL(openSlotAllocation);
+			}
 		}
 
 		final long[] result = new long[PNL_COMPONENT_COUNT];
