@@ -166,7 +166,7 @@ public class ScheduleModelKPIUtils {
 		return 0L;
 	}
 
-	public static int[] getScheduleLateness(@NonNull Schedule schedule) {
+	public static int[] getScheduleLateness(@NonNull final Schedule schedule) {
 		int totalLatenessHoursIncludingFlex = 0;
 		int totalLatenessHoursExcludingFlex = 0;
 
@@ -193,7 +193,7 @@ public class ScheduleModelKPIUtils {
 		return result;
 	}
 
-	public static int getScheduleViolationCount(@NonNull Schedule schedule) {
+	public static int getScheduleViolationCount(@NonNull final Schedule schedule) {
 
 		int totalCapacityViolationCount = 0;
 		for (final Sequence seq : schedule.getSequences()) {
@@ -213,7 +213,11 @@ public class ScheduleModelKPIUtils {
 			return 0L;
 		}
 
-		return profitAndLossContainer.getGroupProfitAndLoss().getProfitAndLoss();
+		final GroupProfitAndLoss groupProfitAndLoss = profitAndLossContainer.getGroupProfitAndLoss();
+		if (groupProfitAndLoss == null) {
+			return 0L;
+		}
+		return groupProfitAndLoss.getProfitAndLoss();
 	}
 
 	public static long getGroupPreTaxProfitAndLoss(@Nullable final ProfitAndLossContainer profitAndLossContainer) {
@@ -221,7 +225,11 @@ public class ScheduleModelKPIUtils {
 			return 0L;
 		}
 
-		return profitAndLossContainer.getGroupProfitAndLoss().getProfitAndLossPreTax();
+		final GroupProfitAndLoss groupProfitAndLoss = profitAndLossContainer.getGroupProfitAndLoss();
+		if (groupProfitAndLoss == null) {
+			return 0L;
+		}
+		return groupProfitAndLoss.getProfitAndLossPreTax();
 	}
 
 	public static long getAdditionalProfitAndLoss(@NonNull final ProfitAndLossContainer profitAndLossContainer) {
@@ -345,7 +353,7 @@ public class ScheduleModelKPIUtils {
 			long total = 0L;
 			for (final Event event : grouping.getEvents()) {
 				if (event instanceof SlotVisit) {
-					SlotVisit slotVisit = (SlotVisit) event;
+					final SlotVisit slotVisit = (SlotVisit) event;
 					// total += slotVisit.getFuelCost();
 					total += slotVisit.getCharterCost();
 					total += slotVisit.getPortCost();
