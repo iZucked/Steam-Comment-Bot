@@ -16,6 +16,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.cache.NotCaching;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -46,6 +47,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 
 	@Inject
+	@NotCaching
 	private Provider<IVolumeAllocator> volumeAllocator;
 
 	@Inject
