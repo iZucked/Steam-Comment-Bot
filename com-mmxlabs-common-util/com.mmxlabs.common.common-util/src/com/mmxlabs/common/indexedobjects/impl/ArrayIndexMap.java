@@ -53,6 +53,7 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 		isSet = newIsSet;
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public final U maybeGet(final T key) {
 		// return get(key);

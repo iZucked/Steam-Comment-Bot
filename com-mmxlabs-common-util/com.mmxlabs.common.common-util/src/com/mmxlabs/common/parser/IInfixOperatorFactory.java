@@ -4,8 +4,12 @@
  */
 package com.mmxlabs.common.parser;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 public interface IInfixOperatorFactory<T> {
-	public IExpression<T> createInfixOperator(final char operator, final IExpression<T> lhs, final IExpression<T> rhs);
+
+	@NonNull
+	IExpression<T> createInfixOperator(char operator, @NonNull IExpression<T> lhs, @NonNull IExpression<T> rhs);
 
 	/**
 	 * Returns true iff operator a binds more strongly than operator b.
@@ -14,7 +18,7 @@ public interface IInfixOperatorFactory<T> {
 	 * @param b
 	 * @return true if a > b (e.g. if a='*' and b='+')
 	 */
-	public boolean isOperatorHigherPriority(final char a, final char b);
+	boolean isOperatorHigherPriority(final char a, final char b);
 
-	public boolean isInfixOperator(final char operator);
+	boolean isInfixOperator(final char operator);
 }

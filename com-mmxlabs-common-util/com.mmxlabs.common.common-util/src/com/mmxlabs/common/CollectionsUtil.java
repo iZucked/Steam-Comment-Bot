@@ -109,7 +109,7 @@ public final class CollectionsUtil {
 	@NonNull
 	public static <T> List<T> makeArrayList(final T... elements) {
 
-		final List<T> collection = new ArrayList<T>(elements.length);
+		final List<T> collection = new ArrayList<>(elements.length);
 
 		for (final T e : elements) {
 			collection.add(e);

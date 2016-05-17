@@ -42,7 +42,7 @@ public class MethodChainGenerator implements Opcodes {
 		cw.visitEnd();
 
 		try {
-			return (Class<? extends ITransformer>) loader.injectAndLoadClass(fqn, cw.toByteArray());
+			return loader.injectAndLoadClass(fqn, cw.toByteArray());
 		} catch (final ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

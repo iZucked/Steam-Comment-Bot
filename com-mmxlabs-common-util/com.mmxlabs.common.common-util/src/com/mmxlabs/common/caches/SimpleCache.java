@@ -5,6 +5,7 @@
 package com.mmxlabs.common.caches;
 
 import java.lang.ref.SoftReference;
+import java.lang.reflect.Array;
 
 import com.mmxlabs.common.Pair;
 
@@ -44,16 +45,17 @@ public final class SimpleCache<K, V> extends AbstractCache<K, V> {
 		}
 	}
 
-	Object[] entries;
+	Entry[] entries;
 
 	public SimpleCache(final String name, final IKeyEvaluator<K, V> evaluator, final int size) {
 		this(name, evaluator, size, 2);
 	}
 
+	@SuppressWarnings("unchecked")
 	public SimpleCache(final String name, final IKeyEvaluator<K, V> evaluator, final int binCount, final int maxMisses) {
 		super(name, evaluator);
 		this.evictionThreshold = maxMisses;
-		this.entries = new Object[binCount];
+		this.entries = (Entry[]) Array.newInstance(Entry.class, binCount);
 		for (int i = 0; i < entries.length; i++) {
 			entries[i] = new Entry();
 		}
@@ -62,16 +64,16 @@ public final class SimpleCache<K, V> extends AbstractCache<K, V> {
 	@Override
 	public final V get(final K key) {
 		final int hash = key.hashCode();
-		final int hashPosition = hash == Integer.MIN_VALUE ? 0: Math.abs(hash) % entries.length;
-		final Entry e = (Entry) entries[hashPosition];
+		final int hashPosition = hash == Integer.MIN_VALUE ? 0 : Math.abs(hash) % entries.length;
+		final Entry e = entries[hashPosition];
 
 		return e.getAndUpdate(evaluator, key);
 	}
 
 	@Override
 	public void clear() {
-		for (final Object o : entries) {
-			((Entry) o).clear();
+		for (final Entry o : entries) {
+			o.clear();
 		}
 	}
 

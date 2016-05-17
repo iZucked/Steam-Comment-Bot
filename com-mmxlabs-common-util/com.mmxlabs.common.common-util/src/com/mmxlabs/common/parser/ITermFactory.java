@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.common.parser;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 public interface ITermFactory<T> {
-	public IExpression<T> createTerm(final String term);
+	@NonNull IExpression<T> createTerm(@NonNull String term);
 }
