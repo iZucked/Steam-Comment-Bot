@@ -4,11 +4,11 @@
 	<parent>
 		<groupId>com.mmxlabs.optimiser</groupId>
 		<artifactId>optimiser-parent</artifactId>
-		<version>3.12.3-SNAPSHOT</version>
+		<version>3.12.3.RELEASE</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.optimiser.optimiser-lso.tests</artifactId>
-	<version>3.12.3-SNAPSHOT</version>
+	<version>3.12.3.RELEASE</version>
 	<packaging>eclipse-test-plugin</packaging>
 	
 	<build>
