@@ -65,7 +65,7 @@ public class LNGScenarioChainBuilder {
 	 */
 	public static IChainRunner createStandardOptimisationChain(@Nullable final String childName, @NonNull final LNGDataTransformer dataTransformer,
 			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, @NonNull final OptimiserSettings optimiserSettings, @NonNull final ExecutorService executorService,
-			@Nullable final String... initialHints) {
+			@NonNull final String @Nullable... initialHints) {
 
 		boolean createOptimiser = false;
 		boolean doHillClimb = false;
