@@ -848,6 +848,7 @@ public final class ChangeSetTransformerUtil {
 		if (((SpotSlot) head.getDischargeSlot()).getMarket().eClass() == ((SpotSlot) tail.getDischargeSlot()).getMarket().eClass()) {
 			if (head.getRhsName() != null && head.getRhsName().equals(tail.getRhsName())) {
 				final ChangeSetRow lhsWiringLink = tail.getLhsWiringLink();
+				head.setOriginalDischargeAllocation(tail.getOriginalDischargeAllocation());
 				head.setLhsWiringLink(lhsWiringLink);
 				return true;
 			}
