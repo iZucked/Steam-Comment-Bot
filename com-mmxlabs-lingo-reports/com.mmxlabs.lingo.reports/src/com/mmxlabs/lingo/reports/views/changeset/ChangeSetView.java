@@ -441,13 +441,6 @@ public class ChangeSetView implements IAdaptable {
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 		}
 
-		{
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER);
-			gvc.getColumn().setText("P&L (m)");
-			gvc.getColumn().setWidth(75);
-			gvc.setLabelProvider(createPNLDeltaLabelProvider());
-			gvc.getColumn().setCellRenderer(createCellRenderer());
-		}
 
 		final GridColumnGroup pnlComponentGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER | SWT.TOGGLE);
 		// pnlComponentGroup.setText("P&L Components");
@@ -471,17 +464,28 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setText("");
-			gvc.getColumn().setHeaderTooltip("P&&L Components");
-			gvc.getColumn().setWidth(20);
-			gvc.setLabelProvider(createStubLabelProvider());
-			// gvc.setLabelProvider(createDeltaLabelProvider(true, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION,
-			// ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
-			createWordWrapRenderer(gvc);
+			gvc.getColumn().setText("P&L (m)");
+			gvc.getColumn().setWidth(75);
+			gvc.setLabelProvider(createPNLDeltaLabelProvider());
 			gvc.getColumn().setCellRenderer(createCellRenderer());
-			gvc.getColumn().setDetail(false);
+			gvc.getColumn().setDetail(true);
 			gvc.getColumn().setSummary(true);
+
 		}
+//		{
+//			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
+//			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+//			gvc.getColumn().setText("");
+//			gvc.getColumn().setHeaderTooltip("P&&L Components");
+//			gvc.getColumn().setWidth(20);
+//			gvc.setLabelProvider(createStubLabelProvider());
+//			// gvc.setLabelProvider(createDeltaLabelProvider(true, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION,
+//			// ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
+//			createWordWrapRenderer(gvc);
+//			gvc.getColumn().setCellRenderer(createCellRenderer());
+//			gvc.getColumn().setDetail(false);
+//			gvc.getColumn().setSummary(true);
+//		}
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
