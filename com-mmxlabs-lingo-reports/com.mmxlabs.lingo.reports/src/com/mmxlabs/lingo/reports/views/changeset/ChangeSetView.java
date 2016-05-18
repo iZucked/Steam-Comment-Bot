@@ -29,6 +29,7 @@ import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jdt.annotation.NonNull;
@@ -57,7 +58,6 @@ import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer;
 import org.eclipse.nebula.widgets.grid.internal.DefaultColumnHeaderRenderer;
-import org.eclipse.nebula.widgets.grid.internal.ExpandToggleRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.TreeEvent;
 import org.eclipse.swt.events.TreeListener;
@@ -67,7 +67,6 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
@@ -1873,11 +1872,19 @@ public class ChangeSetView implements IAdaptable {
 				if (element instanceof ChangeSet) {
 					cell.setFont(boldFont);
 					final ChangeSet changeSet = (ChangeSet) element;
-					for (final ChangeSetRow change : changeSet.getChangeSetRowsToPrevious()) {
-						if (asInt) {
-							delta += deltaIntegerUpdater.applyAsInt(calcF.apply(change), calcT.apply(change));
-						} else {
-							delta += deltaDoubleUpdater.applyAsDouble(calcF.apply(change), calcT.apply(change));
+					final List<ChangeSetRow> rows;
+					if (diffToBase) {
+						rows = changeSet.getChangeSetRowsToBase();
+					} else {
+						rows = changeSet.getChangeSetRowsToPrevious();
+					}
+					if (rows != null) {
+						for (final ChangeSetRow change : rows) {
+							if (asInt) {
+								delta += deltaIntegerUpdater.applyAsInt(calcF.apply(change), calcT.apply(change));
+							} else {
+								delta += deltaDoubleUpdater.applyAsDouble(calcF.apply(change), calcT.apply(change));
+							}
 						}
 					}
 				} else if (element instanceof ChangeSetRow) {
