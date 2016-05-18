@@ -19,15 +19,21 @@ import org.mockito.Mockito;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EndEvent;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -180,8 +186,10 @@ public class ChangeSetTransformerUtilTest {
 			Assert.assertSame(oldLoadSlotAllocation, row.getOriginalLoadAllocation());
 
 			Assert.assertSame(newDischargeSlotAllocation, row.getNewDischargeAllocation());
-			Assert.assertSame(oldDischargeSlotAllocation, row.getOriginalDischargeAllocation());
+			// Discharge 2 did not have any previous allocation
+			Assert.assertNull(row.getOriginalDischargeAllocation());
 		}
+		// Open "discharge"
 		{
 			final ChangeSetRow row = rows.get(1);
 			Assert.assertNull(row.getLhsName());
@@ -226,7 +234,7 @@ public class ChangeSetTransformerUtilTest {
 			final Sequence sequence = createSequence("sequence");
 			final SpotMarket dischargeMarket = createDESSaleSpotMarket("SPOT");
 			final LoadSlot loadSlot = createLoadSlot("load");
-			final DischargeSlot dischargeSlot = createSpotDischargeSlot("SPOT-2015-11-3", LocalDate.of(2015, 11, 1), dischargeMarket);
+			final DischargeSlot dischargeSlot = createSpotDischargeSlot("SPOT-2015-11-1", LocalDate.of(2015, 11, 1), dischargeMarket);
 			final Cargo cargo = createCargo("load", loadSlot, dischargeSlot);
 
 			newLoadSlotAllocation = createSlotAllocation(loadSlot, sequence);
@@ -276,8 +284,10 @@ public class ChangeSetTransformerUtilTest {
 			Assert.assertSame(oldLoadSlotAllocation, row.getOriginalLoadAllocation());
 
 			Assert.assertSame(newDischargeSlotAllocation, row.getNewDischargeAllocation());
-			Assert.assertSame(oldDischargeSlotAllocation, row.getOriginalDischargeAllocation());
+			Assert.assertNull(row.getOriginalDischargeAllocation());
 		}
+
+		// Different market type caused second row to be created
 		{
 			final ChangeSetRow row = rows.get(1);
 			Assert.assertNull(row.getLhsName());
@@ -352,7 +362,7 @@ public class ChangeSetTransformerUtilTest {
 			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, oldLoadSlotAllocation.getSlotVisit(), loadSlot, false, false);
 		}
 
-		// Verify results
+		// Verify results - same market type, same market name, same month, same as no change.
 		Assert.assertEquals(1, rows.size());
 
 		final ChangeSetRow row = rows.get(0);
@@ -506,7 +516,7 @@ public class ChangeSetTransformerUtilTest {
 			Assert.assertSame(oldLoadSlotAllocation2, row.getOriginalLoadAllocation());
 
 			Assert.assertSame(newDischargeSlotAllocation2, row.getNewDischargeAllocation());
-			Assert.assertSame(oldDischargeSlotAllocation2, row.getOriginalDischargeAllocation());
+			Assert.assertNull(row.getOriginalDischargeAllocation());
 		}
 		{
 			final ChangeSetRow row = rows.get(2);
@@ -668,10 +678,213 @@ public class ChangeSetTransformerUtilTest {
 		}
 	}
 
-	private Sequence createSequence(final String name) {
+	@Test
+	public void testNoChange_StartEvent() {
+
+		// Configure example case
+
+		final Map<String, ChangeSetRow> lhsRowMap = new HashMap<>();
+		final Map<String, ChangeSetRow> rhsRowMap = new HashMap<>();
+
+		final List<ChangeSetRow> rows = new LinkedList<>();
+
+		// New
+
+		final StartEvent newStartEvent;
+		{
+			final Sequence sequence = createSequence("sequence");
+			newStartEvent = createStartEvent(sequence, "Start sequence");
+			ChangeSetTransformerUtil.createOrUpdateEventRow(lhsRowMap, rhsRowMap, rows, newStartEvent, true);
+		}
+
+		// Original
+
+		final StartEvent oldStartEvent;
+		{
+			final Sequence sequence = createSequence("sequence");
+			oldStartEvent = createStartEvent(sequence, "Start sequence");
+			ChangeSetTransformerUtil.createOrUpdateEventRow(lhsRowMap, rhsRowMap, rows, oldStartEvent, false);
+		}
+
+		// Verify results
+		Assert.assertEquals(1, rows.size());
+
+		final ChangeSetRow row = rows.get(0);
+		Assert.assertEquals("Start sequence", row.getLhsName());
+		Assert.assertNull(row.getRhsName());
+		Assert.assertEquals("sequence", row.getOriginalVesselName());
+		Assert.assertEquals("sequence", row.getNewVesselName());
+		Assert.assertNull(row.getLhsWiringLink());
+		Assert.assertNull(row.getRhsWiringLink());
+
+		Assert.assertSame(newStartEvent, row.getNewEventGrouping());
+		Assert.assertSame(oldStartEvent, row.getOriginalEventGrouping());
+		Assert.assertSame(newStartEvent, row.getNewGroupProfitAndLoss());
+		Assert.assertSame(oldStartEvent, row.getOriginalGroupProfitAndLoss());
+	}
+
+	@Test
+	public void testNoChange_DryDockEvent() {
+
+		// Configure example case
+
+		final Map<String, ChangeSetRow> lhsRowMap = new HashMap<>();
+		final Map<String, ChangeSetRow> rhsRowMap = new HashMap<>();
+
+		final List<ChangeSetRow> rows = new LinkedList<>();
+
+		// New
+
+		final VesselEventVisit newEvent;
+		{
+			final Sequence sequence = createSequence("sequence");
+			newEvent = createDryDockEvent(sequence, "Drydock-1");
+			ChangeSetTransformerUtil.createOrUpdateEventRow(lhsRowMap, rhsRowMap, rows, newEvent, true);
+		}
+
+		// Original
+
+		final VesselEventVisit oldEvent;
+		{
+			final Sequence sequence = createSequence("sequence");
+			oldEvent = createDryDockEvent(sequence, "Drydock-1");
+			ChangeSetTransformerUtil.createOrUpdateEventRow(lhsRowMap, rhsRowMap, rows, oldEvent, false);
+		}
+
+		// Verify results
+		Assert.assertEquals(1, rows.size());
+
+		final ChangeSetRow row = rows.get(0);
+		Assert.assertEquals("Drydock-1", row.getLhsName());
+		Assert.assertNull(row.getRhsName());
+		Assert.assertEquals("sequence", row.getOriginalVesselName());
+		Assert.assertEquals("sequence", row.getNewVesselName());
+		Assert.assertNull(row.getLhsWiringLink());
+		Assert.assertNull(row.getRhsWiringLink());
+
+		Assert.assertSame(newEvent, row.getNewEventGrouping());
+		Assert.assertSame(oldEvent, row.getOriginalEventGrouping());
+		Assert.assertSame(newEvent, row.getNewGroupProfitAndLoss());
+		Assert.assertSame(oldEvent, row.getOriginalGroupProfitAndLoss());
+	}
+
+	@Test
+	public void testNoChange_EndEvent() {
+
+		// Configure example case
+
+		final Map<String, ChangeSetRow> lhsRowMap = new HashMap<>();
+		final Map<String, ChangeSetRow> rhsRowMap = new HashMap<>();
+
+		final List<ChangeSetRow> rows = new LinkedList<>();
+
+		// New
+
+		final EndEvent newEndEvent;
+		{
+			final Sequence sequence = createSequence("sequence");
+			newEndEvent = createEndEvent(sequence, "End sequence");
+			ChangeSetTransformerUtil.createOrUpdateEventRow(lhsRowMap, rhsRowMap, rows, newEndEvent, true);
+		}
+
+		// Original
+
+		final EndEvent oldEndEvent;
+		{
+			final Sequence sequence = createSequence("sequence");
+			oldEndEvent = createEndEvent(sequence, "End sequence");
+			ChangeSetTransformerUtil.createOrUpdateEventRow(lhsRowMap, rhsRowMap, rows, oldEndEvent, false);
+		}
+
+		// Verify results
+		Assert.assertEquals(1, rows.size());
+
+		final ChangeSetRow row = rows.get(0);
+		Assert.assertEquals("End sequence", row.getLhsName());
+		Assert.assertNull(row.getRhsName());
+		Assert.assertEquals("sequence", row.getOriginalVesselName());
+		Assert.assertEquals("sequence", row.getNewVesselName());
+		Assert.assertNull(row.getLhsWiringLink());
+		Assert.assertNull(row.getRhsWiringLink());
+
+		Assert.assertSame(newEndEvent, row.getNewEventGrouping());
+		Assert.assertSame(oldEndEvent, row.getOriginalEventGrouping());
+		Assert.assertSame(newEndEvent, row.getNewGroupProfitAndLoss());
+		Assert.assertSame(oldEndEvent, row.getOriginalGroupProfitAndLoss());
+	}
+
+	@Test
+	public void testNoChange_CharterIn_EndEvent() {
+
+		// Configure example case
+
+		final Map<String, ChangeSetRow> lhsRowMap = new HashMap<>();
+		final Map<String, ChangeSetRow> rhsRowMap = new HashMap<>();
+
+		final List<ChangeSetRow> rows = new LinkedList<>();
+
+		// New
+
+		final EndEvent newEndEvent;
+		{
+			final Sequence sequence = createSequence("sequence");
+			Mockito.when(sequence.isSetCharterInMarket()).thenReturn(Boolean.TRUE);
+			newEndEvent = createEndEvent(sequence, "End sequence");
+			ChangeSetTransformerUtil.createOrUpdateEventRow(lhsRowMap, rhsRowMap, rows, newEndEvent, true);
+		}
+
+		// Original
+
+		final EndEvent oldEndEvent;
+		{
+			final Sequence sequence = createSequence("sequence");
+			Mockito.when(sequence.isSetCharterInMarket()).thenReturn(Boolean.TRUE);
+			oldEndEvent = createEndEvent(sequence, "End sequence");
+			ChangeSetTransformerUtil.createOrUpdateEventRow(lhsRowMap, rhsRowMap, rows, oldEndEvent, false);
+		}
+
+		// Verify results -- Charter in end events filtered out.
+		Assert.assertEquals(0, rows.size());
+	}
+
+	private @NonNull VesselEventVisit createDryDockEvent(final Sequence sequence, final String name) {
+
+		VesselEventVisit visit = Mockito.mock(VesselEventVisit.class);
+		final DryDockEvent event = Mockito.mock(DryDockEvent.class);
+		Mockito.when(visit.name()).thenReturn(name);
+		Mockito.when(visit.getSequence()).thenReturn(sequence);
+
+		Mockito.when(visit.getVesselEvent()).thenReturn(event);
+		
+		Mockito.when(visit.eClass()).thenReturn(CargoPackage.Literals.DRY_DOCK_EVENT);
+		
+		return visit;
+	}
+
+	private @NonNull StartEvent createStartEvent(final Sequence sequence, final String name) {
+
+		final StartEvent startEvent = Mockito.mock(StartEvent.class);
+		Mockito.when(startEvent.name()).thenReturn(name);
+		Mockito.when(startEvent.getSequence()).thenReturn(sequence);
+
+		return startEvent;
+	}
+
+	private @NonNull EndEvent createEndEvent(final Sequence sequence, final String name) {
+
+		final EndEvent endEvent = Mockito.mock(EndEvent.class);
+		Mockito.when(endEvent.name()).thenReturn(name);
+		Mockito.when(endEvent.getSequence()).thenReturn(sequence);
+
+		return endEvent;
+	}
+
+	private @NonNull Sequence createSequence(final String name) {
 
 		final Sequence sequence = Mockito.mock(Sequence.class);
+		final EList<Event> events = new BasicEList<>();
 		Mockito.when(sequence.getName()).thenReturn(name);
+		Mockito.when(sequence.getEvents()).thenReturn(events);
 
 		return sequence;
 	}
