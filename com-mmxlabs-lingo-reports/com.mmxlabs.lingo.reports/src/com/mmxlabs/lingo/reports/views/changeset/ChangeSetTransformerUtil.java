@@ -300,7 +300,7 @@ public final class ChangeSetTransformerUtil {
 			// TODO: Unique name?
 			lhsRowMap.put(key, row);
 
-			row.setLhsName(key);
+			row.setLhsName(eventName);
 			if (event instanceof ProfitAndLossContainer) {
 				row.setNewGroupProfitAndLoss((ProfitAndLossContainer) event);
 			}
@@ -783,7 +783,7 @@ public final class ChangeSetTransformerUtil {
 			// Phase 1. Find wiring groups which have compatible (i.e. same market, different instance count) heads and tails and join them together.
 			// For example a Spot Purchase may now be open, but previously paired to a sale. Another sale in the wiring group may have previously been paired to a different spot purchase in the same
 			// market/month as the open position. We can assume these are equivalent and join the head to the tail.
-			final Map<ChangeSetRow, ChangeSetRow> headToTails = new HashMap<>();
+			final Map<ChangeSetRow, ChangeSetRow> headToTails = new LinkedHashMap<>();
 			for (final ChangeSetRow row : rows) {
 				if (row.getLhsWiringLink() == null) {
 					ChangeSetRow link = row.getRhsWiringLink();
@@ -810,7 +810,7 @@ public final class ChangeSetTransformerUtil {
 		}
 		// Phase 2. It is possible that we can end up with separate wiring groups but both share compatible head tails and these can be merged together into a single wiring group.
 		{
-			final Map<ChangeSetRow, ChangeSetRow> headToTails = new HashMap<>();
+			final Map<ChangeSetRow, ChangeSetRow> headToTails = new LinkedHashMap<>();
 			for (final ChangeSetRow row : rows) {
 				if (row.getLhsWiringLink() == null) {
 					ChangeSetRow link = row.getRhsWiringLink();
