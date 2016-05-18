@@ -31,6 +31,7 @@ public final class LHMCache<K, V> extends AbstractCache<K, V> {
 	public final V get(final K key) {
 		query();
 		final Reference<V> ref = map.get(key);
+		@SuppressWarnings("null")
 		V value = (V) null;
 		if ((ref == null) || ((value = ref.get()) == null)) {
 			final Pair<K, V> pair = evaluate(key);

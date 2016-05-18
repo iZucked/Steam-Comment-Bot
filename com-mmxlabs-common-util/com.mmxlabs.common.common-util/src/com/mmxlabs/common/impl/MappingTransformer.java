@@ -22,6 +22,7 @@ public final class MappingTransformer<T, U> implements ITransformer<T, U> {
 		this.mapping = mapping;
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public U transform(final T t) {
 		if (mapping.containsKey(t)) {

@@ -23,6 +23,7 @@ public class Triple<A, B, C> {
 	private B second;
 	private C third;
 
+	@SuppressWarnings("null")
 	public Triple() {
 		this((A) null, (B) null, (C) null);
 	}

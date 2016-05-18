@@ -18,6 +18,7 @@ public class Pair<A, B> {
 	private A first;
 	private B second;
 
+	@SuppressWarnings("null")
 	public Pair() {
 		this((A) null, (B) null);
 	}
