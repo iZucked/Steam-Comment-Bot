@@ -82,7 +82,7 @@ public final class ChangeSetTransformerUtil {
 
 		final ChangeSetRow row;
 		{
-			final String rowKey = getKeyName(loadSlot);
+ 			final String rowKey = getKeyName(loadSlot);
 			if (lhsRowMap.containsKey(rowKey)) {
 				row = lhsRowMap.get(rowKey);
 			} else {
@@ -155,7 +155,7 @@ public final class ChangeSetTransformerUtil {
 					}
 				}
 			} else {
-				row.setOriginalDischargeAllocation(slotAllocation);
+//				row.setOriginalDischargeAllocation(slotAllocation);
 			}
 			if (!isBase) {
 				if (slotAllocation.getSlot() != null) {
@@ -192,6 +192,8 @@ public final class ChangeSetTransformerUtil {
 						rows.add(otherRow);
 						rhsRowMap.put(otherRowKey, otherRow);
 						if (slotAllocation.getSlot() instanceof SpotSlot) {
+							// FIXME: Random key used here, no point inserting into map.
+							// Probably really want #addToMarketMap
 							rhsRowMap.put("market-" + slotAllocation.getSlot().getName(), otherRow);
 						}
 						otherRow.setRhsName(getRowName(slotAllocation.getSlot()));
@@ -279,12 +281,13 @@ public final class ChangeSetTransformerUtil {
 			@NonNull final Event event, final boolean isBase) {
 
 		final String eventName = event.name();
+		String key = EquivalanceGroupBuilder.getElementKey(event);
 		if (isBase) {
 			final ChangeSetRow row = ChangesetFactory.eINSTANCE.createChangeSetRow();
 			rows.add(row);
 
 			// TODO: Unique name?
-			lhsRowMap.put(eventName, row);
+			lhsRowMap.put(key, row);
 
 			row.setLhsName(eventName);
 			if (event instanceof ProfitAndLossContainer) {
@@ -296,14 +299,14 @@ public final class ChangeSetTransformerUtil {
 			row.setNewVesselName(getName(event.getSequence()));
 			row.setNewVesselShortName(getShortName(event.getSequence()));
 		} else {
-			ChangeSetRow row = lhsRowMap.get(eventName);
+			ChangeSetRow row = lhsRowMap.get(key);
 			if (row == null) {
 				row = ChangesetFactory.eINSTANCE.createChangeSetRow();
 				row.setLhsName(eventName);
 				rows.add(row);
 
 				// TODO: Unique name?
-				lhsRowMap.put(eventName, row);
+				lhsRowMap.put(key, row);
 
 			}
 
@@ -527,10 +530,8 @@ public final class ChangeSetTransformerUtil {
 			return null;
 		}
 		if (slot instanceof SpotSlot) {
-			if (slot instanceof SpotSlot) {
-				final SpotMarket market = ((SpotSlot) slot).getMarket();
-				return String.format("%s-%s", market.getName(), format(slot.getWindowStart()));
-			}
+			final SpotMarket market = ((SpotSlot) slot).getMarket();
+			return String.format("%s-%s", market.getName(), format(slot.getWindowStart()));
 		}
 		return slot.getName();
 	}
@@ -793,11 +794,13 @@ public final class ChangeSetTransformerUtil {
 		if (tail == null || !(tail.getDischargeSlot() instanceof SpotSlot)) {
 			return false;
 		}
-
-		if (head.getRhsName() != null && head.getRhsName().equals(tail.getRhsName())) {
-			final ChangeSetRow lhsWiringLink = tail.getLhsWiringLink();
-			head.setLhsWiringLink(lhsWiringLink);
-			return true;
+		// Check for same market type
+		if (((SpotSlot) head.getDischargeSlot()).getMarket().eClass() == ((SpotSlot) tail.getDischargeSlot()).getMarket().eClass()) {
+			if (head.getRhsName() != null && head.getRhsName().equals(tail.getRhsName())) {
+				final ChangeSetRow lhsWiringLink = tail.getLhsWiringLink();
+				head.setLhsWiringLink(lhsWiringLink);
+				return true;
+			}
 		}
 		return false;
 	}
@@ -812,26 +815,30 @@ public final class ChangeSetTransformerUtil {
 			return false;
 		}
 
-		if (head.getLhsName() != null && head.getLhsName().equals(tail.getLhsName())) {
+		// Check for same market type
+		if (((SpotSlot) head.getLoadSlot()).getMarket().eClass() == ((SpotSlot) tail.getLoadSlot()).getMarket().eClass()) {
 
-			if (head.getNewDischargeAllocation() == null && tail.getOriginalDischargeAllocation() == null) {
+			if (head.getLhsName() != null && head.getLhsName().equals(tail.getLhsName())) {
 
+				if (head.getNewDischargeAllocation() == null && tail.getOriginalDischargeAllocation() == null) {
+
+				}
+
+				final ChangeSetRow lhsWiringLink = tail.getLhsWiringLink();
+				head.setLhsWiringLink(lhsWiringLink);
+
+				// Copy data across - not needed for sales as that should already have happened. However all data is keyed off the load, hence extra work here
+				head.setNewDischargeAllocation(tail.getNewDischargeAllocation());
+				head.setNewEventGrouping(tail.getNewEventGrouping());
+				head.setNewGroupProfitAndLoss(tail.getNewGroupProfitAndLoss());
+				head.setNewLoadAllocation(tail.getNewLoadAllocation());
+				head.setNewVesselName(tail.getNewVesselName());
+				head.setNewVesselShortName(tail.getNewVesselShortName());
+				head.setRhsName(tail.getRhsName());
+				head.setDischargeSlot(tail.getDischargeSlot());
+
+				return true;
 			}
-
-			final ChangeSetRow lhsWiringLink = tail.getLhsWiringLink();
-			head.setLhsWiringLink(lhsWiringLink);
-
-			// Copy data across - not needed for sales as that should already have happened. However all data is keyed off the load, hence extra work here
-			head.setNewDischargeAllocation(tail.getNewDischargeAllocation());
-			head.setNewEventGrouping(tail.getNewEventGrouping());
-			head.setNewGroupProfitAndLoss(tail.getNewGroupProfitAndLoss());
-			head.setNewLoadAllocation(tail.getNewLoadAllocation());
-			head.setNewVesselName(tail.getNewVesselName());
-			head.setNewVesselShortName(tail.getNewVesselShortName());
-			head.setRhsName(tail.getRhsName());
-			head.setDischargeSlot(tail.getDischargeSlot());
-
-			return true;
 		}
 		return false;
 	}
