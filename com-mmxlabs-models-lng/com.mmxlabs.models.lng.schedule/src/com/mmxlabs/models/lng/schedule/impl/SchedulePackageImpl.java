@@ -1979,6 +1979,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		endEventEClass.getESuperTypes().add(this.getFuelUsage());
 		endEventEClass.getESuperTypes().add(this.getPortVisit());
 		endEventEClass.getESuperTypes().add(this.getProfitAndLossContainer());
+		endEventEClass.getESuperTypes().add(this.getEventGrouping());
 		journeyEClass.getESuperTypes().add(this.getEvent());
 		journeyEClass.getESuperTypes().add(this.getFuelUsage());
 		idleEClass.getESuperTypes().add(this.getEvent());

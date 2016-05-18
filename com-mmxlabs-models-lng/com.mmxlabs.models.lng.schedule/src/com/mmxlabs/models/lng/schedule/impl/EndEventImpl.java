@@ -15,12 +15,15 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.EndEvent;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
@@ -45,6 +48,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getLateness <em>Lateness</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getEvents <em>Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getSlotAllocation <em>Slot Allocation</em>}</li>
  * </ul>
  *
@@ -120,6 +124,16 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 	 * @ordered
 	 */
 	protected EList<GeneralPNLDetails> generalPNLDetails;
+
+	/**
+	 * The cached value of the '{@link #getEvents() <em>Events</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEvents()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Event> events;
 
 	/**
 	 * The cached value of the '{@link #getSlotAllocation() <em>Slot Allocation</em>}' reference.
@@ -298,6 +312,18 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<Event> getEvents() {
+		if (events == null) {
+			events = new EObjectResolvingEList<Event>(Event.class, this, SchedulePackage.END_EVENT__EVENTS);
+		}
+		return events;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public SlotAllocation getSlotAllocation() {
 		if (slotAllocation != null && slotAllocation.eIsProxy()) {
 			InternalEObject oldSlotAllocation = (InternalEObject)slotAllocation;
@@ -387,6 +413,8 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 				return getGroupProfitAndLoss();
 			case SchedulePackage.END_EVENT__GENERAL_PNL_DETAILS:
 				return getGeneralPNLDetails();
+			case SchedulePackage.END_EVENT__EVENTS:
+				return getEvents();
 			case SchedulePackage.END_EVENT__SLOT_ALLOCATION:
 				if (resolve) return getSlotAllocation();
 				return basicGetSlotAllocation();
@@ -423,6 +451,10 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 				getGeneralPNLDetails().clear();
 				getGeneralPNLDetails().addAll((Collection<? extends GeneralPNLDetails>)newValue);
 				return;
+			case SchedulePackage.END_EVENT__EVENTS:
+				getEvents().clear();
+				getEvents().addAll((Collection<? extends Event>)newValue);
+				return;
 			case SchedulePackage.END_EVENT__SLOT_ALLOCATION:
 				setSlotAllocation((SlotAllocation)newValue);
 				return;
@@ -456,6 +488,9 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 			case SchedulePackage.END_EVENT__GENERAL_PNL_DETAILS:
 				getGeneralPNLDetails().clear();
 				return;
+			case SchedulePackage.END_EVENT__EVENTS:
+				getEvents().clear();
+				return;
 			case SchedulePackage.END_EVENT__SLOT_ALLOCATION:
 				setSlotAllocation((SlotAllocation)null);
 				return;
@@ -483,6 +518,8 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 				return groupProfitAndLoss != null;
 			case SchedulePackage.END_EVENT__GENERAL_PNL_DETAILS:
 				return generalPNLDetails != null && !generalPNLDetails.isEmpty();
+			case SchedulePackage.END_EVENT__EVENTS:
+				return events != null && !events.isEmpty();
 			case SchedulePackage.END_EVENT__SLOT_ALLOCATION:
 				return slotAllocation != null;
 		}
@@ -522,6 +559,12 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 				default: return -1;
 			}
 		}
+		if (baseClass == EventGrouping.class) {
+			switch (derivedFeatureID) {
+				case SchedulePackage.END_EVENT__EVENTS: return SchedulePackage.EVENT_GROUPING__EVENTS;
+				default: return -1;
+			}
+		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
@@ -558,6 +601,12 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 				default: return -1;
 			}
 		}
+		if (baseClass == EventGrouping.class) {
+			switch (baseFeatureID) {
+				case SchedulePackage.EVENT_GROUPING__EVENTS: return SchedulePackage.END_EVENT__EVENTS;
+				default: return -1;
+			}
+		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
@@ -585,6 +634,11 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 			}
 		}
 		if (baseClass == ProfitAndLossContainer.class) {
+			switch (baseOperationID) {
+				default: return -1;
+			}
+		}
+		if (baseClass == EventGrouping.class) {
 			switch (baseOperationID) {
 				default: return -1;
 			}

@@ -114,7 +114,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocation" lowerBound="1"
         eType="#//SlotAllocation"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EndEvent" eSuperTypes="#//Event #//FuelUsage #//PortVisit #//ProfitAndLossContainer">
+  <eClassifiers xsi:type="ecore:EClass" name="EndEvent" eSuperTypes="#//Event #//FuelUsage #//PortVisit #//ProfitAndLossContainer #//EventGrouping">
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocation" lowerBound="1"
         eType="#//SlotAllocation"/>
   </eClassifiers>

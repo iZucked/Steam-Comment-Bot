@@ -1842,13 +1842,22 @@ public interface SchedulePackage extends EPackage {
 	int END_EVENT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Events</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_EVENT__EVENTS = EVENT_FEATURE_COUNT + 6;
+
+	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 6;
+	int END_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The number of structural features of the '<em>End Event</em>' class.
@@ -1857,7 +1866,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 7;
+	int END_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 8;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.

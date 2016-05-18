@@ -52,6 +52,7 @@ public class EndEventItemProvider
 
 			addPortCostPropertyDescriptor(object);
 			addGroupProfitAndLossPropertyDescriptor(object);
+			addEventsPropertyDescriptor(object);
 			addSlotAllocationPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -96,6 +97,28 @@ public class EndEventItemProvider
 				 false,
 				 false,
 				 false,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Events feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addEventsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_EventGrouping_events_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_EventGrouping_events_feature", "_UI_EventGrouping_type"),
+				 SchedulePackage.Literals.EVENT_GROUPING__EVENTS,
+				 true,
+				 false,
+				 true,
 				 null,
 				 null,
 				 null));

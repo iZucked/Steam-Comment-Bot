@@ -197,6 +197,7 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = caseFuelUsage(endEvent);
 				if (result == null) result = casePortVisit(endEvent);
 				if (result == null) result = caseProfitAndLossContainer(endEvent);
+				if (result == null) result = caseEventGrouping(endEvent);
 				if (result == null) result = caseEvent(endEvent);
 				if (result == null) result = caseITimezoneProvider(endEvent);
 				if (result == null) result = caseCapacityViolationsHolder(endEvent);
