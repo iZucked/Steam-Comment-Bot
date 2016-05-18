@@ -110,7 +110,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 		if (actualsDataProvider != null && actualsDataProvider.hasActuals(loadOption)) {
 			return actualsDataProvider.getLNGPricePerMMBTu(loadOption);
 		}
-		final int pricingDate = pricingEventHelper.getDischargePricingDate(dischargeSlot, allocationAnnotation);
+		final int pricingDate = pricingEventHelper.getLoadPricingDate(loadOption, dischargeSlot, allocationAnnotation);
 		return calculateSimpleUnitPrice(pricingDate, dischargeSlot.getPort());
 	}
 
