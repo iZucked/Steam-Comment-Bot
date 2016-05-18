@@ -185,7 +185,7 @@ public class ChangeSetTransformer {
 		final Map<String, List<ChangeSetRow>> lhsRowMarketMap = new HashMap<>();
 		final Map<String, List<ChangeSetRow>> rhsRowMarketMap = new HashMap<>();
 
-		List<ChangeSet> changeSets = new LinkedList<>();
+		final List<ChangeSet> changeSets = new LinkedList<>();
 
 		// Convert into new data model.
 		for (final UserGroup g : table.getUserGroups()) {
@@ -220,7 +220,7 @@ public class ChangeSetTransformer {
 		Collections.sort(changeSets, new Comparator<ChangeSet>() {
 
 			@Override
-			public int compare(ChangeSet o1, ChangeSet o2) {
+			public int compare(final ChangeSet o1, final ChangeSet o2) {
 				// TODO Auto-generated method stub
 				return Integer.compare(o2.getMetricsToPrevious().getPnlDelta(), o1.getMetricsToPrevious().getPnlDelta());
 			}
@@ -532,8 +532,8 @@ public class ChangeSetTransformer {
 	}
 
 	private void processCycleGroup(final CycleGroup cycleGroup, @NonNull final Map<String, ChangeSetRow> lhsRowMap, @NonNull final Map<String, ChangeSetRow> rhsRowMap,
-			Map<String, List<ChangeSetRow>> lhsRowMarketMap, Map<String, List<ChangeSetRow>> rhsRowMarketMap, @NonNull final List<ChangeSetRow> rows, final Map<EObject, Set<EObject>> equivalancesMap,
-			final boolean firstPass) {
+			final Map<String, List<ChangeSetRow>> lhsRowMarketMap, final Map<String, List<ChangeSetRow>> rhsRowMarketMap, @NonNull final List<ChangeSetRow> rows,
+			final Map<EObject, Set<EObject>> equivalancesMap, final boolean firstPass) {
 		for (final Row r : cycleGroup.getRows()) {
 
 			boolean isBase = true;
@@ -552,10 +552,10 @@ public class ChangeSetTransformer {
 
 			EObject element = r.getTarget();
 			if (element instanceof CargoAllocation) {
-				CargoAllocation cargoAllocation = (CargoAllocation) element;
-				for (SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
+				final CargoAllocation cargoAllocation = (CargoAllocation) element;
+				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 					if (slotAllocation.getSlot() instanceof LoadSlot) {
-						SlotVisit slotVisit = slotAllocation.getSlotVisit();
+						final SlotVisit slotVisit = slotAllocation.getSlotVisit();
 						element = slotVisit;
 						break;
 					}
@@ -621,9 +621,9 @@ public class ChangeSetTransformer {
 		final DeltaMetrics deltaMetrics = ChangesetFactory.eINSTANCE.createDeltaMetrics();
 
 		{
-			long pnl = ScheduleModelKPIUtils.getScheduleProfitAndLoss(toSchedule);
-			int lateness = ScheduleModelKPIUtils.getScheduleLateness(toSchedule)[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
-			int violations = ScheduleModelKPIUtils.getScheduleViolationCount(toSchedule);
+			final long pnl = ScheduleModelKPIUtils.getScheduleProfitAndLoss(toSchedule);
+			final int lateness = ScheduleModelKPIUtils.getScheduleLateness(toSchedule)[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
+			final int violations = ScheduleModelKPIUtils.getScheduleViolationCount(toSchedule);
 
 			currentMetrics.setPnl((int) pnl);
 			currentMetrics.setCapacity((int) violations);
@@ -634,32 +634,33 @@ public class ChangeSetTransformer {
 		long violations = 0L;
 		long lateness = 0L;
 		{
-			for (ChangeSetRow row : changeSet.getChangeSetRowsToPrevious()) {
+			for (final ChangeSetRow row : changeSet.getChangeSetRowsToPrevious()) {
 				{
-					ProfitAndLossContainer newGroupProfitAndLoss = row.getNewGroupProfitAndLoss();
+					final ProfitAndLossContainer newGroupProfitAndLoss = row.getNewGroupProfitAndLoss();
 					if (newGroupProfitAndLoss != null) {
 						final GroupProfitAndLoss groupProfitAndLoss = newGroupProfitAndLoss.getGroupProfitAndLoss();
 						if (groupProfitAndLoss != null) {
 							pnl += groupProfitAndLoss.getProfitAndLoss();
 						}
-						if (groupProfitAndLoss instanceof CargoAllocation) {
-							CargoAllocation cargoAllocation = (CargoAllocation) groupProfitAndLoss;
-							lateness += LatenessUtils.getLatenessExcludingFlex(cargoAllocation);
-							violations += ScheduleModelKPIUtils.getCapacityViolationCount(cargoAllocation);
-						}
+					}
+					final EventGrouping newEventGrouping = row.getNewEventGrouping();
+					if (newEventGrouping != null) {
+
+						lateness += LatenessUtils.getLatenessExcludingFlex(newEventGrouping);
+						violations += ScheduleModelKPIUtils.getCapacityViolationCount(newEventGrouping);
 					}
 
-					ProfitAndLossContainer originalGroupProfitAndLoss = row.getOriginalGroupProfitAndLoss();
+					final ProfitAndLossContainer originalGroupProfitAndLoss = row.getOriginalGroupProfitAndLoss();
 					if (originalGroupProfitAndLoss != null) {
 						final GroupProfitAndLoss groupProfitAndLoss = originalGroupProfitAndLoss.getGroupProfitAndLoss();
 						if (groupProfitAndLoss != null) {
 							pnl -= groupProfitAndLoss.getProfitAndLoss();
 						}
-						if (groupProfitAndLoss instanceof CargoAllocation) {
-							CargoAllocation cargoAllocation = (CargoAllocation) groupProfitAndLoss;
-							lateness -= LatenessUtils.getLatenessExcludingFlex(cargoAllocation);
-							violations -= ScheduleModelKPIUtils.getCapacityViolationCount(cargoAllocation);
-						}
+					}
+					final EventGrouping originalEventGrouping = row.getOriginalEventGrouping();
+					if (originalEventGrouping != null) {
+						lateness = LatenessUtils.getLatenessExcludingFlex(originalEventGrouping);
+						violations = ScheduleModelKPIUtils.getCapacityViolationCount(originalEventGrouping);
 					}
 				}
 			}

@@ -37,6 +37,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
@@ -72,6 +73,7 @@ public final class ChangeSetTransformerUtil {
 			createOrUpdateOpenSlotAllocationRow(lhsRowMap, rhsRowMap, rows, openSlotAllocation, isBase /* , canDefer */);
 		} else if (element instanceof Event) {
 			final Event event = (Event) element;
+
 			// return
 			createOrUpdateEventRow(lhsRowMap, rhsRowMap, rows, event, isBase /* , canDefer */);
 		}
@@ -284,6 +286,12 @@ public final class ChangeSetTransformerUtil {
 			@NonNull final Event event, final boolean isBase) {
 
 		final String eventName = event.name();
+		// Skip charter market end events.
+		if (event instanceof EndEvent) {
+			if (event.getSequence().isSetCharterInMarket()) {
+				return;
+			}
+		}
 		final String key = EquivalanceGroupBuilder.getElementKey(event);
 		if (isBase) {
 			final ChangeSetRow row = ChangesetFactory.eINSTANCE.createChangeSetRow();
@@ -292,7 +300,7 @@ public final class ChangeSetTransformerUtil {
 			// TODO: Unique name?
 			lhsRowMap.put(key, row);
 
-			row.setLhsName(eventName);
+			row.setLhsName(key);
 			if (event instanceof ProfitAndLossContainer) {
 				row.setNewGroupProfitAndLoss((ProfitAndLossContainer) event);
 			}
@@ -578,6 +586,7 @@ public final class ChangeSetTransformerUtil {
 	public static void setRowFlags(@NonNull final List<ChangeSetRow> rows) {
 		// Update with vessel and wiring changes
 		for (final ChangeSetRow row : rows) {
+
 			if (!Objects.equal(row.getOriginalVesselName(), row.getNewVesselName())) {
 				row.setVesselChange(true);
 			}
@@ -707,9 +716,13 @@ public final class ChangeSetTransformerUtil {
 							if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
 								final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
 								pnl += cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-								lateness += LatenessUtils.getLatenessExcludingFlex(cargoAllocation);
-								violations += ScheduleModelKPIUtils.getCapacityViolationCount(cargoAllocation);
 							}
+						}
+
+						if (event instanceof EventGrouping) {
+							EventGrouping eventGrouping = (EventGrouping) event;
+							lateness += LatenessUtils.getLatenessExcludingFlex(eventGrouping);
+							violations += ScheduleModelKPIUtils.getCapacityViolationCount(eventGrouping);
 						}
 					}
 				}
@@ -718,7 +731,7 @@ public final class ChangeSetTransformerUtil {
 					pnl += openSlotAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 				}
 			}
-			// THIS SHOULD BE THE TO SCHENAR> -- FLIP CODE ROUND
+
 			currentMetrics.setPnl((int) pnl);
 			currentMetrics.setCapacity(violations);
 			currentMetrics.setLateness(lateness);
@@ -736,10 +749,15 @@ public final class ChangeSetTransformerUtil {
 							if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
 								final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
 								pnl -= cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-								lateness -= LatenessUtils.getLatenessExcludingFlex(cargoAllocation);
-								violations -= ScheduleModelKPIUtils.getCapacityViolationCount(cargoAllocation);
 							}
 						}
+
+						if (event instanceof EventGrouping) {
+							EventGrouping eventGrouping = (EventGrouping) event;
+							lateness -= LatenessUtils.getLatenessExcludingFlex(eventGrouping);
+							violations -= ScheduleModelKPIUtils.getCapacityViolationCount(eventGrouping);
+						}
+
 					}
 				}
 

@@ -223,7 +223,9 @@ public class ActionSetTransformer {
 		for (final EObject element : uniqueElements) {
 			assert element != null;
 			final boolean isBaseElement = toAllElements.contains(element);
-			ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, element, isBaseElement, false);
+			if (!isBaseElement) {
+				ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, element, isBaseElement, false);
+			}
 		}
 
 		// Second pass, create the wiring links.

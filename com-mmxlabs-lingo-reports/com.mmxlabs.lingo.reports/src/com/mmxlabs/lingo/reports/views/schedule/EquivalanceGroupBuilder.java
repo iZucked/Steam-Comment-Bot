@@ -360,10 +360,18 @@ public class EquivalanceGroupBuilder {
 			}
 		} else if (element instanceof StartEvent) {
 			final StartEvent startEvent = (StartEvent) element;
-			return "start-" + startEvent.getSequence().getName();
+			final String base = "start-" + startEvent.getSequence().getName();
+			if (startEvent.getSequence().isSetSpotIndex()) {
+				return base + "-" + startEvent.getSequence().getSpotIndex();
+			}
+			return base;
 		} else if (element instanceof EndEvent) {
 			final EndEvent endEvent = (EndEvent) element;
-			return "end-" + endEvent.getSequence().getName();
+			final String base = "end-" + endEvent.getSequence().getName();
+			if (endEvent.getSequence().isSetSpotIndex()) {
+				return base + "-" + endEvent.getSequence().getSpotIndex();
+			}
+			return base;
 		} else if (element instanceof Event) {
 			return element.eClass().getName() + "-" + ((Event) element).name();
 		}
@@ -411,14 +419,14 @@ public class EquivalanceGroupBuilder {
 	protected static @NonNull String getSlotTypePrefix(final Slot slot) {
 		String prefix;
 		if (slot instanceof LoadSlot) {
-			LoadSlot loadSlot = (LoadSlot) slot;
+			final LoadSlot loadSlot = (LoadSlot) slot;
 			if (loadSlot.isDESPurchase()) {
 				prefix = "des-purchase";
 			} else {
 				prefix = "fob-purchase";
 			}
 		} else {
-			DischargeSlot dischargeSlot = (DischargeSlot) slot;
+			final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 			if (dischargeSlot.isFOBSale()) {
 				prefix = "fob-sale";
 			} else {

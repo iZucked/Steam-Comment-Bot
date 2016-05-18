@@ -30,6 +30,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
@@ -175,7 +176,7 @@ public class ScenarioComparisonTransformer {
 	}
 
 	private void processCycleGroup(final CycleGroup cycleGroup, @NonNull final Map<String, ChangeSetRow> lhsRowMap, @NonNull final Map<String, ChangeSetRow> rhsRowMap,
-			@NonNull Map<String, List<ChangeSetRow>> lhsRowMarketMap, @NonNull Map<String, List<ChangeSetRow>> rhsRowMarketMap, @NonNull final List<ChangeSetRow> rows,
+			@NonNull final Map<String, List<ChangeSetRow>> lhsRowMarketMap, @NonNull final Map<String, List<ChangeSetRow>> rhsRowMarketMap, @NonNull final List<ChangeSetRow> rows,
 			final Map<EObject, Set<EObject>> equivalancesMap, final int pass) {
 		for (final Row r : cycleGroup.getRows()) {
 
@@ -258,12 +259,12 @@ public class ScenarioComparisonTransformer {
 		final DeltaMetrics deltaMetrics = ChangesetFactory.eINSTANCE.createDeltaMetrics();
 
 		long pnl = ScheduleModelKPIUtils.getScheduleProfitAndLoss(fromSchedule);
-		int lateness = ScheduleModelKPIUtils.getScheduleLateness(fromSchedule)[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
-		int violations = ScheduleModelKPIUtils.getScheduleViolationCount(fromSchedule);
+		long lateness = ScheduleModelKPIUtils.getScheduleLateness(fromSchedule)[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
+		long violations = ScheduleModelKPIUtils.getScheduleViolationCount(fromSchedule);
 
 		currentMetrics.setPnl((int) pnl);
-		currentMetrics.setCapacity(violations);
-		currentMetrics.setLateness(lateness);
+		currentMetrics.setCapacity((int) violations);
+		currentMetrics.setLateness((int) lateness);
 		pnl = 0;
 		violations = 0;
 		lateness = 0;
@@ -279,9 +280,13 @@ public class ScenarioComparisonTransformer {
 						}
 						if (newGroupProfitAndLoss instanceof CargoAllocation) {
 							final CargoAllocation cargoAllocation = (CargoAllocation) newGroupProfitAndLoss;
-							lateness += LatenessUtils.getLatenessExcludingFlex(cargoAllocation);
-							violations += ScheduleModelKPIUtils.getCapacityViolationCount(cargoAllocation);
 						}
+					}
+					final EventGrouping newEventGrouping = row.getNewEventGrouping();
+					if (newEventGrouping != null) {
+
+						lateness += LatenessUtils.getLatenessExcludingFlex(newEventGrouping);
+						violations += ScheduleModelKPIUtils.getCapacityViolationCount(newEventGrouping);
 					}
 
 					final ProfitAndLossContainer originalGroupProfitAndLoss = row.getOriginalGroupProfitAndLoss();
@@ -290,18 +295,18 @@ public class ScenarioComparisonTransformer {
 						if (groupProfitAndLoss != null) {
 							pnl -= groupProfitAndLoss.getProfitAndLoss();
 						}
-						if (originalGroupProfitAndLoss instanceof CargoAllocation) {
-							final CargoAllocation cargoAllocation = (CargoAllocation) originalGroupProfitAndLoss;
-							lateness -= LatenessUtils.getLatenessExcludingFlex(cargoAllocation);
-							violations -= ScheduleModelKPIUtils.getCapacityViolationCount(cargoAllocation);
-						}
+					}
+					final EventGrouping originalEventGrouping = row.getOriginalEventGrouping();
+					if (originalEventGrouping != null) {
+						lateness = LatenessUtils.getLatenessExcludingFlex(originalEventGrouping);
+						violations = ScheduleModelKPIUtils.getCapacityViolationCount(originalEventGrouping);
 					}
 				}
 			}
 		}
 		deltaMetrics.setPnlDelta((int) pnl);
-		deltaMetrics.setLatenessDelta(lateness);
-		deltaMetrics.setCapacityDelta(violations);
+		deltaMetrics.setLatenessDelta((int) lateness);
+		deltaMetrics.setCapacityDelta((int) violations);
 		changeSet.setMetricsToPrevious(deltaMetrics);
 
 		changeSet.setCurrentMetrics(currentMetrics);
