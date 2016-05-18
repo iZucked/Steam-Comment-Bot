@@ -10,14 +10,14 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 
-public class SlotMaker extends AbstractSlotMaker<SlotMaker> {
+public class SlotMaker<T extends Slot> extends AbstractSlotMaker<SlotMaker<T>> {
 
 	public SlotMaker(@NonNull final CargoModelBuilder cargoModelBuilder) {
 		super(cargoModelBuilder);
 	}
 
 	@NonNull
-	public Slot build() {
+	public T build() {
 
 		if (slot instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) slot;
@@ -29,6 +29,6 @@ public class SlotMaker extends AbstractSlotMaker<SlotMaker> {
 			assert false;
 		}
 
-		return slot;
+		return (T) slot;
 	}
 }

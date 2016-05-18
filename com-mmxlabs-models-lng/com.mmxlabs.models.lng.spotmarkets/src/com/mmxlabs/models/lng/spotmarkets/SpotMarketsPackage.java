@@ -152,13 +152,22 @@ public interface SpotMarketsPackage extends EPackage {
 	int SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Default Nominal Market</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_MARKETS_MODEL__DEFAULT_NOMINAL_MARKET = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_MARKETS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int SPOT_MARKETS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketGroupImpl <em>Spot Market Group</em>}' class.
@@ -1224,6 +1233,17 @@ public interface SpotMarketsPackage extends EPackage {
 	EReference getSpotMarketsModel_CharterOutMarkets();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getDefaultNominalMarket <em>Default Nominal Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Default Nominal Market</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getDefaultNominalMarket()
+	 * @see #getSpotMarketsModel()
+	 * @generated
+	 */
+	EReference getSpotMarketsModel_DefaultNominalMarket();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup <em>Spot Market Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1738,6 +1758,14 @@ public interface SpotMarketsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS = eINSTANCE.getSpotMarketsModel_CharterOutMarkets();
+
+		/**
+		 * The meta object literal for the '<em><b>Default Nominal Market</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SPOT_MARKETS_MODEL__DEFAULT_NOMINAL_MARKET = eINSTANCE.getSpotMarketsModel_DefaultNominalMarket();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketGroupImpl <em>Spot Market Group</em>}' class.

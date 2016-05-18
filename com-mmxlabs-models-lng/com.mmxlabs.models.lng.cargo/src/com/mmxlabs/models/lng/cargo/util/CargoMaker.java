@@ -48,7 +48,6 @@ public class CargoMaker {
 			CargoMaker.this.slots.add(slot);
 			return CargoMaker.this;
 		}
-
 	}
 
 	public CargoMaker(@NonNull final CargoModelBuilder cargoModelBuilder) {
@@ -124,7 +123,7 @@ public class CargoMaker {
 
 	public CargoMaker withAssignmentFlags(final boolean allowRewiring, final boolean lockedToAssignment) {
 
-		assert allowRewiring || lockedToAssignment;
+		assert !lockedToAssignment || (allowRewiring && lockedToAssignment);
 		cargo.setLocked(lockedToAssignment);
 		cargo.setAllowRewiring(allowRewiring);
 

@@ -17,6 +17,7 @@
         eType="#//CharterInMarket" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="charterOutMarkets" upperBound="-1"
         eType="#//CharterOutMarket" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultNominalMarket" eType="#//CharterInMarket"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="SpotType">
     <eLiterals name="FOBSale" literal="FOB Sale"/>

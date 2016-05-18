@@ -71,6 +71,7 @@ public class SpotMarketsModelComponentHelper extends BaseComponentHelper {
 		add_charterOutStartDateEditor(detailComposite, topClass);
 		add_charterInMarketsEditor(detailComposite, topClass);
 		add_charterOutMarketsEditor(detailComposite, topClass);
+		add_defaultNominalMarketEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the desPurchaseSpotMarket feature on SpotMarketsModel
@@ -129,5 +130,14 @@ public class SpotMarketsModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_charterOutMarketsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS));
+	}
+
+	/**
+	 * Create the editor for the defaultNominalMarket feature on SpotMarketsModel
+	 *
+	 * @generated
+	 */
+	protected void add_defaultNominalMarketEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__DEFAULT_NOMINAL_MARKET));
 	}
 }

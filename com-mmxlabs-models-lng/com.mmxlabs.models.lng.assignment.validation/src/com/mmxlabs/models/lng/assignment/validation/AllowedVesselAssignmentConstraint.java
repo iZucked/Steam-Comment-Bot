@@ -29,10 +29,14 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -53,7 +57,7 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 			final AssignableElement assignableElement = (AssignableElement) object;
 
 			final VesselAssignmentType vesselAssignmentType = assignableElement.getVesselAssignmentType();
-
+			boolean useDefaultNominalMarket = false;
 			if (vesselAssignmentType == null) {
 				if (assignableElement instanceof VesselEvent) {
 					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
@@ -62,7 +66,8 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 					failures.add(status);
 					return Activator.PLUGIN_ID;
 				} else {
-					return Activator.PLUGIN_ID;
+					useDefaultNominalMarket = true;
+					// return Activator.PLUGIN_ID;
 				}
 			}
 
@@ -103,14 +108,31 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 				}
 
 				AVesselSet<Vessel> vesselAssignment = null;
-				if (vesselAssignmentType instanceof VesselAvailability) {
-					VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
+				if (useDefaultNominalMarket) {
+					final MMXRootObject rootObject = extraContext.getRootObject();
+					if (rootObject instanceof LNGScenarioModel) {
+						final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+						final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(lngScenarioModel);
+						final CharterInMarket defaultNominalMarket = spotMarketsModel.getDefaultNominalMarket();
+						if (defaultNominalMarket != null) {
+							vesselAssignment = defaultNominalMarket.getVesselClass();
+						} else {
+							// Missing default market, skip over
+							return Activator.PLUGIN_ID;
+						}
+					}
+				} else if (vesselAssignmentType instanceof VesselAvailability) {
+					final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
 					vesselAssignment = vesselAvailability.getVessel();
 				} else if (vesselAssignmentType instanceof CharterInMarket) {
-					CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+					final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
 					vesselAssignment = charterInMarket.getVesselClass();
 				} else {
 					log.error("Assignment is not a VesselAvailability or CharterInMarket - unable to validate");
+					return Activator.PLUGIN_ID;
+				}
+
+				if (vesselAssignment == null) {
 					return Activator.PLUGIN_ID;
 				}
 
@@ -132,12 +154,20 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 				if (!permitted) {
 
 					final String message;
-					if (target instanceof Slot) {
-						message = String.format("Slot '%s': Assignment '%s' is not in the allowed vessels list.", ((Slot) target).getName(), vesselAssignment.getName());
-					} else if (target instanceof VesselEvent) {
-						message = String.format("Vessel Event '%s': Assignment requires vessel(s) not in the allowed vessels list.", ((VesselEvent) target).getName());
+					if (useDefaultNominalMarket) {
+						if (target instanceof Slot) {
+							message = String.format("Slot '%s': Default nominal market vessel type '%s' is not in the allowed vessels list.", ((Slot) target).getName(), vesselAssignment.getName());
+						} else {
+							throw new IllegalStateException("Unexpected code branch.");
+						}
 					} else {
-						throw new IllegalStateException("Unexpected code branch.");
+						if (target instanceof Slot) {
+							message = String.format("Slot '%s': Assignment '%s' is not in the allowed vessels list.", ((Slot) target).getName(), vesselAssignment.getName());
+						} else if (target instanceof VesselEvent) {
+							message = String.format("Vessel Event '%s': Assignment requires vessel(s) not in the allowed vessels list.", ((VesselEvent) target).getName());
+						} else {
+							throw new IllegalStateException("Unexpected code branch.");
+						}
 					}
 					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 

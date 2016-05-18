@@ -275,6 +275,15 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getSpotMarketsModel_DefaultNominalMarket() {
+		return (EReference)spotMarketsModelEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getSpotMarketGroup() {
 		return spotMarketGroupEClass;
 	}
@@ -666,6 +675,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		createEReference(spotMarketsModelEClass, SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE);
 		createEReference(spotMarketsModelEClass, SPOT_MARKETS_MODEL__CHARTER_IN_MARKETS);
 		createEReference(spotMarketsModelEClass, SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS);
+		createEReference(spotMarketsModelEClass, SPOT_MARKETS_MODEL__DEFAULT_NOMINAL_MARKET);
 
 		spotMarketGroupEClass = createEClass(SPOT_MARKET_GROUP);
 		createEReference(spotMarketGroupEClass, SPOT_MARKET_GROUP__AVAILABILITY);
@@ -781,6 +791,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		initEReference(getSpotMarketsModel_CharterOutStartDate(), this.getCharterOutStartDate(), null, "charterOutStartDate", null, 0, 1, SpotMarketsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSpotMarketsModel_CharterInMarkets(), this.getCharterInMarket(), null, "charterInMarkets", null, 0, -1, SpotMarketsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSpotMarketsModel_CharterOutMarkets(), this.getCharterOutMarket(), null, "charterOutMarkets", null, 0, -1, SpotMarketsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSpotMarketsModel_DefaultNominalMarket(), this.getCharterInMarket(), null, "defaultNominalMarket", null, 0, 1, SpotMarketsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(spotMarketGroupEClass, SpotMarketGroup.class, "SpotMarketGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSpotMarketGroup_Availability(), this.getSpotAvailability(), null, "availability", null, 1, 1, SpotMarketGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

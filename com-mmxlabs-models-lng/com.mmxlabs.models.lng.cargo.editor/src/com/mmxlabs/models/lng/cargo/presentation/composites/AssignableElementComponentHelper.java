@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.SpotIndexInlineEditor;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.AssignableElementEditorWrapper;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.AssignmentInlineEditor;
 import com.mmxlabs.models.ui.BaseComponentHelper;
@@ -77,7 +78,7 @@ public class AssignableElementComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_spotIndexEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(new AssignableElementEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX)));
+		detailComposite.addInlineEditor(new AssignableElementEditorWrapper(new SpotIndexInlineEditor( CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX)));
 	}
 	/**
 	 * Create the editor for the sequenceHint feature on AssignableElement

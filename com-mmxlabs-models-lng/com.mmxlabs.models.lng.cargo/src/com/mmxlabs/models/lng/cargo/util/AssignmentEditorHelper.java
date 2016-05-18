@@ -135,7 +135,7 @@ public class AssignmentEditorHelper {
 		final List<Pair<CharterInMarket, Integer>> charterInMarketKeysOrder = new ArrayList<>();
 		final Map<Pair<CharterInMarket, Integer>, List<AssignableElement>> spotGrouping = new HashMap<>();
 		for (final CharterInMarket charterInMarket : spotMarketsModel.getCharterInMarkets()) {
-			for (int i = 0; i < charterInMarket.getSpotCharterCount(); ++i) {
+			for (int i = -1; i < charterInMarket.getSpotCharterCount(); ++i) {
 				final Pair<CharterInMarket, Integer> key = new Pair<CharterInMarket, Integer>(charterInMarket, i);
 				charterInMarketKeysOrder.add(key);
 				// Pre-create map values

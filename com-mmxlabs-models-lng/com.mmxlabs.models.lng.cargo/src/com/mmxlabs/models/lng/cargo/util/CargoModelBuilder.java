@@ -198,25 +198,25 @@ public class CargoModelBuilder {
 	}
 
 	@NonNull
-	public SlotMaker makeDESPurchase(@NonNull final String name, final boolean divertible, @NonNull final LocalDate windowStart, @NonNull final Port port,
+	public SlotMaker<LoadSlot> makeDESPurchase(@NonNull final String name, final boolean divertible, @NonNull final LocalDate windowStart, @NonNull final Port port,
 			@Nullable final PurchaseContract purchaseContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, @Nullable Double cv,
 			@Nullable final Vessel nominatedVessel) {
 
-		return new SlotMaker(this).withDESPurchase(name, divertible, windowStart, port, purchaseContract, entity, priceExpression, cv, nominatedVessel);
+		return new SlotMaker<LoadSlot>(this).withDESPurchase(name, divertible, windowStart, port, purchaseContract, entity, priceExpression, cv, nominatedVessel);
 	}
 
 	@NonNull
-	public SlotMaker makeDESSale(@NonNull final String name, @NonNull final LocalDate windowStart, @NonNull final Port port, @Nullable final SalesContract salesContract,
+	public SlotMaker<DischargeSlot> makeDESSale(@NonNull final String name, @NonNull final LocalDate windowStart, @NonNull final Port port, @Nullable final SalesContract salesContract,
 			@Nullable final BaseLegalEntity entity, @Nullable final String priceExpression) {
 
-		return new SlotMaker(this).withDESSale(name, windowStart, port, salesContract, entity, priceExpression);
+		return new SlotMaker<DischargeSlot>(this).withDESSale(name, windowStart, port, salesContract, entity, priceExpression);
 	}
 
 	@NonNull
-	public SlotMaker makeFOBSale(@NonNull final String name, final boolean divertible, @NonNull final LocalDate windowStart, @NonNull final Port port, @Nullable final SalesContract salesContract,
-			@Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, @Nullable final Vessel nominatedVessel) {
+	public SlotMaker<DischargeSlot> makeFOBSale(@NonNull final String name, final boolean divertible, @NonNull final LocalDate windowStart, @NonNull final Port port,
+			@Nullable final SalesContract salesContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, @Nullable final Vessel nominatedVessel) {
 
-		return new SlotMaker(this).withFOBSale(name, divertible, windowStart, port, salesContract, entity, priceExpression, nominatedVessel);
+		return new SlotMaker<DischargeSlot>(this).withFOBSale(name, divertible, windowStart, port, salesContract, entity, priceExpression, nominatedVessel);
 	}
 
 	public @NonNull SpotDischargeSlot createSpotDESSale(@NonNull final String name, @NonNull final DESSalesMarket market, @NonNull final YearMonth windowStart, @NonNull final Port port) {

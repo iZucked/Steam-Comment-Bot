@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
@@ -50,20 +51,19 @@ public class SpotMarketsModelEditorContribution extends BaseJointModelEditorCont
 
 		charterInMarketPane = new CharterInMarketPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		charterInMarketPane.createControl(sash);
-		charterInMarketPane.init(Arrays.asList(new EReference[] { SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterInMarkets() }), editorPart.getAdapterFactory(), editorPart.getEditingDomain()
-				.getCommandStack());
+		charterInMarketPane.init(Arrays.asList(new EReference[] { SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterInMarkets() }), editorPart.getAdapterFactory(),
+				editorPart.getEditingDomain().getCommandStack());
 		charterInMarketPane.getViewer().setInput(modelObject);
 
 		charterOutMarketPane = new CharterOutMarketPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		charterOutMarketPane.createControl(sash);
-		charterOutMarketPane.init(Arrays.asList(new EReference[] { SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterOutMarkets() }), editorPart.getAdapterFactory(), editorPart
-				.getEditingDomain().getCommandStack());
+		charterOutMarketPane.init(Arrays.asList(new EReference[] { SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterOutMarkets() }), editorPart.getAdapterFactory(),
+				editorPart.getEditingDomain().getCommandStack());
 		charterOutMarketPane.getViewer().setInput(modelObject);
-
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(charterInMarketPane.getControl(), "com.mmxlabs.lingo.doc.Editor_SpotCharters");
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(charterOutMarketPane.getControl(), "com.mmxlabs.lingo.doc.Editor_SpotCharters");
-		
+
 		indexPage = editorPart.addPage(sash);
 		editorPart.setPageText(indexPage, "Charters");
 	}
@@ -102,7 +102,6 @@ public class SpotMarketsModelEditorContribution extends BaseJointModelEditorCont
 
 		spotCargoMarketsPage = editorPart.addPage(sash);
 		editorPart.setPageText(spotCargoMarketsPage, "Spot Cargoes");
-		
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(fobPurchasesPane.getControl(), "com.mmxlabs.lingo.doc.Editor_SpotCargoes");
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(desPurchasePane.getControl(), "com.mmxlabs.lingo.doc.Editor_SpotCargoes");
@@ -126,6 +125,13 @@ public class SpotMarketsModelEditorContribution extends BaseJointModelEditorCont
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
 
 			final Object target = dcsd.getTarget();
+
+			if (target instanceof SpotMarketsModel) {
+				final SpotMarketsModel spotMarketsModel = (SpotMarketsModel) target;
+				if (dcsd.getFeaturesForEObject(spotMarketsModel).contains(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__DEFAULT_NOMINAL_MARKET)) {
+					return true;
+				}
+			}
 			if (target instanceof CharterInMarket) {
 				return true;
 			}
@@ -145,6 +151,13 @@ public class SpotMarketsModelEditorContribution extends BaseJointModelEditorCont
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
 
 			final Object target = dcsd.getTarget();
+			if (target instanceof SpotMarketsModel) {
+				final SpotMarketsModel spotMarketsModel = (SpotMarketsModel) target;
+				if (dcsd.getFeaturesForEObject(spotMarketsModel).contains(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__DEFAULT_NOMINAL_MARKET)) {
+					editorPart.setActivePage(indexPage);
+					return;
+				}
+			}
 			if (target instanceof CharterInMarket) {
 				editorPart.setActivePage(indexPage);
 				charterInMarketPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);

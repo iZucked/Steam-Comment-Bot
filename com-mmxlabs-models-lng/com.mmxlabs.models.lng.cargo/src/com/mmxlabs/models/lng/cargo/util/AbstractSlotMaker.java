@@ -122,6 +122,11 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 		return (T) this;
 	}
 
+	public @NonNull T withCancellationFee(final @NonNull String expression) {
+		slot.setCancellationExpression(expression);
+		return (T) this;
+	}
+
 	@NonNull
 	public T withVisitDuration(@Nullable final Integer visitDurationInHours) {
 		if (visitDurationInHours != null) {
