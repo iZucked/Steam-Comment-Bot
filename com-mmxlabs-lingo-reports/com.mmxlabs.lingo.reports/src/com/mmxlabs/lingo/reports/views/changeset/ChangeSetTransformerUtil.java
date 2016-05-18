@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,6 +23,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.base.Objects;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
@@ -82,7 +84,7 @@ public final class ChangeSetTransformerUtil {
 
 		final ChangeSetRow row;
 		{
- 			final String rowKey = getKeyName(loadSlot);
+			final String rowKey = getKeyName(loadSlot);
 			if (lhsRowMap.containsKey(rowKey)) {
 				row = lhsRowMap.get(rowKey);
 			} else {
@@ -155,7 +157,7 @@ public final class ChangeSetTransformerUtil {
 					}
 				}
 			} else {
-//				row.setOriginalDischargeAllocation(slotAllocation);
+				// row.setOriginalDischargeAllocation(slotAllocation);
 			}
 			if (!isBase) {
 				if (slotAllocation.getSlot() != null) {
@@ -192,6 +194,7 @@ public final class ChangeSetTransformerUtil {
 						rows.add(otherRow);
 						rhsRowMap.put(otherRowKey, otherRow);
 						if (slotAllocation.getSlot() instanceof SpotSlot) {
+							rhsRowMap.put(EquivalanceGroupBuilder.getElementKey(slotAllocation.getSlot()), otherRow);
 							// FIXME: Random key used here, no point inserting into map.
 							// Probably really want #addToMarketMap
 							rhsRowMap.put("market-" + slotAllocation.getSlot().getName(), otherRow);
@@ -281,7 +284,7 @@ public final class ChangeSetTransformerUtil {
 			@NonNull final Event event, final boolean isBase) {
 
 		final String eventName = event.name();
-		String key = EquivalanceGroupBuilder.getElementKey(event);
+		final String key = EquivalanceGroupBuilder.getElementKey(event);
 		if (isBase) {
 			final ChangeSetRow row = ChangesetFactory.eINSTANCE.createChangeSetRow();
 			rows.add(row);
@@ -758,31 +761,78 @@ public final class ChangeSetTransformerUtil {
 	}
 
 	public static void mergeSpots(final List<ChangeSetRow> rows) {
-
-		final Map<ChangeSetRow, Collection<ChangeSetRow>> rowToRowGroup = new HashMap<>();
-		final Map<ChangeSetRow, ChangeSetRow> headToTails = new HashMap();
-		for (final ChangeSetRow row : rows) {
-			if (row.getLhsWiringLink() == null) {
-				ChangeSetRow link = row.getRhsWiringLink();
-				ChangeSetRow tail = link;
-				while (link != null) {
-					tail = link;
-					link = link.getRhsWiringLink();
+		{
+			// Phase 1. Find wiring groups which have compatible (i.e. same market, different instance count) heads and tails and join them together.
+			// For example a Spot Purchase may now be open, but previously paired to a sale. Another sale in the wiring group may have previously been paired to a different spot purchase in the same
+			// market/month as the open position. We can assume these are equivalent and join the head to the tail.
+			final Map<ChangeSetRow, ChangeSetRow> headToTails = new HashMap<>();
+			for (final ChangeSetRow row : rows) {
+				if (row.getLhsWiringLink() == null) {
+					ChangeSetRow link = row.getRhsWiringLink();
+					ChangeSetRow tail = link;
+					while (link != null) {
+						tail = link;
+						link = link.getRhsWiringLink();
+					}
+					if (tail != null) {
+						headToTails.put(row, tail);
+					}
 				}
-				headToTails.put(row, tail);
+			}
+			for (final Map.Entry<ChangeSetRow, ChangeSetRow> e : headToTails.entrySet()) {
+				if (mergeSpotSales(e.getKey(), e.getValue())) {
+					rows.remove(e.getValue());
+				}
+			}
+			for (final Map.Entry<ChangeSetRow, ChangeSetRow> e : headToTails.entrySet()) {
+				if (mergeSpotPurchases(e.getKey(), e.getValue())) {
+					rows.remove(e.getValue());
+				}
 			}
 		}
-		for (final Map.Entry<ChangeSetRow, ChangeSetRow> e : headToTails.entrySet()) {
-			if (mergeSpotSales(e.getKey(), e.getValue())) {
-				rows.remove(e.getValue());
+		// Phase 2. It is possible that we can end up with separate wiring groups but both share compatible head tails and these can be merged together into a single wiring group.
+		{
+			final Map<ChangeSetRow, ChangeSetRow> headToTails = new HashMap<>();
+			for (final ChangeSetRow row : rows) {
+				if (row.getLhsWiringLink() == null) {
+					ChangeSetRow link = row.getRhsWiringLink();
+					ChangeSetRow tail = link;
+					while (link != null) {
+						tail = link;
+						link = link.getRhsWiringLink();
+					}
+					if (tail != null) {
+						headToTails.put(row, tail);
+					}
+				}
 			}
-		}
-		for (final Map.Entry<ChangeSetRow, ChangeSetRow> e : headToTails.entrySet()) {
-			if (mergeSpotPurchases(e.getKey(), e.getValue())) {
-				rows.remove(e.getValue());
-			}
-		}
 
+			final Map<Pair<String, String>, Pair<ChangeSetRow, ChangeSetRow>> headTailMap = new LinkedHashMap<>();
+			for (final Map.Entry<ChangeSetRow, ChangeSetRow> e : headToTails.entrySet()) {
+
+				final Pair<String, String> keyA = new Pair<>(e.getKey().getLhsName(), e.getValue().getRhsName());
+				final Pair<String, String> keyB = new Pair<>(e.getValue().getLhsName(), e.getKey().getRhsName());
+
+				if (headTailMap.containsKey(keyA)) {
+					final Pair<ChangeSetRow, ChangeSetRow> existing = headTailMap.get(keyA);
+					mergeSpotSales(existing.getSecond(), e.getValue());
+					mergeSpotPurchases(e.getKey(), existing.getFirst());
+					rows.remove(e.getValue());
+					rows.remove(existing.getFirst());
+					headTailMap.remove(keyA);
+				} else if (headTailMap.containsKey(keyB)) {
+					final Pair<ChangeSetRow, ChangeSetRow> existing = headTailMap.get(keyB);
+					mergeSpotPurchases(existing.getFirst(), e.getValue());
+					mergeSpotSales(e.getKey(), existing.getSecond());
+					rows.remove(existing.getSecond());
+					rows.remove(e.getValue());
+					headTailMap.remove(keyB);
+				} else {
+					headTailMap.put(keyA, new Pair<>(e.getKey(), e.getValue()));
+					headTailMap.put(keyB, new Pair<>(e.getValue(), e.getKey()));
+				}
+			}
+		}
 	}
 
 	private static boolean mergeSpotSales(@Nullable final ChangeSetRow head, @Nullable final ChangeSetRow tail) {
