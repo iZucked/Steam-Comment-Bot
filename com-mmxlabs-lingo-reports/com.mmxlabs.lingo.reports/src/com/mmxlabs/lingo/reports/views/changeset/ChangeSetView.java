@@ -435,7 +435,7 @@ public class ChangeSetView implements IAdaptable {
 			gvc.getColumn().setText("");
 			gvc.getColumn().setTree(true);
 			gvc.getColumn().setWidth(60);
-			gvc.getColumn().setResizeable(false);
+			gvc.getColumn().setResizeable(true);
 			gvc.getColumn().setMoveable(false);
 			gvc.setLabelProvider(createCSLabelProvider());
 			gvc.getColumn().setCellRenderer(createCellRenderer());
