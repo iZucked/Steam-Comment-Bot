@@ -92,10 +92,10 @@ public final class FitnessComponentInstantiator implements IFitnessComponentInst
 			final IFitnessComponent component;
 			if (fitnessComponentsMap.containsKey(name)) {
 				component = fitnessComponentsMap.get(name);
+				components.add(component);
 			} else {
 				component = null;
 			}
-			components.add(component);
 		}
 
 		return components;
