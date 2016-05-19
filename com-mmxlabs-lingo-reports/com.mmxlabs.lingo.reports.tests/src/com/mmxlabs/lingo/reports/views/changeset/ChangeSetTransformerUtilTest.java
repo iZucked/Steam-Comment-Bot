@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -114,6 +115,50 @@ public class ChangeSetTransformerUtilTest {
 
 		Assert.assertSame(newDischargeSlotAllocation, row.getNewDischargeAllocation());
 		Assert.assertSame(oldDischargeSlotAllocation, row.getOriginalDischargeAllocation());
+	}
+
+	@Test
+	public void testNoChange_OpenSlotAllocation() {
+
+		// Configure example case
+
+		final Map<String, ChangeSetRow> lhsRowMap = new HashMap<>();
+		final Map<String, ChangeSetRow> rhsRowMap = new HashMap<>();
+
+		final List<ChangeSetRow> rows = new LinkedList<>();
+
+		// Target
+
+		final OpenSlotAllocation newOpenSlotAllocation;
+		{
+			final LoadSlot loadSlot = createLoadSlot("load");
+
+			newOpenSlotAllocation = createOpenSlotAllocation(loadSlot);
+			ChangeSetTransformerUtil.createOrUpdateOpenSlotAllocationRow(lhsRowMap, rhsRowMap, rows, newOpenSlotAllocation, true);
+		}
+
+		// Base
+
+		final OpenSlotAllocation oldOpenSlotAllocation;
+		{
+			final LoadSlot loadSlot = createLoadSlot("load");
+			oldOpenSlotAllocation = createOpenSlotAllocation(loadSlot);
+			ChangeSetTransformerUtil.createOrUpdateOpenSlotAllocationRow(lhsRowMap, rhsRowMap, rows, oldOpenSlotAllocation, false);
+		}
+
+		// Verify results
+		Assert.assertEquals(1, rows.size());
+
+		final ChangeSetRow row = rows.get(0);
+		Assert.assertEquals("load", row.getLhsName());
+		Assert.assertNull(row.getRhsName());
+		Assert.assertNull(row.getOriginalVesselName());
+		Assert.assertNull(row.getNewVesselName());
+		Assert.assertNull(row.getLhsWiringLink());
+		Assert.assertNull(row.getRhsWiringLink());
+
+		Assert.assertSame(newOpenSlotAllocation, row.getNewGroupProfitAndLoss());
+		Assert.assertSame(oldOpenSlotAllocation, row.getOriginalGroupProfitAndLoss());
 	}
 
 	@Test
@@ -211,6 +256,167 @@ public class ChangeSetTransformerUtilTest {
 			Assert.assertNull(row.getNewDischargeAllocation());
 			Assert.assertSame(oldDischargeSlotAllocation, row.getOriginalDischargeAllocation());
 		}
+	}
+
+	@Test
+	public void testWiringChange_SplitIntoOpenSlotAllocations() {
+
+		// Configure example case
+
+		final Map<String, ChangeSetRow> lhsRowMap = new HashMap<>();
+		final Map<String, ChangeSetRow> rhsRowMap = new HashMap<>();
+
+		final Map<String, List<ChangeSetRow>> lhsRowMarketMap = new HashMap<>();
+		final Map<String, List<ChangeSetRow>> rhsRowMarketMap = new HashMap<>();
+
+		final List<ChangeSetRow> rows = new LinkedList<>();
+
+		// Target
+		final OpenSlotAllocation newOpenAllocation1;
+		final OpenSlotAllocation newOpenAllocation2;
+		{
+			final LoadSlot loadSlot = createLoadSlot("load");
+			final DischargeSlot dischargeSlot = createDischargeSlot("discharge");
+			newOpenAllocation1 = createOpenSlotAllocation(loadSlot);
+			newOpenAllocation2 = createOpenSlotAllocation(dischargeSlot);
+			ChangeSetTransformerUtil.createOrUpdateOpenSlotAllocationRow(lhsRowMap, rhsRowMap, rows, newOpenAllocation1, true);
+			ChangeSetTransformerUtil.createOrUpdateOpenSlotAllocationRow(lhsRowMap, rhsRowMap, rows, newOpenAllocation2, true);
+		}
+
+		// Base
+		final CargoAllocation oldCargoAllocation;
+		final SlotAllocation oldLoadSlotAllocation;
+		final SlotAllocation oldDischargeSlotAllocation;
+		{
+			final Sequence sequence = createSequence("sequence");
+
+			final LoadSlot loadSlot = createLoadSlot("load");
+			final DischargeSlot dischargeSlot = createDischargeSlot("discharge");
+			final Cargo cargo = createCargo("load", loadSlot, dischargeSlot);
+
+			oldLoadSlotAllocation = createSlotAllocation(loadSlot, sequence);
+			oldDischargeSlotAllocation = createSlotAllocation(dischargeSlot, sequence);
+
+			oldCargoAllocation = createCargoAllocation(cargo, oldLoadSlotAllocation, oldDischargeSlotAllocation);
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, oldLoadSlotAllocation.getSlotVisit(), loadSlot, false, false);
+		}
+
+		// Verify results
+		Assert.assertEquals(2, rows.size());
+		{
+			final ChangeSetRow row = rows.get(0);
+			Assert.assertEquals("load", row.getLhsName());
+			Assert.assertNull(row.getRhsName());
+			Assert.assertEquals("sequence", row.getOriginalVesselName());
+			Assert.assertNull(row.getNewVesselName());
+			Assert.assertNull(row.getLhsWiringLink());
+			Assert.assertSame(rows.get(1), row.getRhsWiringLink());
+
+			Assert.assertSame(newOpenAllocation1, row.getNewGroupProfitAndLoss());
+			Assert.assertSame(oldCargoAllocation, row.getOriginalGroupProfitAndLoss());
+			Assert.assertNull(row.getNewEventGrouping());
+			Assert.assertSame(oldCargoAllocation, row.getOriginalEventGrouping());
+
+			Assert.assertNull(row.getNewLoadAllocation());
+			Assert.assertSame(oldLoadSlotAllocation, row.getOriginalLoadAllocation());
+
+			Assert.assertNull(row.getNewDischargeAllocation());
+			Assert.assertNull(row.getOriginalDischargeAllocation());
+		}
+		// Open "discharge"
+		{
+			final ChangeSetRow row = rows.get(1);
+			Assert.assertNull(row.getLhsName());
+			Assert.assertEquals("discharge", row.getRhsName());
+			Assert.assertNull(row.getOriginalVesselName());
+			Assert.assertNull(row.getNewVesselName());
+			Assert.assertSame(rows.get(0), row.getLhsWiringLink());
+			Assert.assertNull(row.getRhsWiringLink());
+
+			Assert.assertSame(newOpenAllocation2, row.getNewGroupProfitAndLoss());
+			Assert.assertNull(row.getOriginalGroupProfitAndLoss());
+
+			Assert.assertNull(row.getNewEventGrouping());
+			Assert.assertNull(row.getOriginalEventGrouping());
+
+			Assert.assertNull(row.getNewLoadAllocation());
+			Assert.assertNull(row.getOriginalLoadAllocation());
+
+			Assert.assertNull(row.getNewDischargeAllocation());
+			Assert.assertSame(oldDischargeSlotAllocation, row.getOriginalDischargeAllocation());
+		}
+	}
+
+	@Test
+	public void testWiringChange_CombineOpenSlotAllocations() {
+
+		// Configure example case
+
+		final Map<String, ChangeSetRow> lhsRowMap = new HashMap<>();
+		final Map<String, ChangeSetRow> rhsRowMap = new HashMap<>();
+
+		final Map<String, List<ChangeSetRow>> lhsRowMarketMap = new HashMap<>();
+		final Map<String, List<ChangeSetRow>> rhsRowMarketMap = new HashMap<>();
+
+		final List<ChangeSetRow> rows = new LinkedList<>();
+
+		// New
+		final CargoAllocation newCargoAllocation;
+		final SlotAllocation newLoadSlotAllocation;
+		final SlotAllocation newDischargeSlotAllocation;
+		{
+			final Sequence sequence = createSequence("sequence");
+
+			final LoadSlot loadSlot = createLoadSlot("load");
+			final DischargeSlot dischargeSlot = createDischargeSlot("discharge");
+			final Cargo cargo = createCargo("load", loadSlot, dischargeSlot);
+
+			newLoadSlotAllocation = createSlotAllocation(loadSlot, sequence);
+			newDischargeSlotAllocation = createSlotAllocation(dischargeSlot, sequence);
+
+			newCargoAllocation = createCargoAllocation(cargo, newLoadSlotAllocation, newDischargeSlotAllocation);
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, newLoadSlotAllocation.getSlotVisit(), loadSlot, true, false);
+		}
+
+		// Original
+		final OpenSlotAllocation oldOpenAllocation1;
+		final OpenSlotAllocation oldOpenAllocation2;
+		{
+			final LoadSlot loadSlot = createLoadSlot("load");
+			final DischargeSlot dischargeSlot = createDischargeSlot("discharge");
+			oldOpenAllocation1 = createOpenSlotAllocation(loadSlot);
+			oldOpenAllocation2 = createOpenSlotAllocation(dischargeSlot);
+			ChangeSetTransformerUtil.createOrUpdateOpenSlotAllocationRow(lhsRowMap, rhsRowMap, rows, oldOpenAllocation1, false);
+			ChangeSetTransformerUtil.createOrUpdateOpenSlotAllocationRow(lhsRowMap, rhsRowMap, rows, oldOpenAllocation2, false);
+		}
+
+		// Verify results
+		Assert.assertEquals(1, rows.size());
+		{
+			final ChangeSetRow row = rows.get(0);
+			Assert.assertEquals("load", row.getLhsName());
+			Assert.assertEquals("discharge", row.getRhsName());
+			Assert.assertNull(row.getOriginalVesselName());
+			Assert.assertEquals("sequence", row.getNewVesselName());
+			Assert.assertNull(row.getLhsWiringLink());
+			Assert.assertNull(row.getRhsWiringLink());
+
+			Assert.assertSame(newCargoAllocation, row.getNewGroupProfitAndLoss());
+			// Arg, what about oldOpenAllocation1?
+			Assert.assertSame(oldOpenAllocation2, row.getOriginalGroupProfitAndLoss());
+			Assert.assertSame(newCargoAllocation, row.getNewEventGrouping());
+			Assert.assertNull(row.getOriginalEventGrouping());
+
+			Assert.assertSame(newLoadSlotAllocation, row.getNewLoadAllocation());
+			Assert.assertNull(row.getOriginalLoadAllocation());
+
+			Assert.assertSame(newDischargeSlotAllocation, row.getNewDischargeAllocation());
+			Assert.assertNull(row.getOriginalDischargeAllocation());
+		}
+
+		// Both the OpenSlotAllocation instances can have P&L attached to them. However we are ignoring one of them. We are correctly combining into a single row, but the datastructures do now allow
+		// for this case.
+		Assert.fail("We have passed... Except we only have one original P&L object rather than two");
 	}
 
 	@Test
@@ -855,9 +1061,9 @@ public class ChangeSetTransformerUtilTest {
 		Mockito.when(visit.getSequence()).thenReturn(sequence);
 
 		Mockito.when(visit.getVesselEvent()).thenReturn(event);
-		
+
 		Mockito.when(visit.eClass()).thenReturn(CargoPackage.Literals.DRY_DOCK_EVENT);
-		
+
 		return visit;
 	}
 
@@ -900,6 +1106,15 @@ public class ChangeSetTransformerUtilTest {
 		Mockito.when(slotAllocation.getSlotVisit()).thenReturn(slotVisit);
 
 		Mockito.when(slotVisit.getSequence()).thenReturn(sequence);
+
+		return slotAllocation;
+	}
+
+	@NonNull
+	private OpenSlotAllocation createOpenSlotAllocation(final Slot slot) {
+
+		final OpenSlotAllocation slotAllocation = Mockito.mock(OpenSlotAllocation.class);
+		Mockito.when(slotAllocation.getSlot()).thenReturn(slot);
 
 		return slotAllocation;
 	}
