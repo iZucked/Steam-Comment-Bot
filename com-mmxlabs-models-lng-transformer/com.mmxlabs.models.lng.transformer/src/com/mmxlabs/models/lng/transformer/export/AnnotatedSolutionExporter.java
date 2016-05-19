@@ -215,7 +215,7 @@ public class AnnotatedSolutionExporter {
 				eSequence.setSpotIndex(vesselAvailability.getSpotIndex());
 				break;
 			case CARGO_SHORTS:
-				eSequence.setSequenceType(SequenceType.CARGO_SHORTS);
+				eSequence.setSequenceType(SequenceType.ROUND_TRIP);
 				if (sequence.size() < 2) {
 					continue;
 				}
