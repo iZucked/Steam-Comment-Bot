@@ -50,5 +50,5 @@ public interface IEvaluationContext {
 	 * @return
 	 */
 	@NonNull
-	List<String> getEvaluationProcesses();
+	List<@NonNull String> getEvaluationProcesses();
 }

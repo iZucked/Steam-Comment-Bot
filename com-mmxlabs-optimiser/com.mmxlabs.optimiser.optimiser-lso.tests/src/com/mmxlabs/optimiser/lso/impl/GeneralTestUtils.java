@@ -20,8 +20,12 @@ import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerInstantiator;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.constraints.impl.EvaluatedStateConstraintCheckerInstantiator;
+import com.mmxlabs.optimiser.core.constraints.impl.EvaluatedStateConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessInstantiator;
@@ -91,7 +95,14 @@ public final class GeneralTestUtils {
 		return registry;
 	}
 
-	public static LinearSimulatedAnnealingFitnessEvaluator createLinearSAFitnessEvaluator(final int stepSize, final int numIterations, final List<IFitnessComponent> fitnessComponents, IOptimisationData optimisationData) {
+	public static @NonNull IEvaluatedStateConstraintCheckerRegistry createEvaluatedStateConstraintCheckerRegistry() {
+		final EvaluatedStateConstraintCheckerRegistry registry = new EvaluatedStateConstraintCheckerRegistry();
+
+		return registry;
+	}
+
+	public static LinearSimulatedAnnealingFitnessEvaluator createLinearSAFitnessEvaluator(final int stepSize, final int numIterations, final List<IFitnessComponent> fitnessComponents,
+			IOptimisationData optimisationData) {
 		final Map<String, Double> weightsMap = new HashMap<String, Double>();
 		for (final IFitnessComponent component : fitnessComponents) {
 			weightsMap.put(component.getName(), 1.0);
@@ -111,7 +122,8 @@ public final class GeneralTestUtils {
 		thresholder.setInitialThreshold(initialThreshold);
 
 		final FitnessHelper fitnessHelper = new FitnessHelper();
-		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = createFitnessEvaluatorInstance(combiner, thresholder, fitnessHelper, fitnessComponents, evaluationProcesses, optimisationData);
+		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = createFitnessEvaluatorInstance(combiner, thresholder, fitnessHelper, fitnessComponents, evaluationProcesses,
+				optimisationData);
 
 		return fitnessEvaluator;
 	}
@@ -127,10 +139,15 @@ public final class GeneralTestUtils {
 		final List<IConstraintChecker> constraintCheckers = constraintCheckerInstantiator.instantiateConstraintCheckers(context.getConstraintCheckerRegistry(), context.getConstraintCheckers(),
 				context.getOptimisationData());
 
+		final EvaluatedStateConstraintCheckerInstantiator evaluatedStateConstraintCheckerInstantiator = new EvaluatedStateConstraintCheckerInstantiator();
+		final List<IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers = evaluatedStateConstraintCheckerInstantiator
+				.instantiateConstraintCheckers(context.getEvaluatedStateConstraintCheckerRegistry(), context.getEvaluatedStateConstraintCheckers());
+
 		final FitnessComponentInstantiator fitnessComponentInstantiator = new FitnessComponentInstantiator();
 		final List<IFitnessComponent> fitnessComponents = fitnessComponentInstantiator.instantiateFitnesses(context.getFitnessFunctionRegistry(), context.getFitnessComponents());
 
-		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = GeneralTestUtils.createLinearSAFitnessEvaluator(stepSize, numberOfIterations, fitnessComponents, context.getOptimisationData());
+		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = GeneralTestUtils.createLinearSAFitnessEvaluator(stepSize, numberOfIterations, fitnessComponents,
+				context.getOptimisationData());
 		final IMoveGenerator moveGenerator = GeneralTestUtils.createRandomMoveGenerator(random);
 
 		final DefaultLocalSearchOptimiser lso = new DefaultLocalSearchOptimiser();
@@ -140,6 +157,7 @@ public final class GeneralTestUtils {
 		lso.setMoveGenerator(moveGenerator);
 		lso.setFitnessEvaluator(fitnessEvaluator);
 		lso.setConstraintCheckers(constraintCheckers);
+		lso.setEvaluatedStateConstraintCheckers(evaluatedStateConstraintCheckers);
 		lso.setEvaluationProcesses(evaluationProcesses);
 
 		lso.setProgressMonitor(monitor);

@@ -21,6 +21,7 @@ import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 
@@ -38,6 +39,9 @@ public class LocalSearchOptimiserTest {
 
 		final List<IConstraintChecker> constraintCheckers = Collections.emptyList();
 		lso.setConstraintCheckers(constraintCheckers);
+
+		final List<IEvaluatedStateConstraintChecker> evalConstraintCheckers = Collections.emptyList();
+		lso.setEvaluatedStateConstraintCheckers(evalConstraintCheckers);
 
 		final IFitnessEvaluator fitnessEvaluator = Mockito.mock(IFitnessEvaluator.class);
 		lso.setFitnessEvaluator(fitnessEvaluator);
@@ -61,6 +65,9 @@ public class LocalSearchOptimiserTest {
 
 		final List<IConstraintChecker> constraintCheckers = Collections.emptyList();
 		lso.setConstraintCheckers(constraintCheckers);
+
+		final List<IEvaluatedStateConstraintChecker> evalConstraintCheckers = Collections.emptyList();
+		lso.setEvaluatedStateConstraintCheckers(evalConstraintCheckers);
 
 		final IFitnessEvaluator fitnessEvaluator = Mockito.mock(IFitnessEvaluator.class);
 		lso.setFitnessEvaluator(fitnessEvaluator);
