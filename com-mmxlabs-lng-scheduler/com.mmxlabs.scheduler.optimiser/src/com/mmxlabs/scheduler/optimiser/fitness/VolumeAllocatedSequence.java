@@ -214,7 +214,10 @@ public final class VolumeAllocatedSequence {
 				record.arrivalTime = currentTime;
 				record.voyagePlan = vpi.getCurrentPlan();
 				record.portTimesRecord = vpi.getCurrentPortTimeRecord();
-				record.heelLevelAnnotation = vpi.getCurrentHeelLevelAnnotations().get(portSlot);
+				Map<IPortSlot, IHeelLevelAnnotation> currentHeelLevelAnnotations = vpi.getCurrentHeelLevelAnnotations();
+				if (currentHeelLevelAnnotations != null) {
+					record.heelLevelAnnotation = currentHeelLevelAnnotations.get(portSlot);
+				}
 
 			}
 		}

@@ -189,6 +189,7 @@ public class LatenessComponentTest {
 
 		checker.calculateLateness(scheduledSequence, null);
 		c.startEvaluation(profitAndLossSequences);
+		c.startSequence(resource);
 		c.nextVoyagePlan(voyagePlan, voyageStartTime);
 		c.nextObject(startDetails, 0);
 		c.nextObject(loadDetails, loadEndTime + loadLateTime);

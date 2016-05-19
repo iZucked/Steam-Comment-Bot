@@ -90,11 +90,11 @@ public class ProfitAndLossCalculator {
 	public ProfitAndLossSequences calculateProfitAndLoss(final @NonNull ISequences sequences, @NonNull final VolumeAllocatedSequences volumeAllocatedSequences,
 			final @Nullable IAnnotatedSolution annotatedSolution) {
 
+		final ProfitAndLossSequences profitAndLossSequences = new ProfitAndLossSequences(volumeAllocatedSequences);
 		// Some tests cases have no EVC
 		if (entityValueCalculatorProvider == null) {
-			return null;
+			return profitAndLossSequences;
 		}
-		final ProfitAndLossSequences profitAndLossSequences = new ProfitAndLossSequences(volumeAllocatedSequences);
 
 		// 2014-02-12 - SG
 		// Bad hack to allow a custom contract to reset cached data AFTER any charter out generation / break -even code has run.

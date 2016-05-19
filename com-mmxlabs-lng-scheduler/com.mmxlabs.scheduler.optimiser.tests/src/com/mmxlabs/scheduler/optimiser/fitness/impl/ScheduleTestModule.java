@@ -26,6 +26,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.constraints.impl.EvaluatedStateConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
@@ -40,11 +41,15 @@ import com.mmxlabs.optimiser.core.modules.FitnessFunctionInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.OptimiserContextModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.CapacityEvaluatedStateCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.LatenessEvaluatedStateCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselStartDateCharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcessFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
@@ -78,6 +83,7 @@ public class ScheduleTestModule extends AbstractModule {
 		install(new ConstraintCheckerInstantiatorModule());
 		install(new FitnessFunctionInstantiatorModule());
 		install(new EvaluationProcessInstantiatorModule());
+		install(new EvaluatedStateConstraintCheckerInstantiatorModule());
 
 		bind(IFitnessHelper.class).to(FitnessHelper.class);
 
@@ -102,6 +108,8 @@ public class ScheduleTestModule extends AbstractModule {
 
 		bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
 		bind(VesselBaseFuelCalculator.class).in(Singleton.class);
+
+		bind(IEndEventScheduler.class).to(DefaultEndEventScheduler.class);
 
 		// if (Platform.isRunning()) {
 		// bind(IFitnessFunctionRegistry.class).toProvider(service(IFitnessFunctionRegistry.class).single());
@@ -191,6 +199,25 @@ public class ScheduleTestModule extends AbstractModule {
 
 	@Provides
 	@Singleton
+	private IEvaluatedStateConstraintCheckerRegistry createEvaluatedStateConstraintCheckerRegistry(final Injector injector) {
+		final IEvaluatedStateConstraintCheckerRegistry evaluationProcessRegistry = new EvaluatedStateConstraintCheckerRegistry();
+
+		{
+			final LatenessEvaluatedStateCheckerFactory factory = new LatenessEvaluatedStateCheckerFactory();
+			injector.injectMembers(factory);
+			evaluationProcessRegistry.registerConstraintCheckerFactory(factory);
+		}
+		{
+			final CapacityEvaluatedStateCheckerFactory factory = new CapacityEvaluatedStateCheckerFactory();
+			injector.injectMembers(factory);
+			evaluationProcessRegistry.registerConstraintCheckerFactory(factory);
+		}
+
+		return evaluationProcessRegistry;
+	}
+
+	@Provides
+	@Singleton
 	@Named(ConstraintCheckerInstantiatorModule.ENABLED_CONSTRAINT_NAMES)
 	private List<String> provideEnabledConstraintNames(final IConstraintCheckerRegistry registry) {
 		final List<String> result = new ArrayList<String>(registry.getConstraintCheckerNames());
@@ -216,7 +243,7 @@ public class ScheduleTestModule extends AbstractModule {
 	@Provides
 	@Singleton
 	@Named(EvaluatedStateConstraintCheckerInstantiatorModule.ENABLED_EVALUATED_STATE_CONSTRAINT_NAMES)
-	private List<String> provideEnabledEvaluationProcessNames(final IEvaluatedStateConstraintCheckerRegistry registry) {
+	private List<String> provideEnabledEvaluatedStateCheckerNames(final IEvaluatedStateConstraintCheckerRegistry registry) {
 		final List<String> result = new ArrayList<String>(registry.getConstraintCheckerNames());
 		return result;
 	}
