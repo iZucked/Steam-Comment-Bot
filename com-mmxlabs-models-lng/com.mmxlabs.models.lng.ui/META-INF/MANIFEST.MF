@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: LNG UI
 Bundle-SymbolicName: com.mmxlabs.models.lng.ui;singleton:=true
-Bundle-Version: 3.12.4.qualifier
+Bundle-Version: 3.12.4.RELEASE
 Bundle-Activator: com.mmxlabs.models.lng.ui.LngUIActivator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
