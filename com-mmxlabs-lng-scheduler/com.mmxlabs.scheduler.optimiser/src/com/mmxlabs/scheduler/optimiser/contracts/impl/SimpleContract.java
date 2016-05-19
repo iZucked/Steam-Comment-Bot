@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
@@ -161,5 +160,4 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 			return IPortSlot.NO_PRICING_DATE;
 		}
 	}
-
 }
