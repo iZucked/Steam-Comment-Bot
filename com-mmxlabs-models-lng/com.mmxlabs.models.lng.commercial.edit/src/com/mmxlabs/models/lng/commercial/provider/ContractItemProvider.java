@@ -64,7 +64,6 @@ public class ContractItemProvider
 			addNotesPropertyDescriptor(object);
 			addContractTypePropertyDescriptor(object);
 			addPricingEventPropertyDescriptor(object);
-			addCancellationFeePropertyDescriptor(object);
 			addCancellationExpressionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -357,28 +356,6 @@ public class ContractItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Cancellation Fee feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addCancellationFeePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Contract_cancellationFee_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_cancellationFee_feature", "_UI_Contract_type"),
-				 CommercialPackage.Literals.CONTRACT__CANCELLATION_FEE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Cancellation Expression feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -475,7 +452,6 @@ public class ContractItemProvider
 			case CommercialPackage.CONTRACT__NOTES:
 			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
 			case CommercialPackage.CONTRACT__PRICING_EVENT:
-			case CommercialPackage.CONTRACT__CANCELLATION_FEE:
 			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

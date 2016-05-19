@@ -33,7 +33,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getContractType <em>Contract Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPricingEvent <em>Pricing Event</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getCancellationFee <em>Cancellation Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getCancellationExpression <em>Cancellation Expression</em>}</li>
  * </ul>
  *
@@ -361,35 +360,7 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setPricingEvent(PricingEvent value);
-/**
-	 * Returns the value of the '<em><b>Cancellation Fee</b></em>' attribute.
-	 * The default value is <code>"0"</code>.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Cancellation Fee</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Cancellation Fee</em>' attribute.
-	 * @see #setCancellationFee(int)
-	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_CancellationFee()
-	 * @model default="0"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='###,###,##0' unitPrefix='$'"
-	 * @generated
-	 */
-	int getCancellationFee();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getCancellationFee <em>Cancellation Fee</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Cancellation Fee</em>' attribute.
-	 * @see #getCancellationFee()
-	 * @generated
-	 */
-	void setCancellationFee(int value);
-
-	//
+//
 //	/**
 //	 * Returns the value of the '<em><b>Cancellation Fee</b></em>' attribute.
 //	 * The default value is <code>"0"</code>.

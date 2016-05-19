@@ -104,7 +104,6 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_restrictedListsArePermissiveEditor(detailComposite, topClass);
 		add_hedgesEditor(detailComposite, topClass);
 		add_allowedVesselsEditor(detailComposite, topClass);
-		add_cancellationFeeEditor(detailComposite, topClass);
 		add_cancellationExpressionEditor(detailComposite, topClass);
 		add_overrideRestrictionsEditor(detailComposite, topClass);
 		add_nominatedVesselEditor(detailComposite, topClass);

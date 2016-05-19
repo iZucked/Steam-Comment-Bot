@@ -432,17 +432,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_CancellationFee() {
-		return (EAttribute)contractEClass.getEStructuralFeatures().get(13);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getContract_CancellationExpression() {
-		return (EAttribute)contractEClass.getEStructuralFeatures().get(14);
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(13);
 	}
 
 	/**
@@ -706,7 +697,6 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(contractEClass, CONTRACT__NOTES);
 		createEAttribute(contractEClass, CONTRACT__CONTRACT_TYPE);
 		createEAttribute(contractEClass, CONTRACT__PRICING_EVENT);
-		createEAttribute(contractEClass, CONTRACT__CANCELLATION_FEE);
 		createEAttribute(contractEClass, CONTRACT__CANCELLATION_EXPRESSION);
 
 		salesContractEClass = createEClass(SALES_CONTRACT);
@@ -826,7 +816,6 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getContract_Notes(), ecorePackage.getEString(), "notes", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_ContractType(), this.getContractType(), "contractType", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_PricingEvent(), this.getPricingEvent(), "pricingEvent", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getContract_CancellationFee(), ecorePackage.getEInt(), "cancellationFee", "0", 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_CancellationExpression(), ecorePackage.getEString(), "cancellationExpression", "0", 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(salesContractEClass, SalesContract.class, "SalesContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -903,13 +892,6 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		   source, 
 		   new String[] {
 			 "formatString", "#,###,##0"
-		   });	
-		addAnnotation
-		  (getContract_CancellationFee(), 
-		   source, 
-		   new String[] {
-			 "formatString", "###,###,##0",
-			 "unitPrefix", "$"
 		   });	
 		addAnnotation
 		  (getSalesContract_MinCvValue(), 

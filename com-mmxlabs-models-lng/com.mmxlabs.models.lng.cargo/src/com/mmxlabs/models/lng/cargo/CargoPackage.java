@@ -626,22 +626,13 @@ public interface CargoPackage extends EPackage {
 	int SLOT__ALLOWED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 24;
 
 	/**
-	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT__CANCELLATION_FEE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 25;
-
-	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
+	int SLOT__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 25;
 
 	/**
 	 * The feature id for the '<em><b>Override Restrictions</b></em>' attribute.
@@ -650,7 +641,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__OVERRIDE_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
+	int SLOT__OVERRIDE_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
 
 	/**
 	 * The feature id for the '<em><b>Nominated Vessel</b></em>' reference.
@@ -659,7 +650,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__NOMINATED_VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 28;
+	int SLOT__NOMINATED_VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
 
 	/**
 	 * The feature id for the '<em><b>Locked</b></em>' attribute.
@@ -668,7 +659,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__LOCKED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 29;
+	int SLOT__LOCKED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 28;
 
 	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
@@ -677,7 +668,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 30;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 29;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1119,15 +1110,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__ALLOWED_VESSELS = SLOT__ALLOWED_VESSELS;
-
-	/**
-	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT__CANCELLATION_FEE = SLOT__CANCELLATION_FEE;
 
 	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
@@ -1677,15 +1659,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__ALLOWED_VESSELS = SLOT__ALLOWED_VESSELS;
-
-	/**
-	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT__CANCELLATION_FEE = SLOT__CANCELLATION_FEE;
 
 	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
@@ -2329,15 +2302,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__ALLOWED_VESSELS = LOAD_SLOT__ALLOWED_VESSELS;
 
 	/**
-	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT__CANCELLATION_FEE = LOAD_SLOT__CANCELLATION_FEE;
-
-	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2904,15 +2868,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__ALLOWED_VESSELS = DISCHARGE_SLOT__ALLOWED_VESSELS;
-
-	/**
-	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT__CANCELLATION_FEE = DISCHARGE_SLOT__CANCELLATION_FEE;
 
 	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
@@ -4893,18 +4848,6 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_Hedges();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Cancellation Fee</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getCancellationFee()
-	 * @see #getSlot()
-	 * @generated
-	 */
-	EAttribute getSlot_CancellationFee();
-
-	
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationExpression <em>Cancellation Expression</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6188,14 +6131,6 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SLOT__ALLOWED_VESSELS = eINSTANCE.getSlot_AllowedVessels();
-
-		/**
-		 * The meta object literal for the '<em><b>Cancellation Fee</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SLOT__CANCELLATION_FEE = eINSTANCE.getSlot_CancellationFee();
 
 		/**
 		 * The meta object literal for the '<em><b>Cancellation Expression</b></em>' attribute feature.

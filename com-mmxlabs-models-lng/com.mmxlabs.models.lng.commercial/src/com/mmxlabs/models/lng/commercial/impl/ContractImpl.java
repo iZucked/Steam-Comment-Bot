@@ -48,7 +48,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getContractType <em>Contract Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPricingEvent <em>Pricing Event</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getCancellationFee <em>Cancellation Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getCancellationExpression <em>Cancellation Expression</em>}</li>
  * </ul>
  *
@@ -273,26 +272,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected PricingEvent pricingEvent = PRICING_EVENT_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getCancellationFee() <em>Cancellation Fee</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCancellationFee()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int CANCELLATION_FEE_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getCancellationFee() <em>Cancellation Fee</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCancellationFee()
-	 * @generated
-	 * @ordered
-	 */
-	protected int cancellationFee = CANCELLATION_FEE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getCancellationExpression() <em>Cancellation Expression</em>}' attribute.
@@ -661,27 +640,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getCancellationFee() {
-		return cancellationFee;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setCancellationFee(int newCancellationFee) {
-		int oldCancellationFee = cancellationFee;
-		cancellationFee = newCancellationFee;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__CANCELLATION_FEE, oldCancellationFee, cancellationFee));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public String getCancellationExpression() {
 		return cancellationExpression;
 	}
@@ -750,8 +708,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return getContractType();
 			case CommercialPackage.CONTRACT__PRICING_EVENT:
 				return getPricingEvent();
-			case CommercialPackage.CONTRACT__CANCELLATION_FEE:
-				return getCancellationFee();
 			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
 				return getCancellationExpression();
 		}
@@ -812,9 +768,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__PRICING_EVENT:
 				setPricingEvent((PricingEvent)newValue);
 				return;
-			case CommercialPackage.CONTRACT__CANCELLATION_FEE:
-				setCancellationFee((Integer)newValue);
-				return;
 			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
 				setCancellationExpression((String)newValue);
 				return;
@@ -872,9 +825,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__PRICING_EVENT:
 				setPricingEvent(PRICING_EVENT_EDEFAULT);
 				return;
-			case CommercialPackage.CONTRACT__CANCELLATION_FEE:
-				setCancellationFee(CANCELLATION_FEE_EDEFAULT);
-				return;
 			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
 				setCancellationExpression(CANCELLATION_EXPRESSION_EDEFAULT);
 				return;
@@ -918,8 +868,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return contractType != CONTRACT_TYPE_EDEFAULT;
 			case CommercialPackage.CONTRACT__PRICING_EVENT:
 				return pricingEvent != PRICING_EVENT_EDEFAULT;
-			case CommercialPackage.CONTRACT__CANCELLATION_FEE:
-				return cancellationFee != CANCELLATION_FEE_EDEFAULT;
 			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
 				return CANCELLATION_EXPRESSION_EDEFAULT == null ? cancellationExpression != null : !CANCELLATION_EXPRESSION_EDEFAULT.equals(cancellationExpression);
 		}
@@ -984,8 +932,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		result.append(contractType);
 		result.append(", pricingEvent: ");
 		result.append(pricingEvent);
-		result.append(", cancellationFee: ");
-		result.append(cancellationFee);
 		result.append(", cancellationExpression: ");
 		result.append(cancellationExpression);
 		result.append(')');

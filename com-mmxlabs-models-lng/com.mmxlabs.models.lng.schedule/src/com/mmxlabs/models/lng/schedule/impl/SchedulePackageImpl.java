@@ -2191,7 +2191,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		addEEnumLiteral(sequenceTypeEEnum, SequenceType.SPOT_VESSEL);
 		addEEnumLiteral(sequenceTypeEEnum, SequenceType.DES_PURCHASE);
 		addEEnumLiteral(sequenceTypeEEnum, SequenceType.FOB_SALE);
-		addEEnumLiteral(sequenceTypeEEnum, SequenceType.CARGO_SHORTS);
+		addEEnumLiteral(sequenceTypeEEnum, SequenceType.ROUND_TRIP);
 
 		initEEnum(fuelEEnum, Fuel.class, "Fuel");
 		addEEnumLiteral(fuelEEnum, Fuel.BASE_FUEL);

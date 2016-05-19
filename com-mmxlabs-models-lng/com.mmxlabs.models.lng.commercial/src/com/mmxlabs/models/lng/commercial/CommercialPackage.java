@@ -425,22 +425,13 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT__PRICING_EVENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
 
 	/**
-	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT__CANCELLATION_FEE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
-
-	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
+	int CONTRACT__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The number of structural features of the '<em>Contract</em>' class.
@@ -449,7 +440,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
+	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
@@ -604,15 +595,6 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int SALES_CONTRACT__PRICING_EVENT = CONTRACT__PRICING_EVENT;
-
-	/**
-	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SALES_CONTRACT__CANCELLATION_FEE = CONTRACT__CANCELLATION_FEE;
 
 	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
@@ -812,15 +794,6 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int PURCHASE_CONTRACT__PRICING_EVENT = CONTRACT__PRICING_EVENT;
-
-	/**
-	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PURCHASE_CONTRACT__CANCELLATION_FEE = CONTRACT__CANCELLATION_FEE;
 
 	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
@@ -1433,17 +1406,6 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getContract_PricingEvent();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getCancellationFee <em>Cancellation Fee</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Cancellation Fee</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.Contract#getCancellationFee()
-	 * @see #getContract()
-	 * @generated
-	 */
-	EAttribute getContract_CancellationFee();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getCancellationExpression <em>Cancellation Expression</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1908,14 +1870,6 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CONTRACT__PRICING_EVENT = eINSTANCE.getContract_PricingEvent();
-
-		/**
-		 * The meta object literal for the '<em><b>Cancellation Fee</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CONTRACT__CANCELLATION_FEE = eINSTANCE.getContract_CancellationFee();
 
 		/**
 		 * The meta object literal for the '<em><b>Cancellation Expression</b></em>' attribute feature.

@@ -57,6 +57,13 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="contractType" eType="#//ContractType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingEvent" lowerBound="1"
         eType="#//PricingEvent"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cancellationFee" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="###,###,##0"/>
+        <details key="unitPrefix" value="$"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cancellationExpression"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="0">
       <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">

@@ -72,7 +72,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getHedges <em>Hedges</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCancellationFee <em>Cancellation Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCancellationExpression <em>Cancellation Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isOverrideRestrictions <em>Override Restrictions</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getNominatedVessel <em>Nominated Vessel</em>}</li>
@@ -592,35 +591,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected EList<AVesselSet<Vessel>> allowedVessels;
-
-	/**
-	 * The default value of the '{@link #getCancellationFee() <em>Cancellation Fee</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCancellationFee()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int CANCELLATION_FEE_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getCancellationFee() <em>Cancellation Fee</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCancellationFee()
-	 * @generated
-	 * @ordered
-	 */
-	protected int cancellationFee = CANCELLATION_FEE_EDEFAULT;
-
-	/**
-	 * This is true if the Cancellation Fee attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean cancellationFeeESet;
 
 	/**
 	 * The default value of the '{@link #getCancellationExpression() <em>Cancellation Expression</em>}' attribute.
@@ -1570,29 +1540,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void unsetCancellationFee() {
-		int oldCancellationFee = cancellationFee;
-		boolean oldCancellationFeeESet = cancellationFeeESet;
-		cancellationFee = CANCELLATION_FEE_EDEFAULT;
-		cancellationFeeESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__CANCELLATION_FEE, oldCancellationFee, CANCELLATION_FEE_EDEFAULT, oldCancellationFeeESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetCancellationFee() {
-		return cancellationFeeESet;
-	}
-
-        /**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public String getCancellationExpression() {
 		return cancellationExpression;
 	}
@@ -1728,29 +1675,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	
 	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public int getCancellationFee() {
-		return cancellationFee;
-	}
-
-								/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setCancellationFee(int newCancellationFee) {
-		int oldCancellationFee = cancellationFee;
-		cancellationFee = newCancellationFee;
-		boolean oldCancellationFeeESet = cancellationFeeESet;
-		cancellationFeeESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CANCELLATION_FEE, oldCancellationFee, cancellationFee, !oldCancellationFeeESet));
-	}
-
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1918,15 +1842,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public int getSlotOrContractCancellationFee() {
-		return (Integer) eGetWithDefault(CargoPackage.Literals.SLOT__CANCELLATION_FEE);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
 	public PricingEvent getSlotOrDelegatedPricingEvent() {
 		return (PricingEvent) eGetWithDefault(CargoPackage.Literals.SLOT__PRICING_EVENT);
 	}
@@ -2058,8 +1973,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getHedges();
 			case CargoPackage.SLOT__ALLOWED_VESSELS:
 				return getAllowedVessels();
-			case CargoPackage.SLOT__CANCELLATION_FEE:
-				return getCancellationFee();
 			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
 				return getCancellationExpression();
 			case CargoPackage.SLOT__OVERRIDE_RESTRICTIONS:
@@ -2159,9 +2072,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				getAllowedVessels().clear();
 				getAllowedVessels().addAll((Collection<? extends AVesselSet<Vessel>>)newValue);
 				return;
-			case CargoPackage.SLOT__CANCELLATION_FEE:
-				setCancellationFee((Integer)newValue);
-				return;
 			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
 				setCancellationExpression((String)newValue);
 				return;
@@ -2260,9 +2170,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__ALLOWED_VESSELS:
 				getAllowedVessels().clear();
 				return;
-			case CargoPackage.SLOT__CANCELLATION_FEE:
-				unsetCancellationFee();
-				return;
 			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
 				unsetCancellationExpression();
 				return;
@@ -2336,8 +2243,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return hedges != HEDGES_EDEFAULT;
 			case CargoPackage.SLOT__ALLOWED_VESSELS:
 				return allowedVessels != null && !allowedVessels.isEmpty();
-			case CargoPackage.SLOT__CANCELLATION_FEE:
-				return isSetCancellationFee();
 			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
 				return isSetCancellationExpression();
 			case CargoPackage.SLOT__OVERRIDE_RESTRICTIONS:
@@ -2506,8 +2411,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		result.append(restrictedListsArePermissive);
 		result.append(", hedges: ");
 		result.append(hedges);
-		result.append(", cancellationFee: ");
-		if (cancellationFeeESet) result.append(cancellationFee); else result.append("<unset>");
 		result.append(", cancellationExpression: ");
 		if (cancellationExpressionESet) result.append(cancellationExpression); else result.append("<unset>");
 		result.append(", overrideRestrictions: ");
