@@ -3,10 +3,10 @@
   <parent>
     <artifactId>com.mmxlabs.rcp.common.parent</artifactId>
     <groupId>com.mmxlabs.rcp.common</groupId>
-    <version>3.12.4-SNAPSHOT</version>
+    <version>3.12.4.RELEASE</version>
     <relativePath>..</relativePath>
   </parent>
   <artifactId>com.mmxlabs.models.common</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <version>3.12.4-SNAPSHOT</version>
+  <version>3.12.4.RELEASE</version>
 </project>
