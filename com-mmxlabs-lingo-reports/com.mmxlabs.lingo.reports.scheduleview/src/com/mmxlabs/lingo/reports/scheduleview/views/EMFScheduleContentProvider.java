@@ -158,7 +158,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 		if (element instanceof Event) {
 			final Event event = (Event) element;
 			// Special case for cargo shorts - group items separately
-			if (event.getSequence().getSequenceType() == SequenceType.CARGO_SHORTS) {
+			if (event.getSequence().getSequenceType() == SequenceType.ROUND_TRIP) {
 				Event start = ScheduleModelUtils.getSegmentStart(event);
 
 				if (start != null) {
