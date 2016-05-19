@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.lingo.feature"
       label="Lingo"
-      version="3.12.4.qualifier"
+      version="3.12.4.RELEASE"
       provider-name="Minimax Labs Ltd."
       plugin="com.mmxlabs.lingo.app">
 
