@@ -358,18 +358,19 @@ public class ScheduleModelKPIUtils {
 			for (final Event event : grouping.getEvents()) {
 				if (event instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) event;
-					// total += slotVisit.getFuelCost();
 					total += slotVisit.getCharterCost();
 					total += slotVisit.getPortCost();
 				} else if (event instanceof Journey) {
 					final Journey journey = (Journey) event;
-					// total += journey.getFuelCost();
 					total += journey.getCharterCost();
 					total += journey.getToll();
 				} else if (event instanceof Idle) {
 					final Idle idle = (Idle) event;
-					// total += idle.getFuelCost();
 					total += idle.getCharterCost();
+				} else if (event instanceof PortVisit) {
+					final PortVisit portVisit = (PortVisit) event;
+					total += portVisit.getCharterCost();
+					total += portVisit.getPortCost();
 				}
 				if (event instanceof FuelUsage) {
 					final FuelUsage fuelUsage = (FuelUsage) event;
