@@ -24,6 +24,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
@@ -159,7 +160,7 @@ public final class ChangeSetTransformerUtil {
 					}
 				}
 			} else {
-				// row.setOriginalDischargeAllocation(slotAllocation);
+				row.setOriginalDischargeAllocation(slotAllocation);
 			}
 			if (!isBase) {
 				if (slotAllocation.getSlot() != null) {
@@ -203,7 +204,7 @@ public final class ChangeSetTransformerUtil {
 						}
 						otherRow.setRhsName(getRowName(slotAllocation.getSlot()));
 					}
-					otherRow.setOriginalDischargeAllocation(slotAllocation);
+					// otherRow.setOriginalDischargeAllocation(slotAllocation);
 					otherRow.setDischargeSlot((DischargeSlot) slotAllocation.getSlot());
 
 					if (row != otherRow) {
@@ -851,6 +852,58 @@ public final class ChangeSetTransformerUtil {
 				}
 			}
 		}
+		// Change set 20
+		// Phase 3. We may have a load which swaps spot markets with another load. E.g. l1 -> s1 diverted to s2 and l2 -> s2 diverted to s1. This would otherwise be reported as two separate group when
+		// in fact it could be one group.
+		{
+			final Map<Pair<String, String>, Pair<ChangeSetRow, ChangeSetRow>> mapping = new LinkedHashMap<>();
+
+			for (final ChangeSetRow row : new LinkedList<>(rows)) {
+				// Is this a connected head element?
+				if (!(row.getLhsWiringLink() == null && row.getRhsWiringLink() != null)) {
+					continue;
+				}
+				// Head
+				ChangeSetRow head = row;
+				ChangeSetRow rhs = row.getRhsWiringLink();
+				// Is the next element a tail?
+				if (rhs.getRhsWiringLink() != null) {
+					continue;
+				}
+				// We are a tail! (we have a head -> tail sequence)
+				ChangeSetRow tail = rhs;
+
+				if (tail.getNewLoadAllocation() != null) {
+					// Previous wiring, skip;
+					continue;
+				}
+
+				// Now we have found a cargo wiring example - do they involve spots?
+
+				boolean headSpot = (head.getNewDischargeAllocation() != null && head.getNewDischargeAllocation().getSlot() instanceof SpotSlot);
+				if (!headSpot) {
+					continue;
+				}
+				boolean tailSpot = (head.getOriginalDischargeAllocation() != null && head.getOriginalDischargeAllocation().getSlot() instanceof SpotSlot);
+				if (!tailSpot) {
+					continue;
+				}
+
+				// We have found one potential wiring cargo.
+				Pair<String, String> lookupKey = new Pair<>(tail.getRhsName(), head.getRhsName());
+				if (mapping.containsKey(lookupKey)) {
+					// Merge!
+					Pair<ChangeSetRow, ChangeSetRow> p = mapping.get(lookupKey);
+					mergeSpotSales(head, p.getSecond());
+					rows.remove(p.getSecond());
+					mergeSpotSales(p.getFirst(), tail);
+					rows.remove(tail);
+				} else {
+					Pair<String, String> storeKey = new Pair<>(head.getRhsName(), tail.getRhsName());
+					mapping.put(storeKey, new Pair<>(head, tail));
+				}
+			}
+		}
 	}
 
 	private static boolean mergeSpotSales(@Nullable final ChangeSetRow head, @Nullable final ChangeSetRow tail) {
@@ -866,7 +919,7 @@ public final class ChangeSetTransformerUtil {
 		if (((SpotSlot) head.getDischargeSlot()).getMarket().eClass() == ((SpotSlot) tail.getDischargeSlot()).getMarket().eClass()) {
 			if (head.getRhsName() != null && head.getRhsName().equals(tail.getRhsName())) {
 				final ChangeSetRow lhsWiringLink = tail.getLhsWiringLink();
-				head.setOriginalDischargeAllocation(tail.getOriginalDischargeAllocation());
+				// head.setOriginalDischargeAllocation(tail.getOriginalDischargeAllocation());
 				head.setLhsWiringLink(lhsWiringLink);
 				return true;
 			}
@@ -888,10 +941,6 @@ public final class ChangeSetTransformerUtil {
 		if (((SpotSlot) head.getLoadSlot()).getMarket().eClass() == ((SpotSlot) tail.getLoadSlot()).getMarket().eClass()) {
 
 			if (head.getLhsName() != null && head.getLhsName().equals(tail.getLhsName())) {
-
-				if (head.getNewDischargeAllocation() == null && tail.getOriginalDischargeAllocation() == null) {
-
-				}
 
 				final ChangeSetRow lhsWiringLink = tail.getLhsWiringLink();
 				head.setLhsWiringLink(lhsWiringLink);
