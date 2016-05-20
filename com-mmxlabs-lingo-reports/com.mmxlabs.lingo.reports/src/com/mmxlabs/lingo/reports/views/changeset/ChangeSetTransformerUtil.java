@@ -41,6 +41,7 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
@@ -49,6 +50,8 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -712,11 +715,15 @@ public final class ChangeSetTransformerUtil {
 							if (groupProfitAndLoss != null) {
 								pnl += groupProfitAndLoss.getProfitAndLoss();
 							}
-						} else if (event instanceof SlotVisit) {
+						}
+
+						if (event instanceof SlotVisit) {
 							final SlotVisit slotVisit = (SlotVisit) event;
 							if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
 								final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
 								pnl += cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
+								lateness += LatenessUtils.getLatenessExcludingFlex(cargoAllocation);
+								violations += ScheduleModelKPIUtils.getCapacityViolationCount(cargoAllocation);
 							}
 						}
 
@@ -745,11 +752,14 @@ public final class ChangeSetTransformerUtil {
 							if (groupProfitAndLoss != null) {
 								pnl -= groupProfitAndLoss.getProfitAndLoss();
 							}
-						} else if (event instanceof SlotVisit) {
+						}
+						if (event instanceof SlotVisit) {
 							final SlotVisit slotVisit = (SlotVisit) event;
 							if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
 								final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
 								pnl -= cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
+								lateness -= LatenessUtils.getLatenessExcludingFlex(cargoAllocation);
+								violations -= ScheduleModelKPIUtils.getCapacityViolationCount(cargoAllocation);
 							}
 						}
 
@@ -992,5 +1002,45 @@ public final class ChangeSetTransformerUtil {
 			list = new LinkedList<>();
 		}
 		list.remove(row);
+	}
+
+	/**
+	 * Find elements that we are interested in showing in the view.
+	 * 
+	 * @param schedule
+	 * @param interestingEvents
+	 * @param allEvents
+	 */
+	public static void extractElements(final @Nullable Schedule schedule, final Collection<EObject> interestingEvents, final Collection<EObject> allEvents) {
+		if (schedule == null) {
+			return;
+		}
+
+		for (final Sequence sequence : schedule.getSequences()) {
+			for (final Event event : sequence.getEvents()) {
+				boolean includeEvent = false;
+				if (event instanceof SlotVisit) {
+					includeEvent = true;
+				} else if (event instanceof VesselEventVisit) {
+					includeEvent = true;
+				} else if (event instanceof GeneratedCharterOut) {
+					includeEvent = true;
+
+				} else if (event instanceof StartEvent) {
+					includeEvent = true;
+				} else if (event instanceof EndEvent) {
+					includeEvent = true;
+				}
+				if (includeEvent) {
+					interestingEvents.add(event);
+				}
+				allEvents.add(event);
+			}
+		}
+
+		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
+			interestingEvents.add(openSlotAllocation);
+			allEvents.add(openSlotAllocation);
+		}
 	}
 }

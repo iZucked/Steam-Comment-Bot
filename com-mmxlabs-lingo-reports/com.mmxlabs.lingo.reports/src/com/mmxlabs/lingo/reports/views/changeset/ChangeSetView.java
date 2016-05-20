@@ -1871,7 +1871,7 @@ public class ChangeSetView implements IAdaptable {
 				cell.setFont(null);
 				double delta = 0;
 				if (element instanceof ChangeSet) {
-					cell.setFont(boldFont);
+//					cell.setFont(boldFont);
 					final ChangeSet changeSet = (ChangeSet) element;
 					final List<ChangeSetRow> rows;
 					if (diffToBase) {

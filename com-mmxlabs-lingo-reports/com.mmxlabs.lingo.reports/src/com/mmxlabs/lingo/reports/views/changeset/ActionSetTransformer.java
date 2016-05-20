@@ -143,46 +143,7 @@ public class ActionSetTransformer {
 		return changeSet;
 	}
 
-	/**
-	 * Find elements that we are interested in showing in the view.
-	 * 
-	 * @param schedule
-	 * @param interestingEvents
-	 * @param allEvents
-	 */
-	private void extractElements(final Schedule schedule, final Collection<EObject> interestingEvents, final Collection<EObject> allEvents) {
-		if (schedule == null) {
-			return;
-		}
 
-		for (final Sequence sequence : schedule.getSequences()) {
-			for (final Event event : sequence.getEvents()) {
-				boolean includeEvent = false;
-				if (event instanceof SlotVisit) {
-					includeEvent = true;
-				} else if (event instanceof VesselEventVisit) {
-					includeEvent = true;
-				} else if (event instanceof GeneratedCharterOut) {
-					includeEvent = true;
-
-				} else if (event instanceof StartEvent) {
-					includeEvent = true;
-				} else if (event instanceof EndEvent) {
-					includeEvent = true;
-
-				}
-				if (includeEvent) {
-					interestingEvents.add(event);
-				}
-				allEvents.add(event);
-			}
-		}
-
-		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
-			interestingEvents.add(openSlotAllocation);
-			allEvents.add(openSlotAllocation);
-		}
-	}
 
 	private void generateDifferences(final ScenarioInstance from, final ScenarioInstance to, final ChangeSet changeSet, final boolean isBase) {
 		final EquivalanceGroupBuilder equivalanceGroupBuilder = new EquivalanceGroupBuilder();
@@ -195,8 +156,8 @@ public class ActionSetTransformer {
 		final Schedule fromSchedule = ((LNGScenarioModel) from.getInstance()).getScheduleModel().getSchedule();
 		final Schedule toSchedule = ((LNGScenarioModel) to.getInstance()).getScheduleModel().getSchedule();
 
-		extractElements(fromSchedule, fromInterestingElements, fromAllElements);
-		extractElements(toSchedule, toInterestingElements, toAllElements);
+		ChangeSetTransformerUtil.extractElements(fromSchedule, fromInterestingElements, fromAllElements);
+		ChangeSetTransformerUtil.extractElements(toSchedule, toInterestingElements, toAllElements);
 
 		// Generate the element by key map
 		final List<Map<String, List<EObject>>> perScenarioElementsByKeyMap = new LinkedList<>();
