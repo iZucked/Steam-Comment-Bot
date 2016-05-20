@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -160,6 +161,8 @@ public class ActionSetTransformer {
 				if (event instanceof SlotVisit) {
 					includeEvent = true;
 				} else if (event instanceof VesselEventVisit) {
+					includeEvent = true;
+				} else if (event instanceof GeneratedCharterOut) {
 					includeEvent = true;
 
 				} else if (event instanceof StartEvent) {

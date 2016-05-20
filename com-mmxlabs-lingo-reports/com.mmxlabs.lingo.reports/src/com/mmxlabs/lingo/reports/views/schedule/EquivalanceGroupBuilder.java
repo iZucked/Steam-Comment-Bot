@@ -197,7 +197,6 @@ public class EquivalanceGroupBuilder {
 		// Find all the equivalents from the reference to the other scenarios
 		final Map<String, List<EObject>> reference = maps.get(0);
 		for (final String key : allKeys) {
-
 			final List<EObject> referenceElements = reference.get(key);
 			if (referenceElements == null || referenceElements.isEmpty()) {
 
@@ -372,6 +371,11 @@ public class EquivalanceGroupBuilder {
 				return base + "-" + endEvent.getSequence().getSpotIndex();
 			}
 			return base;
+		} else if (element instanceof GeneratedCharterOut) {
+			// Add in hash code to keep elements unique.
+			// See start of #checkElementEquivalence
+			// Equivalence is really overlapping event time on a resource, element name (currently) encode the previous cargo/event ID which may change.
+			return element.eClass().getName() + "-" + ((Event) element).name() + "-" + element.hashCode();
 		} else if (element instanceof Event) {
 			return element.eClass().getName() + "-" + ((Event) element).name();
 		}
