@@ -161,6 +161,20 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 		return new Comparator<String>() {
 			@Override
 			public int compare(final String arg0, final String arg1) {
+				if (UNITS.equals(arg0)) {
+					return -1;
+				}
+				if (EXPRESSION.equals(arg0)) {
+					return -1;
+				}
+
+				if (EXPRESSION.equals(arg1)) {
+					return 1;
+				}
+
+				if (UNITS.equals(arg1)) {
+					return 1;
+				}
 				return arg0.compareTo(arg1);
 			}
 		};
@@ -219,10 +233,14 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 			final Index<? extends Number> index = getIndexFromObject((TargetClass) obj);
 
 			if (index instanceof DataIndex) {
-				final Map<String, String> row = new TreeMap<String, String>(getFieldNameOrderComparator());
+				final Map<String, String> row = new LinkedHashMap<>();
 				row.putAll(getNonDateFields((TargetClass) obj, index));
-				row.putAll(getDateFields(context, (DataIndex<? extends Number>) index, exportAsInt));
-				result.add(row);
+				// Sorted dates
+				final Map<String, String> dateFields = new TreeMap<String, String>(getFieldNameOrderComparator());
+				dateFields.putAll(getDateFields(context, (DataIndex<? extends Number>) index, exportAsInt));
+				// Convert to linked hash map now data is sorted.
+				row.putAll(dateFields);
+				result.add(new LinkedHashMap<>(row));
 			} else if (index instanceof DerivedIndex) {
 				final Map<String, String> row = new LinkedHashMap<String, String>();
 				row.putAll(getNonDateFields((TargetClass) obj, index));
