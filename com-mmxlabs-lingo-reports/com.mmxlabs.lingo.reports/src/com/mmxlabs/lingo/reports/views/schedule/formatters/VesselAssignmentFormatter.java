@@ -13,7 +13,9 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 
@@ -68,7 +70,7 @@ public class VesselAssignmentFormatter extends BaseFormatter {
 					}
 				} else if (vesselAssignmentType instanceof CharterInMarket) {
 					final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
-					return String.format("%s (spot)", charterInMarket.getName());
+					return formatCharterInMarket(charterInMarket, inputCargo.getSpotIndex());
 				}
 				break;
 			default:
@@ -80,11 +82,30 @@ public class VesselAssignmentFormatter extends BaseFormatter {
 			final Event event = (Event) object;
 			final Sequence sequence = event.getSequence();
 			if (sequence != null) {
+				if (sequence.isSetCharterInMarket()) {
+					return formatCharterInMarket(sequence.getCharterInMarket(), sequence.getSpotIndex());
+				}
+
 				return sequence.getName();
 			}
+		} else if (object instanceof Sequence) {
+			final Sequence sequence = (Sequence) object;
+			if (sequence.isSetCharterInMarket()) {
+				return formatCharterInMarket(sequence.getCharterInMarket(), sequence.getSpotIndex());
+			}
+
+			return sequence.getName();
 		}
 
 		return null;
+	}
+
+	protected String formatCharterInMarket(final CharterInMarket charterInMarket, int spotIndex) {
+		if (spotIndex == -1) {
+			return String.format("%s (nominal)", charterInMarket.getName());
+		} else {
+			return String.format("%s (model)", charterInMarket.getName());
+		}
 	}
 
 	@Override

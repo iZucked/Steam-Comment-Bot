@@ -15,6 +15,7 @@ import java.util.WeakHashMap;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.Viewer;
 
+import com.google.inject.Stage;
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -53,7 +54,12 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 					final EList<Sequence> sequences = ((Schedule) o).getSequences();
 
 					for (final Sequence seq : sequences) {
+						// Skip nominal cargoes
+						if (seq.getSequenceType() == SequenceType.ROUND_TRIP) {
+							continue;
+						}
 						result.add(seq);
+
 					}
 				}
 			}
@@ -62,6 +68,10 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 			final EList<Sequence> sequences = ((Schedule) parent).getSequences();
 			final List<Sequence> seqs = new ArrayList<Sequence>(sequences.size());
 			for (final Sequence seq : sequences) {
+				// Skip nominal cargoes
+				if (seq.getSequenceType() == SequenceType.ROUND_TRIP) {
+					continue;
+				}
 				seqs.add(seq);
 			}
 			return seqs.toArray();

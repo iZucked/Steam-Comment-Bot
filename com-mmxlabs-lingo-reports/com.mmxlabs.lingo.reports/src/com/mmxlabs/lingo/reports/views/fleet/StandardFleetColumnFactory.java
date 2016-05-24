@@ -23,6 +23,7 @@ import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterRevenueF
 import com.mmxlabs.lingo.reports.views.fleet.formatters.LNGCostFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.PortCostFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.VesselFormatter;
+import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.provider.PinnedScheduleFormatter;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
@@ -45,31 +46,31 @@ public class StandardFleetColumnFactory implements IFleetColumnFactory {
 					ColumnType.MULTIPLE, formatter, ScheduleReportPackage.Literals.ROW__SCENARIO, ScenarioServicePackage.eINSTANCE.getContainer_Name()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.vessel":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Vessel", "Vessel name", ColumnType.NORMAL, new VesselFormatter(),
-					ScheduleReportPackage.Literals.ROW__SEQUENCE));
+			columnManager.registerColumn(FLEET_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Vessel", "Vessel name", ColumnType.NORMAL, new VesselAssignmentFormatter(), ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.canalcosts":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Route ($)", "Total route costs", ColumnType.NORMAL, new CanalCostFormatter(),
-					ScheduleReportPackage.Literals.ROW__SEQUENCE));
+			columnManager.registerColumn(FLEET_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Route ($)", "Total route costs", ColumnType.NORMAL, new CanalCostFormatter(), ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.lngcosts":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "LNG ($)", "Total LNG BOG costs", ColumnType.NORMAL, new LNGCostFormatter(),
-					ScheduleReportPackage.Literals.ROW__SEQUENCE));
+			columnManager.registerColumn(FLEET_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "LNG ($)", "Total LNG BOG costs", ColumnType.NORMAL, new LNGCostFormatter(), ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.basefuelcosts":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Base Fuel ($)", "Total base fuel costs", ColumnType.NORMAL, new BaseFuelCostFormatter(),
-					ScheduleReportPackage.Literals.ROW__SEQUENCE));
+			columnManager.registerColumn(FLEET_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Base Fuel ($)", "Total base fuel costs", ColumnType.NORMAL, new BaseFuelCostFormatter(), ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.portcosts":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Port ($)", "Total port costs", ColumnType.NORMAL, new PortCostFormatter(),
-					ScheduleReportPackage.Literals.ROW__SEQUENCE));
+			columnManager.registerColumn(FLEET_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Port ($)", "Total port costs", ColumnType.NORMAL, new PortCostFormatter(), ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.chartercosts":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Charter ($)", "Total chartering costs", ColumnType.NORMAL, new PortCostFormatter(),
-					ScheduleReportPackage.Literals.ROW__SEQUENCE));
+			columnManager.registerColumn(FLEET_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Charter ($)", "Total chartering costs", ColumnType.NORMAL, new PortCostFormatter(), ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 		case COLUMN_BLOCK_GCO_VESSEL: {
 

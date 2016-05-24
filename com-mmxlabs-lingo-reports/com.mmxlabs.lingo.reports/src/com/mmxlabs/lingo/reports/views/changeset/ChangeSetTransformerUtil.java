@@ -24,19 +24,20 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.Triple;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.lingo.reports.views.schedule.EquivalanceGroupBuilder;
+import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -54,7 +55,6 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
-import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 
@@ -488,50 +488,41 @@ public final class ChangeSetTransformerUtil {
 
 	@NonNull
 	public static String getName(@NonNull final Sequence sequence) {
-		if (sequence.isSetCharterInMarket()) {
-			return getName(sequence.getCharterInMarket());
-		} else if (sequence.isSetVesselAvailability()) {
-			return getName(sequence.getVesselAvailability());
+		if (sequence.getSequenceType() == SequenceType.DES_PURCHASE) {
+			return "";
+		} else if (sequence.getSequenceType() == SequenceType.FOB_SALE) {
+			return "";
 		} else {
-			if (sequence.getSequenceType() == SequenceType.DES_PURCHASE) {
-				return "";
-			} else if (sequence.getSequenceType() == SequenceType.FOB_SALE) {
+			// Use consistent naming
+			final VesselAssignmentFormatter formatter = new VesselAssignmentFormatter();
+			@Nullable
+			final String renderedName = formatter.render(sequence);
+			if (renderedName != null) {
+				return renderedName;
+			} else {
 				return "";
 			}
-			return sequence.getName();
 		}
 	}
 
 	@NonNull
 	public static String getShortName(@NonNull final Sequence sequence) {
-		if (sequence.isSetCharterInMarket()) {
-			return getName(sequence.getCharterInMarket());
-		} else if (sequence.isSetVesselAvailability()) {
+		if (sequence.isSetVesselAvailability()) {
 			return getShortName(sequence.getVesselAvailability());
 		} else {
-			if (sequence.getSequenceType() == SequenceType.DES_PURCHASE) {
-				return "";
-			} else if (sequence.getSequenceType() == SequenceType.FOB_SALE) {
-				return "";
-			}
-			return sequence.getName();
+			return getName(sequence);
 		}
-	}
-
-	@NonNull
-	public static String getName(@Nullable final VesselAssignmentType t) {
-		if (t instanceof VesselAvailability) {
-			return ((VesselAvailability) t).getVessel().getName();
-		} else if (t instanceof CharterInMarket) {
-			return ((CharterInMarket) t).getName();
-		}
-		throw new NullPointerException();
 	}
 
 	@NonNull
 	public static String getShortName(@Nullable final VesselAssignmentType t) {
 		if (t instanceof VesselAvailability) {
-			return ((VesselAvailability) t).getVessel().getShortenedName();
+			Vessel vessel = ((VesselAvailability) t).getVessel();
+			if (vessel != null) {
+				return vessel.getShortenedName();
+			} else {
+				return "";
+			}
 		}
 		throw new NullPointerException();
 	}
@@ -728,7 +719,7 @@ public final class ChangeSetTransformerUtil {
 						}
 
 						if (event instanceof EventGrouping) {
-							EventGrouping eventGrouping = (EventGrouping) event;
+							final EventGrouping eventGrouping = (EventGrouping) event;
 							lateness += LatenessUtils.getLatenessExcludingFlex(eventGrouping);
 							violations += ScheduleModelKPIUtils.getCapacityViolationCount(eventGrouping);
 						}
@@ -764,7 +755,7 @@ public final class ChangeSetTransformerUtil {
 						}
 
 						if (event instanceof EventGrouping) {
-							EventGrouping eventGrouping = (EventGrouping) event;
+							final EventGrouping eventGrouping = (EventGrouping) event;
 							lateness -= LatenessUtils.getLatenessExcludingFlex(eventGrouping);
 							violations -= ScheduleModelKPIUtils.getCapacityViolationCount(eventGrouping);
 						}
@@ -874,14 +865,14 @@ public final class ChangeSetTransformerUtil {
 					continue;
 				}
 				// Head
-				ChangeSetRow head = row;
-				ChangeSetRow rhs = row.getRhsWiringLink();
+				final ChangeSetRow head = row;
+				final ChangeSetRow rhs = row.getRhsWiringLink();
 				// Is the next element a tail?
 				if (rhs.getRhsWiringLink() != null) {
 					continue;
 				}
 				// We are a tail! (we have a head -> tail sequence)
-				ChangeSetRow tail = rhs;
+				final ChangeSetRow tail = rhs;
 
 				if (tail.getNewLoadAllocation() != null) {
 					// Previous wiring, skip;
@@ -890,26 +881,26 @@ public final class ChangeSetTransformerUtil {
 
 				// Now we have found a cargo wiring example - do they involve spots?
 
-				boolean headSpot = (head.getNewDischargeAllocation() != null && head.getNewDischargeAllocation().getSlot() instanceof SpotSlot);
+				final boolean headSpot = (head.getNewDischargeAllocation() != null && head.getNewDischargeAllocation().getSlot() instanceof SpotSlot);
 				if (!headSpot) {
 					continue;
 				}
-				boolean tailSpot = (head.getOriginalDischargeAllocation() != null && head.getOriginalDischargeAllocation().getSlot() instanceof SpotSlot);
+				final boolean tailSpot = (head.getOriginalDischargeAllocation() != null && head.getOriginalDischargeAllocation().getSlot() instanceof SpotSlot);
 				if (!tailSpot) {
 					continue;
 				}
 
 				// We have found one potential wiring cargo.
-				Pair<String, String> lookupKey = new Pair<>(tail.getRhsName(), head.getRhsName());
+				final Pair<String, String> lookupKey = new Pair<>(tail.getRhsName(), head.getRhsName());
 				if (mapping.containsKey(lookupKey)) {
 					// Merge!
-					Pair<ChangeSetRow, ChangeSetRow> p = mapping.get(lookupKey);
+					final Pair<ChangeSetRow, ChangeSetRow> p = mapping.get(lookupKey);
 					mergeSpotSales(head, p.getSecond());
 					rows.remove(p.getSecond());
 					mergeSpotSales(p.getFirst(), tail);
 					rows.remove(tail);
 				} else {
-					Pair<String, String> storeKey = new Pair<>(head.getRhsName(), tail.getRhsName());
+					final Pair<String, String> storeKey = new Pair<>(head.getRhsName(), tail.getRhsName());
 					mapping.put(storeKey, new Pair<>(head, tail));
 				}
 			}
@@ -985,7 +976,6 @@ public final class ChangeSetTransformerUtil {
 	@NonNull
 	private static List<ChangeSetRow> getMarketOptions(final Map<String, List<ChangeSetRow>> rowMarketMap, final Slot slot) {
 		final String marketKey = EquivalanceGroupBuilder.getElementKey(slot);
-		final List<ChangeSetRow> list;
 		if (rowMarketMap.containsKey(marketKey)) {
 			return rowMarketMap.get(marketKey);
 		} else {

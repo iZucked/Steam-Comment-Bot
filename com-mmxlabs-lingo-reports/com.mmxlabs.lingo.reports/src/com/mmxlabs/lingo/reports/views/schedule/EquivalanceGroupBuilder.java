@@ -16,6 +16,7 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.base.Joiner;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
@@ -440,7 +441,7 @@ public class EquivalanceGroupBuilder {
 		return prefix;
 	}
 
-	private static String format(final LocalDate date) {
+	private static @NonNull String format(final @Nullable LocalDate date) {
 		if (date == null) {
 			return "<no date>";
 		}

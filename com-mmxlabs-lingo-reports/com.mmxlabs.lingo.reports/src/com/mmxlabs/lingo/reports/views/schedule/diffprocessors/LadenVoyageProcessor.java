@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 public class LadenVoyageProcessor implements IDiffProcessor {
@@ -48,7 +49,12 @@ public class LadenVoyageProcessor implements IDiffProcessor {
 		if (referenceRow.getTarget() instanceof CargoAllocation) {
 			final CargoAllocation referenceCargoAllocation = (CargoAllocation) referenceRow.getTarget();
 
+			Sequence sequence = referenceCargoAllocation.getSequence();
+			if (sequence.getSequenceType() == SequenceType.ROUND_TRIP) {
+				return;
+			}
 			for (final Event event : referenceCargoAllocation.getEvents()) {
+
 				if (event instanceof Journey) {
 					final Journey journey = (Journey) event;
 					if (journey.isLaden()) {
@@ -84,8 +90,11 @@ public class LadenVoyageProcessor implements IDiffProcessor {
 				if (scheduleModel != null) {
 					if (scheduleModel.getSchedule() != referenceRow.getSchedule()) {
 						for (final Sequence sequence : scheduleModel.getSchedule().getSequences()) {
-							if (sequence.getName().equals(referenceSequence.getName())) {
-								bindToLadenOverlaps(sequence, referenceRow, referenceInterval, elementToRowMap);
+							// Nominal cargoes never overlap (probably not really true, but right now we can overlap with anything..)
+							if (sequence.getSequenceType() != SequenceType.ROUND_TRIP) {
+								if (sequence.getName().equals(referenceSequence.getName())) {
+									bindToLadenOverlaps(sequence, referenceRow, referenceInterval, elementToRowMap);
+								}
 							}
 						}
 

@@ -28,6 +28,7 @@ import com.mmxlabs.ganttviewer.IGanttChartColourProvider;
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -74,6 +75,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	private boolean showCanals = false;
 	private final SelectedScenariosService selectedScenariosService;
 
+	private final VesselAssignmentFormatter vesselFormatter = new VesselAssignmentFormatter();
+
 	public EMFScheduleLabelProvider(final GanttChartViewer viewer, final IMemento memento, @NonNull final SelectedScenariosService selectedScenariosService) {
 		this.viewer = viewer;
 		this.memento = memento;
@@ -92,7 +95,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		if (element instanceof Sequence) {
 			final Sequence sequence = (Sequence) element;
 
-			String seqText = sequence.getName();
+			String seqText = vesselFormatter.render(sequence);
 
 			// Add scenario instance name to field if multiple scenarios are selected
 			final Object input = viewer.getInput();

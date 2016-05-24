@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.reports.views.portrotation;
 
+import static com.mmxlabs.lingo.reports.views.schedule.ScheduleBasedReportBuilder.CARGO_REPORT_TYPE_ID;
+
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.HashMap;
@@ -17,6 +19,7 @@ import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
 import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EmfBlockColumnFactory;
+import com.mmxlabs.lingo.reports.components.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.views.formatters.AsDateTimeFormatter;
@@ -24,6 +27,7 @@ import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.NumberOfDPFormatter;
+import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.provider.PinnedScheduleFormatter;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.schedule.Cooldown;
@@ -119,8 +123,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 					containingScheduleFormatter);
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.vessel":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Vessel", null, ColumnType.NORMAL, Formatters.objectFormatter, MMXCorePackage.eINSTANCE.getMMXObject__EContainerOp(),
-					sp.getSequence__GetName());
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Vessel", null, ColumnType.NORMAL, new VesselAssignmentFormatter());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.type":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Type", null, ColumnType.NORMAL, Formatters.objectFormatter, sp.getEvent__Type());
