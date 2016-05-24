@@ -166,11 +166,6 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 			// Preconditions check - ensure period, otherwise ignore test case
 			Assume.assumeTrue(periodStart != null);
 			Assume.assumeTrue(periodEnd != null);
-
-			// Skip this for now
-			// DEBUG - Remove
-			Assume.assumeFalse(scenarioURL.contains("FB1808"));
-
 		}
 
 		// Only run full iterations if the flag is set
