@@ -184,8 +184,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 			}
 
 			// Apply sequence manipulators
-			final IModifiableSequences potentialFullSequences = new ModifiableSequences(pinnedPotentialRawSequences);
-			getSequenceManipulator().manipulate(potentialFullSequences);
+			final IModifiableSequences potentialFullSequences = getSequenceManipulator().createManipulatedSequences(pinnedPotentialRawSequences);
 
 			// Apply hard constraint checkers
 			for (final IConstraintChecker checker : getConstraintCheckers()) {
