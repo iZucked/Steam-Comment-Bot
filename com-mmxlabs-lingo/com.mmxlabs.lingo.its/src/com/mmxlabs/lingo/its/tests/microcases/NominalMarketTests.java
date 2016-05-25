@@ -35,7 +35,6 @@ import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.util.PortModelFinder;
-import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.util.PricingModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
@@ -52,6 +51,7 @@ import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintChecker;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintChecker;
 
 @RunWith(value = ShiroRunner.class)
 public class NominalMarketTests extends AbstractPeriodTestCase {
@@ -116,11 +116,7 @@ public class NominalMarketTests extends AbstractPeriodTestCase {
 		// Create the required basic elements
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 
-		final CharterIndex charterIndex1 = pricingModelBuilder.createCharterIndex("CharterIndex1", "$/day", 50_000);
-		// final CharterIndex charterIndex2 = pricingModelBuilder.createCharterIndex("CharterIndex2", "$/day", 100_000);
-
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, charterIndex1, 0);
-		// final CharterInMarket charterInMarket_2 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2", vesselClass, charterIndex2, 2);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
 
 		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
@@ -174,11 +170,7 @@ public class NominalMarketTests extends AbstractPeriodTestCase {
 		// Create the required basic elements
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 
-		final CharterIndex charterIndex1 = pricingModelBuilder.createCharterIndex("CharterIndex1", "$/day", 200_000);
-		// final CharterIndex charterIndex2 = pricingModelBuilder.createCharterIndex("CharterIndex2", "$/day", 100_000);
-
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, charterIndex1, 0);
-		// final CharterInMarket charterInMarket_2 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2", vesselClass, charterIndex2, 2);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "200000", 0);
 
 		// Construct the cargo scenario
 
@@ -220,12 +212,10 @@ public class NominalMarketTests extends AbstractPeriodTestCase {
 		// Create the required basic elements
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 
-		final CharterIndex charterIndex1 = pricingModelBuilder.createCharterIndex("CharterIndex1", "$/day", 50_000);
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, charterIndex1, 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
 
 		// Second market much cheaper, but should not be used.
-		final CharterIndex charterIndex2 = pricingModelBuilder.createCharterIndex("CharterIndex2", "$/day", 10_000);
-		final CharterInMarket charterInMarket_2 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2", vesselClass, charterIndex2, 0);
+		final CharterInMarket charterInMarket_2 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2", vesselClass, "10000", 0);
 
 		// Construct the cargo scenario
 
@@ -270,9 +260,7 @@ public class NominalMarketTests extends AbstractPeriodTestCase {
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		final VesselClass vesselClass2 = fleetModelFinder.findVesselClass("STEAM-138");
 
-		final CharterIndex charterIndex1 = pricingModelBuilder.createCharterIndex("CharterIndex1", "$/day", 50_000);
-
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass2, charterIndex1, 0);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass2, "50000", 0);
 
 		// Construct the cargo scenario
 
@@ -300,7 +288,7 @@ public class NominalMarketTests extends AbstractPeriodTestCase {
 
 			// Expect just this one to fail
 			Assert.assertEquals(1, failedConstraintCheckers.size());
-			Assert.assertTrue(failedConstraintCheckers.get(0) instanceof ResourceAllocationConstraintChecker);
+			Assert.assertTrue(failedConstraintCheckers.get(0) instanceof AllowedVesselPermissionConstraintChecker);
 
 		});
 	}
@@ -317,11 +305,7 @@ public class NominalMarketTests extends AbstractPeriodTestCase {
 		// Create the required basic elements
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 
-		final CharterIndex charterIndex1 = pricingModelBuilder.createCharterIndex("CharterIndex1", "$/day", 10_000);
-		// final CharterIndex charterIndex2 = pricingModelBuilder.createCharterIndex("CharterIndex2", "$/day", 100_000);
-
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, charterIndex1, 0);
-		// final CharterInMarket charterInMarket_2 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2", vesselClass, charterIndex2, 2);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "10000", 0);
 
 		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
@@ -358,6 +342,46 @@ public class NominalMarketTests extends AbstractPeriodTestCase {
 
 			// Validate the initial sequences are valid
 			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+		});
+	}
+
+	/**
+	 * Test: Ensure we do not use a cheaper nominal vessel and avoid fleet vessel charter cost.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Category({ MicroTest.class })
+	public void testAssignToDefaultNominal() throws Exception {
+
+		// Create the required basic elements
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "10000", 0);
+		spotMarketsModelBuilder.getSpotMarketsModel().setDefaultNominalMarket(charterInMarket_1);
+
+		// Construct the cargo scenario
+
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.build() //
+				.build();
+
+		runTest(scenarioRunner -> {
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			// Check spot index has been updated
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			// Check cargoes removed
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+
+			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
+
+			Assert.assertEquals(charterInMarket_1, optCargo1.getVesselAssignmentType());
+			Assert.assertEquals(-1, optCargo1.getSpotIndex());
 		});
 	}
 

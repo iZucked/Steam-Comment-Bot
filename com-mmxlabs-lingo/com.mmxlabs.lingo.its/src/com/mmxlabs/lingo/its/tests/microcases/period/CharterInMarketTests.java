@@ -75,12 +75,8 @@ public class CharterInMarketTests extends AbstractPeriodTestCase {
 		// Create the required basic elements
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 
-		final PricingModelBuilder pricingModelBuilder = scenarioModelBuilder.getPricingModelBuilder();
-		final CharterIndex charterIndex1 = pricingModelBuilder.createCharterIndex("CharterIndex1", "$/day", 50_000);
-		final CharterIndex charterIndex2 = pricingModelBuilder.createCharterIndex("CharterIndex2", "$/day", 100_000);
-
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, charterIndex1, 2);
-		final CharterInMarket charterInMarket_2 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2", vesselClass, charterIndex2, 2);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 2);
+		final CharterInMarket charterInMarket_2 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2", vesselClass, "100000", 2);
 
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
@@ -196,12 +192,8 @@ public class CharterInMarketTests extends AbstractPeriodTestCase {
 		// Create the required basic elements
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 
-		final PricingModelBuilder pricingModelBuilder = scenarioModelBuilder.getPricingModelBuilder();
-		final CharterIndex charterIndex1 = pricingModelBuilder.createCharterIndex("CharterIndex1", "$/day", 50_000);
-		final CharterIndex charterIndex2 = pricingModelBuilder.createCharterIndex("CharterIndex2", "$/day", 100_000);
-
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, charterIndex1, 2);
-		final CharterInMarket charterInMarket_2 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2", vesselClass, charterIndex2, 2);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 2);
+		final CharterInMarket charterInMarket_2 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2", vesselClass, "100000", 2);
 
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 

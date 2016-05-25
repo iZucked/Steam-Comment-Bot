@@ -10,9 +10,12 @@ import java.time.YearMonth;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -49,6 +52,7 @@ import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintChecker;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConstraintChecker;
 
 /**
  * FB1918 - Pre-created FOB Sale spot market slots ignored the valid port set and instead were permitted to bind to any load port.
@@ -56,6 +60,53 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
  */
 @RunWith(value = ShiroRunner.class)
 public class FOBSaleSpotMarketTests {
+
+	private LNGScenarioModel lngScenarioModel;
+	private ScenarioModelBuilder scenarioModelBuilder;
+	private ScenarioModelFinder scenarioModelFinder;
+	private CommercialModelFinder commercialModelFinder;
+	private FleetModelFinder fleetModelFinder;
+	private PortModelFinder portFinder;
+	private CargoModelBuilder cargoModelBuilder;
+	private FleetModelBuilder fleetModelBuilder;
+	private SpotMarketsModelBuilder spotMarketsBuilder;
+	private BaseLegalEntity entity;
+
+	@Before
+	public void constructor() throws MalformedURLException {
+
+		// Load in the basic scenario from CSV
+		lngScenarioModel = importReferenceData();
+
+		// Create finder and builder
+		scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
+		scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
+
+		commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
+		fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
+		portFinder = scenarioModelFinder.getPortModelFinder();
+
+		cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
+		fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
+
+		spotMarketsBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
+
+		// Create the required basic elements
+		entity = commercialModelFinder.findEntity("Shipping");
+	}
+
+	@After
+	public void destructor() {
+		lngScenarioModel = null;
+		scenarioModelFinder = null;
+		scenarioModelBuilder = null;
+		commercialModelFinder = null;
+		fleetModelFinder = null;
+		portFinder = null;
+		cargoModelBuilder = null;
+		fleetModelBuilder = null;
+		entity = null;
+	}
 
 	/**
 	 * This should fail as bad port match
@@ -65,29 +116,6 @@ public class FOBSaleSpotMarketTests {
 	@Test
 	@Category({ RegressionTest.class, MicroTest.class })
 	public void testBadPortMatch() throws Exception {
-
-		// Load in the basic scenario from CSV
-		final LNGScenarioModel lngScenarioModel = importReferenceData();
-
-		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
-
-		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
-		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
-
-		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-
-		final SpotMarketsModelBuilder spotMarketsBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
-
-		// Create the required basic elements
-		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
-		//
-		// final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		//
-		// final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
 
 		final FOBSalesMarket market = spotMarketsBuilder.makeFOBSaleMarket("FOBSaleMarket", PortModelBuilder.makePortSet(portFinder.findPort("Idku LNG")), entity, "5") //
 				.withAvailabilityConstant(0)//
@@ -102,35 +130,16 @@ public class FOBSaleSpotMarketTests {
 
 				.build();
 
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
-		userSettings.setGenerateCharterOuts(false);
-
-		userSettings.setShippingOnly(false);
-		userSettings.setSimilarityMode(SimilarityMode.OFF);
-
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
-
-		// Generate internal data
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
-		try {
-
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null, false,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			scenarioRunner.evaluateInitialState();
+		runTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			// Assert initial state can be evaluated
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are invalid
-			List<IConstraintChecker> validateConstraintCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
+			final List<IConstraintChecker> validateConstraintCheckers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
 			Assert.assertNotNull(validateConstraintCheckers);
-			Assert.assertTrue(validateConstraintCheckers.get(0) instanceof ResourceAllocationConstraintChecker);
-
-		} finally {
-			executorService.shutdownNow();
-		}
+			Assert.assertTrue(validateConstraintCheckers.get(0) instanceof FOBDESCompatibilityConstraintChecker);
+		});
 	}
 
 	/**
@@ -141,29 +150,6 @@ public class FOBSaleSpotMarketTests {
 	@Test
 	@Category({ MicroTest.class, RegressionTest.class })
 	public void testRestrictedOptimisation_ExistingSlot() throws Exception {
-
-		// Load in the basic scenario from CSV
-		final LNGScenarioModel lngScenarioModel = importReferenceData();
-
-		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
-
-		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
-		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
-
-		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-
-		final SpotMarketsModelBuilder spotMarketsBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
-
-		// Create the required basic elements
-		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
-		//
-		// final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		//
-		// final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
 
 		final FOBSalesMarket market = spotMarketsBuilder.makeFOBSaleMarket("FOBSaleMarket", PortModelBuilder.makePortSet(portFinder.findPort("Point Fortin")), entity, "5") //
 				.withAvailabilityConstant(0)//
@@ -198,27 +184,7 @@ public class FOBSaleSpotMarketTests {
 		final LoadSlot load2 = (LoadSlot) cargo2.getSlots().get(0);
 		final DischargeSlot discharge2 = (DischargeSlot) cargo2.getSlots().get(1);
 
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
-		userSettings.setGenerateCharterOuts(false);
-
-		userSettings.setShippingOnly(false);
-		userSettings.setSimilarityMode(SimilarityMode.OFF);
-
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
-
-		// Limit optimisation run time
-		optimiserSettings.getAnnealingSettings().setIterations(10_000);
-		optimiserSettings.getSolutionImprovementSettings().setImprovingSolutions(false);
-
-		// Generate internal data
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
-		try {
-
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null, false,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			scenarioRunner.evaluateInitialState();
+		runTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final IMultiStateResult result = scenarioRunner.run();
@@ -261,37 +227,12 @@ public class FOBSaleSpotMarketTests {
 
 			// Assert.fail("Should not pass *new* constraint checker");
 
-		} finally {
-			executorService.shutdownNow();
-		}
+		});
 	}
 
 	@Test
 	@Category({ MicroTest.class })
 	public void testUnrestrictedOptimisation_ExistingSlot() throws Exception {
-
-		// Load in the basic scenario from CSV
-		final LNGScenarioModel lngScenarioModel = importReferenceData();
-
-		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
-
-		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
-		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
-
-		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-
-		final SpotMarketsModelBuilder spotMarketsBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
-
-		// Create the required basic elements
-		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
-		//
-		// final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		//
-		// final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
 
 		final FOBSalesMarket market = spotMarketsBuilder.makeFOBSaleMarket("FOBSaleMarket", PortModelBuilder.makePortSet(portFinder.findPort("Idku LNG")), entity, "5") //
 				.withAvailabilityConstant(0)//
@@ -324,28 +265,7 @@ public class FOBSaleSpotMarketTests {
 
 		final LoadSlot load2 = (LoadSlot) cargo2.getSlots().get(0);
 		final DischargeSlot discharge2 = (DischargeSlot) cargo2.getSlots().get(1);
-
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
-		userSettings.setGenerateCharterOuts(false);
-
-		userSettings.setShippingOnly(false);
-		userSettings.setSimilarityMode(SimilarityMode.OFF);
-
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
-
-		// Limit optimisation run time
-		optimiserSettings.getAnnealingSettings().setIterations(10_000);
-		optimiserSettings.getSolutionImprovementSettings().setImprovingSolutions(false);
-
-		// Generate internal data
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
-		try {
-
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null, false,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			scenarioRunner.evaluateInitialState();
+		runTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final IMultiStateResult result = scenarioRunner.run();
@@ -385,37 +305,12 @@ public class FOBSaleSpotMarketTests {
 
 			// Assert.fail("Should not pass *new* constraint checker");
 
-		} finally {
-			executorService.shutdownNow();
-		}
+		});
 	}
 
 	@Test
 	@Category({ MicroTest.class })
 	public void testRestrictedOptimisation_GeneratedSlot() throws Exception {
-
-		// Load in the basic scenario from CSV
-		final LNGScenarioModel lngScenarioModel = importReferenceData();
-
-		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
-
-		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
-		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
-
-		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-
-		final SpotMarketsModelBuilder spotMarketsBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
-
-		// Create the required basic elements
-		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
-		//
-		// final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		//
-		// final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
 
 		final FOBSalesMarket market = spotMarketsBuilder.makeFOBSaleMarket("FOBSaleMarket", PortModelBuilder.makePortSet(portFinder.findPort("Point Fortin")), entity, "5") //
 				.withAvailabilityConstant(1)//
@@ -434,28 +329,7 @@ public class FOBSaleSpotMarketTests {
 
 		final LoadSlot load2 = (LoadSlot) cargo2.getSlots().get(0);
 		final DischargeSlot discharge2 = (DischargeSlot) cargo2.getSlots().get(1);
-
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
-		userSettings.setGenerateCharterOuts(false);
-
-		userSettings.setShippingOnly(false);
-		userSettings.setSimilarityMode(SimilarityMode.OFF);
-
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
-
-		// Limit optimisation run time
-		optimiserSettings.getAnnealingSettings().setIterations(10_000);
-		optimiserSettings.getSolutionImprovementSettings().setImprovingSolutions(false);
-
-		// Generate internal data
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
-		try {
-
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null, false,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			scenarioRunner.evaluateInitialState();
+		runTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final IMultiStateResult result = scenarioRunner.run();
@@ -480,37 +354,12 @@ public class FOBSaleSpotMarketTests {
 
 			// Assert.fail("Should not pass *new* constraint checker");
 
-		} finally {
-			executorService.shutdownNow();
-		}
+		});
 	}
 
 	@Test
 	@Category({ MicroTest.class })
 	public void testUnrestrictedOptimisation_GeneratedSlot() throws Exception {
-
-		// Load in the basic scenario from CSV
-		final LNGScenarioModel lngScenarioModel = importReferenceData();
-
-		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
-
-		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
-		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
-
-		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-
-		final SpotMarketsModelBuilder spotMarketsBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
-
-		// Create the required basic elements
-		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
-		//
-		// final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		//
-		// final Vessel vessel_1 = fleetModelBuilder.createVessel("Vessel-1", vesselClass);
 
 		final FOBSalesMarket market = spotMarketsBuilder.makeFOBSaleMarket("FOBSaleMarket", PortModelBuilder.makePortSet(portFinder.findPort("Idku LNG")), entity, "5") //
 				.withAvailabilityConstant(1)//
@@ -529,28 +378,7 @@ public class FOBSaleSpotMarketTests {
 
 		final LoadSlot load2 = (LoadSlot) cargo2.getSlots().get(0);
 		final DischargeSlot discharge2 = (DischargeSlot) cargo2.getSlots().get(1);
-
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
-		userSettings.setGenerateCharterOuts(false);
-
-		userSettings.setShippingOnly(false);
-		userSettings.setSimilarityMode(SimilarityMode.OFF);
-
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
-
-		// Limit optimisation run time
-		optimiserSettings.getAnnealingSettings().setIterations(10_000);
-		optimiserSettings.getSolutionImprovementSettings().setImprovingSolutions(false);
-
-		// Generate internal data
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
-		try {
-
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null, false,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			scenarioRunner.evaluateInitialState();
+		runTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final IMultiStateResult result = scenarioRunner.run();
@@ -577,9 +405,7 @@ public class FOBSaleSpotMarketTests {
 
 			// Assert.fail("Should not pass *new* constraint checker");
 
-		} finally {
-			executorService.shutdownNow();
-		}
+		});
 	}
 
 	@NonNull
@@ -602,4 +428,32 @@ public class FOBSaleSpotMarketTests {
 
 		return importer.doImport();
 	}
+
+	private void runTest(final Consumer<LNGScenarioRunner> checker) {
+		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
+		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
+		userSettings.setBuildActionSets(false);
+		userSettings.setGenerateCharterOuts(false);
+		userSettings.setShippingOnly(false);
+		userSettings.setSimilarityMode(SimilarityMode.OFF);
+
+		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		// Limit optimisation run time
+		optimiserSettings.getAnnealingSettings().setIterations(10_000);
+		optimiserSettings.getSolutionImprovementSettings().setImprovingSolutions(false);
+
+		// Generate internal data
+		final ExecutorService executorService = Executors.newSingleThreadExecutor();
+		try {
+
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null, false,
+					LNGTransformerHelper.HINT_OPTIMISE_LSO);
+			scenarioRunner.evaluateInitialState();
+
+			checker.accept(scenarioRunner);
+		} finally {
+			executorService.shutdownNow();
+		}
+	}
+
 }

@@ -54,7 +54,6 @@ import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBoot
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
-import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintChecker;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -65,6 +64,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -127,10 +127,7 @@ public class VesselRestrictionsTest extends AbstractPeriodTestCase {
 		// Create the required basic elements
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 
-		final CharterIndex charterIndex1 = pricingModelBuilder.createCharterIndex("CharterIndex1", "$/day", 50_000);
-		// final CharterIndex charterIndex2 = pricingModelBuilder.createCharterIndex("CharterIndex2", "$/day", 100_000);
-
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, charterIndex1, 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 1);
 
 		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
@@ -155,7 +152,7 @@ public class VesselRestrictionsTest extends AbstractPeriodTestCase {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final ResourceAllocationConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
+			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
 			Assert.assertTrue(checker.checkConstraints(createSequences(scenarioToOptimiserBridge, cargo1, vesselAvailability1), null));
@@ -175,10 +172,7 @@ public class VesselRestrictionsTest extends AbstractPeriodTestCase {
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		final VesselClass vesselClass2 = fleetModelFinder.findVesselClass("STEAM-138");
 
-		final CharterIndex charterIndex1 = pricingModelBuilder.createCharterIndex("CharterIndex1", "$/day", 50_000);
-		// final CharterIndex charterIndex2 = pricingModelBuilder.createCharterIndex("CharterIndex2", "$/day", 100_000);
-
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, charterIndex1, 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 1);
 
 		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
@@ -203,7 +197,7 @@ public class VesselRestrictionsTest extends AbstractPeriodTestCase {
 		runTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final ResourceAllocationConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
+			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
 			Assert.assertFalse(checker.checkConstraints(createSequences(scenarioToOptimiserBridge, cargo1, vesselAvailability1), null));
@@ -223,10 +217,7 @@ public class VesselRestrictionsTest extends AbstractPeriodTestCase {
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		final VesselClass vesselClass2 = fleetModelFinder.findVesselClass("STEAM-138");
 
-		final CharterIndex charterIndex1 = pricingModelBuilder.createCharterIndex("CharterIndex1", "$/day", 50_000);
-		// final CharterIndex charterIndex2 = pricingModelBuilder.createCharterIndex("CharterIndex2", "$/day", 100_000);
-
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, charterIndex1, 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 1);
 
 		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass2);
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
@@ -251,7 +242,7 @@ public class VesselRestrictionsTest extends AbstractPeriodTestCase {
 		runTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final ResourceAllocationConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
+			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
 			Assert.assertTrue(checker.checkConstraints(createSequences(scenarioToOptimiserBridge, cargo1, vesselAvailability1), null));
@@ -270,10 +261,7 @@ public class VesselRestrictionsTest extends AbstractPeriodTestCase {
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		final VesselClass vesselClass2 = fleetModelFinder.findVesselClass("STEAM-138");
 
-		final CharterIndex charterIndex1 = pricingModelBuilder.createCharterIndex("CharterIndex1", "$/day", 50_000);
-		// final CharterIndex charterIndex2 = pricingModelBuilder.createCharterIndex("CharterIndex2", "$/day", 100_000);
-
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, charterIndex1, 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 1);
 
 		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass2);
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
@@ -298,7 +286,7 @@ public class VesselRestrictionsTest extends AbstractPeriodTestCase {
 		runTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final ResourceAllocationConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
+			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
 			Assert.assertTrue(checker.checkConstraints(createSequences(scenarioToOptimiserBridge, cargo1, vesselAvailability1), null));
@@ -316,10 +304,7 @@ public class VesselRestrictionsTest extends AbstractPeriodTestCase {
 		// Create the required basic elements
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 
-		final CharterIndex charterIndex1 = pricingModelBuilder.createCharterIndex("CharterIndex1", "$/day", 50_000);
-		// final CharterIndex charterIndex2 = pricingModelBuilder.createCharterIndex("CharterIndex2", "$/day", 100_000);
-
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, charterIndex1, 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 1);
 
 		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		final Vessel vessel2 = fleetModelBuilder.createVessel("Vessel2", vesselClass);
@@ -345,7 +330,7 @@ public class VesselRestrictionsTest extends AbstractPeriodTestCase {
 		runTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final ResourceAllocationConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
+			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
 			Assert.assertFalse(checker.checkConstraints(createSequences(scenarioToOptimiserBridge, cargo1, vesselAvailability1), null));
@@ -367,7 +352,7 @@ public class VesselRestrictionsTest extends AbstractPeriodTestCase {
 		final CharterIndex charterIndex1 = pricingModelBuilder.createCharterIndex("CharterIndex1", "$/day", 50_000);
 		// final CharterIndex charterIndex2 = pricingModelBuilder.createCharterIndex("CharterIndex2", "$/day", 100_000);
 
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass2, charterIndex1, 1);
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass2, "50000", 1);
 
 		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
@@ -392,7 +377,7 @@ public class VesselRestrictionsTest extends AbstractPeriodTestCase {
 		runTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final ResourceAllocationConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
+			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			// Real vessel
 			Assert.assertFalse(checker.checkConstraints(createSequences(scenarioToOptimiserBridge, cargo1, vesselAvailability1), null));
@@ -427,8 +412,38 @@ public class VesselRestrictionsTest extends AbstractPeriodTestCase {
 		runTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final ResourceAllocationConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
+			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
+			Assert.assertTrue(checker.checkConstraints(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null));
+		});
+	}
+	@Test
+	@Category({ MicroTest.class })
+	public void testDESPurchaseVesselRestrictions_VesselExists2() throws Exception {
+		
+		// Create the required basic elements
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		
+		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
+		final Vessel vessel2 = fleetModelBuilder.createVessel("Vessel2", vesselClass);
+		
+		// Construct the cargo scenario
+		
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeDESPurchase("L1", true, LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.withVesselRestriction(vessel2) // <<<<<< Restrict load to alternative vessel 
+				.build() //
+				.withAssignmentFlags(false, false) //
+				.build();
+		
+		runTest(scenarioRunner -> {
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+			
+			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
+			
 			Assert.assertFalse(checker.checkConstraints(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null));
 		});
 	}
@@ -457,7 +472,38 @@ public class VesselRestrictionsTest extends AbstractPeriodTestCase {
 		runTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final ResourceAllocationConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
+			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
+
+			Assert.assertTrue(checker.checkConstraints(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null));
+		});
+	}
+
+	@Test
+	@Category({ MicroTest.class })
+	public void testFOBSaleVesselRestrictions_VesselExists2() throws Exception {
+
+		// Create the required basic elements
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+
+		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
+		final Vessel vessel2 = fleetModelBuilder.createVessel("Vessel2", vesselClass);
+
+		// Construct the cargo scenario
+
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.withVesselRestriction(vessel2) // <<<<<< Restrict load to alternative vessel
+				.build() //
+				.makeFOBSale("D1", true, LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7", vessel) //
+				.build() //
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		runTest(scenarioRunner -> {
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			Assert.assertFalse(checker.checkConstraints(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null));
 		});
@@ -488,7 +534,7 @@ public class VesselRestrictionsTest extends AbstractPeriodTestCase {
 		runTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final ResourceAllocationConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
+			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			Assert.assertFalse(checker.checkConstraints(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null));
 		});
@@ -519,7 +565,7 @@ public class VesselRestrictionsTest extends AbstractPeriodTestCase {
 		runTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final ResourceAllocationConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
+			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			Assert.assertFalse(checker.checkConstraints(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null));
 		});
@@ -550,7 +596,7 @@ public class VesselRestrictionsTest extends AbstractPeriodTestCase {
 		runTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final ResourceAllocationConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
+			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			Assert.assertFalse(checker.checkConstraints(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null));
 		});
@@ -582,7 +628,7 @@ public class VesselRestrictionsTest extends AbstractPeriodTestCase {
 		runTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			final ResourceAllocationConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
+			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
 
 			Assert.assertFalse(checker.checkConstraints(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null));
 		});
@@ -658,16 +704,16 @@ public class VesselRestrictionsTest extends AbstractPeriodTestCase {
 		return sequences;
 	}
 
-	private ResourceAllocationConstraintChecker getChecker(final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge) {
+	private AllowedVesselPermissionConstraintChecker getChecker(final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge) {
 		final Pair<LNGEvaluationTransformerUnit, List<IConstraintChecker>> constraintCheckers = MicroTestUtils.getConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer());
 
 		for (final IConstraintChecker checker : constraintCheckers.getSecond()) {
-			if (checker instanceof ResourceAllocationConstraintChecker) {
-				return (ResourceAllocationConstraintChecker) checker;
+			if (checker instanceof AllowedVesselPermissionConstraintChecker) {
+				return (AllowedVesselPermissionConstraintChecker) checker;
 			}
 
 		}
-		Assert.fail("Unable to find ResourceAllocationConstraintChecker");
+		Assert.fail("Unable to find AllowedVesselPermissionConstraintChecker");
 		throw new IllegalStateException();
 	}
 
