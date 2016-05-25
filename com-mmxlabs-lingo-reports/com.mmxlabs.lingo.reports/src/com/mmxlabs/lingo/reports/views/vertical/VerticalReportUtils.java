@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -66,8 +67,8 @@ public final class VerticalReportUtils {
 	 * @return
 	 */
 	@NonNull
-	public static List<LocalDate> getUTCDaysBetween(final LocalDate start, final LocalDate end) {
-		final List<LocalDate> result = new ArrayList<>();
+	public static List<@NonNull LocalDate> getUTCDaysBetween(final @Nullable LocalDate start, final @Nullable LocalDate end) {
+		final List<@NonNull LocalDate> result = new ArrayList<>();
 		if (start != null && end != null) {
 			LocalDate current = start;
 			while (!current.isAfter(end)) {
