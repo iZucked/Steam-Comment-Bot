@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -573,6 +574,8 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		CharterOutEvent event = msc.makeCharterOut(msc, scenario, msc.loadPort, msc.originPort);
 		event.getHeelOptions().setVolumeAvailable(2000);
 
+		event.setVesselAssignmentType(msc.vesselAvailability);
+
 		// FIXME: Note - there are three idle events in a row due to the way the internal optimisation represents the transition from charter start to charter end. Not great API but this is the way it
 		// works.
 		Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, Idle.class, Idle.class,
@@ -649,6 +652,8 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 
 		CharterOutEvent event = msc.makeCharterOut(msc, scenario, msc.loadPort, msc.originPort);
 		event.getHeelOptions().setVolumeAvailable(1000);
+
+		event.setVesselAssignmentType(msc.vesselAvailability);
 
 		// FIXME: Note - there are three idle events in a row due to the way the internal optimisation represents the transition from charter start to charter end. Not great API but this is the way it
 		// works.
@@ -732,7 +737,8 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final LocalDateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime().toLocalDateTime();
 		final LocalDateTime dryDockStartByDate = endLoad.plusHours(3);
 		final LocalDateTime dryDockStartAfterDate = endLoad.plusHours(2);
-		msc.vesselEventCreator.createDryDockEvent("DryDock", msc.loadPort, dryDockStartByDate, dryDockStartAfterDate);
+		DryDockEvent event = msc.vesselEventCreator.createDryDockEvent("DryDock", msc.loadPort, dryDockStartByDate, dryDockStartAfterDate);
+		event.setVesselAssignmentType(msc.vesselAvailability);
 
 		// set up a drydock pricing of 6
 		msc.portCreator.setPortCost(msc.loadPort, PortCapability.DRYDOCK, 6);

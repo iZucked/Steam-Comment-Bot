@@ -17,11 +17,14 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
@@ -38,6 +41,7 @@ import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -349,7 +353,8 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		Cargo secondCargo = msc.createDefaultCargo(msc.loadPort, msc.dischargePort);
 
 		// and send the vessel back to the origin port at end of itinerary
-		msc.setDefaultAvailability(msc.originPort, msc.originPort);
+		VesselAvailability va = msc.setDefaultAvailability(msc.originPort, msc.originPort);
+		secondCargo.setVesselAssignmentType(va);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -872,19 +877,14 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		final CargoModel cargoModel = scenario.getCargoModel();
 		cargoModel.getVesselAvailabilities().clear();
+
+		cargoModel.getCargoes().forEach(c -> c.setVesselAssignmentType(null));
 		// Cannot null as final
 		// msc.vessel = null;
 		// msc.vesselAvailability = null;
 
 		// Set up a charter index curve
 		final int charterRatePerDay = 240;
-		final CharterIndex spotMarketRate = PricingFactory.eINSTANCE.createCharterIndex();
-		final DerivedIndex<Integer> spotMarketRateData = PricingFactory.eINSTANCE.createDerivedIndex();
-		spotMarketRateData.setExpression("" + charterRatePerDay);
-		spotMarketRate.setData(spotMarketRateData);
-
-		final PricingModel pricingModel = scenario.getReferenceModel().getPricingModel();
-		pricingModel.getCharterIndices().add(spotMarketRate);
 
 		// Create a charter-in market object
 		final SpotMarketsModel sportMarketsModel = scenario.getReferenceModel().getSpotMarketsModel();
@@ -896,12 +896,14 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		charterModel.setVesselClass(msc.vc);
 		charterModel.setSpotCharterCount(1);
-		charterModel.setCharterInPrice(spotMarketRate);
+		charterModel.setCharterInRate("" + charterRatePerDay);
+
+		sportMarketsModel.setDefaultNominalMarket(charterModel);
 
 		// Spot charter-in vessels have fewer voyages
 		final SequenceTester checker;
 		{
-			final Class<?>[] expectedClasses = { SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, EndEvent.class };
+			final Class<?>[] expectedClasses = { SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, Object.class };
 			checker = getTestCharterCost_SpotCharterInTester(expectedClasses);
 		}
 
@@ -939,7 +941,8 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 2, 2 });
 
 		// don't care what the duration of the end event is
-		checker.setExpectedValues(Expectations.DURATIONS, EndEvent.class, new Integer[] { null });
+		checker.setExpectedValues(Expectations.DURATIONS, PortVisit.class, new Integer[] { null, null, null });
+		checker.setExpectedValues(Expectations.DURATIONS, SlotVisit.class, new Integer[] { null, null, null });
 
 		// don't care what the duration of the start event is
 		checker.setExpectedValues(Expectations.DURATIONS, StartEvent.class, new Integer[] {});
@@ -1103,7 +1106,8 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final LocalDateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime().toLocalDateTime();
 		final LocalDateTime dryDockStartByDate = endLoad.plusHours(3);
 		final LocalDateTime dryDockStartAfterDate = endLoad.plusHours(2);
-		msc.vesselEventCreator.createDryDockEvent("DryDock", msc.loadPort, dryDockStartByDate, dryDockStartAfterDate);
+		DryDockEvent event = msc.vesselEventCreator.createDryDockEvent("DryDock", msc.loadPort, dryDockStartByDate, dryDockStartAfterDate);
+		event.setVesselAssignmentType(msc.vesselAvailability);
 
 		// set up a drydock pricing of 6
 		msc.portCreator.setPortCost(msc.loadPort, PortCapability.DRYDOCK, 6);
@@ -1135,7 +1139,8 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final LocalDateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime().toLocalDateTime();
 		final LocalDateTime maintenanceDockStartByDate = endLoad.plusHours(3);
 		final LocalDateTime maintenanceDockStartAfterDate = endLoad.plusHours(2);
-		msc.vesselEventCreator.createMaintenanceEvent("Maintenance", msc.loadPort, maintenanceDockStartByDate, maintenanceDockStartAfterDate);
+		MaintenanceEvent event = msc.vesselEventCreator.createMaintenanceEvent("Maintenance", msc.loadPort, maintenanceDockStartByDate, maintenanceDockStartAfterDate);
+		event.setVesselAssignmentType(msc.vesselAvailability);
 
 		// set up a drydock pricing of 6
 		msc.portCreator.setPortCost(msc.loadPort, PortCapability.MAINTENANCE, 3);
@@ -1256,7 +1261,6 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		checker.check(sequence);
 	}
 
-	
 	@Test
 	public void testGeneratedCharterOut() {
 		System.err.println("\n\nIdle at end should permit generated charter out event.");
@@ -1411,6 +1415,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		@SuppressWarnings("unused")
 		CharterOutEvent event = msc.makeCharterOut(msc, scenario, msc.loadPort, msc.originPort);
 
+		event.setVesselAssignmentType(msc.vesselAvailability);
 		// FIXME: Note - there are three idle events in a row due to the way the internal optimisation represents the transition from charter start to charter end. Not great API but this is the way it
 		// works.
 		Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, Idle.class, Idle.class,

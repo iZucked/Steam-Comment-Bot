@@ -75,6 +75,7 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -120,10 +121,12 @@ public class DefaultScenarioCreator {
 
 	private static final String timeZone = ZoneId.of("UTC").getId();
 	protected final @NonNull CommercialModelBuilder commercialModelBuilder;
+	private SpotMarketsModelBuilder spotMarketsModelBuilder;
 
 	public DefaultScenarioCreator() {
 		scenario = ManifestJointModel.createEmptyInstance(null);
 		commercialModelBuilder = new CommercialModelBuilder(ScenarioModelUtil.getCommercialModel(scenario));
+		spotMarketsModelBuilder = new SpotMarketsModelBuilder(ScenarioModelUtil.getSpotMarketsModel(scenario));
 
 		// need to create a legal entity for contracts
 		contractEntity = addEntity("Third-parties");
@@ -317,13 +320,11 @@ public class DefaultScenarioCreator {
 
 			final DefaultVesselStateAttributesCreator dvsac = new DefaultVesselStateAttributesCreator();
 
-			final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
-			charterInMarket.setName("market-" + vc.getName());
-			charterInMarket.setSpotCharterCount(spotCharterCount);
-			charterInMarket.setVesselClass(vc);
-
-			final SpotMarketsModel spotMarketsModel = scenario.getReferenceModel().getSpotMarketsModel();
-			spotMarketsModel.getCharterInMarkets().add(charterInMarket);
+			final CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("market-" + vc.getName(), vc, "0", spotCharterCount);
+			// Make first created market the default one
+			if (spotMarketsModelBuilder.getSpotMarketsModel().getCharterInMarkets().size() == 1) {
+				spotMarketsModelBuilder.getSpotMarketsModel().setDefaultNominalMarket(charterInMarket);
+			}
 
 			vc.setLadenAttributes(dvsac.createVesselStateAttributes(defaultMinSpeed, defaultMaxSpeed));
 			vc.setBallastAttributes(dvsac.createVesselStateAttributes(defaultMinSpeed, defaultMaxSpeed));
@@ -722,11 +723,7 @@ public class DefaultScenarioCreator {
 			result.setVesselClass(vc);
 			result.setMinCharterOutDuration(minDuration);
 
-			final String indexName = String.format("Charter-out cost for vessel class %s", vc.getName());
-			final CharterIndex charterIndex = PricingFactory.eINSTANCE.createCharterIndex();
-			charterIndex.setName(indexName);
-			charterIndex.setData(createIndex(price));
-			result.setCharterOutPrice(charterIndex);
+			result.setCharterOutRate(Integer.toString(price));
 
 			EList<APortSet<Port>> cPorts = result.getAvailablePorts();
 			for (Port p : ports) {
@@ -736,8 +733,6 @@ public class DefaultScenarioCreator {
 
 			final SpotMarketsModel marketModel = scenario.getReferenceModel().getSpotMarketsModel();
 			marketModel.getCharterOutMarkets().add(result);
-
-			scenario.getReferenceModel().getPricingModel().getCharterIndices().add(charterIndex);
 
 			return result;
 		}

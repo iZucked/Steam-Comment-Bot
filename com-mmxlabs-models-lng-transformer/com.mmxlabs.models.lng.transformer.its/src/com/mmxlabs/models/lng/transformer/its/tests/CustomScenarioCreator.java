@@ -65,9 +65,11 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -92,6 +94,8 @@ public class CustomScenarioCreator {
 	private final SpotMarketsModel spotMarketsModel;
 	private final LNGReferenceModel referenceModel;
 
+	private final ScenarioModelBuilder scenarioModelBuilder;
+
 	final SalesContract sc;
 	final PurchaseContract pc;
 	final LegalEntity contractEntity;
@@ -107,7 +111,9 @@ public class CustomScenarioCreator {
 	public CustomScenarioCreator(final float dischargePrice, final String timeZone) {
 		this.timeZone = timeZone;
 
-		scenario = ManifestJointModel.createEmptyInstance(null);
+		this.scenarioModelBuilder = ScenarioModelBuilder.instantiate();
+		scenario = scenarioModelBuilder.getLNGScenarioModel();
+
 		referenceModel = scenario.getReferenceModel();
 		cargoModel = scenario.getCargoModel();
 
@@ -118,15 +124,9 @@ public class CustomScenarioCreator {
 		commercialModel = referenceModel.getCommercialModel();
 		spotMarketsModel = referenceModel.getSpotMarketsModel();
 
+		contractEntity = scenarioModelBuilder.getCommercialModelBuilder().makeLegalEntityAndBooks("Third-parties");
+		shippingEntity = scenarioModelBuilder.getCommercialModelBuilder().makeLegalEntityAndBooks("Shipping");
 
-		contractEntity = CommercialFactory.eINSTANCE.createLegalEntity();
-		contractEntity.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		contractEntity.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		contractEntity.setUpstreamBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		shippingEntity = CommercialFactory.eINSTANCE.createLegalEntity();
-		shippingEntity.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		shippingEntity.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		shippingEntity.setUpstreamBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		final TaxRate taxRate = CommercialFactory.eINSTANCE.createTaxRate();
 		taxRate.setDate(createLocalDate(2000, Calendar.JANUARY, 1));
 		shippingEntity.getShippingBook().getTaxRates().add(EcoreUtil.copy(taxRate));
@@ -136,9 +136,6 @@ public class CustomScenarioCreator {
 
 		commercialModel.getEntities().add(contractEntity);
 		commercialModel.getEntities().add(shippingEntity);
-
-		contractEntity.setName("Third-parties");
-		shippingEntity.setName("Shipping");
 
 		sc = addSalesContract("Sales Contract", dischargePrice);
 		pc = addPurchaseContract("Purchase Contract");
@@ -194,6 +191,8 @@ public class CustomScenarioCreator {
 			final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final int pilotLightRate, final int minHeelVolume,
 			final boolean isTimeChartered) {
 
+		SpotMarketsModelBuilder spotMarketsModelBuilder = new SpotMarketsModelBuilder(spotMarketsModel);
+
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
 		final int warmupTime = Integer.MAX_VALUE;
@@ -231,14 +230,10 @@ public class CustomScenarioCreator {
 		vc.setMinHeel(minHeelVolume);
 		vc.setFillCapacity(fillCapacity);
 
-		if (spotCharterCount > 0) {
-			final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
-			charterInMarket.setName("market-" + vc.getName());
-			charterInMarket.setSpotCharterCount(spotCharterCount);
-			// Costs
-			charterInMarket.setVesselClass(vc);
-
-			spotMarketsModel.getCharterInMarkets().add(charterInMarket);
+		final CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("market-" + vc.getName(), vc, "0", spotCharterCount);
+		// Make first created market the default one
+		if (spotMarketsModel.getCharterInMarkets().size() == 1) {
+			spotMarketsModel.setDefaultNominalMarket(charterInMarket);
 		}
 		final FuelConsumption ladenMin = FleetFactory.eINSTANCE.createFuelConsumption();
 		final FuelConsumption ladenMax = FleetFactory.eINSTANCE.createFuelConsumption();
@@ -568,7 +563,7 @@ public class CustomScenarioCreator {
 			final int canalLadenCost, final int canalUnladenCost, final int canalTransitFuelDays, final int canalNBORateDays, final int canalTransitTime) {
 
 		final Route canal = PortFactory.eINSTANCE.createRoute();
-//		canal.setCanal(true);
+		// canal.setCanal(true);
 		canal.setRouteOption(canalOption);
 		scenario.getReferenceModel().getPortModel().getRoutes().add(canal);
 		canal.setName(canalOption.getName());
@@ -683,17 +678,8 @@ public class CustomScenarioCreator {
 	 * @return
 	 */
 	public SalesContract addSalesContract(final String name, final float dischargePrice) {
-		final SalesContract result = CommercialFactory.eINSTANCE.createSalesContract();
-		final ExpressionPriceParameters params = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
-		result.setName(name);
 
-		result.setEntity(contractEntity);
-		params.setPriceExpression(Float.toString(dischargePrice));
-
-		result.setPriceInfo(params);
-		commercialModel.getSalesContracts().add(result);
-
-		return result;
+		return scenarioModelBuilder.getCommercialModelBuilder().makeExpressionSalesContract(name, contractEntity, Float.toString(dischargePrice));
 	}
 
 	/**
@@ -705,19 +691,7 @@ public class CustomScenarioCreator {
 	 * @return
 	 */
 	public PurchaseContract addPurchaseContract(final String name) {
-		final PurchaseContract result = CommercialFactory.eINSTANCE.createPurchaseContract();
-		final ExpressionPriceParameters params = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
-
-		// Set a default value
-		params.setPriceExpression("0");
-
-		result.setName(name);
-
-		result.setEntity(contractEntity);
-		result.setPriceInfo(params);
-		commercialModel.getPurchaseContracts().add(result);
-
-		return result;
+		return scenarioModelBuilder.getCommercialModelBuilder().makeExpressionPurchaseContract(name, contractEntity, "0");
 	}
 
 	public CommodityIndex addCommodityIndex(final String name) {
@@ -765,7 +739,7 @@ public class CustomScenarioCreator {
 	}
 
 	public LocalDate createLocalDate(final int year, final int month, final int day) {
-		return  LocalDate.of(year, 1 + month, day);
+		return LocalDate.of(year, 1 + month, day);
 	}
 
 	public static LocalDateTime createLocalDateTime(final int year, final int month, final int day, final int hourOfDay) {

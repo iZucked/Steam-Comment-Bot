@@ -51,10 +51,10 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 
 		final CommercialModel commercialModel = scenario.getReferenceModel().getCommercialModel();
 
-//		// need to create a legal entity for contracts
-//		contractEntity = addEntity("Third-parties");
-//		// need to create a legal entity for shipping
-//		shippingEntity = addEntity("Shipping");
+		// // need to create a legal entity for contracts
+		// contractEntity = addEntity("Third-parties");
+		// // need to create a legal entity for shipping
+		// shippingEntity = addEntity("Shipping");
 
 		// need to create sales and purchase contracts
 		salesContract = addSalesContract("Sales Contract", dischargePrice);
@@ -85,7 +85,8 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 
 		cargo = createDefaultCargo(loadPort, dischargePort);
 
-		setDefaultAvailability(originPort, originPort);
+		VesselAvailability va = setDefaultAvailability(originPort, originPort);
+		cargo.setVesselAssignmentType(va);
 
 	}
 
@@ -118,7 +119,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		return 2 * getTravelTime(loadPort, dischargePort, null, (int) vc.getMaxSpeed());
 	}
 
-	public void setDefaultAvailability(final Port startPort, final Port endPort) {
+	public VesselAvailability setDefaultAvailability(final Port startPort, final Port endPort) {
 
 		final Pair<Port, ZonedDateTime> firstAppointment = getFirstAppointment();
 		final Pair<Port, ZonedDateTime> lastAppointment = getLastAppointment();
@@ -132,6 +133,8 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		final CargoModel cargoModel = scenario.getCargoModel();
 		this.vesselAvailability = fleetCreator.setAvailability(cargoModel, vessel, originPort, startDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime(), originPort,
 				endDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
+
+		return this.vesselAvailability;
 	}
 
 	public VesselEvent createDefaultMaintenanceEvent(final String name, final Port port, LocalDateTime startDate) {

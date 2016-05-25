@@ -8,16 +8,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.ui.dialogs.SelectionDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -290,32 +288,30 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 			}
 		}
 
-		// For all unassigned cargoes, assign to the default nominal market vessel
-		for (final Cargo cargo : cargoModel.getCargoes()) {
-			if (cargo.getCargoType() != CargoType.FLEET) {
-				continue;
+		// Assign shippable cargoes to the default nominal market (if it exists)
+		final ISpotCharterInMarket defaultMarketForNominalCargoes = spotCharterInMarketProvider.getDefaultMarketForNominalCargoes();
+		if (defaultMarketForNominalCargoes != null) {
+			// For all unassigned cargoes, assign to the default nominal market vessel
+			for (final Cargo cargo : cargoModel.getCargoes()) {
+				if (cargo.getCargoType() != CargoType.FLEET) {
+					continue;
+				}
+				if (seenCargoes.contains(cargo)) {
+					assert cargo.getVesselAssignmentType() != null;
+					continue;
+				}
+
+				final IVesselAvailability vesselAvailability = spotCharterInMarketProvider.getSpotMarketAvailability(defaultMarketForNominalCargoes, -1);
+				final IResource resource = vesselProvider.getResource(vesselAvailability);
+				assert resource != null;
+				final IModifiableSequence sequence = advice.getModifiableSequence(resource);
+
+				for (final ISequenceElement element : getElements(cargo, portSlotProvider, mem)) {
+					assert element != null;
+					sequence.add(element);
+				}
 			}
-			if (seenCargoes.contains(cargo)) {
-				assert cargo.getVesselAssignmentType() != null;
-				continue;
-			}
-
-			// Do this here rather than outside of loop. Some older test cases will not have a default market and this would throw an exception even if the market was never needed.
-			@NonNull
-			final ISpotCharterInMarket defaultMarketForNominalCargoes = spotCharterInMarketProvider.getDefaultMarketForNominalCargoes();
-
-			final IVesselAvailability vesselAvailability = spotCharterInMarketProvider.getSpotMarketAvailability(defaultMarketForNominalCargoes, -1);
-			final IResource resource = vesselProvider.getResource(vesselAvailability);
-			assert resource != null;
-			final IModifiableSequence sequence = advice.getModifiableSequence(resource);
-
-			for (final ISequenceElement element : getElements(cargo, portSlotProvider, mem)) {
-				assert element != null;
-				sequence.add(element);
-			}
-
 		}
-
 		// Add in end elements
 		for (final Entry<IResource, IModifiableSequence> sequence : advice.getModifiableSequences().entrySet()) {
 			sequence.getValue().add(startEndRequirementProvider.getEndElement(sequence.getKey()));

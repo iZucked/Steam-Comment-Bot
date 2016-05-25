@@ -40,14 +40,18 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessFunctionRegistry;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.SlotGroupCountConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.SpotToSpotConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.VesselEventConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcessFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
@@ -197,6 +201,11 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new PortCvCompatibilityConstraintCheckerFactory());
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new SpotToSpotConstraintCheckerFactory());
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new ShippingTypeRequirementConstraintCheckerFactory());
+		
+		constraintCheckerRegistry.registerConstraintCheckerFactory(new RoundTripVesselPermissionConstraintCheckerFactory());
+		constraintCheckerRegistry.registerConstraintCheckerFactory(new AllowedVesselPermissionConstraintCheckerFactory());
+		constraintCheckerRegistry.registerConstraintCheckerFactory(new FOBDESCompatibilityConstraintCheckerFactory());
+		constraintCheckerRegistry.registerConstraintCheckerFactory(new VesselEventConstraintCheckerFactory());
 
 		return constraintCheckerRegistry;
 	}

@@ -24,8 +24,10 @@ import com.mmxlabs.optimiser.common.constraints.LockedUnusedElementsConstraintCh
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.fitness.NonOptionalSlotFitnessCoreFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.DifferentSTSVesselsConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
@@ -35,6 +37,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.ShippingHoursRestriction
 import com.mmxlabs.scheduler.optimiser.constraints.impl.SpotToSpotConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.VesselEventConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 
@@ -77,11 +80,18 @@ public class ScenarioUtils {
 		// create constraints
 		{
 			final EList<Constraint> constraints = settings.getConstraints();
+
+			// "Quick" resource allocation checks
 			constraints.add(createConstraint(parametersFactory, ResourceAllocationConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, RoundTripVesselPermissionConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, AllowedVesselPermissionConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, PortExclusionConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, VesselEventConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, FOBDESCompatibilityConstraintCheckerFactory.NAME, true));
+
 			constraints.add(createConstraint(parametersFactory, OrderedSequenceElementsConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, PortTypeConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, TravelTimeConstraintCheckerFactory.NAME, true));
-			constraints.add(createConstraint(parametersFactory, PortExclusionConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, VirtualVesselConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, TimeSortConstraintCheckerFactory.NAME, true));
 
@@ -98,7 +108,6 @@ public class ScenarioUtils {
 			constraints.add(createConstraint(parametersFactory, ShippingTypeRequirementConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, ShippingHoursRestrictionCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, LockedUnusedElementsConstraintCheckerFactory.NAME, true));
-			constraints.add(createConstraint(parametersFactory, RoundTripVesselPermissionConstraintCheckerFactory.NAME, true));
 		}
 
 		// create objectives
