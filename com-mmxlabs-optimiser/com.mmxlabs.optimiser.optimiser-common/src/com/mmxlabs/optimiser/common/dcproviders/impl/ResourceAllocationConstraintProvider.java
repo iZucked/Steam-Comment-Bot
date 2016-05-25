@@ -8,6 +8,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProviderEditor;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -21,24 +24,16 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
  */
 public final class ResourceAllocationConstraintProvider implements IResourceAllocationConstraintDataComponentProviderEditor {
 
-	private final Map<ISequenceElement, Collection<IResource>> allowedResourceMap;
+	private final Map<@NonNull ISequenceElement, @Nullable Collection<@NonNull IResource>> allowedResourceMap = new HashMap<>();
 
-	public ResourceAllocationConstraintProvider() {
-		this.allowedResourceMap = new HashMap<ISequenceElement, Collection<IResource>>();
+	@Override
+	public Collection<@NonNull IResource> getAllowedResources(final @NonNull ISequenceElement element) {
+
+		return allowedResourceMap.getOrDefault(element, null);
 	}
 
 	@Override
-	public Collection<IResource> getAllowedResources(final ISequenceElement element) {
-
-		if (allowedResourceMap.containsKey(element)) {
-			return allowedResourceMap.get(element);
-		}
-
-		return null;
-	}
-
-	@Override
-	public void setAllowedResources(final ISequenceElement element, final Collection<IResource> resources) {
+	public void setAllowedResources(final @NonNull ISequenceElement element, final @Nullable Collection<@NonNull IResource> resources) {
 		allowedResourceMap.put(element, resources);
 	}
 }
