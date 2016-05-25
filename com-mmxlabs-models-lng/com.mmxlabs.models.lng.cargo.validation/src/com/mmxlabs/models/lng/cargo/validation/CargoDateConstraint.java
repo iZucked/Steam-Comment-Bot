@@ -151,7 +151,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 				for (final CharterInMarket charterCostModel : spotMarketsModel.getCharterInMarkets()) {
-					if (charterCostModel.getCharterInPrice() != null && charterCostModel.getSpotCharterCount() > 0) {
+					if (charterCostModel.getCharterInRate() != null && charterCostModel.getSpotCharterCount() > 0) {
 						usedClasses.add(charterCostModel.getVesselClass());
 					}
 				}

@@ -87,4 +87,9 @@ public class CharterOutEventMaker {
 		return this;
 	}
 
+	public @NonNull CharterOutEventMaker withRepositioningFee(int fee) {
+		event.setRepositioningFee(fee);
+		return this;
+	}
+
 }

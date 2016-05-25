@@ -37,7 +37,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getExtensions <em>Extensions</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getName <em>Name</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getCharterInPrice <em>Charter In Price</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getCharterInRate <em>Charter In Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getSpotCharterCount <em>Spot Charter Count</em>}</li>
  * </ul>
  *
@@ -75,14 +75,24 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	protected String name = NAME_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getCharterInPrice() <em>Charter In Price</em>}' reference.
+	 * The default value of the '{@link #getCharterInRate() <em>Charter In Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getCharterInPrice()
+	 * @see #getCharterInRate()
 	 * @generated
 	 * @ordered
 	 */
-	protected CharterIndex charterInPrice;
+	protected static final String CHARTER_IN_RATE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getCharterInRate() <em>Charter In Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCharterInRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected String charterInRate = CHARTER_IN_RATE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getSpotCharterCount() <em>Spot Charter Count</em>}' attribute.
@@ -161,44 +171,6 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CharterIndex getCharterInPrice() {
-		if (charterInPrice != null && charterInPrice.eIsProxy()) {
-			InternalEObject oldCharterInPrice = (InternalEObject)charterInPrice;
-			charterInPrice = (CharterIndex)eResolveProxy(oldCharterInPrice);
-			if (charterInPrice != oldCharterInPrice) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_IN_PRICE, oldCharterInPrice, charterInPrice));
-			}
-		}
-		return charterInPrice;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CharterIndex basicGetCharterInPrice() {
-		return charterInPrice;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setCharterInPrice(CharterIndex newCharterInPrice) {
-		CharterIndex oldCharterInPrice = charterInPrice;
-		charterInPrice = newCharterInPrice;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_IN_PRICE, oldCharterInPrice, charterInPrice));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public int getSpotCharterCount() {
 		return spotCharterCount;
 	}
@@ -213,6 +185,27 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 		spotCharterCount = newSpotCharterCount;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_IN_MARKET__SPOT_CHARTER_COUNT, oldSpotCharterCount, spotCharterCount));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getCharterInRate() {
+		return charterInRate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCharterInRate(String newCharterInRate) {
+		String oldCharterInRate = charterInRate;
+		charterInRate = newCharterInRate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_IN_RATE, oldCharterInRate, charterInRate));
 	}
 
 	/**
@@ -279,9 +272,8 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				return getExtensions();
 			case SpotMarketsPackage.CHARTER_IN_MARKET__NAME:
 				return getName();
-			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_IN_PRICE:
-				if (resolve) return getCharterInPrice();
-				return basicGetCharterInPrice();
+			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_IN_RATE:
+				return getCharterInRate();
 			case SpotMarketsPackage.CHARTER_IN_MARKET__SPOT_CHARTER_COUNT:
 				return getSpotCharterCount();
 		}
@@ -304,8 +296,8 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__NAME:
 				setName((String)newValue);
 				return;
-			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_IN_PRICE:
-				setCharterInPrice((CharterIndex)newValue);
+			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_IN_RATE:
+				setCharterInRate((String)newValue);
 				return;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__SPOT_CHARTER_COUNT:
 				setSpotCharterCount((Integer)newValue);
@@ -328,8 +320,8 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_IN_PRICE:
-				setCharterInPrice((CharterIndex)null);
+			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_IN_RATE:
+				setCharterInRate(CHARTER_IN_RATE_EDEFAULT);
 				return;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__SPOT_CHARTER_COUNT:
 				setSpotCharterCount(SPOT_CHARTER_COUNT_EDEFAULT);
@@ -350,8 +342,8 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				return extensions != null && !extensions.isEmpty();
 			case SpotMarketsPackage.CHARTER_IN_MARKET__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_IN_PRICE:
-				return charterInPrice != null;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_IN_RATE:
+				return CHARTER_IN_RATE_EDEFAULT == null ? charterInRate != null : !CHARTER_IN_RATE_EDEFAULT.equals(charterInRate);
 			case SpotMarketsPackage.CHARTER_IN_MARKET__SPOT_CHARTER_COUNT:
 				return spotCharterCount != SPOT_CHARTER_COUNT_EDEFAULT;
 		}
@@ -424,6 +416,8 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", charterInRate: ");
+		result.append(charterInRate);
 		result.append(", spotCharterCount: ");
 		result.append(spotCharterCount);
 		result.append(')');

@@ -32,12 +32,12 @@ public class SpotMarketsModelBuilder {
 	}
 
 	@NonNull
-	public CharterInMarket createCharterInMarket(@NonNull final String name, @NonNull final VesselClass vesselClass, @NonNull final CharterIndex charterInPrice, final int charterInCount) {
+	public CharterInMarket createCharterInMarket(@NonNull final String name, @NonNull final VesselClass vesselClass, @NonNull final String charterInRate, final int charterInCount) {
 
 		final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 		charterInMarket.setName(name);
 		charterInMarket.setVesselClass(vesselClass);
-		charterInMarket.setCharterInPrice(charterInPrice);
+		charterInMarket.setCharterInRate(charterInRate);
 		charterInMarket.setSpotCharterCount(charterInCount);
 
 		spotMarketsModel.getCharterInMarkets().add(charterInMarket);

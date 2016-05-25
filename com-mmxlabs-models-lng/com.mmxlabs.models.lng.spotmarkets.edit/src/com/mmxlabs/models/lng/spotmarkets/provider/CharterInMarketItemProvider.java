@@ -53,7 +53,7 @@ public class CharterInMarketItemProvider
 
 			addExtensionsPropertyDescriptor(object);
 			addNamePropertyDescriptor(object);
-			addCharterInPricePropertyDescriptor(object);
+			addCharterInRatePropertyDescriptor(object);
 			addSpotCharterCountPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -104,28 +104,6 @@ public class CharterInMarketItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Charter In Price feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addCharterInPricePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CharterInMarket_charterInPrice_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CharterInMarket_charterInPrice_feature", "_UI_CharterInMarket_type"),
-				 SpotMarketsPackage.Literals.CHARTER_IN_MARKET__CHARTER_IN_PRICE,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Spot Charter Count feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -143,6 +121,28 @@ public class CharterInMarketItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Charter In Rate feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCharterInRatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterInMarket_charterInRate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterInMarket_charterInRate_feature", "_UI_CharterInMarket_type"),
+				 SpotMarketsPackage.Literals.CHARTER_IN_MARKET__CHARTER_IN_RATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -215,6 +215,7 @@ public class CharterInMarketItemProvider
 
 		switch (notification.getFeatureID(CharterInMarket.class)) {
 			case SpotMarketsPackage.CHARTER_IN_MARKET__NAME:
+			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_IN_RATE:
 			case SpotMarketsPackage.CHARTER_IN_MARKET__SPOT_CHARTER_COUNT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

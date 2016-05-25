@@ -114,11 +114,11 @@ public class AssignmentEditorHelper {
 		return null;
 	}
 
-	public static List<CollectedAssignment> collectAssignments(@NonNull final CargoModel cargoModel, @NonNull final SpotMarketsModel spotMarketsModel) {
+	public static List<@NonNull CollectedAssignment> collectAssignments(@NonNull final CargoModel cargoModel, @NonNull final SpotMarketsModel spotMarketsModel) {
 		return collectAssignments(cargoModel, spotMarketsModel, new AssignableElementDateComparator());
 	}
 
-	public static List<CollectedAssignment> collectAssignments(@NonNull final CargoModel cargoModel, @NonNull final SpotMarketsModel spotMarketsModel,
+	public static List<@NonNull CollectedAssignment> collectAssignments(@NonNull final CargoModel cargoModel, @NonNull final SpotMarketsModel spotMarketsModel,
 			@NonNull final IAssignableElementComparator assignableElementComparator) {
 
 		// Map the vessel availability to assignents
@@ -168,7 +168,7 @@ public class AssignmentEditorHelper {
 		}
 
 		// Final sorted list of assignment, ordered by fleet then spot
-		final List<CollectedAssignment> result = new ArrayList<>();
+		final List<@NonNull CollectedAssignment> result = new ArrayList<>();
 
 		// First add in the fleet vessels
 		for (final VesselAvailability vesselAvailability : vesselAvailabilityOrder) {

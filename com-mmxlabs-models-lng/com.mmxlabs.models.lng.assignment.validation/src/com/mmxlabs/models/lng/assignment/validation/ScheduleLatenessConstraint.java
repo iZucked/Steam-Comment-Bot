@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -45,8 +46,8 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 		final EObject target = ctx.getTarget();
 		if (target instanceof LNGScenarioModel) {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) target;
-			final SpotMarketsModel spotMarketsModel = scenarioModel.getReferenceModel().getSpotMarketsModel();
-			final CargoModel cargoModel = scenarioModel.getCargoModel();
+			final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(scenarioModel);
+			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 
 			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, spotMarketsModel);
 
@@ -54,6 +55,11 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 
 			// Check sequencing for each grouping
 			for (final CollectedAssignment collectedAssignment : collectAssignments) {
+
+				if (collectedAssignment.isSpotVessel() && collectedAssignment.getSpotIndex() == -1) {
+					continue;
+				}
+
 				AssignableElement prevAssignment = null;
 				for (final AssignableElement assignment : collectedAssignment.getAssignedObjects()) {
 					final ZonedDateTime left = getEndDate(prevAssignment);
@@ -73,8 +79,9 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			// More than one problem is likely to be a problem for the optimiser
 			final int severity = problems.size() > 1 ? IStatus.ERROR : IStatus.WARNING;
 			for (final Pair<AssignableElement, AssignableElement> p : problems) {
-				final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
-						"%s and %s overlap causing too much lateness. Change dates or vessel.", getID(p.getFirst()), getID(p.getSecond()))), severity);
+				final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("%s and %s overlap causing too much lateness. Change dates or vessel.", getID(p.getFirst()), getID(p.getSecond()))),
+						severity);
 				addEndDateFeature(failure, p.getFirst());
 				addStartDateFeature(failure, p.getSecond());
 

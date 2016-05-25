@@ -554,15 +554,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getCharterOutMarket_CharterOutPrice() {
-		return (EReference)charterOutMarketEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getCharterOutMarket_MinCharterOutDuration() {
 		return (EAttribute)charterOutMarketEClass.getEStructuralFeatures().get(1);
 	}
@@ -581,6 +572,15 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getCharterOutMarket_CharterOutRate() {
+		return (EAttribute)charterOutMarketEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getCharterInMarket() {
 		return charterInMarketEClass;
 	}
@@ -590,8 +590,8 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getCharterInMarket_CharterInPrice() {
-		return (EReference)charterInMarketEClass.getEStructuralFeatures().get(0);
+	public EAttribute getCharterInMarket_SpotCharterCount() {
+		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -599,8 +599,8 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getCharterInMarket_SpotCharterCount() {
-		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(1);
+	public EAttribute getCharterInMarket_CharterInRate() {
+		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -715,12 +715,12 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		createEAttribute(charterOutStartDateEClass, CHARTER_OUT_START_DATE__CHARTER_OUT_START_DATE);
 
 		charterOutMarketEClass = createEClass(CHARTER_OUT_MARKET);
-		createEReference(charterOutMarketEClass, CHARTER_OUT_MARKET__CHARTER_OUT_PRICE);
+		createEAttribute(charterOutMarketEClass, CHARTER_OUT_MARKET__CHARTER_OUT_RATE);
 		createEAttribute(charterOutMarketEClass, CHARTER_OUT_MARKET__MIN_CHARTER_OUT_DURATION);
 		createEReference(charterOutMarketEClass, CHARTER_OUT_MARKET__AVAILABLE_PORTS);
 
 		charterInMarketEClass = createEClass(CHARTER_IN_MARKET);
-		createEReference(charterInMarketEClass, CHARTER_IN_MARKET__CHARTER_IN_PRICE);
+		createEAttribute(charterInMarketEClass, CHARTER_IN_MARKET__CHARTER_IN_RATE);
 		createEAttribute(charterInMarketEClass, CHARTER_IN_MARKET__SPOT_CHARTER_COUNT);
 
 		spotCharterMarketEClass = createEClass(SPOT_CHARTER_MARKET);
@@ -843,7 +843,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		initEAttribute(getCharterOutStartDate_CharterOutStartDate(), theDateTimePackage.getLocalDate(), "charterOutStartDate", null, 0, 1, CharterOutStartDate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterOutMarketEClass, CharterOutMarket.class, "CharterOutMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getCharterOutMarket_CharterOutPrice(), thePricingPackage.getCharterIndex(), null, "charterOutPrice", null, 1, 1, CharterOutMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterOutMarket_CharterOutRate(), ecorePackage.getEString(), "charterOutRate", null, 0, 1, CharterOutMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterOutMarket_MinCharterOutDuration(), ecorePackage.getEInt(), "minCharterOutDuration", null, 1, 1, CharterOutMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
 		g2 = createEGenericType(thePortPackage.getPort());
@@ -851,7 +851,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		initEReference(getCharterOutMarket_AvailablePorts(), g1, null, "availablePorts", null, 0, -1, CharterOutMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterInMarketEClass, CharterInMarket.class, "CharterInMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getCharterInMarket_CharterInPrice(), thePricingPackage.getCharterIndex(), null, "charterInPrice", null, 1, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterInMarket_CharterInRate(), ecorePackage.getEString(), "charterInRate", null, 0, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterInMarket_SpotCharterCount(), ecorePackage.getEInt(), "spotCharterCount", null, 1, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(spotCharterMarketEClass, SpotCharterMarket.class, "SpotCharterMarket", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -871,6 +871,8 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		// Create annotations
 		// http://www.mmxlabs.com/models/ui/numberFormat
 		createNumberFormatAnnotations();
+		// http://www.mmxlabs.com/models/pricing/expressionType
+		createExpressionTypeAnnotations();
 	}
 
 	/**
@@ -906,6 +908,40 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		   new String[] {
 			 "unit", "mmBtu/m\u00b3",
 			 "formatString", "#0.###"
+		   });	
+		addAnnotation
+		  (getCharterOutMarket_CharterOutRate(), 
+		   source, 
+		   new String[] {
+			 "unit", "$/day"
+		   });	
+		addAnnotation
+		  (getCharterInMarket_CharterInRate(), 
+		   source, 
+		   new String[] {
+			 "unit", "$/day"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/pricing/expressionType</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createExpressionTypeAnnotations() {
+		String source = "http://www.mmxlabs.com/models/pricing/expressionType";	
+		addAnnotation
+		  (getCharterOutMarket_CharterOutRate(), 
+		   source, 
+		   new String[] {
+			 "type", "charter"
+		   });	
+		addAnnotation
+		  (getCharterInMarket_CharterInRate(), 
+		   source, 
+		   new String[] {
+			 "type", "charter"
 		   });
 	}
 

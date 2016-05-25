@@ -69,16 +69,8 @@ public class CharterInMarketComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_charterInPriceEditor(detailComposite, topClass);
+		add_charterInRateEditor(detailComposite, topClass);
 		add_spotCharterCountEditor(detailComposite, topClass);
-	}
-	/**
-	 * Create the editor for the charterInPrice feature on CharterInMarket
-	 *
-	 * @generated
-	 */
-	protected void add_charterInPriceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__CHARTER_IN_PRICE));
 	}
 	/**
 	 * Create the editor for the spotCharterCount feature on CharterInMarket
@@ -87,5 +79,14 @@ public class CharterInMarketComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_spotCharterCountEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__SPOT_CHARTER_COUNT));
+	}
+
+	/**
+	 * Create the editor for the charterInRate feature on CharterInMarket
+	 *
+	 * @generated
+	 */
+	protected void add_charterInRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__CHARTER_IN_RATE));
 	}
 }

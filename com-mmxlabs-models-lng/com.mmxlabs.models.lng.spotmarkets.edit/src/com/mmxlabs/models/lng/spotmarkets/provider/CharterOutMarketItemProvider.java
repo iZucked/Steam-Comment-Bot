@@ -53,7 +53,7 @@ public class CharterOutMarketItemProvider
 
 			addExtensionsPropertyDescriptor(object);
 			addNamePropertyDescriptor(object);
-			addCharterOutPricePropertyDescriptor(object);
+			addCharterOutRatePropertyDescriptor(object);
 			addMinCharterOutDurationPropertyDescriptor(object);
 			addAvailablePortsPropertyDescriptor(object);
 		}
@@ -105,28 +105,6 @@ public class CharterOutMarketItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Charter Out Price feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addCharterOutPricePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CharterOutMarket_charterOutPrice_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOutMarket_charterOutPrice_feature", "_UI_CharterOutMarket_type"),
-				 SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__CHARTER_OUT_PRICE,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Min Charter Out Duration feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -166,6 +144,28 @@ public class CharterOutMarketItemProvider
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Charter Out Rate feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCharterOutRatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterOutMarket_charterOutRate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOutMarket_charterOutRate_feature", "_UI_CharterOutMarket_type"),
+				 SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__CHARTER_OUT_RATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -238,6 +238,7 @@ public class CharterOutMarketItemProvider
 
 		switch (notification.getFeatureID(CharterOutMarket.class)) {
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__NAME:
+			case SpotMarketsPackage.CHARTER_OUT_MARKET__CHARTER_OUT_RATE:
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__MIN_CHARTER_OUT_DURATION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
