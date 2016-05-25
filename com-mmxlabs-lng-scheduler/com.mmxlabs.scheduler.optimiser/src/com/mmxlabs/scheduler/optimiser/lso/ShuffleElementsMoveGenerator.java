@@ -29,11 +29,14 @@ import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.lso.moves.ShuffleElements.ShuffleElementsBuilder;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * A module for the {@link ConstrainedMoveGenerator} handles moves on a per slot basis. This moved generator selects single slot and attempts to move it next to another preceder or follower in another
@@ -49,6 +52,9 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 
 	@Inject
 	private IOptionalElementsProvider optionalElementsProvider;
+
+	@Inject
+	private IPortTypeProvider portTypeProvider;
 
 	@Inject
 	private IResourceAllocationConstraintDataComponentProvider racDCP;
@@ -80,8 +86,12 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 			// TODO: check new API - null might be events or start/ends?
 			// TODO: Really need port type in here
 			final Collection<IResource> resources = racDCP.getAllowedResources(e);
-			if ((resources != null && resources.size() > 1) || optionalElementsProvider.isElementOptional(e)) {
-				targetElements.add(e);
+			if (resources == null || (resources.size() > 1) || optionalElementsProvider.isElementOptional(e)) {
+				final PortType portType = portTypeProvider.getPortType(e);
+
+				if (portType == PortType.Load || portType == PortType.Discharge) {
+					targetElements.add(e);
+				}
 			} else if (alternativeElementProvider.hasAlternativeElement(e)) {
 				targetElements.add(e);
 				targetElements.add(alternativeElementProvider.getAlternativeElement(e));
@@ -511,6 +521,12 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 	}
 
 	private boolean checkResource(final @NonNull ISequenceElement element, final @NonNull IResource resource) {
+
+		// Disable re-wiring on round trips.
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+			return false;
+		}
 
 		final Collection<@NonNull IResource> allowedResources = racDCP.getAllowedResources(element);
 		if (allowedResources == null) {

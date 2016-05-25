@@ -32,6 +32,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
+import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -238,8 +239,13 @@ public class ScheduleCalculator {
 		if (arrivalTimes == null) {
 			return new VolumeAllocatedSequence(resource, sequence, 0, Collections.<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> emptyList());
 		}
+		
 		// If this a cargo round trip sequence, but we have no data (i.e. there are no cargoes), return the basic data structure to avoid any exceptions
 		final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
+		if (isRoundTripSequence
+				) {
+			int ii = 0;
+		}
 		if (isRoundTripSequence && arrivalTimes.length == 0) {
 			return new VolumeAllocatedSequence(resource, sequence, 0, Collections.<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> emptyList());
 		}

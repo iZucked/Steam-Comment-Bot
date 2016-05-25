@@ -44,6 +44,8 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ArrayL
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProvider;
@@ -61,6 +63,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IFOBDESCompatibilityProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IFOBDESCompatibilityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProvider;
@@ -115,7 +119,9 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultAllowedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImpl;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultFOBDESCompatibilityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultNextLoadDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultPromptPeriodProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultRoundTripVesselPermissionProviderEditor;
@@ -391,6 +397,14 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(DefaultSpotCharterInMarketProviderEditor.class).in(Singleton.class);
 		bind(ISpotCharterInMarketProvider.class).to(DefaultSpotCharterInMarketProviderEditor.class);
 		bind(ISpotCharterInMarketProviderEditor.class).to(DefaultSpotCharterInMarketProviderEditor.class);
+
+		bind(DefaultFOBDESCompatibilityProviderEditor.class).in(Singleton.class);
+		bind(IFOBDESCompatibilityProvider.class).to(DefaultFOBDESCompatibilityProviderEditor.class);
+		bind(IFOBDESCompatibilityProviderEditor.class).to(DefaultFOBDESCompatibilityProviderEditor.class);
+
+		bind(DefaultAllowedVesselProvider.class).in(Singleton.class);
+		bind(IAllowedVesselProvider.class).to(DefaultAllowedVesselProvider.class);
+		bind(IAllowedVesselProviderEditor.class).to(DefaultAllowedVesselProvider.class);
 	}
 
 	/**

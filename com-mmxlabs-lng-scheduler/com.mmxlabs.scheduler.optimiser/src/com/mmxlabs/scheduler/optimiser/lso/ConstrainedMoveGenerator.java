@@ -195,14 +195,15 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		} else {
 			this.optionalMoveGenerator = null;
 		}
-		for (final IResource resource : data.getResources()) {
-			final IVesselAvailability vessel = vesselProvider.getVesselAvailability(resource);
-			if (vessel.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
-				this.swapElementsMoveGenerator = new SwapElementsInSequenceMoveGeneratorUnit(this);
-				injector.injectMembers(swapElementsMoveGenerator);
-				break;
-			}
-		}
+		// Disable within route element swap for round trip cargoes.
+//		for (final IResource resource : data.getResources()) {
+//			final IVesselAvailability vessel = vesselProvider.getVesselAvailability(resource);
+//			if (vessel.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+//				this.swapElementsMoveGenerator = new SwapElementsInSequenceMoveGeneratorUnit(this);
+//				injector.injectMembers(swapElementsMoveGenerator);
+//				break;
+//			}
+//		}
 		checker.setMaxLateness(initialMaxLateness);
 
 	}

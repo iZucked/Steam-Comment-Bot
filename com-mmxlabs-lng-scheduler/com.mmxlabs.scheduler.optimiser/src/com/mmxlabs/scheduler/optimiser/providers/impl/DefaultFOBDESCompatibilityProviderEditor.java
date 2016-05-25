@@ -13,9 +13,9 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IFOBDESCompatibilityProviderEditor;
 
-public class DefaultRoundTripVesselPermissionProviderEditor implements IRoundTripVesselPermissionProviderEditor {
+public class DefaultFOBDESCompatibilityProviderEditor implements IFOBDESCompatibilityProviderEditor {
 
 	private final Map<IPortSlot, Collection<@NonNull IVesselAvailability>> portSlotMap = new HashMap<>();
 	private final Map<ISequenceElement, Collection<@NonNull IResource>> elementMap = new HashMap<>();
@@ -47,6 +47,7 @@ public class DefaultRoundTripVesselPermissionProviderEditor implements IRoundTri
 			c.addAll(r);
 			return new HashSet<>(c);
 		});
+
 		portSlotMap.merge(portSlot, Sets.newHashSet(vesselAvailability), (c, r) -> {
 			c.addAll(r);
 			return new HashSet<>(c);

@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
@@ -37,12 +38,8 @@ public class DefaultSpotCharterInMarketProviderEditor implements ISpotCharterInM
 	}
 
 	@Override
-	public @NonNull ISpotCharterInMarket getDefaultMarketForNominalCargoes() {
-		final ISpotCharterInMarket pDefaultMarketForNominalCargoes = defaultMarketForNominalCargoes;
-		if (pDefaultMarketForNominalCargoes == null) {
-			throw new IllegalStateException("No default market specified");
-		}
-		return pDefaultMarketForNominalCargoes;
+	public @Nullable ISpotCharterInMarket getDefaultMarketForNominalCargoes() {
+		return defaultMarketForNominalCargoes;
 	}
 
 	@Override

@@ -105,10 +105,13 @@ import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
+import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IFOBDESCompatibilityProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IFOBDESCompatibilityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProviderEditor;
@@ -228,12 +231,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@NonNull
 	private final List<VesselEventPortSlot> vesselEvents = new LinkedList<>();
-
-	@NonNull
-	private final Map<IPortSlot, Set<IVesselAvailability>> slotVesselAvailabilityRestrictions = new HashMap<>();
-
-	@NonNull
-	private final Map<IPortSlot, Set<IVesselClass>> slotVesselClassRestrictions = new HashMap<>();
 
 	@NonNull
 	private final IIndexingContext indexingContext = new CheckingIndexingContext();
@@ -372,7 +369,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Inject
 	private @NonNull IRoundTripVesselPermissionProviderEditor roundTripVesselPermissionProviderEditor;
 
-	private List<@NonNull IPortSlot> permittedRoundTripVesselSlots = new LinkedList<>();
+	@Inject
+	private @NonNull IAllowedVesselProviderEditor allowedVesselProviderEditor;
+
+	@Inject
+	private IFOBDESCompatibilityProviderEditor fobdesCompatibilityProviderEditor;
+
+	private final List<@NonNull IPortSlot> permittedRoundTripVesselSlots = new LinkedList<>();
 
 	@NonNull
 	private final Map<IPort, MarkToMarket> desPurchaseMTMPortMap = new HashMap<IPort, MarkToMarket>();
@@ -666,7 +669,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@NonNull
 	public ICargo createCargo(final @NonNull Collection<@NonNull IPortSlot> slots, final boolean allowRewiring) {
 
-		final Cargo cargo = new Cargo(new ArrayList<@NonNull IPortSlot>(slots));
+		final Cargo cargo = new Cargo(new ArrayList<>(slots));
 		cargoes.add(cargo);
 
 		// Fix slot pairing if we disallow re-wiring or this is a complex cargo (more than just one load and one discharge)
@@ -878,7 +881,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		final IVessel spotVessel = createVessel(name, vesselClass, vesselClass.getCargoCapacity());
 
 		// End cold already enforced in VoyagePlanner#getVoyageOptionsAndSetVpoChoices
-		IVesselAvailability spotAvailability = createVesselAvailability(spotVessel, dailyCharterInPrice, VesselInstanceType.SPOT_CHARTER, start, end, spotCharterInMarket, spotIndex);
+		final IVesselAvailability spotAvailability = createVesselAvailability(spotVessel, dailyCharterInPrice, VesselInstanceType.SPOT_CHARTER, start, end, spotCharterInMarket, spotIndex);
 		spotCharterInMarketProviderEditor.addSpotMarketAvailability(spotAvailability, spotCharterInMarket, spotIndex);
 
 		return spotAvailability;
@@ -1225,7 +1228,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		// configure constraints
 		applyAdjacencyConstraints();
-		applyVesselRestrictionConstraints();
 
 		linkMarkToMarkets();
 		// set the self-self distance to zero for all ports to make sure indexed DCP has seen every element.
@@ -1453,37 +1455,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		final VesselEventPortSlot slot = new VesselEventPortSlot(id, event.getEndPort(), event.getTimeWindow(), event);
 		slot.setPortType(portType);
 		vesselEvents.add(slot);
-		slotVesselAvailabilityRestrictions.put(slot, new HashSet<IVesselAvailability>());
-		slotVesselClassRestrictions.put(slot, new HashSet<IVesselClass>());
 
 		buildVesselEvent(slot);
 		return slot;
-	}
-
-	@Override
-	public void addVesselEventVessel(@NonNull final IVesselEventPortSlot charterOut, final IVesselAvailability vesselAvailability) {
-		checkNotNull(charterOut);
-		checkNotNull(vesselAvailability);
-		if (!vesselAvailabilities.contains(vesselAvailability)) {
-			throw new IllegalArgumentException("IVessel was not created using this builder");
-		}
-		if (!vesselEvents.contains(charterOut)) {
-			throw new IllegalArgumentException("ICharterOut was not created using this builder");
-		}
-		slotVesselAvailabilityRestrictions.get(charterOut).add(vesselAvailability);
-	}
-
-	@Override
-	public void addVesselEventVesselClass(@NonNull final IVesselEventPortSlot charterOut, final IVesselClass vesselClass) {
-		checkNotNull(charterOut);
-		checkNotNull(vesselClass);
-		if (!vesselClasses.contains(vesselClass)) {
-			throw new IllegalArgumentException("IVesselClass was not created using this builder");
-		}
-		if (!vesselEvents.contains(charterOut)) {
-			throw new IllegalArgumentException("ICharterOut was not created using this builder");
-		}
-		slotVesselClassRestrictions.get(charterOut).add(vesselClass);
 	}
 
 	protected void buildVesselEvent(final VesselEventPortSlot slot) {
@@ -1529,11 +1503,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			sequenceElements.add(redirectElement);
 
 			// replicate vessel constraints
-			constrainSlotToVesselClasses(startSlot, slotVesselClassRestrictions.get(slot));
-			constrainSlotToVesselAvailabilities(startSlot, slotVesselAvailabilityRestrictions.get(slot));
-
-			constrainSlotToVesselClasses(redirectSlot, slotVesselClassRestrictions.get(slot));
-			constrainSlotToVesselAvailabilities(redirectSlot, slotVesselAvailabilityRestrictions.get(slot));
+			// This is now done in the transformer.
+			// constrainSlotToVesselClasses(startSlot, slotVesselClassRestrictions.get(slot));
+			// constrainSlotToVesselAvailabilities(startSlot, slotVesselAvailabilityRestrictions.get(slot));
+			//
+			// constrainSlotToVesselClasses(redirectSlot, slotVesselClassRestrictions.get(slot));
+			// constrainSlotToVesselAvailabilities(redirectSlot, slotVesselAvailabilityRestrictions.get(slot));
 
 			// patch up sequencing constraints
 			if (reverseAdjacencyConstraints.containsKey(slot)) {
@@ -1624,12 +1599,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}
 	}
 
-	@Override
-	public void setSlotVesselAvailabilityRestriction(final IPortSlot slot, final Set<IVesselAvailability> vesselAvailabilities) {
-
-		assert slot != null;
-		constrainSlotToVesselAvailabilities(slot, vesselAvailabilities);
-	}
+	// @Override
+	// public void setSlotVesselAvailabilityRestriction(final IPortSlot slot, final Set<IVesselAvailability> vesselAvailabilities) {
+	//
+	// assert slot != null;
+	// constrainSlotToVesselAvailabilities(slot, vesselAvailabilities);
+	// }
 
 	@Override
 	/**
@@ -1650,93 +1625,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		for (final Map.Entry<IPortSlot, IPortSlot> entry : forwardAdjacencyConstraints.entrySet()) {
 			orderedSequenceElementsEditor.setElementOrder(portSlotsProvider.getElement(entry.getKey()), portSlotsProvider.getElement(entry.getValue()));
 			assert reverseAdjacencyConstraints.get(entry.getValue()) == entry.getKey() : "Adjacency constraints have become inconsistent";
-		}
-	}
-
-	/**
-	 * Set up the {@link #resourceAllocationProvider} to apply the constraints described in {@link #slotVesselClassRestrictions} and {@link #slotVesselRestrictions}.
-	 */
-	private void applyVesselRestrictionConstraints() {
-		final HashSet<@NonNull IPortSlot> restrictedSlots = new HashSet<>();
-		restrictedSlots.addAll(slotVesselAvailabilityRestrictions.keySet());
-		restrictedSlots.addAll(slotVesselClassRestrictions.keySet());
-
-		for (final IPortSlot slot : restrictedSlots) {
-
-			Set<IVesselAvailability> allowedVessels = slotVesselAvailabilityRestrictions.get(slot);
-
-			Set<IVesselClass> allowedVesselClasses = slotVesselClassRestrictions.get(slot);
-
-			if (allowedVesselClasses == null && allowedVessels == null) {
-				continue;
-			}
-
-			final Set<IResource> allowedResources = new HashSet<>();
-
-			for (final IVesselAvailability vesselAvailability : vesselAvailabilities) {
-
-				assert vesselAvailability != null;
-
-				if ((allowedVessels != null && allowedVessels.contains(vesselAvailability))
-						|| (allowedVesselClasses != null && allowedVesselClasses.contains(vesselAvailability.getVessel().getVesselClass()))) {
-					/*
-					 * If this is a vessel event, and it's a spot vessel, don't allow it. In future this should probably be handled as a separate kind of constraint (a vessel instance type
-					 * restriction, saying slot X can only go on vessels of types Y and Z)
-					 */
-					if ((slot instanceof IVesselEventPortSlot) && (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER)) {
-						continue;
-					}
-					allowedResources.add(vesselProvider.getResource(vesselAvailability));
-				}
-
-			}
-			resourceAllocationProvider.setAllowedResources(portSlotsProvider.getElement(slot), allowedResources);
-		}
-
-		// Finally, allow any other slot to be linked to any non-virtual vessel. This helps the optional move generator.
-		final Set<IResource> allowedResources = new HashSet<>();
-
-		for (final IVesselAvailability vesselAvailability : vesselAvailabilities) {
-			assert vesselAvailability != null;
-
-			// Skip virtual vessels
-			if (virtualVesselAvailabilityMap.values().contains(vesselAvailability)) {
-				continue;
-			}
-
-			allowedResources.add(vesselProvider.getResource(vesselAvailability));
-		}
-
-		final HashSet<IPortSlot> unrestrictedSlots = new HashSet<IPortSlot>();
-		unrestrictedSlots.addAll(loadSlots);
-		unrestrictedSlots.addAll(dischargeSlots);
-		// Note this might not be the correct behaviour for event slots - although typically we expect them to be part of the restrictedSlots array.
-		unrestrictedSlots.addAll(vesselEvents);
-		// unrestrictedSlots.removeAll(unshippedElements);
-		for (final ISequenceElement unshippedElement : unshippedElements) {
-			unrestrictedSlots.add(portSlotsProvider.getPortSlot(unshippedElement));
-		}
-		unrestrictedSlots.removeAll(restrictedSlots);
-		for (final IPortSlot slot : unrestrictedSlots) {
-			resourceAllocationProvider.setAllowedResources(portSlotsProvider.getElement(slot), allowedResources);
-		}
-	}
-
-	@Override
-	public void constrainSlotToVesselAvailabilities(@NonNull final IPortSlot slot, @Nullable final Set<IVesselAvailability> vesselAvailabilities) {
-		if ((vesselAvailabilities == null)) {
-			slotVesselAvailabilityRestrictions.remove(slot);
-		} else {
-			slotVesselAvailabilityRestrictions.put(slot, new HashSet<>(vesselAvailabilities));
-		}
-	}
-
-	@Override
-	public void constrainSlotToVesselClasses(@NonNull final IPortSlot slot, @Nullable final Set<IVesselClass> vesselClasses) {
-		if ((vesselClasses == null) || vesselClasses.isEmpty()) {
-			slotVesselClassRestrictions.remove(slot);
-		} else {
-			slotVesselClassRestrictions.put(slot, new HashSet<>(vesselClasses));
 		}
 	}
 
@@ -1798,6 +1686,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			if (virtualVesselAvailability == null) {
 				throw new IllegalArgumentException("DES Purchase is not linked to a virtual vesssel");
 			}
+			// Allow the DES Purchase on it's own resource
+			@NonNull
+			final IResource resource = vesselProvider.getResource(virtualVesselAvailability);
+			fobdesCompatibilityProviderEditor.permitElementOnResource(desElement, desPurchase, resource, virtualVesselAvailability);
 
 			for (final IDischargeOption option : dischargeSlots) {
 
@@ -1815,13 +1707,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 						final List<ITimeWindow> tw2 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(option));
 						if (matchingWindows(Collections.singletonList(desPurchaseWindowForPort), tw2) || matchingWindows(tw2, Collections.singletonList(desPurchaseWindowForPort))) {
 
-							Set<IVesselAvailability> set = slotVesselAvailabilityRestrictions.get(option);
-							if (set == null || set.isEmpty()) {
-								set = new HashSet<IVesselAvailability>(realVesselAvailabilities);
-							}
-							set.add(virtualVesselAvailability);
-
-							constrainSlotToVesselAvailabilities(option, set);
+							final ISequenceElement element = portSlotsProvider.getElement(option);
+							fobdesCompatibilityProviderEditor.permitElementOnResource(element, option, resource, virtualVesselAvailability);
 						}
 					}
 				}
@@ -1851,6 +1738,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				throw new IllegalArgumentException("FOB Sale is not linked to a virtual vesssel");
 			}
 
+			// Allow the FOB Sale on it's own resource
+			@NonNull
+			final IResource resource = vesselProvider.getResource(virtualVesselAvailability);
+			fobdesCompatibilityProviderEditor.permitElementOnResource(fobElement, fobSale, resource, virtualVesselAvailability);
+
 			for (final ILoadOption option : loadSlots) {
 
 				// Skip frozen slots - already bound
@@ -1866,13 +1758,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 						final List<ITimeWindow> tw2 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(option));
 						if (matchingWindows(Collections.singletonList(fobSaleWindowForPort), tw2) || matchingWindows(tw2, Collections.singletonList(fobSaleWindowForPort))) {
-							Set<IVesselAvailability> set = slotVesselAvailabilityRestrictions.get(option);
-							if (set == null || set.isEmpty()) {
-								set = new HashSet<IVesselAvailability>(realVesselAvailabilities);
-							}
-							set.add(virtualVesselAvailability);
-
-							constrainSlotToVesselAvailabilities(option, set);
+							final ISequenceElement element = portSlotsProvider.getElement(option);
+							fobdesCompatibilityProviderEditor.permitElementOnResource(element, option, resource, virtualVesselAvailability);
 						}
 					}
 				}
@@ -2110,8 +1997,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public void freezeSlotToVesselAvailability(@NonNull final IPortSlot portSlot, @NonNull final IVesselAvailability vesselAvailability) {
-		constrainSlotToVesselAvailabilities(portSlot, Collections.singleton(vesselAvailability));
 		this.frozenSlots.add(portSlot);
+		final ISequenceElement element = portSlotsProvider.getElement(portSlot);
+		final IResource resource = vesselProvider.getResource(vesselAvailability);
+
+		resourceAllocationProvider.setAllowedResources(element, Collections.singleton(resource));
 	}
 
 	@Override
@@ -2135,7 +2025,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final IVessel roundTripCargoVessel = createVessel(name, roundTripCargoVesselClass, roundTripCargoVesselClass.getCargoCapacity());
 
-		IVesselAvailability vesselAvailability = createVesselAvailability(roundTripCargoVessel, spotCharterInMarket.getDailyCharterInRateCurve(), VesselInstanceType.ROUND_TRIP,
+		final IVesselAvailability vesselAvailability = createVesselAvailability(roundTripCargoVessel, spotCharterInMarket.getDailyCharterInRateCurve(), VesselInstanceType.ROUND_TRIP,
 				createStartRequirement(), createEndRequirement(), spotCharterInMarket, -1);
 
 		spotCharterInMarketProviderEditor.addSpotMarketAvailability(vesselAvailability, spotCharterInMarket, -1);
@@ -2157,5 +2047,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 			permittedRoundTripVesselSlots.add(slot);
 		}
+	}
+
+	@Override
+	public void setVesselAndClassPermissions(@NonNull final IPortSlot portSlot, @Nullable final List<@NonNull IVessel> permittedVessels,
+			@Nullable final List<@NonNull IVesselClass> permittedVesselClasses) {
+		allowedVesselProviderEditor.setPermittedVesselAndClasses(portSlot, permittedVessels, permittedVesselClasses);
 	}
 }
