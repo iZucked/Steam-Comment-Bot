@@ -6,7 +6,6 @@ package com.mmxlabs.scheduler.optimiser.annotations.impl;
 
 import java.util.Objects;
 
-import com.mmxlabs.scheduler.optimiser.annotations.IHedgingAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 
 /**

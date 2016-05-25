@@ -7,7 +7,6 @@ package com.mmxlabs.scheduler.optimiser.contracts.impl;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;

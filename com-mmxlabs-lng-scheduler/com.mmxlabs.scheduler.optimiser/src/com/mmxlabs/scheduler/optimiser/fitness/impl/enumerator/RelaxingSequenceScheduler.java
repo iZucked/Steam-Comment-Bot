@@ -9,9 +9,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 
 /**
  * Relaxing sequence scheduler; solution procedure is like this:

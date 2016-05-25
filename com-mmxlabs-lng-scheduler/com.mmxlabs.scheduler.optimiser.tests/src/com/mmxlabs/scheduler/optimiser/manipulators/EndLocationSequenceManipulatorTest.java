@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.manipulators;
 
 import org.junit.Assert;
 import org.junit.Test;
+
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.optimiser.core.IResource;
