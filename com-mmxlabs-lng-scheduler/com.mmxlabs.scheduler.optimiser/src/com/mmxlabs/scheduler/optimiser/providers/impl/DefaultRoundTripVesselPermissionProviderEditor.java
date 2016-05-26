@@ -18,6 +18,7 @@ public class DefaultRoundTripVesselPermissionProviderEditor implements IRoundTri
 
 	private final Map<IPortSlot, Collection<@NonNull IVesselAvailability>> portSlotMap = new HashMap<>();
 	private final Map<ISequenceElement, Collection<@NonNull IResource>> elementMap = new HashMap<>();
+	private final Map<ISequenceElement, ISequenceElement> elementSequencePair = new HashMap<>();
 
 	@Override
 	public boolean isPermittedOnResource(@NonNull final IPortSlot portSlot, @NonNull final IVesselAvailability vesselAvailability) {
@@ -52,4 +53,16 @@ public class DefaultRoundTripVesselPermissionProviderEditor implements IRoundTri
 		});
 	}
 
+	@Override
+	public boolean isBoundPair(@NonNull ISequenceElement first, @NonNull ISequenceElement second) {
+		if (elementSequencePair.containsKey(first)) {
+			return elementSequencePair.get(first) == second;
+		}
+		return true;
+	}
+
+	@Override
+	public void makeBoundPair(@NonNull ISequenceElement first, @NonNull ISequenceElement second) {
+		elementSequencePair.put(first, second);
+	}
 }

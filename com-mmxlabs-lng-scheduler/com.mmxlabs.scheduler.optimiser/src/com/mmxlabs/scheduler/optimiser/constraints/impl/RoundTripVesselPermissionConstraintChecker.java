@@ -68,11 +68,18 @@ public class RoundTripVesselPermissionConstraintChecker implements IPairwiseCons
 			return true;
 		}
 
+		ISequenceElement prevElement = null;
 		for (ISequenceElement element : sequence) {
-
 			if (!checkElement(element, resource)) {
 				return false; // fail fast.
 			}
+
+			if (prevElement != null) {
+				if (!roundTripVesselPermissionProvider.isBoundPair(prevElement, element)) {
+					return false;
+				}
+			}
+			prevElement = element;
 		}
 		return true;
 	}
@@ -116,7 +123,11 @@ public class RoundTripVesselPermissionConstraintChecker implements IPairwiseCons
 			return true;
 		}
 
-		return checkElement(first, resource) && checkElement(second, resource);
+		boolean valid = checkElement(first, resource) && checkElement(second, resource);
+		if (valid) {
+			roundTripVesselPermissionProvider.isBoundPair(first, second);
+		}
+		return false;
 	}
 
 	protected boolean checkElement(final @NonNull ISequenceElement element, final @NonNull IResource resource) {

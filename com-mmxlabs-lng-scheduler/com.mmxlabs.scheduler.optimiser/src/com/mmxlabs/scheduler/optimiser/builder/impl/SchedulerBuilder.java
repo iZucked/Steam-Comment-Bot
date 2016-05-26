@@ -2036,6 +2036,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public void bindSlotsToRoundTripVessel(@NonNull final IVesselAvailability roundTripCargoVesselAvailability, @NonNull final IPortSlot @NonNull... slots) {
+
+		ISequenceElement prevElement = null;
 		for (final IPortSlot slot : slots) {
 			final ISequenceElement element = portSlotsProvider.getElement(slot);
 			final IResource resource = vesselProvider.getResource(roundTripCargoVesselAvailability);
@@ -2043,6 +2045,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			roundTripVesselPermissionProviderEditor.permitElementOnResource(element, slot, resource, roundTripCargoVesselAvailability);
 
 			permittedRoundTripVesselSlots.add(slot);
+
+			if (prevElement != null) {
+				roundTripVesselPermissionProviderEditor.makeBoundPair(prevElement, element);
+			}
+			prevElement = element;
 		}
 	}
 

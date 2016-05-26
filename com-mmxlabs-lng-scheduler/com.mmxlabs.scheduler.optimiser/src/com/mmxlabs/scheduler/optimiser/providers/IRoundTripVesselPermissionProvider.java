@@ -24,4 +24,12 @@ public interface IRoundTripVesselPermissionProvider extends IDataComponentProvid
 
 	boolean isPermittedOnResource(@NonNull ISequenceElement element, @NonNull IResource resource);
 
+	/**
+	 * If elements are permitted, is the order valid.
+	 * @param first
+	 * @param second
+	 * @return
+	 */
+	boolean isBoundPair(@NonNull ISequenceElement first, @NonNull ISequenceElement second);
+
 }

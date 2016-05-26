@@ -14,4 +14,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 public interface IRoundTripVesselPermissionProviderEditor extends IRoundTripVesselPermissionProvider {
 
 	void permitElementOnResource(@NonNull ISequenceElement element, @NonNull IPortSlot portSlot, @NonNull IResource resource, @NonNull IVesselAvailability vesselAvailability);
+	
+	void makeBoundPair(@NonNull ISequenceElement first, @NonNull ISequenceElement second);
+
 }
