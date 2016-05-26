@@ -5,6 +5,7 @@
 package com.mmxlabs.scenario.service.model.impl;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -128,7 +129,10 @@ public class ModelReferenceImpl extends EObjectImpl implements ModelReference {
 		ScenarioInstance scenarioInstance = getScenarioInstance();
 		setScenarioInstance(null);
 		if (scenarioInstance != null) {
-			scenarioInstance.getModelReferences().remove(this);
+			List<ModelReference> modelReferences = scenarioInstance.getModelReferences();
+			synchronized (modelReferences) {
+				modelReferences.remove(this);
+			}
 		}
 	}
 
