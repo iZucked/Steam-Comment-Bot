@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.scenario.model.edit;singleton:=true
-Bundle-Version: 3.12.5.qualifier
+Bundle-Version: 3.12.5.RELEASE
 Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.scenario.model.provider.LNGScenarioEditPlugin$Implementation
 Bundle-Vendor: %providerName
