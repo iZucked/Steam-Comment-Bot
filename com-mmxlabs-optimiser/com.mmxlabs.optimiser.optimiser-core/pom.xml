@@ -4,10 +4,10 @@
 	<parent>
 		<groupId>com.mmxlabs.optimiser</groupId>
 		<artifactId>optimiser-parent</artifactId>
-		<version>3.12.5.RELEASE</version>
+		<version>3.12.6-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.optimiser.optimiser-core</artifactId>
-	<version>3.12.5.RELEASE</version>
+	<version>3.12.6-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
