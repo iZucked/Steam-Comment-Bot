@@ -6,9 +6,9 @@
 	<parent>
 		<groupId>com.mmxlabs.lingo.reports</groupId>
 		<artifactId>com.mmxlabs.lingo.reports.parent</artifactId>
-		<version>3.12.5-SNAPSHOT</version>
+		<version>3.12.5.RELEASE</version>
 	</parent>
 	<artifactId>com.mmxlabs.lingo.reports.scheduleview</artifactId>
-	<version>3.12.5-SNAPSHOT</version>
+	<version>3.12.5.RELEASE</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
