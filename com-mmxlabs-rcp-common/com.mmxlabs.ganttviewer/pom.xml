@@ -6,10 +6,10 @@
 	<parent>
 		<artifactId>com.mmxlabs.rcp.common.parent</artifactId>
 		<groupId>com.mmxlabs.rcp.common</groupId>
-		<version>3.12.5-SNAPSHOT</version>
+		<version>3.12.5.RELEASE</version>
 	</parent>
 	<groupId>com.mmxlabs.ganttviewer</groupId>
 	<artifactId>com.mmxlabs.ganttviewer</artifactId>
-	<version>3.12.5-SNAPSHOT</version>
+	<version>3.12.5.RELEASE</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
