@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.scenario.service.feature"
       label="Scenario Service Feature"
-      version="3.12.5.qualifier"
+      version="3.12.6.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description>
