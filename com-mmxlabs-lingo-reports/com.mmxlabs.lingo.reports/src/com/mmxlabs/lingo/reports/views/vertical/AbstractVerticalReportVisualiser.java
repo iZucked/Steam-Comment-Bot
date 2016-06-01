@@ -268,7 +268,7 @@ public abstract class AbstractVerticalReportVisualiser {
 	 * @param date
 	 * @return
 	 */
-	public Event[] getEventsByScheduledDate(final Sequence seq, final LocalDate date) {
+	public @NonNull Event[] getEventsByScheduledDate(final Sequence seq, final LocalDate date) {
 		return getEventsByScheduledDate(seq, date, date.plusDays(1));
 	}
 
@@ -276,8 +276,8 @@ public abstract class AbstractVerticalReportVisualiser {
 	 * Returns the events, if any, occurring between the two dates specified.
 	 * 
 	 */
-	public Event[] getEventsByScheduledDate(final Sequence seq, final LocalDate start, final LocalDate end) {
-		final List<Event> result = new ArrayList<>();
+	public @NonNull Event[] getEventsByScheduledDate(final Sequence seq, final LocalDate start, final LocalDate end) {
+		final List<@NonNull Event> result = new ArrayList<>();
 		if (seq != null && start != null && end != null) {
 			for (final Event event : seq.getEvents()) {
 

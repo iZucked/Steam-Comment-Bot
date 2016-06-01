@@ -35,7 +35,7 @@ public final class FilteredEventProvider extends EventProvider implements IBorde
 	}
 
 	@Override
-	protected Event[] getUnfilteredEvents(final LocalDate date) {
+	protected @NonNull Event[] getUnfilteredEvents(final LocalDate date) {
 		return wrapped.getEvents(date);
 	}
 

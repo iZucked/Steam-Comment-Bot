@@ -26,10 +26,10 @@ import com.mmxlabs.models.lng.schedule.Event;
  * 
  */
 public class HashMapEventProvider extends EventProvider {
-	protected Map<LocalDate, List<Event>> events = new HashMap<>();
-	protected final Event[] noEvents = new Event[0];
-	private final List<Event> allEvents = new LinkedList<>();
-	
+	protected Map<LocalDate, List<@NonNull Event>> events = new HashMap<>();
+	protected final @NonNull Event[] noEvents = new @NonNull Event[0];
+	private final List<@NonNull Event> allEvents = new LinkedList<>();
+
 	public HashMapEventProvider(@NonNull final LocalDate start, @NonNull final LocalDate end, @NonNull final EventProvider wrapped) {
 		this(null);
 		for (final LocalDate day : VerticalReportUtils.getUTCDaysBetween(start, end)) {
@@ -44,7 +44,7 @@ public class HashMapEventProvider extends EventProvider {
 	}
 
 	public void addEvent(@NonNull final LocalDate date, @NonNull final Event event) {
-		final List<Event> list = events.containsKey(date) ? events.get(date) : new ArrayList<Event>();
+		final List<@NonNull Event> list = events.containsKey(date) ? events.get(date) : new ArrayList<@NonNull Event>();
 		list.add(event);
 		this.events.put(date, list);
 		if (!allEvents.contains(event)) {
@@ -53,13 +53,13 @@ public class HashMapEventProvider extends EventProvider {
 	}
 
 	@Override
-	protected Event[] getUnfilteredEvents(@NonNull final LocalDate date) {
+	protected @NonNull Event[] getUnfilteredEvents(@NonNull final LocalDate date) {
 		if (events.containsKey(date)) {
 			return events.get(date).toArray(noEvents);
 		}
 		return noEvents;
 	}
-	
+
 	public List<Event> getEvents() {
 		return allEvents;
 	}

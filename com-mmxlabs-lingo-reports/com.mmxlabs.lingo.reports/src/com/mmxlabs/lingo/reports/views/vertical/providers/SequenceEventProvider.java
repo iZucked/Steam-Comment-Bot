@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.reports.views.vertical.providers;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -39,27 +40,27 @@ public class SequenceEventProvider extends EventProvider {
 	}
 
 	public SequenceEventProvider(@NonNull final Sequence seq, @Nullable final EventFilter filter, @NonNull final AbstractVerticalReportVisualiser verticalReportVisualiser) {
-		this(new Sequence[] { seq }, filter, verticalReportVisualiser);
+		this(new @NonNull Sequence[] { seq }, filter, verticalReportVisualiser);
 	}
 
 	@Override
-	public Event[] getUnfilteredEvents(@NonNull final LocalDate date) {
-		final ArrayList<Event> result = new ArrayList<>();
+	public @NonNull Event[] getUnfilteredEvents(@NonNull final LocalDate date) {
+		final List<@NonNull Event> result = new ArrayList<>();
 
 		for (final Sequence seq : data) {
 			if (seq != null) {
-				final Event[] events = getEvents(date, seq);
+				final @NonNull Event[] events = getEvents(date, seq);
 				for (final Event event : events) {
 					result.add(event);
 				}
 			}
 		}
 
-		return result.toArray(new Event[0]);
+		return result.toArray(new @NonNull Event[0]);
 	}
 
-	protected Event[] getEvents(@NonNull final LocalDate date, @NonNull final Sequence seq) {
-		final Event[] events = verticalReportVisualiser.getEventsByScheduledDate(seq, date);
+	protected @NonNull Event[] getEvents(@NonNull final LocalDate date, @NonNull final Sequence seq) {
+		final @NonNull Event[] events = verticalReportVisualiser.getEventsByScheduledDate(seq, date);
 		return events;
 	}
 }
