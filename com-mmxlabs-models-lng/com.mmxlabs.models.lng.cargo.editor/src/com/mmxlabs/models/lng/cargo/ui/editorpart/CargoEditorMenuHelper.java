@@ -257,6 +257,19 @@ public class CargoEditorMenuHelper {
 				if (dischargeSlot.isFOBSale()) {
 					createAssignmentMenus(manager, dischargeSlot);
 				} else if (dischargeSlot.getCargo() != null) {
+
+					boolean foundDESPurchase = false;
+					for (final Slot s : dischargeSlot.getCargo().getSlots()) {
+						if (s instanceof LoadSlot && ((LoadSlot) s).isDESPurchase()) {
+							createAssignmentMenus(manager, s);
+							foundDESPurchase = true;
+						}
+					}
+					if (!foundDESPurchase) {
+						createAssignmentMenus(manager, dischargeSlot.getCargo());
+
+					}
+
 					createAssignmentMenus(manager, dischargeSlot.getCargo());
 				}
 				final Contract contract = dischargeSlot.getContract();
@@ -348,19 +361,26 @@ public class CargoEditorMenuHelper {
 			final MenuManager reassignMenuManager = new MenuManager("Assign to...", null);
 			menuManager.add(reassignMenuManager);
 
+			final MenuManager marketMenu = new MenuManager("Market ...", null);
+			boolean marketMenuUsed = false;
+
 			class AssignAction extends Action {
 				private final VesselAssignmentType vessel;
+				private int spotIndex;
 
-				public AssignAction(final String label, final VesselAssignmentType vessel) {
+				public AssignAction(final String label, final VesselAssignmentType vessel, int spotIndex) {
 					super(label);
 					this.vessel = vessel;
+					this.spotIndex = spotIndex;
 				}
 
 				public void run() {
 
 					final Object value = vessel == null ? SetCommand.UNSET_VALUE : vessel;
-					final Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, value);
-					scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+					CompoundCommand cc = new CompoundCommand("Set assignment");
+					cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, value));
+					cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, spotIndex));
+					scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
 					{
 						cec.verifyCargoModel(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getCargoModel());
 					}
@@ -373,10 +393,57 @@ public class CargoEditorMenuHelper {
 					CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType(), scenarioModel);
 
 			for (final Pair<String, EObject> p : valueProvider.getAllowedValues(assignableElement, CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType())) {
-				if (p.getSecond() != assignableElement.getVesselAssignmentType()) {
-					reassignMenuManager.add(new AssignAction(p.getFirst(), (VesselAssignmentType) p.getSecond()));
+				EObject assignmentOption = p.getSecond();
+				if (assignmentOption == null) {
+					continue;
+				}
+
+				if (assignmentOption instanceof CharterInMarket) {
+					CharterInMarket charterInMarket = (CharterInMarket) assignmentOption;
+
+					if (charterInMarket.isEnabled() && charterInMarket.getSpotCharterCount() > 0) {
+						final MenuManager marketOptionMenu = new MenuManager(String.format("%s ...", charterInMarket.getName()), null);
+
+						marketOptionMenu.add(new AssignAction(String.format("Nominal", charterInMarket.getName()), charterInMarket, -1));
+						for (int i = 0; i < charterInMarket.getSpotCharterCount(); ++i) {
+							marketOptionMenu.add(new AssignAction(String.format("Option %d ", i + 1), charterInMarket, i));
+
+						}
+
+						marketMenu.add(marketOptionMenu);
+						marketMenuUsed = true;
+					} else {
+
+						reassignMenuManager.add(new AssignAction(String.format("%s (nominal)", charterInMarket.getName()), (VesselAssignmentType) assignmentOption, -1));
+
+					}
+
+				} else {
+					if (assignmentOption != assignableElement.getVesselAssignmentType()) {
+						reassignMenuManager.add(new AssignAction(p.getFirst(), (VesselAssignmentType) assignmentOption, -1));
+					}
 				}
 			}
+
+			if (marketMenuUsed) {
+				reassignMenuManager.add(marketMenu);
+			}
+			{
+				final Action action = new Action("Unassign") {
+					@Override
+					public void run() {
+						final CompoundCommand cc = new CompoundCommand("Unassign");
+						cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE,
+								SetCommand.UNSET_VALUE));
+						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
+						{
+							cec.verifyCargoModel(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getCargoModel());
+						}
+					}
+				};
+				menuManager.add(action);
+			}
+
 			if (assignableElement instanceof Cargo || assignableElement instanceof VesselEvent) {
 				if (assignableElement.getVesselAssignmentType() != null) {
 					if (assignableElement.isLocked()) {
@@ -413,21 +480,6 @@ public class CargoEditorMenuHelper {
 						menuManager.add(action);
 					}
 				}
-			}
-			{
-				final Action action = new Action("Unassign") {
-					@Override
-					public void run() {
-						final CompoundCommand cc = new CompoundCommand("Unassign");
-						cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE,
-								SetCommand.UNSET_VALUE));
-						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
-						{
-							cec.verifyCargoModel(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getCargoModel());
-						}
-					}
-				};
-				menuManager.add(action);
 			}
 
 		}
@@ -513,7 +565,17 @@ public class CargoEditorMenuHelper {
 				if (loadSlot.isDESPurchase()) {
 					createAssignmentMenus(manager, loadSlot);
 				} else if (loadSlot.getCargo() != null) {
-					createAssignmentMenus(manager, loadSlot.getCargo());
+					boolean foundFobSale = false;
+					for (final Slot s : loadSlot.getCargo().getSlots()) {
+						if (s instanceof DischargeSlot && ((DischargeSlot) s).isFOBSale()) {
+							createAssignmentMenus(manager, s);
+							foundFobSale = true;
+						}
+					}
+					if (!foundFobSale) {
+						createAssignmentMenus(manager, loadSlot.getCargo());
+
+					}
 				}
 				final Contract contract = loadSlot.getContract();
 				if (contract == null || contract.getContractType() == ContractType.BOTH) {
@@ -1390,4 +1452,5 @@ public class CargoEditorMenuHelper {
 		}
 		return String.format("%02d %s %04d", localDate.getDayOfMonth(), localDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()), localDate.getYear());
 	}
+
 }

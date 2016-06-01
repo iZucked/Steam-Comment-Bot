@@ -565,8 +565,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 								}
 							}
 						}
-					}
-
+					}  
+				 
 					menu.setVisible(true);
 				}
 			}
@@ -954,7 +954,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		{
 			final AssignmentManipulator assignmentManipulator = new AssignmentManipulator(scenarioEditingLocation);
 			final RowDataEMFPath assignmentPath = new RowDataEMFPath(true, Type.SLOT_OR_CARGO);
-			final GridViewerColumn assignmentColumn = addTradesColumn("Vessel", assignmentManipulator, assignmentPath);
+			final GridViewerColumn assignmentColumn = addTradesColumn(loadColumns, "Vessel", new ReadOnlyManipulatorWrapper<>(assignmentManipulator), assignmentPath);
 			assignmentColumn.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), assignmentManipulator, assignmentPath) {
 				@Override
 				public Image getImage(final Object element) {
