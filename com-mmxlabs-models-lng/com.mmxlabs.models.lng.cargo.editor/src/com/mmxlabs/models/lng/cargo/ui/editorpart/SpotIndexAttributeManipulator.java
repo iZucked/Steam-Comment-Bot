@@ -37,6 +37,7 @@ public class SpotIndexAttributeManipulator extends BasicAttributeManipulator {
 		String[] options = null;
 		int[] optionValues = null;
 		if (object instanceof AssignableElement) {
+
 			final AssignableElement assignableElement = (AssignableElement) object;
 			final int currentIndex = assignableElement.getSpotIndex();
 
@@ -58,11 +59,13 @@ public class SpotIndexAttributeManipulator extends BasicAttributeManipulator {
 					options[1 + i] = String.format("%d", 1 + i);
 					optionValues[1 + i] = i;
 				}
+
 				if (currentIndex >= spotCharterCount) {
 					final int idx = options.length - 1;
 					options[idx] = String.format("%d", 1 + currentIndex);
 					optionValues[idx] = currentIndex;
 				}
+
 			} else {
 				options = new String[] { String.format("%d", 1 + currentIndex) };
 				optionValues = new int[] { currentIndex };
@@ -84,8 +87,8 @@ public class SpotIndexAttributeManipulator extends BasicAttributeManipulator {
 	public void doSetValue(final Object object, final Object value) {
 
 		if (value instanceof Integer) {
-			int idx = (Integer) value;
-			int internalValue = optionValues[idx];
+			final int idx = (Integer) value;
+			final int internalValue = optionValues[idx];
 			super.doSetValue(object, internalValue);
 		} else {
 			super.doSetValue(object, value);
@@ -97,7 +100,7 @@ public class SpotIndexAttributeManipulator extends BasicAttributeManipulator {
 
 		final Object object2 = super.getValue(object);
 		if (object2 instanceof Integer) {
-			int interalValue = (Integer) object2;
+			final int interalValue = (Integer) object2;
 			for (int i = 0; i < optionValues.length; ++i) {
 				if (optionValues[i] == interalValue) {
 					return optionValues[i];
@@ -116,7 +119,7 @@ public class SpotIndexAttributeManipulator extends BasicAttributeManipulator {
 	@Override
 	public String render(final Object object) {
 		if (object instanceof Integer) {
-			int interalValue = (Integer) object;
+			final int interalValue = (Integer) object;
 			for (int i = 0; i < optionValues.length; ++i) {
 				if (optionValues[i] == interalValue) {
 					return options[i];
