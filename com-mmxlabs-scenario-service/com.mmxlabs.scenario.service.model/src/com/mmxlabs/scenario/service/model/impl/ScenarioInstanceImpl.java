@@ -895,12 +895,14 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			if (getInstance() == null) {
 				return;
 			}
-			// Model references are still present! (note revert command will now break!)
-			//			if (!getModelReferences().isEmpty()) {
-			//				log.error("Attempting to unload a scenario which still has open model references");
-			//				return;
-			//			}
-			scenarioService.unload(this);
+			
+			// Final checks - if still no references here, trigger unload
+			List<ModelReference> refs = getModelReferences();
+			synchronized (refs) {
+				if (refs.isEmpty()) {				
+					scenarioService.unload(this);
+				}
+			}
 		}
 	}
 

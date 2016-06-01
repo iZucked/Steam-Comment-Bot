@@ -127,10 +127,11 @@ public class ModelReferenceImpl extends EObjectImpl implements ModelReference {
 	 */
 	public void close() {
 		ScenarioInstance scenarioInstance = getScenarioInstance();
-		setScenarioInstance(null);
 		if (scenarioInstance != null) {
 			List<ModelReference> modelReferences = scenarioInstance.getModelReferences();
 			synchronized (modelReferences) {
+				
+				setScenarioInstance(null);
 				modelReferences.remove(this);
 			}
 		}
