@@ -36,7 +36,7 @@ public interface ISequencesOptimiser extends IOptimiser {
 	 * @return
 	 */
 	@NonNull
-	List<IConstraintChecker> getConstraintCheckers();
+	List<@NonNull IConstraintChecker> getConstraintCheckers();
 
 	/**
 	 * Returns the list of {@link #getConstraintCheckers()} which also implement @link {IReducingContraintChecker}
@@ -44,7 +44,7 @@ public interface ISequencesOptimiser extends IOptimiser {
 	 * @return
 	 */
 	@NonNull
-	List<IReducingConstraintChecker> getReducingConstraintCheckers();
+	List<@NonNull IReducingConstraintChecker> getReducingConstraintCheckers();
 
 	/**
 	 * Returns the list of {@link #getConstraintCheckers()} which also implement @link {IInitialSequencesConstraintChecker}
@@ -52,10 +52,10 @@ public interface ISequencesOptimiser extends IOptimiser {
 	 * @return
 	 */
 	@NonNull
-	List<IInitialSequencesConstraintChecker> getInitialSequencesConstraintCheckers();
+	List<@NonNull IInitialSequencesConstraintChecker> getInitialSequencesConstraintCheckers();
 
 	@NonNull
-	List<IEvaluationProcess> getEvaluationProcesses();
+	List<@NonNull IEvaluationProcess> getEvaluationProcesses();
 
 	/**
 	 * Returns the {@link ISequencesManipulator} used to transform {@link ISequences} into a new {@link ISequences} object to validate and evaluate each iteration.
@@ -91,6 +91,6 @@ public interface ISequencesOptimiser extends IOptimiser {
 	ISequences getBestRawSequences();
 
 	@NonNull
-	List<IEvaluatedStateConstraintChecker> getEvaluatedStateConstraintCheckers();
+	List<@NonNull IEvaluatedStateConstraintChecker> getEvaluatedStateConstraintCheckers();
 
 }

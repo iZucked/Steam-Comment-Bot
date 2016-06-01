@@ -38,11 +38,11 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 
 	private int numberOfIterationsCompleted;
 
-	private List<IConstraintChecker> constraintCheckers;
+	private List<@NonNull IConstraintChecker> constraintCheckers;
 
-	private List<IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers;
+	private List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers;
 
-	private List<IEvaluationProcess> evaluationProcesses;
+	private List<@NonNull IEvaluationProcess> evaluationProcesses;
 
 	private IFitnessEvaluator fitnessEvaluator;
 
@@ -56,9 +56,9 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 
 	private long startTime;
 
-	private List<IReducingConstraintChecker> reducingConstraintCheckers;
+	private List<@NonNull IReducingConstraintChecker> reducingConstraintCheckers;
 
-	private List<IInitialSequencesConstraintChecker> initialSequencesConstraintCheckers;
+	private List<@NonNull IInitialSequencesConstraintChecker> initialSequencesConstraintCheckers;
 
 	/**
 	 * Initialise method checking the object has all the correct pieces of data to be able to perform the {@link #optimise(IOptimisationContext, Collection, Object)} method. Throws an
@@ -174,10 +174,10 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 		return numberOfIterations;
 	}
 
-	public final void setConstraintCheckers(@NonNull final List<IConstraintChecker> constraintCheckers) {
+	public final void setConstraintCheckers(@NonNull final List<@NonNull IConstraintChecker> constraintCheckers) {
 		this.constraintCheckers = constraintCheckers;
-		this.reducingConstraintCheckers = new ArrayList<IReducingConstraintChecker>(constraintCheckers.size());
-		this.initialSequencesConstraintCheckers = new ArrayList<IInitialSequencesConstraintChecker>(constraintCheckers.size());
+		this.reducingConstraintCheckers = new ArrayList<>(constraintCheckers.size());
+		this.initialSequencesConstraintCheckers = new ArrayList<>(constraintCheckers.size());
 		for (final IConstraintChecker checker : constraintCheckers) {
 			if (checker instanceof IReducingConstraintChecker) {
 				reducingConstraintCheckers.add((IReducingConstraintChecker) checker);
@@ -188,41 +188,41 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 		}
 	}
 
-	public final void setEvaluatedStateConstraintCheckers(@NonNull final List<IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers) {
+	public final void setEvaluatedStateConstraintCheckers(@NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers) {
 		this.evaluatedStateConstraintCheckers = evaluatedStateConstraintCheckers;
 	}
 
-	public final void setEvaluationProcesses(@NonNull final List<IEvaluationProcess> evaluationProcesses) {
+	public final void setEvaluationProcesses(@NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses) {
 		this.evaluationProcesses = evaluationProcesses;
 	}
 
 	@Override
 	@NonNull
-	public final List<IConstraintChecker> getConstraintCheckers() {
+	public final List<@NonNull IConstraintChecker> getConstraintCheckers() {
 		return constraintCheckers;
 	}
 
 	@Override
 	@NonNull
-	public final List<IEvaluatedStateConstraintChecker> getEvaluatedStateConstraintCheckers() {
+	public final List<@NonNull IEvaluatedStateConstraintChecker> getEvaluatedStateConstraintCheckers() {
 		return evaluatedStateConstraintCheckers;
 	}
 
 	@Override
 	@NonNull
-	public final List<IEvaluationProcess> getEvaluationProcesses() {
+	public final List<@NonNull IEvaluationProcess> getEvaluationProcesses() {
 		return evaluationProcesses;
 	}
 
 	@Override
 	@NonNull
-	public final List<IReducingConstraintChecker> getReducingConstraintCheckers() {
+	public final List<@NonNull IReducingConstraintChecker> getReducingConstraintCheckers() {
 		return reducingConstraintCheckers;
 	}
 
 	@Override
 	@NonNull
-	public final List<IInitialSequencesConstraintChecker> getInitialSequencesConstraintCheckers() {
+	public final List<@NonNull IInitialSequencesConstraintChecker> getInitialSequencesConstraintCheckers() {
 		return initialSequencesConstraintCheckers;
 	}
 
