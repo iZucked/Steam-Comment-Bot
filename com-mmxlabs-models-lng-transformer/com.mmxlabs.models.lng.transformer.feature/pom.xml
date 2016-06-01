@@ -6,10 +6,10 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.lng.transformer.parent</artifactId>
 		<groupId>com.mmxlabs.models.lng.transformer</groupId>
-		<version>3.12.5-SNAPSHOT</version>
+		<version>3.12.6-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.models.lng.transformer.feature</artifactId>
-	<version>3.12.5-SNAPSHOT</version>
+	<version>3.12.6-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 
 	<build>
