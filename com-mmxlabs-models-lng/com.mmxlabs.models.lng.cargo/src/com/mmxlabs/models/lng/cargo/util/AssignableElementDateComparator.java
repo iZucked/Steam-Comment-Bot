@@ -33,7 +33,10 @@ public class AssignableElementDateComparator implements IAssignableElementCompar
 		}
 
 		// if two assignments don't overlap, sort by start date. Otherwise, sort
-		if (overlaps(start0, end0, start1, end1)) {
+		if (overlaps(start0, end0, start1, end1) //
+				|| contained(start0, end0, start1, end1) //
+				|| contained(start1, end1, start0, end0) //
+				) {
 			return ((Integer) arg0.getSequenceHint()).compareTo(arg1.getSequenceHint());
 		} else {
 			return start0.compareTo(start1);
@@ -42,6 +45,9 @@ public class AssignableElementDateComparator implements IAssignableElementCompar
 
 	protected boolean overlaps(@NonNull final ZonedDateTime start0, @NonNull final ZonedDateTime end0, @NonNull final ZonedDateTime start1, @NonNull final ZonedDateTime end1) {
 		return !(end0.isBefore(start1) || end1.isBefore(start0));
+	}
+	protected boolean contained(@NonNull final ZonedDateTime start0, @NonNull final ZonedDateTime end0, @NonNull final ZonedDateTime start1, @NonNull final ZonedDateTime end1) {
+		return end0.isBefore(end1) && start0.isAfter(start1);
 	}
 
 	protected ZonedDateTime getStartDate(@Nullable final AssignableElement element) {
