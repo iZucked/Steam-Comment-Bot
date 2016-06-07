@@ -345,45 +345,45 @@ public class NominalMarketTests extends AbstractPeriodTestCase {
 		});
 	}
 
-	/**
-	 * Test: Ensure we do not use a cheaper nominal vessel and avoid fleet vessel charter cost.
-	 * 
-	 * @throws Exception
-	 */
-	@Test
-	@Category({ MicroTest.class })
-	public void testAssignToDefaultNominal() throws Exception {
-
-		// Create the required basic elements
-		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-
-		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "10000", 0);
-		spotMarketsModelBuilder.getSpotMarketsModel().setDefaultNominalMarket(charterInMarket_1);
-
-		// Construct the cargo scenario
-
-		// Create cargo 1, cargo 2
-		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-				.build() //
-				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
-				.build() //
-				.build();
-
-		runTest(scenarioRunner -> {
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-
-			// Check spot index has been updated
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
-			// Check cargoes removed
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
-
-			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
-
-			Assert.assertEquals(charterInMarket_1, optCargo1.getVesselAssignmentType());
-			Assert.assertEquals(-1, optCargo1.getSpotIndex());
-		});
-	}
+//	/**
+//	 * Test: Ensure we do not use a cheaper nominal vessel and avoid fleet vessel charter cost.
+//	 * 
+//	 * @throws Exception
+//	 */
+//	@Test
+//	@Category({ MicroTest.class })
+//	public void testAssignToDefaultNominal() throws Exception {
+//
+//		// Create the required basic elements
+//		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+//
+//		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "10000", 0);
+//		spotMarketsModelBuilder.getSpotMarketsModel().setDefaultNominalMarket(charterInMarket_1);
+//
+//		// Construct the cargo scenario
+//
+//		// Create cargo 1, cargo 2
+//		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+//				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+//				.build() //
+//				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+//				.build() //
+//				.build();
+//
+//		runTest(scenarioRunner -> {
+//			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+//
+//			// Check spot index has been updated
+//			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+//			// Check cargoes removed
+//			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+//
+//			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
+//
+//			Assert.assertEquals(charterInMarket_1, optCargo1.getVesselAssignmentType());
+//			Assert.assertEquals(-1, optCargo1.getSpotIndex());
+//		});
+//	}
 
 	private void runTest(Consumer<LNGScenarioRunner> checker) {
 		runTest(true, checker);
