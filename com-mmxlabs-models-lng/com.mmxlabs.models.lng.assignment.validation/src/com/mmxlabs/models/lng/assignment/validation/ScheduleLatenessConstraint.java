@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
@@ -48,8 +49,9 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) target;
 			final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(scenarioModel);
 			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
+			final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
 
-			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, spotMarketsModel);
+			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel,  spotMarketsModel);
 
 			final List<Pair<AssignableElement, AssignableElement>> problems = new LinkedList<>();
 

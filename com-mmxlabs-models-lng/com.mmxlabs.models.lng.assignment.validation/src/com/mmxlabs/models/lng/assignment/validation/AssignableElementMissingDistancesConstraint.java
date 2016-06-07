@@ -65,7 +65,7 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 			final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
 			// final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 
-			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, spotMarketsModel);
+			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel);
 
 			@SuppressWarnings("unchecked")
 			Map<Pair<Port, Port>, Boolean> hasDistanceMap = (Map<Pair<Port, Port>, Boolean>) ctx.getCurrentConstraintData();
