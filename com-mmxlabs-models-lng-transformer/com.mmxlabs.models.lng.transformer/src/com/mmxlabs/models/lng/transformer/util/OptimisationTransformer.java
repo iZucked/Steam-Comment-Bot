@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.cargo.editor.utils.IAssignableElementComparatorFac
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -245,9 +246,9 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 
 		final List<CollectedAssignment> assignments;
 		if (assignableElementComparator != null) {
-			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, spotMarketsModel, assignableElementComparator.create(scenarioModel));
+			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, ScenarioModelUtil.getPortModel(scenarioModel), spotMarketsModel, assignableElementComparator.create(scenarioModel));
 		} else {
-			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, spotMarketsModel);
+			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, ScenarioModelUtil.getPortModel(scenarioModel), spotMarketsModel);
 		}
 		for (final CollectedAssignment seq : assignments) {
 			IVesselAvailability vesselAvailability = null;

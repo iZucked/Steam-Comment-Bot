@@ -59,6 +59,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
@@ -189,6 +190,7 @@ public class PeriodTransformer {
 
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(output);
 		final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(output);
+		final PortModel portModel = ScenarioModelUtil.getPortModel(output);
 
 		// Generate the schedule map - maps cargoes and events to schedule information for date, port and heel data extraction
 		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
@@ -233,7 +235,8 @@ public class PeriodTransformer {
 		updateSlotsToRemoveWithDependencies(slotAllocationMap, slotsToRemove, cargoesToRemove, eventDependencies.getFirst());
 
 		// Update vessel availabilities
-		updateVesselAvailabilities(periodRecord, cargoModel, spotMarketsModel, startConditionMap, endConditionMap, eventDependencies.getFirst(), eventDependencies.getSecond(), objectToPortVisitMap);
+		updateVesselAvailabilities(periodRecord, cargoModel, spotMarketsModel, portModel, startConditionMap, endConditionMap, eventDependencies.getFirst(), eventDependencies.getSecond(),
+				objectToPortVisitMap);
 		checkIfRemovedSlotsAreStillNeeded(seenSlots, slotsToRemove, cargoesToRemove, newVesselAvailabilities, startConditionMap, endConditionMap, slotAllocationMap);
 
 		if (extensions != null) {
@@ -726,10 +729,10 @@ public class PeriodTransformer {
 	}
 
 	public void updateVesselAvailabilities(@NonNull final PeriodRecord periodRecord, @NonNull final CargoModel cargoModel, @NonNull final SpotMarketsModel spotMarketsModel,
-			@NonNull final Map<AssignableElement, PortVisit> startConditionMap, @NonNull final Map<AssignableElement, PortVisit> endConditionMap, @NonNull final Set<Cargo> cargoesToKeep,
-			@NonNull final Set<Event> eventsToKeep, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap) {
+			@NonNull PortModel portModel, @NonNull final Map<AssignableElement, PortVisit> startConditionMap, @NonNull final Map<AssignableElement, PortVisit> endConditionMap,
+			@NonNull final Set<Cargo> cargoesToKeep, @NonNull final Set<Event> eventsToKeep, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap) {
 
-		final List<CollectedAssignment> collectedAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, spotMarketsModel);
+		final List<CollectedAssignment> collectedAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel);
 
 		updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, cargoesToKeep, eventsToKeep, objectToPortVisitMap);
 	}

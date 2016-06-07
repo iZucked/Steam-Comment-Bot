@@ -45,6 +45,15 @@ public class PeriodExporter {
 	public Command updateOriginal(final EditingDomain editingDomain, final LNGScenarioModel originalScenario, final LNGScenarioModel periodScenario, final IScenarioEntityMapping mapping) {
 
 		final CompoundCommand cmd = new CompoundCommand("Update original scenario");
+		// Renumber sequence hints
+		{
+			for (Cargo oldCargo : originalScenario.getCargoModel().getCargoes()) {
+				cmd.append(SetCommand.create(editingDomain, oldCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, oldCargo.getSequenceHint() - 100));
+			}
+			for (VesselEvent oldVesselEvent : originalScenario.getCargoModel().getVesselEvents()) {
+				cmd.append(SetCommand.create(editingDomain, oldVesselEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, oldVesselEvent.getSequenceHint() - 100));
+			}
+		}
 
 		// First the easy part, update vessel events. (assigned vessel).
 		{

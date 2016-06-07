@@ -367,7 +367,7 @@ public class PeriodTestUtils {
 
 	public static CollectedAssignment createCollectedAssignment(final VesselAvailability vesselAvailability, final AssignableElement... elements) {
 
-		return new CollectedAssignment(Arrays.asList(elements), vesselAvailability);
+		return new CollectedAssignment(Arrays.asList(elements), vesselAvailability, (PortModel) null);
 	}
 
 	@NonNull
