@@ -846,7 +846,7 @@ public class VoyagePlanner {
 		return null;
 	}
 
-	public final @NonNull VoyagePlan makeDESOrFOBVoyagePlan(final @NonNull IResource resource, final @NonNull ISequence sequence, final @NonNull IPortTimesRecord portTimesRecord) {
+	public final @NonNull VoyagePlan makeDESOrFOBVoyagePlan(final @NonNull IResource resource, final @NonNull IPortTimesRecord portTimesRecord) {
 
 		// Virtual vessels are those operated by a third party, for FOB and DES situations.
 		// Should we compute a schedule for them anyway? The arrival times don't mean much,
@@ -900,7 +900,31 @@ public class VoyagePlanner {
 			setDesPurchaseOrFobPurchaseM3VolumeDetails(currentSequence);
 		}
 		return currentPlan;
+	}
 
+	public final @NonNull Pair<@NonNull VoyagePlan, @NonNull IAllocationAnnotation> makeDESOrFOBVoyagePlanPair(final @NonNull IResource resource, final @NonNull ISequence sequence,
+			final @NonNull IPortTimesRecord portTimesRecord) {
+
+		VoyagePlan currentPlan = makeDESOrFOBVoyagePlan(resource, portTimesRecord);
+
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		final int vesselStartTime = portTimesRecord.getFirstSlotTime();
+
+		// Check break-even logic
+		{
+			// Execute custom logic to manipulate the schedule and choices
+			if (breakEvenEvaluator != null) {
+				final Pair<@NonNull VoyagePlan, @NonNull IAllocationAnnotation> p = breakEvenEvaluator.processSchedule(vesselStartTime, vesselAvailability, currentPlan, portTimesRecord);
+				if (p != null) {
+					return p;
+				}
+			}
+
+		}
+
+		final IAllocationAnnotation annotation = volumeAllocator.get().allocate(vesselAvailability, vesselStartTime, currentPlan, portTimesRecord);
+
+		return new Pair<>(currentPlan, annotation);
 	}
 
 	final private @NonNull Triple<@NonNull IVessel, @Nullable IResource, @NonNull Integer> setVesselAndBaseFuelPrice(@NonNull final IPortTimesRecord portTimesRecord, @NonNull final IVessel vessel,

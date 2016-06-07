@@ -97,11 +97,12 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 
 		for (int idx = 0; idx < currentSequence.length; ++idx) {
 
+			final int offset = vp.isIgnoreEnd() ? 1 : 0;
 			final Object obj = currentSequence[idx];
 			if (obj instanceof PortDetails) {
 				final PortDetails details = (PortDetails) obj;
 				// arrivalTimes.add(currentTime);
-				if (idx != (currentSequence.length - 1)) {
+				if (idx != (currentSequence.length - offset)) {
 					// currentTime += details.getOptions().getVisitDuration();
 					if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
 						isCargoPlan = true;
@@ -158,12 +159,13 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 			long loadVolumeInM3 = 0;
 
 			{
+				final int offset = vp.isIgnoreEnd() ? 1 : 0;
 				for (int idx = 0; idx < currentSequence.length; ++idx) {
 
 					final Object obj = currentSequence[idx];
 					if (obj instanceof PortDetails) {
 						final PortDetails details = (PortDetails) obj;
-						if (idx != (currentSequence.length - 1)) {
+						if (idx != (currentSequence.length - offset)) {
 
 							if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
 								final IPortSlot portSlot = details.getOptions().getPortSlot();
@@ -256,9 +258,14 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 			// final IDischargeOption beSlot;
 			((IBreakEvenPriceCalculator) originalDischarge.getDischargePriceCalculator()).setPrice(breakEvenPricePerMMBtu);
 			// Redundant? Search should have found this....
-			final VoyagePlan newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vesselAvailability), vesselCharterRatePerDay, portTimesRecord, startingHeelInM3);
-			assert newVoyagePlan != null;
 
+			final VoyagePlan newVoyagePlan;
+			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+				newVoyagePlan = voyagePlanner.makeDESOrFOBVoyagePlan(vesselProvider.getResource(vesselAvailability), portTimesRecord);
+			} else {
+				newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vesselAvailability), vesselCharterRatePerDay, portTimesRecord, 0);
+			}
+			assert newVoyagePlan != null;
 			newVoyagePlan.setIgnoreEnd(vp.isIgnoreEnd());
 
 			final IAllocationAnnotation newAllocation = volumeAllocator.get().allocate(vesselAvailability, vesselStartTime, newVoyagePlan, portTimesRecord);
@@ -274,7 +281,12 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 		// Overwrite current break even price with test price
 		((IBreakEvenPriceCalculator) originalDischarge.getDischargePriceCalculator()).setPrice(currentPricePerMMBTu);
 
-		final VoyagePlan newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vesselAvailability), vesselCharterRatePerDay, portTimesRecord, 0);
+		final VoyagePlan newVoyagePlan;
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+			newVoyagePlan = voyagePlanner.makeDESOrFOBVoyagePlan(vesselProvider.getResource(vesselAvailability), portTimesRecord);
+		} else {
+			newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vesselAvailability), vesselCharterRatePerDay, portTimesRecord, 0);
+		}
 		assert newVoyagePlan != null;
 
 		final IAllocationAnnotation newAllocation = volumeAllocator.get().allocate(vesselAvailability, vesselStartTime, newVoyagePlan, portTimesRecord);
