@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -32,7 +34,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
  * 
  */
 public class ScheduleSequenceData {
-	final public Sequence[] vessels;
+	final public @NonNull Sequence[] vessels;
 	final public Sequence fobSales;
 	final public Sequence desPurchases;
 	final public VirtualSequence longLoads;
