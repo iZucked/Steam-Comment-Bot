@@ -726,7 +726,5 @@ public interface ISchedulerBuilder {
 
 	void bindSlotsToRoundTripVessel(@NonNull IVesselAvailability roundTripCargoVessel, @NonNull IPortSlot @NonNull... slots);
 
-	void setDefaultMarketForNominalCargoes(@NonNull ISpotCharterInMarket spotCharterInMarket);
-
 	void setVesselAndClassPermissions(@NonNull IPortSlot portSlot, @Nullable List<@NonNull IVessel> permittedVessels, @Nullable List<@NonNull IVesselClass> permittedVesselClasses);
 }

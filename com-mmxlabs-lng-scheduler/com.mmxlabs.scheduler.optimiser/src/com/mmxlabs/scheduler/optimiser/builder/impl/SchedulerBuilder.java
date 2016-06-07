@@ -2030,11 +2030,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setDefaultMarketForNominalCargoes(@NonNull final ISpotCharterInMarket spotCharterInMarket) {
-		spotCharterInMarketProviderEditor.setDefaultMarketForNominalCargoes(spotCharterInMarket);
-	}
-
-	@Override
 	public void bindSlotsToRoundTripVessel(@NonNull final IVesselAvailability roundTripCargoVesselAvailability, @NonNull final IPortSlot @NonNull... slots) {
 
 		ISequenceElement prevElement = null;

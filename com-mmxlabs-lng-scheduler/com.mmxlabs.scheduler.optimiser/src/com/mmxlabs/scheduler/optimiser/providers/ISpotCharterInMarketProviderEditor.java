@@ -16,6 +16,4 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 public interface ISpotCharterInMarketProviderEditor extends ISpotCharterInMarketProvider {
 
 	void addSpotMarketAvailability(@NonNull IVesselAvailability vesselAvailability, @NonNull ISpotCharterInMarket market, int spotIndex);
-
-	void setDefaultMarketForNominalCargoes(@NonNull ISpotCharterInMarket market);
 }

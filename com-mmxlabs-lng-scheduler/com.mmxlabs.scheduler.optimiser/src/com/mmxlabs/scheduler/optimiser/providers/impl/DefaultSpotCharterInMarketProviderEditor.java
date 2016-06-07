@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
@@ -15,8 +14,6 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.providers.ISpotCharterInMarketProviderEditor;
 
 public class DefaultSpotCharterInMarketProviderEditor implements ISpotCharterInMarketProviderEditor {
-
-	private ISpotCharterInMarket defaultMarketForNominalCargoes;
 
 	private @NonNull final Set<@NonNull ISpotCharterInMarket> spotCharterInMarkets = new HashSet<>();
 	private @NonNull final Map<@NonNull ISpotCharterInMarket, @NonNull Integer> spotCharterInMarketCount = new HashMap<>();
@@ -38,11 +35,6 @@ public class DefaultSpotCharterInMarketProviderEditor implements ISpotCharterInM
 	}
 
 	@Override
-	public @Nullable ISpotCharterInMarket getDefaultMarketForNominalCargoes() {
-		return defaultMarketForNominalCargoes;
-	}
-
-	@Override
 	public void addSpotMarketAvailability(@NonNull final IVesselAvailability vesselAvailability, @NonNull final ISpotCharterInMarket market, final int spotIndex) {
 		spotCharterInMarketMap.put(new Pair<>(market, spotIndex), vesselAvailability);
 		spotCharterInMarkets.add(market);
@@ -54,10 +46,5 @@ public class DefaultSpotCharterInMarketProviderEditor implements ISpotCharterInM
 				return Math.max(existing, other);
 			});
 		}
-	}
-
-	@Override
-	public void setDefaultMarketForNominalCargoes(@NonNull final ISpotCharterInMarket market) {
-		this.defaultMarketForNominalCargoes = market;
 	}
 }
