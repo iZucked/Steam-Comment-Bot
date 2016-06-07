@@ -37,7 +37,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketsModelImpl#getCharterOutStartDate <em>Charter Out Start Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketsModelImpl#getCharterInMarkets <em>Charter In Markets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketsModelImpl#getCharterOutMarkets <em>Charter Out Markets</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketsModelImpl#getDefaultNominalMarket <em>Default Nominal Market</em>}</li>
  * </ul>
  *
  * @generated
@@ -112,16 +111,6 @@ public class SpotMarketsModelImpl extends UUIDObjectImpl implements SpotMarketsM
 	 * @ordered
 	 */
 	protected EList<CharterOutMarket> charterOutMarkets;
-
-	/**
-	 * The cached value of the '{@link #getDefaultNominalMarket() <em>Default Nominal Market</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDefaultNominalMarket()
-	 * @generated
-	 * @ordered
-	 */
-	protected CharterInMarket defaultNominalMarket;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -386,44 +375,6 @@ public class SpotMarketsModelImpl extends UUIDObjectImpl implements SpotMarketsM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CharterInMarket getDefaultNominalMarket() {
-		if (defaultNominalMarket != null && defaultNominalMarket.eIsProxy()) {
-			InternalEObject oldDefaultNominalMarket = (InternalEObject)defaultNominalMarket;
-			defaultNominalMarket = (CharterInMarket)eResolveProxy(oldDefaultNominalMarket);
-			if (defaultNominalMarket != oldDefaultNominalMarket) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SpotMarketsPackage.SPOT_MARKETS_MODEL__DEFAULT_NOMINAL_MARKET, oldDefaultNominalMarket, defaultNominalMarket));
-			}
-		}
-		return defaultNominalMarket;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CharterInMarket basicGetDefaultNominalMarket() {
-		return defaultNominalMarket;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setDefaultNominalMarket(CharterInMarket newDefaultNominalMarket) {
-		CharterInMarket oldDefaultNominalMarket = defaultNominalMarket;
-		defaultNominalMarket = newDefaultNominalMarket;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.SPOT_MARKETS_MODEL__DEFAULT_NOMINAL_MARKET, oldDefaultNominalMarket, defaultNominalMarket));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -467,9 +418,6 @@ public class SpotMarketsModelImpl extends UUIDObjectImpl implements SpotMarketsM
 				return getCharterInMarkets();
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS:
 				return getCharterOutMarkets();
-			case SpotMarketsPackage.SPOT_MARKETS_MODEL__DEFAULT_NOMINAL_MARKET:
-				if (resolve) return getDefaultNominalMarket();
-				return basicGetDefaultNominalMarket();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -506,9 +454,6 @@ public class SpotMarketsModelImpl extends UUIDObjectImpl implements SpotMarketsM
 				getCharterOutMarkets().clear();
 				getCharterOutMarkets().addAll((Collection<? extends CharterOutMarket>)newValue);
 				return;
-			case SpotMarketsPackage.SPOT_MARKETS_MODEL__DEFAULT_NOMINAL_MARKET:
-				setDefaultNominalMarket((CharterInMarket)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -542,9 +487,6 @@ public class SpotMarketsModelImpl extends UUIDObjectImpl implements SpotMarketsM
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS:
 				getCharterOutMarkets().clear();
 				return;
-			case SpotMarketsPackage.SPOT_MARKETS_MODEL__DEFAULT_NOMINAL_MARKET:
-				setDefaultNominalMarket((CharterInMarket)null);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -571,8 +513,6 @@ public class SpotMarketsModelImpl extends UUIDObjectImpl implements SpotMarketsM
 				return charterInMarkets != null && !charterInMarkets.isEmpty();
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS:
 				return charterOutMarkets != null && !charterOutMarkets.isEmpty();
-			case SpotMarketsPackage.SPOT_MARKETS_MODEL__DEFAULT_NOMINAL_MARKET:
-				return defaultNominalMarket != null;
 		}
 		return super.eIsSet(featureID);
 	}

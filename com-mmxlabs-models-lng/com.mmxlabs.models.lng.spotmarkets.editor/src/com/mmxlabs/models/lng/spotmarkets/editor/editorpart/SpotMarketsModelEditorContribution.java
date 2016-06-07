@@ -23,7 +23,6 @@ import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
@@ -126,12 +125,6 @@ public class SpotMarketsModelEditorContribution extends BaseJointModelEditorCont
 
 			final Object target = dcsd.getTarget();
 
-			if (target instanceof SpotMarketsModel) {
-				final SpotMarketsModel spotMarketsModel = (SpotMarketsModel) target;
-				if (dcsd.getFeaturesForEObject(spotMarketsModel).contains(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__DEFAULT_NOMINAL_MARKET)) {
-					return true;
-				}
-			}
 			if (target instanceof CharterInMarket) {
 				return true;
 			}
@@ -151,13 +144,6 @@ public class SpotMarketsModelEditorContribution extends BaseJointModelEditorCont
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
 
 			final Object target = dcsd.getTarget();
-			if (target instanceof SpotMarketsModel) {
-				final SpotMarketsModel spotMarketsModel = (SpotMarketsModel) target;
-				if (dcsd.getFeaturesForEObject(spotMarketsModel).contains(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__DEFAULT_NOMINAL_MARKET)) {
-					editorPart.setActivePage(indexPage);
-					return;
-				}
-			}
 			if (target instanceof CharterInMarket) {
 				editorPart.setActivePage(indexPage);
 				charterInMarketPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);

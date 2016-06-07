@@ -91,22 +91,6 @@
                      class="FOBPurchasesMarket">
                </target>
             </constraint>
-            <constraint
-                  class="com.mmxlabs.models.lng.spotmarkets.validation.NominalVesselConstraint"
-                  id="com.mmxlabs.models.lng.spotmarkets.validation.NominalVesselConstraint"
-                  isEnabledByDefault="true"
-                  lang="java"
-                  mode="Batch"
-                  name="NominalVesselConstraint"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  {0}
-               </message>
-               <target
-                     class="SpotMarketsModel">
-               </target>
-            </constraint>       
             </constraints>
       </constraintProvider>
    </extension>

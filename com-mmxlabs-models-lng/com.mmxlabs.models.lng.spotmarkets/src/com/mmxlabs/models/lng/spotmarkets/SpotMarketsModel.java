@@ -23,7 +23,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getCharterOutStartDate <em>Charter Out Start Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getCharterInMarkets <em>Charter In Markets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getCharterOutMarkets <em>Charter Out Markets</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getDefaultNominalMarket <em>Default Nominal Market</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarketsModel()
@@ -192,32 +191,6 @@ public interface SpotMarketsModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<CharterOutMarket> getCharterOutMarkets();
-
-	/**
-	 * Returns the value of the '<em><b>Default Nominal Market</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Default Nominal Market</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Default Nominal Market</em>' reference.
-	 * @see #setDefaultNominalMarket(CharterInMarket)
-	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarketsModel_DefaultNominalMarket()
-	 * @model
-	 * @generated
-	 */
-	CharterInMarket getDefaultNominalMarket();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getDefaultNominalMarket <em>Default Nominal Market</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Default Nominal Market</em>' reference.
-	 * @see #getDefaultNominalMarket()
-	 * @generated
-	 */
-	void setDefaultNominalMarket(CharterInMarket value);
 
 } // end of  SpotMarketsModel
 
