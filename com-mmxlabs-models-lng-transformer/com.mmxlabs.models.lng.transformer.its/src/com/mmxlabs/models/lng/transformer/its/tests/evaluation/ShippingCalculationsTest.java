@@ -898,8 +898,6 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		charterModel.setSpotCharterCount(1);
 		charterModel.setCharterInRate("" + charterRatePerDay);
 
-		sportMarketsModel.setDefaultNominalMarket(charterModel);
-
 		// Spot charter-in vessels have fewer voyages
 		final SequenceTester checker;
 		{

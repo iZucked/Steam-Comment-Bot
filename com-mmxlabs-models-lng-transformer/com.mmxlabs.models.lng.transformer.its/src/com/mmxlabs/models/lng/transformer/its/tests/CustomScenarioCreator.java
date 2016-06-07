@@ -231,10 +231,7 @@ public class CustomScenarioCreator {
 		vc.setFillCapacity(fillCapacity);
 
 		final CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("market-" + vc.getName(), vc, "0", spotCharterCount);
-		// Make first created market the default one
-		if (spotMarketsModel.getCharterInMarkets().size() == 1) {
-			spotMarketsModel.setDefaultNominalMarket(charterInMarket);
-		}
+
 		final FuelConsumption ladenMin = FleetFactory.eINSTANCE.createFuelConsumption();
 		final FuelConsumption ladenMax = FleetFactory.eINSTANCE.createFuelConsumption();
 
