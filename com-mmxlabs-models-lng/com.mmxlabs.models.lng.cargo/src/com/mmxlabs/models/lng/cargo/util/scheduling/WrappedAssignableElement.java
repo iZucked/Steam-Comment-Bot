@@ -170,7 +170,7 @@ public class WrappedAssignableElement {
 				startWindow.setSecond(maxStartDate);
 			}
 			if (startWindow.getFirst().isAfter(maxStartDate)) {
-				assert false;
+//				assert false;
 				startWindow.setFirst(maxStartDate);
 			}
 
