@@ -112,11 +112,6 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 	@Override
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		if (vesselAvailability.getVesselInstanceType() != VesselInstanceType.ROUND_TRIP) {
-			return true;
-		}
-
 		return checkElement(first, resource) && checkElement(second, resource);
 	}
 
