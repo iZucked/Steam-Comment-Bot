@@ -24,15 +24,10 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
-import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
-import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CostModel;
-import com.mmxlabs.models.lng.pricing.DerivedIndex;
-import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Cooldown;
@@ -901,7 +896,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// Spot charter-in vessels have fewer voyages
 		final SequenceTester checker;
 		{
-			final Class<?>[] expectedClasses = { SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, Object.class };
+			final Class<?>[] expectedClasses = { SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class };
 			checker = getTestCharterCost_SpotCharterInTester(expectedClasses);
 		}
 
