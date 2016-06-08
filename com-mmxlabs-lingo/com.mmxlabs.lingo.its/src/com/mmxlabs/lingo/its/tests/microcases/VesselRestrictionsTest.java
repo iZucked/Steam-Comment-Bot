@@ -253,6 +253,51 @@ public class VesselRestrictionsTest extends AbstractPeriodTestCase {
 		});
 	}
 
+	/**
+	 * The initial sequence builder will normally allocate a cargo to a suitable vessel. In this case there is one vessel which is not compatible, so no cargo allocation can occur
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Category({ MicroTest.class })
+	public void testLoadVesselRestrictions_AutoAllocate_NoPossible() throws Exception {
+
+		// Create the required basic elements
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		final VesselClass vesselClass2 = fleetModelFinder.findVesselClass("STEAM-138");
+
+		// final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 1);
+
+		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass2);
+		final VesselAvailability vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.withCharterRate("30000") //
+				.withStartWindow(LocalDateTime.of(2015, 12, 4, 0, 0, 0), LocalDateTime.of(2015, 12, 6, 0, 0, 0)) //
+				.withEndWindow(LocalDateTime.of(2016, 1, 1, 0, 0, 0)) //
+				.build();
+
+		// Construct the cargo scenario
+
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.withVesselRestriction(vesselClass) // <<<<<< Restrict load to alternative vessel class
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.build() //
+				// .withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
+				.withAssignmentFlags(false, false) //
+				.build();
+		try {
+			runTest(scenarioRunner -> {
+			});
+			Assert.fail("Cargo should not be allocated");
+		} catch (Exception e) {
+			// Expect an exception for failed initial solution builder
+		}
+		// Cargo should not have been allocated a vessel
+		Assert.assertNull(cargo1.getVesselAssignmentType());
+	}
+
 	@Test
 	@Category({ MicroTest.class })
 	public void testLoadVesselRestrictions_VesselExists() throws Exception {
@@ -417,33 +462,34 @@ public class VesselRestrictionsTest extends AbstractPeriodTestCase {
 			Assert.assertTrue(checker.checkConstraints(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null));
 		});
 	}
+
 	@Test
 	@Category({ MicroTest.class })
 	public void testDESPurchaseVesselRestrictions_VesselExists2() throws Exception {
-		
+
 		// Create the required basic elements
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		
+
 		final Vessel vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		final Vessel vessel2 = fleetModelBuilder.createVessel("Vessel2", vesselClass);
-		
+
 		// Construct the cargo scenario
-		
+
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeDESPurchase("L1", true, LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5", vessel) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
-				.withVesselRestriction(vessel2) // <<<<<< Restrict load to alternative vessel 
+				.withVesselRestriction(vessel2) // <<<<<< Restrict load to alternative vessel
 				.build() //
 				.withAssignmentFlags(false, false) //
 				.build();
-		
+
 		runTest(scenarioRunner -> {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-			
+
 			final AllowedVesselPermissionConstraintChecker checker = getChecker(scenarioToOptimiserBridge);
-			
+
 			Assert.assertFalse(checker.checkConstraints(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null));
 		});
 	}
