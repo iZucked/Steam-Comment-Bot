@@ -13,8 +13,6 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -37,8 +35,6 @@ public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessCo
 
 	private long accumulator = 0;
 
-	private boolean includeSequence = true;
-
 	private ProfitAndLossSequences profitAndLossSequences;
 
 	/**
@@ -55,20 +51,13 @@ public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessCo
 
 	@Override
 	public void startSequence(final IResource resource) {
-		@NonNull
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-
-		// Exclude round trip cargo P&L
-		includeSequence = vesselAvailability.getVesselInstanceType() != VesselInstanceType.ROUND_TRIP;
 	}
 
 	@Override
 	public boolean nextVoyagePlan(@NonNull final VoyagePlan voyagePlan, final int time) {
 
-		if (includeSequence) {
-			final long value = profitAndLossSequences.getVoyagePlanGroupValue(voyagePlan);
-			accumulator -= value;
-		}
+		final long value = profitAndLossSequences.getVoyagePlanGroupValue(voyagePlan);
+		accumulator -= value;
 		return true;
 	}
 
