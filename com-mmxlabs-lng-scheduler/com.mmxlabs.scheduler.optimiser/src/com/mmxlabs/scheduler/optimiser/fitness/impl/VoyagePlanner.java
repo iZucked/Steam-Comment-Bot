@@ -126,14 +126,16 @@ public class VoyagePlanner {
 			final int availableTime, final @NonNull IPortSlot prevPortSlot, final @NonNull IPortSlot thisPortSlot, final @Nullable VoyageOptions previousOptions,
 			final @NonNull List<@NonNull IVoyagePlanChoice> vpoChoices, boolean useNBO) {
 
-		final IVesselClass vesselClass = vesselAvailability.getVessel().getVesselClass();
+		@NonNull
+		final IVessel vessel = vesselAvailability.getVessel();
+		final IVesselClass vesselClass = vessel.getVesselClass();
 
 		final IPort thisPort = thisPortSlot.getPort();
 		final IPort prevPort = prevPortSlot.getPort();
 		final PortType prevPortType = prevPortSlot.getPortType();
 
 		final VoyageOptions options = new VoyageOptions(prevPortSlot, thisPortSlot);
-		options.setVessel(vesselAvailability.getVessel());
+		options.setVessel(vessel);
 		options.setVesselState(vesselState);
 		options.setAvailableTime(availableTime);
 
@@ -263,9 +265,9 @@ public class VoyagePlanner {
 				costType = CostType.Ballast;
 			}
 
-			options.setRoute(d.getFirst(), d.getSecond(), routeCostProvider.getRouteCost(d.getFirst(), vesselAvailability.getVessel(), costType));
+			options.setRoute(d.getFirst(), d.getSecond(), routeCostProvider.getRouteCost(d.getFirst(), vessel, costType));
 		} else {
-			vpoChoices.add(new RouteVoyagePlanChoice(previousOptions, options, distances, vesselAvailability.getVessel(), routeCostProvider));
+			vpoChoices.add(new RouteVoyagePlanChoice(previousOptions, options, distances, vessel, routeCostProvider));
 		}
 
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER && thisPortSlot.getPortType() == PortType.End)
@@ -356,9 +358,10 @@ public class VoyagePlanner {
 				if (prevPortSlot != null) {
 
 					final int prevArrivalTime = portTimesRecord.getSlotTime(prevPortSlot);
-					final int voyageStartTime = prevArrivalTime;
 
 					final int availableTravelTime = thisArrivalTime - prevArrivalTime - portTimesRecord.getSlotDuration(prevPortSlot);
+
+					final int voyageStartTime = prevArrivalTime + portTimesRecord.getSlotDuration(prevPortSlot);
 
 					final VesselState vesselState = findVesselState(portTimesRecord, prevPortSlot);
 					final VoyageOptions options = getVoyageOptionsAndSetVpoChoices(vesselAvailability, vesselState, voyageStartTime, availableTravelTime, prevPortSlot, thisPortSlot, previousOptions,
