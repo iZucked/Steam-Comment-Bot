@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -21,7 +20,6 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.Triple;
 import com.mmxlabs.models.lng.transformer.inject.modules.ActionPlanModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeChecker.DifferenceType;
@@ -39,28 +37,12 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
-import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
-import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
-import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess.Phase;
-import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.Sequences;
-import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
-import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
-import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
-import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class BagMover extends BreakdownOptimiserMover {
 	// Random rdm = new Random(0);
@@ -143,140 +125,59 @@ public class BagMover extends BreakdownOptimiserMover {
 		final IModifiableSequences currentFullSequences = sequencesManipulator.createManipulatedSequences(currentRawSequences);
 
 		if (tryDepth == 0 || differencesList.size() == 0) {
-			boolean contains = true;
+			// boolean contains = true;
 			boolean failedEvaluation = false;
 
-			// Apply hard constraint checkers
-			for (final IConstraintChecker checker : constraintCheckers) {
-				if (checker.checkConstraints(currentFullSequences, currentChangedResources) == false) {
-					// Break out
+			long @Nullable [] thisMetrics = evaluationHelper.evaluateState(currentRawSequences, currentFullSequences, currentChangedResources, similarityState, searchStatistics);
+			if (thisMetrics != null) {
+				long thisLateness = thisMetrics[MetricType.LATENESS.ordinal()];
+				long thisPNL = thisMetrics[MetricType.PNL.ordinal()];
+
+				if (thisPNL - currentMetrics[MetricType.PNL.ordinal()] < 0 && thisLateness >= similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]) {
 					failedEvaluation = true;
-					searchStatistics.logEvaluationsFailedConstraints();
-					break;
-				}
-			}
-			if (!failedEvaluation) {
-				final long thisUnusedCompulsarySlotCount = calculateUnusedCompulsarySlot(currentRawSequences);
-				if (thisUnusedCompulsarySlotCount > similarityState.getBaseMetrics()[MetricType.COMPULSARY_SLOT.ordinal()]) {
-					failedEvaluation = true;
+				} else {
+					// currentPNL = thisPNL;
 				}
 
 				if (!failedEvaluation) {
 
-					if (true) {
-						IEvaluationState evaluationState = new EvaluationState();
-						for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-							if (!evaluationProcess.evaluate(Phase.Checked_Evaluation, currentFullSequences, evaluationState)) {
-								failedEvaluation = true;
-								break;
-							}
-						}
-						/*
-						 * This is to increase runtime temporarily
-						 */
-						EvaluationState reEvaluationState = new EvaluationState();
-						if (isReevaluating) {
-							for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-								if (!evaluationProcess.evaluate(Phase.Checked_Evaluation, currentFullSequences, reEvaluationState)) {
-									failedEvaluation = true;
-									break;
-								}
-							}
-						}
-						final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
-						assert volumeAllocatedSequences != null;
+					// Convert change list set into a change set and record sate.
+					// TOOD: Get fitness change and only accept improving solutions. (similarity, similarity plus others etc)
+					final ChangeSet cs = new ChangeSet(changes);
 
-						final long thisLateness = calculateScheduleLateness(currentFullSequences, volumeAllocatedSequences);
-						if (thisLateness > similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]) {
-							failedEvaluation = true;
-						} else {
-							// currentLateness = thisLateness;
-						}
-
-						final long thisCapacity = calculateScheduleCapacity(currentFullSequences, volumeAllocatedSequences);
-						if (thisCapacity > similarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()]) {
-							failedEvaluation = true;
-						} else {
-							// currentLateness = thisLateness;
-						}
-						long thisPNL = Long.MAX_VALUE;
-						if (failedEvaluation) {
-							searchStatistics.logEvaluationsFailedPNL();
-						}
-						if (!failedEvaluation) {
-							searchStatistics.logEvaluationsPassed();
-
-							for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-								if (!evaluationProcess.evaluate(Phase.Final_Evaluation, currentFullSequences, evaluationState)) {
-									failedEvaluation = true;
-									break;
-								}
-							}
-
-							if (isReevaluating) {
-								for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-									if (!evaluationProcess.evaluate(Phase.Final_Evaluation, currentFullSequences, reEvaluationState)) {
-										failedEvaluation = true;
-										break;
-									}
-								}
-
-							}
-
-							final ProfitAndLossSequences profitAndLossSequences = evaluationState.getData(SchedulerEvaluationProcess.PROFIT_AND_LOSS_SEQUENCES, ProfitAndLossSequences.class);
-							assert profitAndLossSequences != null;
-
-							thisPNL = calculateSchedulePNL(currentFullSequences, profitAndLossSequences);
-
-							if (thisPNL - currentMetrics[MetricType.PNL.ordinal()] < 0 && thisLateness >= similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]) {
-								failedEvaluation = true;
-							} else {
-								// currentPNL = thisPNL;
-							}
-						}
-						if (!failedEvaluation) {
-
-							// Convert change list set into a change set and record sate.
-							// TOOD: Get fitness change and only accept improving solutions. (similarity, similarity plus others etc)
-							final ChangeSet cs = new ChangeSet(changes);
-
-							cs.setMetric(MetricType.PNL, thisPNL, thisPNL - currentMetrics[MetricType.PNL.ordinal()], thisPNL - similarityState.getBaseMetrics()[MetricType.PNL.ordinal()]);
-							cs.setMetric(MetricType.LATENESS, thisLateness, thisLateness - currentMetrics[MetricType.LATENESS.ordinal()],
-									thisLateness - similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]);
-							cs.setMetric(MetricType.CAPACITY, thisCapacity, thisCapacity - currentMetrics[MetricType.CAPACITY.ordinal()],
-									thisCapacity - similarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()]);
-							cs.setMetric(MetricType.COMPULSARY_SLOT, thisUnusedCompulsarySlotCount, thisUnusedCompulsarySlotCount - currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()],
-									thisUnusedCompulsarySlotCount - similarityState.getBaseMetrics()[MetricType.COMPULSARY_SLOT.ordinal()]);
-							cs.setRawSequences(currentRawSequences);
-							changes.clear();
-							changeSets.add(cs);
-
-							final JobState jobState = new JobState(new Sequences(currentRawSequences), changeSets, new LinkedList<Change>(), differencesList, searchData);
-
-							jobState.setMetric(MetricType.PNL, thisPNL, thisPNL - currentMetrics[MetricType.PNL.ordinal()], thisPNL - similarityState.getBaseMetrics()[MetricType.PNL.ordinal()]);
-							jobState.setMetric(MetricType.LATENESS, thisLateness, thisLateness - currentMetrics[MetricType.LATENESS.ordinal()],
-									thisLateness - similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]);
-							jobState.setMetric(MetricType.CAPACITY, thisCapacity, thisCapacity - currentMetrics[MetricType.CAPACITY.ordinal()],
-									thisCapacity - similarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()]);
-							jobState.setMetric(MetricType.COMPULSARY_SLOT, thisUnusedCompulsarySlotCount, thisUnusedCompulsarySlotCount - currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()],
-									thisUnusedCompulsarySlotCount - similarityState.getBaseMetrics()[MetricType.COMPULSARY_SLOT.ordinal()]);
-
-							final int changesCount = differencesList.size();
-							if (changesCount == 0) {
-								jobState.mode = JobStateMode.LEAF;
-							}
-
-							// Found a usable state, we no longer need to store limited states.
-							// jobStore.setFoundBranch();
-
-							newStates.add(jobState);
-
-							return newStates;
-
-						}
+					for (MetricType type : MetricType.values()) {
+						long thisValue = thisMetrics[type.ordinal()];
+						long currentValue = currentMetrics[type.ordinal()];
+						cs.setMetric(type, thisValue, thisValue - currentValue, thisValue - similarityState.getBaseMetrics()[type.ordinal()]);
 					}
+
+					cs.setRawSequences(currentRawSequences);
+					changes.clear();
+					changeSets.add(cs);
+
+					final JobState jobState = new JobState(new Sequences(currentRawSequences), changeSets, new LinkedList<Change>(), differencesList, searchData);
+					for (MetricType type : MetricType.values()) {
+						long thisValue = thisMetrics[type.ordinal()];
+						long currentValue = currentMetrics[type.ordinal()];
+						jobState.setMetric(type, thisValue, thisValue - currentValue, thisValue - similarityState.getBaseMetrics()[type.ordinal()]);
+					}
+
+					final int changesCount = differencesList.size();
+					if (changesCount == 0) {
+						jobState.mode = JobStateMode.LEAF;
+					}
+
+					// Found a usable state, we no longer need to store limited states.
+					// jobStore.setFoundBranch();
+
+					newStates.add(jobState);
+
+					return newStates;
 				}
+			} else {
+				failedEvaluation = true;
 			}
+
 			if (failedEvaluation) {
 				// Failed to to find valid state at the end of the search depth. Record a limited state and exit
 				final JobState jobState = new JobState(searchData);
@@ -287,7 +188,9 @@ public class BagMover extends BreakdownOptimiserMover {
 			}
 		}
 
-		if (currentChangedResources == null) {
+		if (currentChangedResources == null)
+
+		{
 			currentChangedResources = new HashSet<>();
 		}
 
@@ -1143,47 +1046,6 @@ public class BagMover extends BreakdownOptimiserMover {
 			}
 		}
 		return newStates;
-	}
-
-	public long calculateSchedulePNL(@NonNull final IModifiableSequences fullSequences, @NonNull final ProfitAndLossSequences scheduledSequences) {
-		long sumPNL = 0;
-
-		for (final VolumeAllocatedSequence volumeAllocatedSequence : scheduledSequences.getVolumeAllocatedSequences()) {
-			long sumA = 0;
-			for (final Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord> p : volumeAllocatedSequence.getVoyagePlans()) {
-				sumPNL += scheduledSequences.getVoyagePlanGroupValue(p.getFirst());
-				sumA += scheduledSequences.getVoyagePlanGroupValue(p.getFirst());
-				p.getFirst().getSequence();
-				IPortSlot load = null;
-				IPortSlot discharge = null;
-				for (IDetailsSequenceElement e : p.getFirst().getSequence()) {
-					if (e instanceof PortDetails) {
-						IPortSlot ps = ((PortDetails) e).getOptions().getPortSlot();
-						if (ps instanceof ILoadOption && load == null) {
-							load = ps;
-						} else if (ps instanceof IDischargeOption && discharge == null) {
-							discharge = ps;
-						}
-					}
-				}
-				if (load != null && discharge != null) {
-					// System.out.println(String.format("%s,%s,%s", load.getId(), discharge.getId(), scheduledSequences.getVoyagePlanGroupValue(p.getFirst())/1000));
-				}
-			}
-			long sumB = 0;
-			// System.out.println("sumPNL[0]:"+sumPNL);
-			for (final ISequenceElement element : fullSequences.getUnusedElements()) {
-				final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
-				assert portSlot != null;
-				sumPNL += scheduledSequences.getUnusedSlotGroupValue(portSlot);
-				sumB += scheduledSequences.getUnusedSlotGroupValue(portSlot);
-			}
-			// System.out.println("sumPNL[1]:"+sumPNL);
-			if (sumB != 0) {
-				int z = 0;
-			}
-		}
-		return sumPNL;
 	}
 
 	@Override

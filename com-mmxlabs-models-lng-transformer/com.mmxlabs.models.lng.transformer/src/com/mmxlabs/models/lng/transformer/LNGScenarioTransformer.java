@@ -812,7 +812,7 @@ public class LNGScenarioTransformer {
 
 			if (vesselAvailability == null) {
 				if (assignableElement instanceof Cargo) {
-					isNominalVessel = true;
+					// Keep going to constrain slot pairing if needed.
 				} else {
 					continue;
 				}
@@ -828,16 +828,8 @@ public class LNGScenarioTransformer {
 				for (final Slot slot : cargo.getSortedSlots()) {
 					final IPortSlot portSlot = modelEntityMap.getOptimiserObjectNullChecked(slot, IPortSlot.class);
 
-					if (isNominalVessel) {
-						if (vesselAvailability == null) {
-							final ISpotCharterInMarket market = spotCharterInMarketProvider.getDefaultMarketForNominalCargoes();
-							if (market != null) {
-								final IVesselAvailability marketAvailability = spotCharterInMarketProvider.getSpotMarketAvailability(market, -1);
-								builder.bindSlotsToRoundTripVessel(marketAvailability, portSlot);
-							}
-						} else {
-							builder.bindSlotsToRoundTripVessel(vesselAvailability, portSlot);
-						}
+					if (isNominalVessel && vesselAvailability != null) {
+						builder.bindSlotsToRoundTripVessel(vesselAvailability, portSlot);
 					}
 
 					if (vesselAvailability != null && (freeze || lockedSlots.contains(slot))) {
@@ -2655,11 +2647,6 @@ public class LNGScenarioTransformer {
 				final IVesselClass oVesselClass = vesselClassAssociation.lookupNullChecked(eVesselClass);
 				final ISpotCharterInMarket spotCharterInMarket = builder.createSpotCharterInMarket(charterCost.getName(), oVesselClass, charterInCurve, charterCount);
 				modelEntityMap.addModelObject(charterCost, spotCharterInMarket);
-
-				// Set the default market for nominal cargoes.
-				if (spotMarketsModel.getDefaultNominalMarket() == charterCost) {
-					builder.setDefaultMarketForNominalCargoes(spotCharterInMarket);
-				}
 
 				{
 					final IVesselAvailability roundTripOption = builder.createRoundTripCargoVessel("RoundTrip-" + charterCost.getName(), spotCharterInMarket);

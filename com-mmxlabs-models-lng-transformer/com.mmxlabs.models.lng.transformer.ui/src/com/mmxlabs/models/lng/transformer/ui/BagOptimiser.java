@@ -36,6 +36,7 @@ import com.mmxlabs.models.lng.transformer.chain.IMultiStateResult;
 import com.mmxlabs.models.lng.transformer.chain.impl.MultiStateResult;
 import com.mmxlabs.models.lng.transformer.inject.modules.ActionPlanModule;
 import com.mmxlabs.models.lng.transformer.stochasticactionsets.StochasticActionSetUtils;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.ActionSetEvaluationHelper;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BagMover;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BreakdownSearchData;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BreakdownSearchStatistics;
@@ -116,7 +117,7 @@ public class BagOptimiser {
 	@NonNull
 	@Inject
 	@Named("MAIN_MOVER")
-	protected BagMover bagMover;
+	protected ActionSetEvaluationHelper bagMover;
 
 	protected static final Logger LOG = LoggerFactory.getLogger(BagOptimiser.class);
 
@@ -390,6 +391,7 @@ public class BagOptimiser {
 		final IModifiableSequences currentFullSequences = sequencesManipulator.createManipulatedSequences(rawSequences);
 
 		final IEvaluationState changeSetEvaluationState = bagMover.evaluateSequence(currentFullSequences);
+		assert changeSetEvaluationState != null;
 		fitnessHelper.evaluateSequencesFromComponents(currentFullSequences, changeSetEvaluationState, fitnessComponents, null);
 
 		final Map<String, Long> currentFitnesses = new HashMap<>();

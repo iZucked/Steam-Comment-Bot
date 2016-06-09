@@ -17,7 +17,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.Triple;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.ActionSetEvaluationHelper;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.Change;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeSet;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.MetricType;
@@ -32,21 +32,9 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
-import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
-import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess.Phase;
-import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
-import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
-import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
-import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * Methods to find dependency relationships in a sequenced list of action sets.
@@ -79,6 +67,9 @@ public class ActionSetIndependenceChecking {
 	@Inject
 	@NonNull
 	private IOptionalElementsProvider optionalElementsProvider;
+
+	@Inject
+	protected ActionSetEvaluationHelper evaluationHelper;
 
 	private final boolean DEBUG = true;
 
@@ -166,7 +157,6 @@ public class ActionSetIndependenceChecking {
 			final long @NonNull [] currentMetrics) {
 		long[] thisCurrentMetrics = currentMetrics;
 		ISequences currentSequences = baseSequences;
-		boolean evaluation = false;
 		for (final ChangeSet cs : changeSets) {
 			for (final Change c : cs.changesList) {
 				Pair<Boolean, ISequences> result = null;
@@ -195,10 +185,8 @@ public class ActionSetIndependenceChecking {
 				}
 			}
 			if (currentSequences != null) {
-				final Pair<Boolean, long[]> evaluationResult = evaluateSolution(currentSequences, similarityState, thisCurrentMetrics);
-				evaluation = evaluationResult.getFirst();
-				thisCurrentMetrics = evaluationResult.getSecond();
-				if (!evaluation) {
+				thisCurrentMetrics = evaluateSolution(currentSequences, similarityState, thisCurrentMetrics);
+				if (thisCurrentMetrics == null) {
 					return null;
 				}
 			}
@@ -473,142 +461,20 @@ public class ActionSetIndependenceChecking {
 		return indexes;
 	}
 
-	private Pair<Boolean, long[]> evaluateSolution(@NonNull final ISequences currentSequences, final SimilarityState similarityState, final long[] currentMetrics) {
-		boolean failedEvaluation = false;
-		long thisPNL = 0;
-		long thisLateness = 0;
-		long thisCapacity = 0;
+	private long @Nullable [] evaluateSolution(@NonNull final ISequences currentSequences, final SimilarityState similarityState, final long[] currentMetrics) {
 
 		final IModifiableSequences currentFullSequences = new ModifiableSequences(currentSequences);
 		sequencesManipulator.manipulate(currentFullSequences);
 
-		// Apply hard constraint checkers
-		for (final IConstraintChecker checker : constraintCheckers) {
-			if (checker.checkConstraints(currentFullSequences, null) == false) {
-				// Break out
-				failedEvaluation = true;
-				break;
-			}
+		long[] metrics = evaluationHelper.evaluateState(currentSequences, currentFullSequences, null, similarityState, null);
+		if (metrics == null) {
+			return null;
 		}
-
-		if (failedEvaluation) {
-			return new Pair<>(false, null);
+		long thisPNL = metrics[MetricType.PNL.ordinal()];
+		long thisLateness = metrics[MetricType.LATENESS.ordinal()];
+		if (thisPNL - currentMetrics[MetricType.PNL.ordinal()] < 0 && thisLateness >= similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]) {
+			return null;
 		}
-
-		final long thisUnusedCompulsarySlotCount = calculateUnusedCompulsarySlot(currentSequences);
-		if (thisUnusedCompulsarySlotCount > similarityState.getBaseMetrics()[MetricType.COMPULSARY_SLOT.ordinal()]) {
-			failedEvaluation = true;
-		}
-
-		if (failedEvaluation) {
-			return new Pair<>(false, null);
-		}
-
-		final IEvaluationState evaluationState = new EvaluationState();
-		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-			if (!evaluationProcess.evaluate(Phase.Checked_Evaluation, currentFullSequences, evaluationState)) {
-				failedEvaluation = true;
-				break;
-			}
-		}
-
-		if (!failedEvaluation) {
-			final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
-			assert volumeAllocatedSequences != null;
-
-			thisLateness = calculateScheduleLateness(currentFullSequences, volumeAllocatedSequences);
-			if (thisLateness > similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]) {
-				failedEvaluation = true;
-			} else {
-				// currentLateness = thisLateness;
-			}
-
-			thisCapacity = calculateScheduleCapacity(currentFullSequences, volumeAllocatedSequences);
-			if (thisCapacity > similarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()]) {
-				failedEvaluation = true;
-			} else {
-				// currentLateness = thisLateness;
-			}
-
-			thisPNL = Long.MAX_VALUE;
-			if (!failedEvaluation) {
-
-				for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-					if (!evaluationProcess.evaluate(Phase.Final_Evaluation, currentSequences, evaluationState)) {
-						failedEvaluation = true;
-						break;
-					}
-				}
-
-				final ProfitAndLossSequences profitAndLossSequences = evaluationState.getData(SchedulerEvaluationProcess.PROFIT_AND_LOSS_SEQUENCES, ProfitAndLossSequences.class);
-				assert profitAndLossSequences != null;
-
-				thisPNL = calculateSchedulePNL(currentFullSequences, profitAndLossSequences);
-
-				if (thisPNL - currentMetrics[MetricType.PNL.ordinal()] < 0 && thisLateness >= similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]) {
-					failedEvaluation = true;
-				} else {
-					// currentPNL = thisPNL;
-				}
-			}
-		}
-		if (failedEvaluation) {
-			return new Pair<>(false, null);
-		} else {
-			return new Pair<>(true, new long[] { thisPNL, thisLateness, thisCapacity, 0 });
-		}
+		return metrics;
 	}
-
-	public long calculateScheduleLateness(final @NonNull ISequences fullSequences, final @NonNull VolumeAllocatedSequences volumeAllocatedSequences) {
-		long sumCost = 0;
-
-		for (final VolumeAllocatedSequence volumeAllocatedSequence : volumeAllocatedSequences) {
-			for (final IPortSlot lateSlot : volumeAllocatedSequence.getLateSlotsSet()) {
-				@Nullable
-				final Pair<Interval, Long> latenessCost = volumeAllocatedSequence.getLatenessCost(lateSlot);
-				if (latenessCost != null) {
-					sumCost += latenessCost.getSecond();
-				}
-			}
-		}
-		return sumCost;
-	}
-
-	public long calculateScheduleCapacity(final @NonNull ISequences fullSequences, final @NonNull VolumeAllocatedSequences volumeAllocatedSequences) {
-		long sumCost = 0;
-		for (final VolumeAllocatedSequence volumeAllocatedSequence : volumeAllocatedSequences) {
-			for (final IPortSlot portSlot : volumeAllocatedSequence.getSequenceSlots()) {
-				sumCost += volumeAllocatedSequence.getCapacityViolationCount(portSlot);
-			}
-		}
-		return sumCost;
-	}
-
-	public long calculateSchedulePNL(@NonNull final IModifiableSequences fullSequences, @NonNull final ProfitAndLossSequences scheduledSequences) {
-		long sumPNL = 0;
-
-		for (final VolumeAllocatedSequence scheduledSequence : scheduledSequences.getVolumeAllocatedSequences()) {
-			for (final Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord> p : scheduledSequence.getVoyagePlans()) {
-				sumPNL += scheduledSequences.getVoyagePlanGroupValue(p.getFirst());
-			}
-			for (final ISequenceElement element : fullSequences.getUnusedElements()) {
-				final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
-				assert portSlot != null;
-				sumPNL += scheduledSequences.getUnusedSlotGroupValue(portSlot);
-			}
-		}
-		return sumPNL;
-	}
-
-	public long calculateUnusedCompulsarySlot(final ISequences rawSequences) {
-
-		int thisUnusedCompulsarySlotCount = 0;
-		for (final ISequenceElement e : rawSequences.getUnusedElements()) {
-			if (optionalElementsProvider.isElementRequired(e)) {
-				thisUnusedCompulsarySlotCount++;
-			}
-		}
-		return thisUnusedCompulsarySlotCount;
-	}
-
 }

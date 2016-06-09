@@ -191,7 +191,7 @@ public class CustomScenarioCreator {
 			final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final int pilotLightRate, final int minHeelVolume,
 			final boolean isTimeChartered) {
 
-		SpotMarketsModelBuilder spotMarketsModelBuilder = new SpotMarketsModelBuilder(spotMarketsModel);
+		final SpotMarketsModelBuilder spotMarketsModelBuilder = new SpotMarketsModelBuilder(spotMarketsModel);
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
@@ -231,10 +231,7 @@ public class CustomScenarioCreator {
 		vc.setFillCapacity(fillCapacity);
 
 		final CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("market-" + vc.getName(), vc, "0", spotCharterCount);
-		// Make first created market the default one
-		if (spotMarketsModel.getCharterInMarkets().size() == 1) {
-			spotMarketsModel.setDefaultNominalMarket(charterInMarket);
-		}
+
 		final FuelConsumption ladenMin = FleetFactory.eINSTANCE.createFuelConsumption();
 		final FuelConsumption ladenMax = FleetFactory.eINSTANCE.createFuelConsumption();
 
@@ -650,23 +647,12 @@ public class CustomScenarioCreator {
 	 *            The cargo to add the constraint to.
 	 * @param allowedVessels
 	 *            The list of vessels to add.
-	 * @return True if the vessels were added to the cargo's allowed vessel list. False if the cargo was not in the scenario.
 	 */
-	public boolean addAllowedVesselsOnCargo(final Cargo cargo, final ArrayList<Vessel> allowedVessels) {
+	public void addAllowedVesselsOnCargo(final Cargo cargo, final List<Vessel> allowedVessels) {
 
-		if (cargoModel.getCargoes().contains(cargo)) {
-
-			for (final Cargo c : cargoModel.getCargoes()) {
-				if (c.equals(cargo)) {
-					for (final Slot s : c.getSlots()) {
-						s.getAllowedVessels().addAll(allowedVessels);
-					}
-					return true;
-				}
-			}
+		for (final Slot s : cargo.getSlots()) {
+			s.getAllowedVessels().addAll(allowedVessels);
 		}
-		return false;
-
 	}
 
 	/**

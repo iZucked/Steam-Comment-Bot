@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -290,32 +289,6 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 			}
 		}
 
-		if (LicenseFeatures.isPermitted("features:default-nominal-vessels")) {
-			// Assign shippable cargoes to the default nominal market (if it exists)
-			final ISpotCharterInMarket defaultMarketForNominalCargoes = spotCharterInMarketProvider.getDefaultMarketForNominalCargoes();
-			if (defaultMarketForNominalCargoes != null) {
-				// For all unassigned cargoes, assign to the default nominal market vessel
-				for (final Cargo cargo : cargoModel.getCargoes()) {
-					if (cargo.getCargoType() != CargoType.FLEET) {
-						continue;
-					}
-					if (seenCargoes.contains(cargo)) {
-						assert cargo.getVesselAssignmentType() != null;
-						continue;
-					}
-
-					final IVesselAvailability vesselAvailability = spotCharterInMarketProvider.getSpotMarketAvailability(defaultMarketForNominalCargoes, -1);
-					final IResource resource = vesselProvider.getResource(vesselAvailability);
-					assert resource != null;
-					final IModifiableSequence sequence = advice.getModifiableSequence(resource);
-
-					for (final ISequenceElement element : getElements(cargo, portSlotProvider, mem)) {
-						assert element != null;
-						sequence.add(element);
-					}
-				}
-			}
-		}
 		// Add in end elements
 		for (final Entry<IResource, IModifiableSequence> sequence : advice.getModifiableSequences().entrySet()) {
 			sequence.getValue().add(startEndRequirementProvider.getEndElement(sequence.getKey()));

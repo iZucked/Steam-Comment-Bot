@@ -232,7 +232,7 @@ public class VesselEventConstraintCheckTest {
 					final Vessel usedVessel = seq.getVesselAvailability().getVessel();
 
 					if (ve instanceof CharterOutEvent) {
-						assertTrue("Drydock uses allowed vessel or vessel of allowed VesselClass", isUsedVesselValid(usedVessel, allowedCharterOutVessel, allowedCharterOutVesselClass));
+						assertTrue("Charter out uses allowed vessel or vessel of allowed VesselClass", isUsedVesselValid(usedVessel, allowedCharterOutVessel, allowedCharterOutVesselClass));
 					} else if (ve instanceof DryDockEvent) {
 						assertTrue("Drydock uses allowed vessel or vessel of allowed VesselClass", isUsedVesselValid(usedVessel, allowedDryDockVessel, allowedDryDockVesselClass));
 					} else {

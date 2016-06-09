@@ -39,6 +39,7 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_Optimiser
 import com.mmxlabs.models.lng.transformer.ui.BagOptimiser;
 import com.mmxlabs.models.lng.transformer.ui.ContainerProvider;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.ActionSetEvaluationHelper;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BagMover;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
@@ -261,8 +262,8 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 			@Provides
 			@Named("MAIN_MOVER")
-			private BagMover providePerThreadBagMover2(@NonNull final Injector injector) {
-				final BagMover bagMover = new BagMover();
+			private ActionSetEvaluationHelper provideMainBagMover(@NonNull final Injector injector) {
+				final ActionSetEvaluationHelper bagMover = new ActionSetEvaluationHelper();
 				injector.injectMembers(bagMover);
 				return bagMover;
 			}
