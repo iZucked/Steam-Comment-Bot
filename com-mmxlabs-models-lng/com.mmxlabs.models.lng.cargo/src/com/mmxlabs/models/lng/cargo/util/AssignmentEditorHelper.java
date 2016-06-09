@@ -198,6 +198,12 @@ public class AssignmentEditorHelper {
 				final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
 				// Use vessel index normally, but for spots include spot index
 				final Pair<CharterInMarket, Integer> key = new Pair<>(charterInMarket, assignableElement.getSpotIndex());
+
+				if (spotGrouping.containsKey(key) == false) {
+					charterInMarketKeysOrder.add(key);
+					spotGrouping.put(key, new ArrayList<AssignableElement>());
+				}
+
 				// Groupings should have been pre-created
 				spotGrouping.get(key).add(assignableElement);
 
@@ -213,7 +219,7 @@ public class AssignmentEditorHelper {
 
 		// First add in the fleet vessels
 		for (final VesselAvailability vesselAvailability : vesselAvailabilityOrder) {
-			result.add(new CollectedAssignment(fleetGrouping.get(vesselAvailability), vesselAvailability, (PortModel) null));//, assignableElementComparator));
+			result.add(new CollectedAssignment(fleetGrouping.get(vesselAvailability), vesselAvailability, (PortModel) null));// , assignableElementComparator));
 		}
 
 		// Now add in the spot charter-ins
