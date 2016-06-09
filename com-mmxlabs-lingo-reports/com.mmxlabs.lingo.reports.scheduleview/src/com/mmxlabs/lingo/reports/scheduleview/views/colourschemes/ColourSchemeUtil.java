@@ -92,8 +92,11 @@ public class ColourSchemeUtil {
 
 		if (ev instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) ev;
-			if (visit.getStart().isAfter(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
-				return true;
+			Slot slot = visit.getSlotAllocation().getSlot();
+			if (slot != null) {
+				if (visit.getStart().isAfter(slot.getWindowEndWithSlotOrPortTime())) {
+					return true;
+				}
 			}
 			// if (visit.getStart().before(visit.getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime())) {
 			// return true;
