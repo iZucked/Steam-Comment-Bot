@@ -862,6 +862,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 	@Test
 	public void testCharterCost_SpotCharterIn() {
+
 		System.err.println("\n\nSpot charter-in vessel charter cost added correctly.");
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
@@ -896,7 +897,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// Spot charter-in vessels have fewer voyages
 		final SequenceTester checker;
 		{
-			final Class<?>[] expectedClasses = { SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class };
+			final Class<?>[] expectedClasses = { SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, EndEvent.class };
 			checker = getTestCharterCost_SpotCharterInTester(expectedClasses);
 		}
 
@@ -934,8 +935,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 2, 2 });
 
 		// don't care what the duration of the end event is
-		checker.setExpectedValues(Expectations.DURATIONS, PortVisit.class, new Integer[] { null, null, null });
-		checker.setExpectedValues(Expectations.DURATIONS, SlotVisit.class, new Integer[] { null, null, null });
+		checker.setExpectedValues(Expectations.DURATIONS, EndEvent.class, new Integer[] { null });
 
 		// don't care what the duration of the start event is
 		checker.setExpectedValues(Expectations.DURATIONS, StartEvent.class, new Integer[] {});
