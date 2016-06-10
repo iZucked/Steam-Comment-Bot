@@ -50,9 +50,11 @@ import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.provider.PinnedScheduleFormatter;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -172,15 +174,68 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 					new SimpleEmfBlockColumnFactory(columnID, "Sell Price", null, ColumnType.NORMAL, new PriceFormatter(false, 3), dischargeAllocationRef, s.getSlotAllocation_Price()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.purchasecontract":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Purchase Contract", null, ColumnType.NORMAL, new BaseFormatter() {
+				@Override
+				public String render(final Object object) {
 
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Purchase Contract", null, ColumnType.NORMAL, Formatters.objectFormatter, loadAllocationRef,
-					s.getSlotAllocation_Slot(), c.getSlot_Contract(), name));
-
+					if (object instanceof Row) {
+						final Row row = (Row) object;
+						final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+						if (openSlotAllocation != null) {
+							final Slot slot = openSlotAllocation.getSlot();
+							if (slot instanceof LoadSlot) {
+								Contract contract = slot.getContract();
+								if (contract != null) {
+									return contract.getName();
+								}
+							}
+						}
+						final SlotAllocation slotAllocation = row.getLoadAllocation();
+						if (slotAllocation != null) {
+							final Slot slot = slotAllocation.getSlot();
+							if (slot instanceof LoadSlot) {
+								Contract contract = slot.getContract();
+								if (contract != null) {
+									return contract.getName();
+								}
+							}
+						}
+					}
+					return "";
+				}
+			}));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.salescontract":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sales Contract", null, ColumnType.NORMAL, new BaseFormatter() {
+				@Override
+				public String render(final Object object) {
 
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sales Contract", null, ColumnType.NORMAL, Formatters.objectFormatter, dischargeAllocationRef,
-					s.getSlotAllocation_Slot(), c.getSlot_Contract(), name));
+					if (object instanceof Row) {
+						final Row row = (Row) object;
+						final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+						if (openSlotAllocation != null) {
+							final Slot slot = openSlotAllocation.getSlot();
+							if (slot instanceof DischargeSlot) {
+								Contract contract = slot.getContract();
+								if (contract != null) {
+									return contract.getName();
+								}
+							}
+						}
+						final SlotAllocation slotAllocation = row.getDischargeAllocation();
+						if (slotAllocation != null) {
+							final Slot slot = slotAllocation.getSlot();
+							if (slot instanceof DischargeSlot) {
+								Contract contract = slot.getContract();
+								if (contract != null) {
+									return contract.getName();
+								}
+							}
+						}
+					}
+					return "";
+				}
+			}));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.buyport": {
 			final ETypedElement[][] paths = new ETypedElement[][] { { loadAllocationRef, s.getSlotAllocation_Slot(), c.getSlot_Port(), name }, { targetObjectRef, s.getEvent_Port(), name } };
