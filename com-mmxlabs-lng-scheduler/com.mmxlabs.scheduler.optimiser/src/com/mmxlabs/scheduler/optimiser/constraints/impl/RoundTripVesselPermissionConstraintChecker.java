@@ -125,7 +125,7 @@ public class RoundTripVesselPermissionConstraintChecker implements IPairwiseCons
 
 		boolean valid = checkElement(first, resource) && checkElement(second, resource);
 		if (valid) {
-			roundTripVesselPermissionProvider.isBoundPair(first, second);
+			return roundTripVesselPermissionProvider.isBoundPair(first, second);
 		}
 		return false;
 	}
