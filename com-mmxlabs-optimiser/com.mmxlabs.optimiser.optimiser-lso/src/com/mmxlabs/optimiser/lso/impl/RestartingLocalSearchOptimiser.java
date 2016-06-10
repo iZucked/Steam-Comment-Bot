@@ -24,9 +24,9 @@ import com.mmxlabs.optimiser.lso.INullMove;
 import com.mmxlabs.optimiser.lso.IRestartingOptimiser;
 
 /**
- * A sub-class of {@link LocalSearchOptimiser} implementing a default main loop.
+ * A reheating local search optimiser.
  * 
- * @author Simon Goodall
+ * @author Alex Churchill
  * 
  */
 public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser implements IRestartingOptimiser {
@@ -45,6 +45,9 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 		MAIN_LOOP: for (int i = 0; i < iterationsThisStep; i++) {
 			getFitnessEvaluator().step();
 			setNumberOfMovesTried(getNumberOfMovesTried() + 1);
+			if (numberOfMovesTried % 10000 == 0) {
+				System.out.println("iteration:" + numberOfMovesTried);
+			}
 			if (isRestartIteration(getNumberOfMovesTried())) {
 				restart();
 			}
@@ -126,12 +129,6 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 					// Problem evaluating, reject move
 					++numberOfFailedEvaluations;
 
-					// if (loggingDataStore != null) {
-					// loggingDataStore.logFailedEvaluatedStateConstraints(checker, move);
-					// if (DO_SEQUENCE_LOGGING) {
-					// loggingDataStore.logSequenceFailedEvaluatedStateConstraint(checker, pinnedPotentialRawSequences);
-					// }
-					// }
 					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
 					// Break out
 					continue MAIN_LOOP;
@@ -172,7 +169,9 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 				if (getFitnessEvaluator().getBestFitness() < best.getSecond()) {
 					best.setFirst(getNumberOfMovesTried());
 					best.setSecond(getFitnessEvaluator().getBestFitness());
-					// System.out.println(best.getFirst() + ":" + best.getSecond());
+					if (false) {
+						System.out.println(best.getFirst() + ":" + best.getSecond());
+					}
 				}
 			} else {
 				// Failed, reset state for old sequences

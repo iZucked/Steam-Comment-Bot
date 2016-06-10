@@ -76,35 +76,4 @@ public class ArbitraryStateLocalSearchOptimiser extends DefaultLocalSearchOptimi
 	protected void initProgressLog() {
 		// do nothing
 	}
-
-	// @Override
-	// public int getNumberOfMovesTried() {
-	// // adding on previous values for logs
-	// return numberOfMovesTried + (loggingDataStore != null ? loggingDataStore.getNumberOfMovesTried() : 0);
-	// }
-	//
-	// @Override
-	// public int getNumberOfMovesAccepted() {
-	// // adding on previous values for logs
-	// return numberOfMovesAccepted + (loggingDataStore != null ? loggingDataStore.getNumberOfMovesAccepted() : 0);
-	// }
-	//
-	// @Override
-	// public int getNumberOfRejectedMoves() {
-	// // adding on previous values for logs
-	// return numberOfRejectedMoves + (loggingDataStore != null ? loggingDataStore.getNumberOfRejectedMoves() : 0);
-	// }
-	//
-	// @Override
-	// public int getNumberOfFailedEvaluations() {
-	// // adding on previous values for logs
-	// return numberOfFailedEvaluations + (loggingDataStore != null ? loggingDataStore.getNumberOfFailedEvaluations() : 0);
-	// }
-	//
-	// @Override
-	// public int getNumberOfFailedToValidate() {
-	// // adding on previous values for logs
-	// return numberOfFailedToValidate + (loggingDataStore != null ? loggingDataStore.getNumberOfFailedToValidate() : 0);
-	// }
-
 }
