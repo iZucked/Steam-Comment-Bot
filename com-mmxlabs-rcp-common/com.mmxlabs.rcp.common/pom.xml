@@ -6,10 +6,10 @@
 	<parent>
 		<artifactId>com.mmxlabs.rcp.common.parent</artifactId>
 		<groupId>com.mmxlabs.rcp.common</groupId>
-		<version>3.12.6.RELEASE</version>
+		<version>3.12.7-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.rcp.common</artifactId>
-	<version>3.12.6.RELEASE</version>
+	<version>3.12.7-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
