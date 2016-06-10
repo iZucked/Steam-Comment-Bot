@@ -26,6 +26,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
@@ -63,9 +64,23 @@ public class ActionSetEvaluationHelper {
 	@Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE)
 	private boolean isReevaluating;
 
+	private boolean strictChecking = false;
+
 	public boolean checkConstraints(@NonNull final ISequences currentFullSequences, @Nullable final Collection<@NonNull IResource> currentChangedResources) {
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
+
+			if (!isStrictChecking()) {
+				// For the action set threads, we do not want this constraint checker to apply
+
+				// Should be feature check? (no-nominal-in-prompt)
+
+				// TODO: Use marker interface?
+				if (checker instanceof PromptRoundTripVesselPermissionConstraintChecker) {
+					continue;
+				}
+			}
+
 			if (checker.checkConstraints(currentFullSequences, currentChangedResources) == false) {
 				// Break out
 				return false;
@@ -305,6 +320,14 @@ public class ActionSetEvaluationHelper {
 			}
 		}
 		return changedElements;
+	}
+
+	public boolean isStrictChecking() {
+		return strictChecking;
+	}
+
+	public void setStrictChecking(boolean strictChecking) {
+		this.strictChecking = strictChecking;
 	}
 
 }

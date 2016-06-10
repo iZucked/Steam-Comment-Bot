@@ -7,11 +7,9 @@ package com.mmxlabs.models.lng.transformer.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
@@ -51,7 +49,6 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.ISpotCharterInMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
@@ -89,21 +86,10 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 	@NonNull
 	private IVirtualVesselSlotProvider virtualVesselSlotProvider;
 
-	@Inject
-	private ISpotCharterInMarketProvider spotCharterInMarketProvider;
-
 	@Inject(optional = true)
 	@Nullable
 	private IAssignableElementComparatorFactory assignableElementComparator;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.mmxlabs.models.lng.transformer.IOptimisationTransformer#createInitialSequences(com.mmxlabs.optimiser.core.scenario.IOptimisationData,
-	 * com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap)
-	 */
-	/**
-	 */
 	@Override
 	@NonNull
 	public ISequences createInitialSequences(@NonNull final IOptimisationData data, @NonNull final ModelEntityMap mem) {
@@ -241,8 +227,6 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 
 		// Process initial vessel assignments list
 
-		final Set<@NonNull Cargo> seenCargoes = new HashSet<>();
-
 		final List<CollectedAssignment> assignments;
 		if (assignableElementComparator != null) {
 			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, ScenarioModelUtil.getPortModel(scenarioModel), spotMarketsModel, assignableElementComparator.create(scenarioModel));
@@ -250,6 +234,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, ScenarioModelUtil.getPortModel(scenarioModel), spotMarketsModel);
 		}
 		for (final CollectedAssignment seq : assignments) {
+
 			IVesselAvailability vesselAvailability = null;
 			if (seq.getVesselAvailability() != null) {
 				final VesselAvailability eVesselAvailability = seq.getVesselAvailability();
@@ -262,13 +247,14 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 				final Map<Integer, IVesselAvailability> availabilitiesForMarket = spotAvailabilitiesByMarket.get(charterInMarket);
 				if (!(availabilitiesForMarket == null || availabilitiesForMarket.isEmpty())) {
 					// Assign to same spot index if possible
-					int idx = 0;
+					int idx = -1;
 					if (availabilitiesForMarket.size() > seq.getSpotIndex()) {
 						idx = seq.getSpotIndex();
 					}
 					vesselAvailability = availabilitiesForMarket.get(idx);
 				}
 			}
+
 			if (vesselAvailability != null) {
 				final IResource resource = vesselProvider.getResource(vesselAvailability);
 				assert resource != null;
@@ -278,14 +264,15 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 					if (assignedObject instanceof Cargo && ((Cargo) assignedObject).getCargoType() != CargoType.FLEET) {
 						continue;
 					}
+
 					for (final ISequenceElement element : getElements(assignedObject, portSlotProvider, mem)) {
 						assert element != null;
 						sequence.add(element);
 					}
-					if (assignedObject instanceof Cargo) {
-						seenCargoes.add((Cargo) assignedObject);
-					}
 				}
+			} else {
+				continue;
+				//assert false;
 			}
 		}
 

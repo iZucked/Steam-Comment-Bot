@@ -30,7 +30,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConst
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ShippingHoursRestrictionCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.SpotToSpotConstraintCheckerFactory;
@@ -84,6 +84,7 @@ public class ScenarioUtils {
 			// "Quick" resource allocation checks
 			constraints.add(createConstraint(parametersFactory, ResourceAllocationConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, RoundTripVesselPermissionConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, AllowedVesselPermissionConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, PortExclusionConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, VesselEventConstraintCheckerFactory.NAME, true));
