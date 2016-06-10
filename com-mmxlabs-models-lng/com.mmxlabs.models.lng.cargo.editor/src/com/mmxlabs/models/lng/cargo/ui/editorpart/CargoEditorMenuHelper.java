@@ -361,14 +361,16 @@ public class CargoEditorMenuHelper {
 			final MenuManager reassignMenuManager = new MenuManager("Assign to...", null);
 			menuManager.add(reassignMenuManager);
 
-			final MenuManager marketMenu = new MenuManager("Market ...", null);
+			final MenuManager marketMenu = new MenuManager("Market...", null);
+			final MenuManager nominalMenu = new MenuManager("Nominal...", null);
 			boolean marketMenuUsed = false;
+			boolean nominalMenuUsed = false;
 
 			class AssignAction extends Action {
 				private final VesselAssignmentType vessel;
-				private int spotIndex;
+				private final int spotIndex;
 
-				public AssignAction(final String label, final VesselAssignmentType vessel, int spotIndex) {
+				public AssignAction(final String label, final VesselAssignmentType vessel, final int spotIndex) {
 					super(label);
 					this.vessel = vessel;
 					this.spotIndex = spotIndex;
@@ -377,7 +379,7 @@ public class CargoEditorMenuHelper {
 				public void run() {
 
 					final Object value = vessel == null ? SetCommand.UNSET_VALUE : vessel;
-					CompoundCommand cc = new CompoundCommand("Set assignment");
+					final CompoundCommand cc = new CompoundCommand("Set assignment");
 					cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, value));
 					cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, spotIndex));
 					scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
@@ -393,29 +395,34 @@ public class CargoEditorMenuHelper {
 					CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType(), scenarioModel);
 
 			for (final Pair<String, EObject> p : valueProvider.getAllowedValues(assignableElement, CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType())) {
-				EObject assignmentOption = p.getSecond();
+				final EObject assignmentOption = p.getSecond();
 				if (assignmentOption == null) {
 					continue;
 				}
 
 				if (assignmentOption instanceof CharterInMarket) {
-					CharterInMarket charterInMarket = (CharterInMarket) assignmentOption;
+					final CharterInMarket charterInMarket = (CharterInMarket) assignmentOption;
+
+					nominalMenuUsed = true;
+					nominalMenu.add(new AssignAction(String.format("%s", charterInMarket.getName()), (VesselAssignmentType) assignmentOption, -1));
 
 					if (charterInMarket.isEnabled() && charterInMarket.getSpotCharterCount() > 0) {
-						final MenuManager marketOptionMenu = new MenuManager(String.format("%s ...", charterInMarket.getName()), null);
 
-						marketOptionMenu.add(new AssignAction(String.format("Nominal", charterInMarket.getName()), charterInMarket, -1));
-						for (int i = 0; i < charterInMarket.getSpotCharterCount(); ++i) {
-							marketOptionMenu.add(new AssignAction(String.format("Option %d ", i + 1), charterInMarket, i));
+						if (charterInMarket.getSpotCharterCount() == 1) {
+							marketMenu.add(new AssignAction(String.format("%s", charterInMarket.getName()), charterInMarket, 0));
+							marketMenuUsed = true;
+						} else {
 
+							final MenuManager marketOptionMenu = new MenuManager(String.format("%s...", charterInMarket.getName()), null);
+
+							for (int i = 0; i < charterInMarket.getSpotCharterCount(); ++i) {
+								marketOptionMenu.add(new AssignAction(String.format("Option %d ", i + 1), charterInMarket, i));
+
+							}
+
+							marketMenu.add(marketOptionMenu);
+							marketMenuUsed = true;
 						}
-
-						marketMenu.add(marketOptionMenu);
-						marketMenuUsed = true;
-					} else {
-
-						reassignMenuManager.add(new AssignAction(String.format("%s (nominal)", charterInMarket.getName()), (VesselAssignmentType) assignmentOption, -1));
-
 					}
 
 				} else {
@@ -425,6 +432,9 @@ public class CargoEditorMenuHelper {
 				}
 			}
 
+			if (nominalMenuUsed) {
+				reassignMenuManager.add(nominalMenu);
+			}
 			if (marketMenuUsed) {
 				reassignMenuManager.add(marketMenu);
 			}
