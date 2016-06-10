@@ -250,7 +250,7 @@ public class ShuffleElements implements IMove {
 
 			for (final To seenTo : seenTos) {
 				if (toResource == seenTo.resource && to_.index > seenTo.index) {
-					offset = seenTo.size;
+					offset += seenTo.size;
 				}
 			}
 			final IModifiableSequence seq = toResource == null ? null : sequences.getModifiableSequence(toResource);
