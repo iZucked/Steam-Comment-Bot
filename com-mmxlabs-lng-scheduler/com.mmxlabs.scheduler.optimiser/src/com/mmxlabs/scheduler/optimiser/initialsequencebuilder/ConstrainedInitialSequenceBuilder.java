@@ -174,7 +174,6 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		final Set<ISequenceElement> sequencedElements = new LinkedHashSet<>();
 		final Set<ISequenceElement> unsequencedElements = new LinkedHashSet<>();
 		unsequencedElements.addAll(data.getSequenceElements());
-
 		unsequencedElements.removeAll(alternativeElementProvider.getAllAlternativeElements());
 
 		// Remove elements in the initial suggestion from the unsequenced set

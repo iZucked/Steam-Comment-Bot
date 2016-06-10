@@ -20,6 +20,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConst
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ShippingHoursRestrictionCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.SlotGroupCountConstraintCheckerFactory;
@@ -83,6 +84,9 @@ public class ConstraintCheckerServiceModule extends AbstractModule {
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(RoundTripVesselPermissionConstraintCheckerFactory.class.getCanonicalName()))
 				.toProvider(Peaberry.service(new RoundTripVesselPermissionConstraintCheckerFactory()).export());
+
+		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(PromptRoundTripVesselPermissionConstraintCheckerFactory.class.getCanonicalName()))
+				.toProvider(Peaberry.service(new PromptRoundTripVesselPermissionConstraintCheckerFactory()).export());
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(AllowedVesselPermissionConstraintCheckerFactory.class.getCanonicalName()))
 				.toProvider(Peaberry.service(new AllowedVesselPermissionConstraintCheckerFactory()).export());

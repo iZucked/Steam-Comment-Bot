@@ -12,6 +12,8 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -20,17 +22,20 @@ import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
+ * A constraint checker which determines whether every port in the sequence is legal for the given vessel. Whether this is the best possible solution is debatable, as it involves a few more lookups
+ * than the minimum possible number; we could instead store a map from vessels to excluded <em>elements</em> instead of <em>ports</em>, saving a lookup at the expense of builder complexity.
  * 
- * @author Simon Goodall
+ * @author hinton
  * 
  * @param
  */
-public class RoundTripVesselPermissionConstraintChecker implements IPairwiseConstraintChecker {
+public class PromptRoundTripVesselPermissionConstraintChecker implements IPairwiseConstraintChecker {
 
 	@Inject
 	@NonNull
@@ -43,10 +48,16 @@ public class RoundTripVesselPermissionConstraintChecker implements IPairwiseCons
 	@Inject
 	private IPortTypeProvider portTypeProvider;
 
+	@Inject
+	private IPromptPeriodProvider promptPeriodProvider;
+
+	@Inject
+	private ITimeWindowDataComponentProvider timeWindowProvider;
+
 	@NonNull
 	private final String name;
 
-	public RoundTripVesselPermissionConstraintChecker(@NonNull final String name) {
+	public PromptRoundTripVesselPermissionConstraintChecker(@NonNull final String name) {
 		this.name = name;
 	}
 
@@ -67,7 +78,7 @@ public class RoundTripVesselPermissionConstraintChecker implements IPairwiseCons
 		}
 
 		ISequenceElement prevElement = null;
-		for (final ISequenceElement element : sequence) {
+		for (ISequenceElement element : sequence) {
 			if (!checkElement(element, resource)) {
 				return false; // fail fast.
 			}
@@ -121,7 +132,7 @@ public class RoundTripVesselPermissionConstraintChecker implements IPairwiseCons
 			return true;
 		}
 
-		final boolean valid = checkElement(first, resource) && checkElement(second, resource);
+		boolean valid = checkElement(first, resource) && checkElement(second, resource);
 		if (valid) {
 			return roundTripVesselPermissionProvider.isBoundPair(first, second);
 		}
@@ -138,11 +149,22 @@ public class RoundTripVesselPermissionConstraintChecker implements IPairwiseCons
 		if (portTypeProvider.getPortType(element) == PortType.Round_Trip_Cargo_End) {
 			return true;
 		}
-		final boolean permitted = roundTripVesselPermissionProvider.isPermittedOnResource(element, resource);
+		boolean permitted = roundTripVesselPermissionProvider.isPermittedOnResource(element, resource);
 		if (!permitted) {
 			return false;
 		}
-
+		// Not strictly correct - should be first load in cargo sequence;
+		if (portTypeProvider.getPortType(element) == PortType.Load) {
+			int endOfPromptPeriod = promptPeriodProvider.getEndOfPromptPeriod();
+			// If timewindow start is in prompt, then we want to remove the cargo.
+			@NonNull
+			final List<@NonNull ITimeWindow> timeWindow = timeWindowProvider.getTimeWindows(element);
+			for (final ITimeWindow tw : timeWindow) {
+				if (tw.getStart() < endOfPromptPeriod) {
+					return false;
+				}
+			}
+		}
 		return true;
 	}
 
