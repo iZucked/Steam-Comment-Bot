@@ -3,11 +3,11 @@
 	<parent>
 		<artifactId>optimiser-parent</artifactId>
 		<groupId>com.mmxlabs.optimiser</groupId>
-		<version>3.12.6-SNAPSHOT</version>
+		<version>3.12.6.RELEASE</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.optimiser.optimiser-common</artifactId>
-	<version>3.12.6-SNAPSHOT</version>
+	<version>3.12.6.RELEASE</version>
 	<packaging>eclipse-plugin</packaging>
 
 </project>
