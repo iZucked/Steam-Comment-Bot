@@ -6,10 +6,10 @@
 	<parent>
 		<artifactId>com.mmxlabs.scheduler.parent</artifactId>
 		<groupId>com.mmxlabs.scheduler</groupId>
-		<version>3.12.6.RELEASE</version>
+		<version>3.12.7-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.scheduler.optimiser.feature</artifactId>
-	<version>3.12.6.RELEASE</version>
+	<version>3.12.7-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 
 
