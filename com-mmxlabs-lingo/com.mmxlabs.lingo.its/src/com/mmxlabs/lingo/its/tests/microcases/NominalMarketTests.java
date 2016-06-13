@@ -7,21 +7,31 @@ package com.mmxlabs.lingo.its.tests.microcases;
 import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
+import com.google.common.collect.Lists;
+import com.google.inject.Injector;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.lingo.its.tests.microcases.period.AbstractPeriodTestCase;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -41,17 +51,32 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
+import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
+import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
-import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintChecker;
+import com.mmxlabs.optimiser.core.IModifiableSequence;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 @RunWith(value = ShiroRunner.class)
 public class NominalMarketTests extends AbstractPeriodTestCase {
@@ -67,6 +92,27 @@ public class NominalMarketTests extends AbstractPeriodTestCase {
 	private SpotMarketsModelBuilder spotMarketsModelBuilder;
 	private PricingModelBuilder pricingModelBuilder;
 	private BaseLegalEntity entity;
+
+	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");
+	private static List<String> addedFeatures = new LinkedList<>();
+
+	@BeforeClass
+	public static void hookIn() {
+		for (final String feature : requiredFeatures) {
+			if (!LicenseFeatures.isPermitted("features:" + feature)) {
+				LicenseFeatures.addFeatureEnablements(feature);
+				addedFeatures.add(feature);
+			}
+		}
+	}
+
+	@AfterClass
+	public static void hookOut() {
+		for (final String feature : addedFeatures) {
+			LicenseFeatures.removeFeatureEnablements(feature);
+		}
+		addedFeatures.clear();
+	}
 
 	@Before
 	public void constructor() throws MalformedURLException {
@@ -87,6 +133,8 @@ public class NominalMarketTests extends AbstractPeriodTestCase {
 
 		entity = commercialModelFinder.findEntity("Shipping");
 
+		// Set a default prompt in the past
+		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2014, 1, 1), LocalDate.of(2014, 3, 1));
 	}
 
 	@After
@@ -200,6 +248,195 @@ public class NominalMarketTests extends AbstractPeriodTestCase {
 		});
 	}
 
+	@Test
+	@Category({ MicroTest.class })
+	public void testForcePromptNominalToOpen_InPrompt() throws Exception {
+
+		// Create the required basic elements
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "200000", 0);
+
+		// Construct the cargo scenario
+
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "7") //
+				.withOptional(true) //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
+				.withOptional(true) //
+				.withCancellationFee("300000") //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2016, 12, 5));
+
+		runTest(true, s -> {
+			// Set iterations to zero to avoid any optimisation changes and rely on the unpairing opt step
+			s.getAnnealingSettings().setIterations(0);
+			s.getSolutionImprovementSettings().setIterations(0);
+		}, null, scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			// Check spot index has been updated
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			// Check cargoes removed
+			Assert.assertEquals(0, optimiserScenario.getCargoModel().getCargoes().size());
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+		});
+
+	}
+
+	/**
+	 * Aim of test is to try and ensure a) the action set can work with these solutions correctly and b) support the filtering correctly. (I.e ensure highly profitable but nominal cargoes are not
+	 * used).ZDFD HSJH U8XD
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Category({ MicroTest.class })
+	public void testForcePromptNominalToOpen_InPrompt_ActionSet() throws Exception {
+
+		// Create the required basic elements
+		final VesselClass vesselClass1 = fleetModelFinder.findVesselClass("STEAM-145");
+		final VesselClass vesselClass2 = fleetModelFinder.findVesselClass("STEAM-138");
+
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass1, "200000", 0);
+		final CharterInMarket charterInMarket_2a = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2a", vesselClass2, "200000", 1);
+		final CharterInMarket charterInMarket_2b = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2b", vesselClass2, "1000", 1);
+
+		// Construct the cargo scenario
+
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.withOptional(true) //
+				.withVesselRestriction(vesselClass1) //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "10.0") //
+				.withOptional(true) //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L2", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.withOptional(true) //
+				.withVesselRestriction(vesselClass1) //
+				.build() //
+				.makeDESSale("D2", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "10") //
+				.withOptional(true) //
+				.build() //
+				.withVesselAssignment(charterInMarket_2a, 0, 1) //
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
+
+		runTest(true, s -> {
+			// Set iterations to zero to avoid any optimisation changes and rely on the unpairing opt step
+			// s.getAnnealingSettings().setIterations(0);
+			s.getSolutionImprovementSettings().setIterations(0);
+
+			s.setBuildActionSets(true);
+
+			// Limit action set
+			s.getActionPlanSettings().setTotalEvaluations(100);
+			s.getActionPlanSettings().setInRunEvaluations(100);
+		}, (scenarioRunner) -> {
+			return new AbstractRunnerHook() {
+
+				@Override
+				public @Nullable ISequences getPrestoredSequences(@NonNull final String phase) {
+					if (IRunnerHook.PHASE_LSO.equals(phase)) {
+						final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+						// Ensure all sequences has been created!
+
+						final IModifiableSequences lsoSolution = SequenceHelper.createSequences(scenarioToOptimiserBridge);
+						// Cargo should be unpaired
+						SequenceHelper.addToUnused(lsoSolution, scenarioToOptimiserBridge, cargo1);
+						// Cargo should move to cheaper vessel
+						SequenceHelper.addSequence(lsoSolution, scenarioToOptimiserBridge, cargo2, charterInMarket_2b, 0);
+
+						// Sequences are now empty, but still need start/end events
+						SequenceHelper.addSequence(lsoSolution, scenarioToOptimiserBridge, null, charterInMarket_2a, 0);
+						// Nothing left on nominals
+						SequenceHelper.addSequence(lsoSolution, scenarioToOptimiserBridge, null, charterInMarket_1, -1);
+						SequenceHelper.addSequence(lsoSolution, scenarioToOptimiserBridge, null, charterInMarket_2a, -1);
+						SequenceHelper.addSequence(lsoSolution, scenarioToOptimiserBridge, null, charterInMarket_2b, -1);
+
+						return lsoSolution;
+					}
+					return null;
+				}
+
+			};
+		}, scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			// Check spot index has been updated
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			// Check cargoes removed
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assert.assertEquals(2, optimiserScenario.getCargoModel().getLoadSlots().size());
+			Assert.assertEquals(2, optimiserScenario.getCargoModel().getDischargeSlots().size());
+
+			Assert.assertSame(cargo2, optimiserScenario.getCargoModel().getCargoes().get(0));
+			Assert.assertSame(charterInMarket_2b, cargo2.getVesselAssignmentType());
+
+		});
+	}
+
+	@Test
+	@Category({ MicroTest.class })
+	public void testForcePromptNominalToOpen_OutPrompt() throws Exception {
+
+		// Create the required basic elements
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "200000", 0);
+
+		// Construct the cargo scenario
+
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "7") //
+				.withOptional(true) //
+				.build() // ````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
+				.withOptional(true) //
+				.withCancellationFee("300000") //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 4));
+
+		runTest(true, s -> {
+			// Set iterations to zero to avoid any optimisation changes and rely on the unpairing opt step
+			s.getAnnealingSettings().setIterations(0);
+			s.getSolutionImprovementSettings().setIterations(0);
+
+		}, null, scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+		});
+	}
+
 	/**
 	 * Test: Do not move onto second cheaper nominal market.
 	 * 
@@ -276,7 +513,7 @@ public class NominalMarketTests extends AbstractPeriodTestCase {
 				.withAssignmentFlags(false, false) //
 				.build();
 
-		runTest(false, scenarioRunner -> {
+		runTest(false, null, null, scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
@@ -345,51 +582,52 @@ public class NominalMarketTests extends AbstractPeriodTestCase {
 		});
 	}
 
-//	/**
-//	 * Test: Ensure we do not use a cheaper nominal vessel and avoid fleet vessel charter cost.
-//	 * 
-//	 * @throws Exception
-//	 */
-//	@Test
-//	@Category({ MicroTest.class })
-//	public void testAssignToDefaultNominal() throws Exception {
-//
-//		// Create the required basic elements
-//		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-//
-//		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "10000", 0);
-//		spotMarketsModelBuilder.getSpotMarketsModel().setDefaultNominalMarket(charterInMarket_1);
-//
-//		// Construct the cargo scenario
-//
-//		// Create cargo 1, cargo 2
-//		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-//				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
-//				.build() //
-//				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
-//				.build() //
-//				.build();
-//
-//		runTest(scenarioRunner -> {
-//			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-//
-//			// Check spot index has been updated
-//			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
-//			// Check cargoes removed
-//			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
-//
-//			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
-//
-//			Assert.assertEquals(charterInMarket_1, optCargo1.getVesselAssignmentType());
-//			Assert.assertEquals(-1, optCargo1.getSpotIndex());
-//		});
-//	}
+	// /**
+	// * Test: Ensure we do not use a cheaper nominal vessel and avoid fleet vessel charter cost.
+	// *
+	// * @throws Exception
+	// */
+	// @Test
+	// @Category({ MicroTest.class })
+	// public void testAssignToDefaultNominal() throws Exception {
+	//
+	// // Create the required basic elements
+	// final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+	//
+	// final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "10000", 0);
+	// spotMarketsModelBuilder.getSpotMarketsModel().setDefaultNominalMarket(charterInMarket_1);
+	//
+	// // Construct the cargo scenario
+	//
+	// // Create cargo 1, cargo 2
+	// final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+	// .makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+	// .build() //
+	// .makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+	// .build() //
+	// .build();
+	//
+	// runTest(scenarioRunner -> {
+	// final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+	//
+	// // Check spot index has been updated
+	// final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+	// // Check cargoes removed
+	// Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+	//
+	// final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
+	//
+	// Assert.assertEquals(charterInMarket_1, optCargo1.getVesselAssignmentType());
+	// Assert.assertEquals(-1, optCargo1.getSpotIndex());
+	// });
+	// }
 
-	private void runTest(Consumer<LNGScenarioRunner> checker) {
-		runTest(true, checker);
+	private void runTest(@NonNull final Consumer<LNGScenarioRunner> checker) {
+		runTest(true, null, null, checker);
 	}
 
-	private void runTest(boolean optimise, Consumer<LNGScenarioRunner> checker) {
+	private void runTest(final boolean optimise, @Nullable final Consumer<OptimiserSettings> tweaker, @Nullable final Function<LNGScenarioRunner, IRunnerHook> runnerHookFactory,
+			@NonNull final Consumer<LNGScenarioRunner> checker) {
 		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
@@ -398,7 +636,11 @@ public class NominalMarketTests extends AbstractPeriodTestCase {
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
 		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
-		optimiserSettings.getAnnealingSettings().setIterations(10_000);
+		if (tweaker != null) {
+			tweaker.accept(optimiserSettings);
+		} else {
+			optimiserSettings.getAnnealingSettings().setIterations(10_000);
+		}
 
 		// Generate internal data
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -406,6 +648,14 @@ public class NominalMarketTests extends AbstractPeriodTestCase {
 
 			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null, false,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
+
+			if (runnerHookFactory != null) {
+				final IRunnerHook runnerHook = runnerHookFactory.apply(scenarioRunner);
+				if (runnerHook != null) {
+					scenarioRunner.setRunnerHook(runnerHook);
+				}
+			}
+
 			scenarioRunner.evaluateInitialState();
 			if (optimise) {
 				scenarioRunner.run();
@@ -416,5 +666,4 @@ public class NominalMarketTests extends AbstractPeriodTestCase {
 			executorService.shutdownNow();
 		}
 	}
-
 }
