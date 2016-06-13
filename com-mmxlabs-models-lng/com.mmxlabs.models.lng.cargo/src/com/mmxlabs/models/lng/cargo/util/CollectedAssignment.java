@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper.OrderingHint;
 import com.mmxlabs.models.lng.cargo.util.scheduling.WrappedAssignableElement;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.mmxcore.NamedObject;
 
 /**
  * Utility class representing a sequence from the input model. Because the input model is now held as per-element assignment classes, this is needed to glom everything together.
@@ -99,7 +100,14 @@ public class CollectedAssignment {
 				if (c != 0) {
 					return c;
 				}
-//				c = a.getName().compareTo(b.getName());
+				// Sort on name if possible
+				if (a instanceof NamedObject && b instanceof NamedObject) {
+					String strA = ((NamedObject) a).getName();
+					String strB = ((NamedObject) b).getName();
+					if (strA != null && strB != null) {
+						c = strA.compareTo(strB);
+					}
+				}
 				return c;
 			}
 
