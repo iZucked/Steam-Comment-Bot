@@ -94,10 +94,14 @@ public class LNGScenarioChainBuilder {
 			}
 
 			// Run the standard LSO optimisation
-			LNGLSOOptimiserTransformerUnit.chain(builder, optimiserSettings, PROGRESS_OPTIMISATION);
+			if (optimiserSettings.getAnnealingSettings().getIterations() > 0) {
+				LNGLSOOptimiserTransformerUnit.chain(builder, optimiserSettings, PROGRESS_OPTIMISATION);
+			}
 			if (doHillClimb) {
 				// Run a hill climb opt on the LSO result
-				LNGHillClimbOptimiserTransformerUnit.chainPool(builder, optimiserSettings, PROGRESS_HILLCLIMBING_OPTIMISATION, executorService);
+				if (optimiserSettings.getSolutionImprovementSettings().getIterations() > 0) {
+					LNGHillClimbOptimiserTransformerUnit.chain(builder, optimiserSettings, PROGRESS_HILLCLIMBING_OPTIMISATION);
+				}
 			}
 
 			if (doActionSetPostOptimisation) {
