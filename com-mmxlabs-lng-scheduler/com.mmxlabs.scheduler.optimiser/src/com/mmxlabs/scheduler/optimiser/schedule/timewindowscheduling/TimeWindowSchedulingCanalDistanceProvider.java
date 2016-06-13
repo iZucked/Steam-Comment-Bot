@@ -94,7 +94,7 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 	public @NonNull List<@NonNull Integer> getFeasibleRoutes(@NonNull final LadenRouteData @NonNull [] sortedCanalTimes, final int minTime, final int maxTime) {
 		final List<@NonNull Integer> canalsWeCanUse = new LinkedList<>();
 		for (int i = 0; i < sortedCanalTimes.length; i++) {
-			if (sortedCanalTimes[i].ladenMaxSpeed <= maxTime) {
+			if (sortedCanalTimes[i].ladenTimeAtMaxSpeed <= maxTime) {
 				canalsWeCanUse.add(i);
 			}
 		}
@@ -104,7 +104,7 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 	@Override
 	public @NonNull LadenRouteData getBestCanalDetails(@NonNull final LadenRouteData @NonNull [] sortedCanalTimes, final int maxTime) {
 		for (final LadenRouteData canal : sortedCanalTimes) {
-			if (maxTime >= canal.ladenMaxSpeed) {
+			if (maxTime >= canal.ladenTimeAtMaxSpeed) {
 				return canal;
 			}
 		}

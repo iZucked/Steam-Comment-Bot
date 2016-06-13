@@ -230,7 +230,7 @@ public class PriceIntervalProviderHelper {
 	@NonNull
 	public LadenRouteData getBestCanalDetails(@NonNull final IntervalData purchase, @NonNull final IntervalData sales, final int loadDuration, @NonNull final LadenRouteData[] sortedCanalTimes) {
 		for (final LadenRouteData canal : sortedCanalTimes) {
-			if (isFeasibleTravelTime(purchase, sales, loadDuration, canal.ladenMaxSpeed)) {
+			if (isFeasibleTravelTime(purchase, sales, loadDuration, canal.ladenTimeAtMaxSpeed)) {
 				return canal;
 			}
 		}
@@ -245,8 +245,8 @@ public class PriceIntervalProviderHelper {
 		long bestBoiloffCostMMBTU = Long.MIN_VALUE;
 		LadenRouteData bestCanal = null;
 		for (final LadenRouteData canal : sortedCanalTimes) {
-			if (isFeasibleTravelTime(purchase, sales, loadDuration, canal.ladenMaxSpeed)) {
-				final int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) canal.ladenMaxSpeed, (int) canal.ladenNBOSpeed);
+			if (isFeasibleTravelTime(purchase, sales, loadDuration, canal.ladenTimeAtMaxSpeed)) {
+				final int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) canal.ladenTimeAtMaxSpeed, (int) canal.ladenTimeAtNBOSpeed);
 				final int ladenLength = (times[1] - times[0]) / 24;
 
 				final long boiloffMMBTU = Calculator.convertM3ToMMBTu((ladenLength) * boiloffRateM3, cv);
@@ -264,13 +264,13 @@ public class PriceIntervalProviderHelper {
 		if (bestCanal == null) {
 			final long fastest = Long.MAX_VALUE;
 			for (final LadenRouteData canal : sortedCanalTimes) {
-				if (canal.ladenMaxSpeed < fastest) {
+				if (canal.ladenTimeAtMaxSpeed < fastest) {
 					bestCanal = canal;
 				}
 			}
 			if (bestCanal != null) {
-				final int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) bestCanal.ladenMaxSpeed,
-						(int) bestCanal.ladenMaxSpeed);
+				final int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) bestCanal.ladenTimeAtMaxSpeed,
+						(int) bestCanal.ladenTimeAtMaxSpeed);
 				final int ladenLength = (times[1] - times[0]) / 24;
 				final long boiloffMMBTU = Calculator.convertM3ToMMBTu((ladenLength) * boiloffRateM3, cv);
 				final long boiloffCost = Calculator.costFromVolume(boiloffMMBTU, sales.price);
@@ -781,9 +781,17 @@ public class PriceIntervalProviderHelper {
 	public IntervalData[] getIntervalsBoundsAndPrices(final List<int[]> intervals) {
 		final IntervalData[] sortedIntervals = new IntervalData[intervals.size() - 1];
 		for (int i = 0; i < intervals.size() - 1; i++) {
-			sortedIntervals[i] = new IntervalData(intervals.get(i)[0], intervals.get(i + 1)[0], intervals.get(i)[1]);
+			sortedIntervals[i] = new IntervalData(intervals.get(i)[0], getEndInterval(intervals.get(i)[0], intervals.get(i + 1)[0]), intervals.get(i)[1]);
 		}
 		return sortedIntervals;
+	}
+	
+	public int getEndInterval(int intervalDataStart, int intervalDataEnd) {
+		if (intervalDataStart == intervalDataEnd) {
+			return intervalDataStart;
+		} else {
+			return intervalDataEnd - 1;
+		}
 	}
 
 	/**
