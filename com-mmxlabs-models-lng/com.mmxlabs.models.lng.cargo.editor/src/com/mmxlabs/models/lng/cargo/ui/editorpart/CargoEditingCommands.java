@@ -17,6 +17,7 @@ import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -28,8 +29,11 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -49,6 +53,8 @@ public class CargoEditingCommands {
 
 	private final @NonNull IModelFactoryRegistry modelFactoryRegistry;
 
+	private final @Nullable BaseLegalEntity defaultEntity;
+
 	/**
 	 */
 	public CargoEditingCommands(final @NonNull EditingDomain editingDomain, final @NonNull LNGScenarioModel rootObject) {
@@ -59,6 +65,14 @@ public class CargoEditingCommands {
 		this.editingDomain = editingDomain;
 		this.scenarioModel = rootObject;
 		this.modelFactoryRegistry = modelFactoryRegistry;
+
+		// No need for listener to update on change to count as users cannot edit number of entities.
+		CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(scenarioModel);
+		if (commercialModel.getEntities().size() == 1) {
+			defaultEntity = commercialModel.getEntities().get(0);
+		} else {
+			defaultEntity = null;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -76,7 +90,7 @@ public class CargoEditingCommands {
 				return (T) setting.getInstance();
 			}
 		}
-		return (T)null;
+		return (T) null;
 	}
 
 	public Cargo createNewCargo(final List<Command> setCommands, final CargoModel cargoModel) {
@@ -84,7 +98,7 @@ public class CargoEditingCommands {
 		final Cargo newCargo = createObject(CargoPackage.eINSTANCE.getCargo(), CargoPackage.eINSTANCE.getCargoModel_Cargoes(), cargoModel);
 		newCargo.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 
-		// Factory create new slots by default - remove them
+		// Factory creates new slots by default - remove them
 		newCargo.getSlots().clear();
 		// Allow re-wiring
 		newCargo.setAllowRewiring(true);
@@ -106,6 +120,11 @@ public class CargoEditingCommands {
 		// newLoad.setContract((Contract) market.getContract());
 		newLoad.setOptional(true);
 		newLoad.setName("");
+		
+		if (defaultEntity != null) {
+			newLoad.setEntity(defaultEntity);
+		}
+		
 		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
 
 		return newLoad;
@@ -193,8 +212,10 @@ public class CargoEditingCommands {
 		newLoad.setDESPurchase(isDESPurchase);
 		newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 		newLoad.setName("");
+		if (defaultEntity != null) {
+			newLoad.setEntity(defaultEntity);
+		}
 		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
-
 		return newLoad;
 	}
 
@@ -204,6 +225,11 @@ public class CargoEditingCommands {
 		newDischarge.setFOBSale(isFOBSale);
 		newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 		newDischarge.setName("");
+		
+		if (defaultEntity != null) {
+			newDischarge.setEntity(defaultEntity);
+		}
+		
 		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
 		return newDischarge;
 	}
@@ -222,6 +248,12 @@ public class CargoEditingCommands {
 			newDischarge.setPort((Port) desSalesMarket.getNotionalPort());
 		}
 		newDischarge.setOptional(true);
+		
+		if (defaultEntity != null) {
+			newDischarge.setEntity(defaultEntity);
+		}
+		
+		
 		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
 		return newDischarge;
 	}

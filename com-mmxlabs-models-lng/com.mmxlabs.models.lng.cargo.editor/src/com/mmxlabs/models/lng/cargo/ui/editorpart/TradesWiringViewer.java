@@ -565,8 +565,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 								}
 							}
 						}
-					}  
-				 
+					}
+
 					menu.setVisible(true);
 				}
 			}
@@ -1720,27 +1720,22 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				final Action newLoad = new Action("Cargo") {
 					public void run() {
 
-						final CompoundCommand cmd = new CompoundCommand("Cargo");
+						final List<Command> setCommands = new LinkedList<Command>();
 
-						final Cargo newCargo = cec.createObject(CargoPackage.eINSTANCE.getCargo(), CargoPackage.eINSTANCE.getCargoModel_Cargoes(), cargoModel);
-						for (final Slot slot : newCargo.getSlots()) {
-							if (slot instanceof LoadSlot) {
-								final LoadSlot newLoad = (LoadSlot) slot;
-								initialiseSlot(newLoad, true, referenceRowData);
-								newLoad.setDESPurchase(false);
-								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
-							} else if (slot instanceof DischargeSlot) {
-								final DischargeSlot newDischarge = (DischargeSlot) slot;
-								initialiseSlot(newDischarge, false, referenceRowData);
-								newDischarge.setFOBSale(false);
-								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
-							} else {
-								throw new IllegalStateException("Unexpected slot type");
-							}
-						}
+						final Cargo newCargo = cec.createNewCargo(setCommands, cargoModel);
+
+						final LoadSlot newLoad = cec.createNewLoad(setCommands, cargoModel, false);
+						initialiseSlot(newLoad, true, referenceRowData);
+
+						final DischargeSlot newDischarge = cec.createNewDischarge(setCommands, cargoModel, false);
+						initialiseSlot(newDischarge, false, referenceRowData);
+
+						newLoad.setCargo(newCargo);
+						newDischarge.setCargo(newCargo);
+
 						newCargo.setAllowRewiring(true);
-
-						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), newCargo));
+						final CompoundCommand cmd = new CompoundCommand("Cargo");
+						setCommands.forEach(c -> cmd.append(c));
 
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
@@ -1751,12 +1746,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				final Action newLoad = new Action("FOB Purchase") {
 					public void run() {
 
-						final CompoundCommand cmd = new CompoundCommand("FOB Purchase");
+						final List<Command> setCommands = new LinkedList<Command>();
 
-						final LoadSlot newLoad = cec.createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
-						newLoad.setDESPurchase(false);
+						final LoadSlot newLoad = cec.createNewLoad(setCommands, cargoModel, false);
 						initialiseSlot(newLoad, true, referenceRowData);
-						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
+
+						final CompoundCommand cmd = new CompoundCommand("FOB Purchase");
+						setCommands.forEach(c -> cmd.append(c));
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
 				};
@@ -1766,12 +1762,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				final Action newDESPurchase = new Action("DES Purchase") {
 					public void run() {
 
-						final CompoundCommand cmd = new CompoundCommand("DES Purchase");
+						final List<Command> setCommands = new LinkedList<Command>();
 
-						final LoadSlot newLoad = cec.createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
-						newLoad.setDESPurchase(true);
+						final LoadSlot newLoad = cec.createNewLoad(setCommands, cargoModel, true);
 						initialiseSlot(newLoad, true, referenceRowData);
-						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
+
+						final CompoundCommand cmd = new CompoundCommand("DES Purchase");
+						setCommands.forEach(c -> cmd.append(c));
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
 				};
@@ -1781,12 +1778,14 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				final Action newDischarge = new Action("DES Sale") {
 					public void run() {
 
-						final CompoundCommand cmd = new CompoundCommand("DES Sale");
+						final List<Command> setCommands = new LinkedList<Command>();
 
-						final DischargeSlot newDischarge = cec.createObject(CargoPackage.eINSTANCE.getDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
-						newDischarge.setFOBSale(false);
+						final DischargeSlot newDischarge = cec.createNewDischarge(setCommands, cargoModel, false);
 						initialiseSlot(newDischarge, false, referenceRowData);
-						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
+
+						final CompoundCommand cmd = new CompoundCommand("DES Sale");
+						setCommands.forEach(c -> cmd.append(c));
+
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
 				};
@@ -1797,12 +1796,14 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				final Action newFOBSale = new Action("FOB Sale") {
 					public void run() {
 
-						final CompoundCommand cmd = new CompoundCommand("FOB Sale");
+						final List<Command> setCommands = new LinkedList<Command>();
 
-						final DischargeSlot newDischarge = cec.createObject(CargoPackage.eINSTANCE.getDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
-						newDischarge.setFOBSale(true);
+						final DischargeSlot newDischarge = cec.createNewDischarge(setCommands, cargoModel, true);
 						initialiseSlot(newDischarge, false, referenceRowData);
-						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
+
+						final CompoundCommand cmd = new CompoundCommand("FOB Sale");
+						setCommands.forEach(c -> cmd.append(c));
+
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
 				};
