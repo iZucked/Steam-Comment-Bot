@@ -27,7 +27,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.cargo.editor.utils.IAssignableElementComparatorFactory;
+import com.mmxlabs.models.lng.cargo.editor.utils.IAssignableElementDateProviderFactory;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -88,7 +88,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 
 	@Inject(optional = true)
 	@Nullable
-	private IAssignableElementComparatorFactory assignableElementComparator;
+	private IAssignableElementDateProviderFactory assignableElementComparator;
 
 	@Override
 	@NonNull
@@ -272,7 +272,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 				}
 			} else {
 				continue;
-				//assert false;
+				// assert false;
 			}
 		}
 

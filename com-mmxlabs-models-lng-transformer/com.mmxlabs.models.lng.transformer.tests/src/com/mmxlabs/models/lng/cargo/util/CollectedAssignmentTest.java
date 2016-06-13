@@ -12,6 +12,12 @@ import org.junit.Test;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Collections2;
+import com.mmxlabs.models.lng.actuals.ActualsFactory;
+import com.mmxlabs.models.lng.actuals.ActualsModel;
+import com.mmxlabs.models.lng.actuals.CargoActuals;
+import com.mmxlabs.models.lng.actuals.DischargeActuals;
+import com.mmxlabs.models.lng.actuals.LoadActuals;
+import com.mmxlabs.models.lng.actuals.util.ActualsAssignableDateProvider;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -22,8 +28,13 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
-import com.mmxlabs.models.lng.port.PortModel;
 
+/**
+ * Test case for the sorting of elements on a Sequence in the EMF data model.
+ * 
+ * @author Simon Goodall
+ *
+ */
 public class CollectedAssignmentTest {
 
 	@Test
@@ -42,8 +53,89 @@ public class CollectedAssignmentTest {
 		final List<AssignableElement> assignments = new LinkedList<>();
 		assignments.add(cargo1);
 		assignments.add(cargo2);
-		for (List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, (PortModel) null);
+		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null);
+			Assert.assertNotNull(collectedAssignment);
+			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assert.assertNull(collectedAssignment.getCharterInMarket());
+			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
+
+			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
+		}
+	}
+
+	@Test
+	public void testSimpleActualsOrdering() {
+
+		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final Port port = PortFactory.eINSTANCE.createPort();
+		port.setTimeZone("Etc/UTC");
+		final Cargo cargo1 = createCargo("cargo1", port, LocalDate.of(2016, 01, 01), 24, port, LocalDate.of(2016, 02, 01), 24);
+		final Cargo cargo2 = createCargo("cargo2", port, LocalDate.of(2016, 03, 01), 24, port, LocalDate.of(2016, 04, 01), 24);
+
+		final ActualsModel actualsModel = ActualsFactory.eINSTANCE.createActualsModel();
+		{
+
+			final CargoActuals cargo2Actuals = ActualsFactory.eINSTANCE.createCargoActuals();
+			final LoadActuals load2Actuals = ActualsFactory.eINSTANCE.createLoadActuals();
+			final DischargeActuals discharge2Actuals = ActualsFactory.eINSTANCE.createDischargeActuals();
+
+			load2Actuals.setSlot(cargo2.getSlots().get(0));
+			discharge2Actuals.setSlot(cargo2.getSlots().get(1));
+
+			cargo2Actuals.setCargo(cargo2);
+			cargo2Actuals.getActuals().add(load2Actuals);
+			cargo2Actuals.getActuals().add(discharge2Actuals);
+
+			actualsModel.getCargoActuals().add(cargo2Actuals);
+
+			load2Actuals.setOperationsStart(LocalDateTime.of(2015, 12, 1, 0, 0, 0, 0));
+			load2Actuals.setOperationsEnd(LocalDateTime.of(2015, 12, 1, 0, 0, 0, 0));
+
+			discharge2Actuals.setOperationsStart(LocalDateTime.of(2015, 12, 10, 0, 0, 0, 0));
+			discharge2Actuals.setOperationsEnd(LocalDateTime.of(2015, 12, 10, 0, 0, 0, 0));
+		}
+		final ActualsAssignableDateProvider dateProvider = new ActualsAssignableDateProvider(actualsModel);
+		final List<AssignableElement> expectedSortOrder = new LinkedList<>();
+		// Actualised date moves cargo 2 before cargo 1
+		expectedSortOrder.add(cargo2);
+		expectedSortOrder.add(cargo1);
+
+		final List<AssignableElement> assignments = new LinkedList<>();
+		assignments.add(cargo1);
+		assignments.add(cargo2);
+		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, dateProvider);
+			Assert.assertNotNull(collectedAssignment);
+			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assert.assertNull(collectedAssignment.getCharterInMarket());
+			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
+
+			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
+		}
+	}
+
+	@Test
+	public void testSequenceHintCargoOrdering() {
+
+		final @NonNull VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final Port port = PortFactory.eINSTANCE.createPort();
+		port.setTimeZone("Etc/UTC");
+		final Cargo cargo1 = createCargo("cargo1", port, LocalDate.of(2016, 01, 01), 24, port, LocalDate.of(2016, 02, 01), 24);
+		cargo1.setSequenceHint(1);
+		final Cargo cargo2 = createCargo("cargo2", port, LocalDate.of(2016, 01, 01), 24, port, LocalDate.of(2016, 02, 01), 24);
+		cargo2.setSequenceHint(2);
+
+		final List<AssignableElement> expectedSortOrder = new LinkedList<>();
+		expectedSortOrder.add(cargo1);
+		expectedSortOrder.add(cargo2);
+
+		final List<AssignableElement> assignments = new LinkedList<>();
+		assignments.add(cargo1);
+		assignments.add(cargo2);
+		for (@NonNull
+		final List<@NonNull AssignableElement> permutation : Collections2.permutations(assignments)) {
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null);
 			Assert.assertNotNull(collectedAssignment);
 			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
 			Assert.assertNull(collectedAssignment.getCharterInMarket());
@@ -69,8 +161,8 @@ public class CollectedAssignmentTest {
 		final List<AssignableElement> assignments = new LinkedList<>();
 		assignments.add(event1);
 		assignments.add(event2);
-		for (List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, (PortModel) null);
+		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null);
 			Assert.assertNotNull(collectedAssignment);
 			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
 			Assert.assertNull(collectedAssignment.getCharterInMarket());
@@ -96,8 +188,8 @@ public class CollectedAssignmentTest {
 		final List<AssignableElement> assignments = new LinkedList<>();
 		assignments.add(cargo1);
 		assignments.add(event1);
-		for (List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, (PortModel) null);
+		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null);
 			Assert.assertNotNull(collectedAssignment);
 			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
 			Assert.assertNull(collectedAssignment.getCharterInMarket());
@@ -127,8 +219,8 @@ public class CollectedAssignmentTest {
 		assignments.add(cargo2);
 		assignments.add(event1);
 
-		for (List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, (PortModel) null);
+		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null);
 			Assert.assertNotNull(collectedAssignment);
 			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
 			Assert.assertNull(collectedAssignment.getCharterInMarket());
@@ -156,8 +248,8 @@ public class CollectedAssignmentTest {
 		assignments.add(cargo1);
 		assignments.add(event1);
 
-		for (List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, (PortModel) null);
+		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null);
 			Assert.assertNotNull(collectedAssignment);
 			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
 			Assert.assertNull(collectedAssignment.getCharterInMarket());
@@ -191,15 +283,15 @@ public class CollectedAssignmentTest {
 		assignments.add(cargo3);
 		assignments.add(event1);
 
-		for (List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, (PortModel) null);
+		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null);
 			Assert.assertNotNull(collectedAssignment);
 			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
 			Assert.assertNull(collectedAssignment.getCharterInMarket());
 			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
 			if (!expectedSortOrder.equals(collectedAssignment.getAssignedObjects())) {
 
-				new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, (PortModel) null);
+				new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null);
 			}
 			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
 		}
@@ -223,8 +315,8 @@ public class CollectedAssignmentTest {
 		assignments.add(event1);
 		assignments.add(cargo1);
 
-		for (List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, (PortModel) null);
+		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null);
 			Assert.assertNotNull(collectedAssignment);
 			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
 			Assert.assertNull(collectedAssignment.getCharterInMarket());
@@ -254,8 +346,8 @@ public class CollectedAssignmentTest {
 		assignments.add(cargo2);
 		assignments.add(cargo3);
 
-		for (List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, (PortModel) null);
+		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null);
 			Assert.assertNotNull(collectedAssignment);
 			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
 			Assert.assertNull(collectedAssignment.getCharterInMarket());
@@ -285,8 +377,8 @@ public class CollectedAssignmentTest {
 		assignments.add(cargo1);
 		assignments.add(cargo3);
 
-		for (List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, (PortModel) null);
+		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null);
 			Assert.assertNotNull(collectedAssignment);
 			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
 			Assert.assertNull(collectedAssignment.getCharterInMarket());
@@ -328,8 +420,8 @@ public class CollectedAssignmentTest {
 		assignments.add(cargo6);
 		assignments.add(cargo7);
 
-		for (List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, (PortModel) null);
+		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null);
 			Assert.assertNotNull(collectedAssignment);
 			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
 			Assert.assertNull(collectedAssignment.getCharterInMarket());
@@ -352,30 +444,30 @@ public class CollectedAssignmentTest {
 		final Cargo cargo2 = createCargo("cargo2", loadport, LocalDate.of(2016, 7, 20), 736, dischargeport2, LocalDate.of(2016, 7, 01), 2200);
 		final Cargo cargo3 = createCargo("cargo3", loadport, LocalDate.of(2016, 6, 1), 2200, dischargeport1, LocalDate.of(2016, 9, 1), 712);
 		final Cargo cargo4 = createCargo("cargo4", loadport, LocalDate.of(2016, 10, 01), 736, dischargeport1, LocalDate.of(2016, 11, 01), 712);
-		// final Cargo cargo5 = createCargo("cargo5", port, LocalDate.of(2016, 12, 1), 90 * 24, port, LocalDate.of(2017, 2, 01), 28 * 24);
-		// final Cargo cargo6 = createCargo("cargo6", port, LocalDate.of(2017, 2, 1), 28 * 24, port, LocalDate.of(2017, 1, 1), 90 * 24);
-		// final Cargo cargo7 = createCargo("cargo7", port, LocalDate.of(2017, 3, 1), 92 * 24, port, LocalDate.of(2017, 4, 01), 30 * 24);
+		final Cargo cargo5 = createCargo("cargo5", loadport, LocalDate.of(2016, 12, 1), 90 * 24, dischargeport1, LocalDate.of(2017, 2, 01), 28 * 24);
+		final Cargo cargo6 = createCargo("cargo6", loadport, LocalDate.of(2017, 2, 1), 28 * 24, dischargeport1, LocalDate.of(2017, 1, 1), 90 * 24);
+		final Cargo cargo7 = createCargo("cargo7", loadport, LocalDate.of(2017, 3, 1), 92 * 24, dischargeport1, LocalDate.of(2017, 4, 01), 30 * 24);
 
 		final List<AssignableElement> expectedSortOrder = new LinkedList<>();
 		expectedSortOrder.add(cargo1);
 		expectedSortOrder.add(cargo2);
 		expectedSortOrder.add(cargo3);
 		expectedSortOrder.add(cargo4);
-//		expectedSortOrder.add(cargo5);
-//		expectedSortOrder.add(cargo6);
-//		expectedSortOrder.add(cargo7);
+		expectedSortOrder.add(cargo5);
+		expectedSortOrder.add(cargo6);
+		expectedSortOrder.add(cargo7);
 
 		final List<AssignableElement> assignments = new LinkedList<>();
 		assignments.add(cargo1);
 		assignments.add(cargo2);
 		assignments.add(cargo3);
 		assignments.add(cargo4);
-//		assignments.add(cargo5);
-//		assignments.add(cargo6);
-//		assignments.add(cargo7);
+		assignments.add(cargo5);
+		assignments.add(cargo6);
+		assignments.add(cargo7);
 
-		for (List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, (PortModel) null);
+		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null);
 			Assert.assertNotNull(collectedAssignment);
 			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
 			Assert.assertNull(collectedAssignment.getCharterInMarket());
@@ -422,8 +514,8 @@ public class CollectedAssignmentTest {
 		assignments.add(cargo8);
 		assignments.add(cargo9);
 
-		for (List<AssignableElement> permutation : Collections2.permutations(assignments)) {
-			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, (PortModel) null);
+		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null);
 			Assert.assertNotNull(collectedAssignment);
 			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
 			Assert.assertNull(collectedAssignment.getCharterInMarket());
@@ -432,11 +524,11 @@ public class CollectedAssignmentTest {
 		}
 	}
 
-	private void dumpPermutation(final List<AssignableElement> expectedSortOrder, List<AssignableElement> permutation, final CollectedAssignment collectedAssignment) {
+	private void dumpPermutation(final List<AssignableElement> expectedSortOrder, final List<AssignableElement> permutation, final CollectedAssignment collectedAssignment) {
 		if (!expectedSortOrder.equals(collectedAssignment.getAssignedObjects())) {
 			{
-				List<String> values = new LinkedList<>();
-				for (AssignableElement e : permutation) {
+				final List<String> values = new LinkedList<>();
+				for (final AssignableElement e : permutation) {
 					if (e instanceof Cargo) {
 						values.add(((Cargo) e).getLoadName());
 					} else if (e instanceof VesselEvent) {
@@ -448,8 +540,8 @@ public class CollectedAssignmentTest {
 				System.out.println("Input:     " + Joiner.on(", ").join(values));
 			}
 			{
-				List<String> values = new LinkedList<>();
-				for (AssignableElement e : collectedAssignment.getAssignedObjects()) {
+				final List<String> values = new LinkedList<>();
+				for (final AssignableElement e : collectedAssignment.getAssignedObjects()) {
 					if (e instanceof Cargo) {
 						values.add(((Cargo) e).getLoadName());
 					} else if (e instanceof VesselEvent) {
@@ -461,8 +553,8 @@ public class CollectedAssignmentTest {
 				System.out.println("Sorted As: " + Joiner.on(", ").join(values));
 			}
 			{
-				List<String> values = new LinkedList<>();
-				for (AssignableElement e : expectedSortOrder) {
+				final List<String> values = new LinkedList<>();
+				for (final AssignableElement e : expectedSortOrder) {
 					if (e instanceof Cargo) {
 						values.add(((Cargo) e).getLoadName());
 					} else if (e instanceof VesselEvent) {
@@ -500,7 +592,7 @@ public class CollectedAssignmentTest {
 		return cargo;
 	}
 
-	private VesselEvent createEvent(final String id, @NonNull final Port loadPort, @NonNull final LocalDateTime loadWindowStart, final int loadWindowSize, int durationInDays) {
+	private VesselEvent createEvent(final String id, @NonNull final Port loadPort, @NonNull final LocalDateTime loadWindowStart, final int loadWindowSize, final int durationInDays) {
 
 		final DryDockEvent event = CargoFactory.eINSTANCE.createDryDockEvent();
 		event.setName(id);
