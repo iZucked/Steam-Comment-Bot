@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -30,6 +31,7 @@ import com.mmxlabs.models.lng.transformer.ui.breakdown.independence.RemoveCargoC
 import com.mmxlabs.models.lng.transformer.ui.breakdown.independence.UnusedToUsedDischargeChange;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.independence.UnusedToUsedLoadChange;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.independence.VesselChange;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -37,37 +39,78 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
-public class BagMover extends BreakdownOptimiserMover {
+public class BagMover {
+
+	private static final boolean DEBUG_VALIDATION = false;
+
+	public static final int DEPTH_START = -1;
+
+	// Move types are for information only
+	public static final int MOVE_TYPE_NONE = 0;
+	private static final int MOVE_TYPE_VESSEL_SWAP = 1;
+	private static final int MOVE_TYPE_LOAD_SWAP = 2;
+	private static final int MOVE_TYPE_DISCHARGE_SWAP = 3;
+	private static final int MOVE_TYPE_CARGO_REMOVE = 4;
+	private static final int MOVE_TYPE_CARGO_INSERT = 5;
+	private static final int MOVE_TYPE_UNUSED_DISCHARGE_SWAPPED = 6;
+	private static final int MOVE_TYPE_UNUSED_LOAD_SWAPPED = 7;
+
 	// Random rdm = new Random(0);
 	private int depthStart = 1;
 	private int depthEnd = 8;
 
 	@Inject
-	@Named(ActionPlanModule.ACTION_PLAN_MAX_SEARCH_DEPTH)
-	private int MAX_SEARCH_STATES;
+	@NonNull
+	private Injector injector;
 
 	@Inject
 	@NonNull
-	protected Injector injector;
+	private IResourceAllocationConstraintDataComponentProvider resourceAllocationProvider;
 
 	@Inject
 	@NonNull
-	IResourceAllocationConstraintDataComponentProvider resourceAllocationProvider;
+	private ISequencesManipulator sequencesManipulator;
+
+	@Inject
+	@NonNull
+	private IPortTypeProvider portTypeProvider;
+
+	@Inject
+	@NonNull
+	private IStartEndRequirementProvider startEndRequirementProvider;
+
+	@Inject
+	@NonNull
+	private IPortSlotProvider portSlotProvider;
+
+	@Inject
+	private ActionSetEvaluationHelper evaluationHelper;
 
 	@Inject
 	@Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE)
 	private boolean isReevaluating;
 
-	int max = 0;
+	@Inject
+	@Named(ActionPlanModule.ACTION_PLAN_MAX_SEARCH_DEPTH)
+	private int MAX_SEARCH_STATES;
 
-	@Override
+	private int max = 0;
+
 	public Collection<JobState> search(@NonNull final ISequences currentRawSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, final int moveType, final long[] currentMetrics, @NonNull final JobStore jobStore,
 			@Nullable final List<ISequenceElement> targetElements, final List<Difference> differencesList, @NonNull final BreakdownSearchData searchData,
@@ -1050,7 +1093,6 @@ public class BagMover extends BreakdownOptimiserMover {
 		return newStates;
 	}
 
-	@Override
 	protected int getNextDepth(final int tryDepth, final Random rdm) {
 		assert rdm != null;
 		assert tryDepth >= -1;
@@ -1082,5 +1124,133 @@ public class BagMover extends BreakdownOptimiserMover {
 
 	private boolean isElementUnused(@NonNull final ISequences currentSequences, @NonNull final ISequenceElement element) {
 		return currentSequences.getUnusedElements().contains(element);
+	}
+
+	protected List<Integer> findInsertPoints(@NonNull final SimilarityState similarityState, @NonNull final ISequence sequence, @NonNull final IResource resource,
+			@NonNull final ISequenceElement insertingLoad, @NonNull final ISequenceElement insertingDischarge) {
+		// first see if this cargo will slot right in to the correct position
+		final List<Integer> perfectPoints = findPerfectInsertPoint(similarityState, sequence, resource, insertingLoad, insertingDischarge);
+		if (!perfectPoints.isEmpty()) {
+			// System.out.println("found perfect points");
+			return perfectPoints;
+		}
+		int prevLoadIdx = -1;
+		ITimeWindow prevTimeWindow = null;
+		int currLoadIdx = -1;
+		IPortSlot currPortSlot = null;
+		ITimeWindow currTimeWindow = null;
+		final ITimeWindow insertingLoadTimeWindow = getTW(portSlotProvider.getPortSlot(insertingLoad), resource);
+		final LinkedHashSet<Integer> validPoints = new LinkedHashSet<Integer>();
+
+		// First pass - add in all valid positions.
+		for (int j = 1; j < sequence.size(); ++j) {
+			final PortType portType = portTypeProvider.getPortType(sequence.get(j));
+			if (portType != PortType.Discharge && portType != PortType.Virtual && portType != PortType.Other) {
+				validPoints.add(j);
+			}
+		}
+
+		// Forward pass - remove early timewindows up until the time window order gets out of sync
+		for (int j = 1; j < sequence.size(); ++j) {
+			final PortType portType = portTypeProvider.getPortType(sequence.get(j));
+			if (portType != PortType.Discharge && portType != PortType.Virtual && portType != PortType.Other && portType != PortType.End) {
+				currLoadIdx = j;
+				currPortSlot = portSlotProvider.getPortSlot(sequence.get(j));
+				currTimeWindow = getTW(currPortSlot, resource);
+				if (prevLoadIdx != -1) {
+					assert prevTimeWindow != null;
+					if (prevTimeWindow.getStart() > currTimeWindow.getEnd()) {
+						// No longer consistent ordering, abort
+						break;
+					}
+					if (prevTimeWindow.getEnd() < insertingLoadTimeWindow.getStart()) {
+						// don't insert before this element
+						validPoints.remove(prevLoadIdx);
+					}
+				}
+				prevLoadIdx = currLoadIdx;
+				prevTimeWindow = currTimeWindow;
+			}
+		}
+		// Reverse pass, remove tail insertion points.
+		// Prev is now "Next"
+		prevLoadIdx = -1;
+		for (int j = sequence.size() - 1; j > 0; --j) {
+			final PortType portType = portTypeProvider.getPortType(sequence.get(j));
+			if (portType != PortType.Discharge && portType != PortType.Virtual && portType != PortType.Other && portType != PortType.End) {
+				currLoadIdx = j;
+				currPortSlot = portSlotProvider.getPortSlot(sequence.get(j));
+				currTimeWindow = getTW(currPortSlot, resource);
+				if (prevLoadIdx != -1) {
+					assert prevTimeWindow != null;
+					if (prevTimeWindow.getEnd() < currTimeWindow.getStart()) {
+						// No longer consistent ordering, abort
+						break;
+					}
+					if (currTimeWindow.getStart() > insertingLoadTimeWindow.getEnd()) {
+						// don't insert before this element
+						validPoints.remove(prevLoadIdx);
+					}
+				}
+				prevLoadIdx = currLoadIdx;
+				prevTimeWindow = currTimeWindow;
+			}
+		}
+
+		return new LinkedList<>(validPoints);
+	}
+
+	private List<Integer> findPerfectInsertPoint(final SimilarityState similarityState, final ISequence sequence, final IResource resource, final ISequenceElement insertingLoad,
+			final ISequenceElement insertingDischarge) {
+		final List<Integer> validPoints = new LinkedList<>();
+		final Pair<Integer, Integer> insertingCargo = new Pair<>(insertingLoad.getIndex(), insertingDischarge.getIndex());
+		final Pair<Integer, Integer> previousTargetCargo = similarityState.getPreviousCargo(insertingCargo);
+		final Pair<Integer, Integer> nextTargetCargo = similarityState.getNextCargo(insertingCargo);
+		if (previousTargetCargo == null || nextTargetCargo == null) {
+			// this cargo isn't in the target cargo
+			return validPoints;
+		}
+		ISequenceElement prev = null;
+		ISequenceElement current = null;
+		Pair<Integer, Integer> prevCargo = new Pair<>(-2, -2); // start
+		Pair<Integer, Integer> currCargo = new Pair<>(-1, -1); // end
+		int prevSequenceIndex = -1;
+		int currSequenceIndex = -1;
+		for (int j = 1; j < sequence.size(); j++) {
+			current = sequence.get(j);
+			currSequenceIndex = j;
+			if (prev != null) {
+				if (portTypeProvider.getPortType(prev) == PortType.Load) {
+					if (portTypeProvider.getPortType(current) == PortType.Discharge) {
+						currCargo = new Pair<>(prev.getIndex(), current.getIndex());
+						if (prevCargo.getSecond().equals(previousTargetCargo.getSecond()) && currCargo.getFirst().equals(nextTargetCargo.getFirst())) {
+							validPoints.add(prevSequenceIndex);
+							return validPoints;
+						}
+					}
+				}
+			}
+			prev = current;
+			prevCargo = currCargo;
+			prevSequenceIndex = currSequenceIndex;
+		}
+		return new LinkedList<>(validPoints);
+	}
+
+	private ITimeWindow getTW(final @NonNull IPortSlot portSlot, final @NonNull IResource resource) {
+		ITimeWindow tw = null;
+
+		if (portSlot instanceof StartPortSlot) {
+			final IStartEndRequirement req = startEndRequirementProvider.getStartRequirement(resource);
+			tw = req.getTimeWindow();
+		} else if (portSlot instanceof EndPortSlot) {
+			final IStartEndRequirement req = startEndRequirementProvider.getEndRequirement(resource);
+			tw = req.getTimeWindow();
+		}
+
+		if (tw == null) {
+			tw = portSlot.getTimeWindow();
+		}
+		return tw;
 	}
 }
