@@ -12,6 +12,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IReducingConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
@@ -23,9 +24,9 @@ import com.mmxlabs.optimiser.lso.INullMove;
 import com.mmxlabs.optimiser.lso.IRestartingOptimiser;
 
 /**
- * A sub-class of {@link LocalSearchOptimiser} implementing a default main loop.
+ * A reheating local search optimiser.
  * 
- * @author Simon Goodall
+ * @author Alex Churchill
  * 
  */
 public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser implements IRestartingOptimiser {
@@ -42,7 +43,11 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 
 		final int iterationsThisStep = Math.min(Math.max(1, (getNumberOfIterations() * percentage) / 100), getNumberOfIterations() - getNumberOfIterationsCompleted());
 		MAIN_LOOP: for (int i = 0; i < iterationsThisStep; i++) {
+			getFitnessEvaluator().step();
 			setNumberOfMovesTried(getNumberOfMovesTried() + 1);
+			if (numberOfMovesTried % 10000 == 0) {
+				System.out.println("iteration:" + numberOfMovesTried);
+			}
 			if (isRestartIteration(getNumberOfMovesTried())) {
 				restart();
 			}
@@ -112,15 +117,28 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 			for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
 				if (!evaluationProcess.evaluate(Phase.Checked_Evaluation, potentialFullSequences, evaluationState)) {
 					// Problem evaluating, reject move
-					setNumberOfFailedEvaluations(getNumberOfFailedEvaluations() + 1);
+					++numberOfFailedEvaluations;
 
 					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
 					continue MAIN_LOOP;
 				}
-				// TODO: Latenes checker
+			}
+			// Apply hard constraint checkers
+			for (final IEvaluatedStateConstraintChecker checker : getEvaluatedStateConstraintCheckers()) {
+				if (checker.checkConstraints(potentialRawSequences, potentialFullSequences, evaluationState) == false) {
+					// Problem evaluating, reject move
+					++numberOfFailedEvaluations;
+
+					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
+					// Break out
+					continue MAIN_LOOP;
+				}
+			}
+
+			for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
 				if (!evaluationProcess.evaluate(Phase.Final_Evaluation, potentialFullSequences, evaluationState)) {
 					// Problem evaluating, reject move
-					setNumberOfFailedEvaluations(getNumberOfFailedEvaluations() + 1);
+					++numberOfFailedEvaluations;
 
 					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
 					continue MAIN_LOOP;
@@ -151,7 +169,9 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 				if (getFitnessEvaluator().getBestFitness() < best.getSecond()) {
 					best.setFirst(getNumberOfMovesTried());
 					best.setSecond(getFitnessEvaluator().getBestFitness());
-					// System.out.println(best.getFirst() + ":" + best.getSecond());
+					if (false) {
+						System.out.println(best.getFirst() + ":" + best.getSecond());
+					}
 				}
 			} else {
 				// Failed, reset state for old sequences
