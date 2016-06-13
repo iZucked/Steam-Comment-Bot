@@ -996,13 +996,8 @@ public class BagOptimiser {
 				continue;
 			}
 			if (currentFitness < fitness) {
-
-				// We want to avoid skipping any final changesets which could leave elements on nominal vessels.
-				final IModifiableSequences currentFullSequences = sequencesManipulator.createManipulatedSequences(cs.getRawSequences());
-				if (evaluationHelper.checkConstraints(currentFullSequences, null)) {
-					fitness = currentFitness;
-					bestIdx = idx;
-				}
+				fitness = currentFitness;
+				bestIdx = idx;
 			}
 			lastFitness = currentFitness;
 

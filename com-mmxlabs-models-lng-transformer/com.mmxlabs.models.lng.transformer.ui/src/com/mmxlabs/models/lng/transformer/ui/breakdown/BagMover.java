@@ -70,7 +70,7 @@ public class BagMover extends BreakdownOptimiserMover {
 	@Override
 	public Collection<JobState> search(@NonNull final ISequences currentRawSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, final int moveType, final long[] currentMetrics, @NonNull final JobStore jobStore,
-			@Nullable List<ISequenceElement> targetElements, List<Difference> differencesList, @NonNull BreakdownSearchData searchData,
+			@Nullable final List<ISequenceElement> targetElements, final List<Difference> differencesList, @NonNull final BreakdownSearchData searchData,
 			@Nullable Collection<@NonNull IResource> currentChangedResources) {
 		final List<JobState> newStates = new LinkedList<>();
 		final BreakdownSearchStatistics searchStatistics = searchData.getSearchStatistics();
@@ -92,15 +92,15 @@ public class BagMover extends BreakdownOptimiserMover {
 		if (DEBUG_VALIDATION) {
 			// check no spurious differences
 			{
-				ChangeChecker cc = injector.getInstance(ChangeChecker.class);
+				final ChangeChecker cc = injector.getInstance(ChangeChecker.class);
 				cc.init(similarityState, similarityState, currentRawSequences);
-				List<Difference> otherDL = cc.getFullDifferences();
-				for (Difference d : differencesList) {
+				final List<Difference> otherDL = cc.getFullDifferences();
+				for (final Difference d : differencesList) {
 					if (!otherDL.contains(d)) {
 						assert false;
 					}
 				}
-				for (Difference d : otherDL) {
+				for (final Difference d : otherDL) {
 					if (!differencesList.contains(d)) {
 						System.out.println(d);
 						assert false;
@@ -128,10 +128,10 @@ public class BagMover extends BreakdownOptimiserMover {
 			// boolean contains = true;
 			boolean failedEvaluation = false;
 
-			long @Nullable [] thisMetrics = evaluationHelper.evaluateState(currentRawSequences, currentFullSequences, currentChangedResources, similarityState, searchStatistics);
+			final long @Nullable [] thisMetrics = evaluationHelper.evaluateState(currentRawSequences, currentFullSequences, currentChangedResources, similarityState, searchStatistics);
 			if (thisMetrics != null) {
-				long thisLateness = thisMetrics[MetricType.LATENESS.ordinal()];
-				long thisPNL = thisMetrics[MetricType.PNL.ordinal()];
+				final long thisLateness = thisMetrics[MetricType.LATENESS.ordinal()];
+				final long thisPNL = thisMetrics[MetricType.PNL.ordinal()];
 
 				if (thisPNL - currentMetrics[MetricType.PNL.ordinal()] < 0 && thisLateness >= similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]) {
 					failedEvaluation = true;
@@ -145,9 +145,9 @@ public class BagMover extends BreakdownOptimiserMover {
 					// TOOD: Get fitness change and only accept improving solutions. (similarity, similarity plus others etc)
 					final ChangeSet cs = new ChangeSet(changes);
 
-					for (MetricType type : MetricType.values()) {
-						long thisValue = thisMetrics[type.ordinal()];
-						long currentValue = currentMetrics[type.ordinal()];
+					for (final MetricType type : MetricType.values()) {
+						final long thisValue = thisMetrics[type.ordinal()];
+						final long currentValue = currentMetrics[type.ordinal()];
 						cs.setMetric(type, thisValue, thisValue - currentValue, thisValue - similarityState.getBaseMetrics()[type.ordinal()]);
 					}
 
@@ -156,9 +156,9 @@ public class BagMover extends BreakdownOptimiserMover {
 					changeSets.add(cs);
 
 					final JobState jobState = new JobState(new Sequences(currentRawSequences), changeSets, new LinkedList<Change>(), differencesList, searchData);
-					for (MetricType type : MetricType.values()) {
-						long thisValue = thisMetrics[type.ordinal()];
-						long currentValue = currentMetrics[type.ordinal()];
+					for (final MetricType type : MetricType.values()) {
+						final long thisValue = thisMetrics[type.ordinal()];
+						final long currentValue = currentMetrics[type.ordinal()];
 						jobState.setMetric(type, thisValue, thisValue - currentValue, thisValue - similarityState.getBaseMetrics()[type.ordinal()]);
 					}
 
@@ -195,7 +195,7 @@ public class BagMover extends BreakdownOptimiserMover {
 		}
 
 		if (differencesList.size() > 0) {
-			StateManager stateManager = new StateManager(currentRawSequences, currentFullSequences);
+			final StateManager stateManager = new StateManager(currentRawSequences, currentFullSequences);
 			// (1) Choose a difference
 			Difference difference = pickRandomElementFromList(differencesList, rdm);
 			while (difference.move != DifferenceType.CARGO_WRONG_WIRING && difference.move != DifferenceType.CARGO_WRONG_VESSEL && difference.move != DifferenceType.CARGO_NOT_IN_TARGET
@@ -205,46 +205,46 @@ public class BagMover extends BreakdownOptimiserMover {
 			}
 			// (2) Fix a difference
 			if (difference.move == DifferenceType.CARGO_WRONG_WIRING) {
-				if (differencesList.contains(new Difference(DifferenceType.LOAD_WRONG_VESSEL, difference.load, null, difference.resource))
-						&& differencesList.contains(new Difference(DifferenceType.DISCHARGE_WRONG_VESSEL, null, difference.discharge, difference.resource))) {
+				if (differencesList.contains(new Difference(DifferenceType.LOAD_WRONG_VESSEL, difference.load, null, difference.currentResource))
+						&& differencesList.contains(new Difference(DifferenceType.DISCHARGE_WRONG_VESSEL, null, difference.discharge, difference.currentResource))) {
 					// either do a load swap or a discharge swap
 					if (rdm.nextBoolean()) {
 						if (!currentRawSequences.getUnusedElements().contains(similarityState.getElementForIndex(similarityState.getLoadForDischarge(difference.discharge)))) {
 							// load
-							newStates.addAll(swapLoad(currentRawSequences, similarityState, changes, changeSets, tryDepth, difference.resource, difference.load, difference.discharge, currentMetrics,
-									jobStore, null, ChangeChecker.copyDifferenceList(differencesList), searchData, currentChangedResources));
+							newStates.addAll(swapLoad(currentRawSequences, similarityState, changes, changeSets, tryDepth, difference.currentResource, difference.load, difference.discharge,
+									currentMetrics, jobStore, null, ChangeChecker.copyDifferenceList(differencesList), searchData, currentChangedResources));
 						}
 					} else {
 						if (!currentRawSequences.getUnusedElements().contains(similarityState.getElementForIndex(similarityState.getDischargeForLoad(difference.load)))) {
 							// discharge
-							newStates.addAll(swapDischarge(currentRawSequences, similarityState, changes, changeSets, tryDepth, difference.resource, difference.load, difference.discharge,
+							newStates.addAll(swapDischarge(currentRawSequences, similarityState, changes, changeSets, tryDepth, difference.currentResource, difference.load, difference.discharge,
 									currentMetrics, jobStore, null, ChangeChecker.copyDifferenceList(differencesList), searchData, currentChangedResources));
 						}
 					}
 
-				} else if (differencesList.contains(new Difference(DifferenceType.LOAD_WRONG_VESSEL, difference.load, null, difference.resource))) {
+				} else if (differencesList.contains(new Difference(DifferenceType.LOAD_WRONG_VESSEL, difference.load, null, difference.currentResource))) {
 					if (!currentRawSequences.getUnusedElements().contains(similarityState.getElementForIndex(similarityState.getLoadForDischarge(difference.discharge)))) {
 						// load swap
-						newStates.addAll(swapLoad(currentRawSequences, similarityState, changes, changeSets, tryDepth, difference.resource, difference.load, difference.discharge, currentMetrics,
-								jobStore, null, ChangeChecker.copyDifferenceList(differencesList), searchData, currentChangedResources));
+						newStates.addAll(swapLoad(currentRawSequences, similarityState, changes, changeSets, tryDepth, difference.currentResource, difference.load, difference.discharge,
+								currentMetrics, jobStore, null, ChangeChecker.copyDifferenceList(differencesList), searchData, currentChangedResources));
 					}
-				} else if (differencesList.contains(new Difference(DifferenceType.DISCHARGE_WRONG_VESSEL, null, difference.discharge, difference.resource))) {
+				} else if (differencesList.contains(new Difference(DifferenceType.DISCHARGE_WRONG_VESSEL, null, difference.discharge, difference.currentResource))) {
 					if (!currentRawSequences.getUnusedElements().contains(similarityState.getElementForIndex(similarityState.getDischargeForLoad(difference.load)))) {
 						// discharge swap
-						newStates.addAll(swapDischarge(currentRawSequences, similarityState, changes, changeSets, tryDepth, difference.resource, difference.load, difference.discharge, currentMetrics,
-								jobStore, null, ChangeChecker.copyDifferenceList(differencesList), searchData, currentChangedResources));
+						newStates.addAll(swapDischarge(currentRawSequences, similarityState, changes, changeSets, tryDepth, difference.currentResource, difference.load, difference.discharge,
+								currentMetrics, jobStore, null, ChangeChecker.copyDifferenceList(differencesList), searchData, currentChangedResources));
 					}
 				} else {
 					if (!currentRawSequences.getUnusedElements().contains(similarityState.getElementForIndex(similarityState.getDischargeForLoad(difference.load)))) {
 						// discharge swap
-						newStates.addAll(swapDischarge(currentRawSequences, similarityState, changes, changeSets, tryDepth, difference.resource, difference.load, difference.discharge, currentMetrics,
-								jobStore, null, ChangeChecker.copyDifferenceList(differencesList), searchData, currentChangedResources));
+						newStates.addAll(swapDischarge(currentRawSequences, similarityState, changes, changeSets, tryDepth, difference.currentResource, difference.load, difference.discharge,
+								currentMetrics, jobStore, null, ChangeChecker.copyDifferenceList(differencesList), searchData, currentChangedResources));
 					}
 				}
 			} else if (difference.move == DifferenceType.CARGO_WRONG_VESSEL) {
 				// vessel swap
 				final ISequence originalResource = currentRawSequences.getSequence(similarityState.getResourceForElement(difference.load));
-				final ISequence currentResource = currentRawSequences.getSequence(difference.resource);
+				final ISequence currentResource = currentRawSequences.getSequence(difference.currentResource);
 
 				// TODO: Create and apply change.
 				for (int i = 0; i < currentResource.size(); ++i) {
@@ -252,10 +252,10 @@ public class BagMover extends BreakdownOptimiserMover {
 
 						// Iterate over all possible positions and try it. Note we really could do with original index information to reduce the quantity of options generated. This
 						// can get very long and quickly explodes the search space.
-						List<Integer> insertionPoints = findInsertPoints(similarityState, originalResource, difference.resource, difference.load, difference.discharge);
-						for (int j : insertionPoints) {
+						final List<Integer> insertionPoints = findInsertPoints(similarityState, originalResource, difference.currentResource, difference.load, difference.discharge);
+						for (final int j : insertionPoints) {
 							if (portTypeProvider.getPortType(originalResource.get(j)) != PortType.Discharge) {
-								newStates.addAll(swapVessel(currentRawSequences, similarityState, changes, changeSets, tryDepth, currentMetrics, difference.resource, difference.load,
+								newStates.addAll(swapVessel(currentRawSequences, similarityState, changes, changeSets, tryDepth, currentMetrics, difference.currentResource, difference.load,
 										difference.discharge, j, jobStore, null, ChangeChecker.copyDifferenceList(differencesList), searchData, currentChangedResources));
 							}
 						}
@@ -263,14 +263,14 @@ public class BagMover extends BreakdownOptimiserMover {
 					}
 				}
 			} else if (difference.move == DifferenceType.UNUSED_DISCHARGE_IN_TARGET) {
-				newStates.addAll(processOneHalfOfCargoUnused(currentRawSequences, similarityState, changes, changeSets, tryDepth, difference.resource, difference.load, difference.discharge,
+				newStates.addAll(processOneHalfOfCargoUnused(currentRawSequences, similarityState, changes, changeSets, tryDepth, difference.currentResource, difference.load, difference.discharge,
 						currentMetrics, false, jobStore, targetElements, ChangeChecker.copyDifferenceList(differencesList), searchData, currentChangedResources));
 			} else if (difference.move == DifferenceType.UNUSED_LOAD_IN_TARGET) {
-				newStates.addAll(processOneHalfOfCargoUnused(currentRawSequences, similarityState, changes, changeSets, tryDepth, difference.resource, difference.discharge, difference.load,
+				newStates.addAll(processOneHalfOfCargoUnused(currentRawSequences, similarityState, changes, changeSets, tryDepth, difference.currentResource, difference.discharge, difference.load,
 						currentMetrics, true, jobStore, targetElements, ChangeChecker.copyDifferenceList(differencesList), searchData, currentChangedResources));
 
 			} else if (difference.move == DifferenceType.CARGO_NOT_IN_TARGET) {
-				newStates.addAll(removeElementsFromSequence(currentRawSequences, similarityState, changes, changeSets, tryDepth, difference.resource, difference.load, difference.discharge,
+				newStates.addAll(removeElementsFromSequence(currentRawSequences, similarityState, changes, changeSets, tryDepth, difference.currentResource, difference.load, difference.discharge,
 						currentMetrics, jobStore, targetElements, ChangeChecker.copyDifferenceList(differencesList), searchData, currentChangedResources));
 			} else if (difference.move == DifferenceType.LOAD_UNUSED_IN_BASE) {
 				newStates.addAll(insertUnusedElementsIntoSequence(currentRawSequences, similarityState, stateManager, changes, changeSets, tryDepth, difference.load, currentMetrics, jobStore,
@@ -284,14 +284,14 @@ public class BagMover extends BreakdownOptimiserMover {
 		return newStates;
 	}
 
-	private <T> T pickRandomElementFromList(List<T> list, Random randomState) {
+	private <T> T pickRandomElementFromList(final List<T> list, final Random randomState) {
 		return list.get(randomState.nextInt(list.size()));
 	}
 
 	protected Collection<JobState> swapVessel(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, final long[] currentMetrics, @NonNull final IResource resource, @NonNull final ISequenceElement prev,
 			@NonNull final ISequenceElement current, final int j, @NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements, @NonNull final List<Difference> differences,
-			@NonNull BreakdownSearchData searchData, @Nullable Collection<@NonNull IResource> currentChangedResources) {
+			@NonNull final BreakdownSearchData searchData, @Nullable final Collection<@NonNull IResource> currentChangedResources) {
 		{
 
 			if (similarityState.getResourceForElement(prev).equals(resource)) {
@@ -317,14 +317,14 @@ public class BagMover extends BreakdownOptimiserMover {
 			differences.remove(new Difference(DifferenceType.LOAD_WRONG_VESSEL, prev, null, resource));
 			differences.remove(new Difference(DifferenceType.DISCHARGE_WRONG_VESSEL, null, current, resource));
 			differences.remove(new Difference(DifferenceType.CARGO_WRONG_VESSEL, prev, current, resource));
-			for (Difference d : new LinkedList<>(differences)) {
+			for (final Difference d : new LinkedList<>(differences)) {
 				if (d.move == DifferenceType.CARGO_WRONG_VESSEL && ((prev == d.load && current == d.discharge) || (current == d.load && prev == d.discharge))) {
 					differences.remove(d);
 				}
 			}
 
 			@Nullable
-			Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
+			final Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
 			changedResources.add(resource);
 			changedResources.add(similarityState.getResourceForElement(prev));
 
@@ -338,7 +338,7 @@ public class BagMover extends BreakdownOptimiserMover {
 	protected Collection<JobState> swapLoad(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final IResource resource, @NonNull final ISequenceElement prev, @NonNull final ISequenceElement current,
 			final long[] currentMetrics, @NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements, @NonNull final List<Difference> differences,
-			@NonNull BreakdownSearchData searchData, @Nullable Collection<@NonNull IResource> currentChangedResources) {
+			@NonNull final BreakdownSearchData searchData, @Nullable final Collection<@NonNull IResource> currentChangedResources) {
 
 		if (!(portSlotProvider.getPortSlot(prev) instanceof ILoadSlot)) {
 			return Collections.emptyList();
@@ -401,7 +401,7 @@ public class BagMover extends BreakdownOptimiserMover {
 		if (resource.getIndex() == otherResource.getIndex()) {
 			return Collections.emptyList();
 		}
-		Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
+		final Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
 		changedResources.add(resource);
 		changedResources.add(otherResource);
 
@@ -409,7 +409,7 @@ public class BagMover extends BreakdownOptimiserMover {
 		assert prev != null;
 		final int depth = getNextDepth(tryDepth, searchData.getRandom());
 		final List<Change> changes2 = new ArrayList<>(changes);
-		String description = String.format("Swap %s onto %s with %s onto %s\n", prev.getName(), otherResource.getName(), otherLoad.getName(), resource.getName());
+		final String description = String.format("Swap %s onto %s with %s onto %s\n", prev.getName(), otherResource.getName(), otherLoad.getName(), resource.getName());
 		changes2.add(new LoadRewireChange(description, prev, current, otherLoad, originalDischarge, resource, otherResource));
 		// now modify differences
 		// (1) remove initial wrong vessel
@@ -430,11 +430,11 @@ public class BagMover extends BreakdownOptimiserMover {
 		}
 		// (4) old load on wrong vessel? or correct discharge?
 		differences.remove(new Difference(DifferenceType.CARGO_WRONG_WIRING, otherLoad, originalDischarge, otherResource));
-		ISequenceElement matchedDischargeForOldLoad = similarityState.getElementForIndex(similarityState.getDischargeForLoad(prev));
-		boolean prevOnCorrectVessel = similarityState.getResourceForElement(prev).equals(otherResource);
+		final ISequenceElement matchedDischargeForOldLoad = similarityState.getElementForIndex(similarityState.getDischargeForLoad(prev));
+		final boolean prevOnCorrectVessel = similarityState.getResourceForElement(prev).equals(otherResource);
 		if (similarityState.getLoadForDischarge(originalDischarge) == null) {
 			// current discharge is not in target
-			Difference unusedDischarge = new Difference(DifferenceType.UNUSED_DISCHARGE_IN_TARGET, prev, originalDischarge, otherResource);
+			final Difference unusedDischarge = new Difference(DifferenceType.UNUSED_DISCHARGE_IN_TARGET, prev, originalDischarge, otherResource);
 			if (!differences.contains(unusedDischarge)) {
 				differences.add(unusedDischarge);
 				if (!prevOnCorrectVessel) {
@@ -466,7 +466,7 @@ public class BagMover extends BreakdownOptimiserMover {
 	protected Collection<JobState> swapDischarge(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final IResource resource, @NonNull final ISequenceElement prev, @NonNull final ISequenceElement current,
 			final long[] currentMetrics, @NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements, @NonNull final List<Difference> differences,
-			@NonNull BreakdownSearchData searchData, @Nullable Collection<@NonNull IResource> currentChangedResources) {
+			@NonNull final BreakdownSearchData searchData, @Nullable final Collection<@NonNull IResource> currentChangedResources) {
 
 		if (!(portSlotProvider.getPortSlot(current) instanceof IDischargeSlot)) {
 			return Collections.emptyList();
@@ -526,14 +526,14 @@ public class BagMover extends BreakdownOptimiserMover {
 			return Collections.emptyList();
 		}
 
-		Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
+		final Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
 		changedResources.add(resource);
 		changedResources.add(otherResource);
 
 		assert swapped;
 		final int depth = getNextDepth(tryDepth, searchData.getRandom());
 		final List<Change> changes2 = new ArrayList<>(changes);
-		String description = String.format("Swap %s (to %s) with %s ( to %s)\n", current.getName(), otherLoad.getName(), originalDischarge.getName(), prev.getName());
+		final String description = String.format("Swap %s (to %s) with %s ( to %s)\n", current.getName(), otherLoad.getName(), originalDischarge.getName(), prev.getName());
 		changes2.add(new DischargeRewireChange(description, prev, current, otherLoad, originalDischarge, resource, otherResource));
 
 		// now modify differences
@@ -555,11 +555,11 @@ public class BagMover extends BreakdownOptimiserMover {
 		}
 		// (4) old discharge on wrong vessel?
 		differences.remove(new Difference(DifferenceType.CARGO_WRONG_WIRING, otherLoad, originalDischarge, otherResource));
-		ISequenceElement matchedLoadForOldDischarge = similarityState.getElementForIndex(similarityState.getLoadForDischarge(current));
-		boolean currOnCorrectResource = similarityState.getResourceForElement(current).equals(otherResource);
+		final ISequenceElement matchedLoadForOldDischarge = similarityState.getElementForIndex(similarityState.getLoadForDischarge(current));
+		final boolean currOnCorrectResource = similarityState.getResourceForElement(current).equals(otherResource);
 		if (similarityState.getDischargeForLoad(otherLoad) == null) {
 			// current load is not in target
-			Difference unusedLoad = new Difference(DifferenceType.UNUSED_LOAD_IN_TARGET, otherLoad, current, otherResource);
+			final Difference unusedLoad = new Difference(DifferenceType.UNUSED_LOAD_IN_TARGET, otherLoad, current, otherResource);
 			if (!differences.contains(unusedLoad)) {
 				differences.add(unusedLoad);
 				if (!currOnCorrectResource) {
@@ -590,8 +590,8 @@ public class BagMover extends BreakdownOptimiserMover {
 	 */
 	protected Collection<JobState> removeElementsFromSequence(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, final IResource resource, @NonNull final ISequenceElement prev, @NonNull final ISequenceElement current,
-			final long[] currentMetrics, @NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements, @NonNull List<Difference> differences,
-			@NonNull BreakdownSearchData searchData, @Nullable Collection<@NonNull IResource> currentChangedResources) {
+			final long[] currentMetrics, @NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements, @NonNull final List<Difference> differences,
+			@NonNull final BreakdownSearchData searchData, @Nullable final Collection<@NonNull IResource> currentChangedResources) {
 		final IModifiableSequences copy = new ModifiableSequences(currentSequences);
 		final IModifiableSequence copyOfTargetSequence = copy.getModifiableSequence(resource);
 		copyOfTargetSequence.remove(prev);
@@ -601,12 +601,12 @@ public class BagMover extends BreakdownOptimiserMover {
 
 		final int depth = getNextDepth(tryDepth, searchData.getRandom());
 		final List<Change> changes2 = new ArrayList<>(changes);
-		String description = String.format("Remove %s and %s\n", prev.getName(), current.getName());
+		final String description = String.format("Remove %s and %s\n", prev.getName(), current.getName());
 		changes2.add(new RemoveCargoChange(description, prev, current, resource));
-		differences.remove(new Difference(DifferenceType.CARGO_NOT_IN_TARGET, prev, current, null));
-		differences.remove(new Difference(DifferenceType.CARGO_NOT_IN_TARGET, current, prev, null));
+		differences.remove(new Difference(DifferenceType.CARGO_NOT_IN_TARGET, prev, current, resource));
+		differences.remove(new Difference(DifferenceType.CARGO_NOT_IN_TARGET, current, prev, resource));
 
-		Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
+		final Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
 		changedResources.add(resource);
 
 		if (resource != null) {
@@ -624,8 +624,8 @@ public class BagMover extends BreakdownOptimiserMover {
 			differences.remove(new Difference(DifferenceType.UNUSED_DISCHARGE_IN_TARGET, load, discharge, resource));
 			updateWrongVesselDifferenceDischarge(differences, discharge);
 			differences.remove(new Difference(DifferenceType.CARGO_WRONG_WIRING, load, discharge, resource));
-			Difference loadNeedsInserting = new Difference(DifferenceType.LOAD_UNUSED_IN_BASE, load, null, null);
-			Difference dischargeNeedsInserting = new Difference(DifferenceType.DISCHARGE_UNUSED_IN_BASE, null, discharge, null);
+			final Difference loadNeedsInserting = new Difference(DifferenceType.LOAD_UNUSED_IN_BASE, load, null, null);
+			final Difference dischargeNeedsInserting = new Difference(DifferenceType.DISCHARGE_UNUSED_IN_BASE, null, discharge, null);
 			updateDifferencesListAfterElementsRemoval(similarityState, differences, load, discharge);
 			if (similarityState.getLoadForDischarge(discharge) != null && !differences.contains(dischargeNeedsInserting)) {
 				differences.add(dischargeNeedsInserting);
@@ -633,7 +633,7 @@ public class BagMover extends BreakdownOptimiserMover {
 			if (similarityState.getDischargeForLoad(load) != null & !differences.contains(loadNeedsInserting)) {
 				differences.add(loadNeedsInserting);
 			}
-			for (Difference d : new LinkedList<>(differences)) {
+			for (final Difference d : new LinkedList<>(differences)) {
 				if (d.move == DifferenceType.CARGO_WRONG_VESSEL && ((prev == d.load && current == d.discharge) || (current == d.load && prev == d.discharge))) {
 					differences.remove(d);
 				}
@@ -649,8 +649,8 @@ public class BagMover extends BreakdownOptimiserMover {
 	private Collection<JobState> processOneHalfOfCargoUnused(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final IResource resource, @NonNull final ISequenceElement elementToKeep,
 			@NonNull final ISequenceElement elementToRemove, final long[] currentMetrics, final boolean isLoadSwap, @NonNull final JobStore jobStore,
-			@Nullable final List<ISequenceElement> targetElements, @NonNull List<Difference> differencesList, @NonNull BreakdownSearchData searchData,
-			@Nullable Collection<@NonNull IResource> currentChangedResources) {
+			@Nullable final List<ISequenceElement> targetElements, @NonNull final List<Difference> differencesList, @NonNull final BreakdownSearchData searchData,
+			@Nullable final Collection<@NonNull IResource> currentChangedResources) {
 		ISequenceElement matchedElement;
 		if (isLoadSwap) {
 			// find correct load
@@ -683,7 +683,7 @@ public class BagMover extends BreakdownOptimiserMover {
 				final List<Change> changes2 = new ArrayList<>(changes);
 				final int moveType;
 				if (isLoadSwap) {
-					String description = String.format("Remove load %s (unused in target solution) and insert load %s (unused in base solution)\n", elementToRemove.getName(),
+					final String description = String.format("Remove load %s (unused in target solution) and insert load %s (unused in base solution)\n", elementToRemove.getName(),
 							matchedElement.getName());
 					changes2.add(new UnusedToUsedLoadChange(description, elementToKeep, elementToRemove, matchedElement, resource));
 					moveType = MOVE_TYPE_UNUSED_LOAD_SWAPPED;
@@ -694,7 +694,7 @@ public class BagMover extends BreakdownOptimiserMover {
 					updateDifferencesRemoveUnusedLoadInBase(differencesList, matchedElement);
 					checkAndAddDifferenceForWrongVesselCargo(similarityState, differencesList, matchedElement, elementToKeep, resource);
 				} else {
-					String description = String.format("Remove discharge %s (unused in target solution) and insert discharge %s (unused in base solution)\n", elementToRemove.getName(),
+					final String description = String.format("Remove discharge %s (unused in target solution) and insert discharge %s (unused in base solution)\n", elementToRemove.getName(),
 							matchedElement.getName());
 					changes2.add(new UnusedToUsedDischargeChange(description, elementToKeep, elementToRemove, matchedElement, resource));
 					moveType = MOVE_TYPE_UNUSED_DISCHARGE_SWAPPED;
@@ -706,7 +706,7 @@ public class BagMover extends BreakdownOptimiserMover {
 					checkAndAddDifferenceForWrongVesselCargo(similarityState, differencesList, elementToKeep, matchedElement, resource);
 				}
 
-				Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
+				final Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
 				changedResources.add(resource);
 
 				return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, moveType, currentMetrics, jobStore, targetElements, differencesList, searchData, changedResources);
@@ -714,7 +714,7 @@ public class BagMover extends BreakdownOptimiserMover {
 				// FOB SALE OR DES PURCHASE
 				final IModifiableSequences copy = new ModifiableSequences(currentSequences);
 				final IModifiableSequence currentResource = copy.getModifiableSequence(resource);
-				Collection<IResource> allowedResources = resourceAllocationProvider.getAllowedResources(matchedElement);
+				final Collection<IResource> allowedResources = resourceAllocationProvider.getAllowedResources(matchedElement);
 				assert allowedResources != null && allowedResources.size() == 1;
 
 				final IModifiableSequence fsSequence = copy.getModifiableSequence(allowedResources.iterator().next());
@@ -728,7 +728,7 @@ public class BagMover extends BreakdownOptimiserMover {
 					copy.getModifiableUnusedElements().add(elementToRemove);
 					final int depth = getNextDepth(tryDepth, searchData.getRandom());
 					final List<Change> changes2 = new ArrayList<>(changes);
-					String description = String.format("Insert FS  %s (unused in target solution) and remove  load %s (unused in base solution)\n", matchedElement.getName(),
+					final String description = String.format("Insert FS  %s (unused in target solution) and remove  load %s (unused in base solution)\n", matchedElement.getName(),
 							elementToRemove.getName());
 					changes2.add(new UnusedToUsedLoadChange(description, elementToKeep, elementToRemove, matchedElement, resource));
 					updateWrongCargoWiringDifference(differencesList, elementToKeep, elementToRemove);
@@ -738,7 +738,7 @@ public class BagMover extends BreakdownOptimiserMover {
 					updateWrongVesselDifferenceDischarge(differencesList, elementToRemove);
 					checkAndAddDifferenceForUnusedDischargeInBase(similarityState, differencesList, elementToRemove);
 
-					Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
+					final Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
 					changedResources.add(resource);
 					changedResources.add(allowedResources.iterator().next());
 
@@ -752,7 +752,7 @@ public class BagMover extends BreakdownOptimiserMover {
 					copy.getModifiableUnusedElements().add(elementToRemove);
 					final int depth = getNextDepth(tryDepth, searchData.getRandom());
 					final List<Change> changes2 = new ArrayList<>(changes);
-					String description = String.format("Insert DP  %s (unused in target solution) and remove Discharge %s (unused in base solution)\n", matchedElement.getName(),
+					final String description = String.format("Insert DP  %s (unused in target solution) and remove Discharge %s (unused in base solution)\n", matchedElement.getName(),
 							elementToRemove.getName());
 					changes2.add(new UnusedToUsedDischargeChange(description, elementToKeep, elementToRemove, matchedElement, resource));
 					updateWrongCargoWiringDifference(differencesList, elementToRemove, elementToKeep);
@@ -762,7 +762,7 @@ public class BagMover extends BreakdownOptimiserMover {
 					checkAndAddDifferenceForUnusedLoadInBase(similarityState, differencesList, elementToRemove);
 					updateWrongVesselDifferenceDischarge(differencesList, elementToKeep);
 
-					Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
+					final Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
 					changedResources.add(resource);
 					changedResources.add(allowedResources.iterator().next());
 
@@ -779,8 +779,8 @@ public class BagMover extends BreakdownOptimiserMover {
 
 	private Collection<JobState> insertUnusedElementsIntoSequence(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final StateManager stateManager,
 			@NonNull final List<Change> changes, @NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final ISequenceElement element, final long[] currentMetrics,
-			@NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements, @NonNull List<Difference> differencesList, @NonNull BreakdownSearchData searchData,
-			@Nullable Collection<@NonNull IResource> currentChangedResources) {
+			@NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements, @NonNull final List<Difference> differencesList, @NonNull final BreakdownSearchData searchData,
+			@Nullable final Collection<@NonNull IResource> currentChangedResources) {
 		if (portTypeProvider.getPortType(element) == PortType.Load) {
 			final Integer otherDischargeIdx = similarityState.getDischargeForLoad(element);
 			final ISequenceElement discharge = similarityState.getElementForIndex(otherDischargeIdx);
@@ -820,11 +820,11 @@ public class BagMover extends BreakdownOptimiserMover {
 
 						final int depth = getNextDepth(tryDepth, searchData.getRandom());
 						final List<Change> changes2 = new ArrayList<>(changes);
-						String description = String.format("Remove %s and %s\n", load.getName(), discharge.getName());
+						final String description = String.format("Remove %s and %s\n", load.getName(), discharge.getName());
 						changes2.add(new RemoveCargoChange(description, load, discharge, p.getFirst()));
 						updateDifferencesListAfterElementsRemoval(similarityState, differencesList, load, discharge);
 
-						Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
+						final Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
 						changedResources.add(p.getFirst());
 
 						return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentMetrics, jobStore, searchElements, differencesList,
@@ -876,12 +876,12 @@ public class BagMover extends BreakdownOptimiserMover {
 						final int depth = getNextDepth(tryDepth, searchData.getRandom());
 						final List<Change> changes2 = new ArrayList<>(changes);
 						// changes2.add(new Change(String.format("Remove %s and %s\n", load.getName(), discharge.getName())));
-						String description = String.format("Remove %s and %s\n", load.getName(), discharge.getName());
+						final String description = String.format("Remove %s and %s\n", load.getName(), discharge.getName());
 						changes2.add(new RemoveCargoChange(description, load, discharge, p.getFirst()));
 						updateDifferencesListAfterElementsRemoval(similarityState, differencesList, load, discharge);
 
 						@Nullable
-						Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
+						final Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
 						changedResources.add(p.getFirst());
 
 						return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentMetrics, jobStore, searchElements, differencesList,
@@ -895,7 +895,8 @@ public class BagMover extends BreakdownOptimiserMover {
 		return new LinkedList<JobState>();
 	}
 
-	private void updateDifferencesListAfterElementsRemoval(SimilarityState similarityState, List<Difference> differencesList, ISequenceElement load, ISequenceElement discharge) {
+	private void updateDifferencesListAfterElementsRemoval(final SimilarityState similarityState, final List<Difference> differencesList, final ISequenceElement load,
+			final ISequenceElement discharge) {
 		checkAndAddDifferenceForUnusedLoadInBase(similarityState, differencesList, load);
 		updateDifferencesRemoveUnusedLoadInTarget(differencesList, load);
 
@@ -907,7 +908,7 @@ public class BagMover extends BreakdownOptimiserMover {
 		updateWrongVesselDifferenceLoad(differencesList, load);
 	}
 
-	private void checkAndAddDifferenceForUnusedLoadInBase(SimilarityState similarityState, List<Difference> differencesList, ISequenceElement load) {
+	private void checkAndAddDifferenceForUnusedLoadInBase(final SimilarityState similarityState, final List<Difference> differencesList, final ISequenceElement load) {
 		if (similarityState.getDischargeForLoad(load) != null) {
 			if (!differencesList.contains(new Difference(DifferenceType.LOAD_UNUSED_IN_BASE, load, null, null))) {
 				differencesList.add(new Difference(DifferenceType.LOAD_UNUSED_IN_BASE, load, null, null));
@@ -915,7 +916,8 @@ public class BagMover extends BreakdownOptimiserMover {
 		}
 	}
 
-	private void checkAndAddDifferenceForWrongVesselCargo(SimilarityState similarityState, List<Difference> differencesList, ISequenceElement load, ISequenceElement discharge, IResource resource) {
+	private void checkAndAddDifferenceForWrongVesselCargo(final SimilarityState similarityState, final List<Difference> differencesList, final ISequenceElement load, final ISequenceElement discharge,
+			final IResource resource) {
 		if (similarityState.getResourceForElement(load) != resource) {
 			updateWrongVesselDifferenceLoad(differencesList, load);
 			updateWrongVesselDifferenceDischarge(differencesList, discharge);
@@ -932,7 +934,7 @@ public class BagMover extends BreakdownOptimiserMover {
 		}
 	}
 
-	private void checkAndAddDifferenceForUnusedDischargeInBase(SimilarityState similarityState, List<Difference> differencesList, ISequenceElement discharge) {
+	private void checkAndAddDifferenceForUnusedDischargeInBase(final SimilarityState similarityState, final List<Difference> differencesList, final ISequenceElement discharge) {
 		if (similarityState.getLoadForDischarge(discharge) != null) {
 			if (!differencesList.contains(new Difference(DifferenceType.DISCHARGE_UNUSED_IN_BASE, null, discharge, null))) {
 				differencesList.add(new Difference(DifferenceType.DISCHARGE_UNUSED_IN_BASE, null, discharge, null));
@@ -940,8 +942,8 @@ public class BagMover extends BreakdownOptimiserMover {
 		}
 	}
 
-	private void updateDifferencesRemoveUnusedLoadInBase(List<Difference> differencesList, ISequenceElement load) {
-		for (Difference d : differencesList) {
+	private void updateDifferencesRemoveUnusedLoadInBase(final List<Difference> differencesList, final ISequenceElement load) {
+		for (final Difference d : differencesList) {
 			if (d.move == DifferenceType.LOAD_UNUSED_IN_BASE && d.load == load) {
 				differencesList.remove(d);
 				break;
@@ -949,8 +951,8 @@ public class BagMover extends BreakdownOptimiserMover {
 		}
 	}
 
-	private void updateDifferencesRemoveUnusedDischargeInBase(List<Difference> differencesList, ISequenceElement discharge) {
-		for (Difference d : differencesList) {
+	private void updateDifferencesRemoveUnusedDischargeInBase(final List<Difference> differencesList, final ISequenceElement discharge) {
+		for (final Difference d : differencesList) {
 			if (d.move == DifferenceType.DISCHARGE_UNUSED_IN_BASE && d.discharge == discharge) {
 				differencesList.remove(d);
 				break;
@@ -958,9 +960,9 @@ public class BagMover extends BreakdownOptimiserMover {
 		}
 	}
 
-	private void updateDifferencesRemoveUnusedLoadInTarget(List<Difference> differencesList, ISequenceElement load) {
+	private void updateDifferencesRemoveUnusedLoadInTarget(final List<Difference> differencesList, final ISequenceElement load) {
 		for (int i = differencesList.size() - 1; i >= 0; i--) {
-			Difference d = differencesList.get(i);
+			final Difference d = differencesList.get(i);
 			if (d.move == DifferenceType.UNUSED_LOAD_IN_TARGET && d.load == load) {
 				differencesList.remove(i);
 				break;
@@ -968,18 +970,18 @@ public class BagMover extends BreakdownOptimiserMover {
 		}
 	}
 
-	private void updateDifferencesRemoveUnusedDischargeInTarget(List<Difference> differencesList, ISequenceElement discharge) {
+	private void updateDifferencesRemoveUnusedDischargeInTarget(final List<Difference> differencesList, final ISequenceElement discharge) {
 		// for (Difference d : differencesList) {
 		for (int i = differencesList.size() - 1; i >= 0; i--) {
-			Difference d = differencesList.get(i);
+			final Difference d = differencesList.get(i);
 			if (d.move == DifferenceType.UNUSED_DISCHARGE_IN_TARGET && d.discharge == discharge) {
 				differencesList.remove(i);
 			}
 		}
 	}
 
-	private void updateWrongCargoWiringDifference(List<Difference> differencesList, ISequenceElement load, ISequenceElement discharge) {
-		for (Difference d : differencesList) {
+	private void updateWrongCargoWiringDifference(final List<Difference> differencesList, final ISequenceElement load, final ISequenceElement discharge) {
+		for (final Difference d : differencesList) {
 			if (d.move == DifferenceType.CARGO_WRONG_WIRING && d.load == load && d.discharge == discharge) {
 				differencesList.remove(d);
 				break;
@@ -987,8 +989,8 @@ public class BagMover extends BreakdownOptimiserMover {
 		}
 	}
 
-	private void updateWrongVesselDifferenceDischarge(List<Difference> differencesList, ISequenceElement discharge) {
-		for (Difference d : differencesList) {
+	private void updateWrongVesselDifferenceDischarge(final List<Difference> differencesList, final ISequenceElement discharge) {
+		for (final Difference d : differencesList) {
 			if (d.move == DifferenceType.DISCHARGE_WRONG_VESSEL && d.discharge == discharge) {
 				differencesList.remove(d);
 				break;
@@ -996,8 +998,8 @@ public class BagMover extends BreakdownOptimiserMover {
 		}
 	}
 
-	private void updateWrongVesselDifferenceLoad(List<Difference> differencesList, ISequenceElement load) {
-		for (Difference d : differencesList) {
+	private void updateWrongVesselDifferenceLoad(final List<Difference> differencesList, final ISequenceElement load) {
+		for (final Difference d : differencesList) {
 			if (d.move == DifferenceType.LOAD_WRONG_VESSEL && d.load == load) {
 				differencesList.remove(d);
 				break;
@@ -1008,16 +1010,16 @@ public class BagMover extends BreakdownOptimiserMover {
 	// FIXME: Make sure different is counted in search()
 	protected Collection<JobState> insertUnusedCargoIntoSequence(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final IResource resource, @NonNull final ISequenceElement load, @NonNull final ISequenceElement discharge,
-			final long[] currentMetrics, @NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements, @NonNull List<Difference> differencesList,
-			@NonNull BreakdownSearchData searchData, @Nullable Collection<@NonNull IResource> currentChangedResources) {
+			final long[] currentMetrics, @NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements, @NonNull final List<Difference> differencesList,
+			@NonNull final BreakdownSearchData searchData, @Nullable final Collection<@NonNull IResource> currentChangedResources) {
 		final ISequence sequenceOfOriginalResource = currentSequences.getSequence(similarityState.getResourceForElement(load));
-		for (IResource r : currentSequences.getResources()) {
-			for (ISequenceElement element : currentSequences.getSequence(r)) {
+		for (final IResource r : currentSequences.getResources()) {
+			for (final ISequenceElement element : currentSequences.getSequence(r)) {
 				assert element != load;
 				assert element != discharge;
 			}
 		}
-		List<JobState> newStates = new LinkedList<>();
+		final List<JobState> newStates = new LinkedList<>();
 		for (final int i : findInsertPoints(similarityState, sequenceOfOriginalResource, similarityState.getResourceForElement(load), load, discharge)) {
 			if (portTypeProvider.getPortType(sequenceOfOriginalResource.get(i)) != PortType.Discharge) {
 				final IModifiableSequences copy = new ModifiableSequences(currentSequences);
@@ -1031,14 +1033,14 @@ public class BagMover extends BreakdownOptimiserMover {
 				final int depth = getNextDepth(tryDepth, searchData.getRandom());
 				final List<Change> changes2 = new ArrayList<>(changes);
 				// changes2.add(new Change(String.format("Insert cargo %s -> %s on %s\n", load.getName(), discharge.getName(), similarityState.getResourceForElement(load).getName())));
-				String description = String.format("Insert cargo %s -> %s on %s\n", load.getName(), discharge.getName(), similarityState.getResourceForElement(load).getName());
+				final String description = String.format("Insert cargo %s -> %s on %s\n", load.getName(), discharge.getName(), similarityState.getResourceForElement(load).getName());
 				changes2.add(new InsertUnusedCargoChange(description, modifiableSequence.get(i - 1), modifiableSequence.get(i + 2), load, discharge, similarityState.getResourceForElement(load)));
-				differencesList.remove(new Difference(DifferenceType.CARGO_NOT_IN_TARGET, load, discharge, null));
+				differencesList.remove(new Difference(DifferenceType.CARGO_NOT_IN_TARGET, load, discharge, resource));
 				differencesList.remove(new Difference(DifferenceType.LOAD_UNUSED_IN_BASE, load, null, null));
 				differencesList.remove(new Difference(DifferenceType.DISCHARGE_UNUSED_IN_BASE, null, discharge, null));
 
 				@Nullable
-				Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
+				final Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
 				changedResources.add(similarityState.getResourceForElement(load));
 
 				newStates.addAll(search(copy, similarityState, changes2, new LinkedList<>(changeSets), depth, MOVE_TYPE_CARGO_INSERT, currentMetrics, jobStore, targetElements, differencesList,
@@ -1049,27 +1051,27 @@ public class BagMover extends BreakdownOptimiserMover {
 	}
 
 	@Override
-	protected int getNextDepth(final int tryDepth, Random rdm) {
+	protected int getNextDepth(final int tryDepth, final Random rdm) {
 		assert rdm != null;
 		assert tryDepth >= -1;
 		return tryDepth == DEPTH_START ? getRandomDepth(rdm) : tryDepth - 1;
 	}
 
-	private int getRandomDepth(Random rdm) {
-		int diff = depthEnd - depthStart;
-		int offset = rdm.nextInt(diff);
+	private int getRandomDepth(final Random rdm) {
+		final int diff = depthEnd - depthStart;
+		final int offset = rdm.nextInt(diff);
 		return depthStart + offset;
 	}
 
-	public void setDepthStart(int depthStart) {
+	public void setDepthStart(final int depthStart) {
 		this.depthStart = depthStart;
 	}
 
-	public void setDepthEnd(int depthEnd) {
+	public void setDepthEnd(final int depthEnd) {
 		this.depthEnd = depthEnd;
 	}
 
-	public void setDepthRange(int start, int end) {
+	public void setDepthRange(final int start, final int end) {
 		this.depthStart = start;
 		this.depthEnd = end;
 	}
@@ -1078,7 +1080,7 @@ public class BagMover extends BreakdownOptimiserMover {
 		return new Pair<Integer, Integer>(depthStart, depthEnd);
 	}
 
-	private boolean isElementUnused(@NonNull final ISequences currentSequences, @NonNull ISequenceElement element) {
+	private boolean isElementUnused(@NonNull final ISequences currentSequences, @NonNull final ISequenceElement element) {
 		return currentSequences.getUnusedElements().contains(element);
 	}
 }
