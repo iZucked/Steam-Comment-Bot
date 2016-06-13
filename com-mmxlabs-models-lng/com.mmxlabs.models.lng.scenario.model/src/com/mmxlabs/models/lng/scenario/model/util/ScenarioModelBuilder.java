@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.scenario.model.util;
 
+import java.time.LocalDate;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -60,6 +62,7 @@ public final class ScenarioModelBuilder {
 		return new ScenarioModelBuilder(rootObject);
 
 	}
+
 	public ScenarioModelBuilder(final @NonNull LNGScenarioModel lngScenarioModel) {
 		this.lngScenarioModel = lngScenarioModel;
 
@@ -111,5 +114,10 @@ public final class ScenarioModelBuilder {
 	@NonNull
 	public SpotMarketsModelBuilder getSpotMarketsModelBuilder() {
 		return spotMarketsModelBuilder;
+	}
+
+	public void setPromptPeriod(@NonNull final LocalDate promptStart, @NonNull final LocalDate promptEnd) {
+		lngScenarioModel.setPromptPeriodStart(promptStart);
+		lngScenarioModel.setPromptPeriodEnd(promptEnd);
 	}
 }
