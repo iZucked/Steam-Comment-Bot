@@ -156,11 +156,11 @@ public class AssignmentEditorHelper {
 	}
 
 	public static List<@NonNull CollectedAssignment> collectAssignments(@NonNull final CargoModel cargoModel, @NonNull final PortModel portModel, @NonNull final SpotMarketsModel spotMarketsModel) {
-		return collectAssignments(cargoModel, portModel, spotMarketsModel, new AssignableElementDateComparator());
+		return collectAssignments(cargoModel, portModel, spotMarketsModel, null);
 	}
 
 	public static List<@NonNull CollectedAssignment> collectAssignments(@NonNull final CargoModel cargoModel, @NonNull final PortModel portModel, @NonNull final SpotMarketsModel spotMarketsModel,
-			@NonNull final IAssignableElementComparator assignableElementComparator) {
+			@Nullable final IAssignableElementDateProvider assignableElementDateProvider) {
 
 		// Map the vessel availability to assignents
 		final Map<VesselAvailability, List<AssignableElement>> fleetGrouping = new HashMap<>();
@@ -219,12 +219,12 @@ public class AssignmentEditorHelper {
 
 		// First add in the fleet vessels
 		for (final VesselAvailability vesselAvailability : vesselAvailabilityOrder) {
-			result.add(new CollectedAssignment(fleetGrouping.get(vesselAvailability), vesselAvailability, (PortModel) null));// , assignableElementComparator));
+			result.add(new CollectedAssignment(fleetGrouping.get(vesselAvailability), vesselAvailability, portModel, assignableElementDateProvider));
 		}
 
 		// Now add in the spot charter-ins
 		for (final Pair<CharterInMarket, Integer> key : charterInMarketKeysOrder) {
-			result.add(new CollectedAssignment(spotGrouping.get(key), key.getFirst(), key.getSecond(), portModel));
+			result.add(new CollectedAssignment(spotGrouping.get(key), key.getFirst(), key.getSecond(), portModel, assignableElementDateProvider));
 		}
 
 		return result;

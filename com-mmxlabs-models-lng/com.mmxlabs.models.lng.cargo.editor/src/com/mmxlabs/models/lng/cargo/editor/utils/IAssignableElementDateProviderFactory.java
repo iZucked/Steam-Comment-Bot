@@ -6,11 +6,11 @@ package com.mmxlabs.models.lng.cargo.editor.utils;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.models.lng.cargo.util.IAssignableElementComparator;
+import com.mmxlabs.models.lng.cargo.util.IAssignableElementDateProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 
-public interface IAssignableElementComparatorFactory {
+public interface IAssignableElementDateProviderFactory {
 
 	@NonNull
-	IAssignableElementComparator create(@NonNull LNGScenarioModel scenario);
+	IAssignableElementDateProvider create(@NonNull LNGScenarioModel scenario);
 }

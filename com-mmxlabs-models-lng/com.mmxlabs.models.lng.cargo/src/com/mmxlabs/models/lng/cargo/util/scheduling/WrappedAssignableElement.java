@@ -4,8 +4,11 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.OptionalInt;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Hours;
@@ -16,6 +19,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.util.IAssignableElementDateProvider;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
@@ -35,28 +39,12 @@ public class WrappedAssignableElement {
 	private Pair<ZonedDateTime, ZonedDateTime> endWindow;
 	private int minElementDuration;
 
-	public WrappedAssignableElement(final AssignableElement assignableElement, 
-			/* final ActualsModel actualsModel, */ 
-			final PortModel portModel) {
+	public WrappedAssignableElement(final @NonNull AssignableElement assignableElement, final @Nullable PortModel portModel, @Nullable final IAssignableElementDateProvider dateProvider) {
 		this.assignableElement = assignableElement;
 		if (assignableElement instanceof Cargo) {
 			final Cargo cargo = (Cargo) assignableElement;
 
-//			CargoActuals actuals = null;
-//			Map<Slot, SlotActuals> slotActualMap = new HashMap<>();
-//			// Is there a cargo actuals?
-//			if (actualsModel != null) {
-//				for (CargoActuals ca : actualsModel.getCargoActuals()) {
-//					if (ca.getCargo() == cargo) {
-//						actuals = ca;
-//						ca.getActuals().forEach(sa -> slotActualMap.put(sa.getSlot(), sa));
-//						break;
-//					}
-//
-//				}
-//			}
-//			
-			final List<Slot> sortedSlots = cargo.getSortedSlots();
+			final List<@NonNull Slot> sortedSlots = cargo.getSortedSlots();
 			assert sortedSlots != null;
 			Slot firstSlot = null;
 			Slot lastSlot = null;
@@ -79,10 +67,7 @@ public class WrappedAssignableElement {
 				for (final Slot slot : sortedSlots) {
 
 					final Port nextPort = slot.getPort();
-					ZonedDateTime slotTime = slot.getWindowStartWithSlotOrPortTime();
-//					if (slotActualMap.containsKey(slot)) {
-//						slotTime = slotActualMap.get(slot).getOperationsStartAsDateTime();
-//					}
+					final ZonedDateTime slotTime = getWindowStart(slot, dateProvider);
 					if (lastPort != null && lastTime != null) {
 						final int minTravelTime = portModel == null ? 0 : getTravelTime(assignableElement, portModel, lastPort, nextPort);
 
@@ -98,11 +83,7 @@ public class WrappedAssignableElement {
 					}
 
 					// Add on slot duration
-					int duration = slot.getDuration();
-//					if (slotActualMap.containsKey(slot)) {
-//						SlotActuals slotActuals = slotActualMap.get(slot);
-//						duration = Hours.between(slotActuals.getOperationsStartAsDateTime(), slotActuals.getOperationsEndAsDateTime());
-//					}
+					final int duration = getDurationInHours(slot, dateProvider);
 
 					lastTime = lastTime.plusHours(duration);
 					lastPort = slot.getPort();
@@ -111,17 +92,14 @@ public class WrappedAssignableElement {
 			}
 			final ZonedDateTime maxStartDate;
 			{
-				final List<Slot> reverseOrder = new ArrayList<>(sortedSlots);
+				final List<@NonNull Slot> reverseOrder = new ArrayList<>(sortedSlots);
 				Collections.reverse(reverseOrder);
 
 				Port lastPort = null;
 				ZonedDateTime lastTime = null;
 				for (final Slot slot : reverseOrder) {
 
-					ZonedDateTime slotTime = slot.getWindowEndWithSlotOrPortTime();
-//					if (slotActualMap.containsKey(slot)) {
-//						slotTime = slotActualMap.get(slot).getOperationsStartAsDateTime();
-//					}
+					final ZonedDateTime slotTime = getWindowEnd(slot, dateProvider);
 					final Port nextPort = slot.getPort();
 					if (lastPort != null && lastTime != null) {
 						final int minTravelTime = portModel == null ? 0 : getTravelTime(assignableElement, portModel, nextPort, lastPort);
@@ -129,11 +107,7 @@ public class WrappedAssignableElement {
 						// latest Departure time
 						ZonedDateTime nextTime = lastTime.minusHours(minTravelTime);
 
-						int duration = slot.getDuration();
-//						if (slotActualMap.containsKey(slot)) {
-//							SlotActuals slotActuals = slotActualMap.get(slot);
-//							duration = Hours.between(slotActuals.getOperationsStartAsDateTime(), slotActuals.getOperationsEndAsDateTime());
-//						}
+						final int duration = getDurationInHours(slot, dateProvider);
 
 						nextTime = nextTime.minusHours(duration);
 
@@ -154,9 +128,10 @@ public class WrappedAssignableElement {
 
 			this.startPort = firstSlot.getPort();
 			this.endPort = lastSlot.getPort();
+			final int lastSlotDurationInHours = getDurationInHours(lastSlot, dateProvider);
 
-			this.startWindow = new Pair<>(firstSlot.getWindowStartWithSlotOrPortTime(), firstSlot.getWindowEndWithSlotOrPortTime());
-			this.endWindow = new Pair<>(lastSlot.getWindowStartWithSlotOrPortTime().plusHours(lastSlot.getDuration()), lastSlot.getWindowEndWithSlotOrPortTime().plusHours(lastSlot.getDuration()));
+			this.startWindow = new Pair<>(getWindowStart(firstSlot, dateProvider), getWindowEnd(firstSlot, dateProvider));
+			this.endWindow = new Pair<>(getWindowStart(lastSlot, dateProvider).plusHours(lastSlotDurationInHours), getWindowEnd(lastSlot, dateProvider).plusHours(lastSlotDurationInHours));
 
 			// Update the end window based on travel time
 			if (endWindow.getFirst().isBefore(minEndDate)) {
@@ -170,12 +145,12 @@ public class WrappedAssignableElement {
 				startWindow.setSecond(maxStartDate);
 			}
 			if (startWindow.getFirst().isAfter(maxStartDate)) {
-//				assert false;
+				// assert false;
 				startWindow.setFirst(maxStartDate);
 			}
 
 			final int ladenDuration = Hours.between(startWindow.getSecond(), endWindow.getFirst());
-			this.minElementDuration = ladenDuration + lastSlot.getDuration();
+			this.minElementDuration = ladenDuration + lastSlotDurationInHours;
 
 		} else if (assignableElement instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) assignableElement;
@@ -195,6 +170,39 @@ public class WrappedAssignableElement {
 			// TODO: Correct? What about day light savings!
 			this.minElementDuration = vesselEvent.getDurationInDays() * 24;
 		}
+	}
+
+	private @NonNull ZonedDateTime getWindowStart(@NonNull final Slot slot, @Nullable final IAssignableElementDateProvider dateProvider) {
+
+		if (dateProvider != null) {
+			ZonedDateTime date = dateProvider.getSlotWindowStart(slot);
+			if (date != null) {
+				return date;
+			}
+		}
+		return slot.getWindowStartWithSlotOrPortTime();
+	}
+
+	private @NonNull ZonedDateTime getWindowEnd(@NonNull final Slot slot, @Nullable final IAssignableElementDateProvider dateProvider) {
+
+		if (dateProvider != null) {
+			ZonedDateTime date = dateProvider.getSlotWindowEnd(slot);
+			if (date != null) {
+				return date;
+			}
+		}
+		return slot.getWindowEndWithSlotOrPortTime();
+	}
+
+	private int getDurationInHours(@NonNull final Slot slot, @Nullable final IAssignableElementDateProvider dateProvider) {
+
+		if (dateProvider != null) {
+			OptionalInt duration = dateProvider.getSlotDurationInHours(slot);
+			if (duration.isPresent()) {
+				return duration.getAsInt();
+			}
+		}
+		return slot.getSlotOrPortDuration();
 	}
 
 	public boolean isCargo() {
@@ -281,4 +289,7 @@ public class WrappedAssignableElement {
 		return assignableElement;
 	}
 
+	public int getSequenceHint() {
+		return assignableElement.getSequenceHint();
+	}
 }

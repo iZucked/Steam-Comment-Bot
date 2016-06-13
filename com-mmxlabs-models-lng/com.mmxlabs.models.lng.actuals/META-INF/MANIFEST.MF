@@ -21,5 +21,6 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.pricing;bundle-version="[3.12.6,4.0.0)";visibility:=reexport,
  com.mmxlabs.models.lng.spotmarkets;bundle-version="[3.12.6,4.0.0)";visibility:=reexport,
  com.mmxlabs.models.datetime;bundle-version="[2.1.0,3.0.0)";visibility:=reexport,
- org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)";resolution:=optional
+ org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)";resolution:=optional,
+ com.mmxlabs.common.common-util
 Bundle-ActivationPolicy: lazy
