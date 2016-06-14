@@ -12,13 +12,13 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.validation.model.EvaluationMode;
 import org.eclipse.emf.validation.service.IBatchValidator;
 import org.eclipse.emf.validation.service.ModelValidationService;
-import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IValidationService;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
@@ -54,7 +54,7 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 		// Run the validation
 		if (validationService != null) {
 
-			Display.getDefault().asyncExec(new Runnable() {
+			RunnerHelper.asyncExec(new Runnable() {
 
 				@Override
 				public void run() {
