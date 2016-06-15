@@ -158,6 +158,12 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 	}
 
 	@NonNull
+	public T withWindowFlex(final int flexInHours) {
+		slot.setWindowFlex(flexInHours);
+		return (T) this;
+	}
+
+	@NonNull
 	public T withLocked(final boolean locked) {
 		slot.setLocked(locked);
 		return (T) this;

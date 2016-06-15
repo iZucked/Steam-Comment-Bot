@@ -13,6 +13,8 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 
@@ -24,6 +26,16 @@ public class PortModelBuilder {
 
 	public PortModelBuilder(@NonNull final PortModel portModel) {
 		this.portModel = portModel;
+	}
+
+	@NonNull
+	public Route createRoute(String name, RouteOption option) {
+		final Route r = PortFactory.eINSTANCE.createRoute();
+		r.setName(option.getName());
+		r.setRouteOption(option);
+
+		portModel.getRoutes().add(r);
+		return r;
 	}
 
 	@NonNull
@@ -76,4 +88,5 @@ public class PortModelBuilder {
 		}
 		return list;
 	}
+
 }
