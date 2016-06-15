@@ -12,12 +12,12 @@ package com.mmxlabs.optimiser.common.components;
  */
 public interface ITimeWindow {
 
-	int getStart();
+	int getInclusiveStart();
 
 	// TODO: Should the end be inclusive or exclusive?
-	int getEnd();
+	int getExclusiveEnd();
 	
-	int getEndFlex();
+	int getExclusiveEndFlex();
 	
-	int getEndWithoutFlex();
+	int getExclusiveEndWithoutFlex();
 }

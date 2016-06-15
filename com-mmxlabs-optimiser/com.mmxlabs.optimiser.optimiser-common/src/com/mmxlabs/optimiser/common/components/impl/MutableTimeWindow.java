@@ -35,34 +35,34 @@ public final class MutableTimeWindow implements ITimeWindow {
 	}
 
 	@Override
-	public int getStart() {
+	public int getInclusiveStart() {
 		return start;
 	}
 
-	public void setStart(final int start) {
+	public void setInclusiveStart(final int start) {
 		this.start = start;
 	}
 
 	@Override
-	public int getEnd() {
+	public int getExclusiveEnd() {
 		return end;
 	}
 
-	public void setEnd(final int end) {
+	public void setExclusiveEnd(final int end) {
 		this.end = end;
 	}
 
 	@Override
-	public int getEndFlex() {
+	public int getExclusiveEndFlex() {
 		return endFlex;
 	}
 
-	public void setEndFlex(final int endFlex) {
+	public void setExclusiveEndFlex(final int endFlex) {
 		this.endFlex = endFlex;
 	}
 
 	@Override
-	public int getEndWithoutFlex() {
+	public int getExclusiveEndWithoutFlex() {
 		return end - endFlex;
 	}
 
