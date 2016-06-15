@@ -45,13 +45,6 @@ public class EvaluationSettingsOverrideModule extends AbstractModule {
 	}
 
 	@Provides
-	@Named(TravelTimeConstraintChecker.OPTIMISER_START_ELEMENT_FIX)
-	private boolean enableStartOfSequenceFix() {
-		return true;
-	}
-
-
-	@Provides
 	@Singleton
 	private ILatenessComponentParameters provideLatenessComponentParameters() {
 		Map<String, Integer> latenessParameterMap = settings.getlatenessParameterMap();
@@ -71,5 +64,5 @@ public class EvaluationSettingsOverrideModule extends AbstractModule {
 
 		return lcp;
 	}
-	
+
 }

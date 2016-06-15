@@ -16,6 +16,7 @@ import org.junit.runner.RunWith;
 
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.lingo.its.tests.category.QuickTest;
+import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroTestUtils;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
@@ -45,7 +46,7 @@ import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.optimiser.core.ISequences;
 
 @RunWith(value = ShiroRunner.class)
-public class CharterInMarketTests extends AbstractPeriodTestCase {
+public class CharterInMarketTests extends AbstractMicroTestCase {
 
 	/**
 	 * If we have two charter in markets and we remove all cargoes from one used option, make sure we reduce the market count and renumber spot index assignments. This test removes cargo after the

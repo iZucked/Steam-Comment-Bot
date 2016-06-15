@@ -42,40 +42,11 @@ import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
  * @author Simon Goodall
  *
  */
-public class ShippingOnlyCargoOptiTests extends AbstractOptimisationResultTester {
+public class ShippingOnlyCargoOptiTests extends AbstractMicroTestCase {
 
 	@Test
 	@Category(MicroTest.class)
 	public void shippingOnly_SlotSwap_Permitted() throws Exception {
-
-		// Load in the basic scenario from CSV
-
-		final @NonNull String urlRoot = getClass().getResource("/referencedata/reference-data-1/").toString();
-		final CSVImporter importer = new CSVImporter();
-		importer.importPortData(urlRoot);
-		importer.importCostData(urlRoot);
-		importer.importEntityData(urlRoot);
-		importer.importFleetData(urlRoot);
-		importer.importMarketData(urlRoot);
-		importer.importPromptData(urlRoot);
-		importer.importMarketData(urlRoot);
-		importer.importContractData(urlRoot);
-
-		final LNGScenarioModel lngScenarioModel = importer.doImport();
-
-		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
-
-		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
-		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
-
-		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-
-		// Create the required basic elements
-		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
 		// Construct the cargo scenario
 
@@ -98,68 +69,19 @@ public class ShippingOnlyCargoOptiTests extends AbstractOptimisationResultTester
 				.withOptional(true) //
 				.build();
 
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
-		userSettings.setGenerateCharterOuts(false);
-		userSettings.setShippingOnly(false);
-		userSettings.setSimilarityMode(SimilarityMode.OFF);
-
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
-		optimiserSettings.getAnnealingSettings().setIterations(10_000);
-
-		// Generate internal data
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
-		try {
-
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null, false,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			scenarioRunner.evaluateInitialState();
-
-			scenarioRunner.run();
+		evaluateWithLSOTest(true, optimiserSettings -> optimiserSettings.setShippingOnly(false), null, scenarioRunner -> {
 
 			// Wiring should have changed
 			Assert.assertSame(load2, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(0));
 			Assert.assertSame(discharge1, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(1));
 
-		} finally {
-			executorService.shutdownNow();
-		}
+		});
 	}
 
 	@Test
 	@Category(MicroTest.class)
 	public void shippingOnly_SlotSwap_NotPermitted() throws Exception {
 
-		// Load in the basic scenario from CSV
-
-		final @NonNull String urlRoot = getClass().getResource("/referencedata/reference-data-1/").toString();
-		final CSVImporter importer = new CSVImporter();
-		importer.importPortData(urlRoot);
-		importer.importCostData(urlRoot);
-		importer.importEntityData(urlRoot);
-		importer.importFleetData(urlRoot);
-		importer.importMarketData(urlRoot);
-		importer.importPromptData(urlRoot);
-		importer.importMarketData(urlRoot);
-		importer.importContractData(urlRoot);
-
-		final LNGScenarioModel lngScenarioModel = importer.doImport();
-
-		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
-
-		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
-		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
-
-		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-
-		// Create the required basic elements
-		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
-
 		// Construct the cargo scenario
 
 		// Create cargo 1, cargo 2
@@ -180,69 +102,18 @@ public class ShippingOnlyCargoOptiTests extends AbstractOptimisationResultTester
 		final Slot load2 = cargoModelBuilder.makeDESPurchase("L2", false, LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "1", null, null) //
 				.withOptional(true) //
 				.build();
-
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
-		userSettings.setGenerateCharterOuts(false);
-		userSettings.setShippingOnly(true);
-		userSettings.setSimilarityMode(SimilarityMode.OFF);
-
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
-		optimiserSettings.getAnnealingSettings().setIterations(10_000);
-
-		// Generate internal data
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
-		try {
-
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null, false,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			scenarioRunner.evaluateInitialState();
-
-			scenarioRunner.run();
+		evaluateWithLSOTest(true, optimiserSettings -> optimiserSettings.setShippingOnly(true), null, scenarioRunner -> {
 
 			// Wiring should have changed
 			Assert.assertSame(load1, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(0));
 			Assert.assertSame(discharge1, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(1));
-
-		} finally {
-			executorService.shutdownNow();
-		}
+		});
 	}
 
 	@Test
 	@Category(MicroTest.class)
 	public void shippingOnly_OptionalSlots_Permitted() throws Exception {
 
-		// Load in the basic scenario from CSV
-
-		final @NonNull String urlRoot = getClass().getResource("/referencedata/reference-data-1/").toString();
-		final CSVImporter importer = new CSVImporter();
-		importer.importPortData(urlRoot);
-		importer.importCostData(urlRoot);
-		importer.importEntityData(urlRoot);
-		importer.importFleetData(urlRoot);
-		importer.importMarketData(urlRoot);
-		importer.importPromptData(urlRoot);
-		importer.importMarketData(urlRoot);
-		importer.importContractData(urlRoot);
-
-		final LNGScenarioModel lngScenarioModel = importer.doImport();
-
-		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
-
-		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
-		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
-
-		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-
-		// Create the required basic elements
-		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
-
 		// Construct the cargo scenario
 
 		// Create cargo 1, cargo 2
@@ -252,66 +123,17 @@ public class ShippingOnlyCargoOptiTests extends AbstractOptimisationResultTester
 		cargoModelBuilder.makeDESSale("D1", LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "7") //
 				.build(); //
 
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
-		userSettings.setGenerateCharterOuts(false);
-		userSettings.setShippingOnly(false);
-		userSettings.setSimilarityMode(SimilarityMode.OFF);
-
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
-		optimiserSettings.getAnnealingSettings().setIterations(10_000);
-
-		// Generate internal data
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
-		try {
-
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null, false,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			scenarioRunner.evaluateInitialState();
-
-			scenarioRunner.run();
+		evaluateWithLSOTest(true, optimiserSettings -> optimiserSettings.setShippingOnly(false), null, scenarioRunner -> {
 
 			Assert.assertEquals(1, lngScenarioModel.getCargoModel().getCargoes().size());
 
-		} finally {
-			executorService.shutdownNow();
-		}
+		});
 	}
 
 	@Test
 	@Category(MicroTest.class)
 	public void shippingOnly_OptionalSlots_NotPermitted() throws Exception {
 
-		// Load in the basic scenario from CSV
-
-		final @NonNull String urlRoot = getClass().getResource("/referencedata/reference-data-1/").toString();
-		final CSVImporter importer = new CSVImporter();
-		importer.importPortData(urlRoot);
-		importer.importCostData(urlRoot);
-		importer.importEntityData(urlRoot);
-		importer.importFleetData(urlRoot);
-		importer.importMarketData(urlRoot);
-		importer.importPromptData(urlRoot);
-		importer.importMarketData(urlRoot);
-		importer.importContractData(urlRoot);
-
-		final LNGScenarioModel lngScenarioModel = importer.doImport();
-
-		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
-
-		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
-		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
-
-		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-
-		// Create the required basic elements
-		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
-
 		// Construct the cargo scenario
 
 		// Create cargo 1, cargo 2
@@ -321,29 +143,10 @@ public class ShippingOnlyCargoOptiTests extends AbstractOptimisationResultTester
 		cargoModelBuilder.makeDESSale("D1", LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "7") //
 				.build(); //
 
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
-		userSettings.setGenerateCharterOuts(false);
-		userSettings.setShippingOnly(true);
-		userSettings.setSimilarityMode(SimilarityMode.OFF);
-
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
-		optimiserSettings.getAnnealingSettings().setIterations(10_000);
-
-		// Generate internal data
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
-		try {
-
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null, false,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			scenarioRunner.evaluateInitialState();
-
-			scenarioRunner.run();
+		evaluateWithLSOTest(true, optimiserSettings -> optimiserSettings.setShippingOnly(true), null, scenarioRunner -> {
 
 			Assert.assertEquals(0, lngScenarioModel.getCargoModel().getCargoes().size());
 
-		} finally {
-			executorService.shutdownNow();
-		}
+		});
 	}
 }

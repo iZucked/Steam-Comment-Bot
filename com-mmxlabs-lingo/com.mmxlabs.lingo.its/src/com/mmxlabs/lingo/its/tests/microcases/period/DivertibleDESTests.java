@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.lingo.its.tests.category.QuickTest;
+import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroTestUtils;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -47,7 +48,7 @@ import com.mmxlabs.optimiser.core.ISequences;
  *
  */
 @RunWith(value = ShiroRunner.class)
-public class DivertibleDESTests extends AbstractPeriodTestCase {
+public class DivertibleDESTests extends AbstractMicroTestCase {
 
 	/**
 	 * This test case originally lead to a scenario with no cargoes as the sale was outside the period and des cargoes are based on sales date.

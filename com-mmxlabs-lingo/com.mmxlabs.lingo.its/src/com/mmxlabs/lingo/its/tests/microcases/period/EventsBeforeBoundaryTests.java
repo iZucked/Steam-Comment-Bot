@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.lingo.its.tests.category.QuickTest;
+import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroTestUtils;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -49,7 +50,7 @@ import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.optimiser.core.ISequences;
 
 @RunWith(value = ShiroRunner.class)
-public class EventsBeforeBoundaryTests extends AbstractPeriodTestCase {
+public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 
 	@Test
 	@Category({ QuickTest.class, MicroTest.class })

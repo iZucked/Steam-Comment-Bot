@@ -13,15 +13,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelFinder;
-import com.mmxlabs.models.lng.fleet.util.FleetModelBuilder;
-import com.mmxlabs.models.lng.fleet.util.FleetModelFinder;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
@@ -36,40 +33,11 @@ import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBoot
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 
-public class NonShippedCargoSwapOptiTests extends AbstractOptimisationResultTester {
+public class NonShippedCargoSwapOptiTests extends AbstractMicroTestCase {
 
 	@Test
 	@Category(MicroTest.class)
 	public void desPurchaseSwapTest() throws Exception {
-
-		// Load in the basic scenario from CSV
-
-		final @NonNull String urlRoot = getClass().getResource("/referencedata/reference-data-1/").toString();
-		final CSVImporter importer = new CSVImporter();
-		importer.importPortData(urlRoot);
-		importer.importCostData(urlRoot);
-		importer.importEntityData(urlRoot);
-		importer.importFleetData(urlRoot);
-		importer.importMarketData(urlRoot);
-		importer.importPromptData(urlRoot);
-		importer.importMarketData(urlRoot);
-		importer.importContractData(urlRoot);
-
-		final LNGScenarioModel lngScenarioModel = importer.doImport();
-
-		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
-
-		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
-		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
-
-		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-
-		// Create the required basic elements
-		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
 		// Construct the cargo scenario
 
@@ -92,23 +60,7 @@ public class NonShippedCargoSwapOptiTests extends AbstractOptimisationResultTest
 				.withOptional(true) //
 				.build();
 
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
-		userSettings.setGenerateCharterOuts(false);
-		userSettings.setShippingOnly(false);
-		userSettings.setSimilarityMode(SimilarityMode.OFF);
-
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
-		optimiserSettings.getAnnealingSettings().setIterations(10_000);
-
-		// Generate internal data
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
-		try {
-
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null, false,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			scenarioRunner.evaluateInitialState();
+		evaluateWithLSOTest(scenarioRunner -> {
 
 			scenarioRunner.run();
 
@@ -116,41 +68,12 @@ public class NonShippedCargoSwapOptiTests extends AbstractOptimisationResultTest
 			Assert.assertSame(load2, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(0));
 			Assert.assertSame(discharge1, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(1));
 
-		} finally {
-			executorService.shutdownNow();
-		}
+		});
 	}
 
 	@Test
 	@Category(MicroTest.class)
 	public void fobSaleSwapTest() throws Exception {
-
-		// Load in the basic scenario from CSV
-
-		final @NonNull String urlRoot = getClass().getResource("/referencedata/reference-data-1/").toString();
-		final CSVImporter importer = new CSVImporter();
-		importer.importPortData(urlRoot);
-		importer.importCostData(urlRoot);
-		importer.importEntityData(urlRoot);
-		importer.importFleetData(urlRoot);
-		importer.importMarketData(urlRoot);
-		importer.importPromptData(urlRoot);
-		importer.importMarketData(urlRoot);
-		importer.importContractData(urlRoot);
-
-		final LNGScenarioModel lngScenarioModel = importer.doImport();
-
-		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
-
-		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
-
-		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-
-		// Create the required basic elements
-		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
 		// Construct the cargo scenario
 
@@ -172,23 +95,7 @@ public class NonShippedCargoSwapOptiTests extends AbstractOptimisationResultTest
 				.withOptional(true) //
 				.build();
 
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
-		userSettings.setGenerateCharterOuts(false);
-		userSettings.setShippingOnly(false);
-		userSettings.setSimilarityMode(SimilarityMode.OFF);
-
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
-		optimiserSettings.getAnnealingSettings().setIterations(10_000);
-
-		// Generate internal data
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
-		try {
-
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null, false,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			scenarioRunner.evaluateInitialState();
+		evaluateWithLSOTest(scenarioRunner -> {
 
 			scenarioRunner.run();
 
@@ -196,9 +103,7 @@ public class NonShippedCargoSwapOptiTests extends AbstractOptimisationResultTest
 			Assert.assertSame(load1, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(0));
 			Assert.assertSame(discharge2, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(1));
 
-		} finally {
-			executorService.shutdownNow();
-		}
+		});
 	}
 
 }

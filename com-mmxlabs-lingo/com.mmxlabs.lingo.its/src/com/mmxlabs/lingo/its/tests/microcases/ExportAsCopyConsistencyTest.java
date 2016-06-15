@@ -4,12 +4,8 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
-import java.net.MalformedURLException;
 import java.time.LocalDateTime;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -27,24 +23,15 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.util.FleetModelBuilder;
 import com.mmxlabs.models.lng.fleet.util.FleetModelFinder;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
-import com.mmxlabs.models.lng.parameters.ParametersFactory;
-import com.mmxlabs.models.lng.parameters.SimilarityMode;
-import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.util.PortModelFinder;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
-import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
-import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
-import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
-import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 
 @RunWith(value = ShiroRunner.class)
-public class ExportAsCopyConsistencyTest {
+public class ExportAsCopyConsistencyTest extends AbstractMicroTestCase {
 
 	/**
 	 * See BugzId: 1893
@@ -54,21 +41,6 @@ public class ExportAsCopyConsistencyTest {
 	@Test
 	@Category({ QuickTest.class, RegressionTest.class })
 	public void testExportAsCopyDoesNotDuplicateReferenceListItems() throws Exception {
-
-		// Load in the basic scenario from CSV
-		final LNGScenarioModel lngScenarioModel = importReferenceData();
-
-		// Create finder and builder
-		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
-		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
-
-		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
-		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
-		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
-
-		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
-		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
-		final SpotMarketsModelBuilder spotMarketsModelBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
 
 		// Create the required basic elements
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
@@ -91,59 +63,17 @@ public class ExportAsCopyConsistencyTest {
 				.withVesselAssignment(vesselAvailability_1, 1) //
 				.withAllowedVessels(vessel_1) //
 				.build(); //
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
-		userSettings.setGenerateCharterOuts(false);
-		userSettings.setShippingOnly(false);
-		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		// userSettings.setPeriodStart(YearMonth.of(2015, 11));
-		// userSettings.setPeriodEnd(YearMonth.of(2016, 1));
+		evaluateTest(null, null, scenarioRunner -> {
 
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
-
-		// Generate internal data
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
-		try {
-
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null,
-					true);
-			scenarioRunner.evaluateInitialState();
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			// Check spot index has been updated
-			LNGScenarioModel copy = scenarioToOptimiserBridge.exportAsCopy(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null);
-			// Check spot index has been updated
-			// LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
-			// Check cargoes removed
+			final LNGScenarioModel copy = scenarioToOptimiserBridge.exportAsCopy(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null);
+
 			Assert.assertEquals(1, copy.getCargoModel().getVesselEvents().size());
 
-			VesselEvent event = copy.getCargoModel().getVesselEvents().get(0);
+			final VesselEvent event = copy.getCargoModel().getVesselEvents().get(0);
 			Assert.assertEquals(1, event.getAllowedVessels().size());
-		} finally {
-			executorService.shutdownNow();
-		}
-	}
-
-	@NonNull
-	public LNGScenarioModel importReferenceData() throws MalformedURLException {
-		return importReferenceData("/referencedata/reference-data-1/");
-	}
-
-	@NonNull
-	public LNGScenarioModel importReferenceData(final String url) throws MalformedURLException {
-
-		final @NonNull String urlRoot = getClass().getResource(url).toString();
-		final CSVImporter importer = new CSVImporter();
-		importer.importPortData(urlRoot);
-		importer.importCostData(urlRoot);
-		importer.importEntityData(urlRoot);
-		importer.importFleetData(urlRoot);
-		importer.importMarketData(urlRoot);
-		importer.importPromptData(urlRoot);
-		importer.importMarketData(urlRoot);
-
-		return importer.doImport();
+		});
 	}
 }
