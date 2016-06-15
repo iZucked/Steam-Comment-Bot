@@ -57,10 +57,10 @@ public class TotalVolumeLimit implements ITotalVolumeLimit {
 	 */
 	public void addSlotIfWindowsMatch(final IPortSlot slot) {
 		final ITimeWindow slotWindow = slot.getTimeWindow();
-		final int min = slotWindow.getStart();
-		final int max = slotWindow.getEnd();
+		final int min = slotWindow.getInclusiveStart();
+		final int max = slotWindow.getExclusiveEnd();
 
-		if (!((max < timeWindow.getStart()) || (min > timeWindow.getEnd()))) {
+		if (!((max < timeWindow.getInclusiveStart()) || (min > timeWindow.getExclusiveEnd()))) {
 			possibleSlots.add(slot);
 		}
 	}

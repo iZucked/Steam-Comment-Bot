@@ -81,9 +81,10 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot2, vesselAvailability1)).thenReturn(true);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element1, resource1)).thenReturn(true);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element2, resource1)).thenReturn(true);
+		Mockito.when(roundTripProvider.isBoundPair(element1, element2)).thenReturn(true);
 
 		Assert.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1));
-		Assert.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource1));
+		Assert.assertFalse(checker.checkPairwiseConstraint(element2, element1, resource1));
 
 		Assert.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource2));
 		Assert.assertFalse(checker.checkPairwiseConstraint(element2, element1, resource2));
@@ -121,7 +122,39 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 			Assert.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource));
 		}
 	}
+	@Test
+	public void testBothNotPermittedOnRoundTrip_UnboundPair() {
 
+		final IVesselProvider vesselProvider = Mockito.mock(IVesselProvider.class);
+		final IPortTypeProvider portTypeProvider = Mockito.mock(IPortTypeProvider.class);
+
+		final IRoundTripVesselPermissionProvider roundTripProvider = Mockito.mock(IRoundTripVesselPermissionProvider.class);
+
+		final RoundTripVesselPermissionConstraintChecker checker = createChecker(vesselProvider, roundTripProvider, portTypeProvider);
+
+		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
+		final IResource resource = Mockito.mock(IResource.class);
+
+		Mockito.when(vesselProvider.getResource(vesselAvailability)).thenReturn(resource);
+		Mockito.when(vesselProvider.getVesselAvailability(resource)).thenReturn(vesselAvailability);
+
+		Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.ROUND_TRIP);
+
+		final IPortSlot portSlot1 = Mockito.mock(IPortSlot.class);
+		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
+
+		final IPortSlot portSlot2 = Mockito.mock(IPortSlot.class);
+		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
+
+		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot1, vesselAvailability)).thenReturn(true);
+		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot2, vesselAvailability)).thenReturn(true);
+		Mockito.when(roundTripProvider.isPermittedOnResource(element1, resource)).thenReturn(true);
+		Mockito.when(roundTripProvider.isPermittedOnResource(element2, resource)).thenReturn(true);
+		Mockito.when(roundTripProvider.isBoundPair(element1, element2)).thenReturn(false);
+
+		Assert.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource));
+		Assert.assertFalse(checker.checkPairwiseConstraint(element2, element1, resource));
+	}
 	@Test
 	public void testBothPermittedOnRoundTrip() {
 
@@ -150,9 +183,11 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot2, vesselAvailability)).thenReturn(true);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element1, resource)).thenReturn(true);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element2, resource)).thenReturn(true);
+		Mockito.when(roundTripProvider.isBoundPair(element1, element2)).thenReturn(true);
 
 		Assert.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource));
-		Assert.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource));
+		// Only one way pairing
+		Assert.assertFalse(checker.checkPairwiseConstraint(element2, element1, resource));
 	}
 
 	@Test
@@ -264,6 +299,7 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 		Mockito.when(roundTripProvider.isPermittedOnResource(portSlot2, vesselAvailability)).thenReturn(true);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element1, resource)).thenReturn(true);
 		Mockito.when(roundTripProvider.isPermittedOnResource(element2, resource)).thenReturn(true);
+		Mockito.when(roundTripProvider.isBoundPair(element1, element2)).thenReturn(true);
 
 		Assert.assertTrue(checker.checkSequence(sequence, resource));
 	}

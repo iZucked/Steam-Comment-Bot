@@ -129,7 +129,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				}
 
 				final int lastArrivalTime = record.portTimesRecord.getSlotTime(slot);
-				final int extraExtent = window == null ? 30 * RELAXATION_STEP : (lastArrivalTime >= window.getEnd() ? 0 : window.getEnd() - lastArrivalTime);
+				final int extraExtent = window == null ? 30 * RELAXATION_STEP : (lastArrivalTime >= window.getExclusiveEnd() ? 0 : window.getExclusiveEnd() - lastArrivalTime);
 
 				evaluateVoyagePlan(record, state, extraExtent);
 				return;

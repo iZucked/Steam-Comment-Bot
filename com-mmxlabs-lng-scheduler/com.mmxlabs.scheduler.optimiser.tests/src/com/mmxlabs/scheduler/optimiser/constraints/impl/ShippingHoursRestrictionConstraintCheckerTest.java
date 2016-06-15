@@ -94,7 +94,7 @@ public class ShippingHoursRestrictionConstraintCheckerTest {
 		Mockito.when(shippingHoursRestrictionProvider.getShippingHoursRestriction(o1)).thenReturn(shippingHoursRestriction);
 		Mockito.when(shippingHoursRestrictionProvider.isDivertable(Matchers.any(ISequenceElement.class))).thenReturn(true);
 		final ITimeWindow timeWindow = Mockito.mock(ITimeWindow.class);
-		Mockito.when(timeWindow.getStart()).thenReturn(0);
+		Mockito.when(timeWindow.getInclusiveStart()).thenReturn(0);
 		Mockito.when(shippingHoursRestrictionProvider.getBaseTime(o1)).thenReturn(timeWindow);
 
 		Mockito.when(divertableDESShippingTimesCalculator.getDivertableDESTimes(Matchers.any(ILoadOption.class), Matchers.any(IDischargeOption.class), Matchers.any(IVessel.class),

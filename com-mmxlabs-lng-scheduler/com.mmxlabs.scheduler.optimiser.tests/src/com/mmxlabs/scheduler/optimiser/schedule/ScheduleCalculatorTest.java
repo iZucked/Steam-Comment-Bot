@@ -230,8 +230,8 @@ public class ScheduleCalculatorTest {
 		final int windowStart = 10;
 		final int windowEnd = 20;
 		final ITimeWindow timeWindow = mock(ITimeWindow.class);
-		when(timeWindow.getStart()).thenReturn(windowStart);
-		when(timeWindow.getEnd()).thenReturn(windowEnd);
+		when(timeWindow.getInclusiveStart()).thenReturn(windowStart);
+		when(timeWindow.getExclusiveEnd()).thenReturn(windowEnd);
 
 		when(portSlot1.getTimeWindow()).thenReturn(timeWindow);
 		when(portSlot2.getTimeWindow()).thenReturn(timeWindow);

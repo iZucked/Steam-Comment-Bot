@@ -151,7 +151,7 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 						return false;
 					}
 					final int returnTime = desTimes.getSecond();
-					if (returnTime - fobLoadDate.getStart() > shippingHours) {
+					if (returnTime - fobLoadDate.getInclusiveStart() > shippingHours) {
 						return false;
 					}
 					return true;

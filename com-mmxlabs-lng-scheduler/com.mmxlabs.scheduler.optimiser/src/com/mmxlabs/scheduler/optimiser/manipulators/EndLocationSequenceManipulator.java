@@ -274,7 +274,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 		assert timeWindow != null;
 
 		final int visitDuration = durationsProvider.getElementDuration(lastVisit, resource);
-		final int lastVoyageStartTime = timeWindow.getStart() + visitDuration;
+		final int lastVoyageStartTime = timeWindow.getInclusiveStart() + visitDuration;
 
 		IPort closestPort = null;
 		int closestPortDistance = Integer.MAX_VALUE;

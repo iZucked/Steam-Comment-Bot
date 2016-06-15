@@ -100,7 +100,7 @@ public abstract class PortSlot implements IPortSlot {
 	@Override
 	public String toString() {
 		final ITimeWindow pTimeWindow = timeWindow;
-		final String twStr = pTimeWindow == null ? "<any>" : String.format("<%d, %d>", pTimeWindow.getStart(), pTimeWindow.getEnd());
+		final String twStr = pTimeWindow == null ? "<any>" : String.format("<%d, %d>", pTimeWindow.getInclusiveStart(), pTimeWindow.getExclusiveEnd());
 		return String.format("%s %s", id, twStr);
 	}
 }

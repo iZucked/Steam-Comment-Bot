@@ -177,8 +177,8 @@ public class LatenessComponentTest {
 		IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
 		Mockito.when(portTimesRecord.getSlotTime(startSlot)).thenReturn(0);
 		Mockito.when(portTimesRecord.getSlotTime(endSlot)).thenReturn(0);
-		Mockito.when(portTimesRecord.getSlotTime(loadSlot)).thenReturn(loadEndTime + 1);
-		Mockito.when(portTimesRecord.getSlotTime(dischargeSlot)).thenReturn(dischargeEndTime + 1);
+		Mockito.when(portTimesRecord.getSlotTime(loadSlot)).thenReturn(loadEndTime - 1 + loadLateTime);
+		Mockito.when(portTimesRecord.getSlotTime(dischargeSlot)).thenReturn(dischargeEndTime - 1 + dischargeLateTime);
 		VolumeAllocatedSequence scheduledSequence = new VolumeAllocatedSequence(resource, mockedSequence, voyageStartTime,
 				new LinkedList<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>>(
 						Arrays.asList(new Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>(voyagePlan, null, portTimesRecord))));
@@ -192,8 +192,8 @@ public class LatenessComponentTest {
 		c.startSequence(resource);
 		c.nextVoyagePlan(voyagePlan, voyageStartTime);
 		c.nextObject(startDetails, 0);
-		c.nextObject(loadDetails, loadEndTime + loadLateTime);
-		c.nextObject(dischargeDetails, dischargeEndTime + dischargeLateTime);
+		c.nextObject(loadDetails, loadEndTime - 1 + loadLateTime);
+		c.nextObject(dischargeDetails, dischargeEndTime - 1 + dischargeLateTime);
 		c.nextObject(endDetails, 0);
 
 		c.endSequence();

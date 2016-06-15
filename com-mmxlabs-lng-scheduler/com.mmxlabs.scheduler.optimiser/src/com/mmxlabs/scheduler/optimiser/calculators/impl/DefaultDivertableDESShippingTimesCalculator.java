@@ -51,7 +51,7 @@ public class DefaultDivertableDESShippingTimesCalculator implements IDivertableD
 	private Pair<@NonNull Integer, @NonNull ERouteOption> getDischargeTimeAndRoute(final @NonNull ILoadOption buyOption, final @NonNull IDischargeOption sellOption,
 			final @NonNull IVessel nominatedVessel, final @NonNull IResource resource) {
 		final ISequenceElement buyElement = portSlotProvider.getElement(buyOption);
-		final int fobLoadTime = shippingHoursRestrictionProvider.getBaseTime(buyElement).getStart();
+		final int fobLoadTime = shippingHoursRestrictionProvider.getBaseTime(buyElement).getInclusiveStart();
 		final int loadDuration = durationProvider.getElementDuration(buyElement, resource);
 
 		final Triple<Integer, ERouteOption, Integer> distanceData = getShortestTravelTimeToPort(buyOption, buyOption.getPort(), sellOption.getPort(), nominatedVessel,
@@ -65,7 +65,7 @@ public class DefaultDivertableDESShippingTimesCalculator implements IDivertableD
 		final int notionalDischargeTime = fobLoadTime + loadDuration + notionalLadenTime;
 		final ITimeWindow sellWindow = sellOption.getTimeWindow();
 
-		return new Pair<>(Math.max(notionalDischargeTime, sellWindow.getStart()), route);
+		return new Pair<>(Math.max(notionalDischargeTime, sellWindow.getInclusiveStart()), route);
 	}
 
 	@Override

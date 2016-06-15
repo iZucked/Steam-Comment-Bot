@@ -115,7 +115,7 @@ public class PortTimesPlanner {
 						if (actualsDataProvider.hasActuals(thisPortSlot)) {
 							startTime = actualsDataProvider.getArrivalTime(thisPortSlot);
 						} else {
-							final int windowStart = timeWindow.getStart();
+							final int windowStart = timeWindow.getInclusiveStart();
 							startTime = Math.max(windowStart, startTime);
 						}
 					}
@@ -126,7 +126,7 @@ public class PortTimesPlanner {
 					} else {
 						// Divertible FOB has sales time window
 						// if (!shippingHoursRestrictionProvider.isDivertable(element)) {
-						final int windowStart = timeWindow.getStart();
+						final int windowStart = timeWindow.getInclusiveStart();
 						startTime = Math.max(windowStart, startTime);
 					}
 				}

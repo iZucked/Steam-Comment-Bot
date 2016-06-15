@@ -41,6 +41,7 @@ import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
+import com.mmxlabs.scheduler.optimiser.builder.impl.TimeWindowMaker;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -126,16 +127,16 @@ public class SimpleSchedulerTest {
 		builder.createVesselAvailability(vessel3, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
 				builder.createEndRequirement(Collections.singleton(port6), null, false, 0, false));
 
-		final ITimeWindow tw1 = builder.createTimeWindow(5, 6);
-		final ITimeWindow tw2 = builder.createTimeWindow(10, 11);
+		final ITimeWindow tw1 = TimeWindowMaker.createInclusiveExclusive(5, 6, 0, false);
+		final ITimeWindow tw2 = TimeWindowMaker.createInclusiveExclusive(10, 11, 0, false);
 
-		final ITimeWindow tw3 = builder.createTimeWindow(15, 16);
-		final ITimeWindow tw4 = builder.createTimeWindow(20, 21);
+		final ITimeWindow tw3 = TimeWindowMaker.createInclusiveExclusive(15, 16, 0, false);
+		final ITimeWindow tw4 = TimeWindowMaker.createInclusiveExclusive(20, 21, 0, false);
 
-		final ITimeWindow tw5 = builder.createTimeWindow(25, 26);
-		final ITimeWindow tw6 = builder.createTimeWindow(30, 31);
+		final ITimeWindow tw5 = TimeWindowMaker.createInclusiveExclusive(25, 26, 0, false);
+		final ITimeWindow tw6 = TimeWindowMaker.createInclusiveExclusive(30, 31, 0, false);
 
-		final ITimeWindow tw7 = builder.createTimeWindow(35, 36);
+		final ITimeWindow tw7 = TimeWindowMaker.createInclusiveExclusive(35, 36, 0, false);
 
 		final ILoadPriceCalculator purchaseCurve = new FixedPriceContract(5);
 		final ISalesPriceCalculator salesCurve = new FixedPriceContract(200000);

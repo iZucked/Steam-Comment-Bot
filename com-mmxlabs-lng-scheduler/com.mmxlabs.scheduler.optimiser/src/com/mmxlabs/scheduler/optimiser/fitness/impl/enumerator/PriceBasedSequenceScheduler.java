@@ -57,8 +57,8 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 	private void updateFollowingPortTimeRecordStartTime(IPortTimeWindowsRecord first, IPortTimeWindowsRecord second) {
 		IPortSlot lastSlotFirst = first.getSlots().get(first.getSlots().size() - 1);
 		IPortSlot firstSlotSecond = second.getFirstSlot();
-		ITimeWindow timeWindow = new TimeWindow(first.getSlotFeasibleTimeWindow(lastSlotFirst).getStart(), second.getFirstSlotFeasibleTimeWindow().getStart(),
-				second.getFirstSlotFeasibleTimeWindow().getEndFlex());
+		ITimeWindow timeWindow = new TimeWindow(first.getSlotFeasibleTimeWindow(lastSlotFirst).getInclusiveStart(), second.getFirstSlotFeasibleTimeWindow().getInclusiveStart(),
+				second.getFirstSlotFeasibleTimeWindow().getExclusiveEndFlex());
 		second.setSlotFeasibleTimeWindow(firstSlotSecond, timeWindow);
 	}
 
@@ -75,8 +75,8 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 	private void updateTimeWindows(IPortTimeWindowsRecord portTimeWindowsRecord, int seqIndex) {
 		for (IPortSlot portSlot : portTimeWindowsRecord.getSlots()) {
 			ITimeWindow timeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(portSlot);
-			windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)] = timeWindow.getStart();
-			windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)] = timeWindow.getEnd();
+			windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)] = timeWindow.getInclusiveStart();
+			windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)] = timeWindow.getExclusiveEnd();
 		}
 	}
 
@@ -144,7 +144,7 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 			return;
 		}
 		if (sizes[seq] >= index) {
-			windowStartTime[seq][index] = timeWindow.getStart();
+			windowStartTime[seq][index] = timeWindow.getInclusiveStart();
 		}
 	}
 
