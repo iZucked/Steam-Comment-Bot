@@ -10,7 +10,8 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.models.lng.scenario.model;bundle-version="[3.12.7,4.0.0)",
  com.mmxlabs.models.ui.validation;bundle-version="[3.12.7,4.0.0)",
  com.mmxlabs.models.lng.commercial.validation;bundle-version="[3.12.7,4.0.0)",
- org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
+ org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
+ com.mmxlabs.models.lng.pricing.validation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: com.mmxlabs.common

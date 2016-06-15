@@ -13,7 +13,8 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.scheduler.optimiser;bundle-version="[3.12.7,4.0.0)",
  com.mmxlabs.models.lng.cargo.editor;bundle-version="[3.12.7,4.0.0)",
  com.mmxlabs.common.common-util;bundle-version="[3.12.7,4.0.0)",
- org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
+ org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
+ com.mmxlabs.license.features
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: org.slf4j;version="1.6.4"
