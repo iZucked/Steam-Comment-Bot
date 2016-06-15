@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.OptionalInt;
 
+import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -70,13 +71,17 @@ public class WrappedAssignableElement {
 					final ZonedDateTime slotTime = getWindowStart(slot, dateProvider);
 					if (lastPort != null && lastTime != null) {
 						final int minTravelTime = portModel == null ? 0 : getTravelTime(assignableElement, portModel, lastPort, nextPort);
-
-						final ZonedDateTime nextTime = lastTime.plusHours(minTravelTime);
-
-						if (nextTime.isAfter(slotTime)) {
-							lastTime = nextTime;
-						} else {
+						if (minTravelTime == Integer.MAX_VALUE) {
 							lastTime = slotTime;
+
+						} else {
+							final ZonedDateTime nextTime = lastTime.plusHours(minTravelTime);
+
+							if (nextTime.isAfter(slotTime)) {
+								lastTime = nextTime;
+							} else {
+								lastTime = slotTime;
+							}
 						}
 					} else {
 						lastTime = slotTime;
@@ -103,18 +108,22 @@ public class WrappedAssignableElement {
 					final Port nextPort = slot.getPort();
 					if (lastPort != null && lastTime != null) {
 						final int minTravelTime = portModel == null ? 0 : getTravelTime(assignableElement, portModel, nextPort, lastPort);
-
-						// latest Departure time
-						ZonedDateTime nextTime = lastTime.minusHours(minTravelTime);
-
-						final int duration = getDurationInHours(slot, dateProvider);
-
-						nextTime = nextTime.minusHours(duration);
-
-						if (nextTime.isAfter(slotTime)) {
+						if (minTravelTime == Integer.MAX_VALUE) {
 							lastTime = slotTime;
+
 						} else {
-							lastTime = nextTime;
+							// latest Departure time
+							ZonedDateTime nextTime = lastTime.minusHours(minTravelTime);
+
+							final int duration = getDurationInHours(slot, dateProvider);
+
+							nextTime = nextTime.minusHours(duration);
+
+							if (nextTime.isAfter(slotTime)) {
+								lastTime = slotTime;
+							} else {
+								lastTime = nextTime;
+							}
 						}
 					} else {
 						lastTime = slotTime;
@@ -257,24 +266,27 @@ public class WrappedAssignableElement {
 		int travelTimeInHours = Integer.MAX_VALUE;
 		if (portModel != null) {
 			for (final Route route : portModel.getRoutes()) {
-				final RouteDistanceLineCache cache = (RouteDistanceLineCache) Platform.getAdapterManager().loadAdapter(route, RouteDistanceLineCache.class.getName());
-				if (cache != null) {
-					final int distance = cache.getDistance(from, to);
+				IAdapterManager adapterManager = Platform.isRunning() ? Platform.getAdapterManager() : null;
+				if (adapterManager != null) {
+					final RouteDistanceLineCache cache = (RouteDistanceLineCache) adapterManager.loadAdapter(route, RouteDistanceLineCache.class.getName());
+					if (cache != null) {
+						final int distance = cache.getDistance(from, to);
 
-					if (distance == Integer.MAX_VALUE) {
-						continue;
-					}
-
-					final double travelTime = distance / maxSpeed;
-					int totalTime = (int) (Math.floor(travelTime));
-
-					for (final VesselClassRouteParameters p : vesselClass.getRouteParameters()) {
-						if (p.getRoute() == route) {
-							totalTime += p.getExtraTransitTime();
+						if (distance == Integer.MAX_VALUE) {
+							continue;
 						}
-					}
 
-					travelTimeInHours = Math.min(totalTime, travelTimeInHours);
+						final double travelTime = distance / maxSpeed;
+						int totalTime = (int) (Math.floor(travelTime));
+
+						for (final VesselClassRouteParameters p : vesselClass.getRouteParameters()) {
+							if (p.getRoute() == route) {
+								totalTime += p.getExtraTransitTime();
+							}
+						}
+
+						travelTimeInHours = Math.min(totalTime, travelTimeInHours);
+					}
 				}
 			}
 		}
