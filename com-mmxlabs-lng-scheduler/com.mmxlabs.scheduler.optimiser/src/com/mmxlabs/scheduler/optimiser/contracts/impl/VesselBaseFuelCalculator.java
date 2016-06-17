@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
@@ -30,7 +31,12 @@ public class VesselBaseFuelCalculator implements IVesselBaseFuelCalculator {
 
 	@Override
 	public int getBaseFuelPrice(final IVessel vessel, final int voyagePlanStartTime) {
-		final IBaseFuel bf = vessel.getVesselClass().getBaseFuel();
+		return getBaseFuelPrice(vessel.getVesselClass(), voyagePlanStartTime);
+	}
+
+	@Override
+	public int getBaseFuelPrice(final IVesselClass vesselClass, final int voyagePlanStartTime) {
+		final IBaseFuel bf = vesselClass.getBaseFuel();
 		
 		final ICurve curve = baseFuelProvider.getBaseFuelCurve(bf);
 		if (curve != null) {

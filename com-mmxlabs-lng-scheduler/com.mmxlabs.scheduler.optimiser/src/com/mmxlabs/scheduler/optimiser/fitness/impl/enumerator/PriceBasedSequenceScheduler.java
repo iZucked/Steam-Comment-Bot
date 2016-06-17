@@ -14,8 +14,10 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.GeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowsTrimming;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimeWindowsRecord;
 
 /**
  * {@link EnumeratingSequenceScheduler} which checks for the best price on a per cargo basis in order to determine arrival times
@@ -40,6 +42,10 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 		return arrivalTimes;
 	}
 
+	public List<List<IPortTimeWindowsRecord>> getPortTimeWindowsRecords() {
+		return portTimeWindowsRecords;
+	}
+	
 	private void sequentialEarliestTimePriceBasedWindowTrimming(ISequences sequences, List<List<IPortTimeWindowsRecord>> portTimeWindowsRecords) {
 		for (int seqIndex = 0; seqIndex < sequences.size(); seqIndex++) {
 			List<IPortTimeWindowsRecord> list = portTimeWindowsRecords.get(seqIndex);

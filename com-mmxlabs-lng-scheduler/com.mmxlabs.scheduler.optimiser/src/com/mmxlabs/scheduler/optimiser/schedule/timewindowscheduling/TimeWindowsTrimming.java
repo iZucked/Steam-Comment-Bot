@@ -216,17 +216,19 @@ public class TimeWindowsTrimming {
 		for (int purchaseIndex = bestPurchaseDetailsIdx; purchaseIndex < purchaseIntervals.length; purchaseIndex++) {
 			for (int salesIndex = bestSalesDetailsIdx; salesIndex >= 0; salesIndex--) {
 				final int salesPrice = purchaseIntervals[purchaseIndex].price; // inverted!
-				final NonNullPair<LadenRouteData,Long> newCanalDetails = priceIntervalProviderHelper.getBestCanalDetailsWithBoiloff(purchaseIntervals[purchaseIndex], salesIntervals[salesIndex], loadDuration,
-						salesPrice, sortedCanalTimes, vessel.getVesselClass().getNBORate(VesselState.Laden), load.getCargoCVValue(), loadVolumeMMBTU);
-				final long boiloffCost = newCanalDetails.getSecond();
-				final long boiloffMargin = boiloffCost / loadVolumeMMBTU;
-				final long canalMargin = (newCanalDetails.getFirst().ladenRouteCost / loadVolumeMMBTU);
-				final long newMargin = purchaseIntervals[purchaseIndex].price - salesIntervals[salesIndex].price - canalMargin - boiloffMargin; // inverted!
+//				final NonNullPair<LadenRouteData,Long> newCanalDetails = priceIntervalProviderHelper.getBestCanalDetailsWithBoiloff(purchaseIntervals[purchaseIndex], salesIntervals[salesIndex], loadDuration,
+				NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[purchaseIndex], salesIntervals[salesIndex], loadDuration, salesPrice, sortedCanalTimes, vessel.getVesselClass().getNBORate(VesselState.Laden), vessel.getVesselClass(), load.getCargoCVValue());
+				//				final long boiloffCost = newCanalDetails.getSecond();
+//				final long boiloffMargin = boiloffCost / loadVolumeMMBTU;
+//				final long canalMargin = (newCanalDetails.getFirst().ladenRouteCost / loadVolumeMMBTU);
+				final long estimatedCostMMBTU = totalEstimatedJourneyCostDetails.getSecond() / loadVolumeMMBTU;
+
+				final long newMargin = purchaseIntervals[purchaseIndex].price - salesIntervals[salesIndex].price - estimatedCostMMBTU; // inverted!
 				if (newMargin > bestMargin) {
 					bestMargin = newMargin;
 					bestPurchaseDetailsIdx = purchaseIndex;
 					bestSalesDetailsIdx = salesIndex;
-					bestCanalDetails = newCanalDetails.getFirst();
+					bestCanalDetails = totalEstimatedJourneyCostDetails.getFirst();
 				}
 			}
 		}
@@ -246,7 +248,7 @@ public class TimeWindowsTrimming {
 	 * @param salesIntervals
 	 * @return
 	 */
-	private int[] findBestBucketPairWithRouteAndBoiloffConsiderations(final IVessel vessel, final ILoadOption load, final LadenRouteData[] sortedCanalTimes, final int loadDuration,
+	public int[] findBestBucketPairWithRouteAndBoiloffConsiderations(final IVessel vessel, final ILoadOption load, final LadenRouteData[] sortedCanalTimes, final int loadDuration,
 			final IntervalData[] purchaseIntervals, final IntervalData[] salesIntervals) {
 		assert purchaseIntervals.length > 0;
 
@@ -259,15 +261,17 @@ public class TimeWindowsTrimming {
 			for (int salesIndex = bestSalesDetailsIdx; salesIndex < salesIntervals.length; salesIndex++) {
 				final NonNullPair<LadenRouteData, Long> newCanalDetails = priceIntervalProviderHelper.getBestCanalDetailsWithBoiloff(purchaseIntervals[purchaseIndex], salesIntervals[salesIndex], loadDuration,
 						salesIntervals[salesIndex].price, sortedCanalTimes, vessel.getVesselClass().getNBORate(VesselState.Laden), load.getCargoCVValue(), loadVolumeMMBTU);
-				final long boiloffCost = newCanalDetails.getSecond();
-				final long boiloffMargin = boiloffCost / loadVolumeMMBTU;
-				final long canalMargin = newCanalDetails.getFirst().ladenRouteCost / loadVolumeMMBTU;
-				final long newMargin = salesIntervals[salesIndex].price - purchaseIntervals[purchaseIndex].price - canalMargin - boiloffMargin;
+				NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[purchaseIndex], salesIntervals[salesIndex], loadDuration, salesIntervals[salesIndex].price, sortedCanalTimes, vessel.getVesselClass().getNBORate(VesselState.Laden), vessel.getVesselClass(), load.getCargoCVValue());
+//				final long boiloffCost = newCanalDetails.getSecond();
+//				final long boiloffMargin = boiloffCost / loadVolumeMMBTU;
+//				final long canalMargin = newCanalDetails.getFirst().ladenRouteCost / loadVolumeMMBTU;
+				final long estimatedCostMMBTU = totalEstimatedJourneyCostDetails.getSecond() / loadVolumeMMBTU;
+				final long newMargin = salesIntervals[salesIndex].price - purchaseIntervals[purchaseIndex].price - estimatedCostMMBTU;
 				if (newMargin > bestMargin) {
 					bestMargin = newMargin;
 					bestPurchaseDetailsIdx = purchaseIndex;
 					bestSalesDetailsIdx = salesIndex;
-					bestCanalDetails = newCanalDetails.getFirst();
+					bestCanalDetails = totalEstimatedJourneyCostDetails.getFirst();
 				}
 			}
 		}
@@ -437,14 +441,14 @@ public class TimeWindowsTrimming {
 	}
 
 	@NonNull
-	private List<int[]> getLoadPriceIntervalsIndependentOfDischarge(final IPortTimeWindowsRecord portTimeWindowRecord, final ILoadOption load) {
+	public List<int[]> getLoadPriceIntervalsIndependentOfDischarge(final IPortTimeWindowsRecord portTimeWindowRecord, final ILoadOption load) {
 		final ITimeWindow loadTimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(load);
 		return priceIntervalProviderHelper.getFeasibleIntervalSubSet(loadTimeWindow.getStart(), loadTimeWindow.getEnd(),
 				priceIntervalProducer.getLoadIntervalsIndependentOfDischarge(load, portTimeWindowRecord));
 	}
 
 	@NonNull
-	private List<int[]> getDischargePriceIntervalsIndependentOfLoad(final IPortTimeWindowsRecord portTimeWindowRecord, final IDischargeOption discharge) {
+	public List<int[]> getDischargePriceIntervalsIndependentOfLoad(final IPortTimeWindowsRecord portTimeWindowRecord, final IDischargeOption discharge) {
 		final ITimeWindow dischargeTimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge);
 		return priceIntervalProviderHelper.getFeasibleIntervalSubSet(dischargeTimeWindow.getStart(), dischargeTimeWindow.getEnd(),
 				priceIntervalProducer.getDischargeWindowIndependentOfLoad(discharge, portTimeWindowRecord));
