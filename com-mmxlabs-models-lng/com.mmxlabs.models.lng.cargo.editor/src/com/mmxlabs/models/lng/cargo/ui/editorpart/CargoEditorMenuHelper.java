@@ -1137,7 +1137,8 @@ public class CargoEditorMenuHelper {
 						dischargeSlot.setWindowStart(dishargeCal);
 						dischargeSlot.setWindowStartTime(0);
 
-						dischargeSlot.setWindowSize(Hours.between(dishargeCal, dishargeCal.plusMonths(1)));
+						// Subtract 1 hour to limit within calendar month
+						dischargeSlot.setWindowSize(Hours.between(dishargeCal, dishargeCal.plusMonths(1)) - 1);
 
 						final String idPrefix = market.getName() + "-" + yearMonthString + "-";
 						int i = 0;
@@ -1162,7 +1163,8 @@ public class CargoEditorMenuHelper {
 
 						loadSlot.setWindowStart(cal);
 						loadSlot.setWindowStartTime(0);
-						loadSlot.setWindowSize(Hours.between(cal, cal.plusMonths(1)));
+						// Subtract 1 hour to limit within calendar month
+						loadSlot.setWindowSize(Hours.between(cal, cal.plusMonths(1)) - 1);
 
 						// Get existing names
 						final Set<String> usedIDStrings = new HashSet<>();

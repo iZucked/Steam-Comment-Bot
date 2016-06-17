@@ -141,7 +141,7 @@ public class CargoModelBuilder {
 		slot.setMarket(market);
 		slot.setOptional(true);
 		slot.setWindowStartTime(0);
-		slot.setWindowSize(Hours.between(windowStart, windowStart.plusMonths(1)));
+		slot.setWindowSize(Hours.between(windowStart, windowStart.plusMonths(1)) - 1);
 
 		cargoModel.getLoadSlots().add(slot);
 		return slot;
@@ -157,7 +157,7 @@ public class CargoModelBuilder {
 		slot.setMarket(market);
 		slot.setOptional(true);
 		slot.setWindowStartTime(0);
-		slot.setWindowSize(Hours.between(windowStart, windowStart.plusMonths(1)));
+		slot.setWindowSize(Hours.between(windowStart, windowStart.plusMonths(1)) - 1);
 
 		cargoModel.getLoadSlots().add(slot);
 		return slot;
@@ -228,7 +228,7 @@ public class CargoModelBuilder {
 		slot.setMarket(market);
 		slot.setOptional(true);
 		slot.setWindowStartTime(0);
-		slot.setWindowSize(Hours.between(windowStart, windowStart.plusMonths(1)));
+		slot.setWindowSize(Hours.between(windowStart, windowStart.plusMonths(1)) - 1);
 
 		cargoModel.getDischargeSlots().add(slot);
 
@@ -245,7 +245,7 @@ public class CargoModelBuilder {
 		slot.setFOBSale(true);
 		slot.setOptional(true);
 		slot.setWindowStartTime(0);
-		slot.setWindowSize(Hours.between(windowStart, windowStart.plusMonths(1)));
+		slot.setWindowSize(Hours.between(windowStart, windowStart.plusMonths(1)) - 1);
 
 		cargoModel.getDischargeSlots().add(slot);
 

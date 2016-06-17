@@ -50,6 +50,10 @@ public class BasicPNLProperties implements IDetailPropertyFactory {
 		final GroupProfitAndLoss groupPnL = profitAndLossContainer.getGroupProfitAndLoss();
 		final DetailProperty dp = PropertiesFactory.eINSTANCE.createDetailProperty();
 
+		if (groupPnL == null ){
+			return null;
+		}
+		
 		// Create standard details
 		createPnLDetailProperty(groupPnL, dp, "Group P&L", "Taxed Group profit and loss", false);
 
