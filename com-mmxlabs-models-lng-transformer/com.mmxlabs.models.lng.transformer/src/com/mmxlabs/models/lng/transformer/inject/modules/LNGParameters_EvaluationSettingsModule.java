@@ -116,12 +116,6 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 	}
 
 	@Provides
-	@Named(TravelTimeConstraintChecker.OPTIMISER_START_ELEMENT_FIX)
-	private boolean enableStartOfSequenceFix() {
-		return true;
-	}
-
-	@Provides
 	@Singleton
 	private ILatenessComponentParameters provideLatenessComponentParameters() {
 		final LatenessComponentParameters lcp = new LatenessComponentParameters();

@@ -47,7 +47,7 @@ public class LNGScenarioRunner {
 	@NonNull
 	private final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge;
 
-	public LNGScenarioToOptimiserBridge getScenarioToOptimiserBridge() {
+	public @NonNull LNGScenarioToOptimiserBridge getScenarioToOptimiserBridge() {
 		return scenarioToOptimiserBridge;
 	}
 

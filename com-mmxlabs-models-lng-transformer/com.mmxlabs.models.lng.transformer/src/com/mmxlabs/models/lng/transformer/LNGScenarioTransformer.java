@@ -130,11 +130,13 @@ import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
+import com.mmxlabs.scheduler.optimiser.builder.impl.TimeWindowMaker;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -884,7 +886,7 @@ public class LNGScenarioTransformer {
 				continue;
 			}
 
-			final ITimeWindow window = builder.createTimeWindow(dateHelper.convertTime(event.getStartAfterAsDateTime()), dateHelper.convertTime(event.getStartByAsDateTime()));
+			final ITimeWindow window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(event.getStartAfterAsDateTime()), dateHelper.convertTime(event.getStartByAsDateTime()), false);
 			final IPort port = portAssociation.lookupNullChecked(event.getPort());
 			final int durationHours = event.getDurationInDays() * 24;
 			final IVesselEventPortSlot builderSlot;
@@ -1098,9 +1100,7 @@ public class LNGScenarioTransformer {
 			// Convert port local external date/time into UTC based internal time units
 			final int twStart = timeZoneToUtcOffsetProvider.UTC(dateHelper.convertTime(startTime), port);
 			final int twEnd = timeZoneToUtcOffsetProvider.UTC(dateHelper.convertTime(endTime), port);
-			// This should probably be fixed in ScheduleBuilder#matchingWindows and elsewhere if needed, but subtract one to avoid e.g. 1st Feb 00:00 being permitted in the Jan
-			// month block
-			final ITimeWindow twUTC = builder.createTimeWindow(twStart, Math.max(twStart, twEnd - 1));
+			final ITimeWindow twUTC = TimeWindowMaker.createInclusiveInclusive(twStart, Math.max(twStart, twEnd), 0, false);
 
 			return twUTC;
 		} else {
@@ -1131,8 +1131,8 @@ public class LNGScenarioTransformer {
 				final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
 				for (final IPort port : marketPorts) {
 					// Take the UTC based window and shift according to local port timezone
-					final int twStart = timeZoneToUtcOffsetProvider.localTime(twForSlotBinding.getStart(), port);
-					final int twEnd = timeZoneToUtcOffsetProvider.localTime(twForSlotBinding.getEnd(), port);
+					final int twStart = timeZoneToUtcOffsetProvider.localTime(twForSlotBinding.getInclusiveStart(), port);
+					final int twEnd = timeZoneToUtcOffsetProvider.localTime(twForSlotBinding.getExclusiveEnd(), port);
 					marketPortsMap.put(port, new TimeWindow(twStart, twEnd));
 				}
 
@@ -1179,8 +1179,8 @@ public class LNGScenarioTransformer {
 				final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
 				for (final IPort port : marketPorts) {
 					// Take the UTC based window and shift according to local port timezone
-					final int twStart = timeZoneToUtcOffsetProvider.localTime(twForSlotBinding.getStart(), port);
-					final int twEnd = timeZoneToUtcOffsetProvider.localTime(twForSlotBinding.getEnd(), port);
+					final int twStart = timeZoneToUtcOffsetProvider.localTime(twForSlotBinding.getInclusiveStart(), port);
+					final int twEnd = timeZoneToUtcOffsetProvider.localTime(twForSlotBinding.getExclusiveEnd(), port);
 					marketPortsMap.put(port, new TimeWindow(twStart, twEnd));
 				}
 
@@ -1225,8 +1225,11 @@ public class LNGScenarioTransformer {
 
 		usedIDStrings.add(elementName);
 
-		final ITimeWindow dischargeWindow = builder.createTimeWindow(dateHelper.convertTime(dischargeSlot.getWindowStartWithSlotOrPortTimeWithFlex()),
-				dateHelper.convertTime(dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex()), dischargeSlot.getWindowFlex());
+		// final ITimeWindow dischargeWindow = builder.createTimeWindow(dateHelper.convertTime(dischargeSlot.getWindowStartWithSlotOrPortTimeWithFlex()),
+		// dateHelper.convertTime(dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex()), dischargeSlot.getWindowFlex());
+
+		final ITimeWindow dischargeWindow = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(dischargeSlot.getWindowStartWithSlotOrPortTimeWithFlex()),
+				dateHelper.convertTime(dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex()), dischargeSlot.getWindowFlex(), false);
 
 		final ISalesPriceCalculator dischargePriceCalculator;
 
@@ -1329,8 +1332,8 @@ public class LNGScenarioTransformer {
 
 				if (dischargeSlot instanceof SpotDischargeSlot) {
 					// Convert back into a UTC based date and add in TZ flex
-					final int utcStart = timeZoneToUtcOffsetProvider.UTC(dischargeWindow.getStart(), portAssociation.lookup(dischargeSlot.getPort()));
-					final int utcEnd = timeZoneToUtcOffsetProvider.UTC(dischargeWindow.getEnd(), portAssociation.lookup(dischargeSlot.getPort()));
+					final int utcStart = timeZoneToUtcOffsetProvider.UTC(dischargeWindow.getInclusiveStart(), portAssociation.lookup(dischargeSlot.getPort()));
+					final int utcEnd = timeZoneToUtcOffsetProvider.UTC(dischargeWindow.getExclusiveEnd(), portAssociation.lookup(dischargeSlot.getPort()));
 					localTimeWindow = createUTCPlusTimeWindow(utcStart, utcEnd);
 				} else {
 					localTimeWindow = dischargeWindow;
@@ -1387,8 +1390,8 @@ public class LNGScenarioTransformer {
 		final String elementName = String.format("%s-%s", loadSlot.isDESPurchase() ? "DP" : "FP", loadSlot.getName());
 		usedIDStrings.add(elementName);
 
-		final ITimeWindow loadWindow = builder.createTimeWindow(dateHelper.convertTime(loadSlot.getWindowStartWithSlotOrPortTimeWithFlex()),
-				dateHelper.convertTime(loadSlot.getWindowEndWithSlotOrPortTimeWithFlex()), loadSlot.getWindowFlex());
+		final ITimeWindow loadWindow = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(loadSlot.getWindowStartWithSlotOrPortTimeWithFlex()),
+				dateHelper.convertTime(loadSlot.getWindowEndWithSlotOrPortTimeWithFlex()), loadSlot.getWindowFlex(), false);
 
 		final ILoadPriceCalculator loadPriceCalculator;
 		final boolean isSpot = (loadSlot instanceof SpotSlot);
@@ -1468,11 +1471,11 @@ public class LNGScenarioTransformer {
 			final ITimeWindow localTimeWindow;
 			if (loadSlot.isDivertible()) {
 				// Extend window out to cover whole shipping days restriction
-				localTimeWindow = builder.createTimeWindow(loadWindow.getStart(), loadWindow.getEnd() + loadSlot.getShippingDaysRestriction() * 24);
+				localTimeWindow = TimeWindowMaker.createInclusiveExclusive(loadWindow.getInclusiveStart(), loadWindow.getExclusiveEnd() + loadSlot.getShippingDaysRestriction() * 24, 0, false);
 			} else if (loadSlot instanceof SpotLoadSlot) {
 				// Convert back into a UTC based date and add in TZ flex
-				final int utcStart = timeZoneToUtcOffsetProvider.UTC(loadWindow.getStart(), portAssociation.lookup(loadSlot.getPort()));
-				final int utcEnd = timeZoneToUtcOffsetProvider.UTC(loadWindow.getEnd(), portAssociation.lookup(loadSlot.getPort()));
+				final int utcStart = timeZoneToUtcOffsetProvider.UTC(loadWindow.getInclusiveStart(), portAssociation.lookup(loadSlot.getPort()));
+				final int utcEnd = timeZoneToUtcOffsetProvider.UTC(loadWindow.getExclusiveEnd(), portAssociation.lookup(loadSlot.getPort()));
 				localTimeWindow = createUTCPlusTimeWindow(utcStart, utcEnd);
 			} else {
 				localTimeWindow = loadWindow;
@@ -1599,7 +1602,7 @@ public class LNGScenarioTransformer {
 
 			// Convert this to the 1st of the month in the notional port timezone.
 			ZonedDateTime tzStartTime = initialYearMonth.atDay(1).atStartOfDay(ZoneId.of("UTC"));
-			while (tzStartTime.isBefore(latestDate)) {
+			while (!tzStartTime.isAfter(latestDate)) {
 
 				// Convert into timezoneless date objects (for EMF slot object)
 				final LocalDate startTime = tzStartTime.toLocalDate();
@@ -1653,7 +1656,7 @@ public class LNGScenarioTransformer {
 
 								// This should probably be fixed in ScheduleBuilder#matchingWindows and elsewhere if needed, but subtract one to avoid e.g. 1st Feb 00:00 being permitted in the Jan
 								// month block
-								final ITimeWindow twUTC = builder.createTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime) - 1);
+								final ITimeWindow twUTC = TimeWindowMaker.createInclusiveExclusive(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime), 0, false);
 								final ITimeWindow twUTCPlus = createUTCPlusTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime));
 
 								final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(desPurchaseMarket.getCv());
@@ -1685,7 +1688,7 @@ public class LNGScenarioTransformer {
 								desSlot.setWindowStartTime(0);
 								// desSlot.setContract(desPurchaseMarket.getContract());
 								desSlot.setOptional(true);
-								final int duration = Math.max(0, Hours.between(startTime, endTime));
+								final int duration = Math.max(0, Hours.between(startTime, endTime) - 1);
 								desSlot.setWindowSize(duration);
 								// Key piece of information
 								desSlot.setMarket(desPurchaseMarket);
@@ -1698,8 +1701,8 @@ public class LNGScenarioTransformer {
 								final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
 								for (final IPort port : marketPorts) {
 									// Use the UTC based time window
-									final int twStart = timeZoneToUtcOffsetProvider.localTime(twUTC.getStart(), port);
-									final int twEnd = timeZoneToUtcOffsetProvider.localTime(twUTC.getEnd(), port);
+									final int twStart = timeZoneToUtcOffsetProvider.localTime(twUTC.getInclusiveStart(), port);
+									final int twEnd = timeZoneToUtcOffsetProvider.localTime(twUTC.getExclusiveEnd(), port);
 									marketPortsMap.put(port, new TimeWindow(twStart, twEnd));
 								}
 								builder.bindDischargeSlotsToDESPurchase(desPurchaseSlot, marketPortsMap);
@@ -1738,7 +1741,7 @@ public class LNGScenarioTransformer {
 
 			// Convert this to the 1st of the month in the notional port timezone.
 			ZonedDateTime tzStartTime = initialYearMonth.atDay(1).atStartOfDay(ZoneId.of("UTC"));
-			while (tzStartTime.isBefore(latestDate)) {
+			while (!tzStartTime.isAfter(latestDate)) {
 
 				// Convert into timezoneless date objects (for EMF slot object)
 				final LocalDate startTime = tzStartTime.toLocalDate();
@@ -1791,7 +1794,7 @@ public class LNGScenarioTransformer {
 
 								// This should probably be fixed in ScheduleBuilder#matchingWindows and elsewhere if needed, but subtract one to avoid e.g. 1st Feb 00:00 being permitted in the Jan
 								// month block
-								final ITimeWindow twUTC = builder.createTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime) - 1);
+								final ITimeWindow twUTC = TimeWindowMaker.createInclusiveExclusive(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime), 0, false);
 								final ITimeWindow twUTCPlus = createUTCPlusTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime));
 
 								final String typePrefix = "FS-";
@@ -1823,7 +1826,7 @@ public class LNGScenarioTransformer {
 								fobSlot.setWindowStartTime(0);
 								// fobSlot.setContract(fobSaleMarket.getContract());
 								fobSlot.setOptional(true);
-								final int duration = Math.max(0, Hours.between(startTime, endTime));
+								final int duration = Math.max(0, Hours.between(startTime, endTime) - 1);
 								fobSlot.setWindowSize(duration);
 								// Key piece of information
 								fobSlot.setMarket(fobSaleMarket);
@@ -1836,8 +1839,8 @@ public class LNGScenarioTransformer {
 								final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
 								for (final IPort port : marketPorts) {
 									// Use the UTC based time window
-									final int twStart = timeZoneToUtcOffsetProvider.localTime(twUTC.getStart(), port);
-									final int twEnd = timeZoneToUtcOffsetProvider.localTime(twUTC.getEnd(), port);
+									final int twStart = timeZoneToUtcOffsetProvider.localTime(twUTC.getInclusiveStart(), port);
+									final int twEnd = timeZoneToUtcOffsetProvider.localTime(twUTC.getExclusiveEnd(), port);
 									marketPortsMap.put(port, new TimeWindow(twStart, twEnd));
 								}
 
@@ -1875,8 +1878,8 @@ public class LNGScenarioTransformer {
 	 * @return
 	 */
 	@NonNull
-	private ITimeWindow createUTCPlusTimeWindow(final int startTime, final int endTime) {
-		return builder.createTimeWindow(startTime - 12, endTime + 14);
+	private ITimeWindow createUTCPlusTimeWindow(final int inclusiveStartTime, final int exclusiveEndTime) {
+		return TimeWindowMaker.createInclusiveExclusive(inclusiveStartTime - 12, exclusiveEndTime + 14, 0, false);
 	}
 
 	private void buildDESSalesSpotMarket(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation,
@@ -1908,7 +1911,7 @@ public class LNGScenarioTransformer {
 					// Convert this to the 1st of the month in the notional port timezone.
 					ZonedDateTime tzStartTime = initialYearMonth.atDay(1).atStartOfDay(ZoneId.of(notionalAPort.getTimeZone()));
 					// Loop!
-					while (tzStartTime.isBefore(latestDate)) {
+					while (!tzStartTime.isAfter(latestDate)) {
 
 						// Convert into timezoneless date objects (for EMF slot object)
 						final LocalDate startTime = tzStartTime.toLocalDate();
@@ -1935,7 +1938,7 @@ public class LNGScenarioTransformer {
 							int offset = 0;
 							for (int i = 0; i < remaining; ++i) {
 
-								final ITimeWindow tw = builder.createTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime));
+								final ITimeWindow tw = TimeWindowMaker.createInclusiveExclusive(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime), 0, false);
 
 								final String typePrefix = "DS-";
 								final String externalIDPrefix = market.getName() + "-" + yearMonthString + "-";
@@ -1957,7 +1960,7 @@ public class LNGScenarioTransformer {
 								// desSlot.setContract(desSalesMarket.getContract());
 								desSlot.setOptional(true);
 								desSlot.setPort((Port) notionalAPort);
-								final int duration = Math.max(0, Hours.between(startTime, endTime));
+								final int duration = Math.max(0, Hours.between(startTime, endTime) - 1);
 								desSlot.setWindowSize(duration);
 
 								final int pricingDate = getSlotPricingDate(desSlot);
@@ -2033,7 +2036,7 @@ public class LNGScenarioTransformer {
 					// Convert this to the 1st of the month in the notional port timezone.
 					ZonedDateTime tzStartTime = initialYearMonth.atDay(1).atStartOfDay(ZoneId.of(notionalAPort.getTimeZone()));
 
-					while (tzStartTime.isBefore(latestDate)) {
+					while (!tzStartTime.isAfter(latestDate)) {
 
 						// Convert into timezoneless date objects (for EMF slot object)
 						final LocalDate startTime = tzStartTime.toLocalDate();
@@ -2062,7 +2065,7 @@ public class LNGScenarioTransformer {
 							int offset = 0;
 							for (int i = 0; i < remaining; ++i) {
 
-								final ITimeWindow tw = builder.createTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime));
+								final ITimeWindow tw = TimeWindowMaker.createInclusiveExclusive(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime), 0, false);
 								final String typePrefix = "FP-";
 								final String externalIDPrefix = market.getName() + "-" + yearMonthString + "-";
 
@@ -2085,7 +2088,7 @@ public class LNGScenarioTransformer {
 								fobSlot.setArriveCold(true);
 								// fobSlot.setCargoCV(fobPurchaseMarket.getCv());
 								fobSlot.setPort((Port) notionalAPort);
-								final int duration = Math.max(0, Hours.between(startTime, endTime));
+								final int duration = Math.max(0, Hours.between(startTime, endTime) - 1);
 								fobSlot.setWindowSize(duration);
 
 								final ILoadOption fobPurchaseSlot = builder.createLoadSlot(internalID, notionalIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
@@ -2725,11 +2728,11 @@ public class LNGScenarioTransformer {
 		ITimeWindow window = null;
 
 		if (from == null && to != null) {
-			window = builder.createTimeWindow(dateHelper.convertTime(dateHelper.getEarliestTime()), dateHelper.convertTime(to));
+			window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(dateHelper.getEarliestTime()), dateHelper.convertTime(to), 0, false);
 		} else if (from != null && to == null) {
-			window = builder.createTimeWindow(dateHelper.convertTime(from), dateHelper.convertTime(dateHelper.getLatestTime()));
+			window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(from), dateHelper.convertTime(dateHelper.getLatestTime()), 0, false);
 		} else if (from != null && to != null) {
-			window = builder.createTimeWindow(dateHelper.convertTime(from), dateHelper.convertTime(to));
+			window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(from), dateHelper.convertTime(to), 0, false);
 		}
 
 		IHeelOptions heelOptions;
@@ -2761,11 +2764,13 @@ public class LNGScenarioTransformer {
 
 		boolean isOpenEnded = false;
 		if (from == null && to != null) {
-			window = builder.createTimeWindow(dateHelper.convertTime(dateHelper.getEarliestTime()), dateHelper.convertTime(to));
+			window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(dateHelper.getEarliestTime()), dateHelper.convertTime(to), 0, false);
 		} else if (from != null && to == null) {
-			window = builder.createTimeWindow(dateHelper.convertTime(from), Integer.MIN_VALUE);
+			// Set a default window end date which is valid change later
+			window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(from), dateHelper.convertTime(from), 0, true);
+			builder.addOpenEndWindow((MutableTimeWindow) window);
 		} else if (from != null && to != null) {
-			window = builder.createTimeWindow(dateHelper.convertTime(from), dateHelper.convertTime(to));
+			window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(from), dateHelper.convertTime(to), 0, false);
 		} else {
 			// No window
 			isOpenEnded = true;

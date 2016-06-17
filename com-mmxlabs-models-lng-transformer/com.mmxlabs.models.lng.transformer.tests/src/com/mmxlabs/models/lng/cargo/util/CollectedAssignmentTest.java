@@ -236,9 +236,9 @@ public class CollectedAssignmentTest {
 		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
 		final Port port = PortFactory.eINSTANCE.createPort();
 		port.setTimeZone("Etc/UTC");
-		final Cargo cargo1 = createCargo("cargo1", port, LocalDate.of(2016, 01, 01), 2 * 24, port, LocalDate.of(2016, 02, 01), 24);
+		final Cargo cargo1 = createCargo("cargo1", port, LocalDate.of(2016, 01, 01), 2 * 24, port, LocalDate.of(2016, 02, 01), 24 - 1);
 		// start event within load window - this should be enough to schedule before cargo
-		final VesselEvent event1 = createEvent("event1", port, LocalDateTime.of(2016, 01, 2, 0, 0), 27 * 24, 1);
+		final VesselEvent event1 = createEvent("event1", port, LocalDateTime.of(2016, 01, 2, 0, 0), 27 * 24 - 1, 1);
 
 		final List<AssignableElement> expectedSortOrder = new LinkedList<>();
 		expectedSortOrder.add(event1);
@@ -604,4 +604,103 @@ public class CollectedAssignmentTest {
 		return event;
 	}
 
+	@Test
+	public void testOverlappingCargoOrdering_Lateness() {
+
+		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final Port port = PortFactory.eINSTANCE.createPort();
+		port.setTimeZone("Etc/UTC");
+		final Cargo cargo1 = createCargo("cargo1", port, LocalDate.of(2014, 04, 04), 24, port, LocalDate.of(2014, 05, 02), 24);
+		// Spot discharge (note 30th rather than 1st)
+		final Cargo cargo2 = createCargo("cargo2", port, LocalDate.of(2014, 05, 17), 24, port, LocalDate.of(2014, 04, 30), 744);
+		final Cargo cargo3 = createCargo("cargo3", port, LocalDate.of(2014, 05, 13), 24, port, LocalDate.of(2014, 06, 10), 24);
+		final Cargo cargo4 = createCargo("cargo4", port, LocalDate.of(2014, 07, 1), 24, port, LocalDate.of(2014, 07, 11), 24);
+
+		final List<AssignableElement> expectedSortOrder = new LinkedList<>();
+		expectedSortOrder.add(cargo1);
+		expectedSortOrder.add(cargo3);
+		expectedSortOrder.add(cargo2);
+		expectedSortOrder.add(cargo4);
+
+		final List<AssignableElement> assignments = new LinkedList<>();
+		assignments.add(cargo1);
+		assignments.add(cargo2);
+		assignments.add(cargo3);
+		assignments.add(cargo4);
+
+		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null);
+			Assert.assertNotNull(collectedAssignment);
+			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assert.assertNull(collectedAssignment.getCharterInMarket());
+			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
+
+			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
+		}
+	}
+
+	@Test
+	public void testOverlappingCargoOrdering_Lateness2() {
+
+		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final Port port = PortFactory.eINSTANCE.createPort();
+		port.setTimeZone("Etc/UTC");
+		final Cargo cargo1 = createCargo("cargo1", port, LocalDate.of(2014, 9, 8), 24, port, LocalDate.of(2014, 9, 1), 720);
+		final Cargo cargo2 = createCargo("cargo2", port, LocalDate.of(2014, 9, 15), 24, port, LocalDate.of(2014, 9, 22), 24);
+		final Cargo cargo3 = createCargo("cargo3", port, LocalDate.of(2014, 9, 28) /* +6 */, 24, port, LocalDate.of(2014, 9, 1), 720);
+		final Cargo cargo4 = createCargo("cargo4", port, LocalDate.of(2014, 9, 27), 24, port, LocalDate.of(2014, 9, 1), 720);
+		final Cargo cargo5 = createCargo("cargo5", port, LocalDate.of(2014, 10, 11), 24, port, LocalDate.of(2014, 10, 21), 24);
+
+		final List<AssignableElement> expectedSortOrder = new LinkedList<>();
+		expectedSortOrder.add(cargo1);
+		expectedSortOrder.add(cargo2);
+		expectedSortOrder.add(cargo4);
+		expectedSortOrder.add(cargo3);
+		expectedSortOrder.add(cargo5);
+
+		final List<AssignableElement> assignments = new LinkedList<>();
+		assignments.add(cargo1);
+		assignments.add(cargo2);
+		assignments.add(cargo3);
+		assignments.add(cargo4);
+		assignments.add(cargo5);
+
+		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null);
+			Assert.assertNotNull(collectedAssignment);
+			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assert.assertNull(collectedAssignment.getCharterInMarket());
+			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
+
+			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
+		}
+	}
+
+	@Test
+	public void testOverlappingCargoOrdering_Lateness3() {
+
+		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		final Port port = PortFactory.eINSTANCE.createPort();
+		port.setTimeZone("Etc/UTC");
+		final Cargo cargo3 = createCargo("cargo3", port, LocalDate.of(2014, 9, 28) /* +6 */, 24, port, LocalDate.of(2014, 9, 1), 720);
+		final Cargo cargo4 = createCargo("cargo4", port, LocalDate.of(2014, 9, 27), 24, port, LocalDate.of(2014, 9, 1), 720);
+
+		final List<AssignableElement> expectedSortOrder = new LinkedList<>();
+		expectedSortOrder.add(cargo4);
+		expectedSortOrder.add(cargo3);
+
+		final List<AssignableElement> assignments = new LinkedList<>();
+		assignments.add(cargo3);
+		assignments.add(cargo4);
+
+		for (final List<AssignableElement> permutation : Collections2.permutations(assignments)) {
+			final CollectedAssignment collectedAssignment = new CollectedAssignment(new ArrayList<>(permutation), vesselAvailability, null, null);
+			Assert.assertNotNull(collectedAssignment);
+			Assert.assertSame(vesselAvailability, collectedAssignment.getVesselAvailability());
+			Assert.assertNull(collectedAssignment.getCharterInMarket());
+			dumpPermutation(expectedSortOrder, permutation, collectedAssignment);
+
+			Assert.assertEquals(expectedSortOrder, collectedAssignment.getAssignedObjects());
+		}
+	}
 }

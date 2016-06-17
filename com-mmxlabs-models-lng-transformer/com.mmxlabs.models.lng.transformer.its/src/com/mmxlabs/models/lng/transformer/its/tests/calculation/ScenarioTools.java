@@ -172,11 +172,11 @@ public class ScenarioTools {
 	 * but only has argument for one distance between the two ports.
 	 * 
 	 */
-	public static LNGScenarioModel createScenarioWithCanal(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
-			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
-			final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
-			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final boolean useDryDock,
-			final int pilotLightRate, final int minHeelVolume) {
+	public static @NonNull LNGScenarioModel createScenarioWithCanal(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue,
+			final int travelTime, final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption,
+			final int ballastMaxSpeed, final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed,
+			final int ladenMinConsumption, final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate,
+			final boolean useDryDock, final int pilotLightRate, final int minHeelVolume) {
 		return createScenarioWithCanals(new int[] { distanceBetweenPorts }, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity, ballastMinSpeed,
 				ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption, ladenMaxSpeed,
 				ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, useDryDock, pilotLightRate, minHeelVolume);
@@ -218,11 +218,11 @@ public class ScenarioTools {
 	 *            If this is not null a canal is added. If it is null no canal is added.
 	 * @return
 	 */
-	public static LNGScenarioModel createScenarioWithCanals(final int[] distancesBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
-			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
-			final int ballastMaxConsumption, int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
-			final int ladenMaxSpeed, final int ladenMaxConsumption, int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final boolean useDryDock,
-			final int pilotLightRate, final int minHeelVolume) {
+	public static @NonNull LNGScenarioModel createScenarioWithCanals(final int[] distancesBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue,
+			final int travelTime, final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption,
+			final int ballastMaxSpeed, final int ballastMaxConsumption, int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed,
+			final int ladenMinConsumption, final int ladenMaxSpeed, final int ladenMaxConsumption, int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate,
+			final boolean useDryDock, final int pilotLightRate, final int minHeelVolume) {
 
 		final LNGScenarioModel scenario = ManifestJointModel.createEmptyInstance(null);
 
@@ -743,6 +743,13 @@ public class ScenarioTools {
 
 	public static void printSequence(final Sequence seq) {
 
+		if (seq.getVesselAvailability() != null) {
+			VesselAvailability va = seq.getVesselAvailability();
+
+			System.err.println(va.getStartAfterAsDateTime());
+			System.err.println(va.getEndByAsDateTime());
+		}
+
 		for (final Event e : seq.getEvents()) {
 
 			if (e instanceof Idle) {
@@ -780,6 +787,11 @@ public class ScenarioTools {
 				final Slot slot = slotAllocation.getSlot();
 				final String description = (slot instanceof LoadSlot ? "load: " : "discharge: ");
 				final int volume = slotAllocation.getVolumeTransferred();
+
+				System.err.println("\tArrive: " + sv.getStart() + ",  Depart: " + sv.getEnd());
+				System.err.println(
+						"\tWindowStart: " + sv.getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime() + ",  WindowEnd: " + sv.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime());
+
 				System.err.println("\tDuration: " + sv.getDuration() + ", " + description + volume);
 				ScenarioTools.printFuel(sv.getFuels());
 				if (sv.getPortCost() > 0) {

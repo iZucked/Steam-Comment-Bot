@@ -130,7 +130,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 
 			final long startHeelInM3 = originalPlan.getStartingHeelInM3();
 
-			final int originalLoadTime = shippingHoursRestrictionProvider.getBaseTime(loadElement).getStart();
+			final int originalLoadTime = shippingHoursRestrictionProvider.getBaseTime(loadElement).getInclusiveStart();
 
 			long baseShippingCosts = Long.MAX_VALUE;
 			ERouteOption baseRoute = null;
@@ -254,7 +254,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 			return marketPurchasePricePerMMBTu;
 		} else {
 			final DefaultVesselAvailability notionalVesselAvailability = new DefaultVesselAvailability(vessel, VesselInstanceType.FLEET);
-			final int originalLoadTime = shippingHoursRestrictionProvider.getBaseTime(loadElement).getStart();
+			final int originalLoadTime = shippingHoursRestrictionProvider.getBaseTime(loadElement).getInclusiveStart();
 
 			long baseShippingCosts = Long.MAX_VALUE;
 			ERouteOption baseRoute = null;

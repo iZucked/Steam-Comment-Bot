@@ -1159,11 +1159,11 @@ public class BagMover {
 				currTimeWindow = getTW(currPortSlot, resource);
 				if (prevLoadIdx != -1) {
 					assert prevTimeWindow != null;
-					if (prevTimeWindow.getStart() > currTimeWindow.getEnd()) {
+					if (prevTimeWindow.getInclusiveStart() >= currTimeWindow.getExclusiveEnd()) {
 						// No longer consistent ordering, abort
 						break;
 					}
-					if (prevTimeWindow.getEnd() < insertingLoadTimeWindow.getStart()) {
+					if (prevTimeWindow.getExclusiveEnd() < insertingLoadTimeWindow.getInclusiveStart()) {
 						// don't insert before this element
 						validPoints.remove(prevLoadIdx);
 					}
@@ -1183,11 +1183,11 @@ public class BagMover {
 				currTimeWindow = getTW(currPortSlot, resource);
 				if (prevLoadIdx != -1) {
 					assert prevTimeWindow != null;
-					if (prevTimeWindow.getEnd() < currTimeWindow.getStart()) {
+					if (prevTimeWindow.getExclusiveEnd() <= currTimeWindow.getInclusiveStart()) {
 						// No longer consistent ordering, abort
 						break;
 					}
-					if (currTimeWindow.getStart() > insertingLoadTimeWindow.getEnd()) {
+					if (currTimeWindow.getInclusiveStart() > insertingLoadTimeWindow.getExclusiveEnd()) {
 						// don't insert before this element
 						validPoints.remove(prevLoadIdx);
 					}

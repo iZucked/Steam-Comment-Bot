@@ -7,20 +7,15 @@ package com.mmxlabs.models.lng.transformer.its.tests;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
-import com.mmxlabs.models.lng.commercial.LegalEntity;
-import com.mmxlabs.models.lng.commercial.util.CommercialModelBuilder;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 
 /**
  */
@@ -64,7 +59,7 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 		// create a vessel class with default name
 		vc = fleetCreator.createDefaultVesselClass(null);
 		// create a vessel in that class
-		vessel = fleetCreator.createMultipleDefaultVessels(vc, 1, shippingEntity)[0];
+		vessel = fleetCreator.createMultipleDefaultVessels(vc, 1, shippingEntity)[0].getVessel();
 
 		// need to create a default route
 		addRoute(RouteOption.DIRECT);

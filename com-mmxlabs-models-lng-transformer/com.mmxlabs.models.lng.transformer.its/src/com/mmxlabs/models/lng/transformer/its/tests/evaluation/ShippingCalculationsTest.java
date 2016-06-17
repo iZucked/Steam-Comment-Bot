@@ -36,7 +36,6 @@ import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
-import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -344,7 +343,6 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		msc.vc.setMinHeel(10);
 
 		// Create second cargo to require arriving cold
-		@SuppressWarnings("unused")
 		Cargo secondCargo = msc.createDefaultCargo(msc.loadPort, msc.dischargePort);
 
 		// and send the vessel back to the origin port at end of itinerary
@@ -1405,7 +1403,6 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
-		@SuppressWarnings("unused")
 		CharterOutEvent event = msc.makeCharterOut(msc, scenario, msc.loadPort, msc.originPort);
 
 		event.setVesselAssignmentType(msc.vesselAvailability);

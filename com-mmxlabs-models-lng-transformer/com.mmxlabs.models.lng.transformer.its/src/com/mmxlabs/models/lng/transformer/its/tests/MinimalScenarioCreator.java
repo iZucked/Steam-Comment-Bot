@@ -18,7 +18,6 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
@@ -49,8 +48,6 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 	public MinimalScenarioCreator() {
 		super();
 
-		final CommercialModel commercialModel = scenario.getReferenceModel().getCommercialModel();
-
 		// // need to create a legal entity for contracts
 		// contractEntity = addEntity("Third-parties");
 		// // need to create a legal entity for shipping
@@ -63,7 +60,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		// create a vessel class with default name
 		vc = fleetCreator.createDefaultVesselClass(null);
 		// create a vessel in that class
-		vessel = fleetCreator.createMultipleDefaultVessels(vc, 1, shippingEntity)[0];
+		vessel = fleetCreator.createMultipleDefaultVessels(vc, 1, shippingEntity)[0].getVessel();
 
 		// need to create a default route
 		addRoute(RouteOption.DIRECT);
@@ -116,7 +113,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 	}
 
 	public int getMarginHours(final Port startPort, final Port endPort) {
-		return 2 * getTravelTime(loadPort, dischargePort, null, (int) vc.getMaxSpeed());
+		return 2 * getTravelTime(startPort, endPort, null, (int) vc.getMaxSpeed());
 	}
 
 	public VesselAvailability setDefaultAvailability(final Port startPort, final Port endPort) {

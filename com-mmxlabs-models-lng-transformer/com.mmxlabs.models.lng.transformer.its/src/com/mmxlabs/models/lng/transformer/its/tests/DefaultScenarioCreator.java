@@ -24,10 +24,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
-import com.mmxlabs.models.lng.cargo.EndHeelOptions;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -57,7 +54,6 @@ import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
-import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.DataIndex;
@@ -69,7 +65,7 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
@@ -78,6 +74,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
@@ -98,8 +95,8 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 public class DefaultScenarioCreator {
 
 	private static final Logger log = LoggerFactory.getLogger(DefaultScenarioCreator.class);
-	public float dischargePrice = 1f;
-	public float purchasePrice = 0.5f;
+	public double dischargePrice = 1f;
+	public double purchasePrice = 0.5f;
 
 	// will need at least one sales contract and purchase contract for any completed transactions
 	public SalesContract salesContract;
@@ -116,6 +113,8 @@ public class DefaultScenarioCreator {
 
 	public final @NonNull LNGScenarioModel scenario;
 
+	final @NonNull ScenarioModelBuilder scenarioModelBuilder;
+
 	/** A list of canal costs that will be added to every class of vessel when the scenario is retrieved for use. */
 	// private final ArrayList<VesselClassCost> canalCostsForAllVesselClasses = new ArrayList<VesselClassCost>();
 
@@ -125,8 +124,9 @@ public class DefaultScenarioCreator {
 
 	public DefaultScenarioCreator() {
 		scenario = ManifestJointModel.createEmptyInstance(null);
-		commercialModelBuilder = new CommercialModelBuilder(ScenarioModelUtil.getCommercialModel(scenario));
-		spotMarketsModelBuilder = new SpotMarketsModelBuilder(ScenarioModelUtil.getSpotMarketsModel(scenario));
+		scenarioModelBuilder = new ScenarioModelBuilder(scenario);
+		commercialModelBuilder = scenarioModelBuilder.getCommercialModelBuilder();
+		spotMarketsModelBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
 
 		// need to create a legal entity for contracts
 		contractEntity = addEntity("Third-parties");
@@ -144,12 +144,8 @@ public class DefaultScenarioCreator {
 	/**
 	 */
 	public Route addRoute(final RouteOption option) {
-		final PortModel portModel = scenario.getReferenceModel().getPortModel();
-		final Route r = PortFactory.eINSTANCE.createRoute();
-		r.setName(option.getName());
-		r.setRouteOption(option);
-		portModel.getRoutes().add(r);
-		return r;
+
+		return scenarioModelBuilder.getPortModelBuilder().createRoute(option.getName(), option);
 	}
 
 	public class DefaultVesselStateAttributesCreator {
@@ -230,24 +226,24 @@ public class DefaultScenarioCreator {
 		final int defaultSuezCanalCost = 1;
 		final int defaultPanamaCanalCost = 1;
 
-		/**
-		 * Creates a heel options with default settings.
-		 * 
-		 * @return
-		 */
-		public @NonNull HeelOptions createDefaultHeelOptions() {
-			final HeelOptions result = FleetFactory.eINSTANCE.createHeelOptions();
-			result.setCvValue(portCreator.defaultCv);
-			result.setPricePerMMBTU(dischargePrice);
-			result.setVolumeAvailable(startHeelVolume);
-			return result;
-		}
-
-		public @NonNull EndHeelOptions createDefaultEndHeelOptions() {
-			final EndHeelOptions result = CargoFactory.eINSTANCE.createEndHeelOptions();
-			result.unsetTargetEndHeel();
-			return result;
-		}
+		// /**
+		// * Creates a heel options with default settings.
+		// *
+		// * @return
+		// */
+		// public @NonNull HeelOptions createDefaultHeelOptions() {
+		// final HeelOptions result = FleetFactory.eINSTANCE.createHeelOptions();
+		// result.setCvValue(portCreator.defaultCv);
+		// result.setPricePerMMBTU(dischargePrice);
+		// result.setVolumeAvailable(startHeelVolume);
+		// return result;
+		// }
+		//
+		// public @NonNull EndHeelOptions createDefaultEndHeelOptions() {
+		// final EndHeelOptions result = CargoFactory.eINSTANCE.createEndHeelOptions();
+		// result.unsetTargetEndHeel();
+		// return result;
+		// }
 
 		public void setBaseFuelPrice(final BaseFuelCost bfc, final double price, final YearMonth date) {
 			BaseFuelIndex bfi = bfc.getIndex();
@@ -345,25 +341,19 @@ public class DefaultScenarioCreator {
 		 * @param vc
 		 * @return
 		 */
-		public Vessel createDefaultVessel(final @NonNull String name, final @NonNull VesselClass vc, final @NonNull BaseLegalEntity shippingEntity) {
+		public VesselAvailability createDefaultVessel(final @NonNull String name, final @NonNull VesselClass vc, final @NonNull BaseLegalEntity shippingEntity) {
 			final FleetModel fleetModel = scenario.getReferenceModel().getFleetModel();
 			final CargoModel cargoModel = scenario.getCargoModel();
 
-			final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
-			vessel.setVesselClass(vc);
-			vessel.setName(name);
+			@NonNull
+			Vessel vessel = scenarioModelBuilder.getFleetModelBuilder().createVessel(name, vc);
 
-			final VesselAvailability availability = CargoFactory.eINSTANCE.createVesselAvailability();
+			final VesselAvailability availability = scenarioModelBuilder.getCargoModelBuilder() //
+					.makeVesselAvailability(vessel, shippingEntity) //
+					.withStartHeel((double) startHeelVolume, portCreator.defaultCv, dischargePrice) //
+					.build();
 
-			availability.setVessel(vessel);
-			availability.setStartHeel(createDefaultHeelOptions());
-			availability.setEndHeel(createDefaultEndHeelOptions());
-			availability.setEntity(shippingEntity);
-
-			fleetModel.getVessels().add(vessel);
-			cargoModel.getVesselAvailabilities().add(availability);
-
-			return vessel;
+			return availability;
 		}
 
 		/**
@@ -373,8 +363,8 @@ public class DefaultScenarioCreator {
 		 * @param num
 		 * @return
 		 */
-		public Vessel[] createMultipleDefaultVessels(final VesselClass vc, final int num, final @NonNull BaseLegalEntity shippingEntity) {
-			final Vessel[] result = new Vessel[num];
+		public VesselAvailability[] createMultipleDefaultVessels(final VesselClass vc, final int num, final @NonNull BaseLegalEntity shippingEntity) {
+			final VesselAvailability[] result = new VesselAvailability[num];
 			for (int i = 0; i < num; i++) {
 				result[i] = createDefaultVessel(i + "(class " + vc.getName() + ")", vc, shippingEntity);
 			}
@@ -536,6 +526,13 @@ public class DefaultScenarioCreator {
 				setDistance(ports.get(i), result, distances[i], null);
 			}
 
+			// Add in all capabilities by default
+			result.getCapabilities().add(PortCapability.LOAD);
+			result.getCapabilities().add(PortCapability.DISCHARGE);
+			result.getCapabilities().add(PortCapability.DRYDOCK);
+			result.getCapabilities().add(PortCapability.MAINTENANCE);
+			result.getCapabilities().add(PortCapability.TRANSFER);
+
 			return result;
 		}
 
@@ -582,103 +579,65 @@ public class DefaultScenarioCreator {
 	public class DefaultCargoCreator {
 		int defaultWindowSize = 0;
 
-		public void setDefaultSlotWindow(final Slot slot, final LocalDateTime time) {
-			slot.setWindowSize(defaultWindowSize);
-			slot.setWindowStartTime(time.getHour());
-			slot.setWindowStart(time.toLocalDate());
-		}
-
 		public Cargo createDefaultCargo(String name, final Port loadPort, final Port dischargePort, LocalDateTime loadTime, final int travelTimeInHours) {
-			final Cargo result = CargoFactory.eINSTANCE.createCargo();
-			final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
-			final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
 
 			// if load time is not specified, set it to the current datetime
 			if (loadTime == null) {
 				loadTime = LocalDateTime.of(2015, 5, 1, 0, 0);
 			}
 
-			// if name is not specified, set it to a sensible default
-			if (name == null) {
-				final String format = "Cargo from %s to %s in %d hrs";
-				name = String.format(format, loadPort.getName(), dischargePort.getName(), travelTimeInHours);
-			}
-
-			result.getSlots().add(loadSlot);
-			result.getSlots().add(dischargeSlot);
-
-			loadSlot.setPort(loadPort);
-			dischargeSlot.setPort(dischargePort);
-
-			loadSlot.setContract(purchaseContract);
-			dischargeSlot.setContract(salesContract);
-
-			loadSlot.setMaxQuantity(Integer.MAX_VALUE);
-			loadSlot.setName("load");
-			dischargeSlot.setMaxQuantity(Integer.MAX_VALUE);
-			dischargeSlot.setName("discharge");
-
-			setDefaultSlotWindow(loadSlot, loadTime);
-			setDefaultSlotWindow(dischargeSlot, loadTime.plusHours(travelTimeInHours));
-
-			final CargoModel cargoModel = scenario.getCargoModel();
-
-			cargoModel.getLoadSlots().add(loadSlot);
-			cargoModel.getDischargeSlots().add(dischargeSlot);
-			cargoModel.getCargoes().add(result);
-
-			return result;
+			LocalDateTime dischargeTime = loadTime.plusHours(travelTimeInHours);
+			return scenarioModelBuilder.getCargoModelBuilder() //
+					.makeCargo()//
+					//
+					.makeFOBPurchase("load", loadTime.toLocalDate(), loadPort, purchaseContract, null, null) //
+					.withWindowStartTime(loadTime.getHour()) //
+					.withWindowSize(defaultWindowSize) //
+					.withVolumeLimits(0, Integer.MAX_VALUE, VolumeUnits.M3) //
+					.build() //
+					//
+					.makeDESSale("discharge", dischargeTime.toLocalDate(), dischargePort, salesContract, null, null) //
+					.withWindowStartTime(dischargeTime.getHour()) //
+					.withWindowSize(defaultWindowSize) //
+					.withVolumeLimits(0, Integer.MAX_VALUE, VolumeUnits.M3) //
+					.build() //
+					//
+					.build();
 		}
 
 		public Cargo createDefaultLddCargo(String name, final Port loadPort, final Port dischargePort1, final Port dischargePort2, LocalDateTime loadTime, final int travelTimeInHours1,
 				final int travelTimeInHours2) {
-			final Cargo result = CargoFactory.eINSTANCE.createCargo();
-			final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
-			final DischargeSlot dischargeSlot1 = CargoFactory.eINSTANCE.createDischargeSlot();
-			final DischargeSlot dischargeSlot2 = CargoFactory.eINSTANCE.createDischargeSlot();
 
 			// if load time is not specified, set it to the current datetime
 			if (loadTime == null) {
 				loadTime = LocalDateTime.now();
 			}
 
-			// if name is not specified, set it to a sensible default
-			if (name == null) {
-				final String format = "Cargo from %s to %s in %d hrs to %s in %d hrs";
-				name = String.format(format, loadPort.getName(), dischargePort1.getName(), travelTimeInHours1, dischargePort2.getName(), travelTimeInHours2);
-			}
+			LocalDateTime dischargeTime1 = loadTime.plusHours(travelTimeInHours1);
+			LocalDateTime dischargeTime2 = loadTime.plusHours(travelTimeInHours1 + defaultWindowSize + travelTimeInHours2);
+			return scenarioModelBuilder.getCargoModelBuilder() //
+					.makeCargo()//
+					//
+					.makeFOBPurchase("load", loadTime.toLocalDate(), loadPort, purchaseContract, null, null) //
+					.withWindowStartTime(loadTime.getHour()) //
+					.withWindowSize(defaultWindowSize) //
+					.withVolumeLimits(0, Integer.MAX_VALUE, VolumeUnits.M3) //
+					.build() //
+					//
+					.makeDESSale("discharge1", dischargeTime1.toLocalDate(), dischargePort1, salesContract, null, null) //
+					.withWindowStartTime(dischargeTime1.getHour()) //
+					.withWindowSize(defaultWindowSize) //
+					.withVolumeLimits(0, Integer.MAX_VALUE, VolumeUnits.M3) //
+					.build() //
+					//
+					.makeDESSale("discharge2", dischargeTime2.toLocalDate(), dischargePort2, salesContract, null, null) //
+					.withWindowStartTime(dischargeTime2.getHour()) //
+					.withWindowSize(defaultWindowSize) //
+					.withVolumeLimits(0, Integer.MAX_VALUE, VolumeUnits.M3) //
+					.build() //
+					//
+					.build();
 
-			result.getSlots().add(loadSlot);
-			result.getSlots().add(dischargeSlot1);
-			result.getSlots().add(dischargeSlot2);
-
-			loadSlot.setPort(loadPort);
-			dischargeSlot1.setPort(dischargePort1);
-			dischargeSlot2.setPort(dischargePort2);
-
-			loadSlot.setContract(purchaseContract);
-			dischargeSlot1.setContract(salesContract);
-			dischargeSlot2.setContract(salesContract);
-
-			loadSlot.setMaxQuantity(Integer.MAX_VALUE);
-			loadSlot.setName("load");
-			dischargeSlot1.setMaxQuantity(Integer.MAX_VALUE);
-			dischargeSlot1.setName("discharge1");
-			dischargeSlot2.setMaxQuantity(Integer.MAX_VALUE);
-			dischargeSlot2.setName("discharge2");
-
-			setDefaultSlotWindow(loadSlot, loadTime);
-			setDefaultSlotWindow(dischargeSlot1, loadTime.plusHours(travelTimeInHours1));
-			setDefaultSlotWindow(dischargeSlot2, loadTime.plusHours(travelTimeInHours1 + defaultWindowSize + travelTimeInHours2));
-
-			final CargoModel cargoModel = scenario.getCargoModel();
-
-			cargoModel.getLoadSlots().add(loadSlot);
-			cargoModel.getDischargeSlots().add(dischargeSlot1);
-			cargoModel.getDischargeSlots().add(dischargeSlot2);
-			cargoModel.getCargoes().add(result);
-
-			return result;
 		}
 	}
 
@@ -793,11 +752,16 @@ public class DefaultScenarioCreator {
 		}
 	}
 
-	public Integer getTravelTime(final Port p1, final Port p2, final Route r, final int speed) {
+	public int getTravelTime(final Port p1, final Port p2, final Route r, final int speed) {
 		return getDistance(p1, p2, r) / speed;
 	}
 
-	public Integer getDistance(final Port p1, final Port p2, Route r) {
+	public int getDistance(final Port p1, final Port p2, Route r) {
+
+		if (p1 == p2) {
+			return 0;
+		}
+
 		if (r == null) {
 			final PortModel portModel = scenario.getReferenceModel().getPortModel();
 			r = portModel.getRoutes().get(0);
@@ -809,7 +773,7 @@ public class DefaultScenarioCreator {
 			}
 		}
 
-		return null;
+		throw new NullPointerException();
 	}
 
 	public DryDockEvent addDryDock(final Port startPort, final LocalDateTime start, final int durationDays) {
@@ -981,19 +945,9 @@ public class DefaultScenarioCreator {
 	 * @param dischargePrice
 	 * @return
 	 */
-	public SalesContract addSalesContract(final String name, final float dischargePrice) {
-		final CommercialModel commercialModel = scenario.getReferenceModel().getCommercialModel();
-		final SalesContract result = CommercialFactory.eINSTANCE.createSalesContract();
-		final ExpressionPriceParameters params = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
-		result.setName(name);
+	public SalesContract addSalesContract(final String name, final double dischargePrice) {
 
-		result.setEntity(contractEntity);
-		params.setPriceExpression(Float.toString(dischargePrice));
-
-		result.setPriceInfo(params);
-		commercialModel.getSalesContracts().add(result);
-
-		return result;
+		return commercialModelBuilder.makeExpressionSalesContract(name, contractEntity, Double.toString(dischargePrice));
 	}
 
 	/**
@@ -1005,19 +959,9 @@ public class DefaultScenarioCreator {
 	 * @return
 	 */
 	public PurchaseContract addPurchaseContract(final String name, final double purchasePrice) {
-		final CommercialModel commercialModel = scenario.getReferenceModel().getCommercialModel();
-		final PurchaseContract result = CommercialFactory.eINSTANCE.createPurchaseContract();
-		final ExpressionPriceParameters params = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
 
-		result.setName(name);
+		return commercialModelBuilder.makeExpressionPurchaseContract(name, contractEntity, Double.toString(purchasePrice));
 
-		result.setEntity(contractEntity);
-		params.setPriceExpression(Double.toString(purchasePrice));
-
-		result.setPriceInfo(params);
-		commercialModel.getPurchaseContracts().add(result);
-
-		return result;
 	}
 
 	public void checkJourneyGeography(final Journey journey, final Port from, final Port to) {
