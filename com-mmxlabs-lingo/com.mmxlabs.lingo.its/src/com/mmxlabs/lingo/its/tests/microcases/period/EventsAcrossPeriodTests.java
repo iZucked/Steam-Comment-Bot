@@ -46,6 +46,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.optimiser.core.ISequences;
 
 /**
@@ -398,11 +399,11 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 		cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 1, 1), portFinder.findPort("Ras Laffan"), null, entity, "5") //
 				.withWindowStartTime(0) //
-				.withWindowSize(0) //
+				.withWindowSize(0, TimePeriod.DAYS) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 1, 14), portFinder.findPort("Mina Al Ahmadi"), null, entity, "7") //
 				.withWindowStartTime(0) //
-				.withWindowSize(0) //
+				.withWindowSize(0, TimePeriod.DAYS) //
 				.build() //
 				.withVesselAssignment(vesselAvailability_1, 0) //
 				.withAssignmentFlags(true, false) //
@@ -410,11 +411,11 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 		cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L2", LocalDate.of(2015, 2, 1), portFinder.findPort("Ras Laffan"), null, entity, "5") //
 				.withWindowStartTime(0) //
-				.withWindowSize(0) //
+				.withWindowSize(0, TimePeriod.DAYS) //
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2015, 4, 1), portFinder.findPort("Mina Al Ahmadi"), null, entity, "7") //
 				.withWindowStartTime(0) //
-				.withWindowSize(0) //
+				.withWindowSize(0, TimePeriod.DAYS) //
 				.build() //
 				.withVesselAssignment(vesselAvailability_1, 1) //
 				.withAssignmentFlags(true, false) //
@@ -422,11 +423,11 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 		cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L3", LocalDate.of(2015, 7, 1), portFinder.findPort("Ras Laffan"), null, entity, "5") //
 				.withWindowStartTime(0) //
-				.withWindowSize(0) //
+				.withWindowSize(0, TimePeriod.DAYS) //
 				.build() //
 				.makeDESSale("D3", LocalDate.of(2015, 8, 1), portFinder.findPort("Mina Al Ahmadi"), null, entity, "7") //
 				.withWindowStartTime(0) //
-				.withWindowSize(0) //
+				.withWindowSize(0, TimePeriod.DAYS) //
 				.build() //
 				.withVesselAssignment(vesselAvailability_1, 2) //
 				.withAssignmentFlags(true, false) //

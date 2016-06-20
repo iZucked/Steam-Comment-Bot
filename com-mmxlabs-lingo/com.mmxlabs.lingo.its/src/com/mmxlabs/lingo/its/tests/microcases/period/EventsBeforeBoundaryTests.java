@@ -47,6 +47,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.optimiser.core.ISequences;
 
 @RunWith(value = ShiroRunner.class)
@@ -349,11 +350,11 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 1, 1), portFinder.findPort("Ras Laffan"), null, entity, "5") //
 				.withWindowStartTime(0) //
-				.withWindowSize(0) //
+				.withWindowSize(0, TimePeriod.DAYS) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 2, 14), portFinder.findPort("Mina Al Ahmadi"), null, entity, "7") //
 				.withWindowStartTime(0) //
-				.withWindowSize(0) //
+				.withWindowSize(0, TimePeriod.DAYS) //
 				.build() //
 				.withVesselAssignment(vesselAvailability_1, 0) //
 				.withAssignmentFlags(true, false) //
@@ -363,12 +364,12 @@ public class EventsBeforeBoundaryTests extends AbstractMicroTestCase {
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L2", LocalDate.of(2015, 3, 1), portFinder.findPort("Ras Laffan"), null, entity, "5") //
 				.withWindowStartTime(0) //
-				.withWindowSize(0) //
+				.withWindowSize(0, TimePeriod.DAYS) //
 				.withVisitDuration(24) //
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2015, 4, 2), portFinder.findPort("Mina Al Ahmadi"), null, entity, "7") //
 				.withWindowStartTime(0) //
-				.withWindowSize(0) //
+				.withWindowSize(0, TimePeriod.DAYS) //
 				.withVisitDuration(24) //
 				.build() //
 				.withVesselAssignment(vesselAvailability_1, 1) //

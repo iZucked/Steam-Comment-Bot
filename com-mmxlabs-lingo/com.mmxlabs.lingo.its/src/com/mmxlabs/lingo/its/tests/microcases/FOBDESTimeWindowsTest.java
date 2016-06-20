@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LatenessEvaluatedStateChecker;
@@ -85,11 +86,11 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeDESPurchase("L1", false, LocalDate.of(2015, 12, 10), dischargePort, null, entity, "5", null) //
 				.withWindowStartTime(0) //
-				.withWindowSize(47) //
+				.withWindowSize(2, TimePeriod.DAYS) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), dischargePort, null, entity, "7") //
 				.withWindowStartTime(0) //
-				.withWindowSize(47) //
+				.withWindowSize(2, TimePeriod.DAYS) //
 
 				.build() //
 				.withAssignmentFlags(false, false) //
@@ -127,11 +128,11 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeDESPurchase("L1", false, LocalDate.of(2015, 12, 11), dischargePort, null, entity, "5", null) //
 				.withWindowStartTime(0) //
-				.withWindowSize(48) //
+				.withWindowSize(48, TimePeriod.HOURS) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 12, 10), dischargePort, null, entity, "7") //
 				.withWindowStartTime(0) //
-				.withWindowSize(48) //
+				.withWindowSize(48, TimePeriod.HOURS) //
 				.build() //
 				.withAssignmentFlags(false, false) //
 				.build();
@@ -172,12 +173,12 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 		LoadSlot loadSlot = cargoModelBuilder // .makeCargo() //
 				.makeDESPurchase("L1", false, LocalDate.of(2015, 12, 11), dischargePort, null, entity, "5", 22.8, null) //
 				.withWindowStartTime(0) //
-				.withWindowSize(23) //
+				.withWindowSize(23, TimePeriod.HOURS) //
 				.build();
 		//
 		DischargeSlot dischargeSlot = cargoModelBuilder.makeDESSale("D1", LocalDate.of(2015, 12, 12), dischargePort, null, entity, "7") //
 				.withWindowStartTime(0) //
-				.withWindowSize(0) //
+				.withWindowSize(0, TimePeriod.HOURS) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {
@@ -208,12 +209,12 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 		LoadSlot loadSlot = cargoModelBuilder // .makeCargo() //
 				.makeDESPurchase("L1", false, LocalDate.of(2015, 12, 11), dischargePort, null, entity, "5", 22.8, null) //
 				.withWindowStartTime(0) //
-				.withWindowSize(23) //
+				.withWindowSize(23, TimePeriod.HOURS) //
 				.build();
 		//
 		DischargeSlot dischargeSlot = cargoModelBuilder.makeDESSale("D1", LocalDate.of(2015, 12, 12), dischargePort, null, entity, "7") //
 				.withWindowStartTime(1) //
-				.withWindowSize(0) //
+				.withWindowSize(0, TimePeriod.HOURS) //
 				.build();
 
 		evaluateWithLSOTest(scenarioRunner -> {

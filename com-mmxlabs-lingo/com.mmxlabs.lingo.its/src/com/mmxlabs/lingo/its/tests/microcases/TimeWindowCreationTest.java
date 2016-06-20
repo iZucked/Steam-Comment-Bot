@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
@@ -161,12 +162,12 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
 				.withWindowStartTime(0) //
-				.withWindowSize(0) //
+				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.withWindowStartTime(0) //
-				.withWindowSize(0) //
+				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
 				.withVesselAssignment(vesselAvailability, 1)//
@@ -237,7 +238,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 
 			Assert.assertEquals(LocalDate.of(2015, 12, 1), dischargeSlot.getWindowStart());
 			Assert.assertEquals(0, dischargeSlot.getWindowStartTime());
-			Assert.assertEquals(31 * 24 - 1, dischargeSlot.getWindowSize());
+			Assert.assertEquals(31 * 24 - 1, dischargeSlot.getWindowSizeInHours());
 		});
 	}
 
@@ -257,12 +258,12 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
 				.withWindowStartTime(0) //
-				.withWindowSize(23) //
+				.withWindowSize(23, TimePeriod.HOURS) //
 				.build() //
 				//
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.withWindowStartTime(0) //
-				.withWindowSize(23) //
+				.withWindowSize(23, TimePeriod.HOURS) //
 				.build() //
 				//
 				.withVesselAssignment(vesselAvailability, 1)//
@@ -314,13 +315,13 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 		final Cargo cargo = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
 				.withWindowStartTime(0) //
-				.withWindowSize(23) //
+				.withWindowSize(23, TimePeriod.HOURS) //
 				.withWindowFlex(12) //
 				.build() //
 				//
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.withWindowStartTime(0) //
-				.withWindowSize(23) //
+				.withWindowSize(23, TimePeriod.HOURS) //
 				.withWindowFlex(18) //
 				.build() //
 				//
@@ -390,6 +391,43 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 			Assert.assertEquals(0, o_vesselAvailability.getEndRequirement().getTimeWindow().getExclusiveEndFlex());
 			Assert.assertEquals(31 * 24 + 23 + 1, o_vesselAvailability.getEndRequirement().getTimeWindow().getExclusiveEnd());
 		});
+	}
+
+	/**
+	 * Simple test checking the window size and end dates are as expected
+	 * @throws Exception
+	 */
+	@Test
+	@Category({ MicroTest.class })
+	public void testCargo_SlotWindowEnd() throws Exception {
+		portFinder.findPort("Point Fortin").setTimeZone("UTC");
+		final LoadSlot loadSlot = cargoModelBuilder.createFOBPurchase("L1", LocalDate.of(2015, 12, 1), portFinder.findPort("Point Fortin"), null, entity, "5", 22.8); //
+		loadSlot.setWindowStartTime(0);
+
+		loadSlot.setWindowSize(0);
+		Assert.assertEquals(0, loadSlot.getWindowSizeInHours());
+		Assert.assertEquals(ZonedDateTime.of(2015, 12, 1, 0, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getWindowEndWithSlotOrPortTime());
+
+		loadSlot.setWindowSize(23);
+		loadSlot.setWindowSizeUnits(TimePeriod.HOURS);
+		Assert.assertEquals(23, loadSlot.getWindowSizeInHours());
+		Assert.assertEquals(ZonedDateTime.of(2015, 12, 1, 23, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getWindowEndWithSlotOrPortTime());
+
+		loadSlot.setWindowSize(1);
+		loadSlot.setWindowSizeUnits(TimePeriod.DAYS);
+		Assert.assertEquals(23, loadSlot.getWindowSizeInHours());
+		Assert.assertEquals(ZonedDateTime.of(2015, 12, 1, 23, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getWindowEndWithSlotOrPortTime());
+
+		loadSlot.setWindowSize(2);
+		loadSlot.setWindowSizeUnits(TimePeriod.DAYS);
+		Assert.assertEquals(47, loadSlot.getWindowSizeInHours());
+		Assert.assertEquals(ZonedDateTime.of(2015, 12, 2, 23, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getWindowEndWithSlotOrPortTime());
+
+		loadSlot.setWindowSize(1);
+		loadSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+		Assert.assertEquals(31 * 24 - 1, loadSlot.getWindowSizeInHours());
+		Assert.assertEquals(ZonedDateTime.of(2015, 12, 31, 23, 0, 0, 0, ZoneId.of("UTC")), loadSlot.getWindowEndWithSlotOrPortTime());
+
 	}
 
 }
