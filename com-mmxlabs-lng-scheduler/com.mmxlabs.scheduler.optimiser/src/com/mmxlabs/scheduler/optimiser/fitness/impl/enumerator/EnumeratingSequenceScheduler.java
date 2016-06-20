@@ -165,7 +165,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 	/**
 	 * The sequences being evaluated at the moment
 	 */
-	private ISequences sequences;
+	protected ISequences sequences;
 
 	private final TimeWindow defaultStartWindow = new TimeWindow(0, Integer.MAX_VALUE);
 
@@ -381,7 +381,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 	 * @param sequence
 	 * @return
 	 */
-	private boolean[] findSequenceBreaks(final ISequence sequence, boolean isRoundTripSequence) {
+	protected boolean[] findSequenceBreaks(final ISequence sequence, boolean isRoundTripSequence) {
 		final boolean[] result = new boolean[sequence.size()];
 
 		int idx = 0;
@@ -389,7 +389,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 			final PortType portType = portTypeProvider.getPortType(element);
 			switch (portType) {
 			case Load:
-				result[idx] =!isRoundTripSequence && (idx > 0); // don't break on first load port
+				result[idx] = !isRoundTripSequence && (idx > 0); // don't break on first load port
 				break;
 			case CharterOut:
 			case DryDock:
@@ -426,7 +426,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 			// TODO: Implement something here rather than rely on VoyagePlanner
 			return;
 		}
-			
+
 		final int size = sequence.size();
 		if (size < 2) {
 			return;
@@ -459,8 +459,8 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 		PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
 		portTimeWindowsRecord.setResource(resource);
 		// --->
-		
-	// first pass, collecting start time windows
+
+		// first pass, collecting start time windows
 		for (final ISequenceElement element : sequence) {
 			final IPortSlot slot = portSlotProvider.getPortSlot(element);
 
@@ -603,7 +603,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 			prevElement = element;
 		}
 		// add the last time window
-//		portTimeWindowsRecords.get(sequenceIndex).add(portTimeWindowsRecord);
+		// portTimeWindowsRecords.get(sequenceIndex).add(portTimeWindowsRecord);
 		// now perform reverse-pass to trim any overly late end times
 		// (that is end times which would make us late at the next element)
 		for (index = size - 2; index >= 0; index--) {
