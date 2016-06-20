@@ -41,8 +41,14 @@ public class SetReference implements IDeferment {
 		if (iContext instanceof IMMXImportContext) {
 			final IMMXImportContext context = (IMMXImportContext) iContext;
 			if (reference.isMany()) {
+
 				final String[] names = name.split(",");
-				for (final String name : names) {
+				for (final String rawName : names) {
+
+					// Simple (de)encoding - should expand into something more robust
+					final String name = EncoderUtil.decode(rawName);
+					assert name != null;
+
 					final NamedObject no = context.getNamedObject(name.trim(), linkType);
 					if (no != null) {
 						((EList) (container.eGet(reference))).add(no);

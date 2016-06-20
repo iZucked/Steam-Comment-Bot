@@ -27,9 +27,6 @@ import com.mmxlabs.models.util.importer.IMMXImportContext;
 
 public class DefaultAttributeImporter implements IAttributeImporter {
 
-	private static final String HTML_AMPERSAND = "&#38;";
-	private static final String HTML_COMMA = "&#44;";
-
 	@Override
 	public void setAttribute(@NonNull final EObject container, @NonNull final EAttribute attribute, @NonNull final String value, @NonNull final IMMXImportContext context) {
 		if (attribute.isMany()) {
@@ -42,7 +39,7 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 				}
 
 				// Simple (de)encoding - should expand into something more robust
-				final String decodedValue = v.trim().replaceAll(HTML_COMMA, ",").replaceAll(HTML_AMPERSAND, "&");
+				final String decodedValue = EncoderUtil.decode(v);
 				assert decodedValue != null;
 
 				eValues.add(attributeFromString(container, attribute, decodedValue, context));
@@ -75,7 +72,7 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 				comma = true;
 				final String rawValue = stringFromAttribute(container, attribute, o, context);
 				// Simple (de)encoding - should expand into something more robust
-				final String encodedValue = rawValue.replaceAll("&", HTML_AMPERSAND).replaceAll(",", HTML_COMMA);
+				final String encodedValue = EncoderUtil.encode(rawValue);
 
 				result.append(encodedValue);
 			}

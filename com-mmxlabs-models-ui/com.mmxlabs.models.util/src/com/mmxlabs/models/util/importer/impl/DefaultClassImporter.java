@@ -533,7 +533,8 @@ public class DefaultClassImporter extends AbstractClassImporter {
 								sb.append(",");
 							}
 							comma = true;
-							sb.append(no.getName());
+							String rawName = EncoderUtil.encode(no.getName());
+							sb.append(rawName);
 						}
 					}
 
