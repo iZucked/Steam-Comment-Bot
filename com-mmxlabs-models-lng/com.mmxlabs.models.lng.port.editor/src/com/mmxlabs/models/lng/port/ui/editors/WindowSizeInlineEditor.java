@@ -7,11 +7,13 @@ package com.mmxlabs.models.lng.port.ui.editors;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.BiFunction;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.types.TimePeriod;
@@ -42,19 +44,43 @@ public class WindowSizeInlineEditor extends ValueListInlineEditor {
 
 	@Override
 	protected void updateDisplay(final Object value) {
+
+		TimePeriod p;
+		Integer v;
+		if (input instanceof MMXObject) {
+			final MMXObject mmxObject = (MMXObject) input;
+			p = (TimePeriod) mmxObject.eGetWithDefault(unitAttribute);
+			v = (Integer) mmxObject.eGetWithDefault(sizeAttribute);
+		} else {
+			p = (TimePeriod) input.eGet(unitAttribute);
+			v = (Integer) input.eGet(sizeAttribute);
+		}
+		System.out.println(p);
+		;
+		System.out.println(v);
+		;
+
+		final List<Pair<String, Object>> values = getDefaultValues(p, v);
+
+		updateCombo(values);
 		// TODO Auto-generated method stub
 		super.updateDisplay(value);
 	}
 
-	private static @NonNull List<Pair<String, Object>> getDefaultValues(final int count, final Integer current) {
+	private static @NonNull List<Pair<String, Object>> getDefaultValues(final int start, final int count, final Integer current, BiFunction<Integer, String, String> mapping) {
+
+		if (mapping == null) {
+			mapping = (i, s) -> s;
+		}
+
 		final ArrayList<Pair<String, Object>> result = new ArrayList<Pair<String, Object>>();
-		for (int i = 0; i < count; ++i) {
-			result.add(new Pair<String, Object>(String.format("%d", i), Integer.valueOf(i)));
+		for (int i = start; i < start + count; ++i) {
+			result.add(new Pair<String, Object>(mapping.apply(i, String.format("%d", i)), Integer.valueOf(i)));
 		}
 		if (current != null) {
 			final int iCurrent = current;
 			if (iCurrent >= count) {
-				result.add(new Pair<String, Object>(String.format("%d", iCurrent), current));
+				result.add(new Pair<String, Object>(mapping.apply(iCurrent, String.format("%d", iCurrent)), current));
 			}
 		}
 		return result;
@@ -72,6 +98,10 @@ public class WindowSizeInlineEditor extends ValueListInlineEditor {
 			p = (TimePeriod) input.eGet(unitAttribute);
 			v = (Integer) input.eGet(sizeAttribute);
 		}
+		System.out.println(p);
+		;
+		System.out.println(v);
+		;
 
 		final List<Pair<String, Object>> values = getDefaultValues(p, v);
 
@@ -83,11 +113,15 @@ public class WindowSizeInlineEditor extends ValueListInlineEditor {
 	private static @NonNull List<Pair<String, Object>> getDefaultValues(final TimePeriod timePeriod, final Integer currentValue) {
 		switch (timePeriod) {
 		case DAYS:
-			return getDefaultValues(31, currentValue);
+			return getDefaultValues(1, 31, currentValue, null);
 		case HOURS:
-			return getDefaultValues(24, currentValue);
+			@NonNull
+			final List<Pair<String, Object>> l = getDefaultValues(0, 24, currentValue, (i, s) -> i == 0 ? "Exact" : String.format("%d", i + 1));
+			// Add in day and a half special case
+			l.add(new Pair<>("36", 35));
+			return l;
 		case MONTHS:
-			return getDefaultValues(3, currentValue);
+			return getDefaultValues(1, 3, currentValue, null);
 		}
 		throw new IllegalStateException();
 	}
@@ -100,6 +134,8 @@ public class WindowSizeInlineEditor extends ValueListInlineEditor {
 	 */
 	@Override
 	protected boolean updateOnChangeToFeature(final Object changedFeature) {
-		return changedFeature.equals(unitAttribute) || super.updateOnChangeToFeature(changedFeature);
+		final boolean b = changedFeature.equals(unitAttribute) || super.updateOnChangeToFeature(changedFeature);
+		System.out.println(b);
+		return b;
 	}
 }

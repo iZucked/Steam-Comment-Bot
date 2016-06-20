@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,6 +40,7 @@ import com.google.common.collect.Sets;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.displaycomposites.ExpandableSet.ExpansionListener;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
@@ -182,8 +184,15 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					final int time = (Integer) mmxEo.eGetWithDefault(WindowStartTime);
 					final int wsize = (Integer) mmxEo.eGetWithDefault(WindowSize);
 					final TimePeriod ePeriod = (TimePeriod) mmxEo.eGetWithDefault(WindowSizeUnits);
+					if (mmxEo instanceof Slot) {
+						Slot slot = (Slot) mmxEo ;
+						ZonedDateTime ed = slot.getWindowEndWithSlotOrPortTime();
+						final String text = formatDate(d, time) + " - " +  formatDate(ed.toLocalDate(), ed.toLocalDateTime().getHour());
+						textClient.setText(text);
+					} else {
 					final String text = formatDate(d, time) + " - " + wsize + " " + getUnits(ePeriod);
 					textClient.setText(text);
+					}
 					// ec.setText(baseTitle + ": " + text);
 				}
 			}
