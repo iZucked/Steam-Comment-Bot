@@ -46,7 +46,8 @@ Require-Bundle: org.junit;bundle-version="4.8.1",
  org.eclipse.ui.workbench,
  org.eclipse.e4.ui.workbench,
  org.eclipse.e4.ui.model.workbench,
- com.mmxlabs.rcp.common
+ com.mmxlabs.rcp.common,
+ org.eclipse.emf.common
 Bundle-ClassPath: data/,
  .
 Import-Package: org.slf4j;version="1.6.4"
