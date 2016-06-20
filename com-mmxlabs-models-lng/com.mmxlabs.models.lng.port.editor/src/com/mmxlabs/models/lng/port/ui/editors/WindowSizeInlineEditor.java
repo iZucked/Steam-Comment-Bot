@@ -38,7 +38,6 @@ public class WindowSizeInlineEditor extends ValueListInlineEditor {
 
 	@Override
 	public void notifyChanged(final Notification notification) {
-		// TODO Auto-generated method stub
 		super.notifyChanged(notification);
 	}
 
@@ -55,15 +54,11 @@ public class WindowSizeInlineEditor extends ValueListInlineEditor {
 			p = (TimePeriod) input.eGet(unitAttribute);
 			v = (Integer) input.eGet(sizeAttribute);
 		}
-		System.out.println(p);
-		;
-		System.out.println(v);
-		;
 
 		final List<Pair<String, Object>> values = getDefaultValues(p, v);
 
 		updateCombo(values);
-		// TODO Auto-generated method stub
+
 		super.updateDisplay(value);
 	}
 
@@ -98,10 +93,6 @@ public class WindowSizeInlineEditor extends ValueListInlineEditor {
 			p = (TimePeriod) input.eGet(unitAttribute);
 			v = (Integer) input.eGet(sizeAttribute);
 		}
-		System.out.println(p);
-		;
-		System.out.println(v);
-		;
 
 		final List<Pair<String, Object>> values = getDefaultValues(p, v);
 
@@ -135,7 +126,6 @@ public class WindowSizeInlineEditor extends ValueListInlineEditor {
 	@Override
 	protected boolean updateOnChangeToFeature(final Object changedFeature) {
 		final boolean b = changedFeature.equals(unitAttribute) || super.updateOnChangeToFeature(changedFeature);
-		System.out.println(b);
 		return b;
 	}
 }
