@@ -44,6 +44,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -138,9 +139,10 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 			final MMXRootObject scenario = extraContext.getRootObject();
 			if (scenario instanceof LNGScenarioModel) {
 
+				LNGScenarioModel lngScenarioModel = (LNGScenarioModel) scenario;
 				double maxSpeedKnots = 0.0;
-				final CargoModel cargoModel = ((LNGScenarioModel) scenario).getCargoModel();
-				final SpotMarketsModel spotMarketsModel = ((LNGScenarioModel) scenario).getReferenceModel().getSpotMarketsModel();
+				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
+				final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(lngScenarioModel);
 
 				final Set<VesselClass> usedClasses = new HashSet<>();
 

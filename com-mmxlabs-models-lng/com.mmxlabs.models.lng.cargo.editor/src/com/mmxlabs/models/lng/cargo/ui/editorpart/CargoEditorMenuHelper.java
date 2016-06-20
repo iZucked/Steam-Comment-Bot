@@ -71,6 +71,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -1137,8 +1138,8 @@ public class CargoEditorMenuHelper {
 						dischargeSlot.setWindowStart(dishargeCal);
 						dischargeSlot.setWindowStartTime(0);
 
-						// Subtract 1 hour to limit within calendar month
-						dischargeSlot.setWindowSize(Hours.between(dishargeCal, dishargeCal.plusMonths(1)) - 1);
+						dischargeSlot.setWindowSize(1);
+						dischargeSlot.setWindowSizeUnits(TimePeriod.MONTHS);
 
 						final String idPrefix = market.getName() + "-" + yearMonthString + "-";
 						int i = 0;

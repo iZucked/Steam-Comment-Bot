@@ -30,6 +30,7 @@ Export-Package: com.mmxlabs.models.lng.ui,
  com.mmxlabs.models.lng.ui.tabular,
  com.mmxlabs.models.lng.ui.views,
  com.mmxlabs.models.ui.dates,
+ com.mmxlabs.models.ui.editors,
  com.mmxlabs.models.ui.importer
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.slf4j;version="1.6.4"

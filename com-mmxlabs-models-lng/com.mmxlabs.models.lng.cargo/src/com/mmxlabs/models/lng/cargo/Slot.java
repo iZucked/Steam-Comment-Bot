@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -35,6 +36,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowStart <em>Window Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowStartTime <em>Window Start Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowSize <em>Window Size</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowSizeUnits <em>Window Size Units</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowFlex <em>Window Flex</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getDuration <em>Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getVolumeLimitsUnit <em>Volume Limits Unit</em>}</li>
@@ -250,6 +252,63 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @generated
 	 */
 	boolean isSetWindowSize();
+
+	/**
+	 * Returns the value of the '<em><b>Window Size Units</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.TimePeriod}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Window Size Units</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Window Size Units</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.TimePeriod
+	 * @see #isSetWindowSizeUnits()
+	 * @see #unsetWindowSizeUnits()
+	 * @see #setWindowSizeUnits(TimePeriod)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_WindowSizeUnits()
+	 * @model unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='##,##0'"
+	 * @generated
+	 */
+	TimePeriod getWindowSizeUnits();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowSizeUnits <em>Window Size Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Window Size Units</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.TimePeriod
+	 * @see #isSetWindowSizeUnits()
+	 * @see #unsetWindowSizeUnits()
+	 * @see #getWindowSizeUnits()
+	 * @generated
+	 */
+	void setWindowSizeUnits(TimePeriod value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowSizeUnits <em>Window Size Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetWindowSizeUnits()
+	 * @see #getWindowSizeUnits()
+	 * @see #setWindowSizeUnits(TimePeriod)
+	 * @generated
+	 */
+	void unsetWindowSizeUnits();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowSizeUnits <em>Window Size Units</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Window Size Units</em>' attribute is set.
+	 * @see #unsetWindowSizeUnits()
+	 * @see #getWindowSizeUnits()
+	 * @see #setWindowSizeUnits(TimePeriod)
+	 * @generated
+	 */
+	boolean isSetWindowSizeUnits();
 
 	/**
 	 * Returns the value of the '<em><b>Window Flex</b></em>' attribute.
@@ -1263,6 +1322,22 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @generated
 	 */
 	int getSlotOrPortWindowSize();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	TimePeriod getSlotOrPortWindowSizeUnits();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	int getWindowSizeInHours();
 
 	/**
 	 * <!-- begin-user-doc -->

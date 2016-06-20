@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -35,6 +36,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -53,6 +55,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowStart <em>Window Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowStartTime <em>Window Start Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowSize <em>Window Size</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowSizeUnits <em>Window Size Units</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowFlex <em>Window Flex</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getDuration <em>Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getVolumeLimitsUnit <em>Volume Limits Unit</em>}</li>
@@ -198,6 +201,35 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected boolean windowSizeESet;
+
+	/**
+	 * The default value of the '{@link #getWindowSizeUnits() <em>Window Size Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowSizeUnits()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final TimePeriod WINDOW_SIZE_UNITS_EDEFAULT = TimePeriod.HOURS;
+
+	/**
+	 * The cached value of the '{@link #getWindowSizeUnits() <em>Window Size Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowSizeUnits()
+	 * @generated
+	 * @ordered
+	 */
+	protected TimePeriod windowSizeUnits = WINDOW_SIZE_UNITS_EDEFAULT;
+
+	/**
+	 * This is true if the Window Size Units attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean windowSizeUnitsESet;
 
 	/**
 	 * The default value of the '{@link #getWindowFlex() <em>Window Flex</em>}' attribute.
@@ -811,6 +843,52 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 */
 	public boolean isSetWindowSize() {
 		return windowSizeESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public TimePeriod getWindowSizeUnits() {
+		return windowSizeUnits;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setWindowSizeUnits(TimePeriod newWindowSizeUnits) {
+		TimePeriod oldWindowSizeUnits = windowSizeUnits;
+		windowSizeUnits = newWindowSizeUnits == null ? WINDOW_SIZE_UNITS_EDEFAULT : newWindowSizeUnits;
+		boolean oldWindowSizeUnitsESet = windowSizeUnitsESet;
+		windowSizeUnitsESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_SIZE_UNITS, oldWindowSizeUnits, windowSizeUnits, !oldWindowSizeUnitsESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetWindowSizeUnits() {
+		TimePeriod oldWindowSizeUnits = windowSizeUnits;
+		boolean oldWindowSizeUnitsESet = windowSizeUnitsESet;
+		windowSizeUnits = WINDOW_SIZE_UNITS_EDEFAULT;
+		windowSizeUnitsESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__WINDOW_SIZE_UNITS, oldWindowSizeUnits, WINDOW_SIZE_UNITS_EDEFAULT, oldWindowSizeUnitsESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetWindowSizeUnits() {
+		return windowSizeUnitsESet;
 	}
 
 	/**
@@ -1724,7 +1802,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		if (startTime == null) {
 			return null;
 		}
-		return startTime.plusHours( getSlotOrPortWindowSize());
+		
+		return startTime.plusHours(getWindowSizeInHours());
 	}
 	
 	/**
@@ -1786,6 +1865,47 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 */
 	public int getSlotOrPortWindowSize() {
 		return (Integer) eGetWithDefault(CargoPackage.Literals.SLOT__WINDOW_SIZE);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public TimePeriod getSlotOrPortWindowSizeUnits() {
+		return (TimePeriod) eGetWithDefault(CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS);
+
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public int getWindowSizeInHours() {
+		ZonedDateTime start = getWindowStartWithSlotOrPortTime();
+		ZonedDateTime end = start;
+		TimePeriod p  = getSlotOrPortWindowSizeUnits();
+		int windowSize = getSlotOrPortWindowSize();
+		if (windowSize == 0) {
+			return 0;
+		}
+		
+		switch (p) {
+		case DAYS:
+			end = end.plusDays(windowSize).minusHours(1);
+			break;
+		case HOURS:
+			end = end.plusHours(windowSize) ;
+			break;
+		case MONTHS:
+			end = end.plusMonths(windowSize).minusHours(1);
+			break;
+		default:
+			break;
+		}
+		
+		return Hours.between(start, end);
 	}
 
 	/**
@@ -1933,6 +2053,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getWindowStartTime();
 			case CargoPackage.SLOT__WINDOW_SIZE:
 				return getWindowSize();
+			case CargoPackage.SLOT__WINDOW_SIZE_UNITS:
+				return getWindowSizeUnits();
 			case CargoPackage.SLOT__WINDOW_FLEX:
 				return getWindowFlex();
 			case CargoPackage.SLOT__DURATION:
@@ -2011,6 +2133,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return;
 			case CargoPackage.SLOT__WINDOW_SIZE:
 				setWindowSize((Integer)newValue);
+				return;
+			case CargoPackage.SLOT__WINDOW_SIZE_UNITS:
+				setWindowSizeUnits((TimePeriod)newValue);
 				return;
 			case CargoPackage.SLOT__WINDOW_FLEX:
 				setWindowFlex((Integer)newValue);
@@ -2113,6 +2238,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__WINDOW_SIZE:
 				unsetWindowSize();
 				return;
+			case CargoPackage.SLOT__WINDOW_SIZE_UNITS:
+				unsetWindowSizeUnits();
+				return;
 			case CargoPackage.SLOT__WINDOW_FLEX:
 				setWindowFlex(WINDOW_FLEX_EDEFAULT);
 				return;
@@ -2205,6 +2333,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return isSetWindowStartTime();
 			case CargoPackage.SLOT__WINDOW_SIZE:
 				return isSetWindowSize();
+			case CargoPackage.SLOT__WINDOW_SIZE_UNITS:
+				return isSetWindowSizeUnits();
 			case CargoPackage.SLOT__WINDOW_FLEX:
 				return windowFlex != WINDOW_FLEX_EDEFAULT;
 			case CargoPackage.SLOT__DURATION:
@@ -2344,6 +2474,10 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getWindowStartWithSlotOrPortTimeWithFlex();
 			case CargoPackage.SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE:
 				return getSlotOrPortWindowSize();
+			case CargoPackage.SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE_UNITS:
+				return getSlotOrPortWindowSizeUnits();
+			case CargoPackage.SLOT___GET_WINDOW_SIZE_IN_HOURS:
+				return getWindowSizeInHours();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATED_ENTITY:
 				return getSlotOrDelegatedEntity();
 			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS:
@@ -2383,6 +2517,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		if (windowStartTimeESet) result.append(windowStartTime); else result.append("<unset>");
 		result.append(", windowSize: ");
 		if (windowSizeESet) result.append(windowSize); else result.append("<unset>");
+		result.append(", windowSizeUnits: ");
+		if (windowSizeUnitsESet) result.append(windowSizeUnits); else result.append("<unset>");
 		result.append(", windowFlex: ");
 		result.append(windowFlex);
 		result.append(", duration: ");
@@ -2440,6 +2576,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_CancellationExpression(), (String)"");
 		} else if (CargoPackage.Literals.SLOT__VOLUME_LIMITS_UNIT == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_VolumeLimitsUnit(), VolumeUnits.M3);
+		} else if (CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS == feature) {
+			return new DelegateInformation(cargo.getSlot_Port(), port.getPort_DefaultWindowSizeUnits(), TimePeriod.HOURS);
 		}
 		
 		return super.getUnsetValueOrDelegate(feature);

@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 
 /**
@@ -282,6 +283,18 @@ public class SpotLoadSlotImpl extends LoadSlotImpl implements SpotLoadSlot {
 					return result;
 				}
 			};
+		} else if (CargoPackage.Literals.SLOT__WINDOW_SIZE == feature) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SPOT_SLOT__MARKET);
+				}
+
+				public Object getValue(final EObject object) {
+					return 1;
+				}
+			};
+		} else if (CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS == feature) {
+			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Port (), PortPackage.eINSTANCE.getPort_DefaultWindowSizeUnits(), TimePeriod.MONTHS);
 		}
 		return super.getUnsetValueOrDelegate(feature);
 	}

@@ -31,6 +31,7 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.port.ui.editors.WindowSizeInlineEditor;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -101,6 +102,7 @@ public class PortComponentHelper extends BaseComponentHelper {
 		add_defaultStartTimeEditor(detailComposite, topClass);
 		add_allowCooldownEditor(detailComposite, topClass);
 		add_defaultWindowSizeEditor(detailComposite, topClass);
+		add_defaultWindowSizeUnitsEditor(detailComposite, topClass);
 		add_locationEditor(detailComposite, topClass);
 		add_atobviacCodeEditor(detailComposite, topClass);
 		add_dataloyCodeEditor(detailComposite, topClass);
@@ -249,10 +251,21 @@ public class PortComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the defaultWindowSize feature on Port
 	 * 
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_defaultWindowSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__DEFAULT_WINDOW_SIZE));
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__DEFAULT_WINDOW_SIZE));
+		detailComposite.addInlineEditor(new WindowSizeInlineEditor(PortPackage.Literals.PORT__DEFAULT_WINDOW_SIZE  , PortPackage.Literals.PORT__DEFAULT_WINDOW_SIZE_UNITS));
+
+	}
+
+	/**
+	 * Create the editor for the defaultWindowSizeUnits feature on Port
+	 *
+	 * @generated
+	 */
+	protected void add_defaultWindowSizeUnitsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__DEFAULT_WINDOW_SIZE_UNITS));
 	}
 
 	/**
