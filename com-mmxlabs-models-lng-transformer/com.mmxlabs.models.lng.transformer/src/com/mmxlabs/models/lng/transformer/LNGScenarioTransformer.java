@@ -126,6 +126,7 @@ import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.TransformerHelper;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -1688,8 +1689,8 @@ public class LNGScenarioTransformer {
 								desSlot.setWindowStartTime(0);
 								// desSlot.setContract(desPurchaseMarket.getContract());
 								desSlot.setOptional(true);
-								final int duration = Math.max(0, Hours.between(startTime, endTime) - 1);
-								desSlot.setWindowSize(duration);
+								desSlot.setWindowSize(1);
+								desSlot.setWindowSizeUnits(TimePeriod.MONTHS);
 								// Key piece of information
 								desSlot.setMarket(desPurchaseMarket);
 								modelEntityMap.addModelObject(desSlot, desPurchaseSlot);
@@ -1826,8 +1827,8 @@ public class LNGScenarioTransformer {
 								fobSlot.setWindowStartTime(0);
 								// fobSlot.setContract(fobSaleMarket.getContract());
 								fobSlot.setOptional(true);
-								final int duration = Math.max(0, Hours.between(startTime, endTime) - 1);
-								fobSlot.setWindowSize(duration);
+								fobSlot.setWindowSize(1);
+								fobSlot.setWindowSizeUnits(TimePeriod.MONTHS);
 								// Key piece of information
 								fobSlot.setMarket(fobSaleMarket);
 								modelEntityMap.addModelObject(fobSlot, fobSaleSlot);
@@ -1960,8 +1961,8 @@ public class LNGScenarioTransformer {
 								// desSlot.setContract(desSalesMarket.getContract());
 								desSlot.setOptional(true);
 								desSlot.setPort((Port) notionalAPort);
-								final int duration = Math.max(0, Hours.between(startTime, endTime) - 1);
-								desSlot.setWindowSize(duration);
+								desSlot.setWindowSize(1);
+								desSlot.setWindowSizeUnits(TimePeriod.MONTHS);
 
 								final int pricingDate = getSlotPricingDate(desSlot);
 
@@ -2088,8 +2089,8 @@ public class LNGScenarioTransformer {
 								fobSlot.setArriveCold(true);
 								// fobSlot.setCargoCV(fobPurchaseMarket.getCv());
 								fobSlot.setPort((Port) notionalAPort);
-								final int duration = Math.max(0, Hours.between(startTime, endTime) - 1);
-								fobSlot.setWindowSize(duration);
+								fobSlot.setWindowSize(1);
+								fobSlot.setWindowSizeUnits(TimePeriod.MONTHS);
 
 								final ILoadOption fobPurchaseSlot = builder.createLoadSlot(internalID, notionalIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
 										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, fobSlot.getSlotOrPortDuration(), true, true,

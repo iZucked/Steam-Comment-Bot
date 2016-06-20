@@ -74,6 +74,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -592,13 +593,13 @@ public class DefaultScenarioCreator {
 					//
 					.makeFOBPurchase("load", loadTime.toLocalDate(), loadPort, purchaseContract, null, null) //
 					.withWindowStartTime(loadTime.getHour()) //
-					.withWindowSize(defaultWindowSize) //
+					.withWindowSize(defaultWindowSize, TimePeriod.HOURS) //
 					.withVolumeLimits(0, Integer.MAX_VALUE, VolumeUnits.M3) //
 					.build() //
 					//
 					.makeDESSale("discharge", dischargeTime.toLocalDate(), dischargePort, salesContract, null, null) //
 					.withWindowStartTime(dischargeTime.getHour()) //
-					.withWindowSize(defaultWindowSize) //
+					.withWindowSize(defaultWindowSize, TimePeriod.HOURS) //
 					.withVolumeLimits(0, Integer.MAX_VALUE, VolumeUnits.M3) //
 					.build() //
 					//
@@ -620,19 +621,19 @@ public class DefaultScenarioCreator {
 					//
 					.makeFOBPurchase("load", loadTime.toLocalDate(), loadPort, purchaseContract, null, null) //
 					.withWindowStartTime(loadTime.getHour()) //
-					.withWindowSize(defaultWindowSize) //
+					.withWindowSize(defaultWindowSize, TimePeriod.HOURS) //
 					.withVolumeLimits(0, Integer.MAX_VALUE, VolumeUnits.M3) //
 					.build() //
 					//
 					.makeDESSale("discharge1", dischargeTime1.toLocalDate(), dischargePort1, salesContract, null, null) //
 					.withWindowStartTime(dischargeTime1.getHour()) //
-					.withWindowSize(defaultWindowSize) //
+					.withWindowSize(defaultWindowSize, TimePeriod.HOURS) //
 					.withVolumeLimits(0, Integer.MAX_VALUE, VolumeUnits.M3) //
 					.build() //
 					//
 					.makeDESSale("discharge2", dischargeTime2.toLocalDate(), dischargePort2, salesContract, null, null) //
 					.withWindowStartTime(dischargeTime2.getHour()) //
-					.withWindowSize(defaultWindowSize) //
+					.withWindowSize(defaultWindowSize, TimePeriod.HOURS) //
 					.withVolumeLimits(0, Integer.MAX_VALUE, VolumeUnits.M3) //
 					.build() //
 					//

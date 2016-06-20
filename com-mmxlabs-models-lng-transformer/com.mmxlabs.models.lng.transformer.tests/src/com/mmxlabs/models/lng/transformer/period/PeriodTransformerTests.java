@@ -19,6 +19,7 @@ import java.util.Set;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.viewers.CellEditor.LayoutData;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -61,6 +62,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.PeriodRecord;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
+import com.mmxlabs.models.lng.types.TimePeriod;
 
 public class PeriodTransformerTests {
 
@@ -2276,8 +2278,10 @@ public class PeriodTransformerTests {
 		loadSlot1.setWindowStartTime(5);
 		dischargeSlot1.setWindowStartTime(10);
 
-		loadSlot1.setWindowSize(48);
-		dischargeSlot1.setWindowSize(72);
+		loadSlot1.setWindowSize(2);
+		loadSlot1.setWindowSizeUnits(TimePeriod.DAYS);
+		dischargeSlot1.setWindowSize(3);
+		dischargeSlot1.setWindowSizeUnits(TimePeriod.DAYS);
 
 		// TODO: Should be part of the input?
 		// loadSlot1.setDuration(5);

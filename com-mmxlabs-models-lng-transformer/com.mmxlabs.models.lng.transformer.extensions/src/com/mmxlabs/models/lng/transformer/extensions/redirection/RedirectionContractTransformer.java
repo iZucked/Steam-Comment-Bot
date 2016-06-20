@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
@@ -172,7 +173,8 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 							fobPurchaseSlot.setWindowStart(modelEntityMap.getDateFromHours(baseTimeWindow.getInclusiveStart(), loadSlot.getPort()).toLocalDate());
 							fobPurchaseSlot.setContract(loadSlot.getContract());
 							fobPurchaseSlot.setOptional(loadSlot.isOptional());
-							fobPurchaseSlot.setWindowSize((int) 23);
+							fobPurchaseSlot.setWindowSize(1);
+							fobPurchaseSlot.setWindowSizeUnits(TimePeriod.DAYS);
 							if (loadSlot.isSetMaxQuantity()) {
 								fobPurchaseSlot.setMaxQuantity(loadSlot.getMaxQuantity());
 							}
@@ -210,7 +212,8 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 							desSlot.setWindowStart(modelEntityMap.getDateFromHours(window.getInclusiveStart(), loadSlot.getPort()).toLocalDate());
 							desSlot.setContract(loadSlot.getContract());
 							desSlot.setOptional(loadSlot.isOptional());
-							desSlot.setWindowSize((int) 23);
+							desSlot.setWindowSize(1);
+							desSlot.setWindowSizeUnits(TimePeriod.DAYS);
 							if (loadSlot.isSetMaxQuantity()) {
 								desSlot.setMaxQuantity(loadSlot.getMaxQuantity());
 							}
