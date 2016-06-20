@@ -53,7 +53,7 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 
 		// Disable for now
 		if (true) {
-			return Activator.PLUGIN_ID;
+//			return Activator.PLUGIN_ID;
 		}
 
 		final EObject target = ctx.getTarget();
