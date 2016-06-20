@@ -106,16 +106,16 @@ public class LatenessChecker {
 	}
 
 	private int getLateness(@NonNull final IPortSlot portSlot, @NonNull final IResource resource, @Nullable final ITimeWindow tw, final int time) {
-		if ((tw != null) && (time > tw.getEnd())) {
-			final int latenessInHours = time - tw.getEnd();
+		if ((tw != null) && (time >= tw.getExclusiveEnd())) {
+			final int latenessInHours = time - tw.getExclusiveEnd() + 1;
 			return latenessInHours;
 		}
 		return 0;
 	}
 
 	private int getLatenessWithoutFlex(@NonNull final IPortSlot portSlot, @NonNull final IResource resource, @Nullable final ITimeWindow tw, final int time) {
-		if ((tw != null) && (time > tw.getEndWithoutFlex())) {
-			final int latenessInHours = time - tw.getEndWithoutFlex();
+		if ((tw != null) && (time >= tw.getExclusiveEndWithoutFlex())) {
+			final int latenessInHours = time - tw.getExclusiveEndWithoutFlex() + 1;
 			return latenessInHours;
 		}
 		return 0;
@@ -124,9 +124,9 @@ public class LatenessChecker {
 	private @NonNull Pair<ILatenessComponentParameters.@NonNull Interval, @NonNull Long> getWeightedLateness(@NonNull final ITimeWindow tw, final int latenessInHours) {
 		ILatenessComponentParameters.@NonNull Interval interval = Interval.BEYOND;
 		long weightedLateness;
-		if (tw.getStart() < promptPeriodProvider.getEndOfPromptPeriod()) {
+		if (tw.getInclusiveStart() < promptPeriodProvider.getEndOfPromptPeriod()) {
 			interval = Interval.PROMPT;
-		} else if (tw.getStart() < (promptPeriodProvider.getEndOfPromptPeriod() + 90 * 24)) {
+		} else if (tw.getInclusiveStart() < (promptPeriodProvider.getEndOfPromptPeriod() + 90 * 24)) {
 			interval = Interval.MID_TERM;
 		}
 

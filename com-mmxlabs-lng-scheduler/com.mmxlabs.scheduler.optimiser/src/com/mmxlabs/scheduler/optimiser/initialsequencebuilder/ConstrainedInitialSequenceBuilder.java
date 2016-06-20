@@ -387,8 +387,8 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 				final IPortSlot slot3 = portSlotProvider.getPortSlot(e1);
 				final IPortSlot slot4 = portSlotProvider.getPortSlot(e2);
 
-				final int duration1 = slot3.getTimeWindow().getStart() - slot1.getTimeWindow().getStart();
-				final int duration2 = slot4.getTimeWindow().getStart() - slot2.getTimeWindow().getStart();
+				final int duration1 = slot3.getTimeWindow().getInclusiveStart() - slot1.getTimeWindow().getInclusiveStart();
+				final int duration2 = slot4.getTimeWindow().getInclusiveStart() - slot2.getTimeWindow().getInclusiveStart();
 
 				// if one is much longer than the other, do it first.
 
@@ -399,8 +399,8 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 				}
 
 				// sort by start time
-				final int s1 = slot1.getTimeWindow().getStart();
-				final int s2 = slot2.getTimeWindow().getStart();
+				final int s1 = slot1.getTimeWindow().getInclusiveStart();
+				final int s2 = slot2.getTimeWindow().getInclusiveStart();
 
 				if (s1 < s2) {
 					return -1;

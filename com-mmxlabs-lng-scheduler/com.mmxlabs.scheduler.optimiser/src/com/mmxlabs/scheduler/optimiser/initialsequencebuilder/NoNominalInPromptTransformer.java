@@ -84,7 +84,7 @@ public class NoNominalInPromptTransformer {
 							@NonNull
 							final List<@NonNull ITimeWindow> timeWindow = timeWindowProvider.getTimeWindows(e);
 							for (final ITimeWindow tw : timeWindow) {
-								if (tw.getStart() < endOfPromptPeriod) {
+								if (tw.getInclusiveStart() < endOfPromptPeriod) {
 									isRemoving = true;
 								}
 							}

@@ -83,7 +83,7 @@ public class PriceIntervalProviderHelperTest {
 		Mockito.when(loadSlot.getMaxLoadVolumeMMBTU()).thenReturn(OptimiserUnitConvertor.convertToInternalVolume(160000*22.4));
 		ITimeWindow loadSlotTimeWindow = Mockito.mock(ITimeWindow.class);
 		Mockito.when(loadSlot.getTimeWindow()).thenReturn(loadSlotTimeWindow);
-		Mockito.when(loadSlotTimeWindow.getStart()).thenReturn(0);
+		Mockito.when(loadSlotTimeWindow.getInclusiveStart()).thenReturn(0);
 		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
 
 		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
@@ -121,7 +121,7 @@ public class PriceIntervalProviderHelperTest {
 		Mockito.when(loadSlot.getMaxLoadVolumeMMBTU()).thenReturn(OptimiserUnitConvertor.convertToInternalVolume(160000*22.4));
 		ITimeWindow loadSlotTimeWindow = Mockito.mock(ITimeWindow.class);
 		Mockito.when(loadSlot.getTimeWindow()).thenReturn(loadSlotTimeWindow);
-		Mockito.when(loadSlotTimeWindow.getStart()).thenReturn(0);
+		Mockito.when(loadSlotTimeWindow.getInclusiveStart()).thenReturn(0);
 		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
 
 		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
@@ -198,7 +198,7 @@ public class PriceIntervalProviderHelperTest {
 		Mockito.when(loadSlot.getMaxLoadVolumeMMBTU()).thenReturn(OptimiserUnitConvertor.convertToInternalVolume(160000*22.4));
 		ITimeWindow loadSlotTimeWindow = Mockito.mock(ITimeWindow.class);
 		Mockito.when(loadSlot.getTimeWindow()).thenReturn(loadSlotTimeWindow);
-		Mockito.when(loadSlotTimeWindow.getStart()).thenReturn(0);
+		Mockito.when(loadSlotTimeWindow.getInclusiveStart()).thenReturn(0);
 
 		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
 
@@ -239,7 +239,7 @@ public class PriceIntervalProviderHelperTest {
 		Mockito.when(portTimesWindowsRecord.getSlotDuration(loadSlot)).thenReturn(0);
 		ITimeWindow loadSlotTimeWindow = Mockito.mock(ITimeWindow.class);
 		Mockito.when(loadSlot.getTimeWindow()).thenReturn(loadSlotTimeWindow);
-		Mockito.when(loadSlotTimeWindow.getStart()).thenReturn(0);
+		Mockito.when(loadSlotTimeWindow.getInclusiveStart()).thenReturn(0);
 		Mockito.when(portTimesWindowsRecord.getSlotFeasibleTimeWindow(Matchers.eq(loadSlot))).thenReturn(loadSlotTimeWindow);
 
 		IVessel vessel = getIVessel();
@@ -270,7 +270,7 @@ public class PriceIntervalProviderHelperTest {
 		Mockito.when(loadSlot.getMaxLoadVolumeMMBTU()).thenReturn(4018790000L);
 		ITimeWindow loadSlotTimeWindow = Mockito.mock(ITimeWindow.class);
 		Mockito.when(loadSlot.getTimeWindow()).thenReturn(loadSlotTimeWindow);
-		Mockito.when(loadSlotTimeWindow.getStart()).thenReturn(0);
+		Mockito.when(loadSlotTimeWindow.getInclusiveStart()).thenReturn(0);
 
 		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
 		
@@ -306,7 +306,7 @@ public class PriceIntervalProviderHelperTest {
 		Mockito.when(loadSlot.getMaxLoadVolumeMMBTU()).thenReturn(4018790000L);
 		ITimeWindow loadSlotTimeWindow = Mockito.mock(ITimeWindow.class);
 		Mockito.when(loadSlot.getTimeWindow()).thenReturn(loadSlotTimeWindow);
-		Mockito.when(loadSlotTimeWindow.getStart()).thenReturn(0);
+		Mockito.when(loadSlotTimeWindow.getInclusiveStart()).thenReturn(0);
 
 		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
 		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
@@ -359,7 +359,8 @@ public class PriceIntervalProviderHelperTest {
 		Mockito.when(loadSlot.getMaxLoadVolumeMMBTU()).thenReturn(4018790000L);
 		ITimeWindow loadSlotTimeWindow = Mockito.mock(ITimeWindow.class);
 		Mockito.when(loadSlot.getTimeWindow()).thenReturn(loadSlotTimeWindow);
-		Mockito.when(loadSlotTimeWindow.getStart()).thenReturn(0);
+		Mockito.when(loadSlotTimeWindow.getInclusiveStart()).thenReturn(0);
+//		Mockito.when(loadSlotTimeWindow.getExclusiveEnd()).thenReturn(1);
 
 		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
 		
@@ -395,7 +396,7 @@ public class PriceIntervalProviderHelperTest {
 		Mockito.when(loadSlot.getMaxLoadVolumeMMBTU()).thenReturn(4018790000L);
 		ITimeWindow loadSlotTimeWindow = Mockito.mock(ITimeWindow.class);
 		Mockito.when(loadSlot.getTimeWindow()).thenReturn(loadSlotTimeWindow);
-		Mockito.when(loadSlotTimeWindow.getStart()).thenReturn(0);
+		Mockito.when(loadSlotTimeWindow.getInclusiveStart()).thenReturn(0);
 
 		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
 		
@@ -434,7 +435,7 @@ public class PriceIntervalProviderHelperTest {
 		Mockito.when(loadSlot.getMaxLoadVolumeMMBTU()).thenReturn(4018790000L);
 		ITimeWindow loadSlotTimeWindow = Mockito.mock(ITimeWindow.class);
 		Mockito.when(loadSlot.getTimeWindow()).thenReturn(loadSlotTimeWindow);
-		Mockito.when(loadSlotTimeWindow.getStart()).thenReturn(0);
+		Mockito.when(loadSlotTimeWindow.getInclusiveStart()).thenReturn(0);
 
 		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
 		

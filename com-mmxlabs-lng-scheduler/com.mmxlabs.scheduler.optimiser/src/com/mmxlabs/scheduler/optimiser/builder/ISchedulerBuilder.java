@@ -22,6 +22,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -268,45 +269,45 @@ public interface ISchedulerBuilder {
 	@NonNull
 	ICargo createCargo(final boolean allowRewiring, @NonNull final IPortSlot... slots);
 
-//	/**
-//	 * Restrict the set of vessels which can carry this slot to those in the second argument.
-//	 * 
-//	 * If this method is never called, the slot can be carried by any vessel.
-//	 * 
-//	 * @param slot
-//	 *            a {@link ILoadOption} or {@link IDischargeOption}
-//	 * @param vessels
-//	 *            a set of vessels on which this cargo may be carried
-//	 */
-//	void setSlotVesselAvailabilityRestriction(@NonNull IPortSlot slot, @NonNull Set<IVesselAvailability> vessels);
+	// /**
+	// * Restrict the set of vessels which can carry this slot to those in the second argument.
+	// *
+	// * If this method is never called, the slot can be carried by any vessel.
+	// *
+	// * @param slot
+	// * a {@link ILoadOption} or {@link IDischargeOption}
+	// * @param vessels
+	// * a set of vessels on which this cargo may be carried
+	// */
+	// void setSlotVesselAvailabilityRestriction(@NonNull IPortSlot slot, @NonNull Set<IVesselAvailability> vessels);
 
-	/**
-	 * Create a time window with the specified start and end time. If the end time is {@link Integer#MIN_VALUE}, then assume the end time is unbounded and it will be replaced with the latest time in
-	 * the scenario.
-	 * 
-	 * @param start
-	 *            Time window start
-	 * @param end
-	 *            Time window end
-	 * @return
-	 */
-	@NonNull
-	ITimeWindow createTimeWindow(int start, int end);
-
-	/**
-	 * Create a time window with the specified start and end time. If the end time is {@link Integer#MIN_VALUE}, then assume the end time is unbounded and it will be replaced with the latest time in
-	 * the scenario.
-	 * 
-	 * @param start
-	 *            Time window start
-	 * @param end
-	 *            Time window end
-	 * @param endFlex
-	 *            Time window endFlex
-	 * @return
-	 */
-	@NonNull
-	ITimeWindow createTimeWindow(int start, int end, int endFlex);
+	// /**
+	// * Create a time window with the specified start and end time. If the end time is {@link Integer#MIN_VALUE}, then assume the end time is unbounded and it will be replaced with the latest time in
+	// * the scenario.
+	// *
+	// * @param start
+	// * Time window start
+	// * @param end
+	// * Time window end
+	// * @return
+	// */
+	// @NonNull
+	// ITimeWindow createTimeWindow(int start, int end);
+	//
+	// /**
+	// * Create a time window with the specified start and end time. If the end time is {@link Integer#MIN_VALUE}, then assume the end time is unbounded and it will be replaced with the latest time in
+	// * the scenario.
+	// *
+	// * @param start
+	// * Time window start
+	// * @param end
+	// * Time window end
+	// * @param endFlex
+	// * Time window endFlex
+	// * @return
+	// */
+	// @NonNull
+	// ITimeWindow createTimeWindow(int start, int end, int endFlex);
 
 	/**
 	 * Specify a one-way distance between two ports
@@ -497,34 +498,34 @@ public interface ISchedulerBuilder {
 	 */
 	void addTotalVolumeConstraint(@NonNull Set<IPort> ports, boolean loads, boolean discharges, long maximumTotalVolume, @NonNull ITimeWindow timeWindow);
 
-//	/**
-//	 * Constrains the given slot to lie only on the given vessels. Note: Special vessels such as those for DES Purchases and FOB Sales are still permitted.
-//	 * 
-//	 * Note that this does not ensure the compatibility of any other constraints; for example, if you use {@link #setVesselClassInaccessiblePorts(IVesselClass, Set)} to prevent vessels of this class
-//	 * from visiting the port for this slot, you will have an unsolvable scenario.
-//	 * 
-//	 * Passing an empty set or null will clear any constraint
-//	 * 
-//	 * @param slot
-//	 *            the slot to bind to a vessel
-//	 * @param vessel
-//	 *            the vessel to keep this slot on
-//	 */
-//	void constrainSlotToVesselAvailabilities(@NonNull IPortSlot slot, @Nullable Set<IVesselAvailability> vessels);
-//
-//	/**
-//	 * Constrains the given slot to lie only on vessels with the given classes.
-//	 * 
-//	 * In the end the slot will be on the union of vessels with these classes and any vessels set with {@link #constrainSlotToVesselAvailabilities(IPortSlot, Set)}.
-//	 * 
-//	 * Passing an empty or null set will clear any constraint.
-//	 * 
-//	 * Calls to this method <em>replace</em> previous calls, rather than combining them.
-//	 * 
-//	 * @param slot
-//	 * @param vesselClasses
-//	 */
-//	void constrainSlotToVesselClasses(@NonNull IPortSlot slot, @Nullable Set<IVesselClass> vesselClasses);
+	// /**
+	// * Constrains the given slot to lie only on the given vessels. Note: Special vessels such as those for DES Purchases and FOB Sales are still permitted.
+	// *
+	// * Note that this does not ensure the compatibility of any other constraints; for example, if you use {@link #setVesselClassInaccessiblePorts(IVesselClass, Set)} to prevent vessels of this class
+	// * from visiting the port for this slot, you will have an unsolvable scenario.
+	// *
+	// * Passing an empty set or null will clear any constraint
+	// *
+	// * @param slot
+	// * the slot to bind to a vessel
+	// * @param vessel
+	// * the vessel to keep this slot on
+	// */
+	// void constrainSlotToVesselAvailabilities(@NonNull IPortSlot slot, @Nullable Set<IVesselAvailability> vessels);
+	//
+	// /**
+	// * Constrains the given slot to lie only on vessels with the given classes.
+	// *
+	// * In the end the slot will be on the union of vessels with these classes and any vessels set with {@link #constrainSlotToVesselAvailabilities(IPortSlot, Set)}.
+	// *
+	// * Passing an empty or null set will clear any constraint.
+	// *
+	// * Calls to this method <em>replace</em> previous calls, rather than combining them.
+	// *
+	// * @param slot
+	// * @param vesselClasses
+	// */
+	// void constrainSlotToVesselClasses(@NonNull IPortSlot slot, @Nullable Set<IVesselClass> vesselClasses);
 
 	/**
 	 * <p>
@@ -727,4 +728,11 @@ public interface ISchedulerBuilder {
 	void bindSlotsToRoundTripVessel(@NonNull IVesselAvailability roundTripCargoVessel, @NonNull IPortSlot @NonNull... slots);
 
 	void setVesselAndClassPermissions(@NonNull IPortSlot portSlot, @Nullable List<@NonNull IVessel> permittedVessels, @Nullable List<@NonNull IVesselClass> permittedVesselClasses);
+
+	/**
+	 * Register a time window with an open end date that needs to be adjusted to sync up with optimisation end date
+	 * 
+	 * @param window
+	 */
+	void addOpenEndWindow(@NonNull MutableTimeWindow window);
 }

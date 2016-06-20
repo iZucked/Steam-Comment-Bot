@@ -46,11 +46,6 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * @param
  */
 public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
-	public final static String OPTIMISER_START_ELEMENT_FIX = "enableStartElementOptimisation";
-
-	@Inject
-	@Named(TravelTimeConstraintChecker.OPTIMISER_START_ELEMENT_FIX)
-	private boolean START_ELEMENT_OPTIMISATION_FIX; // if set to true it fixes a bug that prevents start elements from being valid preceders
 
 	/**
 	 * The maximum amount of lateness which will even be considered (20 days)
@@ -190,17 +185,17 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 					// See ShippingHoursRestrictions otherwise
 					// if (slot1.getPort() == slot2.getPort()) {
 					if (!shippingHoursRestrictionProvider.isDivertable(first)) {
-						if (tw1.getStart() <= tw2.getStart() && tw1.getEnd() >= tw2.getStart()) {
+						if (tw1.getInclusiveStart() <= tw2.getInclusiveStart() && tw1.getExclusiveEnd() > tw2.getInclusiveStart()) {
 							return true;
 						}
-						if (tw1.getStart() <= tw2.getEnd() && tw1.getEnd() >= tw2.getEnd()) {
+						if (tw1.getInclusiveStart() < tw2.getExclusiveEnd() && tw1.getExclusiveEnd() >= tw2.getExclusiveEnd()) {
 							return true;
 						}
 
-						if (tw2.getStart() <= tw1.getStart() && tw2.getEnd() >= tw1.getStart()) {
+						if (tw2.getInclusiveStart() <= tw1.getInclusiveStart() && tw2.getExclusiveEnd() > tw1.getInclusiveStart()) {
 							return true;
 						}
-						if (tw2.getStart() <= tw1.getEnd() && tw2.getEnd() >= tw1.getEnd()) {
+						if (tw2.getInclusiveStart() < tw1.getExclusiveEnd() && tw2.getExclusiveEnd() >= tw1.getExclusiveEnd()) {
 							return true;
 						}
 						return false;
@@ -230,44 +225,21 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 			return true; // if the time windows are null, there is no effective constraint
 		}
 
-		final int voyageStartTime = tw1.getStart() + elementDurationProvider.getElementDuration(first, resource);
-		Integer travelTime = null;
-		// TODO: Use this loop once rest of code if verified correct.
-		// for (final String route : distanceProvider.getRoutes()) {
-		// int routeTravelTime = distanceProvider.getTravelTime(route, vessel, slot1.getPort(), slot2.getPort(), voyageStartTime, resourceMaxSpeed);
-		// if (travelTime == null || routeTravelTime < travelTime) {
-		// travelTime = routeTravelTime;
-		// }
-		// }
-		final List<Pair<ERouteOption, Integer>> distanceValues = distanceProvider.getDistanceValues(slot1.getPort(), slot2.getPort(), voyageStartTime);
-		for (final Pair<ERouteOption, Integer> distanceOption : distanceValues) {
+		final int voyageStartTime = tw1.getInclusiveStart() + elementDurationProvider.getElementDuration(first, resource);
 
-			final int distance = distanceOption.getSecond();
-			if (distance == Integer.MAX_VALUE) {
-				continue;
-			}
-
-			// TODO: Excluding transit time looks like a bug
-			final int transitTime = 0;// routeCostProvider.getRouteTransitTime(distanceOption.getKey(), vessel);
-			//
-			final int routeTravelTime = Calculator.getTimeFromSpeedDistance(resourceMaxSpeed, distance) + transitTime;
-			if (travelTime == null || routeTravelTime < travelTime) {
-				travelTime = routeTravelTime;
-			}
-		}
-
-		if (travelTime == null) {
+		@NonNull
+		Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), slot1.getPort(), slot2.getPort(), voyageStartTime,
+				resourceMaxSpeed);
+		if (quickestTravelTime.getSecond() == Integer.MAX_VALUE) {
 			return false;
 		}
 
-		final int earliestArrivalTime = voyageStartTime + travelTime;
-		final int latestAllowableTime = tw2.getEnd() + maxLateness;
+		int travelTime = quickestTravelTime.getSecond();
 
-		if (START_ELEMENT_OPTIMISATION_FIX) {
-			return earliestArrivalTime <= latestAllowableTime;
-		} else {
-			return earliestArrivalTime < latestAllowableTime;
-		}
+		final int earliestArrivalTime = voyageStartTime + travelTime;
+		final int latestAllowableTime = tw2.getExclusiveEnd() - 1 + maxLateness;
+
+		return earliestArrivalTime <= latestAllowableTime;
 	}
 
 	@Override
@@ -281,14 +253,14 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		assert tw2 != null;
 		final int visitDuration = elementDurationProvider.getElementDuration(first, resource);
 
-		final int distance = distanceProvider.getDistance(ERouteOption.DIRECT, slot1.getPort(), slot2.getPort(), tw1.getStart() + visitDuration);
+		final int distance = distanceProvider.getDistance(ERouteOption.DIRECT, slot1.getPort(), slot2.getPort(), tw1.getInclusiveStart() + visitDuration);
 
 		if (distance == Integer.MAX_VALUE) {
 			return "No edge connecting ports";
 		}
 
-		return "Excessive lateness : " + slot1.getPort().getName() + " to " + slot2.getPort().getName() + " = " + distance + ", but " + " start of first tw = " + tw1.getStart()
-				+ " and end of second = " + tw2.getEnd();
+		return "Excessive lateness : " + slot1.getPort().getName() + " to " + slot2.getPort().getName() + " = " + distance + ", but " + " start of first tw = " + tw1.getInclusiveStart()
+				+ " and end of second = " + tw2.getExclusiveEnd();
 	}
 
 	public int getMaxLateness() {

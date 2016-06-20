@@ -119,7 +119,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 			if (instanceType != VesselInstanceType.ROUND_TRIP || (lastType == PortType.Load && currentType == PortType.Discharge)) {
 
 				if (lastTimeWindow != null && tw != null) {
-					if (tw.getEnd() < lastTimeWindow.getStart()) {
+					if (tw.getExclusiveEnd() <= lastTimeWindow.getInclusiveStart()) {
 						if (messages != null) {
 							messages.add("Current time window is before previous time window");
 						}
@@ -152,7 +152,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 		final ITimeWindow firstTimeWindow = firstSlot.getTimeWindow();
 		final ITimeWindow secondTimeWindow = secondSlot.getTimeWindow();
 		if (firstTimeWindow != null && secondTimeWindow != null) {
-			if (secondTimeWindow.getEnd() < firstTimeWindow.getStart()) {
+			if (secondTimeWindow.getExclusiveEnd() <= firstTimeWindow.getInclusiveStart()) {
 				return false;
 			}
 		}
@@ -167,7 +167,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 		final ITimeWindow firstTimeWindow = firstSlot.getTimeWindow();
 		final ITimeWindow secondTimeWindow = secondSlot.getTimeWindow();
 		if (firstTimeWindow != null && secondTimeWindow != null) {
-			if (secondTimeWindow.getEnd() < firstTimeWindow.getStart()) {
+			if (secondTimeWindow.getExclusiveEnd() <= firstTimeWindow.getInclusiveStart()) {
 				return "Current time window is before previous time window";
 			}
 		}

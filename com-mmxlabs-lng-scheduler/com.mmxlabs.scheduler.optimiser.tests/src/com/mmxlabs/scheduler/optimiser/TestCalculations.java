@@ -37,6 +37,7 @@ import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
+import com.mmxlabs.scheduler.optimiser.builder.impl.TimeWindowMaker;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -156,17 +157,17 @@ public class TestCalculations {
 			final int ballast_idleConsumptionRateInMTPerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.4);
 			builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, ballast_nboRateInM3PerHour, ballast_idleNBORateInM3PerHour, ballast_idleConsumptionRateInMTPerHour,
 					ballastConsumptionCalculator, 0);
-			final IStartRequirement startRequirement = builder.createStartRequirement(port1, builder.createTimeWindow(0, 0), null);
-			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), builder.createTimeWindow(75, 75), false, 0, false);
+			final IStartRequirement startRequirement = builder.createStartRequirement(port1, TimeWindowMaker.createInclusiveInclusive(0, 0), null);
+			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), TimeWindowMaker.createInclusiveInclusive(75, 75), false, 0, false);
 
 			final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
 			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement);
 
-			final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
+			final ITimeWindow loadWindow = TimeWindowMaker.createInclusiveInclusive(25, 25, 0, false);
 			final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1,
 					false, false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 
-			final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
+			final ITimeWindow dischargeWindow = TimeWindowMaker.createInclusiveInclusive(50, 50);
 			final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE,
 					new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), 1, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false,
 					DEFAULT_VOLUME_LIMIT_IS_M3);
@@ -550,7 +551,6 @@ public class TestCalculations {
 	/**
 	 * Like case 1, but force a higher travelling speed to get idle time + FBO
 	 */
-	@SuppressWarnings("unused")
 	@Test
 	public void testCalculations2() {
 
@@ -604,17 +604,17 @@ public class TestCalculations {
 			builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, ballast_nboRateInM3PerHour, ballast_idleNBORateInM3PerHour, ballast_idleConsumptionRateInMTPerHour,
 					ballastConsumptionCalculator, 0);
 
-			final IStartRequirement startRequirement = builder.createStartRequirement(port1, builder.createTimeWindow(0, 0), null);
-			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), builder.createTimeWindow(75, 75), false, 0, false);
+			final IStartRequirement startRequirement = builder.createStartRequirement(port1, TimeWindowMaker.createInclusiveInclusive(0, 0, 0, false), null);
+			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), TimeWindowMaker.createInclusiveInclusive(75, 75, 0, false), false, 0, false);
 
 			final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
 			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement);
 
-			final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
+			final ITimeWindow loadWindow = TimeWindowMaker.createInclusiveInclusive(25, 25, 0, false);
 			final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1,
 					false, false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 
-			final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
+			final ITimeWindow dischargeWindow = TimeWindowMaker.createInclusiveInclusive(50, 50, 0, false);
 			final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE,
 					new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), 1, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false,
 					DEFAULT_VOLUME_LIMIT_IS_M3);
@@ -993,7 +993,6 @@ public class TestCalculations {
 	/**
 	 * Like case 1, but force a higher travelling speed to get idle time + Base_Supplemental (make NBO more costly than Base)
 	 */
-	@SuppressWarnings("unused")
 	@Test
 	public void testCalculations3() {
 
@@ -1046,17 +1045,17 @@ public class TestCalculations {
 			builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, ballast_nboRateInM3PerHour, ballast_idleNBORateInM3PerHour, ballast_idleConsumptionRateInMTPerHour,
 					ballastConsumptionCalculator, 0);
 
-			final IStartRequirement startRequirement = builder.createStartRequirement(port1, builder.createTimeWindow(0, 0), null);
-			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), builder.createTimeWindow(75, 75), false, 0, false);
+			final IStartRequirement startRequirement = builder.createStartRequirement(port1, TimeWindowMaker.createInclusiveInclusive(0, 0), null);
+			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), TimeWindowMaker.createInclusiveInclusive(75, 75), false, 0, false);
 
 			final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
 			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement);
 
-			final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
+			final ITimeWindow loadWindow = TimeWindowMaker.createInclusiveInclusive(25, 25);
 			final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1,
 					false, false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 
-			final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
+			final ITimeWindow dischargeWindow = TimeWindowMaker.createInclusiveInclusive(50, 50);
 			final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE,
 					new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(200)), 1, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false,
 					DEFAULT_VOLUME_LIMIT_IS_M3);
@@ -1499,7 +1498,7 @@ public class TestCalculations {
 				bind(IVoyagePlanOptimiser.class).to(VoyagePlanOptimiser.class);
 
 				bind(IEndEventScheduler.class).to(DefaultEndEventScheduler.class);
-				
+
 				bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
 				final VesselBaseFuelCalculator baseFuelCalculator = Mockito.mock(VesselBaseFuelCalculator.class);
 				Mockito.when(baseFuelCalculator.getBaseFuelPrice(Matchers.any(IVessel.class), Matchers.any(IPortTimesRecord.class))).thenReturn(baseFuelUnitPrice);

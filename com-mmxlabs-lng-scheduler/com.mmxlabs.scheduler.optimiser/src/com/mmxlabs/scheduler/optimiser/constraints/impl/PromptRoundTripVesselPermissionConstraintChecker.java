@@ -160,7 +160,7 @@ public class PromptRoundTripVesselPermissionConstraintChecker implements IPairwi
 			@NonNull
 			final List<@NonNull ITimeWindow> timeWindow = timeWindowProvider.getTimeWindows(element);
 			for (final ITimeWindow tw : timeWindow) {
-				if (tw.getStart() < endOfPromptPeriod) {
+				if (tw.getInclusiveStart() < endOfPromptPeriod) {
 					return false;
 				}
 			}

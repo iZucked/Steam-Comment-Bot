@@ -222,7 +222,7 @@ public class ProfitAndLossCalculator {
 				@Nullable
 				ITimeWindow timeWindow = loadOption.getTimeWindow();
 				assert timeWindow != null;
-				time = timeWindow.getStart();
+				time = timeWindow.getInclusiveStart();
 				vesselAvailability = new MarkToMarketVesselAvailability(market, loadOption);
 			} else if (portSlot instanceof IDischargeOption) {
 				dischargeOption = (IDischargeOption) portSlot;
@@ -234,7 +234,7 @@ public class ProfitAndLossCalculator {
 				@Nullable
 				ITimeWindow timeWindow = dischargeOption.getTimeWindow();
 				assert timeWindow != null;
-				time = timeWindow.getStart();
+				time = timeWindow.getInclusiveStart();
 				vesselAvailability = new MarkToMarketVesselAvailability(market, dischargeOption);
 			} else {
 				continue;

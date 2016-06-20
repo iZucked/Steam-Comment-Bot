@@ -348,7 +348,8 @@ public class PriceIntervalProviderHelper {
 		LadenRouteData bestCanal = null;
 		for (final LadenRouteData canal : sortedCanalTimes) {
 			if (isFeasibleTravelTime(purchase, sales, loadDuration, canal.ladenTimeAtMaxSpeed)) {
-				final int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) canal.ladenTimeAtMaxSpeed, (int) canal.ladenTimeAtNBOSpeed);
+				final int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) canal.ladenTimeAtMaxSpeed,
+						(int) canal.ladenTimeAtNBOSpeed);
 				final int ladenLength = (times[1] - times[0]) / 24;
 
 				final long boiloffMMBTU = Calculator.convertM3ToMMBTu((ladenLength) * boiloffRateM3, cv);
@@ -510,29 +511,30 @@ public class PriceIntervalProviderHelper {
 			timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge);
 		}
 
-		final List<int[]> intervals = getFeasibleIntervalSubSet(timeWindow.getStart(), timeWindow.getEnd(), priceIntervalProducer.getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(load,
-				discharge, (IPriceIntervalProvider) load.getLoadPriceCalculator(), (IPriceIntervalProvider) discharge.getDischargePriceCalculator(), portTimeWindowRecord, dateFromLoad));
+		final List<int[]> intervals = getFeasibleIntervalSubSet(timeWindow.getInclusiveStart(), timeWindow.getExclusiveEnd(),
+				priceIntervalProducer.getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(load, discharge, (IPriceIntervalProvider) load.getLoadPriceCalculator(),
+						(IPriceIntervalProvider) discharge.getDischargePriceCalculator(), portTimeWindowRecord, dateFromLoad));
 		return intervals;
 	}
 
 	@NonNull
-	List<int[]> getFeasibleIntervalSubSet(final int start, final int end, @NonNull final List<int[]> intervals) {
+	List<int[]> getFeasibleIntervalSubSet(final int inclusiveStart, final int exclusiveEnd, @NonNull final List<int[]> intervals) {
 		final List<int[]> list = new LinkedList<>();
 		for (int i = 0; i < intervals.size(); i++) {
 			if (list.size() == 0) {
-				if (intervals.get(i)[0] == start) {
-					list.add(new int[] { start, intervals.get(i)[1] });
-				} else if (intervals.get(i)[0] > start) {
-					list.add(new int[] { start, intervals.get(i - 1)[1] });
-					if (intervals.get(i)[0] < end) {
+				if (intervals.get(i)[0] == inclusiveStart) {
+					list.add(new int[] { inclusiveStart, intervals.get(i)[1] });
+				} else if (intervals.get(i)[0] > inclusiveStart) {
+					list.add(new int[] { inclusiveStart, intervals.get(i - 1)[1] });
+					if (intervals.get(i)[0] < exclusiveEnd) {
 						list.add(intervals.get(i));
 					}
 				}
-			} else if (intervals.get(i)[0] < end) {
+			} else if (intervals.get(i)[0] < exclusiveEnd) {
 				list.add(intervals.get(i));
 			}
 		}
-		list.add(new int[] { end, Integer.MIN_VALUE });
+		list.add(new int[] { exclusiveEnd, Integer.MIN_VALUE });
 		return list;
 	}
 
@@ -655,7 +657,7 @@ public class PriceIntervalProviderHelper {
 
 	void createAndSetTimeWindow(final IPortTimeWindowsRecord portTimeWindowRecord, final IPortSlot slot, final int start, final int end) {
 		final ITimeWindow timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(slot);
-		final TimeWindow feasibleTimeWindow = new TimeWindow(start, end, timeWindow.getEndFlex());
+		final TimeWindow feasibleTimeWindow = new TimeWindow(start, end, timeWindow.getExclusiveEndFlex());
 		portTimeWindowRecord.setSlotFeasibleTimeWindow(slot, feasibleTimeWindow);
 	}
 
@@ -887,7 +889,7 @@ public class PriceIntervalProviderHelper {
 		}
 		return sortedIntervals;
 	}
-	
+
 	public int getEndInterval(int intervalDataStart, int intervalDataEnd) {
 		if (intervalDataStart == intervalDataEnd) {
 			return intervalDataStart;

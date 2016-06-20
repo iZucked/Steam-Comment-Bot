@@ -69,7 +69,7 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 				firstLoop = false;
 			}
 
-			builder.append(String.format(slotFormat, slot.getId(), slotAllocation.feasibleWindow.getStart()));
+			builder.append(String.format(slotFormat, slot.getId(), slotAllocation.feasibleWindow.getInclusiveStart()));
 		}
 
 		return builder.toString();

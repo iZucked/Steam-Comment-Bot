@@ -91,13 +91,13 @@ public class DefaultNextLoadDateProvider implements INextLoadDateProviderEditor 
 
 		// Find closest slot
 		for (final ILoadOption o : slots) {
-			if (o.getTimeWindow().getEnd() >= returnTime) {
+			if (o.getTimeWindow().getExclusiveEnd() > returnTime) {
 				// First slot found after the return date
 				if (nextSlot == null) {
 					nextSlot = o;
 				} else {
 					// Is this slot closer?
-					if (o.getTimeWindow().getEnd() < nextSlot.getTimeWindow().getEnd()) {
+					if (o.getTimeWindow().getExclusiveEnd() < nextSlot.getTimeWindow().getExclusiveEnd()) {
 						nextSlot = o;
 					}
 				}
@@ -107,7 +107,7 @@ public class DefaultNextLoadDateProvider implements INextLoadDateProviderEditor 
 		if (nextSlot == null) {
 			return new DefaultNextLoadDate(returnTime, null);
 		} else {
-			return new DefaultNextLoadDate(Math.max(returnTime, nextSlot.getTimeWindow().getStart()), nextSlot);
+			return new DefaultNextLoadDate(Math.max(returnTime, nextSlot.getTimeWindow().getInclusiveStart()), nextSlot);
 		}
 	}
 
@@ -143,7 +143,7 @@ public class DefaultNextLoadDateProvider implements INextLoadDateProviderEditor 
 		@Override
 		public int compare(final ILoadOption o1, final ILoadOption o2) {
 
-			return o1.getTimeWindow().getStart() - o2.getTimeWindow().getStart();
+			return o1.getTimeWindow().getInclusiveStart() - o2.getTimeWindow().getInclusiveStart();
 		}
 	}
 

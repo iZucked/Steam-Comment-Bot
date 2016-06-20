@@ -546,11 +546,11 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		{
 			final long hedgeValue = hedgesProvider.getHedgeValue(portSlot);
 			final ILongCurve cancellationCurve = cancellationFeeProvider.getCancellationExpression(portSlot);
-			final long cancellationCost = cancellationCurve.getValueAtPoint(portSlot.getTimeWindow().getStart());
+			final long cancellationCost = cancellationCurve.getValueAtPoint(portSlot.getTimeWindow().getInclusiveStart());
 
 			// Taxed P&L - use time window start as tax date
 			final long preTaxValue = hedgeValue - cancellationCost;
-			final int utcEquivTaxTime = utcOffsetProvider.UTC(portSlot.getTimeWindow().getStart(), portSlot);
+			final int utcEquivTaxTime = utcOffsetProvider.UTC(portSlot.getTimeWindow().getInclusiveStart(), portSlot);
 			final long postTaxValue = entity.getTradingBook().getTaxedProfit(preTaxValue, utcEquivTaxTime);
 			result = postTaxValue;
 

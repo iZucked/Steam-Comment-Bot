@@ -62,8 +62,8 @@ public class RandomPriceBasedSequenceScheduler extends EnumeratingSequenceSchedu
 	private void updateTimeWindows(final IPortTimeWindowsRecord portTimeWindowsRecord, final int seqIndex) {
 		for (final IPortSlot portSlot : portTimeWindowsRecord.getSlots()) {
 			final ITimeWindow timeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(portSlot);
-			windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)] = timeWindow.getStart();
-			windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)] = timeWindow.getEnd();
+			windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)] = timeWindow.getInclusiveStart();
+			windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)] = timeWindow.getExclusiveEnd();
 		}
 	}
 

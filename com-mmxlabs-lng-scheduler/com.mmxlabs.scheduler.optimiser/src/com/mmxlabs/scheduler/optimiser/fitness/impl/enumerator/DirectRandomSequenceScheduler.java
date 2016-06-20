@@ -64,7 +64,7 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 			final int lastIndex = sizes[seq] - 1;
 			for (int pos = 0; pos < lastIndex; pos++) {
 				final int min = getMinArrivalTime(seq, pos);
-				final int max = getMaxArrivalTime(seq, pos);
+				final int max = getMaxArrivalTime(seq, pos) ;
 				arrivalTimes[seq][pos] = RandomHelper.nextIntBetween(random, min, max);
 				// TODO force sync this with any ship-to-ship bindings
 			}

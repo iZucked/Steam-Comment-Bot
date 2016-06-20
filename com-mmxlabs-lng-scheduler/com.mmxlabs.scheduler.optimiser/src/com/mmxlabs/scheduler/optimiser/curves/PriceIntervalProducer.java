@@ -30,9 +30,9 @@ public class PriceIntervalProducer implements IPriceIntervalProducer {
 	@Override
 	public List<int @NonNull []> getLoadIntervalsIndependentOfDischarge(final ILoadOption portSlot, final IPortTimeWindowsRecord portTimeWindowRecord) {
 		assert portSlot.getLoadPriceCalculator() instanceof IPriceIntervalProvider;
-		final int start = portSlot.getTimeWindow().getStart();
+		final int start = portSlot.getTimeWindow().getInclusiveStart();
 		final ITimeWindow feasibletimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(portSlot);
-		final int end = findBestEnd(start, feasibletimeWindow.getStart(), portSlot.getTimeWindow().getEnd(), feasibletimeWindow.getEnd());
+		final int end = findBestEnd(start, feasibletimeWindow.getInclusiveStart(), portSlot.getTimeWindow().getExclusiveEnd(), feasibletimeWindow.getExclusiveEnd());
 		return ((IPriceIntervalProvider) portSlot.getLoadPriceCalculator()).getPriceIntervals(portSlot, start, end, portTimeWindowRecord);
 	}
 
@@ -41,18 +41,18 @@ public class PriceIntervalProducer implements IPriceIntervalProducer {
 		final IDischargeOption discharge = priceIntervalProviderUtil.getFirstDischargeOption(portTimeWindowRecord.getSlots());
 		assert discharge != null;
 		assert discharge.getDischargePriceCalculator() instanceof IPriceIntervalProvider;
-		final int start = portSlot.getTimeWindow().getStart();
+		final int start = portSlot.getTimeWindow().getInclusiveStart();
 		final ITimeWindow feasibletimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(portSlot);
-		final int end = findBestEnd(start, feasibletimeWindow.getStart(), portSlot.getTimeWindow().getEnd(), feasibletimeWindow.getEnd());
+		final int end = findBestEnd(start, feasibletimeWindow.getInclusiveStart(), portSlot.getTimeWindow().getExclusiveEnd(), feasibletimeWindow.getExclusiveEnd());
 		return ((IPriceIntervalProvider) discharge.getDischargePriceCalculator()).getPriceIntervals(discharge, start, end, portTimeWindowRecord);
 	}
 
 	@Override
 	public List<int @NonNull []> getDischargeWindowIndependentOfLoad(@NonNull final IDischargeOption portSlot, @NonNull final IPortTimeWindowsRecord portTimeWindowRecord) {
 		assert portSlot.getDischargePriceCalculator() instanceof IPriceIntervalProvider;
-		final int start = portSlot.getTimeWindow().getStart();
+		final int start = portSlot.getTimeWindow().getInclusiveStart();
 		final ITimeWindow feasibletimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(portSlot);
-		final int end = findBestEnd(start, feasibletimeWindow.getStart(), portSlot.getTimeWindow().getEnd(), feasibletimeWindow.getEnd());
+		final int end = findBestEnd(start, feasibletimeWindow.getInclusiveStart(), portSlot.getTimeWindow().getExclusiveEnd(), feasibletimeWindow.getExclusiveEnd());
 
 		return ((IPriceIntervalProvider) portSlot.getDischargePriceCalculator()).getPriceIntervals(portSlot, start, end, portTimeWindowRecord);
 	}
@@ -62,9 +62,9 @@ public class PriceIntervalProducer implements IPriceIntervalProducer {
 		final ILoadOption loadOption = priceIntervalProviderUtil.getFirstLoadOption(portTimeWindowRecord.getSlots());
 		assert loadOption != null;
 		assert loadOption.getLoadPriceCalculator() instanceof IPriceIntervalProvider;
-		final int start = portSlot.getTimeWindow().getStart();
+		final int start = portSlot.getTimeWindow().getInclusiveStart();
 		final ITimeWindow feasibletimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(portSlot);
-		final int end = findBestEnd(start, feasibletimeWindow.getStart(), portSlot.getTimeWindow().getEnd(), feasibletimeWindow.getEnd());
+		final int end = findBestEnd(start, feasibletimeWindow.getInclusiveStart(), portSlot.getTimeWindow().getExclusiveEnd(), feasibletimeWindow.getExclusiveEnd());
 		return ((IPriceIntervalProvider) loadOption.getLoadPriceCalculator()).getPriceIntervals(loadOption, start, end, portTimeWindowRecord);
 	}
 
@@ -72,10 +72,10 @@ public class PriceIntervalProducer implements IPriceIntervalProducer {
 	public List<int @NonNull []> getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(final @NonNull ILoadOption load, final @NonNull IDischargeOption discharge,
 			final @NonNull IPriceIntervalProvider loadPriceIntervalProvider, final @NonNull IPriceIntervalProvider dischargePriceIntervalProvider,
 			final @NonNull IPortTimeWindowsRecord portTimeWindowsRecord, final boolean dateFromLoad) {
-		final int start = load.getTimeWindow().getStart();
+		final int start = load.getTimeWindow().getInclusiveStart();
 		final ITimeWindow loadFeasibletimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
 		final ITimeWindow dischargeFeasibletimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
-		final int end = findBestEnd(start, loadFeasibletimeWindow.getStart(), discharge.getTimeWindow().getEnd(), dischargeFeasibletimeWindow.getEnd());
+		final int end = findBestEnd(start, loadFeasibletimeWindow.getInclusiveStart(), discharge.getTimeWindow().getExclusiveEnd(), dischargeFeasibletimeWindow.getExclusiveEnd());
 		return priceIntervalProviderUtil.buildComplexPriceIntervals(start, end, load, discharge, loadPriceIntervalProvider, dischargePriceIntervalProvider, portTimeWindowsRecord);
 	}
 

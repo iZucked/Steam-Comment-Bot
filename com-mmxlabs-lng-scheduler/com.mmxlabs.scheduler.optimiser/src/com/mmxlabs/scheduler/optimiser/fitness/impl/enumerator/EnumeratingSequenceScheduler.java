@@ -284,7 +284,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 		for (int i = 1; i < startTimes.length; i++) {
 			if (actualiseTimeWindows[i] && !useRawTimeWindow[i]) {
 				startTimes[i] = Math.max(startTimes[i], startTimes[i - 1] + minTravelTimes[i - 1]);
-				endTimes[i] = Math.max(endTimes[i], startTimes[i]);
+				endTimes[i] = Math.max(endTimes[i], startTimes[i] + 1);
 			}
 		}
 
@@ -295,7 +295,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 			// reachable without lateness
 			// (but never so that the end time is before the start time)
 			if (actualiseTimeWindows[i] && !useRawTimeWindow[i + 1]) {
-				endTimes[i] = Math.max(startTimes[i], Math.min(endTimes[i], endTimes[i + 1] - minTravelTimes[i]));
+				endTimes[i] = Math.max(startTimes[i] + 1, Math.min(endTimes[i], endTimes[i + 1] - minTravelTimes[i]));
 			}
 		}
 	}
@@ -581,20 +581,20 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 				assert windows.size() == 1 : "Multiple time windows are not yet supported!";
 				final ITimeWindow window = windows.get(0);
 				if (index == 0) {// first time window is special
-					windowStartTime[index] = window.getStart();
-					windowEndTime[index] = window.getEnd();
+					windowStartTime[index] = window.getInclusiveStart();
+					windowEndTime[index] = window.getExclusiveEnd();
 				} else {
 					// subsequent time windows have their start time clipped, so
 					// they don't start any earlier
 					// than you could get to them without being late.
-					windowEndTime[index] = window.getEnd();
+					windowEndTime[index] = window.getExclusiveEnd();
 					if (useTimeWindow[index] || actualisedTimeWindow[index]) {
 						// Cargo shorts - pretend this is a start element
 						// Actuals - use window directly
-						windowStartTime[index] = window.getStart();
+						windowStartTime[index] = window.getInclusiveStart();
 					} else {
-						windowStartTime[index] = Math.max(window.getStart(), windowStartTime[index - 1] + minTimeToNextElement[index - 1]);
-						windowEndTime[index] = Math.max(windowEndTime[index], windowStartTime[index]);
+						windowStartTime[index] = Math.max(window.getInclusiveStart(), windowStartTime[index - 1] + minTimeToNextElement[index - 1]);
+						windowEndTime[index] = Math.max(windowEndTime[index]  , windowStartTime[index] + 1);
 					}
 				}
 			}
@@ -617,11 +617,11 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 				// Current window if flexible, next window is fixed, bring end window back
 				windowEndTime[index] = windowEndTime[index + 1] - minTimeToNextElement[index];
 			} else if (!useTimeWindow[index + 1]) {
-				windowEndTime[index] = Math.max(windowStartTime[index], Math.min(windowEndTime[index], windowEndTime[index + 1] - minTimeToNextElement[index]));
+				windowEndTime[index] = Math.max(windowStartTime[index] + 1, Math.min(windowEndTime[index], windowEndTime[index + 1] - minTimeToNextElement[index]));
 			}
 
 			// Make sure end if >= start - this may shift the end forward again violating min travel time.
-			windowEndTime[index] = Math.max(windowStartTime[index], windowEndTime[index]);
+			windowEndTime[index] = Math.max(windowStartTime[index] + 1, windowEndTime[index]);
 		}
 
 		// Compute separation points
@@ -685,7 +685,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 			return windowStartTime[seq][index];
 		} else {
 			// the latest we can arrive here is either window end time, or if we're late clamp to the earliest.
-			return Math.max(getMinArrivalTime(seq, index), windowEndTime[seq][index]);
+			return Math.max(getMinArrivalTime(seq, index), windowEndTime[seq][index] - 1);
 		}
 	}
 
@@ -695,8 +695,8 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 		final int ideal = arrivalTimes[seq][pos + 1] - minTimeToNextElement[seq][pos];
 		if (ideal < windowStartTime[seq][pos]) {
 			return windowStartTime[seq][pos];
-		} else if (ideal > windowEndTime[seq][pos]) {
-			return windowEndTime[seq][pos];
+		} else if (ideal >= windowEndTime[seq][pos]) {
+			return windowEndTime[seq][pos]-1;
 		} else {
 			return ideal;
 		}
@@ -716,7 +716,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 	protected final long getApproximateCombinations(final int seq, final int firstIndex, final int lastIndex, final long maxValue) {
 		long accumulator = 1;
 		for (int i = firstIndex; i <= lastIndex; i++) {
-			accumulator *= ((windowEndTime[seq][i] - windowStartTime[seq][i]) + 1);
+			accumulator *= ((windowEndTime[seq][i] - windowStartTime[seq][i])  );
 			if (accumulator > maxValue) {
 				return maxValue;
 			}

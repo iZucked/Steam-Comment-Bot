@@ -96,7 +96,7 @@ public final class SimpleSequenceScheduler implements ISequenceScheduler {
 						.getDistance(ERouteOption.DIRECT, portProvider.getPortForElement(sequence.get(idx - 1)), portProvider.getPortForElement(element), lastTimeWindowStart /* + visitDuration */));
 			} else {
 				for (final ITimeWindow window : timeWindows) {
-					timeWindowStart = Math.min(timeWindowStart, window.getStart());
+					timeWindowStart = Math.min(timeWindowStart, window.getInclusiveStart());
 				}
 			}
 			arrivalTimes[idx++] = timeWindowStart;
