@@ -52,6 +52,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.optimiser.core.ISequences;
 
 @RunWith(value = ShiroRunner.class)
@@ -336,11 +337,11 @@ public class EventsAfterBoundaryTests extends AbstractMicroTestCase {
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 5, 1), portFinder.findPort("Ras Laffan"), null, entity, "5") //
 				.withWindowStartTime(0) //
-				.withWindowSize(0) //
+				.withWindowSize(0, TimePeriod.DAYS) //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2015, 6, 1), portFinder.findPort("Mina Al Ahmadi"), null, entity, "7") //
 				.withWindowStartTime(0) //
-				.withWindowSize(0) //
+				.withWindowSize(0, TimePeriod.DAYS) //
 				.build() //
 				.withVesselAssignment(vesselAvailability_1, 0) //
 				.withAssignmentFlags(true, false) //

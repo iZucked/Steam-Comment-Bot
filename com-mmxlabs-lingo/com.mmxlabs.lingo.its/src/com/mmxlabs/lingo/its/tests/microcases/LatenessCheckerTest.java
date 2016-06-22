@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.types.TimePeriod;
 
 /**
  * 
@@ -161,13 +162,13 @@ public class LatenessCheckerTest extends AbstractMicroTestCase {
 				.makeFOBPurchase("L", LocalDate.of(2015, 12, 1), port1, null, entity, "5") //
 				.withWindowStartTime(0) //
 				.withVisitDuration(24) //
-				.withWindowSize(0) //
+				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
 				.makeDESSale("D", dischargeDate.toLocalDate(), port2, null, entity, "7") //
 				.withWindowStartTime(dischargeDate.toLocalTime().getHour()) //
 				.withVisitDuration(24) //
-				.withWindowSize(0) //
+				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
 				.withVesselAssignment(vesselAvailability, 1) //
@@ -214,13 +215,13 @@ public class LatenessCheckerTest extends AbstractMicroTestCase {
 				.makeFOBPurchase("L", LocalDate.of(2015, 12, 1), port1, null, entity, "5") //
 				.withWindowStartTime(0) //
 				.withVisitDuration(24) //
-				.withWindowSize(0) //
+				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
 				.makeDESSale("D", dischargeDate.toLocalDate(), port2, null, entity, "7") //
 				.withWindowStartTime(dischargeDate.toLocalTime().getHour()) //
 				.withVisitDuration(24) //
-				.withWindowSize(0) //
+				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
 				.withVesselAssignment(vesselAvailability, 1) //
@@ -268,14 +269,14 @@ public class LatenessCheckerTest extends AbstractMicroTestCase {
 				.makeFOBPurchase("L", LocalDate.of(2015, 12, 1), port1, null, entity, "5") //
 				.withWindowStartTime(0) //
 				.withVisitDuration(24) //
-				.withWindowSize(0) //
+				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
 				.makeDESSale("D", dischargeDate.toLocalDate(), port2, null, entity, "7") //
 				.withWindowStartTime(dischargeDate.toLocalTime().getHour()) //
 				.withVisitDuration(24) //
 				.withWindowFlex(1) //
-				.withWindowSize(0) //
+				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
 				.withVesselAssignment(vesselAvailability, 1) //
