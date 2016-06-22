@@ -18,10 +18,10 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl#getUuid <em>Uuid</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

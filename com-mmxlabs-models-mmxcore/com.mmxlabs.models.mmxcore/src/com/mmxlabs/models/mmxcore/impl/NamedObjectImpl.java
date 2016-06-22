@@ -18,10 +18,10 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.mmxcore.impl.NamedObjectImpl#getName <em>Name</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

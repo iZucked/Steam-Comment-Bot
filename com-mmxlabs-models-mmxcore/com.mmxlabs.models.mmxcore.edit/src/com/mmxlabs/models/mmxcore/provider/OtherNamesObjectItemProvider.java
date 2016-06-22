@@ -33,13 +33,7 @@ import com.mmxlabs.models.mmxcore.OtherNamesObject;
  * @generated
  */
 public class OtherNamesObjectItemProvider
-	extends NamedObjectItemProvider
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends NamedObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->

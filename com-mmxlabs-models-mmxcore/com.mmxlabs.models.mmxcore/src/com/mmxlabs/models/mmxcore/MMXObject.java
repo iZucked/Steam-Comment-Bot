@@ -15,10 +15,10 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.mmxcore.MMXObject#getExtensions <em>Extensions</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.mmxcore.MMXCorePackage#getMMXObject()
  * @model abstract="true"
