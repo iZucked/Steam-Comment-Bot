@@ -95,43 +95,43 @@ public class PriceIntervalProviderHelperTest {
 		Assert.assertArrayEquals(new int[] {0, 0, 40, 45}, times);
 	}
 
-	/**
-	 * Test that the cheapest option is to go direct meaning: load {0, 0} and discharge {40, 45}
-	 */
-	@Test
-	public void testCanalTrimming_MinTimeGreaterThanCheapestOption_NewMethod() {
-		List<int[]> purchaseIntervals = new ArrayList<>();
-		purchaseIntervals.add(new int[] {0,20});
-		purchaseIntervals.add(new int[] {5,25});
-		purchaseIntervals.add(new int[] {15,18});
-		purchaseIntervals.add(new int[] {20,Integer.MIN_VALUE});
-
-		List<int[]> salesIntervals = new ArrayList<>();
-		salesIntervals.add(new int[] {40,25});
-		salesIntervals.add(new int[] {45,20});
-		salesIntervals.add(new int[] {50,22});
-		salesIntervals.add(new int[] {51,Integer.MIN_VALUE});
-
-		List<Pair<ERouteOption, Integer>> distances = new LinkedList<>();
-		distances.add(new Pair<ERouteOption, Integer>(ERouteOption.DIRECT, 400));
-		distances.add(new Pair<ERouteOption, Integer>(ERouteOption.SUEZ, 300));
-		TimeWindowsTrimming timeWindowsTrimming = getTimeWindowsTrimming(distances, getDefaultCanalOpenings());
-		
-		ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
-		Mockito.when(loadSlot.getMaxLoadVolumeMMBTU()).thenReturn(OptimiserUnitConvertor.convertToInternalVolume(160000*22.4));
-		ITimeWindow loadSlotTimeWindow = Mockito.mock(ITimeWindow.class);
-		Mockito.when(loadSlot.getTimeWindow()).thenReturn(loadSlotTimeWindow);
-		Mockito.when(loadSlotTimeWindow.getInclusiveStart()).thenReturn(0);
-		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
-
-		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
-		Mockito.when(portTimesWindowsRecord.getSlotDuration(Matchers.eq(loadSlot))).thenReturn(0);
-		Mockito.when(portTimesWindowsRecord.getSlotFeasibleTimeWindow(Matchers.eq(loadSlot))).thenReturn(loadSlotTimeWindow);
-		
-		IVessel vessel = getIVessel(null);
-		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisationAndBoilOff(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals, false);
-		Assert.assertArrayEquals(new int[] {0, 0, 40, 40}, times);
-	}
+//	/**
+//	 * Test that the cheapest option is to go direct meaning: load {0, 0} and discharge {40, 45}
+//	 */
+//	@Test
+//	public void testCanalTrimming_MinTimeGreaterThanCheapestOption_NewMethod() {
+//		List<int[]> purchaseIntervals = new ArrayList<>();
+//		purchaseIntervals.add(new int[] {0,20});
+//		purchaseIntervals.add(new int[] {5,25});
+//		purchaseIntervals.add(new int[] {15,18});
+//		purchaseIntervals.add(new int[] {20,Integer.MIN_VALUE});
+//
+//		List<int[]> salesIntervals = new ArrayList<>();
+//		salesIntervals.add(new int[] {40,25});
+//		salesIntervals.add(new int[] {45,20});
+//		salesIntervals.add(new int[] {50,22});
+//		salesIntervals.add(new int[] {51,Integer.MIN_VALUE});
+//
+//		List<Pair<ERouteOption, Integer>> distances = new LinkedList<>();
+//		distances.add(new Pair<ERouteOption, Integer>(ERouteOption.DIRECT, 400));
+//		distances.add(new Pair<ERouteOption, Integer>(ERouteOption.SUEZ, 300));
+//		TimeWindowsTrimming timeWindowsTrimming = getTimeWindowsTrimming(distances, getDefaultCanalOpenings());
+//		
+//		ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
+//		Mockito.when(loadSlot.getMaxLoadVolumeMMBTU()).thenReturn(OptimiserUnitConvertor.convertToInternalVolume(160000*22.4));
+//		ITimeWindow loadSlotTimeWindow = Mockito.mock(ITimeWindow.class);
+//		Mockito.when(loadSlot.getTimeWindow()).thenReturn(loadSlotTimeWindow);
+//		Mockito.when(loadSlotTimeWindow.getInclusiveStart()).thenReturn(0);
+//		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
+//
+//		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
+//		Mockito.when(portTimesWindowsRecord.getSlotDuration(Matchers.eq(loadSlot))).thenReturn(0);
+//		Mockito.when(portTimesWindowsRecord.getSlotFeasibleTimeWindow(Matchers.eq(loadSlot))).thenReturn(loadSlotTimeWindow);
+//		
+//		IVessel vessel = getIVessel(null);
+//		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisationAndBoilOff(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals, false);
+//		Assert.assertArrayEquals(new int[] {0, 0, 40, 40}, times);
+//	}
 
 	@SuppressWarnings("null")
 	@Test
