@@ -208,7 +208,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			Assert.assertEquals(0, optimiserScenario.getCargoModel().getCargoes().size());
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
-		});
+		}, null);
 
 	}
 
@@ -312,7 +312,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			Assert.assertSame(cargo2, optimiserScenario.getCargoModel().getCargoes().get(0));
 			Assert.assertSame(charterInMarket_2b, cargo2.getVesselAssignmentType());
 
-		});
+		}, null);
 	}
 
 	@Test
@@ -354,7 +354,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
 			Assert.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
-		});
+		}, null);
 	}
 
 	/**
@@ -447,7 +447,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, failedConstraintCheckers.size());
 			Assert.assertTrue(failedConstraintCheckers.get(0) instanceof AllowedVesselPermissionConstraintChecker);
 
-		});
+		}, null);
 	}
 
 	/**

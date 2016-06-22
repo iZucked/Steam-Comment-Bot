@@ -75,7 +75,7 @@ public class ShippingOnlyCargoOptiTests extends AbstractMicroTestCase {
 			Assert.assertSame(load2, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(0));
 			Assert.assertSame(discharge1, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(1));
 
-		});
+		}, null);
 	}
 
 	@Test
@@ -107,7 +107,7 @@ public class ShippingOnlyCargoOptiTests extends AbstractMicroTestCase {
 			// Wiring should have changed
 			Assert.assertSame(load1, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(0));
 			Assert.assertSame(discharge1, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(1));
-		});
+		}, null);
 	}
 
 	@Test
@@ -127,7 +127,7 @@ public class ShippingOnlyCargoOptiTests extends AbstractMicroTestCase {
 
 			Assert.assertEquals(1, lngScenarioModel.getCargoModel().getCargoes().size());
 
-		});
+		}, null);
 	}
 
 	@Test
@@ -147,6 +147,6 @@ public class ShippingOnlyCargoOptiTests extends AbstractMicroTestCase {
 
 			Assert.assertEquals(0, lngScenarioModel.getCargoModel().getCargoes().size());
 
-		});
+		}, null);
 	}
 }
