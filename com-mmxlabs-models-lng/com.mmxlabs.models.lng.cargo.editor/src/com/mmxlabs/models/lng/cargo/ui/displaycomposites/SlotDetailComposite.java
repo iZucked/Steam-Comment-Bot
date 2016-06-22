@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,9 +40,11 @@ import com.google.common.collect.Sets;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.displaycomposites.ExpandableSet.ExpansionListener;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -59,6 +62,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private static final EStructuralFeature WindowStart = CargoFeatures.getSlot_WindowStart();
 	private static final EStructuralFeature WindowStartTime = CargoFeatures.getSlot_WindowStartTime();
 	private static final EStructuralFeature WindowSize = CargoFeatures.getSlot_WindowSize();
+	private static final EStructuralFeature WindowSizeUnits = CargoFeatures.getSlot_WindowSizeUnits();
 	private static final EStructuralFeature WindowFlex = CargoFeatures.getSlot_WindowFlex();
 	private static final EStructuralFeature Contract = CargoFeatures.getSlot_Contract();
 	private static final EStructuralFeature PriceExpression = CargoFeatures.getSlot_PriceExpression();
@@ -106,9 +110,10 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 		windowFeatures = new ArrayList<EStructuralFeature[]>();
 		windowFeatures.add(new EStructuralFeature[] { WindowStart, WindowStartTime });
-		windowFeatures.add(new EStructuralFeature[] { WindowSize, CargoFeatures.getSlot_Duration(), WindowFlex });
+		windowFeatures.add(new EStructuralFeature[] { WindowSize, WindowSizeUnits });
+		windowFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Duration(), WindowFlex });
 		windowFeatures.add(new EStructuralFeature[] {});
-		windowTitleFeatures = Sets.newHashSet(WindowStart, WindowStartTime, WindowSize);
+		windowTitleFeatures = Sets.newHashSet(WindowStart, WindowStartTime, WindowSize, WindowSizeUnits);
 		allFeatures.addAll(getAllFeatures(windowFeatures));
 
 		loadTermsFeatures = new ArrayList<EStructuralFeature[]>();
@@ -178,9 +183,30 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				if (d != null) {
 					final int time = (Integer) mmxEo.eGetWithDefault(WindowStartTime);
 					final int wsize = (Integer) mmxEo.eGetWithDefault(WindowSize);
-					final String text = formatDate(d, time) + " - " + wsize + " hours";
+					final TimePeriod ePeriod = (TimePeriod) mmxEo.eGetWithDefault(WindowSizeUnits);
+					if (mmxEo instanceof Slot) {
+						Slot slot = (Slot) mmxEo ;
+						ZonedDateTime ed = slot.getWindowEndWithSlotOrPortTime();
+						final String text = formatDate(d, time) + " - " +  formatDate(ed.toLocalDate(), ed.toLocalDateTime().getHour());
+						textClient.setText(text);
+					} else {
+					final String text = formatDate(d, time) + " - " + wsize + " " + getUnits(ePeriod);
 					textClient.setText(text);
+					}
 					// ec.setText(baseTitle + ": " + text);
+				}
+			}
+
+			private String getUnits(TimePeriod ePeriod) {
+				switch (ePeriod) {
+				case HOURS:
+					return "Hours";
+				case DAYS:
+					return "Days";
+				case MONTHS:
+					return "Months";
+				default:
+					return ePeriod.getName();
 				}
 			}
 		};
@@ -214,6 +240,23 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 						final Label label = editor.getLabel();
 						if (label != null) {
 							label.setText("Volume");
+						}
+						editor.setLabel(null);
+					} else {
+						editor.setLabel(null);
+					}
+					return gd;
+				}
+				if (feature == CargoPackage.Literals.SLOT__WINDOW_SIZE || feature == CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					gd.widthHint = 100;
+
+					// FIXME: Hack pending proper APi to manipulate labels
+					if (feature == CargoPackage.Literals.SLOT__WINDOW_SIZE) {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Window");
 						}
 						editor.setLabel(null);
 					} else {

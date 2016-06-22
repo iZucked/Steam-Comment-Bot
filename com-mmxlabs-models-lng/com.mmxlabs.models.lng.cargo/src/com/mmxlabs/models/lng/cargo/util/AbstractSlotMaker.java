@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 
 public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
@@ -138,11 +139,16 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 	}
 
 	@NonNull
-	public T withWindowSize(@Nullable final Integer windowSizeInHours) {
-		if (windowSizeInHours != null) {
-			slot.setWindowSize(windowSizeInHours);
+	public T withWindowSize(@Nullable final Integer windowSize, @Nullable TimePeriod units) {
+		if (windowSize != null) {
+			slot.setWindowSize(windowSize);
 		} else {
 			slot.unsetWindowSize();
+		}
+		if (units != null) {
+			slot.setWindowSizeUnits(units);
+		} else {
+			slot.unsetWindowSizeUnits();
 		}
 		return (T) this;
 	}

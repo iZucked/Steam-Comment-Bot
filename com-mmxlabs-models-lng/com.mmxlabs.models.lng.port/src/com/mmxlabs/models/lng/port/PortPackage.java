@@ -198,13 +198,22 @@ public interface PortPackage extends EPackage {
 	int PORT__DEFAULT_WINDOW_SIZE = TypesPackage.APORT_SET_FEATURE_COUNT + 10;
 
 	/**
+	 * The feature id for the '<em><b>Default Window Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__DEFAULT_WINDOW_SIZE_UNITS = TypesPackage.APORT_SET_FEATURE_COUNT + 11;
+
+	/**
 	 * The feature id for the '<em><b>Location</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__LOCATION = TypesPackage.APORT_SET_FEATURE_COUNT + 11;
+	int PORT__LOCATION = TypesPackage.APORT_SET_FEATURE_COUNT + 12;
 
 	/**
 	 * The feature id for the '<em><b>Atobviac Code</b></em>' attribute.
@@ -213,7 +222,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__ATOBVIAC_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 12;
+	int PORT__ATOBVIAC_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 13;
 
 	/**
 	 * The feature id for the '<em><b>Dataloy Code</b></em>' attribute.
@@ -222,7 +231,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DATALOY_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 13;
+	int PORT__DATALOY_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 14;
 
 	/**
 	 * The feature id for the '<em><b>Veson Code</b></em>' attribute.
@@ -231,7 +240,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__VESON_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 14;
+	int PORT__VESON_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 15;
 
 	/**
 	 * The feature id for the '<em><b>External Code</b></em>' attribute.
@@ -240,7 +249,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__EXTERNAL_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 15;
+	int PORT__EXTERNAL_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 16;
 
 	/**
 	 * The feature id for the '<em><b>UN Locode</b></em>' attribute.
@@ -249,7 +258,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__UN_LOCODE = TypesPackage.APORT_SET_FEATURE_COUNT + 16;
+	int PORT__UN_LOCODE = TypesPackage.APORT_SET_FEATURE_COUNT + 17;
 
 	/**
 	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
@@ -258,7 +267,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__MIN_CV_VALUE = TypesPackage.APORT_SET_FEATURE_COUNT + 17;
+	int PORT__MIN_CV_VALUE = TypesPackage.APORT_SET_FEATURE_COUNT + 18;
 
 	/**
 	 * The feature id for the '<em><b>Max Cv Value</b></em>' attribute.
@@ -267,7 +276,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__MAX_CV_VALUE = TypesPackage.APORT_SET_FEATURE_COUNT + 18;
+	int PORT__MAX_CV_VALUE = TypesPackage.APORT_SET_FEATURE_COUNT + 19;
 
 	/**
 	 * The number of structural features of the '<em>Port</em>' class.
@@ -276,7 +285,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 19;
+	int PORT_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 20;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.RouteImpl <em>Route</em>}' class.
@@ -774,6 +783,17 @@ public interface PortPackage extends EPackage {
 	EAttribute getPort_DefaultWindowSize();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getDefaultWindowSizeUnits <em>Default Window Size Units</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Default Window Size Units</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getDefaultWindowSizeUnits()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_DefaultWindowSizeUnits();
+
+	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.port.Port#getLocation <em>Location</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1232,6 +1252,14 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORT__DEFAULT_WINDOW_SIZE = eINSTANCE.getPort_DefaultWindowSize();
+
+		/**
+		 * The meta object literal for the '<em><b>Default Window Size Units</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__DEFAULT_WINDOW_SIZE_UNITS = eINSTANCE.getPort_DefaultWindowSizeUnits();
 
 		/**
 		 * The meta object literal for the '<em><b>Location</b></em>' containment reference feature.

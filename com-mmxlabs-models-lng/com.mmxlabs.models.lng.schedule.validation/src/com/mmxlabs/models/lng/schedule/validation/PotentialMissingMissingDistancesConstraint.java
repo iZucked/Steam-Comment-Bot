@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.schedule.validation;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,8 +19,10 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
@@ -53,7 +56,7 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 
 		// Disable for now
 		if (true) {
-			return Activator.PLUGIN_ID;
+			// return Activator.PLUGIN_ID;
 		}
 
 		final EObject target = ctx.getTarget();
@@ -132,6 +135,20 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 			missingDistances.addAll(distanceChecker.apply(eventPorts, eventPorts));
 
 			missingDistances.addAll(distanceChecker.apply(startPorts, endPorts));
+
+			// Complex cargoes
+			for (final Cargo c : cargoModel.getCargoes()) {
+				if (c.getSlots().size() > 2) {
+					Port prev = null;
+					for (final Slot slot : c.getSortedSlots()) {
+						final Port thisPort = slot.getPort();
+						if (prev != null) {
+							missingDistances.addAll(distanceChecker.apply(Collections.singleton(prev), Collections.singleton(thisPort)));
+						}
+						prev = thisPort;
+					}
+				}
+			}
 
 			for (final Pair<Port, Port> p : missingDistances) {
 				final String msg = String.format("Missing distance between %s and %s.", getPortName(p.getFirst()), getPortName(p.getSecond()));

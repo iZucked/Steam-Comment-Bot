@@ -247,8 +247,17 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getPort_DefaultWindowSizeUnits() {
+		return (EAttribute)portEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getPort_Location() {
-		return (EReference)portEClass.getEStructuralFeatures().get(10);
+		return (EReference)portEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -257,15 +266,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	public EAttribute getPort_AtobviacCode() {
-		return (EAttribute)portEClass.getEStructuralFeatures().get(11);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getPort_DataloyCode() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(12);
 	}
 
@@ -274,7 +274,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_VesonCode() {
+	public EAttribute getPort_DataloyCode() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(13);
 	}
 
@@ -283,7 +283,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_ExternalCode() {
+	public EAttribute getPort_VesonCode() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(14);
 	}
 
@@ -292,7 +292,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_UNLocode() {
+	public EAttribute getPort_ExternalCode() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(15);
 	}
 
@@ -301,7 +301,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_MinCvValue() {
+	public EAttribute getPort_UNLocode() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(16);
 	}
 
@@ -310,8 +310,17 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_MaxCvValue() {
+	public EAttribute getPort_MinCvValue() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(17);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPort_MaxCvValue() {
+		return (EAttribute)portEClass.getEStructuralFeatures().get(18);
 	}
 
 	/**
@@ -578,6 +587,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEAttribute(portEClass, PORT__DEFAULT_START_TIME);
 		createEAttribute(portEClass, PORT__ALLOW_COOLDOWN);
 		createEAttribute(portEClass, PORT__DEFAULT_WINDOW_SIZE);
+		createEAttribute(portEClass, PORT__DEFAULT_WINDOW_SIZE_UNITS);
 		createEReference(portEClass, PORT__LOCATION);
 		createEAttribute(portEClass, PORT__ATOBVIAC_CODE);
 		createEAttribute(portEClass, PORT__DATALOY_CODE);
@@ -683,6 +693,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getPort_DefaultStartTime(), ecorePackage.getEInt(), "defaultStartTime", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_AllowCooldown(), ecorePackage.getEBoolean(), "allowCooldown", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_DefaultWindowSize(), ecorePackage.getEInt(), "defaultWindowSize", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPort_DefaultWindowSizeUnits(), theTypesPackage.getTimePeriod(), "defaultWindowSizeUnits", "HOURS", 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPort_Location(), this.getLocation(), null, "location", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_AtobviacCode(), ecorePackage.getEString(), "atobviacCode", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_DataloyCode(), ecorePackage.getEString(), "dataloyCode", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -789,6 +800,13 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		   });	
 		addAnnotation
 		  (getPort_DefaultWindowSize(), 
+		   source, 
+		   new String[] {
+			 "unit", "hours",
+			 "formatString", "##,##0"
+		   });	
+		addAnnotation
+		  (getPort_DefaultWindowSizeUnits(), 
 		   source, 
 		   new String[] {
 			 "unit", "hours",

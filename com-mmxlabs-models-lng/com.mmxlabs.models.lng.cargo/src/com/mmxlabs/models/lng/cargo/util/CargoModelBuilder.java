@@ -37,6 +37,7 @@ import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.models.lng.types.TimePeriod;
 
 public class CargoModelBuilder {
 	private final @NonNull CargoModel cargoModel;
@@ -141,7 +142,8 @@ public class CargoModelBuilder {
 		slot.setMarket(market);
 		slot.setOptional(true);
 		slot.setWindowStartTime(0);
-		slot.setWindowSize(Hours.between(windowStart, windowStart.plusMonths(1)) - 1);
+		slot.setWindowSize(1);
+		slot.setWindowSizeUnits(TimePeriod.MONTHS);
 
 		cargoModel.getLoadSlots().add(slot);
 		return slot;
@@ -157,7 +159,8 @@ public class CargoModelBuilder {
 		slot.setMarket(market);
 		slot.setOptional(true);
 		slot.setWindowStartTime(0);
-		slot.setWindowSize(Hours.between(windowStart, windowStart.plusMonths(1)) - 1);
+		slot.setWindowSize(1);
+		slot.setWindowSizeUnits(TimePeriod.MONTHS);
 
 		cargoModel.getLoadSlots().add(slot);
 		return slot;
@@ -228,7 +231,8 @@ public class CargoModelBuilder {
 		slot.setMarket(market);
 		slot.setOptional(true);
 		slot.setWindowStartTime(0);
-		slot.setWindowSize(Hours.between(windowStart, windowStart.plusMonths(1)) - 1);
+		slot.setWindowSize(1);
+		slot.setWindowSizeUnits(TimePeriod.MONTHS);
 
 		cargoModel.getDischargeSlots().add(slot);
 
@@ -245,7 +249,8 @@ public class CargoModelBuilder {
 		slot.setFOBSale(true);
 		slot.setOptional(true);
 		slot.setWindowStartTime(0);
-		slot.setWindowSize(Hours.between(windowStart, windowStart.plusMonths(1)) - 1);
+		slot.setWindowSize(1);
+		slot.setWindowSizeUnits(TimePeriod.MONTHS);
 
 		cargoModel.getDischargeSlots().add(slot);
 

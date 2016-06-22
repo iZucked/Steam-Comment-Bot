@@ -15,6 +15,8 @@ import com.mmxlabs.models.datetime.ui.formatters.LocalDateTextFormatter;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.editor.SlotContractRestrictionsWrapper;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.NominatedVesselEditorWrapper;
+import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.port.ui.editors.WindowSizeInlineEditor;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
@@ -85,6 +87,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_windowStartEditor(detailComposite, topClass);
 		add_windowStartTimeEditor(detailComposite, topClass);
 		add_windowSizeEditor(detailComposite, topClass);
+		add_windowSizeUnitsEditor(detailComposite, topClass);
 		add_windowFlexEditor(detailComposite, topClass);
 		add_durationEditor(detailComposite, topClass);
 		add_volumeLimitsUnitEditor(detailComposite, topClass);
@@ -279,10 +282,21 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the windowSize feature on Slot
 	 * 
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_windowSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_SIZE));
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_SIZE));
+		detailComposite.addInlineEditor(new WindowSizeInlineEditor(CargoPackage.Literals.SLOT__WINDOW_SIZE  , CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS));
+
+	}
+
+	/**
+	 * Create the editor for the windowSizeUnits feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_windowSizeUnitsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS));
 	}
 
 	/**

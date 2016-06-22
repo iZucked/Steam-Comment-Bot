@@ -39,13 +39,16 @@
     <genClasses ecoreClass="cargo.ecore#//Slot">
       <genFeatures notify="false" createChild="false" propertyDescription="The contract, if any, for this deal"
           propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/contract"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/port"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="The load or discharge port for this trade"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/port"/>
       <genFeatures createChild="false" propertyDescription="Arrival window start date"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowStart"/>
       <genFeatures createChild="false" propertyCategory="" propertyDescription="Arrival window start time (local time)"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowStartTime"/>
-      <genFeatures createChild="false" propertyDescription="The length of the arrival window in hours"
+      <genFeatures createChild="false" propertyDescription="The length of the arrival window"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowSize"/>
+      <genFeatures createChild="false" propertyDescription="The units of the arrival window"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowSizeUnits"/>
       <genFeatures createChild="false" propertyDescription="Number of hours flexibility on the slot time window. Positive values increase the window end, negative values decrease the window start."
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowFlex"/>
       <genFeatures createChild="false" propertyCategory="" propertyDescription="The duration of the slot in hours"
@@ -59,22 +62,34 @@
       <genFeatures createChild="false" propertyDescription="The price expression, if any, for this deal"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/priceExpression"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/cargo"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/pricingEvent"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/pricingDate"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/notes"/>
-      <genFeatures createChild="false" propertyDescription="Is this slot divertible to a different market?"
+      <genFeatures createChild="false" propertyDescription="The dating event to use to look up pricing"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/pricingEvent"/>
+      <genFeatures createChild="false" propertyDescription="An explicit date to use for pricing lookups"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/pricingDate"/>
+      <genFeatures createChild="false" propertyDescription="Free-text field for note taking"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/notes"/>
+      <genFeatures createChild="false" propertyDescription="Is this non-shipped slot divertible to a different market?"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/divertible"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/shippingDaysRestriction"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/entity"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/restrictedContracts"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/restrictedPorts"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/restrictedListsArePermissive"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/hedges"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/allowedVessels"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/cancellationFee"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/cancellationExpression"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/overrideRestrictions"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/nominatedVessel"/>
+      <genFeatures createChild="false" propertyDescription="Maximum number of notional round trip days allocated to this trade"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/shippingDaysRestriction"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Group entity this trade falls under"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/entity"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="If specified, the list of contracts that may or may not serve deals linked to this trade"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/restrictedContracts"/>
+      <genFeatures notify="false" createChild="false" propertyCategory="" propertyDescription="If specified, the list of ports that may or may not serve deals linked to this trade"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/restrictedPorts"/>
+      <genFeatures createChild="false" propertyDescription="If checked, restrictions are permitted values only. If unchecked restrictions are forbidden values."
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/restrictedListsArePermissive"/>
+      <genFeatures createChild="false" propertyDescription="Postive or negative hedge value"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/hedges"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="If specified, the list of vessel and/or classes that may or may not serve this trade"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/allowedVessels"/>
+      <genFeatures createChild="false" propertyDescription="Price expression defining cancellation cost"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/cancellationExpression"/>
+      <genFeatures createChild="false" propertyDescription="Check to enable slot specific restrictions"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/overrideRestrictions"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Vessel nominated for this trade."
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/nominatedVessel"/>
       <genFeatures createChild="false" propertyDescription="If selected, an open slot will be unable to form a cargo"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/locked"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrPortDuration"/>
@@ -86,6 +101,8 @@
       <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowEndWithSlotOrPortTimeWithFlex"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowStartWithSlotOrPortTimeWithFlex"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrPortWindowSize"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrPortWindowSizeUnits"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowSizeInHours"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatedEntity"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrContractRestrictedContracts"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrContractRestrictedPorts"/>
