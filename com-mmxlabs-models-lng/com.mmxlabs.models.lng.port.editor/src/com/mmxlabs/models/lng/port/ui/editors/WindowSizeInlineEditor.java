@@ -13,7 +13,6 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.types.TimePeriod;
