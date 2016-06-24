@@ -71,7 +71,8 @@ public class AnalyseScenarioHandler {
 
 					// Check forks
 					for (final Container c : scenarioInstance.getElements()) {
-						if (c.getName().toLowerCase().startsWith("actionset")) {
+						String name = c.getName();
+						if (name != null && name.toLowerCase().startsWith("actionset")) {
 							return true;
 						}
 					}
@@ -79,7 +80,8 @@ public class AnalyseScenarioHandler {
 					// Check siblings.
 					final Container parent = scenarioInstance.getParent();
 					for (final Container c : parent.getElements()) {
-						if (c.getName().toLowerCase().startsWith("actionset")) {
+						String name = c.getName();
+						if (name != null && name.toLowerCase().startsWith("actionset")) {
 							return true;
 						}
 					}
