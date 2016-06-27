@@ -66,6 +66,7 @@ public class ScheduleSequenceData {
 		for (final Sequence seq : schedule.getSequences()) {
 			for (final Event event : seq.getEvents()) {
 
+				// Event data
 				final LocalDate sDate = verticalReportVisualiser.getLocalDateFor(event.getStart());
 				final LocalDate eDate = verticalReportVisualiser.getLocalDateFor(event.getEnd());
 
@@ -76,6 +77,19 @@ public class ScheduleSequenceData {
 				}
 				if (endDate == null || endDate.isBefore(eDate)) {
 					endDate = eDate;
+				}
+				// Event window data
+				{
+					if (event instanceof SlotVisit) {
+						SlotVisit slotVisit = (SlotVisit) event;
+						Slot slot = slotVisit.getSlotAllocation().getSlot();
+
+						final LocalDate sWDate = verticalReportVisualiser.getLocalDateFor(slot.getWindowStartWithSlotOrPortTime());
+
+						if (startDate == null || startDate.isAfter(sWDate)) {
+							startDate = sWDate;
+						}
+					}
 				}
 				// Track interesting events and record the latest event
 				if (event instanceof SlotVisit) {
