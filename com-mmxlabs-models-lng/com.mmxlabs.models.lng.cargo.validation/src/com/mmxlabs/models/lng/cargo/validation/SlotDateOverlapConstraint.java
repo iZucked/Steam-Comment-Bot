@@ -81,12 +81,12 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 						continue;
 					}
 
-					final ZonedDateTime slotStart = slot.getWindowStartWithSlotOrPortTime();
-					final ZonedDateTime overlapSlotStart = overlapSlot.getWindowStartWithSlotOrPortTime();
+					final ZonedDateTime slotStart = slot.getWindowStartWithSlotOrPortTimeWithFlex();
+					final ZonedDateTime overlapSlotStart = overlapSlot.getWindowStartWithSlotOrPortTimeWithFlex();
 					final int slotDur = slot.getDuration();
 					final int overlapSlotDur = overlapSlot.getDuration();
-					final ZonedDateTime olEnd = overlapSlot.getWindowEndWithSlotOrPortTime();
-					final ZonedDateTime slotEnd = slot.getWindowEndWithSlotOrPortTime();
+					final ZonedDateTime olEnd = overlapSlot.getWindowEndWithSlotOrPortTimeWithFlex();
+					final ZonedDateTime slotEnd = slot.getWindowEndWithSlotOrPortTimeWithFlex();
 
 					// if slot start + duration is before the end of the overlapSlot window, it can be OK so let them pass
 					final ZonedDateTime slotFinish = slotStart.plusHours(slotDur);
@@ -133,7 +133,7 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 				return;
 			}
 
-			final ZonedDateTime windowStart = slot.getWindowStartWithSlotOrPortTime();
+			final ZonedDateTime windowStart = slot.getWindowStartWithSlotOrPortTimeWithFlex();
 			if (windowStart == null) {
 				return;
 			}

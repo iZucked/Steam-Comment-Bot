@@ -275,8 +275,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 						final Port dischargePort = slot.getPort();
 						if ((loadPort != null) && (dischargePort != null)) {
 
-							final ZonedDateTime windowEndWithSlotOrPortTime = slot.getWindowEndWithSlotOrPortTime();
-							final ZonedDateTime windowStartWithSlotOrPortTime = prevSlot.getWindowStartWithSlotOrPortTime();
+							final ZonedDateTime windowEndWithSlotOrPortTime = slot.getWindowEndWithSlotOrPortTimeWithFlex();
+							final ZonedDateTime windowStartWithSlotOrPortTime = prevSlot.getWindowStartWithSlotOrPortTimeWithFlex();
 
 							if (windowEndWithSlotOrPortTime != null && windowStartWithSlotOrPortTime != null) {
 
