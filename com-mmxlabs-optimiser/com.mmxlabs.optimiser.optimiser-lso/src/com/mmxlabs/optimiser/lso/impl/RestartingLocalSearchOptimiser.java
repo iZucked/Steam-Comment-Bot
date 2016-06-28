@@ -39,6 +39,7 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 	@Named(RESTART_ITERATIONS_THRESHOLD)
 	private int restartInterval;
 
+	@Override
 	protected int step(final int percentage, @NonNull final ModifiableSequences pinnedPotentialRawSequences, @NonNull final ModifiableSequences pinnedCurrentRawSequences) {
 
 		final int iterationsThisStep = Math.min(Math.max(1, (getNumberOfIterations() * percentage) / 100), getNumberOfIterations() - getNumberOfIterationsCompleted());
