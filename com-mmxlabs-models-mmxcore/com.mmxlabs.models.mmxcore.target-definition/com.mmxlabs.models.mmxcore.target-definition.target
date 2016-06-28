@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.6"?><target name="Models MMXCore Target (Indigo)" sequenceNumber="8">
 <locations>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.jdt.annotation" version="2.0.100.v20150311-1658"/>
 <unit id="org.eclipse.jdt.annotation.source" version="2.0.100.v20150311-1658"/>
 <repository location="http://download.eclipse.org/eclipse/updates/4.5/R-4.5.1-201509040015/"/>
