@@ -16,10 +16,10 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.mmxcore.OtherNamesObject#getOtherNames <em>Other Names</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.mmxcore.MMXCorePackage#getOtherNamesObject()
  * @model

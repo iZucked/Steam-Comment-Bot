@@ -26,13 +26,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  * @generated
  */
 public class MMXRootObjectItemProvider
-	extends UUIDObjectItemProvider
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends UUIDObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->

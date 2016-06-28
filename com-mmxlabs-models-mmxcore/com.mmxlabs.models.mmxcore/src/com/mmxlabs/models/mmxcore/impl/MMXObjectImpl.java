@@ -26,10 +26,10 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.mmxcore.impl.MMXObjectImpl#getExtensions <em>Extensions</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
