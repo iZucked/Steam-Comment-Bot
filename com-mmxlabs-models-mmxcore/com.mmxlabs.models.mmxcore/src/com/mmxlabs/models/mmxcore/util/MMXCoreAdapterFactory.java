@@ -72,8 +72,8 @@ public class MMXCoreAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected MMXCoreSwitch<Adapter> modelSwitch =
-		new MMXCoreSwitch<Adapter>() {
+	protected MMXCoreSwitch<@Nullable Adapter> modelSwitch =
+		new MMXCoreSwitch<@Nullable Adapter>() {
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
