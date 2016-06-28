@@ -57,6 +57,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowSize <em>Window Size</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowSizeUnits <em>Window Size Units</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowFlex <em>Window Flex</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowFlexUnits <em>Window Flex Units</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getDuration <em>Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getVolumeLimitsUnit <em>Volume Limits Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMinQuantity <em>Min Quantity</em>}</li>
@@ -250,6 +251,26 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected int windowFlex = WINDOW_FLEX_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getWindowFlexUnits() <em>Window Flex Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowFlexUnits()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final TimePeriod WINDOW_FLEX_UNITS_EDEFAULT = TimePeriod.HOURS;
+
+	/**
+	 * The cached value of the '{@link #getWindowFlexUnits() <em>Window Flex Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowFlexUnits()
+	 * @generated
+	 * @ordered
+	 */
+	protected TimePeriod windowFlexUnits = WINDOW_FLEX_UNITS_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getDuration() <em>Duration</em>}' attribute.
@@ -910,6 +931,27 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		windowFlex = newWindowFlex;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_FLEX, oldWindowFlex, windowFlex));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public TimePeriod getWindowFlexUnits() {
+		return windowFlexUnits;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setWindowFlexUnits(TimePeriod newWindowFlexUnits) {
+		TimePeriod oldWindowFlexUnits = windowFlexUnits;
+		windowFlexUnits = newWindowFlexUnits == null ? WINDOW_FLEX_UNITS_EDEFAULT : newWindowFlexUnits;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_FLEX_UNITS, oldWindowFlexUnits, windowFlexUnits));
 	}
 
 	/**
@@ -1812,13 +1854,26 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @generated NOT
 	 */
 	public ZonedDateTime getWindowEndWithSlotOrPortTimeWithFlex() {
-		final ZonedDateTime endTime = getWindowEndWithSlotOrPortTime();
+		ZonedDateTime endTime = getWindowEndWithSlotOrPortTime();
 		if (endTime == null) {
 			return null;
 		}
 		final int slotFlex = getWindowFlex();
 		if (slotFlex > 0) {
-			return endTime.plusHours(slotFlex);
+			TimePeriod p  = getWindowFlexUnits();
+			switch (p) {
+			case DAYS:
+				endTime = endTime.plusDays(slotFlex).minusHours(1);
+				break;
+			case HOURS:
+				endTime = endTime.plusHours(slotFlex) ;
+				break;
+			case MONTHS:
+				endTime  = endTime.plusMonths(slotFlex).minusHours(1);
+				break;
+			default:
+				break;
+			}
 		}
 		return endTime;
 		
@@ -1847,13 +1902,26 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @generated NOT
 	 */
 	public ZonedDateTime getWindowStartWithSlotOrPortTimeWithFlex() {
-		final ZonedDateTime startTime = getWindowStartWithSlotOrPortTime();
+		ZonedDateTime startTime = getWindowStartWithSlotOrPortTime();
 		if (startTime == null) {
 			return null;
 		}
 		final int slotFlex = getWindowFlex();
 		if (slotFlex < 0) {
-			return startTime.plusHours(slotFlex);
+			TimePeriod p  = getWindowFlexUnits();
+			switch (p) {
+			case DAYS:
+				startTime = startTime.minusDays(slotFlex).plusHours(1);
+				break;
+			case HOURS:
+				startTime = startTime.minusHours(slotFlex) ;
+				break;
+			case MONTHS:
+				startTime  = startTime.minusMonths(slotFlex).plusHours(1);
+				break;
+			default:
+				break;
+			}
 		}
 		return startTime;
 	}
@@ -2057,6 +2125,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getWindowSizeUnits();
 			case CargoPackage.SLOT__WINDOW_FLEX:
 				return getWindowFlex();
+			case CargoPackage.SLOT__WINDOW_FLEX_UNITS:
+				return getWindowFlexUnits();
 			case CargoPackage.SLOT__DURATION:
 				return getDuration();
 			case CargoPackage.SLOT__VOLUME_LIMITS_UNIT:
@@ -2139,6 +2209,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return;
 			case CargoPackage.SLOT__WINDOW_FLEX:
 				setWindowFlex((Integer)newValue);
+				return;
+			case CargoPackage.SLOT__WINDOW_FLEX_UNITS:
+				setWindowFlexUnits((TimePeriod)newValue);
 				return;
 			case CargoPackage.SLOT__DURATION:
 				setDuration((Integer)newValue);
@@ -2244,6 +2317,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__WINDOW_FLEX:
 				setWindowFlex(WINDOW_FLEX_EDEFAULT);
 				return;
+			case CargoPackage.SLOT__WINDOW_FLEX_UNITS:
+				setWindowFlexUnits(WINDOW_FLEX_UNITS_EDEFAULT);
+				return;
 			case CargoPackage.SLOT__DURATION:
 				unsetDuration();
 				return;
@@ -2337,6 +2413,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return isSetWindowSizeUnits();
 			case CargoPackage.SLOT__WINDOW_FLEX:
 				return windowFlex != WINDOW_FLEX_EDEFAULT;
+			case CargoPackage.SLOT__WINDOW_FLEX_UNITS:
+				return windowFlexUnits != WINDOW_FLEX_UNITS_EDEFAULT;
 			case CargoPackage.SLOT__DURATION:
 				return isSetDuration();
 			case CargoPackage.SLOT__VOLUME_LIMITS_UNIT:
@@ -2521,6 +2599,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		if (windowSizeUnitsESet) result.append(windowSizeUnits); else result.append("<unset>");
 		result.append(", windowFlex: ");
 		result.append(windowFlex);
+		result.append(", windowFlexUnits: ");
+		result.append(windowFlexUnits);
 		result.append(", duration: ");
 		if (durationESet) result.append(duration); else result.append("<unset>");
 		result.append(", volumeLimitsUnit: ");

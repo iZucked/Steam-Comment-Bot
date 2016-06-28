@@ -57,6 +57,7 @@ public class SlotItemProvider
 			addWindowSizePropertyDescriptor(object);
 			addWindowSizeUnitsPropertyDescriptor(object);
 			addWindowFlexPropertyDescriptor(object);
+			addWindowFlexUnitsPropertyDescriptor(object);
 			addDurationPropertyDescriptor(object);
 			addVolumeLimitsUnitPropertyDescriptor(object);
 			addMinQuantityPropertyDescriptor(object);
@@ -95,7 +96,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_NamedObject_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"),
+				 getString("_UI_NamedObject_name_description"),
 				 MMXCorePackage.Literals.NAMED_OBJECT__NAME,
 				 true,
 				 false,
@@ -211,6 +212,28 @@ public class SlotItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Window Flex Units feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addWindowFlexUnitsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_windowFlexUnits_feature"),
+				 getString("_UI_Slot_windowFlexUnits_description"),
+				 CargoPackage.Literals.SLOT__WINDOW_FLEX_UNITS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -786,6 +809,7 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__WINDOW_SIZE:
 			case CargoPackage.SLOT__WINDOW_SIZE_UNITS:
 			case CargoPackage.SLOT__WINDOW_FLEX:
+			case CargoPackage.SLOT__WINDOW_FLEX_UNITS:
 			case CargoPackage.SLOT__DURATION:
 			case CargoPackage.SLOT__VOLUME_LIMITS_UNIT:
 			case CargoPackage.SLOT__MIN_QUANTITY:

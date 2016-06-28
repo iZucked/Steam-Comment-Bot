@@ -254,8 +254,8 @@ public class PortComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_defaultWindowSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__DEFAULT_WINDOW_SIZE));
-		detailComposite.addInlineEditor(new WindowSizeInlineEditor(PortPackage.Literals.PORT__DEFAULT_WINDOW_SIZE  , PortPackage.Literals.PORT__DEFAULT_WINDOW_SIZE_UNITS));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__DEFAULT_WINDOW_SIZE));
+//		detailComposite.addInlineEditor(new WindowSizeInlineEditor(PortPackage.Literals.PORT__DEFAULT_WINDOW_SIZE  , PortPackage.Literals.PORT__DEFAULT_WINDOW_SIZE_UNITS));
 
 	}
 

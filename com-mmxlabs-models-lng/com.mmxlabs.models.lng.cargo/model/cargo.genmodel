@@ -51,6 +51,8 @@
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowSizeUnits"/>
       <genFeatures createChild="false" propertyDescription="Number of hours flexibility on the slot time window. Positive values increase the window end, negative values decrease the window start."
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowFlex"/>
+      <genFeatures createChild="false" propertyDescription="The units of the window flex"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowFlexUnits"/>
       <genFeatures createChild="false" propertyCategory="" propertyDescription="The duration of the slot in hours"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/duration"/>
       <genFeatures createChild="false" propertyDescription="The volume units for min/max quantity bounds"

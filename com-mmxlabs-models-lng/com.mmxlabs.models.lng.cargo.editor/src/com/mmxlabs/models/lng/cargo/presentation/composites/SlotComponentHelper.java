@@ -89,6 +89,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_windowSizeEditor(detailComposite, topClass);
 		add_windowSizeUnitsEditor(detailComposite, topClass);
 		add_windowFlexEditor(detailComposite, topClass);
+		add_windowFlexUnitsEditor(detailComposite, topClass);
 		add_durationEditor(detailComposite, topClass);
 		add_volumeLimitsUnitEditor(detailComposite, topClass);
 		add_minQuantityEditor(detailComposite, topClass);
@@ -285,8 +286,8 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_windowSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_SIZE));
-		detailComposite.addInlineEditor(new WindowSizeInlineEditor(CargoPackage.Literals.SLOT__WINDOW_SIZE  , CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_SIZE));
+//		detailComposite.addInlineEditor(new WindowSizeInlineEditor(CargoPackage.Literals.SLOT__WINDOW_SIZE  , CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS));
 
 	}
 
@@ -306,6 +307,15 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_windowFlexEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_FLEX));
+	}
+
+	/**
+	 * Create the editor for the windowFlexUnits feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_windowFlexUnitsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_FLEX_UNITS));
 	}
 
 	/**

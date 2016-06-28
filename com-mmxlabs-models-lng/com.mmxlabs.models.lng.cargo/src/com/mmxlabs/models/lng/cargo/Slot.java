@@ -38,6 +38,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowSize <em>Window Size</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowSizeUnits <em>Window Size Units</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowFlex <em>Window Flex</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowFlexUnits <em>Window Flex Units</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getDuration <em>Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getVolumeLimitsUnit <em>Volume Limits Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getMinQuantity <em>Min Quantity</em>}</li>
@@ -335,6 +336,37 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @generated
 	 */
 	void setWindowFlex(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Window Flex Units</b></em>' attribute.
+	 * The default value is <code>"HOURS"</code>.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.TimePeriod}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Window Flex Units</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Window Flex Units</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.TimePeriod
+	 * @see #setWindowFlexUnits(TimePeriod)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_WindowFlexUnits()
+	 * @model default="HOURS" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='##,##0'"
+	 * @generated
+	 */
+	TimePeriod getWindowFlexUnits();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowFlexUnits <em>Window Flex Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Window Flex Units</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.TimePeriod
+	 * @see #getWindowFlexUnits()
+	 * @generated
+	 */
+	void setWindowFlexUnits(TimePeriod value);
 
 	/**
 	 * Returns the value of the '<em><b>Port</b></em>' reference.

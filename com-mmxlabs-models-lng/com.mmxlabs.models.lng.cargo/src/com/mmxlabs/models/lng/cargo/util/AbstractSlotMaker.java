@@ -164,8 +164,9 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 	}
 
 	@NonNull
-	public T withWindowFlex(final int flexInHours) {
-		slot.setWindowFlex(flexInHours);
+	public T withWindowFlex(final int flex, @NonNull TimePeriod units) {
+		slot.setWindowFlex(flex);
+		slot.setWindowFlexUnits(units);
 		return (T) this;
 	}
 
