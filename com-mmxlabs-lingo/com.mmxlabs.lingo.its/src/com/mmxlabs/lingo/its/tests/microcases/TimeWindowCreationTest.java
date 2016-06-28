@@ -316,13 +316,13 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
 				.withWindowStartTime(0) //
 				.withWindowSize(23, TimePeriod.HOURS) //
-				.withWindowFlex(12) //
+				.withWindowFlex(12, TimePeriod.HOURS) //
 				.build() //
 				//
 				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
 				.withWindowStartTime(0) //
 				.withWindowSize(23, TimePeriod.HOURS) //
-				.withWindowFlex(18) //
+				.withWindowFlex(18, TimePeriod.HOURS) //
 				.build() //
 				//
 				.withVesselAssignment(vesselAvailability, 1)//
@@ -395,6 +395,7 @@ public class TimeWindowCreationTest extends AbstractMicroTestCase {
 
 	/**
 	 * Simple test checking the window size and end dates are as expected
+	 * 
 	 * @throws Exception
 	 */
 	@Test
