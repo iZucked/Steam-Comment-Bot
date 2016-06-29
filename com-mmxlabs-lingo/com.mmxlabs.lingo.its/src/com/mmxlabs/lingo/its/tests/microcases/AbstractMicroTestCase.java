@@ -46,8 +46,11 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
+import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public abstract class AbstractMicroTestCase {
 
@@ -121,15 +124,23 @@ public abstract class AbstractMicroTestCase {
 	}
 
 	public void evaluateWithLSOTest(final @NonNull Consumer<LNGScenarioRunner> checker) {
-		evaluateWithLSOTest(false, null, null, checker);
+		evaluateWithLSOTest(false, null, null, checker, null);
+	}
+
+	public void evaluateWithLSOTest(final @NonNull Consumer<LNGScenarioRunner> checker, IOptimiserInjectorService overrides) {
+		evaluateWithLSOTest(false, null, null, checker, overrides);
 	}
 
 	public void optimiseWithLSOTest(final @NonNull Consumer<LNGScenarioRunner> checker) {
-		evaluateWithLSOTest(true, null, null, checker);
+		evaluateWithLSOTest(true, null, null, checker, null);
+	}
+
+	public void optimiseWithLSOTest(final @NonNull Consumer<LNGScenarioRunner> checker, IOptimiserInjectorService overrides) {
+		evaluateWithLSOTest(true, null, null, checker, overrides);
 	}
 
 	public void evaluateWithLSOTest(final boolean optimise, @Nullable final Consumer<OptimiserSettings> tweaker, @Nullable final Function<LNGScenarioRunner, IRunnerHook> runnerHookFactory,
-			@NonNull final Consumer<LNGScenarioRunner> checker) {
+			@NonNull final Consumer<LNGScenarioRunner> checker, IOptimiserInjectorService overrides) {
 
 		// Create UserSettings
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
@@ -149,9 +160,8 @@ public abstract class AbstractMicroTestCase {
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null, false,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
-
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, null, LNGScenarioRunnerUtils.createExtendedSettings(optimiserSettings),
+					LNGSchedulerJobUtils.createLocalEditingDomain(), new TransformerExtensionTestBootstrapModule(), overrides, null, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			if (runnerHookFactory != null) {
 				final IRunnerHook runnerHook = runnerHookFactory.apply(scenarioRunner);
 				if (runnerHook != null) {
