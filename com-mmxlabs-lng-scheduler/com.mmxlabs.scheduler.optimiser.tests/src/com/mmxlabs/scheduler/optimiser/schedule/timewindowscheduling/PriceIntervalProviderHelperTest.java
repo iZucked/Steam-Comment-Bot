@@ -94,7 +94,7 @@ public class PriceIntervalProviderHelperTest {
 		
 		IVessel vessel = getIVessel();
 		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
-		Assert.assertArrayEquals(new int[] {0, 0, 40, 45}, times);
+		Assert.assertArrayEquals(new int[] {0, 1, 40, 45}, times);
 	}
 
 	/**
@@ -132,7 +132,7 @@ public class PriceIntervalProviderHelperTest {
 		Mockito.when(portTimesWindowsRecord.getSlotFeasibleTimeWindow(Matchers.eq(loadSlot))).thenReturn(loadSlotTimeWindow);
 		
 		IVessel vessel = getIVessel(null);
-		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisationAndBoilOff(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals, false);
+		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisationAndBoilOff(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals, salesIntervals, false);
 		Assert.assertArrayEquals(new int[] {0, 0, 40, 40}, times);
 	}
 
@@ -211,7 +211,7 @@ public class PriceIntervalProviderHelperTest {
 
 		IVessel vessel = getIVessel();
 		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
-		Assert.assertArrayEquals(new int[] {15, 15, 50, 50}, times);
+		Assert.assertArrayEquals(new int[] {15, 16, 50, 51}, times);
 	}
 	
 	@Test
@@ -247,7 +247,7 @@ public class PriceIntervalProviderHelperTest {
 
 		IVessel vessel = getIVessel();
 		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
-		Assert.assertArrayEquals(new int[] {15, 15, 50, 50}, times);
+		Assert.assertArrayEquals(new int[] {15, 16, 50, 51}, times);
 	}
 	
 	@Test
@@ -283,7 +283,7 @@ public class PriceIntervalProviderHelperTest {
 
 		IVessel vessel = getIVessel();
 		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
-		Assert.assertArrayEquals(new int[] {15, 15, 40, 44}, times);
+		Assert.assertArrayEquals(new int[] {15, 16, 40, 45}, times);
 	}
 
 	@Test
@@ -318,7 +318,7 @@ public class PriceIntervalProviderHelperTest {
 		
 		IVessel vessel = getIVessel();
 		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
-		Assert.assertArrayEquals(new int[] {5, 5, 40, 44}, times);
+		Assert.assertArrayEquals(new int[] {5, 6, 40, 45}, times);
 	}
 
 	private List<Pair<ERouteOption, Integer>> getDefaultCanalOpenings() {
@@ -372,7 +372,7 @@ public class PriceIntervalProviderHelperTest {
 		Mockito.when(portTimesWindowsRecord.getSlotFeasibleTimeWindow(Matchers.eq(loadSlot))).thenReturn(loadSlotTimeWindow);
 		IVessel vessel = getIVessel();
 		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
-		Assert.assertArrayEquals(new int[] {15, 15, 40, 44}, times);
+		Assert.assertArrayEquals(new int[] {15, 16, 40, 45}, times);
 	}
 
 	/**
@@ -408,7 +408,7 @@ public class PriceIntervalProviderHelperTest {
 		Mockito.when(portTimesWindowsRecord.getSlotFeasibleTimeWindow(Matchers.eq(loadSlot))).thenReturn(loadSlotTimeWindow);
 		IVessel vessel = getIVessel();
 		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
-		Assert.assertArrayEquals(new int[] {15, 15, 50, 51}, times);
+		Assert.assertArrayEquals(new int[] {15, 16, 50, 51}, times);
 	}
 
 	/**
@@ -448,7 +448,7 @@ public class PriceIntervalProviderHelperTest {
 
 		IVessel vessel = getIVessel();
 		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
-		Assert.assertArrayEquals(new int[] {15, 15, 40, 44}, times);
+		Assert.assertArrayEquals(new int[] {15, 16, 40, 45}, times);
 	}
 
 	@Test

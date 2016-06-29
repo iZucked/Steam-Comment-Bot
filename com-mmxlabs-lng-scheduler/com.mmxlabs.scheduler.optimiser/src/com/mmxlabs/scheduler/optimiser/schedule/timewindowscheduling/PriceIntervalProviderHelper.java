@@ -193,7 +193,7 @@ public class PriceIntervalProviderHelper {
 
 	int @NonNull [] getCargoBoundsWithCanalTrimming(final int purchaseStart, final int purchaseEnd, final int salesStart, final int salesEnd, final int loadDuration, final int minTimeCanal) {
 		final int minSalesStart = getMinDischargeGivenCanal(purchaseStart, salesStart, loadDuration, minTimeCanal);
-		return new int[] { purchaseStart, purchaseStart, minSalesStart, Math.max(minSalesStart, salesEnd) };
+		return new int[] { purchaseStart, processEndTime(purchaseStart), minSalesStart, processEndTime(Math.max(minSalesStart, salesEnd)) };
 	}
 
 	public int getMinDischargeGivenCanal(final int purchaseStart, final int salesStart, final int loadDuration, final int minTimeCanal) {
@@ -943,8 +943,15 @@ public class PriceIntervalProviderHelper {
 		}
 	}
 
-	public static IVessel getIVessel() {
-		// TODO Auto-generated method stub
-		return null;
+	/**
+	 * Makes sure the end of a time window is in the proper format.
+	 * Takes as input the inclusive end and outputs the correct format.
+	 * @param end
+	 * @return
+	 */
+	public int processEndTime(int inclusiveEnd) {
+		// make exclusive end
+		return inclusiveEnd + 1;
 	}
+
 }
