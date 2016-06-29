@@ -21,6 +21,7 @@ import java.util.TreeSet;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -115,9 +116,64 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 
 	protected void fillFeatureMap(@NonNull final EClass eClass, @NonNull final IdMapContainer baseTable, @NonNull final EObject containedObj, @NonNull final String prefix) {
 		if (eClass != null) {
-			for (final EStructuralFeature e : getFeatures(eClass)) {
-				baseTable.getIdMapList().add(new IdMap(prefix.equals("") ? e.getName() : (prefix + "-" + e.getName()), e, containedObj));
+
+			ArrayList<EObject> open = new ArrayList<EObject>();
+			ArrayList<String> handles = new ArrayList<String>();
+			open.add(containedObj);
+			handles.add(prefix);
+
+			while (open.size() > 0) {
+				EObject current_container = open.get(0);
+
+				if (current_container.eContainmentFeature().getName() != "groupProfitAndLoss") {
+					EClass current_class = current_container.eClass();
+
+					for (final EStructuralFeature e : getFeatures(current_class)) {
+
+						baseTable.getIdMapList().add(new IdMap(handles.get(0).equals("") ? e.getName() : handles.get(0) + "-" + e.getName(), e, current_container));
+					}
+
+					EList<EObject> child_containers = current_container.eContents();
+
+					for (EObject child_container : child_containers) {
+
+						String child_handle = child_container.eContainmentFeature().getName();
+						open.add(child_container);
+						String handle = handles.get(0).concat(child_handle);
+						handles.add(handle);
+
+					}
+
+					open.remove(0);
+					handles.remove(0);
+
+				} else {
+					EClass current_class = current_container.eClass();
+
+					for (final EStructuralFeature e : getFeatures(current_class)) {
+
+						baseTable.getIdMapList().add(new IdMap(handles.get(0) + e.getName(), e, current_container));
+
+					}
+
+					EList<EObject> child_containers = current_container.eContents();
+					Integer i = 0;
+					for (EObject child_container : child_containers) {
+
+						String child_handle = child_container.eContainmentFeature().getName().concat(Integer.toString(i));
+
+						open.add(child_container);
+						String handle = handles.get(0).concat(child_handle);
+						handles.add(handle);
+						i++;
+
+					}
+					open.remove(0);
+
+					handles.remove(0);
+				}
 			}
+
 		}
 	}
 
