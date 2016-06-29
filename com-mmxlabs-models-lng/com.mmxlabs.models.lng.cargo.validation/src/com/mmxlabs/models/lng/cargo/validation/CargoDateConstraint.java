@@ -248,7 +248,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 		if ((availableTime / 24) > SENSIBLE_TRAVEL_TIME) {
 			final int severity = IStatus.WARNING;
 			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "'", availableTime / 24L, SENSIBLE_TRAVEL_TIME), severity);
+					(IConstraintStatus) ctx.createFailureStatus(String.format("[Cargo|%s] Travel time is excessive (%d days); %d is a sensible maximum.", "'" + cargo.getLoadName() + "'", availableTime / 24L, SENSIBLE_TRAVEL_TIME)), severity);
 			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
 			failures.add(status);
 		}
