@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -47,6 +48,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
+import com.mmxlabs.models.mmxcore.NamedObject;
 
 /**
  * Abstract class with methods to extract features from given EMF models for use in producing test files and comparisons for clients. Expected to be subclassed on a per client, per contract basis.
@@ -62,10 +64,19 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		final List<EStructuralFeature> list = new ArrayList<EStructuralFeature>();
 		final List<EStructuralFeature> features = c.getEAllStructuralFeatures();
 		for (final EStructuralFeature f : features) {
-			if (f.getEType() == EcorePackage.Literals.EINT || f.getEType() == EcorePackage.Literals.EINTEGER_OBJECT || f.getEType() == EcorePackage.Literals.EDOUBLE
-					|| f.getEType() == EcorePackage.Literals.EDOUBLE_OBJECT || f.getEType() == EcorePackage.Literals.EBOOLEAN || f.getEType() == EcorePackage.Literals.EBOOLEAN_OBJECT
-					|| f.getEType() == EcorePackage.Literals.ELONG || f.getEType() == EcorePackage.Literals.ELONG_OBJECT) {
-				list.add(f);
+			if (f.getName().equals("contract")) {
+				int z = 0;
+			}
+			if (f instanceof EAttribute) {
+				if (f.getEType() == EcorePackage.Literals.EINT || f.getEType() == EcorePackage.Literals.EINTEGER_OBJECT || f.getEType() == EcorePackage.Literals.EDOUBLE
+						|| f.getEType() == EcorePackage.Literals.EDOUBLE_OBJECT || f.getEType() == EcorePackage.Literals.EBOOLEAN || f.getEType() == EcorePackage.Literals.EBOOLEAN_OBJECT
+						|| f.getEType() == EcorePackage.Literals.ELONG || f.getEType() == EcorePackage.Literals.ELONG_OBJECT || f.getEType().getInstanceClass() == LocalDate.class || f.getEType() == EcorePackage.Literals.ESTRING) {
+					list.add(f);
+					}
+			} else if (f instanceof EReference) {
+				if (((EReference) f).getUpperBound() == 1 && NamedObject.class.isAssignableFrom(((EReference) f).getEReferenceType().getInstanceClass())) {
+					list.add(f);
+				}
 			}
 		}
 		return list;
@@ -201,6 +212,21 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		return value * (Math.pow(10, multiplier));
 	}
 
+	private String getLingoOutputString(@NonNull final EObject modelObject, @NonNull final EStructuralFeature feature) {
+		if (modelObject.eGet(feature) == null) {
+			return "null";
+		} else if (feature.getEType().getInstanceClass() == LocalDate.class){
+			return ((LocalDate) modelObject.eGet(feature)).toString();
+		} else if (feature instanceof EReference) {
+			if (NamedObject.class.isAssignableFrom(((EReference) feature).getEReferenceType().getInstanceClass())) {
+				return ((NamedObject) modelObject.eGet(feature)).getName();
+			}
+		} else if (modelObject.eGet(feature) instanceof String) {
+			return (String) modelObject.eGet(feature);
+		}
+		return "unsupported output";
+	}
+	
 	private int getMultiplier(@NonNull final EStructuralFeature e) {
 		final Integer multiplier = FeatureIdTools.getMultiplier(e);
 		if (multiplier != null) {
@@ -419,17 +445,32 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 
 	private void addToProperties(@NonNull final Properties prop, @NonNull final List<IdMap> table, @NonNull final String prefix) {
 		for (final IdMap map : table) {
-			prop.setProperty(createPropertyKey(map, prefix), String.format("%.7f", (double) getLingoOutput(map.getContainer(), map.getFeature())));
+//			prop.setProperty(createPropertyKey(map, prefix), String.format("%.7f", (double) getLingoOutput(map.getContainer(), map.getFeature())));
+			prop.setProperty(createPropertyKey(map, prefix), formatProperty(map.getContainer(), map.getFeature()));
 		}
+	}
+	
+	private String formatProperty(EObject eObj, EStructuralFeature f) {
+		if (f.getEType() == EcorePackage.Literals.EINT || f.getEType() == EcorePackage.Literals.EINTEGER_OBJECT || f.getEType() == EcorePackage.Literals.EDOUBLE
+				|| f.getEType() == EcorePackage.Literals.EDOUBLE_OBJECT || f.getEType() == EcorePackage.Literals.EBOOLEAN || f.getEType() == EcorePackage.Literals.EBOOLEAN_OBJECT
+				|| f.getEType() == EcorePackage.Literals.ELONG || f.getEType() == EcorePackage.Literals.ELONG_OBJECT) {
+			return String.format("%.7f", (double) getLingoOutput(eObj, f));
+		} else {
+			return getLingoOutputString(eObj, f);
+		}
+ 
 	}
 
 	private void comparePropertiesToLingo(@NonNull final Properties prop, @NonNull final List<IdMap> table, @NonNull final String prefix, @NonNull final String cargoName) {
 		for (final IdMap map : table) {
 			final String key = createPropertyKey(map, prefix);
-			if (prop.containsKey(key)) {
-				final double propertiesValue = Double.valueOf(prop.getProperty(key));
-				final double lingoValue = getLingoOutput(map.getContainer(), map.getFeature());
-				Assert.assertEquals(String.format("testing cargo (%s) \"%s:\"", cargoName, key), propertiesValue, lingoValue, 0.000001);
+			if (prop.containsKey(key) && !key.contains("uuid")) {
+				final String propertiesValue = prop.getProperty(key);
+				final String lingoValue = formatProperty(map.getContainer(), map.getFeature());
+				Assert.assertEquals(String.format("testing cargo (%s) \"%s:\"", cargoName, key), propertiesValue, lingoValue);
+//				final double propertiesValue = Double.valueOf(prop.getProperty(key));
+//				final double lingoValue = getLingoOutput(map.getContainer(), map.getFeature());
+//				Assert.assertEquals(String.format("testing cargo (%s) \"%s:\"", cargoName, key), propertiesValue, lingoValue, 0.000001);
 			} else {
 				LOG.warn(key + " not in map");
 			}

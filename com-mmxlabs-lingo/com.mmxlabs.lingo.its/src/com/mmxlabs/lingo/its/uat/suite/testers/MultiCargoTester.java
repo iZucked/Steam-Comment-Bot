@@ -24,6 +24,17 @@ public class MultiCargoTester {
 		checkMultiCargoPropertiesFiles(s, typedCases);
 	}
 	
+	public static void writeAndCheckProperties(UATMultiCargoCase multiCargoCase, boolean write, Schedule s) throws Exception {
+		UATTypedCase[] typedCases = multiCargoCase.cases;
+		String lingoFilePath = multiCargoCase.lingoFilePath;
+		if (write && GlobalUATTestsConfig.WRITE_PROPERTIES) {
+			createMultiCargoPropertiesFiles(s, typedCases);
+		}
+		
+		checkMultiCargoPropertiesFiles(s, typedCases);
+	}
+
+	
 	public static void createMultiCargoPropertiesFiles(Schedule schedule, UATTypedCase[] typedCases) throws Exception  {
 			for (UATTypedCase uatCase : typedCases) {
 				uatCase.featureBasedUAT.createPropertiesForTypedCase(schedule, uatCase.lingoFilePath, uatCase.cargoName);
