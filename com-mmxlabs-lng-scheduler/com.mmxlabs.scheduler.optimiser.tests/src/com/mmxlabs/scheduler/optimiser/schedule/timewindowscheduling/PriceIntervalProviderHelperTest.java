@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
@@ -58,6 +59,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimeWindowsRecord;
 public class PriceIntervalProviderHelperTest {
 	
 	/**
+	 * NOTE: Test currently failing
 	 * Test that the cheapest option is to go direct meaning: load {0, 0} and discharge {40, 45}
 	 */
 	@Test
@@ -95,43 +97,44 @@ public class PriceIntervalProviderHelperTest {
 		Assert.assertArrayEquals(new int[] {0, 0, 40, 45}, times);
 	}
 
-//	/**
-//	 * Test that the cheapest option is to go direct meaning: load {0, 0} and discharge {40, 45}
-//	 */
-//	@Test
-//	public void testCanalTrimming_MinTimeGreaterThanCheapestOption_NewMethod() {
-//		List<int[]> purchaseIntervals = new ArrayList<>();
-//		purchaseIntervals.add(new int[] {0,20});
-//		purchaseIntervals.add(new int[] {5,25});
-//		purchaseIntervals.add(new int[] {15,18});
-//		purchaseIntervals.add(new int[] {20,Integer.MIN_VALUE});
-//
-//		List<int[]> salesIntervals = new ArrayList<>();
-//		salesIntervals.add(new int[] {40,25});
-//		salesIntervals.add(new int[] {45,20});
-//		salesIntervals.add(new int[] {50,22});
-//		salesIntervals.add(new int[] {51,Integer.MIN_VALUE});
-//
-//		List<Pair<ERouteOption, Integer>> distances = new LinkedList<>();
-//		distances.add(new Pair<ERouteOption, Integer>(ERouteOption.DIRECT, 400));
-//		distances.add(new Pair<ERouteOption, Integer>(ERouteOption.SUEZ, 300));
-//		TimeWindowsTrimming timeWindowsTrimming = getTimeWindowsTrimming(distances, getDefaultCanalOpenings());
-//		
-//		ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
-//		Mockito.when(loadSlot.getMaxLoadVolumeMMBTU()).thenReturn(OptimiserUnitConvertor.convertToInternalVolume(160000*22.4));
-//		ITimeWindow loadSlotTimeWindow = Mockito.mock(ITimeWindow.class);
-//		Mockito.when(loadSlot.getTimeWindow()).thenReturn(loadSlotTimeWindow);
-//		Mockito.when(loadSlotTimeWindow.getInclusiveStart()).thenReturn(0);
-//		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
-//
-//		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
-//		Mockito.when(portTimesWindowsRecord.getSlotDuration(Matchers.eq(loadSlot))).thenReturn(0);
-//		Mockito.when(portTimesWindowsRecord.getSlotFeasibleTimeWindow(Matchers.eq(loadSlot))).thenReturn(loadSlotTimeWindow);
-//		
-//		IVessel vessel = getIVessel(null);
-//		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisationAndBoilOff(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals, false);
-//		Assert.assertArrayEquals(new int[] {0, 0, 40, 40}, times);
-//	}
+	/**
+	 * Test that the cheapest option is to go direct meaning: load {0, 0} and discharge {40, 45}
+	 */
+	@Test
+	@Ignore
+	public void testCanalTrimming_MinTimeGreaterThanCheapestOption_NewMethod() {
+		List<int[]> purchaseIntervals = new ArrayList<>();
+		purchaseIntervals.add(new int[] {0,20});
+		purchaseIntervals.add(new int[] {5,25});
+		purchaseIntervals.add(new int[] {15,18});
+		purchaseIntervals.add(new int[] {20,Integer.MIN_VALUE});
+
+		List<int[]> salesIntervals = new ArrayList<>();
+		salesIntervals.add(new int[] {40,25});
+		salesIntervals.add(new int[] {45,20});
+		salesIntervals.add(new int[] {50,22});
+		salesIntervals.add(new int[] {51,Integer.MIN_VALUE});
+
+		List<Pair<ERouteOption, Integer>> distances = new LinkedList<>();
+		distances.add(new Pair<ERouteOption, Integer>(ERouteOption.DIRECT, 400));
+		distances.add(new Pair<ERouteOption, Integer>(ERouteOption.SUEZ, 300));
+		TimeWindowsTrimming timeWindowsTrimming = getTimeWindowsTrimming(distances, getDefaultCanalOpenings());
+		
+		ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
+		Mockito.when(loadSlot.getMaxLoadVolumeMMBTU()).thenReturn(OptimiserUnitConvertor.convertToInternalVolume(160000*22.4));
+		ITimeWindow loadSlotTimeWindow = Mockito.mock(ITimeWindow.class);
+		Mockito.when(loadSlot.getTimeWindow()).thenReturn(loadSlotTimeWindow);
+		Mockito.when(loadSlotTimeWindow.getInclusiveStart()).thenReturn(0);
+		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
+
+		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
+		Mockito.when(portTimesWindowsRecord.getSlotDuration(Matchers.eq(loadSlot))).thenReturn(0);
+		Mockito.when(portTimesWindowsRecord.getSlotFeasibleTimeWindow(Matchers.eq(loadSlot))).thenReturn(loadSlotTimeWindow);
+		
+		IVessel vessel = getIVessel(null);
+		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisationAndBoilOff(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals, false);
+		Assert.assertArrayEquals(new int[] {0, 0, 40, 40}, times);
+	}
 
 	@SuppressWarnings("null")
 	@Test
@@ -208,7 +211,7 @@ public class PriceIntervalProviderHelperTest {
 
 		IVessel vessel = getIVessel();
 		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
-		Assert.assertArrayEquals(new int[] {15, 15, 50, 51}, times);
+		Assert.assertArrayEquals(new int[] {15, 15, 50, 50}, times);
 	}
 	
 	@Test
@@ -244,7 +247,7 @@ public class PriceIntervalProviderHelperTest {
 
 		IVessel vessel = getIVessel();
 		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
-		Assert.assertArrayEquals(new int[] {15, 15, 50, 51}, times);
+		Assert.assertArrayEquals(new int[] {15, 15, 50, 50}, times);
 	}
 	
 	@Test
@@ -280,7 +283,7 @@ public class PriceIntervalProviderHelperTest {
 
 		IVessel vessel = getIVessel();
 		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
-		Assert.assertArrayEquals(new int[] {15, 15, 40, 45}, times);
+		Assert.assertArrayEquals(new int[] {15, 15, 40, 44}, times);
 	}
 
 	@Test
@@ -315,7 +318,7 @@ public class PriceIntervalProviderHelperTest {
 		
 		IVessel vessel = getIVessel();
 		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
-		Assert.assertArrayEquals(new int[] {5, 5, 40, 45}, times);
+		Assert.assertArrayEquals(new int[] {5, 5, 40, 44}, times);
 	}
 
 	private List<Pair<ERouteOption, Integer>> getDefaultCanalOpenings() {
@@ -369,7 +372,7 @@ public class PriceIntervalProviderHelperTest {
 		Mockito.when(portTimesWindowsRecord.getSlotFeasibleTimeWindow(Matchers.eq(loadSlot))).thenReturn(loadSlotTimeWindow);
 		IVessel vessel = getIVessel();
 		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
-		Assert.assertArrayEquals(new int[] {15, 15, 40, 45}, times);
+		Assert.assertArrayEquals(new int[] {15, 15, 40, 44}, times);
 	}
 
 	/**
@@ -445,7 +448,7 @@ public class PriceIntervalProviderHelperTest {
 
 		IVessel vessel = getIVessel();
 		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
-		Assert.assertArrayEquals(new int[] {15, 15, 40, 45}, times);
+		Assert.assertArrayEquals(new int[] {15, 15, 40, 44}, times);
 	}
 
 	@Test
@@ -924,6 +927,7 @@ public class PriceIntervalProviderHelperTest {
 	private static PriceIntervalProviderHelper createPriceIntervalProviderHelper(final int timeDiffA, final int timeDiffB) {
 		PriceIntervalProviderHelper ppih = new PriceIntervalProviderHelper();
 		final ITimeZoneToUtcOffsetProvider t = Mockito.mock(ITimeZoneToUtcOffsetProvider.class);
+		final IVesselBaseFuelCalculator vbfc = Mockito.mock(IVesselBaseFuelCalculator.class);
 		when(t.UTC(Matchers.anyInt(), Matchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
 			@Override
 			public Integer answer(final InvocationOnMock invocation) throws Throwable {
@@ -949,6 +953,7 @@ public class PriceIntervalProviderHelperTest {
 			protected void configure() {
 				bind(ITimeZoneToUtcOffsetProvider.class).toInstance(t);
 				bind(IPriceIntervalProducer.class).to(PriceIntervalProducer.class);
+				bind(IVesselBaseFuelCalculator.class).toInstance(vbfc);
 				bind(IVesselProvider.class).to(HashMapVesselEditor.class);
 			}
 		});

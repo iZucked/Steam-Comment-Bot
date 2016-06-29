@@ -14,10 +14,8 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.GeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowsTrimming;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimeWindowsRecord;
 
 /**
  * {@link EnumeratingSequenceScheduler} which checks for the best price on a per cargo basis in order to determine arrival times
@@ -87,24 +85,45 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 	}
 
 	private void setFeasibleTimeWindowsUsingPrevious(IPortTimeWindowsRecord portTimeWindowsRecord, int seqIndex) {
+		int prevFeasibleWindowStart = IPortSlot.NO_PRICING_DATE;
 		for (IPortSlot portSlot : portTimeWindowsRecord.getSlots()) {
 			final ITimeWindow timeWindow;
+			int feasibleWindowStart, feasibleWindowEnd;
 			if (portTimeWindowsRecord.getFirstSlot().equals(portSlot) && portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot()) > 0) {
 				// first load
-				timeWindow = new TimeWindow(Math.max(
-						windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot()) - 1]
-								+ minTimeToNextElement[seqIndex][portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot()) - 1],
-						windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot())]), windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)]);
+				feasibleWindowStart = getFeasibleWindowStart(portTimeWindowsRecord, seqIndex);
+				feasibleWindowEnd = getFeasibleWindowEnd(portTimeWindowsRecord, seqIndex, portSlot, feasibleWindowStart);
+				timeWindow = new TimeWindow(feasibleWindowStart, feasibleWindowEnd);
 			} else {
-				timeWindow = new TimeWindow(windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)], windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)]);
+				if (prevFeasibleWindowStart == IPortSlot.NO_PRICING_DATE) { 
+					feasibleWindowStart = windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)];
+					feasibleWindowEnd = windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)];
+				} else {
+					feasibleWindowStart = Math.max(windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)], prevFeasibleWindowStart + minTimeToNextElement[seqIndex][portTimeWindowsRecord.getIndex(portSlot) - 1]);
+					feasibleWindowEnd = Math.max(windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)], feasibleWindowStart + 1);
+				}
+				timeWindow = new TimeWindow(feasibleWindowStart, feasibleWindowEnd);
 			}
 			portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, timeWindow);
+			prevFeasibleWindowStart = feasibleWindowStart;
 		}
+	}
+
+	public int getFeasibleWindowEnd(IPortTimeWindowsRecord portTimeWindowsRecord, int seqIndex, IPortSlot portSlot, int feasibleWindowStart) {
+		return Math.max(feasibleWindowStart + 1, windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)]);
+	}
+
+	public int getFeasibleWindowStart(IPortTimeWindowsRecord portTimeWindowsRecord, int seqIndex) {
+		return Math.max(
+				windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot()) - 1]
+						+ minTimeToNextElement[seqIndex][portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot()) - 1],
+				windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot())]);
 	}
 
 	private void setFeasibleTimeWindows(IPortTimeWindowsRecord portTimeWindowsRecord, int seqIndex) {
 		for (IPortSlot portSlot : portTimeWindowsRecord.getSlots()) {
-			ITimeWindow timeWindow = new TimeWindow(windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)], windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)]);
+			int feasibleWindowStartTime = windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)];
+			ITimeWindow timeWindow = new TimeWindow(feasibleWindowStartTime, getFeasibleWindowEnd(portTimeWindowsRecord, seqIndex, portSlot, feasibleWindowStartTime));
 			portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, timeWindow);
 		}
 	}

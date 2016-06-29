@@ -838,7 +838,7 @@ public class PriceIntervalProviderHelper {
 				best = price;
 			}
 		}
-		return new Pair<>(start, end);
+		return new Pair<>(start, getEndInterval(start, end));
 	}
 
 	/**
@@ -871,7 +871,7 @@ public class PriceIntervalProviderHelper {
 				best = price;
 			}
 		}
-		return new Pair<>(start, end);
+		return new Pair<>(start, getEndInterval(start, end));
 	}
 
 	/**
