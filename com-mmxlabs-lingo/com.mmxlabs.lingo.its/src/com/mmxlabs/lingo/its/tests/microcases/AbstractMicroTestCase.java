@@ -4,17 +4,25 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
+import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
 
+import com.mmxlabs.lingo.its.tests.LNGScenarioRunnerCreator;
+import com.mmxlabs.lingo.its.tests.LiNGOTestDataProvider;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelFinder;
@@ -26,9 +34,13 @@ import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.util.PortModelFinder;
 import com.mmxlabs.models.lng.pricing.util.PricingModelBuilder;
+import com.mmxlabs.models.lng.scenario.exportWizards.ExportCSVWizard;
+import com.mmxlabs.models.lng.scenario.exportWizards.ExportCSVWizard.exportInformation;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
+import com.mmxlabs.models.lng.schedule.Fitness;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
@@ -204,4 +216,7 @@ public abstract class AbstractMicroTestCase {
 			executorService.shutdownNow();
 		}
 	}
+	
+
+	
 }

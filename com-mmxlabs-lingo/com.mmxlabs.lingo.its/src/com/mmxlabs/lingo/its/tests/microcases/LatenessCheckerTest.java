@@ -275,7 +275,7 @@ public class LatenessCheckerTest extends AbstractMicroTestCase {
 				.makeDESSale("D", dischargeDate.toLocalDate(), port2, null, entity, "7") //
 				.withWindowStartTime(dischargeDate.toLocalTime().getHour()) //
 				.withVisitDuration(24) //
-				.withWindowFlex(1) //
+				.withWindowFlex(1, TimePeriod.HOURS) //
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
