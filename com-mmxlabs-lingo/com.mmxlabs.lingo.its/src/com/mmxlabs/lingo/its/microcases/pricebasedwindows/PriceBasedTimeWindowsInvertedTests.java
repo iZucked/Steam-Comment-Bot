@@ -48,7 +48,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 
 @RunWith(value = ShiroRunner.class)
-public class TimeWindowsLowerLevelTestsInverted extends AbstractMicroTestCase {
+public class PriceBasedTimeWindowsInvertedTests extends AbstractMicroTestCase {
 
 	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");
 	private static List<String> addedFeatures = new LinkedList<>();
@@ -114,7 +114,7 @@ public class TimeWindowsLowerLevelTestsInverted extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Test: Move a nominal cargo onto an empty fleet vessel (needs pre-defined vessel start and end dates)
+	 * Test: Both slots priced on load, choose higher price
 	 * 
 	 * @throws Exception
 	 */
@@ -158,7 +158,7 @@ public class TimeWindowsLowerLevelTestsInverted extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Test: Move a nominal cargo onto an empty fleet vessel (needs pre-defined vessel start and end dates)
+	 * Test: Both slots priced on load, choose lower price
 	 * 
 	 * @throws Exception
 	 */
@@ -202,7 +202,7 @@ public class TimeWindowsLowerLevelTestsInverted extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Test: Move a nominal cargo onto an empty fleet vessel (needs pre-defined vessel start and end dates)
+	 * Test: Both slots priced on load, choose lower price
 	 * 
 	 * @throws Exception
 	 */
@@ -246,7 +246,7 @@ public class TimeWindowsLowerLevelTestsInverted extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Test: Move a nominal cargo onto an empty fleet vessel (needs pre-defined vessel start and end dates)
+	 * Test: Both slots priced on load, choose higher price
 	 * 
 	 * @throws Exception
 	 */
@@ -291,7 +291,7 @@ public class TimeWindowsLowerLevelTestsInverted extends AbstractMicroTestCase {
 
 	
 	/**
-	 * Test: Move a nominal cargo onto an empty fleet vessel (needs pre-defined vessel start and end dates)
+	 * Test: Both slots priced on discharge, choose higher price
 	 * 
 	 * @throws Exception
 	 */
@@ -302,7 +302,7 @@ public class TimeWindowsLowerLevelTestsInverted extends AbstractMicroTestCase {
 		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 		
 		// Construct the cargo scenario
-		double loadPrice = 6.8;
+		double loadPrice = 6.999;
 		double salesPrice = 7.5;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPort("Bonny Nigeria"), null, entity, "JCC", 23.4) //
@@ -336,7 +336,7 @@ public class TimeWindowsLowerLevelTestsInverted extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Test: Move a nominal cargo onto an empty fleet vessel (needs pre-defined vessel start and end dates)
+	 * Test: Both slots priced on discharge, choose lower price
 	 * 
 	 * @throws Exception
 	 */
@@ -348,7 +348,7 @@ public class TimeWindowsLowerLevelTestsInverted extends AbstractMicroTestCase {
 		final VesselAvailability vesselAvailability1 = createTestVesselAvailability(LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2016, 6, 30, 0, 0, 0), LocalDateTime.of(2018, 1, 1, 0, 0, 0));
 		
 		// Construct the cargo scenario
-		double loadPrice = 6.999;
+		double loadPrice = 6.9999;
 		double salesPrice = 7.5;
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase(loadName, LocalDate.of(2016, 6, 30), portFinder.findPort("Bonny Nigeria"), null, entity, "JCC", 23.4) //
@@ -398,8 +398,8 @@ public class TimeWindowsLowerLevelTestsInverted extends AbstractMicroTestCase {
 			assert load != null;
 			assert discharge != null;
 	
-			Assert.assertEquals(salesPrice, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.000001);
 			Assert.assertEquals(loadPrice, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFLoadSlot()), 0.000001);
+			Assert.assertEquals(salesPrice, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.000001);
 		} ,
 				/*
 				 * Include correct time windows scheduler

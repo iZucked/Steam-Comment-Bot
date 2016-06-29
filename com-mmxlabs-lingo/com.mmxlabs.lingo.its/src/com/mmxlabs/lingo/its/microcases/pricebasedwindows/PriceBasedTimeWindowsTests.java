@@ -86,7 +86,7 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.impl.DefaultB
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 @RunWith(value = ShiroRunner.class)
-public class TimeWindowsLowerLevelTests extends AbstractMicroTestCase {
+public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 
 	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");
 	private static List<String> addedFeatures = new LinkedList<>();
@@ -238,7 +238,7 @@ public class TimeWindowsLowerLevelTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Test: Expected time windows = [end load, start discharge]
+	 * Test: Expected time windows = [5, 1216]
 	 * 
 	 * @throws Exception
 	 */
@@ -306,19 +306,8 @@ public class TimeWindowsLowerLevelTests extends AbstractMicroTestCase {
 		});
 	}
 
-	public IDischargeSlot getDefaultOptimiserDischargeSlot(final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge) {
-		IDischargeSlot discharge = MicroCaseUtils.getOptimiserObjectFromEMF(scenarioToOptimiserBridge, scenarioModelFinder.getCargoModelFinder().findDischargeSlot(dischargeName),
-				IDischargeSlot.class);
-		return discharge;
-	}
-
-	public ILoadSlot getDefaultOptimiserLoadSlot(final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge) {
-		ILoadSlot load = MicroCaseUtils.getOptimiserObjectFromEMF(scenarioToOptimiserBridge, scenarioModelFinder.getCargoModelFinder().findLoadSlot(loadName), ILoadSlot.class);
-		return load;
-	}
-
 	/**
-	 * Test: Move a nominal cargo onto an empty fleet vessel (needs pre-defined vessel start and end dates)
+	 * Test: Expected time windows = [5, 1216], higher sales price not chosen
 	 * 
 	 * @throws Exception
 	 */
@@ -387,16 +376,8 @@ public class TimeWindowsLowerLevelTests extends AbstractMicroTestCase {
 		});
 	}
 
-	public @NonNull DischargeSlot getDefaultEMFDischargeSlot() {
-		return scenarioModelFinder.getCargoModelFinder().findDischargeSlot(dischargeName);
-	}
-
-	public @NonNull LoadSlot getDefaultEMFLoadSlot() {
-		return scenarioModelFinder.getCargoModelFinder().findLoadSlot(loadName);
-	}
-
 	/**
-	 * Test: Move a nominal cargo onto an empty fleet vessel (needs pre-defined vessel start and end dates)
+	 * Test: Expected time windows = [5, 1464], higher sales price not chosen
 	 * 
 	 * @throws Exception
 	 */
@@ -467,7 +448,7 @@ public class TimeWindowsLowerLevelTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Test: Move a nominal cargo onto an empty fleet vessel (needs pre-defined vessel start and end dates)
+	 * Test: Expected time windows = [5, 1488], higher sales price chosen
 	 * 
 	 * @throws Exception
 	 */
@@ -542,7 +523,7 @@ public class TimeWindowsLowerLevelTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Test: Move a nominal cargo onto an empty fleet vessel (needs pre-defined vessel start and end dates)
+	 * Test: higher sales price chosen (8.87)
 	 * 
 	 * @throws Exception
 	 */
@@ -614,6 +595,10 @@ public class TimeWindowsLowerLevelTests extends AbstractMicroTestCase {
 				MicroCaseUtils.getInjectorServiceWithPriceBasedScheduler());
 	}
 
+	/**
+	 * Test: Lower sales price chosen (8.5)
+	 * @throws Exception
+	 */
 	@Test
 	@Category({ MicroTest.class })
 	public void testTimeWindows_higher_price_too_costly() throws Exception {
@@ -683,6 +668,8 @@ public class TimeWindowsLowerLevelTests extends AbstractMicroTestCase {
 	}
 
 	/**
+	 * Test: The exact time window specified is chosen - [(2016, 7, 1), (2016, 8, 21)]
+	 * 
 	 * @throws Exception
 	 */
 	@Test
@@ -748,6 +735,25 @@ public class TimeWindowsLowerLevelTests extends AbstractMicroTestCase {
 					MicroCaseDateUtils.getZonedDateTime(2016, 8, 21, 0, getDefaultEMFDischargeSlot().getPort()));
 			Assert.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
 		});
+	}
+
+	public IDischargeSlot getDefaultOptimiserDischargeSlot(final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge) {
+		IDischargeSlot discharge = MicroCaseUtils.getOptimiserObjectFromEMF(scenarioToOptimiserBridge, scenarioModelFinder.getCargoModelFinder().findDischargeSlot(dischargeName),
+				IDischargeSlot.class);
+		return discharge;
+	}
+
+	public ILoadSlot getDefaultOptimiserLoadSlot(final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge) {
+		ILoadSlot load = MicroCaseUtils.getOptimiserObjectFromEMF(scenarioToOptimiserBridge, scenarioModelFinder.getCargoModelFinder().findLoadSlot(loadName), ILoadSlot.class);
+		return load;
+	}
+
+	public @NonNull DischargeSlot getDefaultEMFDischargeSlot() {
+		return scenarioModelFinder.getCargoModelFinder().findDischargeSlot(dischargeName);
+	}
+
+	public @NonNull LoadSlot getDefaultEMFLoadSlot() {
+		return scenarioModelFinder.getCargoModelFinder().findLoadSlot(loadName);
 	}
 
 }
