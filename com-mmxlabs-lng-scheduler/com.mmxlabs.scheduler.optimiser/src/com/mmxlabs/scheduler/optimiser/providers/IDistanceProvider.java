@@ -63,7 +63,7 @@ public interface IDistanceProvider extends IDataComponentProvider {
 
 	@Deprecated
 	default int getDistance(@NonNull ERouteOption route, @NonNull IPort from, @NonNull IPort to) {
-		return getDistance(route, from, to, Integer.MIN_VALUE);
+		return getDistance(route, from, to, Integer.MAX_VALUE);
 	}
 
 	/**

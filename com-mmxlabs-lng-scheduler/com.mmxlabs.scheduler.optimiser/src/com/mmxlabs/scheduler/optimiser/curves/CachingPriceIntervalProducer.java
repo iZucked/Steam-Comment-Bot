@@ -207,7 +207,8 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 	private int findBestEnd(final int inclusiveWindowStart, final int inclusiveFeasibleStart, final int exclusiveWindowEnd, final int exclusiveFeasibleEnd) {
 		int maxEnd = Math.max(exclusiveWindowEnd, exclusiveFeasibleEnd);
 		if (inclusiveWindowStart == maxEnd || inclusiveFeasibleStart == maxEnd) {
-			maxEnd += 1;
+			assert false;
+//			maxEnd += 1;
 		}
 		// Why +1 1 again?
 		return maxEnd + 1;

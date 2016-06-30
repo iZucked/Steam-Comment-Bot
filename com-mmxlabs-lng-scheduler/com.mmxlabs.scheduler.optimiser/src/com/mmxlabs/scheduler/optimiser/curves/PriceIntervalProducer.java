@@ -92,6 +92,7 @@ public class PriceIntervalProducer implements IPriceIntervalProducer {
 		int maxEnd = Math.max(windowEnd, feasibleEnd);
 		if (windowStart == maxEnd || feasibleStart == maxEnd) {
 			maxEnd += 1;
+			assert false;
 		}
 		return maxEnd + 1;
 	}
