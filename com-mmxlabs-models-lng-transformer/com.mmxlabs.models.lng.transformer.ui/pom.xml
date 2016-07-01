@@ -6,9 +6,9 @@
 	<parent>
 		<groupId>com.mmxlabs.models.lng.transformer</groupId>
 		<artifactId>com.mmxlabs.models.lng.transformer.parent</artifactId>
-		<version>3.12.7.RELEASE</version>
+		<version>3.12.8-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.models.lng.transformer.ui</artifactId>
-	<version>3.12.7.RELEASE</version>
+	<version>3.12.8-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
