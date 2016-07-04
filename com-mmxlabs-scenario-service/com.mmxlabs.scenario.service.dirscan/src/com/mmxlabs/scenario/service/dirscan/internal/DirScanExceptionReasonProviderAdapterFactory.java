@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.dirscan.internal;
@@ -12,11 +12,11 @@ import com.mmxlabs.scenario.service.dirscan.DirScanException;
 public class DirScanExceptionReasonProviderAdapterFactory implements IAdapterFactory {
 
 	@Override
-	public Object getAdapter(final Object adaptableObject, @SuppressWarnings("rawtypes") final Class adapterType) {
+	public <T> T getAdapter(final Object adaptableObject, final Class<T> adapterType) {
 		if (adaptableObject instanceof DirScanException) {
 
 			final DirScanException exception = (DirScanException) adaptableObject;
-			return new IReasonProvider() {
+			return (T) new IReasonProvider() {
 
 				@Override
 				public String getTitle() {
@@ -41,7 +41,7 @@ public class DirScanExceptionReasonProviderAdapterFactory implements IAdapterFac
 			};
 		}
 
-		return null;
+		return (T) null;
 	}
 
 	@Override

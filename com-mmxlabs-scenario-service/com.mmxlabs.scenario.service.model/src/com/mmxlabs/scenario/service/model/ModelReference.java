@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.model;
@@ -15,10 +15,10 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.model.ModelReference#getScenarioInstance <em>Scenario Instance</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getModelReference()
  * @model superTypes="com.mmxlabs.scenario.service.model.Closeable"

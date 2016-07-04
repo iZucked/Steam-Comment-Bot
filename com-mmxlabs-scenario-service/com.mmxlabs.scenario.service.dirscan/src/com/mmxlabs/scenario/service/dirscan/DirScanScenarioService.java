@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.dirscan;
@@ -424,10 +424,12 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 				final String string = file.getParent().normalize().toString();
 				final WeakReference<Container> weakReference = folderMap.get(string);
-				weakReference.get().getElements().add(scenarioInstance);
+				if (weakReference != null) {
+					weakReference.get().getElements().add(scenarioInstance);
 
-				scenarioMap.put(pathKey, new WeakReference<ScenarioInstance>(scenarioInstance));
-				modelToFilesystemMap.put(scenarioInstance, file);
+					scenarioMap.put(pathKey, new WeakReference<ScenarioInstance>(scenarioInstance));
+					modelToFilesystemMap.put(scenarioInstance, file);
+				}
 			}
 		}
 	}

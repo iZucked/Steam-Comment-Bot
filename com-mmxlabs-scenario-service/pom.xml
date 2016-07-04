@@ -5,14 +5,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.scenario.service</groupId>
 	<artifactId>com.mmxlabs.scenario.service.parent</artifactId>
-	<version>3.11.1-SNAPSHOT</version>
+	<version>3.12.7-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
 		<relativePath />
-		<version>31</version>
+		<version>32</version>
 	</parent>
 
 	<scm>
@@ -126,24 +126,31 @@
 	</build>
 	<repositories>
 		<repository>
-			<id>com-mmxlabs-common-util.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/${project.version}/com.mmxlabs.common.util.p2-${project.version}.zip-unzip/</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
-			<id>com-mmxlabs-jobmanager.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/jobmanager/com.mmxlabs.jobmanager.p2/${project.version}/com.mmxlabs.jobmanager.p2-${project.version}.zip-unzip/</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
 			<id>com-mmxlabs-models-mmxcore.hg</id>
 			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/mmxcore/com.mmxlabs.models.mmxcore.p2/5.0.0.RELEASE/com.mmxlabs.models.mmxcore.p2-5.0.0.RELEASE.zip-unzip/</url>
 			<layout>p2</layout>
 		</repository>
-		<repository>
-			<id>com-mmxlabs-rcp-common.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/rcp/common/com.mmxlabs.rcp.common.p2/${project.version}/com.mmxlabs.rcp.common.p2-${project.version}.zip-unzip/</url>
-			<layout>p2</layout>
-		</repository>
 	</repositories>	
+	<profiles>
+		<profile>
+			<id>useNexusRepos</id>
+			<repositories>
+				<repository>
+					<id>com-mmxlabs-common-util.hg</id>
+					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/${project.version}/com.mmxlabs.common.util.p2-${project.version}.zip-unzip/</url>
+					<layout>p2</layout>
+				</repository>
+				<repository>
+					<id>com-mmxlabs-jobmanager.hg</id>
+					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/jobmanager/com.mmxlabs.jobmanager.p2/${project.version}/com.mmxlabs.jobmanager.p2-${project.version}.zip-unzip/</url>
+					<layout>p2</layout>
+				</repository>
+				<repository>
+					<id>com-mmxlabs-rcp-common.hg</id>
+					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/rcp/common/com.mmxlabs.rcp.common.p2/${project.version}/com.mmxlabs.rcp.common.p2-${project.version}.zip-unzip/</url>
+					<layout>p2</layout>
+				</repository>
+			</repositories>	
+		</profile>
+	</profiles>
 </project>

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.dirscan.internal;
@@ -128,7 +128,8 @@ public class Activator extends AbstractUIPlugin {
 
 			dirScanRegistration[idx].unregister();
 			dirScanRegistration[idx] = null;
-
+		}
+		if (dirScanService[idx] != null) {
 			dirScanService[idx].stop();
 			dirScanService[idx] = null;
 		}

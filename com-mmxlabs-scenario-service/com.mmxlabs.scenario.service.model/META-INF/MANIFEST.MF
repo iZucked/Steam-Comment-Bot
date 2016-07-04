@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.scenario.service.model;singleton:=true
-Bundle-Version: 3.11.1.qualifier
+Bundle-Version: 3.12.7.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
@@ -13,9 +13,9 @@ Export-Package: com.mmxlabs.scenario.service,
  com.mmxlabs.scenario.service.model.impl,
  com.mmxlabs.scenario.service.model.util
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
- org.eclipse.emf.ecore;visibility:=reexport;bundle-version="2.7.0",
+ org.eclipse.emf.ecore;bundle-version="2.7.0";visibility:=reexport,
  org.eclipse.emf.query;bundle-version="1.2.100",
- org.eclipse.jdt.annotation;resolution:=optional;bundle-version="[1.1.0,2.0.0)"
+ org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
 Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/*.xml
 Import-Package: org.slf4j;version="1.6.4"

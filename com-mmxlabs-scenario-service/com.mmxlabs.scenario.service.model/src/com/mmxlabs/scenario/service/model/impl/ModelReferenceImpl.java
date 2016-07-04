@@ -1,10 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.model.impl;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -26,10 +27,10 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ModelReferenceImpl#getScenarioInstance <em>Scenario Instance</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
@@ -126,9 +127,13 @@ public class ModelReferenceImpl extends EObjectImpl implements ModelReference {
 	 */
 	public void close() {
 		ScenarioInstance scenarioInstance = getScenarioInstance();
-		setScenarioInstance(null);
 		if (scenarioInstance != null) {
-			scenarioInstance.getModelReferences().remove(this);
+			List<ModelReference> modelReferences = scenarioInstance.getModelReferences();
+			synchronized (modelReferences) {
+				
+				setScenarioInstance(null);
+				modelReferences.remove(this);
+			}
 		}
 	}
 

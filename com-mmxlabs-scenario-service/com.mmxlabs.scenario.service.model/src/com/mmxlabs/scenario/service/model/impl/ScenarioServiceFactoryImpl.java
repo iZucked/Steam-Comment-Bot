@@ -1,9 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.model.impl;
 
+import com.mmxlabs.scenario.service.model.*;
 import java.io.IOException;
 
 import org.eclipse.emf.ecore.EClass;

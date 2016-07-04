@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.manifest;
@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.Manifest#getModelURIs <em>Model UR Is</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.Manifest#getDependencyUUIDs <em>Dependency UUI Ds</em>}</li>
@@ -24,7 +25,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.scenario.service.manifest.Manifest#getClientScenarioVersion <em>Client Scenario Version</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.Manifest#getClientVersionContext <em>Client Version Context</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.scenario.service.manifest.ManifestPackage#getManifest()
  * @model

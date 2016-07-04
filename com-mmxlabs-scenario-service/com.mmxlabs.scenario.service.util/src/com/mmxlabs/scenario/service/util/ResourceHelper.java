@@ -1,9 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.util;
 
+import java.io.CharConversionException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,16 +12,19 @@ import java.util.Map;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.Resource.IOWrappedException;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter.Cipher;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.IllegalValueException;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
+import com.mmxlabs.scenario.service.util.encryption.ScenarioEncryptionException;
 import com.mmxlabs.scenario.service.util.encryption.impl.PassthroughCipherProvider;
 
 public final class ResourceHelper {
@@ -64,22 +68,48 @@ public final class ResourceHelper {
 			final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<String, EObject>();
 			((ResourceImpl) resource).setIntrinsicIDToEObjectMap(intrinsicIDToEObjectMap);
 		}
-		try {
-			// Attempt to load using default options
-			resource.load(null);
-		} catch (final Exception e) {
-			// Need to unload the model, even if it failed otherwise it is still flagged up as loaded
-			resource.unload();
-			// Fall back to pre-encrypted scenario options
-			final Map<Object, Object> noCipherOptions = new HashMap<>();
-			noCipherOptions.put(Resource.OPTION_CIPHER, null);
+
+		Map<Object, Object> loadOptions = new HashMap<>(resourceSet.getLoadOptions());
+		boolean disabledCipher = false;
+		boolean disabledIDMap = false;
+
+		while (true) {
 			try {
-				resource.load(noCipherOptions);
-			} catch (final Exception e2) {
+				// Attempt to load using default options
+				resource.load(loadOptions);
+				break;
+			} catch (IOWrappedException ee) {
+				if (ee.getCause() instanceof IllegalValueException) {
+					// This can be triggered by multiple entries for the same object instance in a unique list
+					if (!disabledIDMap) {
+						disabledIDMap = true;
+						loadOptions.put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, Boolean.FALSE);
+						resource.unload();
+
+						continue;
+					}
+				}
+				if (ee.getCause() instanceof ScenarioEncryptionException) {
+					if (!disabledCipher) {
+						disabledCipher = true;
+						loadOptions.put(XMLResource.OPTION_CIPHER, null);
+						resource.unload();
+						continue;
+					}
+				}
+				throw ee;
+			} catch (CharConversionException /* MalformedByteSequenceException */ e2) {
+				if (!disabledCipher) {
+					disabledCipher = true;
+					loadOptions.put(XMLResource.OPTION_CIPHER, null);
+					resource.unload();
+					continue;
+				}
+				throw e2;
+			} catch (final Exception e) {
 				// Unable to load using fallback, so rethrow original exception
 				throw e;
 			}
-
 		}
 		return resource;
 	}

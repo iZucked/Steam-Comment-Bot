@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service;
@@ -59,7 +59,7 @@ public interface IScenarioService {
 	 * @return a new scenario instance, which will contain a new root object as its instance attribute
 	 * @throws IOException
 	 */
-	ScenarioInstance insert(final Container container, final EObject rootObject) throws IOException;
+	ScenarioInstance insert(Container container, EObject rootObject) throws IOException;
 
 	/**
 	 * Create a duplicate of the given scenario and place it in the destination. Any models owned by the original will be duplicated into new resources; dependencies of the original will not be
@@ -70,7 +70,7 @@ public interface IScenarioService {
 	 * @return the new, duplicated instance.
 	 * @throws IOException
 	 */
-	ScenarioInstance duplicate(@NonNull final ScenarioInstance original, @NonNull final Container destination) throws IOException;
+	ScenarioInstance duplicate(@NonNull ScenarioInstance original, @NonNull Container destination) throws IOException;
 
 	/**
 	 * Delete the given scenario instance from this scenario service. Throws an {@link IllegalArgumentException} if the container is owned by another {@link IScenarioService}. This method can also be
@@ -86,7 +86,7 @@ public interface IScenarioService {
 	 * @param instance
 	 * @throws IOException
 	 */
-	EObject load(@NonNull final ScenarioInstance instance) throws IOException;
+	EObject load(@NonNull ScenarioInstance instance) throws IOException;
 
 	/**
 	 * Cause the saving of the given instance.
@@ -103,7 +103,7 @@ public interface IScenarioService {
 	 * @return
 	 */
 	@NonNull
-	public URI resolveURI(@NonNull final String uriString);
+	public URI resolveURI(@NonNull String uriString);
 
 	/**
 	 * Register a {@link IScenarioServiceListener} with this scenario service. Adding a service multiple times has no effect.

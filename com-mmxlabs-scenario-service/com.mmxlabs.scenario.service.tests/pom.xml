@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>com.mmxlabs.scenario.service.parent</artifactId>
+		<groupId>com.mmxlabs.scenario.service</groupId>
+		<version>3.12.5-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>com.mmxlabs.scenario.service.tests</artifactId>
+	<version>3.12.5-SNAPSHOT</version>
+	<packaging>eclipse-test-plugin</packaging>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<configuration>
+
+							
+					<dependency-resolution>
+						<extraRequirements>
+							<requirement>
+								<type>eclipse-plugin</type>
+								<id>org.hamcrest</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
+							<requirement>
+								<type>eclipse-plugin</type>
+								<id>org.eclipse.jdt.annotation</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
+						</extraRequirements>
+					</dependency-resolution>
+					
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

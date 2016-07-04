@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.ui.commands;
@@ -153,25 +153,32 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 
 	private void scanTree(final File root, final java.util.List<File> scenarioFiles, final Container container, final Map<File, Container> scenarioContainerMap) {
 
-		for (final File f : root.listFiles()) {
-			if (f.isFile() && Files.getFileExtension(f.getName()).toLowerCase().equals("lingo")) {
-				scenarioFiles.add(f);
-				scenarioContainerMap.put(f, container);
-			} else if (f.isDirectory()) {
-				// Check for existing dir in contents and reuse!
-				Folder folder = null;
-				for (Container c : container.getElements()) {
-					if (c instanceof Folder && c.getName().equals(f.getName())) {
-						folder = (Folder) c;
-						break;
+		@Nullable
+		final File[] listFiles = root.listFiles();
+		if (listFiles != null) {
+			for (final File f : listFiles) {
+				if (f == null) {
+					continue;
+				}
+				if (f.isFile() && Files.getFileExtension(f.getName()).toLowerCase().equals("lingo")) {
+					scenarioFiles.add(f);
+					scenarioContainerMap.put(f, container);
+				} else if (f.isDirectory()) {
+					// Check for existing dir in contents and reuse!
+					Folder folder = null;
+					for (final Container c : container.getElements()) {
+						if (c instanceof Folder && c.getName().equals(f.getName())) {
+							folder = (Folder) c;
+							break;
+						}
 					}
+					if (folder == null) {
+						folder = ScenarioServiceFactory.eINSTANCE.createFolder();
+						folder.setName(f.getName());
+						container.getElements().add(folder);
+					}
+					scanTree(f, scenarioFiles, folder, scenarioContainerMap);
 				}
-				if (folder == null) {
-					folder = ScenarioServiceFactory.eINSTANCE.createFolder();
-					folder.setName(f.getName());
-					container.getElements().add(folder);
-				}
-				scanTree(f, scenarioFiles, folder, scenarioContainerMap);
 			}
 		}
 	}
@@ -202,7 +209,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 				} else if (f.isDirectory()) {
 					// Check for existing dir in contents and reuse!
 					Folder folder = null;
-					for (Container c : container.getElements()) {
+					for (final Container c : container.getElements()) {
 						if (c instanceof Folder && c.getName().equals(f.getName())) {
 							folder = (Folder) c;
 							break;
@@ -235,13 +242,13 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 								monitor.subTask("Copying " + f.getName());
 								final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromFile(f.getAbsolutePath(), scenarioCipherProvider);
 								if (instance != null) {
-									Container destinationContainer = scenarioContainerMap.get(f);
+									final Container destinationContainer = scenarioContainerMap.get(f);
 									assert destinationContainer != null;
 
 									// Get basic name
-									String scenarioName = ScenarioServiceModelUtils.stripFileExtension(f.getName());
+									final String scenarioName = ScenarioServiceModelUtils.stripFileExtension(f.getName());
 									final Set<String> existingNames = ScenarioServiceModelUtils.getExistingNames(destinationContainer);
-									ScenarioInstance duplicate = ScenarioServiceModelUtils.copyScenario(instance, destinationContainer, scenarioName, existingNames);
+									final ScenarioInstance duplicate = ScenarioServiceModelUtils.copyScenario(instance, destinationContainer, scenarioName, existingNames);
 								}
 								monitor.worked(1);
 

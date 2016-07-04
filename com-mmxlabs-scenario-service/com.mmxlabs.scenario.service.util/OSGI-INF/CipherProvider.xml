@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2015
+    Copyright (C) Minimax Labs Ltd., 2010 - 2016
     All rights reserved.
 
 -->
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="com.mmxlabs.scenario.service.util.encryption.impl.CachingSharedCipherProvider">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="false" name="com.mmxlabs.scenario.service.util.encryption.impl.CachingSharedCipherProvider">
    <implementation class="com.mmxlabs.scenario.service.util.encryption.impl.CachingSharedCipherProvider"/>
    <service>
       <provide interface="com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider"/>

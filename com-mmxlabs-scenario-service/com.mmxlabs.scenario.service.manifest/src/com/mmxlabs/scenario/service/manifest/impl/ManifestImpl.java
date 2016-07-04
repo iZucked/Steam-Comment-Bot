@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.manifest.impl;
@@ -22,6 +22,7 @@ import com.mmxlabs.scenario.service.manifest.ManifestPackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getModelURIs <em>Model UR Is</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getDependencyUUIDs <em>Dependency UUI Ds</em>}</li>
@@ -32,7 +33,6 @@ import com.mmxlabs.scenario.service.manifest.ManifestPackage;
  *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getClientScenarioVersion <em>Client Scenario Version</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getClientVersionContext <em>Client Version Context</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

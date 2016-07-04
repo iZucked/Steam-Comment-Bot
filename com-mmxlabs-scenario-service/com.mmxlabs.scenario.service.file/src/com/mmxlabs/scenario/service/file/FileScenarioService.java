@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.file;
@@ -596,6 +596,9 @@ public class FileScenarioService extends AbstractScenarioService {
 			final HashMap<String, ScenarioInstance> recoveredInstances = new HashMap<String, ScenarioInstance>();
 			final HashSet<String> recoveredSubInstances = new HashSet<String>();
 			for (final File instanceFile : f.listFiles()) {
+				if (instanceFile == null) {
+					continue;
+				}
 				if (instanceFile.getName().endsWith(".xmi")) {
 					final String instanceUUID = instanceFile.getName().substring(0, instanceFile.getName().length() - 4);
 					if (!allUUIDs.contains(instanceUUID)) {

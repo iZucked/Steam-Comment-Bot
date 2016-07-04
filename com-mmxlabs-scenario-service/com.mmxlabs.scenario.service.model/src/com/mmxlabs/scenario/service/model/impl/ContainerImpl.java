@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.model.impl;
@@ -29,6 +29,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ContainerImpl#getParent <em>Parent</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ContainerImpl#getElements <em>Elements</em>}</li>
@@ -36,7 +37,6 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ContainerImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ContainerImpl#isHidden <em>Hidden</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

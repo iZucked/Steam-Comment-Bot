@@ -1,9 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.manifest.util;
 
+import com.mmxlabs.scenario.service.manifest.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -49,7 +50,7 @@ public class ManifestSwitch<T> extends Switch<T> {
 	 * Checks whether this is a switch for the given package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @parameter ePackage the package in question.
+	 * @param ePackage the package in question.
 	 * @return whether this is a switch for the given package.
 	 * @generated
 	 */
@@ -78,6 +79,7 @@ public class ManifestSwitch<T> extends Switch<T> {
 		}
 	}
 
+ 
 	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Manifest</em>'.
 	 * <!-- begin-user-doc -->

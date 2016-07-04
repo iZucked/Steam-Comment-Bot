@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.util;
@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
@@ -349,28 +350,31 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		}
 
 		fireEvent(ScenarioServiceEvent.PRE_UNLOAD, instance);
-		
-		if (!instance.getModelReferences().isEmpty()) {
-			log.error("Attempting to unload a scenario which still has open model references");
-//			return;
-		}
-		
-		if (instance.getAdapters() != null) {
-			instance.getAdapters().remove(EditingDomain.class);
-			instance.getAdapters().remove(CommandStack.class);
-			instance.getAdapters().remove(BasicCommandStack.class);
 
-			final ResourceSet resourceSet = (ResourceSet) instance.getAdapters().remove(ResourceSet.class);
-			if (resourceSet != null) {
-				for (final Resource r : resourceSet.getResources()) {
-					r.unload();
-				}
+		List<ModelReference> modelReferences = instance.getModelReferences();
+		synchronized (modelReferences) {
+
+			if (!modelReferences.isEmpty()) {
+				log.error("Attempting to unload a scenario which still has open model references");
+				// return;
 			}
 
-			instance.getAdapters().clear();
-		}
-		instance.setInstance(null);
+			if (instance.getAdapters() != null) {
+				instance.getAdapters().remove(EditingDomain.class);
+				instance.getAdapters().remove(CommandStack.class);
+				instance.getAdapters().remove(BasicCommandStack.class);
 
+				final ResourceSet resourceSet = (ResourceSet) instance.getAdapters().remove(ResourceSet.class);
+				if (resourceSet != null) {
+					for (final Resource r : resourceSet.getResources()) {
+						r.unload();
+					}
+				}
+
+				instance.getAdapters().clear();
+			}
+			instance.setInstance(null);
+		}
 		fireEvent(ScenarioServiceEvent.POST_UNLOAD, instance);
 	}
 

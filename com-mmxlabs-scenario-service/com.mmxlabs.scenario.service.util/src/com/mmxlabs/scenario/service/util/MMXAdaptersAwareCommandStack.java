@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.util;
@@ -189,5 +189,10 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 
 	public void setEditingDomain(final CommandProviderAwareEditingDomain editingDomain) {
 		this.editingDomain = editingDomain;
+	}
+	
+	@Override
+	protected void handleError(Exception exception) {
+		throw new RuntimeException(exception);
 	}
 }

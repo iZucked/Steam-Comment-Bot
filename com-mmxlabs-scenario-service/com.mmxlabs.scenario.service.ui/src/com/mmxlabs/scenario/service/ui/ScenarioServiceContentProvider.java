@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.ui;
@@ -15,6 +15,7 @@ import java.util.WeakHashMap;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.Saveable;
@@ -36,8 +37,8 @@ import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceComposedAdapterF
 
 public class ScenarioServiceContentProvider extends AdapterFactoryContentProvider implements IAdaptable {
 
-	private final Set<IScenarioService> listeningScenarioServices = new HashSet<>();
-	private final IScenarioServiceListener scenarioServiceListener = new IScenarioServiceListener() {
+	private final @NonNull Set<IScenarioService> listeningScenarioServices = new HashSet<>();
+	private final @NonNull IScenarioServiceListener scenarioServiceListener = new IScenarioServiceListener() {
 
 		@Override
 		public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
@@ -409,17 +410,17 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	/**
 	 */
 	@Override
-	public Object getAdapter(final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 
 		if (SaveablesProvider.class.isAssignableFrom(adapter)) {
 
 			if (provider == null) {
 				provider = new InternalSaveablesProvider();
 			}
-			return provider;
+			return adapter.cast(provider);
 		}
 
-		return null;
+		return adapter.cast(null);
 	}
 
 	/**

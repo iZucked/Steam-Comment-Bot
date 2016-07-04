@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2015
+    Copyright (C) Minimax Labs Ltd., 2010 - 2016
     All rights reserved.
 
 -->
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="com.mmxlabs.scenario.service.ScenarioServiceRegistry">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="false" name="com.mmxlabs.scenario.service.ScenarioServiceRegistry">
    <implementation class="com.mmxlabs.scenario.service.ScenarioServiceRegistry"/>
    <reference bind="bindScenarioService" cardinality="0..n" interface="com.mmxlabs.scenario.service.IScenarioService" name="IScenarioService" policy="dynamic" unbind="unbindScenarioService"/>
    <service>

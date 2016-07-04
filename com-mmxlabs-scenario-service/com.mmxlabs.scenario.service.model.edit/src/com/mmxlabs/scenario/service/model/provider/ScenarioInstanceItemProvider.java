@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.model.provider;
@@ -33,8 +33,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ScenarioInstanceItemProvider extends ContainerItemProvider implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider,
-		IItemPropertySource {
+public class ScenarioInstanceItemProvider extends ContainerItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -177,10 +176,10 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 	 * @generated
 	 */
 	protected void addClientVersionContextPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_ScenarioInstance_clientVersionContext_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_clientVersionContext_feature", "_UI_ScenarioInstance_type"),
-				ScenarioServicePackage.eINSTANCE.getScenarioInstance_ClientVersionContext(), true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add(
+				createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_ScenarioInstance_clientVersionContext_feature"),
+						getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_clientVersionContext_feature", "_UI_ScenarioInstance_type"),
+						ScenarioServicePackage.eINSTANCE.getScenarioInstance_ClientVersionContext(), true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.ui.editing;
@@ -71,9 +71,9 @@ public class ScenarioServiceEditorInput implements IScenarioServiceEditorInput, 
 	}
 
 	@Override
-	public Object getAdapter(@SuppressWarnings("rawtypes") final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 		if (ScenarioInstance.class.isAssignableFrom(adapter)) {
-			return scenarioInstance;
+			return (T) scenarioInstance;
 		}
 
 		return Platform.getAdapterManager().getAdapter(this, adapter);

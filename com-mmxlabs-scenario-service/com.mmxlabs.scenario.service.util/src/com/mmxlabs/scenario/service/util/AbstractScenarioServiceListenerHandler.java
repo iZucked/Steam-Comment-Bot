@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.util;
@@ -29,8 +29,9 @@ public abstract class AbstractScenarioServiceListenerHandler implements IScenari
 		PRE_LOAD, POST_LOAD, PRE_SAVE, POST_SAVE, PRE_DELETE, POST_DELETE,
 		/**
 		 */
-		PRE_UNLOAD, /**
-		 */
+		PRE_UNLOAD,
+		/**
+		*/
 		POST_UNLOAD
 
 	}
@@ -38,12 +39,12 @@ public abstract class AbstractScenarioServiceListenerHandler implements IScenari
 	private final Set<IScenarioServiceListener> scenarioServiceListeners = new HashSet<IScenarioServiceListener>();
 
 	@Override
-	public void addScenarioServiceListener(@NonNull final IScenarioServiceListener listener) {
+	public void addScenarioServiceListener(@NonNull IScenarioServiceListener listener) {
 		scenarioServiceListeners.add(listener);
 	}
 
 	@Override
-	public void removeScenarioServiceListener(@NonNull final IScenarioServiceListener listener) {
+	public void removeScenarioServiceListener(@NonNull IScenarioServiceListener listener) {
 		scenarioServiceListeners.remove(listener);
 	}
 

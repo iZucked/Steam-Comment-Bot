@@ -1,9 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.model.util;
 
+import com.mmxlabs.scenario.service.model.*;
 import java.io.Closeable;
 
 import org.eclipse.emf.common.notify.Adapter;

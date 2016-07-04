@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.model;
@@ -16,6 +16,7 @@ import com.mmxlabs.scenario.service.IScenarioService;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.model.Container#getParent <em>Parent</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.Container#getElements <em>Elements</em>}</li>
@@ -23,7 +24,6 @@ import com.mmxlabs.scenario.service.IScenarioService;
  *   <li>{@link com.mmxlabs.scenario.service.model.Container#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.Container#isHidden <em>Hidden</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getContainer()
  * @model abstract="true"
