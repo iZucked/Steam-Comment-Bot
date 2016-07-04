@@ -1,24 +1,25 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import java.util.TreeMap;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.Provides;
-import com.google.inject.name.Named;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.curves.ConstantValueCurve;
+import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -40,6 +41,7 @@ import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
+import com.mmxlabs.scheduler.optimiser.builder.impl.TimeWindowMaker;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -47,6 +49,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -54,7 +57,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionR
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.EnumeratingSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 
@@ -100,7 +103,7 @@ public class SimpleSchedulerTest {
 		final int baseFuelEquivalence = 228000;
 		final IBaseFuel baseFuel = builder.createBaseFuel("test", baseFuelEquivalence);
 		baseFuCurveProviderEditor.setBaseFuelCurve(baseFuel, new ConstantValueCurve(7000));
-		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
 
 		// set up basefuel curve
 		final StepwiseIntegerCurve baseFuelCurve = new StepwiseIntegerCurve();
@@ -117,23 +120,23 @@ public class SimpleSchedulerTest {
 		final IVessel vessel2 = builder.createVessel("vessel-2", vesselClass1, 150000000);
 		final IVessel vessel3 = builder.createVessel("vessel-3", vesselClass1, 150000000);
 
-		builder.createVesselAvailability(vessel1, new ConstantValueCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
-				builder.createEndRequirement(Collections.singleton(port2), null, false, 0));
-		builder.createVesselAvailability(vessel2, new ConstantValueCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
-				builder.createEndRequirement(Collections.singleton(port2), null, false, 0));
-		builder.createVesselAvailability(vessel3, new ConstantValueCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
-				builder.createEndRequirement(Collections.singleton(port6), null, false, 0));
+		builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
+				builder.createEndRequirement(Collections.singleton(port2), null, false, 0, false));
+		builder.createVesselAvailability(vessel2, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
+				builder.createEndRequirement(Collections.singleton(port2), null, false, 0, false));
+		builder.createVesselAvailability(vessel3, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
+				builder.createEndRequirement(Collections.singleton(port6), null, false, 0, false));
 
-		final ITimeWindow tw1 = builder.createTimeWindow(5, 6);
-		final ITimeWindow tw2 = builder.createTimeWindow(10, 11);
+		final ITimeWindow tw1 = TimeWindowMaker.createInclusiveExclusive(5, 6, 0, false);
+		final ITimeWindow tw2 = TimeWindowMaker.createInclusiveExclusive(10, 11, 0, false);
 
-		final ITimeWindow tw3 = builder.createTimeWindow(15, 16);
-		final ITimeWindow tw4 = builder.createTimeWindow(20, 21);
+		final ITimeWindow tw3 = TimeWindowMaker.createInclusiveExclusive(15, 16, 0, false);
+		final ITimeWindow tw4 = TimeWindowMaker.createInclusiveExclusive(20, 21, 0, false);
 
-		final ITimeWindow tw5 = builder.createTimeWindow(25, 26);
-		final ITimeWindow tw6 = builder.createTimeWindow(30, 31);
+		final ITimeWindow tw5 = TimeWindowMaker.createInclusiveExclusive(25, 26, 0, false);
+		final ITimeWindow tw6 = TimeWindowMaker.createInclusiveExclusive(30, 31, 0, false);
 
-		final ITimeWindow tw7 = builder.createTimeWindow(35, 36);
+		final ITimeWindow tw7 = TimeWindowMaker.createInclusiveExclusive(35, 36, 0, false);
 
 		final ILoadPriceCalculator purchaseCurve = new FixedPriceContract(5);
 		final ISalesPriceCalculator salesCurve = new FixedPriceContract(200000);
@@ -168,19 +171,34 @@ public class SimpleSchedulerTest {
 		final IDischargeSlot discharge7 = builder.createDischargeSlot("discharge7", port6, tw7, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24,
 				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 
-		builder.createCargo(Lists.<IPortSlot> newArrayList(load1, discharge1), false);
-		builder.createCargo(Lists.<IPortSlot> newArrayList(load2, discharge2), false);
-		builder.createCargo(Lists.<IPortSlot> newArrayList(load3, discharge3), false);
-		builder.createCargo(Lists.<IPortSlot> newArrayList(load4, discharge4), false);
-		builder.createCargo(Lists.<IPortSlot> newArrayList(load5, discharge5), false);
-		builder.createCargo(Lists.<IPortSlot> newArrayList(load6, discharge6), false);
-		builder.createCargo(Lists.<IPortSlot> newArrayList(load7, discharge7), false);
+		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load1, discharge1), false);
+		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load2, discharge2), false);
+		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load3, discharge3), false);
+		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load4, discharge4), false);
+		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load5, discharge5), false);
+		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load6, discharge6), false);
+		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load7, discharge7), false);
 
 		// TODO: Set port durations
 
 		// ....
 
-		builder.buildXYDistances();
+		final List<IPort> portsList = Lists.newArrayList(port1, port2, port3, port4, port5, port6);
+		for (final IPort from : portsList) {
+			if (from instanceof IXYPort) {
+				final IXYPort xyFrom = (IXYPort) from;
+				for (final IPort to : portsList) {
+					if (to instanceof IXYPort) {
+						final IXYPort xyTo = (IXYPort) to;
+						final float diffX = xyFrom.getX() - xyTo.getX();
+						final float diffY = xyFrom.getY() - xyTo.getY();
+
+						final double distance = Math.sqrt((diffX * diffX) + (diffY * diffY));
+						builder.setPortToPortDistance(from, to, ERouteOption.DIRECT, (int) distance);
+					}
+				}
+			}
+		}
 
 		// Generate the optimisation data
 		final IOptimisationData data = builder.getOptimisationData();
@@ -194,14 +212,7 @@ public class SimpleSchedulerTest {
 	public void testLSO() {
 
 		final long seed = 1;
-		final Injector parentInjector = Guice.createInjector(new DataComponentProviderModule() {
-			@Provides
-			@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
-			private boolean isOptimiserReevaluating() {
-				return true;
-			}
-
-		});
+		final Injector parentInjector = Guice.createInjector(new DataComponentProviderModule());
 
 		final IOptimisationData data = createProblem(parentInjector);
 		// Build opt data
@@ -259,7 +270,7 @@ public class SimpleSchedulerTest {
 
 			final LinearSimulatedAnnealingFitnessEvaluator linearFitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator) fitnessEvaluator;
 
-			IEvaluationState evaluationState = new EvaluationState();
+			final IEvaluationState evaluationState = new EvaluationState();
 
 			for (final IEvaluationProcess c : optimiser.getFitnessEvaluator().getEvaluationProcesses()) {
 				c.evaluate(context.getInputSequences(), evaluationState);
@@ -279,7 +290,7 @@ public class SimpleSchedulerTest {
 			System.out.println("Final fitness " + finalFitness);
 			Assert.assertFalse(finalFitness == Long.MAX_VALUE);
 
-			Triple<ISequences, ISequences, IEvaluationState> bestSequences = fitnessEvaluator.getBestSequences();
+			final Triple<ISequences, ISequences, IEvaluationState> bestSequences = fitnessEvaluator.getBestSequences();
 			Assert.assertNotNull(bestSequences);
 			printSequences(bestSequences.getFirst());
 

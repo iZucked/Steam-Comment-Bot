@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
@@ -94,17 +94,18 @@ public class ShippingHoursRestrictionConstraintCheckerTest {
 		Mockito.when(shippingHoursRestrictionProvider.getShippingHoursRestriction(o1)).thenReturn(shippingHoursRestriction);
 		Mockito.when(shippingHoursRestrictionProvider.isDivertable(Matchers.any(ISequenceElement.class))).thenReturn(true);
 		final ITimeWindow timeWindow = Mockito.mock(ITimeWindow.class);
-		Mockito.when(timeWindow.getStart()).thenReturn(0);
+		Mockito.when(timeWindow.getInclusiveStart()).thenReturn(0);
 		Mockito.when(shippingHoursRestrictionProvider.getBaseTime(o1)).thenReturn(timeWindow);
 
-		Mockito.when(
-				divertableDESShippingTimesCalculator.getDivertableDESTimes(Matchers.any(ILoadOption.class), Matchers.any(IDischargeOption.class), Matchers.any(IVessel.class),
-						Matchers.any(IResource.class))).thenReturn(desTimes);
+		Mockito.when(divertableDESShippingTimesCalculator.getDivertableDESTimes(Matchers.any(ILoadOption.class), Matchers.any(IDischargeOption.class), Matchers.any(IVessel.class),
+				Matchers.any(IResource.class))).thenReturn(desTimes);
 
 		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
+		final IVessel vessel = Mockito.mock(IVessel.class);
 		Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.DES_PURCHASE);
 		Mockito.when(vp.getVesselAvailability(Matchers.any(IResource.class))).thenReturn(vesselAvailability);
-		Mockito.when(nvp.getNominatedVessel(Matchers.any(IResource.class))).thenReturn(null);
+		Mockito.when(nvp.getNominatedVessel(Matchers.any(IResource.class))).thenReturn(vessel);
+		Mockito.when(nvp.getNominatedVessel(Matchers.any(ISequenceElement.class))).thenReturn(vessel);
 
 		final ShippingHoursRestrictionChecker shippingHoursRestrictionChecker = createChecker(portSlotProvider, actualsDataProvider, shippingHoursRestrictionProvider, vp, nvp,
 				divertableDESShippingTimesCalculator);

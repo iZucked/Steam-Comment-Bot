@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.lso.moves;
@@ -9,6 +9,9 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -58,7 +61,7 @@ public class ShuffleElements implements IMove {
 		 * @param resource
 		 * @param index
 		 */
-		public void addFrom(final IResource resource, final int index, final ISequenceElement element) {
+		public void addFrom(final @Nullable IResource resource, final int index, final @NonNull ISequenceElement element) {
 			froms.add(new From(resource, index, element));
 		}
 
@@ -69,7 +72,7 @@ public class ShuffleElements implements IMove {
 		 * @param resource
 		 * @param index
 		 */
-		public void addFrom(final IResource resource, final int index, final ISequenceElement element, final ISequenceElement alternative) {
+		public void addFrom(final @Nullable IResource resource, final int index, final @NonNull ISequenceElement element, final @Nullable ISequenceElement alternative) {
 			froms.add(new From(resource, index, element, alternative));
 		}
 
@@ -80,7 +83,7 @@ public class ShuffleElements implements IMove {
 		 * @param index
 		 * @param size
 		 */
-		public void addTo(final IResource resource, final int index, final int size) {
+		public void addTo(final @Nullable IResource resource, final int index, final int size) {
 			tos.add(new To(resource, index, size));
 		}
 
@@ -99,21 +102,21 @@ public class ShuffleElements implements IMove {
 	 * 
 	 */
 	public static final class From {
-		public final IResource resource;
+		public final @Nullable IResource resource;
 		public final int index;
-		public final ISequenceElement element;
+		public final @Nullable ISequenceElement element;
 		/**
 		 */
-		public final ISequenceElement alternativeElement;
+		public final @Nullable ISequenceElement alternativeElement;
 
-		public From(final IResource resource, final int index) {
+		public From(final @Nullable IResource resource, final int index) {
 			this.resource = resource;
 			this.index = index;
 			this.element = null;
 			this.alternativeElement = null;
 		}
 
-		public From(final IResource resource, final int index, final ISequenceElement element) {
+		public From(final @Nullable IResource resource, final int index, final @NonNull ISequenceElement element) {
 			this.resource = resource;
 			this.index = index;
 			this.element = element;
@@ -122,7 +125,7 @@ public class ShuffleElements implements IMove {
 
 		/**
 		 */
-		public From(final IResource resource, final int index, final ISequenceElement element, final ISequenceElement alternativeElement) {
+		public From(final @Nullable IResource resource, final int index, final @NonNull ISequenceElement element, final @Nullable ISequenceElement alternativeElement) {
 			this.resource = resource;
 			this.index = index;
 			this.element = element;
@@ -156,7 +159,7 @@ public class ShuffleElements implements IMove {
 	private final From[] froms;
 	private final To[] tos;
 
-	private final Collection<IResource> resources = new LinkedHashSet<IResource>();
+	private final @NonNull Collection<@NonNull IResource> resources = new LinkedHashSet<>();
 
 	public ShuffleElements(final From[] froms, final To[] tos) {
 		super();
@@ -167,21 +170,27 @@ public class ShuffleElements implements IMove {
 		int fromSize = 0;
 		int toSize = 0;
 		for (final From from : froms) {
-			resources.add(from.resource);
+			@Nullable
+			IResource fromResource = from.resource;
+			if (fromResource != null) {
+				resources.add(fromResource);
+			}
 			fromSize++;
 		}
 		for (final To to_ : tos) {
-			resources.add(to_.resource);
+			IResource toResource = to_.resource;
+			if (toResource != null) {
+				resources.add(toResource);
+			}
 			toSize += to_.size;
 		}
-		resources.remove(null);
 		if (fromSize != toSize) {
 			throw new IllegalArgumentException("Number of from elements should equal number of to elements sizes");
 		}
 	}
 
 	@Override
-	public Collection<IResource> getAffectedResources() {
+	public @NonNull Collection<@NonNull IResource> getAffectedResources() {
 		return resources;
 	}
 
@@ -193,20 +202,22 @@ public class ShuffleElements implements IMove {
 	@Override
 	public void apply(final IModifiableSequences sequences) {
 
-		final List<ISequenceElement> spare = sequences.getModifiableUnusedElements();
+		final List<@NonNull ISequenceElement> spare = sequences.getModifiableUnusedElements();
 
 		// Remove the various elements first
-		final List<From> seenFroms = new ArrayList<From>(froms.length);
-		final List<ISequenceElement> insertionElements = new ArrayList<ISequenceElement>(froms.length);
+		final List<From> seenFroms = new ArrayList<>(froms.length);
+		final List<ISequenceElement> insertionElements = new ArrayList<>(froms.length);
 		for (final From from : froms) {
 			// The offset - if we have already interacted with this ISequence, then the indicies may need adjusting
 			int offset = 0;
+			@Nullable
+			IResource fromResource = from.resource;
 			for (final From seenFrom : seenFroms) {
-				if (from.resource == seenFrom.resource && from.index > seenFrom.index) {
+				if (fromResource == seenFrom.resource && from.index > seenFrom.index) {
 					++offset;
 				}
 			}
-			final IModifiableSequence seq = from.resource == null ? null : sequences.getModifiableSequence(from.resource);
+			final IModifiableSequence seq = fromResource == null ? null : sequences.getModifiableSequence(fromResource);
 
 			final ISequenceElement e = removeElement(seq, spare, from.index - offset);
 			if (from.element != null) {
@@ -230,18 +241,19 @@ public class ShuffleElements implements IMove {
 			// The offset - if we have already interacted with this ISequence, then the indicies may need adjusting
 			int offset = 0;
 
+			IResource toResource = to_.resource;
 			for (final From seenFrom : seenFroms) {
-				if (to_.resource == seenFrom.resource && to_.index > seenFrom.index) {
+				if (toResource == seenFrom.resource && to_.index > seenFrom.index) {
 					--offset;
 				}
 			}
 
 			for (final To seenTo : seenTos) {
-				if (to_.resource == seenTo.resource && to_.index > seenTo.index) {
-					offset = seenTo.size;
+				if (toResource == seenTo.resource && to_.index > seenTo.index) {
+					offset += seenTo.size;
 				}
 			}
-			final IModifiableSequence seq = to_.resource == null ? null : sequences.getModifiableSequence(to_.resource);
+			final IModifiableSequence seq = toResource == null ? null : sequences.getModifiableSequence(toResource);
 			for (int i = 0; i < to_.size; ++i) {
 				addElement(seq, spare, to_.index + offset++, insertionElements.remove(0));
 			}
@@ -250,7 +262,7 @@ public class ShuffleElements implements IMove {
 
 	}
 
-	private void addElement(final IModifiableSequence seq, final List<ISequenceElement> spare, final int index, final ISequenceElement element) {
+	private void addElement(final @Nullable IModifiableSequence seq, final List<@NonNull ISequenceElement> spare, final int index, final @NonNull ISequenceElement element) {
 		if (seq == null) {
 			spare.add(index, element);
 		} else {
@@ -258,7 +270,7 @@ public class ShuffleElements implements IMove {
 		}
 	}
 
-	private ISequenceElement removeElement(final IModifiableSequence seq, final List<ISequenceElement> spares, final int index) {
+	private ISequenceElement removeElement(final @Nullable IModifiableSequence seq, final List<@NonNull ISequenceElement> spares, final int index) {
 		if (seq == null) {
 			return spares.remove(index);
 		} else {

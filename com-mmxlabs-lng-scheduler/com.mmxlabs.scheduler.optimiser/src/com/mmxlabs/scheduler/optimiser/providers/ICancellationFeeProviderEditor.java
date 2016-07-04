@@ -1,9 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
 /**
@@ -14,8 +17,9 @@ public interface ICancellationFeeProviderEditor extends ICancellationFeeProvider
 
 	/**
 	 * @param portSlot
-	 * @param cost
+	 * @param cancellationFeeCurve
+	 *            expression curve
 	 */
-	public void setCancellationFee(final IPortSlot portSlot, final long cost);
+	void setCancellationExpression(@NonNull IPortSlot portSlot, @NonNull ILongCurve cancellationFeeCurve);
 
 }

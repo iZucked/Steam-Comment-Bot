@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers.guice;
@@ -37,14 +37,15 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMatrixEditor;
 import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider;
-import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
-import com.mmxlabs.scheduler.optimiser.builder.impl.XYPortEuclideanDistanceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ArrayListVolumeAllocationEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProvider;
@@ -59,9 +60,11 @@ import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IGeneratedCharterOutSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IGeneratedCharterOutSlotProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IFOBDESCompatibilityProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IFOBDESCompatibilityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProvider;
@@ -92,6 +95,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProvider;
@@ -102,6 +107,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProvide
 import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ISpotCharterInMarketProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ISpotCharterInMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
@@ -112,8 +119,13 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultAllowedVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImpl;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultFOBDESCompatibilityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultNextLoadDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultPromptPeriodProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultRoundTripVesselPermissionProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultSpotCharterInMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultVesselCharterCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapActualsDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapAlternativeElementProviderEditor;
@@ -122,7 +134,6 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCancellationFeeProv
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapDiscountCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapGeneratedCharterOutPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapLoadPriceCalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapMarkToMarketProviderEditor;
@@ -176,8 +187,9 @@ public class DataComponentProviderModule extends AbstractModule {
 	@Override
 	protected void configure() {
 
-		bind(IXYPortDistanceCalculator.class).to(XYPortEuclideanDistanceCalculator.class);
-		bind(XYPortEuclideanDistanceCalculator.class).in(Singleton.class);
+		bind(DefaultDistanceProviderImpl.class).in(Singleton.class);
+		bind(IDistanceProvider.class).to(DefaultDistanceProviderImpl.class);
+		bind(IDistanceProviderEditor.class).to(DefaultDistanceProviderImpl.class);
 
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 
@@ -209,7 +221,7 @@ public class DataComponentProviderModule extends AbstractModule {
 			elementDurationsProvider = new IndexedElementDurationEditor();
 
 			// Create a default matrix entry
-			portDistanceProvider.set(IMultiMatrixProvider.Default_Key, new IndexedMatrixEditor<IPort, Integer>(Integer.MAX_VALUE));
+			portDistanceProvider.set(ERouteOption.DIRECT.name(), new IndexedMatrixEditor<IPort, Integer>(Integer.MAX_VALUE));
 		} else {
 			portProvider = new HashMapPortEditor();
 			portSlotsProvider = new HashMapPortSlotEditor();
@@ -220,7 +232,7 @@ public class DataComponentProviderModule extends AbstractModule {
 			elementDurationsProvider = new HashMapElementDurationEditor();
 
 			// Create a default matrix entry
-			portDistanceProvider.set(IMultiMatrixProvider.Default_Key, new HashMapMatrixProvider<IPort, Integer>(Integer.MAX_VALUE));
+			portDistanceProvider.set(ERouteOption.DIRECT.name(), new HashMapMatrixProvider<IPort, Integer>(Integer.MAX_VALUE));
 		}
 		bind(IPortProvider.class).toInstance(portProvider);
 		bind(IPortProviderEditor.class).toInstance(portProvider);
@@ -256,7 +268,7 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(IReturnElementProvider.class).toInstance(returnElementProvider);
 		bind(IReturnElementProviderEditor.class).toInstance(returnElementProvider);
 
-		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor(IMultiMatrixProvider.Default_Key);
+		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor();
 		bind(IRouteCostProvider.class).toInstance(routeCostProvider);
 		bind(IRouteCostProviderEditor.class).toInstance(routeCostProvider);
 
@@ -271,7 +283,7 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashSetCalculatorProviderEditor calculatorProvider = new HashSetCalculatorProviderEditor();
 		bind(ICalculatorProvider.class).toInstance(calculatorProvider);
 		bind(ICalculatorProviderEditor.class).toInstance(calculatorProvider);
-		
+
 		final IOptionalElementsProviderEditor optionalElements = new IndexedOptionalElementsEditor();
 		bind(IOptionalElementsProvider.class).toInstance(optionalElements);
 		bind(IOptionalElementsProviderEditor.class).toInstance(optionalElements);
@@ -331,7 +343,7 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashMapLoadPriceCalculatorProviderEditor loadPriceCalculatorProviderEditor = new HashMapLoadPriceCalculatorProviderEditor();
 		bind(ILoadPriceCalculatorProvider.class).toInstance(loadPriceCalculatorProviderEditor);
 		bind(ILoadPriceCalculatorProviderEditor.class).toInstance(loadPriceCalculatorProviderEditor);
-		
+
 		final HashMapMarkToMarketProviderEditor markToMarketEditor = new HashMapMarkToMarketProviderEditor();
 		bind(IMarkToMarketProvider.class).toInstance(markToMarketEditor);
 		bind(IMarkToMarketProviderEditor.class).toInstance(markToMarketEditor);
@@ -374,13 +386,25 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(IBaseFuelCurveProvider.class).toInstance(baseFuelCurveEditor);
 		bind(IBaseFuelCurveProviderEditor.class).toInstance(baseFuelCurveEditor);
 
-		final HashMapGeneratedCharterOutPortSlotEditor generatedCharterOutPortSlotEditor = new HashMapGeneratedCharterOutPortSlotEditor();
-		bind(IGeneratedCharterOutSlotProvider.class).toInstance(generatedCharterOutPortSlotEditor);
-		bind(IGeneratedCharterOutSlotProviderEditor.class).toInstance(generatedCharterOutPortSlotEditor);
-
 		bind(DefaultPromptPeriodProviderEditor.class).in(Singleton.class);
 		bind(IPromptPeriodProvider.class).to(DefaultPromptPeriodProviderEditor.class);
 		bind(IPromptPeriodProviderEditor.class).to(DefaultPromptPeriodProviderEditor.class);
+
+		bind(DefaultRoundTripVesselPermissionProviderEditor.class).in(Singleton.class);
+		bind(IRoundTripVesselPermissionProvider.class).to(DefaultRoundTripVesselPermissionProviderEditor.class);
+		bind(IRoundTripVesselPermissionProviderEditor.class).to(DefaultRoundTripVesselPermissionProviderEditor.class);
+
+		bind(DefaultSpotCharterInMarketProviderEditor.class).in(Singleton.class);
+		bind(ISpotCharterInMarketProvider.class).to(DefaultSpotCharterInMarketProviderEditor.class);
+		bind(ISpotCharterInMarketProviderEditor.class).to(DefaultSpotCharterInMarketProviderEditor.class);
+
+		bind(DefaultFOBDESCompatibilityProviderEditor.class).in(Singleton.class);
+		bind(IFOBDESCompatibilityProvider.class).to(DefaultFOBDESCompatibilityProviderEditor.class);
+		bind(IFOBDESCompatibilityProviderEditor.class).to(DefaultFOBDESCompatibilityProviderEditor.class);
+
+		bind(DefaultAllowedVesselProvider.class).in(Singleton.class);
+		bind(IAllowedVesselProvider.class).to(DefaultAllowedVesselProvider.class);
+		bind(IAllowedVesselProviderEditor.class).to(DefaultAllowedVesselProvider.class);
 	}
 
 	/**

@@ -1,9 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -88,12 +89,13 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 		}
 		boolean valid = true;
 		for (int j = 0; j < sequence.size(); j++) {
-			if (excludedPorts.contains(portProvider.getPortForElement(sequence.get(j)))) {
+			IPort portForElement = portProvider.getPortForElement(sequence.get(j));
+			if (excludedPorts.contains(portForElement)) {
 				if (messages == null) {
 					return false; // fail fast.
 				} else {
 					messages.add("Vessel " + vesselProvider.getVesselAvailability(resource).getVessel().getName() + " is excluded from port "
-							+ portProvider.getPortForElement(sequence.get(j)).getName());
+							+ (portForElement == null ? "(unknown port)" : portForElement.getName()));
 					valid = false;
 				}
 			}
@@ -105,23 +107,25 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 	 * This is a fail-fast version of the method below
 	 */
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences) {
-		return checkConstraints(sequences, null);
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
+		return checkConstraints(sequences, changedResources, null);
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
 		if (portExclusionProvider.hasNoExclusions()) {
 			return true;
 		}
-		final List<IResource> resources = sequences.getResources();
-
+		final Collection<@NonNull IResource> loopResources;
+		if (changedResources == null) {
+			loopResources = sequences.getResources();
+		} else {
+			loopResources = changedResources;
+		}
 		boolean valid = true;
-
-		for (int i = 0; i < sequences.size(); i++) {
-			final IResource resource = resources.get(i);
-			assert resource != null;
-			if (!checkSequence(sequences.getSequence(i), resource, messages)) {
+		for (final IResource resource : loopResources) {
+			final ISequence sequence = sequences.getSequence(resource);
+			if (!checkSequence(sequence, resource, messages)) {
 				if (messages == null) {
 					return false;
 				} else {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
@@ -11,7 +11,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 
 /**
@@ -32,15 +31,6 @@ public final class HashMapBaseFuelCurveEditor implements IBaseFuelCurveProviderE
 			return map.get(baseFuel);
 		}
 		throw new IllegalArgumentException("Unknown basefuel");
-	}
-
-	@Override
-	@NonNull
-	public ICurve getVesselBaseFuelCurve(@NonNull final IVessel vessel) {
-		if (map.containsKey(vessel)) {
-			return map.get(vessel);
-		}
-		throw new IllegalArgumentException("Unknown vessel");
 	}
 
 	@Override

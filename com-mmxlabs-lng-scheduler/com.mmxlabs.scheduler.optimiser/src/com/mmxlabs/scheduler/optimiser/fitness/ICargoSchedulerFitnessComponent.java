@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness;
@@ -27,7 +27,7 @@ public interface ICargoSchedulerFitnessComponent extends ICargoFitnessComponent 
 	/**
 	 * Start evaluating a solution
 	 */
-	void startEvaluation(@NonNull ScheduledSequences scheduledSequences);
+	void startEvaluation(@NonNull ProfitAndLossSequences scheduledSequences);
 
 	/**
 	 * Start evaluating a sequence, which has the given resource associated with it
@@ -69,7 +69,7 @@ public interface ICargoSchedulerFitnessComponent extends ICargoFitnessComponent 
 	 * 
 	 * @return true if the unused elements are OK, or false if there's a problem
 	 */
-	boolean evaluateUnusedSlots(@NonNull List<ISequenceElement> unusedSlots, @NonNull ScheduledSequences scheduleSequences);
+	boolean evaluateUnusedSlots(@NonNull List<@NonNull ISequenceElement> unusedSlots, @NonNull ProfitAndLossSequences scheduleSequences);
 
 	/**
 	 * Finish evaluating a solution and return its cost. The cost should also be stored for {@link IFitnessComponent#getFitness()}.

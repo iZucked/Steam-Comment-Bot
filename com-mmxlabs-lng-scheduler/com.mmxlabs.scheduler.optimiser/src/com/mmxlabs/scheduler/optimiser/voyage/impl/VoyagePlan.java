@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
@@ -25,7 +25,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 public final class VoyagePlan implements Cloneable {
 
 	private IDetailsSequenceElement[] sequence;
-	private int charterInRatePerDay;
+	private long charterInRatePerDay;
 	private final LongFastEnumMap<FuelComponent> fuelConsumptions;
 	private final LongFastEnumMap<FuelComponent> routeAdditionalConsumption;
 	private final LongFastEnumMap<FuelComponent> fuelCosts;
@@ -43,7 +43,7 @@ public final class VoyagePlan implements Cloneable {
 		ignoreEnd = true;
 	}
 
-	protected VoyagePlan(final IDetailsSequenceElement[] sequence, final int charterInRatePerDay, final long fuelVolume, final LongFastEnumMap<FuelComponent> fuelConsumptions,
+	protected VoyagePlan(final IDetailsSequenceElement[] sequence, final long charterInRatePerDay, final long fuelVolume, final LongFastEnumMap<FuelComponent> fuelConsumptions,
 			final LongFastEnumMap<FuelComponent> routeAdditionalConsumption, final LongFastEnumMap<FuelComponent> fuelCosts, final int violationsCount, final boolean ignoreEnd,
 			final long startingHeelInM3, final long remainingHeelInM3) {
 		super();
@@ -131,7 +131,7 @@ public final class VoyagePlan implements Cloneable {
 
 		return false;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		// Simple hashCode implementation to fix findbugs warnings.
@@ -177,13 +177,13 @@ public final class VoyagePlan implements Cloneable {
 		return lngFuelVolume;
 	}
 
-	private int totalRouteCost;
+	private long totalRouteCost;
 
-	public void setTotalRouteCost(final int routeCost) {
+	public void setTotalRouteCost(final long routeCost) {
 		totalRouteCost = routeCost;
 	}
 
-	public int getTotalRouteCost() {
+	public long getTotalRouteCost() {
 		return totalRouteCost;
 	}
 
@@ -223,11 +223,11 @@ public final class VoyagePlan implements Cloneable {
 		this.startingHeelInM3 = startingHeelInM3;
 	}
 
-	public int getCharterInRatePerDay() {
+	public long getCharterInRatePerDay() {
 		return charterInRatePerDay;
 	}
 
-	public void setCharterInRatePerDay(final int charterInRatePerDay) {
+	public void setCharterInRatePerDay(final long charterInRatePerDay) {
 		this.charterInRatePerDay = charterInRatePerDay;
 	}
 }

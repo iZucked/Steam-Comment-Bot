@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
@@ -13,8 +13,8 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -27,7 +27,7 @@ public class ScheduleFitnessEvaluator {
 
 	private Collection<ICargoSchedulerFitnessComponent> fitnessComponents;
 
-	public long evaluateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences) {
+	public long evaluateSchedule(final ISequences sequences, final ProfitAndLossSequences scheduledSequences) {
 
 		// Evaluate fitness components
 		final long[] fitnesses = new long[fitnessComponents.size()];
@@ -66,20 +66,20 @@ public class ScheduleFitnessEvaluator {
 	 *            output parameter containing fitnesses, in the order the iterator provides the components
 	 * @return
 	 */
-	private static boolean iterateSchedulerComponents(@NonNull final Iterable<ICargoSchedulerFitnessComponent> components, @NonNull final ScheduledSequences scheduledSequences,
+	private static boolean iterateSchedulerComponents(@NonNull final Iterable<ICargoSchedulerFitnessComponent> components, @NonNull final ProfitAndLossSequences profitAndLossSequences,
 			@NonNull List<ISequenceElement> unusedElements, final long[] fitnesses) {
 		for (final ICargoSchedulerFitnessComponent component : components) {
-			component.startEvaluation(scheduledSequences);
+			component.startEvaluation(profitAndLossSequences);
 		}
 
-		for (final ScheduledSequence sequence : scheduledSequences) {
+		for (final VolumeAllocatedSequence sequence : profitAndLossSequences.getVolumeAllocatedSequences()) {
 			if (!iterateSchedulerComponents(components, sequence)) {
 				return false;
 			}
 		}
 
 		for (final ICargoSchedulerFitnessComponent component : components) {
-			if (!component.evaluateUnusedSlots(unusedElements, scheduledSequences)) {
+			if (!component.evaluateUnusedSlots(unusedElements, profitAndLossSequences)) {
 				return false;
 			}
 		}
@@ -99,7 +99,7 @@ public class ScheduleFitnessEvaluator {
 	 * @param scheduledSequence
 	 * @return
 	 */
-	private static boolean iterateSchedulerComponents(final Iterable<ICargoSchedulerFitnessComponent> components, final ScheduledSequence scheduledSequence) {
+	private static boolean iterateSchedulerComponents(final Iterable<ICargoSchedulerFitnessComponent> components, final VolumeAllocatedSequence scheduledSequence) {
 
 		final VoyagePlanIterator vpItr = new VoyagePlanIterator(scheduledSequence);
 

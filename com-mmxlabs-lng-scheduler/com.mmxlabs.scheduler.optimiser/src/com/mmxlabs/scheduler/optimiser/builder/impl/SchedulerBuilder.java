@@ -1,10 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.builder.impl;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -16,6 +14,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.OptionalInt;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -27,8 +26,8 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.CheckingIndexingContext;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -46,13 +45,11 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixEditor;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
-import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.DefaultSpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
@@ -60,7 +57,6 @@ import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
-import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -80,19 +76,18 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.BaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.impl.Cargo;
-import com.mmxlabs.scheduler.optimiser.components.impl.CargoShortEnd;
 import com.mmxlabs.scheduler.optimiser.components.impl.DefaultVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndRequirement;
-import com.mmxlabs.scheduler.optimiser.components.impl.GeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptions;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.impl.Port;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.RoundTripCargoEnd;
 import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartRequirement;
@@ -107,10 +102,13 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
+import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IFOBDESCompatibilityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProviderEditor;
@@ -121,10 +119,13 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ISpotCharterInMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
@@ -168,17 +169,17 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@NonNull
 	private final List<IDischargeOption> dischargeSlots = new LinkedList<IDischargeOption>();
 
-	@NonNull
-	private final List<ITimeWindow> timeWindows = new LinkedList<ITimeWindow>();
-
-	/**
-	 * List of end slots, which need to be corrected in getOptimisationData to have the latest time in them
-	 */
-	@NonNull
-	private final List<Pair<ISequenceElement, PortSlot>> endSlots = new LinkedList<>();
+	// /**
+	// * List of end slots, which need to be corrected in getOptimisationData to have the latest time in them
+	// */
+	// @NonNull
+	// private final List<Pair<ISequenceElement, PortSlot>> endSlots = new LinkedList<>();
 
 	@NonNull
 	private final List<MutableTimeWindow> openEndDateWindows = new LinkedList<>();
+
+	@NonNull
+	private final List<MutableTimeWindow> endSlotWindows = new LinkedList<>();
 
 	/**
 	 * A "virtual" port which is zero distance from all other ports, to be used in cases where a vessel can be in any location. This can be replaced with a real location at a later date, after running
@@ -229,17 +230,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private final List<VesselEventPortSlot> vesselEvents = new LinkedList<>();
 
 	@NonNull
-	private final Map<IPortSlot, Set<IVesselAvailability>> slotVesselAvailabilityRestrictions = new HashMap<>();
-
-	@NonNull
-	private final Map<IPortSlot, Set<IVesselClass>> slotVesselClassRestrictions = new HashMap<>();
-
-	@NonNull
 	private final IIndexingContext indexingContext = new CheckingIndexingContext();
-
-	@Inject
-	@NonNull
-	private IXYPortDistanceCalculator distanceProvider;
 
 	@Inject
 	@NonNull
@@ -334,6 +325,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	@NonNull
+	private ISpotCharterInMarketProviderEditor spotCharterInMarketProviderEditor;
+
+	@Inject
+	@NonNull
 	private Provider<IMatrixEditor<IPort, Integer>> matrixEditorProvider;
 
 	@Inject
@@ -368,6 +363,17 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@NonNull
 	private IShippingHoursRestrictionProviderEditor shippingHoursRestrictionProviderEditor;
 
+	@Inject
+	private @NonNull IRoundTripVesselPermissionProviderEditor roundTripVesselPermissionProviderEditor;
+
+	@Inject
+	private @NonNull IAllowedVesselProviderEditor allowedVesselProviderEditor;
+
+	@Inject
+	private IFOBDESCompatibilityProviderEditor fobdesCompatibilityProviderEditor;
+
+	private final List<@NonNull IPortSlot> permittedRoundTripVesselSlots = new LinkedList<>();
+
 	@NonNull
 	private final Map<IPort, MarkToMarket> desPurchaseMTMPortMap = new HashMap<IPort, MarkToMarket>();
 
@@ -379,11 +385,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@NonNull
 	private final Map<IPort, MarkToMarket> fobPurchaseMTMPortMap = new HashMap<IPort, MarkToMarket>();
-	
+
 	@Inject
 	@NonNull
 	private Injector injector;
-	
+
 	/**
 	 * Constant used during end date of scenario calculations - {@link #minDaysFromLastEventToEnd} days extra after last date. See code in {@link SchedulerBuilder#getOptimisationData()}
 	 * 
@@ -394,11 +400,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * Fake vessel class for virtual elements.
 	 */
 	private IVesselClass virtualClass;
-	/**
-	 * Fake vessel class for cargo shorts.
-	 */
-	private IVessel shortCargoVessel;
-	private IVesselAvailability shortCargoVesselAvailability;
 
 	/**
 	 * Map between a virtual sequence element and the virtual {@link IVesselEvent} instance representing it.
@@ -428,7 +429,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}, "UTC"/* no timezone */, 0, Integer.MAX_VALUE);
 
 		// setup fake vessels for virtual elements.
-		virtualClass = createVesselClass("virtual", 0, 0, Long.MAX_VALUE, 0, createBaseFuel("fakeFuel", 0), 0, 0, 0, 0);
+		virtualClass = createVesselClass("virtual", 0, 0, Long.MAX_VALUE, 0, createBaseFuel("fakeFuel", 0), 0, 0, 0, 0, false);
 	}
 
 	/**
@@ -437,21 +438,16 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@NonNull
 	public ILoadSlot createLoadSlot(final String id, final @NonNull IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3, final ILoadPriceCalculator loadContract,
 			final int cargoCVValue, final int durationHours, final boolean cooldownSet, final boolean cooldownForbidden, final int pricingDate, final PricingEventType pricingEvent,
-			final boolean optional, boolean locked, final boolean isSpotMarketSlot, final boolean isVolumeLimitInM3) {
+			final boolean optional, final boolean locked, final boolean isSpotMarketSlot, final boolean isVolumeLimitInM3) {
 
 		if (!ports.contains(port)) {
 			throw new IllegalArgumentException("IPort was not created by this builder");
 		}
-		if (!timeWindows.contains(window)) {
-			throw new IllegalArgumentException("ITimeWindow was not created by this builder");
-		}
 
-		final LoadSlot slot = new LoadSlot();
+		final LoadSlot slot = new LoadSlot(id, port, window, minVolumeInM3, maxVolumeInM3, loadContract, cargoCVValue, cooldownSet, cooldownForbidden);
 
-		slot.setCooldownForbidden(cooldownForbidden);
-		slot.setCooldownSet(cooldownSet);
-		final ISequenceElement element = configureLoadOption(slot, id, port, window, minVolumeInM3, maxVolumeInM3, loadContract, cargoCVValue, pricingDate, pricingEvent, optional, locked,
-				isSpotMarketSlot, isVolumeLimitInM3);
+		final ISequenceElement element = configureLoadOption(slot, minVolumeInM3, maxVolumeInM3, loadContract, cargoCVValue, pricingDate, pricingEvent, optional, locked, isSpotMarketSlot,
+				isVolumeLimitInM3);
 
 		elementDurationsProvider.setElementDuration(element, durationHours);
 
@@ -470,9 +466,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			port = ANYWHERE;
 		}
 
-		final LoadOption slot = new LoadOption();
-		final ISequenceElement element = configureLoadOption(slot, id, port, window, minVolume, maxVolume, priceCalculator, cargoCVValue, pricingDate, pricingEvent, slotIsOptional, locked,
-				isSpotMarketSlot, isVolumeLimitInM3);
+		final LoadOption slot = new LoadOption(id, port, window, minVolume, maxVolume, priceCalculator, cargoCVValue);
+		final ISequenceElement element = configureLoadOption(slot, minVolume, maxVolume, priceCalculator, cargoCVValue, pricingDate, pricingEvent, slotIsOptional, locked, isSpotMarketSlot,
+				isVolumeLimitInM3);
 
 		elementDurationsProvider.setElementDuration(element, durationHours);
 
@@ -484,12 +480,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@NonNull
-	private ISequenceElement configureLoadOption(@NonNull final LoadOption slot, @NonNull final String id, final IPort port, final ITimeWindow window, final long minVolume, final long maxVolume,
-			final ILoadPriceCalculator priceCalculator, final int cargoCVValue, final int pricingDate, final PricingEventType pricingEvent, final boolean optional, final boolean locked,
-			final boolean isSpotMarketSlot, final boolean isVolumeLimitInM3) {
-		slot.setId(id);
-		slot.setPort(port);
-		slot.setTimeWindow(window);
+	private ISequenceElement configureLoadOption(@NonNull final LoadOption slot, final long minVolume, final long maxVolume, final ILoadPriceCalculator priceCalculator, final int cargoCVValue,
+			final int pricingDate, final PricingEventType pricingEvent, final boolean optional, final boolean locked, final boolean isSpotMarketSlot, final boolean isVolumeLimitInM3) {
+
 		if (isVolumeLimitInM3) {
 			slot.setMinLoadVolume(minVolume);
 			slot.setMaxLoadVolume(maxVolume == 0 ? Long.MAX_VALUE : maxVolume);
@@ -508,7 +501,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		loadSlots.add(slot);
 
 		// Create a sequence element against this load slot
-		final SequenceElement element = new SequenceElement(indexingContext, id + "-" + port.getName());
+		final SequenceElement element = new SequenceElement(indexingContext, slot.getId() + "-" + slot.getPort().getName());
 
 		optionalElements.setOptional(element, optional);
 
@@ -519,13 +512,17 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		sequenceElements.add(element);
 
 		// Register the port with the element
-		portProvider.setPortForElement(port, element);
+		portProvider.setPortForElement(slot.getPort(), element);
 
 		portTypeProvider.setPortType(element, PortType.Load);
 
 		portSlotsProvider.setPortSlot(element, slot);
 
-		timeWindowProvider.setTimeWindows(element, Collections.singletonList(window));
+		@Nullable
+		final ITimeWindow timeWindow = slot.getTimeWindow();
+		if (timeWindow != null) {
+			timeWindowProvider.setTimeWindows(element, Collections.singletonList(timeWindow));
+		}
 
 		addSlotToVolumeConstraints(slot);
 
@@ -554,11 +551,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		if (port == null) {
 			port = ANYWHERE;
 		}
+		assert port != null;
 
-		final DischargeOption slot = new DischargeOption();
+		final DischargeOption slot = new DischargeOption(id, port, window, minVolume, maxVolume, minCvValue, maxCvValue, priceCalculator);
+		slot.setPricingDate(pricingDate);
 
-		final ISequenceElement element = configureDischargeOption(slot, id, port, window, minVolume, maxVolume, minCvValue, maxCvValue, priceCalculator, pricingDate, pricingEvent, slotIsOptional,
-				slotIsLocked, isSpotMarketSlot, isVolumeLimitInM3);
+		final ISequenceElement element = configureDischargeOption(slot, minVolume, maxVolume, minCvValue, maxCvValue, priceCalculator, pricingDate, pricingEvent, slotIsOptional, slotIsLocked,
+				isSpotMarketSlot, isVolumeLimitInM3);
 
 		elementDurationsProvider.setElementDuration(element, durationHours);
 
@@ -570,12 +569,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@NonNull
-	private ISequenceElement configureDischargeOption(@NonNull final DischargeOption slot, final String id, final IPort port, final ITimeWindow window, final long minVolume, final long maxVolume,
-			final long minCvValue, final long maxCvValue, final ISalesPriceCalculator priceCalculator, final int pricingDate, final PricingEventType pricingEvent, final boolean optional,
-			final boolean locked, final boolean isSpotMarketSlot, final boolean isVolumeLimitInM3) {
-		slot.setId(id);
-		slot.setPort(port);
-		slot.setTimeWindow(window);
+	private ISequenceElement configureDischargeOption(@NonNull final DischargeOption slot,
+			// final String id, final IPort port, final ITimeWindow window,
+			final long minVolume, final long maxVolume, final long minCvValue, final long maxCvValue, final ISalesPriceCalculator priceCalculator, final int pricingDate,
+			final PricingEventType pricingEvent, final boolean optional, final boolean locked, final boolean isSpotMarketSlot, final boolean isVolumeLimitInM3) {
+		// slot.setId(id);
+		// slot.setPort(port);
+		// slot.setTimeWindow(window);
 		if (isVolumeLimitInM3) {
 			slot.setMinDischargeVolume(minVolume);
 			slot.setMaxDischargeVolume(maxVolume == 0 ? Long.MAX_VALUE : maxVolume);
@@ -594,7 +594,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		dischargeSlots.add(slot);
 
 		// Create a sequence element against this discharge slot
-		final SequenceElement element = new SequenceElement(indexingContext, id + "-" + port.getName());
+		final SequenceElement element = new SequenceElement(indexingContext, slot.getId() + "-" + slot.getPort().getName());
 
 		optionalElements.setOptional(element, optional);
 
@@ -605,14 +605,17 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		sequenceElements.add(element);
 
 		// Register the port with the element
-		portProvider.setPortForElement(port, element);
+		portProvider.setPortForElement(slot.getPort(), element);
 
 		portSlotsProvider.setPortSlot(element, slot);
 
 		portTypeProvider.setPortType(element, PortType.Discharge);
 
-		timeWindowProvider.setTimeWindows(element, Collections.singletonList(window));
-
+		@Nullable
+		final ITimeWindow timeWindow = slot.getTimeWindow();
+		if (timeWindow != null) {
+			timeWindowProvider.setTimeWindows(element, Collections.singletonList(timeWindow));
+		}
 		addSlotToVolumeConstraints(slot);
 
 		calculatorProvider.addSalesPriceCalculator(priceCalculator);
@@ -630,14 +633,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		if (!ports.contains(port)) {
 			throw new IllegalArgumentException("IPort was not created by this builder");
 		}
-		if (!timeWindows.contains(window)) {
-			throw new IllegalArgumentException("ITimeWindow was not created by this builder");
-		}
 
-		final DischargeSlot slot = new DischargeSlot();
+		final DischargeSlot slot = new DischargeSlot(id, port, window, minVolumeInM3, maxVolumeInM3, pricePerMMBTu, minCvValue, maxCvValue);
+		slot.setPricingDate(pricingDate);
 
-		final ISequenceElement element = configureDischargeOption(slot, id, port, window, minVolumeInM3, maxVolumeInM3, minCvValue, maxCvValue, pricePerMMBTu, pricingDate, pricingEvent, optional,
-				isLockedSlot, isSpotMarketSlot, isVolumeLimitInM3);
+		final ISequenceElement element = configureDischargeOption(slot, minVolumeInM3, maxVolumeInM3, minCvValue, maxCvValue, pricePerMMBTu, pricingDate, pricingEvent, optional, isLockedSlot,
+				isSpotMarketSlot, isVolumeLimitInM3);
 
 		elementDurationsProvider.setElementDuration(element, durationHours);
 
@@ -657,9 +658,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	@NonNull
-	public ICargo createCargo(final Collection<IPortSlot> slots, final boolean allowRewiring) {
+	public ICargo createCargo(final @NonNull Collection<@NonNull IPortSlot> slots, final boolean allowRewiring) {
 
-		final Cargo cargo = new Cargo(new ArrayList<IPortSlot>(slots));
+		final Cargo cargo = new Cargo(new ArrayList<>(slots));
 		cargoes.add(cargo);
 
 		// Fix slot pairing if we disallow re-wiring or this is a complex cargo (more than just one load and one discharge)
@@ -733,13 +734,21 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				// is very flexible.
 				final List<ITimeWindow> noTimeWindows = Collections.emptyList();
 				timeWindowProvider.setTimeWindows(element, noTimeWindows);
+			} else if (vesselProvider.getVesselAvailability(resource).getVesselInstanceType().equals(VesselInstanceType.ROUND_TRIP)) {
+				// spot charters have no end time window, because their end date
+				// is very flexible.
+				final List<ITimeWindow> noTimeWindows = Collections.emptyList();
+				timeWindowProvider.setTimeWindows(element, noTimeWindows);
 			} else {
 				// this defers setting the time windows to
 				// getOptimisationData(), which will
 				// choose a suitable end date for the optimisation and set all
 				// the elements in
 				// this list to have a time window around that end date
-				endSlots.add(new Pair<ISequenceElement, PortSlot>(element, slot));
+				MutableTimeWindow mutableWindow = new MutableTimeWindow();
+				slot.setTimeWindow(mutableWindow);
+				timeWindowProvider.setTimeWindows(element, Collections.singletonList(mutableWindow));
+				endSlotWindows.add(mutableWindow);
 			}
 		}
 		return element;
@@ -791,45 +800,49 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// Pin variable for null analysis...
 		final IPort localANYWHERE = ANYWHERE;
 		if (localANYWHERE != null) {
-			setPortToPortDistance(port, localANYWHERE, IMultiMatrixProvider.Default_Key, 0);
-			setPortToPortDistance(localANYWHERE, port, IMultiMatrixProvider.Default_Key, 0);
+			setPortToPortDistance(port, localANYWHERE, ERouteOption.DIRECT, 0);
+			setPortToPortDistance(localANYWHERE, port, ERouteOption.DIRECT, 0);
 		}
 
 		// travel time from A to A should be zero, right?
-		this.setPortToPortDistance(port, port, IMultiMatrixProvider.Default_Key, 0);
+		this.setPortToPortDistance(port, port, ERouteOption.DIRECT, 0);
 
 		calculatorProvider.addCooldownCalculator(cooldownCalculator);
 	}
 
-	@Override
-	@NonNull
-	public ITimeWindow createTimeWindow(final int start, final int end) {
-		return createTimeWindow(start, end, 0);
-	}
+	// @Override
+	// @NonNull
+	// public ITimeWindow createTimeWindow(final int start, final int end) {
+	// return createTimeWindow(start, end, 0);
+	// }
+	//
+	// @Override
+	// @NonNull
+	// public ITimeWindow createTimeWindow(final int start, final int end, final int endFlex) {
+	//
+	// if (end != Integer.MIN_VALUE && start > end) {
+	// throw new IllegalArgumentException("Start time is greater than end time!");
+	// }
+	//
+	// final ITimeWindow window;
+	// if (end == Integer.MIN_VALUE) {
+	// final MutableTimeWindow mutableWindow = new MutableTimeWindow(start, end, endFlex);
+	// openEndDateWindows.add(mutableWindow);
+	// window = mutableWindow;
+	// } else {
+	// window = new TimeWindow(start, end, endFlex);
+	// }
+	//
+	// if (end > endOfLatestWindow) {
+	// endOfLatestWindow = end;
+	// }
+	//
+	// return window;
+	// }
 
 	@Override
-	@NonNull
-	public ITimeWindow createTimeWindow(final int start, final int end, final int endFlex) {
-
-		if (end != Integer.MIN_VALUE && start > end) {
-			throw new IllegalArgumentException("Start time is greater than end time!");
-		}
-
-		final ITimeWindow window;
-		if (end == Integer.MIN_VALUE) {
-			final MutableTimeWindow mutableWindow = new MutableTimeWindow(start, end, endFlex);
-			openEndDateWindows.add(mutableWindow);
-			window = mutableWindow;
-		} else {
-			window = new TimeWindow(start, end, endFlex);
-		}
-
-		if (end > endOfLatestWindow) {
-			endOfLatestWindow = end;
-		}
-
-		timeWindows.add(window);
-		return window;
+	public void addOpenEndWindow(MutableTimeWindow window) {
+		openEndDateWindows.add(window);
 	}
 
 	/**
@@ -860,17 +873,21 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@NonNull
 	public IVesselAvailability createSpotVessel(final String name, final int spotIndex, @NonNull final ISpotCharterInMarket spotCharterInMarket) {
 		final IStartRequirement start = createStartRequirement(ANYWHERE, null, null);
-		final IEndRequirement end = createEndRequirement(Collections.singletonList(ANYWHERE), null, /* endCold */true, 0);
+		final IEndRequirement end = createEndRequirement(Collections.singletonList(ANYWHERE), null, /* endCold */true, 0, false);
 		final IVesselClass vesselClass = spotCharterInMarket.getVesselClass();
-		final ICurve dailyCharterInPrice = spotCharterInMarket.getDailyCharterInRateCurve();
+		final ILongCurve dailyCharterInPrice = spotCharterInMarket.getDailyCharterInRateCurve();
 		final IVessel spotVessel = createVessel(name, vesselClass, vesselClass.getCargoCapacity());
+
 		// End cold already enforced in VoyagePlanner#getVoyageOptionsAndSetVpoChoices
-		return createVesselAvailability(spotVessel, dailyCharterInPrice, VesselInstanceType.SPOT_CHARTER, start, end, spotCharterInMarket, spotIndex);
+		final IVesselAvailability spotAvailability = createVesselAvailability(spotVessel, dailyCharterInPrice, VesselInstanceType.SPOT_CHARTER, start, end, spotCharterInMarket, spotIndex);
+		spotCharterInMarketProviderEditor.addSpotMarketAvailability(spotAvailability, spotCharterInMarket, spotIndex);
+
+		return spotAvailability;
 	}
 
 	@Override
 	@NonNull
-	public IVessel createVessel(final String name, @NonNull final IVesselClass vesselClass, final long cargoCapacity) {
+	public IVessel createVessel(final @NonNull String name, @NonNull final IVesselClass vesselClass, final long cargoCapacity) {
 
 		if (!vesselClasses.contains(vesselClass)) {
 			throw new IllegalArgumentException("IVesselClass was not created using this builder");
@@ -889,13 +906,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	@NonNull
-	public IVesselAvailability createVesselAvailability(@NonNull final IVessel vessel, final ICurve dailyCharterInRate, final VesselInstanceType vesselInstanceType, final IStartRequirement start,
+	public IVesselAvailability createVesselAvailability(@NonNull final IVessel vessel, final ILongCurve dailyCharterInRate, final VesselInstanceType vesselInstanceType, final IStartRequirement start,
 			final IEndRequirement end) {
 		return createVesselAvailability(vessel, dailyCharterInRate, vesselInstanceType, start, end, null, -1);
 	}
 
 	@NonNull
-	private IVesselAvailability createVesselAvailability(@NonNull final IVessel vessel, final ICurve dailyCharterInRate, @NonNull final VesselInstanceType vesselInstanceType,
+	private IVesselAvailability createVesselAvailability(@NonNull final IVessel vessel, final ILongCurve dailyCharterInRate, @NonNull final VesselInstanceType vesselInstanceType,
 			@NonNull final IStartRequirement start, @NonNull final IEndRequirement end, @Nullable final ISpotCharterInMarket spotCharterInMarket, final int spotIndex) {
 		if (!vessels.contains(vessel)) {
 			throw new IllegalArgumentException("IVessel was not created using this builder");
@@ -913,10 +930,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final String name = vessel.getName();// + vesselAvailabilities.size();
 
-		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability();
-		vesselAvailability.setVessel(vessel);
-
-		vesselAvailability.setVesselInstanceType(vesselInstanceType);
+		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability(vessel, vesselInstanceType);
 
 		vesselAvailability.setDailyCharterInRate(dailyCharterInRate);
 
@@ -936,19 +950,25 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		// If no time requirement is specified then the time window is at the
 		// very start of the job
-		final ITimeWindow startWindow = start.hasTimeRequirement() ? start.getTimeWindow() : createTimeWindow(0, 0);
 
-		final StartPortSlot startSlot = new StartPortSlot(start.getHeelOptions());
-		startSlot.setId("start-" + name);
-		startSlot.setPort((start.hasPortRequirement() && start.getLocation() != null) ? start.getLocation() : ANYWHERE);
+		final ITimeWindow startWindow = start.hasTimeRequirement() ? start.getTimeWindow() : TimeWindowMaker.createInclusiveInclusive(0, 0, 0, false);
+		assert startWindow != null;
 
-		startSlot.setTimeWindow(startWindow);
+		final IPort startPort = (start.hasPortRequirement() && start.getLocation() != null) ? start.getLocation() : ANYWHERE;
+		assert startPort != null;
 
-		final EndPortSlot endSlot = new EndPortSlot("end-" + name, (end.hasPortRequirement() && end.getLocation() != null) ? end.getLocation() : ANYWHERE, null, end.isEndCold(),
+		final StartPortSlot startSlot = new StartPortSlot("start-" + name, startPort, startWindow, start.getHeelOptions());
+
+		final SequenceElement startElement = new SequenceElement(indexingContext, startSlot.getId());
+		timeWindowProvider.setTimeWindows(startElement, Collections.singletonList(startWindow));
+
+		final EndPortSlot endSlot = new EndPortSlot("end-" + name, //
+				(end.hasPortRequirement() && end.getLocation() != null) ? end.getLocation() : ANYWHERE, //
+				null, // Time Window
+				end.isEndCold(), //
 				end.getTargetHeelInM3());
 
 		// Create start/end sequence elements for this route
-		final SequenceElement startElement = new SequenceElement(indexingContext, startSlot.getId());
 		final SequenceElement endElement = new SequenceElement(indexingContext, endSlot.getId());
 
 		sequenceElements.add(startElement);
@@ -959,18 +979,19 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		if (end.hasTimeRequirement() == false) {
 			// put end slot into list of slots to patch up later.
 			// Fleet vessels and spot vessels both run to the end of the optimisation if they don't have an end date.
-			if (!vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER)) {
-				endSlots.add(new Pair<ISequenceElement, PortSlot>(endElement, endSlot));
+			if (!vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER) && !vesselInstanceType.equals(VesselInstanceType.ROUND_TRIP)) {
+
+				MutableTimeWindow mutableWindow = new MutableTimeWindow();
+				endSlot.setTimeWindow(mutableWindow);
+				timeWindowProvider.setTimeWindows(endElement, Collections.singletonList(mutableWindow));
+				endSlotWindows.add(mutableWindow);
 			}
 		} else {
-			endSlot.setTimeWindow(end.getTimeWindow());
+			final ITimeWindow endWindow = end.getTimeWindow();
+			assert endWindow != null;
+			endSlot.setTimeWindow(endWindow);
+			timeWindowProvider.setTimeWindows(endElement, Collections.singletonList(endWindow));
 		}
-
-		timeWindowProvider.setTimeWindows(startElement, Collections.singletonList(startSlot.getTimeWindow()));
-
-		if (end.hasTimeRequirement()) {
-			timeWindowProvider.setTimeWindows(endElement, Collections.singletonList(endSlot.getTimeWindow()));
-		} // otherwise this will be set in getOptimisationData().
 
 		startElement.setName(startSlot.getId() + "-" + startSlot.getPort().getName());
 		endElement.setName(endSlot.getId() + "-" + endSlot.getPort().getName());
@@ -1007,7 +1028,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@NonNull
 	public IEndRequirement createEndRequirement() {
-		return createEndRequirement(Collections.singletonList(ANYWHERE), null, false, 0);
+		return createEndRequirement(Collections.singletonList(ANYWHERE), null, false, 0, false);
 	}
 
 	@Override
@@ -1019,17 +1040,18 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	@NonNull
-	public IEndRequirement createEndRequirement(@Nullable final Collection<IPort> portSet, @Nullable final ITimeWindow timeWindow, final boolean endCold, final long targetHeelInM3) {
+	public IEndRequirement createEndRequirement(@Nullable final Collection<IPort> portSet, @Nullable final ITimeWindow timeWindow, final boolean endCold, final long targetHeelInM3,
+			final boolean isOpenEnded) {
 
 		if (portSet == null || portSet.isEmpty()) {
-			return new EndRequirement(Collections.singleton(ANYWHERE), false, timeWindow, endCold, targetHeelInM3);
+			return new EndRequirement(Collections.singleton(ANYWHERE), false, timeWindow, endCold, targetHeelInM3, isOpenEnded);
 		} else {
-			return new EndRequirement(portSet, true, timeWindow, endCold, targetHeelInM3);
+			return new EndRequirement(portSet, true, timeWindow, endCold, targetHeelInM3, isOpenEnded);
 		}
 	}
 
 	@Override
-	public void setPortToPortDistance(@NonNull final IPort from, @NonNull final IPort to, @NonNull final String route, final int distance) {
+	public void setPortToPortDistance(@NonNull final IPort from, @NonNull final IPort to, @NonNull final ERouteOption route, final int distance) {
 
 		if (!ports.contains(from)) {
 			throw new IllegalArgumentException("From IPort was not created using this builder");
@@ -1038,14 +1060,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			throw new IllegalArgumentException("To IPort was not created using this builder");
 		}
 
-		if (portDistanceProvider.containsKey(route) == false) {
+		if (portDistanceProvider.containsKey(route.name()) == false) {
 			/*
 			 * This route has not previously been added to the PDP; initialise a blank matrix here?
 			 */
-			portDistanceProvider.set(route, matrixEditorProvider.get());
+			portDistanceProvider.set(route.name(), matrixEditorProvider.get());
 		}
 
-		final IMatrixEditor<IPort, Integer> matrix = (IMatrixEditor<IPort, Integer>) portDistanceProvider.get(route);
+		final IMatrixEditor<IPort, Integer> matrix = (IMatrixEditor<IPort, Integer>) portDistanceProvider.get(route.name());
 
 		matrix.set(from, to, distance);
 	}
@@ -1053,25 +1075,25 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 */
 	@Override
-	public void setVesselClassRouteCost(final String route, @NonNull final IVesselClass vesselClass, final VesselState state, final long tollPrice) {
-		routeCostProvider.setRouteCost(route, vesselClass, state, tollPrice);
+	public void setVesselRouteCost(final @NonNull ERouteOption route, @NonNull final IVessel vessel, final IRouteCostProvider.@NonNull CostType costType, final long tollPrice) {
+		routeCostProvider.setRouteCost(route, vessel, costType, tollPrice);
 	}
 
 	/**
 	 */
 	@Override
-	public void setDefaultRouteCost(final String route, final long defaultPrice) {
+	public void setDefaultRouteCost(final ERouteOption route, final long defaultPrice) {
 		routeCostProvider.setDefaultRouteCost(route, defaultPrice);
 	}
 
 	@Override
-	public void setVesselClassRouteFuel(final String name, @NonNull final IVesselClass vc, final VesselState vesselState, final long baseFuelInScaledMT, final long nboRateInScaledM3) {
-		routeCostProvider.setRouteFuel(name, vc, vesselState, baseFuelInScaledMT, nboRateInScaledM3);
+	public void setVesselRouteFuel(final @NonNull ERouteOption route, @NonNull final IVessel vessel, final VesselState vesselState, final long baseFuelInScaledMT, final long nboRateInScaledM3) {
+		routeCostProvider.setRouteFuel(route, vessel, vesselState, baseFuelInScaledMT, nboRateInScaledM3);
 	}
 
 	@Override
-	public void setVesselClassRouteTransitTime(final String name, final IVesselClass vc, final int transitTimeInHours) {
-		routeCostProvider.setRouteTransitTime(name, vc, transitTimeInHours);
+	public void setVesselRouteTransitTime(final @NonNull ERouteOption route, final @NonNull IVessel vessel, final int transitTimeInHours) {
+		routeCostProvider.setRouteTransitTime(route, vessel, transitTimeInHours);
 	}
 
 	@Override
@@ -1082,25 +1104,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public IOptimisationData getOptimisationData() {
 
-		final boolean enableCargoShorts = false;
-
-		if (enableCargoShorts) {
-			// // TODO: Look up appropriate definition
-			final IVesselClass cargoShortsClass = vesselClasses.get(1);// createVesselClass("short-class", OptimiserUnitConvertor.convertToInternalSpeed(18.0),
-			assert cargoShortsClass != null;
-			IVessel pShortCargoVessel = createVessel("short-vessel", cargoShortsClass, cargoShortsClass.getCargoCapacity());
-			shortCargoVessel = pShortCargoVessel;
-			assert pShortCargoVessel != null;
-			shortCargoVesselAvailability = createVesselAvailability(pShortCargoVessel, new ConstantValueCurve(200000), VesselInstanceType.CARGO_SHORTS, createStartRequirement(),
-					createEndRequirement());
-		}
 		// create return elements before fixing time windows,
 		// because the next bit will have to patch up their time windows
 		createReturnElements();
 
-		if (enableCargoShorts) {
-			createChargoShortReturnElements();
-		}
+		createRoundtripCargoReturnElements();
 
 		portDistanceProvider.cacheExtremalValues(ports);
 
@@ -1116,11 +1124,15 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			if (cargo.getPortSlots().size() > 1) {
 				final IPortSlot end = cargo.getPortSlots().get(cargo.getPortSlots().size() - 1);
 				final IPortSlot endMinus1 = cargo.getPortSlots().get(cargo.getPortSlots().size() - 2);
-				final int endOfDischargeWindow = end.getTimeWindow().getEnd();
-				if (endOfDischargeWindow > latestDischarge) {
-					latestDischarge = endOfDischargeWindow;
-					loadPort = endMinus1.getPort();
-					dischargePort = end.getPort();
+				@Nullable
+				final ITimeWindow timeWindow = end.getTimeWindow();
+				if (timeWindow != null) {
+					final int endOfDischargeWindow = timeWindow.getExclusiveEnd();
+					if (endOfDischargeWindow > latestDischarge) {
+						latestDischarge = endOfDischargeWindow;
+						loadPort = endMinus1.getPort();
+						dischargePort = end.getPort();
+					}
 				}
 			}
 		}
@@ -1129,7 +1141,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// 1 == return to farthest in time load
 		// 2== end window
 		// 3 == discharge + 60
-		final int rule = 3;
+		// 4 == discharge (minus spot) + 60
+		final int rule = 4;
 		final int latestTime;
 		if (rule == 0) {
 			/**
@@ -1180,17 +1193,33 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			latestTime = Math.max(endOfLatestWindow + (24 * minDaysFromLastEventToEnd), maxFastReturnTime + latestDischarge);
 		} else if (rule == 2) {
 			latestTime = Math.max(endOfLatestWindow, latestDischarge);
-		} else {
+		} else if (rule == 3) {
 			latestTime = Math.max(endOfLatestWindow, latestDischarge) + 60 * 24;
+		} else if (rule == 4) {
+
+			// Include all time windows *except* spot market slots
+			final OptionalInt optionalMax = sequenceElements.stream() //
+					.filter(element -> !spotMarketSlots.isSpotMarketSlot(element)) //
+					.filter(element -> !timeWindowProvider.getTimeWindows(element).isEmpty()) //
+					.mapToInt(element -> timeWindowProvider.getTimeWindows(element).get(0).getExclusiveEnd()) //
+					.max();
+			final int lastFoundTime = optionalMax.isPresent() ? optionalMax.getAsInt() : 0;
+
+			latestTime = Math.max(lastFoundTime, latestDischarge) + 60 * 24;
+		} else {
+			// Invalid rule
+			assert false;
 		}
 
-		for (final Pair<ISequenceElement, PortSlot> elementAndSlot : endSlots) {
-			final ITimeWindow endWindow = createTimeWindow(latestTime, latestTime + (35 * 24));
-			elementAndSlot.getSecond().setTimeWindow(endWindow);
-			timeWindowProvider.setTimeWindows(elementAndSlot.getFirst(), Collections.singletonList(endWindow));
+		startEndRequirementProvider.setNotionalEndTime(latestTime);
+
+		final int windowAdder = (rule == 3 || rule == 4) ? 0 : 35 * 24;
+		for (final MutableTimeWindow window : endSlotWindows) {
+			window.setInclusiveStart(latestTime - 1);
+			window.setExclusiveEnd(latestTime + windowAdder);
 		}
 		for (final MutableTimeWindow window : openEndDateWindows) {
-			window.setEnd(latestTime);
+			window.setExclusiveEnd(latestTime);
 		}
 
 		// Generate DES Purchase and FOB Sale slot bindings before applying vessel restriction constraints
@@ -1199,7 +1228,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		// configure constraints
 		applyAdjacencyConstraints();
-		applyVesselRestrictionConstraints();
 
 		linkMarkToMarkets();
 		// set the self-self distance to zero for all ports to make sure indexed DCP has seen every element.
@@ -1238,24 +1266,28 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 * Generate a new return option for each load port in the solution.
 	 */
-	private void createChargoShortReturnElements() {
-		for (final ILoadOption loadOption : loadSlots) {
-			final ISequenceElement loadElement = portSlotsProvider.getElement(loadOption);
+	private void createRoundtripCargoReturnElements() {
+		for (final IPortSlot portSlot : permittedRoundTripVesselSlots) {
+			if (portSlot instanceof ILoadOption) {
+				final ILoadOption loadOption = (ILoadOption) portSlot;
 
-			final String name = "short-return-to-" + loadElement.getName();
-			final IPort port = loadOption.getPort();
-			final CargoShortEnd returnPortSlot = new CargoShortEnd(name, port);
+				final ISequenceElement loadElement = portSlotsProvider.getElement(loadOption);
 
-			final SequenceElement returnElement = new SequenceElement(indexingContext, name);
-			timeWindowProvider.setTimeWindows(returnElement, Collections.<ITimeWindow> emptyList());
+				final String name = "short-return-to-" + loadElement.getName();
+				final IPort port = loadOption.getPort();
+				final RoundTripCargoEnd returnPortSlot = new RoundTripCargoEnd(name, port);
 
-			elementDurationsProvider.setElementDuration(returnElement, 0);
+				final SequenceElement returnElement = new SequenceElement(indexingContext, name);
+				timeWindowProvider.setTimeWindows(returnElement, Collections.<ITimeWindow> emptyList());
 
-			portProvider.setPortForElement(port, returnElement);
-			portSlotsProvider.setPortSlot(returnElement, returnPortSlot);
-			portTypeProvider.setPortType(returnElement, returnPortSlot.getPortType());
+				elementDurationsProvider.setElementDuration(returnElement, 0);
 
-			shortCargoReturnElementProviderEditor.setReturnElement(loadElement, loadOption, returnElement);
+				portProvider.setPortForElement(port, returnElement);
+				portSlotsProvider.setPortSlot(returnElement, returnPortSlot);
+				portTypeProvider.setPortType(returnElement, returnPortSlot.getPortType());
+
+				shortCargoReturnElementProviderEditor.setReturnElement(loadElement, loadOption, returnElement);
+			}
 		}
 	}
 
@@ -1264,8 +1296,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		assert type == VesselInstanceType.DES_PURCHASE || type == VesselInstanceType.FOB_SALE;
 		// create a new resource for each of these guys, and bind them to their resources
 		assert virtualClass != null;
-		final IVessel virtualVessel = createVessel("virtual-" + element.getName(), virtualClass, virtualClass.getCargoCapacity());
-		final IVesselAvailability virtualVesselAvailability = createVesselAvailability(virtualVessel, ZeroCurve.getInstance(), type, createStartRequirement(), createEndRequirement());
+		final IVessel virtualVessel = createVessel("virtual-" + type.toString() + "-" + element.getName(), virtualClass, virtualClass.getCargoCapacity());
+		final IVesselAvailability virtualVesselAvailability = createVesselAvailability(virtualVessel, ZeroLongCurve.getInstance(), type, createStartRequirement(), createEndRequirement());
 		// Bind every slot to its vessel
 		final IPortSlot portSlot = portSlotsProvider.getPortSlot(element);
 		assert portSlot != null;
@@ -1275,25 +1307,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		virtualVesselSlotProviderEditor.setVesselAvailabilityForElement(virtualVesselAvailability, element);
 
 		return virtualVesselAvailability;
-	}
-
-	@Override
-	public void buildXYDistances() {
-		for (final IPort from : ports) {
-			if (!(from instanceof IXYPort)) {
-				continue;
-			}
-			for (final IPort to : ports) {
-				if (to instanceof IXYPort) {
-					final double dist = distanceProvider.getDistance((IXYPort) from, (IXYPort) to);
-					final int iDist = (int) dist;
-
-					final IMatrixEditor<IPort, Integer> matrix = (IMatrixEditor<IPort, Integer>) portDistanceProvider.get(IMultiMatrixProvider.Default_Key);
-
-					matrix.set(from, to, iDist);
-				}
-			}
-		}
 	}
 
 	@Override
@@ -1317,7 +1330,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	@NonNull
 	public IVesselClass createVesselClass(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final long safetyHeelInM3, final IBaseFuel baseFuel,
-			final int pilotLightRate, final int warmupTimeHours, final long cooldownVolumeM3, final int minBaseFuelConsumptionPerDay) {
+			final int pilotLightRate, final int warmupTimeHours, final long cooldownVolumeM3, final int minBaseFuelConsumptionPerDay, final boolean hasReliqCapability) {
 
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setName(name);
@@ -1335,6 +1348,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vesselClass.setMinBaseFuelConsumptionInMTPerDay(minBaseFuelConsumptionPerDay);
 
 		vesselClass.setBaseFuel(baseFuel);
+
+		vesselClass.setHasReliqCapability(hasReliqCapability);
+
 		vesselClasses.add(vesselClass);
 
 		return vesselClass;
@@ -1401,14 +1417,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		return createVesselEvent(id, PortType.CharterOut, arrival, fromPort, toPort, durationHours, maxHeelOut, heelCVValue, heelUnitPrice, totalHireRevenue, repositioning);
 	}
 
-	/**
-	 */
-	@Override
-	@NonNull
-	public IGeneratedCharterOutVesselEventPortSlot createGeneratedCharterOutEvent(final String id,final IPort fromPort) {
-		return createGeneratedCharterOutVesselEvent(id, fromPort );
-	}
-
 	@Override
 	@NonNull
 	public IVesselEventPortSlot createDrydockEvent(final String id, final ITimeWindow arrival, final IPort port, final int durationHours) {
@@ -1447,71 +1455,18 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		final VesselEventPortSlot slot = new VesselEventPortSlot(id, event.getEndPort(), event.getTimeWindow(), event);
 		slot.setPortType(portType);
 		vesselEvents.add(slot);
-		slotVesselAvailabilityRestrictions.put(slot, new HashSet<IVesselAvailability>());
-		slotVesselClassRestrictions.put(slot, new HashSet<IVesselClass>());
 
 		buildVesselEvent(slot);
 		return slot;
 	}
 
-	/**
-	 */
-	@NonNull
-	private IGeneratedCharterOutVesselEventPortSlot createGeneratedCharterOutVesselEvent(final String id, final IPort fromPort) {
-//		final GeneratedCharterOutVesselEvent event = new GeneratedCharterOutVesselEvent();
-//
-//		// TODO should start port and end port be set on this single sequence
-//		// element,
-//		// or should there be a second invisible sequence element for
-//		// repositioning, and something
-//		// which rigs the distance to be zero between repositioning elements?
-//
-//		event.setTimeWindow(arrival); // TODO: this may fail...
-//		event.setDurationHours(durationHours);
-//		event.setStartPort(fromPort);
-//		event.setEndPort(toPort);
-//		event.setMaxHeelOut(maxHeelOut);
-//		event.setHeelCVValue(heelCVValue);
-//		event.setHeelUnitPrice(heelUnitPrice);
-//		event.setHireOutRevenue(hireCost);
-//		event.setRepositioning(repositioning);
-
-		final GeneratedCharterOutVesselEventPortSlot slot = new GeneratedCharterOutVesselEventPortSlot(id, fromPort);
-		injector.injectMembers(slot);
-//		slot.setPortType(PortType.GeneratedCharterOut);
-		return slot;
-	}
-
-	@Override
-	public void addVesselEventVessel(@NonNull final IVesselEventPortSlot charterOut, final IVesselAvailability vesselAvailability) {
-		checkNotNull(charterOut);
-		checkNotNull(vesselAvailability);
-		if (!vesselAvailabilities.contains(vesselAvailability)) {
-			throw new IllegalArgumentException("IVessel was not created using this builder");
-		}
-		if (!vesselEvents.contains(charterOut)) {
-			throw new IllegalArgumentException("ICharterOut was not created using this builder");
-		}
-		slotVesselAvailabilityRestrictions.get(charterOut).add(vesselAvailability);
-	}
-
-	@Override
-	public void addVesselEventVesselClass(@NonNull final IVesselEventPortSlot charterOut, final IVesselClass vesselClass) {
-		checkNotNull(charterOut);
-		checkNotNull(vesselClass);
-		if (!vesselClasses.contains(vesselClass)) {
-			throw new IllegalArgumentException("IVesselClass was not created using this builder");
-		}
-		if (!vesselEvents.contains(charterOut)) {
-			throw new IllegalArgumentException("ICharterOut was not created using this builder");
-		}
-		slotVesselClassRestrictions.get(charterOut).add(vesselClass);
-	}
-
-	protected void buildVesselEvent(final IVesselEventPortSlot slot) {
+	protected void buildVesselEvent(final VesselEventPortSlot slot) {
 		final IVesselEvent vesselEvent = slot.getVesselEvent();
 
 		final SequenceElement endElement = new SequenceElement(indexingContext, slot.getId());
+
+		final List<@NonNull ISequenceElement> eventSequenceElements = new LinkedList<>();
+		final List<@NonNull IPortSlot> eventPortSlots = new LinkedList<>();
 
 		if (vesselEvent.getStartPort() != vesselEvent.getEndPort()) {
 			// We insert two extra elements and slots, so that we go
@@ -1548,11 +1503,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			sequenceElements.add(redirectElement);
 
 			// replicate vessel constraints
-			constrainSlotToVesselClasses(startSlot, slotVesselClassRestrictions.get(slot));
-			constrainSlotToVesselAvailabilities(startSlot, slotVesselAvailabilityRestrictions.get(slot));
-
-			constrainSlotToVesselClasses(redirectSlot, slotVesselClassRestrictions.get(slot));
-			constrainSlotToVesselAvailabilities(redirectSlot, slotVesselAvailabilityRestrictions.get(slot));
+			// This is now done in the transformer.
+			// constrainSlotToVesselClasses(startSlot, slotVesselClassRestrictions.get(slot));
+			// constrainSlotToVesselAvailabilities(startSlot, slotVesselAvailabilityRestrictions.get(slot));
+			//
+			// constrainSlotToVesselClasses(redirectSlot, slotVesselClassRestrictions.get(slot));
+			// constrainSlotToVesselAvailabilities(redirectSlot, slotVesselAvailabilityRestrictions.get(slot));
 
 			// patch up sequencing constraints
 			if (reverseAdjacencyConstraints.containsKey(slot)) {
@@ -1562,7 +1518,18 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				constrainSlotAdjacency(startSlot, redirectSlot);
 				constrainSlotAdjacency(redirectSlot, slot);
 			}
+			eventPortSlots.add(startSlot);
+			eventSequenceElements.add(startElement);
+
+			eventPortSlots.add(redirectSlot);
+			eventSequenceElements.add(redirectElement);
+
 		}
+		eventPortSlots.add(slot);
+		eventSequenceElements.add(endElement);
+
+		slot.setEventPortSlots(eventPortSlots);
+		slot.setEventSequenceElements(eventSequenceElements);
 
 		sequenceElements.add(endElement);
 
@@ -1632,12 +1599,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}
 	}
 
-	@Override
-	public void setSlotVesselAvailabilityRestriction(final IPortSlot slot, final Set<IVesselAvailability> vesselAvailabilities) {
-
-		assert slot != null;
-		constrainSlotToVesselAvailabilities(slot, vesselAvailabilities);
-	}
+	// @Override
+	// public void setSlotVesselAvailabilityRestriction(final IPortSlot slot, final Set<IVesselAvailability> vesselAvailabilities) {
+	//
+	// assert slot != null;
+	// constrainSlotToVesselAvailabilities(slot, vesselAvailabilities);
+	// }
 
 	@Override
 	/**
@@ -1658,103 +1625,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		for (final Map.Entry<IPortSlot, IPortSlot> entry : forwardAdjacencyConstraints.entrySet()) {
 			orderedSequenceElementsEditor.setElementOrder(portSlotsProvider.getElement(entry.getKey()), portSlotsProvider.getElement(entry.getValue()));
 			assert reverseAdjacencyConstraints.get(entry.getValue()) == entry.getKey() : "Adjacency constraints have become inconsistent";
-		}
-	}
-
-	/**
-	 * Set up the {@link #resourceAllocationProvider} to apply the constraints described in {@link #slotVesselClassRestrictions} and {@link #slotVesselRestrictions}.
-	 */
-	private void applyVesselRestrictionConstraints() {
-		final HashSet<IPortSlot> restrictedSlots = new HashSet<IPortSlot>();
-		restrictedSlots.addAll(slotVesselAvailabilityRestrictions.keySet());
-		restrictedSlots.addAll(slotVesselClassRestrictions.keySet());
-
-		for (final IPortSlot slot : restrictedSlots) {
-
-			Set<IVesselAvailability> allowedVessels = slotVesselAvailabilityRestrictions.get(slot);
-			if (allowedVessels == null) {
-				allowedVessels = Collections.emptySet();
-			}
-
-			Set<IVesselClass> allowedVesselClasses = slotVesselClassRestrictions.get(slot);
-			if (allowedVesselClasses == null) {
-				allowedVesselClasses = Collections.emptySet();
-			}
-
-			if (allowedVesselClasses.isEmpty() && allowedVessels.isEmpty()) {
-				continue;
-			}
-
-			final HashSet<IResource> allowedResources = new HashSet<IResource>();
-
-			for (final IVesselAvailability vesselAvailability : vesselAvailabilities) {
-
-				assert vesselAvailability != null;
-
-				if (allowedVessels.contains(vesselAvailability) || allowedVesselClasses.contains(vesselAvailability.getVessel().getVesselClass())) {
-					/*
-					 * If this is a vessel event, and it's a spot vessel, don't allow it. In future this should probably be handled as a separate kind of constraint (a vessel instance type
-					 * restriction, saying slot X can only go on vessels of types Y and Z)
-					 */
-					if ((slot instanceof IVesselEventPortSlot) && (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER)) {
-						continue;
-					}
-					allowedResources.add(vesselProvider.getResource(vesselAvailability));
-				}
-
-				if (shortCargoVessel != null) {
-					// Cargo shorts only applies to load and discharge slots
-					if (loadSlots.contains(slot) || dischargeSlots.contains(slot)) {
-						allowedResources.add(vesselProvider.getResource(shortCargoVesselAvailability));
-					}
-				}
-			}
-			resourceAllocationProvider.setAllowedResources(portSlotsProvider.getElement(slot), allowedResources);
-		}
-
-		// Finally, allow any other slot to be linked to any non-virtual vessel. This helps the optional move generator.
-		final HashSet<IResource> allowedResources = new HashSet<IResource>();
-
-		for (final IVesselAvailability vesselAvailability : vesselAvailabilities) {
-			assert vesselAvailability != null;
-
-			// Skip virtual vessels
-			if (virtualVesselAvailabilityMap.values().contains(vesselAvailability)) {
-				continue;
-			}
-			allowedResources.add(vesselProvider.getResource(vesselAvailability));
-		}
-
-		final HashSet<IPortSlot> unrestrictedSlots = new HashSet<IPortSlot>();
-		unrestrictedSlots.addAll(loadSlots);
-		unrestrictedSlots.addAll(dischargeSlots);
-		// Note this might not be the correct behaviour for event slots - although typically we expect them to be part of the restrictedSlots array.
-		unrestrictedSlots.addAll(vesselEvents);
-		// unrestrictedSlots.removeAll(unshippedElements);
-		for (final ISequenceElement unshippedElement : unshippedElements) {
-			unrestrictedSlots.add(portSlotsProvider.getPortSlot(unshippedElement));
-		}
-		unrestrictedSlots.removeAll(restrictedSlots);
-		for (final IPortSlot slot : unrestrictedSlots) {
-			resourceAllocationProvider.setAllowedResources(portSlotsProvider.getElement(slot), allowedResources);
-		}
-	}
-
-	@Override
-	public void constrainSlotToVesselAvailabilities(@NonNull final IPortSlot slot, @Nullable Set<IVesselAvailability> vesselAvailabilities) {
-		if ((vesselAvailabilities == null) || vesselAvailabilities.isEmpty()) {
-			slotVesselAvailabilityRestrictions.remove(slot);
-		} else {
-			slotVesselAvailabilityRestrictions.put(slot, new HashSet<>(vesselAvailabilities));
-		}
-	}
-
-	@Override
-	public void constrainSlotToVesselClasses(@NonNull final IPortSlot slot, @Nullable final Set<IVesselClass> vesselClasses) {
-		if ((vesselClasses == null) || vesselClasses.isEmpty()) {
-			slotVesselClassRestrictions.remove(slot);
-		} else {
-			slotVesselClassRestrictions.put(slot, new HashSet<>(vesselClasses));
 		}
 	}
 
@@ -1816,6 +1686,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			if (virtualVesselAvailability == null) {
 				throw new IllegalArgumentException("DES Purchase is not linked to a virtual vesssel");
 			}
+			// Allow the DES Purchase on it's own resource
+			@NonNull
+			final IResource resource = vesselProvider.getResource(virtualVesselAvailability);
+			fobdesCompatibilityProviderEditor.permitElementOnResource(desElement, desPurchase, resource, virtualVesselAvailability);
 
 			for (final IDischargeOption option : dischargeSlots) {
 
@@ -1833,13 +1707,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 						final List<ITimeWindow> tw2 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(option));
 						if (matchingWindows(Collections.singletonList(desPurchaseWindowForPort), tw2) || matchingWindows(tw2, Collections.singletonList(desPurchaseWindowForPort))) {
 
-							Set<IVesselAvailability> set = slotVesselAvailabilityRestrictions.get(option);
-							if (set == null || set.isEmpty()) {
-								set = new HashSet<IVesselAvailability>(realVesselAvailabilities);
-							}
-							set.add(virtualVesselAvailability);
-
-							constrainSlotToVesselAvailabilities(option, set);
+							final ISequenceElement element = portSlotsProvider.getElement(option);
+							fobdesCompatibilityProviderEditor.permitElementOnResource(element, option, resource, virtualVesselAvailability);
 						}
 					}
 				}
@@ -1869,6 +1738,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				throw new IllegalArgumentException("FOB Sale is not linked to a virtual vesssel");
 			}
 
+			// Allow the FOB Sale on it's own resource
+			@NonNull
+			final IResource resource = vesselProvider.getResource(virtualVesselAvailability);
+			fobdesCompatibilityProviderEditor.permitElementOnResource(fobElement, fobSale, resource, virtualVesselAvailability);
+
 			for (final ILoadOption option : loadSlots) {
 
 				// Skip frozen slots - already bound
@@ -1884,13 +1758,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 						final List<ITimeWindow> tw2 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(option));
 						if (matchingWindows(Collections.singletonList(fobSaleWindowForPort), tw2) || matchingWindows(tw2, Collections.singletonList(fobSaleWindowForPort))) {
-							Set<IVesselAvailability> set = slotVesselAvailabilityRestrictions.get(option);
-							if (set == null || set.isEmpty()) {
-								set = new HashSet<IVesselAvailability>(realVesselAvailabilities);
-							}
-							set.add(virtualVesselAvailability);
-
-							constrainSlotToVesselAvailabilities(option, set);
+							final ISequenceElement element = portSlotsProvider.getElement(option);
+							fobdesCompatibilityProviderEditor.permitElementOnResource(element, option, resource, virtualVesselAvailability);
 						}
 					}
 				}
@@ -1910,15 +1779,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		for (final ITimeWindow t1 : tw1) {
 			for (final ITimeWindow t2 : tw2) {
 				// End is within
-				if (t1.getEnd() >= t2.getStart() && t1.getEnd() <= t2.getEnd()) {
+				if (t1.getExclusiveEnd() > t2.getInclusiveStart() && t1.getExclusiveEnd() - 1 < t2.getExclusiveEnd()) {
 					return true;
 				}
 				// Start is within
-				if (t1.getStart() >= t2.getStart() && t1.getStart() <= t2.getEnd()) {
+				if (t1.getInclusiveStart() >= t2.getInclusiveStart() && t1.getInclusiveStart() < t2.getExclusiveEnd()) {
 					return true;
 				}
 			}
-
 		}
 
 		return false;
@@ -1934,21 +1802,21 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		slotGroupCountProvider.createSlotGroup(elements, count);
 	}
 
-	private static final class ZeroCurve implements ICurve {
-		protected ZeroCurve() {
+	private static final class ZeroLongCurve implements ILongCurve {
+		protected ZeroLongCurve() {
 
 		}
 
 		@NonNull
-		private static final ZeroCurve INSTANCE = new ZeroCurve();
+		private static final ZeroLongCurve INSTANCE = new ZeroLongCurve();
 
 		@Override
-		public int getValueAtPoint(final int point) {
+		public long getValueAtPoint(final int point) {
 			return 0;
 		}
 
 		@NonNull
-		public static ZeroCurve getInstance() {
+		public static ZeroLongCurve getInstance() {
 			return INSTANCE;
 		}
 	}
@@ -1963,7 +1831,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 */
 	@Override
-	public void createCharterOutCurve(@NonNull final IVesselClass vesselClass, @NonNull final ICurve charterOutCurve, final int minDuration, final Set<IPort> ports) {
+	public void createCharterOutCurve(@NonNull final IVesselClass vesselClass, @NonNull final ILongCurve charterOutCurve, final int minDuration, final Set<IPort> ports) {
 		charterMarketProviderEditor.addCharterOutOption(vesselClass, charterOutCurve, minDuration, ports);
 	}
 
@@ -2119,22 +1987,25 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setDivertableDESAllowedRoute(@NonNull final IVesselClass vc, @NonNull final List<String> allowedRoutes) {
-		for (final String route : allowedRoutes) {
+	public void setDivertableDESAllowedRoute(@NonNull final ILoadOption loadOption, @NonNull final List<ERouteOption> allowedRoutes) {
+		for (final ERouteOption route : allowedRoutes) {
 			assert route != null;
-			shippingHoursRestrictionProviderEditor.setDivertableDESAllowedRoute(vc, route);
+			shippingHoursRestrictionProviderEditor.setDivertableDESAllowedRoute(loadOption, route);
 		}
 	}
 
 	@Override
 	public void freezeSlotToVesselAvailability(@NonNull final IPortSlot portSlot, @NonNull final IVesselAvailability vesselAvailability) {
-		constrainSlotToVesselAvailabilities(portSlot, Collections.singleton(vesselAvailability));
 		this.frozenSlots.add(portSlot);
+		final ISequenceElement element = portSlotsProvider.getElement(portSlot);
+		final IResource resource = vesselProvider.getResource(vesselAvailability);
+
+		resourceAllocationProvider.setAllowedResources(element, Collections.singleton(resource));
 	}
 
 	@Override
 	@NonNull
-	public ISpotCharterInMarket createSpotCharterInMarket(@NonNull final String name, @NonNull final IVesselClass vesselClass, @NonNull final ICurve dailyCharterInRateCurve,
+	public ISpotCharterInMarket createSpotCharterInMarket(@NonNull final String name, @NonNull final IVesselClass vesselClass, @NonNull final ILongCurve dailyCharterInRateCurve,
 			final int availabilityCount) {
 		return new DefaultSpotCharterInMarket(name, vesselClass, dailyCharterInRateCurve, availabilityCount);
 	}
@@ -2145,4 +2016,43 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		return new SequenceElement(indexingContext, name);
 	}
 
+	@Override
+	@NonNull
+	public IVesselAvailability createRoundTripCargoVessel(@NonNull final String name, @NonNull final ISpotCharterInMarket spotCharterInMarket) {
+
+		final IVesselClass roundTripCargoVesselClass = spotCharterInMarket.getVesselClass();
+
+		final IVessel roundTripCargoVessel = createVessel(name, roundTripCargoVesselClass, roundTripCargoVesselClass.getCargoCapacity());
+
+		final IVesselAvailability vesselAvailability = createVesselAvailability(roundTripCargoVessel, spotCharterInMarket.getDailyCharterInRateCurve(), VesselInstanceType.ROUND_TRIP,
+				createStartRequirement(), createEndRequirement(), spotCharterInMarket, -1);
+
+		spotCharterInMarketProviderEditor.addSpotMarketAvailability(vesselAvailability, spotCharterInMarket, -1);
+		return vesselAvailability;
+	}
+
+	@Override
+	public void bindSlotsToRoundTripVessel(@NonNull final IVesselAvailability roundTripCargoVesselAvailability, @NonNull final IPortSlot @NonNull... slots) {
+
+		ISequenceElement prevElement = null;
+		for (final IPortSlot slot : slots) {
+			final ISequenceElement element = portSlotsProvider.getElement(slot);
+			final IResource resource = vesselProvider.getResource(roundTripCargoVesselAvailability);
+
+			roundTripVesselPermissionProviderEditor.permitElementOnResource(element, slot, resource, roundTripCargoVesselAvailability);
+
+			permittedRoundTripVesselSlots.add(slot);
+
+			if (prevElement != null) {
+				roundTripVesselPermissionProviderEditor.makeBoundPair(prevElement, element);
+			}
+			prevElement = element;
+		}
+	}
+
+	@Override
+	public void setVesselAndClassPermissions(@NonNull final IPortSlot portSlot, @Nullable final List<@NonNull IVessel> permittedVessels,
+			@Nullable final List<@NonNull IVesselClass> permittedVesselClasses) {
+		allowedVesselProviderEditor.setPermittedVesselAndClasses(portSlot, permittedVessels, permittedVesselClasses);
+	}
 }

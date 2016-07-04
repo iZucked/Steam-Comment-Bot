@@ -1,8 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl.indexed;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.indexedobjects.IIndexMap;
 import com.mmxlabs.common.indexedobjects.impl.ArrayIndexMap;
@@ -11,15 +13,16 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class IndexedPortTypeEditor implements IPortTypeProviderEditor {
-	private final IIndexMap<ISequenceElement, PortType> portTypes = new ArrayIndexMap<ISequenceElement, PortType>();
+	private final IIndexMap<@NonNull ISequenceElement, @NonNull PortType> portTypes = new ArrayIndexMap<>();
 
 	@Override
-	public PortType getPortType(final ISequenceElement sequenceElement) {
+	@NonNull
+	public PortType getPortType(final @NonNull ISequenceElement sequenceElement) {
 		return portTypes.get(sequenceElement);
 	}
 
 	@Override
-	public void setPortType(final ISequenceElement sequenceElement, final PortType portType) {
+	public void setPortType(final @NonNull ISequenceElement sequenceElement, final @NonNull PortType portType) {
 		portTypes.set(sequenceElement, portType);
 	}
 }

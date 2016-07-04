@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
@@ -9,9 +9,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 
 /**
  * Relaxing sequence scheduler; solution procedure is like this:
@@ -31,7 +29,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 	final int steps = 20;
 
 	@Override
-	public ScheduledSequences schedule(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
+	public int @Nullable [][] schedule(@NonNull final ISequences sequences) {
 		// setSequences(sequences);
 		// resetBest();
 		// prepare2();
@@ -51,7 +49,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 		// final int min = arrivalTimes[seq][pos];
 		// final int max = getMaxArrivalTime(seq, pos);
 		// // log.debug("relax(" + seq + ", " + pos + "), time between " + min
-		// // + ",  " + max);
+		// // + ", " + max);
 		// int lastArrivalTime;
 		// for (int step = 0; step < steps; step++) {
 		// final int i = min + 1 + ((step * ((max - min) + 1)) / steps);

@@ -1,9 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -52,19 +53,26 @@ public class DifferentSTSVesselsConstraintChecker implements IConstraintChecker 
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences) {
-		return checkConstraints(sequences, null);
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
+		return checkConstraints(sequences, changedResources, null);
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
 
-		for (final IResource resource : sequences.getResources()) {
+		final Collection<@NonNull IResource> loopResources;
+		if (changedResources == null) {
+			loopResources = sequences.getResources();
+		} else {
+			loopResources = changedResources;
+		}
+
+		for (final IResource resource : loopResources) {
 			final ISequence sequence = sequences.getSequence(resource);
 
 			// TODO: Skip special routes
 
-			final Set<IPortSlot> sequenceElements = new HashSet<IPortSlot>();
+			final Set<@NonNull IPortSlot> sequenceElements = new HashSet<>();
 
 			// Loop over all sequence elements
 			for (final ISequenceElement element : sequence) {

@@ -1,8 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.voyage;
+
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * Units of Measure for Fuel / Gas etc
@@ -10,6 +12,7 @@ package com.mmxlabs.scheduler.optimiser.voyage;
  * @author Simon Goodall
  * 
  */
+@NonNullByDefault
 public enum FuelUnit {
 
 	/**

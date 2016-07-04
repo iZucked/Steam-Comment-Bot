@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
@@ -7,6 +7,8 @@ package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -57,7 +59,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 	 */
 	@Override
 	public IAllocationAnnotation allocate(final AllocationRecord allocationRecord) {
-		final List<IPortSlot> slots = allocationRecord.slots;
+		final List<@NonNull IPortSlot> slots = allocationRecord.slots;
 
 		final AllocationAnnotation annotation = new AllocationAnnotation();
 
@@ -85,7 +87,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			{
 				final IPortSlot slot = allocationRecord.portTimesRecord.getReturnSlot();
 				if (slot != null) {
-					annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
+					annotation.setReturnSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
 				}
 			}
 			// break out before we get to the m3 to mmbtu calcs which would overwrite the actuals data
@@ -141,6 +143,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			}
 
 			final IPortSlot returnSlot = allocationRecord.returnSlot;
+			assert returnSlot != null;
 
 			final long returnSlotHeelInM3;
 			if (lastSlot != null && actualsDataProvider.hasReturnActuals(lastSlot)) {
@@ -161,7 +164,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			{
 				final IPortSlot slot = allocationRecord.portTimesRecord.getReturnSlot();
 				if (slot != null) {
-					annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
+					annotation.setReturnSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
 				}
 			}
 			// break out before we get to the m3 to mmbtu calcs which would overwrite the actuals data
@@ -337,7 +340,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		{
 			final IPortSlot slot = allocationRecord.portTimesRecord.getReturnSlot();
 			if (slot != null) {
-				annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
+				annotation.setReturnSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
 			}
 		}
 		return annotation;
@@ -387,8 +390,8 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 	 * @param transferVolumeMMBTU
 	 * @param transferVolumeM3
 	 */
-	private void setTransferVolume(final AllocationRecord allocationRecord, final List<IPortSlot> slots, final AllocationAnnotation annotation, final long transferVolumeMMBTU,
-			final long transferVolumeM3) {
+	private void setTransferVolume(final @NonNull AllocationRecord allocationRecord, final @NonNull List<@NonNull IPortSlot> slots, final @NonNull AllocationAnnotation annotation,
+			final long transferVolumeMMBTU, final long transferVolumeM3) {
 		for (int i = 0; i < slots.size(); ++i) {
 			final IPortSlot slot = slots.get(i);
 			annotation.setSlotVolumeInMMBTu(slot, transferVolumeMMBTU);

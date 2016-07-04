@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
@@ -10,18 +10,23 @@ import java.util.List;
 
 import javax.inject.Singleton;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
+import com.google.inject.name.Names;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.constraints.impl.EvaluatedStateConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
@@ -30,10 +35,14 @@ import com.mmxlabs.optimiser.core.fitness.impl.FitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessHelper;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeModule;
 import com.mmxlabs.optimiser.core.modules.ConstraintCheckerInstantiatorModule;
+import com.mmxlabs.optimiser.core.modules.EvaluatedStateConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluationProcessInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.FitnessFunctionInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.OptimiserContextModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.CapacityEvaluatedStateCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.LatenessEvaluatedStateCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
@@ -42,6 +51,8 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselStartDateCharterRate
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcessFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ExcessIdleTimeComponentParameters;
+import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
@@ -70,6 +81,7 @@ public class ScheduleTestModule extends AbstractModule {
 		install(new ConstraintCheckerInstantiatorModule());
 		install(new FitnessFunctionInstantiatorModule());
 		install(new EvaluationProcessInstantiatorModule());
+		install(new EvaluatedStateConstraintCheckerInstantiatorModule());
 
 		bind(IFitnessHelper.class).to(FitnessHelper.class);
 
@@ -95,6 +107,8 @@ public class ScheduleTestModule extends AbstractModule {
 		bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
 		bind(VesselBaseFuelCalculator.class).in(Singleton.class);
 
+		bind(IEndEventScheduler.class).to(DefaultEndEventScheduler.class);
+
 		// if (Platform.isRunning()) {
 		// bind(IFitnessFunctionRegistry.class).toProvider(service(IFitnessFunctionRegistry.class).single());
 		// bind(IConstraintCheckerRegistry.class).toProvider(service(IConstraintCheckerRegistry.class).single());
@@ -102,10 +116,14 @@ public class ScheduleTestModule extends AbstractModule {
 		// }
 
 		// bind(IOptimisationTransformer.class).to(OptimisationTransformer.class).in(Singleton.class);
+
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(Boolean.FALSE);
 	}
 
 	@Provides
-	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(final VoyagePlanOptimiser delegate) {
+	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(final @NonNull VoyagePlanOptimiser delegate) {
 		final CachingVoyagePlanOptimiser cachingVoyagePlanOptimiser = new CachingVoyagePlanOptimiser(delegate, DEFAULT_VPO_CACHE_SIZE);
 		return cachingVoyagePlanOptimiser;
 	}
@@ -179,6 +197,25 @@ public class ScheduleTestModule extends AbstractModule {
 
 	@Provides
 	@Singleton
+	private IEvaluatedStateConstraintCheckerRegistry createEvaluatedStateConstraintCheckerRegistry(final Injector injector) {
+		final IEvaluatedStateConstraintCheckerRegistry evaluationProcessRegistry = new EvaluatedStateConstraintCheckerRegistry();
+
+		{
+			final LatenessEvaluatedStateCheckerFactory factory = new LatenessEvaluatedStateCheckerFactory();
+			injector.injectMembers(factory);
+			evaluationProcessRegistry.registerConstraintCheckerFactory(factory);
+		}
+		{
+			final CapacityEvaluatedStateCheckerFactory factory = new CapacityEvaluatedStateCheckerFactory();
+			injector.injectMembers(factory);
+			evaluationProcessRegistry.registerConstraintCheckerFactory(factory);
+		}
+
+		return evaluationProcessRegistry;
+	}
+
+	@Provides
+	@Singleton
 	@Named(ConstraintCheckerInstantiatorModule.ENABLED_CONSTRAINT_NAMES)
 	private List<String> provideEnabledConstraintNames(final IConstraintCheckerRegistry registry) {
 		final List<String> result = new ArrayList<String>(registry.getConstraintCheckerNames());
@@ -198,6 +235,14 @@ public class ScheduleTestModule extends AbstractModule {
 	@Named(EvaluationProcessInstantiatorModule.ENABLED_EVALUATION_PROCESS_NAMES)
 	private List<String> provideEnabledEvaluationProcessNames(final IEvaluationProcessRegistry registry) {
 		final List<String> result = new ArrayList<String>(registry.getEvaluationProcessNames());
+		return result;
+	}
+
+	@Provides
+	@Singleton
+	@Named(EvaluatedStateConstraintCheckerInstantiatorModule.ENABLED_EVALUATED_STATE_CONSTRAINT_NAMES)
+	private List<String> provideEnabledEvaluatedStateCheckerNames(final IEvaluatedStateConstraintCheckerRegistry registry) {
+		final List<String> result = new ArrayList<String>(registry.getConstraintCheckerNames());
 		return result;
 	}
 
@@ -225,6 +270,21 @@ public class ScheduleTestModule extends AbstractModule {
 	private ISequences provideInputSequences(@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) ISequences initialSequences) {
 
 		return initialSequences;
+	}
+
+	@Provides
+	@Singleton
+	private IExcessIdleTimeComponentParameters provideIdleComponentParameters() {
+		final ExcessIdleTimeComponentParameters idleParams = new ExcessIdleTimeComponentParameters();
+		int highPeriodInDays = 15;
+		int lowPeriodInDays = Math.max(0, highPeriodInDays - 2);
+		idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, lowPeriodInDays * 24);
+		idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, highPeriodInDays * 24);
+		idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, 2_500);
+		idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, 10_000);
+		idleParams.setEndWeight(10_000);
+
+		return idleParams;
 	}
 
 	@Provides

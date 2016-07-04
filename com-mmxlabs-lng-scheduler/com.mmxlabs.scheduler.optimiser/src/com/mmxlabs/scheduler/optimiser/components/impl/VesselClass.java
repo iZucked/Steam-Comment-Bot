@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
@@ -58,7 +58,9 @@ public final class VesselClass implements IVesselClass {
 	private int warmupTime;
 
 	private IBaseFuel baseFuel = null;
-	
+
+	private boolean hasReliqCapability;
+
 	@Override
 	public String getName() {
 		return name;
@@ -168,14 +170,14 @@ public final class VesselClass implements IVesselClass {
 		consumptionRate.put(vesselState, calc);
 	}
 
-//	@Override
-//	public int getBaseFuelConversionFactor() {
-//		return baseFuelConversionFactor;
-//	}
-//
-//	public void setBaseFuelConversionFactor(final int baseFuelConversionFactor) {
-//		this.baseFuelConversionFactor = baseFuelConversionFactor;
-//	}
+	// @Override
+	// public int getBaseFuelConversionFactor() {
+	// return baseFuelConversionFactor;
+	// }
+	//
+	// public void setBaseFuelConversionFactor(final int baseFuelConversionFactor) {
+	// this.baseFuelConversionFactor = baseFuelConversionFactor;
+	// }
 
 	@Override
 	public final long getPilotLightRate() {
@@ -226,9 +228,18 @@ public final class VesselClass implements IVesselClass {
 	public IBaseFuel getBaseFuel() {
 		return baseFuel;
 	}
-	
+
 	@Override
-	public void setBaseFuel(IBaseFuel bf) {
+	public void setBaseFuel(final IBaseFuel bf) {
 		baseFuel = bf;
+	}
+
+	@Override
+	public boolean hasReliqCapability() {
+		return hasReliqCapability;
+	}
+
+	public void setHasReliqCapability(final boolean hasReliqCapability) {
+		this.hasReliqCapability = hasReliqCapability;
 	}
 }

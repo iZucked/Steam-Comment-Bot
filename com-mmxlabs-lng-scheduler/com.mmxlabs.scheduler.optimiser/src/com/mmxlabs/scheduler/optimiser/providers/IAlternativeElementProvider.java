@@ -1,10 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
 import java.util.Collection;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
@@ -23,7 +25,7 @@ public interface IAlternativeElementProvider extends IDataComponentProvider {
 	 * @param element
 	 * @return
 	 */
-	boolean hasAlternativeElement(ISequenceElement element);
+	boolean hasAlternativeElement(@NonNull ISequenceElement element);
 
 	/**
 	 * Returns the alternative (or the original) element to the given one.
@@ -31,7 +33,8 @@ public interface IAlternativeElementProvider extends IDataComponentProvider {
 	 * @param element
 	 * @return
 	 */
-	ISequenceElement getAlternativeElement(ISequenceElement element);
+	@NonNull
+	ISequenceElement getAlternativeElement(@NonNull ISequenceElement element);
 
 	/**
 	 * Returns true if this element is an alternative element - not an original.
@@ -39,7 +42,7 @@ public interface IAlternativeElementProvider extends IDataComponentProvider {
 	 * @param element
 	 * @return
 	 */
-	boolean isElementAlternative(ISequenceElement element);
+	boolean isElementAlternative(@NonNull ISequenceElement element);
 
 	/**
 	 * Returns true iff this element has been registered with the provider and is the original element.
@@ -47,12 +50,13 @@ public interface IAlternativeElementProvider extends IDataComponentProvider {
 	 * @param element
 	 * @return
 	 */
-	boolean isElementOriginal(ISequenceElement element);
+	boolean isElementOriginal(@NonNull ISequenceElement element);
 
 	/**
 	 * Returns all the elements which are alternatives
 	 * 
 	 * @return
 	 */
-	Collection<ISequenceElement> getAllAlternativeElements();
+	@NonNull
+	Collection<@NonNull ISequenceElement> getAllAlternativeElements();
 }

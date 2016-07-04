@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.builder.impl;
@@ -52,25 +52,15 @@ public class SchedulerBuilderTest {
 		final SchedulerBuilder builder = createScheduleBuilder();
 
 		final IPort port = Mockito.mock(IPort.class);
-		final ITimeWindow window = builder.createTimeWindow(0, 0);
+		final ITimeWindow window = TimeWindowMaker.createInclusiveInclusive(0, 0, 0, false);
 
 		final ILoadPriceCalculator contract = Mockito.mock(ILoadPriceCalculator.class);
 
 		builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testCreateLoadSlot3() {
 
-		final SchedulerBuilder builder = createScheduleBuilder();
 
-		final IPort port = builder.createPortForTest("port", false, null, "UTC");
-		final ITimeWindow window = Mockito.mock(ITimeWindow.class);
-
-		final ILoadPriceCalculator contract = Mockito.mock(ILoadPriceCalculator.class);
-
-		builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
-	}
 
 	@Ignore
 	@Test
@@ -84,80 +74,15 @@ public class SchedulerBuilderTest {
 		final SchedulerBuilder builder = createScheduleBuilder();
 
 		final IPort port = Mockito.mock(IPort.class);
-		final ITimeWindow window = builder.createTimeWindow(0, 0);
+		final ITimeWindow window = TimeWindowMaker.createInclusiveInclusive(0, 0, 0, false);
 
 		final ISalesPriceCalculator curve = Mockito.mock(ISalesPriceCalculator.class);
 
-		builder.createDischargeSlot("id", port, window, 0, 0, 0, Long.MAX_VALUE, curve, 0, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
+		builder.createDischargeSlot("id", port, window, 0, 0, 0, Long.MAX_VALUE, curve, 0, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false,
+				DEFAULT_VOLUME_LIMIT_IS_M3);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testCreateDischargeSlot3() {
 
-		final SchedulerBuilder builder = createScheduleBuilder();
-
-		final IPort port = builder.createPortForTest("port", false, null, "UTC");
-		final ITimeWindow window = Mockito.mock(ITimeWindow.class);
-
-		final ISalesPriceCalculator curve = Mockito.mock(ISalesPriceCalculator.class);
-
-		builder.createDischargeSlot("id", port, window, 0, 0, 0, Long.MAX_VALUE, curve, 0, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
-	}
-
-	@Ignore
-	@Test
-	public void testCreatePortString() {
-		fail("Not yet implemented");
-	}
-
-	@Ignore
-	@Test
-	public void testCreatePortStringFloatFloat() {
-		fail("Not yet implemented");
-	}
-
-	@Ignore
-	@Test
-	public void testCreateTimeWindow() {
-
-		final SchedulerBuilder builder = createScheduleBuilder();
-		final ITimeWindow window = builder.createTimeWindow(10, 20);
-
-		Assert.assertEquals(10, window.getStart());
-		Assert.assertEquals(20, window.getEnd());
-
-		fail("Not yet implemented - Test internal state");
-	}
-
-	@Ignore
-	@Test
-	public void testCreateVessel() {
-		fail("Not yet implemented");
-	}
-
-	@Ignore
-	@Test
-	public void testSetPortToPortDistance() {
-		fail("Not yet implemented");
-	}
-
-	@Ignore
-	@Test
-	public void testSetElementDurations() {
-		fail("Not yet implemented");
-	}
-
-	@Ignore
-	@Test
-	public void testGetOptimisationData() {
-		fail("Not yet implemented");
-	}
-
-	@Ignore
-	@Test
-	public void testDispose() {
-		fail("Not yet implemented");
-	}
 
 	@Ignore
 	@Test
@@ -172,7 +97,7 @@ public class SchedulerBuilderTest {
 
 		final IBaseFuel baseFuel = new BaseFuel("test");
 		baseFuel.setEquivalenceFactor(1000);
-		final IVesselClass vesselClass = builder.createVesselClass("name", minSpeed, maxSpeed, capacity, safetyHeel, baseFuel, 0, 35353, 10101, 0);
+		final IVesselClass vesselClass = builder.createVesselClass("name", minSpeed, maxSpeed, capacity, safetyHeel, baseFuel, 0, 35353, 10101, 0, false);
 		// createVesselClass("name", minSpeed,
 		// maxSpeed, capacity, safetyHeel, 700;
 
@@ -187,12 +112,6 @@ public class SchedulerBuilderTest {
 		Assert.assertEquals(10101, vesselClass.getCooldownVolume());
 
 		fail("Not yet implemented - Internal state checks");
-	}
-
-	@Ignore
-	@Test
-	public void testSetVesselClassStateParamaters() {
-		fail("Not yet implemented");
 	}
 
 	private SchedulerBuilder createScheduleBuilder() {

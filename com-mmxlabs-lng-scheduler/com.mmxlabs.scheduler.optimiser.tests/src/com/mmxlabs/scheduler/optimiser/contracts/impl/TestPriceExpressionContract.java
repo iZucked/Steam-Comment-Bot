@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -25,8 +26,14 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
+import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
+import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
+import com.mmxlabs.scheduler.optimiser.curves.IntegerIntervalCurve;
+import com.mmxlabs.scheduler.optimiser.curves.PriceIntervalProducer;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -49,7 +56,8 @@ public class TestPriceExpressionContract {
 	public void testCalculateSimpleUnitPrice() {
 		// create a PriceExpressionContract with a mocked ICurve object
 		final ICurve curve = mock(ICurve.class);
-		PriceExpressionContract contract = createPriceExpressionContract(curve);
+		final IVesselProvider vesselProvider = mock(IVesselProvider.class);
+		final PriceExpressionContract contract = createPriceExpressionContract(curve, vesselProvider);
 
 		// create named test constants
 		final int p1 = (int) OptimiserUnitConvertor.convertToInternalDailyCost(40);
@@ -57,7 +65,7 @@ public class TestPriceExpressionContract {
 		final int t1 = 35;
 		final int t2 = 55;
 
-		IPort port = mock(IPort.class);
+		final IPort port = mock(IPort.class);
 		when(port.getTimeZoneId()).thenReturn("UTC");
 
 		// tell the ICurve mock to return specified values at given points
@@ -83,7 +91,8 @@ public class TestPriceExpressionContract {
 	public void testCalculateLoadUnitPrice() {
 		// create a PriceExpressionContract with a mocked ICurve object
 		final ICurve curve = mock(ICurve.class);
-		PriceExpressionContract contract = createPriceExpressionContract(curve);
+		final IVesselProvider vesselProvider = mock(IVesselProvider.class);
+		final PriceExpressionContract contract = createPriceExpressionContract(curve, vesselProvider);
 
 		// create named test constants
 		final int priceAtLoadTime = (int) OptimiserUnitConvertor.convertToInternalDailyCost(40);
@@ -110,9 +119,11 @@ public class TestPriceExpressionContract {
 		final int dischargePricePerMMBTu = 40;
 		final long dischargeVolumeInM3 = 100;
 		final long loadVolumeInM3 = 200;
-		int vesselStartTime = 0;
+		final int vesselStartTime = 0;
 		final IVesselAvailability vesselAvailability = mock(IVesselAvailability.class);
 		final VoyagePlan plan = new VoyagePlan();
+		final VolumeAllocatedSequences volumeAllocatedSequences = Mockito.mock(VolumeAllocatedSequences.class);
+
 		final IDetailTree annotations = mock(IDetailTree.class);
 
 		final IAllocationAnnotation allocationAnnotation = mock(IAllocationAnnotation.class);
@@ -125,10 +136,10 @@ public class TestPriceExpressionContract {
 		when(allocationAnnotation.getSlotVolumeInM3(dischargeSlot)).thenReturn(dischargeVolumeInM3);
 
 		final int loadPriceWithPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotWithPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vesselAvailability,
-				vesselStartTime, plan, annotations);
+				vesselStartTime, plan, volumeAllocatedSequences, annotations);
 
 		final int loadPriceNoPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotNoPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vesselAvailability, vesselStartTime,
-				plan, annotations);
+				plan, volumeAllocatedSequences, annotations);
 
 		verify(curve).getValueAtPoint(loadPricingDate);
 		verify(curve).getValueAtPoint(loadTime);
@@ -154,7 +165,8 @@ public class TestPriceExpressionContract {
 	public void testCalculateDischargeUnitPrice() {
 		// create a PriceExpressionContract with a mocked ICurve object
 		final ICurve curve = mock(ICurve.class);
-		PriceExpressionContract contract = createPriceExpressionContract(curve);
+		final IVesselProvider vesselProvider = mock(IVesselProvider.class);
+		final PriceExpressionContract contract = createPriceExpressionContract(curve, vesselProvider);
 
 		// create named test constants
 		final int priceAtDischargeTime = (int) OptimiserUnitConvertor.convertToInternalDailyCost(40);
@@ -176,7 +188,7 @@ public class TestPriceExpressionContract {
 		final IDischargeSlot dischargeSlotNoPricingDate = mock(IDischargeSlot.class);
 		when(dischargeSlotNoPricingDate.getPricingDate()).thenReturn(IPortSlot.NO_PRICING_DATE);
 
-		IPortTimesRecord portTimesRecord1 = mock(IPortTimesRecord.class);
+		final IPortTimesRecord portTimesRecord1 = mock(IPortTimesRecord.class);
 		when(portTimesRecord1.getSlotTime(dischargeSlotWithPricingDate)).thenReturn(dischargeTime);
 
 		when(dischargeSlotNoPricingDate.getPricingEvent()).thenReturn(PricingEventType.START_OF_DISCHARGE);
@@ -184,7 +196,7 @@ public class TestPriceExpressionContract {
 		final int salesPriceWithPricingDate = contract.estimateSalesUnitPrice(dischargeSlotWithPricingDate, portTimesRecord1, null);
 		verify(curve).getValueAtPoint(pricingDate);
 
-		IPortTimesRecord portTimesRecord2 = mock(IPortTimesRecord.class);
+		final IPortTimesRecord portTimesRecord2 = mock(IPortTimesRecord.class);
 		when(portTimesRecord2.getSlotTime(dischargeSlotNoPricingDate)).thenReturn(dischargeTime);
 
 		final int salesPriceNoPricingDate = contract.estimateSalesUnitPrice(dischargeSlotNoPricingDate, portTimesRecord2, null);
@@ -198,15 +210,24 @@ public class TestPriceExpressionContract {
 
 	}
 
-	private PriceExpressionContract createPriceExpressionContract(final ICurve curve) {
-		PriceExpressionContract contract = new PriceExpressionContract(curve);
+	private PriceExpressionContract createPriceExpressionContract(final ICurve curve, @NonNull final IVesselProvider vesselProvider) {
+		final IIntegerIntervalCurve integerIntervalCurve = new IntegerIntervalCurve();
+		for (int i = 0; i < 2000; i++) {
+			if (i % 31 == 0) {
+				integerIntervalCurve.add(i);
+			}
+		}
+		final PriceExpressionContract contract = new PriceExpressionContract(curve, integerIntervalCurve);
 
-		Injector injector = Guice.createInjector(new AbstractModule() {
+		final Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
 			protected void configure() {
 				bind(ITimeZoneToUtcOffsetProvider.class).to(TimeZoneToUtcOffsetProvider.class);
+				bind(IPriceIntervalProducer.class).to(PriceIntervalProducer.class);
+				bind(IVesselProvider.class).toInstance(vesselProvider);
 			}
+
 		});
 
 		injector.injectMembers(contract);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
@@ -14,8 +14,9 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -29,31 +30,34 @@ public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessCo
 	@Inject
 	private IPortSlotProvider portSlotProvider;
 
+	@Inject
+	private IVesselProvider vesselProvider;
+
 	private long accumulator = 0;
 
-	private ScheduledSequences scheduledSequences;
+	private ProfitAndLossSequences profitAndLossSequences;
 
 	/**
 	 */
-	public ProfitAndLossAllocationComponent(final String name, final CargoSchedulerFitnessCore core) {
+	public ProfitAndLossAllocationComponent(final @NonNull String name, final @NonNull CargoSchedulerFitnessCore core) {
 		super(name, core);
 	}
 
 	@Override
-	public void startEvaluation(@NonNull final ScheduledSequences scheduledSequences) {
-		this.scheduledSequences = scheduledSequences;
+	public void startEvaluation(@NonNull final ProfitAndLossSequences profitAndLossSequences) {
+		this.profitAndLossSequences = profitAndLossSequences;
 		accumulator = 0;
 	}
 
 	@Override
 	public void startSequence(final IResource resource) {
-
 	}
 
 	@Override
 	public boolean nextVoyagePlan(@NonNull final VoyagePlan voyagePlan, final int time) {
-		long fitness = scheduledSequences.getVoyagePlanGroupValue(voyagePlan);
-		accumulator -= scheduledSequences.getVoyagePlanGroupValue(voyagePlan);
+
+		final long value = profitAndLossSequences.getVoyagePlanGroupValue(voyagePlan);
+		accumulator -= value;
 		return true;
 	}
 
@@ -68,12 +72,12 @@ public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessCo
 	}
 
 	@Override
-	public boolean evaluateUnusedSlots(@NonNull final List<ISequenceElement> unusedElements, @NonNull final ScheduledSequences scheduleSequences) {
+	public boolean evaluateUnusedSlots(@NonNull final List<@NonNull ISequenceElement> unusedElements, @NonNull final ProfitAndLossSequences profitAndLossSequences) {
 
 		for (final ISequenceElement element : unusedElements) {
 			final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 			assert portSlot != null;
-			accumulator -= scheduledSequences.getUnusedSlotGroupValue(portSlot);
+			accumulator -= profitAndLossSequences.getUnusedSlotGroupValue(portSlot);
 		}
 
 		return true;
@@ -86,7 +90,7 @@ public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessCo
 	 */
 	@Override
 	public long endEvaluationAndGetCost() {
-		scheduledSequences = null;
+		profitAndLossSequences = null;
 		return setLastEvaluatedFitness(accumulator / Calculator.ScaleFactor);
 	}
 }

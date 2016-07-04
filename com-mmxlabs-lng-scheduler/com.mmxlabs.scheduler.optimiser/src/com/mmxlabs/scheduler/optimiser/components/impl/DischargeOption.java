@@ -1,12 +1,15 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -26,32 +29,32 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 	private long maxDischargeVolumeMMBTU;
 
 	private boolean volumeSetInM3;
-	
+
 	private long minCvValue;
 
 	private long maxCvValue;
 
 	private ISalesPriceCalculator priceCalculator;
 
-	private int pricingDate;
+	private int pricingDate = IPortSlot.NO_PRICING_DATE;
 
-	private PricingEventType pricingEvent;
+	private @NonNull PricingEventType pricingEvent = PricingEventType.START_OF_DISCHARGE;
 
-	public DischargeOption() {
-		setPortType(PortType.Discharge);
-	}
+	// public DischargeOption() {
+	// setPortType(PortType.Discharge);
+	// }
 
 	/**
 	 */
-	public DischargeOption(final String id, final IPort port, final ITimeWindow timeWindow, final long minDischargeVolume, final long maxDischargeVolume, final long minCvValue, final long maxCvValue,
-			final ISalesPriceCalculator priceCalculator, final int pricingDate) {
+	public DischargeOption(final @NonNull String id, final @NonNull IPort port, final ITimeWindow timeWindow, final long minDischargeVolume, final long maxDischargeVolume, final long minCvValue,
+			final long maxCvValue, final ISalesPriceCalculator priceCalculator) {
 		super(id, port, timeWindow);
+		setPortType(PortType.Discharge);
 		this.minDischargeVolume = minDischargeVolume;
 		this.maxDischargeVolume = maxDischargeVolume;
 		this.priceCalculator = priceCalculator;
 		this.minCvValue = minCvValue;
 		this.maxCvValue = maxCvValue;
-		this.pricingDate = pricingDate;
 	}
 
 	@Override
@@ -150,7 +153,7 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 		return pricingEvent;
 	}
 
-	public void setPricingEvent(PricingEventType pricingEvent) {
+	public void setPricingEvent(@NonNull PricingEventType pricingEvent) {
 		this.pricingEvent = pricingEvent;
 	}
 
@@ -172,10 +175,10 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 		maxDischargeVolumeMMBTU = volume;
 	}
 
-	public void setVolumeSetInM3(boolean m3){
+	public void setVolumeSetInM3(boolean m3) {
 		volumeSetInM3 = m3;
 	}
-	
+
 	@Override
 	public boolean isVolumeSetInM3() {
 		return volumeSetInM3;

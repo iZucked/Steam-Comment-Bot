@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.lso;
@@ -25,6 +25,7 @@ import com.mmxlabs.optimiser.lso.impl.NullMove;
 import com.mmxlabs.optimiser.lso.impl.NullMove2Over2;
 import com.mmxlabs.optimiser.lso.impl.NullMove3Over2;
 import com.mmxlabs.optimiser.lso.impl.NullMove4Over2;
+import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
 /**
  * Refactoring of the sequences-related CMG logic into a helper class.
@@ -42,6 +43,9 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 	public final static String OPTIMISER_ENABLE_FOUR_OPT_2 = "enableOptimiser4Opt2";
 
 	private int FOUR_OPT2_MOVES;
+
+	@Inject
+	private IFollowersAndPreceders followersAndPreceders;
 
 	@Inject
 	public void setFourOpt2Fix(@Named(SequencesConstrainedMoveGeneratorUnit.OPTIMISER_ENABLE_FOUR_OPT_2) boolean ENABLE_4_OPT_2_FIX) {
@@ -100,9 +104,13 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 
 	@Override
 	public IMove generateMove() {
+		if (owner.validBreaks.isEmpty()) {
+			return new NullMove();
+		}
+
 		final Pair<ISequenceElement, ISequenceElement> newPair = RandomHelper.chooseElementFrom(owner.random, owner.validBreaks);
-		final Pair<Integer, Integer> pos1 = owner.reverseLookup.get(newPair.getFirst());
-		final Pair<Integer, Integer> pos2 = owner.reverseLookup.get(newPair.getSecond());
+		final Pair<IResource, Integer> pos1 = owner.reverseLookup.get(newPair.getFirst());
+		final Pair<IResource, Integer> pos2 = owner.reverseLookup.get(newPair.getSecond());
 
 		// Check for special case; elements are not in a sequence
 		// in this case, we typically need something clever to happen anyway
@@ -111,10 +119,8 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 			return new NullMove();
 		}
 
-		final List<IResource> resources = owner.sequences.getResources();
-
-		final int sequence1 = pos1.getFirst();
-		final int sequence2 = pos2.getFirst();
+		final IResource sequence1 = pos1.getFirst();
+		final IResource sequence2 = pos2.getFirst();
 		final int position1 = pos1.getSecond();
 		int position2 = pos2.getSecond();
 
@@ -135,26 +141,32 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 			final ISequence sequence = owner.sequences.getSequence(sequence1);
 			final int beforeFirstCut = Math.min(position1, position2);
 			final int beforeSecondCut = Math.max(position1, position2) - 1;
+			// Zero length segment
+			if (beforeFirstCut == beforeSecondCut) {
+				return new NullMove3Over2();
+			}
+
 			final ISequenceElement firstElementInSegment = sequence.get(beforeFirstCut + 1);
 			final ISequenceElement lastElementInSegment = sequence.get(beforeSecondCut);
 
 			// Collect the elements which can go after the segment we are cutting out
-			final ConstrainedMoveGenerator.Followers<ISequenceElement> followers = owner.validFollowers.get(lastElementInSegment);
+			final Followers<ISequenceElement> followers = followersAndPreceders.getValidFollowers(lastElementInSegment);
 
 			// Pick one of these followers and find where it is at the moment
-			if (followers.size() == 0)
+			if (followers.size() == 0) {
 				return null;
+			}
 			final ISequenceElement precursor = followers.get(owner.random.nextInt(followers.size()));
-			final Pair<Integer, Integer> posPrecursor = owner.reverseLookup.get(precursor);
+			final Pair<IResource, Integer> posPrecursor = owner.reverseLookup.get(precursor);
 
 			// now check whether the element before the precursor can precede
 			// the first element in the segment
-			final Integer first = posPrecursor.getFirst();
+			final IResource first = posPrecursor.getFirst();
 			if (first == null) {
 				return new NullMove3Over2();
 			}
 			final ISequenceElement beforeInsert = owner.sequences.getSequence(first).get(posPrecursor.getSecond() - 1);
-			if (owner.validFollowers.get(beforeInsert).contains(firstElementInSegment)) {
+			if (followersAndPreceders.getValidFollowers(beforeInsert).contains(firstElementInSegment)) {
 				// we have a legal 3opt2, so do that. It might be a 3opt1
 				// really, but that's OK
 				// so long as we don't insert a segment into itself.
@@ -167,11 +179,11 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 				}
 
 				final Move3over2 result = new Move3over2();
-				result.setResource1(resources.get(sequence1));
+				result.setResource1(sequence1);
 				result.setResource1Start(beforeFirstCut + 1);
 				result.setResource1End(beforeSecondCut);
 
-				result.setResource2(resources.get(first));
+				result.setResource2(first);
 				result.setResource2Position(posPrecursor.getSecond() + 1);
 				return result;
 			} else {
@@ -194,21 +206,21 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 			final ISequence seq1 = owner.sequences.getSequence(sequence1);
 			final ISequence seq2 = owner.sequences.getSequence(sequence2);
 
-			boolean valid2opt2 = owner.validFollowers.get(seq2.get(position2 - 1)).contains(seq1.get(position1 + 1));
+			boolean valid2opt2 = followersAndPreceders.getValidFollowers(seq2.get(position2 - 1)).contains(seq1.get(position1 + 1));
 
 			while (!valid2opt2 && (position2 > 1)) {
 				// rewind position 2? after all if we don't have a valid 2opt2
 				// we probably won't get a valid 4opt2 out of it either?
 				position2--;
-				valid2opt2 = owner.validFollowers.get(seq2.get(position2 - 1)).contains(seq1.get(position1 + 1));
+				valid2opt2 = followersAndPreceders.getValidFollowers(seq2.get(position2 - 1)).contains(seq1.get(position1 + 1));
 			}
 
 			// if it would be, maybe do it
 			if (valid2opt2 && (owner.random.nextDouble() < 0.05)) {
 				// make 2opt2
 				final Move2over2 result = new Move2over2A();
-				result.setResource1(resources.get(sequence1));
-				result.setResource2(resources.get(sequence2));
+				result.setResource1(sequence1);
+				result.setResource2(sequence2);
 				// add 1 because the positions are inclusive, and we need to cut
 				// after the first element
 				result.setResource1Position(position1 + 1);
@@ -223,19 +235,19 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 				 * we want to iterate over the elements following B and see if any of them can precede anything in S1 after or including A.
 				 */
 
-				final ConstrainedMoveGenerator.Followers<ISequenceElement> followersOfSecondElementsPredecessor = owner.validFollowers.get(seq2.get(position2 - 1));
+				final Followers<ISequenceElement> followersOfSecondElementsPredecessor = followersAndPreceders.getValidFollowers(seq2.get(position2 - 1));
 
 				final List<Pair<Integer, Integer>> viableSecondBreaks = new ArrayList<Pair<Integer, Integer>>();
 				for (int i = position2 + FOUR_OPT2_MOVES; i < (seq2.size() - 1); i++) { // ignore last element
 					final ISequenceElement here = seq2.get(i);
-					for (final ISequenceElement elt : owner.validFollowers.get(here)) {
-						final Pair<Integer, Integer> loc = owner.reverseLookup.get(elt);
-						final Integer first = loc.getFirst();
+					for (final ISequenceElement elt : followersAndPreceders.getValidFollowers(here)) {
+						final Pair<IResource, Integer> loc = owner.reverseLookup.get(elt);
+						final IResource first = loc.getFirst();
 						if (first == null) {
 							// Most likely an optional element no longer in sequences
 							continue;
 						}
-						if (first.intValue() == sequence1) {
+						if (first == sequence1) {
 							// it can be adjacent to something in sequence 1,
 							// that's good
 							if (loc.getSecond() > position1) {
@@ -250,7 +262,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 									}
 								} else {
 									// 4opt2 check
-									if (valid2opt2 && owner.validFollowers.get(owner.sequences.getSequence(first).get(loc.getSecond() - 1)).contains(seq2.get(i + 1))) {
+									if (valid2opt2 && followersAndPreceders.getValidFollowers(owner.sequences.getSequence(first).get(loc.getSecond() - 1)).contains(seq2.get(i + 1))) {
 										viableSecondBreaks.add(new Pair<Integer, Integer>(i, loc.getSecond()));
 									}
 								}
@@ -268,8 +280,8 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 				if (viableSecondBreaks.isEmpty()) {
 					if (valid2opt2) {
 						final Move2over2 result = new Move2over2B();
-						result.setResource1(resources.get(sequence1));
-						result.setResource2(resources.get(sequence2));
+						result.setResource1(sequence1);
+						result.setResource2(sequence2);
 						// add 1 because the positions are inclusive, and we
 						// need to cut after the first element
 						result.setResource1Position(position1 + 1);
@@ -300,17 +312,17 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 					// 3opt2
 					final Move3over2 result = new Move3over2();
 
-					result.setResource2(resources.get(sequence1));
+					result.setResource2(sequence1);
 					result.setResource2Position(position1 + 1);
 
-					result.setResource1(resources.get(sequence2));
+					result.setResource1(sequence2);
 					result.setResource1Start(position2); // inclusive
 					result.setResource1End(secondPosition2 + 1); // exclusive
 
 					return result;
 				} else {
 					// 4opt2
-					final Move4over2 result = new Move4over2(resources.get(sequence1), position1 + 1, secondPosition1, resources.get(sequence2), position2, secondPosition2 + 1);
+					final Move4over2 result = new Move4over2(sequence1, position1 + 1, secondPosition1, sequence2, position2, secondPosition2 + 1);
 
 					return result;
 				}

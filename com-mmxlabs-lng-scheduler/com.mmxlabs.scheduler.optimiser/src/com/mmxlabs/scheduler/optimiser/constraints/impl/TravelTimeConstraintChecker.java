@@ -1,19 +1,19 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.google.inject.name.Named;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
@@ -22,13 +22,12 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
-import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
@@ -45,11 +44,6 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * @param
  */
 public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
-	public final static String OPTIMISER_START_ELEMENT_FIX = "enableStartElementOptimisation";
-
-	@Inject
-	@Named(TravelTimeConstraintChecker.OPTIMISER_START_ELEMENT_FIX)
-	private boolean START_ELEMENT_OPTIMISATION_FIX; // if set to true it fixes a bug that prevents start elements from being valid preceders
 
 	/**
 	 * The maximum amount of lateness which will even be considered (20 days)
@@ -77,7 +71,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 
 	@Inject
 	@NonNull
-	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
+	private IDistanceProvider distanceProvider;
 
 	@Inject
 	@NonNull
@@ -98,12 +92,17 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences) {
-		for (final Map.Entry<IResource, ISequence> entry : sequences.getSequences().entrySet()) {
-			final IResource resource = entry.getKey();
-			assert resource != null;
-			final ISequence sequence = entry.getValue();
-			assert sequence != null;
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
+
+		final Collection<@NonNull IResource> loopResources;
+		if (changedResources == null) {
+			loopResources = sequences.getResources();
+		} else {
+			loopResources = changedResources;
+		}
+
+		for (final IResource resource : loopResources) {
+			final ISequence sequence = sequences.getSequence(resource);
 			if (!checkSequence(sequence, resource)) {
 				return false;
 			}
@@ -132,8 +131,8 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
-		return checkConstraints(sequences);
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
+		return checkConstraints(sequences, changedResources);
 	}
 
 	@Override
@@ -143,12 +142,12 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 
 	@Override
 	/**
-	 * Can element 2 be reached from element 1 in accordance with time windows under the best possible circumstances,
-	 * if using the given resource to service them
+	 * Can element 2 be reached from element 1 in accordance with time windows under the best possible circumstances, if using the given resource to service them
 	 * 
 	 * @param e1
 	 * @param e2
-	 * @param resource the vessel in question
+	 * @param resource
+	 *            the vessel in question
 	 * @return
 	 */
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
@@ -167,10 +166,10 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 			return true;
 		}
 
-		final IVesselAvailability vessel = vesselProvider.getVesselAvailability(resource);
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		final PortType firstType = portTypeProvider.getPortType(first);
 		final PortType secondType = portTypeProvider.getPortType(second);
-		if (vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
 			final ITimeWindow tw1 = slot1.getTimeWindow();
 			final ITimeWindow tw2 = slot2.getTimeWindow();
 
@@ -184,17 +183,17 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 					// See ShippingHoursRestrictions otherwise
 					// if (slot1.getPort() == slot2.getPort()) {
 					if (!shippingHoursRestrictionProvider.isDivertable(first)) {
-						if (tw1.getStart() <= tw2.getStart() && tw1.getEnd() >= tw2.getStart()) {
+						if (tw1.getInclusiveStart() <= tw2.getInclusiveStart() && tw1.getExclusiveEnd() > tw2.getInclusiveStart()) {
 							return true;
 						}
-						if (tw1.getStart() <= tw2.getEnd() && tw1.getEnd() >= tw2.getEnd()) {
+						if (tw1.getInclusiveStart() < tw2.getExclusiveEnd() && tw1.getExclusiveEnd() >= tw2.getExclusiveEnd()) {
 							return true;
 						}
 
-						if (tw2.getStart() <= tw1.getStart() && tw2.getEnd() >= tw1.getStart()) {
+						if (tw2.getInclusiveStart() <= tw1.getInclusiveStart() && tw2.getExclusiveEnd() > tw1.getInclusiveStart()) {
 							return true;
 						}
-						if (tw2.getStart() <= tw1.getEnd() && tw2.getEnd() >= tw1.getEnd()) {
+						if (tw2.getInclusiveStart() < tw1.getExclusiveEnd() && tw2.getExclusiveEnd() >= tw1.getExclusiveEnd()) {
 							return true;
 						}
 						return false;
@@ -204,9 +203,12 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 			return true;
 		}
 
-		if (vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS) {
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 			// Ignore problems with short cargoes between discharge and next load
 			if (firstType == PortType.Start && secondType == PortType.End) {
+				return true;
+			}
+			if (firstType == PortType.Round_Trip_Cargo_End || secondType == PortType.Round_Trip_Cargo_End) {
 				return true;
 			}
 			if (firstType == PortType.Discharge) {
@@ -214,13 +216,6 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 			}
 		}
 
-		final int distance = distanceProvider.getMinimumValue(slot1.getPort(), slot2.getPort());
-
-		if (distance == Integer.MAX_VALUE) {
-			return false;
-		}
-
-		final int travelTime = Calculator.getTimeFromSpeedDistance(resourceMaxSpeed, distance);
 		final ITimeWindow tw1 = slot1.getTimeWindow();
 		final ITimeWindow tw2 = slot2.getTimeWindow();
 
@@ -228,30 +223,42 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 			return true; // if the time windows are null, there is no effective constraint
 		}
 
-		final int earliestArrivalTime = tw1.getStart() + elementDurationProvider.getElementDuration(first, resource) + travelTime;
+		final int voyageStartTime = tw1.getInclusiveStart() + elementDurationProvider.getElementDuration(first, resource);
 
-		final int latestAllowableTime = tw2.getEnd() + maxLateness;
-
-		if (START_ELEMENT_OPTIMISATION_FIX) {
-			return earliestArrivalTime <= latestAllowableTime;
-		} else {
-			return earliestArrivalTime < latestAllowableTime;
+		@NonNull
+		Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), slot1.getPort(), slot2.getPort(), voyageStartTime,
+				resourceMaxSpeed);
+		if (quickestTravelTime.getSecond() == Integer.MAX_VALUE) {
+			return false;
 		}
+
+		int travelTime = quickestTravelTime.getSecond();
+
+		final int earliestArrivalTime = voyageStartTime + travelTime;
+		final int latestAllowableTime = tw2.getExclusiveEnd() - 1 + maxLateness;
+
+		return earliestArrivalTime <= latestAllowableTime;
 	}
 
 	@Override
 	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
-		final int distance = distanceProvider.get(IMultiMatrixProvider.Default_Key).get(slot1.getPort(), slot2.getPort());
-		if (distance == Integer.MAX_VALUE) {
-			return "No edge connecting ports";
-		}
 		final ITimeWindow tw1 = slot1.getTimeWindow();
 		final ITimeWindow tw2 = slot2.getTimeWindow();
 
-		return "Excessive lateness : " + slot1.getPort().getName() + " to " + slot2.getPort().getName() + " = " + distance + ", but " + " start of first tw = " + tw1.getStart()
-				+ " and end of second = " + tw2.getEnd();
+		assert tw1 != null;
+		assert tw2 != null;
+		final int visitDuration = elementDurationProvider.getElementDuration(first, resource);
+
+		final int distance = distanceProvider.getDistance(ERouteOption.DIRECT, slot1.getPort(), slot2.getPort(), tw1.getInclusiveStart() + visitDuration);
+
+		if (distance == Integer.MAX_VALUE) {
+			return "No edge connecting ports";
+		}
+
+		return "Excessive lateness : " + slot1.getPort().getName() + " to " + slot2.getPort().getName() + " = " + distance + ", but " + " start of first tw = " + tw1.getInclusiveStart()
+				+ " and end of second = " + tw2.getExclusiveEnd();
 	}
 
 	public int getMaxLateness() {
@@ -261,5 +268,4 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	public void setMaxLateness(final int maxLateness) {
 		this.maxLateness = maxLateness;
 	}
-
 }

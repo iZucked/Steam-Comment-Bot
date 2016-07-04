@@ -1,10 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.voyage;
 
 import java.util.List;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -21,31 +23,36 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  */
 public interface IPortTimesRecord extends IElementAnnotation {
-	
+
 	/**
 	 * Returns all slots excluding the return slot
+	 * 
 	 * @return
 	 */
-	List<IPortSlot> getSlots();
+	@NonNull List<@NonNull IPortSlot> getSlots();
 
-	int getSlotTime(IPortSlot slot);
-	void setSlotTime(IPortSlot slot, int time);
+	int getSlotTime(@NonNull IPortSlot slot);
 
-	int getSlotDuration(IPortSlot slot);
-	void setSlotDuration(IPortSlot slot, int duration);
+	void setSlotTime(@NonNull IPortSlot slot, int time);
+
+	int getSlotDuration(@NonNull IPortSlot slot);
+
+	void setSlotDuration(@NonNull IPortSlot slot, int duration);
 
 	/**
 	 * Should be expected to do equivalent of "ptr.getSlotTime(ptr.getFirstSlot())"
+	 * 
 	 * @return
 	 */
 	int getFirstSlotTime();
 
-	IPortSlot getFirstSlot();
-	
+	@NonNull IPortSlot getFirstSlot();
+
 	/**
 	 * Returns the final slot in the slots list
+	 * 
 	 * @return
 	 */
 	IPortSlot getReturnSlot();
-	
+
 }

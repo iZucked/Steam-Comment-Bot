@@ -1,10 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.EnumMap;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -18,18 +20,18 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 public final class PortDetails implements IDetailsSequenceElement, Cloneable {
 
-	private PortOptions options;
+	private @NonNull PortOptions options;
 
 	private final EnumMap<FuelComponent, Long> fuelConsumption = new EnumMap<FuelComponent, Long>(FuelComponent.class);
 	private final EnumMap<FuelComponent, Integer> fuelPrice = new EnumMap<FuelComponent, Integer>(FuelComponent.class);
 
 	private long portCosts;
 
-	public PortDetails() {
-
+	public PortDetails(final @NonNull PortOptions options) {
+		this.options = options;
 	}
 
-	private PortDetails(final PortOptions options, final EnumMap<FuelComponent, Long> fuelConsumption, final EnumMap<FuelComponent, Integer> fuelPrice, final long portCosts) {
+	private PortDetails(final @NonNull PortOptions options, final EnumMap<FuelComponent, Long> fuelConsumption, final EnumMap<FuelComponent, Integer> fuelPrice, final long portCosts) {
 		this.options = options;
 		this.portCosts = portCosts;
 		this.fuelConsumption.putAll(fuelConsumption);
@@ -66,13 +68,11 @@ public final class PortDetails implements IDetailsSequenceElement, Cloneable {
 
 	/**
 	 */
-	public PortOptions getOptions() {
+	public @NonNull PortOptions getOptions() {
 		return options;
 	}
 
-	/**
-	 */
-	public void setOptions(final PortOptions options) {
+	public void setOptions(final @NonNull PortOptions options) {
 		this.options = options;
 	}
 

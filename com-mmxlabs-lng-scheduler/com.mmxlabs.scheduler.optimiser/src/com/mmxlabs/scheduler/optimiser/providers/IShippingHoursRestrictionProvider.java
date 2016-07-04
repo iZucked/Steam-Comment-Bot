@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers;
@@ -11,8 +11,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 
 /**
@@ -49,6 +49,7 @@ public interface IShippingHoursRestrictionProvider extends IDataComponentProvide
 	 * @return
 	 */
 	int getReferenceSpeed(@NonNull IVessel vessel, @NonNull VesselState vesselState);
-	
-	Collection<String> getDivertableDESAllowedRoutes(@NonNull IVesselClass vesselClass);
+
+	@NonNull
+	Collection<ERouteOption> getDivertableDESAllowedRoutes(@NonNull ILoadOption loadOption);
 }

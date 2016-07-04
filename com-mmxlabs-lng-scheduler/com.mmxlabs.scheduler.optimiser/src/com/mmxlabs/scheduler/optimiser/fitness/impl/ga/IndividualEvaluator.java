@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl.ga;
@@ -302,10 +302,10 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 
 			if (tw != null) {
 				// Record early arrival time as window start
-				windowStarts[idx] = tw.getStart();
+				windowStarts[idx] = tw.getInclusiveStart();
 
 				// Determine range of values between arrival and end window.
-				final int r = tw.getEnd() - tw.getStart();
+				final int r = tw.getExclusiveEnd() - tw.getInclusiveStart() - 1;
 				// Should we be forced to arrive too late, i.e. past the end
 				// window, then there is nothing to optimise over here, so set
 				// range to zero.
@@ -412,7 +412,7 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 			}
 
 			// Take off travel time to get to this port to get new latest
-			// arrival at preceeding port.
+			// arrival at preceding port.
 			currentLatestArrival -= travelTimes[idx];
 		}
 

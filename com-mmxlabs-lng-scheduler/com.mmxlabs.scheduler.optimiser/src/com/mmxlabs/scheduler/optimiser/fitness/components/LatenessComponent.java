@@ -1,21 +1,19 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
-import java.util.Set;
-
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
-import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 
 /**
@@ -29,20 +27,21 @@ public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessCom
 
 	private long sequenceAccumulator = 0;
 
-	private long promptLateness = 0;
-	private long totalLateness = 0;
-	private long initialPromptLateness = 0;
-	private long initialTotalLateness = 0;
-	private boolean hasBeenInitialised = false;
-	private Set<IPortSlot> lateSlots = null;
-	private boolean newLateness = false;
+	// private long promptLateness = 0;
+	// private long totalLateness = 0;
+	// private long initialPromptLateness = 0;
+	// private long initialTotalLateness = 0;
+	// private boolean hasBeenInitialised = false;
+	// private Set<IPortSlot> lateSlots = null;
+	// private boolean newLateness = false;
+
 	@Override
-	public void startEvaluation(@NonNull ScheduledSequences scheduledSequences) {
-		promptLateness = 0;
-		totalLateness = 0;
+	public void startEvaluation(@NonNull final ProfitAndLossSequences scheduledSequences) {
+		// promptLateness = 0;
+		// totalLateness = 0;
 		super.startEvaluation(scheduledSequences);
 	}
-	
+
 	public LatenessComponent(@NonNull final String name, @NonNull final CargoSchedulerFitnessCore core) {
 		super(name, core);
 	}
@@ -66,18 +65,16 @@ public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessCom
 	@Override
 	protected boolean reallyEvaluateObject(@NonNull final Object object, final int time) {
 		if (object instanceof PortDetails) {
+			final VolumeAllocatedSequences volumeAllocatedSequences = profitAndLossSequences.getVolumeAllocatedSequences();
+
 			final PortDetails detail = (PortDetails) object;
-			sequenceAccumulator += scheduledSequences.getWeightedLatenessCost(detail.getOptions().getPortSlot());
-			if (lateSlots != null && scheduledSequences.isLateSlot(detail.getOptions().getPortSlot()) && !lateSlots.contains(detail.getOptions().getPortSlot())) {
-				newLateness = true;
-			}
-			Pair<Interval, Long> latenessDetails = scheduledSequences.getLatenessCost(detail.getOptions().getPortSlot());
-			if (latenessDetails != null) {
-				long lateness = latenessDetails.getSecond();
-				if (latenessDetails.getFirst() == Interval.PROMPT) {
-					promptLateness += lateness;
-				}
-				totalLateness += lateness;
+
+			@NonNull
+			final IPortSlot portSlot = detail.getOptions().getPortSlot();
+
+			final VolumeAllocatedSequence volumeAllocatedSequence = volumeAllocatedSequences.getScheduledSequence(portSlot);
+			if (volumeAllocatedSequence != null) {
+				sequenceAccumulator += volumeAllocatedSequence.getWeightedLatenessCost(portSlot);
 			}
 		}
 		return true;
@@ -90,46 +87,16 @@ public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessCom
 	 */
 	@Override
 	protected long endSequenceAndGetCost() {
-		if (initialised() && ((promptLateness > getInitialPromptLateness() || totalLateness > getInitialTotalLateness()) || newLateness == true)) {
-			newLateness = false;
-			return Long.MAX_VALUE;
-		}
+		// if (initialised() && ((promptLateness > getInitialPromptLateness() || totalLateness > getInitialTotalLateness()) || newLateness == true)) {
+		// newLateness = false;
+		// return Long.MAX_VALUE;
+		// }
 
 		return sequenceAccumulator;
 	}
 
 	@Override
 	public long endEvaluationAndGetCost() {
-		if (!initialised()) {
-			setInitialPromptLateness(promptLateness);
-			setInitialTotalLateness(totalLateness);
-			lateSlots = scheduledSequences.getLateSlotsSet();
-			setInitialised(true);
-		}
 		return super.endEvaluationAndGetCost();
-	}
-
-	private void setInitialPromptLateness(long lateness) {
-		initialPromptLateness = lateness;
-	}
-
-	private void setInitialTotalLateness(long lateness) {
-		initialTotalLateness = lateness;
-	}
-
-	private long getInitialPromptLateness() {
-		return initialPromptLateness;
-	}
-
-	private long getInitialTotalLateness() {
-		return initialTotalLateness;
-	}
-
-	private boolean initialised() {
-		return hasBeenInitialised;
-	}
-
-	private void setInitialised(boolean initialised) {
-		hasBeenInitialised = initialised;
 	}
 }

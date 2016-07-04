@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
@@ -27,6 +27,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
+import com.google.inject.name.Names;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -52,16 +54,21 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ExcessIdleTimeComponentParameters;
+import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
@@ -74,6 +81,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvid
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImpl;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapBaseFuelCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
@@ -104,7 +112,22 @@ public class ScheduleCalculatorTest {
 		final IStartEndRequirementProvider startEndRequirementProvider = mock(IStartEndRequirementProvider.class);
 		final IShippingHoursRestrictionProvider shippingHoursRestrictionProvider = mock(IShippingHoursRestrictionProvider.class);
 		class TestModule extends AbstractModule {
-			
+
+			@Provides
+			@Singleton
+			private IExcessIdleTimeComponentParameters provideIdleComponentParameters() {
+				final ExcessIdleTimeComponentParameters idleParams = new ExcessIdleTimeComponentParameters();
+				int highPeriodInDays = 15;
+				int lowPeriodInDays = Math.max(0, highPeriodInDays - 2);
+				idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, lowPeriodInDays * 24);
+				idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, highPeriodInDays * 24);
+				idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, 2_500);
+				idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, 10_000);
+				idleParams.setEndWeight(10_000);
+
+				return idleParams;
+			}
+
 			@Provides
 			@Singleton
 			private ILatenessComponentParameters provideLatenessComponentParameters() {
@@ -144,7 +167,7 @@ public class ScheduleCalculatorTest {
 				bind(ICharterRateCalculator.class).toInstance(charterRateCalculator);
 				bind(IActualsDataProvider.class).toInstance(actualsDataProvider);
 				bind(IStartEndRequirementProvider.class).toInstance(startEndRequirementProvider);
-				
+
 				final IPromptPeriodProvider promptProvider = Mockito.mock(IPromptPeriodProvider.class);
 
 				bind(IPromptPeriodProvider.class).toInstance(promptProvider);
@@ -158,7 +181,15 @@ public class ScheduleCalculatorTest {
 
 				bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>() {
 				}).toInstance(distanceProvider);
+
+				bind(IDistanceProvider.class).to(DefaultDistanceProviderImpl.class).in(Singleton.class);
+				bind(IDistanceProviderEditor.class).to(DefaultDistanceProviderImpl.class);
+
 				bind(ITimeZoneToUtcOffsetProvider.class).to(TimeZoneToUtcOffsetProvider.class);
+
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(Boolean.FALSE);
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(Boolean.FALSE);
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(Boolean.FALSE);
 			}
 		}
 		final Injector injector = Guice.createInjector(new TestModule());
@@ -199,8 +230,8 @@ public class ScheduleCalculatorTest {
 		final int windowStart = 10;
 		final int windowEnd = 20;
 		final ITimeWindow timeWindow = mock(ITimeWindow.class);
-		when(timeWindow.getStart()).thenReturn(windowStart);
-		when(timeWindow.getEnd()).thenReturn(windowEnd);
+		when(timeWindow.getInclusiveStart()).thenReturn(windowStart);
+		when(timeWindow.getExclusiveEnd()).thenReturn(windowEnd);
 
 		when(portSlot1.getTimeWindow()).thenReturn(timeWindow);
 		when(portSlot2.getTimeWindow()).thenReturn(timeWindow);
@@ -208,8 +239,10 @@ public class ScheduleCalculatorTest {
 		when(portSlot4.getTimeWindow()).thenReturn(timeWindow);
 		when(portSlot5.getTimeWindow()).thenReturn(timeWindow);
 
-		final ScheduleCalculator scheduleCalculator = new ScheduleCalculator();
-		injector.injectMembers(scheduleCalculator);
+		Pair<CargoValueAnnotation, Long> p = Mockito.mock(Pair.class);
+		when(entityValueCalculator.evaluate(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.anyInt(), Matchers.any(), Matchers.any())).thenReturn(p);
+		final ProfitAndLossCalculator profitAndLossCalculator = new ProfitAndLossCalculator();
+		injector.injectMembers(profitAndLossCalculator);
 
 		final IMarkToMarket market1 = mock(IMarkToMarket.class);
 		when(markToMarketProvider.getMarketForElement(element1)).thenReturn(market1);
@@ -227,16 +260,16 @@ public class ScheduleCalculatorTest {
 		when(markToMarketProvider.getMarketForElement(element5)).thenReturn(market5);
 
 		final IAllocationAnnotation allocationAnnotation = mock(IAllocationAnnotation.class);
-		when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot1)), Matchers.<IPortTimesRecord> any())).thenReturn(
-				allocationAnnotation);
-		when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot2)), Matchers.<IPortTimesRecord> any())).thenReturn(
-				allocationAnnotation);
-		when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot3)), Matchers.<IPortTimesRecord> any())).thenReturn(
-				allocationAnnotation);
-		when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot4)), Matchers.<IPortTimesRecord> any())).thenReturn(
-				allocationAnnotation);
+		when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot1)), Matchers.<IPortTimesRecord> any()))
+				.thenReturn(allocationAnnotation);
+		when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot2)), Matchers.<IPortTimesRecord> any()))
+				.thenReturn(allocationAnnotation);
+		when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot3)), Matchers.<IPortTimesRecord> any()))
+				.thenReturn(allocationAnnotation);
+		when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot4)), Matchers.<IPortTimesRecord> any()))
+				.thenReturn(allocationAnnotation);
 
-		scheduleCalculator.calculateMarkToMarketPNL(sequences, annotatedSolution);
+		profitAndLossCalculator.calculateMarkToMarketPNL(sequences, annotatedSolution);
 
 		// Verify that our slots were correctly matched against MTM slots
 		verify(volumeAllocator, times(1)).allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot1)),

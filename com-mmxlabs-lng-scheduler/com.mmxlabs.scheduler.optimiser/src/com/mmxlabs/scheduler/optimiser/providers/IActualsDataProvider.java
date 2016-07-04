@@ -1,8 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
@@ -24,7 +26,7 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	 * @param slot
 	 * @return
 	 */
-	boolean hasActuals(IPortSlot slot);
+	boolean hasActuals(@NonNull IPortSlot slot);
 
 	/**
 	 * Returns the actual arrival time at the port.
@@ -32,7 +34,7 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	 * @param slot
 	 * @return
 	 */
-	int getArrivalTime(IPortSlot slot);
+	int getArrivalTime(@NonNull IPortSlot slot);
 
 	/**
 	 * Returns the actual arrival time at the port as a {@link ITimeWindow}.
@@ -40,7 +42,7 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	 * @param slot
 	 * @return
 	 */
-	ITimeWindow getArrivalTimeWindow(IPortSlot slot);
+	ITimeWindow getArrivalTimeWindow(@NonNull IPortSlot slot);
 
 	/**
 	 * Return the actual duration of the visit at this port slot
@@ -48,7 +50,7 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	 * @param slot
 	 * @return
 	 */
-	int getVisitDuration(IPortSlot slot);
+	int getVisitDuration(@NonNull IPortSlot slot);
 
 	/**
 	 * Returns the actual CV for a load or discharge
@@ -56,7 +58,7 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	 * @param slot
 	 * @return
 	 */
-	int getCVValue(IPortSlot slot);
+	int getCVValue(@NonNull IPortSlot slot);
 
 	/**
 	 * Returns the actual port costs for the port slot
@@ -64,7 +66,7 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	 * @param slot
 	 * @return
 	 */
-	long getPortCosts(IPortSlot slot);
+	long getPortCosts(@NonNull IPortSlot slot);
 
 	/**
 	 * Return the actual purchase or sales volume in m3 at this load or discharge
@@ -72,7 +74,7 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	 * @param slot
 	 * @return
 	 */
-	long getVolumeInM3(IPortSlot slot);
+	long getVolumeInM3(@NonNull IPortSlot slot);
 
 	/**
 	 * Return the actual purchase or sales volume in mmBtu at this load or discharge
@@ -80,7 +82,7 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	 * @param slot
 	 * @return
 	 */
-	long getVolumeInMMBtu(IPortSlot slot);
+	long getVolumeInMMBtu(@NonNull IPortSlot slot);
 
 	/**
 	 * Gets the actual heel at the start of the event in m3 (currently only valid for ILoadOptions)
@@ -88,7 +90,7 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	 * @param slot
 	 * @return
 	 */
-	long getStartHeelInM3(IPortSlot slot);
+	long getStartHeelInM3(@NonNull IPortSlot slot);
 
 	/**
 	 * Returns the actual heel at the end of the event in m3 (currently only valid for IDischargeOptions)
@@ -96,19 +98,19 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	 * @param slot
 	 * @return
 	 */
-	long getEndHeelInM3(IPortSlot slot);
+	long getEndHeelInM3(@NonNull IPortSlot slot);
 
 	/**
 	 * Base fuel price per MT (from a {@link ILoadOption})
 	 */
-	int getBaseFuelPricePerMT(IPortSlot slot);
+	int getBaseFuelPricePerMT(@NonNull IPortSlot slot);
 
 	/**
 	 * Charter rate per day (from a {@link ILoadOption})
 	 */
-	int getCharterRatePerDay(IPortSlot slot);
+	long getCharterRatePerDay(@NonNull IPortSlot slot);
 
-	long getPortBaseFuelConsumptionInMT(IPortSlot slot);
+	long getPortBaseFuelConsumptionInMT(@NonNull IPortSlot slot);
 
 	/**
 	 * Returns the actual base fuel used in the next voyage. This includes and load and discharge port fuel consumptions.
@@ -116,24 +118,25 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	 * @param fromPortSlot
 	 * @return
 	 */
-	long getNextVoyageBaseFuelConsumptionInMT(IPortSlot slot);
+	long getNextVoyageBaseFuelConsumptionInMT(@NonNull IPortSlot slot);
 
-	int getNextVoyageDistance(IPortSlot slot);
+	int getNextVoyageDistance(@NonNull IPortSlot slot);
 
-	int getLNGPricePerMMBTu(IPortSlot slot);
+	int getLNGPricePerMMBTu(@NonNull IPortSlot slot);
 
-	long getNextVoyageRouteCosts(IPortSlot slot);
+	long getNextVoyageRouteCosts(@NonNull IPortSlot slot);
 
-	String getNextVoyageRoute(IPortSlot slot);
+	@NonNull
+	ERouteOption getNextVoyageRoute(@NonNull IPortSlot slot);
 
 	// Values for return - should be used as actuals esp for DES, and validation when overlapping with another set of actuals
-	boolean hasReturnActuals(IPortSlot slot);
+	boolean hasReturnActuals(@NonNull IPortSlot slot);
 
-	int getReturnTime(IPortSlot slot);
+	int getReturnTime(@NonNull IPortSlot slot);
 
-	ITimeWindow getReturnTimeAsTimeWindow(IPortSlot slot);
+	ITimeWindow getReturnTimeAsTimeWindow(@NonNull IPortSlot slot);
 
-	long getReturnHeelInM3(IPortSlot slot);
+	long getReturnHeelInM3(@NonNull IPortSlot slot);
 
-	IPort getReturnPort(IPortSlot slot);
+	IPort getReturnPort(@NonNull IPortSlot slot);
 }

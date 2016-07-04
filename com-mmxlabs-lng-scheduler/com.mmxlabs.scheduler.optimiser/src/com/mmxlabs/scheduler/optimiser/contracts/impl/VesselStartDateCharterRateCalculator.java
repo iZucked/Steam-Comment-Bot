@@ -1,12 +1,14 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
 import javax.inject.Inject;
 
-import com.mmxlabs.common.curves.ICurve;
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselCharterInRateProvider;
@@ -23,8 +25,8 @@ public class VesselStartDateCharterRateCalculator implements ICharterRateCalcula
 	private IVesselCharterInRateProvider IVesselCharterInRateProvider;
 
 	@Override
-	public int getCharterRatePerDay(final IVesselAvailability vesselAvailability, final int vesselStartTime, final int voyagePlanStartTime) {
-		final ICurve rate = IVesselCharterInRateProvider.getCharterInRatePerDay(vesselAvailability);
+	public long getCharterRatePerDay(final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, final int voyagePlanStartTime) {
+		final ILongCurve rate = IVesselCharterInRateProvider.getCharterInRatePerDay(vesselAvailability);
 		if (rate != null) {
 			return rate.getValueAtPoint(vesselStartTime);
 		}

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers;
@@ -35,7 +35,7 @@ public interface ICharterMarketProvider extends IDataComponentProvider {
 		int getCharterPrice(int date);
 
 		@NonNull
-		Set<IPort> getAllowedPorts();
+		Set<@NonNull IPort> getAllowedPorts();
 	};
 
 	@NonNull
@@ -52,6 +52,6 @@ public interface ICharterMarketProvider extends IDataComponentProvider {
 	int getCharterOutStartTime();
 
 	@NonNull
-	Set<IPort> getCharteringPortsForVesselClass(IVesselClass vesselClass);
+	Set<@NonNull IPort> getCharteringPortsForVesselClass(@NonNull IVesselClass vesselClass);
 
 }

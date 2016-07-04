@@ -1,5 +1,7 @@
 .*.swp$
 .*~$
+.*.rej$
+.*.orig$
 
 target/
 

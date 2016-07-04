@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness;
@@ -16,7 +16,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Injector;
-import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -26,15 +25,10 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
-import com.mmxlabs.scheduler.optimiser.fitness.components.CapacityComponent;
-import com.mmxlabs.scheduler.optimiser.fitness.components.CharterCostFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.fitness.components.CostComponent;
+import com.mmxlabs.scheduler.optimiser.fitness.components.IdleTimeComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
-import com.mmxlabs.scheduler.optimiser.fitness.components.PortCostFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ProfitAndLossAllocationComponent;
-import com.mmxlabs.scheduler.optimiser.fitness.components.RouteCostFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.ScheduleFitnessEvaluator;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 /**
  * {@link IFitnessCore} which schedules {@link ISequences} objects using an {@link ISequenceScheduler}. Various {@link IFitnessComponent}s implementing {@link ICargoSchedulerFitnessComponent}
@@ -63,28 +57,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 	private void init() {
 		final List<ICargoSchedulerFitnessComponent> localComponents = new ArrayList<>(8);
 		localComponents.add(new LatenessComponent(CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, this));
-
-		localComponents.add(new CapacityComponent(CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, this));
-
-		localComponents.add(new CostComponent(CargoSchedulerFitnessCoreFactory.COST_LNG_COMPONENT_NAME, CollectionsUtil.makeArrayList(FuelComponent.NBO, FuelComponent.FBO, FuelComponent.IdleNBO),
-				this));
-
-		localComponents.add(new CostComponent(CargoSchedulerFitnessCoreFactory.COST_BASE_COMPONENT_NAME, CollectionsUtil.makeArrayList(FuelComponent.Base, FuelComponent.Base_Supplemental,
-				FuelComponent.IdleBase, FuelComponent.PilotLight, FuelComponent.IdlePilotLight), this));
-
-		localComponents.add(new CostComponent(CargoSchedulerFitnessCoreFactory.COST_COOLDOWN_COMPONENT_NAME, CollectionsUtil.makeArrayList(FuelComponent.Cooldown), this));
-
-		localComponents.add(new CharterCostFitnessComponent(CargoSchedulerFitnessCoreFactory.CHARTER_COST_COMPONENT_NAME, this));
-
-		localComponents.add(new RouteCostFitnessComponent(CargoSchedulerFitnessCoreFactory.ROUTE_PRICE_COMPONENT_NAME, this));
-
-		// schedulerComponents.add(new CargoAllocatingSchedulerComponent(CargoSchedulerFitnessCoreFactory.CARGO_ALLOCATION_COMPONENT_NAME, SchedulerConstants.DCP_vesselProvider,
-		// SchedulerConstants.DCP_totalVolumeLimitProvider, SchedulerConstants.DCP_portSlotsProvider, this));
-
-		// schedulerComponents.add(new CharterOutFitnessComponent(CargoSchedulerFitnessCoreFactory.CHARTER_REVENUE_COMPONENT_NAME, SchedulerConstants.DCP_vesselProvider, this));
-
-		localComponents.add(new PortCostFitnessComponent(CargoSchedulerFitnessCoreFactory.PORT_COST_COMPONENT_NAME, this));
-
+		localComponents.add(new IdleTimeComponent(CargoSchedulerFitnessCoreFactory.IDLE_TIME_HOURS_COMPONENT_NAME, this));
 		localComponents.add(new ProfitAndLossAllocationComponent(CargoSchedulerFitnessCoreFactory.PROFIT_COMPONENT_NAME, this));
 
 		schedulerComponents.addAll(localComponents);
@@ -117,7 +90,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 	@Override
 	public boolean evaluate(final ISequences sequences, @NonNull final IEvaluationState evaluationState) {
 
-		final ScheduledSequences scheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
+		final ProfitAndLossSequences scheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.PROFIT_AND_LOSS_SEQUENCES, ProfitAndLossSequences.class);
 		if (scheduledSequences != null) {
 			return evaluator.evaluateSchedule(sequences, scheduledSequences) != Long.MAX_VALUE;
 		}
@@ -126,7 +99,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 
 	@Override
 	public boolean evaluate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @Nullable final Collection<IResource> affectedResources) {
-		final ScheduledSequences scheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
+		final ProfitAndLossSequences scheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.PROFIT_AND_LOSS_SEQUENCES, ProfitAndLossSequences.class);
 		if (scheduledSequences != null) {
 			return evaluator.evaluateSchedule(sequences, scheduledSequences) != Long.MAX_VALUE;
 		}
@@ -174,7 +147,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 			}
 
 			solution.setGeneralAnnotation(SchedulerConstants.G_AI_fitnessPerRoute, fitnessPerRoute);
-//			solution.setGeneralAnnotation(SchedulerConstants.G_AI_scheduledSequence, evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class));
+			// solution.setGeneralAnnotation(SchedulerConstants.G_AI_scheduledSequence, evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class));
 		}
 	}
 }

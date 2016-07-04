@@ -1,10 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
 import java.util.List;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -42,8 +44,8 @@ public class AllocationRecord {
 	/** The LNG volume which the vessel starts with (the start heel) */
 	public final long startVolumeInM3;
 
-	public final IVesselAvailability vesselAvailability;
-	public final VoyagePlan resourceVoyagePlan;
+	public final @NonNull IVesselAvailability vesselAvailability;
+	public final @NonNull VoyagePlan resourceVoyagePlan;
 
 	public IVessel nominatedVessel;
 	public VoyagePlan nominatedVoyagePlan;
@@ -61,25 +63,25 @@ public class AllocationRecord {
 	// public final List<Integer> slotDurations;
 
 	/** Slots in the cargo, excluding the return port slot */
-	public final List<IPortSlot> slots;
+	public final @NonNull List<@NonNull IPortSlot> slots;
 
 	/**
 	 * The minimum transfer volume indexed by port slot
 	 */
-	public final List<Long> minVolumesInM3;
+	public final @NonNull List<Long> minVolumesInM3;
 	/**
 	 * The maximum transfer volume indexed by port slot
 	 */
-	public final List<Long> maxVolumesInM3;
+	public final @NonNull List<Long> maxVolumesInM3;
 
-	public final List<Long> minVolumesInMMBtu;
-	public final List<Long> maxVolumesInMMBtu;
-	public final List<Integer> slotCV;
+	public final @NonNull List<Long> minVolumesInMMBtu;
+	public final @NonNull List<Long> maxVolumesInMMBtu;
+	public final @NonNull List<Integer> slotCV;
 
 	// Set to false to maximise load volume and push gas into next loading
 	public boolean preferShortLoadOverLeftoverHeel = true;
 
-	public AllocationMode allocationMode;
+	public @NonNull AllocationMode allocationMode;
 
 	public int vesselStartTime;
 
@@ -88,11 +90,12 @@ public class AllocationRecord {
 	 */
 	public IPortSlot returnSlot;
 
-	public IPortTimesRecord portTimesRecord;
+	public @NonNull IPortTimesRecord portTimesRecord;
 
-	public AllocationRecord(final IVesselAvailability vesselAvailability, final VoyagePlan resourceVoyagePlan, final int vesselStartTime, final long startVolumeInM3,
-			final long requiredFuelVolumeInM3, final long minEndVolumeInM3, final List<IPortSlot> slots, final IPortTimesRecord portTimesRecord, final IPortSlot returnSlot, final List<Long> minVolumesInM3,
-			final List<Long> maxVolumesInM3, List<Long> minVolumesInMMBtu, List<Long> maxVolumesInMMBtu, List<Integer> slotCV) {
+	public AllocationRecord(final @NonNull IVesselAvailability vesselAvailability, final @NonNull VoyagePlan resourceVoyagePlan, final int vesselStartTime, final long startVolumeInM3,
+			final long requiredFuelVolumeInM3, final long minEndVolumeInM3, final @NonNull List<@NonNull IPortSlot> slots, final @NonNull IPortTimesRecord portTimesRecord, final IPortSlot returnSlot,
+			final @NonNull List<@NonNull Long> minVolumesInM3, final @NonNull List<@NonNull Long> maxVolumesInM3, @NonNull final List<@NonNull Long> minVolumesInMMBtu,
+			@NonNull final List<@NonNull Long> maxVolumesInMMBtu, final @NonNull List<@NonNull Integer> slotCV) {
 		this.vesselAvailability = vesselAvailability;
 		this.resourceVoyagePlan = resourceVoyagePlan;
 		this.vesselStartTime = vesselStartTime;
@@ -107,7 +110,7 @@ public class AllocationRecord {
 		this.minVolumesInMMBtu = minVolumesInMMBtu;
 		this.maxVolumesInMMBtu = maxVolumesInMMBtu;
 		this.slotCV = slotCV;
-		this.allocationMode = (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) ? AllocationMode.Transfer
-				: AllocationMode.Shipped;
+		this.allocationMode = (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE)
+				? AllocationMode.Transfer : AllocationMode.Shipped;
 	}
 }

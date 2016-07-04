@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
@@ -7,8 +7,8 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.curves.ConstantValueCurve;
-import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.ConstantValueLongCurve;
+import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
@@ -34,26 +34,26 @@ public class MarkToMarketVesselAvailability implements IVesselAvailability {
 	private final VesselInstanceType vesselInstanceType;
 
 	@NonNull
-	private ICurve curve;
+	private ILongCurve curve;
 
 	public MarkToMarketVesselAvailability(@NonNull final IMarkToMarket markToMarket, @NonNull final IDischargeOption dischargeOption) {
 		this.markToMarket = markToMarket;
 		this.portSlot = dischargeOption;
-		this.curve = new ConstantValueCurve(0);
+		this.curve = new ConstantValueLongCurve(0);
 		this.vesselInstanceType = VesselInstanceType.DES_PURCHASE;
 	}
 
 	public MarkToMarketVesselAvailability(@NonNull final IMarkToMarket markToMarket, @NonNull final ILoadOption loadOption) {
 		this.markToMarket = markToMarket;
 		this.portSlot = loadOption;
-		this.curve = new ConstantValueCurve(0);
+		this.curve = new ConstantValueLongCurve(0);
 		this.vesselInstanceType = VesselInstanceType.FOB_SALE;
 	}
 
 	@Override
-	@Nullable
+	@NonNull
 	public IVessel getVessel() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class MarkToMarketVesselAvailability implements IVesselAvailability {
 
 	@Override
 	@NonNull
-	public ICurve getDailyCharterInRate() {
+	public ILongCurve getDailyCharterInRate() {
 		return curve;
 	}
 

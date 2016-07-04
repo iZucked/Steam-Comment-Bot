@@ -1,14 +1,21 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.common.Equality;
-import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
 /**
@@ -21,13 +28,23 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 	private int choice;
 
-	private final VoyageOptions options;
+	private final @Nullable VoyageOptions previousOptions;
 
-	private final List<MatrixEntry<IPort, Integer>> distances;
+	private final @NonNull VoyageOptions options;
 
-	public RouteVoyagePlanChoice(final VoyageOptions options, final List<MatrixEntry<IPort, Integer>> distances) {
+	private final @NonNull List<@NonNull Pair<@NonNull ERouteOption, @NonNull Integer>> routeOptions;
+
+	private final @NonNull IRouteCostProvider routeCostProvider;
+
+	private final @NonNull IVessel vessel;
+
+	public RouteVoyagePlanChoice(@Nullable final VoyageOptions previousOptions, @NonNull final VoyageOptions options,
+			@NonNull final List<@NonNull Pair<@NonNull ERouteOption, @NonNull Integer>> routeOptions, @NonNull final IVessel vessel, @NonNull final IRouteCostProvider routeCostProvider) {
+		this.previousOptions = previousOptions;
 		this.options = options;
-		this.distances = distances;
+		this.routeOptions = routeOptions;
+		this.vessel = vessel;
+		this.routeCostProvider = routeCostProvider;
 	}
 
 	@Override
@@ -54,27 +71,41 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 	@Override
 	public int numChoices() {
-		return distances.size();
+		return routeOptions.size();
 	}
 
 	@Override
 	public final boolean apply(final int choice) {
 		this.choice = choice;
 
-		final MatrixEntry<IPort, Integer> entry = distances.get(choice);
+		final Pair<@NonNull ERouteOption, @NonNull Integer> entry = routeOptions.get(choice);
+		final CostType costType;
 
-		options.setRoute(entry.getKey());
-
-		final int distance = entry.getValue();
-
-		// Invalid distance
-		if (distance == Integer.MAX_VALUE) {
-			return false;
+		VoyageOptions pPreviousOption = previousOptions;
+		if (options.getVesselState() == VesselState.Laden) {
+			costType = CostType.Laden;
+		} else if (previousOptions == null) {
+			costType = CostType.Ballast;
+		} else {
+			// Is it round trip?
+			if (pPreviousOption != null) {
+				// Needs same route and load and next load port
+				if (pPreviousOption.getRoute() == entry.getFirst()) {
+					costType = CostType.RoundTripBallast;
+				} else {
+					costType = CostType.Ballast;
+				}
+			} else {
+				costType = CostType.Ballast;
+			}
 		}
 
-		options.setDistance(distance);
+		final long routeCost = routeCostProvider.getRouteCost(entry.getFirst(), vessel, costType);
+
+		options.setRoute(entry.getFirst(), entry.getSecond(), routeCost);
 
 		return true;
+
 	}
 
 	@Override
@@ -84,7 +115,7 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 			final RouteVoyagePlanChoice other = (RouteVoyagePlanChoice) obj;
 
-			if (!Equality.isEqual(distances, other.distances)) {
+			if (!Equality.isEqual(routeOptions, other.routeOptions)) {
 				return false;
 			}
 

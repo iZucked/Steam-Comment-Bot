@@ -1,11 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -64,20 +64,27 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
 
-		return checkConstraints(sequences, null);
+		return checkConstraints(sequences, changedResources, null);
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
 
-		for (final Map.Entry<IResource, ISequence> entry : sequences.getSequences().entrySet()) {
-			final VesselInstanceType vesselInstanceType = vesselProvider.getVesselAvailability(entry.getKey()).getVesselInstanceType();
+		final Collection<@NonNull IResource> loopResources;
+		if (changedResources == null) {
+			loopResources = sequences.getResources();
+		} else {
+			loopResources = changedResources;
+		}
+
+		for (final IResource resource : loopResources) {
+			final VesselInstanceType vesselInstanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
 			if (vesselInstanceType == VesselInstanceType.UNKNOWN || vesselInstanceType == VesselInstanceType.DES_PURCHASE || vesselInstanceType == VesselInstanceType.FOB_SALE) {
 				continue;
 			}
-			final ISequence sequence = entry.getValue();
+			final ISequence sequence = sequences.getSequence(resource);
 			assert sequence != null;
 			if (!checkSequence(sequence, messages, vesselInstanceType)) {
 				return false;
@@ -108,11 +115,11 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 			final PortType currentType = portTypeProvider.getPortType(t);
 
 			final IPortSlot currentSlot = portSlotProvider.getPortSlot(t);
-			final ITimeWindow tw = currentSlot.getTimeWindow();
-			if (instanceType != VesselInstanceType.CARGO_SHORTS || (lastType == PortType.Load && currentType == PortType.Discharge)) {
+			final ITimeWindow tw = currentType == PortType.Round_Trip_Cargo_End ? null : currentSlot.getTimeWindow();
+			if (instanceType != VesselInstanceType.ROUND_TRIP || (lastType == PortType.Load && currentType == PortType.Discharge)) {
 
 				if (lastTimeWindow != null && tw != null) {
-					if (tw.getEnd() < lastTimeWindow.getStart()) {
+					if (tw.getExclusiveEnd() <= lastTimeWindow.getInclusiveStart()) {
 						if (messages != null) {
 							messages.add("Current time window is before previous time window");
 						}
@@ -131,7 +138,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 	@Override
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final VesselInstanceType instanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
-		if (instanceType == VesselInstanceType.CARGO_SHORTS) {
+		if (instanceType == VesselInstanceType.ROUND_TRIP) {
 			// Cargo pairs are independent of each other, so only check real load->discharge state and ignore rest
 			final PortType t1 = portTypeProvider.getPortType(first);
 			final PortType t2 = portTypeProvider.getPortType(second);
@@ -145,7 +152,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 		final ITimeWindow firstTimeWindow = firstSlot.getTimeWindow();
 		final ITimeWindow secondTimeWindow = secondSlot.getTimeWindow();
 		if (firstTimeWindow != null && secondTimeWindow != null) {
-			if (secondTimeWindow.getEnd() < firstTimeWindow.getStart()) {
+			if (secondTimeWindow.getExclusiveEnd() <= firstTimeWindow.getInclusiveStart()) {
 				return false;
 			}
 		}
@@ -160,7 +167,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 		final ITimeWindow firstTimeWindow = firstSlot.getTimeWindow();
 		final ITimeWindow secondTimeWindow = secondSlot.getTimeWindow();
 		if (firstTimeWindow != null && secondTimeWindow != null) {
-			if (secondTimeWindow.getEnd() < firstTimeWindow.getStart()) {
+			if (secondTimeWindow.getExclusiveEnd() <= firstTimeWindow.getInclusiveStart()) {
 				return "Current time window is before previous time window";
 			}
 		}

@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.scheduler</groupId>
 	<artifactId>com.mmxlabs.scheduler.parent</artifactId>
-	<version>3.11.1-SNAPSHOT</version>
+	<version>3.12.7-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Scheduler - Parent</name>
@@ -12,7 +12,7 @@
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
 		<relativePath />
-		<version>31</version>
+		<version>32</version>
 	</parent>
 
 	<scm>
@@ -96,16 +96,21 @@
 		</plugins>
 	</build>
 
-	<repositories>
-		<repository>
-			<id>com-mmxlabs-common-util.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/${project.version}/com.mmxlabs.common.util.p2-${project.version}.zip-unzip/</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
-			<id>com-mmxlabs-optimiser.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/optimiser/com.mmxlabs.optimiser.p2/${project.version}/com.mmxlabs.optimiser.p2-${project.version}.zip-unzip/</url>
-			<layout>p2</layout>
-		</repository>
-	</repositories>
+	<profiles>
+		<profile>
+			<id>useNexusRepos</id>
+			<repositories>
+				<repository>
+					<id>com-mmxlabs-common-util.hg</id>
+					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/${project.version}/com.mmxlabs.common.util.p2-${project.version}.zip-unzip/</url>
+					<layout>p2</layout>
+				</repository>
+				<repository>
+					<id>com-mmxlabs-optimiser.hg</id>
+					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/optimiser/com.mmxlabs.optimiser.p2/${project.version}/com.mmxlabs.optimiser.p2-${project.version}.zip-unzip/</url>
+					<layout>p2</layout>
+				</repository>
+			</repositories>
+		</profile>
+	</profiles>
 </project>

@@ -1,8 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.components;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 
@@ -32,19 +34,20 @@ public interface IDischargeOption extends IPortSlot {
 	 * 
 	 */
 	void setMinDischargeVolume(long volume);
-	
+
 	/**
 	 * Returns the maximum quantity that can be discharged. A value of {@link Long#MAX_VALUE} is equivalent to no maximum bound.
 	 * 
 	 */
 	void setMaxDischargeVolume(long volume);
-	
+
 	/**
 	 * Returns whether the input data volume was set in m3 or MMBTU
+	 * 
 	 * @return
 	 */
 	boolean isVolumeSetInM3();
-	
+
 	/**
 	 * Returns the minimum quantity that can be discharged. A value of zero is equivalent to no minimum bound.
 	 * 
@@ -83,8 +86,9 @@ public interface IDischargeOption extends IPortSlot {
 	/**
 	 */
 	int getPricingDate();
-	
+
+	@NonNull
 	PricingEventType getPricingEvent();
-		
-	//BE long getHedgingPnL();
+
+	// BE long getHedgingPnL();
 }

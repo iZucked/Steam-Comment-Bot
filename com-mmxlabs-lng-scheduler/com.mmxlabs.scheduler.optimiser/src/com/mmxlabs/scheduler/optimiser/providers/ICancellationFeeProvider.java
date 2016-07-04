@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -8,6 +8,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
@@ -21,6 +24,7 @@ public interface ICancellationFeeProvider extends IDataComponentProvider {
 	 * @param portSlot
 	 * @return
 	 */
-	long getCancellationFee(IPortSlot portSlot);
-	
+	@NonNull
+	ILongCurve getCancellationExpression(@NonNull IPortSlot portSlot);
+
 }

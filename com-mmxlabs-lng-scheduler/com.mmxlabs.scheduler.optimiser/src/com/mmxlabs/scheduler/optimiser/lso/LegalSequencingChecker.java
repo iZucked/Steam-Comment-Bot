@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.lso;
@@ -92,18 +92,19 @@ public class LegalSequencingChecker {
 			// log.info("Rejected: " + pairwiseChecker.getName() + ": " + pairwiseChecker.explain(e1, e2, resource));
 			// }
 			if (print)
-			 System.out.println("RAC: Rejected: " + resourceAllocationChecker.getName() + ": " + resourceAllocationChecker.explain(e1, e2, resource));
+				System.out.println("RAC: Rejected: " + resourceAllocationChecker.getName() + ": " + resourceAllocationChecker.explain(e1, e2, resource));
 			return false;
 		} else {
-//			System.out.println("True");
+			// System.out.println("True");
 		}
 		for (final IPairwiseConstraintChecker pairwiseChecker : pairwiseCheckers) {
 			if (!pairwiseChecker.checkPairwiseConstraint(e1, e2, resource)) {
-//				 if (log.isInfoEnabled()) {
-//				 log.info("Rejected: " + pairwiseChecker.getName() + ": " + pairwiseChecker.explain(e1, e2, resource));
-//				 }
-				if (print)
-				 System.out.println("PW: Rejected: " + pairwiseChecker.getName() + ": " + pairwiseChecker.explain(e1, e2, resource));
+				// if (log.isInfoEnabled()) {
+				// log.info("Rejected: " + pairwiseChecker.getName() + ": " + pairwiseChecker.explain(e1, e2, resource));
+				// }
+				if (print) {
+					System.out.println("PW: Rejected: " + pairwiseChecker.getName() + ": " + pairwiseChecker.explain(e1, e2, resource));
+				}
 				return false;
 			}
 		}
@@ -136,7 +137,7 @@ public class LegalSequencingChecker {
 	public void disallowLateness() {
 		setMaxLateness(0);
 	}
-	
+
 	public int getMaxLateness() {
 		int time = 0;
 		for (final IPairwiseConstraintChecker checker : pairwiseCheckers) {
@@ -148,7 +149,7 @@ public class LegalSequencingChecker {
 		}
 		return time;
 	}
-	
+
 	public void setMaxLateness(int time) {
 		for (final IPairwiseConstraintChecker checker : pairwiseCheckers) {
 			if (checker instanceof TravelTimeConstraintChecker) {

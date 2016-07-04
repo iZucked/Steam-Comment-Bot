@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl;
@@ -67,8 +67,8 @@ public class GeneratedCharterOutOptionCache {
 		}
 
 		public void printKey() {
-			System.out.println(this.ballastStartTime + "  - " + this.availableTime + "  - " + this.firstLoad + "  - " + this.discharge + "  - " + this.nextLoad + "  - " + this.vesselAvailability
-					+ "  - ");
+			System.out.println(
+					this.ballastStartTime + "  - " + this.availableTime + "  - " + this.firstLoad + "  - " + this.discharge + "  - " + this.nextLoad + "  - " + this.vesselAvailability + "  - ");
 		}
 
 		@Override
@@ -101,8 +101,8 @@ public class GeneratedCharterOutOptionCache {
 
 	public List<Pair<VoyagePlan, IPortTimesRecord>> getSplitVoyagePlans(final int loadStartTime, final long loadStartingHeel, final int ballastStartTime, final int availableTime,
 			final IPortSlot firstLoad, final IPortSlot discharge, final IPortSlot nextLoad, final IVesselAvailability vesselAvailability) {
-		Pair<List<Pair<VoyagePlan, IPortTimesRecord>>, GeneratedCharterOutOption> storedSolution = cachedSolutions.get(new CacheKey(loadStartTime, loadStartingHeel, ballastStartTime, availableTime,
-				firstLoad, discharge, nextLoad, vesselAvailability));
+		Pair<List<Pair<VoyagePlan, IPortTimesRecord>>, GeneratedCharterOutOption> storedSolution = cachedSolutions
+				.get(new CacheKey(loadStartTime, loadStartingHeel, ballastStartTime, availableTime, firstLoad, discharge, nextLoad, vesselAvailability));
 		if (storedSolution == null) {
 			return null;
 		} else {
@@ -128,14 +128,15 @@ public class GeneratedCharterOutOptionCache {
 						options.setVisitDuration(gcoo.getGCODuration());
 
 						IGeneratedCharterOutVesselEventPortSlot slot = (IGeneratedCharterOutVesselEventPortSlot) options.getPortSlot();
-						slot.setId(gcoo.getGCOID());
+						assert false; // IS THIS STILL VALID NOW ID IS FIXED ?
+						// slot.setId(gcoo.getGCOID());
 						slot.setPort(gcoo.getGCOPort());
 
 						IGeneratedCharterOutVesselEvent event = slot.getVesselEvent();
 						event.setDurationHours(gcoo.getGCOEventDurationHours());
 						event.setHireOutRevenue(gcoo.getGCOEventHireOutRevenue());
 						event.setStartPort(gcoo.getGCOEventStartPort());
-						event.setStartPort(gcoo.getGCOEventEndPort());
+						event.setEndPort(gcoo.getGCOEventEndPort());
 						event.setHeelOptions(gcoo.getGCOEventHeelPrice(), gcoo.getGCOEventHeelCV(), gcoo.getGCOEventHeelVolume());
 					}
 				}
@@ -143,7 +144,7 @@ public class GeneratedCharterOutOptionCache {
 		}
 		return storedSolution.getFirst();
 	}
-	
+
 	public boolean isSolutionCached(final int loadStartTime, final long loadStartingHeel, final int ballastStartTime, final int availableTime, final IPortSlot firstLoad, final IPortSlot discharge,
 			final IPortSlot nextLoad, final IVesselAvailability vesselAvailability) {
 		CacheKey c = new CacheKey(loadStartTime, loadStartingHeel, ballastStartTime, availableTime, firstLoad, discharge, nextLoad, vesselAvailability);

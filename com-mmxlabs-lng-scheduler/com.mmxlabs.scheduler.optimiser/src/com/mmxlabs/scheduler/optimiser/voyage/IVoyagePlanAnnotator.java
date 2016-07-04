@@ -1,11 +1,13 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.voyage;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -22,6 +24,6 @@ public interface IVoyagePlanAnnotator {
 	 * @param Sequence
 	 * @param annotatedSequence
 	 */
-	void annotateFromVoyagePlan(ScheduledSequence scheduledSequence, IAnnotatedSolution annotatedSolution);
+	void annotateFromVoyagePlan(@NonNull VolumeAllocatedSequence scheduledSequence, @NonNull IAnnotatedSolution annotatedSolution);
 
 }

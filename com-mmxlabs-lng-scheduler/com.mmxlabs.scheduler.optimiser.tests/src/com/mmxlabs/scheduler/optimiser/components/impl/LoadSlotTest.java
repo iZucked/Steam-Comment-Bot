@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
@@ -41,16 +41,20 @@ public class LoadSlotTest {
 	@Test
 	public void testGetSetMinLoadVolume() {
 		final long value = 10;
-		final LoadSlot slot = new LoadSlot();
+		final LoadSlot slot = instantiateSlot();
 		Assert.assertEquals(0, slot.getMinLoadVolume());
 		slot.setMinLoadVolume(value);
 		Assert.assertEquals(value, slot.getMinLoadVolume());
 	}
 
+	private LoadSlot instantiateSlot() {
+		return new LoadSlot("slot", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 0, false, true);
+	}
+
 	@Test
 	public void testGetSetMaxLoadVolume() {
 		final long value = 10;
-		final LoadSlot slot = new LoadSlot();
+		final LoadSlot slot = instantiateSlot();
 		Assert.assertEquals(0, slot.getMaxLoadVolume());
 		slot.setMaxLoadVolume(value);
 		Assert.assertEquals(value, slot.getMaxLoadVolume());
@@ -59,8 +63,8 @@ public class LoadSlotTest {
 	@Test
 	public void testGetSetPurchasePriceCurve() {
 		final ILoadPriceCalculator contract = Mockito.mock(ILoadPriceCalculator.class);
-		final LoadSlot slot = new LoadSlot();
-		Assert.assertNull(slot.getLoadPriceCalculator());
+		final LoadSlot slot = instantiateSlot();
+		Assert.assertNotNull(slot.getLoadPriceCalculator());
 		slot.setLoadPriceCalculator(contract);
 		Assert.assertSame(contract, slot.getLoadPriceCalculator());
 	}
@@ -68,7 +72,7 @@ public class LoadSlotTest {
 	@Test
 	public void testGetSetCargoCVValue() {
 		final int value = 10;
-		final LoadSlot slot = new LoadSlot();
+		final LoadSlot slot = instantiateSlot();
 		Assert.assertEquals(0, slot.getCargoCVValue());
 		slot.setCargoCVValue(value);
 		Assert.assertEquals(value, slot.getCargoCVValue());

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
@@ -10,9 +10,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.RandomHelper;
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 
 /**
  * Another random sequence scheduler, which works by resting on top of the {@link EnumeratingSequenceScheduler} and replacing the exhaustive recursive loop with something randomised; for each element
@@ -26,11 +24,10 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 	private Random random;
 
 	@Override
-	public ScheduledSequences schedule(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
+	public int @Nullable [][] schedule(@NonNull final ISequences sequences) {
 		random = new Random(seed);
 
 		setSequences(sequences);
-		resetBest();
 
 		prepare();
 
@@ -40,36 +37,7 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 		}
 		synchroniseShipToShipBindings();
 
-		if (RE_EVALUATE_SOLUTION) {
-			evaluate(null);
-			return reEvaluateAndGetBestResult(sequences, solution);
-		} else {
-			evaluate(solution);
-			return getBestResult();
-		}
-	}
-
-	@Override
-	protected final ScheduledSequences reEvaluateAndGetBestResult(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
-
-//		final long lastValue = getBestValue();
-		random = new Random(seed);
-
-		setSequences(sequences);
-		resetBest();
-
-		prepare();
-
-		for (int index = 0; index < sequences.size(); ++index) {
-			random.setSeed(seed);
-			randomise(index);
-		}
-		synchroniseShipToShipBindings();
-		evaluate(solution);
-
-//		assert lastValue == getBestValue();
-
-		return getBestResult();
+		return arrivalTimes;
 	}
 
 	private void synchroniseShipToShipBindings() {
@@ -96,7 +64,7 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 			final int lastIndex = sizes[seq] - 1;
 			for (int pos = 0; pos < lastIndex; pos++) {
 				final int min = getMinArrivalTime(seq, pos);
-				final int max = getMaxArrivalTime(seq, pos);
+				final int max = getMaxArrivalTime(seq, pos) ;
 				arrivalTimes[seq][pos] = RandomHelper.nextIntBetween(random, min, max);
 				// TODO force sync this with any ship-to-ship bindings
 			}
@@ -107,5 +75,4 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 			arrivalTimes[seq][0] = getMaxArrivalTimeForNextArrival(seq, 0);
 		}
 	}
-
 }

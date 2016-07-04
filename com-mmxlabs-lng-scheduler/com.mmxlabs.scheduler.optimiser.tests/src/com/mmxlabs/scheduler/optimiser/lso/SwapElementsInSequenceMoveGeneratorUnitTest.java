@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.lso;
@@ -11,16 +11,22 @@ import java.util.Random;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator.Followers;
 import com.mmxlabs.scheduler.optimiser.lso.moves.SwapSingleSequenceElements;
+import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
 public class SwapElementsInSequenceMoveGeneratorUnitTest {
 
@@ -28,10 +34,12 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 	public void testTwoElements() {
 		final ConstrainedMoveGenerator cmg = Mockito.mock(ConstrainedMoveGenerator.class);
 
+		final IFollowersAndPreceders followersAndPreceders = Mockito.mock(IFollowersAndPreceders.class);
+
 		final Random random = new Random();
 		Mockito.when(cmg.getRandom()).thenReturn(random);
 
-		final SwapElementsInSequenceMoveGeneratorUnit mg = create(cmg);
+		final SwapElementsInSequenceMoveGeneratorUnit mg = create(cmg, followersAndPreceders);
 
 		// TODO: Build up a sequences structure - permit single combinations
 		final IResource resource = Mockito.mock(IResource.class);
@@ -44,24 +52,41 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 		seq.add(elementA);
 		seq.add(elementB);
 
-		final Map<ISequenceElement, Pair<Integer, Integer>> reverseLookup = new HashMap<ISequenceElement, Pair<Integer, Integer>>();
-		reverseLookup.put(elementA, new Pair<Integer, Integer>(0, 0));
-		reverseLookup.put(elementB, new Pair<Integer, Integer>(0, 1));
+		final Map<ISequenceElement, Pair<IResource, Integer>> reverseLookup = new HashMap<>();
+		reverseLookup.put(elementA, new Pair<IResource, Integer>(resource, 0));
+		reverseLookup.put(elementB, new Pair<IResource, Integer>(resource, 1));
 
-		// Build up followers / preceeders
-		final Map<ISequenceElement, Followers<ISequenceElement>> followers = new HashMap<ISequenceElement, ConstrainedMoveGenerator.Followers<ISequenceElement>>();
-		final Map<ISequenceElement, Followers<ISequenceElement>> preceeders = new HashMap<ISequenceElement, ConstrainedMoveGenerator.Followers<ISequenceElement>>();
+		// Build up followers / preceders
+		final Map<ISequenceElement, Followers<ISequenceElement>> followers = new HashMap<ISequenceElement, Followers<ISequenceElement>>();
+		final Map<ISequenceElement, Followers<ISequenceElement>> preceders = new HashMap<ISequenceElement, Followers<ISequenceElement>>();
 
 		// A can be followed by B
-		followers.put(elementA, cmg.new Followers<ISequenceElement>(Collections.singleton(elementB)));
-		followers.put(elementB, cmg.new Followers<ISequenceElement>(Collections.singleton(elementA)));
-		preceeders.put(elementA, cmg.new Followers<ISequenceElement>(Collections.singleton(elementB)));
-		preceeders.put(elementB, cmg.new Followers<ISequenceElement>(Collections.singleton(elementA)));
+		followers.put(elementA, new Followers<ISequenceElement>(Collections.singleton(elementB)));
+		followers.put(elementB, new Followers<ISequenceElement>(Collections.singleton(elementA)));
+		preceders.put(elementA, new Followers<ISequenceElement>(Collections.singleton(elementB)));
+		preceders.put(elementB, new Followers<ISequenceElement>(Collections.singleton(elementA)));
 
 		Mockito.when(cmg.getReverseLookup()).thenReturn(reverseLookup);
-		Mockito.when(cmg.getValidFollowers()).thenReturn(followers);
-		Mockito.when(cmg.getValidPreceeders()).thenReturn(preceeders);
 		Mockito.when(cmg.getSequences()).thenReturn(sequences);
+
+		Mockito.when(followersAndPreceders.getValidFollowers(Matchers.<ISequenceElement> anyObject())).then(new Answer<Followers<ISequenceElement>>() {
+
+			@Override
+			public Followers<ISequenceElement> answer(final InvocationOnMock invocation) throws Throwable {
+
+				final ISequenceElement e = (ISequenceElement) invocation.getArguments()[0];
+				return followers.get(e);
+			}
+		});
+		Mockito.when(followersAndPreceders.getValidPreceders(Matchers.<ISequenceElement> anyObject())).then(new Answer<Followers<ISequenceElement>>() {
+
+			@Override
+			public Followers<ISequenceElement> answer(final InvocationOnMock invocation) throws Throwable {
+
+				final ISequenceElement e = (ISequenceElement) invocation.getArguments()[0];
+				return preceders.get(e);
+			}
+		});
 
 		final SwapSingleSequenceElements move = mg.generateMove();
 
@@ -79,10 +104,12 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 	public void testThreeElements() {
 		final ConstrainedMoveGenerator cmg = Mockito.mock(ConstrainedMoveGenerator.class);
 
+		final IFollowersAndPreceders followersAndPreceders = Mockito.mock(IFollowersAndPreceders.class);
+
 		final Random random = new Random();
 		Mockito.when(cmg.getRandom()).thenReturn(random);
 
-		final SwapElementsInSequenceMoveGeneratorUnit mg = create(cmg);
+		final SwapElementsInSequenceMoveGeneratorUnit mg = create(cmg, followersAndPreceders);
 
 		final IResource resource = Mockito.mock(IResource.class);
 		final IModifiableSequences sequences = new ModifiableSequences(Collections.singletonList(resource));
@@ -96,32 +123,49 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 		seq.add(elementB);
 		seq.add(elementC);
 
-		final Map<ISequenceElement, Pair<Integer, Integer>> reverseLookup = new HashMap<ISequenceElement, Pair<Integer, Integer>>();
-		reverseLookup.put(elementA, new Pair<Integer, Integer>(0, 0));
-		reverseLookup.put(elementB, new Pair<Integer, Integer>(0, 1));
-		reverseLookup.put(elementC, new Pair<Integer, Integer>(0, 2));
+		final Map<ISequenceElement, Pair<IResource, Integer>> reverseLookup = new HashMap<>();
+		reverseLookup.put(elementA, new Pair<IResource, Integer>(resource, 0));
+		reverseLookup.put(elementB, new Pair<IResource, Integer>(resource, 1));
+		reverseLookup.put(elementC, new Pair<IResource, Integer>(resource, 2));
 
-		// Build up followers / preceeders
-		final Map<ISequenceElement, Followers<ISequenceElement>> followers = new HashMap<ISequenceElement, ConstrainedMoveGenerator.Followers<ISequenceElement>>();
-		final Map<ISequenceElement, Followers<ISequenceElement>> preceeders = new HashMap<ISequenceElement, ConstrainedMoveGenerator.Followers<ISequenceElement>>();
+		// Build up followers / preceders
+		final Map<ISequenceElement, Followers<ISequenceElement>> followers = new HashMap<ISequenceElement, Followers<ISequenceElement>>();
+		final Map<ISequenceElement, Followers<ISequenceElement>> preceders = new HashMap<ISequenceElement, Followers<ISequenceElement>>();
 
 		// A can be followed by B
-		followers.put(elementA, cmg.new Followers<ISequenceElement>(Collections.singleton(elementB)));
-		followers.put(elementB, cmg.new Followers<ISequenceElement>(Collections.singleton(elementC)));
+		followers.put(elementA, new Followers<ISequenceElement>(Collections.singleton(elementB)));
+		followers.put(elementB, new Followers<ISequenceElement>(Collections.singleton(elementC)));
 
-		followers.put(elementC, cmg.new Followers<ISequenceElement>(Collections.singleton(elementB)));
-		followers.put(elementB, cmg.new Followers<ISequenceElement>(Collections.singleton(elementA)));
+		followers.put(elementC, new Followers<ISequenceElement>(Collections.singleton(elementB)));
+		followers.put(elementB, new Followers<ISequenceElement>(Collections.singleton(elementA)));
 
-		preceeders.put(elementB, cmg.new Followers<ISequenceElement>(Collections.singleton(elementA)));
-		preceeders.put(elementC, cmg.new Followers<ISequenceElement>(Collections.singleton(elementB)));
+		preceders.put(elementB, new Followers<ISequenceElement>(Collections.singleton(elementA)));
+		preceders.put(elementC, new Followers<ISequenceElement>(Collections.singleton(elementB)));
 
-		preceeders.put(elementB, cmg.new Followers<ISequenceElement>(Collections.singleton(elementC)));
-		preceeders.put(elementA, cmg.new Followers<ISequenceElement>(Collections.singleton(elementB)));
+		preceders.put(elementB, new Followers<ISequenceElement>(Collections.singleton(elementC)));
+		preceders.put(elementA, new Followers<ISequenceElement>(Collections.singleton(elementB)));
 
 		Mockito.when(cmg.getReverseLookup()).thenReturn(reverseLookup);
-		Mockito.when(cmg.getValidFollowers()).thenReturn(followers);
-		Mockito.when(cmg.getValidPreceeders()).thenReturn(preceeders);
 		Mockito.when(cmg.getSequences()).thenReturn(sequences);
+
+		Mockito.when(followersAndPreceders.getValidFollowers(Matchers.<ISequenceElement> anyObject())).then(new Answer<Followers<ISequenceElement>>() {
+
+			@Override
+			public Followers<ISequenceElement> answer(final InvocationOnMock invocation) throws Throwable {
+
+				final ISequenceElement e = (ISequenceElement) invocation.getArguments()[0];
+				return followers.get(e);
+			}
+		});
+		Mockito.when(followersAndPreceders.getValidPreceders(Matchers.<ISequenceElement> anyObject())).then(new Answer<Followers<ISequenceElement>>() {
+
+			@Override
+			public Followers<ISequenceElement> answer(final InvocationOnMock invocation) throws Throwable {
+
+				final ISequenceElement e = (ISequenceElement) invocation.getArguments()[0];
+				return preceders.get(e);
+			}
+		});
 
 		final SwapSingleSequenceElements move = mg.generateMove();
 
@@ -131,11 +175,19 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 		Assert.assertTrue(move.getIndexA() == 0 || move.getIndexB() == 0);
 		Assert.assertTrue(move.getIndexA() == 2 || move.getIndexB() == 2);
 		Assert.assertTrue(move.getIndexA() != move.getIndexB());
-
 	}
 
-	private SwapElementsInSequenceMoveGeneratorUnit create(final ConstrainedMoveGenerator owner) {
-		return new SwapElementsInSequenceMoveGeneratorUnit(owner);
-	}
+	private SwapElementsInSequenceMoveGeneratorUnit create(final ConstrainedMoveGenerator owner, final IFollowersAndPreceders followersAndProceders) {
+		final Injector injector = Guice.createInjector(new AbstractModule() {
+			@Override
+			protected void configure() {
+				bind(IFollowersAndPreceders.class).toInstance(followersAndProceders);
 
+			}
+		});
+		final SwapElementsInSequenceMoveGeneratorUnit unit = new SwapElementsInSequenceMoveGeneratorUnit(owner);
+		injector.injectMembers(unit);
+
+		return unit;
+	}
 }

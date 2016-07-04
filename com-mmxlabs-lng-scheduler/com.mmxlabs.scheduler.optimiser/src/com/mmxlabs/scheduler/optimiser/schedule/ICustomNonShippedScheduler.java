@@ -1,12 +1,13 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * Allow custom code to tinker with arrival times.
@@ -16,6 +17,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public interface ICustomNonShippedScheduler {
 
-	void modifyArrivalTimes(IResource resource, int startTime, VoyagePlan currentPlan, PortTimesRecord portTimesRecord);
+	void modifyArrivalTimes(@NonNull IResource resource, @NonNull PortTimesRecord portTimesRecord);
 
 }

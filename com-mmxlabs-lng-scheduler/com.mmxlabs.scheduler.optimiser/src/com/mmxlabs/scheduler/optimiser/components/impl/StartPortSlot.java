@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
@@ -18,16 +18,16 @@ public final class StartPortSlot extends PortSlot implements IHeelOptionsPortSlo
 	@NonNull
 	private final IHeelOptions heelOptions;
 
-	public StartPortSlot(@NonNull final String id, @NonNull final IPort port, @NonNull final ITimeWindow timeWindow, @Nullable final IHeelOptions heelOptions) {
+	public StartPortSlot(@NonNull final String id, @NonNull final IPort port, @Nullable final ITimeWindow timeWindow, @Nullable final IHeelOptions heelOptions) {
 		super(id, port, timeWindow);
 		setPortType(PortType.Start);
 		this.heelOptions = heelOptions == null ? new HeelOptions() : heelOptions;
 	}
 
-	public StartPortSlot(final IHeelOptions heelOptions) {
-		setPortType(PortType.Start);
-		this.heelOptions = heelOptions == null ? new HeelOptions() : heelOptions;
-	}
+	// public StartPortSlot(final IHeelOptions heelOptions) {
+	// setPortType(PortType.Start);
+	// this.heelOptions = heelOptions == null ? new HeelOptions() : heelOptions;
+	// }
 
 	/*
 	 * (non-Javadoc)

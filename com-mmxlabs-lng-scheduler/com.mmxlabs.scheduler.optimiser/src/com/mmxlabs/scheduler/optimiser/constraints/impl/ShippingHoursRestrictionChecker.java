@@ -1,9 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -22,6 +23,7 @@ import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCa
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
@@ -65,15 +67,20 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences) {
-		return checkConstraints(sequences, null);
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
+		return checkConstraints(sequences, changedResources, null);
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
+		final Collection<@NonNull IResource> loopResources;
+		if (changedResources == null) {
+			loopResources = sequences.getResources();
+		} else {
+			loopResources = changedResources;
+		}
 
-		for (final IResource resource : sequences.getResources()) {
-			assert resource != null;
+		for (final IResource resource : loopResources) {
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 
@@ -134,9 +141,17 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 						return false;
 					}
 
-					final Pair<Integer, Integer> desTimes = dischargeTimeCalculator.getDivertableDESTimes(desPurchase, desSale, nominatedVesselProvider.getNominatedVessel(first), resource);
+					@Nullable
+					final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(first);
+					if (nominatedVessel == null) {
+						return false;
+					}
+					final Pair<Integer, Integer> desTimes = dischargeTimeCalculator.getDivertableDESTimes(desPurchase, desSale, nominatedVessel, resource);
+					if (desTimes == null) {
+						return false;
+					}
 					final int returnTime = desTimes.getSecond();
-					if (returnTime - fobLoadDate.getStart() > shippingHours) {
+					if (returnTime - fobLoadDate.getInclusiveStart() > shippingHours) {
 						return false;
 					}
 					return true;

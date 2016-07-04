@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
@@ -13,6 +13,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProviderEditor;
 
 public class HashMapActualsDataProviderEditor implements IActualsDataProviderEditor {
@@ -34,10 +35,10 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 
 	private final Map<IPortSlot, Integer> lngPricePerMMBTu = new HashMap<>();
 	private final Map<IPortSlot, Integer> baseFuelPricePerMT = new HashMap<>();
-	private final Map<IPortSlot, Integer> charterRatePerDay = new HashMap<>();
+	private final Map<IPortSlot, Long> charterRatePerDay = new HashMap<>();
 	private final Map<IPortSlot, Long> routeCosts = new HashMap<>();
 	private final Map<IPortSlot, Integer> distance = new HashMap<>();
-	private final Map<IPortSlot, String> nextVoyageRoute = new HashMap<>();
+	private final Map<IPortSlot, ERouteOption> nextVoyageRoute = new HashMap<>();
 
 	private final Map<IPortSlot, Integer> returnTime = new HashMap<>();
 	private final Map<IPortSlot, ITimeWindow> returnTimeWindow = new HashMap<>();
@@ -106,7 +107,7 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 	public long getPortBaseFuelConsumptionInMT(final IPortSlot slot) {
 		return portBaseFuelConsumptionInMT.get(slot);
 	}
-	
+
 	@Override
 	public long getNextVoyageBaseFuelConsumptionInMT(final IPortSlot slot) {
 		return baseFuelConsumptionInMT.get(slot);
@@ -118,7 +119,7 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 	}
 
 	@Override
-	public int getCharterRatePerDay(final IPortSlot slot) {
+	public long getCharterRatePerDay(final IPortSlot slot) {
 		return charterRatePerDay.get(slot);
 	}
 
@@ -134,8 +135,8 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 
 	@Override
 	public void createLoadSlotActuals(final ILoadOption slot, final int arrivalTime, final int visitDuration, final long portCosts, final int cargoCV, final long startHeelInM3,
-			final long lngLoadVolumeInM3, final long lngLoadVolumeInMMBTu, final int purchasePricePerMMBTu, final long portBaseFuelConsumptionInMT, final long ladenBaseFuelConsumptionInMT, final int baseFuelPricePerMT,
-			final int charterRatePerDay, final int distance, final long routeCosts, final String route) {
+			final long lngLoadVolumeInM3, final long lngLoadVolumeInMMBTu, final int purchasePricePerMMBTu, final long portBaseFuelConsumptionInMT, final long ladenBaseFuelConsumptionInMT,
+			final int baseFuelPricePerMT, final long charterRatePerDay, final int distance, final long routeCosts, final ERouteOption route) {
 
 		this.actualsPresent.put(slot, true);
 
@@ -160,8 +161,8 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 
 	@Override
 	public void createDischargeSlotActuals(final IDischargeOption slot, final int arrivalTime, final int visitDuration, final long portCosts, final int cargoCV, final long endHeelInM3,
-			final long lngDischargeVolumeInM3, final long lngDischargeVolumeInMMBTu, final int salesPricePerMMBTu, final long dischargePortBaseFuelConsumptionInMT, final long ballastBaseFuelConsumptionInMT, final int distance,
-			final long routeCosts, final String route) {
+			final long lngDischargeVolumeInM3, final long lngDischargeVolumeInMMBTu, final int salesPricePerMMBTu, final long dischargePortBaseFuelConsumptionInMT,
+			final long ballastBaseFuelConsumptionInMT, final int distance, final long routeCosts, final ERouteOption route) {
 		this.actualsPresent.put(slot, true);
 
 		this.arrivalTime.put(slot, arrivalTime);
@@ -222,7 +223,7 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 	}
 
 	@Override
-	public String getNextVoyageRoute(final IPortSlot slot) {
+	public ERouteOption getNextVoyageRoute(final IPortSlot slot) {
 		return nextVoyageRoute.get(slot);
 	}
 }

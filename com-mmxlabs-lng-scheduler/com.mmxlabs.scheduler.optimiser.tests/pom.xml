@@ -5,11 +5,11 @@
 	<parent>
 		<groupId>com.mmxlabs.scheduler</groupId>
 		<artifactId>com.mmxlabs.scheduler.parent</artifactId>
-		<version>3.11.1-SNAPSHOT</version>
+		<version>3.12.7-SNAPSHOT</version>
 	</parent>
 	
 	<artifactId>com.mmxlabs.scheduler.optimiser.tests</artifactId>
-	<version>3.11.1-SNAPSHOT</version>
+	<version>3.12.7-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
 
 	<build>

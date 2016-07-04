@@ -1,14 +1,15 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * Default implementation of {@link ILoadSlot}.
@@ -22,12 +23,12 @@ public final class LoadSlot extends LoadOption implements ILoadSlot {
 
 	private boolean cooldownForbidden;
 
-	public LoadSlot() {
-		setPortType(PortType.Load);
-	}
+	// public LoadSlot() {
+	// setPortType(PortType.Load);
+	// }
 
-	public LoadSlot(final String id, final IPort port, final ITimeWindow timwWindow, final long minLoadVolume, final long maxLoadVolume, final ILoadPriceCalculator loadPriceCalculator,
-			final int cargoCVValue, final boolean cooldownSet, final boolean cooldownForbidden) {
+	public LoadSlot(final @NonNull String id, final @NonNull IPort port, final ITimeWindow timwWindow, final long minLoadVolume, final long maxLoadVolume,
+			final @NonNull ILoadPriceCalculator loadPriceCalculator, final int cargoCVValue, final boolean cooldownSet, final boolean cooldownForbidden) {
 		super(id, port, timwWindow, minLoadVolume, maxLoadVolume, loadPriceCalculator, cargoCVValue);
 		this.cooldownSet = cooldownSet;
 		this.cooldownForbidden = cooldownForbidden;

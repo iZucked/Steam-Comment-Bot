@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
@@ -17,7 +17,7 @@ public class PortOptionsTest {
 	public void testGetSetVisitDuration() {
 
 		final int value = 100;
-		final PortOptions options = new PortOptions();
+		final PortOptions options = new PortOptions(Mockito.mock(IPortSlot.class));
 		Assert.assertEquals(0, options.getVisitDuration());
 		options.setVisitDuration(value);
 		Assert.assertEquals(value, options.getVisitDuration());
@@ -27,17 +27,15 @@ public class PortOptionsTest {
 	public void testGetSetPortSlot() {
 		final IPortSlot slot = Mockito.mock(IPortSlot.class);
 
-		final PortOptions options = new PortOptions();
-		Assert.assertNull(options.getPortSlot());
-		options.setPortSlot(slot);
+		final PortOptions options = new PortOptions(slot);
 		Assert.assertSame(slot, options.getPortSlot());
 	}
 
 	@Test
 	public void testGetSetVessel() {
 		final IVessel vessel = Mockito.mock(IVessel.class);
-
-		final PortOptions options = new PortOptions();
+		final IPortSlot slot = Mockito.mock(IPortSlot.class);
+		final PortOptions options = new PortOptions(slot);
 		Assert.assertNull(options.getVessel());
 		options.setVessel(vessel);
 		Assert.assertSame(vessel, options.getVessel());

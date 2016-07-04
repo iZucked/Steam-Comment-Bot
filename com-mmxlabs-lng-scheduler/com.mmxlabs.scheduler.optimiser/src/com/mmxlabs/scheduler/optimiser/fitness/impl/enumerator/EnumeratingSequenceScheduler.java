@@ -1,30 +1,27 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
-import com.google.inject.name.Named;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
-import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -32,9 +29,10 @@ import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractLoggingSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -43,7 +41,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
-import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimeWindowsRecord;
 
 /**
  * A sequence scheduler which enumerates possible combinations of arrival times explicitly, rather than using the GA byte array decoding method. This should be subclassable into a random sequence
@@ -52,12 +51,7 @@ import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
  * @author hinton
  * 
  */
-public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceScheduler {
-	public final static String OPTIMISER_REEVALUATE = "enableReEvaluationInOptimiser";
-
-	@Inject
-	@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
-	protected boolean RE_EVALUATE_SOLUTION;
+public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequenceScheduler {
 
 	private static final int DISCHARGE_SEQUENCE_INDEX_OFFSET = 0;
 	private static final int DISCHARGE_WITHIN_SEQUENCE_INDEX_OFFSET = 1;
@@ -77,15 +71,15 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 	/**
 	 * The start times of each window, appropriately `clipped' to deal with infeasible choices or null time windows.
 	 */
-	private int[][] windowStartTime;
+	protected int[][] windowStartTime;
 	/**
 	 * The end times of each window, similar to start times.
 	 */
-	private int[][] windowEndTime;
+	protected int[][] windowEndTime;
 	/**
 	 * The minimum time this vessel can take to get from the indexed element to its successor. i.e. min travel time + visit time at indexed element.
 	 */
-	private int[][] minTimeToNextElement;
+	protected int[][] minTimeToNextElement;
 	/**
 	 * The maximum time to get from the indexed element to its successor. This is the maximum travel time + visit time at this element
 	 */
@@ -133,6 +127,8 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 	// protected final ArrayList<Integer> separationPoints = new
 	// ArrayList<Integer>();
 
+	protected List<List<IPortTimeWindowsRecord>> portTimeWindowsRecords = new ArrayList<>();
+
 	@Inject
 	private IShipToShipBindingProvider shipToShipProvider;
 
@@ -155,7 +151,7 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 	private IRouteCostProvider routeCostProvider;
 
 	@Inject
-	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
+	private IDistanceProvider distanceProvider;
 
 	@Inject
 	private IElementDurationProvider durationProvider;
@@ -164,81 +160,21 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	private ScheduleCalculator scheduleCalculator;
-
-	@Inject
 	private IActualsDataProvider actualsDataProvider;
 
 	/**
 	 * The sequences being evaluated at the moment
 	 */
-	private ISequences sequences;
-
-//	private ScheduleFitnessEvaluator evaluator;
-
-//	/**
-//	 * the fitness of the best result in the cycle
-//	 */
-//	private long bestValue;
-	/**
-	 * the best result in this cycle, or null if we have just started a cycle
-	 */
-	private ScheduledSequences bestResult;
+	protected ISequences sequences;
 
 	private final TimeWindow defaultStartWindow = new TimeWindow(0, Integer.MAX_VALUE);
 
 	public EnumeratingSequenceScheduler() {
 		super();
-
-//		createLog();
-	}
-
-	@Override
-	public ScheduledSequences schedule(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
-		setSequences(sequences);
-		resetBest();
-
-//		startLogEntry(1);
-		prepare();
-		if (RE_EVALUATE_SOLUTION) {
-			enumerate(0, 0, null);
-		} else {
-			enumerate(0, 0, solution);
-		}
-//		endLogEntry();
-		if (RE_EVALUATE_SOLUTION) {
-			return reEvaluateAndGetBestResult(sequences, solution);
-		} else {
-			return getBestResult();
-		}
-	}
-
-	protected ScheduledSequences reEvaluateAndGetBestResult(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
-//		final long lastValue = getBestValue();
-		setSequences(sequences);
-		resetBest();
-
-//		startLogEntry(1);
-		prepare();
-		enumerate(0, 0, solution);
-//		endLogEntry();
-
-//		assert lastValue == getBestValue();
-
-		return getBestResult();
-	}
-
-	protected final void resetBest() {
-		this.bestResult = null;
-//		this.bestValue = Long.MAX_VALUE;
 	}
 
 	protected final void setSequences(final ISequences sequences) {
 		this.sequences = sequences;
-	}
-
-	protected ScheduledSequences getBestResult() {
-		return bestResult;
 	}
 
 	protected final void prepare() {
@@ -257,7 +193,9 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 			sizes = new int[size];
 		}
 
+		portTimeWindowsRecords.clear();
 		for (int i = 0; i < size; i++) {
+			portTimeWindowsRecords.add(new LinkedList<IPortTimeWindowsRecord>());
 			prepare(i);
 		}
 
@@ -272,10 +210,13 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 	 * @param withinSeqIndex
 	 * @param element
 	 */
-	private final void recordShipToShipBindings(final int seqIndex, final int withinSeqIndex, final ISequenceElement element) {
+	private final void recordShipToShipBindings(final int seqIndex, final int withinSeqIndex, final @NonNull ISequenceElement element) {
 
 		final IPortSlot slot = portSlotProvider.getPortSlot(element);
 		final IPortSlot converseSlot = shipToShipProvider.getConverseTransferElement(slot);
+		if (converseSlot == null) {
+			return;
+		}
 		final ISequenceElement transferConverseElement = portSlotProvider.getElement(converseSlot);
 
 		if (transferConverseElement != null) {
@@ -343,7 +284,7 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 		for (int i = 1; i < startTimes.length; i++) {
 			if (actualiseTimeWindows[i] && !useRawTimeWindow[i]) {
 				startTimes[i] = Math.max(startTimes[i], startTimes[i - 1] + minTravelTimes[i - 1]);
-				endTimes[i] = Math.max(endTimes[i], startTimes[i]);
+				endTimes[i] = Math.max(endTimes[i], startTimes[i] + 1);
 			}
 		}
 
@@ -354,7 +295,7 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 			// reachable without lateness
 			// (but never so that the end time is before the start time)
 			if (actualiseTimeWindows[i] && !useRawTimeWindow[i + 1]) {
-				endTimes[i] = Math.max(startTimes[i], Math.min(endTimes[i], endTimes[i + 1] - minTravelTimes[i]));
+				endTimes[i] = Math.max(startTimes[i] + 1, Math.min(endTimes[i], endTimes[i + 1] - minTravelTimes[i]));
 			}
 		}
 	}
@@ -435,6 +376,40 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 	}
 
 	/**
+	 * Returns an array of boolean values indicating whether, for each index of the vessel location sequence, a sequence break occurs at that location (separating one cargo from the next one).
+	 * 
+	 * @param sequence
+	 * @return
+	 */
+	protected boolean[] findSequenceBreaks(final ISequence sequence, boolean isRoundTripSequence) {
+		final boolean[] result = new boolean[sequence.size()];
+
+		int idx = 0;
+		for (final ISequenceElement element : sequence) {
+			final PortType portType = portTypeProvider.getPortType(element);
+			switch (portType) {
+			case Load:
+				result[idx] = !isRoundTripSequence && (idx > 0); // don't break on first load port
+				break;
+			case CharterOut:
+			case DryDock:
+			case Other:
+			case Maintenance:
+			case End:
+			case Round_Trip_Cargo_End:
+				result[idx] = true;
+				break;
+			default:
+				result[idx] = false;
+				break;
+			}
+			idx++;
+		}
+
+		return result;
+	}
+
+	/**
 	 * Unpack some distance/time/speed information, set up arrays etc
 	 * 
 	 * @param maxValue
@@ -453,6 +428,9 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 		}
 
 		final int size = sequence.size();
+		if (size < 2) {
+			return;
+		}
 
 		resizeAll(sequenceIndex, size);
 
@@ -468,13 +446,32 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 
 		final int minSpeed = vesselAvailability.getVessel().getVesselClass().getMinSpeed();
 
+		final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
+
 		int index = 0;
 		ISequenceElement prevElement = null;
+		final boolean[] breakSequence = findSequenceBreaks(sequence, isRoundTripSequence);
+
+		// from voyageplanner --->
+		IPortSlot prevPortSlot = null;
+		// Used for end of sequence checks
+		IPortSlot prevPrevPortSlot = null;
+		PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
+		portTimeWindowsRecord.setResource(resource);
+		// --->
 
 		// first pass, collecting start time windows
 		for (final ISequenceElement element : sequence) {
 			final IPortSlot slot = portSlotProvider.getPortSlot(element);
+
+			// from voyageplanner --->
+			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
+			final PortType portType = portTypeProvider.getPortType(element);
+			final int visitDuration = actualsDataProvider.hasActuals(thisPortSlot) ? actualsDataProvider.getVisitDuration(thisPortSlot) : durationProvider.getElementDuration(element, resource);
+			// --->
+
 			final List<ITimeWindow> windows;
+
 			// Take element start window into account
 			if (portTypeProvider.getPortType(element) == PortType.Start) {
 				final IStartEndRequirement startRequirement = startEndRequirementProvider.getStartRequirement(resource);
@@ -507,7 +504,7 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 			} else {
 
 				final IPortSlot prevSlot = prevElement == null ? null : portSlotProvider.getPortSlot(prevElement);
-				if (actualsDataProvider.hasReturnActuals(prevSlot)) {
+				if (prevSlot != null && actualsDataProvider.hasReturnActuals(prevSlot)) {
 					windows = Collections.singletonList(actualsDataProvider.getReturnTimeAsTimeWindow(prevSlot));
 					if (actualsDataProvider.hasActuals(slot)) {
 						int a = actualsDataProvider.getArrivalTime(slot);
@@ -528,8 +525,21 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 				recordShipToShipBindings(sequenceIndex, index, element);
 			}
 
+			if (breakSequence[index]) {
+				// last slot in plan, set return
+				portTimeWindowsRecord.setReturnSlot(thisPortSlot, null, visitDuration, index);
+				// finalise record
+				portTimeWindowsRecords.get(sequenceIndex).add(portTimeWindowsRecord);
+				// create new record
+				portTimeWindowsRecord = new PortTimeWindowsRecord();
+				portTimeWindowsRecord.setResource(resource);
+				portTimeWindowsRecord.setSlot(thisPortSlot, null, visitDuration, index);
+			} else {
+				portTimeWindowsRecord.setSlot(thisPortSlot, null, visitDuration, index);
+			}
+
 			isVirtual[index] = portTypeProvider.getPortType(element) == PortType.Virtual;
-			useTimeWindow[index] = prevElement == null ? false : portTypeProvider.getPortType(prevElement) == PortType.Short_Cargo_End;
+			useTimeWindow[index] = prevElement == null ? false : portTypeProvider.getPortType(prevElement) == PortType.Round_Trip_Cargo_End;
 			// Calculate minimum inter-element durations
 			maxTimeToNextElement[index] = minTimeToNextElement[index] = durationProvider.getElementDuration(element, resource);
 
@@ -539,10 +549,11 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 
 				int minTravelTime = Integer.MAX_VALUE;
 				int maxTravelTime = 0;
-				for (final MatrixEntry<IPort, Integer> entry : distanceProvider.getValues(prevPort, port)) {
-					final int distance = entry.getValue();
+				for (final Pair<@NonNull ERouteOption, @NonNull Integer> entry : distanceProvider.getDistanceValues(prevPort, port,
+						windowStartTime[index - 1] + durationProvider.getElementDuration(element, resource))) {
+					final int distance = entry.getSecond();
 					if (distance != Integer.MAX_VALUE) {
-						final int extraTime = routeCostProvider.getRouteTransitTime(entry.getKey(), vesselAvailability.getVessel().getVesselClass());
+						final int extraTime = routeCostProvider.getRouteTransitTime(entry.getFirst(), vesselAvailability.getVessel());
 						final int minByRoute = Calculator.getTimeFromSpeedDistance(maxSpeed, distance) + extraTime;
 						final int maxByRoute = Calculator.getTimeFromSpeedDistance(minSpeed, distance) + extraTime;
 						minTravelTime = Math.min(minTravelTime, minByRoute);
@@ -570,20 +581,20 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 				assert windows.size() == 1 : "Multiple time windows are not yet supported!";
 				final ITimeWindow window = windows.get(0);
 				if (index == 0) {// first time window is special
-					windowStartTime[index] = window.getStart();
-					windowEndTime[index] = window.getEnd();
+					windowStartTime[index] = window.getInclusiveStart();
+					windowEndTime[index] = window.getExclusiveEnd();
 				} else {
 					// subsequent time windows have their start time clipped, so
 					// they don't start any earlier
 					// than you could get to them without being late.
-					windowEndTime[index] = window.getEnd();
+					windowEndTime[index] = window.getExclusiveEnd();
 					if (useTimeWindow[index] || actualisedTimeWindow[index]) {
 						// Cargo shorts - pretend this is a start element
 						// Actuals - use window directly
-						windowStartTime[index] = window.getStart();
+						windowStartTime[index] = window.getInclusiveStart();
 					} else {
-						windowStartTime[index] = Math.max(window.getStart(), windowStartTime[index - 1] + minTimeToNextElement[index - 1]);
-						windowEndTime[index] = Math.max(windowEndTime[index], windowStartTime[index]);
+						windowStartTime[index] = Math.max(window.getInclusiveStart(), windowStartTime[index - 1] + minTimeToNextElement[index - 1]);
+						windowEndTime[index] = Math.max(windowEndTime[index]  , windowStartTime[index] + 1);
 					}
 				}
 			}
@@ -591,7 +602,8 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 			index++;
 			prevElement = element;
 		}
-
+		// add the last time window
+		// portTimeWindowsRecords.get(sequenceIndex).add(portTimeWindowsRecord);
 		// now perform reverse-pass to trim any overly late end times
 		// (that is end times which would make us late at the next element)
 		for (index = size - 2; index >= 0; index--) {
@@ -605,11 +617,11 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 				// Current window if flexible, next window is fixed, bring end window back
 				windowEndTime[index] = windowEndTime[index + 1] - minTimeToNextElement[index];
 			} else if (!useTimeWindow[index + 1]) {
-				windowEndTime[index] = Math.max(windowStartTime[index], Math.min(windowEndTime[index], windowEndTime[index + 1] - minTimeToNextElement[index]));
+				windowEndTime[index] = Math.max(windowStartTime[index] + 1, Math.min(windowEndTime[index], windowEndTime[index + 1] - minTimeToNextElement[index]));
 			}
 
 			// Make sure end if >= start - this may shift the end forward again violating min travel time.
-			windowEndTime[index] = Math.max(windowStartTime[index], windowEndTime[index]);
+			windowEndTime[index] = Math.max(windowStartTime[index] + 1, windowEndTime[index]);
 		}
 
 		// Compute separation points
@@ -630,54 +642,6 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 		//
 		// separationPoints.add(arrivalTimes.length - 1);
 	}
-
-	/**
-	 * Recursively enumerate all the possibilities for arrival times from the given index (inclusive), evaluating each one and keeping the best.
-	 * 
-	 * A randomised subclass could override this and take a random decision at each step, until it has evaluated a certain number of possibilities.
-	 * 
-	 * @param index
-	 */
-	protected void enumerate(final int seq, final int index, @Nullable IAnnotatedSolution solution) {
-		if ((seq == arrivalTimes.length) && (index < sizes[seq])) {
-			evaluate(solution);
-			return;
-		} else if (seq == arrivalTimes.length) {
-			enumerate(seq + 1, 0, solution);
-			return;
-		}
-
-		final int min = getMinArrivalTime(seq, index);
-		final int max = getMaxArrivalTime(seq, index);
-
-		for (int time = min; time <= max; time++) {
-			arrivalTimes[seq][index] = time;
-			enumerate(seq, index + 1, solution);
-		}
-	}
-
-	protected boolean evaluate(@Nullable final IAnnotatedSolution solution) {
-
-		final ScheduledSequences scheduledSequences = scheduleCalculator.schedule(sequences, arrivalTimes, solution);
-		if (scheduledSequences == null) {
-			return false;
-		}
-
-//		if (evaluator != null) {
-//			bestValue = evaluator.evaluateSchedule(sequences, scheduledSequences);
-//		} else {
-//			bestValue = 0;
-//		}
-
-//		logValue(bestValue);
-
-		bestResult = scheduledSequences;
-		return true;
-	}
-
-//	public long getBestValue() {
-//		return bestValue;
-//	}
 
 	/**
 	 * Gets the earliest time at which the current vessel can arrive at the given element, given the arrival times set for the previous elements.
@@ -720,16 +684,8 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 		} else if (useTimeWindow[seq][index] || actualisedTimeWindow[seq][index]) {
 			return windowStartTime[seq][index];
 		} else {
-			return Math.max(getMinArrivalTime(seq, index), // the latest we can
-															// arrive
-															// here is either
-															// window
-															// end
-															// time, or if we're
-															// late
-															// clamp to the
-															// earliest.
-					windowEndTime[seq][index]);
+			// the latest we can arrive here is either window end time, or if we're late clamp to the earliest.
+			return Math.max(getMinArrivalTime(seq, index), windowEndTime[seq][index] - 1);
 		}
 	}
 
@@ -739,21 +695,12 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 		final int ideal = arrivalTimes[seq][pos + 1] - minTimeToNextElement[seq][pos];
 		if (ideal < windowStartTime[seq][pos]) {
 			return windowStartTime[seq][pos];
-		} else if (ideal > windowEndTime[seq][pos]) {
-			return windowEndTime[seq][pos];
+		} else if (ideal >= windowEndTime[seq][pos]) {
+			return windowEndTime[seq][pos]-1;
 		} else {
 			return ideal;
 		}
-
 	}
-
-//	public ScheduleFitnessEvaluator getScheduleEvaluator() {
-//		return evaluator;
-//	}
-//
-//	public void setScheduleEvaluator(final ScheduleFitnessEvaluator evaluator) {
-//		this.evaluator = evaluator;
-//	}
 
 	/**
 	 * Get the approximate number of combinations of arrival times for elements from firstIndex to lastIndex inclusive, up to maxValue
@@ -769,7 +716,7 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 	protected final long getApproximateCombinations(final int seq, final int firstIndex, final int lastIndex, final long maxValue) {
 		long accumulator = 1;
 		for (int i = firstIndex; i <= lastIndex; i++) {
-			accumulator *= ((windowEndTime[seq][i] - windowStartTime[seq][i]) + 1);
+			accumulator *= ((windowEndTime[seq][i] - windowStartTime[seq][i])  );
 			if (accumulator > maxValue) {
 				return maxValue;
 			}

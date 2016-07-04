@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
@@ -13,7 +13,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -28,7 +28,7 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent extends Abstract
 	protected IResource currentResource;
 	private long evaluationAccumulator = 0;
 
-	protected ScheduledSequences scheduledSequences;
+	protected ProfitAndLossSequences profitAndLossSequences;
 
 	public AbstractPerRouteSchedulerFitnessComponent(@NonNull final String name, @NonNull final IFitnessCore core) {
 		super(name, core);
@@ -92,8 +92,8 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent extends Abstract
 	 * @see com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent #startEvaluation()
 	 */
 	@Override
-	public void startEvaluation(@NonNull final ScheduledSequences scheduledSequences) {
-		this.scheduledSequences = scheduledSequences;
+	public void startEvaluation(@NonNull final ProfitAndLossSequences profitAndLossSequences) {
+		this.profitAndLossSequences = profitAndLossSequences;
 		evaluationAccumulator = 0;
 	}
 
@@ -120,7 +120,7 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent extends Abstract
 	protected abstract long endSequenceAndGetCost();
 
 	@Override
-	public boolean evaluateUnusedSlots(@NonNull final List<ISequenceElement> unusedSlots, @NonNull final ScheduledSequences scheduleSequences) {
+	public boolean evaluateUnusedSlots(@NonNull final List<@NonNull ISequenceElement> unusedSlots, @NonNull final ProfitAndLossSequences scheduleSequences) {
 		// By default, do nothing
 		return true;
 	}
@@ -132,7 +132,7 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent extends Abstract
 	 */
 	@Override
 	public long endEvaluationAndGetCost() {
-		scheduledSequences = null;
+		profitAndLossSequences = null;
 		return setLastEvaluatedFitness(evaluationAccumulator);
 	}
 
@@ -147,8 +147,8 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent extends Abstract
 		acceptedFitnesses.putAll(evaluatedFitnesses);
 		super.acceptLastEvaluation();
 	}
-	
-	protected long getEvaluationAccumulator(){
+
+	protected long getEvaluationAccumulator() {
 		return evaluationAccumulator;
 	}
 }

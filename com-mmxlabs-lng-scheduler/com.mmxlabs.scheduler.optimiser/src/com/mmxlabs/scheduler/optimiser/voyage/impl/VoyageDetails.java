@@ -1,8 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.common.impl.LongFastEnumEnumMap;
@@ -18,7 +20,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  */
 public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 
-	private VoyageOptions options;
+	private @NonNull VoyageOptions options;
 
 	private final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption = new LongFastEnumEnumMap<FuelComponent, FuelUnit>(FuelComponent.values().length, FuelUnit.values().length);
 
@@ -34,21 +36,19 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 
 	private int startTime;
 
-	private long routeCost = 0;
-
 	private boolean cooldownPerformed;
 
-	public VoyageDetails() {
+	public VoyageDetails(@NonNull final VoyageOptions options) {
+		this.options = options;
 	}
 
-	public VoyageDetails(final int idleTime2, final int travelTime2, final int speed2, final int startTime2, final long routeCost2, final VoyageOptions options,
+	public VoyageDetails(final int idleTime2, final int travelTime2, final int speed2, final int startTime2, final @NonNull VoyageOptions options,
 			final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption2, final LongFastEnumEnumMap<FuelComponent, FuelUnit> routeAdditionalConsumption2,
 			final LongFastEnumMap<FuelComponent> fuelUnitPrices2, final boolean cooldownPerformed) {
 		this.idleTime = idleTime2;
 		this.travelTime = travelTime2;
 		this.speed = speed2;
 		this.startTime = startTime2;
-		this.routeCost = routeCost2;
 		this.options = options;
 		putAll(this.fuelConsumption, fuelConsumption2);
 		this.fuelUnitPrices.putAll(fuelUnitPrices2);
@@ -68,15 +68,15 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 
 	@Override
 	public VoyageDetails clone() {
-		return new VoyageDetails(idleTime, travelTime, speed, startTime, routeCost, new VoyageOptions(options), fuelConsumption, routeAdditionalConsumption, fuelUnitPrices, cooldownPerformed);
+		return new VoyageDetails(idleTime, travelTime, speed, startTime, new VoyageOptions(options), fuelConsumption, routeAdditionalConsumption, fuelUnitPrices, cooldownPerformed);
 	}
 
-	public final long getFuelConsumption(final FuelComponent fuel, final FuelUnit fuelUnit) {
+	public final long getFuelConsumption(final @NonNull FuelComponent fuel, final @NonNull FuelUnit fuelUnit) {
 
 		return fuelConsumption.get(fuel, fuelUnit);
 	}
 
-	public final long getRouteAdditionalConsumption(final FuelComponent fuel, final FuelUnit fuelUnit) {
+	public final long getRouteAdditionalConsumption(final @NonNull FuelComponent fuel, final @NonNull FuelUnit fuelUnit) {
 		return routeAdditionalConsumption.get(fuel, fuelUnit);
 	}
 
@@ -88,7 +88,7 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 		return idleTime;
 	}
 
-	public final VoyageOptions getOptions() {
+	public final @NonNull VoyageOptions getOptions() {
 		return options;
 	}
 
@@ -100,7 +100,7 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 		return travelTime;
 	}
 
-	public final void setFuelConsumption(final FuelComponent fuel, final FuelUnit fuelUnit, final long consumption) {
+	public final void setFuelConsumption(final @NonNull FuelComponent fuel, final @NonNull FuelUnit fuelUnit, final long consumption) {
 		fuelConsumption.put(fuel, fuelUnit, consumption);
 	}
 
@@ -108,7 +108,7 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 		this.idleTime = idleTime;
 	}
 
-	public final void setOptions(final VoyageOptions options) {
+	public final void setOptions(final @NonNull VoyageOptions options) {
 		this.options = options;
 	}
 
@@ -129,14 +129,6 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 		fuelUnitPrices.put(fuel, unitPrice);
 	}
 
-	public void setRouteCost(final long price) {
-		routeCost = price;
-	}
-
-	public long getRouteCost() {
-		return routeCost;
-	}
-
 	@Override
 	public final boolean equals(final Object obj) {
 
@@ -149,7 +141,6 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 				&& Objects.equal(idleTime,  d.idleTime)
 				&& Objects.equal(travelTime,  d.travelTime)
 				&& Objects.equal(startTime,  d.startTime)
-				&& Objects.equal(routeCost,  d.routeCost)
 				&& Objects.equal(options,  d.options)
 				&& Objects.equal(fuelConsumption,  d.fuelConsumption)
 				&& Objects.equal(routeAdditionalConsumption,  d.routeAdditionalConsumption)
@@ -174,7 +165,6 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 				.add("travelTime", travelTime)
 				.add("speed", speed)
 				.add("startTime", startTime)
-				.add("routeCost", routeCost)
 				.toString();
 		// @formatter:on
 	}

@@ -1,8 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -16,6 +19,8 @@ public interface IBreakEvenEvaluator {
 
 	static final String MARKER = "?";
 
-	Pair<VoyagePlan, IAllocationAnnotation> processSchedule(int vesselStartTime, IVesselAvailability vesselAvailability, VoyagePlan vp, IPortTimesRecord portTimesRecord);
+	@Nullable
+	Pair<@NonNull VoyagePlan, @NonNull IAllocationAnnotation> processSchedule(int vesselStartTime, @NonNull IVesselAvailability vesselAvailability, @NonNull VoyagePlan vp,
+			@NonNull IPortTimesRecord portTimesRecord);
 
 }

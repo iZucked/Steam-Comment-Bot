@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
@@ -9,11 +9,8 @@ import org.eclipse.jdt.annotation.NonNull;
 public interface ISimilarityComponentParameters {
 
 	public enum Interval {
-		@NonNull
 		LOW,
-		@NonNull
 		MEDIUM,
-		@NonNull
 		HIGH,
 	}
 

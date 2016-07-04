@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
@@ -53,7 +53,7 @@ public final class PricingEventHelper {
 			break;
 		}
 		case END_OF_DISCHARGE_WINDOW: {
-			pricingDate = timeZoneToUtcOffsetProvider.UTC(dischargeOption.getTimeWindow().getEnd(), dischargeOption);
+			pricingDate = timeZoneToUtcOffsetProvider.UTC(dischargeOption.getTimeWindow().getExclusiveEnd(), dischargeOption);
 			break;
 		}
 		case END_OF_LOAD: {
@@ -64,7 +64,7 @@ public final class PricingEventHelper {
 		}
 		case END_OF_LOAD_WINDOW: {
 			final ILoadOption loadOption = findFirstLoadOption(portTimesRecord);
-			pricingDate = timeZoneToUtcOffsetProvider.UTC(loadOption.getTimeWindow().getEnd(), loadOption);
+			pricingDate = timeZoneToUtcOffsetProvider.UTC(loadOption.getTimeWindow().getExclusiveEnd(), loadOption);
 			break;
 		}
 		case START_OF_LOAD: {
@@ -74,11 +74,11 @@ public final class PricingEventHelper {
 		}
 		case START_OF_LOAD_WINDOW: {
 			final ILoadOption loadOption = findFirstLoadOption(portTimesRecord);
-			pricingDate = timeZoneToUtcOffsetProvider.UTC(loadOption.getTimeWindow().getStart(), loadOption);
+			pricingDate = timeZoneToUtcOffsetProvider.UTC(loadOption.getTimeWindow().getInclusiveStart(), loadOption);
 			break;
 		}
 		case START_OF_DISCHARGE_WINDOW: {
-			pricingDate = timeZoneToUtcOffsetProvider.UTC(dischargeOption.getTimeWindow().getStart(), dischargeOption);
+			pricingDate = timeZoneToUtcOffsetProvider.UTC(dischargeOption.getTimeWindow().getInclusiveStart(), dischargeOption);
 			break;
 		}
 		default:
@@ -92,7 +92,8 @@ public final class PricingEventHelper {
 		return pricingDate;
 	}
 
-	public int getLoadPricingDateFromEventType(@NonNull final PricingEventType pricingEvent, @NonNull final ILoadOption loadOption, @NonNull final IDischargeOption dischargeOption, @NonNull final IPortTimesRecord portTimesRecord) {
+	public int getLoadPricingDateFromEventType(@NonNull final PricingEventType pricingEvent, @NonNull final ILoadOption loadOption, @NonNull final IDischargeOption dischargeOption,
+			@NonNull final IPortTimesRecord portTimesRecord) {
 		int pricingDate;
 		switch (pricingEvent) {
 		case END_OF_DISCHARGE:
@@ -100,23 +101,23 @@ public final class PricingEventHelper {
 			pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(dischargeOption) + dischargeDuration, dischargeOption);
 			break;
 		case END_OF_DISCHARGE_WINDOW:
-			pricingDate = timeZoneToUtcOffsetProvider.UTC(dischargeOption.getTimeWindow().getEnd(), dischargeOption);
+			pricingDate = timeZoneToUtcOffsetProvider.UTC(dischargeOption.getTimeWindow().getExclusiveEnd(), dischargeOption);
 			break;
 		case END_OF_LOAD:
 			final int loadDuration = portTimesRecord.getSlotDuration(loadOption);
 			pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(loadOption) + loadDuration, loadOption);
 			break;
 		case END_OF_LOAD_WINDOW:
-			pricingDate = timeZoneToUtcOffsetProvider.UTC(loadOption.getTimeWindow().getEnd(), loadOption);
+			pricingDate = timeZoneToUtcOffsetProvider.UTC(loadOption.getTimeWindow().getExclusiveEnd(), loadOption);
 			break;
 		case START_OF_DISCHARGE:
 			pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(dischargeOption), dischargeOption);
 			break;
 		case START_OF_DISCHARGE_WINDOW:
-			pricingDate = timeZoneToUtcOffsetProvider.UTC(dischargeOption.getTimeWindow().getStart(), dischargeOption);
+			pricingDate = timeZoneToUtcOffsetProvider.UTC(dischargeOption.getTimeWindow().getInclusiveStart(), dischargeOption);
 			break;
 		case START_OF_LOAD_WINDOW:
-			pricingDate = timeZoneToUtcOffsetProvider.UTC(loadOption.getTimeWindow().getStart(), loadOption);
+			pricingDate = timeZoneToUtcOffsetProvider.UTC(loadOption.getTimeWindow().getInclusiveStart(), loadOption);
 			break;
 		default:
 			// Default is start of load
@@ -134,7 +135,7 @@ public final class PricingEventHelper {
 			assert (slot != null);
 			if (slot instanceof ILoadOption) {
 				loadOption = (ILoadOption) slot;
-				break;
+				return loadOption;
 			}
 		}
 		return loadOption;

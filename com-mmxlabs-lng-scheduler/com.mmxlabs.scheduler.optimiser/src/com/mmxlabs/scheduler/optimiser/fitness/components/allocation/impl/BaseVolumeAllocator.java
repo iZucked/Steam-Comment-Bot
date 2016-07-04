@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
@@ -77,12 +78,12 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		// Rough estimate of required array size
 		final IDetailsSequenceElement[] sequence = plan.getSequence();
 		final int numElements = sequence.length / 2 + 1;
-		final List<IPortSlot> slots = new ArrayList<>(numElements);
-		final List<Long> minVolumesInM3 = new ArrayList<>(numElements);
-		final List<Long> maxVolumesInM3 = new ArrayList<>(numElements);
-		final List<Long> minVolumesInMMBtu = new ArrayList<>(numElements);
-		final List<Long> maxVolumesInMMBtu = new ArrayList<>(numElements);
-		final List<Integer> slotCV = new ArrayList<>(numElements);
+		final List<@NonNull IPortSlot> slots = new ArrayList<>(numElements);
+		final List<@NonNull Long> minVolumesInM3 = new ArrayList<>(numElements);
+		final List<@NonNull Long> maxVolumesInM3 = new ArrayList<>(numElements);
+		final List<@NonNull Long> minVolumesInMMBtu = new ArrayList<>(numElements);
+		final List<@NonNull Long> maxVolumesInMMBtu = new ArrayList<>(numElements);
+		final List<@NonNull Integer> slotCV = new ArrayList<>(numElements);
 
 		boolean foundALoad = false;
 

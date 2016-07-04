@@ -1,8 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 
@@ -14,6 +16,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
  */
 public interface IPortCVRangeProviderEditor extends IPortCVRangeProvider {
 
-	void setPortMinCV(IPort port, int cv);
-	void setPortMaxCV(IPort port, int cv);
+	void setPortMinCV(@NonNull IPort port, int cv);
+	void setPortMaxCV(@NonNull IPort port, int cv);
 }

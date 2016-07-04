@@ -1,8 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
+
+import java.util.Objects;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEvent;
@@ -138,9 +140,38 @@ public class GeneratedCharterOutVesselEvent implements IGeneratedCharterOutVesse
 	}
 
 	@Override
-	public void setHeelOptions(int pricePerMBTU, int cv, long volumeInM3) {
+	public void setHeelOptions(final int pricePerMBTU, final int cv, final long volumeInM3) {
 		setHeelUnitPrice(pricePerMBTU);
 		setHeelCVValue(cv);
 		setMaxHeelOut(volumeInM3);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.durationHours, this.maxHeelOut, this.heelCVValue, this.heelUnitPrice, this.hireCost, this.repositioning,
+				// this.startPort,
+//				this.endPort,
+				this.timeWindow);
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		// DO NOT DO IDENTITY CHECK AS CONTENTS ARE MUTABLE WITH REGARDS TO HASHMAP
+
+		if (obj instanceof GeneratedCharterOutVesselEvent) {
+			final GeneratedCharterOutVesselEvent other = (GeneratedCharterOutVesselEvent) obj;
+			return this.durationHours == other.durationHours //
+					&& this.maxHeelOut == other.maxHeelOut //
+					&& this.heelCVValue == other.heelCVValue //
+					&& this.heelUnitPrice == other.heelUnitPrice //
+					&& this.hireCost == other.hireCost //
+					&& this.repositioning == other.repositioning //
+					// && Objects.equals(this.startPort, other.startPort) //
+//					&& Objects.equals(this.endPort, other.endPort) //
+					&& Objects.equals(this.timeWindow, other.timeWindow); //
+
+		}
+
+		return false;
 	}
 }

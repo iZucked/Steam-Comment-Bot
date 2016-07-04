@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.components;
@@ -31,7 +31,7 @@ public interface IVesselClass {
 
 	/**
 	 * Returns a {@link IConsumptionRateCalculator} to calculate required fuel consumption for the given state at the given speed. The valid range of input values should be between
-	 * {@link #getMinSpeed()} and {@link #getMaxSpeed()} inclusively. It is expected that the rate in MT per Hour.
+	 * {@link #getMinSpeed()} and {@link #getMaxSpeed()} inclusively. It is expected that the rate in MT per Day.
 	 * 
 	 * @param vesselState
 	 * @return
@@ -39,7 +39,7 @@ public interface IVesselClass {
 	IConsumptionRateCalculator getConsumptionRate(VesselState vesselState);
 
 	/**
-	 * Returns the fuel consumption requirements when the vessel is idle. Units are MT Per Hour
+	 * Returns the fuel consumption requirements when the vessel is idle. Units are MT Per Day
 	 * 
 	 * @param vesselState
 	 * @return
@@ -47,7 +47,7 @@ public interface IVesselClass {
 	long getIdleConsumptionRate(VesselState vesselState);
 
 	/**
-	 * Returns the fuel consumption requirements when the vessel is in port. Units are MT Per Hour
+	 * Returns the fuel consumption requirements when the vessel is in port. Units are MT Per Day
 	 * 
 	 * @param portType
 	 * @return
@@ -56,7 +56,7 @@ public interface IVesselClass {
 	long getInPortConsumptionRateInMTPerDay(PortType portType);
 
 	/**
-	 * Returns the rate of NBO when the vessel is idle. Units are M3 Per Hour
+	 * Returns the rate of NBO when the vessel is idle. Units are M3 Per Day
 	 * 
 	 * @param vesselState
 	 * @return
@@ -64,14 +64,14 @@ public interface IVesselClass {
 	long getIdleNBORate(VesselState vesselState);
 
 	/**
-	 * Returns the pilot light rate in MT/Hour for vessels which require a pilot light when running on just LNG. Vessels with no pilot light rate can return 0.
+	 * Returns the pilot light rate in MT/Day for vessels which require a pilot light when running on just LNG. Vessels with no pilot light rate can return 0.
 	 * 
 	 * @return
 	 */
 	long getPilotLightRate();
 
 	/**
-	 * Returns the idle pilot light rate in MT/Hour for vessels which require a pilot light when running on just LNG. Vessels with no pilot light rate can return 0.
+	 * Returns the idle pilot light rate in MT/Day for vessels which require a pilot light when running on just LNG. Vessels with no pilot light rate can return 0.
 	 * 
 	 * @return
 	 */
@@ -106,7 +106,7 @@ public interface IVesselClass {
 	int getServiceSpeed(VesselState vesselState);
 
 	/**
-	 * Returns the rate of NBO when the vessel is travelling. Units are M3 Per Hour
+	 * Returns the rate of NBO when the vessel is travelling. Units are M3 Per Day
 	 * 
 	 * @param vesselState
 	 * @return
@@ -135,20 +135,20 @@ public interface IVesselClass {
 	 * @return
 	 */
 	int getMinBaseFuelConsumptionInMTPerDay();
-	
+
 	/**
 	 * Get the base fuel used by this vessel class.
 	 * 
 	 * @return
 	 */
 	IBaseFuel getBaseFuel();
-	
+
 	/**
 	 * Set the base fuel used by this vessel class.
 	 * 
 	 * @return
 	 */
 	void setBaseFuel(IBaseFuel baseFuel);
-	
-	
+
+	boolean hasReliqCapability();
 }

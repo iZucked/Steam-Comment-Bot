@@ -1,10 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation;
 
 import java.util.List;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -20,7 +22,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 public interface IAllocationAnnotation extends IPortTimesRecord {
 
 	@Override
-	List<IPortSlot> getSlots();
+	@NonNull
+	List<@NonNull IPortSlot> getSlots();
 
 	/**
 	 * Returns the total LNG in m3 used as fuel during this cargo.
@@ -43,7 +46,7 @@ public interface IAllocationAnnotation extends IPortTimesRecord {
 	 * 
 	 * @return
 	 */
-	long getSlotVolumeInM3(IPortSlot slot);
+	long getSlotVolumeInM3(@NonNull IPortSlot slot);
 
 	/**
 	 * Returns the time a load or discharge began
@@ -51,12 +54,12 @@ public interface IAllocationAnnotation extends IPortTimesRecord {
 	 * @return
 	 */
 	@Override
-	int getSlotTime(IPortSlot slot);
+	int getSlotTime(@NonNull IPortSlot slot);
 
 	@Override
-	int getSlotDuration(IPortSlot slot);
+	int getSlotDuration(@NonNull IPortSlot slot);
 
-	long getSlotVolumeInMMBTu(IPortSlot slot);
+	long getSlotVolumeInMMBTu(@NonNull IPortSlot slot);
 
 	/**
 	 * Returns the CV valid for this slot. Typically this will be the load CV, but for actualised cargoes discharge CV may be different to load CV
@@ -64,5 +67,5 @@ public interface IAllocationAnnotation extends IPortTimesRecord {
 	 * @param slot
 	 * @return
 	 */
-	int getSlotCargoCV(IPortSlot slot);
+	int getSlotCargoCV(@NonNull IPortSlot slot);
 }

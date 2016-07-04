@@ -1,11 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -30,14 +30,10 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * {@link IConstraintChecker} implementation to enforce correct ordering of port types. Specifically:
  * 
  * <pre>
- *  * {@link PortType#Start} can only occur at the start of a {@link ISequence}
- *  * {@link PortType#End} can only occur at the start of a {@link ISequence}
- *  * {@link PortType#Load} must be followed by a {@link PortType#Discharge}
- *  * {@link PortType#Load} cannot be followed by another {@link PortType#Load}
- *  * {@link PortType#Discharge} cannot be followed by another {@link PortType#Discharge}
- *  * {@link PortType#Waypoint} can occur anywhere in the sequence, including between {@link PortType#Load} and {@link PortType#Discharge}.
- *  * {@link PortType#DryDock} and {@link PortType#Other} cannot occur between a {@link PortType#Load} and a {@link PortType#Discharge}.
- *  * {@link PortType#Unknown} should not be seen
+ * * {@link PortType#Start} can only occur at the start of a {@link ISequence} * {@link PortType#End} can only occur at the start of a {@link ISequence} * {@link PortType#Load} must be followed by a
+ * {@link PortType#Discharge} * {@link PortType#Load} cannot be followed by another {@link PortType#Load} * {@link PortType#Discharge} cannot be followed by another {@link PortType#Discharge} *
+ * {@link PortType#Waypoint} can occur anywhere in the sequence, including between {@link PortType#Load} and {@link PortType#Discharge}. * {@link PortType#DryDock} and {@link PortType#Other} cannot
+ * occur between a {@link PortType#Load} and a {@link PortType#Discharge}. * {@link PortType#Unknown} should not be seen
  * 
  * @author Simon Goodall
  * 
@@ -70,21 +66,36 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
 
-		return checkConstraints(sequences, null);
+		return checkConstraints(sequences, changedResources, null);
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
 
-		for (final Map.Entry<IResource, ISequence> entry : sequences.getSequences().entrySet()) {
-			if (!checkSequence(entry.getValue(), messages, vesselProvider.getVesselAvailability(entry.getKey()).getVesselInstanceType())) {
-				return false;
+		boolean valid = true;
+
+		final Collection<@NonNull IResource> loopResources;
+		if (changedResources == null) {
+			loopResources = sequences.getResources();
+		} else {
+			loopResources = changedResources;
+		}
+
+		for (final IResource resource : loopResources) {
+			final ISequence sequence = sequences.getSequence(resource);
+			if (!checkSequence(sequence, messages, vesselProvider.getVesselAvailability(resource).getVesselInstanceType())) {
+				if (messages == null) {
+					return false;
+				} else {
+					valid = false;
+				}
 			}
 		}
 
-		return true;
+		return valid;
+
 	}
 
 	@Override
@@ -131,7 +142,8 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		for (final ISequenceElement t : sequence) {
 			final PortType type = portTypeProvider.getPortType(t);
 			if (previous == null) {
-				if (!(((type == PortType.Start) && (instanceType != VesselInstanceType.SPOT_CHARTER)) || ((instanceType == VesselInstanceType.CARGO_SHORTS) && (type == PortType.Load)) || ((instanceType == VesselInstanceType.SPOT_CHARTER) && ((type == PortType.Load) || (type == PortType.End))))) {
+				if (!(((type == PortType.Start) && (instanceType != VesselInstanceType.SPOT_CHARTER)) || ((instanceType == VesselInstanceType.ROUND_TRIP) && (type == PortType.Load))
+						|| ((instanceType == VesselInstanceType.SPOT_CHARTER) && ((type == PortType.Load) || (type == PortType.End))))) {
 					// must either start with Start and be not a spot charter,
 					// or must start with a load or an End and be a spot charter
 
@@ -195,7 +207,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			case Waypoint:
 				break;
 			case CharterOut:
-			case Short_Cargo_End:
+			case Round_Trip_Cargo_End:
 			case DryDock:
 			case Maintenance:
 			case Other:
@@ -230,8 +242,8 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			previousType = type;
 		}
 
-		if ((instanceType == VesselInstanceType.CARGO_SHORTS && !(previousType == null || previousType == PortType.Short_Cargo_End))
-				|| (instanceType != VesselInstanceType.CARGO_SHORTS && previousType != PortType.End)) {
+		if ((instanceType == VesselInstanceType.ROUND_TRIP && !(previousType == null || previousType == PortType.Round_Trip_Cargo_End))
+				|| (instanceType != VesselInstanceType.ROUND_TRIP && previousType != PortType.End)) {
 			// Must end with an End type.
 			if (messages != null) {
 				messages.add("Sequence must end with PortType.End");

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
@@ -12,22 +12,26 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProviderEditor;
 
 /**
  */
 public class HashMapShippingHoursRestrictionProviderEditor implements IShippingHoursRestrictionProviderEditor {
 
+	private static final List<ERouteOption> defaultAllowedRoutes = Lists.newArrayList(ERouteOption.DIRECT);
+
 	private final Map<ISequenceElement, Integer> hoursMap = new HashMap<>();
 	private final Map<ISequenceElement, ITimeWindow> baseTimeMap = new HashMap<>();
 	private final Map<IVessel, Integer> ballastReferenceSpeeds = new HashMap<>();
 	private final Map<IVessel, Integer> ladenReferenceSpeeds = new HashMap<>();
-	private final Map<IVesselClass, List<String>> allowedRoutes = new HashMap<>();
+	private final Map<ILoadOption, List<ERouteOption>> allowedRoutes = new HashMap<>();
 
 	@Override
 	public int getShippingHoursRestriction(@NonNull final ISequenceElement element) {
@@ -76,15 +80,15 @@ public class HashMapShippingHoursRestrictionProviderEditor implements IShippingH
 	}
 
 	@Override
-	public Collection<String> getDivertableDESAllowedRoutes(@NonNull IVesselClass vc) {
-		return allowedRoutes.get(vc);
+	public Collection<ERouteOption> getDivertableDESAllowedRoutes(@NonNull final ILoadOption loadOption) {
+		return allowedRoutes.getOrDefault(loadOption, defaultAllowedRoutes);
 	}
 
 	@Override
-	public void setDivertableDESAllowedRoute(@NonNull IVesselClass vc, @NonNull String route) {
-		if (!allowedRoutes.containsKey(vc)) {
-			allowedRoutes.put(vc, new LinkedList<String>());
+	public void setDivertableDESAllowedRoute(@NonNull final ILoadOption loadOption, @NonNull final ERouteOption route) {
+		if (!allowedRoutes.containsKey(loadOption)) {
+			allowedRoutes.put(loadOption, new LinkedList<>());
 		}
-		allowedRoutes.get(vc).add(route);
+		allowedRoutes.get(loadOption).add(route);
 	}
 }

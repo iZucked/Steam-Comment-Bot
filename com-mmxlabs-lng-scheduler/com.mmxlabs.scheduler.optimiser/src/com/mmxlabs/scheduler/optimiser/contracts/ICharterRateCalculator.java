@@ -1,12 +1,13 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.contracts;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 
-
 public interface ICharterRateCalculator extends ICalculator {
-	int getCharterRatePerDay(IVesselAvailability vesselAvailability, int vesselStartTime, int voyagePlanStartTime);
+	long getCharterRatePerDay(@NonNull IVesselAvailability vesselAvailability, int vesselStartTime, int voyagePlanStartTime);
 }

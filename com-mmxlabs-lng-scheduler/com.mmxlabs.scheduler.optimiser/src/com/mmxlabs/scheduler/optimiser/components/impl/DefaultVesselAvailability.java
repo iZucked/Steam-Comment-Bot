@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
@@ -7,7 +7,7 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -22,12 +22,13 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
  */
 public final class DefaultVesselAvailability implements IVesselAvailability {
 
-	private IVessel vessel;
+	@NonNull
+	private final IVessel vessel;
 
 	@NonNull
-	private VesselInstanceType vesselInstanceType = VesselInstanceType.UNKNOWN;
+	private final VesselInstanceType vesselInstanceType;
 
-	private ICurve dailyCharterInRate;
+	private ILongCurve dailyCharterInRate;
 
 	private IStartEndRequirement startRequirement;
 	private IStartEndRequirement endRequirement;
@@ -36,13 +37,15 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 
 	private int spotIndex;
 
-	@Override
-	public IVessel getVessel() {
-		return vessel;
+	public DefaultVesselAvailability(@NonNull final IVessel vessel, @NonNull final VesselInstanceType vesselInstanceType) {
+		this.vessel = vessel;
+		this.vesselInstanceType = vesselInstanceType;
 	}
 
-	public void setVessel(final IVessel vessel) {
-		this.vessel = vessel;
+	@Override
+	@NonNull
+	public IVessel getVessel() {
+		return vessel;
 	}
 
 	@Override
@@ -51,21 +54,17 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 		return vesselInstanceType;
 	}
 
-	public void setVesselInstanceType(@NonNull final VesselInstanceType vesselInstanceType) {
-		this.vesselInstanceType = vesselInstanceType;
-	}
-
 	@Override
 	public String toString() {
 		return vessel.getName();
 	}
 
 	@Override
-	public ICurve getDailyCharterInRate() {
+	public ILongCurve getDailyCharterInRate() {
 		return dailyCharterInRate;
 	}
 
-	public void setDailyCharterInRate(final ICurve dailyCharterInRate) {
+	public void setDailyCharterInRate(final ILongCurve dailyCharterInRate) {
 		this.dailyCharterInRate = dailyCharterInRate;
 	}
 

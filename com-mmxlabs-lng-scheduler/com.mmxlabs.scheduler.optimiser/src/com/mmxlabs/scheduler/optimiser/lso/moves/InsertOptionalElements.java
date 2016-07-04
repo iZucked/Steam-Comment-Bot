@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.lso.moves;
@@ -25,15 +25,14 @@ import com.mmxlabs.optimiser.lso.IMove;
  * 
  */
 public class InsertOptionalElements implements IMove {
-	@NonNull
-	private final IResource resource;
+
+	private final @NonNull IResource resource;
 
 	private final int beforeInsertionPoint;
 
-	@NonNull
-	private final int[] insertedElements;
+	private final int @NonNull [] insertedElements;
 
-	public InsertOptionalElements(@NonNull final IResource resource, final int beforeInsertionPoint, @NonNull final int[] insertedElements) {
+	public InsertOptionalElements(@NonNull final IResource resource, final int beforeInsertionPoint, final int @NonNull [] insertedElements) {
 		super();
 		this.resource = resource;
 		this.beforeInsertionPoint = beforeInsertionPoint;
@@ -49,7 +48,7 @@ public class InsertOptionalElements implements IMove {
 	@Override
 	public void apply(@NonNull final IModifiableSequences sequences) {
 		final IModifiableSequence sequence = sequences.getModifiableSequence(resource);
-		final List<ISequenceElement> unused = sequences.getModifiableUnusedElements();
+		final @NonNull List<@NonNull ISequenceElement> unused = sequences.getModifiableUnusedElements();
 		int k = 1;
 		for (final int i : insertedElements) {
 			sequence.insert(beforeInsertionPoint + k, unused.get(i));

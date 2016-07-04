@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.entities.impl;
@@ -45,5 +45,10 @@ public abstract class AbstractEntity implements IEntity {
 	@Override
 	public IEntityBook getTradingBook() {
 		return enityProvider.getEntityBook(this, EntityBookType.Trading);
+	}
+
+	@Override
+	public IEntityBook getUpstreamBook() {
+		return enityProvider.getEntityBook(this, EntityBookType.Upstream);
 	}
 }

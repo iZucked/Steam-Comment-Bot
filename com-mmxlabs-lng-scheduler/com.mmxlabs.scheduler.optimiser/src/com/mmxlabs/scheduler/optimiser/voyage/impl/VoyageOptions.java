@@ -1,13 +1,16 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 
 /**
  * Default implementation of {@link VoyageOptions}. This is @link {Cloneable} for use with @link{VoyagePlanOptimiser} use.
@@ -18,13 +21,15 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 	private int availableTime;
 	private int distance;
+	private long routeCost;
 	private IVessel vessel;
-	private IPortSlot fromPortSlot;
-	private IPortSlot toPortSlot;
+	private @NonNull IPortSlot fromPortSlot;
+	private @NonNull IPortSlot toPortSlot;
 	private int nboSpeed;
 
 	private boolean useNBOForIdle;
 	private boolean useNBOForTravel;
+
 	private boolean useFBOForSupplement;
 
 	private boolean charterOutIdleTime;
@@ -46,27 +51,27 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 	 */
 	private boolean startWarm;
 
-	private String route;
+	private ERouteOption route;
 
 	private VesselState vesselState;
 
 	private int charterOutDailyRate;
 
-	public VoyageOptions() {
-
+	public VoyageOptions(@NonNull final IPortSlot from, @NonNull final IPortSlot to) {
+		this.fromPortSlot = from;
+		this.toPortSlot = to;
 	}
 
 	public VoyageOptions(final VoyageOptions options) {
+		this.fromPortSlot = options.getFromPortSlot();
+		this.toPortSlot = options.getToPortSlot();
 		setAvailableTime(options.getAvailableTime());
-		setDistance(options.getDistance());
 		setVessel(options.getVessel());
-		setFromPortSlot(options.getFromPortSlot());
-		setToPortSlot(options.getToPortSlot());
 		setNBOSpeed(options.getNBOSpeed());
 		setUseNBOForTravel(options.useNBOForTravel());
 		setUseFBOForSupplement(options.useFBOForSupplement());
 		setUseNBOForIdle(options.useNBOForIdle());
-		setRoute(options.getRoute());
+		setRoute(options.getRoute(), options.getDistance(), options.getRouteCost());
 		setVesselState(options.getVesselState());
 		setAllowCooldown(options.getAllowCooldown());
 		setShouldBeCold(options.shouldBeCold());
@@ -83,7 +88,11 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 		return distance;
 	}
 
-	public final IPortSlot getFromPortSlot() {
+	public long getRouteCost() {
+		return routeCost;
+	}
+
+	public final @NonNull IPortSlot getFromPortSlot() {
 		return fromPortSlot;
 	}
 
@@ -91,11 +100,11 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 		return nboSpeed;
 	}
 
-	public final String getRoute() {
+	public final ERouteOption getRoute() {
 		return route;
 	}
 
-	public final IPortSlot getToPortSlot() {
+	public final @NonNull IPortSlot getToPortSlot() {
 		return toPortSlot;
 	}
 
@@ -139,24 +148,24 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 		this.availableTime = availableTime;
 	}
 
-	public final void setDistance(final int distance) {
-		this.distance = distance;
-	}
-
 	public final void setVessel(final IVessel vessel) {
 		this.vessel = vessel;
 	}
 
-	public final void setFromPortSlot(final IPortSlot fromPortSlot) {
+	@Deprecated // Only used for Client E
+	public final void setFromPortSlot(final @NonNull IPortSlot fromPortSlot) {
 		this.fromPortSlot = fromPortSlot;
 	}
 
-	public final void setToPortSlot(final IPortSlot toPortSlot) {
+	@Deprecated // Only used for Client E
+	public final void setToPortSlot(final @NonNull IPortSlot toPortSlot) {
 		this.toPortSlot = toPortSlot;
 	}
 
-	public final void setRoute(final String route) {
+	public final void setRoute(@NonNull final ERouteOption route, final int distance, final long routeCost) {
 		this.route = route;
+		this.distance = distance;
+		this.routeCost = routeCost;
 	}
 
 	public final void setVesselState(final VesselState vesselState) {
@@ -205,6 +214,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 				&& Objects.equal(useFBOForSupplement, vo.useFBOForSupplement)
 				&& Objects.equal(availableTime, vo.availableTime)
 				&& Objects.equal(distance, vo.distance)
+				&& Objects.equal(routeCost, vo.routeCost)
 				&& Objects.equal(nboSpeed, vo.nboSpeed)
 				&& Objects.equal(vesselState, vo.vesselState)
 				&& Objects.equal(route, vo.route)
@@ -222,7 +232,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 	}
 
 	@Override
-	public final VoyageOptions clone() {
+	public final @NonNull VoyageOptions clone() {
 		return new VoyageOptions(this);
 	}
 
@@ -246,6 +256,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 				.add("shouldBeCold", shouldBeCold)
 				.add("startWarm", startWarm)
 				.add("route", route)
+				.add("routeCost", routeCost)
 				.add("vesselState", vesselState)
 				.toString();
 		// @formatter:on
@@ -279,7 +290,5 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 
 	public void setCargoCVValue(final int cargoCV) {
 		this.cargoCV = cargoCV;
-
 	}
-
 }

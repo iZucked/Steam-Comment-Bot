@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
@@ -8,35 +8,34 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
 
 public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor {
 
-	public HashMapRouteCostProviderEditor(final String defaultKey) {
-		super();
-		this.defaultKey = defaultKey;
-	}
+	private final Map<ERouteOption, Map<IVessel, EnumMap<CostType, Long>>> pricesByRouteClassAndState = new HashMap<>();
 
-	private final Map<String, Map<IVesselClass, EnumMap<VesselState, Long>>> pricesByRouteClassAndState = new HashMap<String, Map<IVesselClass, EnumMap<VesselState, Long>>>();
+	private final Map<ERouteOption, Long> defaultPrices = new HashMap<>();
 
-	private final Map<String, Long> defaultPrices = new HashMap<String, Long>();
-	private final String defaultKey;
-
-	private final Map<String, Map<IVesselClass, Integer>> travelTimesByRouteAndClass = new HashMap<String, Map<IVesselClass, Integer>>();
-	private final Map<String, Map<IVesselClass, EnumMap<VesselState, Long>>> baseFuelByRouteAndClass = new HashMap<String, Map<IVesselClass, EnumMap<VesselState, Long>>>();
-	private final Map<String, Map<IVesselClass, EnumMap<VesselState, Long>>> nboRateByRouteAndClass = new HashMap<String, Map<IVesselClass, EnumMap<VesselState, Long>>>();
+	private final Map<ERouteOption, Map<IVessel, Integer>> travelTimesByRouteAndClass = new HashMap<>();
+	private final Map<ERouteOption, Map<IVessel, EnumMap<VesselState, Long>>> baseFuelByRouteAndClass = new HashMap<>();
+	private final Map<ERouteOption, Map<IVessel, EnumMap<VesselState, Long>>> nboRateByRouteAndClass = new HashMap<>();
 
 	/**
 	 */
 	@Override
-	public long getRouteCost(final String route, final IVesselClass vesselClass, final VesselState vesselState) {
+	public long getRouteCost(final @NonNull ERouteOption route, final @NonNull IVessel vessel, final @NonNull CostType vesselState) {
 
-		if (route.equals(defaultKey)) {
-			return 0;
+		// Special case DIRECT
+		if (route == ERouteOption.DIRECT) {
+			return 0L;
 		}
-		Long cost = get(pricesByRouteClassAndState, route, vesselClass, vesselState, null);
+
+		Long cost = get(pricesByRouteClassAndState, route, vessel, vesselState, null);
 
 		if (cost == null) {
 			cost = defaultPrices.get(route);
@@ -50,50 +49,51 @@ public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor 
 	/**
 	 */
 	@Override
-	public void setRouteCost(final String route, final IVesselClass vesselClass, final VesselState vesselState, final long price) {
-		set(pricesByRouteClassAndState, route, vesselClass, vesselState, price);
+	public void setRouteCost(final @NonNull ERouteOption route, final @NonNull IVessel vessel, final @NonNull CostType costType, final long price) {
+		set(pricesByRouteClassAndState, route, vessel, costType, price, CostType.class);
 	}
 
 	/**
 	 */
 	@Override
-	public void setDefaultRouteCost(final String route, final long price) {
+	public void setDefaultRouteCost(final ERouteOption route, final long price) {
 		defaultPrices.put(route, price);
 	}
 
 	@Override
-	public void setRouteFuel(final String routeName, final IVesselClass vesselClass, final VesselState vesselState, final long baseFuelInScaledMT, final long nboRateInScaledM3) {
+	public void setRouteFuel(final @NonNull ERouteOption routeName, final @NonNull IVessel vessel, final @NonNull VesselState vesselState, final long baseFuelInScaledMT,
+			final long nboRateInScaledM3) {
 
-		set(baseFuelByRouteAndClass, routeName, vesselClass, vesselState, baseFuelInScaledMT);
-		set(nboRateByRouteAndClass, routeName, vesselClass, vesselState, nboRateInScaledM3);
+		set(baseFuelByRouteAndClass, routeName, vessel, vesselState, baseFuelInScaledMT, VesselState.class);
+		set(nboRateByRouteAndClass, routeName, vessel, vesselState, nboRateInScaledM3, VesselState.class);
 	}
 
 	@Override
-	public void setRouteTransitTime(final String routeName, final IVesselClass vc, final int transitTimeInHours) {
+	public void setRouteTransitTime(final @NonNull ERouteOption routeName, final @NonNull IVessel vessel, final int transitTimeInHours) {
 		if (!travelTimesByRouteAndClass.containsKey(routeName)) {
-			travelTimesByRouteAndClass.put(routeName, new HashMap<IVesselClass, Integer>());
+			travelTimesByRouteAndClass.put(routeName, new HashMap<>());
 		}
-		travelTimesByRouteAndClass.get(routeName).put(vc, transitTimeInHours);
+		travelTimesByRouteAndClass.get(routeName).put(vessel, transitTimeInHours);
 	}
 
 	@Override
-	public long getRouteFuelUsage(final String route, final IVesselClass vesselClass, final VesselState vesselState) {
-		return get(baseFuelByRouteAndClass, route, vesselClass, vesselState, 0L);
+	public long getRouteFuelUsage(final @NonNull ERouteOption route, final @NonNull IVessel vessel, final VesselState vesselState) {
+		return get(baseFuelByRouteAndClass, route, vessel, vesselState, 0L);
 	}
 
 	@Override
-	public long getRouteNBORate(final String route, final IVesselClass vesselClass, final VesselState vesselState) {
-		return get(nboRateByRouteAndClass, route, vesselClass, vesselState, 0L);
+	public long getRouteNBORate(final @NonNull ERouteOption route, final @NonNull IVessel vessel, final VesselState vesselState) {
+		return get(nboRateByRouteAndClass, route, vessel, vesselState, 0L);
 	}
 
 	@Override
-	public int getRouteTransitTime(final String route, final IVesselClass vesselClass) {
-		if (defaultKey.equals(route)) {
+	public int getRouteTransitTime(final @NonNull ERouteOption route, final IVessel vessel) {
+		if (route == ERouteOption.DIRECT) {
 			return 0;
 		}
-		final Map<IVesselClass, Integer> byClass = travelTimesByRouteAndClass.get(route);
-		if (byClass != null) {
-			final Integer value = byClass.get(vesselClass);
+		final Map<IVessel, Integer> byVessel = travelTimesByRouteAndClass.get(route);
+		if (byVessel != null) {
+			final Integer value = byVessel.get(vessel);
 			if (value != null) {
 				return value;
 			}
@@ -101,38 +101,39 @@ public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor 
 		return 0;
 	}
 
-	private <T> void set(final Map<String, Map<IVesselClass, EnumMap<VesselState, T>>> map, final String route, final IVesselClass vesselClass, final VesselState vesselState, final T value) {
+	private <T, U extends Enum<U>> void set(final Map<ERouteOption, Map<IVessel, EnumMap<U, T>>> map, final @NonNull ERouteOption route, final @NonNull IVessel vessel, final @NonNull U vesselState,
+			final T value, final Class<U> enumClass) {
 		if (!map.containsKey(route)) {
-			final EnumMap<VesselState, T> single = new EnumMap<VesselState, T>(VesselState.class);
+			final EnumMap<U, T> single = new EnumMap<U, T>(enumClass);
 			single.put(vesselState, value);
-			final HashMap<IVesselClass, EnumMap<VesselState, T>> byV = new HashMap<IVesselClass, EnumMap<VesselState, T>>();
-			byV.put(vesselClass, single);
+			final HashMap<IVessel, EnumMap<U, T>> byV = new HashMap<>();
+			byV.put(vessel, single);
 			map.put(route, byV);
 		} else {
-			final Map<IVesselClass, EnumMap<VesselState, T>> byV = map.get(route);
-			if (byV.containsKey(vesselClass)) {
-				byV.get(vesselClass).put(vesselState, value);
+			final Map<IVessel, EnumMap<U, T>> byV = map.get(route);
+			if (byV.containsKey(vessel)) {
+				byV.get(vessel).put(vesselState, value);
 			} else {
-				final EnumMap<VesselState, T> single = new EnumMap<VesselState, T>(VesselState.class);
+				final EnumMap<U, T> single = new EnumMap<U, T>(enumClass);
 				single.put(vesselState, value);
-				byV.put(vesselClass, single);
+				byV.put(vessel, single);
 			}
 		}
 	}
 
-	private <T> T get(final Map<String, Map<IVesselClass, EnumMap<VesselState, T>>> map, final String route, final IVesselClass vesselClass, final VesselState vesselState, final T defaultValue) {
-		if (route.equals(defaultKey)) {
-			return defaultValue;
-		}
+	private <T, U extends Enum<U>> T get(final Map<ERouteOption, Map<IVessel, EnumMap<U, T>>> map, final @NonNull ERouteOption route, final @NonNull IVessel vessel, final @NonNull U vesselState,
+			final T defaultValue) {
 		{
-			final Map<IVesselClass, EnumMap<VesselState, T>> byVessel = map.get(route);
+			final Map<IVessel, EnumMap<U, T>> byVessel = map.get(route);
 			if (byVessel != null) {
-				final EnumMap<VesselState, T> byState = byVessel.get(vesselClass);
+				final EnumMap<U, T> byState = byVessel.get(vessel);
 				if (byState != null) {
 					final T x = byState.get(vesselState);
 					if (x != null) {
 						return x;
 					}
+				} else {
+					throw new IllegalStateException();
 				}
 			}
 		}

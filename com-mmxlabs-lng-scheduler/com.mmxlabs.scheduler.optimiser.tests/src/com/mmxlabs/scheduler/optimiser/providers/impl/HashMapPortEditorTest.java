@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
@@ -13,15 +13,24 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 
 public class HashMapPortEditorTest {
 
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetSetPortForElement1() {
+
+		final HashMapPortEditor editor = new HashMapPortEditor();
+
+		final ISequenceElement element = Mockito.mock(ISequenceElement.class);
+
+		Assert.assertNull(editor.getPortForElement(element));
+
+	}
+
 	@Test
-	public void testGetSetPortForElement() {
+	public void testGetSetPortForElement2() {
 
 		final HashMapPortEditor editor = new HashMapPortEditor();
 
 		final IPort port = Mockito.mock(IPort.class);
 		final ISequenceElement element = Mockito.mock(ISequenceElement.class);
-
-		Assert.assertNull(editor.getPortForElement(element));
 
 		editor.setPortForElement(port, element);
 

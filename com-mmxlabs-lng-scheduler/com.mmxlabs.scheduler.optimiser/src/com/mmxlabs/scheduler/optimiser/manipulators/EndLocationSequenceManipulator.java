@@ -1,30 +1,39 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.manipulators;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.google.inject.Inject;
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
@@ -92,7 +101,13 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	private IStartEndRequirementProvider startEndRequirementProvider;
 
 	@Inject
-	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
+	private IDistanceProvider distanceProvider;
+
+	@Inject
+	private IPortSlotProvider portSlotProvider;
+
+	@Inject
+	private IElementDurationProvider durationsProvider;
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -116,7 +131,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 			final VesselInstanceType vesselInstanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
 			if (vesselInstanceType == VesselInstanceType.DES_PURCHASE || vesselInstanceType == VesselInstanceType.FOB_SALE) {
 				setEndLocationRule(resource, EndLocationRule.NONE);
-			} else if (vesselInstanceType == VesselInstanceType.CARGO_SHORTS) {
+			} else if (vesselInstanceType == VesselInstanceType.ROUND_TRIP) {
 				setEndLocationRule(resource, EndLocationRule.REMOVE);
 			} else if (vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER)) {
 				setEndLocationRule(resource, EndLocationRule.RETURN_TO_FIRST_LOAD);
@@ -139,12 +154,12 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 
 	}
 
-	private void setNoRequirementEndLocationRule(IResource resource) {
+	private void setNoRequirementEndLocationRule(final @NonNull IResource resource) {
 		// TODO: Remove NullGeneratedCharterOutEvaluator at some point
 		boolean returnToLastPort = true;
 		if (charterOutEvaluator != null && !(charterOutEvaluator instanceof NullGeneratedCharterOutEvaluator)) {
-			Set<IPort> charteringPorts = getCharterMarketPortsForResource(resource);
-			if (charteringPorts != null && charteringPorts.size() > 0) {
+			final Set<@NonNull IPort> charteringPorts = getCharterMarketPortsForResource(resource);
+			if (charteringPorts.size() > 0) {
 				returnToLastPort = false;
 			}
 		}
@@ -155,37 +170,28 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 		}
 	}
 
-	private Set<IPort> getCharterMarketPortsForResource(IResource resource) {
-		Set<IPort> charteringPorts = null;
-		IVesselClass resourceVesselClass = getVesselClass(resource);
-		if (resourceVesselClass != null) {
-			charteringPorts = charterMarketProvider.getCharteringPortsForVesselClass(resourceVesselClass);
-		}
-		return charteringPorts;
+	private @NonNull Set<@NonNull IPort> getCharterMarketPortsForResource(final @NonNull IResource resource) {
+		final IVesselClass resourceVesselClass = getVesselClass(resource);
+		return charterMarketProvider.getCharteringPortsForVesselClass(resourceVesselClass);
 	}
 
-	private IVesselClass getVesselClass(IResource resource) {
-		IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		if (vesselAvailability != null) {
-			IVessel vessel = vesselAvailability.getVessel();
-			if (vessel != null) {
-				return vessel.getVesselClass();
-			}
-		}
-		return null;
+	private @NonNull IVesselClass getVesselClass(final @NonNull IResource resource) {
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		final IVessel vessel = vesselAvailability.getVessel();
+		return vessel.getVesselClass();
 	}
 
 	@Override
-	public void manipulate(final IModifiableSequences sequences) {
+	public void manipulate(final @NonNull IModifiableSequences sequences) {
 		assert portTypeProvider != null;
 
 		// Loop through each sequence in turn and manipulate
-		for (final Map.Entry<IResource, IModifiableSequence> entry : sequences.getModifiableSequences().entrySet()) {
+		for (final Map.Entry<@NonNull IResource, @NonNull IModifiableSequence> entry : sequences.getModifiableSequences().entrySet()) {
 			manipulate(entry.getKey(), entry.getValue());
 		}
 	}
 
-	public void manipulate(final IResource resource, final IModifiableSequence sequence) {
+	public void manipulate(final @NonNull IResource resource, final @NonNull IModifiableSequence sequence) {
 
 		final EndLocationRule rule = ruleMap.get(resource);
 		if (rule == null) {
@@ -239,7 +245,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	 * @param resource
 	 * @param sequence
 	 */
-	private final void returnToClosestInSet(final IResource resource, final IModifiableSequence sequence) {
+	private final void returnToClosestInSet(final @NonNull IResource resource, final @NonNull IModifiableSequence sequence) {
 		final IStartEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
 		returnToClosestInSet(resource, sequence, endRequirement.getLocations());
 	}
@@ -250,7 +256,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	 * @param resource
 	 * @param sequence
 	 */
-	private final void returnToClosestCharterOutPort(final IResource resource, final IModifiableSequence sequence) {
+	private final void returnToClosestCharterOutPort(final @NonNull IResource resource, final @NonNull IModifiableSequence sequence) {
 		returnToClosestInSet(resource, sequence, getCharterMarketPortsForResource(resource));
 	}
 
@@ -261,9 +267,14 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	 * @param sequence
 	 * @param ports
 	 */
-	private final void returnToClosestInSet(final IResource resource, final IModifiableSequence sequence, Collection<IPort> ports) {
+	private final void returnToClosestInSet(final @NonNull IResource resource, final @NonNull IModifiableSequence sequence, final @NonNull Collection<@NonNull IPort> ports) {
 		final ISequenceElement lastVisit = sequence.get(sequence.size() - 2);
 		final IPort fromPort = portProvider.getPortForElement(lastVisit);
+		final ITimeWindow timeWindow = portSlotProvider.getPortSlot(lastVisit).getTimeWindow();
+		assert timeWindow != null;
+
+		final int visitDuration = durationsProvider.getElementDuration(lastVisit, resource);
+		final int lastVoyageStartTime = timeWindow.getInclusiveStart() + visitDuration;
 
 		IPort closestPort = null;
 		int closestPortDistance = Integer.MAX_VALUE;
@@ -272,7 +283,16 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 				closestPort = toPort;
 				break;
 			}
-			final int distance = distanceProvider.getMinimumValue(fromPort, toPort);
+
+			final List<Pair<ERouteOption, Integer>> distanceValues = distanceProvider.getDistanceValues(fromPort, toPort, lastVoyageStartTime);
+			int distance = Integer.MAX_VALUE;
+			for (final Pair<ERouteOption, Integer> distanceOption : distanceValues) {
+				final int routeDistance = distanceOption.getSecond();
+				if (routeDistance < distance) {
+					distance = routeDistance;
+				}
+			}
+
 			if (distance < closestPortDistance) {
 				closestPort = toPort;
 				closestPortDistance = distance;
@@ -280,7 +300,11 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 		}
 
 		if (closestPort != null) {
-			sequence.set(sequence.size() - 1, returnElementProvider.getReturnElement(resource, closestPort));
+			@Nullable
+			ISequenceElement elementToReturn = returnElementProvider.getReturnElement(resource, closestPort);
+			assert elementToReturn != null;
+
+			sequence.set(sequence.size() - 1, elementToReturn);
 		}
 	}
 
@@ -292,7 +316,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	 * @param sequence
 	 * @param location
 	 */
-	private final void adjustLastElement(final IResource resource, final IModifiableSequence sequence, final ISequenceElement returnElement) {
+	private final void adjustLastElement(final @NonNull IResource resource, final @NonNull IModifiableSequence sequence, final @Nullable ISequenceElement returnElement) {
 		if (returnElement == null) {
 			return;
 		}
@@ -306,7 +330,12 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 		 * 
 		 * TODO consider merging this with the start-end-requirement stuff
 		 */
-		sequence.set(sequence.size() - 1, returnElementProvider.getReturnElement(resource, returnPort));
+		@Nullable
+		ISequenceElement elementToReturn = returnElementProvider.getReturnElement(resource, returnPort);
+
+		assert elementToReturn != null;
+
+		sequence.set(sequence.size() - 1, elementToReturn);
 	}
 
 	/**
@@ -331,26 +360,6 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 		return portTypeProvider;
 	}
 
-	public void setPortTypeProvider(final IPortTypeProvider portTypeProvider) {
-		this.portTypeProvider = portTypeProvider;
-	}
-
-	public IPortProvider getPortProvider() {
-		return portProvider;
-	}
-
-	public void setPortProvider(final IPortProvider portProvider) {
-		this.portProvider = portProvider;
-	}
-
-	public IReturnElementProvider getReturnElementProvider() {
-		return returnElementProvider;
-	}
-
-	public void setReturnElementProvider(final IReturnElementProvider returnElementProvider) {
-		this.returnElementProvider = returnElementProvider;
-	}
-
 	/**
 	 * Specify the {@link EndLocationRule} for this {@link IResource}
 	 * 
@@ -372,21 +381,5 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 			return ruleMap.get(resource);
 		}
 		return EndLocationRule.NONE;
-	}
-
-	public IStartEndRequirementProvider getStartEndRequirementProvider() {
-		return startEndRequirementProvider;
-	}
-
-	public void setStartEndRequirementProvider(final IStartEndRequirementProvider startEndRequirementProvider) {
-		this.startEndRequirementProvider = startEndRequirementProvider;
-	}
-
-	public IMultiMatrixProvider<IPort, Integer> getDistanceProvider() {
-		return distanceProvider;
-	}
-
-	public void setDistanceProvider(final IMultiMatrixProvider<IPort, Integer> distanceProvider) {
-		this.distanceProvider = distanceProvider;
 	}
 }

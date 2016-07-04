@@ -1,8 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.voyage;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 /**
  * Enum describing the possible breakdowns of fuel components. Each component represents a specific calculation required in a voyage calculation.
@@ -56,10 +58,10 @@ public enum FuelComponent {
 	 */
 	Cooldown(FuelUnit.M3, FuelUnit.MMBTu);
 
-	private final FuelUnit fuelUnit;
-	private final FuelUnit pricingFuelUnit;
+	private final @NonNull FuelUnit fuelUnit;
+	private final @NonNull FuelUnit pricingFuelUnit;
 
-	private FuelComponent(final FuelUnit fuelUnit, final FuelUnit pricingFuelUnit) {
+	private FuelComponent(final @NonNull FuelUnit fuelUnit, final @NonNull FuelUnit pricingFuelUnit) {
 		this.fuelUnit = fuelUnit;
 		this.pricingFuelUnit = pricingFuelUnit;
 	}
@@ -69,47 +71,47 @@ public enum FuelComponent {
 	 * 
 	 * @return
 	 */
-	public final FuelUnit getDefaultFuelUnit() {
+	public final @NonNull FuelUnit getDefaultFuelUnit() {
 		return fuelUnit;
 	}
 
-	private static final FuelComponent[] travelFuelComponents = new FuelComponent[] { Base, NBO, Base_Supplemental, FBO, FuelComponent.PilotLight };
+	private static final @NonNull FuelComponent @NonNull [] travelFuelComponents = new @NonNull FuelComponent @NonNull [] { Base, NBO, Base_Supplemental, FBO, FuelComponent.PilotLight };
 
-	public static FuelComponent[] getTravelFuelComponents() {
+	public static @NonNull FuelComponent @NonNull [] getTravelFuelComponents() {
 		return travelFuelComponents;
 	}
 
-	private static final FuelComponent[] idleFuelComponents = new FuelComponent[] { FuelComponent.IdleBase, FuelComponent.IdleNBO, FuelComponent.IdlePilotLight };
+	private static final @NonNull FuelComponent @NonNull [] idleFuelComponents = new @NonNull FuelComponent @NonNull [] { FuelComponent.IdleBase, FuelComponent.IdleNBO, FuelComponent.IdlePilotLight };
 
-	public static FuelComponent[] getIdleFuelComponents() {
+	public static @NonNull FuelComponent @NonNull [] getIdleFuelComponents() {
 		return idleFuelComponents;
 	}
 
-	private static final FuelComponent[] baseFuelComponents = new FuelComponent[] { Base, Base_Supplemental, IdleBase, PilotLight, IdlePilotLight };
+	private static final @NonNull FuelComponent @NonNull [] baseFuelComponents = new @NonNull FuelComponent @NonNull [] { Base, Base_Supplemental, IdleBase, PilotLight, IdlePilotLight };
 
-	public static FuelComponent[] getBaseFuelComponents() {
+	public static @NonNull FuelComponent @NonNull [] getBaseFuelComponents() {
 		return baseFuelComponents;
 	}
 
-	private static final FuelComponent[] lngFuelComponents = new FuelComponent[] { NBO, FBO, IdleNBO };
+	private static final @NonNull FuelComponent @NonNull [] lngFuelComponents = new @NonNull FuelComponent @NonNull [] { NBO, FBO, IdleNBO };
 
-	public static FuelComponent[] getLNGFuelComponents() {
+	public static @NonNull FuelComponent @NonNull [] getLNGFuelComponents() {
 		return lngFuelComponents;
 	}
 
-	private static final FuelComponent[] baseNoPilotFuelComponents = new FuelComponent[] { Base, Base_Supplemental, IdleBase };
+	private static final @NonNull FuelComponent @NonNull [] baseNoPilotFuelComponents = new @NonNull FuelComponent @NonNull [] { Base, Base_Supplemental, IdleBase };
 
 	/**
 	 */
-	public static FuelComponent[] getBaseFuelComponentsNoPilot() {
+	public static @NonNull FuelComponent @NonNull [] getBaseFuelComponentsNoPilot() {
 		return baseNoPilotFuelComponents;
 	}
 
-	private static final FuelComponent[] pilotLightFuelComponents = new FuelComponent[] { PilotLight, IdlePilotLight };
+	private static final @NonNull FuelComponent @NonNull [] pilotLightFuelComponents = new @NonNull FuelComponent @NonNull [] { PilotLight, IdlePilotLight };
 
 	/**
 	 */
-	public static FuelComponent[] getPilotLightFuelComponents() {
+	public static @NonNull FuelComponent @NonNull [] getPilotLightFuelComponents() {
 		return pilotLightFuelComponents;
 	}
 
@@ -117,7 +119,7 @@ public enum FuelComponent {
 	 * Returns true of the given {@link FuelComponent} is a type of LNG
 	 * 
 	 */
-	public static boolean isLNGFuelComponent(final FuelComponent fc) {
+	public static boolean isLNGFuelComponent(final @NonNull FuelComponent fc) {
 		if (fc == FuelComponent.NBO || fc == FuelComponent.FBO || fc == FuelComponent.IdleNBO) {
 			return true;
 		}
@@ -126,7 +128,7 @@ public enum FuelComponent {
 
 	/**
 	 */
-	public FuelUnit getPricingFuelUnit() {
+	public @NonNull FuelUnit getPricingFuelUnit() {
 		return pricingFuelUnit;
 	}
 

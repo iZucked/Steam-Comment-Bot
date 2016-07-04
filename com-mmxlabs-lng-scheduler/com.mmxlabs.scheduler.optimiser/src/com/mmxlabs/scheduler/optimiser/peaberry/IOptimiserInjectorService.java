@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.peaberry;
@@ -60,7 +60,7 @@ public interface IOptimiserInjectorService {
 		 * 
 		 */
 		Module_Optimisation,
-		
+
 		/**
 		 * Enum to specify evaluation modules to override the Module providing parameters (e.g. Seed or number of iterations) to the scenario.
 		 * 
@@ -85,7 +85,7 @@ public interface IOptimiserInjectorService {
 	 * @return
 	 */
 	@Nullable
-	Module requestModule(@NonNull ModuleType moduleType, @NonNull final Collection<String> hints);
+	Module requestModule(@NonNull ModuleType moduleType, @NonNull final Collection<@NonNull String> hints);
 
 	/**
 	 * Request a {@link Map} of {@link Module} which override the default Module implementations. This permits the default bindings to be changed.
@@ -97,5 +97,5 @@ public interface IOptimiserInjectorService {
 	 * @return
 	 */
 	@Nullable
-	List<Module> requestModuleOverrides(@NonNull ModuleType moduleType, @NonNull final Collection<String> hints);
+	List<@NonNull Module> requestModuleOverrides(@NonNull ModuleType moduleType, @NonNull final Collection<@NonNull String> hints);
 }

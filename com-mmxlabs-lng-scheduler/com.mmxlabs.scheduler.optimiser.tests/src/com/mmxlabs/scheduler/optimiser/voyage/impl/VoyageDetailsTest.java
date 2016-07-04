@@ -1,17 +1,18 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
 public class VoyageDetailsTest {
-
 
 	@Test
 	public void testGetSetFuelConsumption() {
@@ -21,7 +22,7 @@ public class VoyageDetailsTest {
 		final FuelUnit u2 = FuelUnit.M3;
 
 		final long value = 100L;
-		final VoyageDetails details = new VoyageDetails();
+		final VoyageDetails details = new VoyageDetails(new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class)));
 		Assert.assertEquals(0, details.getFuelConsumption(c, u));
 		Assert.assertEquals(0, details.getFuelConsumption(c, u2));
 		details.setFuelConsumption(c, u, value);
@@ -32,7 +33,7 @@ public class VoyageDetailsTest {
 	@Test
 	public void testGetSetIdleTime() {
 		final int value = 100;
-		final VoyageDetails details = new VoyageDetails();
+		final VoyageDetails details = new VoyageDetails(new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class)));
 		Assert.assertEquals(0, details.getIdleTime());
 		details.setIdleTime(value);
 		Assert.assertEquals(value, details.getIdleTime());
@@ -41,10 +42,10 @@ public class VoyageDetailsTest {
 	@Test
 	public void testGetSetOptions() {
 
-		final VoyageOptions options = new VoyageOptions();
+		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
 
-		final VoyageDetails details = new VoyageDetails();
-		Assert.assertNull(details.getOptions());
+		final VoyageDetails details = new VoyageDetails(options);
+		Assert.assertSame(options, details.getOptions());
 		details.setOptions(options);
 		Assert.assertSame(options, details.getOptions());
 	}
@@ -52,7 +53,7 @@ public class VoyageDetailsTest {
 	@Test
 	public void testGetSetSpeed() {
 		final int value = 100;
-		final VoyageDetails details = new VoyageDetails();
+		final VoyageDetails details = new VoyageDetails(new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class)));
 		Assert.assertEquals(0, details.getSpeed());
 		details.setSpeed(value);
 		Assert.assertEquals(value, details.getSpeed());
@@ -61,7 +62,7 @@ public class VoyageDetailsTest {
 	@Test
 	public void testGetSetTravelTime() {
 		final int value = 100;
-		final VoyageDetails details = new VoyageDetails();
+		final VoyageDetails details = new VoyageDetails(new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class)));
 		Assert.assertEquals(0, details.getTravelTime());
 		details.setTravelTime(value);
 		Assert.assertEquals(value, details.getTravelTime());
@@ -72,7 +73,7 @@ public class VoyageDetailsTest {
 
 		final FuelComponent c = FuelComponent.Base;
 		final int value = 100;
-		final VoyageDetails details = new VoyageDetails();
+		final VoyageDetails details = new VoyageDetails(new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class)));
 		Assert.assertEquals(0, details.getFuelUnitPrice(c));
 		details.setFuelUnitPrice(c, value);
 		Assert.assertEquals(value, details.getFuelUnitPrice(c));
@@ -81,8 +82,8 @@ public class VoyageDetailsTest {
 	@Test
 	public void testEquals() {
 
-		final VoyageOptions options1 = new VoyageOptions();
-		final VoyageOptions options2 = new VoyageOptions();
+		final VoyageOptions options1 = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
+		final VoyageOptions options2 = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
 		// Set as different so Equals test will fail when comparing these objects
 		options1.setAvailableTime(1);
 		options2.setAvailableTime(2);
@@ -135,7 +136,7 @@ public class VoyageDetailsTest {
 	VoyageDetails make(final int idleTime, final int travelTime, final int speed, final VoyageOptions options, final FuelComponent fuel, final FuelUnit unit, final long consumption,
 			final int unitPrice) {
 
-		final VoyageDetails d = new VoyageDetails();
+		final VoyageDetails d = new VoyageDetails(new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class)));
 
 		d.setIdleTime(idleTime);
 		d.setTravelTime(travelTime);

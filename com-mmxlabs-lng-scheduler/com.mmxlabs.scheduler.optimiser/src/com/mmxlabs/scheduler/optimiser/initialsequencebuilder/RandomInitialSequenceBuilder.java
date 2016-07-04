@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.initialsequencebuilder;
@@ -51,8 +51,8 @@ public class RandomInitialSequenceBuilder implements IInitialSequenceBuilder {
 		Collections.sort(sequenceElements, new Comparator<ISequenceElement>() {
 			@Override
 			public int compare(final ISequenceElement o1, final ISequenceElement o2) {
-				final int s1 = slotProvider.getPortSlot(o1).getTimeWindow().getStart();
-				final int s2 = slotProvider.getPortSlot(o2).getTimeWindow().getStart();
+				final int s1 = slotProvider.getPortSlot(o1).getTimeWindow().getInclusiveStart();
+				final int s2 = slotProvider.getPortSlot(o2).getTimeWindow().getInclusiveStart();
 				if (s1 < s2) {
 					return -1;
 				} else if (s1 > s2) {

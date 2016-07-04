@@ -1,8 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.common.Equality;
@@ -19,30 +21,30 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 public final class PortOptions implements Cloneable, IOptionsSequenceElement {
 	private int visitDuration;
 	private IVessel vessel;
-	private IPortSlot portSlot;
+	private @NonNull IPortSlot portSlot;
 
-	
-	public PortOptions() {
+	public PortOptions(@NonNull final IPortSlot portSlot) {
+		this.portSlot = portSlot;
 
 	}
-	
-	public PortOptions(int visitDuration, IVessel vessel, IPortSlot portSlot, VesselState vesselState) {
+
+	public PortOptions(final int visitDuration, final IVessel vessel, @NonNull final IPortSlot portSlot, final VesselState vesselState) {
+		this.portSlot = portSlot;
 		setVisitDuration(visitDuration);
 		setVessel(vessel);
-		setPortSlot(portSlot);
 	}
-	
-	
+
 	public PortOptions(final PortOptions options) {
+		this.portSlot = options.getPortSlot();
 		setVisitDuration(options.getVisitDuration());
 		setVessel(options.getVessel());
-		setPortSlot(options.getPortSlot());
 	}
 
 	public final int getVisitDuration() {
 		return visitDuration;
 	}
 
+	@NonNull
 	public final IPortSlot getPortSlot() {
 		return portSlot;
 	}
@@ -59,7 +61,7 @@ public final class PortOptions implements Cloneable, IOptionsSequenceElement {
 		this.vessel = vessel;
 	}
 
-	public final void setPortSlot(final IPortSlot portSlot) {
+	public final void setPortSlot(final @NonNull IPortSlot portSlot) {
 		this.portSlot = portSlot;
 	}
 
@@ -86,7 +88,7 @@ public final class PortOptions implements Cloneable, IOptionsSequenceElement {
 	}
 
 	@Override
-	public final PortOptions clone()  {
+	public final PortOptions clone() {
 
 		return new PortOptions(this);
 	}

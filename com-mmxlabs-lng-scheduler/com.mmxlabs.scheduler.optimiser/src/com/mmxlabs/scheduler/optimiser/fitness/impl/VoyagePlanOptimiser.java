@@ -1,10 +1,14 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * All rights reserved.
+ */
+/**
+
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -14,7 +18,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -37,7 +40,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author Simon Goodall
  * 
  */
-@PerChainUnitScope
+// @PerChainUnitScope
 public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	@Inject
@@ -45,79 +48,53 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	private static final int RELAXATION_STEP = 6;
 
-	private final List<IVoyagePlanChoice> choices = new ArrayList<>();
+	public static class Record {
 
-	private List<IOptionsSequenceElement> basicSequence;
+		public Record(@Nullable IResource resource, @NonNull IVessel vessel, long startHeel, int baseFuelPricePerMT, long vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
+				List<@NonNull IOptionsSequenceElement> basicSequence, List<@NonNull IVoyagePlanChoice> choices) {
+			this.resource = resource;
+			this.vessel = vessel;
+			this.startHeelInM3 = startHeel;
+			this.baseFuelPricePerMT = baseFuelPricePerMT;
+			this.vesselCharterInRatePerDay = vesselCharterInRatePerDay;
+			this.portTimesRecord = portTimesRecord;
+			this.basicSequence = basicSequence;
+			this.choices = choices;
+		}
 
-	private IPortTimesRecord portTimesRecord;
+		public final List<@NonNull IVoyagePlanChoice> choices;// = new ArrayList<>();
 
-	private IVessel vessel;
+		public final List<@NonNull IOptionsSequenceElement> basicSequence;
 
-	private int baseFuelPricePerMT;
+		public final IPortTimesRecord portTimesRecord;
 
-	private int vesselCharterInRatePerDay;
+		public final IVessel vessel;
 
-	private int bestProblemCount = Integer.MAX_VALUE;
+		public final int baseFuelPricePerMT;
 
-	private long bestCost = Long.MAX_VALUE;
+		public final long vesselCharterInRatePerDay;
+		public final long startHeelInM3;
 
-	private VoyagePlan bestPlan = null;
+		public final @Nullable IResource resource;
+	}
 
-	private long startHeel;
+	static class InternalState {
+		public int bestProblemCount = Integer.MAX_VALUE;
 
-	/**
-	 * True iff {@link #bestPlan} meets the requirement that every voyage uses less than or equal to the available time for that voyage
-	 */
-	private boolean bestPlanFitsInAvailableTime = false;
+		public long bestCost = Long.MAX_VALUE;
+
+		public @Nullable VoyagePlan bestPlan = null;
+		/**
+		 * True iff {@link #bestPlan} meets the requirement that every voyage uses less than or equal to the available time for that voyage
+		 */
+		public boolean bestPlanFitsInAvailableTime = false;
+	}
 
 	private final ILNGVoyageCalculator voyageCalculator;
-
-	private IResource resource;
 
 	@Inject
 	public VoyagePlanOptimiser(final ILNGVoyageCalculator voyageCalculator) {
 		this.voyageCalculator = voyageCalculator;
-	}
-
-	/**
-	 * Check internal state is valid (i.e. all setters have been called).
-	 */
-	@Override
-	public void init() {
-		if (vessel == null) {
-			throw new IllegalStateException("Vessel has not been set");
-		}
-		if (voyageCalculator == null) {
-			throw new IllegalStateException("Voyage Calculator has not been set");
-		}
-		if (basicSequence == null) {
-			throw new IllegalStateException("Basic sequence has not been set");
-		}
-		if (portTimesRecord == null) {
-			throw new IllegalStateException("Port times record has not been set");
-		}
-	}
-
-	/**
-	 * Reset the state of this object ready for a new optimisation.
-	 */
-	@Override
-	public void reset() {
-		choices.clear();
-		basicSequence = null;
-		bestPlan = null;
-		bestPlanFitsInAvailableTime = false;
-		bestProblemCount = Integer.MAX_VALUE;
-		bestCost = Long.MAX_VALUE;
-		portTimesRecord = null;
-	}
-
-	/**
-	 * Clean up all references.
-	 */
-	@Override
-	public void dispose() {
-		reset();
 	}
 
 	/**
@@ -126,24 +103,24 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 * @return
 	 */
 	@Override
-	public VoyagePlan optimise() {
-		bestPlan = null;
-		bestPlanFitsInAvailableTime = false;
-		bestCost = Long.MAX_VALUE;
-		bestProblemCount = Integer.MAX_VALUE;
+	public VoyagePlan optimise(IResource resource, IVessel vessel, long startHeel, int baseFuelPricePerMT, long vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
+			List<@NonNull IOptionsSequenceElement> basicSequence, List<@NonNull IVoyagePlanChoice> choices) {
 
-		runLoop(0);
-		choices.clear();
-		return bestPlan;
+		Record record = new Record(resource, vessel, startHeel, baseFuelPricePerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence, choices);
+
+		InternalState state = new InternalState();
+		runLoop(record, state, 0);
+		return state.bestPlan;
 	}
 
-	private void evaluateVoyagePlan() {
-		final PortOptions endOptions = (PortOptions) basicSequence.get(basicSequence.size() - 1);
+	private void evaluateVoyagePlan(Record record, InternalState state) {
+		final PortOptions endOptions = (PortOptions) record.basicSequence.get(record.basicSequence.size() - 1);
 		final IPortSlot slot = endOptions.getPortSlot();
 
 		if (slot != null) {
 			if (slot.getPortType() == PortType.End) {
 				ITimeWindow window = slot.getTimeWindow();
+				IResource resource = record.resource;
 				if (resource != null) {
 					final IEndRequirement requirement = startEndRequirementProvider.getEndRequirement(resource);
 					if (requirement != null) {
@@ -151,15 +128,15 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 					}
 				}
 
-				final int lastArrivalTime = portTimesRecord.getSlotTime(slot);
-				final int extraExtent = window == null ? 30 * RELAXATION_STEP : (lastArrivalTime >= window.getEnd() ? 0 : window.getEnd() - lastArrivalTime);
+				final int lastArrivalTime = record.portTimesRecord.getSlotTime(slot);
+				final int extraExtent = window == null ? 30 * RELAXATION_STEP : (lastArrivalTime >= window.getExclusiveEnd() ? 0 : window.getExclusiveEnd() - lastArrivalTime);
 
-				evaluateVoyagePlan(extraExtent);
+				evaluateVoyagePlan(record, state, extraExtent);
 				return;
 			}
 		}
 
-		evaluateVoyagePlan(0);
+		evaluateVoyagePlan(record, state, 0);
 	}
 
 	/**
@@ -168,17 +145,18 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 * 
 	 * @param i
 	 */
-	private final void runLoop(final int i) {
+	private final void runLoop(Record record, InternalState state, final int i) {
+
 		// Recursive termination point.
-		if (i == choices.size()) {
+		if (i == record.choices.size()) {
 			// Perform voyage calculations and populate plan.
-			evaluateVoyagePlan();
+			evaluateVoyagePlan(record, state);
 		} else {
 			// Perform recursive application of choice objects.
-			final IVoyagePlanChoice c = choices.get(i);
+			final IVoyagePlanChoice c = record.choices.get(i);
 			for (int ci = 0; ci < c.numChoices(); ++ci) {
 				if (c.apply(ci)) {
-					runLoop(i + 1);
+					runLoop(record, state, i + 1);
 				}
 			}
 		}
@@ -189,7 +167,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 * 
 	 * @param optimiseLastLeg
 	 */
-	private void evaluateVoyagePlan(final int timeExtent) {
+	private void evaluateVoyagePlan(Record record, InternalState state, final int timeExtent) {
 
 		int currentProblemCount;
 		long cost;
@@ -198,7 +176,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		VoyageOptions optionsToRestore = null;
 		int availableTimeToRestore = 0;
 
-		if (timeExtent / RELAXATION_STEP > 0) {
+		if (timeExtent / RELAXATION_STEP > 0 && record.basicSequence.size() > 1) {
 
 			// There are some cases where we wish to evaluate the best time to
 			// end the sequence, rather than the specified value. Typically
@@ -215,7 +193,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			// However this may miss potential cheaper solutions past this
 			// boundary
 
-			final VoyageOptions options = (VoyageOptions) basicSequence.get(basicSequence.size() - 2);
+			final VoyageOptions options = (VoyageOptions) record.basicSequence.get(record.basicSequence.size() - 2);
 			final int originalTime = options.getAvailableTime();
 			optionsToRestore = options;
 			availableTimeToRestore = originalTime;
@@ -228,7 +206,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			// TODO: Turn into a parameter -- probably want this to be longer than slightly over one day - could also scale it to 6/12 hours etc.
 			for (int i = 0; i < timeExtent / RELAXATION_STEP; i++) {
 
-				currentPlan = calculateVoyagePlan();
+				currentPlan = calculateVoyagePlan(record);
 
 				if (currentPlan != null) {
 					final VoyageDetails lastVoyageDetails = (VoyageDetails) (currentPlan.getSequence()[currentPlan.getSequence().length - 2]);
@@ -240,8 +218,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 					// This is not calculator.multiply, because hireRate is not scaled.
 					{
-						final int hireRatePerDay = currentPlan.getCharterInRatePerDay();
-						final long hireCost = (long) hireRatePerDay * (long) (lastVoyageDetails.getIdleTime() + lastVoyageDetails.getTravelTime()) / 24;
+						final long hireRatePerDay = currentPlan.getCharterInRatePerDay();
+						final long hireCost = hireRatePerDay * (long) (lastVoyageDetails.getIdleTime() + lastVoyageDetails.getTravelTime()) / 24;
 						currentCost += hireCost;
 					}
 
@@ -273,7 +251,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		} else {
 			// Fall back to a single evaluation assuming final voyage options
 			// are good
-			currentPlan = calculateVoyagePlan();
+			currentPlan = calculateVoyagePlan(record);
 			cost = evaluatePlan(currentPlan);
 			if (currentPlan != null) {
 				currentProblemCount = currentPlan.getViolationsCount();
@@ -317,30 +295,32 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		if (currentPlan != null) {
 
 			// this plan is valid, but the other is not, who cares about cost
-			if (currentPlanFitsInAvailableTime && !bestPlanFitsInAvailableTime) {
+			if (currentPlanFitsInAvailableTime && !state.bestPlanFitsInAvailableTime) {
 				storePlan = true;
 				// this plan is valid, or the other is not, and it's cheaper
-			} else if (currentPlanFitsInAvailableTime || !bestPlanFitsInAvailableTime) {
+			} else if (currentPlanFitsInAvailableTime || !state.bestPlanFitsInAvailableTime) {
 
-				if (currentProblemCount < bestProblemCount) {
+				if (currentProblemCount < state.bestProblemCount) {
 					storePlan = true;
-				} else if ((currentProblemCount == bestProblemCount) && (cost < bestCost)) {
+				} else if ((currentProblemCount == state.bestProblemCount) && (cost < state.bestCost)) {
 					storePlan = true;
 				}
 			}
 		}
 
 		if (storePlan) {
-			bestPlanFitsInAvailableTime = currentPlanFitsInAvailableTime;
-			bestCost = cost;
-			bestPlan = currentPlan;
-			bestProblemCount = currentProblemCount;
+
+			assert currentPlan != null;
+			state.bestPlanFitsInAvailableTime = currentPlanFitsInAvailableTime;
+			state.bestCost = cost;
+			state.bestPlan = currentPlan;
+			state.bestProblemCount = currentProblemCount;
 
 			// We need to ensure the best plan as a set of options which are not
 			// changed by further iterations through choices, so lets loop
 			// through the plan and replace the voyage details options with
 			// cloned ones.
-			for (final Object obj : bestPlan.getSequence()) {
+			for (final Object obj : currentPlan.getSequence()) {
 				if (obj instanceof VoyageDetails) {
 					final VoyageDetails details = (VoyageDetails) obj;
 					// Skip cast check as we created the object in the first
@@ -371,126 +351,18 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	/**
 	 */
-	private VoyagePlan calculateVoyagePlan() {
+	private VoyagePlan calculateVoyagePlan(Record record) {
 		// For each voyage options, calculate new Details.
 
-		final List<IDetailsSequenceElement> currentSequence = voyageCalculator.generateFuelCostCalculatedSequence(basicSequence.toArray(new IOptionsSequenceElement[0]));
+		final List<IDetailsSequenceElement> currentSequence = voyageCalculator.generateFuelCostCalculatedSequence(record.basicSequence.toArray(new IOptionsSequenceElement[0]));
 
 		final VoyagePlan currentPlan = new VoyagePlan();
-		currentPlan.setCharterInRatePerDay(vesselCharterInRatePerDay);
+		currentPlan.setCharterInRatePerDay(record.vesselCharterInRatePerDay);
 
 		// Calculate voyage plan
-		voyageCalculator.calculateVoyagePlan(currentPlan, vessel, startHeel, baseFuelPricePerMT, portTimesRecord, currentSequence.toArray(new IDetailsSequenceElement[0]));
+		voyageCalculator.calculateVoyagePlan(currentPlan, record.vessel, record.startHeelInM3, record.baseFuelPricePerMT, record.portTimesRecord,
+				currentSequence.toArray(new IDetailsSequenceElement[0]));
 
 		return currentPlan;
 	}
-
-	@Override
-	public void setPortTimesRecord(final IPortTimesRecord portTimesRecord) {
-		this.portTimesRecord = portTimesRecord;
-	}
-
-	/**
-	 * Returns the basic sequence that is being optimised over.
-	 * 
-	 * @return
-	 */
-	@Override
-	public List<IOptionsSequenceElement> getBasicSequence() {
-		return basicSequence;
-	}
-
-	/**
-	 * Sets the basic voyage plan sequence. This should be {@link IPortSlot} instances separated by {@link VoyageOptions} instances implementing {@link Cloneable}. The {@link VoyageOptions} objects
-	 * will be modified during optimisation.
-	 * 
-	 * @param basicSequence
-	 */
-	@Override
-	public void setBasicSequence(final List<IOptionsSequenceElement> basicSequence) {
-		this.basicSequence = basicSequence;
-	}
-
-	/**
-	 * Get the {@link IVessel} to evaluate voyages against.
-	 * 
-	 * @return
-	 */
-	@Override
-	public IVessel getVessel() {
-		return vessel;
-	}
-
-	/**
-	 * Set the {@link IVessel} to evaluate voyages against.
-	 * 
-	 * @param vessel
-	 */
-	@Override
-	public void setVessel(@NonNull final IVessel vessel, @Nullable final IResource resource, final int baseFuelPricePerMT) {
-		this.vessel = vessel;
-		this.resource = resource;
-		this.baseFuelPricePerMT = baseFuelPricePerMT;
-	}
-
-	@Override
-	public void setBaseFuelPricePerMT(int baseFuelPricePerMT) {
-		this.baseFuelPricePerMT = baseFuelPricePerMT;
-	}
-
-	/**
-	 * Once optimised, returns the best {@link VoyagePlan} cost.
-	 * 
-	 * @return
-	 */
-	@Override
-	public long getBestCost() {
-		return bestCost;
-	}
-
-	/**
-	 * Once optimised, returns the best {@link VoyagePlan}.
-	 * 
-	 * @return
-	 */
-	@Override
-	public VoyagePlan getBestPlan() {
-		return bestPlan;
-	}
-
-	/**
-	 * Returns the {@link ILNGVoyageCalculator} used in the {@link VoyagePlanOptimiser}.
-	 * 
-	 * @return
-	 */
-	@Override
-	public ILNGVoyageCalculator getVoyageCalculator() {
-		return voyageCalculator;
-	}
-
-	/**
-	 * Add a new choice to the ordered stack of choices. If this choice depends upon the choice of another {@link IVoyagePlanChoice}, then that object should have already been added.
-	 * 
-	 * @param choice
-	 */
-	@Override
-	public void addChoice(final IVoyagePlanChoice choice) {
-		choices.add(choice);
-	}
-
-	@Override
-	public void setStartHeel(final long heelVolumeInM3) {
-		startHeel = heelVolumeInM3;
-	}
-
-	@Override
-	public long getStartHeel() {
-		return startHeel;
-	}
-
-	@Override
-	public void setVesselCharterInRatePerDay(final int vesselCharterInRatePerDay) {
-		this.vesselCharterInRatePerDay = vesselCharterInRatePerDay;
-	}
-
 }

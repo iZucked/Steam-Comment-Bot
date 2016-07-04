@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser;
@@ -20,8 +20,9 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
+import com.google.inject.name.Names;
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.common.curves.ConstantValueCurve;
+import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IEvaluationContext;
 import com.mmxlabs.optimiser.core.IResource;
@@ -32,12 +33,11 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.Sequences;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
+import com.mmxlabs.scheduler.optimiser.builder.impl.TimeWindowMaker;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -63,21 +63,25 @@ import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.events.ILoadEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ExcessIdleTimeComponentParameters;
+import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.DefaultEndEventScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.IEndEventScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
-import com.mmxlabs.scheduler.optimiser.schedule.ScheduledDataLookupProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.VoyagePlanAnnotator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
@@ -132,7 +136,7 @@ public class TestCalculations {
 			final int baseFuelUnitPrice = OptimiserUnitConvertor.convertToInternalPrice(400);
 			final IBaseFuel baseFuel = new BaseFuel("test");
 			baseFuel.setEquivalenceFactor(baseFuelEquivalence);
-			final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0);
+			final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
 
 			final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 			ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
@@ -153,26 +157,26 @@ public class TestCalculations {
 			final int ballast_idleConsumptionRateInMTPerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.4);
 			builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, ballast_nboRateInM3PerHour, ballast_idleNBORateInM3PerHour, ballast_idleConsumptionRateInMTPerHour,
 					ballastConsumptionCalculator, 0);
-			final IStartRequirement startRequirement = builder.createStartRequirement(port1, builder.createTimeWindow(0, 0), null);
-			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), builder.createTimeWindow(75, 75), false, 0);
+			final IStartRequirement startRequirement = builder.createStartRequirement(port1, TimeWindowMaker.createInclusiveInclusive(0, 0), null);
+			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), TimeWindowMaker.createInclusiveInclusive(75, 75), false, 0, false);
 
 			final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
-			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement);
+			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement);
 
-			final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
+			final ITimeWindow loadWindow = TimeWindowMaker.createInclusiveInclusive(25, 25, 0, false);
 			final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1,
 					false, false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 
-			final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
+			final ITimeWindow dischargeWindow = TimeWindowMaker.createInclusiveInclusive(50, 50);
 			final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE,
 					new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), 1, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false,
 					DEFAULT_VOLUME_LIMIT_IS_M3);
 
 			final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
 
-			builder.setPortToPortDistance(port1, port2, IMultiMatrixProvider.Default_Key, 12 * 24);
-			builder.setPortToPortDistance(port2, port3, IMultiMatrixProvider.Default_Key, 12 * 24);
-			builder.setPortToPortDistance(port3, port4, IMultiMatrixProvider.Default_Key, 12 * 24);
+			builder.setPortToPortDistance(port1, port2, ERouteOption.DIRECT, 12 * 24);
+			builder.setPortToPortDistance(port2, port3, ERouteOption.DIRECT, 12 * 24);
+			builder.setPortToPortDistance(port3, port4, ERouteOption.DIRECT, 12 * 24);
 
 			final IOptimisationData data = builder.getOptimisationData();
 
@@ -230,14 +234,13 @@ public class TestCalculations {
 
 			final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, context, state);
 
-			final ScheduledSequences scheduledSequence;
 			// try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 			// scope.enter();
 			final ScheduleCalculator scheduler = injector.getInstance(ScheduleCalculator.class);
 
-			scheduledSequence = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
+			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
 			// }
-			Assert.assertNotNull(scheduledSequence);
+			Assert.assertNotNull(volumeAllocatedSequences);
 			// TODO: Start checking results
 			{
 				Assert.assertNull(annotatedSolution.getElementAnnotations().getAnnotation(startElement, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class));
@@ -548,7 +551,6 @@ public class TestCalculations {
 	/**
 	 * Like case 1, but force a higher travelling speed to get idle time + FBO
 	 */
-	@SuppressWarnings("unused")
 	@Test
 	public void testCalculations2() {
 
@@ -576,7 +578,7 @@ public class TestCalculations {
 			final IBaseFuel baseFuel = new BaseFuel("test");
 			baseFuel.setEquivalenceFactor(baseFuelUnitEquivalence);
 
-			final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0);
+			final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
 
 			final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 			ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
@@ -602,26 +604,26 @@ public class TestCalculations {
 			builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, ballast_nboRateInM3PerHour, ballast_idleNBORateInM3PerHour, ballast_idleConsumptionRateInMTPerHour,
 					ballastConsumptionCalculator, 0);
 
-			final IStartRequirement startRequirement = builder.createStartRequirement(port1, builder.createTimeWindow(0, 0), null);
-			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), builder.createTimeWindow(75, 75), false, 0);
+			final IStartRequirement startRequirement = builder.createStartRequirement(port1, TimeWindowMaker.createInclusiveInclusive(0, 0, 0, false), null);
+			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), TimeWindowMaker.createInclusiveInclusive(75, 75, 0, false), false, 0, false);
 
 			final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
-			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement);
+			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement);
 
-			final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
+			final ITimeWindow loadWindow = TimeWindowMaker.createInclusiveInclusive(25, 25, 0, false);
 			final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1,
 					false, false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 
-			final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
+			final ITimeWindow dischargeWindow = TimeWindowMaker.createInclusiveInclusive(50, 50, 0, false);
 			final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE,
 					new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), 1, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false,
 					DEFAULT_VOLUME_LIMIT_IS_M3);
 
 			final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
 
-			builder.setPortToPortDistance(port1, port2, IMultiMatrixProvider.Default_Key, 12 * 25);
-			builder.setPortToPortDistance(port2, port3, IMultiMatrixProvider.Default_Key, 12 * 25);
-			builder.setPortToPortDistance(port3, port4, IMultiMatrixProvider.Default_Key, 12 * 25);
+			builder.setPortToPortDistance(port1, port2, ERouteOption.DIRECT, 12 * 25);
+			builder.setPortToPortDistance(port2, port3, ERouteOption.DIRECT, 12 * 25);
+			builder.setPortToPortDistance(port3, port4, ERouteOption.DIRECT, 12 * 25);
 
 			final IOptimisationData data = builder.getOptimisationData();
 
@@ -678,8 +680,8 @@ public class TestCalculations {
 
 			final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, context, state);
 
-			final ScheduledSequences scheduledSequence = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
-			Assert.assertNotNull(scheduledSequence);
+			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
+			Assert.assertNotNull(volumeAllocatedSequences);
 
 			// TODO: Start checking results
 			{
@@ -991,7 +993,6 @@ public class TestCalculations {
 	/**
 	 * Like case 1, but force a higher travelling speed to get idle time + Base_Supplemental (make NBO more costly than Base)
 	 */
-	@SuppressWarnings("unused")
 	@Test
 	public void testCalculations3() {
 
@@ -1019,7 +1020,7 @@ public class TestCalculations {
 
 			final IBaseFuel baseFuel = new BaseFuel("test");
 			baseFuel.setEquivalenceFactor(baseFuelEquivalence);
-			final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0);
+			final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
 
 			final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 			ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
@@ -1044,26 +1045,26 @@ public class TestCalculations {
 			builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, ballast_nboRateInM3PerHour, ballast_idleNBORateInM3PerHour, ballast_idleConsumptionRateInMTPerHour,
 					ballastConsumptionCalculator, 0);
 
-			final IStartRequirement startRequirement = builder.createStartRequirement(port1, builder.createTimeWindow(0, 0), null);
-			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), builder.createTimeWindow(75, 75), false, 0);
+			final IStartRequirement startRequirement = builder.createStartRequirement(port1, TimeWindowMaker.createInclusiveInclusive(0, 0), null);
+			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), TimeWindowMaker.createInclusiveInclusive(75, 75), false, 0, false);
 
 			final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
-			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement);
+			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement);
 
-			final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
+			final ITimeWindow loadWindow = TimeWindowMaker.createInclusiveInclusive(25, 25);
 			final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1,
 					false, false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 
-			final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
+			final ITimeWindow dischargeWindow = TimeWindowMaker.createInclusiveInclusive(50, 50);
 			final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE,
 					new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(200)), 1, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false,
 					DEFAULT_VOLUME_LIMIT_IS_M3);
 
 			final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
 
-			builder.setPortToPortDistance(port1, port2, IMultiMatrixProvider.Default_Key, 12 * 25);
-			builder.setPortToPortDistance(port2, port3, IMultiMatrixProvider.Default_Key, 12 * 25);
-			builder.setPortToPortDistance(port3, port4, IMultiMatrixProvider.Default_Key, 12 * 25);
+			builder.setPortToPortDistance(port1, port2, ERouteOption.DIRECT, 12 * 25);
+			builder.setPortToPortDistance(port2, port3, ERouteOption.DIRECT, 12 * 25);
+			builder.setPortToPortDistance(port3, port4, ERouteOption.DIRECT, 12 * 25);
 
 			final IOptimisationData data = builder.getOptimisationData();
 
@@ -1119,8 +1120,8 @@ public class TestCalculations {
 
 			final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, context, state);
 
-			final ScheduledSequences scheduledSequence = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
-			Assert.assertNotNull(scheduledSequence);
+			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
+			Assert.assertNotNull(volumeAllocatedSequences);
 			// TODO: Start checking results
 			{
 				Assert.assertNull(annotatedSolution.getElementAnnotations().getAnnotation(startElement, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class));
@@ -1469,18 +1470,34 @@ public class TestCalculations {
 				return lcp;
 			}
 
+			@Provides
+			@Singleton
+			private IExcessIdleTimeComponentParameters provideIdleComponentParameters() {
+				final ExcessIdleTimeComponentParameters idleParams = new ExcessIdleTimeComponentParameters();
+				int highPeriodInDays = 15;
+				int lowPeriodInDays = Math.max(0, highPeriodInDays - 2);
+				idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, lowPeriodInDays * 24);
+				idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, highPeriodInDays * 24);
+				idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, 2_500);
+				idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, 10_000);
+				idleParams.setEndWeight(10_000);
+
+				return idleParams;
+			}
+
 			@Override
 			protected void configure() {
 
 				bind(VoyagePlanAnnotator.class);
 				bind(VoyagePlanner.class);
 				bind(ScheduleCalculator.class);
-				bind(ScheduledDataLookupProvider.class);
 				bind(ICharterRateCalculator.class).to(VesselStartDateCharterRateCalculator.class);
 				bind(IVolumeAllocator.class).toInstance(volumeAllocator);
 				bind(SchedulerBuilder.class);
 				bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
 				bind(IVoyagePlanOptimiser.class).to(VoyagePlanOptimiser.class);
+
+				bind(IEndEventScheduler.class).to(DefaultEndEventScheduler.class);
 
 				bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
 				final VesselBaseFuelCalculator baseFuelCalculator = Mockito.mock(VesselBaseFuelCalculator.class);
@@ -1488,6 +1505,10 @@ public class TestCalculations {
 				Mockito.when(baseFuelCalculator.getBaseFuelPrice(Matchers.any(IVessel.class), Matchers.anyInt())).thenReturn(baseFuelUnitPrice);
 
 				bind(VesselBaseFuelCalculator.class).toInstance(baseFuelCalculator);
+
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(Boolean.FALSE);
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(Boolean.FALSE);
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(Boolean.FALSE);
 
 			}
 		});

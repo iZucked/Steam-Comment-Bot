@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.peaberry;
@@ -22,7 +22,7 @@ public class OptimiserServiceModule extends PeaberryActivationModule {
 
 		install(new FitnessCoreServiceModule());
 		install(new ConstraintCheckerServiceModule());
-//		install(new EvaluationProcessServiceModule());
+		install(new EvaluatedStateConstraintCheckerServiceModule());
 		install(new EvaluationProcessServiceModule());
 	}
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.initialsequencebuilder;
@@ -18,6 +18,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -158,22 +159,21 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		}
 
 		// stick together elements which must be stuck together
-		final Map<ISequenceElement, Set<ISequenceElement>> followerCache = new LinkedHashMap<ISequenceElement, Set<ISequenceElement>>();
-		final Set<ISequenceElement> heads = new LinkedHashSet<ISequenceElement>();
+		final Map<ISequenceElement, Set<ISequenceElement>> followerCache = new LinkedHashMap<>();
+		final Set<@NonNull ISequenceElement> heads = new LinkedHashSet<>();
 		// Tails contains all elements in a chain which are not the head element
-		final Set<ISequenceElement> tails = new LinkedHashSet<ISequenceElement>();
+		final Set<@NonNull ISequenceElement> tails = new LinkedHashSet<>();
 
 		// Get the set of all optional elements...
-		final Collection<ISequenceElement> optionalElements = new LinkedHashSet<ISequenceElement>(optionalElementsProvider.getOptionalElements());
+		final Collection<@NonNull ISequenceElement> optionalElements = new LinkedHashSet<>(optionalElementsProvider.getOptionalElements());
 		// ...remove elements specified in the paringHints as these will be used and should not be considered optional for the builder
 		optionalElements.removeAll(pairingHints.keySet());
 		optionalElements.removeAll(pairingHints.values());
 
 		// Add all elements to the unsequenced set.
-		final Set<ISequenceElement> sequencedElements = new LinkedHashSet<ISequenceElement>();
-		final Set<ISequenceElement> unsequencedElements = new LinkedHashSet<ISequenceElement>();
+		final Set<ISequenceElement> sequencedElements = new LinkedHashSet<>();
+		final Set<ISequenceElement> unsequencedElements = new LinkedHashSet<>();
 		unsequencedElements.addAll(data.getSequenceElements());
-
 		unsequencedElements.removeAll(alternativeElementProvider.getAllAlternativeElements());
 
 		// Remove elements in the initial suggestion from the unsequenced set
@@ -189,7 +189,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		}
 
 		// Determine the set of elements remaining that will not be sequenced.
-		final List<ISequenceElement> unusedElements = new ArrayList<ISequenceElement>();
+		final List<@NonNull ISequenceElement> unusedElements = new ArrayList<>();
 		unusedElements.addAll(optionalElements);
 		unusedElements.retainAll(unsequencedElements);
 
@@ -202,7 +202,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 		for (final ISequenceElement element1 : unsequencedElements) {
 			// Init the follower cache
-			final Set<ISequenceElement> after1 = new LinkedHashSet<ISequenceElement>();
+			final Set<ISequenceElement> after1 = new LinkedHashSet<>();
 			followerCache.put(element1, after1);
 			// If there is a paring hint, then use this as the only possible follower information.
 			if (pairingHints.containsKey(element1)) {
@@ -234,7 +234,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 		// Heads now contains the head of every chunk that has to go together.
 		// We need to pull out all the chunks and sort out their rules
-		final List<IResource> resources = new ArrayList<IResource>(data.getResources());
+		final List<@NonNull IResource> resources = new ArrayList<>(data.getResources());
 		{
 			Collections.sort(resources, new Comparator<IResource>() {
 				@Override
@@ -256,7 +256,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		final Map<IResource, SequenceChunk> endChunks = new LinkedHashMap<IResource, SequenceChunk>();
 
 		// Build up chunks for elements which only have one follower
-		final List<SequenceChunk> chunks = new LinkedList<SequenceChunk>();
+		final List<@NonNull SequenceChunk> chunks = new LinkedList<>();
 		for (ISequenceElement head : heads) {
 			final SequenceChunk chunk = new SequenceChunk();
 			if (portTypeProvider.getPortType(head) == PortType.End) {
@@ -341,6 +341,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 				chunks.add(guy);
 			}
 		}
+		log.debug("Elements remaining to be sequenced: " + unsequencedElements);
 
 		// These are the things which we need to schedule on routes. We need to
 		// sort them
@@ -386,8 +387,8 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 				final IPortSlot slot3 = portSlotProvider.getPortSlot(e1);
 				final IPortSlot slot4 = portSlotProvider.getPortSlot(e2);
 
-				final int duration1 = slot3.getTimeWindow().getStart() - slot1.getTimeWindow().getStart();
-				final int duration2 = slot4.getTimeWindow().getStart() - slot2.getTimeWindow().getStart();
+				final int duration1 = slot3.getTimeWindow().getInclusiveStart() - slot1.getTimeWindow().getInclusiveStart();
+				final int duration2 = slot4.getTimeWindow().getInclusiveStart() - slot2.getTimeWindow().getInclusiveStart();
 
 				// if one is much longer than the other, do it first.
 
@@ -398,8 +399,8 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 				}
 
 				// sort by start time
-				final int s1 = slot1.getTimeWindow().getStart();
-				final int s2 = slot2.getTimeWindow().getStart();
+				final int s1 = slot1.getTimeWindow().getInclusiveStart();
+				final int s2 = slot2.getTimeWindow().getInclusiveStart();
 
 				if (s1 < s2) {
 					return -1;
@@ -583,8 +584,8 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 		if (chunks.isEmpty() == false) {
 			log.error("Could not schedule the following " + chunks.size() + " elements anywhere: " + chunks);
-			throw new RuntimeException("Scenario is too hard for ConstrainedInitialSequenceBuilder.\n\n Try manually assigning vessels.\n\n" + chunks.size() + " chunks "
-					+ "could not be scheduled anywhere: " + chunks);
+			throw new RuntimeException(
+					"Scenario is too hard for ConstrainedInitialSequenceBuilder.\n\n Try manually assigning vessels.\n\n" + chunks.size() + " chunks " + "could not be scheduled anywhere: " + chunks);
 		}
 
 		// OK, we have done our best, now build the modifiablesequences

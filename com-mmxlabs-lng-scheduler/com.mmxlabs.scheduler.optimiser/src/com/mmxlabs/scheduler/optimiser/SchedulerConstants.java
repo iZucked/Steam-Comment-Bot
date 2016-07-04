@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser;
@@ -14,6 +14,11 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  */
 @NonNullByDefault
 public final class SchedulerConstants {
+
+	// Caching constants - used in injection framework
+	public static final String Key_VolumeAllocationCache = "cache-volume-allocation";
+	public static final String Key_VolumeAllocatedSequenceCache = "cache-volume-allocated-sequence";
+	public static final String Key_ProfitandLossCache = "cache-profit-and-loss";
 
 	// Additional Info keys
 	public static final String AI_idleInfo = "info-idle";

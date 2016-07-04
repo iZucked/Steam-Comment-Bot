@@ -1,34 +1,19 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.manipulators;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.scheduler.optimiser.manipulators.EndLocationSequenceManipulator.EndLocationRule;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 
 public class EndLocationSequenceManipulatorTest {
-
-	@Test
-	public void testGetSetPortTypeProvider() {
-		final EndLocationSequenceManipulator manipulator = new EndLocationSequenceManipulator();
-
-		Assert.assertNull(manipulator.getPortTypeProvider());
-
-		final IPortTypeProvider portTypeProvider = Mockito.mock(IPortTypeProvider.class);
-
-		manipulator.setPortTypeProvider(portTypeProvider);
-
-		Assert.assertSame(portTypeProvider, manipulator.getPortTypeProvider());
-	}
 
 	@Test
 	public void testGetSetEndLocationRule() {

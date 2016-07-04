@@ -1,8 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
@@ -24,5 +26,6 @@ public interface IPortTypeProvider extends IDataComponentProvider {
 	 * @param sequenceElement
 	 * @return
 	 */
-	PortType getPortType(ISequenceElement sequenceElement);
+	@NonNull
+	PortType getPortType(@NonNull ISequenceElement sequenceElement);
 }

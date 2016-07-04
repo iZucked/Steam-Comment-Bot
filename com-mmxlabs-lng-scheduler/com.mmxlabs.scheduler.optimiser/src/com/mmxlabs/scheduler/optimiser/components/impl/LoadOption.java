@@ -1,13 +1,16 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -33,9 +36,9 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	 */
 
 	private long minLoadVolumeMMBTU;
-	
+
 	private long maxLoadVolumeMMBTU;
-	
+
 	private boolean volumeSetInM3;
 
 	private ILoadPriceCalculator loadPriceCalculator;
@@ -47,14 +50,14 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	/**
 	 * The date which LNG price indices should be based on.
 	 */
-	private int pricingDate;
+	private int pricingDate = IPortSlot.NO_PRICING_DATE;
 
-	private PricingEventType pricingEvent;
-	
+	private PricingEventType pricingEvent = PricingEventType.START_OF_LOAD;
 
-	public LoadOption() {
-		setPortType(PortType.Load);
-	}
+	//
+	// public LoadOption() {
+	// setPortType(PortType.Load);
+	// }
 
 	/**
 	 * Construct a new load option
@@ -74,9 +77,10 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	 * @param cargoCVValue
 	 *            - the CV value for gas here.
 	 */
-	public LoadOption(final String id, final IPort port, final ITimeWindow timeWindow, final long minLoadVolume, final long maxLoadVolume, final ILoadPriceCalculator loadPriceCalculator,
-			final int cargoCVValue) {
+	public LoadOption(final @NonNull String id, final IPort port, final @NonNull ITimeWindow timeWindow, final long minLoadVolume, final long maxLoadVolume,
+			final ILoadPriceCalculator loadPriceCalculator, final int cargoCVValue) {
 		super(id, port, timeWindow);
+		setPortType(PortType.Load);
 		this.minLoadVolume = minLoadVolume;
 		this.maxLoadVolume = maxLoadVolume;
 		this.loadPriceCalculator = loadPriceCalculator;
@@ -172,7 +176,7 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	public void setPricingEvent(PricingEventType pricingEvent) {
 		this.pricingEvent = pricingEvent;
 	}
-	
+
 	@Override
 	public long getMinLoadVolumeMMBTU() {
 		return minLoadVolumeMMBTU;
@@ -193,15 +197,13 @@ public class LoadOption extends PortSlot implements ILoadOption {
 		maxLoadVolumeMMBTU = volume;
 	}
 
-	public void setVolumeSetInM3(boolean m3){
+	public void setVolumeSetInM3(boolean m3) {
 		volumeSetInM3 = m3;
 	}
-	
+
 	@Override
 	public boolean isVolumeSetInM3() {
 		return volumeSetInM3;
 	}
-
-
 
 }

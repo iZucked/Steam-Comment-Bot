@@ -1,8 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.components;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 
@@ -21,7 +23,7 @@ public interface ILoadOption extends IPortSlot {
 	long getMinLoadVolume();
 
 	void setMinLoadVolume(long volume);
-	
+
 	/**
 	 * Returns the maximum quantity that can be loaded. A value of {@link Long#MAX_VALUE} is equivalent to no maximum bound. Units are M3.
 	 * 
@@ -46,11 +48,12 @@ public interface ILoadOption extends IPortSlot {
 	 * @return
 	 */
 	long getMaxLoadVolumeMMBTU();
-	
+
 	void setMaxLoadVolumeMMBTU(long volume);
 
 	/**
 	 * Returns whether the input data volume was set in m3 or MMBTU
+	 * 
 	 * @return
 	 */
 	boolean isVolumeSetInM3();
@@ -61,7 +64,7 @@ public interface ILoadOption extends IPortSlot {
 	 * @return
 	 */
 	int getCargoCVValue();
-	
+
 	/**
 	 * Returns the date on which the slot pricing should be based.
 	 * 
@@ -69,8 +72,9 @@ public interface ILoadOption extends IPortSlot {
 	 */
 	int getPricingDate();
 
+	@NonNull
 	PricingEventType getPricingEvent();
-	
+
 	/**
 	 * Returns the {@link com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator} which should be used to determine the unit cost of LNG at this slot.
 	 * 

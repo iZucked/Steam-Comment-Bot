@@ -1,8 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -22,5 +24,5 @@ public interface IPortCostProviderEditor extends IPortCostProvider {
 	 * @param type
 	 * @param from
 	 */
-	public void setPortCost(final IPort port, final IVessel vessel, final PortType type, final long cost);
+	public void setPortCost(final @NonNull IPort port, final @NonNull IVessel vessel, final @NonNull PortType type, final long cost);
 }

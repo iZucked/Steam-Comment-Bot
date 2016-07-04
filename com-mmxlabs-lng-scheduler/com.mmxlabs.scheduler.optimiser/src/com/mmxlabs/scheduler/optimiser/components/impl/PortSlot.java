@@ -1,10 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -14,22 +15,23 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public abstract class PortSlot implements IPortSlot {
 
-	private String id;
+	private @NonNull String id;
 
-	private IPort port;
+	private @NonNull IPort port;
 
-	private ITimeWindow timeWindow;
+	private @Nullable ITimeWindow timeWindow;
 
-	private PortType portType;
+	private @NonNull PortType portType;
 
-	public PortSlot() {
+	// public PortSlot() {
+	//
+	// }
 
-	}
-
-	public PortSlot(@NonNull final String id, @NonNull final IPort port, @NonNull final ITimeWindow timeWindow) {
+	public PortSlot(@NonNull final String id, @NonNull final IPort port, @Nullable final ITimeWindow timeWindow) {
 		this.id = id;
 		this.port = port;
 		this.timeWindow = timeWindow;
+		this.portType = PortType.Unknown;
 	}
 
 	@Override
@@ -52,6 +54,7 @@ public abstract class PortSlot implements IPortSlot {
 	}
 
 	@Override
+	@Nullable
 	public ITimeWindow getTimeWindow() {
 		return timeWindow;
 	}
@@ -96,6 +99,8 @@ public abstract class PortSlot implements IPortSlot {
 
 	@Override
 	public String toString() {
-		return id + (timeWindow == null ? " <any>" : " <" + timeWindow.getStart() + ", " + timeWindow.getEnd() + ">");
+		final ITimeWindow pTimeWindow = timeWindow;
+		final String twStr = pTimeWindow == null ? "<any>" : String.format("<%d, %d>", pTimeWindow.getInclusiveStart(), pTimeWindow.getExclusiveEnd());
+		return String.format("%s %s", id, twStr);
 	}
 }

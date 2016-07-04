@@ -1,10 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers;
-
-import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -20,79 +18,66 @@ public enum PortType {
 	/**
 	 * Unknown or unspecified port type.
 	 */
-	@NonNull
 	Unknown,
 
 	/**
 	 * Port type is a start port. I.e. the first element in the sequence.
 	 */
-	@NonNull
 	Start,
 
 	/**
 	 * Port type is an end port. I.e. the last element in the sequence.
 	 */
-	@NonNull
 	End,
 
 	/**
 	 * Port type is a Load event.
 	 */
-	@NonNull
 	Load,
 
 	/**
 	 * Port type is a discharge event
 	 */
-	@NonNull
 	Discharge,
 
 	/**
 	 * Port type is a dry dock event.
 	 */
-	@NonNull
 	DryDock,
 
 	/**
 	 * Port type is a maintenance event.
 	 */
-	@NonNull
 	Maintenance,
 
 	/**
 	 * Port type is a waypoint, i.e. a routing point optionally associated with a {@link ITimeWindow}
 	 */
-	@NonNull
 	Waypoint,
 
 	/**
 	 * Port type is a charter out, which will have a start time window and duration.
 	 */
-	@NonNull
 	CharterOut,
 
 	/**
 	 * Port type is a generated charter out, which will have a start time window and duration (although not neccessarily at creation time).
 	 */
-	@NonNull
 	GeneratedCharterOut,
 
 	/**
 	 * Generic port type.
 	 */
-	@NonNull
 	Other,
 
 	/**
 	 * Used to denote a visit to a port which doesn't have any real-world associated port. Journey legs to or from a virtual port should have no associated costs/route choices/etc.
 	 */
-	@NonNull
 	Virtual,
 
 	/**
-	 * Represents a type which is an end element for a cargo short. This will typically not be part of the normal sequence but added in. Such elements are not counted as must use.
+	 * Represents a type which is an end element for a round trip cargo. This will typically not be part of the normal sequence but added in. Such elements are not counted as must use.
 	 * 
 	 */
-	@NonNull
-	Short_Cargo_End;
+	Round_Trip_Cargo_End;
 }

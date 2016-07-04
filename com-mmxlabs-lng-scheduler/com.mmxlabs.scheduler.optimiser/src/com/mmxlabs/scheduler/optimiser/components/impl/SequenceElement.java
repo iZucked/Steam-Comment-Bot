@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
@@ -16,7 +16,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  * @author Simon Goodall
  * 
  */
-public final class SequenceElement extends IndexedObject implements ISequenceElement {
+public class SequenceElement extends IndexedObject implements ISequenceElement {
 	@NonNull
 	private String name;
 

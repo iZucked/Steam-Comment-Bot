@@ -1,14 +1,15 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.contracts;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 
 /**
  * An interface for cooldown price calculations. This calculator only has access to sequence and time information, because it will be used to calculate shipping costs.
@@ -25,7 +26,7 @@ public interface ICooldownCalculator extends ICalculator {
 	 * @param sequences
 	 * @param scheduledSequences
 	 */
-	public void prepareEvaluation(ISequences sequences);
+	public void prepareEvaluation(@NonNull ISequences sequences);
 
 	/**
 	 * Calculate the total cost of a cooldown operation. Note: time is passed in local time and converted to UTC.
@@ -34,5 +35,5 @@ public interface ICooldownCalculator extends ICalculator {
 	 * @param port
 	 *            {@link IPort} for local to UTC conversion
 	 */
-	public long calculateCooldownCost(IVesselClass vesselClass, IPort port, int cv, int localTime);
+	public long calculateCooldownCost(@NonNull IVesselClass vesselClass, @NonNull IPort port, int cv, int localTime);
 }

@@ -1,10 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation;
 
 import java.util.List;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -31,7 +33,7 @@ public interface IVolumeAllocator {
 	 * @param arrivalTimes
 	 * @return
 	 */
-	IAllocationAnnotation allocate(IVesselAvailability vesselAvailability, int vesselStartTime, VoyagePlan plan, IPortTimesRecord portTimesRecord);
+	IAllocationAnnotation allocate(@NonNull IVesselAvailability vesselAvailability, int vesselStartTime, @NonNull VoyagePlan plan, @NonNull IPortTimesRecord portTimesRecord);
 
 	/**
 	 * Creates and returns the initial {@link AllocationRecord} instance based on input data. This can be modified before passing to {@link #allocate(AllocationRecord)}. This method should be called
@@ -43,7 +45,7 @@ public interface IVolumeAllocator {
 	 * @param arrivalTimes
 	 * @return
 	 */
-	AllocationRecord createAllocationRecord(IVesselAvailability vesselAvailability, int vesselStartTime, VoyagePlan plan, IPortTimesRecord portTimesRecord);
+	AllocationRecord createAllocationRecord(@NonNull IVesselAvailability vesselAvailability, int vesselStartTime, @NonNull VoyagePlan plan, @NonNull IPortTimesRecord portTimesRecord);
 
 	/**
 	 * Given the {@link AllocationRecord}, perform the volume allocation to create an {@link IAllocationAnnotation}. This method should be called in cases where the {@link ICustomVolumeAllocator} is
@@ -52,6 +54,6 @@ public interface IVolumeAllocator {
 	 * @param allocationRecord
 	 * @return
 	 */
-	IAllocationAnnotation allocate(AllocationRecord allocationRecord);
+	IAllocationAnnotation allocate(@NonNull AllocationRecord allocationRecord);
 
 }

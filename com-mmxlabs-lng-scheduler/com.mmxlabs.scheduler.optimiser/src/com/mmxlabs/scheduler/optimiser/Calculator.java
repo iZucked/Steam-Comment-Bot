@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser;
@@ -58,17 +58,17 @@ public final class Calculator {
 			return Calculator.convertM3ToMMBTu(volumeInM3, cv);
 		}
 	}
-	
+
 	/**
 	 */
 	public static long convertM3ToM3Price(final long m3, final int pricePerM3) {
 		return (m3 * (long) pricePerM3) / HighScaleFactor;
-	}	
+	}
 
 	public static long convertMMBTuToM3(final long mmbtu, final int factor) {
 		return (mmbtu * HighScaleFactor) / (long) factor;
 	}
-	
+
 	public static long convertMMBTuToM3WithOverflowProtection(long volumeInMMBTu, int cv) {
 		if (volumeInMMBTu == Long.MAX_VALUE) {
 			return Long.MAX_VALUE;
@@ -80,7 +80,6 @@ public final class Calculator {
 			}
 		}
 	}
-
 
 	public static long convertM3ToMT(final long m3, final int cargoCV, final int factor) {
 		return factor == 0 ? 0L : (m3 * (long) cargoCV) / (long) factor;
@@ -143,11 +142,17 @@ public final class Calculator {
 	}
 
 	/**
-	 * Convert a $/m3 price to a $/MMBTu price
-	 * 
+	 * Take a price (in high scale factor) and multiply by a % share (range 0.0->1.0 at high scale factor)
 	 */
-	public static int getShareOfPrice(final int share, final int price) {
-		return (int) (((long) share * (long) price) / HighScaleFactor);
+	public static int getShareOfPrice(final int hs_share, final int hs_price) {
+		return (int) (((long) hs_share * (long) hs_price) / HighScaleFactor);
+	}
+
+	/**
+	 * Take a value (in low scale factor) and multiply by a % share (range 0.0->1.0 at High scale factor)
+	 */
+	public static long getShareOfValue(final long hs_share, final long ls_value) {
+		return (ls_value * hs_share) / HighScaleFactor;
 	}
 
 	/**
@@ -169,6 +174,17 @@ public final class Calculator {
 	}
 
 	/**
+	 * Multiply a int by a double, returning the result as a int, rounded
+	 * 
+	 * @param multiply
+	 * @param d
+	 * @return
+	 */
+	public static int multiply(final int multiply, final double d) {
+		return (int) Math.round((multiply * d));
+	}
+
+	/**
 	 * Simple multiplication between scaled integer based values
 	 * 
 	 * @param a
@@ -177,5 +193,16 @@ public final class Calculator {
 	 */
 	public static long multiply(final long a, final long b) {
 		return (a * b) / ScaleFactor;
+	}
+
+	/**
+	 * Simple multiplication between scaled integer based values
+	 * 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static long multiplyHigh(final long a, final long b) {
+		return (a * b) / HighScaleFactor;
 	}
 }

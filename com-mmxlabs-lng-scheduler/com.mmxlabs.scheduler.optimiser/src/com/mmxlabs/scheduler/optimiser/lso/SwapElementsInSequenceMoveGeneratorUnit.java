@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.lso;
@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+
+import javax.inject.Inject;
 
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.core.IResource;
@@ -19,12 +21,16 @@ import com.mmxlabs.scheduler.optimiser.lso.moves.SwapSingleSequenceElements;
 
 /**
  * A module for the {@link ConstrainedMoveGenerator} which swaps slots within a single sequence. This is intended for use with {@link VesselInstanceType#CARGO_SHORTS}. Note this cannot currently swap
- * two elements which are adjacent to each other. This would require additional work around the follower / preceeder checks.
+ * two elements which are adjacent to each other. This would require additional work around the follower / preceder checks.
  * 
  * @author Simon Goodall
  * 
  */
 public class SwapElementsInSequenceMoveGeneratorUnit implements IConstrainedMoveGeneratorUnit {
+
+	@Inject
+	private IFollowersAndPreceders followersAndPreceders;
+
 	private final ConstrainedMoveGenerator owner;
 
 	public SwapElementsInSequenceMoveGeneratorUnit(final ConstrainedMoveGenerator owner) {
@@ -114,9 +120,9 @@ public class SwapElementsInSequenceMoveGeneratorUnit implements IConstrainedMove
 			return true;
 		}
 		if (follower) {
-			return owner.getValidFollowers().get(a).contains(b);
+			return followersAndPreceders.getValidFollowers(a).contains(b);
 		} else {
-			return owner.getValidPreceeders().get(a).contains(b);
+			return followersAndPreceders.getValidPreceders(a).contains(b);
 		}
 	}
 }

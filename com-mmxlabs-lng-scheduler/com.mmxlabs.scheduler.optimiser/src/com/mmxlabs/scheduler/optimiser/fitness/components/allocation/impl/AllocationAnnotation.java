@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.common.base.Objects;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -29,10 +30,29 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 		public int cargoCV;
 		public int startTime;
 		public int duration;
+
+		@Override
+		public boolean equals(Object obj) {
+
+			if (obj == this) {
+				return true;
+			}
+			if (obj instanceof SlotAllocationAnnotation) {
+				final SlotAllocationAnnotation other = (SlotAllocationAnnotation) obj;
+				return volumeInM3 == other.volumeInM3 //
+						&& volumeInMMBTu == other.volumeInMMBTu //
+						&& cargoCV == other.cargoCV //
+						&& startTime == other.startTime //
+						&& duration == other.duration;
+
+			}
+
+			return false;
+		}
 	}
 
-	private final Map<IPortSlot, SlotAllocationAnnotation> slotAllocations = new HashMap<IPortSlot, SlotAllocationAnnotation>();
-	private final List<IPortSlot> slots = new ArrayList<IPortSlot>(2);
+	private final @NonNull Map<IPortSlot, SlotAllocationAnnotation> slotAllocations = new HashMap<>();
+	private final @NonNull List<@NonNull IPortSlot> slots = new ArrayList<>(2);
 
 	private long fuelVolumeInM3;
 
@@ -103,11 +123,11 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	@Override
-	public List<IPortSlot> getSlots() {
+	public List<@NonNull IPortSlot> getSlots() {
 		return slots;
 	}
 
-	private SlotAllocationAnnotation getOrCreateSlotAllocation(final IPortSlot slot) {
+	private SlotAllocationAnnotation getOrCreateSlotAllocation(final @NonNull IPortSlot slot) {
 		SlotAllocationAnnotation allocation = slotAllocations.get(slot);
 		if (allocation == null) {
 			allocation = new SlotAllocationAnnotation();
@@ -117,7 +137,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	@Override
-	public int getSlotTime(final IPortSlot slot) {
+	public int getSlotTime(final @NonNull IPortSlot slot) {
 		final SlotAllocationAnnotation allocation = slotAllocations.get(slot);
 		if (allocation != null) {
 			return allocation.startTime;
@@ -126,7 +146,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	@Override
-	public void setSlotTime(final IPortSlot slot, final int time) {
+	public void setSlotTime(final @NonNull IPortSlot slot, final int time) {
 		getOrCreateSlotAllocation(slot).startTime = time;
 		// Set or update the first port slot and time
 		if (firstPortSlot == null || slot == firstPortSlot) {
@@ -135,14 +155,14 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 		}
 	}
 
-	public void setReturnSlotTime(final IPortSlot slot, final int time) {
+	public void setReturnSlotTime(final @NonNull IPortSlot slot, final int time) {
 		setSlotTime(slot, time);
 		slots.remove(returnPortSlot);
 		returnPortSlot = slot;
 	}
 
 	@Override
-	public int getSlotDuration(final IPortSlot slot) {
+	public int getSlotDuration(final @NonNull IPortSlot slot) {
 		final SlotAllocationAnnotation allocation = slotAllocations.get(slot);
 		if (allocation != null) {
 			return allocation.duration;
@@ -151,12 +171,12 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	@Override
-	public void setSlotDuration(final IPortSlot slot, final int duration) {
+	public void setSlotDuration(final @NonNull IPortSlot slot, final int duration) {
 		getOrCreateSlotAllocation(slot).duration = duration;
 	}
 
 	@Override
-	public long getSlotVolumeInM3(final IPortSlot slot) {
+	public long getSlotVolumeInM3(final @NonNull IPortSlot slot) {
 
 		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
 		if (allocation != null) {
@@ -166,12 +186,12 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 		return 0;
 	}
 
-	public void setSlotVolumeInM3(final IPortSlot slot, final long volumeInM3) {
+	public void setSlotVolumeInM3(final @NonNull IPortSlot slot, final long volumeInM3) {
 		getOrCreateSlotAllocation(slot).volumeInM3 = volumeInM3;
 	}
 
 	@Override
-	public long getSlotVolumeInMMBTu(final IPortSlot slot) {
+	public long getSlotVolumeInMMBTu(final @NonNull IPortSlot slot) {
 
 		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
 		if (allocation != null) {
@@ -181,12 +201,12 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 		return 0;
 	}
 
-	public void setSlotVolumeInMMBTu(final IPortSlot slot, final long volumeInMMBTu) {
+	public void setSlotVolumeInMMBTu(final @NonNull IPortSlot slot, final long volumeInMMBTu) {
 		getOrCreateSlotAllocation(slot).volumeInMMBTu = volumeInMMBTu;
 	}
 
 	@Override
-	public int getSlotCargoCV(final IPortSlot slot) {
+	public int getSlotCargoCV(final @NonNull IPortSlot slot) {
 
 		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
 		if (allocation != null) {
@@ -196,7 +216,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 		return 0;
 	}
 
-	public void setSlotCargoCV(final IPortSlot slot, final int cargoCV) {
+	public void setSlotCargoCV(final @NonNull IPortSlot slot, final int cargoCV) {
 		getOrCreateSlotAllocation(slot).cargoCV = cargoCV;
 	}
 
@@ -211,7 +231,11 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 
 	@Override
 	public IPortSlot getFirstSlot() {
-		return firstPortSlot;
+		final IPortSlot pFirstPortSlot = firstPortSlot;
+		if (pFirstPortSlot == null) {
+			throw new IllegalStateException("#getFirstSlot called before slots have been added");
+		}
+		return pFirstPortSlot;
 	}
 
 	@Override
@@ -222,5 +246,25 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	@Override
 	public IPortSlot getReturnSlot() {
 		return returnPortSlot;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
+			return true;
+		}
+
+		if (obj instanceof AllocationAnnotation) {
+			AllocationAnnotation other = (AllocationAnnotation) obj;
+			return this.firstSlotTime == other.firstSlotTime //
+					&& this.startHeelVolumeInM3 == other.startHeelVolumeInM3 //
+					&& this.fuelVolumeInM3 == other.fuelVolumeInM3 //
+					&& this.remainingHeelVolumeInM3 == other.remainingHeelVolumeInM3 //
+					&& Objects.equal(this.returnPortSlot, other.returnPortSlot) //
+					&& Objects.equal(this.slotAllocations, other.slotAllocations)//
+					&& Objects.equal(this.slots, other.slots);
+		}
+
+		return false;
 	}
 }

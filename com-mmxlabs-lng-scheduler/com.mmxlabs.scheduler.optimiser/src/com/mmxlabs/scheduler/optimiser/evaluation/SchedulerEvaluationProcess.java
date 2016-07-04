@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.evaluation;
@@ -19,14 +19,20 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.schedule.ProfitAndLossCalculator;
+import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
 
 public class SchedulerEvaluationProcess implements IEvaluationProcess {
 
+	// Constants used for keys into IEvaluationState
 	@NonNull
-	public static final String SCHEDULED_SEQUENCES = "com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess-scheduled-sequences";
+	public static final String VOLUME_ALLOCATED_SEQUENCES = "com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess-volume-allocated-sequences";
+	@NonNull
+	public static final String PROFIT_AND_LOSS_SEQUENCES = "com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess-profit-and-loss-sequences";
 
 	@NonNull
 	public static final String ALL_ELEMENTS = "com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess-all-elements";
@@ -42,49 +48,82 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 	private ISequenceScheduler scheduler;
 
 	@Inject
+	private ScheduleCalculator scheduleCalculator;
+
+	@Inject
+	private ProfitAndLossCalculator profitAndLossCalculator;
+
+	@Inject
 	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Override
-	public boolean evaluate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState) {
-		return evaluate(sequences, evaluationState, null);
+	public boolean evaluate(@NonNull final Phase phase, @NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState) {
+		return evaluate(phase, sequences, evaluationState, null);
 	}
 
 	@Override
-	public void annotate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution) {
-		evaluate(sequences, evaluationState, solution);
+	public void annotate(@NonNull final Phase phase, @NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution) {
+		if (!evaluate(phase, sequences, evaluationState, solution)) {
+			throw new RuntimeException("Unable to evaluate state");
+		}
 	}
 
-	private boolean evaluate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @Nullable final IAnnotatedSolution solution) {
+	private boolean evaluate(@NonNull final Phase phase, @NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @Nullable final IAnnotatedSolution solution) {
+		if (phase == Phase.Checked_Evaluation) {
+			// Calculate arrival times for sequences
+			final int @Nullable [][] arrivalTimes = scheduler.schedule(sequences);
+			if (arrivalTimes == null) {
+				return false;
+			}
 
-		final ScheduledSequences scheduledSequences = scheduler.schedule(sequences, solution);
-		if (scheduledSequences == null) {
-			return false;
-		}
+			@Nullable
+			final VolumeAllocatedSequences volumeAllocatedSequences = scheduleCalculator.schedule(sequences, arrivalTimes, solution);
+			if (volumeAllocatedSequences == null) {
+				return false;
+			}
 
-		// Store evaluated state
-		evaluationState.setData(SCHEDULED_SEQUENCES, scheduledSequences);
-		if (solution != null) {
-			setEvaluationElements(evaluationState, solution);
+			// Store evaluated state
+			evaluationState.setData(VOLUME_ALLOCATED_SEQUENCES, volumeAllocatedSequences);
+
+			if (solution != null) {
+				setEvaluationElements(evaluationState, solution);
+			}
+
+		} else if (phase == Phase.Final_Evaluation) {
+
+			final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
+			if (volumeAllocatedSequences == null) {
+				return false;
+			}
+			final ProfitAndLossSequences profitAndLossSequences = profitAndLossCalculator.calculateProfitAndLoss(sequences, volumeAllocatedSequences, solution);
+			if (profitAndLossSequences == null) {
+				return false;
+			}
+
+			// Store evaluated state
+			evaluationState.setData(PROFIT_AND_LOSS_SEQUENCES, profitAndLossSequences);
+
 		}
 		return true;
+
 	}
 
 	public void setEvaluationElements(@NonNull final IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution) {
-		final Set<ISequenceElement> allElements = getAllScheduledSequenceElements(evaluationState, solution);
+		final Set<@NonNull ISequenceElement> allElements = getAllScheduledSequenceElements(evaluationState, solution);
 		evaluationState.setData(ALL_ELEMENTS, allElements);
-		final Set<ISequenceElement> optimisationElements = getOptimisationSequenceElements(solution);
+		final Set<@NonNull ISequenceElement> optimisationElements = getOptimisationSequenceElements(solution);
 		evaluationState.setData(OPTIMISATION_ELEMENTS, optimisationElements);
-		final Set<ISequenceElement> additionalElements = getAdditionalSequenceElements(allElements, optimisationElements);
+		final Set<@NonNull ISequenceElement> additionalElements = getAdditionalSequenceElements(allElements, optimisationElements);
 		evaluationState.setData(ADDITIONAL_ELEMENTS, additionalElements);
 	}
 
 	@NonNull
-	private Set<ISequenceElement> getAllScheduledSequenceElements(@NonNull final IEvaluationState evaluationState, @NonNull final IAnnotatedSolution annotatedSolution) {
-		final Set<ISequenceElement> allElements = new HashSet<ISequenceElement>();
-		final ScheduledSequences scheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
-		assert scheduledSequences != null;
-		for (final ScheduledSequence scheduledSequence : scheduledSequences) {
+	private Set<@NonNull ISequenceElement> getAllScheduledSequenceElements(@NonNull final IEvaluationState evaluationState, @NonNull final IAnnotatedSolution annotatedSolution) {
+		final Set<@NonNull ISequenceElement> allElements = new HashSet<>();
+		final VolumeAllocatedSequences volumeAllocatedSequences = evaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
+		assert volumeAllocatedSequences != null;
+		for (final VolumeAllocatedSequence scheduledSequence : volumeAllocatedSequences) {
 			for (final IPortSlot portSlot : scheduledSequence.getSequenceSlots()) {
 				allElements.add(portSlotProvider.getElement(portSlot));
 			}
@@ -94,14 +133,14 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 	}
 
 	@NonNull
-	private Set<ISequenceElement> getOptimisationSequenceElements(final IAnnotatedSolution solution) {
-		final Set<ISequenceElement> optimisationElements = new HashSet<ISequenceElement>(solution.getContext().getOptimisationData().getSequenceElements());
+	private Set<@NonNull ISequenceElement> getOptimisationSequenceElements(final @NonNull IAnnotatedSolution solution) {
+		final Set<@NonNull ISequenceElement> optimisationElements = new HashSet<>(solution.getContext().getOptimisationData().getSequenceElements());
 		return optimisationElements;
 	}
 
 	@NonNull
-	private Set<ISequenceElement> getAdditionalSequenceElements(final Set<ISequenceElement> allElements, final Set<ISequenceElement> optimisationElements) {
-		final Set<ISequenceElement> additionalElements = new HashSet<ISequenceElement>(allElements);
+	private Set<@NonNull ISequenceElement> getAdditionalSequenceElements(final Set<@NonNull ISequenceElement> allElements, final Set<@NonNull ISequenceElement> optimisationElements) {
+		final Set<@NonNull ISequenceElement> additionalElements = new HashSet<>(allElements);
 		additionalElements.removeAll(optimisationElements);
 		return additionalElements;
 	}

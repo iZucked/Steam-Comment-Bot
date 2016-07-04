@@ -1,10 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
 import javax.inject.Inject;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -20,8 +22,8 @@ import com.mmxlabs.scheduler.optimiser.events.impl.IdleEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.JourneyEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.LoadEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.PortVisitEventImpl;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.portcost.impl.PortCostAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -50,32 +52,32 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 	@Inject
 	private IVesselProvider vesselProvider;
 
-	private final FuelComponent[] idleFuelComponents = FuelComponent.getIdleFuelComponents();
-	private final FuelComponent[] travelFuelComponents = FuelComponent.getTravelFuelComponents();
+	private final @NonNull FuelComponent @NonNull [] idleFuelComponents = FuelComponent.getIdleFuelComponents();
+	private final @NonNull FuelComponent @NonNull [] travelFuelComponents = FuelComponent.getTravelFuelComponents();
 
-	public void annotateFromScheduledSequences(final ScheduledSequences scheduledSequences, final IAnnotatedSolution solution) {
-		for (final ScheduledSequence s : scheduledSequences) {
+	public void annotateFromScheduledSequences(final @NonNull VolumeAllocatedSequences scheduledSequences, final @NonNull IAnnotatedSolution solution) {
+		for (final VolumeAllocatedSequence s : scheduledSequences) {
 			annotateFromScheduledSequence(s, solution);
 		}
 		// add volume annotations
 	}
 
-	public void annotateFromScheduledSequence(final ScheduledSequence scheduledSequence, final IAnnotatedSolution solution) {
+	public void annotateFromScheduledSequence(final @NonNull VolumeAllocatedSequence scheduledSequence, final @NonNull IAnnotatedSolution solution) {
 		annotateFromVoyagePlan(scheduledSequence, solution);
 	}
-		
+
 	/**
 	 */
 	@Override
-	public void annotateFromVoyagePlan(final ScheduledSequence scheduledSequence, final IAnnotatedSolution solution) {
+	public void annotateFromVoyagePlan(final @NonNull VolumeAllocatedSequence scheduledSequence, final @NonNull IAnnotatedSolution solution) {
 		final VoyagePlanIterator vpi = new VoyagePlanIterator(scheduledSequence);
 
 		while (vpi.hasNextObject()) {
 			final Object e = vpi.nextObject();
 			//
 			final int currentTime = vpi.getCurrentTime();
-			VoyagePlan currentPlan = vpi.getCurrentPlan();
-			int charterRatePerDay = currentPlan.getCharterInRatePerDay();
+			final VoyagePlan currentPlan = vpi.getCurrentPlan();
+			final long charterRatePerDay = currentPlan.getCharterInRatePerDay();
 			if (e instanceof PortDetails) {
 				final PortDetails details = (PortDetails) e;
 				final IPortSlot currentPortSlot = details.getOptions().getPortSlot();
@@ -137,7 +139,6 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 				final int travelTime = details.getTravelTime();
 
 				final JourneyEventImpl journey = new JourneyEventImpl();
-
 				journey.setName("journey");
 				journey.setFromPort(prevPortSlot.getPort());
 				journey.setToPort(currentPortSlot.getPort());
@@ -147,8 +148,8 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 				journey.setEndTime(currentTime + travelTime);
 
 				journey.setDistance(options.getDistance());
-				journey.setRoute(options.getRoute());
-				journey.setRouteCost(details.getRouteCost());
+				journey.setRoute(options.getRoute().name());
+				journey.setRouteCost(options.getRouteCost());
 
 				journey.setDuration(travelTime);
 				journey.setHireCost(Calculator.quantityFromRateTime(charterRatePerDay, travelTime) / 24);
@@ -159,7 +160,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 						final long consumption = details.getFuelConsumption(fuel, unit) + details.getRouteAdditionalConsumption(fuel, unit);
 						journey.setFuelConsumption(fuel, unit, consumption);
 						if (unit == fuel.getPricingFuelUnit()) {
-							int fuelUnitPrice = details.getFuelUnitPrice(fuel);
+							final int fuelUnitPrice = details.getFuelUnitPrice(fuel);
 							final long cost = Calculator.costFromConsumption(consumption, fuelUnitPrice);
 
 							journey.setFuelCost(fuel, cost);
@@ -252,5 +253,5 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 	public void setVesselProvider(final IVesselProvider vesselProvider) {
 		this.vesselProvider = vesselProvider;
 	}
-	
+
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.manipulators;
@@ -42,7 +42,7 @@ public class ShortCargoSequenceManipulator implements ISequencesManipulator {
 
 		for (final IResource resource : sequences.getResources()) {
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS) {
+			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 				final IModifiableSequence seq = sequences.getModifiableSequence(resource);
 				final int size = seq.size();
 				// Loop backwards to avoid needing to update index by inserted item count
@@ -51,11 +51,19 @@ public class ShortCargoSequenceManipulator implements ISequencesManipulator {
 					final PortType portType = portTypeProvider.getPortType(element);
 					if (portType == PortType.Load) {
 						final ISequenceElement returnElement = shortCargoReturnElementProvider.getReturnElement(element);
-						final ISegment segment = new DisconnectedSegment(Collections.singletonList(returnElement));
-						if (i + 2 <= seq.size()) {
-							seq.insert(i + 2, segment);
-						} else {
-							seq.add(returnElement);
+
+						// If element is null we expect that a constraint checker will mark the solution as invalid.... (if not, then expect some sort of failure in the PortTimesPlanner/VoyagePlanner
+						// classes)
+						// The sequence manipulator API does not have a way to mark solution failed.
+						// If it is null, then we have tried to put a load on a nominal cargo vessel that was not expected to be placed on a nominal vessel.
+						if (returnElement != null) {
+
+							final ISegment segment = new DisconnectedSegment(Collections.singletonList(returnElement));
+							if (i + 2 <= seq.size()) {
+								seq.insert(i + 2, segment);
+							} else {
+								seq.add(returnElement);
+							}
 						}
 					}
 				}

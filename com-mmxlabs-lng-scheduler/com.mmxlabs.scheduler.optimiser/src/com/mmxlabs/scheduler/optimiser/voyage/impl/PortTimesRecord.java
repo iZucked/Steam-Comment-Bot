@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
@@ -23,15 +25,17 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
  * @author Simon Goodall
  * 
  */
-public class PortTimesRecord implements IPortTimesRecord {
+public final class PortTimesRecord implements IPortTimesRecord {
 
-	private static class SlotVoyageRecord {
+	private static final class SlotVoyageRecord {
 		public int startTime;
 		public int duration;
 
 		@Override
 		public boolean equals(final Object obj) {
-			if (obj instanceof SlotVoyageRecord) {
+			if (obj == this) {
+				return true;
+			} else if (obj instanceof SlotVoyageRecord) {
 				final SlotVoyageRecord other = (SlotVoyageRecord) obj;
 				return startTime == other.startTime && duration == other.duration;
 			}
@@ -48,8 +52,8 @@ public class PortTimesRecord implements IPortTimesRecord {
 	// Most voyages are load, discharge, next. DES/FOB cargoes have a start, load, discharge end sequence. 4 elements is a good starting point, although LDD etc style cargoes could start to push this
 	// up.
 	private static final int INITIAL_CAPACITY = 4;
-	private final Map<IPortSlot, SlotVoyageRecord> slotRecords = new HashMap<IPortSlot, SlotVoyageRecord>(INITIAL_CAPACITY);
-	private final List<IPortSlot> slots = new ArrayList<IPortSlot>(INITIAL_CAPACITY);
+	private final @NonNull Map<IPortSlot, SlotVoyageRecord> slotRecords = new HashMap<>(INITIAL_CAPACITY);
+	private final @NonNull List<@NonNull IPortSlot> slots = new ArrayList<>(INITIAL_CAPACITY);
 	private int firstSlotTime = Integer.MAX_VALUE;
 	private IPortSlot firstPortSlot = null;
 	private IPortSlot returnSlot;
@@ -63,16 +67,14 @@ public class PortTimesRecord implements IPortTimesRecord {
 	 * 
 	 * @param other
 	 */
-	public PortTimesRecord(final IPortTimesRecord other) {
-		final IPortSlot otherReturnSlot = other.getReturnSlot();
+	public PortTimesRecord(final @NonNull IPortTimesRecord other) {
 		for (final IPortSlot slot : other.getSlots()) {
-			assert (slot != null);
-			if (otherReturnSlot == slot) {
-				this.setReturnSlotTime(slot, other.getSlotTime(slot));
-			} else {
-				this.setSlotTime(slot, other.getSlotTime(slot));
-				this.setSlotDuration(slot, other.getSlotDuration(slot));
-			}
+			this.setSlotTime(slot, other.getSlotTime(slot));
+			this.setSlotDuration(slot, other.getSlotDuration(slot));
+		}
+		final IPortSlot otherReturnSlot = other.getReturnSlot();
+		if (otherReturnSlot != null) {
+			this.setReturnSlotTime(otherReturnSlot, other.getSlotTime(otherReturnSlot));
 		}
 	}
 
@@ -92,15 +94,23 @@ public class PortTimesRecord implements IPortTimesRecord {
 			builder.append(String.format(slotFormat, slot.getId(), slotAllocation.startTime));
 		}
 
+		if (returnSlot != null) {
+			final SlotVoyageRecord slotAllocation = slotRecords.get(returnSlot);
+			builder.append(" return ");
+			builder.append(String.format(slotFormat, returnSlot.getId(), slotAllocation.startTime));
+
+		}
+
 		return builder.toString();
 	}
 
 	@Override
-	public List<IPortSlot> getSlots() {
+	public List<@NonNull IPortSlot> getSlots() {
 		return slots;
 	}
 
-	private SlotVoyageRecord getOrCreateSlotRecord(final IPortSlot slot) {
+	@NonNull
+	private SlotVoyageRecord getOrCreateSlotRecord(final @NonNull IPortSlot slot) {
 		assert slot != null;
 		SlotVoyageRecord allocation = slotRecords.get(slot);
 		if (allocation == null) {
@@ -120,7 +130,7 @@ public class PortTimesRecord implements IPortTimesRecord {
 		throw new IllegalArgumentException("Unknown port slot");
 	}
 
-	public void setReturnSlotTime(final IPortSlot slot, final int time) {
+	public void setReturnSlotTime(final @NonNull IPortSlot slot, final int time) {
 		setSlotTime(slot, time);
 		// Return slot should not be in list
 		slots.remove(slot);
@@ -175,7 +185,11 @@ public class PortTimesRecord implements IPortTimesRecord {
 
 	@Override
 	public IPortSlot getFirstSlot() {
-		return firstPortSlot;
+		final IPortSlot pFirstPortSlot = firstPortSlot;
+		if (pFirstPortSlot == null) {
+			throw new IllegalStateException("#getFirstSlot called before slots have been added");
+		}
+		return pFirstPortSlot;
 	}
 
 	@Override

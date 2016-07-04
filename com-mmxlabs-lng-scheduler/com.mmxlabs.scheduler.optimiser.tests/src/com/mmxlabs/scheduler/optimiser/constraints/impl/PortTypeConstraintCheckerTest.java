@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
@@ -80,7 +80,7 @@ public class PortTypeConstraintCheckerTest {
 		final Map<IResource, ISequence> m = CollectionsUtil.makeHashMap(r, sequence);
 		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r), m);
 
-		Assert.assertTrue(checker.checkConstraints(sequences));
+		Assert.assertTrue(checker.checkConstraints(sequences, null));
 	}
 
 	@Test
@@ -117,7 +117,7 @@ public class PortTypeConstraintCheckerTest {
 		final Map<IResource, ISequence> m = CollectionsUtil.makeHashMap(r, sequence);
 		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r), m);
 
-		Assert.assertFalse(checker.checkConstraints(sequences));
+		Assert.assertFalse(checker.checkConstraints(sequences, null));
 	}
 
 	@Test
@@ -155,7 +155,7 @@ public class PortTypeConstraintCheckerTest {
 		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r), m);
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assert.assertTrue(checker.checkConstraints(sequences, messages));
+		Assert.assertTrue(checker.checkConstraints(sequences, null, messages));
 		Assert.assertEquals(0, messages.size());
 	}
 
@@ -193,7 +193,7 @@ public class PortTypeConstraintCheckerTest {
 		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r), m);
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assert.assertFalse(checker.checkConstraints(sequences, messages));
+		Assert.assertFalse(checker.checkConstraints(sequences, null, messages));
 		Assert.assertEquals(1, messages.size());
 	}
 
