@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.validation.scenarios;
@@ -53,6 +53,7 @@ public class ScenarioInstanceValidatorScenarioServiceListener extends ScenarioSe
 	}
 
 	private void hookExisting(final Container container) {
+		// CONCURRENT MODIFICATION EXCEPTION HERE!
 		for (final Container c : container.getElements()) {
 			if (c instanceof ScenarioInstance) {
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) c;

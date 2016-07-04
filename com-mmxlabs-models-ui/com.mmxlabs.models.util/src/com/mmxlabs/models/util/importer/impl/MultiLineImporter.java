@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.util.importer.impl;
@@ -173,8 +173,11 @@ public class MultiLineImporter extends DefaultClassImporter {
 
 	@Override
 	public Collection<EObject> importObjects(final EClass importClass, final CSVReader reader, final IMMXImportContext context) {
-		objectMap.clear();
-		return super.importObjects(importClass, reader, context);
+		try {
+			return super.importObjects(importClass, reader, context);
+		} finally {
+			objectMap.clear();
+		}
 	}
 
 	/**

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +44,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.autocomplete.IMMXContentProposalProvider;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
@@ -64,6 +66,8 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	 * Adapter factory instance. This contains all factories registered in the global registry.
 	 */
 	private static final ComposedAdapterFactory FACTORY = createAdapterFactory();
+
+	protected IMMXContentProposalProvider proposalHelper;
 
 	/**
 	 * Object being edited
@@ -191,6 +195,10 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		}
 
 		setControlsEnabled(!isFeatureReadonly() && isEditorEnabled());
+
+		if (proposalHelper != null) {
+			proposalHelper.setRootObject(rootObject);
+		}
 
 		firePostDisplay(dialogContext, rootObject, input, range);
 	}
@@ -565,15 +573,15 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	protected boolean isFeatureReadonly() {
 		return propertyDescriptor == null ? false : !propertyDescriptor.canSetProperty(input);
 	}
-	
+
 	@Override
 	public boolean hasLabel() {
 		return true;
 	}
-	
+
 	@Override
 	public Object createLayoutData(MMXRootObject root, EObject value, Control control) {
 		return null;
 	}
-		
+
 }

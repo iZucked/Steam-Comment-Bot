@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.util.importer.impl;
@@ -34,6 +34,7 @@ import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.FieldMap;
 import com.mmxlabs.common.csv.IFieldMap;
 import com.mmxlabs.common.csv.IImportProblem;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -105,6 +106,10 @@ public class DefaultClassImporter extends AbstractClassImporter {
 				Map<String, String> row;
 				while ((row = reader.readRow(true)) != null) {
 					results.addAll(importObject(null, importClass, row, context).createdExtraObjects);
+					// Clean up null data
+					while (results.contains(null)) {
+						results.remove(null);
+					}
 				}
 			} finally {
 				reader.close();
@@ -384,6 +389,9 @@ public class DefaultClassImporter extends AbstractClassImporter {
 
 	protected void importAttributes(final Map<String, String> row, final IMMXImportContext context, final EClass rowClass, final EObject instance) {
 		for (final EAttribute attribute : rowClass.getEAllAttributes()) {
+			if (!checkLicensedAttribute(attribute)) {
+				continue;
+			}
 			final String lowerCase = attribute.getName().toLowerCase();
 			if (row.containsKey(lowerCase)) {
 				final IAttributeImporter ai = importerRegistry.getAttributeImporter(attribute.getEAttributeType());
@@ -453,9 +461,11 @@ public class DefaultClassImporter extends AbstractClassImporter {
 	}
 
 	protected void exportAttribute(final EObject object, final EAttribute attribute, final Map<String, String> result, @NonNull final IMMXExportContext context) {
+		if (!checkLicensedAttribute(attribute)) {
+			return;
+		}
 		final IAttributeImporter ai = Activator.getDefault().getImporterRegistry().getAttributeImporter(attribute.getEAttributeType());
 		if (ai != null) {
-
 			// Determine whether or not to export the othernames feature
 			if (attribute == MMXCorePackage.eINSTANCE.getOtherNamesObject_OtherNames()) {
 				// Annotation is not on the feature itself, but rather the sub-class
@@ -523,7 +533,8 @@ public class DefaultClassImporter extends AbstractClassImporter {
 								sb.append(",");
 							}
 							comma = true;
-							sb.append(no.getName());
+							String rawName = EncoderUtil.encode(no.getName());
+							sb.append(rawName);
 						}
 					}
 
@@ -539,7 +550,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 		}
 	}
 
-	protected boolean shouldExportExtension(EObject object, EObject extension) {
+	protected boolean shouldExportExtension(final EObject object, final EObject extension) {
 		return true;
 	}
 
@@ -558,4 +569,14 @@ public class DefaultClassImporter extends AbstractClassImporter {
 		this.importerRegistry = importerRegistry;
 	}
 
+	public static boolean checkLicensedAttribute(final @NonNull EAttribute attribute) {
+		final EAnnotation annotation = attribute.getEAnnotation("http://www.mmxlabs.com/models/ui/featureEnablement");
+		if (annotation != null) {
+			String requiredFeature = annotation.getDetails().get("feature");
+			if (requiredFeature != null) {
+				return LicenseFeatures.isPermitted(String.format("features:%s", requiredFeature));
+			}
+		}
+		return true;
+	}
 }

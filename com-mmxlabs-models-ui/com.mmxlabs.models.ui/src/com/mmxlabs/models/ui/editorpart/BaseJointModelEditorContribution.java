@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.editorpart;
@@ -30,7 +30,7 @@ public abstract class BaseJointModelEditorContribution<T extends UUIDObject> imp
 	public void dispose() {
 		this.editorPart = null;
 		this.rootObject = null;
-		this.modelObject = null;
+		this.modelObject = (T) null;
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.util.importer.impl;
@@ -27,9 +27,6 @@ import com.mmxlabs.models.util.importer.IMMXImportContext;
 
 public class DefaultAttributeImporter implements IAttributeImporter {
 
-	private static final String HTML_AMPERSAND = "&#38;";
-	private static final String HTML_COMMA = "&#44;";
-
 	@Override
 	public void setAttribute(@NonNull final EObject container, @NonNull final EAttribute attribute, @NonNull final String value, @NonNull final IMMXImportContext context) {
 		if (attribute.isMany()) {
@@ -42,7 +39,7 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 				}
 
 				// Simple (de)encoding - should expand into something more robust
-				final String decodedValue = v.trim().replaceAll(HTML_COMMA, ",").replaceAll(HTML_AMPERSAND, "&");
+				final String decodedValue = EncoderUtil.decode(v);
 				assert decodedValue != null;
 
 				eValues.add(attributeFromString(container, attribute, decodedValue, context));
@@ -75,7 +72,7 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 				comma = true;
 				final String rawValue = stringFromAttribute(container, attribute, o, context);
 				// Simple (de)encoding - should expand into something more robust
-				final String encodedValue = rawValue.replaceAll("&", HTML_AMPERSAND).replaceAll(",", HTML_COMMA);
+				final String encodedValue = EncoderUtil.encode(rawValue);
 
 				result.append(encodedValue);
 			}
@@ -91,7 +88,7 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 		assert dt != null;
 		try {
 			if (isNumberDataType(dt)) {
-				return importNumberDataType(dt, value, context);
+				return importNumberDataType(dt, attribute, value, context);
 			} else if (isDateDataType(dt)) {
 				return importDateDataType(dt, value, context);
 
@@ -113,7 +110,7 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 		}
 
 		if (isNumberDataType(dt)) {
-			return exportNumberDataType(dt, value, context);
+			return exportNumberDataType(dt, attribute, value, context);
 		} else if (isDateDataType(dt)) {
 			return exportDateDataType(dt, value, context);
 		} else {
@@ -141,29 +138,29 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 		return false;
 	}
 
-	protected Object importNumberDataType(@NonNull final EDataType dt, @NonNull final String value, @NonNull final IMMXImportContext context) throws ParseException {
+	protected Object importNumberDataType(@NonNull final EDataType dt, @NonNull EAttribute attribute, @NonNull final String value, @NonNull final IMMXImportContext context) throws ParseException {
 
 		final NumberAttributeImporter nai = new NumberAttributeImporter(context.getDecimalSeparator());
 		if (dt == EcorePackage.Literals.EINT || dt == EcorePackage.Literals.EINTEGER_OBJECT) {
-			return nai.stringToInt(value);
+			return nai.stringToInt(value, attribute);
 		} else if (dt == EcorePackage.Literals.EFLOAT || dt == EcorePackage.Literals.EFLOAT_OBJECT) {
-			return nai.stringToFloat(value);
+			return nai.stringToFloat(value, attribute);
 		} else if (dt == EcorePackage.Literals.EDOUBLE || dt == EcorePackage.Literals.EDOUBLE_OBJECT) {
-			return nai.stringToDouble(value);
+			return nai.stringToDouble(value, attribute);
 		}
 
 		return null;
 	}
 
-	protected String exportNumberDataType(@NonNull final EDataType dt, @NonNull final Object value, @NonNull final IMMXExportContext context) {
+	protected String exportNumberDataType(@NonNull final EDataType dt, @NonNull EAttribute attribute, @NonNull final Object value, @NonNull final IMMXExportContext context) {
 
 		final NumberAttributeImporter nai = new NumberAttributeImporter(context.getDecimalSeparator());
 		if (dt == EcorePackage.Literals.EINT || dt == EcorePackage.Literals.EINTEGER_OBJECT) {
-			return nai.intToString((Integer) value);
+			return nai.intToString((Integer) value, attribute);
 		} else if (dt == EcorePackage.Literals.EFLOAT || dt == EcorePackage.Literals.EFLOAT_OBJECT) {
-			return nai.floatToString((Float) value);
+			return nai.floatToString((Float) value, attribute);
 		} else if (dt == EcorePackage.Literals.EDOUBLE || dt == EcorePackage.Literals.EDOUBLE_OBJECT) {
-			return nai.doubleToString((Double) value);
+			return nai.doubleToString((Double) value, attribute);
 		}
 
 		return null;

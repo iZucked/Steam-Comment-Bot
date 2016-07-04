@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.editors.util;
@@ -88,7 +88,7 @@ public class DialogEcoreCopier {
 
 	public List<EObject> copyAll(final List<EObject> theOriginals) {
 
-		final List<EObject> newCopies = new ArrayList<EObject>(theOriginals.size());
+		final List<EObject> newCopies = new ArrayList<>(theOriginals.size());
 		for (final EObject original : theOriginals) {
 			// Check to see if object has already been copied to avoid duplicate copies
 			if (copier.get(original) != null) {

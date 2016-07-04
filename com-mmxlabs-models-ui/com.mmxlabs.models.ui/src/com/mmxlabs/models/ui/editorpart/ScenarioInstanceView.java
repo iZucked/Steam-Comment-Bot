@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.editorpart;
@@ -128,11 +128,10 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		// selectionChanged(null, getSite().getPage().getSelection(SCENARIO_NAVIGATOR_ID));
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public Object getAdapter(final Class adapter) {
+	public <T> T getAdapter(Class<T> adapter) {
 		if (adapter.isAssignableFrom(IValidationStatusGoto.class)) {
-			return this;
+			return adapter.cast(this);
 		}
 		return super.getAdapter(adapter);
 	}

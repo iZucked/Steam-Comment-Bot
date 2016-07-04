@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.editors.impl;
@@ -30,10 +30,9 @@ import com.mmxlabs.common.Pair;
  * 
  */
 public class ValueListInlineEditor extends UnsettableInlineEditor {
-	
+
 	/**
-	 * Create a new List<Pair<String, Object>> from the list of elements. This method assumes an even number of elements 
-	 * in the form { label1, enum1, label2, enum2...}
+	 * Create a new List<Pair<String, Object>> from the list of elements. This method assumes an even number of elements in the form { label1, enum1, label2, enum2...}
 	 * 
 	 * @param elements
 	 * @return
@@ -45,23 +44,39 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 			final String key = (String) elements[i];
 			final Object value = (Object) elements[i + 1];
 			pairList.add(new Pair<String, Object>(key, value));
-		}		
+		}
 		return pairList;
 	}
 
 	private Combo combo;
 
-	private final List<String> names;
-	private final List<Object> values;
+	private final ArrayList<String> names;
+	private final ArrayList<Object> values;
 
 	public ValueListInlineEditor(final EStructuralFeature feature, final List<Pair<String, Object>> values) {
 		super(feature);
-		names = new ArrayList<String>(values.size());
+		this.names = new ArrayList<String>(values.size());
 		this.values = new ArrayList<Object>(values.size());
 		for (final Pair<String, Object> pair : values) {
 			this.names.add(pair.getFirst());
 			this.values.add(pair.getSecond());
 		}
+	}
+
+	protected void updateCombo(final List<Pair<String, Object>> values) {
+		this.names.clear();
+		this.values.clear();
+
+		this.names.ensureCapacity(values.size());
+		this.values.ensureCapacity(values.size());
+
+		for (final Pair<String, Object> pair : values) {
+			this.names.add(pair.getFirst());
+			this.values.add(pair.getSecond());
+		}
+		
+		combo.setItems(names.toArray(new String[names.size()]));
+
 	}
 
 	@Override

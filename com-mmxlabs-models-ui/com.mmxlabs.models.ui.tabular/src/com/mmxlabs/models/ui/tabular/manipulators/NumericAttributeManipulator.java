@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.tabular.manipulators;
@@ -90,6 +90,17 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 		return -Integer.MAX_VALUE;
 	}
 
+	protected String renderSetValue(final Object container, final Object setValue) {
+		if (setValue == null) {
+			return null;
+		}
+		formatter.setValue(setValue);
+//		return setValue == null ? null : 
+			return formatter.getDisplayString();//setValue.toString();
+	}
+
+	
+
 	@Override
 	protected CellEditor createCellEditor(final Composite c, final Object object) {
 		final FormattedTextCellEditor editor = new FormattedTextCellEditor(c);
@@ -99,27 +110,36 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 	}
 
 	private Object scale(final Object internalValue) {
+		
+		if (scale == 1) {
+			return internalValue;
+		}
+		
 		if (internalValue instanceof Integer) {
-			return ((Integer) internalValue).intValue() * scale;
+			return ((Integer) internalValue).intValue() * (double) scale;
 		} else if (internalValue instanceof Long) {
-			return ((Long) internalValue).longValue() * scale;
+			return ((Long) internalValue).longValue() * (double) scale;
 		} else if (internalValue instanceof Float) {
-			return ((Float) internalValue).floatValue() * scale;
+			return ((Float) internalValue).floatValue() * (double) scale;
 		} else if (internalValue instanceof Double) {
-			return ((Double) internalValue).doubleValue() * scale;
+			return ((Double) internalValue).doubleValue() * (double) scale;
 		}
 		return internalValue;
 	}
 
 	private Object descale(final Object displayValue) {
+		if (scale == 1) {
+			return displayValue;
+		}
+		
 		if (displayValue instanceof Integer) {
-			return ((Integer) displayValue).intValue() / scale;
+			return ((Integer) displayValue).intValue() / (double) scale;
 		} else if (displayValue instanceof Long) {
-			return ((Long) displayValue).longValue() / scale;
+			return ((Long) displayValue).longValue() / (double) scale;
 		} else if (displayValue instanceof Float) {
-			return ((Float) displayValue).floatValue() / scale;
+			return ((Float) displayValue).floatValue() / (double) scale;
 		} else if (displayValue instanceof Double) {
-			return ((Double) displayValue).doubleValue() / scale;
+			return ((Double) displayValue).doubleValue() / (double) scale;
 		}
 		return displayValue;
 	}

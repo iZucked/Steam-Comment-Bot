@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.editors.impl;
@@ -13,6 +13,8 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
+
+import com.mmxlabs.models.ui.editors.autocomplete.AutoCompleteHelper;
 
 public class TextInlineEditor extends UnsettableInlineEditor {
 	private Text text;
@@ -81,18 +83,21 @@ public class TextInlineEditor extends UnsettableInlineEditor {
 
 		super.setControlsEnabled(controlsEnabled);
 	}
+
 	@Override
 	protected void setControlsVisible(final boolean visible) {
 		if (!text.isDisposed()) {
 			text.setVisible(visible);
 		}
-		
+
 		super.setControlsVisible(visible);
 	}
 
 	protected Text createText(final Composite parent) {
-//		final Text text = new Text(parent, style);
+
+		// final Text text = new Text(parent, style);
 		final Text text = toolkit.createText(parent, "", style);
+		this.proposalHelper = AutoCompleteHelper.createTextControlProposalAdapter(text, feature);
 		return text;
 	}
 }

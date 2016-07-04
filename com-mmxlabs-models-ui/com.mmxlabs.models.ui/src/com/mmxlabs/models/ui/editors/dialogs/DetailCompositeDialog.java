@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.editors.dialogs;
@@ -30,6 +30,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -61,6 +62,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.PairKeyedMap;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -124,11 +126,11 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	/**
 	 * The objects which are currently being edited (duplicates)
 	 */
-	private final List<EObject> currentEditorTargets = new ArrayList<EObject>();
+	private final List<EObject> currentEditorTargets = new ArrayList<>();
 
 	private IDisplayCompositeFactory displayCompositeFactory;
 
-	private final Map<EObject, Collection<EObject>> ranges = new HashMap<EObject, Collection<EObject>>();
+	private final Map<EObject, Collection<EObject>> ranges = new HashMap<>();
 
 	private boolean displaySidebarList = false;
 
@@ -141,12 +143,12 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	/**
 	 * Contains elements which have been removed from {@link #inputs}, which will be deleted if the dialog is OKed.
 	 */
-	private final List<EObject> deletedInputs = new ArrayList<EObject>();
+	private final List<EObject> deletedInputs = new ArrayList<>();
 
 	/**
 	 * Contains elements which have been added (these will actually be added into the model, so they must be deleted on cancel)
 	 */
-	private final List<EObject> addedInputs = new ArrayList<EObject>();
+	private final List<Triple<@NonNull EObject, @NonNull EObject, @NonNull EReference>> addedInputs = new ArrayList<>();
 
 	private CopyDialogToClipboard copyDialogToClipboardEditorWrapper;
 
@@ -194,7 +196,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	};
 
 	private static ComposedAdapterFactory createAdapterFactory() {
-		final List<AdapterFactory> factories = new ArrayList<AdapterFactory>();
+		final List<AdapterFactory> factories = new ArrayList<>();
 		factories.add(new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE));
 		factories.add(new ReflectiveItemProviderAdapterFactory());
 		return new ComposedAdapterFactory(factories);
@@ -244,7 +246,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 				index++;
 			}
 
-			final List<EObject> duplicateRange = new ArrayList<EObject>(dialogEcoreCopier.copyAll(reducedRange));
+			final List<EObject> duplicateRange = new ArrayList<>(dialogEcoreCopier.copyAll(reducedRange));
 
 			// re-insert the duplicates back into the range
 			for (final Pair<Integer, EObject> duplicated : alreadyDuplicated) {
@@ -596,10 +598,12 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 				barManager.createControl(c).setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 
 				final Action copy = new Action("Copy") {
+
 					@Override
 					public void run() {
 						copyDialogToClipboardEditorWrapper.copyToClipboard();
 					}
+
 				};
 
 				copy.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/copy.gif"));
@@ -617,27 +621,34 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			@Override
 			public void run() {
 				final Collection<? extends ISetting> settings = factory.createInstance(rootObject, sidebarContainer, sidebarContainment, null);
-				if (settings.isEmpty())
+				if (settings.isEmpty()) {
 					return;
-				// now create an add command, which will include adding any
-				// other relevant objects
-				final CompoundCommand add = new CompoundCommand();
-				for (final ISetting setting : settings) {
-					add.append(AddCommand.create(commandHandler.getEditingDomain(), setting.getContainer(), setting.getContainment(), setting.getInstance()));
 				}
-				add.execute();
-				inputs.add(settings.iterator().next().getInstance());
-				addedInputs.add(settings.iterator().next().getInstance());
-				if (inputs.get(inputs.size() - 1) instanceof NamedObject) {
-					((NamedObject) inputs.get(inputs.size() - 1)).setName("New " + factory.getLabel());
+
+				// add.append(AddCommand.create(commandHandler.getEditingDomain(), setting.getContainer(), setting.getContainment(), setting.getInstance()));
+				// }
+				// add.execute();
+				final EObject newInstance = settings.iterator().next().getInstance();
+
+				inputs.add(newInstance);
+				ranges.put(newInstance, Collections.singleton(newInstance));
+				if (newInstance instanceof NamedObject) {
+					((NamedObject) newInstance).setName("New " + factory.getLabel());
 				}
+				// If inputs is now one (i.e. initially zero) trigger a relayout
+				// if (inputs.size() == 1) {
+				// }
 				selectionViewer.refresh();
 				selectionViewer.setSelection(new StructuredSelection(inputs.get(inputs.size() - 1)));
 
-				// If inputs is now one (i.e. initially zero) trigger a relayout
-				if (inputs.size() == 1) {
-					updateEditor();
+				updateEditor();
+				// now create an add command, which will include adding any
+				// other relevant objects
+				// final CompoundCommand add = new CompoundCommand();
+				for (final ISetting setting : settings) {
+					addedInputs.add(new Triple<>(dialogEcoreCopier.getOriginal(setting.getInstance()), setting.getContainer(), setting.getContainment()));
 				}
+
 			}
 		};
 	}
@@ -819,7 +830,20 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 				}
 
 				// new objects should already be added wherever they belong.
+				if (!addedInputs.isEmpty()) {
+					for (final Triple<@NonNull EObject, @NonNull EObject, @NonNull EReference> t : addedInputs) {
+						final EObject object = t.getFirst();
+						final EObject owner = t.getSecond();
+						final EObject reference = t.getThird();
 
+						if (deletedInputs.contains(object)) {
+							deletedInputs.remove(object);
+							continue;
+						}
+						final Command cmd = AddCommand.create(commandHandler.getEditingDomain(), owner, reference, object);
+						cc.append(cmd);
+					}
+				}
 				// delete any objects which have been removed from the sidebar
 				// list
 				if (!deletedInputs.isEmpty()) {
@@ -830,19 +854,6 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 				}
 				if (!cc.isEmpty()) {
 					executeFinalCommand(cc);
-				}
-			} else {
-				// any new objects will have been added from the inputs list, so
-				// we have to delete them
-				// we want to directly execute the command so that it doesn't go
-				// into the undo stack.
-				if (!addedInputs.isEmpty()) {
-					final Command delete = DeleteCommand.create(commandHandler.getEditingDomain(), addedInputs);
-					if (delete.canExecute()) {
-						delete.execute();
-					} else {
-						log.error("Cannot execute delete", new RuntimeException());
-					}
 				}
 			}
 			return value;

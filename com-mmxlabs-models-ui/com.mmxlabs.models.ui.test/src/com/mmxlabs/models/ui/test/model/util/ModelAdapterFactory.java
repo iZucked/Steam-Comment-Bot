@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -10,6 +10,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.ui.test.model.ModelPackage;
 import com.mmxlabs.models.ui.test.model.ModelRoot;
@@ -73,8 +74,8 @@ public class ModelAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ModelSwitch<Adapter> modelSwitch =
-		new ModelSwitch<Adapter>() {
+	protected ModelSwitch<@Nullable Adapter> modelSwitch =
+		new ModelSwitch<@Nullable Adapter>() {
 			@Override
 			public Adapter caseModelRoot(ModelRoot object) {
 				return createModelRootAdapter();

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -9,6 +9,7 @@ package com.mmxlabs.models.ui.properties.util;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.ui.properties.DetailProperty;
 import com.mmxlabs.models.ui.properties.PropertiesPackage;
@@ -26,7 +27,7 @@ import com.mmxlabs.models.ui.properties.PropertiesPackage;
  * @see com.mmxlabs.models.ui.properties.PropertiesPackage
  * @generated
  */
-public class PropertiesSwitch<T> extends Switch<T> {
+public class PropertiesSwitch<@Nullable T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->

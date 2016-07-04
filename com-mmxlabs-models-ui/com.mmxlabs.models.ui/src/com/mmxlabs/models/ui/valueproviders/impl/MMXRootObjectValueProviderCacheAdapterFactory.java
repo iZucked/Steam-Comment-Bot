@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.valueproviders.impl;
@@ -22,9 +22,9 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
  */
 public class MMXRootObjectValueProviderCacheAdapterFactory implements IAdapterFactory {
 	private final WeakHashMap<MMXRootObject, WeakReference<ReferenceValueProviderCache>> cacheCache = new WeakHashMap<MMXRootObject, WeakReference<ReferenceValueProviderCache>>();
-	
+
 	@Override
-	public Object getAdapter(Object adaptableObject, Class adapterType) {
+	public <T> T getAdapter(Object adaptableObject, Class<T> adapterType) {
 		if (adaptableObject instanceof MMXRootObject) {
 			if (adapterType.isAssignableFrom(ReferenceValueProviderCache.class)) {
 				synchronized (this) {
@@ -34,17 +34,17 @@ public class MMXRootObjectValueProviderCacheAdapterFactory implements IAdapterFa
 					if (existingValue == null) {
 						final ReferenceValueProviderCache newCache = new ReferenceValueProviderCache(rootObject);
 						cacheCache.put(rootObject, new WeakReference<ReferenceValueProviderCache>(newCache));
-						return newCache;
+						return (T) newCache;
 					}
-					return existingValue;
+					return (T) existingValue;
 				}
 			}
 		}
-		return null;
+		return (T) null;
 	}
 
 	@Override
 	public Class<?>[] getAdapterList() {
-		return new Class[] {ReferenceValueProviderCache.class};
+		return new Class[] { ReferenceValueProviderCache.class };
 	}
 }

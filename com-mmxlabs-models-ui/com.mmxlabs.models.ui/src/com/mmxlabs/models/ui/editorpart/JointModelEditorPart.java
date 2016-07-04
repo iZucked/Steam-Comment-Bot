@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.editorpart;
@@ -303,7 +303,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public Object getAdapter(final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter.isAssignableFrom(IPropertySheetPage.class)) {
 			if (propertySheetPage == null) {
 				propertySheetPage = new PropertySheetPage();
@@ -336,11 +336,11 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 					};
 				propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(adapterFactory));
 			}
-			return propertySheetPage;
+			return adapter.cast(propertySheetPage);
 		} else if (adapter.isAssignableFrom(IValidationStatusGoto.class)) {
-			return this;
+			return adapter.cast(this);
 		} else if (adapter.isAssignableFrom(IPartGotoTarget.class)) {
-			return partGotoTarget;
+			return adapter.cast(partGotoTarget);
 		}
 
 		return super.getAdapter(adapter);

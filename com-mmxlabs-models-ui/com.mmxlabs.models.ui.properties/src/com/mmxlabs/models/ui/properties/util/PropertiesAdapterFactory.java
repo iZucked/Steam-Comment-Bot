@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -10,6 +10,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.ui.properties.DetailProperty;
 import com.mmxlabs.models.ui.properties.PropertiesPackage;
@@ -68,8 +69,8 @@ public class PropertiesAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected PropertiesSwitch<Adapter> modelSwitch =
-		new PropertiesSwitch<Adapter>() {
+	protected PropertiesSwitch<@Nullable Adapter> modelSwitch =
+		new PropertiesSwitch<@Nullable Adapter>() {
 			@Override
 			public Adapter caseDetailProperty(DetailProperty object) {
 				return createDetailPropertyAdapter();
