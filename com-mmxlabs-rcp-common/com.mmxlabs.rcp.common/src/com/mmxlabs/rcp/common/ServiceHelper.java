@@ -7,6 +7,9 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
+import com.mmxlabs.common.util.CheckedConsumer;
+import com.mmxlabs.common.util.CheckedFunction;
+
 public final class ServiceHelper {
 
 	public static <T> void withOptionalService(Class<T> cls, final Consumer<T> withFunc) {
@@ -36,6 +39,21 @@ public final class ServiceHelper {
 			}
 		} else {
 			return withFunc.apply((T) null);
+		}
+	}
+
+	public static <T, E extends Exception> void withCheckedOptionalService(Class<T> cls, final CheckedConsumer<T, E> withFunc) throws E {
+		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
+		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
+		if (serviceReference != null) {
+			final T service = bundleContext.getService(serviceReference);
+			try {
+				withFunc.accept(service);
+			} finally {
+				bundleContext.ungetService(serviceReference);
+			}
+		} else {
+			withFunc.accept((T) null);
 		}
 	}
 
@@ -82,19 +100,7 @@ public final class ServiceHelper {
 		}
 	}
 
-	@FunctionalInterface
-	public interface CheckedFunction<T, R, E extends Exception> {
-
-		/**
-		 * Applies this function to the given argument.
-		 *
-		 * @param t
-		 *            the function argument
-		 * @return the function result
-		 */
-		R apply(T t) throws E;
-	}
-
+	
 	public static <T, V, E extends Exception> V withCheckedService(Class<T> cls, final CheckedFunction<T, V, E> withFunc) throws E {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
 		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
@@ -104,6 +110,21 @@ public final class ServiceHelper {
 		final T service = bundleContext.getService(serviceReference);
 		try {
 			return withFunc.apply(service);
+		} finally {
+			bundleContext.ungetService(serviceReference);
+		}
+	}
+
+
+	public static <T, E extends Exception> void withCheckedService(Class<T> cls, final CheckedConsumer<T, E> withFunc) throws E {
+		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
+		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
+		if (serviceReference == null) {
+			throw new RuntimeException("Service not found");
+		}
+		final T service = bundleContext.getService(serviceReference);
+		try {
+			withFunc.accept(service);
 		} finally {
 			bundleContext.ungetService(serviceReference);
 		}
