@@ -138,24 +138,9 @@
 							<arch>x86_64</arch>
 						</environment>
 						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
 							<os>win32</os>
 							<ws>win32</ws>
 							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>macosx</os>
-							<ws>cocoa</ws>
-							<arch>x86</arch>
 						</environment>
 						<environment>
 							<os>macosx</os>
@@ -188,11 +173,6 @@
 			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/datetime/com.mmxlabs.models.datetime.p2/2.1.1.RELEASE/com.mmxlabs.models.datetime.p2-2.1.1.RELEASE.zip-unzip/</url>
 			<layout>p2</layout>
 		</repository>
-		<repository>
-			<id>com-mmxlabs-models-mmxcore.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/mmxcore/com.mmxlabs.models.mmxcore.p2/5.0.0.RELEASE/com.mmxlabs.models.mmxcore.p2-5.0.0.RELEASE.zip-unzip/</url>
-			<layout>p2</layout>
-		</repository>
 	</repositories>
 	<profiles>
 		<profile>
@@ -211,6 +191,11 @@
 				<repository>
 					<id>com-mmxlabs-lng-scheduler.hg</id>
 					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/scheduler/com.mmxlabs.scheduler.p2/${project.version}/com.mmxlabs.scheduler.p2-${project.version}.zip-unzip/</url>
+					<layout>p2</layout>
+				</repository>
+				<repository>
+					<id>com-mmxlabs-models-mmxcore.hg</id>
+					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/mmxcore/com.mmxlabs.models.mmxcore.p2/${project.version}/com.mmxlabs.models.mmxcore.p2-${project.version}.zip-unzip/</url>
 					<layout>p2</layout>
 				</repository>
 				<repository>
