@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.migration.scenario;
@@ -66,7 +66,7 @@ public class MigrationHelper {
 
 	}
 
-	public static void migrateAndLoad(final ScenarioInstance instance, final IScenarioCipherProvider scenarioCipherProvider) throws IOException {
+	public static void migrateAndLoad(@NonNull final ScenarioInstance instance, final IScenarioCipherProvider scenarioCipherProvider) throws IOException {
 
 		final BundleContext bundleContext = FrameworkUtil.getBundle(MigrationHelper.class).getBundleContext();
 		final ServiceReference<IMigrationRegistry> serviceReference = bundleContext.getServiceReference(IMigrationRegistry.class);
@@ -77,7 +77,7 @@ public class MigrationHelper {
 		}
 	}
 
-	public static void migrateAndLoad(final ScenarioInstance instance) throws IOException {
+	public static void migrateAndLoad(@NonNull final ScenarioInstance instance) throws IOException {
 
 		final BundleContext bundleContext = FrameworkUtil.getBundle(MigrationHelper.class).getBundleContext();
 		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
@@ -88,7 +88,7 @@ public class MigrationHelper {
 		}
 	}
 
-	public static void migrateAndLoad(final ScenarioInstance instance, final IScenarioCipherProvider scenarioCipherProvider, final IMigrationRegistry migrationRegistry) throws IOException {
+	public static void migrateAndLoad(@NonNull final ScenarioInstance instance, final IScenarioCipherProvider scenarioCipherProvider, final IMigrationRegistry migrationRegistry) throws IOException {
 
 		final ScenarioMigrationService migrationService = new ScenarioMigrationService();
 		migrationService.setMigrationRegistry(migrationRegistry);

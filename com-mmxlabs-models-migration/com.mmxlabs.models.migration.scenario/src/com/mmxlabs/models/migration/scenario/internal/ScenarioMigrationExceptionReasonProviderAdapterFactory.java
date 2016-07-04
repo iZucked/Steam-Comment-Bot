@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.migration.scenario.internal;
@@ -13,11 +13,11 @@ import com.mmxlabs.rcp.common.editors.IReasonProvider;
 public class ScenarioMigrationExceptionReasonProviderAdapterFactory implements IAdapterFactory {
 
 	@Override
-	public Object getAdapter(final Object adaptableObject, final Class adapterType) {
+	public <T> T getAdapter(final Object adaptableObject, final Class<T> adapterType) {
 
 		if (adaptableObject instanceof FinalClientMigratedVersionMismatchException) {
 			final FinalClientMigratedVersionMismatchException exception = (FinalClientMigratedVersionMismatchException) adaptableObject;
-			return new IReasonProvider() {
+			return (T) new IReasonProvider() {
 
 				@Override
 				public String getTitle() {
@@ -42,7 +42,7 @@ public class ScenarioMigrationExceptionReasonProviderAdapterFactory implements I
 		} else if (adaptableObject instanceof ScenarioMigrationException) {
 
 			final ScenarioMigrationException exception = (ScenarioMigrationException) adaptableObject;
-			return new IReasonProvider() {
+			return (T) new IReasonProvider() {
 
 				@Override
 				public String getTitle() {
@@ -66,7 +66,7 @@ public class ScenarioMigrationExceptionReasonProviderAdapterFactory implements I
 			};
 		}
 
-		return null;
+		return (T) null;
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.migration.utils;
@@ -56,11 +56,11 @@ public class DynamicEObjectWrapperImpl extends DynamicEObjectImpl implements EOb
 	}
 
 	@Override
-	public Object getAttrib(final String name) {
+	public <T> T getAttrib(final String name) {
 		final EAttribute feature = (EAttribute) eClass().getEStructuralFeature(name);
 		assert feature != null;
 		assert !feature.isMany();
-		return eGet(feature);
+		return (T) eGet(feature);
 	}
 
 	@Override
@@ -101,6 +101,7 @@ public class DynamicEObjectWrapperImpl extends DynamicEObjectImpl implements EOb
 		final EStructuralFeature feature = eClass().getEStructuralFeature(name);
 		eUnset(feature);
 	}
+
 	@Override
 	public boolean isSetFeature(final String name) {
 		final EStructuralFeature feature = eClass().getEStructuralFeature(name);
