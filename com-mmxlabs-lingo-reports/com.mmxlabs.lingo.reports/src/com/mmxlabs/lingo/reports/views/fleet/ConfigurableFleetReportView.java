@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -92,7 +92,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 	}
 
 	@Override
-	public Object getAdapter(@SuppressWarnings("rawtypes") final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 		// if (Table.class.isAssignableFrom(adapter)) {
 		// final Object input = viewer.getInput();
 		// if (input instanceof IEMFObservable) {
@@ -106,7 +106,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 
 			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
 			final String contents = util.convert();
-			return new IReportContents() {
+			return (T) new IReportContents() {
 
 				@Override
 				public String getStringContents() {

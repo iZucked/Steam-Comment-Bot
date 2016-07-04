@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -10,6 +10,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
@@ -72,8 +73,8 @@ public class ChangesetAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ChangesetSwitch<Adapter> modelSwitch =
-		new ChangesetSwitch<Adapter>() {
+	protected ChangesetSwitch<@Nullable Adapter> modelSwitch =
+		new ChangesetSwitch<@Nullable Adapter>() {
 			@Override
 			public Adapter caseChangeSetRoot(ChangeSetRoot object) {
 				return createChangeSetRootAdapter();

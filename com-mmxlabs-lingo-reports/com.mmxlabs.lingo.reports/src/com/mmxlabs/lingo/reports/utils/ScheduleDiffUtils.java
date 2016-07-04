@@ -1,11 +1,14 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.utils;
 
-import org.eclipse.emf.common.util.EList;
+import java.util.List;
+
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.lng.cargo.CargoType;
@@ -31,7 +34,7 @@ public class ScheduleDiffUtils {
 	private boolean checkSpotMarketDifferences = true;
 	private boolean checkNextPortDifferences = true;
 
-	public boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
+	public boolean isElementDifferent(final @Nullable EObject pinnedObject, final @Nullable EObject otherObject) {
 
 		// oops - dynamic eobjects coming here...
 
@@ -40,9 +43,9 @@ public class ScheduleDiffUtils {
 		}
 
 		if (pinnedObject instanceof GeneratedCharterOut || otherObject instanceof GeneratedCharterOut) {
-			GeneratedCharterOut pinnedCharterOut = (GeneratedCharterOut) pinnedObject;
-			GeneratedCharterOut otherCharterOut = (GeneratedCharterOut) otherObject;
-			
+			final GeneratedCharterOut pinnedCharterOut = (GeneratedCharterOut) pinnedObject;
+			final GeneratedCharterOut otherCharterOut = (GeneratedCharterOut) otherObject;
+
 			if (pinnedCharterOut.getDuration() != otherCharterOut.getDuration()) {
 				return true;
 			}
@@ -74,8 +77,8 @@ public class ScheduleDiffUtils {
 				}
 			}
 
-			final EList<SlotAllocation> caSlotAllocations = ca.getSlotAllocations();
-			final EList<SlotAllocation> refSlotAllocations = ref.getSlotAllocations();
+			final List<SlotAllocation> caSlotAllocations = ca.getSlotAllocations();
+			final List<SlotAllocation> refSlotAllocations = ref.getSlotAllocations();
 
 			if (caSlotAllocations.size() != refSlotAllocations.size()) {
 				return true;
@@ -139,8 +142,8 @@ public class ScheduleDiffUtils {
 			}
 
 			if (checkNextPortDifferences && ref.getInputCargo().getCargoType() == CargoType.FLEET) {
-				final Event caLastEvent = ca.getEvents().get(ca.getEvents().size()-1);
-				final Event refLastEvent = ref.getEvents().get(ref.getEvents().size()-1);
+				final Event caLastEvent = ca.getEvents().get(ca.getEvents().size() - 1);
+				final Event refLastEvent = ref.getEvents().get(ref.getEvents().size() - 1);
 
 				final Event caNextEvent = caLastEvent.getNextEvent();
 				final Event refNextEvent = refLastEvent.getNextEvent();
@@ -159,7 +162,7 @@ public class ScheduleDiffUtils {
 
 			return false;
 		} else if (pinnedObject instanceof SlotAllocation && otherObject instanceof SlotAllocation) {
-			return isElementDifferent(((SlotAllocation)pinnedObject).getSlotVisit(), ((SlotAllocation)otherObject).getSlotVisit());
+			return isElementDifferent(((SlotAllocation) pinnedObject).getSlotVisit(), ((SlotAllocation) otherObject).getSlotVisit());
 		} else if (pinnedObject instanceof SlotVisit && otherObject instanceof SlotVisit) {
 			SlotVisit ref = null;
 			SlotVisit ca = null;
@@ -218,7 +221,7 @@ public class ScheduleDiffUtils {
 					return true;
 				}
 			}
-			return isSpot ? false  :isElementDifferent(ref.getSlotAllocation().getCargoAllocation(), ca.getSlotAllocation().getCargoAllocation());
+			return isSpot ? false : isElementDifferent(ref.getSlotAllocation().getCargoAllocation(), ca.getSlotAllocation().getCargoAllocation());
 		} else if (pinnedObject instanceof OpenSlotAllocation && otherObject instanceof OpenSlotAllocation) {
 			OpenSlotAllocation ref = null;
 			OpenSlotAllocation ca = null;
@@ -296,11 +299,14 @@ public class ScheduleDiffUtils {
 		return true;
 	}
 
-	private PortVisit findNextPortVisit(final Event evt) {
-
+	private @Nullable PortVisit findNextPortVisit(final @NonNull Event evt) {
 		Event e = evt.getNextEvent();
 		while (!(e instanceof PortVisit)) {
-			e = e.getNextEvent();
+			if (e != null) {
+				e = e.getNextEvent();
+			} else {
+				break;
+			}
 		}
 		return (PortVisit) e;
 	}

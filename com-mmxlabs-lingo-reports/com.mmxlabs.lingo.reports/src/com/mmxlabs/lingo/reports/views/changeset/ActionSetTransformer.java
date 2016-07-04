@@ -1,8 +1,7 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
-
 package com.mmxlabs.lingo.reports.views.changeset;
 
 import java.util.Collection;
@@ -24,7 +23,9 @@ import com.mmxlabs.lingo.reports.views.schedule.EquivalanceGroupBuilder;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -142,42 +143,7 @@ public class ActionSetTransformer {
 		return changeSet;
 	}
 
-	/**
-	 * Find elements that we are interested in showing in the view.
-	 * 
-	 * @param schedule
-	 * @param interestingEvents
-	 * @param allEvents
-	 */
-	private void extractElements(final Schedule schedule, final Collection<EObject> interestingEvents, final Collection<EObject> allEvents) {
-		if (schedule == null) {
-			return;
-		}
 
-		for (final Sequence sequence : schedule.getSequences()) {
-			for (final Event event : sequence.getEvents()) {
-				boolean includeEvent = false;
-				if (event instanceof SlotVisit) {
-					includeEvent = true;
-				} else if (event instanceof VesselEventVisit) {
-					includeEvent = true;
-
-				} else if (event instanceof StartEvent) {
-					includeEvent = true;
-
-				}
-				if (includeEvent) {
-					interestingEvents.add(event);
-				}
-				allEvents.add(event);
-			}
-		}
-
-		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
-			interestingEvents.add(openSlotAllocation);
-			allEvents.add(openSlotAllocation);
-		}
-	}
 
 	private void generateDifferences(final ScenarioInstance from, final ScenarioInstance to, final ChangeSet changeSet, final boolean isBase) {
 		final EquivalanceGroupBuilder equivalanceGroupBuilder = new EquivalanceGroupBuilder();
@@ -190,8 +156,8 @@ public class ActionSetTransformer {
 		final Schedule fromSchedule = ((LNGScenarioModel) from.getInstance()).getScheduleModel().getSchedule();
 		final Schedule toSchedule = ((LNGScenarioModel) to.getInstance()).getScheduleModel().getSchedule();
 
-		extractElements(fromSchedule, fromInterestingElements, fromAllElements);
-		extractElements(toSchedule, toInterestingElements, toAllElements);
+		ChangeSetTransformerUtil.extractElements(fromSchedule, fromInterestingElements, fromAllElements);
+		ChangeSetTransformerUtil.extractElements(toSchedule, toInterestingElements, toAllElements);
 
 		// Generate the element by key map
 		final List<Map<String, List<EObject>>> perScenarioElementsByKeyMap = new LinkedList<>();
@@ -221,7 +187,9 @@ public class ActionSetTransformer {
 		for (final EObject element : uniqueElements) {
 			assert element != null;
 			final boolean isBaseElement = toAllElements.contains(element);
-			ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, element, isBaseElement, false);
+			if (!isBaseElement) {
+				ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, element, isBaseElement, false);
+			}
 		}
 
 		// Second pass, create the wiring links.

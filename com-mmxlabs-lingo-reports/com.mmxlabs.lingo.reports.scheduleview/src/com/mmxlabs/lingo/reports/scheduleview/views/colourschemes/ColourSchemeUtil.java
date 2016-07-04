@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.scheduleview.views.colourschemes;
@@ -51,7 +51,7 @@ public class ColourSchemeUtil {
 		VesselClass vesselClass = null;
 
 		// get vessel class directly from the sequence if it is a spot charter
-		CharterInMarket charterInMarket = sequence.getCharterInMarket();
+		final CharterInMarket charterInMarket = sequence.getCharterInMarket();
 		if (charterInMarket != null) {
 			vesselClass = charterInMarket.getVesselClass();
 		}
@@ -92,8 +92,11 @@ public class ColourSchemeUtil {
 
 		if (ev instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) ev;
-			if (visit.getStart().isAfter(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
-				return true;
+			Slot slot = visit.getSlotAllocation().getSlot();
+			if (slot != null) {
+				if (visit.getStart().isAfter(slot.getWindowEndWithSlotOrPortTime())) {
+					return true;
+				}
 			}
 			// if (visit.getStart().before(visit.getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime())) {
 			// return true;
@@ -172,12 +175,21 @@ public class ColourSchemeUtil {
 	}
 
 	public static boolean isFOBSaleCargo(final SlotVisit visit) {
-		boolean isFOB;
-		final Slot slot = visit.getSlotAllocation().getSlot();
-		if (slot instanceof LoadSlot) {
-			return visit.getSlotAllocation().getCargoAllocation().getInputCargo().getCargoType() == CargoType.FOB;
-		} else {
-			isFOB = ((DischargeSlot) slot).isFOBSale();
+		boolean isFOB = false;
+		final SlotAllocation slotAllocation = visit.getSlotAllocation();
+		if (slotAllocation != null) {
+			final Slot slot = slotAllocation.getSlot();
+			if (slot instanceof LoadSlot) {
+				final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
+				if (cargoAllocation != null) {
+					final Cargo inputCargo = cargoAllocation.getInputCargo();
+					if (inputCargo != null) {
+						return inputCargo.getCargoType() == CargoType.FOB;
+					}
+				}
+			} else {
+				isFOB = ((DischargeSlot) slot).isFOBSale();
+			}
 		}
 		return isFOB;
 	}
@@ -187,7 +199,11 @@ public class ColourSchemeUtil {
 		if (slot instanceof LoadSlot) {
 			return ((LoadSlot) slot).isDESPurchase();
 		} else {
-			return visit.getSlotAllocation().getCargoAllocation().getInputCargo().getCargoType() == CargoType.DES;
+			Cargo inputCargo = visit.getSlotAllocation().getCargoAllocation().getInputCargo();
+			if (inputCargo != null) {
+				return inputCargo.getCargoType() == CargoType.DES;
+			}
 		}
+		return false;
 	}
 }

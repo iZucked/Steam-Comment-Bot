@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -507,13 +507,31 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET_ROW__NEW_EVENT_GROUPING = 17;
 
 	/**
+	 * The feature id for the '<em><b>Original Vessel Short Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW__ORIGINAL_VESSEL_SHORT_NAME = 18;
+
+	/**
+	 * The feature id for the '<em><b>New Vessel Short Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW__NEW_VESSEL_SHORT_NAME = 19;
+
+	/**
 	 * The number of structural features of the '<em>Change Set Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_FEATURE_COUNT = 18;
+	int CHANGE_SET_ROW_FEATURE_COUNT = 20;
 
 	/**
 	 * The number of operations of the '<em>Change Set Row</em>' class.
@@ -972,6 +990,28 @@ public interface ChangesetPackage extends EPackage {
 	EReference getChangeSetRow_NewEventGrouping();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalVesselShortName <em>Original Vessel Short Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Original Vessel Short Name</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalVesselShortName()
+	 * @see #getChangeSetRow()
+	 * @generated
+	 */
+	EAttribute getChangeSetRow_OriginalVesselShortName();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewVesselShortName <em>New Vessel Short Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>New Vessel Short Name</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewVesselShortName()
+	 * @see #getChangeSetRow()
+	 * @generated
+	 */
+	EAttribute getChangeSetRow_NewVesselShortName();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1331,6 +1371,22 @@ public interface ChangesetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CHANGE_SET_ROW__NEW_EVENT_GROUPING = eINSTANCE.getChangeSetRow_NewEventGrouping();
+
+		/**
+		 * The meta object literal for the '<em><b>Original Vessel Short Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_ROW__ORIGINAL_VESSEL_SHORT_NAME = eINSTANCE.getChangeSetRow_OriginalVesselShortName();
+
+		/**
+		 * The meta object literal for the '<em><b>New Vessel Short Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_ROW__NEW_VESSEL_SHORT_NAME = eINSTANCE.getChangeSetRow_NewVesselShortName();
 
 	}
 

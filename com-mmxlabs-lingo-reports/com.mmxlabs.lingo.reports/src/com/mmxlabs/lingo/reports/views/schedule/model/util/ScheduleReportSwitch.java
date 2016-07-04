@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -9,6 +9,7 @@ package com.mmxlabs.lingo.reports.views.schedule.model.util;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions;
@@ -31,7 +32,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
  * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage
  * @generated
  */
-public class ScheduleReportSwitch<T> extends Switch<T> {
+public class ScheduleReportSwitch<@Nullable T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->

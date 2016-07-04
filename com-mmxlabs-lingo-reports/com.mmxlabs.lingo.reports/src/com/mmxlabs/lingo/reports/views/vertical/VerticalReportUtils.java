@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.vertical;
@@ -7,6 +7,9 @@ package com.mmxlabs.lingo.reports.views.vertical;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -63,8 +66,9 @@ public final class VerticalReportUtils {
 	 * @param end
 	 * @return
 	 */
-	public static List<LocalDate> getUTCDaysBetween(final LocalDate start, final LocalDate end) {
-		final ArrayList<LocalDate> result = new ArrayList<>();
+	@NonNull
+	public static List<@NonNull LocalDate> getUTCDaysBetween(final @Nullable LocalDate start, final @Nullable LocalDate end) {
+		final List<@NonNull LocalDate> result = new ArrayList<>();
 		if (start != null && end != null) {
 			LocalDate current = start;
 			while (!current.isAfter(end)) {

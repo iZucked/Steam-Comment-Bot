@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.scheduleview.views;
@@ -15,6 +15,7 @@ import java.util.WeakHashMap;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.Viewer;
 
+import com.google.inject.Stage;
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -53,7 +54,12 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 					final EList<Sequence> sequences = ((Schedule) o).getSequences();
 
 					for (final Sequence seq : sequences) {
+						// Skip nominal cargoes
+						if (seq.getSequenceType() == SequenceType.ROUND_TRIP) {
+							continue;
+						}
 						result.add(seq);
+
 					}
 				}
 			}
@@ -62,6 +68,10 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 			final EList<Sequence> sequences = ((Schedule) parent).getSequences();
 			final List<Sequence> seqs = new ArrayList<Sequence>(sequences.size());
 			for (final Sequence seq : sequences) {
+				// Skip nominal cargoes
+				if (seq.getSequenceType() == SequenceType.ROUND_TRIP) {
+					continue;
+				}
 				seqs.add(seq);
 			}
 			return seqs.toArray();
@@ -158,7 +168,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 		if (element instanceof Event) {
 			final Event event = (Event) element;
 			// Special case for cargo shorts - group items separately
-			if (event.getSequence().getSequenceType() == SequenceType.CARGO_SHORTS) {
+			if (event.getSequence().getSequenceType() == SequenceType.ROUND_TRIP) {
 				Event start = ScheduleModelUtils.getSegmentStart(event);
 
 				if (start != null) {

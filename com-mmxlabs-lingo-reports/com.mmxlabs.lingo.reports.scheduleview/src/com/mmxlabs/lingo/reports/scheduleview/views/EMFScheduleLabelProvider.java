@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.scheduleview.views;
@@ -28,11 +28,13 @@ import com.mmxlabs.ganttviewer.IGanttChartColourProvider;
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -73,6 +75,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	private boolean showCanals = false;
 	private final SelectedScenariosService selectedScenariosService;
 
+	private final VesselAssignmentFormatter vesselFormatter = new VesselAssignmentFormatter();
+
 	public EMFScheduleLabelProvider(final GanttChartViewer viewer, final IMemento memento, @NonNull final SelectedScenariosService selectedScenariosService) {
 		this.viewer = viewer;
 		this.memento = memento;
@@ -91,7 +95,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		if (element instanceof Sequence) {
 			final Sequence sequence = (Sequence) element;
 
-			String seqText = sequence.getName();
+			String seqText = vesselFormatter.render(sequence);
 
 			// Add scenario instance name to field if multiple scenarios are selected
 			final Object input = viewer.getInput();
@@ -118,11 +122,9 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		} else if (element instanceof Journey) {
 			final Journey j = (Journey) element;
 			final Route route = j.getRoute();
-			if (route != null) {
-				if (route.isCanal()) {
-					if (memento.getBoolean(Show_Canals)) {
-						text = route.getName().replace("canal", "");
-					}
+			if (route != null && route.getRouteOption() != RouteOption.DIRECT) {
+				if (memento.getBoolean(Show_Canals)) {
+					text = route.getName().replace("canal", "");
 				}
 			}
 		}
@@ -239,13 +241,14 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				eventText.append("Travel time: " + durationTime + " \n");
 				final Journey journey = (Journey) element;
 				eventText.append(" \n");
-				// if (!journey.getRoute().equalsIgnoreCase("default")) {
+				// if (!journey.getRoute().equalsIgnoreCase(RouteOption.DIRECT.getName())) {
 				eventText.append(String.format("%.1f knots", journey.getSpeed()));
 				for (final FuelQuantity fq : journey.getFuels()) {
 					eventText.append(String.format(" | %s", fq.getFuel().toString()));
 				}
 				final Route route = journey.getRoute();
-				if (route != null && route.isCanal()) {
+
+				if (route != null && route.getRouteOption() != RouteOption.DIRECT) {
 					eventText.append(" | " + route + "\n");
 				}
 
@@ -290,7 +293,11 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					}
 				}
 			} else if (element instanceof Idle) {
+				Idle idle = (Idle) element;
 				eventText.append("Idle time: " + durationTime);
+				for (final FuelQuantity fq : idle.getFuels()) {
+					eventText.append(String.format("\n%s\n", fq.getFuel().toString()));
+				}
 			} else if (element instanceof GeneratedCharterOut) {
 				eventText.append(" \n");
 				eventText.append("Duration: " + durationTime);

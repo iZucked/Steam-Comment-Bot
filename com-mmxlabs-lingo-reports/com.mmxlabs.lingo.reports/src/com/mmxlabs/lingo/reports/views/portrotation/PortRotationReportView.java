@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.portrotation;
@@ -74,31 +74,43 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 
 		@Override
 		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
-
-			final Runnable r = new Runnable() {
-				@Override
-				public void run() {
-					elements.clear();
-					elementCollector.beginCollecting(pinned != null);
-					if (pinned != null) {
-						elementCollector.collectElements(pinned, (LNGScenarioModel) pinned.getInstance(), true);
-					}
-					for (final ScenarioInstance other : others) {
-						elementCollector.collectElements(other, (LNGScenarioModel) other.getInstance(), false);
-					}
-					elementCollector.endCollecting();
-					viewer.setInput(elements);
+//
+//			final Runnable r = new Runnable() {
+//				@Override
+//				public void run() {
+//					elements.clear();
+//					elementCollector.beginCollecting(pinned != null);
+//					if (pinned != null) {
+//						elementCollector.collectElements(pinned, (LNGScenarioModel) pinned.getInstance(), true);
+//					}
+//					for (final ScenarioInstance other : others) {
+//						elementCollector.collectElements(other, (LNGScenarioModel) other.getInstance(), false);
+//					}
+//					elementCollector.endCollecting();
+//					viewer.setInput(elements);
+//				}
+//			};
+//			if (block) {
+//				if (Display.getDefault().getThread() == Thread.currentThread()) {
+//					r.run();
+//				} else {
+//					Display.getDefault().syncExec(r);
+//				}
+//			} else {
+//				Display.getDefault().asyncExec(r);
+//			}
+			ViewerHelper.setInput(viewer, block, () ->  {
+				elements.clear();
+				elementCollector.beginCollecting(pinned != null);
+				if (pinned != null) {
+					elementCollector.collectElements(pinned, (LNGScenarioModel) pinned.getInstance(), true);
 				}
-			};
-			if (block) {
-				if (Display.getDefault().getThread() == Thread.currentThread()) {
-					r.run();
-				} else {
-					Display.getDefault().syncExec(r);
+				for (final ScenarioInstance other : others) {
+					elementCollector.collectElements(other, (LNGScenarioModel) other.getInstance(), false);
 				}
-			} else {
-				Display.getDefault().asyncExec(r);
-			}
+				elementCollector.endCollecting();
+				return elements;
+			});
 		}
 	};
 
@@ -328,13 +340,13 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 	}
 
 	@Override
-	public Object getAdapter(final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 
 		if (IReportContents.class.isAssignableFrom(adapter)) {
 
 			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
 			final String contents = util.convert();
-			return new IReportContents() {
+			return (T) new IReportContents() {
 
 				@Override
 				public String getStringContents() {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.vertical.providers;
@@ -35,7 +35,7 @@ public final class FilteredEventProvider extends EventProvider implements IBorde
 	}
 
 	@Override
-	protected Event[] getUnfilteredEvents(final LocalDate date) {
+	protected @NonNull Event[] getUnfilteredEvents(final LocalDate date) {
 		return wrapped.getEvents(date);
 	}
 

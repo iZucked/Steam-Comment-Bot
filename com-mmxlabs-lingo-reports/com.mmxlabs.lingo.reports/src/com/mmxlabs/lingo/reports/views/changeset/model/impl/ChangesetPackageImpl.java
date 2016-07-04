@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -504,6 +504,24 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getChangeSetRow_OriginalVesselShortName() {
+		return (EAttribute)changeSetRowEClass.getEStructuralFeatures().get(18);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getChangeSetRow_NewVesselShortName() {
+		return (EAttribute)changeSetRowEClass.getEStructuralFeatures().get(19);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ChangesetFactory getChangesetFactory() {
 		return (ChangesetFactory)getEFactoryInstance();
 	}
@@ -572,6 +590,8 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		createEReference(changeSetRowEClass, CHANGE_SET_ROW__NEW_GROUP_PROFIT_AND_LOSS);
 		createEReference(changeSetRowEClass, CHANGE_SET_ROW__ORIGINAL_EVENT_GROUPING);
 		createEReference(changeSetRowEClass, CHANGE_SET_ROW__NEW_EVENT_GROUPING);
+		createEAttribute(changeSetRowEClass, CHANGE_SET_ROW__ORIGINAL_VESSEL_SHORT_NAME);
+		createEAttribute(changeSetRowEClass, CHANGE_SET_ROW__NEW_VESSEL_SHORT_NAME);
 	}
 
 	/**
@@ -654,6 +674,8 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		initEReference(getChangeSetRow_NewGroupProfitAndLoss(), theSchedulePackage.getProfitAndLossContainer(), null, "newGroupProfitAndLoss", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSetRow_OriginalEventGrouping(), theSchedulePackage.getEventGrouping(), null, "originalEventGrouping", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSetRow_NewEventGrouping(), theSchedulePackage.getEventGrouping(), null, "newEventGrouping", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSetRow_OriginalVesselShortName(), ecorePackage.getEString(), "originalVesselShortName", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSetRow_NewVesselShortName(), ecorePackage.getEString(), "newVesselShortName", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

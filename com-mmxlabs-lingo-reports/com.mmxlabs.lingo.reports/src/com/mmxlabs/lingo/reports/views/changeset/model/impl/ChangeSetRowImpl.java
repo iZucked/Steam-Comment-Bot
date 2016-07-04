@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -47,6 +47,8 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getNewGroupProfitAndLoss <em>New Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getOriginalEventGrouping <em>Original Event Grouping</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getNewEventGrouping <em>New Event Grouping</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getOriginalVesselShortName <em>Original Vessel Short Name</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getNewVesselShortName <em>New Vessel Short Name</em>}</li>
  * </ul>
  *
  * @generated
@@ -291,6 +293,46 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * @ordered
 	 */
 	protected EventGrouping newEventGrouping;
+
+	/**
+	 * The default value of the '{@link #getOriginalVesselShortName() <em>Original Vessel Short Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOriginalVesselShortName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String ORIGINAL_VESSEL_SHORT_NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getOriginalVesselShortName() <em>Original Vessel Short Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOriginalVesselShortName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String originalVesselShortName = ORIGINAL_VESSEL_SHORT_NAME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getNewVesselShortName() <em>New Vessel Short Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNewVesselShortName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NEW_VESSEL_SHORT_NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getNewVesselShortName() <em>New Vessel Short Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNewVesselShortName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String newVesselShortName = NEW_VESSEL_SHORT_NAME_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -942,6 +984,48 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getOriginalVesselShortName() {
+		return originalVesselShortName;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setOriginalVesselShortName(String newOriginalVesselShortName) {
+		String oldOriginalVesselShortName = originalVesselShortName;
+		originalVesselShortName = newOriginalVesselShortName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_VESSEL_SHORT_NAME, oldOriginalVesselShortName, originalVesselShortName));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getNewVesselShortName() {
+		return newVesselShortName;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setNewVesselShortName(String newNewVesselShortName) {
+		String oldNewVesselShortName = newVesselShortName;
+		newVesselShortName = newNewVesselShortName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__NEW_VESSEL_SHORT_NAME, oldNewVesselShortName, newVesselShortName));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -1029,6 +1113,10 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 			case ChangesetPackage.CHANGE_SET_ROW__NEW_EVENT_GROUPING:
 				if (resolve) return getNewEventGrouping();
 				return basicGetNewEventGrouping();
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_VESSEL_SHORT_NAME:
+				return getOriginalVesselShortName();
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_VESSEL_SHORT_NAME:
+				return getNewVesselShortName();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1094,6 +1182,12 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 				return;
 			case ChangesetPackage.CHANGE_SET_ROW__NEW_EVENT_GROUPING:
 				setNewEventGrouping((EventGrouping)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_VESSEL_SHORT_NAME:
+				setOriginalVesselShortName((String)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_VESSEL_SHORT_NAME:
+				setNewVesselShortName((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -1161,6 +1255,12 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 			case ChangesetPackage.CHANGE_SET_ROW__NEW_EVENT_GROUPING:
 				setNewEventGrouping((EventGrouping)null);
 				return;
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_VESSEL_SHORT_NAME:
+				setOriginalVesselShortName(ORIGINAL_VESSEL_SHORT_NAME_EDEFAULT);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_VESSEL_SHORT_NAME:
+				setNewVesselShortName(NEW_VESSEL_SHORT_NAME_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1209,6 +1309,10 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 				return originalEventGrouping != null;
 			case ChangesetPackage.CHANGE_SET_ROW__NEW_EVENT_GROUPING:
 				return newEventGrouping != null;
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_VESSEL_SHORT_NAME:
+				return ORIGINAL_VESSEL_SHORT_NAME_EDEFAULT == null ? originalVesselShortName != null : !ORIGINAL_VESSEL_SHORT_NAME_EDEFAULT.equals(originalVesselShortName);
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_VESSEL_SHORT_NAME:
+				return NEW_VESSEL_SHORT_NAME_EDEFAULT == null ? newVesselShortName != null : !NEW_VESSEL_SHORT_NAME_EDEFAULT.equals(newVesselShortName);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1235,6 +1339,10 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 		result.append(wiringChange);
 		result.append(", vesselChange: ");
 		result.append(vesselChange);
+		result.append(", originalVesselShortName: ");
+		result.append(originalVesselShortName);
+		result.append(", newVesselShortName: ");
+		result.append(newVesselShortName);
 		result.append(')');
 		return result.toString();
 	}

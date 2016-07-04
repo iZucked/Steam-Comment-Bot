@@ -1,8 +1,7 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
-
 package com.mmxlabs.lingo.reports.views.changeset.handlers;
 
 import java.util.List;
@@ -72,7 +71,8 @@ public class AnalyseScenarioHandler {
 
 					// Check forks
 					for (final Container c : scenarioInstance.getElements()) {
-						if (c.getName().toLowerCase().startsWith("actionset")) {
+						String name = c.getName();
+						if (name != null && name.toLowerCase().startsWith("actionset")) {
 							return true;
 						}
 					}
@@ -80,7 +80,8 @@ public class AnalyseScenarioHandler {
 					// Check siblings.
 					final Container parent = scenarioInstance.getParent();
 					for (final Container c : parent.getElements()) {
-						if (c.getName().toLowerCase().startsWith("actionset")) {
+						String name = c.getName();
+						if (name != null && name.toLowerCase().startsWith("actionset")) {
 							return true;
 						}
 					}

@@ -1,14 +1,16 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.components;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 
+import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 
@@ -60,7 +62,7 @@ public abstract class AbstractSimpleTabularReportTransformer<T> {
 		}
 	}
 
-	abstract public List<ColumnManager<T>> getColumnManagers();
+	abstract public List<ColumnManager<T>> getColumnManagers(@NonNull ISelectedDataProvider selectedDataProvider);
 
 	/**
 	 */

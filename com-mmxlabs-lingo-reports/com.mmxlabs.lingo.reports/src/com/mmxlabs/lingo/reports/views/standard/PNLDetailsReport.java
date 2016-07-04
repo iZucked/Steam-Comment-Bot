@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.standard;
@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
@@ -112,6 +113,8 @@ public class PNLDetailsReport extends DetailPropertiesView {
 				} else if (a instanceof VesselEventVisit) {
 					adaptedObjects.add(a);
 				} else if (a instanceof StartEvent) {
+					adaptedObjects.add(a);
+				} else if (a instanceof EndEvent) {
 					adaptedObjects.add(a);
 				} else if (a instanceof Cargo) {
 					findSelectionElement((Cargo) a, adaptedObjects);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views;
@@ -617,7 +617,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public Object getAdapter(final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 
 		// if (SortData.class.isAssignableFrom(adapter)) {
 		// return sortData;

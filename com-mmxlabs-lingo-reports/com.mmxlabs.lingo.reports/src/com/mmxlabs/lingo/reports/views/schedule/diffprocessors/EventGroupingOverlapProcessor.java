@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.schedule.diffprocessors;
@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 
@@ -47,26 +48,34 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 		}
 		if (referenceGrouping != null) {
 			final EList<Event> events = referenceGrouping.getEvents();
-			final Event firstEvent = events.get(0);
-			final Event lastEvent = events.get(events.size() - 1);
+			if (!events.isEmpty()) {
+				final Event firstEvent = events.get(0);
+				final Event lastEvent = events.get(events.size() - 1);
 
-			final ZonedDateTime start = firstEvent.getStart();
+				final ZonedDateTime start = firstEvent.getStart();
 
-			final ZonedDateTime end = lastEvent.getEnd();
+				final ZonedDateTime end = lastEvent.getEnd();
 
-			final NonNullPair<ZonedDateTime, ZonedDateTime> referenceInterval = new NonNullPair<>(start, end);
+				final NonNullPair<ZonedDateTime, ZonedDateTime> referenceInterval = new NonNullPair<>(start, end);
 
-			final Sequence referenceSequence = firstEvent.getSequence();
+				final Sequence referenceSequence = firstEvent.getSequence();
 
-			for (final EObject scenario : table.getScenarios()) {
-				if (scenario instanceof LNGScenarioModel) {
-					final LNGScenarioModel scenarioModel = (LNGScenarioModel) scenario;
-					final ScheduleModel scheduleModel = scenarioModel.getScheduleModel();
-					if (scheduleModel != null) {
-						if (scheduleModel.getSchedule() != referenceRow.getSchedule()) {
-							for (final Sequence sequence : scheduleModel.getSchedule().getSequences()) {
-								if (sequence.getName().equals(referenceSequence.getName())) {
-									bindToOverlaps(sequence, referenceRow, referenceInterval, elementToRowMap);
+				if (referenceSequence.getSequenceType() == SequenceType.ROUND_TRIP) {
+					return;
+				}
+
+				for (final EObject scenario : table.getScenarios()) {
+					if (scenario instanceof LNGScenarioModel) {
+						final LNGScenarioModel scenarioModel = (LNGScenarioModel) scenario;
+						final ScheduleModel scheduleModel = scenarioModel.getScheduleModel();
+						if (scheduleModel != null) {
+							if (scheduleModel.getSchedule() != referenceRow.getSchedule()) {
+								for (final Sequence sequence : scheduleModel.getSchedule().getSequences()) {
+									if (sequence.getSequenceType() != SequenceType.ROUND_TRIP) {
+										if (sequence.getName().equals(referenceSequence.getName())) {
+											bindToOverlaps(sequence, referenceRow, referenceInterval, elementToRowMap);
+										}
+									}
 								}
 							}
 						}
@@ -74,6 +83,7 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 				}
 			}
 		}
+
 	}
 
 	private void bindToOverlaps(@NonNull final Sequence sequence, @NonNull final Row referenceRow, @NonNull final NonNullPair<ZonedDateTime, ZonedDateTime> referenceInterval,

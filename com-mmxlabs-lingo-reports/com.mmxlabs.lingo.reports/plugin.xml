@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2015
+    Copyright (C) Minimax Labs Ltd., 2010 - 2016
     All rights reserved.
 
 -->
@@ -38,15 +38,6 @@
             name="Reports"
             id="com.mmxlabs.shiplingo.platform.reports">
       </category>
-      <!--
-      <view
-            name="Index Exposures"
-            icon="icons/cview16/exec_statistic_view.gif"
-            category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.views.standard.ExposureReportView"
-            id="com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView">
-      </view>
-      -->
       <view
             name="Volume Tracking"
             icon="icons/cview16/exec_statistic_view.gif"
@@ -96,6 +87,15 @@
             class="com.mmxlabs.lingo.reports.views.standard.LatenessReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.LatenessReportView">
       </view>
+      <!--
+      <view
+            name="Excess Idle"
+            icon="icons/cview16/exec_flow_view.gif"
+            category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.views.standard.ExcessIdleTimeReportView"
+            id="com.mmxlabs.shiplingo.platform.reports.views.ExcessIdleTimeReportView">
+      </view>
+      -->
       <view
             name="Cooldown"
             icon="icons/cview16/exec_flow_view.gif"
@@ -197,6 +197,10 @@
       </ScheduleBasedColumn>
       <ScheduleBasedColumn
             handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_upstream">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_shipping">
       </ScheduleBasedColumn>
       <ScheduleBasedColumn
@@ -271,6 +275,10 @@
             handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.schedule.totalcost">
       </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.shipping_cost">
+      </ScheduleBasedColumn>      
       <ScheduleBasedColumn
             handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.schedule.load-notes">
@@ -570,6 +578,10 @@
       <PluginXMLEnablement
             feature="difftools"
             plugin.xml="difftools.plugin.xml">
+      </PluginXMLEnablement>
+      <PluginXMLEnablement
+            feature="exposures"
+            plugin.xml="exposures.plugin.xml">
       </PluginXMLEnablement>
       <PluginXMLEnablement
             feature="optimisation-charter-out-generation"

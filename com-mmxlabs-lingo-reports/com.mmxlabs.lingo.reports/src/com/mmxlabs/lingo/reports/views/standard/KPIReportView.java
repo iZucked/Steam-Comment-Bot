@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.standard;
@@ -45,6 +45,7 @@ import org.eclipse.ui.part.ViewPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
@@ -55,6 +56,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -96,7 +98,7 @@ public class KPIReportView extends ViewPart {
 					int numberOfSchedules = 0;
 					List<RowData> pinnedData = null;
 					if (pinned != null) {
-						LNGScenarioModel instance = (LNGScenarioModel) pinned.getInstance();
+						final LNGScenarioModel instance = (LNGScenarioModel) pinned.getInstance();
 						if (instance != null) {
 							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
 							if (schedule != null) {
@@ -107,7 +109,7 @@ public class KPIReportView extends ViewPart {
 						}
 					}
 					for (final ScenarioInstance other : others) {
-						LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
+						final LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
 						if (instance != null) {
 							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
 							if (schedule != null) {
@@ -444,7 +446,7 @@ public class KPIReportView extends ViewPart {
 		super.dispose();
 	}
 
-	private void setShowColumns(final boolean showDeltaColumn, int numberOfSchedules) {
+	private void setShowColumns(final boolean showDeltaColumn, final int numberOfSchedules) {
 		if (showDeltaColumn) {
 			if (delta == null) {
 				delta = new GridViewerColumn(viewer, SWT.NONE);
@@ -461,5 +463,24 @@ public class KPIReportView extends ViewPart {
 		}
 
 		scheduleColumnViewer.getColumn().setVisible(numberOfSchedules > 1);
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> adapter) {
+
+		if (IReportContents.class.isAssignableFrom(adapter)) {
+
+			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
+			final String contents = util.convert();
+			return (T) new IReportContents() {
+
+				@Override
+				public String getStringContents() {
+					return contents;
+				}
+			};
+		}
+
+		return super.getAdapter(adapter);
 	}
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.scheduleview.views;
@@ -747,10 +747,10 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 	}
 
 	@Override
-	public Object getAdapter(@SuppressWarnings("rawtypes") final Class key) {
+	public <T> T getAdapter(final Class<T> key) {
 		// Hook up our property sheet page
 		if (key.equals(IPropertySheetPage.class)) {
-			return getPropertySheetPage();
+			return (T) getPropertySheetPage();
 		} else {
 			return super.getAdapter(key);
 		}

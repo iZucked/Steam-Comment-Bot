@@ -1,11 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.vertical;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,7 +26,6 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.vertical.providers.EventProvider;
-import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
@@ -92,7 +90,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 						ViewerHelper.setInput(gridViewer, true, scenario.getInstance());
 						setCurrentScenario(scenario);
 					} else {
-						ViewerHelper.setInput(gridViewer, true, null);
+						ViewerHelper.setInput(gridViewer, true, (Object)null);
 						setCurrentScenario(null);
 					}
 				}

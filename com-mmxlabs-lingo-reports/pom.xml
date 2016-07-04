@@ -5,13 +5,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.lingo.reports</groupId>
 	<artifactId>com.mmxlabs.lingo.reports.parent</artifactId>
-	<version>3.11.1-SNAPSHOT</version>
+	<version>3.12.7-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
 		<relativePath />
-		<version>31</version>
+		<version>32</version>
 	</parent>
 
 	<scm>
@@ -108,6 +108,7 @@
 			</plugin>
 		</plugins>
 	</build>
+
 	<repositories>
 		<repository>
 			<id>com-mmxlabs-models-datetime.hg</id>
@@ -115,54 +116,61 @@
 			<layout>p2</layout>
 		</repository>
 		<repository>
-			<id>com-mmxlabs-common-util.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/${project.version}/com.mmxlabs.common.util.p2-${project.version}.zip-unzip/</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
-			<id>com-mmxlabs-optimiser.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/optimiser/com.mmxlabs.optimiser.p2/${project.version}/com.mmxlabs.optimiser.p2-${project.version}.zip-unzip/</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
-			<id>com-mmxlabs-lng-scheduler.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/scheduler/com.mmxlabs.scheduler.p2/${project.version}/com.mmxlabs.scheduler.p2-${project.version}.zip-unzip/</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
-			<id>com-mmxlabs-jobmanager.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/jobmanager/com.mmxlabs.jobmanager.p2/${project.version}/com.mmxlabs.jobmanager.p2-${project.version}.zip-unzip/</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
 			<id>com-mmxlabs-models-mmxcore.hg</id>
 			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/mmxcore/com.mmxlabs.models.mmxcore.p2/5.0.0.RELEASE/com.mmxlabs.models.mmxcore.p2-5.0.0.RELEASE.zip-unzip/</url>
 			<layout>p2</layout>
 		</repository>
-		<repository>
-			<id>com-mmxlabs-rcp-common.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/rcp/common/com.mmxlabs.rcp.common.p2/${project.version}/com.mmxlabs.rcp.common.p2-${project.version}.zip-unzip/</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
-			<id>com-mmxlabs-scenario-service.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/scenario/service/com.mmxlabs.scenario.service.p2/${project.version}/com.mmxlabs.scenario.service.p2-${project.version}.zip-unzip/</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
-			<id>com-mmxlabs-models-migration.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/migration/com.mmxlabs.models.migration.p2/${project.version}/com.mmxlabs.models.migration.p2-${project.version}.zip-unzip/</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
-			<id>com-mmxlabs-models-ui.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/ui/com.mmxlabs.models.ui.p2/${project.version}/com.mmxlabs.models.ui.p2-${project.version}.zip-unzip/</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
-			<id>com-mmxlabs-models-lng.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/lng/com.mmxlabs.models.lng.p2/${project.version}/com.mmxlabs.models.lng.p2-${project.version}.zip-unzip/</url>
-			<layout>p2</layout>
-		</repository>
 	</repositories>
+	<profiles>
+		<profile>
+			<id>useNexusRepos</id>
+			<repositories>
+				<repository>
+					<id>com-mmxlabs-common-util.hg</id>
+					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/${project.version}/com.mmxlabs.common.util.p2-${project.version}.zip-unzip/</url>
+					<layout>p2</layout>
+				</repository>
+				<repository>
+					<id>com-mmxlabs-optimiser.hg</id>
+					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/optimiser/com.mmxlabs.optimiser.p2/${project.version}/com.mmxlabs.optimiser.p2-${project.version}.zip-unzip/</url>
+					<layout>p2</layout>
+				</repository>
+				<repository>
+					<id>com-mmxlabs-lng-scheduler.hg</id>
+					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/scheduler/com.mmxlabs.scheduler.p2/${project.version}/com.mmxlabs.scheduler.p2-${project.version}.zip-unzip/</url>
+					<layout>p2</layout>
+				</repository>
+				<repository>
+					<id>com-mmxlabs-jobmanager.hg</id>
+					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/jobmanager/com.mmxlabs.jobmanager.p2/${project.version}/com.mmxlabs.jobmanager.p2-${project.version}.zip-unzip/</url>
+					<layout>p2</layout>
+				</repository>
+				<repository>
+					<id>com-mmxlabs-rcp-common.hg</id>
+					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/rcp/common/com.mmxlabs.rcp.common.p2/${project.version}/com.mmxlabs.rcp.common.p2-${project.version}.zip-unzip/</url>
+					<layout>p2</layout>
+				</repository>
+				<repository>
+					<id>com-mmxlabs-scenario-service.hg</id>
+					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/scenario/service/com.mmxlabs.scenario.service.p2/${project.version}/com.mmxlabs.scenario.service.p2-${project.version}.zip-unzip/</url>
+					<layout>p2</layout>
+				</repository>
+				<repository>
+					<id>com-mmxlabs-models-migration.hg</id>
+					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/migration/com.mmxlabs.models.migration.p2/${project.version}/com.mmxlabs.models.migration.p2-${project.version}.zip-unzip/</url>
+					<layout>p2</layout>
+				</repository>
+				<repository>
+					<id>com-mmxlabs-models-ui.hg</id>
+					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/ui/com.mmxlabs.models.ui.p2/${project.version}/com.mmxlabs.models.ui.p2-${project.version}.zip-unzip/</url>
+					<layout>p2</layout>
+				</repository>
+				<repository>
+					<id>com-mmxlabs-models-lng.hg</id>
+					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/lng/com.mmxlabs.models.lng.p2/${project.version}/com.mmxlabs.models.lng.p2-${project.version}.zip-unzip/</url>
+					<layout>p2</layout>
+				</repository>
+			</repositories>
+		</profile>
+	</profiles>
 </project>

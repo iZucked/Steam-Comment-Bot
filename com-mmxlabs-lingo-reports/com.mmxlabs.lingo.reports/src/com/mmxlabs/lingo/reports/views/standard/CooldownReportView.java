@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.standard;
@@ -150,7 +150,7 @@ public class CooldownReportView extends EMFReportView {
 		return new ScheduledEventCollector() {
 
 			@Override
-			public void beginCollecting(boolean pinDiffMode) {
+			public void beginCollecting(final boolean pinDiffMode) {
 				clearPinModeData();
 				super.beginCollecting(pinDiffMode);
 			}
@@ -159,8 +159,8 @@ public class CooldownReportView extends EMFReportView {
 			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean pinned) {
 
 				final Collection<? extends Object> collectedElements = super.collectElements(scenarioInstance, schedule, pinned);
-				List<EObject> elements = new ArrayList<>(collectedElements.size());
-				for (Object o : collectedElements) {
+				final List<EObject> elements = new ArrayList<>(collectedElements.size());
+				for (final Object o : collectedElements) {
 					if (o instanceof EObject) {
 						elements.add((EObject) o);
 					}
@@ -192,13 +192,13 @@ public class CooldownReportView extends EMFReportView {
 	}
 
 	@Override
-	public Object getAdapter(final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 
 		if (IReportContents.class.isAssignableFrom(adapter)) {
 
 			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
 			final String contents = util.convert();
-			return new IReportContents() {
+			return (T) new IReportContents() {
 
 				@Override
 				public String getStringContents() {

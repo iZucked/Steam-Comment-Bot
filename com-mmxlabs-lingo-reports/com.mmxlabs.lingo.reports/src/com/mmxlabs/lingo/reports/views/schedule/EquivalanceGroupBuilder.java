@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.schedule;
@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.base.Joiner;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
@@ -196,7 +198,6 @@ public class EquivalanceGroupBuilder {
 		// Find all the equivalents from the reference to the other scenarios
 		final Map<String, List<EObject>> reference = maps.get(0);
 		for (final String key : allKeys) {
-
 			final List<EObject> referenceElements = reference.get(key);
 			if (referenceElements == null || referenceElements.isEmpty()) {
 
@@ -336,31 +337,9 @@ public class EquivalanceGroupBuilder {
 			final SlotAllocation slotAllocation = (SlotAllocation) element;
 			String prefix = "";
 			final Slot slot = slotAllocation.getSlot();
-			if (slot instanceof LoadSlot) {
-				prefix = "allocation-load";
-			} else {
-				prefix = "allocation-discharge";
-			}
+			prefix = "allocation-" + getSlotTypePrefix(slot);
 			if (slot instanceof SpotSlot) {
-				final SpotMarket market = ((SpotSlot) slot).getMarket();
-				final String id = String.format("%s-%s-%s", market.eClass().getName(), market.getName(), format(slot.getWindowStart()));
-				final Cargo c = slot.getCargo();
-
-				if (c != null) {
-					final List<String> elements = new LinkedList<>();
-					for (final Slot s : c.getSortedSlots()) {
-						if (s == slot) {
-							elements.add(id);
-						} else if (s instanceof SpotSlot) {
-							elements.add("spot");
-						} else {
-							elements.add(getElementKey(s));
-						}
-					}
-					return prefix + "-" + Joiner.on("--").join(elements);
-				} else {
-					return prefix + "-" + id;
-				}
+				return prefix + "-" + getSpotSlotSuffix(slot);
 
 			} else {
 				final String baseName = slotAllocation.getName();
@@ -372,72 +351,41 @@ public class EquivalanceGroupBuilder {
 			final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
 			String prefix = "";
 			final Slot slot = openSlotAllocation.getSlot();
-			if (slot instanceof LoadSlot) {
-				prefix = "load";
-			} else {
-				prefix = "discharge";
-			}
+			prefix = getSlotTypePrefix(slot);
 			if (slot instanceof SpotSlot) {
-				final SpotMarket market = ((SpotSlot) slot).getMarket();
-				final String id = String.format("%s-%s-%s", market.eClass().getName(), market.getName(), format(slot.getWindowStart()));
-				final Cargo c = slot.getCargo();
-
-				if (c != null) {
-					final List<String> elements = new LinkedList<>();
-					for (final Slot s : c.getSortedSlots()) {
-						if (s == slot) {
-							elements.add(id);
-						} else if (s instanceof SpotSlot) {
-							elements.add("spot");
-						} else {
-							elements.add(getElementKey(s));
-						}
-					}
-					return prefix + "-" + Joiner.on("--").join(elements);
-				} else {
-					return prefix + "-" + id;
-				}
+				return prefix + "-" + getSpotSlotSuffix(slot);
 			} else {
 				final String baseName = openSlotAllocation.getSlot().getName();
 				return prefix + "-" + baseName;
 			}
 		} else if (element instanceof StartEvent) {
 			final StartEvent startEvent = (StartEvent) element;
-			return "start-" + startEvent.getSequence().getName();
+			final String base = "start-" + startEvent.getSequence().getName();
+			if (startEvent.getSequence().isSetSpotIndex()) {
+				return base + "-" + startEvent.getSequence().getSpotIndex();
+			}
+			return base;
 		} else if (element instanceof EndEvent) {
 			final EndEvent endEvent = (EndEvent) element;
-			return "end-" + endEvent.getSequence().getName();
+			final String base = "end-" + endEvent.getSequence().getName();
+			if (endEvent.getSequence().isSetSpotIndex()) {
+				return base + "-" + endEvent.getSequence().getSpotIndex();
+			}
+			return base;
+		} else if (element instanceof GeneratedCharterOut) {
+			// Add in hash code to keep elements unique.
+			// See start of #checkElementEquivalence
+			// Equivalence is really overlapping event time on a resource, element name (currently) encode the previous cargo/event ID which may change.
+			return element.eClass().getName() + "-" + ((Event) element).name() + "-" + element.hashCode();
 		} else if (element instanceof Event) {
 			return element.eClass().getName() + "-" + ((Event) element).name();
 		}
 		if (element instanceof Slot) {
 			String prefix = "";
 			final Slot slot = (Slot) element;
-			if (slot instanceof LoadSlot) {
-				prefix = "load";
-			} else {
-				prefix = "discharge";
-			}
+			prefix = getSlotTypePrefix(slot);
 			if (slot instanceof SpotSlot) {
-				final SpotMarket market = ((SpotSlot) slot).getMarket();
-				final String id = String.format("%s-%s-%s", market.eClass().getName(), market.getName(), format(slot.getWindowStart()));
-				final Cargo c = slot.getCargo();
-
-				if (c != null) {
-					final List<String> elements = new LinkedList<>();
-					for (final Slot s : c.getSortedSlots()) {
-						if (s == slot) {
-							elements.add(id);
-						} else if (s instanceof SpotSlot) {
-							elements.add("spot");
-						} else {
-							elements.add(getElementKey(s));
-						}
-					}
-					return prefix + "-" + Joiner.on("--").join(elements);
-				} else {
-					return prefix + "-" + id;
-				}
+				return prefix + "-" + getSpotSlotSuffix(slot);
 			} else {
 				final String baseName = slot.getName();
 				return prefix + "-" + baseName;
@@ -450,7 +398,50 @@ public class EquivalanceGroupBuilder {
 		return element.toString();
 	}
 
-	private static String format(final LocalDate date) {
+	protected static @NonNull String getSpotSlotSuffix(final Slot slot) {
+		final SpotMarket market = ((SpotSlot) slot).getMarket();
+		final String id = String.format("%s-%s-%s", market.eClass().getName(), market.getName(), format(slot.getWindowStart()));
+		final Cargo c = slot.getCargo();
+
+		if (c != null) {
+			final List<String> elements = new LinkedList<>();
+			for (final Slot s : c.getSortedSlots()) {
+				if (s == slot) {
+					elements.add(id);
+				} else if (s instanceof SpotSlot) {
+					// Avoid recursion
+					elements.add("spot");
+				} else {
+					elements.add(getElementKey(s));
+				}
+			}
+			return Joiner.on("--").join(elements);
+		} else {
+			return id;
+		}
+	}
+
+	protected static @NonNull String getSlotTypePrefix(final Slot slot) {
+		String prefix;
+		if (slot instanceof LoadSlot) {
+			final LoadSlot loadSlot = (LoadSlot) slot;
+			if (loadSlot.isDESPurchase()) {
+				prefix = "des-purchase";
+			} else {
+				prefix = "fob-purchase";
+			}
+		} else {
+			final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+			if (dischargeSlot.isFOBSale()) {
+				prefix = "fob-sale";
+			} else {
+				prefix = "des-sale";
+			}
+		}
+		return prefix;
+	}
+
+	private static @NonNull String format(final @Nullable LocalDate date) {
 		if (date == null) {
 			return "<no date>";
 		}

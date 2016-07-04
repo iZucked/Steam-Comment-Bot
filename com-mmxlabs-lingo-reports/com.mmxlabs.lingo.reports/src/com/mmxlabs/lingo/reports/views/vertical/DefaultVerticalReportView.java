@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.vertical;
@@ -38,8 +38,8 @@ public class DefaultVerticalReportView extends AbstractVerticalCalendarReportVie
 		final Sequence[] vessels = data.vessels;
 		if (vessels != null) {
 			for (final Sequence seq : vessels) {
-				final CalendarColumn column = new CalendarColumn(verticalReportVisualiser.createDateFormat(), new SequenceEventProvider(seq, null, verticalReportVisualiser), new EventLabelProvider(
-						verticalReportVisualiser), seq.getName(), null);
+				final CalendarColumn column = new CalendarColumn(verticalReportVisualiser.createDateFormat(), new SequenceEventProvider(seq, null, verticalReportVisualiser),
+						new EventLabelProvider(verticalReportVisualiser), seq.getName(), null);
 				result.add(column);
 			}
 		}
@@ -47,7 +47,7 @@ public class DefaultVerticalReportView extends AbstractVerticalCalendarReportVie
 	}
 
 	@Override
-	public Object getAdapter(final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 
 		if (IReportContents.class.isAssignableFrom(adapter)) {
 
@@ -55,7 +55,7 @@ public class DefaultVerticalReportView extends AbstractVerticalCalendarReportVie
 			util.setRowHeadersIncluded(true);
 			util.setShowBackgroundColours(true);
 			final String contents = util.convert();
-			return new IReportContents() {
+			return (T) new IReportContents() {
 
 				@Override
 				public String getStringContents() {

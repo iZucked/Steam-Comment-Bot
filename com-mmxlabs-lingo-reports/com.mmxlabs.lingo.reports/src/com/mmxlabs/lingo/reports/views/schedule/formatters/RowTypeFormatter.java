@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.schedule.formatters;
@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -36,6 +37,8 @@ public class RowTypeFormatter extends BaseFormatter {
 			return "Cargo";
 		} else if (object instanceof StartEvent) {
 			return "Start";
+		} else if (object instanceof EndEvent) {
+			return "End";
 		} else if (object instanceof GeneratedCharterOut) {
 			return "Charter Out (virt)";
 		} else if (object instanceof VesselEventVisit) {

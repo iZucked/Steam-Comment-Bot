@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.schedule;
@@ -39,6 +39,7 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
@@ -66,6 +67,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 	public static final OptionInfo ROW_FILTER_LONG_CARGOES = new OptionInfo("ROW_FILTER_LONG_CARGOES", "Longs");
 	public static final OptionInfo ROW_FILTER_SHORT_CARGOES = new OptionInfo("ROW_FILTER_SHORT_CARGOES", "Shorts");
 	public static final OptionInfo ROW_FILTER_VESSEL_START_ROW = new OptionInfo("ROW_FILTER_VESSEL_START_ROW", "Start ballast legs");
+	public static final OptionInfo ROW_FILTER_VESSEL_END_ROW = new OptionInfo("ROW_FILTER_VESSEL_END_ROW", "End event legs");
 	public static final OptionInfo ROW_FILTER_VESSEL_EVENT_ROW = new OptionInfo("ROW_FILTER_VESSEL_EVENT_ROW", "Vessel Events");
 	public static final OptionInfo ROW_FILTER_CHARTER_OUT_ROW = new OptionInfo("ROW_FILTER_CHARTER_OUT_ROW", "Charter Outs (Virtual)");
 	public static final OptionInfo ROW_FILTER_CARGO_ROW = new OptionInfo("ROW_FILTER_CARGO_ROW", "Cargoes");
@@ -83,7 +85,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 
 		/** All filters (note this order is also used in the {@link ConfigurableScheduleReportView} dialog */
 		ROW_FILTER_ALL = new OptionInfo[] { ROW_FILTER_CARGO_ROW, ROW_FILTER_LONG_CARGOES, ROW_FILTER_SHORT_CARGOES, ROW_FILTER_VESSEL_EVENT_ROW, ROW_FILTER_CHARTER_OUT_ROW,
-				ROW_FILTER_VESSEL_START_ROW };
+				ROW_FILTER_VESSEL_START_ROW, ROW_FILTER_VESSEL_END_ROW };
 
 	}
 
@@ -117,6 +119,8 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 	public boolean showEvent(final Event event) {
 		if (event instanceof StartEvent) {
 			return rowFilterInfo.contains(ROW_FILTER_VESSEL_START_ROW.id);
+		} else if (event instanceof EndEvent) {
+			return rowFilterInfo.contains(ROW_FILTER_VESSEL_END_ROW.id);
 		} else if (event instanceof VesselEventVisit) {
 			return rowFilterInfo.contains(ROW_FILTER_VESSEL_EVENT_ROW.id);
 		} else if (event instanceof GeneratedCharterOut) {
@@ -216,7 +220,18 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 		return new EmfBlockColumnFactory() {
 			@Override
 			public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
-				final String book = bookContainmentFeature == null ? "Total" : (bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading");
+				final String book;
+				if (bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK) {
+					book = "Shipping";
+				} else if (bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK) {
+					book = "Trading";
+				} else if (bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK) {
+					book = "Upstream";
+				} else if (bookContainmentFeature == null) {
+					book = "Total";
+				} else {
+					throw new IllegalArgumentException("Unknown entity book type");
+				}
 				final String title = String.format("P&L (%s)", book);
 
 				final ColumnBlock block = blockManager.createBlock(columnId, title, ColumnType.NORMAL);
@@ -281,7 +296,8 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 		}, false, ScheduleReportPackage.Literals.ROW__TARGET);
 	}
 
-	private ColumnHandler addPNLColumn(final String blockId, final String entityLabel, final String entityKey, final EStructuralFeature bookContainmentFeature) { final String book = bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading";
+	private ColumnHandler addPNLColumn(final String blockId, final String entityLabel, final String entityKey, final EStructuralFeature bookContainmentFeature) {
+		final String book = bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading";
 		final String title = String.format("P&L (%s - %s)", entityLabel, book);
 
 		// HACK: don't the label to the entity column names if the column is for total group P&L

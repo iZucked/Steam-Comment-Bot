@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2016
+    All rights reserved.
+
+-->
+<!-- Copyright (C) Minimax Labs Ltd., 2010 - 2015 All rights reserved. -->
+<?eclipse version="3.4"?>
+<plugin>
+
+  <extension
+         point="org.eclipse.ui.views">
+      <view
+            name="Index Exposures"
+            icon="icons/cview16/exec_statistic_view.gif"
+            category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.views.standard.ExposureReportView"
+            id="com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView">
+      </view>
+	</extension>
+
+</plugin>

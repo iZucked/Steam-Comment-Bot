@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.standard;
@@ -12,11 +12,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IFontProvider;
-import org.eclipse.jface.viewers.ITableColorProvider;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
@@ -24,7 +23,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -35,9 +33,12 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
+import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.views.IProvideEditorInputScenario;
 import com.mmxlabs.lingo.reports.views.standard.HeadlineReportTransformer.RowData;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -45,6 +46,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
@@ -80,20 +82,22 @@ public class HeadlineReportView extends ViewPart {
 
 	/**
 	 * The ordered list of columns. These are either labels, or values. Label types take a String value and no formatter. Value types take a default Long value representing the largest expected value
-	 * which is used to calculate the required colum width.
+	 * which is used to calculate the required column width.
 	 */
 	public enum ColumnDefinition {
 		LABEL_PNL(ColumnType.Label, "P&L", null), VALUE_PNL(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
 		LABEL_TRADING(ColumnType.Label, "Trading", null), VALUE_TRADING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
 		LABEL_SHIPPING(ColumnType.Label, "Shipping", null), VALUE_SHIPPING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
-		LABEL_GCO(ColumnType.Label, "Charter Out (virt)", null), VALUE_GCO_DAYS(ColumnType.Value, 2400l, KPIReportTransformer.TYPE_TIME), VALUE_GCO_REVENUE(ColumnType.Value, 1000000000l,
-				KPIReportTransformer.TYPE_COST), //
-				LABEL_VIOLATIONS(ColumnType.Label, "Violations", null), VALUE_VIOLATIONS(ColumnType.Value, 100l, ""), //
-				LABEL_LATENESS(ColumnType.Label, "Late", null), VALUE_LATENESS(ColumnType.Value, 5200l, KPIReportTransformer.TYPE_TIME); //
+		LABEL_EQUITY(ColumnType.Label, "Equity", null, "features:report-equity-book"), VALUE_EQUITY(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:report-equity-book"), //
+		LABEL_GCO(ColumnType.Label, "Charter Out (virt)", null, "features:optimisation-charter-out-generation"), VALUE_GCO_DAYS(ColumnType.Value, 2400l, KPIReportTransformer.TYPE_TIME,
+				"features:optimisation-charter-out-generation"), VALUE_GCO_REVENUE(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST, "features:optimisation-charter-out-generation"), //
+		LABEL_VIOLATIONS(ColumnType.Label, "Violations", null), VALUE_VIOLATIONS(ColumnType.Value, 100l, ""), //
+		LABEL_LATENESS(ColumnType.Label, "Late", null), VALUE_LATENESS(ColumnType.Value, 5200l, KPIReportTransformer.TYPE_TIME); //
 
 		private final ColumnType columnType;
 		private final Object labelOrDefaultLong;
 		private final String formatType;
+		private final String feature;
 
 		protected ColumnType getColumnType() {
 			return columnType;
@@ -112,11 +116,26 @@ public class HeadlineReportView extends ViewPart {
 		}
 
 		private ColumnDefinition(final ColumnType columnType, final Object labelOrDefaultLong, final String formatType) {
+			this(columnType, labelOrDefaultLong, formatType, null);
+
+		}
+
+		private ColumnDefinition(final ColumnType columnType, final Object labelOrDefaultLong, final String formatType, String feature) {
 			this.columnType = columnType;
 			this.labelOrDefaultLong = labelOrDefaultLong;
+			this.feature = feature;
 			assert labelOrDefaultLong instanceof String || labelOrDefaultLong instanceof Number;
 			this.formatType = formatType;
 
+		}
+
+		/**
+		 * If not null, returns the license feature required to display this data
+		 * @return
+		 */
+		@Nullable
+		public String getFeature() {
+			return feature;
 		}
 	}
 
@@ -167,7 +186,7 @@ public class HeadlineReportView extends ViewPart {
 							rowElements.add(pPinnedData);
 							pPinnedData = null;
 						} else {
-							rowElements.add(new RowData("", null, null, null, null, null, null, null, null, null, null, null));
+							rowElements.add(new RowData("", null, null, null, null, null, null, null, null, null, null, null, null));
 						}
 					}
 
@@ -179,7 +198,14 @@ public class HeadlineReportView extends ViewPart {
 		}
 	};
 
-	class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider, ITableColorProvider {
+	class ViewLabelProvider extends ColumnLabelProvider implements ILabelProvider, IFontProvider, IColorProvider {
+
+		private final ColumnDefinition columnDefinition;
+
+		public ViewLabelProvider(ColumnDefinition columnDefinition) {
+			this.columnDefinition = columnDefinition;
+
+		}
 
 		/**
 		 * Get Mapping between a {@link ColumnDefinition} value type and a {@link RowData} field.
@@ -205,6 +231,8 @@ public class HeadlineReportView extends ViewPart {
 				return d.shippingPNL;
 			case VALUE_TRADING:
 				return d.tradingPNL;
+			case VALUE_EQUITY:
+				return d.upstreamDownstreamPNL;
 			case VALUE_VIOLATIONS:
 				return d.capacityViolationCount;
 			default:
@@ -215,15 +243,7 @@ public class HeadlineReportView extends ViewPart {
 		}
 
 		@Override
-		public String getToolTipText(final Object obj) {
-
-			// TODO: Lateness tooltip -- needs per column label provider
-
-			return null;
-		}
-
-		@Override
-		public String getColumnText(final Object obj, final int index) {
+		public String getText(final Object obj) {
 			if (obj instanceof RowData) {
 				final RowData d = (RowData) obj;
 				if (d.dummy) {
@@ -231,7 +251,6 @@ public class HeadlineReportView extends ViewPart {
 				}
 				final RowData pinD = pinnedData;
 
-				final ColumnDefinition columnDefinition = ColumnDefinition.values()[index];
 				if (columnDefinition.columnType == ColumnType.Label) {
 					return columnDefinition.getLabel();
 				} else if (columnDefinition.getColumnType() == ColumnType.Value) {
@@ -244,7 +263,9 @@ public class HeadlineReportView extends ViewPart {
 
 						if (pinD == null) {
 							if (d.latenessExcludingFlex != null && d.latenessIncludingFlex != null) {
-								suffix = " *";
+								if (d.latenessExcludingFlex - d.latenessIncludingFlex != 0) {
+									suffix = " *";
+								}
 							}
 						} else {
 							long a = 0;
@@ -268,22 +289,12 @@ public class HeadlineReportView extends ViewPart {
 		}
 
 		@Override
-		public Image getColumnImage(final Object obj, final int index) {
-			return null;
-		}
-
-		@Override
-		public void update(final ViewerCell cell) {
-
-		}
-
-		@Override
 		public Font getFont(final Object element) {
 			return boldFont;
 		}
 
 		@Override
-		public Color getForeground(final Object element, final int columnIndex) {
+		public Color getForeground(final Object element) {
 
 			if (element instanceof RowData) {
 				final RowData d = (RowData) element;
@@ -292,7 +303,6 @@ public class HeadlineReportView extends ViewPart {
 				}
 				final RowData pinD = pinnedData;
 				int color = SWT.COLOR_DARK_GRAY;
-				final ColumnDefinition columnDefinition = ColumnDefinition.values()[columnIndex];
 				if (columnDefinition.getColumnType() == ColumnType.Label) {
 					return Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 				}
@@ -316,6 +326,13 @@ public class HeadlineReportView extends ViewPart {
 						color = SWT.COLOR_BLACK;
 					} else {
 						color = (d.shippingPNL - pinD.shippingPNL) >= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
+					}
+					break;
+				case VALUE_EQUITY:
+					if (pinD == null) {
+						color = SWT.COLOR_BLACK;
+					} else {
+						color = (d.upstreamDownstreamPNL - pinD.upstreamDownstreamPNL) >= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
 					}
 					break;
 				case VALUE_GCO_DAYS:
@@ -345,11 +362,6 @@ public class HeadlineReportView extends ViewPart {
 				}
 				return Display.getCurrent().getSystemColor(color);
 			}
-			return null;
-		}
-
-		@Override
-		public Color getBackground(final Object element, final int columnIndex) {
 			return null;
 		}
 	}
@@ -388,10 +400,15 @@ public class HeadlineReportView extends ViewPart {
 		// SG: 2013-04-17
 		viewer.setAutoPreferredHeight(true);
 
-		final ViewLabelProvider labelProvider = new ViewLabelProvider();
-
 		for (int i = 0; i < ColumnDefinition.values().length; ++i) {
 			final ColumnDefinition def = ColumnDefinition.values()[i];
+
+			@Nullable
+			String feature = def.getFeature();
+			if (feature != null && !LicenseFeatures.isPermitted(feature)) {
+				continue;
+			}
+
 			final GridViewerColumn tvc = new GridViewerColumn(viewer, SWT.NONE);
 			int width;
 			String string;
@@ -402,8 +419,11 @@ public class HeadlineReportView extends ViewPart {
 			}
 			width = getTextWidth(20, string);
 			tvc.getColumn().setWidth(width);
+			final ViewLabelProvider labelProvider = new ViewLabelProvider(def);
+			tvc.setLabelProvider(labelProvider);
+
 		}
-		viewer.setLabelProvider(labelProvider);
+		// viewer.setLabelProvider(labelProvider);
 
 		viewer.getGrid().setLinesVisible(true);
 		viewer.getGrid().setHeaderVisible(false);
@@ -561,5 +581,56 @@ public class HeadlineReportView extends ViewPart {
 		} else {
 			return String.format("%,d", value);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T getAdapter(final Class<T> adapter) {
+
+		if (IProvideEditorInputScenario.class.isAssignableFrom(adapter)) {
+			return (T) new IProvideEditorInputScenario() {
+				@Override
+				public void provideScenarioInstance(ScenarioInstance scenarioInstance) {
+
+					if (HeadlineReportView.this.modelReference != null) {
+						HeadlineReportView.this.modelReference.close();
+						HeadlineReportView.this.modelReference = null;
+					}
+					HeadlineReportView.this.currentActiveEditor = null;
+					ScheduleModel scheduleModel = null;
+
+					if (scenarioInstance != null) {
+						if (!scenarioInstance.isLoadFailure()) {
+							HeadlineReportView.this.modelReference = scenarioInstance.getReference();
+							final EObject instance = modelReference.getInstance();
+							if (instance instanceof LNGScenarioModel) {
+								final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
+								scheduleModel = lngScenarioModel.getScheduleModel();
+							}
+						}
+					}
+					// this.activeEditor = activeEditor;
+					HeadlineReportView.this.scheduleModel = scheduleModel;
+
+				}
+			};
+		}
+
+		if (IReportContents.class.isAssignableFrom(adapter))
+
+		{
+
+			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
+			final String contents = util.convert();
+			return (T) new IReportContents() {
+
+				@Override
+				public String getStringContents() {
+					return contents;
+				}
+			};
+		}
+
+		return super.getAdapter(adapter);
 	}
 }

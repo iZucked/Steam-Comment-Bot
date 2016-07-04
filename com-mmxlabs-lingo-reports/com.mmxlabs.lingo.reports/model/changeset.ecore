@@ -61,5 +61,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="originalEventGrouping"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//EventGrouping"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="newEventGrouping" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//EventGrouping"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="originalVesselShortName"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newVesselShortName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
 </ecore:EPackage>

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.changeset;
@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Event;
  * @author chris.gross@us.ibm.com
  * @since 2.0.0
  */
+@SuppressWarnings("restriction")
 public class CenteringColumnGroupHeaderRenderer extends GridHeaderRenderer {
 	int leftMargin = 6;
 
@@ -43,6 +44,7 @@ public class CenteringColumnGroupHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void paint(GC gc, Object value) {
 		GridColumnGroup group = (GridColumnGroup) value;
 
@@ -116,6 +118,7 @@ public class CenteringColumnGroupHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Point computeSize(GC gc, int wHint, int hHint, Object value) {
 		GridColumnGroup group = (GridColumnGroup) value;
 
@@ -161,6 +164,7 @@ public class CenteringColumnGroupHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean notify(int event, Point point, Object value) {
 		GridColumnGroup group = (GridColumnGroup) value;
 
@@ -190,6 +194,7 @@ public class CenteringColumnGroupHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Rectangle getToggleBounds() {
 		int x = getBounds().x + getBounds().width - toggleRenderer.getBounds().width - rightMargin;
 		int y = getBounds().y + (getBounds().height - toggleRenderer.getBounds().height) / 2;
@@ -200,6 +205,7 @@ public class CenteringColumnGroupHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setDisplay(Display display) {
 		super.setDisplay(display);
 		toggleRenderer.setDisplay(display);
@@ -208,6 +214,7 @@ public class CenteringColumnGroupHeaderRenderer extends GridHeaderRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Rectangle getTextBounds(Object value, boolean preferred) {
 		GridColumnGroup group = (GridColumnGroup) value;
 
@@ -245,6 +252,7 @@ public class CenteringColumnGroupHeaderRenderer extends GridHeaderRenderer {
 			textLayout = new TextLayout(gc.getDevice());
 			textLayout.setFont(gc.getFont());
 			group.getParent().addDisposeListener(new DisposeListener() {
+				@Override
 				public void widgetDisposed(DisposeEvent e) {
 					textLayout.dispose();
 				}

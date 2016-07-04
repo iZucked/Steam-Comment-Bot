@@ -1,10 +1,9 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.standard;
 
-import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,6 +22,7 @@ import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
@@ -56,6 +57,8 @@ public class KPIReportTransformer {
 	private static final String SHIPPING_PNL = "Shipping P&L";
 	@NonNull
 	private static final String TRADING_PNL = "Trading P&L";
+	@NonNull
+	private static final String UPSTREAM_PNL = "Upstream P&L";
 	@NonNull
 	private static final String MTM_PNL = "MtM P&L";
 
@@ -90,9 +93,6 @@ public class KPIReportTransformer {
 	public final List<RowData> transform(final Schedule schedule, final ScenarioInstance scenarioInstance, @Nullable final List<RowData> pinnedData) {
 		final List<RowData> output = new LinkedList<>();
 		long totalCost = 0l;
-		long lateness = 0l;
-		long totalTradingPNL = 0l;
-		long totalShippingPNL = 0l;
 		long totalMtMPNL = 0l;
 		long totalIdleHours = 0l;
 
@@ -118,72 +118,33 @@ public class KPIReportTransformer {
 					final int cost = ((PortVisit) evt).getPortCost();
 					totalCost += cost;
 				}
-
-				if (evt instanceof SlotVisit) {
-					final SlotVisit visit = (SlotVisit) evt;
-					if (visit.getStart().isAfter(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
-						lateness += Hours.between(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime(), visit.getStart());
-					}
-
-				} else if (evt instanceof VesselEventVisit) {
-					final VesselEventVisit vev = (VesselEventVisit) evt;
-					if (vev.getStart().isAfter(vev.getVesselEvent().getStartByAsDateTime())) {
-						lateness += Hours.between(vev.getVesselEvent().getStartByAsDateTime(), evt.getStart());
-
-					}
-				} else if (evt instanceof PortVisit) {
-					final PortVisit visit = (PortVisit) evt;
-					final VesselAvailability availability = seq.getVesselAvailability();
-					if (availability == null) {
-						continue;
-					}
-					if (seq.getEvents().indexOf(visit) == 0) {
-
-						final ZonedDateTime startBy = availability.getStartByAsDateTime();
-						if (startBy != null && visit.getStart().isAfter(startBy)) {
-							lateness += Hours.between(startBy, visit.getStart());
-						}
-					} else if (seq.getEvents().indexOf(visit) == seq.getEvents().size() - 1) {
-						final ZonedDateTime endBy = availability.getEndAfterAsDateTime();
-						if (endBy != null && visit.getStart().isAfter(endBy)) {
-							lateness += Hours.between(endBy, visit.getStart());
-						}
-					}
-				}
-
-				if (evt instanceof SlotVisit) {
-					final SlotVisit visit = (SlotVisit) evt;
-
-					if (visit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-						final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
-						totalTradingPNL += getElementTradingPNL(cargoAllocation);
-						totalShippingPNL += getElementShippingPNL(cargoAllocation);
-					}
-
-				} else if (evt instanceof ProfitAndLossContainer) {
-					totalTradingPNL += getElementTradingPNL((ProfitAndLossContainer) evt);
-					totalShippingPNL += getElementShippingPNL((ProfitAndLossContainer) evt);
-				}
 			}
 		}
 
-		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
-			totalTradingPNL += getElementTradingPNL(openSlotAllocation);
-			totalShippingPNL += getElementShippingPNL(openSlotAllocation);
-		}
-
 		for (final MarketAllocation marketAllocation : schedule.getMarketAllocations()) {
-			totalMtMPNL += getElementTradingPNL(marketAllocation);
-			totalMtMPNL += getElementShippingPNL(marketAllocation);
+			totalMtMPNL += ScheduleModelKPIUtils.getElementTradingPNL(marketAllocation);
+			totalMtMPNL += ScheduleModelKPIUtils.getElementShippingPNL(marketAllocation);
 		}
 
-		output.add(createRow(scenarioInstance.getName(), TOTAL_PNL, TYPE_COST, totalTradingPNL + totalShippingPNL, TotalsHierarchyView.ID, false, pinnedData));
+		final long[] scheduleProfitAndLoss = ScheduleModelKPIUtils.getScheduleProfitAndLossSplit(schedule);
+		final long totalTradingPNL = scheduleProfitAndLoss[ScheduleModelKPIUtils.TRADING_PNL_IDX];
+		final long totalShippingPNL = scheduleProfitAndLoss[ScheduleModelKPIUtils.SHIPPING_PNL_IDX];
+		final long totalUpstreamPNL = scheduleProfitAndLoss[ScheduleModelKPIUtils.UPSTREAM_PNL_IDX];
+
+		final int[] scheduleLateness = ScheduleModelKPIUtils.getScheduleLateness(schedule);
+		final long totalLatenessHoursExcludingFlex = scheduleLateness[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
+		final long totalLatenessHoursIncludingFlex = scheduleLateness[ScheduleModelKPIUtils.LATENESS_WTH_FLEX_IDX];
+
+		final long totalCapacityViolationCount = ScheduleModelKPIUtils.getScheduleViolationCount(schedule);
+
+		output.add(createRow(scenarioInstance.getName(), TOTAL_PNL, TYPE_COST, totalTradingPNL + totalShippingPNL + totalUpstreamPNL, TotalsHierarchyView.ID, false, pinnedData));
 		output.add(createRow(scenarioInstance.getName(), TRADING_PNL, TYPE_COST, totalTradingPNL, TotalsHierarchyView.ID, false, pinnedData));
 		output.add(createRow(scenarioInstance.getName(), SHIPPING_PNL, TYPE_COST, totalShippingPNL, TotalsHierarchyView.ID, false, pinnedData));
+		output.add(createRow(scenarioInstance.getName(), UPSTREAM_PNL, TYPE_COST, totalUpstreamPNL, TotalsHierarchyView.ID, false, pinnedData));
 		output.add(createRow(scenarioInstance.getName(), MTM_PNL, TYPE_COST, totalMtMPNL, TotalsHierarchyView.ID, false, pinnedData));
 
 		output.add(createRow(scenarioInstance.getName(), TOTAL_COST, TYPE_COST, totalCost, TotalsHierarchyView.ID, true, pinnedData));
-		output.add(createRow(scenarioInstance.getName(), LATENESS, TYPE_TIME, lateness, LatenessReportView.ID, true, pinnedData));
+		output.add(createRow(scenarioInstance.getName(), LATENESS, TYPE_TIME, totalLatenessHoursExcludingFlex, LatenessReportView.ID, true, pinnedData));
 		output.add(createRow(scenarioInstance.getName(), IDLE, TYPE_TIME, totalIdleHours, null, true, pinnedData));
 
 		return output;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.components;
@@ -591,15 +591,14 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 
 	/**
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public Object getAdapter(final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 
 		if (adapter.isAssignableFrom(IPropertySheetPage.class)) {
 			final PropertySheetPage propertySheetPage = new PropertySheetPage();
 
 			propertySheetPage.setPropertySourceProvider(new ScheduledEventPropertySourceProvider());
-			return propertySheetPage;
+			return (T) propertySheetPage;
 		}
 		return super.getAdapter(adapter);
 	}

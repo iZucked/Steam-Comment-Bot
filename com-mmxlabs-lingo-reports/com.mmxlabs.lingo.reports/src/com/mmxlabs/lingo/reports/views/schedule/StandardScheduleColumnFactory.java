@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.schedule;
@@ -29,7 +29,6 @@ import com.mmxlabs.lingo.reports.components.IColumnFactory;
 import com.mmxlabs.lingo.reports.components.MultiObjectEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.components.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
-import com.mmxlabs.lingo.reports.diff.utils.ScheduleCostUtils;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
@@ -51,11 +50,14 @@ import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.provider.PinnedScheduleFormatter;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
@@ -70,6 +72,7 @@ import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -171,15 +174,68 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 					new SimpleEmfBlockColumnFactory(columnID, "Sell Price", null, ColumnType.NORMAL, new PriceFormatter(false, 3), dischargeAllocationRef, s.getSlotAllocation_Price()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.purchasecontract":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Purchase Contract", null, ColumnType.NORMAL, new BaseFormatter() {
+				@Override
+				public String render(final Object object) {
 
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Purchase Contract", null, ColumnType.NORMAL, Formatters.objectFormatter, loadAllocationRef,
-					s.getSlotAllocation_Slot(), c.getSlot_Contract(), name));
-
+					if (object instanceof Row) {
+						final Row row = (Row) object;
+						final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+						if (openSlotAllocation != null) {
+							final Slot slot = openSlotAllocation.getSlot();
+							if (slot instanceof LoadSlot) {
+								Contract contract = slot.getContract();
+								if (contract != null) {
+									return contract.getName();
+								}
+							}
+						}
+						final SlotAllocation slotAllocation = row.getLoadAllocation();
+						if (slotAllocation != null) {
+							final Slot slot = slotAllocation.getSlot();
+							if (slot instanceof LoadSlot) {
+								Contract contract = slot.getContract();
+								if (contract != null) {
+									return contract.getName();
+								}
+							}
+						}
+					}
+					return "";
+				}
+			}));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.salescontract":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sales Contract", null, ColumnType.NORMAL, new BaseFormatter() {
+				@Override
+				public String render(final Object object) {
 
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sales Contract", null, ColumnType.NORMAL, Formatters.objectFormatter, dischargeAllocationRef,
-					s.getSlotAllocation_Slot(), c.getSlot_Contract(), name));
+					if (object instanceof Row) {
+						final Row row = (Row) object;
+						final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+						if (openSlotAllocation != null) {
+							final Slot slot = openSlotAllocation.getSlot();
+							if (slot instanceof DischargeSlot) {
+								Contract contract = slot.getContract();
+								if (contract != null) {
+									return contract.getName();
+								}
+							}
+						}
+						final SlotAllocation slotAllocation = row.getDischargeAllocation();
+						if (slotAllocation != null) {
+							final Slot slot = slotAllocation.getSlot();
+							if (slot instanceof DischargeSlot) {
+								Contract contract = slot.getContract();
+								if (contract != null) {
+									return contract.getName();
+								}
+							}
+						}
+					}
+					return "";
+				}
+			}));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.buyport": {
 			final ETypedElement[][] paths = new ETypedElement[][] { { loadAllocationRef, s.getSlotAllocation_Slot(), c.getSlot_Port(), name }, { targetObjectRef, s.getEvent_Port(), name } };
@@ -239,7 +295,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				@Override
 				public Integer getIntValue(final Object object) {
 
-					return ScheduleCostUtils.calculateLegCost(object, cargoAllocationRef, loadAllocationRef);
+					return ScheduleModelKPIUtils.calculateLegCost(object, cargoAllocationRef, loadAllocationRef);
 				}
 
 			}));
@@ -250,7 +306,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				@Override
 				public Integer getIntValue(final Object object) {
 
-					return ScheduleCostUtils.calculateLegCost(object, cargoAllocationRef, dischargeAllocationRef);
+					return ScheduleModelKPIUtils.calculateLegCost(object, cargoAllocationRef, dischargeAllocationRef);
 				}
 			}));
 			break;
@@ -287,6 +343,20 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				}
 			}, cargoAllocationRef));
 			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.shipping_cost":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Shipping Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
+				@Override
+				public Integer getIntValue(final Object object) {
+					if (object instanceof CargoAllocation) {
+						final CargoAllocation allocation = (CargoAllocation) object;
+						long total = ScheduleModelKPIUtils.calculateLegCost(allocation);
+						return (int)total;
+					}
+					return null;
+
+				}
+			}, cargoAllocationRef));
+			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_additional":
 
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Addn. P&L", null, ColumnType.NORMAL, new IntegerFormatter() {
@@ -297,8 +367,8 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 					ProfitAndLossContainer container = null;
 
-					if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut
-							|| object instanceof OpenSlotAllocation) {
+					if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut 
+							|| object instanceof OpenSlotAllocation || object instanceof EndEvent) {
 						container = (ProfitAndLossContainer) object;
 					}
 					if (object instanceof SlotVisit) {
@@ -347,6 +417,9 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_shipping":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, builder.getTotalPNLColumnFactory(columnID, CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_upstream":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, builder.getTotalPNLColumnFactory(columnID, CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK));
 			break;
 
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.type":

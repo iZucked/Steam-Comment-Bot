@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -41,6 +41,8 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewGroupProfitAndLoss <em>New Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalEventGrouping <em>Original Event Grouping</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewEventGrouping <em>New Event Grouping</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalVesselShortName <em>Original Vessel Short Name</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewVesselShortName <em>New Vessel Short Name</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow()
@@ -519,5 +521,57 @@ public interface ChangeSetRow extends EObject {
 	 * @generated
 	 */
 	void setNewEventGrouping(EventGrouping value);
+
+	/**
+	 * Returns the value of the '<em><b>Original Vessel Short Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Original Vessel Short Name</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Original Vessel Short Name</em>' attribute.
+	 * @see #setOriginalVesselShortName(String)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_OriginalVesselShortName()
+	 * @model
+	 * @generated
+	 */
+	String getOriginalVesselShortName();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalVesselShortName <em>Original Vessel Short Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Original Vessel Short Name</em>' attribute.
+	 * @see #getOriginalVesselShortName()
+	 * @generated
+	 */
+	void setOriginalVesselShortName(String value);
+
+	/**
+	 * Returns the value of the '<em><b>New Vessel Short Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>New Vessel Short Name</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>New Vessel Short Name</em>' attribute.
+	 * @see #setNewVesselShortName(String)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_NewVesselShortName()
+	 * @model
+	 * @generated
+	 */
+	String getNewVesselShortName();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewVesselShortName <em>New Vessel Short Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>New Vessel Short Name</em>' attribute.
+	 * @see #getNewVesselShortName()
+	 * @generated
+	 */
+	void setNewVesselShortName(String value);
 
 } // ChangeSetRow

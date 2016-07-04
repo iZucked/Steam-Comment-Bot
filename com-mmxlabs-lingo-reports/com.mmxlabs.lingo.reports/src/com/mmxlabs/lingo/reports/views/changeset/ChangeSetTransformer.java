@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.changeset;
@@ -51,6 +51,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
@@ -63,6 +64,8 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -139,8 +142,8 @@ public class ChangeSetTransformer {
 		final Set<EObject> fromAllElements = new LinkedHashSet<>();
 		final Set<EObject> toAllElements = new LinkedHashSet<>();
 		assert toSchedule != fromSchedule;
-		extractElements(toSchedule, toInterestingElements, toAllElements);
-		extractElements(fromSchedule, fromInterestingElements, fromAllElements);
+		ChangeSetTransformerUtil.extractElements(toSchedule, toInterestingElements, toAllElements);
+		ChangeSetTransformerUtil.extractElements(fromSchedule, fromInterestingElements, fromAllElements);
 
 		generateRows(table, to, toSchedule, toInterestingElements, toAllElements, true);
 		generateRows(table, from, fromSchedule, fromInterestingElements, fromAllElements, false);
@@ -182,7 +185,7 @@ public class ChangeSetTransformer {
 		final Map<String, List<ChangeSetRow>> lhsRowMarketMap = new HashMap<>();
 		final Map<String, List<ChangeSetRow>> rhsRowMarketMap = new HashMap<>();
 
-		List<ChangeSet> changeSets = new LinkedList<>();
+		final List<ChangeSet> changeSets = new LinkedList<>();
 
 		// Convert into new data model.
 		for (final UserGroup g : table.getUserGroups()) {
@@ -217,7 +220,7 @@ public class ChangeSetTransformer {
 		Collections.sort(changeSets, new Comparator<ChangeSet>() {
 
 			@Override
-			public int compare(ChangeSet o1, ChangeSet o2) {
+			public int compare(final ChangeSet o1, final ChangeSet o2) {
 				// TODO Auto-generated method stub
 				return Integer.compare(o2.getMetricsToPrevious().getPnlDelta(), o1.getMetricsToPrevious().getPnlDelta());
 			}
@@ -450,6 +453,9 @@ public class ChangeSetTransformer {
 			if (vesselAvailability != null) {
 				row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(startEvent, vesselAvailability.getVessel()));
 			}
+		} else if (a instanceof EndEvent) {
+			final EndEvent endEvent = (EndEvent) a;
+			row.getInputEquivalents().add(endEvent);
 		} else if (a instanceof OpenSlotAllocation) {
 			final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) a;
 			row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(openSlotAllocation, openSlotAllocation.getSlot()));
@@ -486,46 +492,9 @@ public class ChangeSetTransformer {
 	// return changeSet;
 	// }
 
-	/**
-	 * Find elements that we are interested in showing in the view.
-	 *
-	 * @param schedule
-	 * @param interestingEvents
-	 * @param allEvents
-	 */
-	private void extractElements(final Schedule schedule, final Collection<EObject> interestingEvents, final Collection<EObject> allEvents) {
-		if (schedule == null) {
-			return;
-		}
-
-		for (final Sequence sequence : schedule.getSequences()) {
-			for (final Event event : sequence.getEvents()) {
-				boolean includeEvent = false;
-				if (event instanceof SlotVisit) {
-					includeEvent = true;
-				} else if (event instanceof VesselEventVisit) {
-					includeEvent = true;
-
-				} else if (event instanceof StartEvent) {
-					includeEvent = true;
-
-				}
-				if (includeEvent) {
-					interestingEvents.add(event);
-				}
-				allEvents.add(event);
-			}
-		}
-
-		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
-			interestingEvents.add(openSlotAllocation);
-			allEvents.add(openSlotAllocation);
-		}
-	}
-
 	private void processCycleGroup(final CycleGroup cycleGroup, @NonNull final Map<String, ChangeSetRow> lhsRowMap, @NonNull final Map<String, ChangeSetRow> rhsRowMap,
-			Map<String, List<ChangeSetRow>> lhsRowMarketMap, Map<String, List<ChangeSetRow>> rhsRowMarketMap, @NonNull final List<ChangeSetRow> rows, final Map<EObject, Set<EObject>> equivalancesMap,
-			final boolean firstPass) {
+			final Map<String, List<ChangeSetRow>> lhsRowMarketMap, final Map<String, List<ChangeSetRow>> rhsRowMarketMap, @NonNull final List<ChangeSetRow> rows,
+			final Map<EObject, Set<EObject>> equivalancesMap, final boolean firstPass) {
 		for (final Row r : cycleGroup.getRows()) {
 
 			boolean isBase = true;
@@ -544,10 +513,10 @@ public class ChangeSetTransformer {
 
 			EObject element = r.getTarget();
 			if (element instanceof CargoAllocation) {
-				CargoAllocation cargoAllocation = (CargoAllocation) element;
-				for (SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
+				final CargoAllocation cargoAllocation = (CargoAllocation) element;
+				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 					if (slotAllocation.getSlot() instanceof LoadSlot) {
-						SlotVisit slotVisit = slotAllocation.getSlotVisit();
+						final SlotVisit slotVisit = slotAllocation.getSlotVisit();
 						element = slotVisit;
 						break;
 					}
@@ -612,69 +581,47 @@ public class ChangeSetTransformer {
 		final Metrics currentMetrics = ChangesetFactory.eINSTANCE.createMetrics();
 		final DeltaMetrics deltaMetrics = ChangesetFactory.eINSTANCE.createDeltaMetrics();
 
-		long pnl = 0;
-		long lateness = 0;
-		long violations = 0;
 		{
-			for (final Sequence sequence : toSchedule.getSequences()) {
-				for (final Event event : sequence.getEvents()) {
-					if (event instanceof ProfitAndLossContainer) {
-						final ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer) event;
-						final GroupProfitAndLoss groupProfitAndLoss = profitAndLossContainer.getGroupProfitAndLoss();
-						if (groupProfitAndLoss != null) {
-							pnl += groupProfitAndLoss.getProfitAndLoss();
-						}
-					} else if (event instanceof SlotVisit) {
-						final SlotVisit slotVisit = (SlotVisit) event;
-						if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-							final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
-							pnl += cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-							lateness += ChangeSetUtils.getLatenessExcludingFlex(cargoAllocation);
-							violations += ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
-						}
-					}
-				}
-			}
+			final long pnl = ScheduleModelKPIUtils.getScheduleProfitAndLoss(toSchedule);
+			final int lateness = ScheduleModelKPIUtils.getScheduleLateness(toSchedule)[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
+			final int violations = ScheduleModelKPIUtils.getScheduleViolationCount(toSchedule);
 
-			for (final OpenSlotAllocation openSlotAllocation : fromSchedule.getOpenSlotAllocations()) {
-				pnl += openSlotAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-			}
+			currentMetrics.setPnl((int) pnl);
+			currentMetrics.setCapacity((int) violations);
+			currentMetrics.setLateness((int) lateness);
 		}
 
-		currentMetrics.setPnl((int) pnl);
-		currentMetrics.setCapacity((int) violations);
-		currentMetrics.setLateness((int) lateness);
-		pnl = 0;
-		violations = 0;
-		lateness = 0;
+		long pnl = 0L;
+		long violations = 0L;
+		long lateness = 0L;
 		{
-
-			for (ChangeSetRow row : changeSet.getChangeSetRowsToPrevious()) {
+			for (final ChangeSetRow row : changeSet.getChangeSetRowsToPrevious()) {
 				{
-					ProfitAndLossContainer newGroupProfitAndLoss = row.getNewGroupProfitAndLoss();
+					final ProfitAndLossContainer newGroupProfitAndLoss = row.getNewGroupProfitAndLoss();
 					if (newGroupProfitAndLoss != null) {
 						final GroupProfitAndLoss groupProfitAndLoss = newGroupProfitAndLoss.getGroupProfitAndLoss();
 						if (groupProfitAndLoss != null) {
 							pnl += groupProfitAndLoss.getProfitAndLoss();
 						}
-						if (groupProfitAndLoss instanceof CargoAllocation) {
-							CargoAllocation cargoAllocation = (CargoAllocation) groupProfitAndLoss;
-							lateness += ChangeSetUtils.getLatenessExcludingFlex(cargoAllocation);
-							violations += ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
-						}
+					}
+					final EventGrouping newEventGrouping = row.getNewEventGrouping();
+					if (newEventGrouping != null) {
+
+						lateness += LatenessUtils.getLatenessExcludingFlex(newEventGrouping);
+						violations += ScheduleModelKPIUtils.getCapacityViolationCount(newEventGrouping);
 					}
 
-					ProfitAndLossContainer originalGroupProfitAndLoss = row.getOriginalGroupProfitAndLoss();
+					final ProfitAndLossContainer originalGroupProfitAndLoss = row.getOriginalGroupProfitAndLoss();
 					if (originalGroupProfitAndLoss != null) {
 						final GroupProfitAndLoss groupProfitAndLoss = originalGroupProfitAndLoss.getGroupProfitAndLoss();
 						if (groupProfitAndLoss != null) {
 							pnl -= groupProfitAndLoss.getProfitAndLoss();
 						}
-						if (groupProfitAndLoss instanceof CargoAllocation) {
-							CargoAllocation cargoAllocation = (CargoAllocation) groupProfitAndLoss;
-							lateness -= ChangeSetUtils.getLatenessExcludingFlex(cargoAllocation);
-							violations -= ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
-						}
+					}
+					final EventGrouping originalEventGrouping = row.getOriginalEventGrouping();
+					if (originalEventGrouping != null) {
+						lateness = LatenessUtils.getLatenessExcludingFlex(originalEventGrouping);
+						violations = ScheduleModelKPIUtils.getCapacityViolationCount(originalEventGrouping);
 					}
 				}
 			}
