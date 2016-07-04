@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.jobmanager.views;
@@ -25,8 +25,9 @@ class JobManagerViewRefreshListener implements IEclipseJobManagerListener {
 
 	@Override
 	public void jobRemoved(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
-
-		control.removeListener(getJobListener());
+		if (control != null) {
+			control.removeListener(getJobListener());
+		}
 		view.refresh();
 	}
 
