@@ -1,11 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -39,15 +40,20 @@ public class VesselEventExistenceTest {
 	public void test() {
 
 		// A list for all VesselEvents from the input.
-		final ArrayList<VesselEvent> inputVesselEvents = new ArrayList<VesselEvent>();
+		final List<VesselEvent> inputVesselEvents = new ArrayList<>();
 
 		@SuppressWarnings("unused")
 		final int loadPrice = 1;
 		final int cvValue = 10;
 
 		// a list of ports to use in the scenario
-		final Port[] ports = new Port[] { ScenarioTools.createPort("portA"), ScenarioTools.createPort("portB"), ScenarioTools.createPort("portC"), ScenarioTools.createPort("portD"),
-				ScenarioTools.createPort("portE"), ScenarioTools.createPort("portF") };
+		final Port[] ports = new Port[] { //
+				ScenarioTools.createPort("portA"), //
+				ScenarioTools.createPort("portB"), //
+				ScenarioTools.createPort("portC"), //
+				ScenarioTools.createPort("portD"), //
+				ScenarioTools.createPort("portE"), //
+				ScenarioTools.createPort("portF") };
 
 		// Add the ports, and set the distances.
 		SanityCheckTools.setPortDistances(csc, ports);
@@ -85,7 +91,6 @@ public class VesselEventExistenceTest {
 				if (portA.equals(portB)) {
 					charterOutDurationDays /= 2;
 				}
-
 			}
 		}
 
@@ -113,7 +118,7 @@ public class VesselEventExistenceTest {
 	 * @param inputVesselEvents
 	 *            The VesselEvents that were input into the unevaluated scenario.
 	 */
-	private void checkVesselEvents(final Schedule result, final ArrayList<VesselEvent> inputVesselEvents) {
+	private void checkVesselEvents(final Schedule result, final List<VesselEvent> inputVesselEvents) {
 
 		final int inputNumOfVesselEvents = inputVesselEvents.size();
 		int outputNumOfVesselEvents = 0;

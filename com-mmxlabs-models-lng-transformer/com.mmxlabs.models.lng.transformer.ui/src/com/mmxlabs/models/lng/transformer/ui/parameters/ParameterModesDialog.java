@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.parameters;
@@ -65,6 +65,8 @@ import com.mmxlabs.models.ui.forms.AbstractDataBindingFormDialog;
  */
 public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
+	private static final String SWTBOT_KEY = "org.eclipse.swtbot.widget.key";
+
 	public enum DataType {
 		Boolean, PositiveInt, Date, MonthYear, Choice
 	}
@@ -97,6 +99,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		final ChoiceData choiceData;
 		final EStructuralFeature[] features;
 		final String label;
+		final String swtBotId;
 		final EditingDomain editingDomain;
 		public boolean enabled = true;
 
@@ -104,13 +107,14 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		public final List<IValidator> validators = new LinkedList<>();
 
 		public Option(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomain, final String label, final EObject data, final EObject defaultData,
-				final DataType dataType, final ChoiceData choiceData, final EStructuralFeature... features) {
+				final DataType dataType, final ChoiceData choiceData, String swtBotId, final EStructuralFeature... features) {
 			this.dataSection = dataSection;
 			this.group = group;
 			this.data = data;
 			this.defaultData = defaultData;
 			this.dataType = dataType;
 			this.choiceData = choiceData;
+			this.swtBotId = swtBotId;
 			this.features = features;
 			this.editingDomain = editingDomain;
 			this.label = label;
@@ -118,7 +122,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	}
 
 	private final Map<DataSection, List<Option>> optionsMap = new EnumMap<DataSection, List<Option>>(DataSection.class);
-	
+
 	@Nullable
 	private String title;
 
@@ -136,11 +140,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		// Get the form object and set a title
 		final ScrolledForm form = managedForm.getForm();
 		form.setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_HORIZONTAL));
-		if (title != null) {
-			form.setText(title);
-		} else {
-			form.setText("Settings");
-		}
+		form.setText("");
 		toolkit.decorateFormHeading(form.getForm());
 
 		// Disable reset button as choice control does not work correctly with it.
@@ -331,6 +331,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		area.setLayout(new GridLayout(2, false));
 		final Label lbl = toolkit.createLabel(area, option.label);
 		final Text text = toolkit.createText(area, null, SWT.NONE);
+		text.setData(SWTBOT_KEY, option.swtBotId);
 
 		// Create UpdateValueStratgy and assign
 		// to the binding
@@ -394,6 +395,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		};
 
 		final Text text = toolkit.createText(area, null, SWT.NONE);
+		text.setData(SWTBOT_KEY, option.swtBotId);
 		text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
 
 		final IEMFEditValueProperty prop = EMFEditProperties.value(option.editingDomain, FeaturePath.fromList(option.features));
@@ -478,6 +480,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		};
 
 		final Text text = toolkit.createText(area, null, SWT.NONE);
+		text.setData(SWTBOT_KEY, option.swtBotId);
 		text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
 
 		final IEMFEditValueProperty prop = EMFEditProperties.value(option.editingDomain, FeaturePath.fromList(option.features));
@@ -563,6 +566,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			if (p.getSecond().equals(target.eGet(lastFeature))) {
 				btn.setSelection(true);
 			}
+			btn.setData(SWTBOT_KEY, option.swtBotId + "." + p.getFirst());
 
 			btn.addSelectionListener(new SelectionListener() {
 
@@ -615,8 +619,8 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	 * @param features
 	 */
 	public Option addOption(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomian, final String label, final EObject data, final EObject defaultData,
-			final DataType dataType, final EStructuralFeature... features) {
-		return addOption(dataSection, group, editingDomian, label, data, defaultData, dataType, null, features);
+			final DataType dataType, String swtBotIdPrefix, final EStructuralFeature... features) {
+		return addOption(dataSection, group, editingDomian, label, data, defaultData, dataType, null, swtBotIdPrefix, features);
 	}
 
 	/**
@@ -631,7 +635,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	 * @param features
 	 */
 	public Option addOption(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomian, final String label, final EObject data, final EObject defaultData,
-			final DataType dataType, final ChoiceData choiceData, final EStructuralFeature... features) {
+			final DataType dataType, final ChoiceData choiceData, String swtBotIdPrefix, final EStructuralFeature... features) {
 
 		if (group != null) {
 			if (dataSection != group.dataSection) {
@@ -639,7 +643,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			}
 		}
 
-		final Option option = new Option(dataSection, group, editingDomian, label, data, defaultData, dataType, choiceData, features);
+		final Option option = new Option(dataSection, group, editingDomian, label, data, defaultData, dataType, choiceData, swtBotIdPrefix, features);
 		final List<Option> options;
 		if (optionsMap.containsKey(dataSection)) {
 			options = optionsMap.get(dataSection);

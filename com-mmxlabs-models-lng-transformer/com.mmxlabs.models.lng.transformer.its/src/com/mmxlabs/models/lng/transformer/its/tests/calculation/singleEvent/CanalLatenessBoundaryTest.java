@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its.tests.calculation.singleEvent;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -28,7 +29,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 @RunWith(value = ShiroRunner.class)
 public class CanalLatenessBoundaryTest {
 
-	private static final String canalName = "Suez canal";
+	// private static final RouteOption canalOption = RouteOption.SUEZ;
 
 	/**
 	 * If the vessel is going to be late if it takes the longer ocean route check it takes the shorter canal route, even if it costs more.
@@ -50,8 +51,8 @@ public class CanalLatenessBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute().getName()));
-		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute().getName()));
+		Assert.assertTrue("Laden leg travels on canal", RouteOption.SUEZ.equals(a.getLadenLeg().getRoute().getRouteOption()));
+		Assert.assertTrue("Ballast leg travels on canal", RouteOption.SUEZ.equals(a.getBallastLeg().getRoute().getRouteOption()));
 	}
 
 	/**
@@ -72,8 +73,8 @@ public class CanalLatenessBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute().getName()));
-		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute().getName()));
+		Assert.assertTrue("Laden leg travels on canal", RouteOption.SUEZ.equals(a.getLadenLeg().getRoute().getRouteOption()));
+		Assert.assertTrue("Ballast leg travels on canal", RouteOption.SUEZ.equals(a.getBallastLeg().getRoute().getRouteOption()));
 	}
 
 	/**
@@ -94,8 +95,8 @@ public class CanalLatenessBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute().getName()));
-		Assert.assertTrue("Ballast leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute().getName()));
+		Assert.assertTrue("Laden leg travels on ocean", RouteOption.DIRECT.equals(a.getLadenLeg().getRoute().getRouteOption()));
+		Assert.assertTrue("Ballast leg travels on ocean", RouteOption.DIRECT.equals(a.getBallastLeg().getRoute().getRouteOption()));
 	}
 
 	/**
@@ -116,21 +117,21 @@ public class CanalLatenessBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute().getName()));
-		Assert.assertTrue("Ballast leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute().getName()));
+		Assert.assertTrue("Laden leg travels on ocean", RouteOption.DIRECT.equals(a.getLadenLeg().getRoute().getRouteOption()));
+		Assert.assertTrue("Ballast leg travels on ocean", RouteOption.DIRECT.equals(a.getBallastLeg().getRoute().getRouteOption()));
 	}
 
 	/**
-	 * Test that an free canal is used if it is quicker than the ocean route, but the ocean route will get there on time anyway.
+	 * Assuming identically costed direct and Suez voyages, pick direct.
 	 */
 	@Test
-	public void freeCanalNotUsed() {
+	public void preferDirectWhenCostsIdentical() {
 
-		final String testName = "Free canal used";
+		final String testName = "Prefer direct voyages when costs are identical";
 
 		// The canal is free
 		final int canalCost = 0;
-		final int travelTime = 100;
+		final int travelTime = 150;
 
 		// The canal will take 98 + 1 = 99 hours, the ocean route will take 100 hours
 		final int canalTransitTimeHours = 1;
@@ -139,8 +140,8 @@ public class CanalLatenessBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute().getName()));
-		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute().getName()));
+		Assert.assertTrue("Laden leg travels direct", RouteOption.DIRECT.equals(a.getLadenLeg().getRoute().getRouteOption()));
+		Assert.assertTrue("Ballast leg travels direct", RouteOption.DIRECT.equals(a.getBallastLeg().getRoute().getRouteOption()));
 	}
 
 	/**
@@ -197,11 +198,11 @@ public class CanalLatenessBoundaryTest {
 		final int minHeelVolume = 0;
 
 		final LNGScenarioModel canalScenario = ScenarioTools.createScenarioWithCanal(oceanRouteDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed,
-				capacity, speed, fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, speed,
-				fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, useDryDock, pilotLightRate, minHeelVolume);
+				capacity, speed, fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, speed, fuelTravelConsumptionPerDay,
+				speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, useDryDock, pilotLightRate, minHeelVolume);
 
-		CustomScenarioCreator.createCanalAndCost(canalScenario, canalName, ScenarioTools.A, ScenarioTools.B, canalDistance, canalDistance, canalLadenCost, canalUnladenCost, canalTransitFuelPerDay,
-				NBOTravelRatePerDay, canalTransitTimeHours);
+		CustomScenarioCreator.createCanalAndCost(canalScenario, RouteOption.SUEZ, ScenarioTools.A, ScenarioTools.B, canalDistance, canalDistance, canalLadenCost, canalUnladenCost,
+				canalTransitFuelPerDay, NBOTravelRatePerDay, canalTransitTimeHours);
 
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(canalScenario);

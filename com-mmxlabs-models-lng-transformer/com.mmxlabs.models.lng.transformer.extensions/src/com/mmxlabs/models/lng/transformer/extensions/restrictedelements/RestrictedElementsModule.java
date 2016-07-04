@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions.restrictedelements;
@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.ops4j.peaberry.activation.util.PeaberryActivationModule;
 
 import com.google.inject.AbstractModule;
@@ -38,7 +39,8 @@ public class RestrictedElementsModule extends PeaberryActivationModule {
 	public static class RestrictedElementsInjectorService implements IOptimiserInjectorService {
 
 		@Override
-		public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<String> hints) {
+		@Nullable
+		public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 
 			if (moduleType == ModuleType.Module_DataComponentProviderModule) {
 				return new AbstractModule() {
@@ -56,7 +58,8 @@ public class RestrictedElementsModule extends PeaberryActivationModule {
 		}
 
 		@Override
-		public List<Module> requestModuleOverrides(ModuleType moduleType, @NonNull final Collection<String> hints) {
+		@Nullable
+		public List<@NonNull Module> requestModuleOverrides(ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 			return null;
 		}
 	}

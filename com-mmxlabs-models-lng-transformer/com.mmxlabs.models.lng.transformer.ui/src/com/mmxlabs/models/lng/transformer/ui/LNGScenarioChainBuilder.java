@@ -1,9 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -15,6 +16,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
@@ -29,18 +32,25 @@ import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGEvaluationTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGHillClimbOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGLSOOptimiserTransformerUnit;
+import com.mmxlabs.models.lng.transformer.chain.impl.LNGNoNominalInPromptTransformerUnit;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_OptimiserSettingsModule;
 import com.mmxlabs.models.lng.transformer.stochasticactionsets.LNGActionSetTransformerUnit;
 
 public class LNGScenarioChainBuilder {
 
 	public static final String PROPERTY_MMX_NUMBER_OF_CORES = "MMX_NUMBER_OF_CORES";
-	public static final String PROPERTY_MMX_DISABLE_MULTI_LSO = "MMX_DISABLE_MULTI_LSO";
+	public static final String PROPERTY_MMX_DISABLE_SECOND_ACTION_SET_RUN = "MMX_DISABLE_SECOND_ACTION_SET_RUN";
 
 	private static final int PROGRESS_OPTIMISATION = 100;
 	private static final int PROGRESS_HILLCLIMBING_OPTIMISATION = 10;
 	private static final int PROGRESS_ACTION_SET_OPTIMISATION = 20;
 	private static final int PROGRESS_ACTION_SET_SAVE = 5;
+
+	// TODO: (Alex) - Does not work as class is not injected. See system property.
+	@Inject
+	@Named(LNGParameters_OptimiserSettingsModule.PROPERTY_MMX_HALF_SPEED_ACTION_SETS)
+	private static boolean HALF_SPEED_ACTION_SETS;
 
 	/**
 	 * Creates a {@link IChainRunner} for the "standard" optimisation process (as of 2015/11)
@@ -56,7 +66,7 @@ public class LNGScenarioChainBuilder {
 	 */
 	public static IChainRunner createStandardOptimisationChain(@Nullable final String childName, @NonNull final LNGDataTransformer dataTransformer,
 			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, @NonNull final OptimiserSettings optimiserSettings, @NonNull final ExecutorService executorService,
-			@Nullable final String... initialHints) {
+			@NonNull final String @Nullable... initialHints) {
 
 		boolean createOptimiser = false;
 		boolean doHillClimb = false;
@@ -78,36 +88,26 @@ public class LNGScenarioChainBuilder {
 
 		final ChainBuilder builder = new ChainBuilder(dataTransformer);
 		if (createOptimiser) {
+
+			if (LicenseFeatures.isPermitted("features:no-nominal-in-prompt")) {
+				LNGNoNominalInPromptTransformerUnit.chain(builder, optimiserSettings, 1);
+			}
+
 			// Run the standard LSO optimisation
-			int numCopies = getNumberOfAvailableCores();
-			if (System.getProperty(PROPERTY_MMX_DISABLE_MULTI_LSO) != null) {
-				numCopies = 1;
+			if (optimiserSettings.getAnnealingSettings().getIterations() > 0) {
+				LNGLSOOptimiserTransformerUnit.chain(builder, optimiserSettings, PROGRESS_OPTIMISATION);
 			}
-			final int[] seeds = new int[numCopies];
-			for (int i = 0; i < numCopies; ++i) {
-				seeds[i] = optimiserSettings.getSeed();
-			}
-			assert seeds.length > 0;
-			LNGLSOOptimiserTransformerUnit.chainPool(builder, optimiserSettings, PROGRESS_OPTIMISATION, executorService, seeds);
 			if (doHillClimb) {
 				// Run a hill climb opt on the LSO result
-				LNGHillClimbOptimiserTransformerUnit.chainPool(builder, optimiserSettings, PROGRESS_HILLCLIMBING_OPTIMISATION, executorService);
+				if (optimiserSettings.getSolutionImprovementSettings().getIterations() > 0) {
+					LNGHillClimbOptimiserTransformerUnit.chain(builder, optimiserSettings, PROGRESS_HILLCLIMBING_OPTIMISATION);
+				}
 			}
 
 			if (doActionSetPostOptimisation) {
 				// Run the action set post optimisation
-				boolean over3Months = false;
-				OptimisationRange range = optimiserSettings.getRange();
-				if (range != null) {
-					if (!range.isSetOptimiseAfter() || !range.isSetOptimiseBefore()) {
-						over3Months = true;
-
-					}
-					if (Months.between(range.getOptimiseAfter(), range.getOptimiseBefore()) > 3) {
-						over3Months = true;
-					}
-				}
-				if (over3Months) {
+				final boolean doSecondRun = doSecondActionSetRun(optimiserSettings);
+				if (doSecondRun) {
 					LNGActionSetTransformerUnit.chainFake(builder, optimiserSettings, executorService, PROGRESS_ACTION_SET_OPTIMISATION / 2);
 					LNGActionSetTransformerUnit.chain(builder, optimiserSettings, executorService, PROGRESS_ACTION_SET_OPTIMISATION / 2);
 				} else {
@@ -147,6 +147,29 @@ public class LNGScenarioChainBuilder {
 		return builder.build();
 	}
 
+	protected static boolean doSecondActionSetRun(@NonNull final OptimiserSettings optimiserSettings) {
+		if (System.getProperty(PROPERTY_MMX_DISABLE_SECOND_ACTION_SET_RUN) != null) {
+			return false;
+		}
+		boolean over3Months = false;
+		final OptimisationRange range = optimiserSettings.getRange();
+		if (range != null) {
+			if (!range.isSetOptimiseAfter() || !range.isSetOptimiseBefore()) {
+				over3Months = true;
+			} else {
+				final YearMonth after = range.getOptimiseAfter();
+				final YearMonth before = range.getOptimiseBefore();
+				if (after == null || before == null) {
+					over3Months = true;
+
+				} else if (Months.between(after, before) > 3) {
+					over3Months = true;
+				}
+			}
+		}
+		return over3Months;
+	}
+
 	/**
 	 * WIP: Needs UI link up. Generates a run-all similarity mode chain.
 	 * 
@@ -182,7 +205,7 @@ public class LNGScenarioChainBuilder {
 
 			OptimisationHelper.checkUserSettings(copy, true);
 
-			final OptimiserSettings settings = OptimisationHelper.transformUserSettings(copy, null);
+			final OptimiserSettings settings = OptimisationHelper.transformUserSettings(copy, null, dataExporter.getOptimiserScenario());
 			if (settings != null) {
 				runners.add(createStandardOptimisationChain("Similarity-" + mode.toString(), dataTransformer, dataExporter, settings, executorService, initialHints));
 			}

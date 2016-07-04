@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
@@ -75,7 +75,7 @@ public class LNGSchedulerManyJobsControl extends AbstractEclipseJobControl {
 			fork = createFork(model);
 			ref = fork.getReference();
 			this.scenarioModel = (LNGScenarioModel) ref.getInstance();
-			this.runner = new LNGScenarioRunner(runnerService, scenarioModel, fork, settings, (EditingDomain) fork.getAdapters().get(EditingDomain.class), null, hints);
+			this.runner = new LNGScenarioRunner(runnerService, scenarioModel, fork, settings, (EditingDomain) fork.getAdapters().get(EditingDomain.class), null, false, hints);
 			this.lock = fork.getLock(ScenarioLock.OPTIMISER);
 			this.lock.awaitClaim();
 		}

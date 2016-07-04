@@ -3,12 +3,12 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Models: LNG Transformer Tests
 Fragment-Host: com.mmxlabs.models.lng.transformer
 Bundle-SymbolicName: com.mmxlabs.models.lng.transformer.tests
-Bundle-Version: 3.11.1.qualifier
+Bundle-Version: 3.12.7.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit;bundle-version="4.8.2",
  org.mockito.mockito-all;bundle-version="1.9.5",
- org.eclipse.jdt.annotation;bundle-version="[1.1.100,2.0.0)";resolution:=optional,
+ org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.lng.transformer.ui
 Import-Package: com.mmxlabs.models.lng.pricing,
  com.mmxlabs.models.lng.spotmarkets

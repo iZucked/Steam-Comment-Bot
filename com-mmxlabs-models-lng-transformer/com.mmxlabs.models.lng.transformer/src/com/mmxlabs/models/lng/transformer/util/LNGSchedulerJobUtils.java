@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.util;
@@ -17,6 +17,7 @@ import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
@@ -466,11 +467,15 @@ public class LNGSchedulerJobUtils {
 				processor.postProcess(domain, scenario, schedule, cmd);
 			}
 		}
+		if (cmd.isEmpty()) {
+			return IdentityCommand.INSTANCE;
+		}
+
 		return cmd;
 
 	}
 
-	public static IAnnotatedSolution evaluateCurrentState(@NonNull final Injector injector, @NonNull final IOptimisationData data, @NonNull final ISequences rawSequences) {
+	public static @NonNull IAnnotatedSolution evaluateCurrentState(@NonNull final Injector injector, @NonNull final IOptimisationData data, @NonNull final ISequences rawSequences) {
 		/**
 		 * Start the full evaluation process.
 		 */
@@ -501,7 +506,12 @@ public class LNGSchedulerJobUtils {
 
 	@NonNull
 	public static EditingDomain createLocalEditingDomain() {
-		final BasicCommandStack commandStack = new BasicCommandStack();
+		final BasicCommandStack commandStack = new BasicCommandStack() {
+			@Override
+			protected void handleError(Exception exception) {
+				throw new RuntimeException(exception);
+			}
+		};
 		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, commandStack);

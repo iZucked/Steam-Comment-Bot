@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.stochasticactionsets;
@@ -39,6 +39,7 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_Optimiser
 import com.mmxlabs.models.lng.transformer.ui.BagOptimiser;
 import com.mmxlabs.models.lng.transformer.ui.ContainerProvider;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.ActionSetEvaluationHelper;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BagMover;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
@@ -90,13 +91,13 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 		chainBuilder.addLink(link);
 		return link;
 	}
-	
+
 	@NonNull
 	public static IChainLink chainFake(final ChainBuilder chainBuilder, @NonNull final OptimiserSettings settings, @Nullable final ExecutorService executorService, final int progressTicks) {
 		final IChainLink link = new IChainLink() {
-			
+
 			private LNGActionSetTransformerUnit t;
-			
+
 			@Override
 			public IMultiStateResult run(final IProgressMonitor monitor) {
 				if (t == null) {
@@ -105,18 +106,18 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 				t.run(monitor);
 				return t.getInputState();
 			}
-			
+
 			@Override
 			public void init(final IMultiStateResult inputState) {
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
 				t = new LNGActionSetTransformerUnit(dt, settings, executorService, inputState, dt.getHints());
 			}
-			
+
 			@Override
 			public int getProgressTicks() {
 				return progressTicks;
 			}
-			
+
 			@Override
 			public IMultiStateResult getInputState() {
 				if (t == null) {
@@ -261,9 +262,9 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 			@Provides
 			@Named("MAIN_MOVER")
-			private BagMover providePerThreadBagMover2(@NonNull final Injector injector) {
-				final BagMover bagMover = new BagMover();
-				injector.injectMembers(bagMover);
+			private ActionSetEvaluationHelper provideMainBagMover(@NonNull final Injector injector) {
+				final ActionSetEvaluationHelper bagMover = injector.getInstance(ActionSetEvaluationHelper.class);
+				bagMover.setStrictChecking(true);
 				return bagMover;
 			}
 

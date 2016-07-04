@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
@@ -56,7 +56,7 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 /**
  * The {@link LNGScenarioToOptimiserBridge} creates and maintains the mapping between the original {@link LNGScenarioModel} and the optimiser data structures to allow saving of the results. This class
  * also handles the Period Optimisation transformation. Call {@link #overwrite(int, ISequences, Map)} to save into the current {@link ScenarioInstance}. Call
- * {@link #storeAsCopy(ISequences, String, Container, Map)} to save the result in a copy of the {@link SIPINFO}
+ * {@link #storeAsCopy(ISequences, String, Container, Map)} to save the result in a copy of the {@link ScenarioInstance}
  * 
  * 
  * @author Simon Goodall
@@ -85,7 +85,7 @@ public class LNGScenarioToOptimiserBridge {
 	private final IScenarioEntityMapping periodMapping;
 
 	@NonNull
-	private final Collection<String> hints;
+	private final Collection<@NonNull String> hints;
 
 	@Nullable
 	private final ScenarioInstance scenarioInstance;
@@ -93,8 +93,8 @@ public class LNGScenarioToOptimiserBridge {
 	@NonNull
 	private LNGDataTransformer optimiserDataTransformer;
 
-	@NonNull
-	private final LNGDataTransformer originalDataTransformer;
+	// @NonNull
+	// private final LNGDataTransformer originalDataTransformer;
 
 	/**
 	 * Integer to count "undo" state of the scenario. Each overwrite evaluation should increment this value. Calls to {@link LNGSchedulerJobUtils#undoPreviousOptimsationStep(EditingDomain, int)}
@@ -103,17 +103,20 @@ public class LNGScenarioToOptimiserBridge {
 	 */
 	private int overwriteCommandStackCounter = 0;
 
+	private Collection<@NonNull IOptimiserInjectorService> optimiserInjectorServices;
+
 	public LNGScenarioToOptimiserBridge(@NonNull final LNGScenarioModel scenario, @Nullable final ScenarioInstance scenarioInstance, @NonNull final OptimiserSettings optimiserSettings,
-			@NonNull final EditingDomain editingDomain, @Nullable final Module bootstrapModule, @Nullable final IOptimiserInjectorService localOverrides, final String... initialHints) {
+			@NonNull final EditingDomain editingDomain, @Nullable final Module bootstrapModule, @Nullable final IOptimiserInjectorService localOverrides, boolean evaluationOnly,
+			final @NonNull String @Nullable... initialHints) {
 		this.originalScenario = scenario;
 		this.scenarioInstance = scenarioInstance;
 		this.optimiserSettings = optimiserSettings;
 		this.originalEditingDomain = editingDomain;
 		this.hints = LNGTransformerHelper.getHints(optimiserSettings, initialHints);
 
-		final Collection<IOptimiserInjectorService> services = LNGTransformerHelper.getOptimiserInjectorServices(bootstrapModule, localOverrides);
+		optimiserInjectorServices = LNGTransformerHelper.getOptimiserInjectorServices(bootstrapModule, localOverrides);
 
-		originalDataTransformer = new LNGDataTransformer(this.originalScenario, optimiserSettings, hints, services);
+		LNGDataTransformer originalDataTransformer = new LNGDataTransformer(this.originalScenario, optimiserSettings, hints, optimiserInjectorServices);
 
 		// TODO: These ideally should be final, but #overwrite currently needs these variables set.
 		this.optimiserEditingDomain = originalEditingDomain;
@@ -123,13 +126,17 @@ public class LNGScenarioToOptimiserBridge {
 		// Trigger initial evaluation - note no fitness state is saved
 		overwrite(0, originalDataTransformer.getInitialSequences(), null);
 
-		final Triple<LNGScenarioModel, EditingDomain, IScenarioEntityMapping> t = initPeriodOptimisationData(scenarioInstance, originalScenario, originalEditingDomain, optimiserSettings);
+		if (!evaluationOnly) {
+			final Triple<@NonNull LNGScenarioModel, @NonNull EditingDomain, @Nullable IScenarioEntityMapping> t = initPeriodOptimisationData(scenarioInstance, originalScenario, originalEditingDomain,
+					optimiserSettings);
 
-		// TODO: Replaces the above with that return in the triple (this could be original or optimiser)
-		this.optimiserScenario = t.getFirst();
-		this.optimiserEditingDomain = t.getSecond();
-		this.periodMapping = t.getThird();
-
+			// TODO: Replaces the above with that return in the triple (this could be original or optimiser)
+			this.optimiserScenario = t.getFirst();
+			this.optimiserEditingDomain = t.getSecond();
+			this.periodMapping = t.getThird();
+		} else {
+			this.periodMapping = null;
+		}
 		// If we are in a period optimisation, then create a LNGDataTransformer for the period data
 		if (this.periodMapping != null) {
 
@@ -137,15 +144,15 @@ public class LNGScenarioToOptimiserBridge {
 			final CompoundCommand wrapper = LNGSchedulerJobUtils.createBlankCommand(0);
 			wrapper.append(IdentityCommand.INSTANCE);
 			optimiserEditingDomain.getCommandStack().execute(wrapper);
-			
-			optimiserDataTransformer = new LNGDataTransformer(this.optimiserScenario, optimiserSettings, hints, services);
+
+			optimiserDataTransformer = new LNGDataTransformer(this.optimiserScenario, optimiserSettings, hints, optimiserInjectorServices);
 		} else {
 			optimiserDataTransformer = originalDataTransformer;
 		}
 	}
 
 	@NonNull
-	private static Triple<LNGScenarioModel, EditingDomain, IScenarioEntityMapping> initPeriodOptimisationData(@Nullable final ScenarioInstance scenarioInstance,
+	private static Triple<@NonNull LNGScenarioModel, @NonNull EditingDomain, @Nullable IScenarioEntityMapping> initPeriodOptimisationData(@Nullable final ScenarioInstance scenarioInstance,
 			@NonNull final LNGScenarioModel originalScenario, @NonNull final EditingDomain originalEditingDomain, @NonNull final OptimiserSettings optimiserSettings) {
 
 		IScenarioEntityMapping periodMapping = null;
@@ -164,13 +171,18 @@ public class LNGScenarioToOptimiserBridge {
 			t.setInclusionChecker(new InclusionChecker());
 
 			final NonNullPair<LNGScenarioModel, EditingDomain> p = t.transform(originalScenario, optimiserSettings, periodMapping);
-			
+
 			// DEBUGGING - store sub scenario as a "fork"
-			if (false && scenarioInstance != null) {
-				try {
-					LNGScenarioRunnerUtils.saveScenarioAsChild(scenarioInstance, scenarioInstance, p.getFirst(), "Period Scenario");
-				} catch (final Exception e) {
-					e.printStackTrace();
+			if (scenarioInstance != null) {
+				@NonNull
+				ScenarioInstance pScenarioInstance = scenarioInstance;
+				if (false) {
+					try {
+						assert scenarioInstance != null;
+						LNGScenarioRunnerUtils.saveScenarioAsChild(pScenarioInstance, pScenarioInstance, p.getFirst(), "Period Scenario");
+					} catch (final Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			return new Triple<>(p.getFirst(), p.getSecond(), periodMapping);
@@ -210,7 +222,7 @@ public class LNGScenarioToOptimiserBridge {
 			}
 
 			final Pair<Command, Schedule> commandPair = creatExportScheduleCommand(currentProgress, rawSeqences, extraAnnotations, optimiserScenario, optimiserEditingDomain, originalScenario,
-					originalEditingDomain, optimiserDataTransformer.getModelEntityMap(), originalDataTransformer.getModelEntityMap(), periodMapping);
+					originalEditingDomain, optimiserDataTransformer.getModelEntityMap(), optimiserSettings, periodMapping);
 			originalEditingDomain.getCommandStack().execute(commandPair.getFirst());
 
 			++overwriteCommandStackCounter;
@@ -232,11 +244,13 @@ public class LNGScenarioToOptimiserBridge {
 	 * @return
 	 */
 	@NonNull
-	private LNGScenarioModel exportAsCopy(@NonNull final ISequences rawSequences, @Nullable final Map<String, Object> extraAnnotations) {
+	public LNGScenarioModel exportAsCopy(@NonNull final ISequences rawSequences, @Nullable final Map<String, Object> extraAnnotations) {
 
 		final EcoreUtil.Copier originalScenarioCopier = new EcoreUtil.Copier();
 		final LNGScenarioModel targetOriginalScenario = (LNGScenarioModel) originalScenarioCopier.copy(originalScenario);
-		originalScenarioCopier.copyReferences();
+		// Do not do this here as CopiedModelEntityMap will do it. If we call it twice, we can end up with multiple copies of data
+		// in reference lists
+		// originalScenarioCopier.copyReferences();
 
 		assert targetOriginalScenario != null;
 		final EditingDomain targetOriginalEditingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
@@ -245,27 +259,26 @@ public class LNGScenarioToOptimiserBridge {
 		if (pPeriodMapping != null) {
 			final EcoreUtil.Copier optimiserScenarioCopier = new EcoreUtil.Copier();
 			final LNGScenarioModel targetOptimiserScenario = (LNGScenarioModel) optimiserScenarioCopier.copy(optimiserScenario);
-			optimiserScenarioCopier.copyReferences();
+			// As above
+			// optimiserScenarioCopier.copyReferences();
 
 			assert targetOptimiserScenario != null;
 
 			final CopiedModelEntityMap copiedOptimiserModelEntityMap = new CopiedModelEntityMap(optimiserDataTransformer.getModelEntityMap(), optimiserScenarioCopier);
-			final CopiedModelEntityMap copiedOriginalModelEntityMap = new CopiedModelEntityMap(originalDataTransformer.getModelEntityMap(), originalScenarioCopier);
 
 			final CopiedScenarioEntityMapping copiedPeriodMapping = new CopiedScenarioEntityMapping(pPeriodMapping, originalScenarioCopier, optimiserScenarioCopier);
 			final EditingDomain targetOptimiserEditingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
 
 			final Pair<Command, Schedule> commandPair = creatExportScheduleCommand(100, rawSequences, extraAnnotations,
 
-					targetOptimiserScenario, targetOptimiserEditingDomain, targetOriginalScenario, targetOriginalEditingDomain, copiedOptimiserModelEntityMap, copiedOriginalModelEntityMap,
-					copiedPeriodMapping);
+					targetOptimiserScenario, targetOptimiserEditingDomain, targetOriginalScenario, targetOriginalEditingDomain, copiedOptimiserModelEntityMap, optimiserSettings, copiedPeriodMapping);
 			targetOriginalEditingDomain.getCommandStack().execute(commandPair.getFirst());
 
 		} else {
-			final CopiedModelEntityMap copiedModelEntityMap = new CopiedModelEntityMap(originalDataTransformer.getModelEntityMap(), originalScenarioCopier);
+			final CopiedModelEntityMap copiedModelEntityMap = new CopiedModelEntityMap(optimiserDataTransformer.getModelEntityMap(), originalScenarioCopier);
 			final Pair<Command, Schedule> commandPair = creatExportScheduleCommand(100, rawSequences, extraAnnotations,
 
-					targetOriginalScenario, targetOriginalEditingDomain, targetOriginalScenario, targetOriginalEditingDomain, copiedModelEntityMap, copiedModelEntityMap, null);
+					targetOriginalScenario, targetOriginalEditingDomain, targetOriginalScenario, targetOriginalEditingDomain, copiedModelEntityMap, optimiserSettings, null);
 			targetOriginalEditingDomain.getCommandStack().execute(commandPair.getFirst());
 		}
 
@@ -283,7 +296,7 @@ public class LNGScenarioToOptimiserBridge {
 	 */
 	private Pair<Command, Schedule> creatExportScheduleCommand(final int currentProgress, @NonNull final ISequences rawSequences, @Nullable final Map<String, Object> extraAnnotations,
 			@NonNull final LNGScenarioModel targetOptimiserScenario, @NonNull final EditingDomain targetOptimiserEditingDomain, @NonNull final LNGScenarioModel targetOriginalScenario,
-			@NonNull final EditingDomain targetOriginalEditingDomain, @NonNull final ModelEntityMap optimiserModelEntityMap, @NonNull final ModelEntityMap the_originalModelEntityMap,
+			@NonNull final EditingDomain targetOriginalEditingDomain, @NonNull final ModelEntityMap optimiserModelEntityMap, @NonNull OptimiserSettings originalOptimiserSettings,
 			@Nullable final IScenarioEntityMapping periodMapping) {
 
 		// Create a "wrapper" to set the user friendly command name for the undo menu
@@ -310,7 +323,7 @@ public class LNGScenarioToOptimiserBridge {
 				if (periodMapping == null) {
 					final Injector evaluationInjector;
 					{
-						final Collection<IOptimiserInjectorService> services = optimiserDataTransformer.getModuleServices();
+						final Collection<@NonNull IOptimiserInjectorService> services = optimiserDataTransformer.getModuleServices();
 						final List<Module> modules = new LinkedList<>();
 						modules.add(new InputSequencesModule(rawSequences));
 						modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(optimiserDataTransformer.getOptimiserSettings()), services,
@@ -333,8 +346,8 @@ public class LNGScenarioToOptimiserBridge {
 					{
 						final Injector evaluationInjector;
 						{
-							final Collection<IOptimiserInjectorService> services = optimiserDataTransformer.getModuleServices();
-							final List<Module> modules = new LinkedList<>();
+							final Collection<@NonNull IOptimiserInjectorService> services = optimiserDataTransformer.getModuleServices();
+							final List<@NonNull Module> modules = new LinkedList<>();
 							modules.add(new InputSequencesModule(rawSequences));
 							modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(optimiserDataTransformer.getOptimiserSettings()), services,
 									IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
@@ -365,31 +378,25 @@ public class LNGScenarioToOptimiserBridge {
 
 					// Stage 3: Re-evaluate original scenario to make sure it all ties in
 					{
-						final OptimiserSettings evalSettings = EcoreUtil.copy(originalDataTransformer.getOptimiserSettings());
+						final OptimiserSettings evalSettings = EcoreUtil.copy(originalOptimiserSettings);
 						evalSettings.getRange().unsetOptimiseAfter();
 						evalSettings.getRange().unsetOptimiseBefore();
 
-						final Set<String> hints = LNGTransformerHelper.getHints(evalSettings);
+						final Set<@NonNull String> hints = LNGTransformerHelper.getHints(evalSettings);
 
 						// final LNGDataTransformer subTransformer = originalDataTransformer;
-						
+
 						// Always create a new transformer as we have problems with re-use and mapping newly created spot slots (and probably cargoes) between instances
-						ModelEntityMap originalModelEntityMap = the_originalModelEntityMap;
-						final LNGDataTransformer subTransformer;
-//						if (the_originalModelEntityMap instanceof CopiedModelEntityMap) {
-							subTransformer = new LNGDataTransformer(targetOriginalScenario, evalSettings, hints, originalDataTransformer.getModuleServices());
-							originalModelEntityMap = subTransformer.getModelEntityMap();
-//						} else {
-//							subTransformer = originalDataTransformer;
-//						}
+						final LNGDataTransformer subTransformer = new LNGDataTransformer(targetOriginalScenario, evalSettings, hints, optimiserInjectorServices);
+						ModelEntityMap originalModelEntityMap = subTransformer.getModelEntityMap();
 
 						Injector evaluationInjector2;
-						final Collection<IOptimiserInjectorService> services = subTransformer.getModuleServices();
 						{
 							final List<Module> modules2 = new LinkedList<>();
-							modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(originalDataTransformer.getOptimiserSettings()), services,
+							modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(originalOptimiserSettings), optimiserInjectorServices,
 									IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
-							modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
+							modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), optimiserInjectorServices,
+									IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 
 							evaluationInjector2 = subTransformer.getInjector().createChildInjector(modules2);
 						}
@@ -399,8 +406,8 @@ public class LNGScenarioToOptimiserBridge {
 						final ISequences initialSequences;
 						{
 							final List<Module> modules2 = new LinkedList<>();
-							modules2.addAll(
-									LNGTransformerHelper.getModulesWithOverrides(new LNGInitialSequencesModule(), services, IOptimiserInjectorService.ModuleType.Module_InitialSolution, hints));
+							modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGInitialSequencesModule(), optimiserInjectorServices,
+									IOptimiserInjectorService.ModuleType.Module_InitialSolution, hints));
 
 							final Injector initialSolutionInjector = evaluationInjector2.createChildInjector(modules2);
 							final PerChainUnitScopeImpl scope = initialSolutionInjector.getInstance(PerChainUnitScopeImpl.class);
@@ -479,5 +486,14 @@ public class LNGScenarioToOptimiserBridge {
 	@NonNull
 	public LNGDataTransformer getDataTransformer() {
 		return optimiserDataTransformer;
+	}
+
+	/**
+	 * Returns the scenario used by the optimisation. This method is intended for use in test cases rather than the main application.
+	 * 
+	 * @return
+	 */
+	public LNGScenarioModel getOptimiserScenario() {
+		return optimiserScenario;
 	}
 }

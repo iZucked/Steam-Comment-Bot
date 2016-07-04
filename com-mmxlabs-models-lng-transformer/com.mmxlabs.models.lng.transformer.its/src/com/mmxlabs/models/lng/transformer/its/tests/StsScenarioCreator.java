@@ -1,18 +1,18 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its.tests;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.port.RouteOption;
 
 /**
  */
@@ -21,7 +21,7 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 	 * 
 	 */
 	public final VesselClass vc;
-	public final Vessel[] vessels;
+	public final VesselAvailability[] vesselAvailabilities;
 
 	public final Port originPort;
 	public final Port loadPort;
@@ -38,12 +38,12 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 	 * cargo, travel to the discharge port and discharge it. There is enough time at every stage to create some idling at the discharge port.
 	 */
 	public StsScenarioCreator() {
-		scenario = ManifestJointModel.createEmptyInstance(null);
-
-		// need to create a legal entity for contracts
-		contractEntity = addEntity("Third-parties");
-		// need to create a legal entity for shipping
-		shippingEntity = addEntity("Shipping");
+		// scenario = ManifestJointModel.createEmptyInstance(null);
+		//
+		// // need to create a legal entity for contracts
+		// contractEntity = addEntity("Third-parties");
+		// // need to create a legal entity for shipping
+		// shippingEntity = addEntity("Shipping");
 
 		// need to create sales and purchase contracts
 		salesContract = addSalesContract("Sales Contract", dischargePrice);
@@ -52,18 +52,18 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 		// create a vessel class with default name
 		vc = fleetCreator.createDefaultVesselClass(null);
 		// create two vessels in that class
-		vessels = fleetCreator.createMultipleDefaultVessels(vc, 2, shippingEntity);
-		final VesselAvailability[] vesselAvailabilities = new VesselAvailability[vessels.length];
-		for (int i = 0; i < vessels.length; ++i) {
-			for (VesselAvailability vesselAvailability : scenario.getCargoModel().getVesselAvailabilities()) {
-				if (vesselAvailability.getVessel() == vessels[i]) {
-					vesselAvailabilities[i] = vesselAvailability;
-				}
-			}
-		}
+		vesselAvailabilities = fleetCreator.createMultipleDefaultVessels(vc, 2, shippingEntity);
+		// final VesselAvailability[] vesselAvailabilities = new VesselAvailability[vessels.length];
+		// for (int i = 0; i < vessels.length; ++i) {
+		// for (VesselAvailability vesselAvailability : scenario.getCargoModel().getVesselAvailabilities()) {
+		// if (vesselAvailability.getVessel() == vessels[i]) {
+		// vesselAvailabilities[i] = vesselAvailability;
+		// }
+		// }
+		// }
 
 		// need to create a default route
-		addRoute(ScenarioTools.defaultRouteName);
+		addRoute(RouteOption.DIRECT);
 
 		final double maxSpeed = vc.getMaxSpeed();
 

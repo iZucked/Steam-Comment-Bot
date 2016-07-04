@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer;
@@ -93,7 +93,7 @@ public class DefaultModelEntityMap implements ModelEntityMap {
 
 	/**
 	 */
-	public <T extends EObject> Collection<T> getAllModelObjects(@NonNull final Class<? extends T> clz) {
+	public <T extends EObject> Collection<@NonNull T> getAllModelObjects(@NonNull final Class<? extends T> clz) {
 
 		final List<T> objects = new LinkedList<T>();
 		for (final Object obj : modelToOptimiser.keySet()) {

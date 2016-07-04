@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
@@ -79,7 +79,7 @@ public class LNGSchedulerRunAllSimilarityJobControl extends AbstractEclipseJobCo
 			// TODO: This is probably a) null and b) bad idea to use the same executor service for sub-processes while the main process is using the pool....
 			// TODO: Is is possible for a job to suspend itself and release the thread?
 
-			this.runner = new LNGScenarioRunner(runnerService, scenarioModel, fork, settings, (EditingDomain) fork.getAdapters().get(EditingDomain.class), null, hints);
+			this.runner = new LNGScenarioRunner(runnerService, scenarioModel, fork, settings, (EditingDomain) fork.getAdapters().get(EditingDomain.class), null, false, hints);
 			this.lock = fork.getLock(ScenarioLock.OPTIMISER);
 			this.lock.awaitClaim();
 		}

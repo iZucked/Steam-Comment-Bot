@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions.redirection.impl;
@@ -9,7 +9,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -19,6 +18,10 @@ import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -30,21 +33,24 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 	@Inject
-	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
+	private IDistanceProvider distanceProvider;
+
+	@Inject
+	private IRouteCostProvider routeCostProvider;
 
 	@Inject
 	private ILNGVoyageCalculator voyageCalculator;
 
 	@Override
 	public VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDuration, final int dischargeTime,
-			final int dischargeDuration, @NonNull final IVessel vessel, final int vesselCharterInRatePerDay, final long startHeelInM3, final int notionalSpeed, final int cargoCVValue,
-			@NonNull final String route, final int baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPrice) {
+			final int dischargeDuration, @NonNull final IVessel vessel, final long vesselCharterInRatePerDay, final long startHeelInM3, final int notionalSpeed, final int cargoCVValue,
+			@NonNull final ERouteOption route, final int baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPrice) {
 
 		final VoyagePlan notionalPlan = new VoyagePlan();
 		notionalPlan.setCharterInRatePerDay(vesselCharterInRatePerDay);
 
-		final Integer distance = distanceProvider.get(route).get(loadPort, dischargePort);
-		if (distance == null || distance.intValue() == Integer.MAX_VALUE) {
+		final int distance = distanceProvider.getDistance(route, loadPort, dischargePort, loadTime + loadDuration);
+		if (distance == Integer.MAX_VALUE) {
 			return null;
 		}
 
@@ -54,18 +60,9 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 		// Determine notional port visit times.
 		final int notionalReturnTime = dischargeTime + dischargeDuration + travelTime;
 
-		final LoadSlot notionalLoadSlot = new LoadSlot();
-		notionalLoadSlot.setPort(loadPort);
-		notionalLoadSlot.setTimeWindow(new TimeWindow(loadTime, loadTime));
-		notionalLoadSlot.setCargoCVValue(cargoCVValue);
-		notionalLoadSlot.setCooldownForbidden(true);
-		notionalLoadSlot.setMaxLoadVolume(vessel.getCargoCapacity());
-		notionalLoadSlot.setMinLoadVolume(vessel.getCargoCapacity());
+		final LoadSlot notionalLoadSlot = makeNotionalLoad(loadPort, loadTime, vessel, cargoCVValue);
 
-		final DischargeSlot notionalDischargeSlot = new DischargeSlot();
-		notionalDischargeSlot.setPort(dischargePort);
-		notionalDischargeSlot.setTimeWindow(new TimeWindow(dischargeTime, dischargeTime));
-		notionalDischargeSlot.setDischargePriceCalculator(salesPrice);
+		final DischargeSlot notionalDischargeSlot = makeNotionalDischarge(dischargePort, dischargeTime, salesPrice);
 
 		final PortSlot notionalReturnSlot = new EndPortSlot("notional-end", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), true, vessel.getVesselClass().getSafetyHeel());
 
@@ -79,25 +76,22 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 		// Calculate new voyage requirements
 		{
-			final VoyageDetails ladenDetails = calculateVoyageDetails(VesselState.Laden, vessel, route, distance, dischargeTime - loadDuration - loadTime, notionalLoadSlot, notionalDischargeSlot,
-					cargoCVValue);
+			final long ladenRouteCosts = routeCostProvider.getRouteCost(route, vessel, CostType.Laden);
+			final long ballastRouteCosts = routeCostProvider.getRouteCost(route, vessel, CostType.RoundTripBallast);
 
-			final VoyageDetails ballastDetails = calculateVoyageDetails(VesselState.Ballast, vessel, route, distance, notionalReturnTime - dischargeDuration - dischargeTime, notionalDischargeSlot,
-					notionalReturnSlot, cargoCVValue);
+			final VoyageDetails ladenDetails = calculateVoyageDetails(VesselState.Laden, vessel, route, distance, ladenRouteCosts, dischargeTime - loadDuration - loadTime, notionalLoadSlot,
+					notionalDischargeSlot, cargoCVValue);
 
-			final PortDetails loadDetails = new PortDetails();
-			loadDetails.setOptions(new PortOptions());
-			loadDetails.getOptions().setPortSlot(notionalLoadSlot);
+			final VoyageDetails ballastDetails = calculateVoyageDetails(VesselState.Ballast, vessel, route, distance, ballastRouteCosts, notionalReturnTime - dischargeDuration - dischargeTime,
+					notionalDischargeSlot, notionalReturnSlot, cargoCVValue);
+
+			final PortDetails loadDetails = new PortDetails(new PortOptions(notionalLoadSlot));
 			loadDetails.getOptions().setVisitDuration(loadDuration);
 
-			final PortDetails dischargeDetails = new PortDetails();
-			dischargeDetails.setOptions(new PortOptions());
-			dischargeDetails.getOptions().setPortSlot(notionalDischargeSlot);
+			final PortDetails dischargeDetails = new PortDetails(new PortOptions(notionalDischargeSlot));
 			dischargeDetails.getOptions().setVisitDuration(dischargeDuration);
 
-			final PortDetails returnDetails = new PortDetails();
-			returnDetails.setOptions(new PortOptions());
-			returnDetails.getOptions().setPortSlot(notionalReturnSlot);
+			final PortDetails returnDetails = new PortDetails(new PortOptions(notionalReturnSlot));
 			returnDetails.getOptions().setVisitDuration(0);
 
 			final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, ladenDetails, dischargeDetails, ballastDetails, returnDetails };
@@ -111,61 +105,60 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 	@Override
 	@Nullable
 	public VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDuration, final int dischargeTime,
-			final int dischargeDuration, final int returnTime, @NonNull final IVessel vessel, final int vesselCharterInRatePerDay, final long startHeelInM3, final int cargoCVValue,
-			@NonNull final String route, final int baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPrice) {
+			final int dischargeDuration, final int returnTime, @NonNull final IVessel vessel, final long vesselCharterInRatePerDay, final long startHeelInM3, final int cargoCVValue,
+			@NonNull final ERouteOption route, final int baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPrice) {
 
 		final VoyagePlan notionalPlan = new VoyagePlan();
 		notionalPlan.setCharterInRatePerDay(vesselCharterInRatePerDay);
 
-		final Integer distance = distanceProvider.get(route).get(loadPort, dischargePort);
-		if (distance == null || distance.intValue() == Integer.MAX_VALUE) {
+		final int distance = distanceProvider.getDistance(route, loadPort, dischargePort, loadTime + loadDuration);
+		if (distance == Integer.MAX_VALUE) {
 			return null;
 		}
 
-		final LoadSlot notionalLoadSlot = new LoadSlot();
-		notionalLoadSlot.setPort(loadPort);
-		notionalLoadSlot.setTimeWindow(new TimeWindow(loadTime, loadTime));
-		notionalLoadSlot.setCargoCVValue(cargoCVValue);
-		notionalLoadSlot.setCooldownForbidden(true);
-		notionalLoadSlot.setMaxLoadVolume(vessel.getCargoCapacity());
-		notionalLoadSlot.setMinLoadVolume(vessel.getCargoCapacity());
+		return calculateShippingCosts(loadPort, dischargePort, loadTime, distance, loadDuration, dischargeTime, distance, dischargeDuration, returnTime, vessel, vesselCharterInRatePerDay,
+				startHeelInM3, cargoCVValue, route, baseFuelPricePerMT, salesPrice);
+	}
 
-		final DischargeSlot notionalDischargeSlot = new DischargeSlot();
-		notionalDischargeSlot.setPort(dischargePort);
-		notionalDischargeSlot.setTimeWindow(new TimeWindow(dischargeTime, dischargeTime));
-		notionalDischargeSlot.setDischargePriceCalculator(salesPrice);
+	@Override
+	public VoyagePlan calculateShippingCosts(IPort loadPort, IPort dischargePort, int loadTime, int loadDistance, int loadDuration, int dischargeTime, int dischargeDistance, int dischargeDuration,
+			int notionalReturnTime, IVessel vessel, long vesselCharterInRatePerDay, long startHeelInM3, int cargoCVValue, ERouteOption route, int baseFuelPricePerMT,
+			ISalesPriceCalculator salesPriceCalculator) {
+		final VoyagePlan notionalPlan = new VoyagePlan();
+		notionalPlan.setCharterInRatePerDay(vesselCharterInRatePerDay);
 
-		final PortSlot notionalReturnSlot = new EndPortSlot("notional-end", loadPort, new TimeWindow(returnTime, returnTime), true, vessel.getVesselClass().getSafetyHeel());
+		final LoadSlot notionalLoadSlot = makeNotionalLoad(loadPort, loadTime, vessel, cargoCVValue);
+
+		final DischargeSlot notionalDischargeSlot = makeNotionalDischarge(dischargePort, dischargeTime, salesPriceCalculator);
+
+		final PortSlot notionalReturnSlot = new EndPortSlot("notional-end", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), true, vessel.getVesselClass().getSafetyHeel());
 
 		final PortTimesRecord portTimesRecord = new PortTimesRecord();
 		portTimesRecord.setSlotTime(notionalLoadSlot, loadTime);
 		portTimesRecord.setSlotTime(notionalDischargeSlot, dischargeTime);
-		portTimesRecord.setReturnSlotTime(notionalReturnSlot, returnTime);
+		portTimesRecord.setReturnSlotTime(notionalReturnSlot, notionalReturnTime);
 
 		portTimesRecord.setSlotDuration(notionalLoadSlot, loadDuration);
 		portTimesRecord.setSlotDuration(notionalDischargeSlot, dischargeDuration);
 
 		// Calculate new voyage requirements
 		{
-			final VoyageDetails ladenDetails = calculateVoyageDetails(VesselState.Laden, vessel, route, distance, dischargeTime - loadDuration - loadTime, notionalLoadSlot, notionalDischargeSlot,
-					cargoCVValue);
+			final long ladenRouteCosts = routeCostProvider.getRouteCost(route, vessel, CostType.Laden);
+			final long ballastRouteCosts = routeCostProvider.getRouteCost(route, vessel, CostType.RoundTripBallast);
 
-			final VoyageDetails ballastDetails = calculateVoyageDetails(VesselState.Ballast, vessel, route, distance, returnTime - dischargeDuration - dischargeTime, notionalDischargeSlot,
-					notionalReturnSlot, cargoCVValue);
+			final VoyageDetails ladenDetails = calculateVoyageDetails(VesselState.Laden, vessel, route, loadDistance, ladenRouteCosts, dischargeTime - loadDuration - loadTime, notionalLoadSlot,
+					notionalDischargeSlot, cargoCVValue);
 
-			final PortDetails loadDetails = new PortDetails();
-			loadDetails.setOptions(new PortOptions());
-			loadDetails.getOptions().setPortSlot(notionalLoadSlot);
+			final VoyageDetails ballastDetails = calculateVoyageDetails(VesselState.Ballast, vessel, route, dischargeDistance, ballastRouteCosts,
+					notionalReturnTime - dischargeDuration - dischargeTime, notionalDischargeSlot, notionalReturnSlot, cargoCVValue);
+
+			final PortDetails loadDetails = new PortDetails(new PortOptions(notionalLoadSlot));
 			loadDetails.getOptions().setVisitDuration(loadDuration);
 
-			final PortDetails dischargeDetails = new PortDetails();
-			dischargeDetails.setOptions(new PortOptions());
-			dischargeDetails.getOptions().setPortSlot(notionalDischargeSlot);
+			final PortDetails dischargeDetails = new PortDetails(new PortOptions(notionalDischargeSlot));
 			dischargeDetails.getOptions().setVisitDuration(dischargeDuration);
 
-			final PortDetails returnDetails = new PortDetails();
-			returnDetails.setOptions(new PortOptions());
-			returnDetails.getOptions().setPortSlot(notionalReturnSlot);
+			final PortDetails returnDetails = new PortDetails(new PortOptions(notionalReturnSlot));
 			returnDetails.getOptions().setVisitDuration(0);
 
 			final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, ladenDetails, dischargeDetails, ballastDetails, returnDetails };
@@ -174,6 +167,5 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 			return notionalPlan;
 		}
-
 	}
 }

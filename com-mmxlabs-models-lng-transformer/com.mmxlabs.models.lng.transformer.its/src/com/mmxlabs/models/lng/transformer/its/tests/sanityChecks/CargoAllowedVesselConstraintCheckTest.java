@@ -1,16 +1,19 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.google.common.collect.Lists;
+import com.google.inject.name.Named;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
@@ -63,14 +66,13 @@ public class CargoAllowedVesselConstraintCheckTest {
 		csc.addVesselSimple("classOne", numOfClassOne, 10, 25, 1000000, 10, 10, 0, 500, false);
 		csc.addVesselSimple("classTwo", numOfClassTwo, 9, 30, 700000, 11, 9, 7, 0, false);
 		csc.addVesselSimple("classThree", numOfClassThree, 27, 25, 10000, 17, 14, 10, 1000, false);
-		final ArrayList<Vessel> vesselsClassFour = new ArrayList<Vessel>(Arrays.asList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true)));
-
+		final List<Vessel> vesselsClassFour = Lists.newArrayList(csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true));
 		// create some cargoes.
-		final ArrayList<Cargo> cargoes = new ArrayList<Cargo>(Arrays.asList(SanityCheckTools.addCargoes(csc, ports, loadPrice, dischargePrice, cvValue)));
+		final List<Cargo> cargoes = new ArrayList<Cargo>(Arrays.asList(SanityCheckTools.addCargoes(csc, ports, loadPrice, dischargePrice, cvValue)));
 
 		// add a constraint to one cargo - it can only be carried by the one vessel that is class four.
 		final Cargo constrainedCargo = cargoes.get(0);
-		Assert.assertTrue("Allowed vessels added to cargo successfully", csc.addAllowedVesselsOnCargo(constrainedCargo, vesselsClassFour));
+		csc.addAllowedVesselsOnCargo(constrainedCargo, vesselsClassFour);
 
 		// build and run the scenario.
 		final LNGScenarioModel scenario = csc.buildScenario();
@@ -87,6 +89,11 @@ public class CargoAllowedVesselConstraintCheckTest {
 				final Vessel av = ca.getSequence().getVesselAvailability().getVessel();
 
 				final boolean namesMatch = av.getName().equals(vesselsClassFour.get(0).getName());
+				
+				if (!namesMatch
+						) {
+					int ii = 0;
+				}
 				Assert.assertTrue("Only vessel class four used", namesMatch);
 				// don't need to carry on
 				break;
@@ -129,11 +136,11 @@ public class CargoAllowedVesselConstraintCheckTest {
 		csc.addVesselSimple("classFour", numOfClassFour, 15, 20, 150000, 20, 10, 5, 2000, true);
 
 		// create some cargoes.
-		final ArrayList<Cargo> cargoes = new ArrayList<Cargo>(Arrays.asList(SanityCheckTools.addCargoes(csc, ports, loadPrice, dischargePrice, cvValue)));
+		final List<Cargo> cargoes = Lists.newArrayList(SanityCheckTools.addCargoes(csc, ports, loadPrice, dischargePrice, cvValue));
 
 		// constrain all cargoes so none of class four can carry any.
 		for (final Cargo c : cargoes) {
-			Assert.assertTrue("Allowed vessels added to cargo successfully", csc.addAllowedVesselsOnCargo(c, allowedVessels));
+			csc.addAllowedVesselsOnCargo(c, allowedVessels);
 		}
 
 		// build and run the scenario

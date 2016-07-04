@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its.tests.evaluation;
@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.CostModel;
@@ -476,7 +477,8 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// create an additional cargo
-		msc.createDefaultCargo(msc.loadPort, msc.dischargePort);
+		Cargo secondCargo = msc.createDefaultCargo(msc.loadPort, msc.dischargePort);
+		secondCargo.setVesselAssignmentType(msc.vesselAvailability);
 		// and send the vessel back to the origin port at end of itinerary
 		msc.setDefaultAvailability(msc.originPort, msc.originPort);
 
@@ -569,6 +571,8 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		// and send the vessel back to the origin port at end of itinerary
 		msc.setDefaultAvailability(msc.originPort, msc.originPort);
 
+		secondCargo.setVesselAssignmentType(msc.vesselAvailability);
+		
 		final VesselAvailability vesselAvailability = msc.vesselAvailability;
 		vesselAvailability.getStartHeel().setVolumeAvailable(500);
 		vesselAvailability.getStartHeel().setCvValue(21);
@@ -663,7 +667,8 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		// create a maintenance event after the cargo
 		final Port eventPort = msc.loadPort;
 
-		msc.createDefaultMaintenanceEvent("Maintenance", eventPort, null);
+		VesselEvent event = msc.createDefaultMaintenanceEvent("Maintenance", eventPort, null);
+		event.setVesselAssignmentType(msc.vesselAvailability);
 
 		// and recalculate the vessel availability
 		msc.setDefaultAvailability(msc.originPort, msc.originPort);
@@ -718,7 +723,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final LocalDateTime charterStartAfterDate = startLoad.minusHours(25);
 		final int charterOutRate = 24;
 		final CharterOutEvent event = msc.vesselEventCreator.createCharterOutEvent("CharterOut", msc.originPort, msc.originPort, charterStartByDate, charterStartAfterDate, charterOutRate);
-
+		event.setVesselAssignmentType(msc.vesselAvailability);
 		// set the charter out required end heel to 5000 (and set some other things)
 		event.getHeelOptions().setVolumeAvailable(5000);
 		event.getHeelOptions().setCvValue(21);
@@ -771,7 +776,8 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 
 		@SuppressWarnings("unused")
 		final CharterOutEvent event = msc.makeCharterOut(msc, scenario, msc.loadPort, msc.loadPort);
-
+		event.setVesselAssignmentType(msc.vesselAvailability);
+		
 		final SequenceTester checker = getTesterForVesselEventPostDischarge();
 		// SequenceTester checker = getDefaultTester();
 
@@ -798,6 +804,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		final CharterOutEvent event = msc.makeCharterOut(msc, scenario, msc.loadPort, msc.loadPort);
+		event.setVesselAssignmentType(msc.vesselAvailability);
 
 		event.getHeelOptions().setCvValue(21);
 		event.getHeelOptions().setPricePerMMBTU(1);

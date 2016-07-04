@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.chain.impl;
@@ -108,7 +108,6 @@ public class LNGEvaluationTransformerUnit implements ILNGStateTransformerUnit {
 		return injector;
 	}
 
-	@SuppressWarnings("null")
 	@NonNull
 	public IEvaluationContext getEvaluationContext() {
 		return injector.getInstance(IEvaluationContext.class);

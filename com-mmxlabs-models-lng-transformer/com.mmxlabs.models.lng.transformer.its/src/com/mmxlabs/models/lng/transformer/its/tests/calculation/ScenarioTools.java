@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its.tests.calculation;
@@ -44,6 +44,7 @@ import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.commercial.util.CommercialModelBuilder;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -58,6 +59,7 @@ import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
@@ -67,6 +69,8 @@ import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -84,6 +88,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
@@ -96,7 +101,6 @@ import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.manifest.ManifestFactory;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -119,9 +123,6 @@ public class ScenarioTools {
 		B.setTimeZone("UTC");
 
 	}
-
-	// The default route name of the ocean route between ports.
-	public static final String defaultRouteName = IMultiMatrixProvider.Default_Key;
 
 	/**
 	 * Creates a scenario.
@@ -171,11 +172,11 @@ public class ScenarioTools {
 	 * but only has argument for one distance between the two ports.
 	 * 
 	 */
-	public static LNGScenarioModel createScenarioWithCanal(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
-			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
-			final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
-			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final boolean useDryDock,
-			final int pilotLightRate, final int minHeelVolume) {
+	public static @NonNull LNGScenarioModel createScenarioWithCanal(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue,
+			final int travelTime, final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption,
+			final int ballastMaxSpeed, final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed,
+			final int ladenMinConsumption, final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate,
+			final boolean useDryDock, final int pilotLightRate, final int minHeelVolume) {
 		return createScenarioWithCanals(new int[] { distanceBetweenPorts }, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity, ballastMinSpeed,
 				ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption, ladenMaxSpeed,
 				ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, useDryDock, pilotLightRate, minHeelVolume);
@@ -217,18 +218,23 @@ public class ScenarioTools {
 	 *            If this is not null a canal is added. If it is null no canal is added.
 	 * @return
 	 */
-	public static LNGScenarioModel createScenarioWithCanals(final int[] distancesBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
-			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
-			final int ballastMaxConsumption, int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
-			final int ladenMaxSpeed, final int ladenMaxConsumption, int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final boolean useDryDock,
-			final int pilotLightRate, final int minHeelVolume) {
+	public static @NonNull LNGScenarioModel createScenarioWithCanals(final int[] distancesBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue,
+			final int travelTime, final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption,
+			final int ballastMaxSpeed, final int ballastMaxConsumption, int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed,
+			final int ladenMinConsumption, final int ladenMaxSpeed, final int ladenMaxConsumption, int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate,
+			final boolean useDryDock, final int pilotLightRate, final int minHeelVolume) {
 
 		final LNGScenarioModel scenario = ManifestJointModel.createEmptyInstance(null);
 
 		final PricingModel pricingModel = scenario.getReferenceModel().getPricingModel();
 		final CostModel costModel = scenario.getReferenceModel().getCostModel();
 		final SpotMarketsModel spotMarketsModel = scenario.getReferenceModel().getSpotMarketsModel();
+		final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(scenario);
+		final CommercialModelBuilder commercialModelBuilder = new CommercialModelBuilder(commercialModel);
+		final SpotMarketsModelBuilder spotMarketsModelBuilder = new SpotMarketsModelBuilder(spotMarketsModel);
 
+		final LegalEntity s = commercialModelBuilder.makeLegalEntityAndBooks("Shipping");
+		final LegalEntity e = commercialModelBuilder.makeLegalEntityAndBooks("Other");
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
 		final int warmupTime = Integer.MAX_VALUE;
@@ -286,14 +292,7 @@ public class ScenarioTools {
 		vc.setMinHeel(minHeelVolume);
 		vc.setFillCapacity(fillCapacity);
 
-		final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
-		charterInMarket.setName("market-" + vc.getName());
-
-		charterInMarket.setSpotCharterCount(spotCharterCount);
-		// Costs
-		charterInMarket.setVesselClass(vc);
-
-		spotMarketsModel.getCharterInMarkets().add(charterInMarket);
+		final CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("market-" + vc.getName(), vc, "0", spotCharterCount);
 
 		final FuelConsumption ladenMin = FleetFactory.eINSTANCE.createFuelConsumption();
 		final FuelConsumption ladenMax = FleetFactory.eINSTANCE.createFuelConsumption();
@@ -334,6 +333,7 @@ public class ScenarioTools {
 		availablility.setVessel(vessel);
 		final HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
 		availablility.setStartHeel(heelOptions);
+		availablility.setEntity(s);
 
 		fleetModel.getVessels().add(vessel);
 		cargoModel.getVesselAvailabilities().add(availablility);
@@ -342,7 +342,8 @@ public class ScenarioTools {
 		portModel.getPorts().add(B);
 
 		final Route r = PortFactory.eINSTANCE.createRoute();
-		r.setName("default");
+		r.setName(RouteOption.DIRECT.getName());
+		r.setRouteOption(RouteOption.DIRECT);
 		portModel.getRoutes().add(r);
 		for (final int distance : distancesBetweenPorts) {
 			final RouteLine distanceLine = PortFactory.eINSTANCE.createRouteLine();
@@ -358,21 +359,6 @@ public class ScenarioTools {
 			distancLineBack.setDistance(distance);
 			r.getLines().add(distancLineBack);
 		}
-
-		final CommercialModel commercialModel = scenario.getReferenceModel().getCommercialModel();
-
-		final LegalEntity e = CommercialFactory.eINSTANCE.createLegalEntity();
-		e.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		e.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		commercialModel.getEntities().add(e);
-		final LegalEntity s = CommercialFactory.eINSTANCE.createLegalEntity();
-		s.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		s.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		commercialModel.getEntities().add(s);
-		availablility.setEntity(s);
-
-		e.setName("Other");
-		s.setName("Shipping");
 
 		final PurchaseContract pc = CommercialFactory.eINSTANCE.createPurchaseContract();
 		final ExpressionPriceParameters purchaseParams = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
@@ -469,6 +455,7 @@ public class ScenarioTools {
 		cargoModel.getLoadSlots().add(load);
 		cargoModel.getDischargeSlots().add(dis);
 
+		cargo.setVesselAssignmentType(availablility);
 		return scenario;
 	}
 
@@ -482,12 +469,20 @@ public class ScenarioTools {
 			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final int pilotLightRate,
 			final int charterOutTimeDays, final int heelLimit) {
 
-		final LNGScenarioModel scenario = ManifestJointModel.createEmptyInstance(null);
+		final ScenarioModelBuilder scenarioModelBuilder = ScenarioModelBuilder.instantiate();
+		final LNGScenarioModel scenario = scenarioModelBuilder.getLNGScenarioModel();
 		final PortModel portModel = scenario.getReferenceModel().getPortModel();
 		final FleetModel fleetModel = scenario.getReferenceModel().getFleetModel();
 		final PricingModel pricingModel = scenario.getReferenceModel().getPricingModel();
 		final CostModel costModel = scenario.getReferenceModel().getCostModel();
 		final SpotMarketsModel spotMarketsModel = scenario.getReferenceModel().getSpotMarketsModel();
+
+		final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(scenario);
+		final CommercialModelBuilder commercialModelBuilder = scenarioModelBuilder.getCommercialModelBuilder();
+		final SpotMarketsModelBuilder spotMarketsModelBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
+
+		final LegalEntity s = commercialModelBuilder.makeLegalEntityAndBooks("Shipping");
+		final LegalEntity e = commercialModelBuilder.makeLegalEntityAndBooks("Other");
 
 		final CargoModel cargoModel = scenario.getCargoModel();
 
@@ -502,15 +497,10 @@ public class ScenarioTools {
 		final int distanceFromAToB = distanceBetweenPorts;
 		final int distanceFromBToA = distanceBetweenPorts;
 
-		final BaseFuel baseFuel = FleetFactory.eINSTANCE.createBaseFuel();
-		baseFuel.setName("BASE FUEL");
-		baseFuel.setEquivalenceFactor(equivalenceFactor);
+		final BaseFuel baseFuel = scenarioModelBuilder.getFleetModelBuilder().createBaseFuel("BASE FUEL", equivalenceFactor);
+		final BaseFuelIndex bfi = scenarioModelBuilder.getPricingModelBuilder().createBaseFuelExpressionIndex(baseFuel.getName(), baseFuelUnitPrice);
+		final BaseFuelCost bfc = scenarioModelBuilder.getCostModelBuilder().createBaseFuelCost(baseFuel, bfi);
 
-		final BaseFuelCost bfc = createBaseFuelCost(baseFuel, baseFuelUnitPrice);
-		costModel.getBaseFuelCosts().add(bfc);
-		pricingModel.getBaseFuelPrices().add(bfc.getIndex());
-
-		fleetModel.getBaseFuels().add(baseFuel);
 		final VesselClass vc = FleetFactory.eINSTANCE.createVesselClass();
 		final VesselStateAttributes laden = FleetFactory.eINSTANCE.createVesselStateAttributes();
 		final VesselStateAttributes ballast = FleetFactory.eINSTANCE.createVesselStateAttributes();
@@ -531,13 +521,7 @@ public class ScenarioTools {
 		vc.setMinHeel(minHeelVolume);
 		vc.setFillCapacity(fillCapacity);
 
-		final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
-		charterInMarket.setName("market-" + vc.getName());
-		charterInMarket.setSpotCharterCount(spotCharterCount);
-		// Costs
-		charterInMarket.setVesselClass(vc);
-
-		spotMarketsModel.getCharterInMarkets().add(charterInMarket);
+		final CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("market-" + vc.getName(), vc, "0", spotCharterCount);
 
 		final FuelConsumption ladenMin = FleetFactory.eINSTANCE.createFuelConsumption();
 		final FuelConsumption ladenMax = FleetFactory.eINSTANCE.createFuelConsumption();
@@ -569,24 +553,16 @@ public class ScenarioTools {
 		ballast.setIdleNBORate(ballastIdleNBORate);
 		ballast.setNboRate(ballastNBORate);
 
-		final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
-		vessel.setVesselClass(vc);
-		vessel.setName("Vessel");
+		final Vessel vessel = scenarioModelBuilder.getFleetModelBuilder().createVessel("Vessel", vc);
 
 		final VesselAvailability availability = CargoFactory.eINSTANCE.createVesselAvailability();
-
-		availability.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
-
-		availability.setVessel(vessel);
-
-		fleetModel.getVessels().add(vessel);
-		cargoModel.getVesselAvailabilities().add(availability);
+		scenarioModelBuilder.getCargoModelBuilder().makeVesselAvailability(vessel, s).build();
 
 		portModel.getPorts().add(A);
 		portModel.getPorts().add(B);
 
 		final Route r = PortFactory.eINSTANCE.createRoute();
-		r.setName("default");
+		r.setName(RouteOption.DIRECT.getName());
 		portModel.getRoutes().add(r);
 
 		final RouteLine distance = PortFactory.eINSTANCE.createRouteLine();
@@ -603,79 +579,26 @@ public class ScenarioTools {
 		r.getLines().add(distance);
 		r.getLines().add(distance2);
 
-		final CommercialModel commercialModel = scenario.getReferenceModel().getCommercialModel();
-		final LegalEntity e = CommercialFactory.eINSTANCE.createLegalEntity();
-		e.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		e.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		commercialModel.getEntities().add(e);
-		final LegalEntity s = CommercialFactory.eINSTANCE.createLegalEntity();
-		s.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		s.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		commercialModel.getEntities().add(s);
-		availability.setEntity(s);
-
-		e.setName("Other");
-		s.setName("Shipping");
-
-		final PurchaseContract pc = CommercialFactory.eINSTANCE.createPurchaseContract();
-		final ExpressionPriceParameters purchaseParams = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
-		// Set a default value
-		purchaseParams.setPriceExpression("0");
-		pc.setPriceInfo(purchaseParams);
-
-		final SalesContract sc = CommercialFactory.eINSTANCE.createSalesContract();
-		final CommodityIndex sales = PricingFactory.eINSTANCE.createCommodityIndex();
-		final DataIndex<Double> salesData = PricingFactory.eINSTANCE.createDataIndex();
-		sales.setName("Sales");
-		final IndexPoint<Double> pt = PricingFactory.eINSTANCE.createIndexPoint();
-		pt.setDate(YearMonth.of(1970, 1));
-		pt.setValue(0.0);
-		salesData.getPoints().add(pt);
-		sales.setData(salesData);
-		pricingModel.getCommodityIndices().add(sales);
-
-		sc.setEntity(e);
-		pc.setEntity(e);
-		final ExpressionPriceParameters salesParams = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
-		salesParams.setPriceExpression(sales.getName());
-		sc.setPriceInfo(salesParams);
-
-		commercialModel.getSalesContracts().add(sc);
-		commercialModel.getPurchaseContracts().add(pc);
+		final PurchaseContract pc = scenarioModelBuilder.getCommercialModelBuilder().makeExpressionPurchaseContract("Purchase", e, "0");
+		final SalesContract sc = scenarioModelBuilder.getCommercialModelBuilder().makeExpressionSalesContract("Sales", e, "0.0");
 
 		final LocalDateTime startCharterOut = LocalDateTime.now();
 		final LocalDateTime endCharterOut = startCharterOut.plusDays(charterOutTimeDays);
 		final LocalDateTime dryDockJourneyStartDate = endCharterOut.plusHours(travelTime);
 
-		final CharterOutEvent charterOut = CargoFactory.eINSTANCE.createCharterOutEvent();
-		charterOut.setStartAfter(startCharterOut);
-		charterOut.setStartBy(startCharterOut);
-		// same start and end port.
-		charterOut.setPort(A);
-		charterOut.setRelocateTo(A);
-		charterOut.setName("Charter Out");
-
-		final HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
-		heelOptions.setVolumeAvailable(heelLimit);
-		heelOptions.setCvValue(cvValue);
-		heelOptions.setPricePerMMBTU(dischargePrice);
-		charterOut.setHeelOptions(heelOptions);
-
-		charterOut.setDurationInDays(charterOutTimeDays);
-		// charterOut.setDailyCharterOutPrice(0);
-		charterOut.setRepositioningFee(0);
-		// add to the scenario's fleet model
-		cargoModel.getVesselEvents().add(charterOut);
+		final CharterOutEvent charterOut = scenarioModelBuilder.getCargoModelBuilder() //
+				.makeCharterOutEvent("Charter Out", startCharterOut, startCharterOut, A) //
+				.withRelocatePort(A) //
+				.withDurationInDays(charterOutTimeDays) //
+				.withEndHeelOptions(heelLimit, cvValue, dischargePrice) //
+				.withRepositioningFee(0) //
+				.build();
 
 		// Set up dry dock to cause journey
-		final DryDockEvent dryDockJourney = CargoFactory.eINSTANCE.createDryDockEvent();
-		dryDockJourney.setDurationInDays(0);
-		dryDockJourney.setPort(B);
-		// set the date to be after the charter out date
-		dryDockJourney.setStartAfter(dryDockJourneyStartDate);
-		dryDockJourney.setStartBy(dryDockJourneyStartDate);
-		// add to scenario's fleet model
-		cargoModel.getVesselEvents().add(dryDockJourney);
+		final DryDockEvent dryDockJourney = scenarioModelBuilder.getCargoModelBuilder() //
+				.makeDryDockEvent("DryDock", dryDockJourneyStartDate, dryDockJourneyStartDate, B) //
+				.withDurationInDays(0) //
+				.build();
 
 		return scenario;
 	}
@@ -690,7 +613,7 @@ public class ScenarioTools {
 		return evaluate(scenario, false);
 	}
 
-	public static Schedule evaluate(@NonNull final LNGScenarioModel scenario, boolean withCharterOutGeneration) {
+	public static Schedule evaluate(@NonNull final LNGScenarioModel scenario, final boolean withCharterOutGeneration) {
 
 		// Code to dump out the scenario to disk
 		if (false) {
@@ -820,6 +743,13 @@ public class ScenarioTools {
 
 	public static void printSequence(final Sequence seq) {
 
+		if (seq.getVesselAvailability() != null) {
+			VesselAvailability va = seq.getVesselAvailability();
+
+			System.err.println(va.getStartAfterAsDateTime());
+			System.err.println(va.getEndByAsDateTime());
+		}
+
 		for (final Event e : seq.getEvents()) {
 
 			if (e instanceof Idle) {
@@ -857,6 +787,11 @@ public class ScenarioTools {
 				final Slot slot = slotAllocation.getSlot();
 				final String description = (slot instanceof LoadSlot ? "load: " : "discharge: ");
 				final int volume = slotAllocation.getVolumeTransferred();
+
+				System.err.println("\tArrive: " + sv.getStart() + ",  Depart: " + sv.getEnd());
+				System.err.println(
+						"\tWindowStart: " + sv.getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime() + ",  WindowEnd: " + sv.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime());
+
 				System.err.println("\tDuration: " + sv.getDuration() + ", " + description + volume);
 				ScenarioTools.printFuel(sv.getFuels());
 				if (sv.getPortCost() > 0) {

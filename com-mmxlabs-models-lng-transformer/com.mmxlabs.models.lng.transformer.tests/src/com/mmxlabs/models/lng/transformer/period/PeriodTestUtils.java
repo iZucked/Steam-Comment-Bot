@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.period;
@@ -367,7 +367,7 @@ public class PeriodTestUtils {
 
 	public static CollectedAssignment createCollectedAssignment(final VesselAvailability vesselAvailability, final AssignableElement... elements) {
 
-		return new CollectedAssignment(Arrays.asList(elements), vesselAvailability);
+		return new CollectedAssignment(Arrays.asList(elements), vesselAvailability, null, null);
 	}
 
 	@NonNull

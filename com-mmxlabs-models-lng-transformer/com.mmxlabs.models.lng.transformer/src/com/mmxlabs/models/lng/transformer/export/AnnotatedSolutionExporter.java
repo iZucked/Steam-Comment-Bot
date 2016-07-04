@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.export;
@@ -56,8 +56,8 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
@@ -124,11 +124,11 @@ public class AnnotatedSolutionExporter {
 
 	/**
 	 */
-	public Schedule exportAnnotatedSolution(final ModelEntityMap modelEntityMap, final IAnnotatedSolution annotatedSolution) {
+	public Schedule exportAnnotatedSolution(final @NonNull ModelEntityMap modelEntityMap, final @NonNull IAnnotatedSolution annotatedSolution) {
 		final IElementAnnotationsMap elementAnnotations = annotatedSolution.getElementAnnotations();
 		final Schedule output = factory.createSchedule();
 		// get domain level sequences
-		final ScheduledSequences scheduledSequences = annotatedSolution.getEvaluationState().getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
+		final VolumeAllocatedSequences scheduledSequences = annotatedSolution.getEvaluationState().getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, VolumeAllocatedSequences.class);
 
 		// go through the annotated solution and build stuff for the EMF;
 
@@ -181,7 +181,7 @@ public class AnnotatedSolutionExporter {
 			boolean isDESSequence = false;
 
 			final ISequence sequence = annotatedSolution.getFullSequences().getSequence(resource);
-			final ScheduledSequence scheduledSequence = scheduledSequences.getScheduledSequenceForResource(resource);
+			final VolumeAllocatedSequence scheduledSequence = scheduledSequences.getScheduledSequenceForResource(resource);
 			switch (vesselAvailability.getVesselInstanceType()) {
 			case TIME_CHARTER:
 			case FLEET:
@@ -207,20 +207,23 @@ public class AnnotatedSolutionExporter {
 				break;
 			case SPOT_CHARTER:
 				eSequence.setSequenceType(SequenceType.SPOT_VESSEL);
-				if (sequence.size() < 2)
+				if (sequence.size() < 2) {
 					continue;
+                                }
 
 				eSequence.setCharterInMarket(modelEntityMap.getModelObjectNullChecked(vesselAvailability.getSpotCharterInMarket(), CharterInMarket.class));
 				eSequence.unsetVesselAvailability();
 				eSequence.setSpotIndex(vesselAvailability.getSpotIndex());
 				break;
-			case CARGO_SHORTS:
-				eSequence.setSequenceType(SequenceType.CARGO_SHORTS);
+			case ROUND_TRIP:
+				eSequence.setSequenceType(SequenceType.ROUND_TRIP);
 				if (sequence.size() < 2) {
 					continue;
 				}
 
+				eSequence.setCharterInMarket(modelEntityMap.getModelObjectNullChecked(vesselAvailability.getSpotCharterInMarket(), CharterInMarket.class));
 				eSequence.unsetVesselAvailability();
+				eSequence.setSpotIndex(vesselAvailability.getSpotIndex());
 				break;
 			default:
 				break;
@@ -276,6 +279,17 @@ public class AnnotatedSolutionExporter {
 			final Comparator<Event> eventComparator = new Comparator<Event>() {
 				@Override
 				public int compare(final Event arg0, final Event arg1) {
+					if (arg0 instanceof StartEvent) {
+						return -1;
+					} else if (arg1 instanceof StartEvent) {
+						return 1;
+					}
+
+					if (arg0 instanceof EndEvent) {
+						return 1;
+					} else if (arg1 instanceof EndEvent) {
+						return -1;
+					}
 					if (arg0.getStart().isBefore(arg1.getStart())) {
 						return -1;
 					} else if (arg0.getStart().isAfter(arg1.getStart())) {
@@ -405,6 +419,9 @@ public class AnnotatedSolutionExporter {
 						eventGrouping.getEvents().add(event);
 					} else if (event instanceof StartEvent) {
 						eventGrouping = (StartEvent) event;
+						eventGrouping.getEvents().add(event);
+					} else if (event instanceof EndEvent) {
+						eventGrouping = (EndEvent) event;
 						eventGrouping.getEvents().add(event);
 					} else if (event instanceof VesselEventVisit) {
 						eventGrouping = (VesselEventVisit) event;

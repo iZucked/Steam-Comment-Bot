@@ -1,10 +1,14 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions.restrictedelements;
 
+import java.util.Collection;
 import java.util.List;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.core.IResource;
@@ -45,14 +49,21 @@ public class RestrictedElementsConstraintChecker implements IPairwiseConstraintC
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences) {
-		return checkConstraints(sequences, null);
+	public boolean checkConstraints(final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
+		return checkConstraints(sequences, changedResources, null);
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
+	public boolean checkConstraints(final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 
-		for (final IResource resource : sequences.getResources()) {
+		final Collection<@NonNull IResource> loopResources;
+		if (changedResources == null) {
+			loopResources = sequences.getResources();
+		} else {
+			loopResources = changedResources;
+		}
+
+		for (final IResource resource : loopResources) {
 			final ISequence sequence = sequences.getSequence(resource);
 			ISequenceElement prev = null;
 			for (final ISequenceElement current : sequence) {
@@ -77,7 +88,7 @@ public class RestrictedElementsConstraintChecker implements IPairwiseConstraintC
 	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 
 		final VesselInstanceType instanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
-		if (instanceType == VesselInstanceType.CARGO_SHORTS) {
+		if (instanceType == VesselInstanceType.ROUND_TRIP) {
 			// Cargo pairs are independent of each other, so only check real load->discharge state and ignore rest
 			final PortType t1 = portTypeProvider.getPortType(first);
 			final PortType t2 = portTypeProvider.getPortType(second);

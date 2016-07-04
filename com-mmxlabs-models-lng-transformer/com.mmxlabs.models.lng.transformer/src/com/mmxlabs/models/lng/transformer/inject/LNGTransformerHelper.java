@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.inject;
@@ -35,27 +35,34 @@ public class LNGTransformerHelper {
 
 	/**
 	 */
-	public static final String HINT_OPTIMISE_LSO = "hint-lngtransformer-optimise-lso";
+	public static final @NonNull String HINT_OPTIMISE_LSO = "hint-lngtransformer-optimise-lso";
 	/**
 	 */
-	public static final String HINT_OPTIMISE_BREAKDOWN = "hint-lngtransformer-optimise-breakdown";
+	public static final @NonNull String HINT_OPTIMISE_BREAKDOWN = "hint-lngtransformer-optimise-breakdown";
 
-	public static final String HINT_GENERATE_CHARTER_OUTS = "hint-lngtransformer-generate-charter-outs";
+	public static final @NonNull String HINT_GENERATE_CHARTER_OUTS = "hint-lngtransformer-generate-charter-outs";
+
+	public static final @NonNull String HINT_SHIPPING_ONLY = "hint-lngtransformer-shipping-only";
 
 	@NonNull
-	public static Set<String> getHints(@NonNull final OptimiserSettings settings, @Nullable final String... initialHints) {
+	public static Set<@NonNull String> getHints(@NonNull final OptimiserSettings settings, @NonNull final String @Nullable... initialHints) {
 
-		final Set<String> hints = new HashSet<String>();
+		final Set<@NonNull String> hints = new HashSet<>();
 		// Check hints
 		if (initialHints != null) {
 			for (final String hint : initialHints) {
-				hints.add(hint);
+				if (hint != null) {
+					hints.add(hint);
+				}
 			}
 		}
 		if (settings.isGenerateCharterOuts()) {
 			if (LicenseFeatures.isPermitted("features:optimisation-charter-out-generation")) {
 				hints.add(HINT_GENERATE_CHARTER_OUTS);
 			}
+		}
+		if (settings.isShippingOnly()) {
+			hints.add(HINT_SHIPPING_ONLY);
 		}
 
 		// Too late for LNGScenarioRunner, but add to hints for modules in case it is needed in the future.
@@ -69,11 +76,11 @@ public class LNGTransformerHelper {
 	}
 
 	@NonNull
-	public static Collection<Module> getModulesWithOverrides(@NonNull final Module mainModule, @NonNull final Collection<IOptimiserInjectorService> services,
-			@NonNull final IOptimiserInjectorService.ModuleType moduleType, @NonNull final Collection<String> hints) {
-		final List<Module> overrides = new LinkedList<>();
+	public static Collection<@NonNull Module> getModulesWithOverrides(@NonNull final Module mainModule, @NonNull final Collection<@NonNull IOptimiserInjectorService> services,
+			final IOptimiserInjectorService.@NonNull ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
+		final List<@NonNull Module> overrides = new LinkedList<>();
 		collectModuleOverrides(moduleType, services, overrides, hints);
-		final LinkedList<Module> modules = new LinkedList<>();
+		final LinkedList<@NonNull Module> modules = new LinkedList<>();
 		if (overrides.isEmpty()) {
 			modules.add(mainModule);
 		} else {
@@ -84,9 +91,9 @@ public class LNGTransformerHelper {
 	}
 
 	@NonNull
-	public static Collection<Module> collectModules(@NonNull final IOptimiserInjectorService.ModuleType moduleType, @NonNull final Collection<IOptimiserInjectorService> services,
-			@NonNull final Collection<String> hints) {
-		final List<Module> modules = new LinkedList<>();
+	public static Collection<@NonNull Module> collectModules(final IOptimiserInjectorService.@NonNull ModuleType moduleType, @NonNull final Collection<@NonNull IOptimiserInjectorService> services,
+			@NonNull final Collection<@NonNull String> hints) {
+		final List<@NonNull Module> modules = new LinkedList<>();
 		for (final IOptimiserInjectorService s : services) {
 			if (s != null) {
 				final Module m = s.requestModule(moduleType, hints);
@@ -98,8 +105,8 @@ public class LNGTransformerHelper {
 		return modules;
 	}
 
-	public static void collectModuleOverrides(@NonNull final IOptimiserInjectorService.ModuleType moduleType, @NonNull final Collection<IOptimiserInjectorService> moduleOverrides,
-			@NonNull final List<Module> overrides, @NonNull final Collection<String> hints) {
+	public static void collectModuleOverrides(final IOptimiserInjectorService.@NonNull ModuleType moduleType, @NonNull final Collection<@NonNull IOptimiserInjectorService> moduleOverrides,
+			@NonNull final List<@NonNull Module> overrides, @NonNull final Collection<@NonNull String> hints) {
 
 		for (final IOptimiserInjectorService s : moduleOverrides) {
 			if (s != null) {
@@ -122,9 +129,9 @@ public class LNGTransformerHelper {
 	 */
 	@SuppressWarnings("unchecked")
 	@NonNull
-	public static Collection<IOptimiserInjectorService> getOptimiserInjectorServices(@Nullable final Module bootstrapModule, @Nullable final IOptimiserInjectorService extraService) {
+	public static Collection<@NonNull IOptimiserInjectorService> getOptimiserInjectorServices(@Nullable final Module bootstrapModule, @Nullable final IOptimiserInjectorService extraService) {
 
-		final List<IOptimiserInjectorService> services = new LinkedList<>();
+		final List<@NonNull IOptimiserInjectorService> services = new LinkedList<>();
 		final Injector tmpInjector;
 		if (Platform.isRunning()) {
 			// Create temp injector to grab extraModules from OSGi services
@@ -135,7 +142,7 @@ public class LNGTransformerHelper {
 					bind(TypeLiterals.iterable(IOptimiserInjectorService.class)).toProvider(Peaberry.service(IOptimiserInjectorService.class).multiple());
 				}
 			};
-			final List<Module> m = new ArrayList<Module>(3);
+			final List<@NonNull Module> m = new ArrayList<>(3);
 			m.add(Peaberry.osgiModule(FrameworkUtil.getBundle(LNGTransformerHelper.class).getBundleContext()));
 			m.add(optimiserInjectorServiceModule);
 			if (bootstrapModule != null) {
@@ -150,7 +157,7 @@ public class LNGTransformerHelper {
 
 		if (tmpInjector != null) {
 			final Key<Iterable<? extends IOptimiserInjectorService>> key = Key.<Iterable<? extends IOptimiserInjectorService>> get(TypeLiterals.iterable(IOptimiserInjectorService.class));
-			for (final IOptimiserInjectorService service : (Iterable<IOptimiserInjectorService>) tmpInjector.getInstance(key)) {
+			for (final IOptimiserInjectorService service : (Iterable<@NonNull IOptimiserInjectorService>) tmpInjector.getInstance(key)) {
 				services.add(service);
 			}
 		}

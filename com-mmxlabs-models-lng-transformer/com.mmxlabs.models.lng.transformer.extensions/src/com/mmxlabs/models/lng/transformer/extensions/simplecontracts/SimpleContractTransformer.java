@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions.simplecontracts;
@@ -37,6 +37,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
+import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 
 /**
  * 
@@ -55,6 +56,10 @@ public class SimpleContractTransformer implements IContractTransformer {
 	@Inject
 	@Named(LNGTransformerModule.Parser_Commodity)
 	private SeriesParser indices;
+
+	@Inject
+	@Named(LNGTransformerModule.MONTH_ALIGNED_INTEGER_INTERVAL_CURVE)
+	private IIntegerIntervalCurve monthIntervalsInHoursCurve;
 
 	/**
 	 */
@@ -110,7 +115,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 	 */
 	private PriceExpressionContract createPriceExpressionContract(final String priceExpression) {
 		final ICurve curve = generateExpressionCurve(priceExpression);
-		final PriceExpressionContract contract = new PriceExpressionContract(curve);
+		final PriceExpressionContract contract = new PriceExpressionContract(curve, monthIntervalsInHoursCurve);
 		injector.injectMembers(contract);
 		return contract;
 	}

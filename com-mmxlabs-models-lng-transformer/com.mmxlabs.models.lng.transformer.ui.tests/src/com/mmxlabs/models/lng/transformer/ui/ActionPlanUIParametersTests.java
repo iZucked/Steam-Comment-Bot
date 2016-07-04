@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import com.mmxlabs.models.lng.parameters.ActionPlanSettings;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
-import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 
 public class ActionPlanUIParametersTests {
 	@Test

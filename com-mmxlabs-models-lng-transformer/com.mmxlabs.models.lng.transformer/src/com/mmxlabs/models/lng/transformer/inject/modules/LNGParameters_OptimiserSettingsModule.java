@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.inject.modules;
@@ -21,20 +21,13 @@ import com.mmxlabs.models.lng.parameters.ActionPlanSettings;
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
-import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessFactory;
-import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
-import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
-import com.mmxlabs.optimiser.core.modules.EvaluationProcessInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.FitnessFunctionInstantiatorModule;
 import com.mmxlabs.optimiser.lso.IThresholder;
 import com.mmxlabs.optimiser.lso.impl.RestartingLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.thresholders.GeometricThresholder;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
-import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
-import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ISimilarityComponentParameters;
-import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.SimilarityComponentParameters;
 import com.mmxlabs.scheduler.optimiser.lso.SequencesConstrainedMoveGeneratorUnit;
 
@@ -44,10 +37,12 @@ import com.mmxlabs.scheduler.optimiser.lso.SequencesConstrainedMoveGeneratorUnit
  */
 public class LNGParameters_OptimiserSettingsModule extends AbstractModule {
 
+	public static final String PROPERTY_MMX_HALF_SPEED_ACTION_SETS = "MMX_HALF_SPEED_ACTION_SETS";
+
 	@NonNull
 	private final OptimiserSettings settings;
 
-	public LNGParameters_OptimiserSettingsModule(@NonNull OptimiserSettings settings) {
+	public LNGParameters_OptimiserSettingsModule(@NonNull final OptimiserSettings settings) {
 		this.settings = settings;
 	}
 
@@ -84,6 +79,12 @@ public class LNGParameters_OptimiserSettingsModule extends AbstractModule {
 		// return new CalibratingGeometricThresholder(getRandom(), ts.getEpochLength(), ts.getInitialAcceptanceRate(), ts.getAlpha());
 	}
 
+	@Provides
+	@Named(PROPERTY_MMX_HALF_SPEED_ACTION_SETS)
+	private boolean isActionSetsRevaluating() {
+		return true;
+	}
+	
 	@Provides
 	@Named(LocalSearchOptimiserModule.RANDOM_SEED)
 	private long getRandomSeed() {
@@ -122,12 +123,12 @@ public class LNGParameters_OptimiserSettingsModule extends AbstractModule {
 
 	@Provides
 	@Named(LinearFitnessEvaluatorModule.LINEAR_FITNESS_WEIGHTS_MAP)
-	Map<String, Double> provideLSOFitnessWeights(final List<IFitnessComponent> fitnessComponents) {
-		// Initialise to zero, then take optimiser settings
+	Map<String, Double> provideLSOFitnessWeights(@Named(FitnessFunctionInstantiatorModule.ENABLED_FITNESS_NAMES) @NonNull final List<String> enabledFitnessNames) {
+
 		final Map<String, Double> weightsMap = new HashMap<String, Double>();
-		for (final IFitnessComponent component : fitnessComponents) {
+		for (final String component : enabledFitnessNames) {
 			if (component != null) {
-				weightsMap.put(component.getName(), 0.0);
+				weightsMap.put(component, 0.0);
 			}
 		}
 
@@ -148,7 +149,7 @@ public class LNGParameters_OptimiserSettingsModule extends AbstractModule {
 		final SimilarityComponentParameters scp = new SimilarityComponentParameters();
 
 		// Replace with settings.
-		SimilaritySettings similaritySettings = settings.getSimilaritySettings();
+		final SimilaritySettings similaritySettings = settings.getSimilaritySettings();
 
 		scp.setThreshold(ISimilarityComponentParameters.Interval.LOW, similaritySettings.getLowInterval().getThreshold());
 		scp.setWeight(ISimilarityComponentParameters.Interval.LOW, similaritySettings.getLowInterval().getWeight());
@@ -164,7 +165,7 @@ public class LNGParameters_OptimiserSettingsModule extends AbstractModule {
 	@Provides
 	@Named(ActionPlanModule.ACTION_PLAN_TOTAL_EVALUATIONS)
 	private int actionPlanTotalEvals() {
-		ActionPlanSettings actionPlanSettings = settings.getActionPlanSettings();
+		final ActionPlanSettings actionPlanSettings = settings.getActionPlanSettings();
 		assert actionPlanSettings != null;
 		return actionPlanSettings.getTotalEvaluations();
 	}
@@ -172,7 +173,7 @@ public class LNGParameters_OptimiserSettingsModule extends AbstractModule {
 	@Provides
 	@Named(ActionPlanModule.ACTION_PLAN_IN_RUN_EVALUATIONS)
 	private int actionPlanInRunEvals() {
-		ActionPlanSettings actionPlanSettings = settings.getActionPlanSettings();
+		final ActionPlanSettings actionPlanSettings = settings.getActionPlanSettings();
 		assert actionPlanSettings != null;
 		return actionPlanSettings.getInRunEvaluations();
 	}
@@ -180,7 +181,7 @@ public class LNGParameters_OptimiserSettingsModule extends AbstractModule {
 	@Provides
 	@Named(ActionPlanModule.ACTION_PLAN_MAX_SEARCH_DEPTH)
 	private int actionPlanInRunSearchDepth() {
-		ActionPlanSettings actionPlanSettings = settings.getActionPlanSettings();
+		final ActionPlanSettings actionPlanSettings = settings.getActionPlanSettings();
 		assert actionPlanSettings != null;
 		return actionPlanSettings.getSearchDepth();
 	}

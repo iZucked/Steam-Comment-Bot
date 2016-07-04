@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
@@ -131,7 +131,7 @@ public class SuboptimalScenarioTester {
 			final OptimiserSettings settings = LNGScenarioRunnerUtils.createDefaultSettings();
 			settings.getAnnealingSettings().setIterations(10000);
 			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) scenario, settings, new TransformerExtensionTestBootstrapModule(),
-					null, LNGTransformerHelper.HINT_OPTIMISE_LSO);
+					null, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			runner.evaluateInitialState();
 			runner.run();
 

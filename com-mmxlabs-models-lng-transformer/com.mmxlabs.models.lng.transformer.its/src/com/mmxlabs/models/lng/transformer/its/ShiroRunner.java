@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its;
@@ -24,6 +24,6 @@ public class ShiroRunner extends BlockJUnit4ClassRunner {
 
 	private void initAccessControl() {
 		// Initialise feature enablements
-		LicenseFeatures.initialiseFeatureEnablements("optimisation-period", "optimisation-charter-out-generation");
+		LicenseFeatures.initialiseFeatureEnablements("optimisation-period", "optimisation-charter-out-generation", "panama-canal", "break-evens");
 	}
 }

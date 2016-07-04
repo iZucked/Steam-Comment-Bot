@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.stochasticactionsets;
@@ -13,8 +13,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.omg.CORBA.CustomMarshal;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.Change;
@@ -108,7 +106,7 @@ public class StochasticActionSetUtils {
 		final int identical = getIdenticalChanges(a, b).size();
 		return Math.min((identical * 100) / (a.changesList.size()), 100);
 	}
-	
+
 	/**
 	 * Returns the total p&L per change for a collection of changeSets
 	 * 
@@ -116,11 +114,11 @@ public class StochasticActionSetUtils {
 	 */
 	public static long getTotalPNL(final Collection<ChangeSet> changeSets) {
 		long totalPnl = 0;
-		
+
 		for (final ChangeSet cs : changeSets) {
 			totalPnl += cs.metricDelta[MetricType.PNL.ordinal()];
 		}
-		
+
 		return totalPnl;
 	}
 
@@ -162,7 +160,7 @@ public class StochasticActionSetUtils {
 				break;
 			}
 		}
-		
+
 		return prctilePnl / totalChanges;
 	}
 
@@ -214,12 +212,12 @@ public class StochasticActionSetUtils {
 
 	private static int getAverageMatching(final JobState a, final JobState b) {
 		int sum = 0;
-		for (final ChangeSet cs: a.changeSetsAsList) {
+		for (final ChangeSet cs : a.changeSetsAsList) {
 			sum += getChangeSetMatching(cs, b);
 		}
 		return sum / a.changeSetsAsList.size();
 	}
-	
+
 	public static int getChangeSetMatching(final ChangeSet cs, final JobState b) {
 		int max = 0;
 		for (final ChangeSet csB : b.changeSetsAsList) {
@@ -260,11 +258,13 @@ public class StochasticActionSetUtils {
 		}
 		return new Pair<>(matrix, closestNeighbourTable);
 	}
-	
-	public Collection<JobState> getKNearestNeighbourForAllChangeSets(final Collection<JobState> jobStates, final Pair<Map<JobState, Map<JobState, int[]>>, Map<JobState, JobState>> distancesAndClosest, final JobState forComparing, final int k) {
+
+	public Collection<JobState> getKNearestNeighbourForAllChangeSets(final Collection<JobState> jobStates, final Pair<Map<JobState, Map<JobState, int[]>>, Map<JobState, JobState>> distancesAndClosest,
+			final JobState forComparing, final int k) {
 		final Map<JobState, Map<JobState, int[]>> distances = distancesAndClosest.getFirst();
 		final LinkedList<JobState> sortedJobStates = new LinkedList<>(jobStates);
 		Collections.sort(sortedJobStates, new Comparator<JobState>() {
+			@Override
 			public int compare(final JobState o1, final JobState o2) {
 				if (distances.get(forComparing).get(o1)[0] == distances.get(forComparing).get(o2)[0]) {
 					return (Integer.compare(distances.get(forComparing).get(o1)[1], distances.get(forComparing).get(o2)[1]));
@@ -273,7 +273,7 @@ public class StochasticActionSetUtils {
 				}
 			};
 		});
-		return sortedJobStates.subList(Math.max(0,sortedJobStates.size()-3), sortedJobStates.size());
+		return sortedJobStates.subList(Math.max(0, sortedJobStates.size() - 3), sortedJobStates.size());
 	}
 
 	public static int[][] createDistanceData(final Collection<JobState> jobStates) {
@@ -379,7 +379,7 @@ public class StochasticActionSetUtils {
 					currentSum += js.changeSetsAsList.get(i).metricDelta[MetricType.PNL.ordinal()];
 					currentChanges += js.changeSetsAsList.get(i).changesList.size();
 					if (currentSum > 0) {
-						value += (currentSum/currentChanges);
+						value += (currentSum / currentChanges);
 						cumulativeChanges = currentChanges;
 						idx = i;
 						foundPositive = true;

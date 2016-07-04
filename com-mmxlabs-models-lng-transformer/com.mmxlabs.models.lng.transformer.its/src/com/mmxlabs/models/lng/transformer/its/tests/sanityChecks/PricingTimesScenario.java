@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
@@ -146,7 +146,7 @@ public class PricingTimesScenario {
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) this.scenario, LNGScenarioRunnerUtils.createDefaultSettings(),
-					new TransformerExtensionTestBootstrapModule(), null);
+					new TransformerExtensionTestBootstrapModule(), null, true);
 			runner.evaluateInitialState();
 
 			final Schedule schedule = runner.getSchedule();

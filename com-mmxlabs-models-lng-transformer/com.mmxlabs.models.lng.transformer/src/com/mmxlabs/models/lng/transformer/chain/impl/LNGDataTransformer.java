@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.chain.impl;
@@ -44,10 +44,10 @@ import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModu
 public class LNGDataTransformer {
 
 	@NonNull
-	private final Collection<IOptimiserInjectorService> services;
+	private final Collection<@NonNull IOptimiserInjectorService> services;
 
 	@NonNull
-	private final Collection<String> hints;
+	private final Collection<@NonNull String> hints;
 
 	@NonNull
 	private final Injector injector;
@@ -58,28 +58,27 @@ public class LNGDataTransformer {
 	private IRunnerHook runnerHook;
 
 	@SuppressWarnings("null")
-	public LNGDataTransformer(@NonNull final LNGScenarioModel scenarioModel, @NonNull final OptimiserSettings settings, @NonNull final Collection<String> hints,
-			@NonNull final Collection<IOptimiserInjectorService> services) {
+	public LNGDataTransformer(@NonNull final LNGScenarioModel scenarioModel, @NonNull final OptimiserSettings settings, @NonNull final Collection<@NonNull String> hints,
+			@NonNull final Collection<@NonNull IOptimiserInjectorService> services) {
 
 		this.settings = settings;
 		this.hints = hints;
 		this.services = services;
 
-		final List<Module> modules = new LinkedList<>();
+		final List<@NonNull Module> modules = new LinkedList<>();
 
 		// Prepare the main modules with the re-usable data for any further work.
 		modules.add(new PerChainUnitScopeModule());
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
-		modules.addAll(
-				LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenarioModel, settings), services, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, hints));
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenarioModel, hints), services, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, hints));
 
 		final Injector parentInjector = Guice.createInjector(modules);
 
 		// Create temporary child injector to compute the initial solution and then pass result back into the main injector (as new child). This avoid polluting the injector with evaluation state.
 		{
 			final List<Module> modules2 = new LinkedList<>();
-			modules2.addAll(
-					LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(settings), services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
+			modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(settings), services,
+					IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 			modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 			modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGInitialSequencesModule(), services, IOptimiserInjectorService.ModuleType.Module_InitialSolution, hints));
 
@@ -102,7 +101,7 @@ public class LNGDataTransformer {
 	}
 
 	@NonNull
-	public Collection<IOptimiserInjectorService> getModuleServices() {
+	public Collection<@NonNull IOptimiserInjectorService> getModuleServices() {
 		return services;
 	}
 
@@ -119,20 +118,18 @@ public class LNGDataTransformer {
 		return settings;
 	}
 
-	@SuppressWarnings("null")
 	@NonNull
 	public ModelEntityMap getModelEntityMap() {
 		return injector.getInstance(ModelEntityMap.class);
 	}
 
-	@SuppressWarnings("null")
 	@NonNull
 	public IOptimisationData getOptimisationData() {
 		return injector.getInstance(IOptimisationData.class);
 	}
 
 	@NonNull
-	public Collection<String> getHints() {
+	public Collection<@NonNull String> getHints() {
 		return hints;
 	}
 

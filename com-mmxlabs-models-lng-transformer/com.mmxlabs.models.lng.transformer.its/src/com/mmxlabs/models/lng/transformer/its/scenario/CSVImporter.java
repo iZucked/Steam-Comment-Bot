@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its.scenario;
@@ -81,7 +81,6 @@ import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultAttributeImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
-import com.mmxlabs.models.util.importer.impl.MultiLineImporter;
 import com.mmxlabs.models.util.importer.registry.ExtensionConfigurationModule;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 import com.mmxlabs.models.util.importer.registry.impl.ImporterRegistry;
@@ -95,6 +94,7 @@ public class CSVImporter {
 		dataMap.put(PortModelImporter.PORT_GROUP_KEY, createURL(urlRoot, "Port Groups.csv"));
 		dataMap.put(PortModelImporter.DISTANCES_KEY, createURL(urlRoot, "Distance Matrix.csv"));
 		dataMap.put(PortModelImporter.SUEZ_KEY, createURL(urlRoot, "Suez Distance Matrix.csv"));
+		dataMap.put(PortModelImporter.PANAMA_KEY, createURL(urlRoot, "Panama Distance Matrix.csv"));
 	}
 
 	public void importFleetData(@NonNull final String urlRoot) throws MalformedURLException {
@@ -126,6 +126,7 @@ public class CSVImporter {
 
 		dataMap.put(CostModelImporter.COOLDOWN_PRICING_KEY, createURL(urlRoot, "Cooldown Prices.csv"));
 		dataMap.put(CostModelImporter.PORT_COSTS_KEY, createURL(urlRoot, "Port Costs.csv"));
+		dataMap.put(CostModelImporter.PANAMA_CANAL_TARIFF_KEY, createURL(urlRoot, "Panama Canal Tariff.csv"));
 	}
 
 	public void importPromptData(@NonNull final String urlRoot) throws MalformedURLException {
@@ -158,7 +159,8 @@ public class CSVImporter {
 		importPromptData(urlRoot);
 	}
 
-	private URL createURL(final String urlRoot, final String filename) throws MalformedURLException {
+	@NonNull
+	public URL createURL(final String urlRoot, final String filename) throws MalformedURLException {
 		return new URL(String.format("%s/%s", urlRoot, filename));
 	}
 
@@ -363,7 +365,7 @@ public class CSVImporter {
 		try {
 			for (final String key : parts.keySet()) {
 				try {
-					URL url = dataMap.get(key);
+					final URL url = dataMap.get(key);
 					if (url != null) {
 						@SuppressWarnings("resource")
 						final CSVReader r = new FileCSVReader(url);
@@ -402,7 +404,7 @@ public class CSVImporter {
 			try {
 				for (final String key : parts.keySet()) {
 					try {
-						URL url = dataMap.get(key);
+						final URL url = dataMap.get(key);
 						if (url != null) {
 							@SuppressWarnings("resource")
 							final CSVReader r = new FileCSVReader(url);

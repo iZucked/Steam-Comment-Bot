@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
@@ -10,12 +10,8 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.models.lng.parameters.ActionPlanSettings;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
-import com.mmxlabs.models.lng.parameters.SimilarityInterval;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
-import com.mmxlabs.models.lng.parameters.SimilaritySettings;
-import com.mmxlabs.models.lng.parameters.UserSettings;
 
 public class ActionPlanUIParameters {
 	

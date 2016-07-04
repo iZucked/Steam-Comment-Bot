@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.period;
@@ -160,6 +160,7 @@ public class PeriodExporterTests {
 		// Perform changes -- change assignment
 		{
 			final Cargo copyCargo1 = mapping.getCopyFromOriginal(cargo1);
+			assert copyCargo1 != null;
 			final VesselAvailability copyVesselAvailability2 = mapping.getCopyFromOriginal(vesselAvailability2);
 			copyCargo1.setVesselAssignmentType(copyVesselAvailability2);
 			copyCargo1.setSequenceHint(2);
@@ -215,7 +216,10 @@ public class PeriodExporterTests {
 			final Cargo copyCargo2 = mapping.getCopyFromOriginal(cargo2);
 
 			final DischargeSlot copyDischarge1 = mapping.getCopyFromOriginal(discharge1);
+			assert copyDischarge1 != null;
+
 			final DischargeSlot copyDischarge2 = mapping.getCopyFromOriginal(discharge2);
+			assert copyDischarge2 != null;
 
 			copyDischarge1.setCargo(copyCargo2);
 			copyDischarge2.setCargo(copyCargo1);
@@ -272,6 +276,10 @@ public class PeriodExporterTests {
 
 			final LoadSlot copyLoad1 = mapping.getCopyFromOriginal(load1);
 			final DischargeSlot copyDischarge1 = mapping.getCopyFromOriginal(discharge1);
+
+			assert copyCargo1 != null;
+			assert copyLoad1 != null;
+			assert copyDischarge1 != null;
 
 			copyLoad1.setCargo(null);
 			copyDischarge1.setCargo(null);
@@ -330,6 +338,10 @@ public class PeriodExporterTests {
 
 			final LoadSlot copyLoad1 = mapping.getCopyFromOriginal(load1);
 			final DischargeSlot copyDischarge1 = mapping.getCopyFromOriginal(discharge1);
+
+			assert copyCargo1 != null;
+			assert copyLoad1 != null;
+			assert copyDischarge1 != null;
 
 			copyLoad1.setCargo(null);
 			copyDischarge1.setCargo(null);
@@ -542,6 +554,11 @@ public class PeriodExporterTests {
 			final DischargeSlot copyDischarge1 = mapping.getCopyFromOriginal(discharge1);
 			final DischargeSlot copyDischarge2 = mapping.getCopyFromOriginal(discharge2);
 
+			assert copyCargo1 != null;
+			assert copyLoad1 != null;
+			assert copyDischarge1 != null;
+			assert copyDischarge2 != null;
+
 			copyLoad1.setPort(mapping.getCopyFromOriginal(port2));
 			copyDischarge1.setCargo(null);
 			copyDischarge2.setCargo(copyCargo1);
@@ -598,7 +615,11 @@ public class PeriodExporterTests {
 		// Perform changes -- change assignment
 		{
 			final CharterOutEvent copyEvent1 = mapping.getCopyFromOriginal(event1);
+			assert copyEvent1 != null;
+
 			final VesselAvailability copyVesselAvailability2 = mapping.getCopyFromOriginal(vesselAvailability2);
+			assert copyVesselAvailability2 != null;
+
 			copyEvent1.setVesselAssignmentType(copyVesselAvailability2);
 			copyEvent1.setSequenceHint(2);
 		}

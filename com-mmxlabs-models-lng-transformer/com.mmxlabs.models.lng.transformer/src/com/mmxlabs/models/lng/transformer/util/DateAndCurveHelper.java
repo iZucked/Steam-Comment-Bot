@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.util;
@@ -14,11 +14,13 @@ import java.util.TimeZone;
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
+import com.mmxlabs.common.curves.StepwiseLongCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
@@ -26,6 +28,7 @@ import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 
@@ -52,7 +55,7 @@ public class DateAndCurveHelper {
 	public DateAndCurveHelper(@NonNull final ZonedDateTime earliest, @NonNull final ZonedDateTime latest) {
 
 		this.earliestTime = earliest.withZoneSameInstant(ZoneId.of("UTC")).truncatedTo(ChronoUnit.HOURS);
-		assert!earliestTime.isAfter(earliest);
+		assert !earliestTime.isAfter(earliest);
 		this.latestTime = latest;
 	}
 
@@ -151,7 +154,8 @@ public class DateAndCurveHelper {
 		return curve;
 	}
 
-	public StepwiseIntegerCurve generateFixedCostExpressionCurve(final String priceExpression, final SeriesParser seriesParser) {
+	@Nullable
+	public StepwiseLongCurve generateLongExpressionCurve(final @Nullable String priceExpression, final @NonNull SeriesParser seriesParser) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return null;
@@ -160,18 +164,43 @@ public class DateAndCurveHelper {
 		final IExpression<ISeries> expression = seriesParser.parse(priceExpression);
 		final ISeries parsed = expression.evaluate();
 
-		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+		final StepwiseLongCurve curve = new StepwiseLongCurve();
 		if (parsed.getChangePoints().length == 0) {
-			curve.setDefaultValue((int) OptimiserUnitConvertor.convertToInternalFixedCost(parsed.evaluate(0).intValue()));
+			curve.setDefaultValue(Math.round(parsed.evaluate(0).doubleValue() * (double) Calculator.ScaleFactor));
 		} else {
 
-			curve.setDefaultValue(0);
+			curve.setDefaultValue(0L);
 			for (final int i : parsed.getChangePoints()) {
-				curve.setValueAfter(i, (int) OptimiserUnitConvertor.convertToInternalFixedCost(parsed.evaluate(i).intValue()));
+				curve.setValueAfter(i, Math.round(parsed.evaluate(i).doubleValue() * (double) Calculator.ScaleFactor));
 			}
 		}
 		return curve;
 	}
+
+//	@Nullable
+//	public StepwiseIntegerCurve generateFixedCostExpressionCurve(final @Nullable String priceExpression, final @NonNull SeriesParser seriesParser) {
+//
+//		if (priceExpression == null || priceExpression.isEmpty()) {
+//			return null;
+//		}
+//
+//		final IExpression<ISeries> expression = seriesParser.parse(priceExpression);
+//		final ISeries parsed = expression.evaluate();
+//
+//		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+//		if (parsed.getChangePoints().length == 0) {
+//			curve.setDefaultValue((int) OptimiserUnitConvertor.convertToInternalFixedCost(parsed.evaluate(0).intValue()));
+//		} else {
+//
+//			curve.setDefaultValue(0);
+//			for (final int i : parsed.getChangePoints()) {
+//				Number value = parsed.evaluate(i);
+//				assert value.longValue() == value.intValue();
+//				curve.setValueAfter(i, (int) OptimiserUnitConvertor.convertToInternalFixedCost(value.intValue()));
+//			}
+//		}
+//		return curve;
+//	}
 
 	public int convertTime(@NonNull final YearMonth time) {
 		return convertTime(yearMonthToDateTime(time));
@@ -241,5 +270,38 @@ public class DateAndCurveHelper {
 
 	public static YearMonth createYearMonth(final int year, final int month) {
 		return YearMonth.of(year, month);
+	}
+
+	@NonNull
+	public StepwiseIntegerCurve createDateShiftCurve(int dayOfMonth) {
+		// Create a curve, shifting the current date forwards or backwards depending on whether or not it is on or after the dayOfMonth.
+		final StepwiseIntegerCurve dateShiftCurve = new StepwiseIntegerCurve();
+		{
+			ZonedDateTime currentDate = getEarliestTime();
+
+			// Find the previous dayOfMonth
+			if (currentDate.getDayOfMonth() < dayOfMonth) {
+				currentDate = currentDate.minusMonths(1);
+			}
+			currentDate = currentDate.withDayOfMonth(dayOfMonth);
+			// Ensure midnight
+			currentDate = currentDate.withHour(0);
+
+			// Hmm, not sure how to get to the true latest date - perhaps better as a lazy treemap?
+			final ZonedDateTime end = getLatestTime();
+			while (currentDate.isBefore(end)) {
+
+				// We want to move anything after dayOfMonth to start of the next month
+				final int time = convertTime(currentDate);
+				// Set to start of current month *then* shift to the next month
+				final ZonedDateTime c = currentDate.withDayOfMonth(1).plusMonths(1);
+
+				final int startOfMonth = convertTime(c);
+				dateShiftCurve.setValueAfter(time, startOfMonth);
+
+				currentDate = currentDate.plusMonths(1);
+			}
+		}
+		return dateShiftCurve;
 	}
 }

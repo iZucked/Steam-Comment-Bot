@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.util;
@@ -31,7 +31,7 @@ public class TransformerHelper {
 		final IVesselClass vc = builder.createVesselClass(eVc.getName(), OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMinSpeed()),
 				OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMaxSpeed()), OptimiserUnitConvertor.convertToInternalVolume((int) (eVc.getFillCapacity() * eVc.getCapacity())),
 				OptimiserUnitConvertor.convertToInternalVolume(eVc.getMinHeel()), baseFuel, OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getPilotLightRate()), eVc.getWarmingTime(),
-				OptimiserUnitConvertor.convertToInternalVolume(eVc.getCoolingVolume()), OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getMinBaseFuelConsumption()));
+				OptimiserUnitConvertor.convertToInternalVolume(eVc.getCoolingVolume()), OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getMinBaseFuelConsumption()), eVc.isHasReliqCapability());
 		buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Laden, eVc.getLadenAttributes());
 		buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Ballast, eVc.getBallastAttributes());
 
@@ -48,7 +48,7 @@ public class TransformerHelper {
 
 	@NonNull
 	public static IBaseFuel buildBaseFuel(@NonNull final ISchedulerBuilder builder, @NonNull final BaseFuel eBF) {
-		IBaseFuel bf = builder.createBaseFuel(eBF.getName(), OptimiserUnitConvertor.convertToInternalConversionFactor(eBF.getEquivalenceFactor()));
+		final IBaseFuel bf = builder.createBaseFuel(eBF.getName(), OptimiserUnitConvertor.convertToInternalConversionFactor(eBF.getEquivalenceFactor()));
 		return bf;
 	}
 
@@ -64,8 +64,8 @@ public class TransformerHelper {
 	 * @param ladenAttributes
 	 *            the {@link VesselStateAttributes} from the EMF model
 	 */
-	public static void buildVesselStateAttributes(@NonNull final ISchedulerBuilder builder, @NonNull final IVesselClass vc,
-			@NonNull final com.mmxlabs.scheduler.optimiser.components.VesselState state, final VesselStateAttributes attrs) {
+	public static void buildVesselStateAttributes(@NonNull final ISchedulerBuilder builder, @NonNull final IVesselClass vc, final com.mmxlabs.scheduler.optimiser.components.@NonNull VesselState state,
+			final VesselStateAttributes attrs) {
 		final TreeMap<Integer, Long> keypoints = new TreeMap<>();
 
 		int minSpeed = Integer.MAX_VALUE;

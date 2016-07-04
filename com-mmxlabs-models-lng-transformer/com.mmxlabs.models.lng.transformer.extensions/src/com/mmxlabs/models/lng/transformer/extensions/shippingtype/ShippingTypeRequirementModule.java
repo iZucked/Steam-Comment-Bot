@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions.shippingtype;
@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.ops4j.peaberry.activation.util.PeaberryActivationModule;
 
 import com.google.inject.AbstractModule;
@@ -54,14 +55,16 @@ public class ShippingTypeRequirementModule extends PeaberryActivationModule {
 	public static class DesPermissionInjectorService implements IOptimiserInjectorService {
 
 		@Override
-		public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<String> hints) {
+		@Nullable
+		public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 			return null;
 		}
 
 		@Override
-		public List<Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<String> hints) {
+		@Nullable
+		public List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 			if (moduleType == ModuleType.Module_DataComponentProviderModule) {
-				return Collections.<Module> singletonList(new DesPermissionDCPModule());
+				return Collections.<@NonNull Module> singletonList(new DesPermissionDCPModule());
 			}
 			return null;
 		}

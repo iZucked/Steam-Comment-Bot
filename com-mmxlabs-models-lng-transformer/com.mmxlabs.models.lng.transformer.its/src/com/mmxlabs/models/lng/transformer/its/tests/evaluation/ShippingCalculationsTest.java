@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its.tests.evaluation;
@@ -17,18 +17,17 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
-import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CostModel;
-import com.mmxlabs.models.lng.pricing.DerivedIndex;
-import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Cooldown;
@@ -69,9 +68,9 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		// change from default scenario: add a canal
 
-		final Route canal = msc.portCreator.addCanal("canal");
+		final Route canal = msc.portCreator.addCanal(RouteOption.SUEZ);
 		msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 10, canal);
-		msc.fleetCreator.assignDefaultCanalData(msc.vc, canal);
+		msc.fleetCreator.assignDefaultSuezCanalData(msc.vc, canal);
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -113,20 +112,19 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final Sequence sequence = schedule.getSequences().get(0);
 
 		checker.check(sequence);
-
 	}
 
 	@Test
-	public void testCanalRouteLonger() {
+	public void testSuezCanalRouteLonger() {
 		System.err.println("\n\nDon't use canal which is longer than default route");
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: add a canal, but it is longer than the default route
 
-		final Route canal = msc.portCreator.addCanal("canal");
+		final Route canal = msc.portCreator.addCanal(RouteOption.SUEZ);
 		msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 30, canal);
-		msc.fleetCreator.assignDefaultCanalData(msc.vc, canal);
+		msc.fleetCreator.assignDefaultSuezCanalData(msc.vc, canal);
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -153,9 +151,9 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// which is shorter than the default route
 		// but has a high usage cost
 
-		final Route canal = msc.portCreator.addCanal("canal");
+		final Route canal = msc.portCreator.addCanal(RouteOption.SUEZ);
 		msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 10, canal);
-		msc.fleetCreator.assignDefaultCanalData(msc.vc, canal);
+		msc.fleetCreator.assignDefaultSuezCanalData(msc.vc, canal);
 		final RouteCost cost = msc.getRouteCost(msc.vc, canal);
 		cost.setLadenCost(500);
 
@@ -175,22 +173,34 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 	}
 
 	@Test
-	public void testCanalRouteShorterWithDelay() {
-		System.err.println("\n\nUse canal which is cheaper than default route but has a delay");
+	public void testSuezCanalRouteShorterWithDelay() {
+		System.err.println("\n\nUse Suez canal which is cheaper than default route but has a delay");
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: add a canal
 
-		final Route canal = msc.portCreator.addCanal("canal");
-		msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 10, canal);
-		msc.fleetCreator.assignDefaultCanalData(msc.vc, canal);
-		final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vc, canal);
+		{
+			final Route suezCanal = msc.portCreator.addCanal(RouteOption.SUEZ);
+			msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 10, suezCanal);
+			msc.fleetCreator.assignDefaultSuezCanalData(msc.vc, suezCanal);
+			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vc, suezCanal);
 
-		routeParameters.setExtraTransitTime(2);
-		routeParameters.setLadenNBORate(TimeUnitConvert.convertPerHourToPerDay(1));
-		routeParameters.setLadenConsumptionRate(TimeUnitConvert.convertPerHourToPerDay(2));
+			routeParameters.setExtraTransitTime(2);
+			routeParameters.setLadenNBORate(TimeUnitConvert.convertPerHourToPerDay(1));
+			routeParameters.setLadenConsumptionRate(TimeUnitConvert.convertPerHourToPerDay(2));
+		}
 
+		{
+			final Route panamaCanal = msc.portCreator.addCanal(RouteOption.PANAMA);
+			msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 20, panamaCanal);
+			msc.fleetCreator.assignDefaultSuezCanalData(msc.vc, panamaCanal);
+			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vc, panamaCanal);
+
+			routeParameters.setExtraTransitTime(2);
+			routeParameters.setLadenNBORate(TimeUnitConvert.convertPerHourToPerDay(1));
+			routeParameters.setLadenConsumptionRate(TimeUnitConvert.convertPerHourToPerDay(2));
+		}
 		final SequenceTester checker = getDefaultTester();
 
 		// change from default scenario
@@ -236,6 +246,83 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 	}
 
 	@Test
+	public void testPanamaCanalRouteShorterWithDelay() {
+		System.err.println("\n\nUse panama canal which is cheaper than default route but has a delay");
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+
+		// change from default scenario: add a canal
+		//
+		{
+			final Route suezCanal = msc.portCreator.addCanal(RouteOption.SUEZ);
+			msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 30, suezCanal);
+			msc.fleetCreator.assignDefaultSuezCanalData(msc.vc, suezCanal);
+			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vc, suezCanal);
+
+			routeParameters.setExtraTransitTime(2);
+			routeParameters.setLadenNBORate(TimeUnitConvert.convertPerHourToPerDay(1));
+			routeParameters.setLadenConsumptionRate(TimeUnitConvert.convertPerHourToPerDay(2));
+		}
+
+		{
+			final Route panamaCanal = msc.portCreator.addCanal(RouteOption.PANAMA);
+			msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 10, panamaCanal);
+			msc.fleetCreator.assignDefaultPanamaCanalData(msc.vc, panamaCanal);
+			final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vc, panamaCanal);
+
+			routeParameters.setExtraTransitTime(2);
+			routeParameters.setLadenNBORate(TimeUnitConvert.convertPerHourToPerDay(1));
+			routeParameters.setLadenConsumptionRate(TimeUnitConvert.convertPerHourToPerDay(2));
+		}
+
+		final SequenceTester checker = getDefaultTester();
+
+		// change from default scenario
+		// second journey is now 1 hr longer due to canal usage (but 10 units shorter distance)
+		// so fuel usage is halved, plus extra from canal
+
+		// use half as much fuel on second journey (as default) plus 2 for the canal
+		checker.setExpectedValue(12, Expectations.NBO_USAGE, Journey.class, 1);
+
+		// use half as much fuel on second journey (as default) plus 2 for the canal
+		checker.setExpectedValue(7, Expectations.BF_USAGE, Journey.class, 1);
+
+		// second journey cost is different
+		// 322 = 7 { BF usage } * 10 { BF price } + 12 { NBO usage } * 21 { NBO price }
+		checker.setExpectedValue(322, Expectations.FUEL_COSTS, Journey.class, 1);
+
+		// second journey faces additional canal cost
+		checker.setExpectedValue(1, Expectations.OVERHEAD_COSTS, Journey.class, 1);
+
+		// second journey takes 3hrs (instead of 2)
+		checker.setExpectedValue(3, Expectations.DURATIONS, Journey.class, 1);
+
+		// so second idle is 1hr less
+		checker.setExpectedValue(1, Expectations.DURATIONS, Idle.class, 1);
+
+		// and correspondingly costs less
+		checker.setExpectedValue(105, Expectations.FUEL_COSTS, Idle.class, 1);
+
+		// and requires less fuel
+		checker.setExpectedValue(5, Expectations.NBO_USAGE, Idle.class, 1);
+
+		// idle NBO consumption is 5, plus 12 for journey
+		final Integer[] expectedloadDischargeVolumes = { 10000, -9983 };
+		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, expectedloadDischargeVolumes);
+
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+		Assert.assertEquals(RouteOption.DIRECT, ((Journey) sequence.getEvents().get(1)).getRoute().getRouteOption());
+		Assert.assertEquals(RouteOption.PANAMA, ((Journey) sequence.getEvents().get(4)).getRoute().getRouteOption());
+		Assert.assertEquals(RouteOption.DIRECT, ((Journey) sequence.getEvents().get(7)).getRoute().getRouteOption());
+
+		checker.check(sequence);
+
+	}
+
+	@Test
 	public void testFBOLimitedByMinHeel() {
 		System.err.println("\n\nUse FBO for one trip after loading");
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
@@ -256,11 +343,11 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		msc.vc.setMinHeel(10);
 
 		// Create second cargo to require arriving cold
-		@SuppressWarnings("unused")
 		Cargo secondCargo = msc.createDefaultCargo(msc.loadPort, msc.dischargePort);
 
 		// and send the vessel back to the origin port at end of itinerary
-		msc.setDefaultAvailability(msc.originPort, msc.originPort);
+		VesselAvailability va = msc.setDefaultAvailability(msc.originPort, msc.originPort);
+		secondCargo.setVesselAssignmentType(va);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -773,6 +860,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 	@Test
 	public void testCharterCost_SpotCharterIn() {
+
 		System.err.println("\n\nSpot charter-in vessel charter cost added correctly.");
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
@@ -783,19 +871,14 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		final CargoModel cargoModel = scenario.getCargoModel();
 		cargoModel.getVesselAvailabilities().clear();
+
+		cargoModel.getCargoes().forEach(c -> c.setVesselAssignmentType(null));
 		// Cannot null as final
 		// msc.vessel = null;
 		// msc.vesselAvailability = null;
 
 		// Set up a charter index curve
 		final int charterRatePerDay = 240;
-		final CharterIndex spotMarketRate = PricingFactory.eINSTANCE.createCharterIndex();
-		final DerivedIndex<Integer> spotMarketRateData = PricingFactory.eINSTANCE.createDerivedIndex();
-		spotMarketRateData.setExpression("" + charterRatePerDay);
-		spotMarketRate.setData(spotMarketRateData);
-
-		final PricingModel pricingModel = scenario.getReferenceModel().getPricingModel();
-		pricingModel.getCharterIndices().add(spotMarketRate);
 
 		// Create a charter-in market object
 		final SpotMarketsModel sportMarketsModel = scenario.getReferenceModel().getSpotMarketsModel();
@@ -807,7 +890,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		charterModel.setVesselClass(msc.vc);
 		charterModel.setSpotCharterCount(1);
-		charterModel.setCharterInPrice(spotMarketRate);
+		charterModel.setCharterInRate("" + charterRatePerDay);
 
 		// Spot charter-in vessels have fewer voyages
 		final SequenceTester checker;
@@ -1014,7 +1097,8 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final LocalDateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime().toLocalDateTime();
 		final LocalDateTime dryDockStartByDate = endLoad.plusHours(3);
 		final LocalDateTime dryDockStartAfterDate = endLoad.plusHours(2);
-		msc.vesselEventCreator.createDryDockEvent("DryDock", msc.loadPort, dryDockStartByDate, dryDockStartAfterDate);
+		DryDockEvent event = msc.vesselEventCreator.createDryDockEvent("DryDock", msc.loadPort, dryDockStartByDate, dryDockStartAfterDate);
+		event.setVesselAssignmentType(msc.vesselAvailability);
 
 		// set up a drydock pricing of 6
 		msc.portCreator.setPortCost(msc.loadPort, PortCapability.DRYDOCK, 6);
@@ -1046,7 +1130,8 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final LocalDateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime().toLocalDateTime();
 		final LocalDateTime maintenanceDockStartByDate = endLoad.plusHours(3);
 		final LocalDateTime maintenanceDockStartAfterDate = endLoad.plusHours(2);
-		msc.vesselEventCreator.createMaintenanceEvent("Maintenance", msc.loadPort, maintenanceDockStartByDate, maintenanceDockStartAfterDate);
+		MaintenanceEvent event = msc.vesselEventCreator.createMaintenanceEvent("Maintenance", msc.loadPort, maintenanceDockStartByDate, maintenanceDockStartAfterDate);
+		event.setVesselAssignmentType(msc.vesselAvailability);
 
 		// set up a drydock pricing of 6
 		msc.portCreator.setPortCost(msc.loadPort, PortCapability.MAINTENANCE, 3);
@@ -1157,31 +1242,6 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// force idle time
 		checker.setExpectedValue(firstIdle, Expectations.DURATIONS, Idle.class, 0);
 		checker.setExpectedValue(5 * firstIdle, Expectations.BF_USAGE, Idle.class, 0);
-		checker.setupOrdinaryFuelCosts();
-
-		final Schedule schedule = ScenarioTools.evaluate(scenario);
-		ScenarioTools.printSequences(schedule);
-
-		final Sequence sequence = schedule.getSequences().get(0);
-
-		checker.check(sequence);
-	}
-
-	@Test
-	public void testUseDefaultFinalIdlingWhenEndTimeUnspecified() {
-		System.err.println("\n\nUnspecified end time should result in idling due to a defined minimum time between last event and end.");
-		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
-
-		msc.vesselAvailability.unsetEndAfter();
-		msc.vesselAvailability.unsetEndBy();
-
-		SequenceTester checker = getDefaultTester();
-
-		final int lastIdleHours = /* SchedulerBuilder.minDaysFromLastEventToEnd */60 * 24 - checker.getExpectedValues(Expectations.DURATIONS, Journey.class)[2];
-		;
-		checker.setExpectedValue(lastIdleHours, Expectations.DURATIONS, Idle.class, 2);
-		checker.setExpectedValue(lastIdleHours * 5, Expectations.BF_USAGE, Idle.class, 2);
 		checker.setupOrdinaryFuelCosts();
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
@@ -1343,9 +1403,9 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
-		@SuppressWarnings("unused")
 		CharterOutEvent event = msc.makeCharterOut(msc, scenario, msc.loadPort, msc.originPort);
 
+		event.setVesselAssignmentType(msc.vesselAvailability);
 		// FIXME: Note - there are three idle events in a row due to the way the internal optimisation represents the transition from charter start to charter end. Not great API but this is the way it
 		// works.
 		Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, Idle.class, Idle.class,

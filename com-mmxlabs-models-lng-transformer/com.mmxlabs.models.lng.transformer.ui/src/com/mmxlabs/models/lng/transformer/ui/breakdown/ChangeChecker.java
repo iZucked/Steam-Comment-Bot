@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.breakdown;
@@ -31,11 +31,11 @@ public class ChangeChecker {
 
 	}
 
-	public ChangeChecker(SimilarityState base, SimilarityState target, ISequences baseRawSequences) {
+	public ChangeChecker(final SimilarityState base, final SimilarityState target, final ISequences baseRawSequences) {
 		init(base, target, baseRawSequences);
 	}
 
-	public void init(SimilarityState base, SimilarityState target, ISequences baseRawSequences) {
+	public void init(final SimilarityState base, final SimilarityState target, final ISequences baseRawSequences) {
 		this.base = base;
 		this.target = target;
 		this.baseRawSequences = baseRawSequences;
@@ -46,12 +46,12 @@ public class ChangeChecker {
 		return fullDifferences;
 	}
 
-	private void setDifferences(ISequences rawSequences) {
+	private void setDifferences(final ISequences rawSequences) {
 		fullDifferences = findAllDifferences(rawSequences);
 	}
 
-	private List<Difference> findAllDifferences(ISequences rawSequences) {
-		List<Difference> differences = new ArrayList<Difference>();
+	private List<Difference> findAllDifferences(final ISequences rawSequences) {
+		final List<Difference> differences = new ArrayList<Difference>();
 		int differenceCount = 0;
 		boolean different = false;
 		for (final IResource resource : rawSequences.getResources()) {
@@ -64,11 +64,11 @@ public class ChangeChecker {
 					// Currently only looking at LD style cargoes
 					if (portTypeProvider.getPortType(prev) == PortType.Load && portTypeProvider.getPortType(current) == PortType.Discharge) {
 						// Wiring Change
-						boolean wiringChange = false;
+						final boolean wiringChange = false;
 						final Integer matchedDischarge = target.getDischargeForLoad(prev);
 						final Integer matchedLoad = target.getLoadForDischarge(current);
 						if (matchedDischarge == null && matchedLoad == null) {
-							differences.add(new Difference(DifferenceType.CARGO_NOT_IN_TARGET, prev, current, null));
+							differences.add(new Difference(DifferenceType.CARGO_NOT_IN_TARGET, prev, current, resource));
 							prev = current;
 							continue;
 						} else if (matchedLoad == null && matchedDischarge != null) {
@@ -82,8 +82,8 @@ public class ChangeChecker {
 						} else if (matchedDischarge != current.getIndex()) {
 							differences.add(new Difference(DifferenceType.CARGO_WRONG_WIRING, prev, current, resource));
 							// Has the load moved vessel?
-							IResource matchedLoadResource = target.getResourceForElement(prev);
-							IResource matchedDischargeResource = target.getResourceForElement(current);
+							final IResource matchedLoadResource = target.getResourceForElement(prev);
+							final IResource matchedDischargeResource = target.getResourceForElement(current);
 							if (matchedLoadResource != resource) {
 								// Hash the discharge moved vessel?
 								if (matchedDischargeResource != resource) {
@@ -135,9 +135,9 @@ public class ChangeChecker {
 			}
 		}
 
-		Deque<ISequenceElement> unusedElements = new LinkedList<ISequenceElement>(rawSequences.getUnusedElements());
+		final Deque<ISequenceElement> unusedElements = new LinkedList<ISequenceElement>(rawSequences.getUnusedElements());
 		while (unusedElements.size() > 0) {
-			ISequenceElement element = unusedElements.pop();
+			final ISequenceElement element = unusedElements.pop();
 			if (portTypeProvider.getPortType(element).equals(PortType.Load) && target.getDischargeForLoad(element) != null) {
 				differences.add(new Difference(DifferenceType.LOAD_UNUSED_IN_BASE, element, null, null));
 			} else if (portTypeProvider.getPortType(element).equals(PortType.Discharge) && target.getLoadForDischarge(element) != null) {
@@ -154,23 +154,23 @@ public class ChangeChecker {
 		return differences;
 	}
 
-	public ChangeChecker(ChangeChecker original) {
+	public ChangeChecker(final ChangeChecker original) {
 		this(original.base, original.target, original.baseRawSequences);
 		this.fullDifferences = new ArrayList<Difference>();
-		for (Difference d : original.fullDifferences) {
-			this.fullDifferences.add(new Difference(d.move, d.load, d.discharge, d.resource));
+		for (final Difference d : original.fullDifferences) {
+			this.fullDifferences.add(new Difference(d.move, d.load, d.discharge, d.currentResource));
 		}
 	}
 
-	public static List<Difference> copyDifferenceList(List<Difference> differences) {
-		List<Difference> copy = new ArrayList<Difference>();
-		for (Difference d : differences) {
-			copy.add(new Difference(d.move, d.load, d.discharge, d.resource));
+	public static List<Difference> copyDifferenceList(final List<Difference> differences) {
+		final List<Difference> copy = new ArrayList<>();
+		for (final Difference d : differences) {
+			copy.add(new Difference(d.move, d.load, d.discharge, d.currentResource));
 		}
 		return copy;
 	}
 
-	public enum DifferenceType {
+	public static enum DifferenceType {
 		CARGO_WRONG_VESSEL, DISCHARGE_WRONG_VESSEL, LOAD_WRONG_VESSEL, CARGO_WRONG_WIRING, CARGO_NOT_IN_TARGET, UNUSED_DISCHARGE_IN_TARGET, UNUSED_LOAD_IN_TARGET, DISCHARGE_UNUSED_IN_BASE, LOAD_UNUSED_IN_BASE,
 	}
 }

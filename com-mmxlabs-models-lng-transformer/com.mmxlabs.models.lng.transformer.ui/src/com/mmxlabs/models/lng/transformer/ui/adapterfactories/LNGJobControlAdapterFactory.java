@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.adapterfactories;
@@ -25,15 +25,15 @@ import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 public class LNGJobControlAdapterFactory implements IAdapterFactory {
 
 	@Override
-	public Object getAdapter(final Object adaptableObject, @SuppressWarnings("rawtypes") final Class adapterType) {
+	public <T> T getAdapter(final Object adaptableObject, @SuppressWarnings("rawtypes") final Class<T> adapterType) {
 
 		if (adaptableObject instanceof LNGRunAllSimilarityJobDescriptor) {
 
 			final LNGRunAllSimilarityJobDescriptor descriptor = (LNGRunAllSimilarityJobDescriptor) adaptableObject;
 			if (descriptor.isOptimising()) {
 				try {
-//					return new LNGSchedulerRunAllSimilarityJobControl(descriptor);
-					return new LNGSchedulerManyJobsControl(descriptor);
+					// return new LNGSchedulerRunAllSimilarityJobControl(descriptor);
+					return (T) new LNGSchedulerManyJobsControl(descriptor);
 				} catch (final IOException e) {
 					throw new RuntimeException(e);
 				}
@@ -42,12 +42,12 @@ public class LNGJobControlAdapterFactory implements IAdapterFactory {
 
 			final LNGSchedulerJobDescriptor descriptor = (LNGSchedulerJobDescriptor) adaptableObject;
 			if (descriptor.isOptimising()) {
-				return new LNGSchedulerOptimiserJobControl(descriptor);
+				return (T) new LNGSchedulerOptimiserJobControl(descriptor);
 			} else {
-				return new LNGSchedulerEvaluationJobControl(descriptor);
+				return (T) new LNGSchedulerEvaluationJobControl(descriptor);
 			}
 		}
-		return null;
+		return (T)null;
 	}
 
 	@Override

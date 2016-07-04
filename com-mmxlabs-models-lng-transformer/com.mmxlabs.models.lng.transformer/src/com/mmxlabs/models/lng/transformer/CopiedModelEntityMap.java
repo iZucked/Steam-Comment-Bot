@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer;
@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.cargo.SpotSlot;
@@ -27,32 +26,35 @@ public class CopiedModelEntityMap implements ModelEntityMap {
 	private final Map<EObject, EObject> originalToNewCopy = new HashMap<>();
 	private final Map<EObject, EObject> newCopyToOriginal = new HashMap<>();
 
-	private Copier copier;
-
-	public CopiedModelEntityMap(@NonNull final ModelEntityMap delegate, @NonNull final EcoreUtil.Copier copier) {
+	/**
+	 * Constructor. <b>Note we will call {@link EcoreUtil.Copier#copyReferences()} so do not do this externally</b>
+	 * 
+	 * @param delegate
+	 * @param copier
+	 */
+	public CopiedModelEntityMap(@NonNull final ModelEntityMap delegate, final EcoreUtil.@NonNull Copier copier) {
 		this.delegate = delegate;
-		this.copier = copier;
 		for (final Map.Entry<EObject, EObject> e : copier.entrySet()) {
 			originalToNewCopy.put(e.getKey(), e.getValue());
 			newCopyToOriginal.put(e.getValue(), e.getKey());
 		}
 
-		Collection<SpotSlot> allModelObjects = delegate.getAllModelObjects(SpotSlot.class);
-		for (SpotSlot ss : allModelObjects) {
+		final Collection<SpotSlot> allModelObjects = delegate.getAllModelObjects(SpotSlot.class);
+		for (final SpotSlot ss : allModelObjects) {
 			if (!originalToNewCopy.containsKey(ss)) {
-				EObject u =  copier.copy(ss);
-				originalToNewCopy.put(ss,u);
+				final EObject u = copier.copy(ss);
+				originalToNewCopy.put(ss, u);
 				newCopyToOriginal.put(u, ss);
 			}
 		}
+		// Copy references for newly copied objects. Note this will also copy references for object copied previously. This can lead to reference lists being populated twice!
 		copier.copyReferences();
-
 	}
 
 	@Override
 	public <U> U getModelObject(final Object internalObject, final Class<? extends U> clz) {
 		final U original = delegate.getModelObject(internalObject, clz);
-		U u = (U) originalToNewCopy.get(original);
+		final U u = (U) originalToNewCopy.get(original);
 		if (original != null && u == null) {
 
 			assert false;
@@ -64,13 +66,13 @@ public class CopiedModelEntityMap implements ModelEntityMap {
 	public <U> U getModelObjectNullChecked(final Object internalObject, final Class<? extends U> clz) {
 		final U original = delegate.getModelObjectNullChecked(internalObject, clz);
 
-		boolean a = originalToNewCopy.containsKey(original);
-		boolean b = originalToNewCopy.containsValue(original);
-		boolean c = newCopyToOriginal.containsKey(original);
-		boolean d = newCopyToOriginal.containsValue(original);
+		final boolean a = originalToNewCopy.containsKey(original);
+		final boolean b = originalToNewCopy.containsValue(original);
+		final boolean c = newCopyToOriginal.containsKey(original);
+		final boolean d = newCopyToOriginal.containsValue(original);
 
 		if (!(a || b || c || d)) {
-			int ii = 0;
+			final int ii = 0;
 		}
 
 		return (U) originalToNewCopy.get(original);
@@ -95,7 +97,7 @@ public class CopiedModelEntityMap implements ModelEntityMap {
 	}
 
 	@Override
-	public <T extends EObject> Collection<T> getAllModelObjects(final Class<? extends T> clz) {
+	public <T extends EObject> Collection<@NonNull T> getAllModelObjects(final Class<? extends T> clz) {
 		final Collection<? extends T> allModelObjects = delegate.getAllModelObjects(clz);
 		return allModelObjects.stream().map(t -> (T) originalToNewCopy.get(t)).collect(Collectors.toList());
 	}

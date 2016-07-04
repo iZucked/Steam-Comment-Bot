@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions.entities;
@@ -74,7 +74,7 @@ public class EntityTransformerExtension implements ITransformerExtension {
 
 		final CommercialModel commercialModel = rootObject.getReferenceModel().getCommercialModel();
 		for (final BaseLegalEntity e : commercialModel.getEntities()) {
-			IEntity entity = modelEntityMap.getOptimiserObject(e, IEntity.class);
+			IEntity entity = modelEntityMap.getOptimiserObjectNullChecked(e, IEntity.class);
 			if (e.getShippingBook() instanceof SimpleEntityBook) {
 				final SimpleEntityBook simpleBook = (SimpleEntityBook) e.getShippingBook();
 				final StepwiseIntegerCurve taxCurve = EntityTransformerUtils.createTaxCurve(simpleBook.getTaxRates(), dateHelper, dateHelper.getEarliestTime());
@@ -86,18 +86,26 @@ public class EntityTransformerExtension implements ITransformerExtension {
 			if (e.getTradingBook() instanceof SimpleEntityBook) {
 				final SimpleEntityBook simpleBook = (SimpleEntityBook) e.getTradingBook();
 				final StepwiseIntegerCurve taxCurve = EntityTransformerUtils.createTaxCurve(simpleBook.getTaxRates(), dateHelper, dateHelper.getEarliestTime());
-				final IEntityBook book = new DefaultEntityBook(entity, EntityBookType.Shipping, taxCurve);
+				final IEntityBook book = new DefaultEntityBook(entity, EntityBookType.Trading, taxCurve);
 				injector.injectMembers(book);
 				modelEntityMap.addModelObject(simpleBook, book);
 				entityProvider.setEntityBook(entity, EntityBookType.Trading, book);
+			}
+			if (e.getUpstreamBook() instanceof SimpleEntityBook) {
+				final SimpleEntityBook simpleBook = (SimpleEntityBook) e.getUpstreamBook();
+				final StepwiseIntegerCurve taxCurve = EntityTransformerUtils.createTaxCurve(simpleBook.getTaxRates(), dateHelper, dateHelper.getEarliestTime());
+				final IEntityBook book = new DefaultEntityBook(entity, EntityBookType.Upstream, taxCurve);
+				injector.injectMembers(book);
+				modelEntityMap.addModelObject(simpleBook, book);
+				entityProvider.setEntityBook(entity, EntityBookType.Upstream, book);
 			}
 		}
 
 		// Generic stuff -> split into separate extension
 		final CargoModel cargoModel = rootObject.getCargoModel();
 		for (final VesselAvailability eVesselAvailability : cargoModel.getVesselAvailabilities()) {
-			final IVesselAvailability vesselAvailability = modelEntityMap.getOptimiserObject(eVesselAvailability, IVesselAvailability.class);
-			final IEntity entity = modelEntityMap.getOptimiserObject(eVesselAvailability.getEntity(), IEntity.class);
+			final IVesselAvailability vesselAvailability = modelEntityMap.getOptimiserObjectNullChecked(eVesselAvailability, IVesselAvailability.class);
+			final IEntity entity = modelEntityMap.getOptimiserObjectNullChecked(eVesselAvailability.getEntity(), IEntity.class);
 			entityProvider.setEntityForVesselAvailability(entity, vesselAvailability);
 		}
 
@@ -108,7 +116,7 @@ public class EntityTransformerExtension implements ITransformerExtension {
 			final IPortSlot portSlot = modelEntityMap.getOptimiserObject(slot, IPortSlot.class);
 			if (portSlot != null) {
 				final BaseLegalEntity slotEntity = slot.getSlotOrDelegatedEntity();
-				final IEntity entity = modelEntityMap.getOptimiserObject(slotEntity, IEntity.class);
+				final IEntity entity = modelEntityMap.getOptimiserObjectNullChecked(slotEntity, IEntity.class);
 				entityProvider.setEntityForSlot(entity, portSlot);
 			}
 		}

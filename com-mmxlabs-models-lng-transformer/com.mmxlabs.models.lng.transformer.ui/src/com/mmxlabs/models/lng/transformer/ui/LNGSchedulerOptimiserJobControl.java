@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
@@ -147,7 +147,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 			};
 		}
 		scenarioRunner = new LNGScenarioRunner(executorService, originalScenario, scenarioInstance, jobDescriptor.getOptimiserSettings(), originalEditingDomain, runnerHook,
-				LNGTransformerHelper.HINT_OPTIMISE_LSO);
+				false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
 
@@ -165,7 +165,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	@Override
 	protected void doRunJob(IProgressMonitor progressMonitor) {
-
+		long start = System.currentTimeMillis();
 		progressMonitor.beginTask("Optimise", 100);
 		try {
 			// TODO Auto-generated method stub
@@ -176,6 +176,9 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 			super.setProgress(100);
 		} finally {
 			progressMonitor.done();
+			if (false) {
+				System.out.println("done in:"+(System.currentTimeMillis() - start));
+			}
 		}
 		// if (scenarioRunner.isFinished()) {
 		// return false;

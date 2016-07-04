@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.period;
@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -23,39 +25,39 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
  */
 public final class ScenarioEntityMapping implements IScenarioEntityMapping {
 
-	private final BiMap<EObject, EObject> originalToCopyMap = HashBiMap.create();
-	private final Set<EObject> removedObjects = new HashSet<>();
+	private final BiMap<@NonNull EObject, @NonNull EObject> originalToCopyMap = HashBiMap.create();
+	private final Set<@NonNull EObject> removedObjects = new HashSet<>();
 
 	@Override
-	public void createMappings(Map<EObject, EObject> originalToCopyMap) {
+	public void createMappings(final Map<@NonNull EObject, @NonNull EObject> originalToCopyMap) {
 		this.originalToCopyMap.putAll(originalToCopyMap);
 	}
 
 	@Override
-	public void createMapping(EObject original, EObject copy) {
+	public void createMapping(@NonNull final EObject original, @NonNull final EObject copy) {
 		originalToCopyMap.put(original, copy);
 	}
 
 	@Override
-	public void registerRemovedOriginal(EObject original) {
+	public void registerRemovedOriginal(@NonNull final EObject original) {
 		removedObjects.add(original);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends EObject> T getOriginalFromCopy(T copy) {
+	public <T extends EObject> T getOriginalFromCopy(final T copy) {
 		return (T) originalToCopyMap.inverse().get(copy);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends EObject> T getCopyFromOriginal(T original) {
+	public <T extends EObject> T getCopyFromOriginal(final T original) {
 		return (T) originalToCopyMap.get(original);
 	}
 
 	@Override
-	public Collection<EObject> getUsedOriginalObjects() {
-		Set<EObject> set = new HashSet<>();
+	public Collection<@NonNull EObject> getUsedOriginalObjects() {
+		final Set<@NonNull EObject> set = new HashSet<>();
 		// All the original objects
 		set.addAll(originalToCopyMap.keySet());
 
@@ -66,22 +68,22 @@ public final class ScenarioEntityMapping implements IScenarioEntityMapping {
 	}
 
 	@Override
-	public Collection<EObject> getUnusedOriginalObjects() {
+	public Collection<@NonNull EObject> getUnusedOriginalObjects() {
 		return removedObjects;
 	}
 
-	private Map<Pair<CharterInMarket, Integer>, Integer> periodToOriginal = new HashMap<>();
-	private Map<Pair<CharterInMarket, Integer>, Integer> originalToPeriod = new HashMap<>();
+	private final Map<@NonNull Pair<@NonNull CharterInMarket, @NonNull Integer>, @Nullable Integer> periodToOriginal = new HashMap<>();
+	private final Map<@NonNull Pair<@NonNull CharterInMarket, @NonNull Integer>, @Nullable Integer> originalToPeriod = new HashMap<>();
 
 	@Override
-	public void setSpotCharterInMapping(CharterInMarket periodCharterInMarket, int originalSpotIndex, int periodSpotIndex) {
+	public void setSpotCharterInMapping(@NonNull final CharterInMarket periodCharterInMarket, final int originalSpotIndex, final int periodSpotIndex) {
 		periodToOriginal.put(new Pair<>(periodCharterInMarket, periodSpotIndex), originalSpotIndex);
 		originalToPeriod.put(new Pair<>(periodCharterInMarket, originalSpotIndex), periodSpotIndex);
 	}
 
 	@Override
-	public int getSpotCharterInMappingFromPeriod(CharterInMarket periodCharterInMarket, int periodSpotIndex) {
-		Integer idx = periodToOriginal.get(new Pair<>(periodCharterInMarket, periodSpotIndex));
+	public int getSpotCharterInMappingFromPeriod(@NonNull final CharterInMarket periodCharterInMarket, final int periodSpotIndex) {
+		final Integer idx = periodToOriginal.get(new Pair<>(periodCharterInMarket, periodSpotIndex));
 		if (idx == null) {
 			return periodSpotIndex;
 		}
@@ -89,8 +91,8 @@ public final class ScenarioEntityMapping implements IScenarioEntityMapping {
 	}
 
 	@Override
-	public int getSpotCharterInMappingFromOriginal(CharterInMarket periodCharterInMarket, int originalSpotIndex) {
-		Integer idx = originalToPeriod.get(new Pair<>(periodCharterInMarket, originalSpotIndex));
+	public int getSpotCharterInMappingFromOriginal(@NonNull final CharterInMarket periodCharterInMarket, final int originalSpotIndex) {
+		final Integer idx = originalToPeriod.get(new Pair<>(periodCharterInMarket, originalSpotIndex));
 		if (idx == null) {
 			return originalSpotIndex;
 		}

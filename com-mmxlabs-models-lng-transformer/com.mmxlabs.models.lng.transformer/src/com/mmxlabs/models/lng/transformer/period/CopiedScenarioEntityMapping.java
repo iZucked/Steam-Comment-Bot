@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.period;
@@ -45,8 +45,8 @@ public final class CopiedScenarioEntityMapping implements IScenarioEntityMapping
 	@NonNull
 	private Set<EObject> usedObjects;
 
-	public CopiedScenarioEntityMapping(@NonNull final IScenarioEntityMapping originalMapping, @NonNull final EcoreUtil.Copier originalScenarioCopier,
-			@NonNull final EcoreUtil.Copier optimiserScenarioCopier) {
+	public CopiedScenarioEntityMapping(@NonNull final IScenarioEntityMapping originalMapping, final EcoreUtil.@NonNull Copier originalScenarioCopier,
+			final EcoreUtil.@NonNull Copier optimiserScenarioCopier) {
 		this.originalMapping = originalMapping;
 		for (final Map.Entry<EObject, EObject> e : originalScenarioCopier.entrySet()) {
 			originalRealToCopy.put(e.getKey(), e.getValue());
@@ -102,7 +102,7 @@ public final class CopiedScenarioEntityMapping implements IScenarioEntityMapping
 	}
 
 	@Override
-	public void createMappings(final Map<EObject, EObject> originalToCopyMap) {
+	public void createMappings(final Map<@NonNull EObject, @NonNull EObject> originalToCopyMap) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -120,17 +120,20 @@ public final class CopiedScenarioEntityMapping implements IScenarioEntityMapping
 	@Override
 	public <T extends EObject> T getOriginalFromCopy(final T copyOfOptimiser) {
 		if (copyOfOptimiser == null) {
-			return null;
+			return (T) null;
 		}
 		if ((copyOfOptimiser instanceof SpotSlot || copyOfOptimiser instanceof Cargo) && !optimiserCopyToReal.containsKey(copyOfOptimiser)) {
-			return null;
+			return (T) null;
 		}
 
 		final EObject realOptimiser = mapOptimiserCopyToReal(copyOfOptimiser);
 
 		final T copyOfOriginal = (T) originalMapping.getOriginalFromCopy(realOptimiser);
 		if (copyOfOptimiser instanceof SpotSlot && copyOfOriginal == null) {
-			return null;
+			return (T) null;
+		}
+		if (copyOfOriginal == null) {
+			return (T) null;
 		}
 		return (T) mapOriginalRealToCopy(copyOfOriginal);
 	}
@@ -139,36 +142,39 @@ public final class CopiedScenarioEntityMapping implements IScenarioEntityMapping
 	@Override
 	public <T extends EObject> T getCopyFromOriginal(final T copyOfOriginal) {
 		if (copyOfOriginal == null) {
-			return null;
+			return (T) null;
 		}
 		final EObject realOriginal = mapOriginalCopyToReal(copyOfOriginal);
 		final T copyOfOptimiser = (T) originalMapping.getCopyFromOriginal(realOriginal);
+		if (copyOfOptimiser == null) {
+			return null;
+		}
 		return (T) mapOptimiserRealToCopy(copyOfOptimiser);
 	}
 
 	@Override
-	public Collection<EObject> getUsedOriginalObjects() {
+	public Collection<@NonNull EObject> getUsedOriginalObjects() {
 		return usedObjects;
 	}
 
 	@Override
-	public Collection<EObject> getUnusedOriginalObjects() {
+	public Collection<@NonNull EObject> getUnusedOriginalObjects() {
 		return unusedObjects;
 	}
 
 	@Override
-	public void setSpotCharterInMapping(CharterInMarket periodCharterInMarket, int originalSpotIndex, int periodSpotIndex) {
+	public void setSpotCharterInMapping(@NonNull CharterInMarket periodCharterInMarket, int originalSpotIndex, int periodSpotIndex) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public int getSpotCharterInMappingFromPeriod(CharterInMarket periodCharterInMarket, int periodSpotIndex) {
+	public int getSpotCharterInMappingFromPeriod(@NonNull CharterInMarket periodCharterInMarket, int periodSpotIndex) {
 		final CharterInMarket realOriginal = (CharterInMarket) mapOptimiserCopyToReal(periodCharterInMarket);
 		return originalMapping.getSpotCharterInMappingFromPeriod(realOriginal, periodSpotIndex);
 	}
 
 	@Override
-	public int getSpotCharterInMappingFromOriginal(CharterInMarket periodCharterInMarket, int originalSpotIndex) {
+	public int getSpotCharterInMappingFromOriginal(@NonNull CharterInMarket periodCharterInMarket, int originalSpotIndex) {
 		final CharterInMarket realOriginal = (CharterInMarket) mapOptimiserCopyToReal(periodCharterInMarket);
 		return originalMapping.getSpotCharterInMappingFromOriginal(realOriginal, originalSpotIndex);
 	}

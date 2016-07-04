@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its.tests;
@@ -15,7 +15,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.port.RouteOption;
 
 /**
  */
@@ -40,14 +40,17 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 	 * cargo, travel to the discharge port and discharge it. There is enough time at every stage to create some idling at the discharge port.
 	 */
 	public LddScenarioCreator() {
-		scenario = ManifestJointModel.createEmptyInstance(null);
+		super();
+		// scenario = ManifestJointModel.createEmptyInstance(null);
+		// commercialModelBuilder = new CommercialModelBuilder(ScenarioModelUtil.getCommercialModel(scenario));
+
+		// need to create a legal entity for contracts
+		// contractEntity = addEntity("Third-parties");
+		// need to create a legal entity for shipping
+		// shippingEntity = addEntity("Shipping");
 
 		final CommercialModel commercialModel = scenario.getReferenceModel().getCommercialModel();
 		final FleetModel fleetModel = scenario.getReferenceModel().getFleetModel();
-		// need to create a legal entity for contracts
-		contractEntity = addEntity("Third-parties");
-		// need to create a legal entity for shipping
-		shippingEntity = addEntity("Shipping");
 
 		// need to create sales and purchase contracts
 		salesContract = addSalesContract("Sales Contract", dischargePrice);
@@ -56,10 +59,10 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 		// create a vessel class with default name
 		vc = fleetCreator.createDefaultVesselClass(null);
 		// create a vessel in that class
-		vessel = fleetCreator.createMultipleDefaultVessels(vc, 1, shippingEntity)[0];
+		vessel = fleetCreator.createMultipleDefaultVessels(vc, 1, shippingEntity)[0].getVessel();
 
 		// need to create a default route
-		addRoute(ScenarioTools.defaultRouteName);
+		addRoute(RouteOption.DIRECT);
 
 		final double maxSpeed = vc.getMaxSpeed();
 
@@ -99,8 +102,8 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 		final ZonedDateTime startDate = loadDate.minusHours(2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
 		final ZonedDateTime endDate = lastDischargeDate.plusHours(2 * getTravelTime(dischargePort2, originPort, null, (int) maxSpeed));
 
-		this.vesselAvailability = fleetCreator.setAvailability(scenario.getCargoModel(), vessel, originPort, startDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime(), originPort, endDate
-				.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
+		this.vesselAvailability = fleetCreator.setAvailability(scenario.getCargoModel(), vessel, originPort, startDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime(), originPort,
+				endDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 
 		cargo.setVesselAssignmentType(vesselAvailability);
 	}

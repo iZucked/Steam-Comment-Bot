@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.period;
@@ -9,6 +9,8 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -27,7 +29,7 @@ public interface IScenarioEntityMapping {
 	 * 
 	 * @param originalToCopyMap
 	 */
-	void createMappings(Map<EObject, EObject> originalToCopyMap);
+	void createMappings(Map<@NonNull EObject, @NonNull EObject> originalToCopyMap);
 
 	/**
 	 * Bind an original object to its period optimisation copy.
@@ -35,14 +37,14 @@ public interface IScenarioEntityMapping {
 	 * @param original
 	 * @param copy
 	 */
-	void createMapping(EObject original, EObject copy);
+	void createMapping(@NonNull EObject original, @NonNull EObject copy);
 
 	/**
 	 * Register an original object not present in the period optimisation scenario. Note we assume {@link Schedule} elements are excluded and API is undefined for these elements.
 	 * 
 	 * @param original
 	 */
-	void registerRemovedOriginal(EObject original);
+	void registerRemovedOriginal(@NonNull EObject original);
 
 	/**
 	 * Return the original scenario model from the copied instance, or null if not found.
@@ -50,7 +52,8 @@ public interface IScenarioEntityMapping {
 	 * @param copy
 	 * @return
 	 */
-	<T extends EObject> T getOriginalFromCopy(T copy);
+	@Nullable
+	<T extends EObject> T getOriginalFromCopy(@NonNull T copy);
 
 	/**
 	 * Return the copied scenario model from the original instance, or null if not found.
@@ -58,26 +61,27 @@ public interface IScenarioEntityMapping {
 	 * @param original
 	 * @return
 	 */
-	<T extends EObject> T getCopyFromOriginal(T original);
+	@Nullable
+	<T extends EObject> T getCopyFromOriginal(@NonNull T original);
 
 	/**
 	 * Returns all the original scenario elements that have not been removed.
 	 * 
 	 * @return
 	 */
-	Collection<EObject> getUsedOriginalObjects();
+	Collection<@NonNull EObject> getUsedOriginalObjects();
 
 	/**
 	 * Returns the list of elements passed to {@link #registerRemovedOriginal(EObject)}.
 	 * 
 	 * @return
 	 */
-	Collection<EObject> getUnusedOriginalObjects();
+	Collection<@NonNull EObject> getUnusedOriginalObjects();
 
-	void setSpotCharterInMapping(CharterInMarket periodCharterInMarket, int originalSpotIndex, int periodSpotIndex);
+	void setSpotCharterInMapping(@NonNull CharterInMarket periodCharterInMarket, int originalSpotIndex, int periodSpotIndex);
 
-	int getSpotCharterInMappingFromPeriod(CharterInMarket periodCharterInMarket, int periodSpotIndex);
+	int getSpotCharterInMappingFromPeriod(@NonNull CharterInMarket periodCharterInMarket, int periodSpotIndex);
 
-	int getSpotCharterInMappingFromOriginal(CharterInMarket periodCharterInMarket, int originalSpotIndex);
+	int getSpotCharterInMappingFromOriginal(@NonNull CharterInMarket periodCharterInMarket, int originalSpotIndex);
 
 }

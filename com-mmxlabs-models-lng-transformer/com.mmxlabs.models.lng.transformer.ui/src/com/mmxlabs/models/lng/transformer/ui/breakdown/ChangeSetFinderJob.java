@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.breakdown;
@@ -11,7 +11,6 @@ import java.util.concurrent.Callable;
 
 import com.google.inject.Injector;
 import com.mmxlabs.optimiser.core.impl.Sequences;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 
 /**
  * A class that could be passed into an ExecutorService to attempt to find change sets from the current state.
@@ -25,7 +24,6 @@ public final class ChangeSetFinderJob implements Callable<Collection<JobState>> 
 	private final JobStore jobStore;
 	private final long seed;
 	private final Injector injector;
-	private BreakdownOptimiserMover optimiser;
 	private int depthStart;
 	private int depthEnd;
 
@@ -45,9 +43,10 @@ public final class ChangeSetFinderJob implements Callable<Collection<JobState>> 
 			final BagMover optimiser = injector.getInstance(BagMover.class);
 			optimiser.setDepthRange(depthStart, depthEnd);
 			try {
-				final int localDepth = state.mode == JobStateMode.LIMITED ? 2 : BreakdownOptimiserMover.DEPTH_START;
+				final int localDepth = state.mode == JobStateMode.LIMITED ? 2 : BagMover.DEPTH_START;
 				return optimiser.search(new Sequences(state.rawSequences), similarityState, new LinkedList<Change>(state.changesAsList), new LinkedList<ChangeSet>(state.changeSetsAsList), localDepth,
-						BreakdownOptimiserMover.MOVE_TYPE_NONE, state.metric, jobStore, null, state.getDifferencesList(), new BreakdownSearchData(new BreakdownSearchStatistics(), new Random(seed)));
+						BagMover.MOVE_TYPE_NONE, state.metric, jobStore, null, state.getDifferencesList(), new BreakdownSearchData(new BreakdownSearchStatistics(), new Random(seed)),
+						null);
 			} catch (final Throwable e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);

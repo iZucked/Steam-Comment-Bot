@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its.tests.calculation.singleEvent;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -32,7 +33,7 @@ public class RouteSameCostTest {
 
 	static class CanalParameters {
 
-		public String canalName;
+		public RouteOption canalOption;
 		public int canalDistance;
 		public int canalCost;
 		public int canalTransitFuelPerDay;
@@ -55,7 +56,7 @@ public class RouteSameCostTest {
 		final int[] portDistances = { cheapestDistance, expensiveDistance1, expensiveDistance2 };
 
 		CanalParameters params = new CanalParameters();
-		params.canalName = "Canal 1";
+		params.canalOption = RouteOption.SUEZ;
 		params.canalDistance = 900;
 		params.canalCost = 50;
 		params.canalTransitFuelPerDay = TimeUnitConvert.convertPerHourToPerDay(0);
@@ -75,8 +76,8 @@ public class RouteSameCostTest {
 		Assert.assertTrue("Cheapest routes are same price", canalPrice == oceanPrice);
 
 		// check the vessel took either of the cheapest routes.
-		final boolean ballastCheapestOceanRouteOrCanal = (a.getBallastLeg().getDistance() == cheapestDistance) || a.getBallastLeg().getRoute().getName().equals(params.canalName);
-		final boolean ladenCheapestOceanRouteOrCanal = (a.getLadenLeg().getDistance() == cheapestDistance) || a.getLadenLeg().getRoute().getName().equals(params.canalName);
+		final boolean ballastCheapestOceanRouteOrCanal = (a.getBallastLeg().getDistance() == cheapestDistance) || a.getBallastLeg().getRoute().getRouteOption().equals(params.canalOption);
+		final boolean ladenCheapestOceanRouteOrCanal = (a.getLadenLeg().getDistance() == cheapestDistance) || a.getLadenLeg().getRoute().getRouteOption().equals(params.canalOption);
 
 		Assert.assertTrue("Vessel took one of cheapest routes", ballastCheapestOceanRouteOrCanal && ladenCheapestOceanRouteOrCanal);
 	}
@@ -98,7 +99,7 @@ public class RouteSameCostTest {
 		final int[] portDistances = { cheapestDistance, expensiveDistance1, expensiveDistance2 };
 
 		CanalParameters params = new CanalParameters();
-		params.canalName = "Canal 1";
+		params.canalOption = RouteOption.SUEZ;
 		params.canalDistance = 2000;
 		params.canalCost = 0;
 		params.canalTransitFuelPerDay = TimeUnitConvert.convertPerHourToPerDay(0);
@@ -117,8 +118,8 @@ public class RouteSameCostTest {
 		Assert.assertTrue("Cheapest routes are same price", canalPrice == oceanPrice);
 
 		// check the vessel took either of the cheapest routes.
-		final boolean ballastCheapestOceanRouteOrCanal = (a.getBallastLeg().getDistance() == cheapestDistance) || a.getBallastLeg().getRoute().getName().equals(params.canalName);
-		final boolean ladenCheapestOceanRouteOrCanal = (a.getLadenLeg().getDistance() == cheapestDistance) || a.getLadenLeg().getRoute().getName().equals(params.canalName);
+		final boolean ballastCheapestOceanRouteOrCanal = (a.getBallastLeg().getDistance() == cheapestDistance) || a.getBallastLeg().getRoute().getRouteOption().equals(params.canalOption);
+		final boolean ladenCheapestOceanRouteOrCanal = (a.getLadenLeg().getDistance() == cheapestDistance) || a.getLadenLeg().getRoute().getRouteOption().equals(params.canalOption);
 
 		Assert.assertTrue("Vessel took one of cheapest routes", ballastCheapestOceanRouteOrCanal && ladenCheapestOceanRouteOrCanal);
 	}
@@ -199,7 +200,8 @@ public class RouteSameCostTest {
 	 * @return The total cost for the route, including idles.
 	 */
 	private long getPriceOfCanal(final String testName, final CanalParameters canalCost, final int fuelTravelConsumptionPerHour, final int NBORatePerHour) {
-		final SimpleCargoAllocation a = new SimpleCargoAllocation(testEquallyPricedRoutes(testName + ": get canal price", new int[] { 10000 }, canalCost, fuelTravelConsumptionPerHour, NBORatePerHour));
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(
+				testEquallyPricedRoutes(testName + ": get canal price", new int[] { 10000 }, canalCost, fuelTravelConsumptionPerHour, NBORatePerHour));
 
 		return getCargoAllocationCost(a);
 	}
@@ -222,7 +224,7 @@ public class RouteSameCostTest {
 
 	private void addCanalParameters(CanalParameters canalParameters, LNGScenarioModel canalScenario) {
 		if (canalParameters != null) {
-			CustomScenarioCreator.createCanalAndCost(canalScenario, canalParameters.canalName, ScenarioTools.A, ScenarioTools.B, canalParameters.canalDistance, canalParameters.canalDistance,
+			CustomScenarioCreator.createCanalAndCost(canalScenario, canalParameters.canalOption, ScenarioTools.A, ScenarioTools.B, canalParameters.canalDistance, canalParameters.canalDistance,
 					canalParameters.canalCost, canalParameters.canalCost, canalParameters.canalTransitFuelPerDay, canalParameters.NBOTravelRatePerDay, canalParameters.canalTransitTime);
 		}
 	}

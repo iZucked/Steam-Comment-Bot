@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions.redirection;
@@ -77,6 +77,7 @@ public class RedirectionPostExportProcessor implements IPostExportProcessor {
 											// TODO: We may need a getSlotOrPortWindowStartTime here
 											commands.append(SetCommand.create(ed, loadSlot, CargoPackage.Literals.SLOT__WINDOW_START_TIME, discharge.getWindowStartTime()));
 											commands.append(SetCommand.create(ed, loadSlot, CargoPackage.Literals.SLOT__WINDOW_SIZE, discharge.getSlotOrPortWindowSize()));
+											commands.append(SetCommand.create(ed, loadSlot, CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS, discharge.getSlotOrPortWindowSizeUnits()));
 											commands.append(SetCommand.create(ed, loadSlot, CargoPackage.Literals.SLOT__DURATION, discharge.getSlotOrPortDuration()));
 
 											// TODO: What about volume bounds?

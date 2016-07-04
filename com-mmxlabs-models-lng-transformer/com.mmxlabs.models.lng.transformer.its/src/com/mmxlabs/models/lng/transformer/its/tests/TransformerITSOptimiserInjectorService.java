@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its.tests;
@@ -10,11 +10,11 @@ import java.util.List;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.ops4j.peaberry.util.TypeLiterals;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
-import com.mmxlabs.models.lng.transformer.extensions.charterout.GeneratedCharterOutTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsTransformerFactory;
@@ -30,35 +30,44 @@ import com.mmxlabs.models.lng.transformer.inject.ITransformerExtensionFactory;
 import com.mmxlabs.models.lng.transformer.util.OptimisationTransformer;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
-import com.mmxlabs.optimiser.common.fitness.NonOptionalSlotFitnessCoreFactory;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerFactory;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.constraints.impl.EvaluatedStateConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessFunctionRegistry;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.SlotGroupCountConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.SpotToSpotConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.VesselEventConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcessFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
+import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class TransformerITSOptimiserInjectorService implements IOptimiserInjectorService {
 
 	@Override
-	public List<Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<String> hints) {
+	@Nullable
+	public List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 		return null;
 	}
 
 	@Override
-	public Module requestModule(final ModuleType moduleType, @NonNull final Collection<String> hints) {
+	@Nullable
+	public Module requestModule(final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 		if (moduleType == ModuleType.Module_LNGTransformerModule) {
 
 			return new AbstractModule() {
@@ -75,7 +84,6 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 						// transformerExtensionFactories.add(new StandardContractTransformerExtensionFactory());
 						transformerExtensionFactories.add(new RestrictedElementsTransformerFactory());
 						transformerExtensionFactories.add(new ShippingTypeRequirementTransformerFactory());
-						transformerExtensionFactories.add(new GeneratedCharterOutTransformerFactory());
 						bind(TypeLiterals.iterable(ITransformerExtensionFactory.class)).toInstance(transformerExtensionFactories);
 
 						// TODO - Remove once we have explicit use of export stage
@@ -97,11 +105,12 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 
 					if (!Platform.isRunning()) {
 						bind(IConstraintCheckerRegistry.class).toInstance(createConstraintCheckerRegistry());
+						bind(IEvaluatedStateConstraintCheckerRegistry.class).toInstance(createEvaluatedStateConstraintCheckerRegistry());
 						bind(IEvaluationProcessRegistry.class).toInstance(createEvaluationProcessRegistry());
 					}
 					// This bit is always needed for LiNGO ITS
 					// TODO: Split this into two classes, one for transformer ITS and one for LiNGO ITS
-//					bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
+					// bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
 				}
 			};
 		} else if (moduleType == ModuleType.Module_Optimisation) {
@@ -159,6 +168,11 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 		return fitnessFunctionRegistry;
 	}
 
+	public IEvaluatedStateConstraintCheckerRegistry createEvaluatedStateConstraintCheckerRegistry() {
+		final EvaluatedStateConstraintCheckerRegistry registry = new EvaluatedStateConstraintCheckerRegistry();
+		return registry;
+	}
+
 	/**
 	 * Creates a constraint checker registry used by this {@link OptimisationTransformer} instance.
 	 * 
@@ -187,6 +201,11 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new PortCvCompatibilityConstraintCheckerFactory());
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new SpotToSpotConstraintCheckerFactory());
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new ShippingTypeRequirementConstraintCheckerFactory());
+		
+		constraintCheckerRegistry.registerConstraintCheckerFactory(new RoundTripVesselPermissionConstraintCheckerFactory());
+		constraintCheckerRegistry.registerConstraintCheckerFactory(new AllowedVesselPermissionConstraintCheckerFactory());
+		constraintCheckerRegistry.registerConstraintCheckerFactory(new FOBDESCompatibilityConstraintCheckerFactory());
+		constraintCheckerRegistry.registerConstraintCheckerFactory(new VesselEventConstraintCheckerFactory());
 
 		return constraintCheckerRegistry;
 	}

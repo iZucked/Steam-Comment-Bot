@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its.tests;
@@ -52,6 +52,7 @@ import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
@@ -64,9 +65,11 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -91,6 +94,8 @@ public class CustomScenarioCreator {
 	private final SpotMarketsModel spotMarketsModel;
 	private final LNGReferenceModel referenceModel;
 
+	private final ScenarioModelBuilder scenarioModelBuilder;
+
 	final SalesContract sc;
 	final PurchaseContract pc;
 	final LegalEntity contractEntity;
@@ -106,7 +111,9 @@ public class CustomScenarioCreator {
 	public CustomScenarioCreator(final float dischargePrice, final String timeZone) {
 		this.timeZone = timeZone;
 
-		scenario = ManifestJointModel.createEmptyInstance(null);
+		this.scenarioModelBuilder = ScenarioModelBuilder.instantiate();
+		scenario = scenarioModelBuilder.getLNGScenarioModel();
+
 		referenceModel = scenario.getReferenceModel();
 		cargoModel = scenario.getCargoModel();
 
@@ -117,13 +124,9 @@ public class CustomScenarioCreator {
 		commercialModel = referenceModel.getCommercialModel();
 		spotMarketsModel = referenceModel.getSpotMarketsModel();
 
+		contractEntity = scenarioModelBuilder.getCommercialModelBuilder().makeLegalEntityAndBooks("Third-parties");
+		shippingEntity = scenarioModelBuilder.getCommercialModelBuilder().makeLegalEntityAndBooks("Shipping");
 
-		contractEntity = CommercialFactory.eINSTANCE.createLegalEntity();
-		contractEntity.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		contractEntity.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		shippingEntity = CommercialFactory.eINSTANCE.createLegalEntity();
-		shippingEntity.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		shippingEntity.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		final TaxRate taxRate = CommercialFactory.eINSTANCE.createTaxRate();
 		taxRate.setDate(createLocalDate(2000, Calendar.JANUARY, 1));
 		shippingEntity.getShippingBook().getTaxRates().add(EcoreUtil.copy(taxRate));
@@ -134,14 +137,11 @@ public class CustomScenarioCreator {
 		commercialModel.getEntities().add(contractEntity);
 		commercialModel.getEntities().add(shippingEntity);
 
-		contractEntity.setName("Third-parties");
-		shippingEntity.setName("Shipping");
-
 		sc = addSalesContract("Sales Contract", dischargePrice);
 		pc = addPurchaseContract("Purchase Contract");
 
 		final Route r = PortFactory.eINSTANCE.createRoute();
-		r.setName(ScenarioTools.defaultRouteName);
+		r.setName(RouteOption.DIRECT.getName());
 		portModel.getRoutes().add(r);
 
 		// ScenarioUtils.addDefaultSettings(scenario);
@@ -191,6 +191,8 @@ public class CustomScenarioCreator {
 			final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final int pilotLightRate, final int minHeelVolume,
 			final boolean isTimeChartered) {
 
+		final SpotMarketsModelBuilder spotMarketsModelBuilder = new SpotMarketsModelBuilder(spotMarketsModel);
+
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
 		final int warmupTime = Integer.MAX_VALUE;
@@ -228,15 +230,8 @@ public class CustomScenarioCreator {
 		vc.setMinHeel(minHeelVolume);
 		vc.setFillCapacity(fillCapacity);
 
-		if (spotCharterCount > 0) {
-			final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
-			charterInMarket.setName("market-" + vc.getName());
-			charterInMarket.setSpotCharterCount(spotCharterCount);
-			// Costs
-			charterInMarket.setVesselClass(vc);
+		final CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("market-" + vc.getName(), vc, "0", spotCharterCount);
 
-			spotMarketsModel.getCharterInMarkets().add(charterInMarket);
-		}
 		final FuelConsumption ladenMin = FleetFactory.eINSTANCE.createFuelConsumption();
 		final FuelConsumption ladenMax = FleetFactory.eINSTANCE.createFuelConsumption();
 
@@ -545,7 +540,7 @@ public class CustomScenarioCreator {
 	/**
 	 * Creates a canal and costs. Although this only returns a VesselClassCost for the canal costs, the canal can be retrieved by using {@link VesselClassCost#getCanal()}.
 	 * 
-	 * @param canalName
+	 * @param canalOption
 	 *            The name of the canal
 	 * @param distanceAToB
 	 *            Distance along the canal from port A to port B
@@ -561,13 +556,14 @@ public class CustomScenarioCreator {
 	 *            Transit time in hours
 	 * @return
 	 */
-	public static void createCanalAndCost(final LNGScenarioModel scenario, final String canalName, final Port A, final Port B, final int distanceAToB, final int distanceBToA,
+	public static void createCanalAndCost(final LNGScenarioModel scenario, final RouteOption canalOption, final Port A, final Port B, final int distanceAToB, final int distanceBToA,
 			final int canalLadenCost, final int canalUnladenCost, final int canalTransitFuelDays, final int canalNBORateDays, final int canalTransitTime) {
 
 		final Route canal = PortFactory.eINSTANCE.createRoute();
-		canal.setCanal(true);
+		// canal.setCanal(true);
+		canal.setRouteOption(canalOption);
 		scenario.getReferenceModel().getPortModel().getRoutes().add(canal);
-		canal.setName(canalName);
+		canal.setName(canalOption.getName());
 		// add distance lines, as for the main distance model:
 		final RouteLine atob = PortFactory.eINSTANCE.createRouteLine();
 		atob.setFrom(A);
@@ -651,23 +647,12 @@ public class CustomScenarioCreator {
 	 *            The cargo to add the constraint to.
 	 * @param allowedVessels
 	 *            The list of vessels to add.
-	 * @return True if the vessels were added to the cargo's allowed vessel list. False if the cargo was not in the scenario.
 	 */
-	public boolean addAllowedVesselsOnCargo(final Cargo cargo, final ArrayList<Vessel> allowedVessels) {
+	public void addAllowedVesselsOnCargo(final Cargo cargo, final List<Vessel> allowedVessels) {
 
-		if (cargoModel.getCargoes().contains(cargo)) {
-
-			for (final Cargo c : cargoModel.getCargoes()) {
-				if (c.equals(cargo)) {
-					for (final Slot s : c.getSlots()) {
-						s.getAllowedVessels().addAll(allowedVessels);
-					}
-					return true;
-				}
-			}
+		for (final Slot s : cargo.getSlots()) {
+			s.getAllowedVessels().addAll(allowedVessels);
 		}
-		return false;
-
 	}
 
 	/**
@@ -679,17 +664,8 @@ public class CustomScenarioCreator {
 	 * @return
 	 */
 	public SalesContract addSalesContract(final String name, final float dischargePrice) {
-		final SalesContract result = CommercialFactory.eINSTANCE.createSalesContract();
-		final ExpressionPriceParameters params = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
-		result.setName(name);
 
-		result.setEntity(contractEntity);
-		params.setPriceExpression(Float.toString(dischargePrice));
-
-		result.setPriceInfo(params);
-		commercialModel.getSalesContracts().add(result);
-
-		return result;
+		return scenarioModelBuilder.getCommercialModelBuilder().makeExpressionSalesContract(name, contractEntity, Float.toString(dischargePrice));
 	}
 
 	/**
@@ -701,19 +677,7 @@ public class CustomScenarioCreator {
 	 * @return
 	 */
 	public PurchaseContract addPurchaseContract(final String name) {
-		final PurchaseContract result = CommercialFactory.eINSTANCE.createPurchaseContract();
-		final ExpressionPriceParameters params = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
-
-		// Set a default value
-		params.setPriceExpression("0");
-
-		result.setName(name);
-
-		result.setEntity(contractEntity);
-		result.setPriceInfo(params);
-		commercialModel.getPurchaseContracts().add(result);
-
-		return result;
+		return scenarioModelBuilder.getCommercialModelBuilder().makeExpressionPurchaseContract(name, contractEntity, "0");
 	}
 
 	public CommodityIndex addCommodityIndex(final String name) {
@@ -761,7 +725,7 @@ public class CustomScenarioCreator {
 	}
 
 	public LocalDate createLocalDate(final int year, final int month, final int day) {
-		return  LocalDate.of(year, 1 + month, day);
+		return LocalDate.of(year, 1 + month, day);
 	}
 
 	public static LocalDateTime createLocalDateTime(final int year, final int month, final int day, final int hourOfDay) {

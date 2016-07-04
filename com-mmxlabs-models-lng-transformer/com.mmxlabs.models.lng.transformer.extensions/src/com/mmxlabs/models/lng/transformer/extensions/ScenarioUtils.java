@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions;
@@ -23,18 +23,23 @@ import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRe
 import com.mmxlabs.optimiser.common.constraints.LockedUnusedElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
-import com.mmxlabs.optimiser.common.fitness.NonOptionalSlotFitnessCoreFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.DifferentSTSVesselsConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ShippingHoursRestrictionCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.SpotToSpotConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.VesselEventConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
+import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
 
 /**
  * Utility class for handling scenarios.
@@ -75,11 +80,19 @@ public class ScenarioUtils {
 		// create constraints
 		{
 			final EList<Constraint> constraints = settings.getConstraints();
+
+			// "Quick" resource allocation checks
 			constraints.add(createConstraint(parametersFactory, ResourceAllocationConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, RoundTripVesselPermissionConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, AllowedVesselPermissionConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, PortExclusionConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, VesselEventConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, FOBDESCompatibilityConstraintCheckerFactory.NAME, true));
+
 			constraints.add(createConstraint(parametersFactory, OrderedSequenceElementsConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, PortTypeConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, TravelTimeConstraintCheckerFactory.NAME, true));
-			constraints.add(createConstraint(parametersFactory, PortExclusionConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, VirtualVesselConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, TimeSortConstraintCheckerFactory.NAME, true));
 
@@ -112,7 +125,7 @@ public class ScenarioUtils {
 		final AnnealingSettings annealingSettings = parametersFactory.createAnnealingSettings();
 		annealingSettings.setIterations(1_000_000);
 		annealingSettings.setCooling(0.96);
-		annealingSettings.setEpochLength(900); // 900 for full; 300 for period
+		annealingSettings.setEpochLength(10_000);
 		annealingSettings.setInitialTemperature(1_000_000);
 		// restarts
 		annealingSettings.setRestarting(false);
@@ -196,7 +209,7 @@ public class ScenarioUtils {
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
-
+		userSettings.setFloatingDaysLimit(15);
 		return userSettings;
 	}
 

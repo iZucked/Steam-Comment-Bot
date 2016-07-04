@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2015
+    Copyright (C) Minimax Labs Ltd., 2010 - 2016
     All rights reserved.
 
 -->
 <feature
       id="com.mmxlabs.models.lng.transformer.its.feature"
       label="Models: LNG Types - Transformer ITS Feature"
-      version="3.11.1.qualifier"
+      version="3.12.7.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description>

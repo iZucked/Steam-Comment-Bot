@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its.tests;
@@ -26,8 +26,10 @@ public class SimpleCargoAllocation {
 	private final Idle ballastIdle;
 	private final SlotAllocation loadAllocation;
 	private final SlotAllocation dischargeAllocation;
+	private CargoAllocation cargoAllocation;
 
 	public SimpleCargoAllocation(final CargoAllocation cargoAllocation) {
+		this.cargoAllocation = cargoAllocation;
 		// Simple processing - assuming single load/discharge pairing
 		final EList<Event> events = cargoAllocation.getEvents();
 
@@ -105,5 +107,9 @@ public class SimpleCargoAllocation {
 
 	public int getDischargeVolume() {
 		return dischargeAllocation.getVolumeTransferred();
+	}
+
+	public CargoAllocation getCargoAllocation() {
+		return cargoAllocation;
 	}
 }

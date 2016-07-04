@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
@@ -18,8 +18,6 @@ import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -56,13 +54,12 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 		setJobState(EJobState.RUNNING);
 		final ScenarioInstance scenarioInstance = jobDescriptor.getJobContext();
 
-		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try (final ModelReference modelReference = scenarioInstance.getReference()) {
 			final LNGScenarioModel scenario = (LNGScenarioModel) modelReference.getInstance();
 			final EditingDomain editingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
 
-			LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenario, null, jobDescriptor.getOptimiserSettings(), editingDomain, null);
-
+			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenario, scenarioInstance, jobDescriptor.getOptimiserSettings(), editingDomain, null, true);
 			try {
 				runner.evaluateInitialState();
 			} finally {

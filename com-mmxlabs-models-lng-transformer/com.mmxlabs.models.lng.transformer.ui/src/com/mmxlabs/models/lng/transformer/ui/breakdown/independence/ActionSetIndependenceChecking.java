@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui.breakdown.independence;
@@ -13,10 +13,11 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.Triple;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.ActionSetEvaluationHelper;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.Change;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeSet;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.MetricType;
@@ -31,18 +32,9 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
-import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
-import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
-import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * Methods to find dependency relationships in a sequenced list of action sets.
@@ -76,7 +68,10 @@ public class ActionSetIndependenceChecking {
 	@NonNull
 	private IOptionalElementsProvider optionalElementsProvider;
 
-	private boolean DEBUG = true;
+	@Inject
+	protected ActionSetEvaluationHelper evaluationHelper;
+
+	private final boolean DEBUG = true;
 
 	/**
 	 * Get dependancy information for each individual change set. This can be used to create a dependency graph
@@ -87,17 +82,17 @@ public class ActionSetIndependenceChecking {
 	 * @param currentMetrics
 	 * @return
 	 */
-	public Map<ChangeSet, Set<List<ChangeSet>>> getChangeSetIndependence(@NonNull List<ChangeSet> changeSets, @NonNull ISequences baseSequences, @NonNull SimilarityState similarityState,
-			@NonNull long[] currentMetrics) {
-		Map<ChangeSet, Set<List<ChangeSet>>> relationships = new HashMap<>();
-		Deque<List<ChangeSet>> perms = createPermutations(changeSets);
+	public Map<ChangeSet, Set<List<ChangeSet>>> getChangeSetIndependence(@NonNull final List<ChangeSet> changeSets, @NonNull final ISequences baseSequences,
+			@NonNull final SimilarityState similarityState, final long @NonNull [] currentMetrics) {
+		final Map<ChangeSet, Set<List<ChangeSet>>> relationships = new HashMap<>();
+		final Deque<List<ChangeSet>> perms = createPermutations(changeSets);
 		while (perms.size() > 0) {
-			List<ChangeSet> dependency = perms.pop();
+			final List<ChangeSet> dependency = perms.pop();
 			assert dependency != null;
-			ISequences applied = applyChanges(baseSequences, dependency, similarityState, currentMetrics);
+			final ISequences applied = applyChanges(baseSequences, dependency, similarityState, currentMetrics);
 			if (applied != null) {
 				// We care about the final change set
-				ChangeSet interestingChangeSet = dependency.get(dependency.size() - 1);
+				final ChangeSet interestingChangeSet = dependency.get(dependency.size() - 1);
 				Set<List<ChangeSet>> set = relationships.get(interestingChangeSet);
 				if (set == null) {
 					set = new HashSet<>();
@@ -110,16 +105,16 @@ public class ActionSetIndependenceChecking {
 			}
 		}
 		if (DEBUG) {
-			for (ChangeSet cs : relationships.keySet()) {
+			for (final ChangeSet cs : relationships.keySet()) {
 				System.out.println("---Map---");
-				for (Change c : cs.changesList) {
+				for (final Change c : cs.changesList) {
 					System.out.println(c.description);
 				}
 				System.out.println("---------");
-				Set<List<ChangeSet>> rels = relationships.get(cs);
-				for (List<ChangeSet> lcs : rels) {
+				final Set<List<ChangeSet>> rels = relationships.get(cs);
+				for (final List<ChangeSet> lcs : rels) {
 					String output = "";
-					for (ChangeSet _cs : lcs) {
+					for (final ChangeSet _cs : lcs) {
 						for (int i = 0; i < changeSets.size(); i++) {
 							if (changeSets.get(i) == _cs) {
 								output += " --> " + i;
@@ -133,18 +128,18 @@ public class ActionSetIndependenceChecking {
 		return relationships;
 	}
 
-	private void pruneSuccessfulPermutations(List<ChangeSet> dependency, List<List<ChangeSet>> perms) {
+	private void pruneSuccessfulPermutations(final List<ChangeSet> dependency, final List<List<ChangeSet>> perms) {
 		for (int idx = perms.size() - 1; idx > -1; idx--) {
-			List<ChangeSet> lcs = perms.get(idx);
+			final List<ChangeSet> lcs = perms.get(idx);
 			if (dependency.get(dependency.size() - 1).equals(lcs.get(lcs.size() - 1))) {
 				perms.remove(idx);
 			}
 		}
 	}
 
-	private void pruneUnsuccessfulPermutations(List<ChangeSet> dependency, List<List<ChangeSet>> perms) {
+	private void pruneUnsuccessfulPermutations(final List<ChangeSet> dependency, final List<List<ChangeSet>> perms) {
 		for (int idx = perms.size() - 1; idx > -1; idx--) {
-			List<ChangeSet> lcs = perms.get(idx);
+			final List<ChangeSet> lcs = perms.get(idx);
 			boolean beginningIdentical = true;
 			for (int i = 0; i < dependency.size(); i++) {
 				if (!dependency.get(i).equals(lcs.get(i))) {
@@ -158,12 +153,12 @@ public class ActionSetIndependenceChecking {
 		}
 	}
 
-	private ISequences applyChanges(@NonNull ISequences baseSequences, @NonNull List<ChangeSet> changeSets, @NonNull SimilarityState similarityState, @NonNull long[] currentMetrics) {
+	private ISequences applyChanges(@NonNull final ISequences baseSequences, @NonNull final List<ChangeSet> changeSets, @NonNull final SimilarityState similarityState,
+			final long @NonNull [] currentMetrics) {
 		long[] thisCurrentMetrics = currentMetrics;
 		ISequences currentSequences = baseSequences;
-		boolean evaluation = false;
-		for (ChangeSet cs : changeSets) {
-			for (Change c : cs.changesList) {
+		for (final ChangeSet cs : changeSets) {
+			for (final Change c : cs.changesList) {
 				Pair<Boolean, ISequences> result = null;
 				if (c instanceof LoadRewireChange) {
 					result = applyLoadRewireChange(currentSequences, (LoadRewireChange) c);
@@ -190,10 +185,8 @@ public class ActionSetIndependenceChecking {
 				}
 			}
 			if (currentSequences != null) {
-				Pair<Boolean, long[]> evaluationResult = evaluateSolution(currentSequences, similarityState, thisCurrentMetrics);
-				evaluation = evaluationResult.getFirst();
-				thisCurrentMetrics = evaluationResult.getSecond();
-				if (!evaluation) {
+				thisCurrentMetrics = evaluateSolution(currentSequences, similarityState, thisCurrentMetrics);
+				if (thisCurrentMetrics == null) {
 					return null;
 				}
 			}
@@ -201,11 +194,11 @@ public class ActionSetIndependenceChecking {
 		return currentSequences;
 	}
 
-	private Deque<List<ChangeSet>> createPermutations(List<ChangeSet> finalBreakdown) {
-		Deque<List<ChangeSet>> perms = new LinkedList<>();
-		int current = finalBreakdown.size() - 1;
+	private Deque<List<ChangeSet>> createPermutations(final List<ChangeSet> finalBreakdown) {
+		final Deque<List<ChangeSet>> perms = new LinkedList<>();
+		final int current = finalBreakdown.size() - 1;
 		for (int length = 1; length < finalBreakdown.size() + 1; length++) {
-			int[] initial = new int[length];
+			final int[] initial = new int[length];
 			for (int index = 0; index < length; index++) {
 				initial[index] = index;
 			}
@@ -214,7 +207,7 @@ public class ActionSetIndependenceChecking {
 		return perms;
 	}
 
-	private Deque<List<ChangeSet>> getPermutation(int[] solution, List<ChangeSet> original, int current, Deque<List<ChangeSet>> permutations) {
+	private Deque<List<ChangeSet>> getPermutation(int[] solution, final List<ChangeSet> original, final int current, final Deque<List<ChangeSet>> permutations) {
 
 		while (solution != null) {
 			permutations.add(generatePermutations(solution, original));
@@ -224,16 +217,16 @@ public class ActionSetIndependenceChecking {
 		return permutations;
 	}
 
-	private List<ChangeSet> generatePermutations(int[] solution, List<ChangeSet> original) {
-		List<ChangeSet> processed = new LinkedList<>();
+	private List<ChangeSet> generatePermutations(final int[] solution, final List<ChangeSet> original) {
+		final List<ChangeSet> processed = new LinkedList<>();
 		for (int i = 0; i < solution.length; i++) {
 			processed.add(original.get(solution[i]));
 		}
 		return processed;
 	}
 
-	private int[] resetPermutation(int[] solution, int current) {
-		int length = solution.length;
+	private int[] resetPermutation(final int[] solution, final int current) {
+		final int length = solution.length;
 		int pivot = -1;
 		for (int i = length - 1; i > -1; i--) {
 			if (i == length - 1) {
@@ -259,13 +252,13 @@ public class ActionSetIndependenceChecking {
 		}
 	}
 
-	private Pair<Boolean, ISequences> applyDischargeRewireChange(@NonNull ISequences currentSequences, @NonNull DischargeRewireChange change) {
-		int[] indexes = getDualCargoIndexes(currentSequences, change);
-		int loadAIdx = indexes[0];
-		int dischargeAIdx = indexes[1];
-		int loadBIdx = indexes[2];
-		int dischargeBIdx = indexes[3];
-		for (int index : indexes) {
+	private Pair<Boolean, ISequences> applyDischargeRewireChange(@NonNull final ISequences currentSequences, @NonNull final DischargeRewireChange change) {
+		final int[] indexes = getDualCargoIndexes(currentSequences, change);
+		final int loadAIdx = indexes[0];
+		final int dischargeAIdx = indexes[1];
+		final int loadBIdx = indexes[2];
+		final int dischargeBIdx = indexes[3];
+		for (final int index : indexes) {
 			if (index == -1) {
 				return new Pair<>(false, null);
 			}
@@ -280,13 +273,13 @@ public class ActionSetIndependenceChecking {
 		return new Pair<Boolean, ISequences>(true, copy);
 	}
 
-	private Pair<Boolean, ISequences> applyLoadRewireChange(@NonNull ISequences currentSequences, @NonNull LoadRewireChange change) {
-		int[] indexes = getDualCargoIndexes(currentSequences, change);
-		int loadAIdx = indexes[0];
-		int dischargeAIdx = indexes[1];
-		int loadBIdx = indexes[2];
-		int dischargeBIdx = indexes[3];
-		for (int index : indexes) {
+	private Pair<Boolean, ISequences> applyLoadRewireChange(@NonNull final ISequences currentSequences, @NonNull final LoadRewireChange change) {
+		final int[] indexes = getDualCargoIndexes(currentSequences, change);
+		final int loadAIdx = indexes[0];
+		final int dischargeAIdx = indexes[1];
+		final int loadBIdx = indexes[2];
+		final int dischargeBIdx = indexes[3];
+		for (final int index : indexes) {
 			if (index == -1) {
 				return new Pair<>(false, null);
 			}
@@ -305,16 +298,16 @@ public class ActionSetIndependenceChecking {
 		return new Pair<Boolean, ISequences>(true, copy);
 	}
 
-	private Pair<Boolean, ISequences> applyUnusedDischargeRewireChange(ISequences currentSequences, UnusedToUsedDischargeChange change) {
+	private Pair<Boolean, ISequences> applyUnusedDischargeRewireChange(final ISequences currentSequences, final UnusedToUsedDischargeChange change) {
 		// check that the unused element is currently unused
 		if (!currentSequences.getUnusedElements().contains(change.getUnusedDischarge())) {
 			return new Pair<>(false, null);
 		}
 		// check other elements are in order
-		int[] indexes = getSingleCargoIndexes(currentSequences, change.getLoadA(), change.getDischargeA(), change.getResourceA());
-		int loadAIdx = indexes[0];
-		int dischargeAIdx = indexes[1];
-		for (int index : indexes) {
+		final int[] indexes = getSingleCargoIndexes(currentSequences, change.getLoadA(), change.getDischargeA(), change.getResourceA());
+		final int loadAIdx = indexes[0];
+		final int dischargeAIdx = indexes[1];
+		for (final int index : indexes) {
 			if (index == -1) {
 				return new Pair<>(false, null);
 			}
@@ -329,10 +322,10 @@ public class ActionSetIndependenceChecking {
 		return new Pair<Boolean, ISequences>(true, copy);
 	}
 
-	private Pair<Boolean, ISequences> applyRemoveCargoChange(@NonNull ISequences currentSequences, @NonNull RemoveCargoChange change) {
+	private Pair<Boolean, ISequences> applyRemoveCargoChange(@NonNull final ISequences currentSequences, @NonNull final RemoveCargoChange change) {
 		// check elements are in order
-		int[] indexes = getSingleCargoIndexes(currentSequences, change.getLoadA(), change.getDischargeA(), change.getResourceA());
-		for (int index : indexes) {
+		final int[] indexes = getSingleCargoIndexes(currentSequences, change.getLoadA(), change.getDischargeA(), change.getResourceA());
+		for (final int index : indexes) {
 			if (index == -1) {
 				return new Pair<>(false, null);
 			}
@@ -347,16 +340,16 @@ public class ActionSetIndependenceChecking {
 		return new Pair<Boolean, ISequences>(true, copy);
 	}
 
-	private Pair<Boolean, ISequences> applyUnusedLoadRewireChange(@NonNull ISequences currentSequences, @NonNull UnusedToUsedLoadChange change) {
+	private Pair<Boolean, ISequences> applyUnusedLoadRewireChange(@NonNull final ISequences currentSequences, @NonNull final UnusedToUsedLoadChange change) {
 		// check that the unused element is currently unused
 		if (!currentSequences.getUnusedElements().contains(change.getUnusedLoad())) {
 			return new Pair<>(false, null);
 		}
 		// check other elements are in order
-		int[] indexes = getSingleCargoIndexes(currentSequences, change.getUsedLoad(), change.getDischarge(), change.getResource());
-		int loadAIdx = indexes[0];
-		int dischargeAIdx = indexes[1];
-		for (int index : indexes) {
+		final int[] indexes = getSingleCargoIndexes(currentSequences, change.getUsedLoad(), change.getDischarge(), change.getResource());
+		final int loadAIdx = indexes[0];
+		final int dischargeAIdx = indexes[1];
+		for (final int index : indexes) {
 			if (index == -1) {
 				return new Pair<>(false, null);
 			}
@@ -371,16 +364,16 @@ public class ActionSetIndependenceChecking {
 		return new Pair<Boolean, ISequences>(true, copy);
 	}
 
-	private Pair<Boolean, ISequences> applyInsertUnusedCargoChange(@NonNull ISequences currentSequences, @NonNull InsertUnusedCargoChange change) {
+	private Pair<Boolean, ISequences> applyInsertUnusedCargoChange(@NonNull final ISequences currentSequences, @NonNull final InsertUnusedCargoChange change) {
 		// check that the unused element is currently unused
 		if (!(currentSequences.getUnusedElements().contains(change.getUnusedLoad()) && currentSequences.getUnusedElements().contains(change.getUnusedDischarge()))) {
 			return new Pair<>(false, null);
 		}
 		// check other elements are in order
-		int[] indexes = getSingleCargoIndexes(currentSequences, change.getLoadA(), change.getDischargeA(), change.getResourceA());
-		int loadAIdx = indexes[0];
-		int dischargeAIdx = indexes[1];
-		for (int index : indexes) {
+		final int[] indexes = getSingleCargoIndexes(currentSequences, change.getLoadA(), change.getDischargeA(), change.getResourceA());
+		final int loadAIdx = indexes[0];
+		final int dischargeAIdx = indexes[1];
+		for (final int index : indexes) {
 			if (index == -1) {
 				return new Pair<>(false, null);
 			}
@@ -395,13 +388,13 @@ public class ActionSetIndependenceChecking {
 		return new Pair<Boolean, ISequences>(true, copy);
 	}
 
-	private Pair<Boolean, ISequences> applyVesselChange(@NonNull ISequences currentSequences, @NonNull VesselChange change) {
-		int[] indexes = getDualCargoIndexes(currentSequences, change);
-		int loadAIdx = indexes[0];
-		int dischargeAIdx = indexes[1];
-		int element1BIdx = indexes[2];
-		int element2BIdx = indexes[3];
-		for (int index : indexes) {
+	private Pair<Boolean, ISequences> applyVesselChange(@NonNull final ISequences currentSequences, @NonNull final VesselChange change) {
+		final int[] indexes = getDualCargoIndexes(currentSequences, change);
+		final int loadAIdx = indexes[0];
+		final int dischargeAIdx = indexes[1];
+		final int element1BIdx = indexes[2];
+		final int element2BIdx = indexes[3];
+		for (final int index : indexes) {
 			if (index == -1) {
 				return new Pair<>(false, null);
 			}
@@ -425,14 +418,15 @@ public class ActionSetIndependenceChecking {
 		return new Pair<Boolean, ISequences>(true, copy);
 	}
 
-	private int[] getSingleCargoIndexes(@NonNull ISequences currentSequences, @NonNull ISequenceElement load, @NonNull ISequenceElement discharge, @NonNull IResource resourceA) {
-		int[] indexes = new int[2];
+	private int[] getSingleCargoIndexes(@NonNull final ISequences currentSequences, @NonNull final ISequenceElement load, @NonNull final ISequenceElement discharge,
+			@NonNull final IResource resourceA) {
+		final int[] indexes = new int[2];
 		indexes[0] = indexes[1] = -1;
-		for (IResource resource : currentSequences.getResources()) {
+		for (final IResource resource : currentSequences.getResources()) {
 			assert resource != null;
-			ISequence sequence = currentSequences.getSequence(resource);
+			final ISequence sequence = currentSequences.getSequence(resource);
 			int idx = 0;
-			for (ISequenceElement element : sequence) {
+			for (final ISequenceElement element : sequence) {
 				if (element == load && resource == resourceA) {
 					indexes[0] = idx;
 				} else if (element == discharge && resource == resourceA) {
@@ -444,14 +438,14 @@ public class ActionSetIndependenceChecking {
 		return indexes;
 	}
 
-	private int[] getDualCargoIndexes(ISequences currentSequences, RewireChange change) {
-		int[] indexes = new int[4];
+	private int[] getDualCargoIndexes(final ISequences currentSequences, final RewireChange change) {
+		final int[] indexes = new int[4];
 		indexes[0] = indexes[1] = indexes[2] = indexes[3] = -1;
-		for (IResource resource : currentSequences.getResources()) {
+		for (final IResource resource : currentSequences.getResources()) {
 			assert resource != null;
-			ISequence sequence = currentSequences.getSequence(resource);
+			final ISequence sequence = currentSequences.getSequence(resource);
 			int idx = 0;
-			for (ISequenceElement element : sequence) {
+			for (final ISequenceElement element : sequence) {
 				if (element == change.getElement1A() && resource == change.getResourceA()) {
 					indexes[0] = idx;
 				} else if (element == change.getElement2A() && resource == change.getResourceA()) {
@@ -467,137 +461,20 @@ public class ActionSetIndependenceChecking {
 		return indexes;
 	}
 
-	private Pair<Boolean, long[]> evaluateSolution(@NonNull ISequences currentSequences, SimilarityState similarityState, long[] currentMetrics) {
-		boolean failedEvaluation = false;
-		long thisPNL = 0;
-		long thisLateness = 0;
-		long thisCapacity = 0;
+	private long @Nullable [] evaluateSolution(@NonNull final ISequences currentSequences, final SimilarityState similarityState, final long[] currentMetrics) {
 
 		final IModifiableSequences currentFullSequences = new ModifiableSequences(currentSequences);
 		sequencesManipulator.manipulate(currentFullSequences);
 
-		// Apply hard constraint checkers
-		for (final IConstraintChecker checker : constraintCheckers) {
-			if (checker.checkConstraints(currentFullSequences) == false) {
-				// Break out
-				failedEvaluation = true;
-				break;
-			}
+		long[] metrics = evaluationHelper.evaluateState(currentSequences, currentFullSequences, null, similarityState, null);
+		if (metrics == null) {
+			return null;
 		}
-
-		if (failedEvaluation) {
-			return new Pair<>(false, null);
+		long thisPNL = metrics[MetricType.PNL.ordinal()];
+		long thisLateness = metrics[MetricType.LATENESS.ordinal()];
+		if (thisPNL - currentMetrics[MetricType.PNL.ordinal()] < 0 && thisLateness >= similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]) {
+			return null;
 		}
-
-		final long thisUnusedCompulsarySlotCount = calculateUnusedCompulsarySlot(currentSequences);
-		if (thisUnusedCompulsarySlotCount > similarityState.getBaseMetrics()[MetricType.COMPULSARY_SLOT.ordinal()]) {
-			failedEvaluation = true;
-		}
-
-		if (failedEvaluation) {
-			return new Pair<>(false, null);
-		}
-
-		final IEvaluationState evaluationState = new EvaluationState();
-		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-			if (!evaluationProcess.evaluate(currentFullSequences, evaluationState)) {
-				failedEvaluation = true;
-				break;
-			}
-		}
-
-		if (!failedEvaluation) {
-			final ScheduledSequences ss = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
-			assert ss != null;
-
-			thisLateness = calculateScheduleLateness(currentFullSequences, ss);
-			if (thisLateness > similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]) {
-				failedEvaluation = true;
-			} else {
-				// currentLateness = thisLateness;
-			}
-
-			thisCapacity = calculateScheduleCapacity(currentFullSequences, ss);
-			if (thisCapacity > similarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()]) {
-				failedEvaluation = true;
-			} else {
-				// currentLateness = thisLateness;
-			}
-
-			thisPNL = Long.MAX_VALUE;
-			if (!failedEvaluation) {
-
-				for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-					// Do PNL bit
-					if (evaluationProcess instanceof SchedulerEvaluationProcess) {
-						final SchedulerEvaluationProcess schedulerEvaluationProcess = (SchedulerEvaluationProcess) evaluationProcess;
-						// schedulerEvaluationProcess.doPNL(currentFullSequences, evaluationState);
-					}
-				}
-
-				thisPNL = calculateSchedulePNL(currentFullSequences, ss);
-
-				if (thisPNL - currentMetrics[MetricType.PNL.ordinal()] < 0 && thisLateness >= similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]) {
-					failedEvaluation = true;
-				} else {
-					// currentPNL = thisPNL;
-				}
-			}
-		}
-		if (failedEvaluation) {
-			return new Pair<>(false, null);
-		} else {
-			return new Pair<>(true, new long[] { thisPNL, thisLateness, thisCapacity, 0 });
-		}
+		return metrics;
 	}
-
-	private long calculateScheduleLateness(final ISequences fullSequences, final ScheduledSequences scheduledSequences) {
-		long sumCost = 0;
-
-		for (final IPortSlot lateSlot : scheduledSequences.getLateSlotsSet()) {
-			sumCost += scheduledSequences.getLatenessCost(lateSlot).getSecond();
-		}
-		return sumCost;
-
-	}
-
-	public long calculateScheduleCapacity(final ISequences fullSequences, final ScheduledSequences scheduledSequences) {
-		long sumCost = 0;
-
-		for (final ISequence seq : fullSequences.getSequences().values()) {
-			for (final ISequenceElement e : seq) {
-				assert e != null;
-				sumCost += scheduledSequences.getCapacityViolationCount(portSlotProvider.getPortSlot(e));
-			}
-		}
-		return sumCost;
-	}
-
-	public long calculateSchedulePNL(@NonNull final IModifiableSequences fullSequences, @NonNull final ScheduledSequences scheduledSequences) {
-		long sumPNL = 0;
-
-		for (final ScheduledSequence scheduledSequence : scheduledSequences) {
-			for (final Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord> p : scheduledSequence.getVoyagePlans()) {
-				sumPNL += scheduledSequences.getVoyagePlanGroupValue(p.getFirst());
-			}
-			for (final ISequenceElement element : fullSequences.getUnusedElements()) {
-				final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
-				assert portSlot != null;
-				sumPNL += scheduledSequences.getUnusedSlotGroupValue(portSlot);
-			}
-		}
-		return sumPNL;
-	}
-
-	public long calculateUnusedCompulsarySlot(final ISequences rawSequences) {
-
-		int thisUnusedCompulsarySlotCount = 0;
-		for (final ISequenceElement e : rawSequences.getUnusedElements()) {
-			if (optionalElementsProvider.isElementRequired(e)) {
-				thisUnusedCompulsarySlotCount++;
-			}
-		}
-		return thisUnusedCompulsarySlotCount;
-	}
-
 }

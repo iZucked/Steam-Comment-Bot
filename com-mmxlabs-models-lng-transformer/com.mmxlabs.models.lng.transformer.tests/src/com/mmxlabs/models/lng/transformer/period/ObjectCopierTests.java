@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.period;
@@ -43,7 +43,7 @@ public class ObjectCopierTests {
 		sourceLoad1.setName("LoadSlot1");
 		sourceLoad1.setArriveCold(true);
 		sourceLoad1.setNominatedVessel(null);
-		sourceLoad1.setCancellationFee(1000);
+		sourceLoad1.setCancellationExpression("1000");
 		sourceLoad1.setPricingEvent(PricingEvent.START_DISCHARGE);
 
 		// Perform the copy

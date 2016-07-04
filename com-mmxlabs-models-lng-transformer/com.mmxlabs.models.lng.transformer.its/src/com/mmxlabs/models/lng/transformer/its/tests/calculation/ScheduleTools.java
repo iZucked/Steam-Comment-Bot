@@ -1,17 +1,19 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its.tests.calculation;
 
 import java.util.List;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
@@ -108,4 +110,23 @@ public final class ScheduleTools {
 
 		return 0;
 	}
+	
+	/**
+	 * Get allocated slot's price
+	 * @param scenario
+	 * @param slot
+	 * @return
+	 */
+	public static double getPrice(LNGScenarioModel scenario, Slot slot) {
+		EList<SlotAllocation> slotAllocations = scenario.getScheduleModel().getSchedule().getSlotAllocations();
+		SlotAllocation interestingSlotAllocation = null;
+		for (SlotAllocation slotAllocation : slotAllocations) {
+			if (slotAllocation.getSlot().equals(slot)) {
+				interestingSlotAllocation = slotAllocation;
+			}
+		}
+		assert (interestingSlotAllocation != null);
+		return interestingSlotAllocation.getPrice();
+	}
+
 }
