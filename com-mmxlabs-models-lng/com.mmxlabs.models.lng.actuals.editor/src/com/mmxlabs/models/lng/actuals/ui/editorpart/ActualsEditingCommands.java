@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.actuals.ui.editorpart;
@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.mmxlabs.models.lng.actuals.ActualsModel;
@@ -41,7 +42,7 @@ public class ActualsEditingCommands {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> T createObject(final EClass clz, final EReference reference, final EObject container) {
+	public <@NonNull T> T createObject(final EClass clz, final EReference reference, final EObject container) {
 		final List<IModelFactory> factories = Activator.getDefault().getModelFactoryRegistry().getModelFactories(clz);
 
 		// TODO: Pre-generate and link to UI
@@ -55,7 +56,7 @@ public class ActualsEditingCommands {
 				return (T) setting.getInstance();
 			}
 		}
-		return null;
+		throw new IllegalStateException("Unable to create requested instance");
 	}
 
 	public CargoActuals createNewCargoActuals(final List<Command> setCommands, final ActualsModel actualsModel) {

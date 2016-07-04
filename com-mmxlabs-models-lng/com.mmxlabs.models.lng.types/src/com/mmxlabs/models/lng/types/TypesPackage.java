@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.types;
@@ -114,7 +114,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OBJECT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+	int OBJECT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE_1 = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
@@ -123,7 +123,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OBJECT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+	int OBJECT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE_1 = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
@@ -205,7 +205,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int APORT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE = OBJECT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+	int APORT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE_1 = OBJECT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE_1;
 
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
@@ -214,7 +214,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int APORT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = OBJECT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+	int APORT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE_1 = OBJECT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE_1;
 
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
@@ -296,7 +296,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE = OBJECT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+	int AVESSEL_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE_1 = OBJECT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE_1;
 
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
@@ -305,7 +305,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = OBJECT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+	int AVESSEL_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE_1 = OBJECT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE_1;
 
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
@@ -430,6 +430,16 @@ public interface TypesPackage extends EPackage {
 	int VOLUME_UNITS = 7;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.TimePeriod <em>Time Period</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.types.TimePeriod
+	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getTimePeriod()
+	 * @generated
+	 */
+	int TIME_PERIOD = 8;
+
+	/**
 	 * The meta object id for the '<em>Iterable</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -437,7 +447,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 8;
+	int ITERABLE = 9;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.APortSet <em>APort Set</em>}'.
@@ -538,6 +548,16 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getVolumeUnits();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.types.TimePeriod <em>Time Period</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Time Period</em>'.
+	 * @see com.mmxlabs.models.lng.types.TimePeriod
+	 * @generated
+	 */
+	EEnum getTimePeriod();
 
 	/**
 	 * Returns the meta object for data type '{@link java.lang.Iterable <em>Iterable</em>}'.
@@ -668,6 +688,16 @@ public interface TypesPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum VOLUME_UNITS = eINSTANCE.getVolumeUnits();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.TimePeriod <em>Time Period</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.types.TimePeriod
+		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getTimePeriod()
+		 * @generated
+		 */
+		EEnum TIME_PERIOD = eINSTANCE.getTimePeriod();
 
 		/**
 		 * The meta object literal for the '<em>Iterable</em>' data type.

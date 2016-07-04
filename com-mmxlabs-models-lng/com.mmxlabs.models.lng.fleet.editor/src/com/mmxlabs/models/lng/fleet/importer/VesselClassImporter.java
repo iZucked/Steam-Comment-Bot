@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.importer;
@@ -17,10 +17,10 @@ import com.mmxlabs.common.csv.FieldMap;
 import com.mmxlabs.common.csv.IDeferment;
 import com.mmxlabs.common.csv.IFieldMap;
 import com.mmxlabs.common.csv.IImportContext;
-import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
@@ -96,7 +96,7 @@ public class VesselClassImporter extends DefaultClassImporter {
 						if (row.containsKey("name"))
 							subMap.put("vesselclass", row.get("name"));
 						final RouteCost cost = (RouteCost) routeCostImporter.importObject(parent, PricingPackage.eINSTANCE.getRouteCost(), subMap, context).importedObject;
-
+						
 						context.doLater(new IDeferment() {
 							@Override
 							public void run(final IImportContext importContext) {
@@ -106,8 +106,10 @@ public class VesselClassImporter extends DefaultClassImporter {
 									if (rootObject instanceof LNGScenarioModel) {
 										final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 										final CostModel costModel = ScenarioModelUtil.getCostModel(lngScenarioModel);
-
-										costModel.getRouteCosts().add(cost);
+										// Only import suez costs
+										if (cost.getRoute().getRouteOption() == RouteOption.SUEZ) {
+											costModel.getRouteCosts().add(cost);
+										}
 									}
 								}
 							}

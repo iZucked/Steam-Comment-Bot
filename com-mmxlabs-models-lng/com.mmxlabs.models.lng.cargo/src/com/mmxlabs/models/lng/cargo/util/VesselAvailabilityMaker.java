@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.util;
@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -24,12 +25,13 @@ public class VesselAvailabilityMaker {
 	@NonNull
 	private final VesselAvailability vesselAvailability;
 
-	public VesselAvailabilityMaker(@NonNull final CargoModelBuilder cargoModelBuilder, @NonNull Vessel vessel) {
+	public VesselAvailabilityMaker(@NonNull final CargoModelBuilder cargoModelBuilder, @NonNull Vessel vessel, @NonNull BaseLegalEntity entity) {
 		this.cargoModelBuilder = cargoModelBuilder;
 		this.vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
 		this.vesselAvailability.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
 		this.vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 		this.vesselAvailability.setVessel(vessel);
+		this.vesselAvailability.setEntity(entity);
 	}
 
 	public VesselAvailabilityMaker withStartPort(@Nullable final Port port) {
@@ -50,6 +52,10 @@ public class VesselAvailabilityMaker {
 		return this;
 	}
 
+	public VesselAvailabilityMaker withStartWindow(@NonNull final LocalDateTime exactTime) {
+		return withStartWindow(exactTime, exactTime);
+	}
+
 	public VesselAvailabilityMaker withStartWindow(@Nullable final LocalDateTime windowStart, @Nullable final LocalDateTime windowEnd) {
 		if (windowStart != null) {
 			vesselAvailability.setStartAfter(windowStart);
@@ -57,13 +63,17 @@ public class VesselAvailabilityMaker {
 			vesselAvailability.unsetStartAfter();
 		}
 		if (windowEnd != null) {
-			vesselAvailability.setStartBy(windowStart);
+			vesselAvailability.setStartBy(windowEnd);
 		} else {
 			vesselAvailability.unsetStartBy();
 		}
 		return this;
 	}
 
+	public VesselAvailabilityMaker withEndWindow(@NonNull final LocalDateTime exactTime) {
+		return withEndWindow(exactTime, exactTime);
+	}
+	
 	public VesselAvailabilityMaker withEndWindow(@Nullable final LocalDateTime windowStart, @Nullable final LocalDateTime windowEnd) {
 		if (windowStart != null) {
 			vesselAvailability.setEndAfter(windowStart);
@@ -71,7 +81,7 @@ public class VesselAvailabilityMaker {
 			vesselAvailability.unsetEndAfter();
 		}
 		if (windowEnd != null) {
-			vesselAvailability.setEndBy(windowStart);
+			vesselAvailability.setEndBy(windowEnd);
 		} else {
 			vesselAvailability.unsetEndBy();
 		}
@@ -106,6 +116,13 @@ public class VesselAvailabilityMaker {
 
 	}
 
+	@NonNull
+	public VesselAvailabilityMaker withCharterRate(@NonNull String priceExpression) {
+		vesselAvailability.setTimeCharterRate(priceExpression);
+		return this;
+	}
+
+	@NonNull
 	public VesselAvailability build() {
 
 		cargoModelBuilder.getCargoModel().getVesselAvailabilities().add(vesselAvailability);

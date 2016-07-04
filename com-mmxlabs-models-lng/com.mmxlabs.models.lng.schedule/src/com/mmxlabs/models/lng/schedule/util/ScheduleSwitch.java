@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.util;
@@ -10,6 +10,7 @@ import java.util.Map;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
@@ -62,7 +63,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage
  * @generated
  */
-public class ScheduleSwitch<T> extends Switch<T> {
+public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
@@ -196,6 +197,7 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = caseFuelUsage(endEvent);
 				if (result == null) result = casePortVisit(endEvent);
 				if (result == null) result = caseProfitAndLossContainer(endEvent);
+				if (result == null) result = caseEventGrouping(endEvent);
 				if (result == null) result = caseEvent(endEvent);
 				if (result == null) result = caseITimezoneProvider(endEvent);
 				if (result == null) result = caseCapacityViolationsHolder(endEvent);

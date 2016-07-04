@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -22,7 +22,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getCharterOutPrice <em>Charter Out Price</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getCharterOutRate <em>Charter Out Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getMinCharterOutDuration <em>Min Charter Out Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getAvailablePorts <em>Available Ports</em>}</li>
  * </ul>
@@ -46,17 +46,7 @@ public interface CharterOutMarket extends SpotCharterMarket, NamedObject {
 	 * @model required="true"
 	 * @generated
 	 */
-	CharterIndex getCharterOutPrice();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getCharterOutPrice <em>Charter Out Price</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Charter Out Price</em>' reference.
-	 * @see #getCharterOutPrice()
-	 * @generated
-	 */
-	void setCharterOutPrice(CharterIndex value);
+//	CharterIndex getCharterOutPrice();
 
 	/**
 	 * Returns the value of the '<em><b>Min Charter Out Duration</b></em>' attribute.
@@ -99,5 +89,32 @@ public interface CharterOutMarket extends SpotCharterMarket, NamedObject {
 	 * @generated
 	 */
 	EList<APortSet<Port>> getAvailablePorts();
+
+	/**
+	 * Returns the value of the '<em><b>Charter Out Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Charter Out Rate</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Charter Out Rate</em>' attribute.
+	 * @see #setCharterOutRate(String)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterOutMarket_CharterOutRate()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$/day'"
+	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='charter'"
+	 * @generated
+	 */
+	String getCharterOutRate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getCharterOutRate <em>Charter Out Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Charter Out Rate</em>' attribute.
+	 * @see #getCharterOutRate()
+	 * @generated
+	 */
+	void setCharterOutRate(String value);
 
 } // CharterOutMarket

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -117,6 +117,7 @@ public class SimilaritySettingsImpl extends EObjectImpl implements SimilaritySet
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SimilarityInterval getLowInterval() {
 		return lowInterval;
 	}
@@ -141,6 +142,7 @@ public class SimilaritySettingsImpl extends EObjectImpl implements SimilaritySet
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLowInterval(SimilarityInterval newLowInterval) {
 		if (newLowInterval != lowInterval) {
 			NotificationChain msgs = null;
@@ -160,6 +162,7 @@ public class SimilaritySettingsImpl extends EObjectImpl implements SimilaritySet
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SimilarityInterval getMedInterval() {
 		return medInterval;
 	}
@@ -184,6 +187,7 @@ public class SimilaritySettingsImpl extends EObjectImpl implements SimilaritySet
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMedInterval(SimilarityInterval newMedInterval) {
 		if (newMedInterval != medInterval) {
 			NotificationChain msgs = null;
@@ -203,6 +207,7 @@ public class SimilaritySettingsImpl extends EObjectImpl implements SimilaritySet
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SimilarityInterval getHighInterval() {
 		return highInterval;
 	}
@@ -227,6 +232,7 @@ public class SimilaritySettingsImpl extends EObjectImpl implements SimilaritySet
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHighInterval(SimilarityInterval newHighInterval) {
 		if (newHighInterval != highInterval) {
 			NotificationChain msgs = null;
@@ -246,6 +252,7 @@ public class SimilaritySettingsImpl extends EObjectImpl implements SimilaritySet
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getOutOfBoundsWeight() {
 		return outOfBoundsWeight;
 	}
@@ -255,6 +262,7 @@ public class SimilaritySettingsImpl extends EObjectImpl implements SimilaritySet
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setOutOfBoundsWeight(int newOutOfBoundsWeight) {
 		int oldOutOfBoundsWeight = outOfBoundsWeight;
 		outOfBoundsWeight = newOutOfBoundsWeight;
@@ -269,6 +277,7 @@ public class SimilaritySettingsImpl extends EObjectImpl implements SimilaritySet
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetOutOfBoundsWeight() {
 		int oldOutOfBoundsWeight = outOfBoundsWeight;
 		boolean oldOutOfBoundsWeightESet = outOfBoundsWeightESet;
@@ -283,6 +292,7 @@ public class SimilaritySettingsImpl extends EObjectImpl implements SimilaritySet
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetOutOfBoundsWeight() {
 		return outOfBoundsWeightESet;
 	}

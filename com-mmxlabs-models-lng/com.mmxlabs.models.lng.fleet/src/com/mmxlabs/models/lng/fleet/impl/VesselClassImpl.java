@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.impl;
@@ -51,6 +51,7 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getRouteParameters <em>Route Parameters</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getPilotLightRate <em>Pilot Light Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getMinBaseFuelConsumption <em>Min Base Fuel Consumption</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#isHasReliqCapability <em>Has Reliq Capability</em>}</li>
  * </ul>
  *
  * @generated
@@ -285,6 +286,26 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 	 * @ordered
 	 */
 	protected double minBaseFuelConsumption = MIN_BASE_FUEL_CONSUMPTION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isHasReliqCapability() <em>Has Reliq Capability</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isHasReliqCapability()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean HAS_RELIQ_CAPABILITY_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isHasReliqCapability() <em>Has Reliq Capability</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isHasReliqCapability()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean hasReliqCapability = HAS_RELIQ_CAPABILITY_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -645,6 +666,27 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isHasReliqCapability() {
+		return hasReliqCapability;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHasReliqCapability(boolean newHasReliqCapability) {
+		boolean oldHasReliqCapability = hasReliqCapability;
+		hasReliqCapability = newHasReliqCapability;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__HAS_RELIQ_CAPABILITY, oldHasReliqCapability, hasReliqCapability));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public EList<Vessel> collect(EList<AVesselSet<Vessel>> marked) {
@@ -719,6 +761,8 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 				return getPilotLightRate();
 			case FleetPackage.VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION:
 				return getMinBaseFuelConsumption();
+			case FleetPackage.VESSEL_CLASS__HAS_RELIQ_CAPABILITY:
+				return isHasReliqCapability();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -776,6 +820,9 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 			case FleetPackage.VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION:
 				setMinBaseFuelConsumption((Double)newValue);
 				return;
+			case FleetPackage.VESSEL_CLASS__HAS_RELIQ_CAPABILITY:
+				setHasReliqCapability((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -830,6 +877,9 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 			case FleetPackage.VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION:
 				setMinBaseFuelConsumption(MIN_BASE_FUEL_CONSUMPTION_EDEFAULT);
 				return;
+			case FleetPackage.VESSEL_CLASS__HAS_RELIQ_CAPABILITY:
+				setHasReliqCapability(HAS_RELIQ_CAPABILITY_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -870,6 +920,8 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 				return pilotLightRate != PILOT_LIGHT_RATE_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION:
 				return minBaseFuelConsumption != MIN_BASE_FUEL_CONSUMPTION_EDEFAULT;
+			case FleetPackage.VESSEL_CLASS__HAS_RELIQ_CAPABILITY:
+				return hasReliqCapability != HAS_RELIQ_CAPABILITY_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -902,6 +954,8 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 		result.append(pilotLightRate);
 		result.append(", minBaseFuelConsumption: ");
 		result.append(minBaseFuelConsumption);
+		result.append(", hasReliqCapability: ");
+		result.append(hasReliqCapability);
 		result.append(')');
 		return result.toString();
 	}

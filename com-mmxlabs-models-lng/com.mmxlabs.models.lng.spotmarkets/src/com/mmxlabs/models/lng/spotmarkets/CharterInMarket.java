@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -19,7 +19,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterInPrice <em>Charter In Price</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterInRate <em>Charter In Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getSpotCharterCount <em>Spot Charter Count</em>}</li>
  * </ul>
  *
@@ -42,17 +42,7 @@ public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType
 	 * @model required="true"
 	 * @generated
 	 */
-	CharterIndex getCharterInPrice();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterInPrice <em>Charter In Price</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Charter In Price</em>' reference.
-	 * @see #getCharterInPrice()
-	 * @generated
-	 */
-	void setCharterInPrice(CharterIndex value);
+//	CharterIndex getCharterInPrice();
 
 	/**
 	 * Returns the value of the '<em><b>Spot Charter Count</b></em>' attribute.
@@ -79,5 +69,32 @@ public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType
 	 * @generated
 	 */
 	void setSpotCharterCount(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Charter In Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Charter In Rate</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Charter In Rate</em>' attribute.
+	 * @see #setCharterInRate(String)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket_CharterInRate()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$/day'"
+	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='charter'"
+	 * @generated
+	 */
+	String getCharterInRate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterInRate <em>Charter In Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Charter In Rate</em>' attribute.
+	 * @see #getCharterInRate()
+	 * @generated
+	 */
+	void setCharterInRate(String value);
 
 } // CharterInMarket

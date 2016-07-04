@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2015
+    Copyright (C) Minimax Labs Ltd., 2010 - 2016
     All rights reserved.
 
 -->
@@ -396,6 +396,22 @@
                </message>
                <target
                      class="LoadSlot">
+               </target>
+            </constraint>
+                        <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.KeepOpenSlotConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.KeepOpenSlotConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Keep Open Slot Constaint"
+                  severity="ERROR"
+                  statusCode="0">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="Slot">
                </target>
             </constraint>
             <constraint

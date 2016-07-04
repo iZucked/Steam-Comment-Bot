@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.presentation.composites;
@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
@@ -78,6 +79,7 @@ public class VesselClassComponentHelper extends BaseComponentHelper {
 		add_routeParametersEditor(detailComposite, topClass);
 		add_pilotLightRateEditor(detailComposite, topClass);
 		add_minBaseFuelConsumptionEditor(detailComposite, topClass);
+		add_hasReliqCapabilityEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the inaccessiblePorts feature on VesselClass
@@ -193,5 +195,16 @@ public class VesselClassComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_minBaseFuelConsumptionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION));
+	}
+
+	/**
+	 * Create the editor for the hasReliqCapability feature on VesselClass
+	 *
+	 * @generated NOT
+	 */
+	protected void add_hasReliqCapabilityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted("features:reliq-support")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS__HAS_RELIQ_CAPABILITY));
+		}
 	}
 }

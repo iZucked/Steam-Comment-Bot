@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation;
@@ -44,6 +44,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -97,7 +98,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	private void validateSlotOrder(final IValidationContext ctx, final Cargo cargo, final Slot slot, final long availableTime, final List<IStatus> failures) {
 		if (availableTime < 0) {
 			final int severity = IStatus.ERROR;
-			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(" [Cargo|" + cargo.getLoadName() + "] Load is after discharge (note timezone)."), severity);
+			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+					(IConstraintStatus) ctx.createFailureStatus(" [Cargo|" + cargo.getLoadName() + "] Load is after discharge (note timezone)."), severity);
 			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
 			failures.add(status);
 		}
@@ -137,9 +139,10 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 			final MMXRootObject scenario = extraContext.getRootObject();
 			if (scenario instanceof LNGScenarioModel) {
 
+				LNGScenarioModel lngScenarioModel = (LNGScenarioModel) scenario;
 				double maxSpeedKnots = 0.0;
-				final CargoModel cargoModel = ((LNGScenarioModel) scenario).getCargoModel();
-				final SpotMarketsModel spotMarketsModel = ((LNGScenarioModel) scenario).getReferenceModel().getSpotMarketsModel();
+				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
+				final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(lngScenarioModel);
 
 				final Set<VesselClass> usedClasses = new HashSet<>();
 
@@ -150,7 +153,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 				for (final CharterInMarket charterCostModel : spotMarketsModel.getCharterInMarkets()) {
-					if (charterCostModel.getCharterInPrice() != null && charterCostModel.getSpotCharterCount() > 0) {
+					if (charterCostModel.getCharterInRate() != null && charterCostModel.getSpotCharterCount() > 0) {
 						usedClasses.add(charterCostModel.getVesselClass());
 					}
 				}
@@ -245,7 +248,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 		if ((availableTime / 24) > SENSIBLE_TRAVEL_TIME) {
 			final int severity = IStatus.WARNING;
 			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "'", availableTime / 24L, SENSIBLE_TRAVEL_TIME), severity);
+					(IConstraintStatus) ctx.createFailureStatus(String.format("[Cargo|%s] Travel time is excessive (%d days); %d is a sensible maximum.", "'" + cargo.getLoadName() + "'", availableTime / 24L, SENSIBLE_TRAVEL_TIME)), severity);
 			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
 			failures.add(status);
 		}
@@ -272,8 +275,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 						final Port dischargePort = slot.getPort();
 						if ((loadPort != null) && (dischargePort != null)) {
 
-							final ZonedDateTime windowEndWithSlotOrPortTime = slot.getWindowEndWithSlotOrPortTime();
-							final ZonedDateTime windowStartWithSlotOrPortTime = prevSlot.getWindowStartWithSlotOrPortTime();
+							final ZonedDateTime windowEndWithSlotOrPortTime = slot.getWindowEndWithSlotOrPortTimeWithFlex();
+							final ZonedDateTime windowStartWithSlotOrPortTime = prevSlot.getWindowStartWithSlotOrPortTimeWithFlex();
 
 							if (windowEndWithSlotOrPortTime != null && windowStartWithSlotOrPortTime != null) {
 
@@ -318,14 +321,14 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 		}
 		if (windowLength < 0) {
 			final int severity = IStatus.ERROR;
-			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Cargo|" + cargo.getLoadName() + "] purchase is after sale"),
-					severity);
+			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+					(IConstraintStatus) ctx.createFailureStatus("[Cargo|" + cargo.getLoadName() + "] purchase is after sale"), severity);
 			status.addEObjectAndFeature(from, CargoPackage.eINSTANCE.getSlot_WindowStart());
 			status.addEObjectAndFeature(to, CargoPackage.eINSTANCE.getSlot_WindowStart());
 			failures.add(status);
 		} else {
 
-			int travelTime = TravelTimeUtils.getMinRouteTimeInHours(from, to, shippingDaysSpeedProvider, TravelTimeUtils.getScenarioModel(extraContext), vessel,
+			int travelTime = TravelTimeUtils.getMinRouteTimeInHours(from, from, to, shippingDaysSpeedProvider, TravelTimeUtils.getScenarioModel(extraContext), vessel,
 					TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel.getVesselClass(), true));
 			if (travelTime + from.getSlotOrPortDuration() > windowLength) {
 				final String message = String.format("Purchase|%s] is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey by %s", from.getName(),
@@ -341,8 +344,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	}
 
 	private Integer getLadenMaxWindow(Slot startSlot, Slot endSlot) {
-		final ZonedDateTime dateStart = startSlot.getWindowStartWithSlotOrPortTime();
-		final ZonedDateTime dateEnd = endSlot.getWindowEndWithSlotOrPortTime();
+		final ZonedDateTime dateStart = startSlot.getWindowStartWithSlotOrPortTimeWithFlex();
+		final ZonedDateTime dateEnd = endSlot.getWindowEndWithSlotOrPortTimeWithFlex();
 
 		if (dateStart != null && dateEnd != null) {
 			return Hours.between(dateStart, dateEnd);

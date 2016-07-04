@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2015
+    Copyright (C) Minimax Labs Ltd., 2010 - 2016
     All rights reserved.
 
 -->
@@ -22,6 +22,15 @@
             class="com.mmxlabs.models.lng.pricing.PricingPackage"
             genModel="model/pricing.genmodel"/>
    </extension>
-
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="com.mmxlabs.models.lng.pricing.PricingModel"
+            class="com.mmxlabs.models.lng.pricing.util.MarketIndexCacheAdapterFactory">
+         <adapter
+               type="com.mmxlabs.models.lng.pricing.util.MarketIndexCache">
+         </adapter>
+      </factory>
+   </extension>
 
 </plugin>

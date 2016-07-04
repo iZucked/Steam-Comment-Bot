@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.presentation.composites;
@@ -64,11 +64,21 @@ public class VesselComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_shortNameEditor(detailComposite, topClass);
 		add_vesselClassEditor(detailComposite, topClass);
 		add_inaccessiblePortsEditor(detailComposite, topClass);
 		add_capacityEditor(detailComposite, topClass);
 		add_fillCapacityEditor(detailComposite, topClass);
 	}
+	/**
+	 * Create the editor for the shortName feature on Vessel
+	 *
+	 * @generated
+	 */
+	protected void add_shortNameEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__SHORT_NAME));
+	}
+
 	/**
 	 * Create the editor for the vesselClass feature on Vessel
 	 *

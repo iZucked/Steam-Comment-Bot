@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -93,6 +93,7 @@ public class SimilarityIntervalImpl extends EObjectImpl implements SimilarityInt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getWeight() {
 		return weight;
 	}
@@ -102,6 +103,7 @@ public class SimilarityIntervalImpl extends EObjectImpl implements SimilarityInt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWeight(int newWeight) {
 		int oldWeight = weight;
 		weight = newWeight;
@@ -114,6 +116,7 @@ public class SimilarityIntervalImpl extends EObjectImpl implements SimilarityInt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getThreshold() {
 		return threshold;
 	}
@@ -123,6 +126,7 @@ public class SimilarityIntervalImpl extends EObjectImpl implements SimilarityInt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setThreshold(int newThreshold) {
 		int oldThreshold = threshold;
 		threshold = newThreshold;

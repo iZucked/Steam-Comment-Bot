@@ -1,16 +1,24 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.util;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper.OrderingHint;
+import com.mmxlabs.models.lng.cargo.util.scheduling.WrappedAssignableElement;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.mmxcore.NamedObject;
 
 /**
  * Utility class representing a sequence from the input model. Because the input model is now held as per-element assignment classes, this is needed to glom everything together.
@@ -22,53 +30,27 @@ public class CollectedAssignment {
 
 	private final VesselAvailability vesselAvailability;
 	private final CharterInMarket charterInMarket;
-	private final ArrayList<AssignableElement> assignedObjects = new ArrayList<AssignableElement>();
-	private List<AssignableElement> assignments = null;
+	private final @NonNull List<@NonNull AssignableElement> assignments;
 	private final Integer spotIndex;
 
-	public CollectedAssignment(final List<AssignableElement> assignments, final VesselAvailability vesselAvailability) {
+	public CollectedAssignment(final @NonNull List<@NonNull AssignableElement> assignments, final @NonNull VesselAvailability vesselAvailability, final @Nullable PortModel portModel,
+			final @Nullable IAssignableElementDateProvider dateProvider) {
 		this.vesselAvailability = vesselAvailability;
 		this.charterInMarket = null;
 		this.spotIndex = null;
-		this.assignments = assignments;
-		sortAssignments(new AssignableElementDateComparator());
+		this.assignments = sortAssignments(assignments, portModel, dateProvider);
 	}
 
-	public CollectedAssignment(final List<AssignableElement> assignments, final CharterInMarket charterInMarket, final int spotIndex) {
+	public CollectedAssignment(final @NonNull List<@NonNull AssignableElement> assignments, final @NonNull CharterInMarket charterInMarket, final int spotIndex, final @Nullable PortModel portModel,
+			final @Nullable IAssignableElementDateProvider dateProvider) {
 		this.vesselAvailability = null;
 		this.charterInMarket = charterInMarket;
-		this.assignments = assignments;
 		this.spotIndex = spotIndex;
-		sortAssignments(new AssignableElementDateComparator());
+		this.assignments = sortAssignments(assignments, portModel, dateProvider);
 	}
 
-	public CollectedAssignment(final List<AssignableElement> assignments, final VesselAvailability vesselAvailability, final IAssignableElementComparator comparator) {
-		this.vesselAvailability = vesselAvailability;
-		this.charterInMarket = null;
-		this.spotIndex = null;
-		this.assignments = assignments;
-		sortAssignments(comparator);
-	}
-
-	public CollectedAssignment(final List<AssignableElement> assignments, final CharterInMarket charterInMarket, final int spotIndex, final IAssignableElementComparator comparator) {
-		this.vesselAvailability = null;
-		this.charterInMarket = charterInMarket;
-		this.assignments = assignments;
-		this.spotIndex = spotIndex;
-		sortAssignments(comparator);
-	}
-
-	private void sortAssignments(final IAssignableElementComparator comparator) {
-
-		Collections.sort(assignments, comparator);
-
-		for (final AssignableElement ea : assignments) {
-			assignedObjects.add(ea);
-		}
-	}
-
-	public List<AssignableElement> getAssignedObjects() {
-		return Collections.unmodifiableList(assignedObjects);
+	public @NonNull List<@NonNull AssignableElement> getAssignedObjects() {
+		return Collections.unmodifiableList(assignments);
 	}
 
 	public boolean isSpotVessel() {
@@ -89,5 +71,48 @@ public class CollectedAssignment {
 
 	public int getSpotIndex() {
 		return spotIndex == null ? 0 : spotIndex.intValue();
+	}
+
+	private static @NonNull List<@NonNull AssignableElement> sortAssignments(@NonNull final List<@NonNull AssignableElement> assignments, final @Nullable PortModel portModel,
+			final @Nullable IAssignableElementDateProvider dateProvider) {
+
+		final @NonNull List<@NonNull WrappedAssignableElement> sortedElements = new LinkedList<>();
+		for (final AssignableElement ae : assignments) {
+			final WrappedAssignableElement e = new WrappedAssignableElement(ae, portModel, dateProvider);
+			sortedElements.add(e);
+		}
+
+		Collections.sort(sortedElements, (a, b) -> {
+
+			final OrderingHint hint = AssignmentEditorHelper.checkOrdering(a, b);
+			switch (hint) {
+			case AFTER:
+				return 1;
+			case BEFORE:
+				return -1;
+			case AMBIGUOUS:
+			default:
+				int c = Integer.compare(a.getSequenceHint(), b.getSequenceHint());
+				if (c != 0) {
+					return c;
+				}
+				c = a.getStartWindow().getSecond().compareTo(b.getStartWindow().getSecond());
+				if (c != 0) {
+					return c;
+				}
+				// Sort on name if possible
+				if (a instanceof NamedObject && b instanceof NamedObject) {
+					String strA = ((NamedObject) a).getName();
+					String strB = ((NamedObject) b).getName();
+					if (strA != null && strB != null) {
+						c = strA.compareTo(strB);
+					}
+				}
+				return c;
+			}
+
+		});
+		// Unwrap list
+		return sortedElements.stream().map(e -> e.getAssignableElement()).collect(Collectors.toList());
 	}
 }

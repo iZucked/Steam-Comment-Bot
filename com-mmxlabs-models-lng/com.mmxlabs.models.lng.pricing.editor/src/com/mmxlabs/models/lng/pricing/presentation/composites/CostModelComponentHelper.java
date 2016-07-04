@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -74,6 +74,7 @@ public class CostModelComponentHelper extends BaseComponentHelper {
 		add_portCostsEditor(detailComposite, topClass);
 		add_cooldownCostsEditor(detailComposite, topClass);
 		add_baseFuelCostsEditor(detailComposite, topClass);
+		add_panamaCanalTariffEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the routeCosts feature on CostModel
@@ -106,5 +107,14 @@ public class CostModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_baseFuelCostsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.COST_MODEL__BASE_FUEL_COSTS));
+	}
+
+	/**
+	 * Create the editor for the panamaCanalTariff feature on CostModel
+	 *
+	 * @generated
+	 */
+	protected void add_panamaCanalTariffEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.COST_MODEL__PANAMA_CANAL_TARIFF));
 	}
 }

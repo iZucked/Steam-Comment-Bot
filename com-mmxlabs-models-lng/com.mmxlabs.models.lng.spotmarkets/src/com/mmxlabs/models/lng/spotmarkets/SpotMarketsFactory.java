@@ -1,10 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets;
 
 import org.eclipse.emf.ecore.EFactory;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * <!-- begin-user-doc -->
@@ -14,6 +15,7 @@ import org.eclipse.emf.ecore.EFactory;
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage
  * @generated
  */
+@NonNullByDefault
 public interface SpotMarketsFactory extends EFactory {
 	/**
 	 * The singleton instance of the factory.

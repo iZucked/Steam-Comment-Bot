@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -9,6 +9,7 @@ package com.mmxlabs.models.lng.pricing.impl;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
+import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
@@ -17,6 +18,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
@@ -24,6 +26,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -39,6 +42,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CostModelImpl#getPortCosts <em>Port Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CostModelImpl#getCooldownCosts <em>Cooldown Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CostModelImpl#getBaseFuelCosts <em>Base Fuel Costs</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CostModelImpl#getPanamaCanalTariff <em>Panama Canal Tariff</em>}</li>
  * </ul>
  *
  * @generated
@@ -83,6 +87,16 @@ public class CostModelImpl extends UUIDObjectImpl implements CostModel {
 	 * @ordered
 	 */
 	protected EList<BaseFuelCost> baseFuelCosts;
+
+	/**
+	 * The cached value of the '{@link #getPanamaCanalTariff() <em>Panama Canal Tariff</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPanamaCanalTariff()
+	 * @generated
+	 * @ordered
+	 */
+	protected PanamaCanalTariff panamaCanalTariff;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -156,6 +170,49 @@ public class CostModelImpl extends UUIDObjectImpl implements CostModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public PanamaCanalTariff getPanamaCanalTariff() {
+		return panamaCanalTariff;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetPanamaCanalTariff(PanamaCanalTariff newPanamaCanalTariff, NotificationChain msgs) {
+		PanamaCanalTariff oldPanamaCanalTariff = panamaCanalTariff;
+		panamaCanalTariff = newPanamaCanalTariff;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PricingPackage.COST_MODEL__PANAMA_CANAL_TARIFF, oldPanamaCanalTariff, newPanamaCanalTariff);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPanamaCanalTariff(PanamaCanalTariff newPanamaCanalTariff) {
+		if (newPanamaCanalTariff != panamaCanalTariff) {
+			NotificationChain msgs = null;
+			if (panamaCanalTariff != null)
+				msgs = ((InternalEObject)panamaCanalTariff).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PricingPackage.COST_MODEL__PANAMA_CANAL_TARIFF, null, msgs);
+			if (newPanamaCanalTariff != null)
+				msgs = ((InternalEObject)newPanamaCanalTariff).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PricingPackage.COST_MODEL__PANAMA_CANAL_TARIFF, null, msgs);
+			msgs = basicSetPanamaCanalTariff(newPanamaCanalTariff, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.COST_MODEL__PANAMA_CANAL_TARIFF, newPanamaCanalTariff, newPanamaCanalTariff));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -167,6 +224,8 @@ public class CostModelImpl extends UUIDObjectImpl implements CostModel {
 				return ((InternalEList<?>)getCooldownCosts()).basicRemove(otherEnd, msgs);
 			case PricingPackage.COST_MODEL__BASE_FUEL_COSTS:
 				return ((InternalEList<?>)getBaseFuelCosts()).basicRemove(otherEnd, msgs);
+			case PricingPackage.COST_MODEL__PANAMA_CANAL_TARIFF:
+				return basicSetPanamaCanalTariff(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -187,6 +246,8 @@ public class CostModelImpl extends UUIDObjectImpl implements CostModel {
 				return getCooldownCosts();
 			case PricingPackage.COST_MODEL__BASE_FUEL_COSTS:
 				return getBaseFuelCosts();
+			case PricingPackage.COST_MODEL__PANAMA_CANAL_TARIFF:
+				return getPanamaCanalTariff();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -216,6 +277,9 @@ public class CostModelImpl extends UUIDObjectImpl implements CostModel {
 				getBaseFuelCosts().clear();
 				getBaseFuelCosts().addAll((Collection<? extends BaseFuelCost>)newValue);
 				return;
+			case PricingPackage.COST_MODEL__PANAMA_CANAL_TARIFF:
+				setPanamaCanalTariff((PanamaCanalTariff)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -240,6 +304,9 @@ public class CostModelImpl extends UUIDObjectImpl implements CostModel {
 			case PricingPackage.COST_MODEL__BASE_FUEL_COSTS:
 				getBaseFuelCosts().clear();
 				return;
+			case PricingPackage.COST_MODEL__PANAMA_CANAL_TARIFF:
+				setPanamaCanalTariff((PanamaCanalTariff)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -260,6 +327,8 @@ public class CostModelImpl extends UUIDObjectImpl implements CostModel {
 				return cooldownCosts != null && !cooldownCosts.isEmpty();
 			case PricingPackage.COST_MODEL__BASE_FUEL_COSTS:
 				return baseFuelCosts != null && !baseFuelCosts.isEmpty();
+			case PricingPackage.COST_MODEL__PANAMA_CANAL_TARIFF:
+				return panamaCanalTariff != null;
 		}
 		return super.eIsSet(featureID);
 	}

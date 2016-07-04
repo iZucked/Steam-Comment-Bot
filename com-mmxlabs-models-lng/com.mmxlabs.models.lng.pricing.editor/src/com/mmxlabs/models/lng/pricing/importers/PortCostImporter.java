@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.importers;
@@ -8,10 +8,12 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.util.importer.IMMXExportContext;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
@@ -53,4 +55,14 @@ public class PortCostImporter extends DefaultClassImporter {
 		return result;
 	}
 
+	@Override
+	protected boolean shouldExportFeature(EStructuralFeature feature) {
+		
+		if (feature == PricingPackage.Literals.PORT_COST__ENTRIES) {
+			return false;
+		}
+		
+		return super.shouldExportFeature(feature);
+	}
+	
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
@@ -61,14 +61,14 @@ public enum SequenceType implements Enumerator {
 	FOB_SALE(3, "FOB_SALE", "FOB_SALE"),
 
 	/**
-	 * The '<em><b>CARGO SHORTS</b></em>' literal object.
+	 * The '<em><b>ROUND TRIP</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #CARGO_SHORTS_VALUE
+	 * @see #ROUND_TRIP_VALUE
 	 * @generated
 	 * @ordered
 	 */
-	CARGO_SHORTS(4, "CARGO_SHORTS", "CARGO_SHORTS");
+	ROUND_TRIP(4, "ROUND_TRIP", "ROUND_TRIP");
 
 	/**
 	 * The '<em><b>VESSEL</b></em>' literal value.
@@ -131,19 +131,19 @@ public enum SequenceType implements Enumerator {
 	public static final int FOB_SALE_VALUE = 3;
 
 	/**
-	 * The '<em><b>CARGO SHORTS</b></em>' literal value.
+	 * The '<em><b>ROUND TRIP</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of '<em><b>CARGO SHORTS</b></em>' literal object isn't clear,
+	 * If the meaning of '<em><b>ROUND TRIP</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @see #CARGO_SHORTS
+	 * @see #ROUND_TRIP
 	 * @model
 	 * @generated
 	 * @ordered
 	 */
-	public static final int CARGO_SHORTS_VALUE = 4;
+	public static final int ROUND_TRIP_VALUE = 4;
 
 	/**
 	 * An array of all the '<em><b>Sequence Type</b></em>' enumerators.
@@ -157,7 +157,7 @@ public enum SequenceType implements Enumerator {
 			SPOT_VESSEL,
 			DES_PURCHASE,
 			FOB_SALE,
-			CARGO_SHORTS,
+			ROUND_TRIP,
 		};
 
 	/**
@@ -218,7 +218,7 @@ public enum SequenceType implements Enumerator {
 			case SPOT_VESSEL_VALUE: return SPOT_VESSEL;
 			case DES_PURCHASE_VALUE: return DES_PURCHASE;
 			case FOB_SALE_VALUE: return FOB_SALE;
-			case CARGO_SHORTS_VALUE: return CARGO_SHORTS;
+			case ROUND_TRIP_VALUE: return ROUND_TRIP;
 		}
 		return null;
 	}

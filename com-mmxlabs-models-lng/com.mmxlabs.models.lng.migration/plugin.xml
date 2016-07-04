@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2015
+    Copyright (C) Minimax Labs Ltd., 2010 - 2016
     All rights reserved.
 
 -->
@@ -10,7 +10,7 @@
    <extension
          point="com.mmxlabs.models.migration.MigrationContext">
       <MigrationContext
-            latestVersion="44"
+            latestVersion="54"
             name="com.mmxlabs.lingo">
       </MigrationContext>
    </extension>
@@ -346,11 +346,81 @@
              to="43">
        </MigrationUnit>
        <MigrationUnit
-             class="com.mmxlabs.models.lng.migration.units.MigrateToV43"
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV44"
              context="com.mmxlabs.lingo"
              from="43"
-             id="com.mmxlabs.models.lng.migration.units.MigrateToV43"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV44"
              to="44">
+       </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV45"
+             context="com.mmxlabs.lingo"
+             from="44"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV45"
+             to="45">
+       </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV46"
+             context="com.mmxlabs.lingo"
+             from="45"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV46"
+             to="46">
+       </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV47"
+             context="com.mmxlabs.lingo"
+             from="46"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV47"
+             to="47">
+       </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV48"
+             context="com.mmxlabs.lingo"
+             from="47"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV48"
+             to="48">
+       </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV49"
+             context="com.mmxlabs.lingo"
+             from="48"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV49"
+             to="49">
+       </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV50"
+             context="com.mmxlabs.lingo"
+             from="49"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV50"
+             to="50">
+       </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV51"
+             context="com.mmxlabs.lingo"
+             from="50"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV51"
+             to="51">
+       </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV52"
+             context="com.mmxlabs.lingo"
+             from="51"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV52"
+             to="52">
+       </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV53"
+             context="com.mmxlabs.lingo"
+             from="52"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV53"
+             to="53">
+       </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV54"
+             context="com.mmxlabs.lingo"
+             from="53"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV54"
+             to="54">
        </MigrationUnit>
    </extension>
 </plugin>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2015
+    Copyright (C) Minimax Labs Ltd., 2010 - 2016
     All rights reserved.
 
 -->
@@ -39,6 +39,12 @@
           id="com.mmxlabs.models.lng.cargo.editor.CharterIndexCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.pricing.PanamaCanalTariff"
+          factory="com.mmxlabs.models.lng.pricing.ui.displaycomposites.PanamaCanalTariffDisplayCompositeFactory"
+          id="com.mmxlabs.models.lng.pricing.ui.displaycomposites.PanamaCanalTariffDisplayCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
 </extension>
 	<extension
 		point="com.mmxlabs.models.ui.componenthelpers">
@@ -74,26 +80,16 @@
 			modelClass="com.mmxlabs.models.lng.pricing.Index" />
 		
 		<componentHelper
-			id="com.mmxlabs.models.lng.pricing.helpers.FleetCostModel"
-			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.FleetCostModelComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.pricing.FleetCostModel" />
-		
-		<componentHelper
 			id="com.mmxlabs.models.lng.pricing.helpers.RouteCost"
 			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.RouteCostComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.pricing.RouteCost" />
-		
 		
 		<componentHelper
 			id="com.mmxlabs.models.lng.pricing.helpers.BaseFuelCost"
 			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.BaseFuelCostComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.pricing.BaseFuelCost" />
-		
-		
-
   
   <componentHelper
         helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CooldownPriceComponentHelper"
@@ -267,6 +263,12 @@
           inheritable="false"
           modelClass="com.mmxlabs.models.lng.fleet.BaseFuel">
     </componentHelper>
+    <componentHelper
+          helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PanamaCanalTariffComponentHelper"
+          id="com.mmxlabs.models.lng.pricing.presentation.composites.PanamaCanalTariffComponentHelper"
+          inheritable="true"
+          modelClass="com.mmxlabs.models.lng.pricing.PanamaCanalTariff">
+    </componentHelper>
  </extension>
  <extension
        point="com.mmxlabs.models.util.import.classes">
@@ -328,6 +330,33 @@
             class="com.mmxlabs.models.lng.pricing.presentation.PricingEditor"
             contributorClass="com.mmxlabs.models.lng.pricing.presentation.PricingActionBarContributor">
       </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:com.mmxlabs.models.lng.port.ui.editorpart.PortEditorPane">
+         <command
+               commandId="com.mmxlabs.models.lng.pricing.editor.commands.EditPanamaCanalTariff"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <test
+                     args="features:panama-canal"
+                     forcePluginActivation="true"
+                     property="com.mmxlabs.license.features.enablement">
+               </test>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="com.mmxlabs.models.lng.pricing.ui.editorpart.PanamaCanalTariffHandler"
+            id="com.mmxlabs.models.lng.pricing.editor.commands.EditPanamaCanalTariff"
+            name="Edit Panama Canal Tariff">
+      </command>
    </extension>
 
 </plugin>

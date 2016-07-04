@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -20,6 +20,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getShippingBook <em>Shipping Book</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getTradingBook <em>Trading Book</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getUpstreamBook <em>Upstream Book</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getBaseLegalEntity()
@@ -79,4 +80,30 @@ public interface BaseLegalEntity extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setTradingBook(BaseEntityBook value);
+
+	/**
+	 * Returns the value of the '<em><b>Upstream Book</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Upstream Book</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Upstream Book</em>' containment reference.
+	 * @see #setUpstreamBook(BaseEntityBook)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getBaseLegalEntity_UpstreamBook()
+	 * @model containment="true"
+	 * @generated
+	 */
+	BaseEntityBook getUpstreamBook();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getUpstreamBook <em>Upstream Book</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Upstream Book</em>' containment reference.
+	 * @see #getUpstreamBook()
+	 * @generated
+	 */
+	void setUpstreamBook(BaseEntityBook value);
 } // BaseLegalEntity

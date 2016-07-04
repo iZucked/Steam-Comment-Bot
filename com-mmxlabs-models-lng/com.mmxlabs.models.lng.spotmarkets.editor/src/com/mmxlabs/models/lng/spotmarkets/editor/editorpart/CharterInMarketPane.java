@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets.editor.editorpart;
@@ -36,15 +36,12 @@ public class CharterInMarketPane extends ScenarioTableViewerPane {
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
 		super.init(path, adapterFactory, commandStack);
-
 		addTypicalColumn("Name ", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getEditingDomain()));
-		
+
 		addTypicalColumn("Enabled", new BooleanAttributeManipulator(SpotMarketsPackage.eINSTANCE.getSpotCharterMarket_Enabled(), getEditingDomain()));
 
 		addTypicalColumn("Vessel Classes", new SingleReferenceManipulator(SpotMarketsPackage.eINSTANCE.getSpotCharterMarket_VesselClass(), getReferenceValueProviderCache(), getEditingDomain()));
 
 		addTypicalColumn("Count", new NumericAttributeManipulator(SpotMarketsPackage.eINSTANCE.getCharterInMarket_SpotCharterCount(), getEditingDomain()));
-
-		defaultSetTitle("Charter In Market");
 	}
 }

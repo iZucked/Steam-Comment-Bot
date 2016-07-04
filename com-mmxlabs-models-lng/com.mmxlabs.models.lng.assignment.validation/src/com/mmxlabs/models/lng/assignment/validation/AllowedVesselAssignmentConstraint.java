@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -53,7 +53,6 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 			final AssignableElement assignableElement = (AssignableElement) object;
 
 			final VesselAssignmentType vesselAssignmentType = assignableElement.getVesselAssignmentType();
-
 			if (vesselAssignmentType == null) {
 				if (assignableElement instanceof VesselEvent) {
 					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
@@ -104,10 +103,10 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 
 				AVesselSet<Vessel> vesselAssignment = null;
 				if (vesselAssignmentType instanceof VesselAvailability) {
-					VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
+					final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
 					vesselAssignment = vesselAvailability.getVessel();
 				} else if (vesselAssignmentType instanceof CharterInMarket) {
-					CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+					final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
 					vesselAssignment = charterInMarket.getVesselClass();
 				} else {
 					log.error("Assignment is not a VesselAvailability or CharterInMarket - unable to validate");
@@ -132,6 +131,7 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 				if (!permitted) {
 
 					final String message;
+
 					if (target instanceof Slot) {
 						message = String.format("Slot '%s': Assignment '%s' is not in the allowed vessels list.", ((Slot) target).getName(), vesselAssignment.getName());
 					} else if (target instanceof VesselEvent) {

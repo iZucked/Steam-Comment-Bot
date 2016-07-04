@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.scenario.model.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -31,7 +32,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage
  * @generated
  */
-public class LNGScenarioSwitch<T> extends Switch<T> {
+public class LNGScenarioSwitch<@Nullable T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->

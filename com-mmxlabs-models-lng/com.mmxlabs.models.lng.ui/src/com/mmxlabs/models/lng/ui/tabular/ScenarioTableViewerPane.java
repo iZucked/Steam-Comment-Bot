@@ -1,13 +1,15 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.ui.tabular;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
@@ -17,6 +19,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
@@ -155,6 +158,10 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 
 	protected String getToolbarID() {
 		return "toolbar:" + getClass().getCanonicalName();
+	}
+
+	protected String getMenuID() {
+		return "menu:" + getClass().getCanonicalName();
 	}
 
 	@Override
@@ -306,8 +313,8 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 							try {
 								editorLock.claim();
 								if (scenarioViewer.isLocked() == false) {
-									final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getRootObject(), scenarioEditingLocation
-											.getDefaultCommandHandler());
+									final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getRootObject(),
+											scenarioEditingLocation.getDefaultCommandHandler());
 									mdd.open(scenarioEditingLocation, structuredSelection.toList());
 								}
 							} finally {
@@ -439,7 +446,7 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
 		}
-		deleteAction = createDeleteAction();
+		deleteAction = createDeleteAction(null);
 		if (deleteAction != null) {
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, deleteAction);
 		}
@@ -449,17 +456,20 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 
 		// add extension points to toolbar
 		{
-			final String toolbarID = getToolbarID();
 			final IMenuService menuService = (IMenuService) PlatformUI.getWorkbench().getService(IMenuService.class);
 			if (menuService != null) {
-				menuService.populateContributionManager(toolbar, toolbarID);
+				{
+					toolbar.getControl().addDisposeListener(new DisposeListener() {
 
-				viewer.getControl().addDisposeListener(new DisposeListener() {
-					@Override
-					public void widgetDisposed(final DisposeEvent e) {
-						menuService.releaseContributions(toolbar);
-					}
-				});
+						@Override
+						public void widgetDisposed(DisposeEvent e) {
+							menuService.releaseContributions(toolbar);
+
+						}
+					});
+					menuService.populateContributionManager(toolbar, getToolbarID());
+				}
+
 			}
 		}
 
@@ -476,6 +486,26 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 
 		if (copyToClipboardAction != null) {
 			toolbar.add(copyToClipboardAction);
+		}
+
+		{
+			// Menu Manager
+			{
+				final String menuID = getMenuID();
+				final IMenuService menuService = (IMenuService) PlatformUI.getWorkbench().getService(IMenuService.class);
+				if (menuService != null) {
+					final MenuManager mgr = getMenuManager();
+					menuService.populateContributionManager(mgr, menuID);
+
+					viewer.getControl().addDisposeListener(new DisposeListener() {
+						@Override
+						public void widgetDisposed(final DisposeEvent e) {
+							menuService.releaseContributions(mgr);
+						}
+					});
+				}
+			}
+
 		}
 
 		if (actionBars != null) {
@@ -496,7 +526,7 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 		return result;
 	}
 
-	protected Action createDeleteAction() {
+	protected Action createDeleteAction(@Nullable Function<Collection<?>, Collection<Object>> callback) {
 		return new ScenarioModifyingAction("Delete") {
 			{
 				setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
@@ -521,10 +551,15 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 							if (sel instanceof IStructuredSelection) {
 								final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
 								// Copy selection
-								final List<?> objects = new ArrayList<Object>(((IStructuredSelection) sel).toList());
+								final List<?> objects = new ArrayList<>(((IStructuredSelection) sel).toList());
 
 								// Ensure a unique collection of objects - no duplicates
-								final Set<Object> uniqueObjects = new HashSet<Object>(objects);
+								final Set<Object> uniqueObjects = new HashSet<>(objects);
+
+								// Pull in additional objects to delete.
+								if (callback != null) {
+									uniqueObjects.addAll(callback.apply(objects));
+								}
 
 								// Clear current selection
 								selectionChanged(new SelectionChangedEvent(viewer, StructuredSelection.EMPTY));
@@ -554,17 +589,18 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 		super.requestActivation();
 		scenarioEditingLocation.setCurrentViewer(scenarioViewer);
 
-		if (actionBars != null) {
-			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
+		final IActionBars pActionBars = actionBars;
+		if (pActionBars != null) {
+			pActionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
+			pActionBars.updateActionBars();
 		}
-		if (actionBars != null) {
-			actionBars.updateActionBars();
-		}
-
 	}
 
 	public void setLocked(final boolean locked) {
-		scenarioViewer.setLocked(locked);
+		final ScenarioTableViewer pScenarioViewer = scenarioViewer;
+		if (pScenarioViewer != null) {
+			pScenarioViewer.setLocked(locked);
+		}
 
 		for (final IContributionItem item : getToolBarManager().getItems()) {
 			if (item instanceof ActionContributionItem) {

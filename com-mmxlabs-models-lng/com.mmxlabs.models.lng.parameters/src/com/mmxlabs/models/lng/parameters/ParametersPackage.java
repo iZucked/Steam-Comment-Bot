@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.parameters;
@@ -125,13 +125,22 @@ public interface ParametersPackage extends EPackage {
 	int USER_SETTINGS__SIMILARITY_MODE = 5;
 
 	/**
+	 * The feature id for the '<em><b>Floating Days Limit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__FLOATING_DAYS_LIMIT = 6;
+
+	/**
 	 * The number of structural features of the '<em>User Settings</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS_FEATURE_COUNT = 6;
+	int USER_SETTINGS_FEATURE_COUNT = 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.IndividualSolutionImprovementSettingsImpl <em>Individual Solution Improvement Settings</em>}' class.
@@ -371,13 +380,22 @@ public interface ParametersPackage extends EPackage {
 	int OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
+	 * The feature id for the '<em><b>Floating Days Limit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISER_SETTINGS__FLOATING_DAYS_LIMIT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+
+	/**
 	 * The number of structural features of the '<em>Optimiser Settings</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+	int OPTIMISER_SETTINGS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.
@@ -856,6 +874,17 @@ public interface ParametersPackage extends EPackage {
 	EAttribute getUserSettings_SimilarityMode();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#getFloatingDaysLimit <em>Floating Days Limit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Floating Days Limit</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings#getFloatingDaysLimit()
+	 * @see #getUserSettings()
+	 * @generated
+	 */
+	EAttribute getUserSettings_FloatingDaysLimit();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings <em>Individual Solution Improvement Settings</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1060,6 +1089,17 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getOptimiserSettings_ActionPlanSettings();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getFloatingDaysLimit <em>Floating Days Limit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Floating Days Limit</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#getFloatingDaysLimit()
+	 * @see #getOptimiserSettings()
+	 * @generated
+	 */
+	EAttribute getOptimiserSettings_FloatingDaysLimit();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.Objective <em>Objective</em>}'.
@@ -1474,6 +1514,14 @@ public interface ParametersPackage extends EPackage {
 		EAttribute USER_SETTINGS__SIMILARITY_MODE = eINSTANCE.getUserSettings_SimilarityMode();
 
 		/**
+		 * The meta object literal for the '<em><b>Floating Days Limit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER_SETTINGS__FLOATING_DAYS_LIMIT = eINSTANCE.getUserSettings_FloatingDaysLimit();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.IndividualSolutionImprovementSettingsImpl <em>Individual Solution Improvement Settings</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1630,6 +1678,14 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EReference OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS = eINSTANCE.getOptimiserSettings_ActionPlanSettings();
+
+		/**
+		 * The meta object literal for the '<em><b>Floating Days Limit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OPTIMISER_SETTINGS__FLOATING_DAYS_LIMIT = eINSTANCE.getOptimiserSettings_FloatingDaysLimit();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -23,6 +23,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.pricing.CostModel#getPortCosts <em>Port Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.CostModel#getCooldownCosts <em>Cooldown Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.CostModel#getBaseFuelCosts <em>Base Fuel Costs</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.CostModel#getPanamaCanalTariff <em>Panama Canal Tariff</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getCostModel()
@@ -93,5 +94,31 @@ public interface CostModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<BaseFuelCost> getBaseFuelCosts();
+
+	/**
+	 * Returns the value of the '<em><b>Panama Canal Tariff</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Panama Canal Tariff</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Panama Canal Tariff</em>' containment reference.
+	 * @see #setPanamaCanalTariff(PanamaCanalTariff)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getCostModel_PanamaCanalTariff()
+	 * @model containment="true"
+	 * @generated
+	 */
+	PanamaCanalTariff getPanamaCanalTariff();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.CostModel#getPanamaCanalTariff <em>Panama Canal Tariff</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Panama Canal Tariff</em>' containment reference.
+	 * @see #getPanamaCanalTariff()
+	 * @generated
+	 */
+	void setPanamaCanalTariff(PanamaCanalTariff value);
 
 } // CostModel

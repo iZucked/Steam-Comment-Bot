@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.provider;
@@ -62,6 +62,7 @@ public class VesselClassItemProvider
 			addRouteParametersPropertyDescriptor(object);
 			addPilotLightRatePropertyDescriptor(object);
 			addMinBaseFuelConsumptionPropertyDescriptor(object);
+			addHasReliqCapabilityPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -331,6 +332,28 @@ public class VesselClassItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Has Reliq Capability feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHasReliqCapabilityPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselClass_hasReliqCapability_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_hasReliqCapability_feature", "_UI_VesselClass_type"),
+				 FleetPackage.Literals.VESSEL_CLASS__HAS_RELIQ_CAPABILITY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -408,6 +431,7 @@ public class VesselClassItemProvider
 			case FleetPackage.VESSEL_CLASS__COOLING_VOLUME:
 			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
 			case FleetPackage.VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION:
+			case FleetPackage.VESSEL_CLASS__HAS_RELIQ_CAPABILITY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:

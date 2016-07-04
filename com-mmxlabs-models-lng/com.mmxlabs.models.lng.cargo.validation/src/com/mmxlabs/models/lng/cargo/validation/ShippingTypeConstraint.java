@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation;
@@ -35,7 +35,7 @@ public class ShippingTypeConstraint extends AbstractModelMultiConstraint {
 		if (object instanceof Cargo) {
 			final Cargo cargo = (Cargo) object;
 
-			final CargoDeliveryType cargoType = cargo.getCargoType() == CargoType.DES ? CargoDeliveryType.NOT_SHIPPED : CargoDeliveryType.SHIPPED;
+			final CargoDeliveryType cargoType = cargo.getCargoType() == CargoType.FLEET  ? CargoDeliveryType.SHIPPED : CargoDeliveryType.NOT_SHIPPED;
 
 			for (final Slot slot : cargo.getSlots()) {
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.importer;
@@ -96,6 +96,9 @@ public class CommercialModelImporter implements ISubmodelImporter {
 					}
 					if (baseLegalEntity.getTradingBook() == null) {
 						baseLegalEntity.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+					}
+					if (baseLegalEntity.getUpstreamBook() == null) {
+						baseLegalEntity.setUpstreamBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 					}
 				}
 

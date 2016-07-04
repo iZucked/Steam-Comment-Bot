@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port;
@@ -8,6 +8,7 @@ import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.mmxcore.OtherNamesObject;
 
 /**
@@ -29,6 +30,7 @@ import com.mmxlabs.models.mmxcore.OtherNamesObject;
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getDefaultStartTime <em>Default Start Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#isAllowCooldown <em>Allow Cooldown</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getDefaultWindowSize <em>Default Window Size</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Port#getDefaultWindowSizeUnits <em>Default Window Size Units</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getLocation <em>Location</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getAtobviacCode <em>Atobviac Code</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getDataloyCode <em>Dataloy Code</em>}</li>
@@ -275,6 +277,37 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * @generated
 	 */
 	void setDefaultWindowSize(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Default Window Size Units</b></em>' attribute.
+	 * The default value is <code>"HOURS"</code>.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.TimePeriod}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Default Window Size Units</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Default Window Size Units</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.TimePeriod
+	 * @see #setDefaultWindowSizeUnits(TimePeriod)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_DefaultWindowSizeUnits()
+	 * @model default="HOURS" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hours' formatString='##,##0'"
+	 * @generated
+	 */
+	TimePeriod getDefaultWindowSizeUnits();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getDefaultWindowSizeUnits <em>Default Window Size Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Default Window Size Units</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.TimePeriod
+	 * @see #getDefaultWindowSizeUnits()
+	 * @generated
+	 */
+	void setDefaultWindowSizeUnits(TimePeriod value);
 
 	/**
 	 * Returns the value of the '<em><b>Location</b></em>' containment reference.

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.util;
@@ -9,6 +9,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -90,8 +91,8 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected CargoSwitch<Adapter> modelSwitch =
-		new CargoSwitch<Adapter>() {
+	protected CargoSwitch<@Nullable Adapter> modelSwitch =
+		new CargoSwitch<@Nullable Adapter>() {
 			@Override
 			public Adapter caseCargoModel(CargoModel object) {
 				return createCargoModelAdapter();

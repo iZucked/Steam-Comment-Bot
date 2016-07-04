@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -116,6 +116,7 @@ public class ActionPlanSettingsImpl extends EObjectImpl implements ActionPlanSet
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getTotalEvaluations() {
 		return totalEvaluations;
 	}
@@ -125,6 +126,7 @@ public class ActionPlanSettingsImpl extends EObjectImpl implements ActionPlanSet
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTotalEvaluations(int newTotalEvaluations) {
 		int oldTotalEvaluations = totalEvaluations;
 		totalEvaluations = newTotalEvaluations;
@@ -137,6 +139,7 @@ public class ActionPlanSettingsImpl extends EObjectImpl implements ActionPlanSet
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getInRunEvaluations() {
 		return inRunEvaluations;
 	}
@@ -146,6 +149,7 @@ public class ActionPlanSettingsImpl extends EObjectImpl implements ActionPlanSet
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setInRunEvaluations(int newInRunEvaluations) {
 		int oldInRunEvaluations = inRunEvaluations;
 		inRunEvaluations = newInRunEvaluations;
@@ -158,6 +162,7 @@ public class ActionPlanSettingsImpl extends EObjectImpl implements ActionPlanSet
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getSearchDepth() {
 		return searchDepth;
 	}
@@ -167,6 +172,7 @@ public class ActionPlanSettingsImpl extends EObjectImpl implements ActionPlanSet
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSearchDepth(int newSearchDepth) {
 		int oldSearchDepth = searchDepth;
 		searchDepth = newSearchDepth;

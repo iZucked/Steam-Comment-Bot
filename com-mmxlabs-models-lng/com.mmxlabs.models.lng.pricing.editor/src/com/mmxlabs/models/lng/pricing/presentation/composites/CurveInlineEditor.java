@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.presentation.composites;
@@ -296,7 +296,7 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 							point.setValue(0);
 							newPoint = point;
 						} else {
-							final IndexPoint<?> point = PricingFactory.eINSTANCE.createIndexPoint();
+							final IndexPoint point = PricingFactory.eINSTANCE.createIndexPoint();
 							point.setValue(null);
 							newPoint = point;
 						}

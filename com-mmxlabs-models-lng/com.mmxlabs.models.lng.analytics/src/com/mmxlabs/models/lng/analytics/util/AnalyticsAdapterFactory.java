@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.util;
@@ -10,6 +10,7 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
+import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
@@ -83,8 +84,8 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected AnalyticsSwitch<Adapter> modelSwitch =
-		new AnalyticsSwitch<Adapter>() {
+	protected AnalyticsSwitch<@Nullable Adapter> modelSwitch =
+		new AnalyticsSwitch<@Nullable Adapter>() {
 			@Override
 			public Adapter caseAnalyticsModel(AnalyticsModel object) {
 				return createAnalyticsModelAdapter();

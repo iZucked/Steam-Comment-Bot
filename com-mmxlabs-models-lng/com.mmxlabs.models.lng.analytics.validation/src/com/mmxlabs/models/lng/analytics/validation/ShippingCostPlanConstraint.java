@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.validation;
@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -128,7 +129,7 @@ public class ShippingCostPlanConstraint extends AbstractModelMultiConstraint {
 				}
 
 				for (final Route route : scenario.getReferenceModel().getPortModel().getRoutes()) {
-					if (route.isCanal() == false) {
+					if (route.getRouteOption() == RouteOption.DIRECT) {
 						collectMinTimes(minTimes, route, 0, maxSpeedKnots);
 					}
 				}

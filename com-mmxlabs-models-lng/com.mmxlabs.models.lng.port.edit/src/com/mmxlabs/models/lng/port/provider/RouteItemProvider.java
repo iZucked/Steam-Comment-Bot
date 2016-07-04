@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port.provider;
@@ -52,6 +52,7 @@ public class RouteItemProvider
 			super.getPropertyDescriptors(object);
 
 			addUuidPropertyDescriptor(object);
+			addRouteOptionPropertyDescriptor(object);
 			addCanalPropertyDescriptor(object);
 			addRoutingOptionsPropertyDescriptor(object);
 		}
@@ -72,6 +73,28 @@ public class RouteItemProvider
 				 getString("_UI_UUIDObject_uuid_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_UUIDObject_uuid_feature", "_UI_UUIDObject_type"),
 				 MMXCorePackage.Literals.UUID_OBJECT__UUID,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Route Option feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRouteOptionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Route_routeOption_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Route_routeOption_feature", "_UI_Route_type"),
+				 PortPackage.Literals.ROUTE__ROUTE_OPTION,
 				 true,
 				 false,
 				 false,
@@ -192,6 +215,7 @@ public class RouteItemProvider
 
 		switch (notification.getFeatureID(Route.class)) {
 			case PortPackage.ROUTE__UUID:
+			case PortPackage.ROUTE__ROUTE_OPTION:
 			case PortPackage.ROUTE__CANAL:
 			case PortPackage.ROUTE__ROUTING_OPTIONS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
+import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
 import com.mmxlabs.models.lng.parameters.Argument;
 import com.mmxlabs.models.lng.parameters.Constraint;
@@ -39,7 +40,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @see com.mmxlabs.models.lng.parameters.ParametersPackage
  * @generated
  */
-public class ParametersSwitch<T> extends Switch<T> {
+public class ParametersSwitch<@Nullable T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->

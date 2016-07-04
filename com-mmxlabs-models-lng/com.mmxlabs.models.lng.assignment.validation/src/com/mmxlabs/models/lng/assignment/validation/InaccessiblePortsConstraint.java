@@ -1,9 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.assignment.validation;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -17,6 +18,8 @@ import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
@@ -38,12 +41,12 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 		final EObject target = ctx.getTarget();
 		if (target instanceof AssignableElement) {
 			final AssignableElement assignableElement = (AssignableElement) target;
-			VesselAssignmentType vesselAssignmentType = assignableElement.getVesselAssignmentType();
+			final VesselAssignmentType vesselAssignmentType = assignableElement.getVesselAssignmentType();
 
 			List<APortSet<Port>> inaccessiblePorts = null;
 
 			if (vesselAssignmentType instanceof VesselAvailability) {
-				VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
+				final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
 				final Vessel vessel = vesselAvailability.getVessel();
 				if (vessel != null) {
 					inaccessiblePorts = vessel.getInaccessiblePorts();
@@ -55,7 +58,7 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 			} else if (vesselAssignmentType instanceof CharterInMarket) {
-				CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+				final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
 				final VesselClass vesselClass = charterInMarket.getVesselClass();
 				if (vesselClass != null) {
 					inaccessiblePorts = vesselClass.getInaccessiblePorts();
@@ -114,7 +117,68 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 			}
+		} else if (target instanceof Slot) {
+			final Slot targetSlot = (Slot) target;
+
+			List<APortSet<Port>> inaccessiblePorts = null;
+			final List<Slot> slotsToValidate = new LinkedList<>();
+			if (target instanceof LoadSlot) {
+				final LoadSlot loadSlot = (LoadSlot) target;
+				if (loadSlot.isDESPurchase() && loadSlot.isDivertible()) {
+					final Vessel nominatedVessel = loadSlot.getNominatedVessel();
+					if (nominatedVessel != null) {
+						inaccessiblePorts = nominatedVessel.getInaccessiblePorts();
+						if (inaccessiblePorts.isEmpty()) {
+							final VesselClass vesselClass = nominatedVessel.getVesselClass();
+							if (vesselClass != null) {
+								inaccessiblePorts = vesselClass.getInaccessiblePorts();
+							}
+						}
+					}
+				}
+			}
+
+			else if (target instanceof DischargeSlot) {
+				final DischargeSlot dischargeSlot = (DischargeSlot) target;
+				if (dischargeSlot.isFOBSale() && dischargeSlot.isDivertible()) {
+					final Vessel nominatedVessel = dischargeSlot.getNominatedVessel();
+					if (nominatedVessel != null) {
+						inaccessiblePorts = nominatedVessel.getInaccessiblePorts();
+						if (inaccessiblePorts.isEmpty()) {
+							final VesselClass vesselClass = nominatedVessel.getVesselClass();
+							if (vesselClass != null) {
+								inaccessiblePorts = vesselClass.getInaccessiblePorts();
+							}
+						}
+					}
+				}
+			}
+
+			if (inaccessiblePorts != null) {
+				final Set<Port> inaccessiblePortSet = SetUtils.getObjects(inaccessiblePorts);
+
+				final Cargo cargo = targetSlot.getCargo();
+				if (cargo != null) {
+					slotsToValidate.addAll(cargo.getSlots());
+				} else {
+					slotsToValidate.add(targetSlot);
+				}
+
+				for (final Slot slot : slotsToValidate) {
+					if (inaccessiblePortSet.contains(slot.getPort())) {
+						final String msg = String.format("The port %s is not an accessible port for the nominated vessel", slot.getPort().getName());
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
+						if (slot == targetSlot) {
+							dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__NOMINATED_VESSEL);
+						}
+						dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
+						statues.add(dsd);
+					}
+				}
+
+			}
 		}
+
 		return Activator.PLUGIN_ID;
 	}
 }

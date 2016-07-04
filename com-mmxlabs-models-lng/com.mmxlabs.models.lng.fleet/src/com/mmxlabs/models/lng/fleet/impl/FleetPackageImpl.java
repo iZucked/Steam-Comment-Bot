@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.impl;
@@ -174,8 +174,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getVessel_VesselClass() {
-		return (EReference)vesselEClass.getEStructuralFeatures().get(0);
+	public EAttribute getVessel_ShortName() {
+		return (EAttribute)vesselEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -183,7 +183,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getVessel_InaccessiblePorts() {
+	public EReference getVessel_VesselClass() {
 		return (EReference)vesselEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -192,8 +192,17 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getVessel_InaccessiblePorts() {
+		return (EReference)vesselEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getVessel_Capacity() {
-		return (EAttribute)vesselEClass.getEStructuralFeatures().get(2);
+		return (EAttribute)vesselEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -202,7 +211,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EAttribute getVessel_FillCapacity() {
-		return (EAttribute)vesselEClass.getEStructuralFeatures().get(3);
+		return (EAttribute)vesselEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -338,6 +347,15 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 */
 	public EAttribute getVesselClass_MinBaseFuelConsumption() {
 		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getVesselClass_HasReliqCapability() {
+		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(14);
 	}
 
 	/**
@@ -648,6 +666,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEAttribute(baseFuelEClass, BASE_FUEL__EQUIVALENCE_FACTOR);
 
 		vesselEClass = createEClass(VESSEL);
+		createEAttribute(vesselEClass, VESSEL__SHORT_NAME);
 		createEReference(vesselEClass, VESSEL__VESSEL_CLASS);
 		createEReference(vesselEClass, VESSEL__INACCESSIBLE_PORTS);
 		createEAttribute(vesselEClass, VESSEL__CAPACITY);
@@ -668,6 +687,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEReference(vesselClassEClass, VESSEL_CLASS__ROUTE_PARAMETERS);
 		createEAttribute(vesselClassEClass, VESSEL_CLASS__PILOT_LIGHT_RATE);
 		createEAttribute(vesselClassEClass, VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION);
+		createEAttribute(vesselClassEClass, VESSEL_CLASS__HAS_RELIQ_CAPABILITY);
 
 		vesselGroupEClass = createEClass(VESSEL_GROUP);
 		createEReference(vesselGroupEClass, VESSEL_GROUP__VESSELS);
@@ -761,6 +781,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEAttribute(getBaseFuel_EquivalenceFactor(), ecorePackage.getEDouble(), "equivalenceFactor", null, 1, 1, BaseFuel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(vesselEClass, Vessel.class, "Vessel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getVessel_ShortName(), ecorePackage.getEString(), "shortName", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVessel_VesselClass(), this.getVesselClass(), null, "vesselClass", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
 		g2 = createEGenericType(thePortPackage.getPort());
@@ -772,6 +793,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		addEOperation(vesselEClass, ecorePackage.getEInt(), "getVesselOrVesselClassCapacity", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		addEOperation(vesselEClass, ecorePackage.getEDouble(), "getVesselOrVesselClassFillCapacity", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		addEOperation(vesselEClass, ecorePackage.getEString(), "getShortenedName", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(vesselClassEClass, VesselClass.class, "VesselClass", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
@@ -791,6 +814,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEReference(getVesselClass_RouteParameters(), this.getVesselClassRouteParameters(), null, "routeParameters", null, 0, -1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClass_PilotLightRate(), ecorePackage.getEDouble(), "pilotLightRate", null, 1, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClass_MinBaseFuelConsumption(), ecorePackage.getEDouble(), "minBaseFuelConsumption", null, 0, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselClass_HasReliqCapability(), ecorePackage.getEBoolean(), "hasReliqCapability", null, 0, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(vesselGroupEClass, VesselGroup.class, "VesselGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getVesselGroup_Vessels(), this.getVessel(), null, "vessels", null, 0, -1, VesselGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -826,6 +850,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		// Create annotations
 		// http://www.mmxlabs.com/models/ui/numberFormat
 		createNumberFormatAnnotations();
+		// http://www.mmxlabs.com/models/ui/featureEnablement
+		createFeatureEnablementAnnotations();
 	}
 
 	/**
@@ -856,7 +882,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		   new String[] {
 			 "scale", "100",
 			 "formatString", "###.#",
-			 "unit", "%"
+			 "unit", "%",
+			 "exportFormatString", "#.###"
 		   });	
 		addAnnotation
 		  (getVesselClass_Capacity(), 
@@ -871,7 +898,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		   new String[] {
 			 "scale", "100",
 			 "formatString", "###.#",
-			 "unit", "%"
+			 "unit", "%",
+			 "exportFormatString", "#.###"
 		   });	
 		addAnnotation
 		  (getVesselClass_MinSpeed(), 
@@ -920,7 +948,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		   source, 
 		   new String[] {
 			 "unit", "MT/day",
-			 "formatString", "###.###"
+			 "formatString", "##0.###"
 		   });	
 		addAnnotation
 		  (getHeelOptions_VolumeAvailable(), 
@@ -1026,6 +1054,22 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		   new String[] {
 			 "unit", "m\u00b3/day",
 			 "formatString", "##0.###"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/ui/featureEnablement</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createFeatureEnablementAnnotations() {
+		String source = "http://www.mmxlabs.com/models/ui/featureEnablement";	
+		addAnnotation
+		  (getVesselClass_HasReliqCapability(), 
+		   source, 
+		   new String[] {
+			 "feature", "reliq-support"
 		   });
 	}
 

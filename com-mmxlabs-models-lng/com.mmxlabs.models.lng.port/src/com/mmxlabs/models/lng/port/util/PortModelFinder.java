@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port.util;
@@ -29,7 +29,7 @@ public class PortModelFinder {
 				return port;
 			}
 		}
-		throw new IllegalArgumentException("Unknown port");
+		throw new IllegalArgumentException("Unknown port " + portName);
 	}
 
 	@NonNull

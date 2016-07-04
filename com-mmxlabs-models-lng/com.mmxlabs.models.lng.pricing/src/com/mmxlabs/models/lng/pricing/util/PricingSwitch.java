@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.util;
@@ -8,12 +8,14 @@ import com.mmxlabs.models.lng.pricing.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
+import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
@@ -45,7 +47,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @see com.mmxlabs.models.lng.pricing.PricingPackage
  * @generated
  */
-public class PricingSwitch<T> extends Switch<T> {
+public class PricingSwitch<@Nullable T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
@@ -230,6 +232,18 @@ public class PricingSwitch<T> extends Switch<T> {
 				PortsSplitExpressionMap portsSplitExpressionMap = (PortsSplitExpressionMap)theEObject;
 				T result = casePortsSplitExpressionMap(portsSplitExpressionMap);
 				if (result == null) result = caseMMXObject(portsSplitExpressionMap);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.PANAMA_CANAL_TARIFF: {
+				PanamaCanalTariff panamaCanalTariff = (PanamaCanalTariff)theEObject;
+				T result = casePanamaCanalTariff(panamaCanalTariff);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.PANAMA_CANAL_TARIFF_BAND: {
+				PanamaCanalTariffBand panamaCanalTariffBand = (PanamaCanalTariffBand)theEObject;
+				T result = casePanamaCanalTariffBand(panamaCanalTariffBand);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -519,6 +533,36 @@ public class PricingSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePortsSplitExpressionMap(PortsSplitExpressionMap object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Panama Canal Tariff</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Panama Canal Tariff</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePanamaCanalTariff(PanamaCanalTariff object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Panama Canal Tariff Band</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Panama Canal Tariff Band</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePanamaCanalTariffBand(PanamaCanalTariffBand object) {
 		return null;
 	}
 

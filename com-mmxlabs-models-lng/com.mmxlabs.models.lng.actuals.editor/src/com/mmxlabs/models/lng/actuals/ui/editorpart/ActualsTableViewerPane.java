@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -86,7 +86,6 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewerValidationSupport;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.manipulators.DateTimeAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateTimeAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
@@ -508,7 +507,7 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 			if (menuService != null) {
 				menuService.populateContributionManager(toolbar, toolbarID);
 
-				viewer.getControl().addDisposeListener(new DisposeListener() {
+				toolbar.getControl().addDisposeListener(new DisposeListener() {
 					@Override
 					public void widgetDisposed(final DisposeEvent e) {
 						menuService.releaseContributions(toolbar);
@@ -525,7 +524,7 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 		// toolbar.appendToGroup(ADD_REMOVE_GROUP, dupAction);
 		// }
 		// }
-		deleteAction = createDeleteAction();
+		deleteAction = createDeleteAction(null);
 		if (deleteAction != null) {
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, deleteAction);
 		}

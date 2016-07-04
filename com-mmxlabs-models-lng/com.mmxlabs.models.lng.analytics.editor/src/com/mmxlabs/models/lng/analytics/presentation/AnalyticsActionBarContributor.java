@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -198,7 +198,8 @@ public class AnalyticsActionBarContributor
 		//
 		submenuManager.addMenuListener
 			(new IMenuListener() {
-				 public void menuAboutToShow(IMenuManager menuManager) {
+				 @Override
+				public void menuAboutToShow(IMenuManager menuManager) {
 					 menuManager.updateAll(true);
 				 }
 			 });

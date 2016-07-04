@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.ui.editorpart;
@@ -41,7 +41,10 @@ import org.eclipse.nebula.widgets.formattedtext.NumberFormatter;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
@@ -80,6 +83,7 @@ import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.NonEditableColumn;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
@@ -101,6 +105,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 	private final IndexTreeTransformer transformer = new IndexTreeTransformer();
 	private final Map<DataType, SeriesParser> seriesParsers = new EnumMap<>(DataType.class);
 	private PricingModel pricingModel;
+
+	private GridViewerColumn nameViewerColumn;
 
 	public IndexPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
@@ -184,7 +190,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 			}
 		});
 
-		final GridViewerColumn nameColumn = addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getEditingDomain()) {
+		nameViewerColumn = addTypicalColumn("Name", new ReadOnlyManipulatorWrapper<>(new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getEditingDomain()) {
 			@Override
 			public boolean canEdit(final Object object) {
 				// Skip tree model elements
@@ -194,9 +200,9 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 				return super.canEdit(object);
 			}
-		});
+		}));
 		// Enable the tree controls on this column
-		nameColumn.getColumn().setTree(true);
+		nameViewerColumn.getColumn().setTree(true);
 
 		addTypicalColumn("Units", new BasicAttributeManipulator(PricingPackage.Literals.NAMED_INDEX_CONTAINER__UNITS, getEditingDomain()) {
 			@Override
@@ -369,7 +375,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 				public boolean isValueUnset(Object object) {
 					return false;
 				}
-				
+
 				@Override
 				public Object getFilterValue(final Object object) {
 					return null;
@@ -599,41 +605,31 @@ public class IndexPane extends ScenarioTableViewerPane {
 	 */
 	@Override
 	protected void enableOpenListener() {
+
+		// Enable the tree controls on this column
+		scenarioViewer.getGrid().addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+
+				Point p = new Point(e.x, e.y);
+				GridColumn column = scenarioViewer.getGrid().getColumn(p);
+				if (column == nameViewerColumn.getColumn()) {
+					editIndex();
+				}
+			}
+
+		});
+
 		scenarioViewer.addOpenListener(new IOpenListener() {
 
 			@Override
 			public void open(final OpenEvent event) {
-				if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
-					final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
-					if (structuredSelection.isEmpty() == false) {
-						final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
-						if (structuredSelection.size() == 1) {
-
-							// Skip tree model elements
-							if (transformer.getNodeClass().isInstance(structuredSelection.getFirstElement())) {
-								return;
-							}
-
-							final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getDefaultCommandHandler());
-							try {
-								editorLock.claim();
-								scenarioEditingLocation.setDisableUpdates(true);
-								dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), structuredSelection.toList(), scenarioViewer.isLocked());
-							} finally {
-								scenarioEditingLocation.setDisableUpdates(false);
-								editorLock.release();
-							}
-						} else {
-							// No multi-edit for indices
-						}
-					}
-				}
 			}
 		});
 	}
 
-	private @Nullable
-	Index<?> getIndex(@Nullable final Object o) {
+	private @Nullable Index<?> getIndex(@Nullable final Object o) {
 		if (o instanceof CommodityIndex) {
 			return ((CommodityIndex) o).getData();
 		} else if (o instanceof CharterIndex) {
@@ -644,11 +640,9 @@ public class IndexPane extends ScenarioTableViewerPane {
 			return ((NamedIndexContainer<?>) o).getData();
 		}
 		return null;
-
 	}
 
-	private @Nullable
-	DataType getDataTypeForElement(@Nullable final Object element) {
+	private @Nullable DataType getDataTypeForElement(@Nullable final Object element) {
 		if (element instanceof CommodityIndex) {
 			return DataType.Commodity;
 		} else if (element instanceof BaseFuelIndex) {
@@ -660,8 +654,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 	}
 
-	private @Nullable
-	Number getNumberForElement(Object element, final YearMonth colDate) {
+	private @Nullable Number getNumberForElement(Object element, final YearMonth colDate) {
 
 		if (transformer.getNodeClass().isInstance(element)) {
 			return null;
@@ -725,5 +718,33 @@ public class IndexPane extends ScenarioTableViewerPane {
 			}
 		}
 		getScenarioViewer().setExpandedElements(expandedObjects.toArray());
+	}
+
+	private void editIndex() {
+		if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
+			final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
+			if (structuredSelection.isEmpty() == false) {
+				final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
+				if (structuredSelection.size() == 1) {
+
+					// Skip tree model elements
+					if (transformer.getNodeClass().isInstance(structuredSelection.getFirstElement())) {
+						return;
+					}
+
+					final DetailCompositeDialog dcd = new DetailCompositeDialog(scenarioViewer.getGrid().getShell(), scenarioEditingLocation.getDefaultCommandHandler());
+					try {
+						editorLock.claim();
+						scenarioEditingLocation.setDisableUpdates(true);
+						dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), structuredSelection.toList(), scenarioViewer.isLocked());
+					} finally {
+						scenarioEditingLocation.setDisableUpdates(false);
+						editorLock.release();
+					}
+				} else {
+					// No multi-edit for indices
+				}
+			}
+		}
 	}
 }

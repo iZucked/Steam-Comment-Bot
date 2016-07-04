@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -67,17 +67,9 @@ public class CharterOutMarketComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_charterOutPriceEditor(detailComposite, topClass);
+		add_charterOutRateEditor(detailComposite, topClass);
 		add_minCharterOutDurationEditor(detailComposite, topClass);
 		add_availablePortsEditor(detailComposite, topClass);
-	}
-	/**
-	 * Create the editor for the charterOutPrice feature on CharterOutMarket
-	 *
-	 * @generated
-	 */
-	protected void add_charterOutPriceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__CHARTER_OUT_PRICE));
 	}
 	/**
 	 * Create the editor for the minCharterOutDuration feature on CharterOutMarket
@@ -95,5 +87,14 @@ public class CharterOutMarketComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_availablePortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__AVAILABLE_PORTS));
+	}
+
+	/**
+	 * Create the editor for the charterOutRate feature on CharterOutMarket
+	 *
+	 * @generated
+	 */
+	protected void add_charterOutRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__CHARTER_OUT_RATE));
 	}
 }

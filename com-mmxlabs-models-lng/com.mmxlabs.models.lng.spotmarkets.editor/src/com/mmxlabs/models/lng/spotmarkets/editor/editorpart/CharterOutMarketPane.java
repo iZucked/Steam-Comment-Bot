@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets.editor.editorpart;
@@ -59,7 +59,7 @@ public class CharterOutMarketPane extends ScenarioTableViewerPane {
 
 		addTypicalColumn("Min Duration", new NumericAttributeManipulator(SpotMarketsPackage.eINSTANCE.getCharterOutMarket_MinCharterOutDuration(), getEditingDomain()));
 
-		addTypicalColumn("Lending Index", new SingleReferenceManipulator(SpotMarketsPackage.eINSTANCE.getCharterOutMarket_CharterOutPrice(), getReferenceValueProviderCache(), getEditingDomain()));
+		addTypicalColumn("Lending Rate", new BasicAttributeManipulator(SpotMarketsPackage.eINSTANCE.getCharterOutMarket_CharterOutRate(), getEditingDomain()));
 
 		defaultSetTitle("Charter Out  Market");
 

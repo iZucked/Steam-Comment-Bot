@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -30,6 +30,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl#getShippingBook <em>Shipping Book</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl#getTradingBook <em>Trading Book</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl#getUpstreamBook <em>Upstream Book</em>}</li>
  * </ul>
  *
  * @generated
@@ -74,6 +75,16 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 	 * @ordered
 	 */
 	protected BaseEntityBook tradingBook;
+
+	/**
+	 * The cached value of the '{@link #getUpstreamBook() <em>Upstream Book</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUpstreamBook()
+	 * @generated
+	 * @ordered
+	 */
+	protected BaseEntityBook upstreamBook;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -206,6 +217,49 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public BaseEntityBook getUpstreamBook() {
+		return upstreamBook;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetUpstreamBook(BaseEntityBook newUpstreamBook, NotificationChain msgs) {
+		BaseEntityBook oldUpstreamBook = upstreamBook;
+		upstreamBook = newUpstreamBook;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CommercialPackage.BASE_LEGAL_ENTITY__UPSTREAM_BOOK, oldUpstreamBook, newUpstreamBook);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setUpstreamBook(BaseEntityBook newUpstreamBook) {
+		if (newUpstreamBook != upstreamBook) {
+			NotificationChain msgs = null;
+			if (upstreamBook != null)
+				msgs = ((InternalEObject)upstreamBook).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CommercialPackage.BASE_LEGAL_ENTITY__UPSTREAM_BOOK, null, msgs);
+			if (newUpstreamBook != null)
+				msgs = ((InternalEObject)newUpstreamBook).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CommercialPackage.BASE_LEGAL_ENTITY__UPSTREAM_BOOK, null, msgs);
+			msgs = basicSetUpstreamBook(newUpstreamBook, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.BASE_LEGAL_ENTITY__UPSTREAM_BOOK, newUpstreamBook, newUpstreamBook));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -213,6 +267,8 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 				return basicSetShippingBook(null, msgs);
 			case CommercialPackage.BASE_LEGAL_ENTITY__TRADING_BOOK:
 				return basicSetTradingBook(null, msgs);
+			case CommercialPackage.BASE_LEGAL_ENTITY__UPSTREAM_BOOK:
+				return basicSetUpstreamBook(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -231,6 +287,8 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 				return getShippingBook();
 			case CommercialPackage.BASE_LEGAL_ENTITY__TRADING_BOOK:
 				return getTradingBook();
+			case CommercialPackage.BASE_LEGAL_ENTITY__UPSTREAM_BOOK:
+				return getUpstreamBook();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -251,6 +309,9 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 				return;
 			case CommercialPackage.BASE_LEGAL_ENTITY__TRADING_BOOK:
 				setTradingBook((BaseEntityBook)newValue);
+				return;
+			case CommercialPackage.BASE_LEGAL_ENTITY__UPSTREAM_BOOK:
+				setUpstreamBook((BaseEntityBook)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -273,6 +334,9 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 			case CommercialPackage.BASE_LEGAL_ENTITY__TRADING_BOOK:
 				setTradingBook((BaseEntityBook)null);
 				return;
+			case CommercialPackage.BASE_LEGAL_ENTITY__UPSTREAM_BOOK:
+				setUpstreamBook((BaseEntityBook)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -291,6 +355,8 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 				return shippingBook != null;
 			case CommercialPackage.BASE_LEGAL_ENTITY__TRADING_BOOK:
 				return tradingBook != null;
+			case CommercialPackage.BASE_LEGAL_ENTITY__UPSTREAM_BOOK:
+				return upstreamBook != null;
 		}
 		return super.eIsSet(featureID);
 	}

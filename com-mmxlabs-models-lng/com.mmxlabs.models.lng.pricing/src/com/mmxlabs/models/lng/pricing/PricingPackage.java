@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing;
@@ -626,13 +626,22 @@ public interface PricingPackage extends EPackage {
 	int COST_MODEL__BASE_FUEL_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Panama Canal Tariff</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COST_MODEL__PANAMA_CANAL_TARIFF = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Cost Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COST_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int COST_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1022,6 +1031,116 @@ public interface PricingPackage extends EPackage {
 	 * @ordered
 	 */
 	int PORTS_SPLIT_EXPRESSION_MAP_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PanamaCanalTariffImpl <em>Panama Canal Tariff</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.PanamaCanalTariffImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPanamaCanalTariff()
+	 * @generated
+	 */
+	int PANAMA_CANAL_TARIFF = 19;
+
+	/**
+	 * The feature id for the '<em><b>Bands</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PANAMA_CANAL_TARIFF__BANDS = 0;
+
+	/**
+	 * The feature id for the '<em><b>Available From</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PANAMA_CANAL_TARIFF__AVAILABLE_FROM = 1;
+
+	/**
+	 * The feature id for the '<em><b>Markup Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PANAMA_CANAL_TARIFF__MARKUP_RATE = 2;
+
+	/**
+	 * The number of structural features of the '<em>Panama Canal Tariff</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PANAMA_CANAL_TARIFF_FEATURE_COUNT = 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PanamaCanalTariffBandImpl <em>Panama Canal Tariff Band</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.PanamaCanalTariffBandImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPanamaCanalTariffBand()
+	 * @generated
+	 */
+	int PANAMA_CANAL_TARIFF_BAND = 20;
+
+	/**
+	 * The feature id for the '<em><b>Laden Tariff</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PANAMA_CANAL_TARIFF_BAND__LADEN_TARIFF = 0;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Tariff</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PANAMA_CANAL_TARIFF_BAND__BALLAST_TARIFF = 1;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Roundtrip Tariff</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PANAMA_CANAL_TARIFF_BAND__BALLAST_ROUNDTRIP_TARIFF = 2;
+
+	/**
+	 * The feature id for the '<em><b>Band Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PANAMA_CANAL_TARIFF_BAND__BAND_START = 3;
+
+	/**
+	 * The feature id for the '<em><b>Band End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PANAMA_CANAL_TARIFF_BAND__BAND_END = 4;
+
+	/**
+	 * The number of structural features of the '<em>Panama Canal Tariff Band</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PANAMA_CANAL_TARIFF_BAND_FEATURE_COUNT = 5;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PricingModel <em>Model</em>}'.
@@ -1449,6 +1568,17 @@ public interface PricingPackage extends EPackage {
 	EReference getCostModel_BaseFuelCosts();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.pricing.CostModel#getPanamaCanalTariff <em>Panama Canal Tariff</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Panama Canal Tariff</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.CostModel#getPanamaCanalTariff()
+	 * @see #getCostModel()
+	 * @generated
+	 */
+	EReference getCostModel_PanamaCanalTariff();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PortsPriceMap <em>Ports Price Map</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1597,6 +1727,114 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPortsSplitExpressionMap_Expression2();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariff <em>Panama Canal Tariff</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Panama Canal Tariff</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PanamaCanalTariff
+	 * @generated
+	 */
+	EClass getPanamaCanalTariff();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariff#getBands <em>Bands</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Bands</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PanamaCanalTariff#getBands()
+	 * @see #getPanamaCanalTariff()
+	 * @generated
+	 */
+	EReference getPanamaCanalTariff_Bands();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariff#getAvailableFrom <em>Available From</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Available From</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PanamaCanalTariff#getAvailableFrom()
+	 * @see #getPanamaCanalTariff()
+	 * @generated
+	 */
+	EAttribute getPanamaCanalTariff_AvailableFrom();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariff#getMarkupRate <em>Markup Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Markup Rate</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PanamaCanalTariff#getMarkupRate()
+	 * @see #getPanamaCanalTariff()
+	 * @generated
+	 */
+	EAttribute getPanamaCanalTariff_MarkupRate();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand <em>Panama Canal Tariff Band</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Panama Canal Tariff Band</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand
+	 * @generated
+	 */
+	EClass getPanamaCanalTariffBand();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand#getLadenTariff <em>Laden Tariff</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Laden Tariff</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand#getLadenTariff()
+	 * @see #getPanamaCanalTariffBand()
+	 * @generated
+	 */
+	EAttribute getPanamaCanalTariffBand_LadenTariff();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand#getBallastTariff <em>Ballast Tariff</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ballast Tariff</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand#getBallastTariff()
+	 * @see #getPanamaCanalTariffBand()
+	 * @generated
+	 */
+	EAttribute getPanamaCanalTariffBand_BallastTariff();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand#getBallastRoundtripTariff <em>Ballast Roundtrip Tariff</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ballast Roundtrip Tariff</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand#getBallastRoundtripTariff()
+	 * @see #getPanamaCanalTariffBand()
+	 * @generated
+	 */
+	EAttribute getPanamaCanalTariffBand_BallastRoundtripTariff();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand#getBandStart <em>Band Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Band Start</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand#getBandStart()
+	 * @see #getPanamaCanalTariffBand()
+	 * @generated
+	 */
+	EAttribute getPanamaCanalTariffBand_BandStart();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand#getBandEnd <em>Band End</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Band End</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand#getBandEnd()
+	 * @see #getPanamaCanalTariffBand()
+	 * @generated
+	 */
+	EAttribute getPanamaCanalTariffBand_BandEnd();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -1971,6 +2209,14 @@ public interface PricingPackage extends EPackage {
 		EReference COST_MODEL__BASE_FUEL_COSTS = eINSTANCE.getCostModel_BaseFuelCosts();
 
 		/**
+		 * The meta object literal for the '<em><b>Panama Canal Tariff</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COST_MODEL__PANAMA_CANAL_TARIFF = eINSTANCE.getCostModel_PanamaCanalTariff();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PortsPriceMapImpl <em>Ports Price Map</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2089,6 +2335,90 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORTS_SPLIT_EXPRESSION_MAP__EXPRESSION2 = eINSTANCE.getPortsSplitExpressionMap_Expression2();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PanamaCanalTariffImpl <em>Panama Canal Tariff</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.PanamaCanalTariffImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPanamaCanalTariff()
+		 * @generated
+		 */
+		EClass PANAMA_CANAL_TARIFF = eINSTANCE.getPanamaCanalTariff();
+
+		/**
+		 * The meta object literal for the '<em><b>Bands</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PANAMA_CANAL_TARIFF__BANDS = eINSTANCE.getPanamaCanalTariff_Bands();
+
+		/**
+		 * The meta object literal for the '<em><b>Available From</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PANAMA_CANAL_TARIFF__AVAILABLE_FROM = eINSTANCE.getPanamaCanalTariff_AvailableFrom();
+
+		/**
+		 * The meta object literal for the '<em><b>Markup Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PANAMA_CANAL_TARIFF__MARKUP_RATE = eINSTANCE.getPanamaCanalTariff_MarkupRate();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PanamaCanalTariffBandImpl <em>Panama Canal Tariff Band</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.PanamaCanalTariffBandImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPanamaCanalTariffBand()
+		 * @generated
+		 */
+		EClass PANAMA_CANAL_TARIFF_BAND = eINSTANCE.getPanamaCanalTariffBand();
+
+		/**
+		 * The meta object literal for the '<em><b>Laden Tariff</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PANAMA_CANAL_TARIFF_BAND__LADEN_TARIFF = eINSTANCE.getPanamaCanalTariffBand_LadenTariff();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Tariff</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PANAMA_CANAL_TARIFF_BAND__BALLAST_TARIFF = eINSTANCE.getPanamaCanalTariffBand_BallastTariff();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Roundtrip Tariff</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PANAMA_CANAL_TARIFF_BAND__BALLAST_ROUNDTRIP_TARIFF = eINSTANCE.getPanamaCanalTariffBand_BallastRoundtripTariff();
+
+		/**
+		 * The meta object literal for the '<em><b>Band Start</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PANAMA_CANAL_TARIFF_BAND__BAND_START = eINSTANCE.getPanamaCanalTariffBand_BandStart();
+
+		/**
+		 * The meta object literal for the '<em><b>Band End</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PANAMA_CANAL_TARIFF_BAND__BAND_END = eINSTANCE.getPanamaCanalTariffBand_BandEnd();
 
 	}
 

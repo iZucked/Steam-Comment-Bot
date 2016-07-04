@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.importers;
@@ -20,6 +20,7 @@ import java.util.TreeMap;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.csv.IExportContext;
 import com.mmxlabs.common.csv.IImportContext;
@@ -30,6 +31,7 @@ import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.AbstractClassImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
@@ -105,35 +107,47 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 				if (columnsToIgnore.contains(s)) {
 					continue;
 				}
+				if ("units".equals(s)) {
+					continue;
+				}
+				final YearMonth date;
 				try {
-					final YearMonth date = parseDateString(s);
-
-					final String valueStr = row.get(s);
-					if (valueStr.isEmpty())
-						continue;
-					try {
-						final Number n = numberImporterHelper.parseNumberString(valueStr, parseAsInt);
-						if (n == null) {
-							continue;
-						}
-
-						if (!seenDates.add(date)) {
-							context.addProblem(context.createProblem("The month " + s + " is defined multiple times", true, true, true));
-							continue;
-						}
-
-						final IndexPoint<Number> point = PricingFactory.eINSTANCE.createIndexPoint();
-						point.setDate(date);
-						point.setValue(n);
-						data.getPoints().add(point);
-					} catch (final NumberFormatException nfe) {
-						context.addProblem(context.createProblem("The value " + valueStr + " is not a number", true, true, true));
-					}
+					date = parseDateString(s);
 				} catch (final ParseException ex) {
 					if (s.equals(EXPRESSION) == false && s.equals(UNITS) == false) {
 						context.addProblem(context.createProblem("The field " + s + " is not a date", true, false, true));
 					}
+					continue;
 				}
+				if (date == null) {
+					continue;
+				}
+				final String valueStr = row.get(s);
+				if (valueStr.isEmpty())
+					continue;
+				try {
+					final Number n = numberImporterHelper.parseNumberString(valueStr, parseAsInt);
+					if (n == null) {
+						continue;
+					}
+
+					if (!seenDates.add(date)) {
+						context.addProblem(context.createProblem("The month " + s + " is defined multiple times", true, true, true));
+						continue;
+					}
+
+					final IndexPoint<Number> point = PricingFactory.eINSTANCE.createIndexPoint();
+					point.setDate(date);
+					point.setValue(n);
+					data.getPoints().add(point);
+				} catch (final NumberFormatException | ParseException nfe) {
+					context.addProblem(context.createProblem("The value " + valueStr + " is not a number", true, true, true));
+				}
+				// } catch (final ParseException ex) {
+				// if (s.equals(EXPRESSION) == false && s.equals(UNITS) == false) {
+				// context.addProblem(context.createProblem("The field " + s + " is not a date", true, false, true));
+				// }
+				// }
 			}
 		}
 
@@ -147,6 +161,20 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 		return new Comparator<String>() {
 			@Override
 			public int compare(final String arg0, final String arg1) {
+				if (UNITS.equals(arg0)) {
+					return -1;
+				}
+				if (EXPRESSION.equals(arg0)) {
+					return -1;
+				}
+
+				if (EXPRESSION.equals(arg1)) {
+					return 1;
+				}
+
+				if (UNITS.equals(arg1)) {
+					return 1;
+				}
 				return arg0.compareTo(arg1);
 			}
 		};
@@ -177,9 +205,9 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 			for (final IndexPoint<? extends Number> pt : di.getPoints()) {
 				String value;
 				if (exportAsInt) {
-					value = nai.intToString(pt.getValue().intValue());
+					value = nai.intToString(pt.getValue().intValue(), PricingPackage.Literals.INDEX_POINT__VALUE);
 				} else {
-					value = nai.doubleToString(pt.getValue().doubleValue());
+					value = nai.doubleToString(pt.getValue().doubleValue(), PricingPackage.Literals.INDEX_POINT__VALUE);
 				}
 				map.put(dateParser.formatYearMonth(pt.getDate()), value);
 			}
@@ -188,6 +216,7 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 		return map;
 	}
 
+	@Nullable
 	protected YearMonth parseDateString(final String s) throws ParseException {
 		try {
 			return dateParser.parseYearMonth(s);
@@ -204,10 +233,14 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 			final Index<? extends Number> index = getIndexFromObject((TargetClass) obj);
 
 			if (index instanceof DataIndex) {
-				final Map<String, String> row = new TreeMap<String, String>(getFieldNameOrderComparator());
+				final Map<String, String> row = new LinkedHashMap<>();
 				row.putAll(getNonDateFields((TargetClass) obj, index));
-				row.putAll(getDateFields(context, (DataIndex<? extends Number>) index, exportAsInt));
-				result.add(row);
+				// Sorted dates
+				final Map<String, String> dateFields = new TreeMap<String, String>(getFieldNameOrderComparator());
+				dateFields.putAll(getDateFields(context, (DataIndex<? extends Number>) index, exportAsInt));
+				// Convert to linked hash map now data is sorted.
+				row.putAll(dateFields);
+				result.add(new LinkedHashMap<>(row));
 			} else if (index instanceof DerivedIndex) {
 				final Map<String, String> row = new LinkedHashMap<String, String>();
 				row.putAll(getNonDateFields((TargetClass) obj, index));

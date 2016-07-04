@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port.impl;
@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
@@ -33,6 +34,7 @@ import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getUuid <em>Uuid</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getLines <em>Lines</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getRouteOption <em>Route Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#isCanal <em>Canal</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getRoutingOptions <em>Routing Options</em>}</li>
  * </ul>
@@ -69,6 +71,26 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * @ordered
 	 */
 	protected EList<RouteLine> lines;
+
+	/**
+	 * The default value of the '{@link #getRouteOption() <em>Route Option</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRouteOption()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final RouteOption ROUTE_OPTION_EDEFAULT = RouteOption.DIRECT;
+
+	/**
+	 * The cached value of the '{@link #getRouteOption() <em>Route Option</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRouteOption()
+	 * @generated
+	 * @ordered
+	 */
+	protected RouteOption routeOption = ROUTE_OPTION_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isCanal() <em>Canal</em>}' attribute.
@@ -157,6 +179,27 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public RouteOption getRouteOption() {
+		return routeOption;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setRouteOption(RouteOption newRouteOption) {
+		RouteOption oldRouteOption = routeOption;
+		routeOption = newRouteOption == null ? ROUTE_OPTION_EDEFAULT : newRouteOption;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE__ROUTE_OPTION, oldRouteOption, routeOption));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean isCanal() {
 		return canal;
 	}
@@ -211,6 +254,8 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 				return getUuid();
 			case PortPackage.ROUTE__LINES:
 				return getLines();
+			case PortPackage.ROUTE__ROUTE_OPTION:
+				return getRouteOption();
 			case PortPackage.ROUTE__CANAL:
 				return isCanal();
 			case PortPackage.ROUTE__ROUTING_OPTIONS:
@@ -234,6 +279,9 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 			case PortPackage.ROUTE__LINES:
 				getLines().clear();
 				getLines().addAll((Collection<? extends RouteLine>)newValue);
+				return;
+			case PortPackage.ROUTE__ROUTE_OPTION:
+				setRouteOption((RouteOption)newValue);
 				return;
 			case PortPackage.ROUTE__CANAL:
 				setCanal((Boolean)newValue);
@@ -260,6 +308,9 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 			case PortPackage.ROUTE__LINES:
 				getLines().clear();
 				return;
+			case PortPackage.ROUTE__ROUTE_OPTION:
+				setRouteOption(ROUTE_OPTION_EDEFAULT);
+				return;
 			case PortPackage.ROUTE__CANAL:
 				setCanal(CANAL_EDEFAULT);
 				return;
@@ -282,6 +333,8 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 				return UUID_EDEFAULT == null ? uuid != null : !UUID_EDEFAULT.equals(uuid);
 			case PortPackage.ROUTE__LINES:
 				return lines != null && !lines.isEmpty();
+			case PortPackage.ROUTE__ROUTE_OPTION:
+				return routeOption != ROUTE_OPTION_EDEFAULT;
 			case PortPackage.ROUTE__CANAL:
 				return canal != CANAL_EDEFAULT;
 			case PortPackage.ROUTE__ROUTING_OPTIONS:

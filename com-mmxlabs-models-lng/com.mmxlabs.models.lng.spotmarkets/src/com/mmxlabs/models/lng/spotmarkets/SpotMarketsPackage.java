@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets;
@@ -1017,13 +1017,13 @@ public interface SpotMarketsPackage extends EPackage {
 	int CHARTER_OUT_MARKET__NAME = SPOT_CHARTER_MARKET_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Charter Out Price</b></em>' reference.
+	 * The feature id for the '<em><b>Charter Out Rate</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_MARKET__CHARTER_OUT_PRICE = SPOT_CHARTER_MARKET_FEATURE_COUNT + 2;
+	int CHARTER_OUT_MARKET__CHARTER_OUT_RATE = SPOT_CHARTER_MARKET_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Min Charter Out Duration</b></em>' attribute.
@@ -1099,13 +1099,13 @@ public interface SpotMarketsPackage extends EPackage {
 	int CHARTER_IN_MARKET__NAME = SPOT_CHARTER_MARKET_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Charter In Price</b></em>' reference.
+	 * The feature id for the '<em><b>Charter In Rate</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET__CHARTER_IN_PRICE = SPOT_CHARTER_MARKET_FEATURE_COUNT + 2;
+	int CHARTER_IN_MARKET__CHARTER_IN_RATE = SPOT_CHARTER_MARKET_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Spot Charter Count</b></em>' attribute.
@@ -1545,17 +1545,6 @@ public interface SpotMarketsPackage extends EPackage {
 	EClass getCharterOutMarket();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getCharterOutPrice <em>Charter Out Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Charter Out Price</em>'.
-	 * @see com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getCharterOutPrice()
-	 * @see #getCharterOutMarket()
-	 * @generated
-	 */
-	EReference getCharterOutMarket_CharterOutPrice();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getMinCharterOutDuration <em>Min Charter Out Duration</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1578,6 +1567,17 @@ public interface SpotMarketsPackage extends EPackage {
 	EReference getCharterOutMarket_AvailablePorts();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getCharterOutRate <em>Charter Out Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Charter Out Rate</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getCharterOutRate()
+	 * @see #getCharterOutMarket()
+	 * @generated
+	 */
+	EAttribute getCharterOutMarket_CharterOutRate();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket <em>Charter In Market</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1586,17 +1586,6 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getCharterInMarket();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterInPrice <em>Charter In Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Charter In Price</em>'.
-	 * @see com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterInPrice()
-	 * @see #getCharterInMarket()
-	 * @generated
-	 */
-	EReference getCharterInMarket_CharterInPrice();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getSpotCharterCount <em>Spot Charter Count</em>}'.
@@ -1608,6 +1597,17 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getCharterInMarket_SpotCharterCount();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterInRate <em>Charter In Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Charter In Rate</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterInRate()
+	 * @see #getCharterInMarket()
+	 * @generated
+	 */
+	EAttribute getCharterInMarket_CharterInRate();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket <em>Spot Charter Market</em>}'.
@@ -1998,14 +1998,6 @@ public interface SpotMarketsPackage extends EPackage {
 		EClass CHARTER_OUT_MARKET = eINSTANCE.getCharterOutMarket();
 
 		/**
-		 * The meta object literal for the '<em><b>Charter Out Price</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CHARTER_OUT_MARKET__CHARTER_OUT_PRICE = eINSTANCE.getCharterOutMarket_CharterOutPrice();
-
-		/**
 		 * The meta object literal for the '<em><b>Min Charter Out Duration</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2022,6 +2014,14 @@ public interface SpotMarketsPackage extends EPackage {
 		EReference CHARTER_OUT_MARKET__AVAILABLE_PORTS = eINSTANCE.getCharterOutMarket_AvailablePorts();
 
 		/**
+		 * The meta object literal for the '<em><b>Charter Out Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_OUT_MARKET__CHARTER_OUT_RATE = eINSTANCE.getCharterOutMarket_CharterOutRate();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl <em>Charter In Market</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2032,20 +2032,20 @@ public interface SpotMarketsPackage extends EPackage {
 		EClass CHARTER_IN_MARKET = eINSTANCE.getCharterInMarket();
 
 		/**
-		 * The meta object literal for the '<em><b>Charter In Price</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CHARTER_IN_MARKET__CHARTER_IN_PRICE = eINSTANCE.getCharterInMarket_CharterInPrice();
-
-		/**
 		 * The meta object literal for the '<em><b>Spot Charter Count</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute CHARTER_IN_MARKET__SPOT_CHARTER_COUNT = eINSTANCE.getCharterInMarket_SpotCharterCount();
+
+		/**
+		 * The meta object literal for the '<em><b>Charter In Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_IN_MARKET__CHARTER_IN_RATE = eINSTANCE.getCharterInMarket_CharterInRate();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotCharterMarketImpl <em>Spot Charter Market</em>}' class.

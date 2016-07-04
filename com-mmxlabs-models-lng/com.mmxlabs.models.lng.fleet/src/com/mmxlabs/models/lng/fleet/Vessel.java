@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet;
@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getShortName <em>Short Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getVesselClass <em>Vessel Class</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}</li>
@@ -29,6 +30,32 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  * @generated
  */
 public interface Vessel extends AVesselSet<Vessel> {
+	/**
+	 * Returns the value of the '<em><b>Short Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Short Name</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Short Name</em>' attribute.
+	 * @see #setShortName(String)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_ShortName()
+	 * @model
+	 * @generated
+	 */
+	String getShortName();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getShortName <em>Short Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Short Name</em>' attribute.
+	 * @see #getShortName()
+	 * @generated
+	 */
+	void setShortName(String value);
+
 	/**
 	 * Returns the value of the '<em><b>Vessel Class</b></em>' reference.
 	 * <!-- begin-user-doc -->
@@ -140,7 +167,7 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @see #setFillCapacity(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_FillCapacity()
 	 * @model default="1" unsettable="true" required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat scale='100' formatString='###.#' unit='%'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat scale='100' formatString='###.#' unit='%' exportFormatString='#.###'"
 	 * @generated
 	 */
 	double getFillCapacity();
@@ -195,6 +222,14 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	double getVesselOrVesselClassFillCapacity();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getShortenedName();
 
 } // end of  Vessel
 

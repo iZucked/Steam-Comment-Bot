@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.provider;
@@ -48,12 +48,35 @@ public class VesselItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addShortNamePropertyDescriptor(object);
 			addVesselClassPropertyDescriptor(object);
 			addInaccessiblePortsPropertyDescriptor(object);
 			addCapacityPropertyDescriptor(object);
 			addFillCapacityPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Short Name feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addShortNamePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_shortName_feature"),
+				 getString("_UI_Vessel_shortName_description"),
+				 FleetPackage.Literals.VESSEL__SHORT_NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -181,6 +204,7 @@ public class VesselItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Vessel.class)) {
+			case FleetPackage.VESSEL__SHORT_NAME:
 			case FleetPackage.VESSEL__CAPACITY:
 			case FleetPackage.VESSEL__FILL_CAPACITY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

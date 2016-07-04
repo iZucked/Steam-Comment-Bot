@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.analytics/src" modelPluginID="com.mmxlabs.models.lng.analytics"
-    templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.template/templates/"
+    templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.sdk.template/templates/"
     dynamicTemplates="true" modelName="Analytics" testsDirectory="" importerID="org.eclipse.emf.importer.ecore"
     complianceLevel="8.0" copyrightFields="false" runtimeVersion="2.11" usedGenPackages="../../com.mmxlabs.models.lng.commercial/model/commercial.genmodel#//commercial ../../com.mmxlabs.models.lng.fleet/model/fleet.genmodel#//fleet platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore ../../com.mmxlabs.models.lng.port/model/port.genmodel#//port ../../com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime">
   <foreignModel>analytics.ecore</foreignModel>

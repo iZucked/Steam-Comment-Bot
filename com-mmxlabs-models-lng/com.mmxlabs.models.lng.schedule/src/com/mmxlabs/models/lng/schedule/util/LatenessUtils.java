@@ -1,14 +1,17 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.util;
 
 import java.time.ZonedDateTime;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -103,6 +106,40 @@ public class LatenessUtils {
 			return portVisitLateness.getLatenessInHours();
 		}
 		return 0;
+	}
+
+	public static long getLatenessAfterFlex(@Nullable final EventGrouping eventGrouping) {
+		long lateness = 0;
+		if (eventGrouping != null) {
+
+			for (final Event evt : eventGrouping.getEvents()) {
+				if (evt instanceof PortVisit) {
+					final PortVisit visit = (PortVisit) evt;
+					final boolean isLate = LatenessUtils.isLateAfterFlex(visit);
+					if (isLate) {
+						lateness += LatenessUtils.getLatenessInHours(visit);
+					}
+				}
+			}
+		}
+		return lateness;
+	}
+
+	public static long getLatenessExcludingFlex(@Nullable final EventGrouping eventGrouping) {
+		long lateness = 0;
+		if (eventGrouping != null) {
+
+			for (final Event evt : eventGrouping.getEvents()) {
+				if (evt instanceof PortVisit) {
+					final PortVisit visit = (PortVisit) evt;
+					final boolean isLate = LatenessUtils.isLateExcludingFlex(visit);
+					if (isLate) {
+						lateness += LatenessUtils.getLatenessInHours(visit);
+					}
+				}
+			}
+		}
+		return lateness;
 	}
 
 }

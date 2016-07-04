@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.provider;
@@ -55,7 +55,9 @@ public class SlotItemProvider
 			addWindowStartPropertyDescriptor(object);
 			addWindowStartTimePropertyDescriptor(object);
 			addWindowSizePropertyDescriptor(object);
+			addWindowSizeUnitsPropertyDescriptor(object);
 			addWindowFlexPropertyDescriptor(object);
+			addWindowFlexUnitsPropertyDescriptor(object);
 			addDurationPropertyDescriptor(object);
 			addVolumeLimitsUnitPropertyDescriptor(object);
 			addMinQuantityPropertyDescriptor(object);
@@ -74,7 +76,7 @@ public class SlotItemProvider
 			addRestrictedListsArePermissivePropertyDescriptor(object);
 			addHedgesPropertyDescriptor(object);
 			addAllowedVesselsPropertyDescriptor(object);
-			addCancellationFeePropertyDescriptor(object);
+			addCancellationExpressionPropertyDescriptor(object);
 			addOverrideRestrictionsPropertyDescriptor(object);
 			addNominatedVesselPropertyDescriptor(object);
 			addLockedPropertyDescriptor(object);
@@ -94,7 +96,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_NamedObject_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"),
+				 getString("_UI_NamedObject_name_description"),
 				 MMXCorePackage.Literals.NAMED_OBJECT__NAME,
 				 true,
 				 false,
@@ -171,6 +173,28 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Window Size Units feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addWindowSizeUnitsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_windowSizeUnits_feature"),
+				 getString("_UI_Slot_windowSizeUnits_description"),
+				 CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Window Flex feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -193,6 +217,28 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Window Flex Units feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addWindowFlexUnitsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_windowFlexUnits_feature"),
+				 getString("_UI_Slot_windowFlexUnits_description"),
+				 CargoPackage.Literals.SLOT__WINDOW_FLEX_UNITS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Port feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -204,7 +250,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_port_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_port_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_port_description"),
 				 CargoPackage.Literals.SLOT__PORT,
 				 true,
 				 false,
@@ -402,7 +448,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_pricingEvent_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_pricingEvent_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_pricingEvent_description"),
 				 CargoPackage.Literals.SLOT__PRICING_EVENT,
 				 true,
 				 false,
@@ -424,7 +470,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_pricingDate_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_pricingDate_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_pricingDate_description"),
 				 CargoPackage.Literals.SLOT__PRICING_DATE,
 				 true,
 				 false,
@@ -446,7 +492,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_notes_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_notes_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_notes_description"),
 				 CargoPackage.Literals.SLOT__NOTES,
 				 true,
 				 false,
@@ -490,7 +536,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_shippingDaysRestriction_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_shippingDaysRestriction_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_shippingDaysRestriction_description"),
 				 CargoPackage.Literals.SLOT__SHIPPING_DAYS_RESTRICTION,
 				 true,
 				 false,
@@ -512,7 +558,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_entity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_entity_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_entity_description"),
 				 CargoPackage.Literals.SLOT__ENTITY,
 				 true,
 				 false,
@@ -534,7 +580,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_restrictedContracts_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_restrictedContracts_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_restrictedContracts_description"),
 				 CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS,
 				 true,
 				 false,
@@ -556,7 +602,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_restrictedPorts_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_restrictedPorts_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_restrictedPorts_description"),
 				 CargoPackage.Literals.SLOT__RESTRICTED_PORTS,
 				 true,
 				 false,
@@ -578,7 +624,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_restrictedListsArePermissive_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_restrictedListsArePermissive_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_restrictedListsArePermissive_description"),
 				 CargoPackage.Literals.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE,
 				 true,
 				 false,
@@ -600,7 +646,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_hedges_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_hedges_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_hedges_description"),
 				 CargoPackage.Literals.SLOT__HEDGES,
 				 true,
 				 false,
@@ -622,7 +668,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_allowedVessels_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_allowedVessels_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_allowedVessels_description"),
 				 CargoPackage.Literals.SLOT__ALLOWED_VESSELS,
 				 true,
 				 false,
@@ -633,23 +679,23 @@ public class SlotItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Cancellation Fee feature.
+	 * This adds a property descriptor for the Cancellation Expression feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addCancellationFeePropertyDescriptor(Object object) {
+	protected void addCancellationExpressionPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Slot_cancellationFee_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_cancellationFee_feature", "_UI_Slot_type"),
-				 CargoPackage.Literals.SLOT__CANCELLATION_FEE,
+				 getString("_UI_Slot_cancellationExpression_feature"),
+				 getString("_UI_Slot_cancellationExpression_description"),
+				 CargoPackage.Literals.SLOT__CANCELLATION_EXPRESSION,
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -666,7 +712,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_overrideRestrictions_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_overrideRestrictions_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_overrideRestrictions_description"),
 				 CargoPackage.Literals.SLOT__OVERRIDE_RESTRICTIONS,
 				 true,
 				 false,
@@ -688,7 +734,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_nominatedVessel_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_nominatedVessel_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_nominatedVessel_description"),
 				 CargoPackage.Literals.SLOT__NOMINATED_VESSEL,
 				 true,
 				 false,
@@ -710,7 +756,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_locked_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_locked_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_locked_description"),
 				 CargoPackage.Literals.SLOT__LOCKED,
 				 true,
 				 false,
@@ -761,7 +807,9 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__WINDOW_START:
 			case CargoPackage.SLOT__WINDOW_START_TIME:
 			case CargoPackage.SLOT__WINDOW_SIZE:
+			case CargoPackage.SLOT__WINDOW_SIZE_UNITS:
 			case CargoPackage.SLOT__WINDOW_FLEX:
+			case CargoPackage.SLOT__WINDOW_FLEX_UNITS:
 			case CargoPackage.SLOT__DURATION:
 			case CargoPackage.SLOT__VOLUME_LIMITS_UNIT:
 			case CargoPackage.SLOT__MIN_QUANTITY:
@@ -775,7 +823,7 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
 			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 			case CargoPackage.SLOT__HEDGES:
-			case CargoPackage.SLOT__CANCELLATION_FEE:
+			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
 			case CargoPackage.SLOT__OVERRIDE_RESTRICTIONS:
 			case CargoPackage.SLOT__LOCKED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

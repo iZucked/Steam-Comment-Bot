@@ -2,17 +2,17 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Analyics Navigator Addon
 Bundle-SymbolicName: com.mmxlabs.models.lng.analytics.navigator;singleton:=true
-Bundle-Version: 3.11.1.qualifier
+Bundle-Version: 3.12.7.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.core.runtime;bundle-version="3.7.0",
- com.mmxlabs.scenario.service.ui;bundle-version="[3.11.1,4.0.0)",
- com.mmxlabs.scenario.service.model;bundle-version="[3.11.1,4.0.0)",
+ com.mmxlabs.scenario.service.ui;bundle-version="[3.12.7,4.0.0)",
+ com.mmxlabs.scenario.service.model;bundle-version="[3.12.7,4.0.0)",
  org.eclipse.ui.navigator;bundle-version="3.5.101",
- com.mmxlabs.models.lng.scenario.model;bundle-version="[3.11.1,4.0.0)",
+ com.mmxlabs.models.lng.scenario.model;bundle-version="[3.12.7,4.0.0)",
  org.eclipse.core.databinding.observable;bundle-version="1.4.0",
  org.eclipse.emf.databinding.edit;bundle-version="1.2.0",
  org.eclipse.jface.databinding;bundle-version="1.5.0",
- org.eclipse.jdt.annotation;bundle-version="[1.1.100,2.0.0)";resolution:=optional
+ org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

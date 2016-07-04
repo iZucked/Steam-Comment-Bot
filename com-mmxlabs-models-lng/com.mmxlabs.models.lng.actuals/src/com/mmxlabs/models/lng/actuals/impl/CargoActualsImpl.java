@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -7,8 +7,6 @@
 package com.mmxlabs.models.lng.actuals.impl;
 
 import java.util.Collection;
-import java.util.List;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -26,8 +24,6 @@ import com.mmxlabs.models.lng.actuals.ReturnActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
 import com.mmxlabs.models.lng.actuals.util.CargoActualsSlotSorter;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.util.CargoSlotSorter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import java.lang.reflect.InvocationTargetException;
 

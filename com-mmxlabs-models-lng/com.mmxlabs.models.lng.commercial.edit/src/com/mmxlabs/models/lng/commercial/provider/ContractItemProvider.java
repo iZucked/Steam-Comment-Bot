@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.provider;
@@ -64,7 +64,7 @@ public class ContractItemProvider
 			addNotesPropertyDescriptor(object);
 			addContractTypePropertyDescriptor(object);
 			addPricingEventPropertyDescriptor(object);
-			addCancellationFeePropertyDescriptor(object);
+			addCancellationExpressionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -356,23 +356,23 @@ public class ContractItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Cancellation Fee feature.
+	 * This adds a property descriptor for the Cancellation Expression feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addCancellationFeePropertyDescriptor(Object object) {
+	protected void addCancellationExpressionPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Contract_cancellationFee_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_cancellationFee_feature", "_UI_Contract_type"),
-				 CommercialPackage.Literals.CONTRACT__CANCELLATION_FEE,
+				 getString("_UI_Contract_cancellationExpression_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_cancellationExpression_feature", "_UI_Contract_type"),
+				 CommercialPackage.Literals.CONTRACT__CANCELLATION_EXPRESSION,
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -452,7 +452,7 @@ public class ContractItemProvider
 			case CommercialPackage.CONTRACT__NOTES:
 			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
 			case CommercialPackage.CONTRACT__PRICING_EVENT:
-			case CommercialPackage.CONTRACT__CANCELLATION_FEE:
+			case CommercialPackage.CONTRACT__CANCELLATION_EXPRESSION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case CommercialPackage.CONTRACT__PRICE_INFO:

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.editor.commands;
@@ -25,7 +25,7 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -68,7 +68,7 @@ public class RouteParametersCommandProvider extends BaseModelCommandProvider<Obj
 
 		if (addedObject instanceof Route) {
 			final Route route = (Route) addedObject;
-			if (route.isCanal() == false) {
+			if (route.getRouteOption() == RouteOption.DIRECT) {
 				return null;
 			}
 
@@ -103,7 +103,7 @@ public class RouteParametersCommandProvider extends BaseModelCommandProvider<Obj
 						continue add_costs_for_new_vc;
 					}
 				}
-				if (route.isCanal()) {
+				if (route.getRouteOption() != RouteOption.DIRECT) {
 					cmd.append(AddCommand.create(domain, vesselClass, FleetPackage.eINSTANCE.getVesselClass_RouteParameters(), createRouteParameters(route, vesselClass)));
 				}
 			}
@@ -117,7 +117,7 @@ public class RouteParametersCommandProvider extends BaseModelCommandProvider<Obj
 							continue add_costs_for_new_vc;
 						}
 					}
-					if (route.isCanal()) {
+					if (route.getRouteOption() != RouteOption.DIRECT) {
 						cmd.append(AddCommand.create(domain, vesselClass, FleetPackage.eINSTANCE.getVesselClass_RouteParameters(), createRouteParameters(route, vesselClass)));
 					}
 				}

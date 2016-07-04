@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.parameters.impl;
@@ -266,6 +266,7 @@ public class AnnealingSettingsImpl extends EObjectImpl implements AnnealingSetti
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isRestarting() {
 		return restarting;
 	}
@@ -275,6 +276,7 @@ public class AnnealingSettingsImpl extends EObjectImpl implements AnnealingSetti
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRestarting(boolean newRestarting) {
 		boolean oldRestarting = restarting;
 		restarting = newRestarting;
@@ -287,6 +289,7 @@ public class AnnealingSettingsImpl extends EObjectImpl implements AnnealingSetti
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getRestartIterationsThreshold() {
 		return restartIterationsThreshold;
 	}
@@ -296,6 +299,7 @@ public class AnnealingSettingsImpl extends EObjectImpl implements AnnealingSetti
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRestartIterationsThreshold(int newRestartIterationsThreshold) {
 		int oldRestartIterationsThreshold = restartIterationsThreshold;
 		restartIterationsThreshold = newRestartIterationsThreshold;

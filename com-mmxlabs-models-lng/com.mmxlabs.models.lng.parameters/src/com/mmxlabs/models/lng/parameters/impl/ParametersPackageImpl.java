@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -199,6 +199,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getUserSettings() {
 		return userSettingsEClass;
 	}
@@ -208,6 +209,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUserSettings_PeriodStart() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(0);
 	}
@@ -217,6 +219,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUserSettings_PeriodEnd() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(1);
 	}
@@ -226,6 +229,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUserSettings_ShippingOnly() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(2);
 	}
@@ -235,6 +239,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUserSettings_GenerateCharterOuts() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(3);
 	}
@@ -244,6 +249,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUserSettings_BuildActionSets() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(4);
 	}
@@ -253,6 +259,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUserSettings_SimilarityMode() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(5);
 	}
@@ -262,6 +269,16 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getUserSettings_FloatingDaysLimit() {
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getIndividualSolutionImprovementSettings() {
 		return individualSolutionImprovementSettingsEClass;
 	}
@@ -271,6 +288,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getIndividualSolutionImprovementSettings_Iterations() {
 		return (EAttribute)individualSolutionImprovementSettingsEClass.getEStructuralFeatures().get(0);
 	}
@@ -280,6 +298,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getIndividualSolutionImprovementSettings_ImprovingSolutions() {
 		return (EAttribute)individualSolutionImprovementSettingsEClass.getEStructuralFeatures().get(1);
 	}
@@ -409,6 +428,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getOptimiserSettings_SimilaritySettings() {
 		return (EReference)optimiserSettingsEClass.getEStructuralFeatures().get(8);
 	}
@@ -418,6 +438,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getOptimiserSettings_SolutionImprovementSettings() {
 		return (EReference)optimiserSettingsEClass.getEStructuralFeatures().get(9);
 	}
@@ -427,6 +448,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getOptimiserSettings_BuildActionSets() {
 		return (EAttribute)optimiserSettingsEClass.getEStructuralFeatures().get(10);
 	}
@@ -436,8 +458,18 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getOptimiserSettings_ActionPlanSettings() {
 		return (EReference)optimiserSettingsEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getOptimiserSettings_FloatingDaysLimit() {
+		return (EAttribute)optimiserSettingsEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -575,6 +607,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getAnnealingSettings_Restarting() {
 		return (EAttribute)annealingSettingsEClass.getEStructuralFeatures().get(4);
 	}
@@ -584,6 +617,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getAnnealingSettings_RestartIterationsThreshold() {
 		return (EAttribute)annealingSettingsEClass.getEStructuralFeatures().get(5);
 	}
@@ -623,6 +657,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSimilaritySettings() {
 		return similaritySettingsEClass;
 	}
@@ -632,6 +667,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSimilaritySettings_LowInterval() {
 		return (EReference)similaritySettingsEClass.getEStructuralFeatures().get(0);
 	}
@@ -641,6 +677,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSimilaritySettings_MedInterval() {
 		return (EReference)similaritySettingsEClass.getEStructuralFeatures().get(1);
 	}
@@ -650,6 +687,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSimilaritySettings_HighInterval() {
 		return (EReference)similaritySettingsEClass.getEStructuralFeatures().get(2);
 	}
@@ -659,6 +697,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSimilaritySettings_OutOfBoundsWeight() {
 		return (EAttribute)similaritySettingsEClass.getEStructuralFeatures().get(3);
 	}
@@ -668,6 +707,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSimilarityInterval() {
 		return similarityIntervalEClass;
 	}
@@ -677,6 +717,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSimilarityInterval_Weight() {
 		return (EAttribute)similarityIntervalEClass.getEStructuralFeatures().get(0);
 	}
@@ -686,6 +727,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSimilarityInterval_Threshold() {
 		return (EAttribute)similarityIntervalEClass.getEStructuralFeatures().get(1);
 	}
@@ -695,6 +737,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getActionPlanSettings() {
 		return actionPlanSettingsEClass;
 	}
@@ -704,6 +747,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getActionPlanSettings_TotalEvaluations() {
 		return (EAttribute)actionPlanSettingsEClass.getEStructuralFeatures().get(0);
 	}
@@ -713,6 +757,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getActionPlanSettings_InRunEvaluations() {
 		return (EAttribute)actionPlanSettingsEClass.getEStructuralFeatures().get(1);
 	}
@@ -722,6 +767,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getActionPlanSettings_SearchDepth() {
 		return (EAttribute)actionPlanSettingsEClass.getEStructuralFeatures().get(2);
 	}
@@ -731,6 +777,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getSimilarityMode() {
 		return similarityModeEEnum;
 	}
@@ -771,6 +818,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		createEAttribute(userSettingsEClass, USER_SETTINGS__GENERATE_CHARTER_OUTS);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__BUILD_ACTION_SETS);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__SIMILARITY_MODE);
+		createEAttribute(userSettingsEClass, USER_SETTINGS__FLOATING_DAYS_LIMIT);
 
 		individualSolutionImprovementSettingsEClass = createEClass(INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS);
 		createEAttribute(individualSolutionImprovementSettingsEClass, INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS__ITERATIONS);
@@ -793,6 +841,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		createEReference(optimiserSettingsEClass, OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS);
 		createEAttribute(optimiserSettingsEClass, OPTIMISER_SETTINGS__BUILD_ACTION_SETS);
 		createEReference(optimiserSettingsEClass, OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS);
+		createEAttribute(optimiserSettingsEClass, OPTIMISER_SETTINGS__FLOATING_DAYS_LIMIT);
 
 		objectiveEClass = createEClass(OBJECTIVE);
 		createEAttribute(objectiveEClass, OBJECTIVE__WEIGHT);
@@ -882,6 +931,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		initEAttribute(getUserSettings_GenerateCharterOuts(), ecorePackage.getEBoolean(), "generateCharterOuts", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_BuildActionSets(), ecorePackage.getEBoolean(), "buildActionSets", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_SimilarityMode(), this.getSimilarityMode(), "similarityMode", "OFF", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUserSettings_FloatingDaysLimit(), ecorePackage.getEInt(), "floatingDaysLimit", "15", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(individualSolutionImprovementSettingsEClass, IndividualSolutionImprovementSettings.class, "IndividualSolutionImprovementSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getIndividualSolutionImprovementSettings_Iterations(), ecorePackage.getEInt(), "iterations", null, 1, 1, IndividualSolutionImprovementSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -904,6 +954,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		initEReference(getOptimiserSettings_SolutionImprovementSettings(), this.getIndividualSolutionImprovementSettings(), null, "solutionImprovementSettings", null, 1, 1, OptimiserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getOptimiserSettings_BuildActionSets(), ecorePackage.getEBoolean(), "buildActionSets", null, 0, 1, OptimiserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptimiserSettings_ActionPlanSettings(), this.getActionPlanSettings(), null, "actionPlanSettings", null, 1, 1, OptimiserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOptimiserSettings_FloatingDaysLimit(), ecorePackage.getEInt(), "floatingDaysLimit", "15", 0, 1, OptimiserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(objectiveEClass, Objective.class, "Objective", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getObjective_Weight(), ecorePackage.getEDouble(), "weight", null, 1, 1, Objective.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port.util;
@@ -9,6 +9,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.port.CapabilityGroup;
 import com.mmxlabs.models.lng.port.Location;
@@ -79,8 +80,8 @@ public class PortAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected PortSwitch<Adapter> modelSwitch =
-		new PortSwitch<Adapter>() {
+	protected PortSwitch<@Nullable Adapter> modelSwitch =
+		new PortSwitch<@Nullable Adapter>() {
 			@Override
 			public Adapter casePort(Port object) {
 				return createPortAdapter();

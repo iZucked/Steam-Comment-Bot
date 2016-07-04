@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -87,6 +87,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_TimeCharterRate()
 	 * @model unsettable="true" required="true"
 	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$/day'"
+	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='charter'"
 	 * @generated
 	 */
 	String getTimeCharterRate();

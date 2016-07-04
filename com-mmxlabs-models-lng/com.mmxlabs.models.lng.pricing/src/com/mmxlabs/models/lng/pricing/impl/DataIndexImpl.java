@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.impl;
@@ -24,9 +24,7 @@ import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Data Index</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Data Index</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
@@ -39,8 +37,7 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
 public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<Value> {
 	/**
 	 * The cached value of the '{@link #getPoints() <em>Points</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getPoints()
 	 * @generated
 	 * @ordered
@@ -48,8 +45,7 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 	protected EList<IndexPoint<Value>> points;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected DataIndexImpl() {
@@ -57,8 +53,7 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -67,8 +62,7 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public EList<IndexPoint<Value>> getPoints() {
@@ -79,8 +73,7 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -93,8 +86,7 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -107,8 +99,7 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -124,8 +115,7 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -139,8 +129,7 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -176,10 +165,10 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 			}
 			// Sorted set, so break out if this condition is true
 			if (point.getDate().isAfter(date)) {
-				return null;
+				return (Value) null;
 			}
 		}
-		return null;
+		return (Value) null;
 	}
 
 	@Override
@@ -191,10 +180,10 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 			}
 			// Sorted set, so break out if this condition is true
 			if (point.getDate().isAfter(date)) {
-				return null;
+				return (Value) null;
 			}
 		}
-		return null;
+		return (Value) null;
 	}
 
 	@Override
@@ -210,14 +199,14 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 				if (lastPoint != null) {
 					return lastPoint.getValue();
 				}
-				return null;
+				return (Value) null;
 			}
 			lastPoint = point;
 		}
 		if (lastPoint != null) {
 			return lastPoint.getValue();
 		}
-		return null;
+		return (Value) null;
 	}
 
 	@Override

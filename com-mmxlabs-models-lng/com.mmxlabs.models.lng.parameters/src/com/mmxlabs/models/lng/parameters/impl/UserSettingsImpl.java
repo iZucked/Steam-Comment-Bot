@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -33,6 +33,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isGenerateCharterOuts <em>Generate Charter Outs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isBuildActionSets <em>Build Action Sets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getSimilarityMode <em>Similarity Mode</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getFloatingDaysLimit <em>Floating Days Limit</em>}</li>
  * </ul>
  *
  * @generated
@@ -177,6 +178,26 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	protected SimilarityMode similarityMode = SIMILARITY_MODE_EDEFAULT;
 
 	/**
+	 * The default value of the '{@link #getFloatingDaysLimit() <em>Floating Days Limit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFloatingDaysLimit()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int FLOATING_DAYS_LIMIT_EDEFAULT = 15;
+
+	/**
+	 * The cached value of the '{@link #getFloatingDaysLimit() <em>Floating Days Limit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFloatingDaysLimit()
+	 * @generated
+	 * @ordered
+	 */
+	protected int floatingDaysLimit = FLOATING_DAYS_LIMIT_EDEFAULT;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -200,6 +221,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public YearMonth getPeriodStart() {
 		return periodStart;
 	}
@@ -209,6 +231,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPeriodStart(YearMonth newPeriodStart) {
 		YearMonth oldPeriodStart = periodStart;
 		periodStart = newPeriodStart;
@@ -223,6 +246,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetPeriodStart() {
 		YearMonth oldPeriodStart = periodStart;
 		boolean oldPeriodStartESet = periodStartESet;
@@ -237,6 +261,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetPeriodStart() {
 		return periodStartESet;
 	}
@@ -246,6 +271,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public YearMonth getPeriodEnd() {
 		return periodEnd;
 	}
@@ -255,6 +281,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPeriodEnd(YearMonth newPeriodEnd) {
 		YearMonth oldPeriodEnd = periodEnd;
 		periodEnd = newPeriodEnd;
@@ -269,6 +296,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetPeriodEnd() {
 		YearMonth oldPeriodEnd = periodEnd;
 		boolean oldPeriodEndESet = periodEndESet;
@@ -283,6 +311,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetPeriodEnd() {
 		return periodEndESet;
 	}
@@ -292,6 +321,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isShippingOnly() {
 		return shippingOnly;
 	}
@@ -301,6 +331,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setShippingOnly(boolean newShippingOnly) {
 		boolean oldShippingOnly = shippingOnly;
 		shippingOnly = newShippingOnly;
@@ -313,6 +344,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isGenerateCharterOuts() {
 		return generateCharterOuts;
 	}
@@ -322,6 +354,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setGenerateCharterOuts(boolean newGenerateCharterOuts) {
 		boolean oldGenerateCharterOuts = generateCharterOuts;
 		generateCharterOuts = newGenerateCharterOuts;
@@ -334,6 +367,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isBuildActionSets() {
 		return buildActionSets;
 	}
@@ -343,6 +377,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBuildActionSets(boolean newBuildActionSets) {
 		boolean oldBuildActionSets = buildActionSets;
 		buildActionSets = newBuildActionSets;
@@ -355,6 +390,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SimilarityMode getSimilarityMode() {
 		return similarityMode;
 	}
@@ -364,11 +400,33 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSimilarityMode(SimilarityMode newSimilarityMode) {
 		SimilarityMode oldSimilarityMode = similarityMode;
 		similarityMode = newSimilarityMode == null ? SIMILARITY_MODE_EDEFAULT : newSimilarityMode;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__SIMILARITY_MODE, oldSimilarityMode, similarityMode));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getFloatingDaysLimit() {
+		return floatingDaysLimit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setFloatingDaysLimit(int newFloatingDaysLimit) {
+		int oldFloatingDaysLimit = floatingDaysLimit;
+		floatingDaysLimit = newFloatingDaysLimit;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT, oldFloatingDaysLimit, floatingDaysLimit));
 	}
 
 	/**
@@ -391,6 +449,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return isBuildActionSets();
 			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:
 				return getSimilarityMode();
+			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
+				return getFloatingDaysLimit();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -420,6 +480,9 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return;
 			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:
 				setSimilarityMode((SimilarityMode)newValue);
+				return;
+			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
+				setFloatingDaysLimit((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -451,6 +514,9 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:
 				setSimilarityMode(SIMILARITY_MODE_EDEFAULT);
 				return;
+			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
+				setFloatingDaysLimit(FLOATING_DAYS_LIMIT_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -475,6 +541,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return buildActionSets != BUILD_ACTION_SETS_EDEFAULT;
 			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:
 				return similarityMode != SIMILARITY_MODE_EDEFAULT;
+			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
+				return floatingDaysLimit != FLOATING_DAYS_LIMIT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -501,6 +569,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 		result.append(buildActionSets);
 		result.append(", similarityMode: ");
 		result.append(similarityMode);
+		result.append(", floatingDaysLimit: ");
+		result.append(floatingDaysLimit);
 		result.append(')');
 		return result.toString();
 	}

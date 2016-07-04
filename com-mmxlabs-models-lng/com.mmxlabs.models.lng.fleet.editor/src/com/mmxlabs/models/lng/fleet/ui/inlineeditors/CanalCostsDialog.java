@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.ui.inlineeditors;
@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -103,8 +104,9 @@ public class CanalCostsDialog extends Dialog {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 			final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
 			route_loop: for (final Route r : portModel.getRoutes()) {
-				if (r.isCanal() == false)
+				if (r.getRouteOption() == RouteOption.DIRECT) {
 					continue route_loop;
+				}
 				for (final VesselClassRouteParameters vcrp : l) {
 					if (vcrp.getRoute() == r) {
 						continue route_loop;

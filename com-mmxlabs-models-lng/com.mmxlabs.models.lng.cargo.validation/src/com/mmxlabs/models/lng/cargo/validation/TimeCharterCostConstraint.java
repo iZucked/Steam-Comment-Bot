@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation;
@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -46,7 +47,7 @@ public class TimeCharterCostConstraint extends AbstractModelMultiConstraint {
 					failures.add(dsd);
 				} else {
 					final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_TimeCharterRate(),
-							vesselAvailability.getTimeCharterRate(), PriceExpressionUtils.getCharterParser(null));
+							vesselAvailability.getTimeCharterRate(), PriceIndexType.CHARTER);
 					if (!result.isOk()) {
 						final String message = String.format("[Vessel|'%s']%s", failures, result.getErrorDetails());
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));

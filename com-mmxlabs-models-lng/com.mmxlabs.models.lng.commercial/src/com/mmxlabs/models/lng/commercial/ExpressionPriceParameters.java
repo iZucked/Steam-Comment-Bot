@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial;
@@ -34,6 +34,7 @@ public interface ExpressionPriceParameters extends LNGPriceCalculatorParameters 
 	 * @see #setPriceExpression(String)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getExpressionPriceParameters_PriceExpression()
 	 * @model default="" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='commodity'"
 	 * @generated
 	 */
 	String getPriceExpression();

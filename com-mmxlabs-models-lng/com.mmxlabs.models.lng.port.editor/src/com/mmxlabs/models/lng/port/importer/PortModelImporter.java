@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port.importer;
@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.common.csv.CSVReader;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.port.CapabilityGroup;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
@@ -22,6 +23,7 @@ import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
@@ -38,6 +40,7 @@ public class PortModelImporter implements ISubmodelImporter {
 	 * 
 	 */
 	private static final String SUEZ_CANAL_NAME = "Suez canal";
+	private static final String PANAMA_CANAL_NAME = "Panama canal";
 	/**
 	 * 
 	 */
@@ -46,12 +49,17 @@ public class PortModelImporter implements ISubmodelImporter {
 	public static final String PORT_GROUP_KEY = "PORTGROUP";
 	public static final String DISTANCES_KEY = "DISTANCES";
 	public static final String SUEZ_KEY = "SUEZ";
+	public static final String PANAMA_KEY = "PANAMA";
 	public static final HashMap<String, String> inputs = new LinkedHashMap<String, String>();
+
 	static {
 		inputs.put(PORT_KEY, "Ports");
 		inputs.put(PORT_GROUP_KEY, "Port Groups");
 		inputs.put(DISTANCES_KEY, "Distance Matrix");
 		inputs.put(SUEZ_KEY, "Suez Distance Matrix");
+		if (LicenseFeatures.isPermitted("features:panama-canal")) {
+			inputs.put(PANAMA_KEY, "Panama Distance Matrix");
+		}
 	}
 
 	@Inject
@@ -121,6 +129,9 @@ public class PortModelImporter implements ISubmodelImporter {
 			final Route direct = routeImporter.importRoute(inputs.get(DISTANCES_KEY), context);
 			if (direct != null) {
 				direct.setName(DIRECT_NAME);
+				direct.setRouteOption(RouteOption.DIRECT);
+				direct.setCanal(false);
+
 				result.getRoutes().add(direct);
 				context.registerNamedObject(direct);
 			}
@@ -129,9 +140,22 @@ public class PortModelImporter implements ISubmodelImporter {
 			final Route suez = routeImporter.importRoute(inputs.get(SUEZ_KEY), context);
 			if (suez != null) {
 				suez.setName(SUEZ_CANAL_NAME);
+				suez.setRouteOption(RouteOption.SUEZ);
 				suez.setCanal(true);
 				result.getRoutes().add(suez);
 				context.registerNamedObject(suez);
+			}
+		}
+		if (LicenseFeatures.isPermitted("features:panama-canal")) {
+			if (inputs.containsKey(PANAMA_KEY)) {
+				final Route panama = routeImporter.importRoute(inputs.get(PANAMA_KEY), context);
+				if (panama != null) {
+					panama.setName(PANAMA_CANAL_NAME);
+					panama.setRouteOption(RouteOption.PANAMA);
+					panama.setCanal(true);
+					result.getRoutes().add(panama);
+					context.registerNamedObject(panama);
+				}
 			}
 		}
 		return result;
@@ -141,10 +165,12 @@ public class PortModelImporter implements ISubmodelImporter {
 	public void exportModel(final EObject model, final Map<String, Collection<Map<String, String>>> output, final IMMXExportContext context) {
 		for (final Route r : ((PortModel) model).getRoutes()) {
 			final Collection<Map<String, String>> result = routeImporter.exportRoute(r, context);
-			if (r.getName().equals(DIRECT_NAME)) {
+			if (r.getRouteOption() == RouteOption.DIRECT) {
 				output.put(DISTANCES_KEY, result);
-			} else if (r.getName().equals(SUEZ_CANAL_NAME)) {
+			} else if (r.getRouteOption() == RouteOption.SUEZ) {
 				output.put(SUEZ_KEY, result);
+			} else if (r.getRouteOption() == RouteOption.PANAMA) {
+				output.put(PANAMA_KEY, result);
 			} else {
 				inputs.put(r.getName(), r.getName());
 				output.put(r.getName(), result);

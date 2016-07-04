@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets.editor.editorpart;
@@ -50,20 +50,19 @@ public class SpotMarketsModelEditorContribution extends BaseJointModelEditorCont
 
 		charterInMarketPane = new CharterInMarketPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		charterInMarketPane.createControl(sash);
-		charterInMarketPane.init(Arrays.asList(new EReference[] { SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterInMarkets() }), editorPart.getAdapterFactory(), editorPart.getEditingDomain()
-				.getCommandStack());
+		charterInMarketPane.init(Arrays.asList(new EReference[] { SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterInMarkets() }), editorPart.getAdapterFactory(),
+				editorPart.getEditingDomain().getCommandStack());
 		charterInMarketPane.getViewer().setInput(modelObject);
 
 		charterOutMarketPane = new CharterOutMarketPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		charterOutMarketPane.createControl(sash);
-		charterOutMarketPane.init(Arrays.asList(new EReference[] { SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterOutMarkets() }), editorPart.getAdapterFactory(), editorPart
-				.getEditingDomain().getCommandStack());
+		charterOutMarketPane.init(Arrays.asList(new EReference[] { SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterOutMarkets() }), editorPart.getAdapterFactory(),
+				editorPart.getEditingDomain().getCommandStack());
 		charterOutMarketPane.getViewer().setInput(modelObject);
-
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(charterInMarketPane.getControl(), "com.mmxlabs.lingo.doc.Editor_SpotCharters");
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(charterOutMarketPane.getControl(), "com.mmxlabs.lingo.doc.Editor_SpotCharters");
-		
+
 		indexPage = editorPart.addPage(sash);
 		editorPart.setPageText(indexPage, "Charters");
 	}
@@ -102,7 +101,6 @@ public class SpotMarketsModelEditorContribution extends BaseJointModelEditorCont
 
 		spotCargoMarketsPage = editorPart.addPage(sash);
 		editorPart.setPageText(spotCargoMarketsPage, "Spot Cargoes");
-		
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(fobPurchasesPane.getControl(), "com.mmxlabs.lingo.doc.Editor_SpotCargoes");
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(desPurchasePane.getControl(), "com.mmxlabs.lingo.doc.Editor_SpotCargoes");
@@ -126,6 +124,7 @@ public class SpotMarketsModelEditorContribution extends BaseJointModelEditorCont
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
 
 			final Object target = dcsd.getTarget();
+
 			if (target instanceof CharterInMarket) {
 				return true;
 			}

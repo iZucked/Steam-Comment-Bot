@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation;
@@ -175,9 +175,9 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 								final int loadDurationInHours = desPurchase.getSlotOrPortDuration();
 								final int dischargeDurationInHours = dischargeSlot.getSlotOrPortDuration();
 
-								final int ladenTravelTimeInHours = TravelTimeUtils.getMinRouteTimeInHours(desPurchase, dischargeSlot, shippingDaysSpeedProvider, lngScenarioModel, vessel,
+								final int ladenTravelTimeInHours = TravelTimeUtils.getMinRouteTimeInHours(desPurchase, desPurchase, dischargeSlot, shippingDaysSpeedProvider, lngScenarioModel, vessel,
 										TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, desPurchase, vesselClass, true));
-								final int ballastTravelTimeInHours = TravelTimeUtils.getMinRouteTimeInHours(dischargeSlot, desPurchase, shippingDaysSpeedProvider, lngScenarioModel, vessel,
+								final int ballastTravelTimeInHours = TravelTimeUtils.getMinRouteTimeInHours(desPurchase, dischargeSlot, desPurchase, shippingDaysSpeedProvider, lngScenarioModel, vessel,
 										TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, desPurchase, vesselClass, false));
 
 								// Calculate minimum time due to slot windows

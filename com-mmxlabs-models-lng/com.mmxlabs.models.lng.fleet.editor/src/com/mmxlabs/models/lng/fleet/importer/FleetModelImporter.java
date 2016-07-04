@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.importer;
@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -124,7 +125,7 @@ public class FleetModelImporter implements ISubmodelImporter {
 					final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
 
 					for (final Route route : portModel.getRoutes()) {
-						if (route.isCanal() == true) {
+						if (route.getRouteOption() != RouteOption.DIRECT) {
 							vessel_classes: for (final VesselClass vc : fleetModel.getVesselClasses()) {
 								for (final VesselClassRouteParameters parameters : vc.getRouteParameters()) {
 									if (parameters.getRoute() == route)

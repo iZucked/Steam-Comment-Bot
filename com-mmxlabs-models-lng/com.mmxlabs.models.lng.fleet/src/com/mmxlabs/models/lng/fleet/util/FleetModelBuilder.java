@@ -1,16 +1,13 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.util;
 
-import java.io.ObjectInputStream.GetField;
-
-import javax.swing.text.BadLocationException;
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
@@ -51,10 +48,20 @@ public class FleetModelBuilder {
 	}
 
 	@NonNull
-	public Vessel createVessel(@NonNull final String name, @NonNull final VesselClass vesselClass, int capacityInM3, double fillPercent) {
+	public Vessel createVessel(@NonNull final String name, @NonNull final VesselClass vesselClass, final int capacityInM3, final double fillPercent) {
 		final Vessel vessel = createVessel(name, vesselClass);
 		vessel.setCapacity(capacityInM3);
 		vessel.setFillCapacity(fillPercent);
 		return vessel;
+	}
+
+	@NonNull
+	public BaseFuel createBaseFuel(@NonNull final String name, final double equivalenceFactor) {
+		final BaseFuel baseFuel = FleetFactory.eINSTANCE.createBaseFuel();
+		baseFuel.setName(name);
+		baseFuel.setEquivalenceFactor(equivalenceFactor);
+
+		fleetModel.getBaseFuels().add(baseFuel);
+		return baseFuel;
 	}
 }

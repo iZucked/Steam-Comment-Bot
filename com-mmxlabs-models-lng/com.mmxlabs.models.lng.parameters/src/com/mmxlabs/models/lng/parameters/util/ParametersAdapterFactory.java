@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -12,6 +12,7 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
+import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
 import com.mmxlabs.models.lng.parameters.Argument;
 import com.mmxlabs.models.lng.parameters.Constraint;
@@ -81,8 +82,8 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ParametersSwitch<Adapter> modelSwitch =
-		new ParametersSwitch<Adapter>() {
+	protected ParametersSwitch<@Nullable Adapter> modelSwitch =
+		new ParametersSwitch<@Nullable Adapter>() {
 			@Override
 			public Adapter caseUserSettings(UserSettings object) {
 				return createUserSettingsAdapter();

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.assignment.validation;
@@ -37,6 +37,7 @@ import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -58,17 +59,18 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 		final EObject target = ctx.getTarget();
 		final MMXRootObject rootObject = extraContext.getRootObject();
 		if (target instanceof CargoModel) {
+			CargoModel cargoModel = (CargoModel) target;
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
-			final LNGReferenceModel referenceModel = scenarioModel.getReferenceModel();
-			final SpotMarketsModel spotMarketsModel = referenceModel.getSpotMarketsModel();
-			final CargoModel cargoModel = scenarioModel.getCargoModel();
+			final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(scenarioModel);
+			final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
+			// final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 
-			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, spotMarketsModel);
+			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel);
 
 			@SuppressWarnings("unchecked")
 			Map<Pair<Port, Port>, Boolean> hasDistanceMap = (Map<Pair<Port, Port>, Boolean>) ctx.getCurrentConstraintData();
 			if (hasDistanceMap == null) {
-				hasDistanceMap = checkDistances(referenceModel.getPortModel());
+				hasDistanceMap = checkDistances(portModel);
 				ctx.putCurrentConstraintData(hasDistanceMap);
 			}
 

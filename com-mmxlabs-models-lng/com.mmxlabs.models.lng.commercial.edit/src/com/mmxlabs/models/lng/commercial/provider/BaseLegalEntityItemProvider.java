@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -94,6 +94,7 @@ public class BaseLegalEntityItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
 			childrenFeatures.add(CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
+			childrenFeatures.add(CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK);
 		}
 		return childrenFeatures;
 	}
@@ -142,6 +143,7 @@ public class BaseLegalEntityItemProvider
 				return;
 			case CommercialPackage.BASE_LEGAL_ENTITY__SHIPPING_BOOK:
 			case CommercialPackage.BASE_LEGAL_ENTITY__TRADING_BOOK:
+			case CommercialPackage.BASE_LEGAL_ENTITY__UPSTREAM_BOOK:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -168,6 +170,11 @@ public class BaseLegalEntityItemProvider
 			(createChildParameter
 				(CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK,
 				 CommercialFactory.eINSTANCE.createSimpleEntityBook()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK,
+				 CommercialFactory.eINSTANCE.createSimpleEntityBook()));
 	}
 
 	/**
@@ -183,7 +190,8 @@ public class BaseLegalEntityItemProvider
 
 		boolean qualify =
 			childFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ||
-			childFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK;
+			childFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK ||
+			childFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK;
 
 		if (qualify) {
 			return getString

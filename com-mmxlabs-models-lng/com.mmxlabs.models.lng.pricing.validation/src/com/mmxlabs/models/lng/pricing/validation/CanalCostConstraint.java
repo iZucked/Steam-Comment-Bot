@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.validation;
@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
@@ -47,7 +48,7 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 			final MMXRootObject rootObject = extraValidationContext.getRootObject();
 
 			if (rootObject instanceof LNGScenarioModel) {
-				LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				final StringBuffer missingCanalNames = new StringBuffer();
 				final CostModel costModel = lngScenarioModel.getReferenceModel().getCostModel();
 				final PortModel portModel = lngScenarioModel.getReferenceModel().getPortModel();
@@ -57,7 +58,7 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 					boolean seenAnyCanalParameters = false;
 
 					for (final Route route : portModel.getRoutes()) {
-						if (route.isCanal()) {
+						if (route.getRouteOption() == RouteOption.SUEZ) {
 							// If the vessel class container is null, then we are probably in a dialog and may not have route costs yet - however the dialog cannot create them, so skip this check
 							boolean seenCanalCost = vesselClass.eContainer() == null;
 							routeCosts: for (final RouteCost routeCost : costModel.getRouteCosts()) {
@@ -115,8 +116,8 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 				return dcsd;
 			} else {
 				if (vesselClassCost.getLadenCost() == 0 || vesselClassCost.getBallastCost() == 0) {
-					final String message = String.format("The vessel class %s has invalid canal costs set for canal %s", vesselClassCost.getVesselClass().getName(), vesselClassCost.getRoute() == null ? "unknown" : vesselClassCost.getRoute()
-							.getName());
+					final String message = String.format("The vessel class %s has invalid canal costs set for canal %s", vesselClassCost.getVesselClass().getName(),
+							vesselClassCost.getRoute() == null ? "unknown" : vesselClassCost.getRoute().getName());
 					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
 					if (vesselClassCost.getLadenCost() == 0) {
@@ -139,7 +140,7 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 						if (routeCost == original || routeCost == replacement) {
 							continue;
 						}
-						if (routeCost.getVesselClass() == vesselClassCost.getVesselClass()) {
+						if ((routeCost.getVesselClass() == vesselClassCost.getVesselClass()) && (routeCost.getRoute() == vesselClassCost.getRoute())) {
 
 							final String message = String.format("Vessel class %s has multiple Route Costs", vesselClassCost.getVesselClass().getName());
 							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));

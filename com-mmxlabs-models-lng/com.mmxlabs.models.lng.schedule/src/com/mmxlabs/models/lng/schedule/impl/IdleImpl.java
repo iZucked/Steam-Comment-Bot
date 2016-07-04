@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
@@ -323,7 +323,9 @@ public class IdleImpl extends EventImpl implements Idle {
 						return ((SlotVisit) namedObject).name();
 					} else if (namedObject instanceof VesselEventVisit) {
 						return ((VesselEventVisit) namedObject).name();
-					}
+					} else if (namedObject instanceof StartEventImpl) {
+						return ((StartEventImpl) namedObject).name();
+					} 
 				}
 			}
 		}

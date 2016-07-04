@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2015
+    Copyright (C) Minimax Labs Ltd., 2010 - 2016
     All rights reserved.
 
 -->
@@ -14,6 +14,12 @@
             mandatory="true"
             name="Schedule Validation">
       </category>
+      <category
+            id="com.mmxlabs.models.lng.schedule.validation.base"
+            mandatory="true"
+            name="com.mmxlabs.models.lng.schedule.validation.base">
+      </category>      
+      
       <constraintProvider
             cache="true">
          <package
@@ -68,8 +74,49 @@
                 </message>
                 <target class="Event"/>
             </constraint>
+                        <constraint
+                      class="com.mmxlabs.models.lng.schedule.validation.NegativePriceConstraint"
+                      id="com.mmxlabs.models.lng.schedule.validation.NegativePriceConstraint"
+                      isEnabledByDefault="true"
+                      lang="Java"
+                      mode="Batch"
+                      name="Negative Error"
+                      severity="ERROR"
+                      statusCode="1">
+                <message>
+                    {0}
+                </message>
+                <target class="Event"/>
+            </constraint>
+         </constraints>
+         <constraints></constraints>
+      </constraintProvider>
+      <constraintProvider
+            cache="true">
+         <package
+               namespaceUri="http://www.mmxlabs.com/models/lng/port/1/">
+         </package>
+         <constraints
+               categories="com.mmxlabs.models.lng.schedule.validation.base">
+            <constraint
+                  class="com.mmxlabs.models.lng.schedule.validation.PotentialMissingMissingDistancesConstraint"
+                  id="com.mmxlabs.models.lng.schedule.validation.PotentialMissingMissingDistancesConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Missing Distances"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="PortModel">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
+    
    </extension>
 
 </plugin>

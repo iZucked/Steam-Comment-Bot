@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.parameters.presentation.composites;
@@ -8,36 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -98,6 +77,7 @@ public class OptimiserSettingsComponentHelper extends BaseComponentHelper {
 		add_solutionImprovementSettingsEditor(detailComposite, topClass);
 		add_buildActionSetsEditor(detailComposite, topClass);
 		add_actionPlanSettingsEditor(detailComposite, topClass);
+		add_floatingDaysLimitEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the objectives feature on OptimiserSettings
@@ -200,5 +180,14 @@ public class OptimiserSettingsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_actionPlanSettingsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ParametersPackage.Literals.OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS));
+	}
+
+	/**
+	 * Create the editor for the floatingDaysLimit feature on OptimiserSettings
+	 *
+	 * @generated
+	 */
+	protected void add_floatingDaysLimitEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ParametersPackage.Literals.OPTIMISER_SETTINGS__FLOATING_DAYS_LIMIT));
 	}
 }

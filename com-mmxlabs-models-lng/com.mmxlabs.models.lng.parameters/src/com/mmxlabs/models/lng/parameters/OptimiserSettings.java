@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.parameters;
@@ -29,6 +29,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getSolutionImprovementSettings <em>Solution Improvement Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isBuildActionSets <em>Build Action Sets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getActionPlanSettings <em>Action Plan Settings</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getFloatingDaysLimit <em>Floating Days Limit</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getOptimiserSettings()
@@ -317,6 +318,33 @@ public interface OptimiserSettings extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setActionPlanSettings(ActionPlanSettings value);
+
+	/**
+	 * Returns the value of the '<em><b>Floating Days Limit</b></em>' attribute.
+	 * The default value is <code>"15"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Floating Days Limit</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Floating Days Limit</em>' attribute.
+	 * @see #setFloatingDaysLimit(int)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getOptimiserSettings_FloatingDaysLimit()
+	 * @model default="15"
+	 * @generated
+	 */
+	int getFloatingDaysLimit();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getFloatingDaysLimit <em>Floating Days Limit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Floating Days Limit</em>' attribute.
+	 * @see #getFloatingDaysLimit()
+	 * @generated
+	 */
+	void setFloatingDaysLimit(int value);
 
 } // end of  OptimiserSettings
 

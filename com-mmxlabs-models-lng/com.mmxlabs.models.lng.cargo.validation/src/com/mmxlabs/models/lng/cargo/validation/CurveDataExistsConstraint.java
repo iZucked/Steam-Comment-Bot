@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation;
@@ -10,15 +10,21 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -26,12 +32,14 @@ import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.TaxRate;
-import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.parser.Node;
+import com.mmxlabs.models.lng.pricing.parser.RawTreeParser;
+import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -159,25 +167,49 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 				return;
 			}
 			final YearMonth utcDate = YearMonth.of(portLocalDate.toLocalDate().getYear(), portLocalDate.toLocalDate().getMonthValue());
+			{
+				if (!slot.isSetPriceExpression()) {
+					return;
+				}
 
-			// check market indices
-			for (final CommodityIndex index : pricingModel.getCommodityIndices()) {
-				if (Exposures.getExposureCoefficient(slot, index) != 0) {
-					if (!curveCovers(utcDate, indexFinder, index.getData(), ctx)) {
-						final String format = "[Index|'%s'] No data for %s, the window start of slot '%s'.";
-						final String failureMessage = String.format(format, index.getName(), format(slot), slot.getName());
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
-						if (slot.isSetPriceExpression()) {
-							dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
-						} else {
-							dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__CONTRACT);
+				final String priceExpression = slot.getPriceExpression();
+				if (priceExpression == null || priceExpression.isEmpty()) {
+					return;
+				}
+				final RawTreeParser parser = new RawTreeParser();
+				try {
+
+					final Map<String, CommodityIndex> indexMap = pricingModel.getCommodityIndices().stream() //
+							.collect(Collectors.toMap(CommodityIndex::getName, Function.identity()));
+
+					final IExpression<Node> parsed = parser.parse(priceExpression);
+					final List<Node> nodes = extract(parsed);
+					for (final Node n : nodes) {
+						if (indexMap.containsKey(n.token)) {
+							final CommodityIndex index = indexMap.get(n.token);
+							@Nullable
+							YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
+							if (date == null || utcDate.isBefore(date)) {
+
+								// if (!curveCovers(utcDate, indexFinder, index.getData(), ctx)) {
+								final String format = "[Index|'%s'] No data for %s, the window start of slot '%s'.";
+								final String failureMessage = String.format(format, index.getName(), format(slot), slot.getName());
+								final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
+								if (slot.isSetPriceExpression()) {
+									dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
+								} else {
+									dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__CONTRACT);
+								}
+								dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_START);
+								failures.add(dsd);
+							}
 						}
-						dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_START);
-						failures.add(dsd);
 					}
+
+				} catch (final Exception e) {
+					// Do nothing
 				}
 			}
-
 			BaseLegalEntity entity = null;
 			if (slot.isSetContract() && slot.getContract() != null) {
 				entity = slot.getContract().getEntity();
@@ -200,8 +232,30 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 
 	}
 
+	private @NonNull List<@NonNull Node> extract(final IExpression<Node> parsed) {
+		@NonNull
+		final List<@NonNull Node> l = new LinkedList<>();
+
+		extract(parsed.evaluate(), l);
+
+		return l;
+	}
+
+	private void extract(final Node n, @NonNull final List<@NonNull Node> l) {
+		if (n == null) {
+			return;
+		}
+		l.add(n);
+
+		if (n.children != null) {
+			for (final Node c : n.children) {
+				extract(c, l);
+			}
+		}
+	}
+
 	private String format(final Slot slot) {
-		LocalDate windowStart = slot.getWindowStart();
+		final LocalDate windowStart = slot.getWindowStart();
 		if (windowStart == null) {
 			return "<no date>";
 		}

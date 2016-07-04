@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.impl;
@@ -14,9 +14,12 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
+import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
+import com.mmxlabs.models.mmxcore.MMXObject.DelegateInformation;
 
 /**
  * <!-- begin-user-doc -->
@@ -256,6 +259,18 @@ public class SpotDischargeSlotImpl extends DischargeSlotImpl implements SpotDisc
 			};
 		} else if (feature == CargoPackage.Literals.SLOT__PRICING_EVENT) {
 			return new DelegateInformation(CargoPackage.eINSTANCE.getSpotSlot_Market(), SpotMarketsPackage.Literals.SPOT_MARKET__PRICING_EVENT, PricingEvent.START_DISCHARGE);
+		} else if (CargoPackage.Literals.SLOT__WINDOW_SIZE == feature) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SPOT_SLOT__MARKET);
+				}
+
+				public Object getValue(final EObject object) {
+					return 1;
+				}
+			};
+		} else if (CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS == feature) {
+			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Port(), PortPackage.eINSTANCE.getPort_DefaultWindowSizeUnits(), TimePeriod.MONTHS);
 		}
 		return super.getUnsetValueOrDelegate(feature);
 	}	

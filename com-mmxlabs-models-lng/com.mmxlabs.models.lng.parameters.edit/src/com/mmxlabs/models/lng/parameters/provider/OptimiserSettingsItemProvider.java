@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.parameters.provider;
@@ -56,6 +56,7 @@ public class OptimiserSettingsItemProvider
 			addGenerateCharterOutsPropertyDescriptor(object);
 			addShippingOnlyPropertyDescriptor(object);
 			addBuildActionSetsPropertyDescriptor(object);
+			addFloatingDaysLimitPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -171,6 +172,28 @@ public class OptimiserSettingsItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Floating Days Limit feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addFloatingDaysLimitPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_OptimiserSettings_floatingDaysLimit_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_OptimiserSettings_floatingDaysLimit_feature", "_UI_OptimiserSettings_type"),
+				 ParametersPackage.Literals.OPTIMISER_SETTINGS__FLOATING_DAYS_LIMIT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -249,6 +272,7 @@ public class OptimiserSettingsItemProvider
 			case ParametersPackage.OPTIMISER_SETTINGS__GENERATE_CHARTER_OUTS:
 			case ParametersPackage.OPTIMISER_SETTINGS__SHIPPING_ONLY:
 			case ParametersPackage.OPTIMISER_SETTINGS__BUILD_ACTION_SETS:
+			case ParametersPackage.OPTIMISER_SETTINGS__FLOATING_DAYS_LIMIT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case ParametersPackage.OPTIMISER_SETTINGS__OBJECTIVES:

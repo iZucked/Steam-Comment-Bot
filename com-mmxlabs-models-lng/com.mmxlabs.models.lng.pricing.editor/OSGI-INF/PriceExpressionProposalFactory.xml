@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2016
+    All rights reserved.
+
+-->
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.mmxlabs.models.lng.pricing.ui.autocomplete.PriceExpressionProposalFactory">
+   <implementation class="com.mmxlabs.models.lng.pricing.ui.autocomplete.PriceExpressionProposalFactory"/>
+   <service>
+      <provide interface="com.mmxlabs.models.ui.editors.autocomplete.IContentProposalFactory"/>
+   </service>
+</scr:component>

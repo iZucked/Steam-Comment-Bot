@@ -1,9 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.presentation;
-
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -117,361 +116,322 @@ import com.mmxlabs.models.lng.pricing.provider.PricingItemProviderAdapterFactory
 import com.mmxlabs.models.lng.types.provider.TypesItemProviderAdapterFactory;
 import com.mmxlabs.models.mmxcore.provider.MMXCoreItemProviderAdapterFactory;
 
-
 /**
- * This is an example of a Pricing model editor.
- * <!-- begin-user-doc -->
- * <!-- end-user-doc -->
+ * This is an example of a Pricing model editor. <!-- begin-user-doc --> <!-- end-user-doc -->
+ * 
  * @generated
  */
-public class PricingEditor
-	extends MultiPageEditorPart
-	implements IEditingDomainProvider, ISelectionProvider, IMenuListener, IViewerProvider, IGotoMarker {
+public class PricingEditor extends MultiPageEditorPart implements IEditingDomainProvider, ISelectionProvider, IMenuListener, IViewerProvider, IGotoMarker {
 	/**
-	 * This keeps track of the editing domain that is used to track all changes to the model.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This keeps track of the editing domain that is used to track all changes to the model. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected AdapterFactoryEditingDomain editingDomain;
 
 	/**
-	 * This is the one adapter factory used for providing views of the model.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This is the one adapter factory used for providing views of the model. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected ComposedAdapterFactory adapterFactory;
 
 	/**
-	 * This is the content outline page.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This is the content outline page. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected IContentOutlinePage contentOutlinePage;
 
 	/**
-	 * This is a kludge...
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This is a kludge... <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected IStatusLineManager contentOutlineStatusLineManager;
 
 	/**
-	 * This is the content outline page's viewer.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This is the content outline page's viewer. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected TreeViewer contentOutlineViewer;
 
 	/**
-	 * This is the property sheet page.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This is the property sheet page. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected List<PropertySheetPage> propertySheetPages = new ArrayList<PropertySheetPage>();
 
 	/**
-	 * This is the viewer that shadows the selection in the content outline.
-	 * The parent relation must be correctly defined for this to work.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This is the viewer that shadows the selection in the content outline. The parent relation must be correctly defined for this to work. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected TreeViewer selectionViewer;
 
 	/**
-	 * This keeps track of the active content viewer, which may be either one of the viewers in the pages or the content outline viewer.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This keeps track of the active content viewer, which may be either one of the viewers in the pages or the content outline viewer. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected Viewer currentViewer;
 
 	/**
-	 * This listens to which ever viewer is active.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This listens to which ever viewer is active. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected ISelectionChangedListener selectionChangedListener;
 
 	/**
-	 * This keeps track of all the {@link org.eclipse.jface.viewers.ISelectionChangedListener}s that are listening to this editor.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This keeps track of all the {@link org.eclipse.jface.viewers.ISelectionChangedListener}s that are listening to this editor. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected Collection<ISelectionChangedListener> selectionChangedListeners = new ArrayList<ISelectionChangedListener>();
 
 	/**
-	 * This keeps track of the selection of the editor as a whole.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This keeps track of the selection of the editor as a whole. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected ISelection editorSelection = StructuredSelection.EMPTY;
 
 	/**
-	 * The MarkerHelper is responsible for creating workspace resource markers presented
-	 * in Eclipse's Problems View.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The MarkerHelper is responsible for creating workspace resource markers presented in Eclipse's Problems View. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected MarkerHelper markerHelper = new EditUIMarkerHelper();
 
 	/**
-	 * This listens for when the outline becomes active
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This listens for when the outline becomes active <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	protected IPartListener partListener =
-		new IPartListener() {
-			public void partActivated(IWorkbenchPart p) {
-				if (p instanceof ContentOutline) {
-					if (((ContentOutline)p).getCurrentPage() == contentOutlinePage) {
-						getActionBarContributor().setActiveEditor(PricingEditor.this);
+	protected IPartListener partListener = new IPartListener() {
+		public void partActivated(IWorkbenchPart p) {
+			if (p instanceof ContentOutline) {
+				if (((ContentOutline) p).getCurrentPage() == contentOutlinePage) {
+					getActionBarContributor().setActiveEditor(PricingEditor.this);
 
-						setCurrentViewer(contentOutlineViewer);
-					}
+					setCurrentViewer(contentOutlineViewer);
 				}
-				else if (p instanceof PropertySheet) {
-					if (propertySheetPages.contains(((PropertySheet)p).getCurrentPage())) {
-						getActionBarContributor().setActiveEditor(PricingEditor.this);
-						handleActivate();
-					}
-				}
-				else if (p == PricingEditor.this) {
+			} else if (p instanceof PropertySheet) {
+				if (propertySheetPages.contains(((PropertySheet) p).getCurrentPage())) {
+					getActionBarContributor().setActiveEditor(PricingEditor.this);
 					handleActivate();
 				}
+			} else if (p == PricingEditor.this) {
+				handleActivate();
 			}
-			public void partBroughtToTop(IWorkbenchPart p) {
-				// Ignore.
-			}
-			public void partClosed(IWorkbenchPart p) {
-				// Ignore.
-			}
-			public void partDeactivated(IWorkbenchPart p) {
-				// Ignore.
-			}
-			public void partOpened(IWorkbenchPart p) {
-				// Ignore.
-			}
-		};
+		}
+
+		public void partBroughtToTop(IWorkbenchPart p) {
+			// Ignore.
+		}
+
+		public void partClosed(IWorkbenchPart p) {
+			// Ignore.
+		}
+
+		public void partDeactivated(IWorkbenchPart p) {
+			// Ignore.
+		}
+
+		public void partOpened(IWorkbenchPart p) {
+			// Ignore.
+		}
+	};
 
 	/**
-	 * Resources that have been removed since last activation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Resources that have been removed since last activation. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected Collection<Resource> removedResources = new ArrayList<Resource>();
 
 	/**
-	 * Resources that have been changed since last activation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Resources that have been changed since last activation. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected Collection<Resource> changedResources = new ArrayList<Resource>();
 
 	/**
-	 * Resources that have been saved.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Resources that have been saved. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected Collection<Resource> savedResources = new ArrayList<Resource>();
 
 	/**
-	 * Map to store the diagnostic associated with a resource.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Map to store the diagnostic associated with a resource. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected Map<Resource, Diagnostic> resourceToDiagnosticMap = new LinkedHashMap<Resource, Diagnostic>();
 
 	/**
-	 * Controls whether the problem indication should be updated.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Controls whether the problem indication should be updated. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected boolean updateProblemIndication = true;
 
 	/**
-	 * Adapter used to update the problem indication when resources are demanded loaded.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Adapter used to update the problem indication when resources are demanded loaded. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	protected EContentAdapter problemIndicationAdapter = 
-		new EContentAdapter() {
-			@Override
-			public void notifyChanged(Notification notification) {
-				if (notification.getNotifier() instanceof Resource) {
-					switch (notification.getFeatureID(Resource.class)) {
-						case Resource.RESOURCE__IS_LOADED:
-						case Resource.RESOURCE__ERRORS:
-						case Resource.RESOURCE__WARNINGS: {
-							Resource resource = (Resource)notification.getNotifier();
-							Diagnostic diagnostic = analyzeResourceProblems(resource, null);
-							if (diagnostic.getSeverity() != Diagnostic.OK) {
-								resourceToDiagnosticMap.put(resource, diagnostic);
-							}
-							else {
-								resourceToDiagnosticMap.remove(resource);
-							}
-
-							if (updateProblemIndication) {
-								getSite().getShell().getDisplay().asyncExec
-									(new Runnable() {
-										 public void run() {
-											 updateProblemIndication();
-										 }
-									 });
-							}
-							break;
-						}
+	protected EContentAdapter problemIndicationAdapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(Notification notification) {
+			if (notification.getNotifier() instanceof Resource) {
+				switch (notification.getFeatureID(Resource.class)) {
+				case Resource.RESOURCE__IS_LOADED:
+				case Resource.RESOURCE__ERRORS:
+				case Resource.RESOURCE__WARNINGS: {
+					Resource resource = (Resource) notification.getNotifier();
+					Diagnostic diagnostic = analyzeResourceProblems(resource, null);
+					if (diagnostic.getSeverity() != Diagnostic.OK) {
+						resourceToDiagnosticMap.put(resource, diagnostic);
+					} else {
+						resourceToDiagnosticMap.remove(resource);
 					}
-				}
-				else {
-					super.notifyChanged(notification);
-				}
-			}
 
-			@Override
-			protected void setTarget(Resource target) {
-				basicSetTarget(target);
-			}
-
-			@Override
-			protected void unsetTarget(Resource target) {
-				basicUnsetTarget(target);
-				resourceToDiagnosticMap.remove(target);
-				if (updateProblemIndication) {
-					getSite().getShell().getDisplay().asyncExec
-						(new Runnable() {
-							 public void run() {
-								 updateProblemIndication();
-							 }
-						 });
+					if (updateProblemIndication) {
+						getSite().getShell().getDisplay().asyncExec(new Runnable() {
+							public void run() {
+								updateProblemIndication();
+							}
+						});
+					}
+					break;
 				}
+				}
+			} else {
+				super.notifyChanged(notification);
 			}
-		};
+		}
+
+		@Override
+		protected void setTarget(Resource target) {
+			basicSetTarget(target);
+		}
+
+		@Override
+		protected void unsetTarget(Resource target) {
+			basicUnsetTarget(target);
+			resourceToDiagnosticMap.remove(target);
+			if (updateProblemIndication) {
+				getSite().getShell().getDisplay().asyncExec(new Runnable() {
+					public void run() {
+						updateProblemIndication();
+					}
+				});
+			}
+		}
+	};
 
 	/**
-	 * This listens for workspace changes.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This listens for workspace changes. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-	protected IResourceChangeListener resourceChangeListener =
-		new IResourceChangeListener() {
-			public void resourceChanged(IResourceChangeEvent event) {
-				IResourceDelta delta = event.getDelta();
-				try {
-					class ResourceDeltaVisitor implements IResourceDeltaVisitor {
-						protected ResourceSet resourceSet = editingDomain.getResourceSet();
-						protected Collection<Resource> changedResources = new ArrayList<Resource>();
-						protected Collection<Resource> removedResources = new ArrayList<Resource>();
+	protected IResourceChangeListener resourceChangeListener = new IResourceChangeListener() {
+		public void resourceChanged(IResourceChangeEvent event) {
+			IResourceDelta delta = event.getDelta();
+			try {
+				class ResourceDeltaVisitor implements IResourceDeltaVisitor {
+					protected ResourceSet resourceSet = editingDomain.getResourceSet();
+					protected Collection<Resource> changedResources = new ArrayList<Resource>();
+					protected Collection<Resource> removedResources = new ArrayList<Resource>();
 
-						public boolean visit(IResourceDelta delta) {
-							if (delta.getResource().getType() == IResource.FILE) {
-								if (delta.getKind() == IResourceDelta.REMOVED ||
-								    delta.getKind() == IResourceDelta.CHANGED && delta.getFlags() != IResourceDelta.MARKERS) {
-									Resource resource = resourceSet.getResource(URI.createPlatformResourceURI(delta.getFullPath().toString(), true), false);
-									if (resource != null) {
-										if (delta.getKind() == IResourceDelta.REMOVED) {
-											removedResources.add(resource);
-										}
-										else if (!savedResources.remove(resource)) {
-											changedResources.add(resource);
-										}
+					public boolean visit(IResourceDelta delta) {
+						if (delta.getResource().getType() == IResource.FILE) {
+							if (delta.getKind() == IResourceDelta.REMOVED || delta.getKind() == IResourceDelta.CHANGED && delta.getFlags() != IResourceDelta.MARKERS) {
+								Resource resource = resourceSet.getResource(URI.createPlatformResourceURI(delta.getFullPath().toString(), true), false);
+								if (resource != null) {
+									if (delta.getKind() == IResourceDelta.REMOVED) {
+										removedResources.add(resource);
+									} else if (!savedResources.remove(resource)) {
+										changedResources.add(resource);
 									}
 								}
-								return false;
 							}
-
-							return true;
+							return false;
 						}
 
-						public Collection<Resource> getChangedResources() {
-							return changedResources;
-						}
-
-						public Collection<Resource> getRemovedResources() {
-							return removedResources;
-						}
+						return true;
 					}
 
-					final ResourceDeltaVisitor visitor = new ResourceDeltaVisitor();
-					delta.accept(visitor);
-
-					if (!visitor.getRemovedResources().isEmpty()) {
-						getSite().getShell().getDisplay().asyncExec
-							(new Runnable() {
-								 public void run() {
-									 removedResources.addAll(visitor.getRemovedResources());
-									 if (!isDirty()) {
-										 getSite().getPage().closeEditor(PricingEditor.this, false);
-									 }
-								 }
-							 });
+					public Collection<Resource> getChangedResources() {
+						return changedResources;
 					}
 
-					if (!visitor.getChangedResources().isEmpty()) {
-						getSite().getShell().getDisplay().asyncExec
-							(new Runnable() {
-								 public void run() {
-									 changedResources.addAll(visitor.getChangedResources());
-									 if (getSite().getPage().getActiveEditor() == PricingEditor.this) {
-										 handleActivate();
-									 }
-								 }
-							 });
+					public Collection<Resource> getRemovedResources() {
+						return removedResources;
 					}
 				}
-				catch (CoreException exception) {
-					PricingEditorPlugin.INSTANCE.log(exception);
+
+				final ResourceDeltaVisitor visitor = new ResourceDeltaVisitor();
+				delta.accept(visitor);
+
+				if (!visitor.getRemovedResources().isEmpty()) {
+					getSite().getShell().getDisplay().asyncExec(new Runnable() {
+						public void run() {
+							removedResources.addAll(visitor.getRemovedResources());
+							if (!isDirty()) {
+								getSite().getPage().closeEditor(PricingEditor.this, false);
+							}
+						}
+					});
 				}
+
+				if (!visitor.getChangedResources().isEmpty()) {
+					getSite().getShell().getDisplay().asyncExec(new Runnable() {
+						public void run() {
+							changedResources.addAll(visitor.getChangedResources());
+							if (getSite().getPage().getActiveEditor() == PricingEditor.this) {
+								handleActivate();
+							}
+						}
+					});
+				}
+			} catch (CoreException exception) {
+				PricingEditorPlugin.INSTANCE.log(exception);
 			}
-		};
+		}
+	};
 
 	/**
-	 * Handles activation of the editor or it's associated views.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Handles activation of the editor or it's associated views. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void handleActivate() {
 		// Recompute the read only state.
 		//
 		if (editingDomain.getResourceToReadOnlyMap() != null) {
-		  editingDomain.getResourceToReadOnlyMap().clear();
+			editingDomain.getResourceToReadOnlyMap().clear();
 
-		  // Refresh any actions that may become enabled or disabled.
-		  //
-		  setSelection(getSelection());
+			// Refresh any actions that may become enabled or disabled.
+			//
+			setSelection(getSelection());
 		}
 
 		if (!removedResources.isEmpty()) {
 			if (handleDirtyConflict()) {
 				getSite().getPage().closeEditor(PricingEditor.this, false);
-			}
-			else {
+			} else {
 				removedResources.clear();
 				changedResources.clear();
 				savedResources.clear();
 			}
-		}
-		else if (!changedResources.isEmpty()) {
+		} else if (!changedResources.isEmpty()) {
 			changedResources.removeAll(savedResources);
 			handleChangedResources();
 			changedResources.clear();
@@ -480,9 +440,8 @@ public class PricingEditor
 	}
 
 	/**
-	 * Handles what to do with changed resources on activation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Handles what to do with changed resources on activation. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void handleChangedResources() {
@@ -498,8 +457,7 @@ public class PricingEditor
 					resource.unload();
 					try {
 						resource.load(Collections.EMPTY_MAP);
-					}
-					catch (IOException exception) {
+					} catch (IOException exception) {
 						if (!resourceToDiagnosticMap.containsKey(resource)) {
 							resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
 						}
@@ -515,22 +473,15 @@ public class PricingEditor
 			updateProblemIndication();
 		}
 	}
-  
+
 	/**
-	 * Updates the problems indication with the information described in the specified diagnostic.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Updates the problems indication with the information described in the specified diagnostic. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void updateProblemIndication() {
 		if (updateProblemIndication) {
-			BasicDiagnostic diagnostic =
-				new BasicDiagnostic
-					(Diagnostic.OK,
-					 "com.mmxlabs.models.lng.pricing.editor",
-					 0,
-					 null,
-					 new Object [] { editingDomain.getResourceSet() });
+			BasicDiagnostic diagnostic = new BasicDiagnostic(Diagnostic.OK, "com.mmxlabs.models.lng.pricing.editor", 0, null, new Object[] { editingDomain.getResourceSet() });
 			for (Diagnostic childDiagnostic : resourceToDiagnosticMap.values()) {
 				if (childDiagnostic.getSeverity() != Diagnostic.OK) {
 					diagnostic.add(childDiagnostic);
@@ -539,12 +490,11 @@ public class PricingEditor
 
 			int lastEditorPage = getPageCount() - 1;
 			if (lastEditorPage >= 0 && getEditor(lastEditorPage) instanceof ProblemEditorPart) {
-				((ProblemEditorPart)getEditor(lastEditorPage)).setDiagnostic(diagnostic);
+				((ProblemEditorPart) getEditor(lastEditorPage)).setDiagnostic(diagnostic);
 				if (diagnostic.getSeverity() != Diagnostic.OK) {
 					setActivePage(lastEditorPage);
 				}
-			}
-			else if (diagnostic.getSeverity() != Diagnostic.OK) {
+			} else if (diagnostic.getSeverity() != Diagnostic.OK) {
 				ProblemEditorPart problemEditorPart = new ProblemEditorPart();
 				problemEditorPart.setDiagnostic(diagnostic);
 				problemEditorPart.setMarkerHelper(markerHelper);
@@ -553,8 +503,7 @@ public class PricingEditor
 					setPageText(lastEditorPage, problemEditorPart.getPartName());
 					setActivePage(lastEditorPage);
 					showTabs();
-				}
-				catch (PartInitException exception) {
+				} catch (PartInitException exception) {
 					PricingEditorPlugin.INSTANCE.log(exception);
 				}
 			}
@@ -564,8 +513,7 @@ public class PricingEditor
 				if (diagnostic.getSeverity() != Diagnostic.OK) {
 					try {
 						markerHelper.createMarkers(diagnostic);
-					}
-					catch (CoreException exception) {
+					} catch (CoreException exception) {
 						PricingEditorPlugin.INSTANCE.log(exception);
 					}
 				}
@@ -574,23 +522,17 @@ public class PricingEditor
 	}
 
 	/**
-	 * Shows a dialog that asks if conflicting changes should be discarded.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Shows a dialog that asks if conflicting changes should be discarded. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected boolean handleDirtyConflict() {
-		return
-			MessageDialog.openQuestion
-				(getSite().getShell(),
-				 getString("_UI_FileConflict_label"),
-				 getString("_WARN_FileConflict"));
+		return MessageDialog.openQuestion(getSite().getShell(), getString("_UI_FileConflict_label"), getString("_WARN_FileConflict"));
 	}
 
 	/**
-	 * This creates a model editor.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This creates a model editor. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public PricingEditor() {
@@ -599,9 +541,8 @@ public class PricingEditor
 	}
 
 	/**
-	 * This sets up the editing domain for the model editor.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This sets up the editing domain for the model editor. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void initializeEditingDomain() {
@@ -623,33 +564,30 @@ public class PricingEditor
 
 		// Add a listener to set the most recent command's affected objects to be the selection of the viewer with focus.
 		//
-		commandStack.addCommandStackListener
-			(new CommandStackListener() {
-				 public void commandStackChanged(final EventObject event) {
-					 getContainer().getDisplay().asyncExec
-						 (new Runnable() {
-							  public void run() {
-								  firePropertyChange(IEditorPart.PROP_DIRTY);
+		commandStack.addCommandStackListener(new CommandStackListener() {
+			public void commandStackChanged(final EventObject event) {
+				getContainer().getDisplay().asyncExec(new Runnable() {
+					public void run() {
+						firePropertyChange(IEditorPart.PROP_DIRTY);
 
-								  // Try to select the affected objects.
-								  //
-								  Command mostRecentCommand = ((CommandStack)event.getSource()).getMostRecentCommand();
-								  if (mostRecentCommand != null) {
-									  setSelectionToViewer(mostRecentCommand.getAffectedObjects());
-								  }
-								  for (Iterator<PropertySheetPage> i = propertySheetPages.iterator(); i.hasNext(); ) {
-									  PropertySheetPage propertySheetPage = i.next();
-									  if (propertySheetPage.getControl().isDisposed()) {
-										  i.remove();
-									  }
-									  else {
-										  propertySheetPage.refresh();
-									  }
-								  }
-							  }
-						  });
-				 }
-			 });
+						// Try to select the affected objects.
+						//
+						Command mostRecentCommand = ((CommandStack) event.getSource()).getMostRecentCommand();
+						if (mostRecentCommand != null) {
+							setSelectionToViewer(mostRecentCommand.getAffectedObjects());
+						}
+						for (Iterator<PropertySheetPage> i = propertySheetPages.iterator(); i.hasNext();) {
+							PropertySheetPage propertySheetPage = i.next();
+							if (propertySheetPage.getControl().isDisposed()) {
+								i.remove();
+							} else {
+								propertySheetPage.refresh();
+							}
+						}
+					}
+				});
+			}
+		});
 
 		// Create the editing domain with a special command stack.
 		//
@@ -657,20 +595,18 @@ public class PricingEditor
 	}
 
 	/**
-	 * This is here for the listener to be able to call it.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This is here for the listener to be able to call it. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
-			@Override
+	@Override
 	protected void firePropertyChange(int action) {
 		super.firePropertyChange(action);
 	}
 
 	/**
-	 * This sets the selection into whichever viewer is active.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This sets the selection into whichever viewer is active. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setSelectionToViewer(Collection<?> collection) {
@@ -678,26 +614,23 @@ public class PricingEditor
 		// Make sure it's okay.
 		//
 		if (theSelection != null && !theSelection.isEmpty()) {
-			Runnable runnable =
-				new Runnable() {
-					public void run() {
-						// Try to select the items in the current content viewer of the editor.
-						//
-						if (currentViewer != null) {
-							currentViewer.setSelection(new StructuredSelection(theSelection.toArray()), true);
-						}
+			Runnable runnable = new Runnable() {
+				public void run() {
+					// Try to select the items in the current content viewer of the editor.
+					//
+					if (currentViewer != null) {
+						currentViewer.setSelection(new StructuredSelection(theSelection.toArray()), true);
 					}
-				};
+				}
+			};
 			getSite().getShell().getDisplay().asyncExec(runnable);
 		}
 	}
 
 	/**
-	 * This returns the editing domain as required by the {@link IEditingDomainProvider} interface.
-	 * This is important for implementing the static methods of {@link AdapterFactoryEditingDomain}
-	 * and for supporting {@link org.eclipse.emf.edit.ui.action.CommandAction}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns the editing domain as required by the {@link IEditingDomainProvider} interface. This is important for implementing the static methods of {@link AdapterFactoryEditingDomain} and for
+	 * supporting {@link org.eclipse.emf.edit.ui.action.CommandAction}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EditingDomain getEditingDomain() {
@@ -705,14 +638,14 @@ public class PricingEditor
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public class ReverseAdapterFactoryContentProvider extends AdapterFactoryContentProvider {
 		/**
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * 
 		 * @generated
 		 */
 		public ReverseAdapterFactoryContentProvider(AdapterFactory adapterFactory) {
@@ -720,30 +653,30 @@ public class PricingEditor
 		}
 
 		/**
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * 
 		 * @generated
 		 */
 		@Override
-		public Object [] getElements(Object object) {
+		public Object[] getElements(Object object) {
 			Object parent = super.getParent(object);
 			return (parent == null ? Collections.EMPTY_SET : Collections.singleton(parent)).toArray();
 		}
 
 		/**
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * 
 		 * @generated
 		 */
 		@Override
-		public Object [] getChildren(Object object) {
+		public Object[] getChildren(Object object) {
 			Object parent = super.getParent(object);
 			return (parent == null ? Collections.EMPTY_SET : Collections.singleton(parent)).toArray();
 		}
 
 		/**
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * 
 		 * @generated
 		 */
 		@Override
@@ -753,8 +686,8 @@ public class PricingEditor
 		}
 
 		/**
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * 
 		 * @generated
 		 */
 		@Override
@@ -764,10 +697,8 @@ public class PricingEditor
 	}
 
 	/**
-	 * This makes sure that one content viewer, either for the current page or the outline view, if it has focus,
-	 * is the current one.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This makes sure that one content viewer, either for the current page or the outline view, if it has focus, is the current one. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setCurrentViewer(Viewer viewer) {
@@ -777,14 +708,13 @@ public class PricingEditor
 			if (selectionChangedListener == null) {
 				// Create the listener on demand.
 				//
-				selectionChangedListener =
-					new ISelectionChangedListener() {
-						// This just notifies those things that are affected by the section.
-						//
-						public void selectionChanged(SelectionChangedEvent selectionChangedEvent) {
-							setSelection(selectionChangedEvent.getSelection());
-						}
-					};
+				selectionChangedListener = new ISelectionChangedListener() {
+					// This just notifies those things that are affected by the section.
+					//
+					public void selectionChanged(SelectionChangedEvent selectionChangedEvent) {
+						setSelection(selectionChangedEvent.getSelection());
+					}
+				};
 			}
 
 			// Stop listening to the old one.
@@ -810,9 +740,8 @@ public class PricingEditor
 	}
 
 	/**
-	 * This returns the viewer as required by the {@link IViewerProvider} interface.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns the viewer as required by the {@link IViewerProvider} interface. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Viewer getViewer() {
@@ -820,9 +749,8 @@ public class PricingEditor
 	}
 
 	/**
-	 * This creates a context menu for the viewer and adds a listener as well registering the menu for extension.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This creates a context menu for the viewer and adds a listener as well registering the menu for extension. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void createContextMenuFor(StructuredViewer viewer) {
@@ -830,7 +758,7 @@ public class PricingEditor
 		contextMenu.add(new Separator("additions"));
 		contextMenu.setRemoveAllWhenShown(true);
 		contextMenu.addMenuListener(this);
-		Menu menu= contextMenu.createContextMenu(viewer.getControl());
+		Menu menu = contextMenu.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
 		getSite().registerContextMenu(contextMenu, new UnwrappingSelectionProvider(viewer));
 
@@ -841,9 +769,8 @@ public class PricingEditor
 	}
 
 	/**
-	 * This is the method called to load a resource into the editing domain's resource set based on the editor's input.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This is the method called to load a resource into the editing domain's resource set based on the editor's input. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void createModel() {
@@ -854,57 +781,40 @@ public class PricingEditor
 			// Load the resource through the editing domain.
 			//
 			resource = editingDomain.getResourceSet().getResource(resourceURI, true);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			exception = e;
 			resource = editingDomain.getResourceSet().getResource(resourceURI, false);
 		}
 
 		Diagnostic diagnostic = analyzeResourceProblems(resource, exception);
 		if (diagnostic.getSeverity() != Diagnostic.OK) {
-			resourceToDiagnosticMap.put(resource,  analyzeResourceProblems(resource, exception));
+			resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
 		}
 		editingDomain.getResourceSet().eAdapters().add(problemIndicationAdapter);
 	}
 
 	/**
-	 * Returns a diagnostic describing the errors and warnings listed in the resource
-	 * and the specified exception (if any).
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns a diagnostic describing the errors and warnings listed in the resource and the specified exception (if any). <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Diagnostic analyzeResourceProblems(Resource resource, Exception exception) {
 		boolean hasErrors = !resource.getErrors().isEmpty();
 		if (hasErrors || !resource.getWarnings().isEmpty()) {
-			BasicDiagnostic basicDiagnostic =
-				new BasicDiagnostic
-					(hasErrors ? Diagnostic.ERROR : Diagnostic.WARNING,
-					 "com.mmxlabs.models.lng.pricing.editor",
-					 0,
-					 getString("_UI_CreateModelError_message", resource.getURI()),
-					 new Object [] { exception == null ? (Object)resource : exception });
+			BasicDiagnostic basicDiagnostic = new BasicDiagnostic(hasErrors ? Diagnostic.ERROR : Diagnostic.WARNING, "com.mmxlabs.models.lng.pricing.editor", 0,
+					getString("_UI_CreateModelError_message", resource.getURI()), new Object[] { exception == null ? (Object) resource : exception });
 			basicDiagnostic.merge(EcoreUtil.computeDiagnostic(resource, true));
 			return basicDiagnostic;
-		}
-		else if (exception != null) {
-			return
-				new BasicDiagnostic
-					(Diagnostic.ERROR,
-					 "com.mmxlabs.models.lng.pricing.editor",
-					 0,
-					 getString("_UI_CreateModelError_message", resource.getURI()),
-					 new Object[] { exception });
-		}
-		else {
+		} else if (exception != null) {
+			return new BasicDiagnostic(Diagnostic.ERROR, "com.mmxlabs.models.lng.pricing.editor", 0, getString("_UI_CreateModelError_message", resource.getURI()), new Object[] { exception });
+		} else {
 			return Diagnostic.OK_INSTANCE;
 		}
 	}
 
 	/**
-	 * This is the method used by the framework to install your own controls.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This is the method used by the framework to install your own controls. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -933,50 +843,46 @@ public class PricingEditor
 			int pageIndex = addPage(tree);
 			setPageText(pageIndex, getString("_UI_SelectionPage_label"));
 
-			getSite().getShell().getDisplay().asyncExec
-				(new Runnable() {
-					 public void run() {
-						 setActivePage(0);
-					 }
-				 });
+			getSite().getShell().getDisplay().asyncExec(new Runnable() {
+				public void run() {
+					setActivePage(0);
+				}
+			});
 		}
 
 		// Ensures that this editor will only display the page's tab
 		// area if there are more than one page
 		//
-		getContainer().addControlListener
-			(new ControlAdapter() {
-				boolean guard = false;
-				@Override
-				public void controlResized(ControlEvent event) {
-					if (!guard) {
-						guard = true;
-						hideTabs();
-						guard = false;
-					}
-				}
-			 });
+		getContainer().addControlListener(new ControlAdapter() {
+			boolean guard = false;
 
-		getSite().getShell().getDisplay().asyncExec
-			(new Runnable() {
-				 public void run() {
-					 updateProblemIndication();
-				 }
-			 });
+			@Override
+			public void controlResized(ControlEvent event) {
+				if (!guard) {
+					guard = true;
+					hideTabs();
+					guard = false;
+				}
+			}
+		});
+
+		getSite().getShell().getDisplay().asyncExec(new Runnable() {
+			public void run() {
+				updateProblemIndication();
+			}
+		});
 	}
 
 	/**
-	 * If there is just one page in the multi-page editor part,
-	 * this hides the single tab at the bottom.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * If there is just one page in the multi-page editor part, this hides the single tab at the bottom. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void hideTabs() {
 		if (getPageCount() <= 1) {
 			setPageText(0, "");
 			if (getContainer() instanceof CTabFolder) {
-				((CTabFolder)getContainer()).setTabHeight(1);
+				((CTabFolder) getContainer()).setTabHeight(1);
 				Point point = getContainer().getSize();
 				getContainer().setSize(point.x, point.y + 6);
 			}
@@ -984,17 +890,15 @@ public class PricingEditor
 	}
 
 	/**
-	 * If there is more than one page in the multi-page editor part,
-	 * this shows the tabs at the bottom.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * If there is more than one page in the multi-page editor part, this shows the tabs at the bottom. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void showTabs() {
 		if (getPageCount() > 1) {
 			setPageText(0, getString("_UI_SelectionPage_label"));
 			if (getContainer() instanceof CTabFolder) {
-				((CTabFolder)getContainer()).setTabHeight(SWT.DEFAULT);
+				((CTabFolder) getContainer()).setTabHeight(SWT.DEFAULT);
 				Point point = getContainer().getSize();
 				getContainer().setSize(point.x, point.y - 6);
 			}
@@ -1002,9 +906,8 @@ public class PricingEditor
 	}
 
 	/**
-	 * This is used to track the active viewer.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This is used to track the active viewer. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -1017,32 +920,27 @@ public class PricingEditor
 	}
 
 	/**
-	 * This is how the framework determines which interfaces we implement.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
+	 * This is how the framework determines which interfaces we implement. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	public Object getAdapter(Class key) {
+	public <T> T getAdapter(Class<T> key) {
 		if (key.equals(IContentOutlinePage.class)) {
-			return showOutlineView() ? getContentOutlinePage() : null;
-		}
-		else if (key.equals(IPropertySheetPage.class)) {
-			return getPropertySheetPage();
-		}
-		else if (key.equals(IGotoMarker.class)) {
-			return this;
-		}
-		else {
+			return showOutlineView() ? (T) getContentOutlinePage() : (T) null;
+		} else if (key.equals(IPropertySheetPage.class)) {
+			return (T) getPropertySheetPage();
+		} else if (key.equals(IGotoMarker.class)) {
+			return (T) this;
+		} else {
 			return super.getAdapter(key);
 		}
 	}
 
 	/**
-	 * This accesses a cached version of the content outliner.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This accesses a cached version of the content outliner. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public IContentOutlinePage getContentOutlinePage() {
@@ -1067,9 +965,9 @@ public class PricingEditor
 					createContextMenuFor(contentOutlineViewer);
 
 					if (!editingDomain.getResourceSet().getResources().isEmpty()) {
-					  // Select the root object in the view.
-					  //
-					  contentOutlineViewer.setSelection(new StructuredSelection(editingDomain.getResourceSet().getResources().get(0)), true);
+						// Select the root object in the view.
+						//
+						contentOutlineViewer.setSelection(new StructuredSelection(editingDomain.getResourceSet().getResources().get(0)), true);
 					}
 				}
 
@@ -1090,40 +988,37 @@ public class PricingEditor
 
 			// Listen to selection so that we can handle it is a special way.
 			//
-			contentOutlinePage.addSelectionChangedListener
-				(new ISelectionChangedListener() {
-					 // This ensures that we handle selections correctly.
-					 //
-					 public void selectionChanged(SelectionChangedEvent event) {
-						 handleContentOutlineSelection(event.getSelection());
-					 }
-				 });
+			contentOutlinePage.addSelectionChangedListener(new ISelectionChangedListener() {
+				// This ensures that we handle selections correctly.
+				//
+				public void selectionChanged(SelectionChangedEvent event) {
+					handleContentOutlineSelection(event.getSelection());
+				}
+			});
 		}
 
 		return contentOutlinePage;
 	}
 
 	/**
-	 * This accesses a cached version of the property sheet.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This accesses a cached version of the property sheet. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public IPropertySheetPage getPropertySheetPage() {
-		PropertySheetPage propertySheetPage =
-			new ExtendedPropertySheetPage(editingDomain) {
-				@Override
-				public void setSelectionToViewer(List<?> selection) {
-					PricingEditor.this.setSelectionToViewer(selection);
-					PricingEditor.this.setFocus();
-				}
+		PropertySheetPage propertySheetPage = new ExtendedPropertySheetPage(editingDomain) {
+			@Override
+			public void setSelectionToViewer(List<?> selection) {
+				PricingEditor.this.setSelectionToViewer(selection);
+				PricingEditor.this.setFocus();
+			}
 
-				@Override
-				public void setActionBars(IActionBars actionBars) {
-					super.setActionBars(actionBars);
-					getActionBarContributor().shareGlobalActions(this, actionBars);
-				}
-			};
+			@Override
+			public void setActionBars(IActionBars actionBars) {
+				super.setActionBars(actionBars);
+				getActionBarContributor().shareGlobalActions(this, actionBars);
+			}
+		};
 		propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(adapterFactory));
 		propertySheetPages.add(propertySheetPage);
 
@@ -1131,14 +1026,13 @@ public class PricingEditor
 	}
 
 	/**
-	 * This deals with how we want selection in the outliner to affect the other views.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This deals with how we want selection in the outliner to affect the other views. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void handleContentOutlineSelection(ISelection selection) {
 		if (selectionViewer != null && !selection.isEmpty() && selection instanceof IStructuredSelection) {
-			Iterator<?> selectedElements = ((IStructuredSelection)selection).iterator();
+			Iterator<?> selectedElements = ((IStructuredSelection) selection).iterator();
 			if (selectedElements.hasNext()) {
 				// Get the first selected element.
 				//
@@ -1158,20 +1052,18 @@ public class PricingEditor
 	}
 
 	/**
-	 * This is for implementing {@link IEditorPart} and simply tests the command stack.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This is for implementing {@link IEditorPart} and simply tests the command stack. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean isDirty() {
-		return ((BasicCommandStack)editingDomain.getCommandStack()).isSaveNeeded();
+		return ((BasicCommandStack) editingDomain.getCommandStack()).isSaveNeeded();
 	}
 
 	/**
-	 * This is for implementing {@link IEditorPart} and simply saves the model file.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This is for implementing {@link IEditorPart} and simply saves the model file. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -1184,32 +1076,30 @@ public class PricingEditor
 
 		// Do the work within an operation because this is a long running activity that modifies the workbench.
 		//
-		WorkspaceModifyOperation operation =
-			new WorkspaceModifyOperation() {
-				// This is the method that gets invoked when the operation runs.
+		WorkspaceModifyOperation operation = new WorkspaceModifyOperation() {
+			// This is the method that gets invoked when the operation runs.
+			//
+			@Override
+			public void execute(IProgressMonitor monitor) {
+				// Save the resources to the file system.
 				//
-				@Override
-				public void execute(IProgressMonitor monitor) {
-					// Save the resources to the file system.
-					//
-					boolean first = true;
-					for (Resource resource : editingDomain.getResourceSet().getResources()) {
-						if ((first || !resource.getContents().isEmpty() || isPersisted(resource)) && !editingDomain.isReadOnly(resource)) {
-							try {
-								long timeStamp = resource.getTimeStamp();
-								resource.save(saveOptions);
-								if (resource.getTimeStamp() != timeStamp) {
-									savedResources.add(resource);
-								}
+				boolean first = true;
+				for (Resource resource : editingDomain.getResourceSet().getResources()) {
+					if ((first || !resource.getContents().isEmpty() || isPersisted(resource)) && !editingDomain.isReadOnly(resource)) {
+						try {
+							long timeStamp = resource.getTimeStamp();
+							resource.save(saveOptions);
+							if (resource.getTimeStamp() != timeStamp) {
+								savedResources.add(resource);
 							}
-							catch (Exception exception) {
-								resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
-							}
-							first = false;
+						} catch (Exception exception) {
+							resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
 						}
+						first = false;
 					}
 				}
-			};
+			}
+		};
 
 		updateProblemIndication = false;
 		try {
@@ -1219,10 +1109,9 @@ public class PricingEditor
 
 			// Refresh the necessary state.
 			//
-			((BasicCommandStack)editingDomain.getCommandStack()).saveIsDone();
+			((BasicCommandStack) editingDomain.getCommandStack()).saveIsDone();
 			firePropertyChange(IEditorPart.PROP_DIRTY);
-		}
-		catch (Exception exception) {
+		} catch (Exception exception) {
 			// Something went wrong that shouldn't.
 			//
 			PricingEditorPlugin.INSTANCE.log(exception);
@@ -1232,10 +1121,9 @@ public class PricingEditor
 	}
 
 	/**
-	 * This returns whether something has been persisted to the URI of the specified resource.
-	 * The implementation uses the URI converter from the editor's resource set to try to open an input stream.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns whether something has been persisted to the URI of the specified resource. The implementation uses the URI converter from the editor's resource set to try to open an input stream.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected boolean isPersisted(Resource resource) {
@@ -1246,17 +1134,15 @@ public class PricingEditor
 				result = true;
 				stream.close();
 			}
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			// Ignore
 		}
 		return result;
 	}
 
 	/**
-	 * This always returns true because it is not currently supported.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This always returns true because it is not currently supported. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -1265,9 +1151,8 @@ public class PricingEditor
 	}
 
 	/**
-	 * This also changes the editor's input.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This also changes the editor's input. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -1284,24 +1169,21 @@ public class PricingEditor
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void doSaveAs(URI uri, IEditorInput editorInput) {
 		(editingDomain.getResourceSet().getResources().get(0)).setURI(uri);
 		setInputWithNotify(editorInput);
 		setPartName(editorInput.getName());
-		IProgressMonitor progressMonitor =
-			getActionBars().getStatusLineManager() != null ?
-				getActionBars().getStatusLineManager().getProgressMonitor() :
-				new NullProgressMonitor();
+		IProgressMonitor progressMonitor = getActionBars().getStatusLineManager() != null ? getActionBars().getStatusLineManager().getProgressMonitor() : new NullProgressMonitor();
 		doSave(progressMonitor);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void gotoMarker(IMarker marker) {
@@ -1312,9 +1194,8 @@ public class PricingEditor
 	}
 
 	/**
-	 * This is called during startup.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This is called during startup. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -1328,8 +1209,8 @@ public class PricingEditor
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -1338,9 +1219,8 @@ public class PricingEditor
 	}
 
 	/**
-	 * This implements {@link org.eclipse.jface.viewers.ISelectionProvider}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This implements {@link org.eclipse.jface.viewers.ISelectionProvider}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void addSelectionChangedListener(ISelectionChangedListener listener) {
@@ -1348,9 +1228,8 @@ public class PricingEditor
 	}
 
 	/**
-	 * This implements {@link org.eclipse.jface.viewers.ISelectionProvider}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This implements {@link org.eclipse.jface.viewers.ISelectionProvider}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
@@ -1358,9 +1237,8 @@ public class PricingEditor
 	}
 
 	/**
-	 * This implements {@link org.eclipse.jface.viewers.ISelectionProvider} to return this editor's overall selection.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This implements {@link org.eclipse.jface.viewers.ISelectionProvider} to return this editor's overall selection. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public ISelection getSelection() {
@@ -1368,10 +1246,9 @@ public class PricingEditor
 	}
 
 	/**
-	 * This implements {@link org.eclipse.jface.viewers.ISelectionProvider} to set this editor's overall selection.
-	 * Calling this result will notify the listeners.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This implements {@link org.eclipse.jface.viewers.ISelectionProvider} to set this editor's overall selection. Calling this result will notify the listeners. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setSelection(ISelection selection) {
@@ -1384,43 +1261,40 @@ public class PricingEditor
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setStatusLineManager(ISelection selection) {
-		IStatusLineManager statusLineManager = currentViewer != null && currentViewer == contentOutlineViewer ?
-			contentOutlineStatusLineManager : getActionBars().getStatusLineManager();
+		IStatusLineManager statusLineManager = currentViewer != null && currentViewer == contentOutlineViewer ? contentOutlineStatusLineManager : getActionBars().getStatusLineManager();
 
 		if (statusLineManager != null) {
 			if (selection instanceof IStructuredSelection) {
-				Collection<?> collection = ((IStructuredSelection)selection).toList();
+				Collection<?> collection = ((IStructuredSelection) selection).toList();
 				switch (collection.size()) {
-					case 0: {
-						statusLineManager.setMessage(getString("_UI_NoObjectSelected"));
-						break;
-					}
-					case 1: {
-						String text = new AdapterFactoryItemDelegator(adapterFactory).getText(collection.iterator().next());
-						statusLineManager.setMessage(getString("_UI_SingleObjectSelected", text));
-						break;
-					}
-					default: {
-						statusLineManager.setMessage(getString("_UI_MultiObjectSelected", Integer.toString(collection.size())));
-						break;
-					}
+				case 0: {
+					statusLineManager.setMessage(getString("_UI_NoObjectSelected"));
+					break;
 				}
-			}
-			else {
+				case 1: {
+					String text = new AdapterFactoryItemDelegator(adapterFactory).getText(collection.iterator().next());
+					statusLineManager.setMessage(getString("_UI_SingleObjectSelected", text));
+					break;
+				}
+				default: {
+					statusLineManager.setMessage(getString("_UI_MultiObjectSelected", Integer.toString(collection.size())));
+					break;
+				}
+				}
+			} else {
 				statusLineManager.setMessage("");
 			}
 		}
 	}
 
 	/**
-	 * This looks up a string in the plugin's plugin.properties file.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This looks up a string in the plugin's plugin.properties file. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private static String getString(String key) {
@@ -1428,37 +1302,35 @@ public class PricingEditor
 	}
 
 	/**
-	 * This looks up a string in plugin.properties, making a substitution.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This looks up a string in plugin.properties, making a substitution. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private static String getString(String key, Object s1) {
-		return PricingEditorPlugin.INSTANCE.getString(key, new Object [] { s1 });
+		return PricingEditorPlugin.INSTANCE.getString(key, new Object[] { s1 });
 	}
 
 	/**
-	 * This implements {@link org.eclipse.jface.action.IMenuListener} to help fill the context menus with contributions from the Edit menu.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This implements {@link org.eclipse.jface.action.IMenuListener} to help fill the context menus with contributions from the Edit menu. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void menuAboutToShow(IMenuManager menuManager) {
-		((IMenuListener)getEditorSite().getActionBarContributor()).menuAboutToShow(menuManager);
+		((IMenuListener) getEditorSite().getActionBarContributor()).menuAboutToShow(menuManager);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EditingDomainActionBarContributor getActionBarContributor() {
-		return (EditingDomainActionBarContributor)getEditorSite().getActionBarContributor();
+		return (EditingDomainActionBarContributor) getEditorSite().getActionBarContributor();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public IActionBars getActionBars() {
@@ -1466,8 +1338,8 @@ public class PricingEditor
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public AdapterFactory getAdapterFactory() {
@@ -1475,8 +1347,8 @@ public class PricingEditor
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -1505,9 +1377,8 @@ public class PricingEditor
 	}
 
 	/**
-	 * Returns whether the outline view should be presented to the user.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns whether the outline view should be presented to the user. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected boolean showOutlineView() {

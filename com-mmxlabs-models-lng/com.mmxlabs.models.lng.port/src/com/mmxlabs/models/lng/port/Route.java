@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port;
@@ -19,6 +19,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.port.Route#getLines <em>Lines</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Route#getRouteOption <em>Route Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Route#isCanal <em>Canal</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Route#getRoutingOptions <em>Routing Options</em>}</li>
  * </ul>
@@ -43,6 +44,35 @@ public interface Route extends NamedObject, UUIDObject {
 	 * @generated
 	 */
 	EList<RouteLine> getLines();
+
+	/**
+	 * Returns the value of the '<em><b>Route Option</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.port.RouteOption}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Route Option</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Route Option</em>' attribute.
+	 * @see com.mmxlabs.models.lng.port.RouteOption
+	 * @see #setRouteOption(RouteOption)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getRoute_RouteOption()
+	 * @model
+	 * @generated
+	 */
+	RouteOption getRouteOption();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Route#getRouteOption <em>Route Option</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Route Option</em>' attribute.
+	 * @see com.mmxlabs.models.lng.port.RouteOption
+	 * @see #getRouteOption()
+	 * @generated
+	 */
+	void setRouteOption(RouteOption value);
 
 	/**
 	 * Returns the value of the '<em><b>Canal</b></em>' attribute.

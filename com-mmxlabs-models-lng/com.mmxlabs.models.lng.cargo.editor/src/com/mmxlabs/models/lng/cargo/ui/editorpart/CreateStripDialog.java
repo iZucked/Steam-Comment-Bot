@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
@@ -223,6 +223,7 @@ public class CreateStripDialog extends FormDialog {
 		default:
 			break;
 		}
+		sample.eSet(MMXCorePackage.Literals.NAMED_OBJECT__NAME, "option");
 
 		// // Set a default window start
 		sample.eSet(CargoPackage.eINSTANCE.getSlot_WindowStart(), LocalDate.now());
@@ -425,7 +426,7 @@ public class CreateStripDialog extends FormDialog {
 					} else {
 						assert rt == RepeatType.Distributed;
 						label1.setText("Create");
-						((GridData) label1.getLayoutData()).widthHint = 36;
+						((GridData) label1.getLayoutData()).widthHint = 40;
 						label2.setVisible(true);
 						label3.setVisible(false);
 						intervalType.getControl().setVisible(false);
@@ -614,6 +615,9 @@ public class CreateStripDialog extends FormDialog {
 		} catch (final NumberFormatException nfe) {
 			// Ignore
 		}
+
+		int n = calSpacing;
+
 		// Min of 1 element
 		calSpacing = Math.max(1, calSpacing);
 
@@ -623,15 +627,16 @@ public class CreateStripDialog extends FormDialog {
 		// ABS as sanity check...
 		final int diffInDays = Days.between(fromDate, toDate);
 
+		final int rtIdx = repeatType.getCombo().getSelectionIndex();
+		if (rtIdx < 0) {
+			return Collections.emptyList();
+		}
+		final RepeatType rt = RepeatType.values()[rtIdx];
 		{
-			final int rtIdx = repeatType.getCombo().getSelectionIndex();
-			if (rtIdx < 0) {
-				return Collections.emptyList();
-			}
-			final RepeatType rt = RepeatType.values()[rtIdx];
 			switch (rt) {
 			case Distributed: {
 				calUnit = ChronoUnit.DAYS;
+				calSpacing = Math.max(1, calSpacing - 1);
 				calSpacing = diffInDays / calSpacing;
 				calSpacing = Math.max(1, calSpacing);
 			}
@@ -671,9 +676,17 @@ public class CreateStripDialog extends FormDialog {
 		} else {
 			sampleDate = LocalDate.now();
 		}
-		while (toDate.isAfter(sampleDate)) {
-			dates.add(sampleDate);
-			sampleDate = sampleDate.plus(calSpacing, calUnit);
+
+		if (rt == RepeatType.Distributed) {
+			for (int i = 0; i < n; ++i) {
+				dates.add(sampleDate);
+				sampleDate = sampleDate.plus(calSpacing, calUnit);
+			}
+		} else {
+			while (toDate.isAfter(sampleDate)) {
+				dates.add(sampleDate);
+				sampleDate = sampleDate.plus(calSpacing, calUnit);
+			}
 		}
 
 		// Pricing date special case - keep the difference in months constant

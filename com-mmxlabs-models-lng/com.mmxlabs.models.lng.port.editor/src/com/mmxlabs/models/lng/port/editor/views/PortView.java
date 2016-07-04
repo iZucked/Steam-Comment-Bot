@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port.editor.views;
@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.port.editor.actions.MergePorts;
 import com.mmxlabs.models.lng.port.ui.editorpart.PortEditorPane;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class PortView extends ScenarioTableViewerView<PortEditorPane> {
@@ -39,7 +40,8 @@ public class PortView extends ScenarioTableViewerView<PortEditorPane> {
 	protected void initViewerPane(final PortEditorPane pane) {
 		final EditingDomain domain = getEditingDomain();
 		if (domain != null) {
-			pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel(), LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_PortModel(), PortPackage.eINSTANCE.getPortModel_Ports() }), null, domain.getCommandStack());
+			pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel(), LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_PortModel(),
+					PortPackage.eINSTANCE.getPortModel_Ports() }), null, domain.getCommandStack());
 			pane.getViewer().setInput(getRootObject());
 
 			// Add action to create and edit cargo groups
@@ -70,5 +72,14 @@ public class PortView extends ScenarioTableViewerView<PortEditorPane> {
 				setSelection(new StructuredSelection(port), true);
 			}
 		}
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> adapter) {
+
+		if (IScenarioEditingLocation.class.isAssignableFrom(adapter)) {
+			return (T)this;
+		}
+		return super.getAdapter(adapter);
 	}
 }

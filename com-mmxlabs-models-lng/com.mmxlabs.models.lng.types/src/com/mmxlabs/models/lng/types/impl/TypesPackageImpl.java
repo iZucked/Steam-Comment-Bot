@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.types.impl;
@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.ObjectSet;
 import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
@@ -88,6 +89,13 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * @generated
 	 */
 	private EEnum volumeUnitsEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum timePeriodEEnum = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -255,6 +263,15 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EEnum getTimePeriod() {
+		return timePeriodEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EDataType getIterable() {
 		return iterableEDataType;
 	}
@@ -304,6 +321,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		portCapabilityEEnum = createEEnum(PORT_CAPABILITY);
 		cargoDeliveryTypeEEnum = createEEnum(CARGO_DELIVERY_TYPE);
 		volumeUnitsEEnum = createEEnum(VOLUME_UNITS);
+		timePeriodEEnum = createEEnum(TIME_PERIOD);
 
 		// Create data types
 		iterableEDataType = createEDataType(ITERABLE);
@@ -407,6 +425,11 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		initEEnum(volumeUnitsEEnum, VolumeUnits.class, "VolumeUnits");
 		addEEnumLiteral(volumeUnitsEEnum, VolumeUnits.M3);
 		addEEnumLiteral(volumeUnitsEEnum, VolumeUnits.MMBTU);
+
+		initEEnum(timePeriodEEnum, TimePeriod.class, "TimePeriod");
+		addEEnumLiteral(timePeriodEEnum, TimePeriod.HOURS);
+		addEEnumLiteral(timePeriodEEnum, TimePeriod.DAYS);
+		addEEnumLiteral(timePeriodEEnum, TimePeriod.MONTHS);
 
 		// Initialize data types
 		initEDataType(iterableEDataType, Iterable.class, "Iterable", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

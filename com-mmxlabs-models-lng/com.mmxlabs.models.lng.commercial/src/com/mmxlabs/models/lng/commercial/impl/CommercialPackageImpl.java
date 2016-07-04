@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.impl;
@@ -288,6 +288,15 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getBaseLegalEntity_UpstreamBook() {
+		return (EReference)baseLegalEntityEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getLegalEntity() {
 		return legalEntityEClass;
 	}
@@ -423,7 +432,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_CancellationFee() {
+	public EAttribute getContract_CancellationExpression() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(13);
 	}
 
@@ -670,6 +679,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		baseLegalEntityEClass = createEClass(BASE_LEGAL_ENTITY);
 		createEReference(baseLegalEntityEClass, BASE_LEGAL_ENTITY__SHIPPING_BOOK);
 		createEReference(baseLegalEntityEClass, BASE_LEGAL_ENTITY__TRADING_BOOK);
+		createEReference(baseLegalEntityEClass, BASE_LEGAL_ENTITY__UPSTREAM_BOOK);
 
 		legalEntityEClass = createEClass(LEGAL_ENTITY);
 
@@ -687,7 +697,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(contractEClass, CONTRACT__NOTES);
 		createEAttribute(contractEClass, CONTRACT__CONTRACT_TYPE);
 		createEAttribute(contractEClass, CONTRACT__PRICING_EVENT);
-		createEAttribute(contractEClass, CONTRACT__CANCELLATION_FEE);
+		createEAttribute(contractEClass, CONTRACT__CANCELLATION_EXPRESSION);
 
 		salesContractEClass = createEClass(SALES_CONTRACT);
 		createEAttribute(salesContractEClass, SALES_CONTRACT__MIN_CV_VALUE);
@@ -782,6 +792,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEClass(baseLegalEntityEClass, BaseLegalEntity.class, "BaseLegalEntity", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getBaseLegalEntity_ShippingBook(), this.getBaseEntityBook(), null, "shippingBook", null, 0, 1, BaseLegalEntity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getBaseLegalEntity_TradingBook(), this.getBaseEntityBook(), null, "tradingBook", null, 0, 1, BaseLegalEntity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBaseLegalEntity_UpstreamBook(), this.getBaseEntityBook(), null, "upstreamBook", null, 0, 1, BaseLegalEntity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(legalEntityEClass, LegalEntity.class, "LegalEntity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -805,7 +816,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getContract_Notes(), ecorePackage.getEString(), "notes", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_ContractType(), this.getContractType(), "contractType", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_PricingEvent(), this.getPricingEvent(), "pricingEvent", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getContract_CancellationFee(), ecorePackage.getEInt(), "cancellationFee", "0", 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getContract_CancellationExpression(), ecorePackage.getEString(), "cancellationExpression", "0", 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(salesContractEClass, SalesContract.class, "SalesContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSalesContract_MinCvValue(), ecorePackage.getEDouble(), "minCvValue", null, 0, 1, SalesContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -856,6 +867,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		// Create annotations
 		// http://www.mmxlabs.com/models/ui/numberFormat
 		createNumberFormatAnnotations();
+		// http://www.mmxlabs.com/models/pricing/expressionType
+		createExpressionTypeAnnotations();
 		// slotContractParams
 		createSlotContractParamsAnnotations();
 	}
@@ -881,13 +894,6 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 			 "formatString", "#,###,##0"
 		   });	
 		addAnnotation
-		  (getContract_CancellationFee(), 
-		   source, 
-		   new String[] {
-			 "formatString", "###,###,##0",
-			 "unitPrefix", "$"
-		   });	
-		addAnnotation
 		  (getSalesContract_MinCvValue(), 
 		   source, 
 		   new String[] {
@@ -907,6 +913,28 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		   new String[] {
 			 "unit", "mmBtu/m\u00b3",
 			 "formatString", "#0.###"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/pricing/expressionType</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createExpressionTypeAnnotations() {
+		String source = "http://www.mmxlabs.com/models/pricing/expressionType";	
+		addAnnotation
+		  (getContract_CancellationExpression(), 
+		   source, 
+		   new String[] {
+			 "type", "commodity"
+		   });	
+		addAnnotation
+		  (getExpressionPriceParameters_PriceExpression(), 
+		   source, 
+		   new String[] {
+			 "type", "commodity"
 		   });
 	}
 

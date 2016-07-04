@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet;
@@ -236,13 +236,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__NAME = TypesPackage.AVESSEL_SET__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Short Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__SHORT_NAME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Vessel Class</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__VESSEL_CLASS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 0;
+	int VESSEL__VESSEL_CLASS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Inaccessible Ports</b></em>' reference list.
@@ -251,7 +260,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 1;
+	int VESSEL__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Capacity</b></em>' attribute.
@@ -260,7 +269,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 2;
+	int VESSEL__CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Fill Capacity</b></em>' attribute.
@@ -269,7 +278,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__FILL_CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 3;
+	int VESSEL__FILL_CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
@@ -278,7 +287,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 4;
+	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -434,13 +443,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 13;
 
 	/**
+	 * The feature id for the '<em><b>Has Reliq Capability</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__HAS_RELIQ_CAPABILITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 14;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Class</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 14;
+	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 15;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.HeelOptionsImpl <em>Heel Options</em>}' class.
@@ -765,6 +783,17 @@ public interface FleetPackage extends EPackage {
 	EClass getVessel();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getShortName <em>Short Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Short Name</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getShortName()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_ShortName();
+
+	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.Vessel#getVesselClass <em>Vessel Class</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -971,6 +1000,17 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getVesselClass_MinBaseFuelConsumption();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#isHasReliqCapability <em>Has Reliq Capability</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Has Reliq Capability</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass#isHasReliqCapability()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_HasReliqCapability();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.FleetModel <em>Model</em>}'.
@@ -1328,6 +1368,14 @@ public interface FleetPackage extends EPackage {
 		EClass VESSEL = eINSTANCE.getVessel();
 
 		/**
+		 * The meta object literal for the '<em><b>Short Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__SHORT_NAME = eINSTANCE.getVessel_ShortName();
+
+		/**
 		 * The meta object literal for the '<em><b>Vessel Class</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1480,6 +1528,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION = eINSTANCE.getVesselClass_MinBaseFuelConsumption();
+
+		/**
+		 * The meta object literal for the '<em><b>Has Reliq Capability</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__HAS_RELIQ_CAPABILITY = eINSTANCE.getVesselClass_HasReliqCapability();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl <em>Model</em>}' class.

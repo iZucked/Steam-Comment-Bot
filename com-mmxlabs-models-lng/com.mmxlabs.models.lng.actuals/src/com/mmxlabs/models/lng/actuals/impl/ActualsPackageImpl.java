@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -424,6 +424,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getCargoActuals__GetSortedActuals() {
 		return cargoActualsEClass.getEOperations().get(0);
 	}

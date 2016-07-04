@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.actuals.validation;
@@ -10,11 +10,8 @@ import java.util.List;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.impl.EStoreEObjectImpl.EStoreFeatureMap;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.eclipse.emf.validation.service.AbstractConstraintProvider;
-
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.CargoActuals;
 import com.mmxlabs.models.lng.actuals.DischargeActuals;

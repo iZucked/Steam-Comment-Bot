@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.properties;
@@ -50,6 +50,10 @@ public class BasicPNLProperties implements IDetailPropertyFactory {
 		final GroupProfitAndLoss groupPnL = profitAndLossContainer.getGroupProfitAndLoss();
 		final DetailProperty dp = PropertiesFactory.eINSTANCE.createDetailProperty();
 
+		if (groupPnL == null ){
+			return null;
+		}
+		
 		// Create standard details
 		createPnLDetailProperty(groupPnL, dp, "Group P&L", "Taxed Group profit and loss", false);
 
@@ -82,6 +86,8 @@ public class BasicPNLProperties implements IDetailPropertyFactory {
 					entityBookDP.setName("Shipping Book");
 				} else if (entityBook.eContainmentFeature() == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK) {
 					entityBookDP.setName("Trading Book");
+				} else if (entityBook.eContainmentFeature() == CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK) {
+					entityBookDP.setName("Upstream Book");
 				}
 				dpNode = entityBookDP;
 			} else {

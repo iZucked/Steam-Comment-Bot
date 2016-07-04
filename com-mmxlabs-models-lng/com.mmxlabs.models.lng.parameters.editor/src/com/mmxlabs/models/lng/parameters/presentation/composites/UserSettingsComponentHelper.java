@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -73,6 +73,7 @@ public class UserSettingsComponentHelper extends BaseComponentHelper {
 		add_generateCharterOutsEditor(detailComposite, topClass);
 		add_buildActionSetsEditor(detailComposite, topClass);
 		add_similarityModeEditor(detailComposite, topClass);
+		add_floatingDaysLimitEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the periodStart feature on UserSettings
@@ -121,5 +122,14 @@ public class UserSettingsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_similarityModeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ParametersPackage.Literals.USER_SETTINGS__SIMILARITY_MODE));
+	}
+
+	/**
+	 * Create the editor for the floatingDaysLimit feature on UserSettings
+	 *
+	 * @generated
+	 */
+	protected void add_floatingDaysLimitEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ParametersPackage.Literals.USER_SETTINGS__FLOATING_DAYS_LIMIT));
 	}
 }

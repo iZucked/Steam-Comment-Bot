@@ -1,10 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.util;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class CargoMaker {
 
 	public class CargoMakerSlotMaker extends AbstractSlotMaker<CargoMakerSlotMaker> {
 
-		public CargoMakerSlotMaker(@NonNull CargoModelBuilder cargoModelBuilder) {
+		public CargoMakerSlotMaker(@NonNull final CargoModelBuilder cargoModelBuilder) {
 			super(cargoModelBuilder);
 		}
 
@@ -52,31 +53,42 @@ public class CargoMaker {
 	public CargoMaker(@NonNull final CargoModelBuilder cargoModelBuilder) {
 		this.cargoModelBuilder = cargoModelBuilder;
 		this.cargo = CargoFactory.eINSTANCE.createCargo();
-
+		this.cargo.setAllowRewiring(true);
 	}
 
 	public CargoMakerSlotMaker makeFOBPurchase(@NonNull final String name, @NonNull final LocalDate windowStart, @NonNull final Port port, @Nullable final PurchaseContract purchaseContract,
 			@Nullable final BaseLegalEntity entity, @Nullable final String priceExpression) {
 		final CargoMakerSlotMaker slotMaker = new CargoMakerSlotMaker(cargoModelBuilder);
-		return slotMaker.withFOBPurchase(name, windowStart, port, purchaseContract, entity, priceExpression);
+		return slotMaker.withFOBPurchase(name, windowStart, port, purchaseContract, entity, priceExpression, null);
 	}
 
-	public CargoMakerSlotMaker makeDESPurchase(@NonNull final String name, boolean divertible, @NonNull final LocalDate windowStart, @NonNull final Port port,
+	public CargoMakerSlotMaker makeFOBPurchase(@NonNull final String name, @NonNull final LocalDate windowStart, @NonNull final Port port, @Nullable final PurchaseContract purchaseContract,
+			@Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, final @Nullable Double cv) {
+		final CargoMakerSlotMaker slotMaker = new CargoMakerSlotMaker(cargoModelBuilder);
+		return slotMaker.withFOBPurchase(name, windowStart, port, purchaseContract, entity, priceExpression, cv);
+	}
+
+	public CargoMakerSlotMaker makeDESPurchase(@NonNull final String name, final boolean divertible, @NonNull final LocalDate windowStart, @NonNull final Port port,
 			@Nullable final PurchaseContract purchaseContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, @Nullable final Vessel nominatedVessel) {
 		final CargoMakerSlotMaker slotMaker = new CargoMakerSlotMaker(cargoModelBuilder);
-		return slotMaker.withDESPurchase(name, divertible, windowStart, port, purchaseContract, entity, priceExpression, nominatedVessel);
+		return slotMaker.withDESPurchase(name, divertible, windowStart, port, purchaseContract, entity, priceExpression, null, nominatedVessel);
 	}
 
-	public CargoMakerSlotMaker makeMarketFOBPurchase(@NonNull final String name, @NonNull final FOBPurchasesMarket market, @NonNull final LocalDate windowStart, @NonNull final Port port,
-			@Nullable final PurchaseContract purchaseContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression) {
+	public CargoMakerSlotMaker makeDESPurchase(@NonNull final String name, final boolean divertible, @NonNull final LocalDate windowStart, @NonNull final Port port,
+			@Nullable final PurchaseContract purchaseContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, final @Nullable Double cv,
+			@Nullable final Vessel nominatedVessel) {
 		final CargoMakerSlotMaker slotMaker = new CargoMakerSlotMaker(cargoModelBuilder);
-		return slotMaker.withMarketFOBPurchase(name, market, windowStart, port, purchaseContract, entity, priceExpression);
+		return slotMaker.withDESPurchase(name, divertible, windowStart, port, purchaseContract, entity, priceExpression, cv, nominatedVessel);
 	}
 
-	public CargoMakerSlotMaker makeMarketDESPurchase(@NonNull final String name, @NonNull final DESPurchaseMarket market, @NonNull final LocalDate windowStart, @NonNull final Port port,
-			@Nullable final PurchaseContract purchaseContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression) {
+	public CargoMakerSlotMaker makeMarketFOBPurchase(@NonNull final String name, @NonNull final FOBPurchasesMarket market, @NonNull final YearMonth windowStart, @NonNull final Port port) {
 		final CargoMakerSlotMaker slotMaker = new CargoMakerSlotMaker(cargoModelBuilder);
-		return slotMaker.withMarketDESPurchase(name, market, windowStart, port, purchaseContract, entity, priceExpression);
+		return slotMaker.withMarketFOBPurchase(name, market, windowStart, port);
+	}
+
+	public CargoMakerSlotMaker makeMarketDESPurchase(@NonNull final String name, @NonNull final DESPurchaseMarket market, @NonNull final YearMonth windowStart, @NonNull final Port port) {
+		final CargoMakerSlotMaker slotMaker = new CargoMakerSlotMaker(cargoModelBuilder);
+		return slotMaker.withMarketDESPurchase(name, market, windowStart, port);
 	}
 
 	public CargoMakerSlotMaker makeDESSale(@NonNull final String name, @NonNull final LocalDate windowStart, @NonNull final Port port, @Nullable final SalesContract salesContract,
@@ -85,22 +97,21 @@ public class CargoMaker {
 		return slotMaker.withDESSale(name, windowStart, port, salesContract, entity, priceExpression);
 	}
 
-	public CargoMakerSlotMaker makeFOBSale(@NonNull final String name, boolean divertible, @NonNull final LocalDate windowStart, @NonNull final Port port, @Nullable final SalesContract salesContract,
-			@Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, @Nullable final Vessel nominatedVessel) {
+	public CargoMakerSlotMaker makeFOBSale(@NonNull final String name, final boolean divertible, @NonNull final LocalDate windowStart, @NonNull final Port port,
+			@Nullable final SalesContract salesContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, @Nullable final Vessel nominatedVessel) {
 		final CargoMakerSlotMaker slotMaker = new CargoMakerSlotMaker(cargoModelBuilder);
 		return slotMaker.withFOBSale(name, divertible, windowStart, port, salesContract, entity, priceExpression, nominatedVessel);
 	}
 
-	public CargoMakerSlotMaker makeMarketDESSale(@NonNull final String name, @NonNull final DESSalesMarket market, @NonNull final LocalDate windowStart, @NonNull final Port port,
+	public CargoMakerSlotMaker makeMarketDESSale(@NonNull final String name, @NonNull final DESSalesMarket market, @NonNull final YearMonth windowStart, @NonNull final Port port,
 			@Nullable final SalesContract salesContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression) {
 		final CargoMakerSlotMaker slotMaker = new CargoMakerSlotMaker(cargoModelBuilder);
-		return slotMaker.withMarketDESSale(name, market, windowStart, port, salesContract, entity, priceExpression);
+		return slotMaker.withMarketDESSale(name, market, windowStart, port);
 	}
 
-	public CargoMakerSlotMaker makeMarketFOBSale(@NonNull final String name, @NonNull final FOBSalesMarket market, @NonNull final LocalDate windowStart, @NonNull final Port port,
-			@Nullable final SalesContract salesContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression) {
+	public CargoMakerSlotMaker makeMarketFOBSale(@NonNull final String name, @NonNull final FOBSalesMarket market, @NonNull final YearMonth windowStart, @NonNull final Port port) {
 		final CargoMakerSlotMaker slotMaker = new CargoMakerSlotMaker(cargoModelBuilder);
-		return slotMaker.withMarketFOBSale(name, market, windowStart, port, salesContract, entity, priceExpression);
+		return slotMaker.withMarketFOBSale(name, market, windowStart, port);
 	}
 
 	public CargoMaker withVesselAssignment(@NonNull final VesselAvailability vesselAvailability, final int sequenceHint) {
@@ -110,9 +121,9 @@ public class CargoMaker {
 		return this;
 	}
 
-	public CargoMaker withAssignmentFlags(boolean allowRewiring, boolean lockedToAssignment) {
+	public CargoMaker withAssignmentFlags(final boolean allowRewiring, final boolean lockedToAssignment) {
 
-		assert allowRewiring || lockedToAssignment;
+		assert !lockedToAssignment || (allowRewiring && lockedToAssignment);
 		cargo.setLocked(lockedToAssignment);
 		cargo.setAllowRewiring(allowRewiring);
 

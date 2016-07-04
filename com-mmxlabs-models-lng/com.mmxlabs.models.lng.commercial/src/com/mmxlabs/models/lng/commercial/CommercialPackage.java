@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial;
@@ -180,13 +180,22 @@ public interface CommercialPackage extends EPackage {
 	int BASE_LEGAL_ENTITY__TRADING_BOOK = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Upstream Book</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_LEGAL_ENTITY__UPSTREAM_BOOK = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Base Legal Entity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_LEGAL_ENTITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int BASE_LEGAL_ENTITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl <em>Legal Entity</em>}' class.
@@ -242,6 +251,15 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int LEGAL_ENTITY__TRADING_BOOK = BASE_LEGAL_ENTITY__TRADING_BOOK;
+
+	/**
+	 * The feature id for the '<em><b>Upstream Book</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LEGAL_ENTITY__UPSTREAM_BOOK = BASE_LEGAL_ENTITY__UPSTREAM_BOOK;
 
 	/**
 	 * The number of structural features of the '<em>Legal Entity</em>' class.
@@ -407,13 +425,13 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT__PRICING_EVENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
 
 	/**
-	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__CANCELLATION_FEE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
+	int CONTRACT__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The number of structural features of the '<em>Contract</em>' class.
@@ -579,13 +597,13 @@ public interface CommercialPackage extends EPackage {
 	int SALES_CONTRACT__PRICING_EVENT = CONTRACT__PRICING_EVENT;
 
 	/**
-	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SALES_CONTRACT__CANCELLATION_FEE = CONTRACT__CANCELLATION_FEE;
+	int SALES_CONTRACT__CANCELLATION_EXPRESSION = CONTRACT__CANCELLATION_EXPRESSION;
 
 	/**
 	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
@@ -778,13 +796,13 @@ public interface CommercialPackage extends EPackage {
 	int PURCHASE_CONTRACT__PRICING_EVENT = CONTRACT__PRICING_EVENT;
 
 	/**
-	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PURCHASE_CONTRACT__CANCELLATION_FEE = CONTRACT__CANCELLATION_FEE;
+	int PURCHASE_CONTRACT__CANCELLATION_EXPRESSION = CONTRACT__CANCELLATION_EXPRESSION;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
@@ -1214,6 +1232,17 @@ public interface CommercialPackage extends EPackage {
 	EReference getBaseLegalEntity_TradingBook();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getUpstreamBook <em>Upstream Book</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Upstream Book</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.BaseLegalEntity#getUpstreamBook()
+	 * @see #getBaseLegalEntity()
+	 * @generated
+	 */
+	EReference getBaseLegalEntity_UpstreamBook();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.LegalEntity <em>Legal Entity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1377,15 +1406,15 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getContract_PricingEvent();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getCancellationFee <em>Cancellation Fee</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getCancellationExpression <em>Cancellation Expression</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Cancellation Fee</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.Contract#getCancellationFee()
+	 * @return the meta object for the attribute '<em>Cancellation Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getCancellationExpression()
 	 * @see #getContract()
 	 * @generated
 	 */
-	EAttribute getContract_CancellationFee();
+	EAttribute getContract_CancellationExpression();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SalesContract <em>Sales Contract</em>}'.
@@ -1711,6 +1740,14 @@ public interface CommercialPackage extends EPackage {
 		EReference BASE_LEGAL_ENTITY__TRADING_BOOK = eINSTANCE.getBaseLegalEntity_TradingBook();
 
 		/**
+		 * The meta object literal for the '<em><b>Upstream Book</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BASE_LEGAL_ENTITY__UPSTREAM_BOOK = eINSTANCE.getBaseLegalEntity_UpstreamBook();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl <em>Legal Entity</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1835,12 +1872,12 @@ public interface CommercialPackage extends EPackage {
 		EAttribute CONTRACT__PRICING_EVENT = eINSTANCE.getContract_PricingEvent();
 
 		/**
-		 * The meta object literal for the '<em><b>Cancellation Fee</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Cancellation Expression</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CONTRACT__CANCELLATION_FEE = eINSTANCE.getContract_CancellationFee();
+		EAttribute CONTRACT__CANCELLATION_EXPRESSION = eINSTANCE.getContract_CancellationExpression();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.

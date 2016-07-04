@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2015
+    Copyright (C) Minimax Labs Ltd., 2010 - 2016
     All rights reserved.
 
 -->
@@ -25,13 +25,20 @@
                attributeTypeURI="http://www.mmxlabs.com/models/lng/types/1/">
          </dataType>
       </attributeImporter>
+      <attributeImporter
+            ID="com.mmxlabs.models.lng.ui.TimePeriodImporter"
+            attributeImporterClass="com.mmxlabs.models.util.importer.impl.DefaultAttributeImporter">
+         <dataType
+               attributeTypeName="TimePeriod"
+               attributeTypeURI="http://www.mmxlabs.com/models/lng/types/1/">
+         </dataType>
+      </attributeImporter>
       
    </extension>
    <extension
          point="com.mmxlabs.models.ui.editorfactories">
       <editorFactory
-            factoryClass="com.mmxlabs.models.ui.volumeunits.VolumeLimitUnitsInlineEditorFactory"
-            featureNameEquals="volumeLimitsUnit"
+            factoryClass="com.mmxlabs.models.ui.editors.VolumeLimitUnitsInlineEditorFactory"
             id="com.mmxlabs.models.ui.dates.VolumeLimitUnitsInlineEditorFactory">
          <FeatureAnyOf>
             <EDataTypeIs
@@ -39,6 +46,16 @@
                   EDataTypeURI="http://www.mmxlabs.com/models/lng/types/1/">
             </EDataTypeIs>
          </FeatureAnyOf>         
+      </editorFactory>
+      <editorFactory
+            factoryClass="com.mmxlabs.models.ui.editors.TimePeriodUnitsInlineEditorFactory"
+            id="com.mmxlabs.models.ui.editors.TimePeriodUnitsInlineEditorFactory">
+         <FeatureAnyOf>
+            <EDataTypeIs
+                  EDataTypeName="TimePeriod"
+                  EDataTypeURI="http://www.mmxlabs.com/models/lng/types/1/">
+            </EDataTypeIs>
+         </FeatureAnyOf>
       </editorFactory>
       
    </extension>

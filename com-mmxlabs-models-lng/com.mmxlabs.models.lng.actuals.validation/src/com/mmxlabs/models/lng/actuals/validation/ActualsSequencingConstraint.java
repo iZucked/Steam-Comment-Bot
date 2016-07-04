@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.actuals.validation;
@@ -25,7 +25,7 @@ import com.mmxlabs.models.lng.actuals.DischargeActuals;
 import com.mmxlabs.models.lng.actuals.LoadActuals;
 import com.mmxlabs.models.lng.actuals.ReturnActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
-import com.mmxlabs.models.lng.actuals.util.ActualsAssignableElementComparator;
+import com.mmxlabs.models.lng.actuals.util.ActualsAssignableDateProvider;
 import com.mmxlabs.models.lng.actuals.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -42,7 +42,9 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -52,7 +54,7 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * This constraint ensures that an {@link CargoActuals} is preceeded by another {@link CargoActuals}, or the vessel start. (or a vessel event with warning). This ensures proper heel tracking etc.
+ * This constraint ensures that an {@link CargoActuals} is preceded by another {@link CargoActuals}, or the vessel start. (or a vessel event with warning). This ensures proper heel tracking etc.
  * 
  * @author Simon Goodall
  * 
@@ -69,7 +71,8 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 			final SpotMarketsModel spotMarketsModel = scenarioModel.getReferenceModel().getSpotMarketsModel();
 			final CargoModel cargoModel = scenarioModel.getCargoModel();
-
+			final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
+			
 			// Build up lookup tables
 			final Map<Cargo, CargoActuals> cargoActualsMap = new HashMap<>();
 			final Map<Slot, SlotActuals> slotActualsMap = new HashMap<>();
@@ -98,7 +101,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 
-			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, spotMarketsModel, new ActualsAssignableElementComparator(actualsModel));
+			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, new ActualsAssignableDateProvider(actualsModel));
 
 			// Check sequencing for each grouping
 			for (final CollectedAssignment collectedAssignment : collectAssignments) {
@@ -231,7 +234,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 						// Only warn about previous missing actuals if an event.
 						final int status = /*prevObject instanceof VesselEvent ? IStatus.WARNING : */ IStatus.ERROR;
 
-						final String msg = String.format("Cargo %s is not preceeded by another actualised event.", getID(prevObject));
+						final String msg = String.format("Cargo %s is not preceded by another actualised event.", getID(prevObject));
 
 						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), status);
 						failure.addEObjectAndFeature(prevObject, MMXCorePackage.Literals.NAMED_OBJECT__NAME);

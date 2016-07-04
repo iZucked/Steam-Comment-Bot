@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.port/src" modelPluginID="com.mmxlabs.models.lng.port"
-    templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.template/templates/"
+    templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.sdk.template/templates/"
     dynamicTemplates="true" redirection="" modelName="Port" testsDirectory="" importerID="org.eclipse.emf.importer.ecore"
     complianceLevel="8.0" copyrightFields="false" runtimeVersion="2.11" usedGenPackages="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore">
   <foreignModel>port.ecore</foreignModel>
   <genPackages prefix="Port" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
       multipleEditorPages="false" generateModelWizard="false" extensibleProviderFactory="true"
       childCreationExtenders="true" ecorePackage="port.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="port.ecore#//RouteOption">
+      <genEnumLiterals ecoreEnumLiteral="port.ecore#//RouteOption/DIRECT"/>
+      <genEnumLiterals ecoreEnumLiteral="port.ecore#//RouteOption/SUEZ"/>
+      <genEnumLiterals ecoreEnumLiteral="port.ecore#//RouteOption/PANAMA"/>
+    </genEnums>
     <genClasses ecoreClass="port.ecore#//Port">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Port/shortName"/>
       <genFeatures createChild="false" propertyDescription="Whether ships can visit this port for this purpose"
@@ -43,6 +48,7 @@
     </genClasses>
     <genClasses ecoreClass="port.ecore#//Route">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//Route/lines"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Route/routeOption"/>
       <genFeatures createChild="false" propertyDescription="If true, this route is a canal"
           ecoreFeature="ecore:EAttribute port.ecore#//Route/canal"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Route/routingOptions"/>

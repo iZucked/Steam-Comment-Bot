@@ -1,23 +1,28 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.util;
 
 import java.time.YearMonth;
 import java.util.Comparator;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
 
 /**
  * 
@@ -28,25 +33,49 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
  */
 public class PriceIndexUtils {
 
+	public enum PriceIndexType {
+		COMMODITY, CHARTER, BUNKERS;
+	}
+
 	/**
 	 * Provides a {@link SeriesParser} object based on the default activator (the one returned by {@link Activator.getDefault()}).
 	 * 
 	 * @return A {@link SeriesParser} object for use in validating price expressions.
 	 */
-	@SuppressWarnings("rawtypes")
-	public static SeriesParser getParserForCommodityIndices(final PricingModel pricingModel, final YearMonth dateZero) {
+	public static @NonNull SeriesParser getParserFor(final @NonNull PricingModel pricingModel, final @NonNull EReference reference) {
+
+		YearMonth dateZero = YearMonth.of(2000, 1);
 
 		final SeriesParser indices = new SeriesParser();
-
-		for (final CommodityIndex commodityIndex : pricingModel.getCommodityIndices()) {
-			final Index<Double> index = commodityIndex.getData();
+		final List<NamedIndexContainer<? extends Number>> namedIndexContainerList = (List<NamedIndexContainer<? extends Number>>) pricingModel.eGet(reference);
+		for (final NamedIndexContainer<? extends Number> namedIndexContainer : namedIndexContainerList) {
+			final Index<? extends Number> index = namedIndexContainer.getData();
 			if (index instanceof DataIndex) {
-				addSeriesDataFromDataIndex(indices, commodityIndex.getName(), dateZero, (DataIndex<? extends Number>) index);
+				addSeriesDataFromDataIndex(indices, namedIndexContainer.getName(), dateZero, (DataIndex<? extends Number>) index);
 			} else if (index instanceof DerivedIndex) {
-				indices.addSeriesExpression(commodityIndex.getName(), ((DerivedIndex) index).getExpression());
+				indices.addSeriesExpression(namedIndexContainer.getName(), ((DerivedIndex) index).getExpression());
 			}
 		}
 		return indices;
+	}
+
+	/**
+	 * Provides a {@link SeriesParser} object based on the default activator (the one returned by {@link Activator.getDefault()}).
+	 * 
+	 * @return A {@link SeriesParser} object for use in validating price expressions.
+	 */
+
+	public static @NonNull SeriesParser getParserFor(final @NonNull PricingModel pricingModel, final @NonNull PriceIndexType priceIndexType) {
+		switch (priceIndexType) {
+		case BUNKERS:
+			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES);
+		case CHARTER:
+			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES);
+		case COMMODITY:
+			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES);
+		default:
+			throw new IllegalArgumentException();
+		}
 	}
 
 	/**

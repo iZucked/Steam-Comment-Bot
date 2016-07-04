@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.impl;
@@ -93,6 +93,8 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.PORTS_EXPRESSION_MAP: return createPortsExpressionMap();
 			case PricingPackage.PORTS_SPLIT_PRICE_MAP: return createPortsSplitPriceMap();
 			case PricingPackage.PORTS_SPLIT_EXPRESSION_MAP: return createPortsSplitExpressionMap();
+			case PricingPackage.PANAMA_CANAL_TARIFF: return createPanamaCanalTariff();
+			case PricingPackage.PANAMA_CANAL_TARIFF_BAND: return createPanamaCanalTariffBand();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -136,56 +138,6 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public <Value> IndexPoint<Value> createIndexPoint() {
 		IndexPointImpl<Value> indexPoint = new IndexPointImpl<Value>();
 		return indexPoint;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public RouteCost createRouteCost() {
-		RouteCostImpl routeCost = new RouteCostImpl();
-		return routeCost;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public BaseFuelCost createBaseFuelCost() {
-		BaseFuelCostImpl baseFuelCost = new BaseFuelCostImpl();
-		return baseFuelCost;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public PortCost createPortCost() {
-		PortCostImpl portCost = new PortCostImpl();
-		return portCost;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public PortCostEntry createPortCostEntry() {
-		PortCostEntryImpl portCostEntry = new PortCostEntryImpl();
-		return portCostEntry;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CooldownPrice createCooldownPrice() {
-		CooldownPriceImpl cooldownPrice = new CooldownPriceImpl();
-		return cooldownPrice;
 	}
 
 	/**
@@ -243,6 +195,56 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public RouteCost createRouteCost() {
+		RouteCostImpl routeCost = new RouteCostImpl();
+		return routeCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseFuelCost createBaseFuelCost() {
+		BaseFuelCostImpl baseFuelCost = new BaseFuelCostImpl();
+		return baseFuelCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PortCost createPortCost() {
+		PortCostImpl portCost = new PortCostImpl();
+		return portCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PortCostEntry createPortCostEntry() {
+		PortCostEntryImpl portCostEntry = new PortCostEntryImpl();
+		return portCostEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CooldownPrice createCooldownPrice() {
+		CooldownPriceImpl cooldownPrice = new CooldownPriceImpl();
+		return cooldownPrice;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public PortsPriceMap createPortsPriceMap() {
 		PortsPriceMapImpl portsPriceMap = new PortsPriceMapImpl();
 		return portsPriceMap;
@@ -276,6 +278,26 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public PortsSplitExpressionMap createPortsSplitExpressionMap() {
 		PortsSplitExpressionMapImpl portsSplitExpressionMap = new PortsSplitExpressionMapImpl();
 		return portsSplitExpressionMap;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PanamaCanalTariff createPanamaCanalTariff() {
+		PanamaCanalTariffImpl panamaCanalTariff = new PanamaCanalTariffImpl();
+		return panamaCanalTariff;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PanamaCanalTariffBand createPanamaCanalTariffBand() {
+		PanamaCanalTariffBandImpl panamaCanalTariffBand = new PanamaCanalTariffBandImpl();
+		return panamaCanalTariffBand;
 	}
 
 	/**

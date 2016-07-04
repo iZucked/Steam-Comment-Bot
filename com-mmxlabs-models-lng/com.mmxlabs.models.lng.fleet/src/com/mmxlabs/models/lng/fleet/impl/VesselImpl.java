@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.impl;
@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getShortName <em>Short Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getVesselClass <em>Vessel Class</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getCapacity <em>Capacity</em>}</li>
@@ -39,6 +40,26 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  * @generated
  */
 public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
+	/**
+	 * The default value of the '{@link #getShortName() <em>Short Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getShortName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String SHORT_NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getShortName() <em>Short Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getShortName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String shortName = SHORT_NAME_EDEFAULT;
+
 	/**
 	 * The cached value of the '{@link #getVesselClass() <em>Vessel Class</em>}' reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -130,6 +151,27 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	@Override
 	protected EClass eStaticClass() {
 		return FleetPackage.Literals.VESSEL;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getShortName() {
+		return shortName;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setShortName(String newShortName) {
+		String oldShortName = shortName;
+		shortName = newShortName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__SHORT_NAME, oldShortName, shortName));
 	}
 
 	/**
@@ -305,12 +347,28 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String getShortenedName() {
+		
+		final String shortName = getShortName();
+		if (shortName == null || shortName.isEmpty()) {
+			return getName();
+		}
+		return shortName;
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case FleetPackage.VESSEL__SHORT_NAME:
+				return getShortName();
 			case FleetPackage.VESSEL__VESSEL_CLASS:
 				if (resolve) return getVesselClass();
 				return basicGetVesselClass();
@@ -332,6 +390,9 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case FleetPackage.VESSEL__SHORT_NAME:
+				setShortName((String)newValue);
+				return;
 			case FleetPackage.VESSEL__VESSEL_CLASS:
 				setVesselClass((VesselClass)newValue);
 				return;
@@ -356,6 +417,9 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case FleetPackage.VESSEL__SHORT_NAME:
+				setShortName(SHORT_NAME_EDEFAULT);
+				return;
 			case FleetPackage.VESSEL__VESSEL_CLASS:
 				setVesselClass((VesselClass)null);
 				return;
@@ -379,6 +443,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case FleetPackage.VESSEL__SHORT_NAME:
+				return SHORT_NAME_EDEFAULT == null ? shortName != null : !SHORT_NAME_EDEFAULT.equals(shortName);
 			case FleetPackage.VESSEL__VESSEL_CLASS:
 				return vesselClass != null;
 			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
@@ -400,7 +466,9 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (capacity: ");
+		result.append(" (shortName: ");
+		result.append(shortName);
+		result.append(", capacity: ");
 		if (capacityESet) result.append(capacity); else result.append("<unset>");
 		result.append(", fillCapacity: ");
 		if (fillCapacityESet) result.append(fillCapacity); else result.append("<unset>");

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -69,6 +69,7 @@ public class BaseLegalEntityComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_shippingBookEditor(detailComposite, topClass);
 		add_tradingBookEditor(detailComposite, topClass);
+		add_upstreamBookEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -87,5 +88,14 @@ public class BaseLegalEntityComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_tradingBookEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK));
+	}
+
+	/**
+	 * Create the editor for the upstreamBook feature on BaseLegalEntity
+	 *
+	 * @generated
+	 */
+	protected void add_upstreamBookEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK));
 	}
 }

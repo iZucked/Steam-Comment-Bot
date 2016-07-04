@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.importers;
@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.pricing.importers;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
@@ -68,6 +69,18 @@ public abstract class AbstractMultipleDataIndexImporter<TargetClass extends Name
 				} else if (NAME.equals(o2)) {
 					return 1;
 				}
+				// Then Units...
+				if (UNITS.equals(o1)) {
+					return -1;
+				} else if (UNITS.equals(o2)) {
+					return 1;
+				}
+				// Then expression
+				if (EXPRESSION.equals(o1)) {
+					return -1;
+				} else if (EXPRESSION.equals(o2)) {
+					return 1;
+				}
 
 				return o1.compareTo(o2);
 			}
@@ -76,9 +89,10 @@ public abstract class AbstractMultipleDataIndexImporter<TargetClass extends Name
 
 	@Override
 	protected Map<String, String> getNonDateFields(final TargetClass target, final Index<? extends Number> index) {
-		final Map<String, String> result = super.getNonDateFields(target, index);
+		final Map<String, String> result = new LinkedHashMap<>();
 		result.put(NAME, target.getName());
 		result.put(UNITS, target.getUnits());
+		result.putAll(super.getNonDateFields(target, index));
 		return result;
 	}
 

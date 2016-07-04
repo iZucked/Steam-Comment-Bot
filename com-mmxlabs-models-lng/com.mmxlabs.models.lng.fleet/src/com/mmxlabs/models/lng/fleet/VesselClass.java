@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet;
@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getRouteParameters <em>Route Parameters</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getPilotLightRate <em>Pilot Light Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getMinBaseFuelConsumption <em>Min Base Fuel Consumption</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#isHasReliqCapability <em>Has Reliq Capability</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass()
@@ -121,7 +122,7 @@ public interface VesselClass extends AVesselSet<Vessel> {
 	 * @see #setFillCapacity(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_FillCapacity()
 	 * @model default="1" required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat scale='100' formatString='###.#' unit='%'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat scale='100' formatString='###.#' unit='%' exportFormatString='#.###'"
 	 * @generated
 	 */
 	double getFillCapacity();
@@ -381,7 +382,7 @@ public interface VesselClass extends AVesselSet<Vessel> {
 	 * @return the value of the '<em>Min Base Fuel Consumption</em>' attribute.
 	 * @see #setMinBaseFuelConsumption(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_MinBaseFuelConsumption()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/day' formatString='###.###'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/day' formatString='##0.###'"
 	 * @generated
 	 */
 	double getMinBaseFuelConsumption();
@@ -395,6 +396,32 @@ public interface VesselClass extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	void setMinBaseFuelConsumption(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Has Reliq Capability</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Has Reliq Capability</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Has Reliq Capability</em>' attribute.
+	 * @see #setHasReliqCapability(boolean)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_HasReliqCapability()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/featureEnablement feature='reliq-support'"
+	 * @generated
+	 */
+	boolean isHasReliqCapability();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClass#isHasReliqCapability <em>Has Reliq Capability</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Has Reliq Capability</em>' attribute.
+	 * @see #isHasReliqCapability()
+	 * @generated
+	 */
+	void setHasReliqCapability(boolean value);
 
 } // end of  VesselClass
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.types.impl;
@@ -81,6 +81,8 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 			return createCargoDeliveryTypeFromString(eDataType, initialValue);
 		case TypesPackage.VOLUME_UNITS:
 			return createVolumeUnitsFromString(eDataType, initialValue);
+		case TypesPackage.TIME_PERIOD:
+			return createTimePeriodFromString(eDataType, initialValue);
 		case TypesPackage.ITERABLE:
 			return createIterableFromString(eDataType, initialValue);
 		default:
@@ -102,6 +104,8 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 			return convertCargoDeliveryTypeToString(eDataType, instanceValue);
 		case TypesPackage.VOLUME_UNITS:
 			return convertVolumeUnitsToString(eDataType, instanceValue);
+		case TypesPackage.TIME_PERIOD:
+			return convertTimePeriodToString(eDataType, instanceValue);
 		case TypesPackage.ITERABLE:
 			return convertIterableToString(eDataType, instanceValue);
 		default:
@@ -169,6 +173,27 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * @generated
 	 */
 	public String convertVolumeUnitsToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public TimePeriod createTimePeriodFromString(EDataType eDataType, String initialValue) {
+		TimePeriod result = TimePeriod.get(initialValue);
+		if (result == null)
+			throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertTimePeriodToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

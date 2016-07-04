@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.presentation.composites;
@@ -46,6 +46,7 @@ public class EndEventComponentHelper extends BaseComponentHelper {
 		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.FUEL_USAGE));
 		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.PORT_VISIT));
 		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER));
+		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.EVENT_GROUPING));
 	}
 	
 	/**

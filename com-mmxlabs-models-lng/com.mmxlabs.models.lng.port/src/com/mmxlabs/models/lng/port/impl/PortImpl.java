@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port.impl;
@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.impl.APortSetImpl;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.OtherNamesObject;
@@ -44,6 +45,7 @@ import com.mmxlabs.models.mmxcore.OtherNamesObject;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getDefaultStartTime <em>Default Start Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#isAllowCooldown <em>Allow Cooldown</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getDefaultWindowSize <em>Default Window Size</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getDefaultWindowSizeUnits <em>Default Window Size Units</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getLocation <em>Location</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getAtobviacCode <em>Atobviac Code</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getDataloyCode <em>Dataloy Code</em>}</li>
@@ -256,6 +258,26 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @ordered
 	 */
 	protected int defaultWindowSize = DEFAULT_WINDOW_SIZE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getDefaultWindowSizeUnits() <em>Default Window Size Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDefaultWindowSizeUnits()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final TimePeriod DEFAULT_WINDOW_SIZE_UNITS_EDEFAULT = TimePeriod.HOURS;
+
+	/**
+	 * The cached value of the '{@link #getDefaultWindowSizeUnits() <em>Default Window Size Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDefaultWindowSizeUnits()
+	 * @generated
+	 * @ordered
+	 */
+	protected TimePeriod defaultWindowSizeUnits = DEFAULT_WINDOW_SIZE_UNITS_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getLocation() <em>Location</em>}' containment reference.
@@ -641,6 +663,27 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public TimePeriod getDefaultWindowSizeUnits() {
+		return defaultWindowSizeUnits;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDefaultWindowSizeUnits(TimePeriod newDefaultWindowSizeUnits) {
+		TimePeriod oldDefaultWindowSizeUnits = defaultWindowSizeUnits;
+		defaultWindowSizeUnits = newDefaultWindowSizeUnits == null ? DEFAULT_WINDOW_SIZE_UNITS_EDEFAULT : newDefaultWindowSizeUnits;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__DEFAULT_WINDOW_SIZE_UNITS, oldDefaultWindowSizeUnits, defaultWindowSizeUnits));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public Location getLocation() {
 		return location;
 	}
@@ -941,6 +984,8 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return isAllowCooldown();
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE:
 				return getDefaultWindowSize();
+			case PortPackage.PORT__DEFAULT_WINDOW_SIZE_UNITS:
+				return getDefaultWindowSizeUnits();
 			case PortPackage.PORT__LOCATION:
 				return getLocation();
 			case PortPackage.PORT__ATOBVIAC_CODE:
@@ -1004,6 +1049,9 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return;
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE:
 				setDefaultWindowSize((Integer)newValue);
+				return;
+			case PortPackage.PORT__DEFAULT_WINDOW_SIZE_UNITS:
+				setDefaultWindowSizeUnits((TimePeriod)newValue);
 				return;
 			case PortPackage.PORT__LOCATION:
 				setLocation((Location)newValue);
@@ -1074,6 +1122,9 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE:
 				setDefaultWindowSize(DEFAULT_WINDOW_SIZE_EDEFAULT);
 				return;
+			case PortPackage.PORT__DEFAULT_WINDOW_SIZE_UNITS:
+				setDefaultWindowSizeUnits(DEFAULT_WINDOW_SIZE_UNITS_EDEFAULT);
+				return;
 			case PortPackage.PORT__LOCATION:
 				setLocation((Location)null);
 				return;
@@ -1132,6 +1183,8 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return allowCooldown != ALLOW_COOLDOWN_EDEFAULT;
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE:
 				return defaultWindowSize != DEFAULT_WINDOW_SIZE_EDEFAULT;
+			case PortPackage.PORT__DEFAULT_WINDOW_SIZE_UNITS:
+				return defaultWindowSizeUnits != DEFAULT_WINDOW_SIZE_UNITS_EDEFAULT;
 			case PortPackage.PORT__LOCATION:
 				return location != null;
 			case PortPackage.PORT__ATOBVIAC_CODE:
@@ -1216,6 +1269,8 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 		result.append(allowCooldown);
 		result.append(", defaultWindowSize: ");
 		result.append(defaultWindowSize);
+		result.append(", defaultWindowSizeUnits: ");
+		result.append(defaultWindowSizeUnits);
 		result.append(", atobviacCode: ");
 		result.append(atobviacCode);
 		result.append(", dataloyCode: ");

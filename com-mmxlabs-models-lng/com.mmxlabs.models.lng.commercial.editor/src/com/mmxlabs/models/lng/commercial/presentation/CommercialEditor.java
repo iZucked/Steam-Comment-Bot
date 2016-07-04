@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.presentation;
@@ -115,7 +115,6 @@ import com.mmxlabs.models.lng.commercial.provider.CommercialItemProviderAdapterF
 import com.mmxlabs.models.lng.port.provider.PortItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.types.provider.TypesItemProviderAdapterFactory;
 import com.mmxlabs.models.mmxcore.provider.MMXCoreItemProviderAdapterFactory;
-
 
 /**
  * This is an example of a Commercial model editor.
@@ -310,7 +309,7 @@ public class CommercialEditor
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected EContentAdapter problemIndicationAdapter = 
+	protected EContentAdapter problemIndicationAdapter =
 		new EContentAdapter() {
 			@Override
 			public void notifyChanged(Notification notification) {
@@ -514,7 +513,7 @@ public class CommercialEditor
 			updateProblemIndication();
 		}
 	}
-  
+
 	/**
 	 * Updates the problems indication with the information described in the specified diagnostic.
 	 * <!-- begin-user-doc -->
@@ -1022,15 +1021,15 @@ public class CommercialEditor
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	public Object getAdapter(Class key) {
+	public <T> T getAdapter(Class<T> key) {
 		if (key.equals(IContentOutlinePage.class)) {
-			return showOutlineView() ? getContentOutlinePage() : null;
+			return showOutlineView() ? (T) getContentOutlinePage() : (T) null;
 		}
 		else if (key.equals(IPropertySheetPage.class)) {
-			return getPropertySheetPage();
+			return (T) getPropertySheetPage();
 		}
 		else if (key.equals(IGotoMarker.class)) {
-			return this;
+			return (T) this;
 		}
 		else {
 			return super.getAdapter(key);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
@@ -19,8 +19,10 @@ import org.eclipse.swt.widgets.Composite;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -67,7 +69,7 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 	public boolean isValueUnset(Object object) {
 		return false;
 	}
-	
+
 	@Override
 	public void setValue(final Object object, final Object value) {
 		// grar.
@@ -87,6 +89,7 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 		for (int i = 0; i < items.length; i++) {
 			items[i] = allowedValues.get(i).getFirst();
 		}
+
 		return new ComboBoxCellEditor(parent, items);
 	}
 
@@ -121,6 +124,19 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 		// by preference, find the string attached to this object by the value provider
 		for (final Pair<String, EObject> pair : allowedValues) {
 			if (pair.getSecond() == current) {
+
+				// HACKY BIT FOR NOW to show nominal allocation
+				if (object instanceof Cargo) {
+					Cargo cargo = (Cargo) object;
+					if (cargo.getVesselAssignmentType() instanceof CharterInMarket) {
+						if (cargo.getSpotIndex() == -1) {
+							return pair.getFirst().replace("spot", "nominal");
+						} else {
+							return pair.getFirst().replace("spot", "market");
+						}
+					}
+				}
+
 				return pair.getFirst();
 			}
 		}

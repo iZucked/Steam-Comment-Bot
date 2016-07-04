@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets.editor.importers;
@@ -61,8 +61,9 @@ public class CharterMarketImporter extends DefaultClassImporter {
 							final CharterOutMarket market = SpotMarketsFactory.eINSTANCE.createCharterOutMarket();
 							context.doLater(new SetReference(market, SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET__VESSEL_CLASS,
 									getEReferenceLinkType(SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET__VESSEL_CLASS), vesselClass, context));
-							context.doLater(new SetReference(market, SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__CHARTER_OUT_PRICE,
-									getEReferenceLinkType(SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__CHARTER_OUT_PRICE), charterOutPrice, context));
+
+							market.setCharterOutRate(charterOutPrice);
+
 							if (row.get("enabled") != null) {
 								final IAttributeImporter ai = importerRegistry.getAttributeImporter(SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET__ENABLED.getEAttributeType());
 								if (ai != null) {
@@ -86,8 +87,7 @@ public class CharterMarketImporter extends DefaultClassImporter {
 							context.doLater(new SetReference(market, SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET__VESSEL_CLASS,
 									getEReferenceLinkType(SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET__VESSEL_CLASS), vesselClass, context));
 
-							context.doLater(new SetReference(market, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__CHARTER_IN_PRICE,
-									getEReferenceLinkType(SpotMarketsPackage.Literals.CHARTER_IN_MARKET__CHARTER_IN_PRICE), charterInPrice, context));
+							market.setCharterInRate(charterInPrice);
 
 							if (row.get("enabled") != null) {
 								final IAttributeImporter ai = importerRegistry.getAttributeImporter(SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET__ENABLED.getEAttributeType());
@@ -137,6 +137,7 @@ public class CharterMarketImporter extends DefaultClassImporter {
 
 		final List<EObject> generalExportObject = new LinkedList<>();
 		for (final EObject obj : objects) {
+
 			if (obj instanceof CharterOutStartDate) {
 				final CharterOutStartDate charterOutStartDate = (CharterOutStartDate) obj;
 				final Map<String, String> dateRow = new HashMap<String, String>();

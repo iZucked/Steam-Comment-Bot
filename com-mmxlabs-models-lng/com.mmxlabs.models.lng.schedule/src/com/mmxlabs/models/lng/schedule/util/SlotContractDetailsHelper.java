@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.util;
@@ -50,7 +50,7 @@ public final class SlotContractDetailsHelper {
 	}
 
 	@Nullable
-	public static <T extends GeneralPNLDetails> T findSlotContractDetails(final @NonNull CargoAllocation cargoAllocation, @NonNull final Class<T> detailsCls) {
+	public static <T extends @NonNull GeneralPNLDetails> T findSlotContractDetails(final @Nullable CargoAllocation cargoAllocation, final Class<T> detailsCls) {
 
 		for (final GeneralPNLDetails generalPNLDetails : cargoAllocation.getGeneralPNLDetails()) {
 			if (generalPNLDetails instanceof SlotPNLDetails) {

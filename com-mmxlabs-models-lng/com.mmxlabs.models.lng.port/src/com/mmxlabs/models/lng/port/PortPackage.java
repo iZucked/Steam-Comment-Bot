@@ -1,11 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -197,13 +198,22 @@ public interface PortPackage extends EPackage {
 	int PORT__DEFAULT_WINDOW_SIZE = TypesPackage.APORT_SET_FEATURE_COUNT + 10;
 
 	/**
+	 * The feature id for the '<em><b>Default Window Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__DEFAULT_WINDOW_SIZE_UNITS = TypesPackage.APORT_SET_FEATURE_COUNT + 11;
+
+	/**
 	 * The feature id for the '<em><b>Location</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__LOCATION = TypesPackage.APORT_SET_FEATURE_COUNT + 11;
+	int PORT__LOCATION = TypesPackage.APORT_SET_FEATURE_COUNT + 12;
 
 	/**
 	 * The feature id for the '<em><b>Atobviac Code</b></em>' attribute.
@@ -212,7 +222,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__ATOBVIAC_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 12;
+	int PORT__ATOBVIAC_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 13;
 
 	/**
 	 * The feature id for the '<em><b>Dataloy Code</b></em>' attribute.
@@ -221,7 +231,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DATALOY_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 13;
+	int PORT__DATALOY_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 14;
 
 	/**
 	 * The feature id for the '<em><b>Veson Code</b></em>' attribute.
@@ -230,7 +240,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__VESON_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 14;
+	int PORT__VESON_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 15;
 
 	/**
 	 * The feature id for the '<em><b>External Code</b></em>' attribute.
@@ -239,7 +249,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__EXTERNAL_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 15;
+	int PORT__EXTERNAL_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 16;
 
 	/**
 	 * The feature id for the '<em><b>UN Locode</b></em>' attribute.
@@ -248,7 +258,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__UN_LOCODE = TypesPackage.APORT_SET_FEATURE_COUNT + 16;
+	int PORT__UN_LOCODE = TypesPackage.APORT_SET_FEATURE_COUNT + 17;
 
 	/**
 	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
@@ -257,7 +267,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__MIN_CV_VALUE = TypesPackage.APORT_SET_FEATURE_COUNT + 17;
+	int PORT__MIN_CV_VALUE = TypesPackage.APORT_SET_FEATURE_COUNT + 18;
 
 	/**
 	 * The feature id for the '<em><b>Max Cv Value</b></em>' attribute.
@@ -266,7 +276,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__MAX_CV_VALUE = TypesPackage.APORT_SET_FEATURE_COUNT + 18;
+	int PORT__MAX_CV_VALUE = TypesPackage.APORT_SET_FEATURE_COUNT + 19;
 
 	/**
 	 * The number of structural features of the '<em>Port</em>' class.
@@ -275,7 +285,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 19;
+	int PORT_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 20;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.RouteImpl <em>Route</em>}' class.
@@ -324,13 +334,22 @@ public interface PortPackage extends EPackage {
 	int ROUTE__LINES = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Route Option</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE__ROUTE_OPTION = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Canal</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE__CANAL = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+	int ROUTE__CANAL = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Routing Options</b></em>' attribute list.
@@ -339,7 +358,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE__ROUTING_OPTIONS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+	int ROUTE__ROUTING_OPTIONS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Route</em>' class.
@@ -348,7 +367,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+	int ROUTE_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.PortGroupImpl <em>Group</em>}' class.
@@ -645,6 +664,16 @@ public interface PortPackage extends EPackage {
 	int LOCATION_FEATURE_COUNT = 3;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.RouteOption <em>Route Option</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.port.RouteOption
+	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getRouteOption()
+	 * @generated
+	 */
+	int ROUTE_OPTION = 7;
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.Port <em>Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -752,6 +781,17 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPort_DefaultWindowSize();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getDefaultWindowSizeUnits <em>Default Window Size Units</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Default Window Size Units</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getDefaultWindowSizeUnits()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_DefaultWindowSizeUnits();
 
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.port.Port#getLocation <em>Location</em>}'.
@@ -872,6 +912,17 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getRoute_Lines();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Route#getRouteOption <em>Route Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Route Option</em>'.
+	 * @see com.mmxlabs.models.lng.port.Route#getRouteOption()
+	 * @see #getRoute()
+	 * @generated
+	 */
+	EAttribute getRoute_RouteOption();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Route#isCanal <em>Canal</em>}'.
@@ -1089,6 +1140,16 @@ public interface PortPackage extends EPackage {
 	EAttribute getLocation_Lon();
 
 	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.port.RouteOption <em>Route Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Route Option</em>'.
+	 * @see com.mmxlabs.models.lng.port.RouteOption
+	 * @generated
+	 */
+	EEnum getRouteOption();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1193,6 +1254,14 @@ public interface PortPackage extends EPackage {
 		EAttribute PORT__DEFAULT_WINDOW_SIZE = eINSTANCE.getPort_DefaultWindowSize();
 
 		/**
+		 * The meta object literal for the '<em><b>Default Window Size Units</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__DEFAULT_WINDOW_SIZE_UNITS = eINSTANCE.getPort_DefaultWindowSizeUnits();
+
+		/**
 		 * The meta object literal for the '<em><b>Location</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1281,6 +1350,14 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ROUTE__LINES = eINSTANCE.getRoute_Lines();
+
+		/**
+		 * The meta object literal for the '<em><b>Route Option</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ROUTE__ROUTE_OPTION = eINSTANCE.getRoute_RouteOption();
 
 		/**
 		 * The meta object literal for the '<em><b>Canal</b></em>' attribute feature.
@@ -1451,6 +1528,16 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute LOCATION__LON = eINSTANCE.getLocation_Lon();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.RouteOption <em>Route Option</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.port.RouteOption
+		 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getRouteOption()
+		 * @generated
+		 */
+		EEnum ROUTE_OPTION = eINSTANCE.getRouteOption();
 
 	}
 

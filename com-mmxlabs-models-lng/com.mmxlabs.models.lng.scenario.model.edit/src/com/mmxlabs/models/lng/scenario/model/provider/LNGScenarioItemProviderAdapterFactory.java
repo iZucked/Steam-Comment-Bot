@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -30,6 +30,7 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.ProvisionalCargo;
@@ -291,7 +292,7 @@ public class LNGScenarioItemProviderAdapterFactory extends LNGScenarioAdapterFac
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		protected static class CreationSwitch extends AnalyticsSwitch<Object> {
+		protected static class CreationSwitch extends AnalyticsSwitch<@Nullable Object> {
 			/**
 			 * The child descriptors being populated.
 			 * <!-- begin-user-doc -->

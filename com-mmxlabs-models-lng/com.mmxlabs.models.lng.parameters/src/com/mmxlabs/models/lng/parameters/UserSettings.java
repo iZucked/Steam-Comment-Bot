@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isGenerateCharterOuts <em>Generate Charter Outs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isBuildActionSets <em>Build Action Sets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getSimilarityMode <em>Similarity Mode</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getFloatingDaysLimit <em>Floating Days Limit</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings()
@@ -249,5 +250,32 @@ public interface UserSettings extends EObject {
 	 * @generated
 	 */
 	void setSimilarityMode(SimilarityMode value);
+
+	/**
+	 * Returns the value of the '<em><b>Floating Days Limit</b></em>' attribute.
+	 * The default value is <code>"15"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Floating Days Limit</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Floating Days Limit</em>' attribute.
+	 * @see #setFloatingDaysLimit(int)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_FloatingDaysLimit()
+	 * @model default="15"
+	 * @generated
+	 */
+	int getFloatingDaysLimit();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#getFloatingDaysLimit <em>Floating Days Limit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Floating Days Limit</em>' attribute.
+	 * @see #getFloatingDaysLimit()
+	 * @generated
+	 */
+	void setFloatingDaysLimit(int value);
 
 } // UserSettings

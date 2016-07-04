@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.impl;
@@ -27,6 +27,8 @@ import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
+import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
+import com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PortsExpressionMap;
@@ -179,6 +181,20 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	private EClass portsSplitExpressionMapEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass panamaCanalTariffEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass panamaCanalTariffBandEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -610,6 +626,15 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getCostModel_PanamaCanalTariff() {
+		return (EReference)costModelEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getPortsPriceMap() {
 		return portsPriceMapEClass;
 	}
@@ -736,6 +761,96 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getPanamaCanalTariff() {
+		return panamaCanalTariffEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPanamaCanalTariff_Bands() {
+		return (EReference)panamaCanalTariffEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPanamaCanalTariff_AvailableFrom() {
+		return (EAttribute)panamaCanalTariffEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPanamaCanalTariff_MarkupRate() {
+		return (EAttribute)panamaCanalTariffEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getPanamaCanalTariffBand() {
+		return panamaCanalTariffBandEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPanamaCanalTariffBand_LadenTariff() {
+		return (EAttribute)panamaCanalTariffBandEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPanamaCanalTariffBand_BallastTariff() {
+		return (EAttribute)panamaCanalTariffBandEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPanamaCanalTariffBand_BallastRoundtripTariff() {
+		return (EAttribute)panamaCanalTariffBandEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPanamaCanalTariffBand_BandStart() {
+		return (EAttribute)panamaCanalTariffBandEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPanamaCanalTariffBand_BandEnd() {
+		return (EAttribute)panamaCanalTariffBandEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public PricingFactory getPricingFactory() {
 		return (PricingFactory)getEFactoryInstance();
 	}
@@ -791,6 +906,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEReference(costModelEClass, COST_MODEL__PORT_COSTS);
 		createEReference(costModelEClass, COST_MODEL__COOLDOWN_COSTS);
 		createEReference(costModelEClass, COST_MODEL__BASE_FUEL_COSTS);
+		createEReference(costModelEClass, COST_MODEL__PANAMA_CANAL_TARIFF);
 
 		routeCostEClass = createEClass(ROUTE_COST);
 		createEReference(routeCostEClass, ROUTE_COST__ROUTE);
@@ -831,6 +947,18 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEReference(portsSplitExpressionMapEClass, PORTS_SPLIT_EXPRESSION_MAP__PORTS);
 		createEAttribute(portsSplitExpressionMapEClass, PORTS_SPLIT_EXPRESSION_MAP__EXPRESSION1);
 		createEAttribute(portsSplitExpressionMapEClass, PORTS_SPLIT_EXPRESSION_MAP__EXPRESSION2);
+
+		panamaCanalTariffEClass = createEClass(PANAMA_CANAL_TARIFF);
+		createEReference(panamaCanalTariffEClass, PANAMA_CANAL_TARIFF__BANDS);
+		createEAttribute(panamaCanalTariffEClass, PANAMA_CANAL_TARIFF__AVAILABLE_FROM);
+		createEAttribute(panamaCanalTariffEClass, PANAMA_CANAL_TARIFF__MARKUP_RATE);
+
+		panamaCanalTariffBandEClass = createEClass(PANAMA_CANAL_TARIFF_BAND);
+		createEAttribute(panamaCanalTariffBandEClass, PANAMA_CANAL_TARIFF_BAND__LADEN_TARIFF);
+		createEAttribute(panamaCanalTariffBandEClass, PANAMA_CANAL_TARIFF_BAND__BALLAST_TARIFF);
+		createEAttribute(panamaCanalTariffBandEClass, PANAMA_CANAL_TARIFF_BAND__BALLAST_ROUNDTRIP_TARIFF);
+		createEAttribute(panamaCanalTariffBandEClass, PANAMA_CANAL_TARIFF_BAND__BAND_START);
+		createEAttribute(panamaCanalTariffBandEClass, PANAMA_CANAL_TARIFF_BAND__BAND_END);
 	}
 
 	/**
@@ -963,6 +1091,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEReference(getCostModel_PortCosts(), this.getPortCost(), null, "portCosts", null, 0, -1, CostModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCostModel_CooldownCosts(), this.getCooldownPrice(), null, "cooldownCosts", null, 0, -1, CostModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCostModel_BaseFuelCosts(), this.getBaseFuelCost(), null, "baseFuelCosts", null, 0, -1, CostModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCostModel_PanamaCanalTariff(), this.getPanamaCanalTariff(), null, "panamaCanalTariff", null, 0, 1, CostModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(routeCostEClass, RouteCost.class, "RouteCost", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRouteCost_Route(), thePortPackage.getRoute(), null, "route", null, 1, 1, RouteCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1023,6 +1152,18 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEAttribute(getPortsSplitExpressionMap_Expression1(), ecorePackage.getEString(), "expression1", null, 1, 1, PortsSplitExpressionMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPortsSplitExpressionMap_Expression2(), ecorePackage.getEString(), "expression2", null, 1, 1, PortsSplitExpressionMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(panamaCanalTariffEClass, PanamaCanalTariff.class, "PanamaCanalTariff", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getPanamaCanalTariff_Bands(), this.getPanamaCanalTariffBand(), null, "bands", null, 0, -1, PanamaCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPanamaCanalTariff_AvailableFrom(), theDateTimePackage.getLocalDate(), "availableFrom", null, 0, 1, PanamaCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPanamaCanalTariff_MarkupRate(), ecorePackage.getEDouble(), "markupRate", null, 0, 1, PanamaCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(panamaCanalTariffBandEClass, PanamaCanalTariffBand.class, "PanamaCanalTariffBand", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getPanamaCanalTariffBand_LadenTariff(), ecorePackage.getEDouble(), "ladenTariff", null, 0, 1, PanamaCanalTariffBand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPanamaCanalTariffBand_BallastTariff(), ecorePackage.getEDouble(), "ballastTariff", null, 0, 1, PanamaCanalTariffBand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPanamaCanalTariffBand_BallastRoundtripTariff(), ecorePackage.getEDouble(), "ballastRoundtripTariff", null, 0, 1, PanamaCanalTariffBand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPanamaCanalTariffBand_BandStart(), ecorePackage.getEInt(), "bandStart", null, 0, 1, PanamaCanalTariffBand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPanamaCanalTariffBand_BandEnd(), ecorePackage.getEInt(), "bandEnd", null, 0, 1, PanamaCanalTariffBand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		// Create resource
 		createResource(eNS_URI);
 
@@ -1065,6 +1206,49 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		   source, 
 		   new String[] {
 			 "unitPrefix", "$",
+			 "formatString", "##,###,##0"
+		   });	
+		addAnnotation
+		  (getPanamaCanalTariff_MarkupRate(), 
+		   source, 
+		   new String[] {
+			 "scale", "100",
+			 "formatString", "##0.#",
+			 "unit", "%"
+		   });	
+		addAnnotation
+		  (getPanamaCanalTariffBand_LadenTariff(), 
+		   source, 
+		   new String[] {
+			 "unitPrefix", "$",
+			 "formatString", "#0.###"
+		   });	
+		addAnnotation
+		  (getPanamaCanalTariffBand_BallastTariff(), 
+		   source, 
+		   new String[] {
+			 "unitPrefix", "$",
+			 "formatString", "#0.###"
+		   });	
+		addAnnotation
+		  (getPanamaCanalTariffBand_BallastRoundtripTariff(), 
+		   source, 
+		   new String[] {
+			 "unitPrefix", "$",
+			 "formatString", "#0.###"
+		   });	
+		addAnnotation
+		  (getPanamaCanalTariffBand_BandStart(), 
+		   source, 
+		   new String[] {
+			 "unitSuffix", "m3\r\n",
+			 "formatString", "##,###,##0"
+		   });	
+		addAnnotation
+		  (getPanamaCanalTariffBand_BandEnd(), 
+		   source, 
+		   new String[] {
+			 "unitSuffix", "m3\r\n",
 			 "formatString", "##,###,##0"
 		   });
 	}

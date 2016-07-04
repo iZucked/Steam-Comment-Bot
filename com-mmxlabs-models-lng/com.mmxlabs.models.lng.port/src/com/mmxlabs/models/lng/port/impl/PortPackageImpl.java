@@ -1,11 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -20,6 +21,7 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
@@ -78,6 +80,13 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	private EClass locationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum routeOptionEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -238,8 +247,17 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getPort_DefaultWindowSizeUnits() {
+		return (EAttribute)portEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getPort_Location() {
-		return (EReference)portEClass.getEStructuralFeatures().get(10);
+		return (EReference)portEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -248,15 +266,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	public EAttribute getPort_AtobviacCode() {
-		return (EAttribute)portEClass.getEStructuralFeatures().get(11);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getPort_DataloyCode() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(12);
 	}
 
@@ -265,7 +274,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_VesonCode() {
+	public EAttribute getPort_DataloyCode() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(13);
 	}
 
@@ -274,7 +283,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_ExternalCode() {
+	public EAttribute getPort_VesonCode() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(14);
 	}
 
@@ -283,7 +292,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_UNLocode() {
+	public EAttribute getPort_ExternalCode() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(15);
 	}
 
@@ -292,7 +301,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_MinCvValue() {
+	public EAttribute getPort_UNLocode() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(16);
 	}
 
@@ -301,8 +310,17 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_MaxCvValue() {
+	public EAttribute getPort_MinCvValue() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(17);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPort_MaxCvValue() {
+		return (EAttribute)portEClass.getEStructuralFeatures().get(18);
 	}
 
 	/**
@@ -337,7 +355,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getRoute_Canal() {
+	public EAttribute getRoute_RouteOption() {
 		return (EAttribute)routeEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -346,8 +364,17 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getRoute_RoutingOptions() {
+	public EAttribute getRoute_Canal() {
 		return (EAttribute)routeEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getRoute_RoutingOptions() {
+		return (EAttribute)routeEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -517,6 +544,15 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EEnum getRouteOption() {
+		return routeOptionEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public PortFactory getPortFactory() {
 		return (PortFactory)getEFactoryInstance();
 	}
@@ -551,6 +587,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEAttribute(portEClass, PORT__DEFAULT_START_TIME);
 		createEAttribute(portEClass, PORT__ALLOW_COOLDOWN);
 		createEAttribute(portEClass, PORT__DEFAULT_WINDOW_SIZE);
+		createEAttribute(portEClass, PORT__DEFAULT_WINDOW_SIZE_UNITS);
 		createEReference(portEClass, PORT__LOCATION);
 		createEAttribute(portEClass, PORT__ATOBVIAC_CODE);
 		createEAttribute(portEClass, PORT__DATALOY_CODE);
@@ -562,6 +599,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		routeEClass = createEClass(ROUTE);
 		createEReference(routeEClass, ROUTE__LINES);
+		createEAttribute(routeEClass, ROUTE__ROUTE_OPTION);
 		createEAttribute(routeEClass, ROUTE__CANAL);
 		createEAttribute(routeEClass, ROUTE__ROUTING_OPTIONS);
 
@@ -587,6 +625,9 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEAttribute(locationEClass, LOCATION__COUNTRY);
 		createEAttribute(locationEClass, LOCATION__LAT);
 		createEAttribute(locationEClass, LOCATION__LON);
+
+		// Create enums
+		routeOptionEEnum = createEEnum(ROUTE_OPTION);
 	}
 
 	/**
@@ -652,6 +693,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getPort_DefaultStartTime(), ecorePackage.getEInt(), "defaultStartTime", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_AllowCooldown(), ecorePackage.getEBoolean(), "allowCooldown", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_DefaultWindowSize(), ecorePackage.getEInt(), "defaultWindowSize", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPort_DefaultWindowSizeUnits(), theTypesPackage.getTimePeriod(), "defaultWindowSizeUnits", "HOURS", 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPort_Location(), this.getLocation(), null, "location", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_AtobviacCode(), ecorePackage.getEString(), "atobviacCode", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_DataloyCode(), ecorePackage.getEString(), "dataloyCode", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -663,6 +705,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		initEClass(routeEClass, Route.class, "Route", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRoute_Lines(), this.getRouteLine(), null, "lines", null, 0, -1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRoute_RouteOption(), this.getRouteOption(), "routeOption", null, 0, 1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRoute_Canal(), ecorePackage.getEBoolean(), "canal", null, 1, 1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRoute_RoutingOptions(), ecorePackage.getEString(), "routingOptions", null, 0, -1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -693,6 +736,12 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getLocation_Country(), ecorePackage.getEString(), "country", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLocation_Lat(), ecorePackage.getEDouble(), "lat", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLocation_Lon(), ecorePackage.getEDouble(), "lon", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		// Initialize enums and add enum literals
+		initEEnum(routeOptionEEnum, RouteOption.class, "RouteOption");
+		addEEnumLiteral(routeOptionEEnum, RouteOption.DIRECT);
+		addEEnumLiteral(routeOptionEEnum, RouteOption.SUEZ);
+		addEEnumLiteral(routeOptionEEnum, RouteOption.PANAMA);
 
 		// Create resource
 		createResource(eNS_URI);
@@ -757,6 +806,13 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 			 "formatString", "##,##0"
 		   });	
 		addAnnotation
+		  (getPort_DefaultWindowSizeUnits(), 
+		   source, 
+		   new String[] {
+			 "unit", "hours",
+			 "formatString", "##,##0"
+		   });	
+		addAnnotation
 		  (getPort_MinCvValue(), 
 		   source, 
 		   new String[] {
@@ -772,13 +828,15 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		  (getLocation_Lat(), 
 		   source, 
 		   new String[] {
-			 "formatString", "-###.###"
+			 "formatString", "-##0.###",
+			 "exportFormatString", "##0.###"
 		   });	
 		addAnnotation
 		  (getLocation_Lon(), 
 		   source, 
 		   new String[] {
-			 "formatString", "-###.###"
+			 "formatString", "-##0.###",
+			 "exportFormatString", "##0.###"
 		   });
 	}
 

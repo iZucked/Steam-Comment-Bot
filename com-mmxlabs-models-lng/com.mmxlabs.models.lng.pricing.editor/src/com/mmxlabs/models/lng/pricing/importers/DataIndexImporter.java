@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.importers;
@@ -82,7 +82,9 @@ public class DataIndexImporter extends AbstractClassImporter {
 			for (final String s : row.keySet()) {
 				try {
 					final YearMonth date = parseDateString(s);
-
+					if (date == null) {
+						continue;
+					}
 					if (row.get(s).isEmpty()) {
 						continue;
 					}

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port;
@@ -61,7 +61,7 @@ public interface Location extends EObject {
 	 * @return the value of the '<em>Lat</em>' attribute.
 	 * @see #setLat(double)
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getLocation_Lat()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='-###.###'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='-##0.###' exportFormatString='##0.###'"
 	 * @generated
 	 */
 	double getLat();
@@ -87,7 +87,7 @@ public interface Location extends EObject {
 	 * @return the value of the '<em>Lon</em>' attribute.
 	 * @see #setLon(double)
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getLocation_Lon()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='-###.###'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='-##0.###' exportFormatString='##0.###'"
 	 * @generated
 	 */
 	double getLon();

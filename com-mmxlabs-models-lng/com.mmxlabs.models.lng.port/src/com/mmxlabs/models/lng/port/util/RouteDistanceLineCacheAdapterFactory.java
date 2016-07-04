@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port.util;
@@ -13,22 +13,22 @@ public class RouteDistanceLineCacheAdapterFactory implements IAdapterFactory {
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public Object getAdapter(final Object adaptableObject, final Class adapterType) {
+	public <T> T getAdapter(final Object adaptableObject, final Class<T> adapterType) {
 
 		if (adaptableObject instanceof Route) {
 			final Route route = (Route) adaptableObject;
 			synchronized (route) {
 				for (final Adapter eAdapter : route.eAdapters()) {
 					if (eAdapter instanceof RouteDistanceLineCache) {
-						return (RouteDistanceLineCache) eAdapter;
+						return (T) eAdapter;
 					}
 				}
 				final RouteDistanceLineCache cache = new RouteDistanceLineCache(route);
 				route.eAdapters().add(cache);
-				return cache;
+				return (T) cache;
 			}
 		}
-		return null;
+		return (T) null;
 	}
 
 	@SuppressWarnings("rawtypes")

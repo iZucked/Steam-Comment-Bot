@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port.ui.editorpart;
@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -26,7 +25,6 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -42,7 +40,6 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.FileCSVReader;
-import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
@@ -82,8 +79,8 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 		addTypicalColumn(PortCapability.LOAD.getName(), new CapabilityManipulator(PortCapability.LOAD, getJointModelEditorPart().getEditingDomain()));
 		addTypicalColumn(PortCapability.DISCHARGE.getName(), new CapabilityManipulator(PortCapability.DISCHARGE, getJointModelEditorPart().getEditingDomain()));
-		addTypicalColumn("Other Names", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getOtherNamesObject_OtherNames(),
-				getEditingDomain())));
+		addTypicalColumn("Other Names",
+				new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getOtherNamesObject_OtherNames(), getEditingDomain())));
 
 		// addTypicalColumn("Timezone", new BasicAttributeManipulator(PortPackage.eINSTANCE.getPort_TimeZone(), getJointModelEditorPart().getEditingDomain()));
 		// addTypicalColumn("Port Code", new BasicAttributeManipulator(PortPackage.eINSTANCE.getPort_PortCode(), getJointModelEditorPart().getEditingDomain()));
@@ -98,8 +95,8 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 			@Override
 			public void run() {
-				final DetailCompositeDialog dcd = new DetailCompositeDialog(PortEditorPane.this.getJointModelEditorPart().getShell(), PortEditorPane.this.getJointModelEditorPart()
-						.getDefaultCommandHandler());
+				final DetailCompositeDialog dcd = new DetailCompositeDialog(PortEditorPane.this.getJointModelEditorPart().getShell(),
+						PortEditorPane.this.getJointModelEditorPart().getDefaultCommandHandler());
 				final MMXRootObject rootObject = getJointModelEditorPart().getRootObject();
 				if (rootObject instanceof LNGScenarioModel) {
 					final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
@@ -225,67 +222,67 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 						addActionToMenu(importR, menu);
 					}
 
-					new MenuItem(menu, SWT.SEPARATOR);
-
-					final ImportAction importNew = new ImportAction(getJointModelEditorPart()) {
-
-						@Override
-						protected void doImportStages(final DefaultImportContext context) {
-							final String path = importHooksProvider.getImportFilePath();
-
-							if (path == null)
-								return;
-
-							final InputDialog input = new InputDialog(importHooksProvider.getShell(), "Name for new canal", "Enter a new name for the new canal", "canal", new IInputValidator() {
-								@Override
-								public String isValid(final String newText) {
-									if (newText.trim().isEmpty()) {
-										return "The canal must have a name";
-									}
-									if (existingNames.contains(newText)) {
-										return "Another route already has the name " + newText;
-									}
-									return null;
-								}
-							});
-							if (input.open() == Window.OK) {
-								final String newName = input.getValue();
-								final RouteImporter routeImporter = new RouteImporter();
-
-								CSVReader reader = null;
-								try {
-									reader = new FileCSVReader(new File(path));
-
-									final Route importRoute = routeImporter.importRoute(reader, context);
-
-									context.run();
-
-									importRoute.setName(newName);
-									importRoute.setCanal(true);
-
-									getJointModelEditorPart().setDisableUpdates(true);
-									getJointModelEditorPart().getEditingDomain().getCommandStack()
-											.execute(AddCommand.create(getJointModelEditorPart().getEditingDomain(), pm, PortPackage.eINSTANCE.getPortModel_Routes(), importRoute));
-									getJointModelEditorPart().setDisableUpdates(false);
-								} catch (final IOException e) {
-									log.error(e.getMessage(), e);
-								} finally {
-
-									if (reader != null) {
-										try {
-											reader.close();
-										} catch (final IOException e) {
-										}
-									}
-
-								}
-							}
-						}
-					};
-
-					importNew.setText("Import new canal...");
-
-					addActionToMenu(importNew, menu);
+//					new MenuItem(menu, SWT.SEPARATOR);
+//
+//					final ImportAction importNew = new ImportAction(getJointModelEditorPart()) {
+//
+//						@Override
+//						protected void doImportStages(final DefaultImportContext context) {
+//							final String path = importHooksProvider.getImportFilePath();
+//
+//							if (path == null)
+//								return;
+//
+//							final InputDialog input = new InputDialog(importHooksProvider.getShell(), "Name for new canal", "Enter a new name for the new canal", "canal", new IInputValidator() {
+//								@Override
+//								public String isValid(final String newText) {
+//									if (newText.trim().isEmpty()) {
+//										return "The canal must have a name";
+//									}
+//									if (existingNames.contains(newText)) {
+//										return "Another route already has the name " + newText;
+//									}
+//									return null;
+//								}
+//							});
+//							if (input.open() == Window.OK) {
+//								final String newName = input.getValue();
+//								final RouteImporter routeImporter = new RouteImporter();
+//
+//								CSVReader reader = null;
+//								try {
+//									reader = new FileCSVReader(new File(path));
+//
+//									final Route importRoute = routeImporter.importRoute(reader, context);
+//
+//									context.run();
+//
+//									importRoute.setName(newName);
+//									importRoute.setCanal(true);
+//
+//									getJointModelEditorPart().setDisableUpdates(true);
+//									getJointModelEditorPart().getEditingDomain().getCommandStack()
+//											.execute(AddCommand.create(getJointModelEditorPart().getEditingDomain(), pm, PortPackage.eINSTANCE.getPortModel_Routes(), importRoute));
+//									getJointModelEditorPart().setDisableUpdates(false);
+//								} catch (final IOException e) {
+//									log.error(e.getMessage(), e);
+//								} finally {
+//
+//									if (reader != null) {
+//										try {
+//											reader.close();
+//										} catch (final IOException e) {
+//										}
+//									}
+//
+//								}
+//							}
+//						}
+//					};
+//
+//					importNew.setText("Import new canal...");
+//
+//					addActionToMenu(importNew, menu);
 
 					boolean hasMainRoute = false;
 					for (final Route r : pm.getRoutes()) {
@@ -380,17 +377,17 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 									}
 									final InputDialog input = new InputDialog(part.getSite().getShell(), "Rename canal " + canal.getName(), "Enter a new name for the canal " + canal.getName(),
 											canal.getName(), new IInputValidator() {
-												@Override
-												public String isValid(final String newText) {
-													if (newText.trim().isEmpty()) {
-														return "The canal must have a name";
-													}
-													if (existingNames.contains(newText)) {
-														return "Another canal already has the name " + newText;
-													}
-													return null;
-												}
-											});
+										@Override
+										public String isValid(final String newText) {
+											if (newText.trim().isEmpty()) {
+												return "The canal must have a name";
+											}
+											if (existingNames.contains(newText)) {
+												return "Another canal already has the name " + newText;
+											}
+											return null;
+										}
+									});
 									if (input.open() == Window.OK) {
 										final String newName = input.getValue();
 										getJointModelEditorPart().getEditingDomain().getCommandStack()
@@ -399,63 +396,63 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 								}
 							};
 							addActionToMenu(renameCanal, menu2);
-							if (canal.isCanal()) {
-								final Action deleteCanal = new Action("Delete...") {
-									@Override
-									public void run() {
-										if (MessageDialog.openQuestion(part.getSite().getShell(), "Delete canal " + canal.getName(), "Are you sure you want to delete the canal \"" + canal.getName()
-												+ "\"?")) {
-											getJointModelEditorPart().getEditingDomain().getCommandStack()
-													.execute(DeleteCommand.create(getJointModelEditorPart().getEditingDomain(), Collections.singleton(canal)));
-										}
-									}
-								};
-								addActionToMenu(deleteCanal, menu2);
-							}
+							// if (canal.isCanal()) {
+							// final Action deleteCanal = new Action("Delete...") {
+							// @Override
+							// public void run() {
+							// if (MessageDialog.openQuestion(part.getSite().getShell(), "Delete canal " + canal.getName(), "Are you sure you want to delete the canal \"" + canal.getName()
+							// + "\"?")) {
+							// getJointModelEditorPart().getEditingDomain().getCommandStack()
+							// .execute(DeleteCommand.create(getJointModelEditorPart().getEditingDomain(), Collections.singleton(canal)));
+							// }
+							// }
+							// };
+							// addActionToMenu(deleteCanal, menu2);
+							// }
 
 						}
 					};
 					addActionToMenu(canalEditor, menu);
 				}
 
-				new MenuItem(menu, SWT.SEPARATOR);
-
-				addActionToMenu(new LockableAction("Add new canal...") {
-					@Override
-					public void run() {
-						final HashSet<String> existingNames = new HashSet<String>();
-						for (final Route c : portModel.getRoutes()) {
-							existingNames.add(c.getName());
-						}
-						final InputDialog input = new InputDialog(part.getSite().getShell(), "Create canal", "Enter a name for the new canal", "", new IInputValidator() {
-							@Override
-							public String isValid(final String newText) {
-								if (newText.trim().isEmpty()) {
-									return "The canal must have a name";
-								}
-								if (existingNames.contains(newText)) {
-									return "Another canal already has the name " + newText;
-								}
-								return null;
-							}
-						});
-						if (input.open() == Window.OK) {
-							final CompoundCommand cc = new CompoundCommand();
-							final String newName = input.getValue();
-							Route dm = PortFactory.eINSTANCE.createRoute();
-							dm.setName(newName);
-							dm.setCanal(true);
-							final DistanceEditorDialog ded = new DistanceEditorDialog(part.getSite().getShell());
-							if (ded.open(PortEditorPane.this.part.getSite(), getJointModelEditorPart(), dm) == Window.OK) {
-								dm = ded.getResult();
-							}
-
-							cc.append(AddCommand.create(getJointModelEditorPart().getEditingDomain(), portModel, PortPackage.eINSTANCE.getPortModel_Routes(), dm));
-							getJointModelEditorPart().getEditingDomain().getCommandStack().execute(cc);
-
-						}
-					}
-				}, menu);
+				// new MenuItem(menu, SWT.SEPARATOR);
+				//
+				// addActionToMenu(new LockableAction("Add new canal...") {
+				// @Override
+				// public void run() {
+				// final HashSet<String> existingNames = new HashSet<String>();
+				// for (final Route c : portModel.getRoutes()) {
+				// existingNames.add(c.getName());
+				// }
+				// final InputDialog input = new InputDialog(part.getSite().getShell(), "Create canal", "Enter a name for the new canal", "", new IInputValidator() {
+				// @Override
+				// public String isValid(final String newText) {
+				// if (newText.trim().isEmpty()) {
+				// return "The canal must have a name";
+				// }
+				// if (existingNames.contains(newText)) {
+				// return "Another canal already has the name " + newText;
+				// }
+				// return null;
+				// }
+				// });
+				// if (input.open() == Window.OK) {
+				// final CompoundCommand cc = new CompoundCommand();
+				// final String newName = input.getValue();
+				// Route dm = PortFactory.eINSTANCE.createRoute();
+				// dm.setName(newName);
+				// dm.setCanal(true);
+				// final DistanceEditorDialog ded = new DistanceEditorDialog(part.getSite().getShell());
+				// if (ded.open(PortEditorPane.this.part.getSite(), getJointModelEditorPart(), dm) == Window.OK) {
+				// dm = ded.getResult();
+				// }
+				//
+				// cc.append(AddCommand.create(getJointModelEditorPart().getEditingDomain(), portModel, PortPackage.eINSTANCE.getPortModel_Routes(), dm));
+				// getJointModelEditorPart().getEditingDomain().getCommandStack().execute(cc);
+				//
+				// }
+				// }
+				// }, menu);
 			}
 		}
 

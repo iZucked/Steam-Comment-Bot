@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.actuals.ui.editorpart;
@@ -39,6 +39,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
@@ -278,7 +279,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 
 								// Take direct route
 								for (final Route route : portModel.getRoutes()) {
-									if (route.isCanal()) {
+									if (route.getRouteOption() != RouteOption.DIRECT) {
 										continue;
 									}
 									for (final RouteLine rl : route.getLines()) {

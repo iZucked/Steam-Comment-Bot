@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
@@ -1979,6 +1979,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		endEventEClass.getESuperTypes().add(this.getFuelUsage());
 		endEventEClass.getESuperTypes().add(this.getPortVisit());
 		endEventEClass.getESuperTypes().add(this.getProfitAndLossContainer());
+		endEventEClass.getESuperTypes().add(this.getEventGrouping());
 		journeyEClass.getESuperTypes().add(this.getEvent());
 		journeyEClass.getESuperTypes().add(this.getFuelUsage());
 		idleEClass.getESuperTypes().add(this.getEvent());
@@ -2190,7 +2191,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		addEEnumLiteral(sequenceTypeEEnum, SequenceType.SPOT_VESSEL);
 		addEEnumLiteral(sequenceTypeEEnum, SequenceType.DES_PURCHASE);
 		addEEnumLiteral(sequenceTypeEEnum, SequenceType.FOB_SALE);
-		addEEnumLiteral(sequenceTypeEEnum, SequenceType.CARGO_SHORTS);
+		addEEnumLiteral(sequenceTypeEEnum, SequenceType.ROUND_TRIP);
 
 		initEEnum(fuelEEnum, Fuel.class, "Fuel");
 		addEEnumLiteral(fuelEEnum, Fuel.BASE_FUEL);

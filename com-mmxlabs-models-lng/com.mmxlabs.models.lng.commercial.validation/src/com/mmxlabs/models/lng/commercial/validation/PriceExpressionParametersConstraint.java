@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.validation;
@@ -11,11 +11,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
+import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -29,10 +29,9 @@ public class PriceExpressionParametersConstraint extends AbstractModelMultiConst
 		EObject target = ctx.getTarget();
 
 		if (target instanceof ExpressionPriceParameters) {
-			final SeriesParser parser = PriceExpressionUtils.getCommodityParser(null);
 			final ExpressionPriceParameters pricingParams = (ExpressionPriceParameters) target;
 			ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, pricingParams, CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION,
-					pricingParams.getPriceExpression(), parser);
+					pricingParams.getPriceExpression(), PriceIndexType.COMMODITY);
 			if (!result.isOk()) {
 				EObject eContainer = pricingParams.eContainer();
 				final DetailConstraintStatusDecorator dsd;

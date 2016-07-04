@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo;
@@ -455,13 +455,31 @@ public interface CargoPackage extends EPackage {
 	int SLOT__WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Window Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__WINDOW_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The feature id for the '<em><b>Window Flex</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_FLEX = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int SLOT__WINDOW_FLEX = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Window Flex Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__WINDOW_FLEX_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Duration</b></em>' attribute.
@@ -470,7 +488,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int SLOT__DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Volume Limits Unit</b></em>' attribute.
@@ -479,7 +497,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__VOLUME_LIMITS_UNIT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int SLOT__VOLUME_LIMITS_UNIT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
@@ -488,7 +506,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__MIN_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+	int SLOT__MIN_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
@@ -497,7 +515,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__MAX_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+	int SLOT__MAX_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The feature id for the '<em><b>Optional</b></em>' attribute.
@@ -506,7 +524,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__OPTIONAL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+	int SLOT__OPTIONAL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
@@ -515,7 +533,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int SLOT__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The feature id for the '<em><b>Cargo</b></em>' reference.
@@ -524,7 +542,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__CARGO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+	int SLOT__CARGO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
 
 	/**
 	 * The feature id for the '<em><b>Pricing Event</b></em>' attribute.
@@ -533,7 +551,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PRICING_EVENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
+	int SLOT__PRICING_EVENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
 
 	/**
 	 * The feature id for the '<em><b>Pricing Date</b></em>' attribute.
@@ -542,7 +560,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PRICING_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
+	int SLOT__PRICING_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
 
 	/**
 	 * The feature id for the '<em><b>Notes</b></em>' attribute.
@@ -551,7 +569,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__NOTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
+	int SLOT__NOTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
 
 	/**
 	 * The feature id for the '<em><b>Divertible</b></em>' attribute.
@@ -560,7 +578,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__DIVERTIBLE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
+	int SLOT__DIVERTIBLE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
 
 	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
@@ -569,7 +587,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
+	int SLOT__SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 20;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -578,7 +596,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
+	int SLOT__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 21;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
@@ -587,7 +605,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 20;
+	int SLOT__RESTRICTED_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 22;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
@@ -596,7 +614,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 21;
+	int SLOT__RESTRICTED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 23;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
@@ -605,7 +623,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 22;
+	int SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 24;
 
 	/**
 	 * The feature id for the '<em><b>Hedges</b></em>' attribute.
@@ -614,7 +632,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__HEDGES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 23;
+	int SLOT__HEDGES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 25;
 
 	/**
 	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
@@ -623,16 +641,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__ALLOWED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 24;
+	int SLOT__ALLOWED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
 
 	/**
-	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__CANCELLATION_FEE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 25;
+	int SLOT__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
 
 	/**
 	 * The feature id for the '<em><b>Override Restrictions</b></em>' attribute.
@@ -641,7 +659,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__OVERRIDE_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
+	int SLOT__OVERRIDE_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 28;
 
 	/**
 	 * The feature id for the '<em><b>Nominated Vessel</b></em>' reference.
@@ -650,7 +668,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__NOMINATED_VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
+	int SLOT__NOMINATED_VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 29;
 
 	/**
 	 * The feature id for the '<em><b>Locked</b></em>' attribute.
@@ -659,7 +677,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__LOCKED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 28;
+	int SLOT__LOCKED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 30;
 
 	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
@@ -668,7 +686,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 29;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 31;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -788,13 +806,31 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 9;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Port Window Size Units</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 10;
+
+	/**
+	 * The operation id for the '<em>Get Window Size In Hours</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_WINDOW_SIZE_IN_HOURS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 11;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Delegated Entity</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATED_ENTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 10;
+	int SLOT___GET_SLOT_OR_DELEGATED_ENTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 12;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
@@ -803,7 +839,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 11;
+	int SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 13;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Ports</em>' operation.
@@ -812,7 +848,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 12;
+	int SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 14;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Lists Are Permissive</em>' operation.
@@ -821,16 +857,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 13;
+	int SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 15;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Contract Cancellation Expression</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 14;
+	int SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 16;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegated Pricing Event</em>' operation.
@@ -839,7 +875,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 15;
+	int SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 17;
 
 	/**
 	 * The operation id for the '<em>Get Pricing Date As Date Time</em>' operation.
@@ -848,7 +884,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_PRICING_DATE_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 16;
+	int SLOT___GET_PRICING_DATE_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 18;
 
 	/**
 	 * The operation id for the '<em>Get Slot Contract Params</em>' operation.
@@ -857,7 +893,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_CONTRACT_PARAMS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 17;
+	int SLOT___GET_SLOT_CONTRACT_PARAMS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 19;
 
 	/**
 	 * The number of operations of the '<em>Slot</em>' class.
@@ -866,7 +902,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 18;
+	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 20;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -941,6 +977,15 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__WINDOW_SIZE = SLOT__WINDOW_SIZE;
 
 	/**
+	 * The feature id for the '<em><b>Window Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__WINDOW_SIZE_UNITS = SLOT__WINDOW_SIZE_UNITS;
+
+	/**
 	 * The feature id for the '<em><b>Window Flex</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -948,6 +993,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__WINDOW_FLEX = SLOT__WINDOW_FLEX;
+
+	/**
+	 * The feature id for the '<em><b>Window Flex Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__WINDOW_FLEX_UNITS = SLOT__WINDOW_FLEX_UNITS;
 
 	/**
 	 * The feature id for the '<em><b>Duration</b></em>' attribute.
@@ -1112,13 +1166,13 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__ALLOWED_VESSELS = SLOT__ALLOWED_VESSELS;
 
 	/**
-	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT__CANCELLATION_FEE = SLOT__CANCELLATION_FEE;
+	int LOAD_SLOT__CANCELLATION_EXPRESSION = SLOT__CANCELLATION_EXPRESSION;
 
 	/**
 	 * The feature id for the '<em><b>Override Restrictions</b></em>' attribute.
@@ -1319,6 +1373,24 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE = SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Port Window Size Units</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE_UNITS = SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE_UNITS;
+
+	/**
+	 * The operation id for the '<em>Get Window Size In Hours</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_WINDOW_SIZE_IN_HOURS = SLOT___GET_WINDOW_SIZE_IN_HOURS;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Delegated Entity</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1355,13 +1427,13 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Contract Cancellation Expression</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE;
+	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION = SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegated Pricing Event</em>' operation.
@@ -1490,6 +1562,15 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__WINDOW_SIZE = SLOT__WINDOW_SIZE;
 
 	/**
+	 * The feature id for the '<em><b>Window Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__WINDOW_SIZE_UNITS = SLOT__WINDOW_SIZE_UNITS;
+
+	/**
 	 * The feature id for the '<em><b>Window Flex</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1497,6 +1578,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__WINDOW_FLEX = SLOT__WINDOW_FLEX;
+
+	/**
+	 * The feature id for the '<em><b>Window Flex Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__WINDOW_FLEX_UNITS = SLOT__WINDOW_FLEX_UNITS;
 
 	/**
 	 * The feature id for the '<em><b>Duration</b></em>' attribute.
@@ -1661,13 +1751,13 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__ALLOWED_VESSELS = SLOT__ALLOWED_VESSELS;
 
 	/**
-	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT__CANCELLATION_FEE = SLOT__CANCELLATION_FEE;
+	int DISCHARGE_SLOT__CANCELLATION_EXPRESSION = SLOT__CANCELLATION_EXPRESSION;
 
 	/**
 	 * The feature id for the '<em><b>Override Restrictions</b></em>' attribute.
@@ -1868,6 +1958,24 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE = SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Port Window Size Units</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE_UNITS = SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE_UNITS;
+
+	/**
+	 * The operation id for the '<em>Get Window Size In Hours</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_WINDOW_SIZE_IN_HOURS = SLOT___GET_WINDOW_SIZE_IN_HOURS;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Delegated Entity</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1904,13 +2012,13 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Contract Cancellation Expression</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE;
+	int DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION = SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegated Pricing Event</em>' operation.
@@ -2131,6 +2239,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__WINDOW_SIZE = LOAD_SLOT__WINDOW_SIZE;
 
 	/**
+	 * The feature id for the '<em><b>Window Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__WINDOW_SIZE_UNITS = LOAD_SLOT__WINDOW_SIZE_UNITS;
+
+	/**
 	 * The feature id for the '<em><b>Window Flex</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2138,6 +2255,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT__WINDOW_FLEX = LOAD_SLOT__WINDOW_FLEX;
+
+	/**
+	 * The feature id for the '<em><b>Window Flex Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__WINDOW_FLEX_UNITS = LOAD_SLOT__WINDOW_FLEX_UNITS;
 
 	/**
 	 * The feature id for the '<em><b>Duration</b></em>' attribute.
@@ -2302,13 +2428,13 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__ALLOWED_VESSELS = LOAD_SLOT__ALLOWED_VESSELS;
 
 	/**
-	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_LOAD_SLOT__CANCELLATION_FEE = LOAD_SLOT__CANCELLATION_FEE;
+	int SPOT_LOAD_SLOT__CANCELLATION_EXPRESSION = LOAD_SLOT__CANCELLATION_EXPRESSION;
 
 	/**
 	 * The feature id for the '<em><b>Override Restrictions</b></em>' attribute.
@@ -2518,6 +2644,24 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE = LOAD_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Port Window Size Units</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE_UNITS = LOAD_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE_UNITS;
+
+	/**
+	 * The operation id for the '<em>Get Window Size In Hours</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_WINDOW_SIZE_IN_HOURS = LOAD_SLOT___GET_WINDOW_SIZE_IN_HOURS;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Delegated Entity</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2554,13 +2698,13 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Contract Cancellation Expression</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_LOAD_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = LOAD_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE;
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION = LOAD_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegated Pricing Event</em>' operation.
@@ -2699,6 +2843,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__WINDOW_SIZE = DISCHARGE_SLOT__WINDOW_SIZE;
 
 	/**
+	 * The feature id for the '<em><b>Window Size Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__WINDOW_SIZE_UNITS = DISCHARGE_SLOT__WINDOW_SIZE_UNITS;
+
+	/**
 	 * The feature id for the '<em><b>Window Flex</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2706,6 +2859,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__WINDOW_FLEX = DISCHARGE_SLOT__WINDOW_FLEX;
+
+	/**
+	 * The feature id for the '<em><b>Window Flex Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__WINDOW_FLEX_UNITS = DISCHARGE_SLOT__WINDOW_FLEX_UNITS;
 
 	/**
 	 * The feature id for the '<em><b>Duration</b></em>' attribute.
@@ -2870,13 +3032,13 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__ALLOWED_VESSELS = DISCHARGE_SLOT__ALLOWED_VESSELS;
 
 	/**
-	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_DISCHARGE_SLOT__CANCELLATION_FEE = DISCHARGE_SLOT__CANCELLATION_FEE;
+	int SPOT_DISCHARGE_SLOT__CANCELLATION_EXPRESSION = DISCHARGE_SLOT__CANCELLATION_EXPRESSION;
 
 	/**
 	 * The feature id for the '<em><b>Override Restrictions</b></em>' attribute.
@@ -3087,6 +3249,24 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE = DISCHARGE_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Port Window Size Units</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE_UNITS = DISCHARGE_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE_UNITS;
+
+	/**
+	 * The operation id for the '<em>Get Window Size In Hours</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_WINDOW_SIZE_IN_HOURS = DISCHARGE_SLOT___GET_WINDOW_SIZE_IN_HOURS;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Delegated Entity</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3123,13 +3303,13 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Contract Cancellation Expression</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE;
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION = DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegated Pricing Event</em>' operation.
@@ -4628,6 +4808,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_WindowSize();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowSizeUnits <em>Window Size Units</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Window Size Units</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getWindowSizeUnits()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_WindowSizeUnits();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowFlex <em>Window Flex</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4637,6 +4828,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSlot_WindowFlex();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowFlexUnits <em>Window Flex Units</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Window Flex Units</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getWindowFlexUnits()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_WindowFlexUnits();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Slot#getPort <em>Port</em>}'.
@@ -4848,17 +5050,16 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_Hedges();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationExpression <em>Cancellation Expression</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Cancellation Fee</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getCancellationFee()
+	 * @return the meta object for the attribute '<em>Cancellation Expression</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getCancellationExpression()
 	 * @see #getSlot()
 	 * @generated
 	 */
-	EAttribute getSlot_CancellationFee();
+	EAttribute getSlot_CancellationExpression();
 
-	
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isOverrideRestrictions <em>Override Restrictions</em>}'.
 	 * <!-- begin-user-doc -->
@@ -4995,6 +5196,26 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetSlotOrPortWindowSize();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrPortWindowSizeUnits() <em>Get Slot Or Port Window Size Units</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Port Window Size Units</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrPortWindowSizeUnits()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrPortWindowSizeUnits();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowSizeInHours() <em>Get Window Size In Hours</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Window Size In Hours</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getWindowSizeInHours()
+	 * @generated
+	 */
+	EOperation getSlot__GetWindowSizeInHours();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegatedEntity() <em>Get Slot Or Delegated Entity</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5035,14 +5256,14 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetSlotOrContractRestrictedListsArePermissive();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractCancellationFee() <em>Get Slot Or Contract Cancellation Fee</em>}' operation.
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractCancellationExpression() <em>Get Slot Or Contract Cancellation Expression</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractCancellationFee()
+	 * @return the meta object for the '<em>Get Slot Or Contract Cancellation Expression</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractCancellationExpression()
 	 * @generated
 	 */
-	EOperation getSlot__GetSlotOrContractCancellationFee();
+	EOperation getSlot__GetSlotOrContractCancellationExpression();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegatedPricingEvent() <em>Get Slot Or Delegated Pricing Event</em>}' operation.
@@ -5966,12 +6187,28 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__WINDOW_SIZE = eINSTANCE.getSlot_WindowSize();
 
 		/**
+		 * The meta object literal for the '<em><b>Window Size Units</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__WINDOW_SIZE_UNITS = eINSTANCE.getSlot_WindowSizeUnits();
+
+		/**
 		 * The meta object literal for the '<em><b>Window Flex</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute SLOT__WINDOW_FLEX = eINSTANCE.getSlot_WindowFlex();
+
+		/**
+		 * The meta object literal for the '<em><b>Window Flex Units</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__WINDOW_FLEX_UNITS = eINSTANCE.getSlot_WindowFlexUnits();
 
 		/**
 		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
@@ -6134,12 +6371,12 @@ public interface CargoPackage extends EPackage {
 		EReference SLOT__ALLOWED_VESSELS = eINSTANCE.getSlot_AllowedVessels();
 
 		/**
-		 * The meta object literal for the '<em><b>Cancellation Fee</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Cancellation Expression</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SLOT__CANCELLATION_FEE = eINSTANCE.getSlot_CancellationFee();
+		EAttribute SLOT__CANCELLATION_EXPRESSION = eINSTANCE.getSlot_CancellationExpression();
 
 		/**
 		 * The meta object literal for the '<em><b>Override Restrictions</b></em>' attribute feature.
@@ -6238,6 +6475,22 @@ public interface CargoPackage extends EPackage {
 		EOperation SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE = eINSTANCE.getSlot__GetSlotOrPortWindowSize();
 
 		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Port Window Size Units</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE_UNITS = eINSTANCE.getSlot__GetSlotOrPortWindowSizeUnits();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Window Size In Hours</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_WINDOW_SIZE_IN_HOURS = eINSTANCE.getSlot__GetWindowSizeInHours();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegated Entity</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6270,12 +6523,12 @@ public interface CargoPackage extends EPackage {
 		EOperation SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = eINSTANCE.getSlot__GetSlotOrContractRestrictedListsArePermissive();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Slot Or Contract Cancellation Fee</b></em>' operation.
+		 * The meta object literal for the '<em><b>Get Slot Or Contract Cancellation Expression</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = eINSTANCE.getSlot__GetSlotOrContractCancellationFee();
+		EOperation SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_EXPRESSION = eINSTANCE.getSlot__GetSlotOrContractCancellationExpression();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegated Pricing Event</b></em>' operation.

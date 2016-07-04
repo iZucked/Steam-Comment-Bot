@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.ui.views;
@@ -11,6 +11,7 @@ import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.ISelection;
@@ -34,7 +35,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  */
 public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane> extends ScenarioInstanceView implements CommandStackListener {
 	private Composite childComposite;
-	private T viewerPane;
+	private @Nullable T viewerPane;
 	private UndoAction undoAction;
 	private RedoAction redoAction;
 	private CommandStack currentCommandStack;
@@ -69,9 +70,12 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 		// Clear existing settings
 		updateActions(null);
 		if (instance != getScenarioInstance()) {
-			if (viewerPane != null) {
+			// Pin the reference
+			@Nullable
+			final T nViewerPane = viewerPane;
+			if (nViewerPane != null) {
 				getSite().setSelectionProvider(null);
-				viewerPane.dispose();
+				nViewerPane.dispose();
 				viewerPane = null;
 			}
 
@@ -82,12 +86,14 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 
 			super.displayScenarioInstance(instance);
 			if (instance != null) {
-				viewerPane = createViewerPane();
-				viewerPane.setExternalMenuManager((MenuManager) getViewSite().getActionBars().getMenuManager());
-				viewerPane.setExternalToolBarManager((ToolBarManager) getViewSite().getActionBars().getToolBarManager());
-				viewerPane.createControl(childComposite);
-				viewerPane.setLocked(isLocked());
-				initViewerPane(viewerPane);
+				// Pin the reference
+				final T pViewerPane = createViewerPane();
+				pViewerPane.setExternalMenuManager((MenuManager) getViewSite().getActionBars().getMenuManager());
+				pViewerPane.setExternalToolBarManager((ToolBarManager) getViewSite().getActionBars().getToolBarManager());
+				pViewerPane.createControl(childComposite);
+				pViewerPane.setLocked(isLocked());
+				this.viewerPane = pViewerPane;
+				initViewerPane(pViewerPane);
 			}
 			parent.layout(true);
 
@@ -120,8 +126,10 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 
 	@Override
 	public void setFocus() {
-		if (viewerPane != null) {
-			viewerPane.setFocus();
+		@Nullable
+		T pViewerPane = viewerPane;
+		if (pViewerPane != null) {
+			pViewerPane.setFocus();
 		} else if (childComposite != null) {
 			childComposite.setFocus();
 		}
@@ -130,8 +138,10 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 
 	@Override
 	public void setLocked(final boolean locked) {
-		if (viewerPane != null) {
-			viewerPane.setLocked(locked);
+		@Nullable
+		T pViewerPane = viewerPane;
+		if (pViewerPane != null) {
+			pViewerPane.setLocked(locked);
 		}
 
 		// Disable while locked.
@@ -150,8 +160,10 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 	 * @see org.eclipse.jface.viewers.Viewer#setSelection(org.eclipse.jface.viewers.ISelection, boolean)
 	 */
 	protected void setSelection(final ISelection selection, final boolean reveal) {
-		if (viewerPane != null) {
-			viewerPane.getScenarioViewer().setSelection(selection, reveal);
+		@Nullable
+		T pViewerPane = viewerPane;
+		if (pViewerPane != null) {
+			pViewerPane.getScenarioViewer().setSelection(selection, reveal);
 		}
 	}
 
@@ -163,8 +175,9 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 
 	@Override
 	public void dispose() {
-		if (currentCommandStack != null) {
-			currentCommandStack.removeCommandStackListener(this);
+		CommandStack pCurrentCommandStack = currentCommandStack;
+		if (pCurrentCommandStack != null) {
+			pCurrentCommandStack.removeCommandStackListener(this);
 			currentCommandStack = null;
 		}
 		super.dispose();

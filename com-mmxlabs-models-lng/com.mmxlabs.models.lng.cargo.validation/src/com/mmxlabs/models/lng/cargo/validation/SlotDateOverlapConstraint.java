@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.validation;
@@ -23,7 +23,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -43,7 +45,7 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 
 	private static class PortSlotCounter {
 
-		private final Map<Port, Map<String, Collection<Slot>>> countingMap = new HashMap<Port, Map<String, Collection<Slot>>>();
+		private final Map<Port, Map<@NonNull String, @NonNull Collection<@NonNull Slot>>> countingMap = new HashMap<>();
 
 		private final DateTimeFormatter df = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
@@ -59,15 +61,16 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 			if (windowStart == null) {
 				return Collections.emptySet();
 			}
+			@NonNull
 			ZonedDateTime cal = windowStart;
 			int windowSize = slot.getWindowSize();
 
-			final Set<Slot> overlappingSlots = new LinkedHashSet<Slot>();
+			final Set<@NonNull Slot> overlappingSlots = new LinkedHashSet<>();
 			final SlotType slotType = classify(slot);
 			do {
 				final String dateKey = dateToString(cal);
-				final Collection<Slot> potentialOverlaps = getOverlappingSlots(slot, dateKey);
-				final Iterator<Slot> ii = potentialOverlaps.iterator();
+				final Collection<@NonNull Slot> potentialOverlaps = getOverlappingSlots(slot, dateKey);
+				final Iterator<@NonNull Slot> ii = potentialOverlaps.iterator();
 				while (ii.hasNext()) {
 					final Slot overlapSlot = ii.next();
 					final SlotType overlapSlotType = classify(overlapSlot);
@@ -78,12 +81,12 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 						continue;
 					}
 
-					final ZonedDateTime slotStart = slot.getWindowStartWithSlotOrPortTime();
-					final ZonedDateTime overlapSlotStart = overlapSlot.getWindowStartWithSlotOrPortTime();
+					final ZonedDateTime slotStart = slot.getWindowStartWithSlotOrPortTimeWithFlex();
+					final ZonedDateTime overlapSlotStart = overlapSlot.getWindowStartWithSlotOrPortTimeWithFlex();
 					final int slotDur = slot.getDuration();
 					final int overlapSlotDur = overlapSlot.getDuration();
-					final ZonedDateTime olEnd = overlapSlot.getWindowEndWithSlotOrPortTime();
-					final ZonedDateTime slotEnd = slot.getWindowEndWithSlotOrPortTime();
+					final ZonedDateTime olEnd = overlapSlot.getWindowEndWithSlotOrPortTimeWithFlex();
+					final ZonedDateTime slotEnd = slot.getWindowEndWithSlotOrPortTimeWithFlex();
 
 					// if slot start + duration is before the end of the overlapSlot window, it can be OK so let them pass
 					final ZonedDateTime slotFinish = slotStart.plusHours(slotDur);
@@ -130,10 +133,11 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 				return;
 			}
 
-			final ZonedDateTime windowStart = slot.getWindowStartWithSlotOrPortTime();
+			final ZonedDateTime windowStart = slot.getWindowStartWithSlotOrPortTimeWithFlex();
 			if (windowStart == null) {
 				return;
 			}
+			@NonNull
 			ZonedDateTime cal = windowStart;
 			int windowPlusDurationSize = slot.getWindowSize();// + slot.getDuration();
 			do {
@@ -146,34 +150,40 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 			} while (windowPlusDurationSize > 0);
 		}
 
-		private Collection<Slot> getOverlappingSlots(final Slot slot, final String dateKey) {
+		private @NonNull Collection<@NonNull Slot> getOverlappingSlots(final @NonNull Slot slot, final @NonNull String dateKey) {
 
 			final Port port = slot.getPort();
-			Map<String, Collection<Slot>> map;
+			Map<@NonNull String, @NonNull Collection<@NonNull Slot>> map;
 			if (countingMap.containsKey(port)) {
 				map = countingMap.get(port);
 			} else {
-				map = new HashMap<String, Collection<Slot>>();
+				map = new HashMap<>();
 				countingMap.put(port, map);
 			}
-			Collection<Slot> col;
+			@NonNull
+			Collection<@NonNull Slot> col;
 			if (map.containsKey(dateKey)) {
 				col = map.get(dateKey);
 			} else {
-				col = new LinkedList<Slot>();
+				col = new LinkedList<>();
 				map.put(dateKey, col);
 			}
 			return col;
 
 		}
 
-		private String dateToString(final ZonedDateTime date) {
+		private @NonNull String dateToString(final @NonNull ZonedDateTime date) {
 			return date.toLocalDate().format(df);
 		}
 	}
 
 	@Override
 	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+
+		if (LicenseFeatures.isPermitted("features:disable-slot-overlap-checks")) {
+			return Activator.PLUGIN_ID;
+		}
+
 		final EObject object = ctx.getTarget();
 		final EObject original = extraContext.getOriginal(object);
 		final EObject replacement = extraContext.getReplacement(object);

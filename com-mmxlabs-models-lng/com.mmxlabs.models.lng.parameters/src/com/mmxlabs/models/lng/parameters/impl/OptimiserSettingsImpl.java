@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.parameters.impl;
@@ -49,6 +49,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getSolutionImprovementSettings <em>Solution Improvement Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#isBuildActionSets <em>Build Action Sets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getActionPlanSettings <em>Action Plan Settings</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getFloatingDaysLimit <em>Floating Days Limit</em>}</li>
  * </ul>
  *
  * @generated
@@ -233,6 +234,26 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * @ordered
 	 */
 	protected ActionPlanSettings actionPlanSettings;
+
+	/**
+	 * The default value of the '{@link #getFloatingDaysLimit() <em>Floating Days Limit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFloatingDaysLimit()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int FLOATING_DAYS_LIMIT_EDEFAULT = 15;
+
+	/**
+	 * The cached value of the '{@link #getFloatingDaysLimit() <em>Floating Days Limit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFloatingDaysLimit()
+	 * @generated
+	 * @ordered
+	 */
+	protected int floatingDaysLimit = FLOATING_DAYS_LIMIT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -479,6 +500,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SimilaritySettings getSimilaritySettings() {
 		return similaritySettings;
 	}
@@ -503,6 +525,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSimilaritySettings(SimilaritySettings newSimilaritySettings) {
 		if (newSimilaritySettings != similaritySettings) {
 			NotificationChain msgs = null;
@@ -522,6 +545,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public IndividualSolutionImprovementSettings getSolutionImprovementSettings() {
 		return solutionImprovementSettings;
 	}
@@ -546,6 +570,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSolutionImprovementSettings(IndividualSolutionImprovementSettings newSolutionImprovementSettings) {
 		if (newSolutionImprovementSettings != solutionImprovementSettings) {
 			NotificationChain msgs = null;
@@ -565,6 +590,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isBuildActionSets() {
 		return buildActionSets;
 	}
@@ -574,6 +600,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBuildActionSets(boolean newBuildActionSets) {
 		boolean oldBuildActionSets = buildActionSets;
 		buildActionSets = newBuildActionSets;
@@ -586,6 +613,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ActionPlanSettings getActionPlanSettings() {
 		return actionPlanSettings;
 	}
@@ -610,6 +638,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setActionPlanSettings(ActionPlanSettings newActionPlanSettings) {
 		if (newActionPlanSettings != actionPlanSettings) {
 			NotificationChain msgs = null;
@@ -622,6 +651,27 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 		}
 		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS, newActionPlanSettings, newActionPlanSettings));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getFloatingDaysLimit() {
+		return floatingDaysLimit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setFloatingDaysLimit(int newFloatingDaysLimit) {
+		int oldFloatingDaysLimit = floatingDaysLimit;
+		floatingDaysLimit = newFloatingDaysLimit;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.OPTIMISER_SETTINGS__FLOATING_DAYS_LIMIT, oldFloatingDaysLimit, floatingDaysLimit));
 	}
 
 	/**
@@ -686,6 +736,8 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 				return isBuildActionSets();
 			case ParametersPackage.OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS:
 				return getActionPlanSettings();
+			case ParametersPackage.OPTIMISER_SETTINGS__FLOATING_DAYS_LIMIT:
+				return getFloatingDaysLimit();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -741,6 +793,9 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 			case ParametersPackage.OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS:
 				setActionPlanSettings((ActionPlanSettings)newValue);
 				return;
+			case ParametersPackage.OPTIMISER_SETTINGS__FLOATING_DAYS_LIMIT:
+				setFloatingDaysLimit((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -792,6 +847,9 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 			case ParametersPackage.OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS:
 				setActionPlanSettings((ActionPlanSettings)null);
 				return;
+			case ParametersPackage.OPTIMISER_SETTINGS__FLOATING_DAYS_LIMIT:
+				setFloatingDaysLimit(FLOATING_DAYS_LIMIT_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -830,6 +888,8 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 				return buildActionSets != BUILD_ACTION_SETS_EDEFAULT;
 			case ParametersPackage.OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS:
 				return actionPlanSettings != null;
+			case ParametersPackage.OPTIMISER_SETTINGS__FLOATING_DAYS_LIMIT:
+				return floatingDaysLimit != FLOATING_DAYS_LIMIT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -886,6 +946,8 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 		result.append(shippingOnly);
 		result.append(", buildActionSets: ");
 		result.append(buildActionSets);
+		result.append(", floatingDaysLimit: ");
+		result.append(floatingDaysLimit);
 		result.append(')');
 		return result.toString();
 	}

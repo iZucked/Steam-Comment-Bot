@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.util;
@@ -62,16 +62,12 @@ public final class SlotContractParamsHelper {
 			return null;
 		}
 		final EClass priceInfoClass = priceInfo.eClass();
-		final EAnnotation annotation = priceInfoClass.getEAnnotation(ANNOTATION_SLOT_CONTRACT_PARAMS);
-		if (annotation == null) {
-			return null;
-		}
-		final EClass paramsObjectEClass = (EClass) annotation.getReferences().get(0);
+		final EClass paramsObjectEClass = getSlotContractParamsEClass(priceInfoClass);
 		if (paramsObjectEClass == null ) {
 			return null;
 		}
 		Class<?> cls = paramsObjectEClass.getInstanceClass();
-		
+
 		if (!SlotContractParams.class.isAssignableFrom(cls)) {
 			return null;
 		}
@@ -83,5 +79,18 @@ public final class SlotContractParamsHelper {
 			}
 		}
 		return null;
+	}
+
+	@Nullable
+	public static EClass getSlotContractParamsEClass(final EClass priceInfoClass) {
+		final EAnnotation annotation = priceInfoClass.getEAnnotation(ANNOTATION_SLOT_CONTRACT_PARAMS);
+		if (annotation == null) {
+			return null;
+		}
+		final EClass paramsObjectEClass = (EClass) annotation.getReferences().get(0);
+		if (paramsObjectEClass == null) {
+			return null;
+		}
+		return paramsObjectEClass;
 	}
 }
