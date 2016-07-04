@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.common.time;
@@ -11,8 +11,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.NonNullPair;
-
-import ch.qos.logback.classic.turbo.TurboFilter;
 
 public class TimeUtilsTest {
 

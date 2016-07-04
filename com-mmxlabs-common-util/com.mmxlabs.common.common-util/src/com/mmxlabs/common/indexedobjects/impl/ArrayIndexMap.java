@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.common.indexedobjects.impl;
@@ -53,12 +53,13 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 		isSet = newIsSet;
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public final U maybeGet(final T key) {
 		// return get(key);
 		final int index = key.getIndex();
 		if ((index >= contents.length) || !isSet[index]) {
-			return null;
+			return (U) null;
 		} else {
 			return contents[index];
 		}

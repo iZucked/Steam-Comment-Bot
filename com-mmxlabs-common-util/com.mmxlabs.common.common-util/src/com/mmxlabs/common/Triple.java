@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.common;
@@ -23,8 +23,9 @@ public class Triple<A, B, C> {
 	private B second;
 	private C third;
 
+	@SuppressWarnings("null")
 	public Triple() {
-		this(null, null, null);
+		this((A) null, (B) null, (C) null);
 	}
 
 	public Triple(final A first, final B second, final C third) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.common.curves;
@@ -16,7 +16,7 @@ import java.util.TreeMap;
  */
 public class StepwiseIntegerCurve implements ICurve {
 	private int defaultValue;
-	private final TreeMap<Integer, Integer> intervals = new TreeMap<Integer, Integer>();
+	private final TreeMap<Integer, Integer> intervals = new TreeMap<>();
 
 	public StepwiseIntegerCurve() {
 

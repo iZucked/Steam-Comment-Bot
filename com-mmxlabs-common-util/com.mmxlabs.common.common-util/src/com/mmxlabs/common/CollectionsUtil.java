@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.common;
@@ -32,8 +32,8 @@ public final class CollectionsUtil {
 	 * @param integers
 	 * @return
 	 */
-	public static @NonNull int[] integersToIntArray(@NonNull final Collection<Integer> integers) {
-		final int[] result = new int[integers.size()];
+	public static int @NonNull [] integersToIntArray(@NonNull final Collection<@NonNull Integer> integers) {
+		final int @NonNull [] result = new int[integers.size()];
 		int ix = 0;
 		for (final int x : integers) {
 			result[ix++] = x;
@@ -47,8 +47,8 @@ public final class CollectionsUtil {
 	 * @param longs
 	 * @return
 	 */
-	public static @NonNull long[] longsToLongArray(@NonNull final Collection<Long> longs) {
-		final long[] result = new long[longs.size()];
+	public static long @NonNull [] longsToLongArray(@NonNull final Collection<@NonNull Long> longs) {
+		final long @NonNull [] result = new long[longs.size()];
 		int ix = 0;
 		for (final long x : longs) {
 			result[ix++] = x;
@@ -62,8 +62,8 @@ public final class CollectionsUtil {
 	 * @param a
 	 * @return
 	 */
-	public static @NonNull ArrayList<Integer> toArrayList(@NonNull final int[] a) {
-		final ArrayList<Integer> list = new ArrayList<Integer>(a.length);
+	public static @NonNull ArrayList<@NonNull Integer> toArrayList(final int @NonNull [] a) {
+		final ArrayList<@NonNull Integer> list = new ArrayList<>(a.length);
 		for (final int v : a) {
 			list.add(v);
 		}
@@ -77,8 +77,8 @@ public final class CollectionsUtil {
 	 * @return
 	 */
 	@NonNull
-	public static final ArrayList<Long> toArrayList(@NonNull final long[] a) {
-		final ArrayList<Long> list = new ArrayList<Long>(a.length);
+	public static final ArrayList<@NonNull Long> toArrayList(final long @NonNull [] a) {
+		final ArrayList<@NonNull Long> list = new ArrayList<>(a.length);
 		for (final long v : a) {
 			list.add(v);
 		}
@@ -91,8 +91,8 @@ public final class CollectionsUtil {
 	 * @param a
 	 * @return
 	 */
-	public static @NonNull ArrayList<Short> toArrayList(@NonNull final short[] a) {
-		final ArrayList<Short> list = new ArrayList<Short>(a.length);
+	public static @NonNull ArrayList<@NonNull Short> toArrayList(final short @NonNull [] a) {
+		final ArrayList<@NonNull Short> list = new ArrayList<>(a.length);
 		for (final short v : a) {
 			list.add(v);
 		}
@@ -109,7 +109,7 @@ public final class CollectionsUtil {
 	@NonNull
 	public static <T> List<T> makeArrayList(final T... elements) {
 
-		final List<T> collection = new ArrayList<T>(elements.length);
+		final List<T> collection = new ArrayList<>(elements.length);
 
 		for (final T e : elements) {
 			collection.add(e);
@@ -166,8 +166,8 @@ public final class CollectionsUtil {
 	 * @param elements
 	 * @return
 	 */
-	public static <T> Set<T> makeHashSet(final T... elements) {
-		final HashSet<T> result = new HashSet<T>();
+	public static <T> Set<@NonNull T> makeHashSet(final @NonNull T... elements) {
+		final Set<@NonNull T> result = new HashSet<>();
 		for (int i = 0; i < elements.length; i++) {
 			result.add(elements[i]);
 		}

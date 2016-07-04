@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.common;
@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -82,7 +83,7 @@ public class CollectionsUtilTest {
 	@Test
 	public void longsToLongArrayTest() {
 
-		final List<Long> l = new ArrayList<Long>(4);
+		final List<@NonNull Long> l = new ArrayList<>(4);
 		l.add(1l);
 		l.add(2l);
 		l.add(3l);
@@ -101,7 +102,7 @@ public class CollectionsUtilTest {
 	@Test
 	public void integersToIntArrayTest() {
 
-		final List<Integer> l = new ArrayList<Integer>(4);
+		final List<@NonNull Integer> l = new ArrayList<>(4);
 		l.add(1);
 		l.add(2);
 		l.add(3);

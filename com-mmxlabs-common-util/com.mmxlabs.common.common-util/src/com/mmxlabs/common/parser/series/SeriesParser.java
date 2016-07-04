@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.common.parser.series;
@@ -31,9 +31,9 @@ import com.mmxlabs.common.parser.series.functions.Or;
 import com.mmxlabs.common.parser.series.functions.ShiftedSeries;
 
 public class SeriesParser extends ExpressionParser<ISeries> {
-	private final Map<String, ISeries> evaluatedSeries = new HashMap<String, ISeries>();
-	private final Map<String, String> unevaluatedSeries = new HashMap<String, String>();
-	private final Set<String> expressionCurves = new HashSet<>();
+	private final @NonNull Map<@NonNull String, @NonNull ISeries> evaluatedSeries = new HashMap<>();
+	private final @NonNull Map<@NonNull String, @NonNull String> unevaluatedSeries = new HashMap<>();
+	private final @NonNull Set<@NonNull String> expressionCurves = new HashSet<>();
 
 	private class FunctionConstructor implements IExpression<ISeries> {
 		private final Class<? extends ISeries> clazz;
@@ -44,7 +44,7 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 			this.arguments = arguments;
 		}
 
-		public ISeries construct() {
+		public @NonNull ISeries construct() {
 			try {
 				return clazz.getConstructor(List.class).newInstance(evaluate(arguments));
 			} catch (final Throwable th) {
@@ -93,16 +93,16 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 			}
 
 			@Override
-			public IExpression<ISeries> createInfixOperator(final char operator, final IExpression<ISeries> lhs, final IExpression<ISeries> rhs) {
+			public IExpression<ISeries> createInfixOperator(final char operator, final @NonNull IExpression<ISeries> lhs, final @NonNull IExpression<ISeries> rhs) {
 				return new SeriesOperatorExpression(operator, lhs, rhs);
 			}
 		});
 
 		setTermFactory(new ITermFactory<ISeries>() {
 			@Override
-			public IExpression<ISeries> createTerm(final String term) {
+			public IExpression<ISeries> createTerm(final @NonNull String term) {
 				try {
-					final int i = Integer.parseInt(term);
+					final long i = Long.parseLong(term);
 					return new ConstantSeriesExpression(i);
 				} catch (final NumberFormatException nfe) {
 					try {
@@ -160,7 +160,7 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 		});
 	}
 
-	public ISeries getSeries(final String name) {
+	public @NonNull ISeries getSeries(final @NonNull String name) {
 		if (evaluatedSeries.containsKey(name)) {
 			return evaluatedSeries.get(name);
 		} else if (unevaluatedSeries.containsKey(name)) {
@@ -198,7 +198,7 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 		}
 	}
 
-	public void addSeriesData(@NonNull final String name, @NonNull final int[] points, @NonNull final Number[] values) {
+	public void addSeriesData(@NonNull final String name, final int @NonNull [] points, @NonNull final Number[] values) {
 		evaluatedSeries.put(name, new ISeries() {
 			@Override
 			public int[] getChangePoints() {
@@ -216,7 +216,7 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 		}
 	}
 
-	public void addSeriesExpression(final String name, final String expression) {
+	public void addSeriesExpression(final @NonNull String name, final @NonNull String expression) {
 		// Register as an expression curve.
 		if (!expressionCurves.add(name)) {
 			// Invalidate any pre-evaluated expression curves as we may have changed the underlying data
@@ -231,7 +231,7 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 		final SeriesParser parser = new SeriesParser();
 		parser.addConstant("X", 1);
 		parser.addConstant("Y", 10);
-		parser.addSeriesData("Z", new int[] { 0, 10, 20 }, new Double[] { -5d, 4d, 9.4 });
+		parser.addSeriesData("Z", new int[] { 0, 10, 20 }, new @NonNull Number[] { -5d, 4d, 9.4 });
 		System.err.println(SeriesUtil.toString(parser.parse(args[0]).evaluate()));
 	}
 }

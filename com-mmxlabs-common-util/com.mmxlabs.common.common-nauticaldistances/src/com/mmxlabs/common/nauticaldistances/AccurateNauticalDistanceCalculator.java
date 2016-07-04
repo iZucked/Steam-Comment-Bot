@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.common.nauticaldistances;
@@ -418,7 +418,7 @@ public class AccurateNauticalDistanceCalculator {
 		final double px = ((lon / Math.PI) + 1) / 2;
 		final double py = (((((Math.log(Math.tan(lat) + (1 / Math.cos(lat))) / maxProjectedLatitude)) // -1..1
 		) * -1) // upside down
-		+ 1) / 2; // all positive, scaled to fit in unit
+				+ 1) / 2; // all positive, scaled to fit in unit
 
 		final boolean answer = mercatorLandMatrix[(int) Math.floor(px * mapWidth)][(int) Math.floor(py * mapHeight)];
 
@@ -434,6 +434,7 @@ public class AccurateNauticalDistanceCalculator {
 	 * @param rotationMatrix
 	 * @param pt
 	 */
+	@SuppressWarnings("unused")
 	private double[] applyMatrix(final double[][] M, final double[] V) {
 		return new double[] { dot(M[0], V), dot(M[1], V), dot(M[2], V) };
 	}
@@ -449,6 +450,7 @@ public class AccurateNauticalDistanceCalculator {
 	 * @param rotationAngle
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	private double[][] rotator(final double[] axis, final double rotationAngle) {
 		final double c = Math.cos(rotationAngle);
 		final double s = Math.sin(rotationAngle);
@@ -469,6 +471,7 @@ public class AccurateNauticalDistanceCalculator {
 	 * @param v2
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	private double[] cross(final double[] v1, final double[] v2) {
 		return new double[] { (v1[1] * v2[2]) - (v1[2] * v2[1]), (v1[2] * v1[0]) - (v1[0] * v2[2]), (v1[0] * v2[1]) - (v1[1] * v2[0]) };
 	}
@@ -477,6 +480,7 @@ public class AccurateNauticalDistanceCalculator {
 		return Math.sqrt((v1[0] * v1[0]) + (v1[1] * v1[1]) + (v1[2] * v1[2]));
 	}
 
+	@SuppressWarnings("unused")
 	private void normalise(final double[] v) {
 		final double l = length(v);
 		v[0] /= l;

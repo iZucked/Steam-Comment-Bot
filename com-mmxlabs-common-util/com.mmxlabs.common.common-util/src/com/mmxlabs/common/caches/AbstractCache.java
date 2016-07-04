@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.common.caches;
@@ -8,12 +8,13 @@ import com.mmxlabs.common.Pair;
 
 public abstract class AbstractCache<K, V> {
 
-	private static final int SAMPLE = 100000;
+	private static final int SAMPLE = 100_000;
 	private final String name;
 
 	int hits = 0;
 	int queries = 0;
 
+	@FunctionalInterface
 	public interface IKeyEvaluator<K, V> {
 		public Pair<K, V> evaluate(K key);
 	}

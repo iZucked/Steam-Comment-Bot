@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.common.parser;
@@ -75,8 +75,10 @@ public class ExpressionParser<T> implements IExpressionParser<T> {
 			tok.nextToken();
 			if (justSeenWord && tok.ttype != '(') {
 				// have to push variable reference onto stack
-				fragmentStack.push(termFactory.createTerm(word));
-				justPushedExpression = true;
+				if (word != null) {
+					fragmentStack.push(termFactory.createTerm(word));
+					justPushedExpression = true;
+				}
 			}
 			if (tok.ttype == StreamTokenizer.TT_EOF)
 				break loop;

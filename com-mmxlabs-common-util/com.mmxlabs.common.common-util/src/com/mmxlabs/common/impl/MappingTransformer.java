@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.common.impl;
@@ -22,12 +22,13 @@ public final class MappingTransformer<T, U> implements ITransformer<T, U> {
 		this.mapping = mapping;
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public U transform(final T t) {
 		if (mapping.containsKey(t)) {
 			return mapping.get(t);
 		}
-		return null;
+		return (U) null;
 	}
 
 	/**

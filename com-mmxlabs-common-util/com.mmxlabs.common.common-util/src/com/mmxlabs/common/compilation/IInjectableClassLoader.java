@@ -1,8 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.common.compilation;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 /**
  * An interface for clients of {@link MethodChainGenerator} to provide access to their classloader.
@@ -11,5 +13,5 @@ package com.mmxlabs.common.compilation;
  * 
  */
 public interface IInjectableClassLoader {
-	public Class<?> injectAndLoadClass(String qualifiedName, byte[] bytecode) throws ClassNotFoundException;
+	<T> Class<T> injectAndLoadClass(@NonNull String qualifiedName, byte @NonNull [] bytecode) throws ClassNotFoundException;
 }

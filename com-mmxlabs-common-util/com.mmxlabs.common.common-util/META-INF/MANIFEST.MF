@@ -4,7 +4,7 @@ Bundle-Name: Common-Util
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: com.mmxlabs.common.common-util
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 3.11.1.qualifier
+Bundle-Version: 3.12.7.qualifier
 Import-Package: javax.tools,
  org.json.simple;version="[1.1,2)",
  org.objectweb.asm;version="5.0.0",
@@ -29,5 +29,6 @@ Export-Package: com.mmxlabs.common,
  com.mmxlabs.common.parser.series.functions,
  com.mmxlabs.common.time,
  com.mmxlabs.common.timezone,
- com.mmxlabs.common.timezone.impl
-Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[1.1.0,2.0.0)";resolution:=optional
+ com.mmxlabs.common.timezone.impl,
+ com.mmxlabs.common.util
+Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"

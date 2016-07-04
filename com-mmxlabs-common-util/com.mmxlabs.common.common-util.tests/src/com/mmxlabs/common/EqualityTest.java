@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.common;
@@ -10,18 +10,57 @@ import org.junit.Test;
 public class EqualityTest {
 
 	@Test
-	public void testIsEqual() {
+	public void testIsEqual_null_null() {
+		Assert.assertTrue(Equality.isEqual(null, null));
+	}
 
+	@Test
+	public void testIsEqual_a_null() {
+		final Object a = new Object();
+		Assert.assertFalse(Equality.isEqual(a, null));
+	}
+
+	@Test
+	public void testIsEqual_null_a() {
+		final Object a = new Object();
+		Assert.assertFalse(Equality.isEqual(null, a));
+
+	}
+
+	@Test
+	public void testIsEqual_a_b() {
 		final Object a = new Object();
 		final Object b = new Object();
 
-		Assert.assertTrue(Equality.isEqual(null, null));
-		Assert.assertFalse(Equality.isEqual(a, null));
-		Assert.assertFalse(Equality.isEqual(null, a));
 		Assert.assertFalse(Equality.isEqual(a, b));
+	}
 
+	@Test
+	public void testIsEqual_b_a() {
+		final Object a = new Object();
+		final Object b = new Object();
+		Assert.assertFalse(Equality.isEqual(b, a));
+
+	}
+
+	@Test
+	public void testIsEqual_a_a() {
+		final Object a = new Object();
 		Assert.assertTrue(Equality.isEqual(a, a));
-		Assert.assertTrue(Equality.isEqual(b, b));
+	}
+
+	@Test
+	public void testIsEqual_s2_s1() {
+		String s1 = "string";
+		String s2 = "string";
+		Assert.assertTrue(Equality.isEqual(s2, s1));
+	}
+
+	@Test
+	public void testIsEqual_s1_s2() {
+		String s1 = "string";
+		String s2 = "string";
+		Assert.assertTrue(Equality.isEqual(s1, s2));
 	}
 
 	@Test

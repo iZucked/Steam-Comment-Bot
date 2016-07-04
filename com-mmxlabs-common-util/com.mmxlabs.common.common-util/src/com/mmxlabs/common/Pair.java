@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.common;
@@ -18,8 +18,9 @@ public class Pair<A, B> {
 	private A first;
 	private B second;
 
+	@SuppressWarnings("null")
 	public Pair() {
-		this(null, null);
+		this((A) null, (B) null);
 	}
 
 	public Pair(final A first, final B second) {

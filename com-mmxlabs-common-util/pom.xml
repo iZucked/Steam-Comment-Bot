@@ -4,14 +4,14 @@
 	<groupId>com.mmxlabs.common</groupId>
 	<artifactId>common-util-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>3.11.1-SNAPSHOT</version>
+	<version>3.12.7-SNAPSHOT</version>
 	<name>Common Util: Parent</name>
 
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
 		<relativePath />
-		<version>31</version>
+		<version>32</version>
 	</parent>
 
 	<description>Project containing commonly used classes and utility functions.</description>

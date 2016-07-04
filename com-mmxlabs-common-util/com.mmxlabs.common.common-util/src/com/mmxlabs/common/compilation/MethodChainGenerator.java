@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.common.compilation;
@@ -42,7 +42,7 @@ public class MethodChainGenerator implements Opcodes {
 		cw.visitEnd();
 
 		try {
-			return (Class<? extends ITransformer>) loader.injectAndLoadClass(fqn, cw.toByteArray());
+			return loader.injectAndLoadClass(fqn, cw.toByteArray());
 		} catch (final ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

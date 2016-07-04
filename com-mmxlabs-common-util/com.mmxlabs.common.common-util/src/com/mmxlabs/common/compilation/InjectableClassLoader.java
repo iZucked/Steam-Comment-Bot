@@ -1,8 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.common.compilation;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 /**
  * @author Tom Hinton
@@ -20,10 +22,11 @@ public class InjectableClassLoader extends ClassLoader implements IInjectableCla
 	}
 
 	@Override
-	public synchronized Class<?> injectAndLoadClass(final String qualifiedName, final byte[] bytecode) throws ClassNotFoundException {
+	public synchronized <T> Class<T> injectAndLoadClass(final @NonNull String qualifiedName, final byte @NonNull [] bytecode) throws ClassNotFoundException {
 		fqn = qualifiedName;
 		this.bytecode = bytecode;
-		final Class<?> result = this.loadClass(qualifiedName);
+		@SuppressWarnings("unchecked")
+		final Class<T> result = (Class<T>) this.loadClass(qualifiedName);
 		this.bytecode = null;
 		fqn = null;
 		return result;
