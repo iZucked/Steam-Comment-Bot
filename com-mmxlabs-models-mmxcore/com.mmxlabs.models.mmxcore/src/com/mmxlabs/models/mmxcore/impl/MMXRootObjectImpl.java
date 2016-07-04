@@ -11,8 +11,6 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>MMX Root Object</b></em>'. <!-- end-user-doc -->
- * <p>
- * </p>
  *
  * @generated
  */

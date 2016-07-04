@@ -13,10 +13,10 @@ package com.mmxlabs.models.mmxcore;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.mmxcore.UUIDObject#getUuid <em>Uuid</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.mmxcore.MMXCorePackage#getUUIDObject()
  * @model

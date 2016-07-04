@@ -22,10 +22,10 @@ import com.mmxlabs.models.mmxcore.OtherNamesObject;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.mmxcore.impl.OtherNamesObjectImpl#getOtherNames <em>Other Names</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

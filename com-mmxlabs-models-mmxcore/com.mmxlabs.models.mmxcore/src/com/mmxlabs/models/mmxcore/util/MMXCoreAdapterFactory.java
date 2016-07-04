@@ -4,10 +4,12 @@
  */
 package com.mmxlabs.models.mmxcore.util;
 
+import com.mmxlabs.models.mmxcore.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
@@ -70,8 +72,8 @@ public class MMXCoreAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected MMXCoreSwitch<Adapter> modelSwitch =
-		new MMXCoreSwitch<Adapter>() {
+	protected MMXCoreSwitch<@Nullable Adapter> modelSwitch =
+		new MMXCoreSwitch<@Nullable Adapter>() {
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
