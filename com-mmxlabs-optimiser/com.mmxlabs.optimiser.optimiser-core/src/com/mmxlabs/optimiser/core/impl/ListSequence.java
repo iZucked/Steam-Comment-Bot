@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core.impl;
@@ -22,9 +22,9 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  */
 public final class ListSequence implements ISequence {
 
-	private final List<ISequenceElement> list;
+	private final List<@NonNull ISequenceElement> list;
 
-	public ListSequence(final List<ISequenceElement> list) {
+	public ListSequence(final List<@NonNull ISequenceElement> list) {
 		this.list = list;
 	}
 
@@ -34,16 +34,16 @@ public final class ListSequence implements ISequence {
 	 * @param sequence
 	 */
 	public ListSequence(final ISequence sequence) {
-		list = new ArrayList<ISequenceElement>(sequence.size());
+		list = new ArrayList<>(sequence.size());
 		for (final ISequenceElement t : sequence) {
 			list.add(t);
 		}
 	}
 
 	@Override
-	public Iterator<ISequenceElement> iterator() {
-		return new Iterator<ISequenceElement>() {
-			private final Iterator<ISequenceElement> i = list.iterator();
+	public Iterator<@NonNull ISequenceElement> iterator() {
+		return new Iterator<@NonNull ISequenceElement>() {
+			private final Iterator<@NonNull ISequenceElement> i = list.iterator();
 
 			@Override
 			public final boolean hasNext() {
@@ -77,7 +77,7 @@ public final class ListSequence implements ISequence {
 	public ISegment getSegment(final int start, final int end) {
 
 		// Copy of the sublist to make segment independent from sequence.
-		return new ListSegment(new ArrayList<ISequenceElement>(list.subList(start, end)), this, start, end);
+		return new ListSegment(new ArrayList<>(list.subList(start, end)), this, start, end);
 	}
 
 	@Override

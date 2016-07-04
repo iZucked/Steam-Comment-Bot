@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.lso.impl;
@@ -68,7 +68,7 @@ public final class Move4over2 implements IMove {
 
 	@Override
 	@NonNull
-	public final Collection<IResource> getAffectedResources() {
+	public final Collection<@NonNull IResource> getAffectedResources() {
 		return CollectionsUtil.makeArrayList(resource1, resource2);
 	}
 
@@ -89,7 +89,7 @@ public final class Move4over2 implements IMove {
 		if (resource2End < resource2Start) {
 			return false;
 		}
-		
+
 		// swapping empty sequences
 		if (resource1Start == resource1End && resource2Start == resource2End) {
 			return false;

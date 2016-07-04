@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core;
@@ -10,6 +10,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 
@@ -35,7 +36,7 @@ public interface IOptimisationContext extends IEvaluationContext {
 	 * @return
 	 */
 	@NonNull
-	List<String> getFitnessComponents();
+	List<@NonNull String> getFitnessComponents();
 
 	/**
 	 * Returns the {@link IConstraintCheckerRegistry} instance to be used to obtain {@link IConstraintChecker} instances. @see {@link #getConstraintCheckers()}.
@@ -51,5 +52,11 @@ public interface IOptimisationContext extends IEvaluationContext {
 	 * @return
 	 */
 	@NonNull
-	List<String> getConstraintCheckers();
+	List<@NonNull String> getConstraintCheckers();
+
+	@NonNull
+	IEvaluatedStateConstraintCheckerRegistry getEvaluatedStateConstraintCheckerRegistry();
+
+	@NonNull
+	List<@NonNull String> getEvaluatedStateConstraintCheckers();
 }

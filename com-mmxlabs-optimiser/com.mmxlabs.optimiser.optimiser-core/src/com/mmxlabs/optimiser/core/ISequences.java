@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core;
@@ -41,7 +41,7 @@ public interface ISequences {
 	 * @return
 	 */
 	@NonNull
-	Map<IResource, ISequence> getSequences();
+	Map<@NonNull IResource, @NonNull ISequence> getSequences();
 
 	/**
 	 * Returns the elements in the solution which are not used anywhere
@@ -49,7 +49,7 @@ public interface ISequences {
 	 * @return
 	 */
 	@NonNull
-	List<ISequenceElement> getUnusedElements();
+	List<@NonNull ISequenceElement> getUnusedElements();
 
 	/**
 	 * Returns an indexed list of resources for which resources are keyed off. The index of each resource can be passed to the {@link #getSequence(int)} method.
@@ -57,7 +57,7 @@ public interface ISequences {
 	 * @return
 	 */
 	@NonNull
-	List<IResource> getResources();
+	List<@NonNull IResource> getResources();
 
 	/**
 	 * Returns the number of {@link IResource}s / {@link ISequence}s contained in this object.

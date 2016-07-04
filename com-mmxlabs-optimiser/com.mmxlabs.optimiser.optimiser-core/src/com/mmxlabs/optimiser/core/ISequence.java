@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core;
@@ -13,7 +13,7 @@ import org.eclipse.jdt.annotation.Nullable;
  * @author Simon Goodall
  * 
  */
-public interface ISequence extends Iterable<ISequenceElement> {
+public interface ISequence extends Iterable<@NonNull ISequenceElement> {
 
 	/**
 	 * Returns the number of elements in this sequence.

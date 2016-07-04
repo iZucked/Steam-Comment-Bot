@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.lso.impl;
@@ -17,7 +17,7 @@ import com.mmxlabs.optimiser.lso.INullMove;
 public class NullMove implements INullMove {
 
 	@Override
-	public Collection<IResource> getAffectedResources() {
+	public Collection<@NonNull IResource> getAffectedResources() {
 		// returns an empty list
 		return Collections.emptyList();
 	}

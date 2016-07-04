@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core.impl;
@@ -32,13 +32,13 @@ import com.mmxlabs.optimiser.core.ISequences;
 public final class ModifiableSequences implements IModifiableSequences {
 
 	@NonNull
-	private final List<IResource> resources;
+	private final List<@NonNull IResource> resources;
 
 	@NonNull
-	private final Map<IResource, IModifiableSequence> sequenceMap;
+	private final Map<@NonNull IResource, @NonNull IModifiableSequence> sequenceMap;
 
 	@NonNull
-	private final List<ISequenceElement> unusedElements = new ArrayList<ISequenceElement>();
+	private final List<@NonNull ISequenceElement> unusedElements = new ArrayList<>();
 
 	/**
 	 * Constructor taking a list of {@link IResource} instances. The {@link IModifiableSequence} instances will be created automatically. The resources list is copied to maintain internal consistency
@@ -46,12 +46,12 @@ public final class ModifiableSequences implements IModifiableSequences {
 	 * 
 	 * @param resources
 	 */
-	public ModifiableSequences(@NonNull final List<IResource> resources) {
+	public ModifiableSequences(@NonNull final List<@NonNull IResource> resources) {
 		// Copy the list as we do not track changes
-		this.resources = new ArrayList<IResource>(resources);
-		sequenceMap = new LinkedHashMap<IResource, IModifiableSequence>();
+		this.resources = new ArrayList<>(resources);
+		sequenceMap = new LinkedHashMap<>();
 		for (final IResource resource : resources) {
-			sequenceMap.put(resource, new ListModifiableSequence(new LinkedList<ISequenceElement>()));
+			sequenceMap.put(resource, new ListModifiableSequence(new LinkedList<>()));
 		}
 	}
 
@@ -61,7 +61,7 @@ public final class ModifiableSequences implements IModifiableSequences {
 	 * @param resources
 	 * @param sequenceMap
 	 */
-	public ModifiableSequences(@NonNull final List<IResource> resources, @NonNull final Map<IResource, IModifiableSequence> sequenceMap) {
+	public ModifiableSequences(@NonNull final List<@NonNull IResource> resources, @NonNull final Map<@NonNull IResource, @NonNull IModifiableSequence> sequenceMap) {
 		this.resources = resources;
 		this.sequenceMap = sequenceMap;
 	}
@@ -74,17 +74,15 @@ public final class ModifiableSequences implements IModifiableSequences {
 	 */
 	public ModifiableSequences(@NonNull final ISequences sequences) {
 
-		this.resources = new ArrayList<IResource>(sequences.getResources());
-
-		this.sequenceMap = new HashMap<IResource, IModifiableSequence>();
+		this.resources = new ArrayList<>(sequences.getResources());
+		this.sequenceMap = new HashMap<>();
 		for (final IResource r : resources) {
-			assert r != null;
 
 			// Get original sequence
 			final ISequence seq = sequences.getSequence(r);
 
 			// Create a modifiable sequence object
-			final ListModifiableSequence modifiableSequence = new ListModifiableSequence(new ArrayList<ISequenceElement>(seq.size()));
+			final ListModifiableSequence modifiableSequence = new ListModifiableSequence(new ArrayList<>(seq.size()));
 
 			// Set contents
 			modifiableSequence.replaceAll(seq);
@@ -119,7 +117,7 @@ public final class ModifiableSequences implements IModifiableSequences {
 	@SuppressWarnings("null")
 	@Override
 	@NonNull
-	public List<IResource> getResources() {
+	public List<@NonNull IResource> getResources() {
 		return Collections.unmodifiableList(resources);
 	}
 
@@ -145,26 +143,26 @@ public final class ModifiableSequences implements IModifiableSequences {
 
 	@Override
 	@NonNull
-	public Map<IResource, ISequence> getSequences() {
+	public Map<@NonNull IResource, @NonNull ISequence> getSequences() {
 
 		// Create a copy so external modification does not affect internal
 		// state. We could call (@link {@link Collections#unmodifiableMap(Map)}
 		// however the generics mismatch between ISequence and
 		// IModifiableSequence still needs to be addressed.
-		final Map<IResource, ISequence> map = new HashMap<IResource, ISequence>(sequenceMap);
+		final Map<@NonNull IResource, @NonNull ISequence> map = new HashMap<>(sequenceMap);
 
 		return map;
 	}
 
 	@Override
 	@NonNull
-	public Map<IResource, IModifiableSequence> getModifiableSequences() {
+	public Map<@NonNull IResource, @NonNull IModifiableSequence> getModifiableSequences() {
 
 		// Create a copy so external modification does not affect internal
 		// state. We could call (@link {@link Collections#unmodifiableMap(Map)}
 		// however the generics mismatch between ISequence and
 		// IModifiableSequence still needs to be addressed.
-		final Map<IResource, IModifiableSequence> map = new HashMap<IResource, IModifiableSequence>(sequenceMap);
+		final Map<@NonNull IResource, @NonNull IModifiableSequence> map = new HashMap<>(sequenceMap);
 
 		return map;
 	}
@@ -211,13 +209,13 @@ public final class ModifiableSequences implements IModifiableSequences {
 	@SuppressWarnings("null")
 	@Override
 	@NonNull
-	public List<ISequenceElement> getUnusedElements() {
+	public List<@NonNull ISequenceElement> getUnusedElements() {
 		return Collections.unmodifiableList(unusedElements);
 	}
 
 	@Override
 	@NonNull
-	public List<ISequenceElement> getModifiableUnusedElements() {
+	public List<@NonNull ISequenceElement> getModifiableUnusedElements() {
 		return unusedElements;
 	}
 }

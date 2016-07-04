@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core.scenario.common.impl;
@@ -10,9 +10,9 @@ import com.mmxlabs.common.indexedobjects.IIndexedObject;
 
 public final class IndexedMultiMatrixProvider<T extends IIndexedObject, U extends Comparable<U>> extends HashMapMultiMatrixProvider<T, U> {
 
-	private final IndexedMatrixEditor<T, U> minima = new IndexedMatrixEditor<T, U>(null);
+	private final IndexedMatrixEditor<T, U> minima = new IndexedMatrixEditor<T, U>((U) null);
 
-	private final IndexedMatrixEditor<T, U> maxima = new IndexedMatrixEditor<T, U>(null);
+	private final IndexedMatrixEditor<T, U> maxima = new IndexedMatrixEditor<T, U>((U) null);
 
 	public IndexedMultiMatrixProvider() {
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core.impl;
@@ -23,14 +23,14 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  */
 public final class ListModifiableSequence implements IModifiableSequence {
 
-	private final List<ISequenceElement> list;
+	private final List<@NonNull ISequenceElement> list;
 
-	public ListModifiableSequence(final List<ISequenceElement> list) {
+	public ListModifiableSequence(final List<@NonNull ISequenceElement> list) {
 		this.list = list;
 	}
 
 	@Override
-	public Iterator<ISequenceElement> iterator() {
+	public Iterator<@NonNull ISequenceElement> iterator() {
 		return list.iterator();
 	}
 
@@ -95,7 +95,7 @@ public final class ListModifiableSequence implements IModifiableSequence {
 	public ISegment getSegment(final int start, final int end) {
 
 		// Copy of the sublist to make segment independent from sequence.
-		return new ListSegment(new ArrayList<ISequenceElement>(list.subList(start, end)), this, start, end);
+		return new ListSegment(new ArrayList<>(list.subList(start, end)), this, start, end);
 	}
 
 	@Override
@@ -130,8 +130,8 @@ public final class ListModifiableSequence implements IModifiableSequence {
 		} else if (!(obj instanceof ISequence)) {
 			return false;
 		} else {
-			final Iterator<ISequenceElement> e1 = iterator();
-			final Iterator<ISequenceElement> e2 = ((ISequence) obj).iterator();
+			final Iterator<@NonNull ISequenceElement> e1 = iterator();
+			final Iterator<@NonNull ISequenceElement> e2 = ((ISequence) obj).iterator();
 			while (e1.hasNext() && e2.hasNext()) {
 				final ISequenceElement o1 = e1.next();
 				final Object o2 = e2.next();
@@ -146,7 +146,7 @@ public final class ListModifiableSequence implements IModifiableSequence {
 	@Override
 	public int hashCode() {
 		int hashCode = 1;
-		final Iterator<ISequenceElement> i = iterator();
+		final Iterator<@NonNull ISequenceElement> i = iterator();
 		while (i.hasNext()) {
 			final ISequenceElement obj = i.next();
 			hashCode = (31 * hashCode) + (obj == null ? 0 : obj.hashCode());

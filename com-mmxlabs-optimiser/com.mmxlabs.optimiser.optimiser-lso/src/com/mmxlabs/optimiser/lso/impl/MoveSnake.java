@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.lso.impl;
@@ -29,22 +29,22 @@ import com.mmxlabs.optimiser.lso.IMove;
  */
 public final class MoveSnake implements IMove {
 
-	private List<IResource> fromResources;
+	private List<@NonNull IResource> fromResources;
 
-	private List<IResource> toResources;
+	private List<@NonNull IResource> toResources;
 
-	private List<Integer> segmentStarts;
+	private List<@NonNull Integer> segmentStarts;
 
-	private List<Integer> segmentEnds;
+	private List<@NonNull Integer> segmentEnds;
 
-	private List<Integer> insertionPositions;
+	private List<@NonNull Integer> insertionPositions;
 
 	@Override
 	public void apply(@NonNull final IModifiableSequences sequences) {
 
 		final int numChanges = fromResources.size();
 
-		final List<ISegment> segments = new ArrayList<ISegment>(numChanges);
+		final List<@NonNull ISegment> segments = new ArrayList<>(numChanges);
 
 		// Generate all the segments
 		for (int i = 0; i < numChanges; ++i) {
@@ -62,7 +62,7 @@ public final class MoveSnake implements IMove {
 			assert to != null;
 			final IModifiableSequence toSequence = sequences.getModifiableSequence(to);
 			final ISegment segment = segments.get(i);
-//			assert segment != null;
+			// assert segment != null;
 			toSequence.insert(insertionPositions.get(i), segment);
 		}
 
@@ -73,16 +73,16 @@ public final class MoveSnake implements IMove {
 			final IModifiableSequence fromSequence = sequences.getModifiableSequence(from);
 
 			final ISegment segment = segments.get(i);
-//			assert segment != null;
+			// assert segment != null;
 			fromSequence.remove(segment);
 		}
 	}
 
 	@Override
 	@NonNull
-	public Collection<IResource> getAffectedResources() {
+	public Collection<@NonNull IResource> getAffectedResources() {
 
-		final Set<IResource> affectedResources = new HashSet<IResource>();
+		final Set<@NonNull IResource> affectedResources = new HashSet<>();
 		affectedResources.addAll(fromResources);
 		affectedResources.addAll(toResources);
 		return affectedResources;
@@ -112,7 +112,7 @@ public final class MoveSnake implements IMove {
 		}
 
 		// Check unique froms
-		final Set<IResource> froms = new HashSet<IResource>();
+		final Set<@NonNull IResource> froms = new HashSet<>();
 		for (final IResource from : fromResources) {
 			if (froms.add(from) == false) {
 				return false;
@@ -120,7 +120,7 @@ public final class MoveSnake implements IMove {
 		}
 
 		// Check unique tos
-		final Set<IResource> tos = new HashSet<IResource>();
+		final Set<@NonNull IResource> tos = new HashSet<>();
 		for (final IResource to : toResources) {
 			if (tos.add(to) == false) {
 				return false;
@@ -157,43 +157,43 @@ public final class MoveSnake implements IMove {
 		return true;
 	}
 
-	public List<IResource> getFromResources() {
+	public List<@NonNull IResource> getFromResources() {
 		return fromResources;
 	}
 
-	public void setFromResources(final List<IResource> fromResources) {
+	public void setFromResources(final List<@NonNull IResource> fromResources) {
 		this.fromResources = fromResources;
 	}
 
-	public List<IResource> getToResources() {
+	public List<@NonNull IResource> getToResources() {
 		return toResources;
 	}
 
-	public void setToResources(final List<IResource> toResources) {
+	public void setToResources(final List<@NonNull IResource> toResources) {
 		this.toResources = toResources;
 	}
 
-	public List<Integer> getSegmentStarts() {
+	public List<@NonNull Integer> getSegmentStarts() {
 		return segmentStarts;
 	}
 
-	public void setSegmentStarts(final List<Integer> segmentStarts) {
+	public void setSegmentStarts(final List<@NonNull Integer> segmentStarts) {
 		this.segmentStarts = segmentStarts;
 	}
 
-	public List<Integer> getSegmentEnds() {
+	public List<@NonNull Integer> getSegmentEnds() {
 		return segmentEnds;
 	}
 
-	public void setSegmentEnds(final List<Integer> segmentEnds) {
+	public void setSegmentEnds(final List<@NonNull Integer> segmentEnds) {
 		this.segmentEnds = segmentEnds;
 	}
 
-	public List<Integer> getInsertionPositions() {
+	public List<@NonNull Integer> getInsertionPositions() {
 		return insertionPositions;
 	}
 
-	public void setInsertionPositions(final List<Integer> insertionPositions) {
+	public void setInsertionPositions(final List<@NonNull Integer> insertionPositions) {
 		this.insertionPositions = insertionPositions;
 	}
 

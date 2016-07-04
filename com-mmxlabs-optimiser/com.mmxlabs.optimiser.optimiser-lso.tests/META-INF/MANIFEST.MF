@@ -9,7 +9,7 @@ Bundle-Name: Optimiser - LSO
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: com.mmxlabs.optimiser.optimiser-lso.tests
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 3.11.1.qualifier
+Bundle-Version: 3.12.7.qualifier
 Created-By: Apache Maven Bundle Plugin
 Export-Package: com.mmxlabs.optimiser.lso.movegenerators.impl;uses:="com
  .mmxlabs.optimiser.core,com.mmxlabs.optimiser.lso,org.slf4j,com.mmxlabs
@@ -34,4 +34,4 @@ Require-Bundle: org.junit;bundle-version="4.8.2",
  org.mockito.mockito-all;bundle-version="1.9.5",
  ch.qos.logback.classic;bundle-version="1.0.0",
  ch.qos.logback.core;bundle-version="1.0.0",
- org.eclipse.jdt.annotation;bundle-version="[1.1.0,2.0.0)";resolution:=optional
+ org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)";resolution:=optional

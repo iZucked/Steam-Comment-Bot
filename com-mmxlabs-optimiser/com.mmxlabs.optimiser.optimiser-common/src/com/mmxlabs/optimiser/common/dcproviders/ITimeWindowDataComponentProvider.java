@@ -1,10 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.common.dcproviders;
 
 import java.util.List;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -24,6 +26,7 @@ public interface ITimeWindowDataComponentProvider extends IDataComponentProvider
 	 * @param element
 	 * @return
 	 */
-	List<ITimeWindow> getTimeWindows(ISequenceElement element);
+	@NonNull
+	List<@NonNull ITimeWindow> getTimeWindows(@NonNull ISequenceElement element);
 
 }

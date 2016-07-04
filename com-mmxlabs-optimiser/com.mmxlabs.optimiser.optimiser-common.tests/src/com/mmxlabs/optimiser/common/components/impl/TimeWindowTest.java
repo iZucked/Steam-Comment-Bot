@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.common.components.impl;
@@ -17,8 +17,8 @@ public class TimeWindowTest {
 
 		final TimeWindow tw = new TimeWindow(start, end);
 
-		Assert.assertEquals(start, tw.getStart());
-		Assert.assertEquals(end, tw.getEnd());
+		Assert.assertEquals(start, tw.getInclusiveStart());
+		Assert.assertEquals(end, tw.getExclusiveEnd());
 	}
 
 	@Test

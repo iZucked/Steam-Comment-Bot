@@ -1,13 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core.scenario.common;
 
 import java.util.Collection;
-import java.util.Set;
-
-import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 
@@ -22,12 +19,6 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
  *            Value type
  */
 public interface IMultiMatrixProvider<T, U extends Comparable<U>> extends IDataComponentProvider {
-
-	/**
-	 * Key for the default matrix.
-	 */
-	@NonNull
-	public static final String Default_Key = "default";
 
 	/**
 	 * Returns true if the given {@link String} exists as a key.
@@ -46,13 +37,6 @@ public interface IMultiMatrixProvider<T, U extends Comparable<U>> extends IDataC
 	 * @return
 	 */
 	IMatrixProvider<T, U> get(String key);
-
-	/**
-	 * Returns the keys used in this object as a {@link Set}
-	 * 
-	 * @return
-	 */
-	Set<String> getKeySet();
 
 	/**
 	 * Returns the keys used in this object as an array.

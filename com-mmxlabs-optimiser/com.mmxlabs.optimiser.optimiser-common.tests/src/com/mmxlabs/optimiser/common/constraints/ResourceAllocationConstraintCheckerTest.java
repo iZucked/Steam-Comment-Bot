@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.common.constraints;
@@ -68,7 +68,7 @@ public class ResourceAllocationConstraintCheckerTest {
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r1, seq1, r2, seq2);
 		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r1, r2), map);
 
-		Assert.assertTrue(checker.checkConstraints(sequences));
+		Assert.assertTrue(checker.checkConstraints(sequences, null));
 	}
 
 	@Test
@@ -97,7 +97,7 @@ public class ResourceAllocationConstraintCheckerTest {
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r1, seq1, r2, seq2);
 		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r1, r2), map);
 
-		Assert.assertFalse(checker.checkConstraints(sequences));
+		Assert.assertFalse(checker.checkConstraints(sequences, null));
 	}
 
 	@Test
@@ -128,7 +128,7 @@ public class ResourceAllocationConstraintCheckerTest {
 
 		final List<String> messages = new LinkedList<String>();
 
-		Assert.assertTrue(checker.checkConstraints(sequences, messages));
+		Assert.assertTrue(checker.checkConstraints(sequences, null, messages));
 
 		Assert.assertTrue(messages.isEmpty());
 	}
@@ -161,7 +161,7 @@ public class ResourceAllocationConstraintCheckerTest {
 
 		final List<String> messages = new LinkedList<String>();
 
-		Assert.assertFalse(checker.checkConstraints(sequences, messages));
+		Assert.assertFalse(checker.checkConstraints(sequences, null, messages));
 
 		Assert.assertEquals(1, messages.size());
 

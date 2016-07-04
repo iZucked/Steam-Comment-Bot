@@ -1,9 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.common.constraints;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Named;
@@ -48,14 +49,21 @@ public final class LockedUnusedElementsConstraintChecker implements IPairwiseCon
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences) {
-		return checkConstraints(sequences, null);
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
+		return checkConstraints(sequences, changedResources, null);
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
 		if (isInitialised()) {
-			for (final IResource resource : sequences.getResources()) {
+			final Collection<@NonNull IResource> loopResources;
+			if (changedResources == null) {
+				loopResources = sequences.getResources();
+			} else {
+				loopResources = changedResources;
+			}
+
+			for (final IResource resource : loopResources) {
 				assert resource != null;
 				for (final ISequenceElement element : sequences.getSequence(resource)) {
 					assert element != null;

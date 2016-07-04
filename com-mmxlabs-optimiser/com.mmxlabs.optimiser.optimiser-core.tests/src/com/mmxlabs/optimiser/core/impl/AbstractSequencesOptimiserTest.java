@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core.impl;
@@ -29,6 +29,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 
 @SuppressWarnings("null")
@@ -42,6 +43,9 @@ public class AbstractSequencesOptimiserTest {
 
 		final List<IConstraintChecker> constraintCheckers = Collections.emptyList();
 		lso.setConstraintCheckers(constraintCheckers);
+
+		final List<IEvaluatedStateConstraintChecker> evalConstraintCheckers = Collections.emptyList();
+		lso.setEvaluatedStateConstraintCheckers(evalConstraintCheckers);
 
 		final IFitnessEvaluator fitnessEvaluator = Mockito.mock(IFitnessEvaluator.class);
 		lso.setFitnessEvaluator(fitnessEvaluator);

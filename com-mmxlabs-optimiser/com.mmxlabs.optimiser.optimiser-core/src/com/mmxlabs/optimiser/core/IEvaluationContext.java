@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core;
@@ -50,5 +50,5 @@ public interface IEvaluationContext {
 	 * @return
 	 */
 	@NonNull
-	List<String> getEvaluationProcesses();
+	List<@NonNull String> getEvaluationProcesses();
 }

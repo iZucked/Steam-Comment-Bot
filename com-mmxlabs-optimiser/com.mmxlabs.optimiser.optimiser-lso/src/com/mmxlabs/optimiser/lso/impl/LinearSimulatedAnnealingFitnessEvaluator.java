@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.lso.impl;
@@ -70,7 +70,8 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 	private long lastFitness = Long.MAX_VALUE;
 	private long bestFitness = Long.MAX_VALUE;
 
-	public LinearSimulatedAnnealingFitnessEvaluator(@NonNull IThresholder thresholder, @NonNull List<IFitnessComponent> fitnessComponents, @NonNull List<IEvaluationProcess> evaluationProcesses) {
+	public LinearSimulatedAnnealingFitnessEvaluator(@NonNull final IThresholder thresholder, @NonNull final List<IFitnessComponent> fitnessComponents,
+			@NonNull final List<IEvaluationProcess> evaluationProcesses) {
 		this.thresholder = thresholder;
 		this.fitnessComponents = new ArrayList<>(fitnessComponents);
 		this.evaluationProcesses = new ArrayList<>(evaluationProcesses);
@@ -108,7 +109,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 		}
 		lastFitness = totalFitness;
 		// Step to the next threshold levels
-		thresholder.step();
+//		thresholder.step();
 		return accept;
 	}
 
@@ -178,9 +179,9 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 		this.initialFitness = totalFitness;
 		this.currentFitness = totalFitness;
 
-		this.initialSequences = new Triple<ISequences, ISequences, IEvaluationState>(new Sequences(initialRawSequences), new Sequences(initialFullSequences), evaluationState);
-		this.bestSequences = new Triple<ISequences, ISequences, IEvaluationState>(new Sequences(initialRawSequences), new Sequences(initialFullSequences), evaluationState);
-		this.currentSequences = new Triple<ISequences, ISequences, IEvaluationState>(new Sequences(initialRawSequences), new Sequences(initialFullSequences), evaluationState);
+		this.initialSequences = new Triple<>(new Sequences(initialRawSequences), new Sequences(initialFullSequences), evaluationState);
+		this.bestSequences = new Triple<>(new Sequences(initialRawSequences), new Sequences(initialFullSequences), evaluationState);
+		this.currentSequences = new Triple<>(new Sequences(initialRawSequences), new Sequences(initialFullSequences), evaluationState);
 
 		for (final IFitnessComponent component : fitnessComponents) {
 			bestFitnesses.put(component.getName(), component.getFitness());

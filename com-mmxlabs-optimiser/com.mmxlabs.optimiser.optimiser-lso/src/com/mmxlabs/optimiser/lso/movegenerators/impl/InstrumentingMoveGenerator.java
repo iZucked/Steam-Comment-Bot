@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.lso.movegenerators.impl;
@@ -44,7 +44,7 @@ public class InstrumentingMoveGenerator implements IMoveGenerator {
 		@SuppressWarnings("null")
 		@Override
 		@NonNull
-		public Collection<IResource> getAffectedResources() {
+		public Collection<@NonNull IResource> getAffectedResources() {
 			// TODO: SG - 2014-12-11 Changed from null to empty list for null analysis stuff. Is this correct? I am not sure how this move interacts with the rest of the application.
 			return Collections.emptySet();
 		}

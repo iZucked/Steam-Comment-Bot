@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.lso.impl;
@@ -58,7 +58,7 @@ public class Move2over2 implements IMove {
 
 	@Override
 	@NonNull
-	public final Collection<IResource> getAffectedResources() {
+	public final Collection<@NonNull IResource> getAffectedResources() {
 		return CollectionsUtil.makeArrayList(resource1, resource2);
 	}
 

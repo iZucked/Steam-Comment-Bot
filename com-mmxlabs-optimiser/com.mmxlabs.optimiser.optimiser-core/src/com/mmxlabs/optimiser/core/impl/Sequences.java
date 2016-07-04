@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core.impl;
@@ -27,11 +27,11 @@ import com.mmxlabs.optimiser.core.ISequences;
  */
 public final class Sequences implements ISequences {
 
-	private final List<IResource> resources;
+	private final List<@NonNull IResource> resources;
 
-	private final Map<IResource, ISequence> sequenceMap;
+	private final Map<@NonNull IResource, @NonNull ISequence> sequenceMap;
 
-	final List<ISequenceElement> unusedElements = new ArrayList<ISequenceElement>();
+	final List<@NonNull ISequenceElement> unusedElements = new ArrayList<>();
 
 	/**
 	 * Constructor taking a list of {@link IResource} instances. The {@link ISequence} instances will be created automatically. The resources list is copied to maintain internal consistency with the
@@ -39,12 +39,12 @@ public final class Sequences implements ISequences {
 	 * 
 	 * @param resources
 	 */
-	public Sequences(final List<IResource> resources) {
+	public Sequences(final @NonNull List<@NonNull IResource> resources) {
 		// Copy the list as we do not track changes
-		this.resources = new ArrayList<IResource>(resources);
-		sequenceMap = new HashMap<IResource, ISequence>();
+		this.resources = new ArrayList<>(resources);
+		sequenceMap = new HashMap<>();
 		for (final IResource resource : resources) {
-			sequenceMap.put(resource, new ListSequence(new LinkedList<ISequenceElement>()));
+			sequenceMap.put(resource, new ListSequence(new LinkedList<>()));
 		}
 	}
 
@@ -54,7 +54,7 @@ public final class Sequences implements ISequences {
 	 * @param resources
 	 * @param sequenceMap
 	 */
-	public Sequences(final List<IResource> resources, final Map<IResource, ISequence> sequenceMap) {
+	public Sequences(final List<@NonNull IResource> resources, final Map<@NonNull IResource, @NonNull ISequence> sequenceMap) {
 		this.resources = resources;
 		this.sequenceMap = sequenceMap;
 	}
@@ -67,11 +67,10 @@ public final class Sequences implements ISequences {
 	 */
 	public Sequences(final ISequences sequences) {
 
-		this.resources = new ArrayList<IResource>(sequences.getResources());
+		this.resources = new ArrayList<>(sequences.getResources());
 
-		this.sequenceMap = new HashMap<IResource, ISequence>();
+		this.sequenceMap = new HashMap<>();
 		for (final IResource r : resources) {
-			assert r != null;
 			// Get original sequence
 			final ISequence seq = sequences.getSequence(r);
 
@@ -87,7 +86,7 @@ public final class Sequences implements ISequences {
 	@SuppressWarnings("null")
 	@Override
 	@NonNull
-	public List<IResource> getResources() {
+	public List<@NonNull IResource> getResources() {
 		return Collections.unmodifiableList(resources);
 	}
 
@@ -114,7 +113,7 @@ public final class Sequences implements ISequences {
 	@SuppressWarnings("null")
 	@Override
 	@NonNull
-	public Map<IResource, ISequence> getSequences() {
+	public Map<@NonNull IResource, @NonNull ISequence> getSequences() {
 
 		// Create a copy so external modification does not affect internal
 		// state.
@@ -156,7 +155,7 @@ public final class Sequences implements ISequences {
 	@SuppressWarnings("null")
 	@Override
 	@NonNull
-	public List<ISequenceElement> getUnusedElements() {
+	public List<@NonNull ISequenceElement> getUnusedElements() {
 		return Collections.unmodifiableList(unusedElements);
 	}
 }

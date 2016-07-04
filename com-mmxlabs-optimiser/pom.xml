@@ -6,14 +6,14 @@
 	<artifactId>optimiser-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>Optimiser - Parent</name>
-	<version>3.11.1-SNAPSHOT</version>
+	<version>3.12.7-SNAPSHOT</version>
 	<description>Parent maven project for core optimisation projects</description>
 
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
 		<relativePath />
-		<version>31</version>
+		<version>32</version>
 	</parent>
 
 	<scm>
@@ -114,11 +114,16 @@
 
 		</plugins>
 	</build>
-	<repositories>
-		<repository>
-			<id>com-mmxlabs-common-util.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/${project.version}/com.mmxlabs.common.util.p2-${project.version}.zip-unzip/</url>
-			<layout>p2</layout>
-		</repository>
-	</repositories>
+	<profiles>
+		<profile>
+			<id>useNexusRepos</id>
+			<repositories>
+				<repository>
+					<id>com-mmxlabs-common-util.hg</id>
+					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/${project.version}/com.mmxlabs.common.util.p2-${project.version}.zip-unzip/</url>
+					<layout>p2</layout>
+				</repository>
+			</repositories>
+		</profile>
+	</profiles>
 </project>

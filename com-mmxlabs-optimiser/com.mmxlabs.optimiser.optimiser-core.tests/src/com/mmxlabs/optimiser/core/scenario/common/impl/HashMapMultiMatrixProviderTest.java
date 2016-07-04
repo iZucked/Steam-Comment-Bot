@@ -1,10 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core.scenario.common.impl;
-
-import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -53,29 +51,6 @@ public class HashMapMultiMatrixProviderTest {
 		Assert.assertFalse(provider.containsKey(null));
 		Assert.assertTrue(provider.containsKey(key));
 		Assert.assertFalse(provider.containsKey(key2));
-	}
-
-	@Test
-	public void testHashMapMatrixGetKeySet() {
-
-		final String key = "key";
-		final String key2 = "key2";
-
-		@SuppressWarnings("unchecked")
-		final IMatrixProvider<Integer, Integer> p = Mockito.mock(IMatrixProvider.class);
-
-		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>();
-
-		Set<String> keySet = provider.getKeySet();
-		Assert.assertTrue(keySet.isEmpty());
-
-		provider.set(key, p);
-
-		keySet = provider.getKeySet();
-		Assert.assertEquals(1, keySet.size());
-
-		Assert.assertTrue(keySet.contains(key));
-		Assert.assertFalse(keySet.contains(key2));
 	}
 
 	@Test

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core;
@@ -10,6 +10,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IReducingConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
@@ -35,7 +36,7 @@ public interface ISequencesOptimiser extends IOptimiser {
 	 * @return
 	 */
 	@NonNull
-	List<IConstraintChecker> getConstraintCheckers();
+	List<@NonNull IConstraintChecker> getConstraintCheckers();
 
 	/**
 	 * Returns the list of {@link #getConstraintCheckers()} which also implement @link {IReducingContraintChecker}
@@ -43,7 +44,7 @@ public interface ISequencesOptimiser extends IOptimiser {
 	 * @return
 	 */
 	@NonNull
-	List<IReducingConstraintChecker> getReducingConstraintCheckers();
+	List<@NonNull IReducingConstraintChecker> getReducingConstraintCheckers();
 
 	/**
 	 * Returns the list of {@link #getConstraintCheckers()} which also implement @link {IInitialSequencesConstraintChecker}
@@ -51,10 +52,10 @@ public interface ISequencesOptimiser extends IOptimiser {
 	 * @return
 	 */
 	@NonNull
-	List<IInitialSequencesConstraintChecker> getInitialSequencesConstraintCheckers();
+	List<@NonNull IInitialSequencesConstraintChecker> getInitialSequencesConstraintCheckers();
 
 	@NonNull
-	List<IEvaluationProcess> getEvaluationProcesses();
+	List<@NonNull IEvaluationProcess> getEvaluationProcesses();
 
 	/**
 	 * Returns the {@link ISequencesManipulator} used to transform {@link ISequences} into a new {@link ISequences} object to validate and evaluate each iteration.
@@ -88,5 +89,8 @@ public interface ISequencesOptimiser extends IOptimiser {
 	boolean isFinished();
 
 	ISequences getBestRawSequences();
+
+	@NonNull
+	List<@NonNull IEvaluatedStateConstraintChecker> getEvaluatedStateConstraintCheckers();
 
 }

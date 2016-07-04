@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core.inject.scopes;
@@ -83,7 +83,7 @@ public class PerChainUnitScopeImpl implements Scope, AutoCloseable {
 
 			// Get a reference to the array holding the thread local variables inside the
 			// ThreadLocalMap of the current thread
-			final Class threadLocalMapClass = Class.forName("java.lang.ThreadLocal$ThreadLocalMap");
+			final Class<?> threadLocalMapClass = Class.forName("java.lang.ThreadLocal$ThreadLocalMap");
 
 			//// From ThreadLocal#remove: if (m != null)
 			if (threadLocalTable != null) {

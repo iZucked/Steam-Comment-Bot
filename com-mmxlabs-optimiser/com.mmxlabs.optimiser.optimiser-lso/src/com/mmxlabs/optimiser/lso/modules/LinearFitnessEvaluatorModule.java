@@ -1,13 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.lso.modules;
 
 import java.util.List;
 import java.util.Map;
-
-import javax.inject.Singleton;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -43,7 +41,7 @@ public class LinearFitnessEvaluatorModule extends AbstractModule {
 	}
 
 	@Provides
-//	@Singleton
+	// @Singleton
 	private IFitnessCombiner createFitnessCombiner(@Named(LINEAR_FITNESS_WEIGHTS_MAP) final Map<String, Double> weightsMap) {
 
 		final LinearFitnessCombiner combiner = new LinearFitnessCombiner();
@@ -52,7 +50,7 @@ public class LinearFitnessEvaluatorModule extends AbstractModule {
 	}
 
 	@Provides
-//	@Singleton
+	// @Singleton
 	private IFitnessEvaluator createFitnessEvaluator(@NonNull final Injector injector, @NonNull final IThresholder thresholder, @NonNull final InstrumentingMoveGenerator img,
 			@NonNull final List<IFitnessComponent> fitnessComponents, @NonNull final List<IEvaluationProcess> evaluationProcesses) {
 		// create a linear Fitness evaluator.

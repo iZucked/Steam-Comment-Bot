@@ -1,11 +1,14 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.common.dcproviders.impl.indexed;
 
 import java.util.Collections;
 import java.util.List;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.indexedobjects.IIndexMap;
 import com.mmxlabs.common.indexedobjects.impl.ArrayIndexMap;
@@ -15,11 +18,13 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 
 public class IndexedTimeWindowEditor implements ITimeWindowDataComponentProviderEditor {
 
-	private final IIndexMap<ISequenceElement, List<ITimeWindow>> timeWindowsByElement = new ArrayIndexMap<ISequenceElement, List<ITimeWindow>>();
+	private final IIndexMap<@NonNull ISequenceElement, @Nullable List<@NonNull ITimeWindow>> timeWindowsByElement = new ArrayIndexMap<>();
 
+	@SuppressWarnings("null")
 	@Override
-	public List<ITimeWindow> getTimeWindows(final ISequenceElement element) {
-		final List<ITimeWindow> windows = timeWindowsByElement.maybeGet(element);
+	@NonNull
+	public List<@NonNull ITimeWindow> getTimeWindows(final @NonNull ISequenceElement element) {
+		final List<@NonNull ITimeWindow> windows = timeWindowsByElement.maybeGet(element);
 		if (windows == null) {
 			return Collections.emptyList();
 		} else {
@@ -28,7 +33,7 @@ public class IndexedTimeWindowEditor implements ITimeWindowDataComponentProvider
 	}
 
 	@Override
-	public void setTimeWindows(final ISequenceElement element, final List<ITimeWindow> timeWindows) {
+	public void setTimeWindows(final @NonNull ISequenceElement element, final @Nullable List<@NonNull ITimeWindow> timeWindows) {
 		timeWindowsByElement.set(element, timeWindows);
 	}
 }

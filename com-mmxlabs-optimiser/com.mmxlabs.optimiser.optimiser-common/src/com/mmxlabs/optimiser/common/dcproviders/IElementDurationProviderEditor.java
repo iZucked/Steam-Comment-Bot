@@ -1,8 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.common.dcproviders;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -15,9 +17,9 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  */
 public interface IElementDurationProviderEditor extends IElementDurationProvider {
 
-	void setElementDuration(ISequenceElement element, IResource resource, int duration);
+	void setElementDuration(@NonNull ISequenceElement element, @NonNull IResource resource, int duration);
 
 	void setDefaultValue(int defaultValue);
 
-	void setElementDuration(ISequenceElement element, int durationHours);
+	void setElementDuration(@NonNull ISequenceElement element, int durationHours);
 }

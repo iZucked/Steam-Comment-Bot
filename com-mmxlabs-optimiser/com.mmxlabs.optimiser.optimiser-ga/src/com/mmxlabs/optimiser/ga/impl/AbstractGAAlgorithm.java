@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.ga.impl;
@@ -84,7 +84,7 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements IG
 
 		// Reset best state to unknown
 		bestFitness = Long.MAX_VALUE;
-		bestIndividual = null;
+		bestIndividual = (I) null;
 
 		// Calculate initial population fitness - update best state and populate
 		// good/bad arrays

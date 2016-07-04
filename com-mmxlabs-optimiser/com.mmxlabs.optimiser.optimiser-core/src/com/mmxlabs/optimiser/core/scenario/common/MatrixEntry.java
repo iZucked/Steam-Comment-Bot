@@ -1,8 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core.scenario.common;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 /**
  * Class representing an entry from a {@link IMatrixProvider}.
@@ -17,7 +19,7 @@ package com.mmxlabs.optimiser.core.scenario.common;
  */
 public final class MatrixEntry<T, U extends Comparable<U>> implements Comparable<MatrixEntry<T, U>> {
 
-	private final String key;
+	private final @NonNull String key;
 
 	private final T x;
 
@@ -25,14 +27,14 @@ public final class MatrixEntry<T, U extends Comparable<U>> implements Comparable
 
 	private final U value;
 
-	public MatrixEntry(final String key, final T x, final T y, final U value) {
+	public MatrixEntry(@NonNull final String key, final T x, final T y, final U value) {
 		this.key = key;
 		this.x = x;
 		this.y = y;
 		this.value = value;
 	}
 
-	public final String getKey() {
+	public final @NonNull String getKey() {
 		return key;
 	}
 

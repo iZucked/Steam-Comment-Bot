@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.lso.impl;
@@ -12,9 +12,11 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IReducingConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess.Phase;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.lso.IMove;
@@ -22,9 +24,9 @@ import com.mmxlabs.optimiser.lso.INullMove;
 import com.mmxlabs.optimiser.lso.IRestartingOptimiser;
 
 /**
- * A sub-class of {@link LocalSearchOptimiser} implementing a default main loop.
+ * A reheating local search optimiser.
  * 
- * @author Simon Goodall
+ * @author Alex Churchill
  * 
  */
 public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser implements IRestartingOptimiser {
@@ -37,17 +39,22 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 	@Named(RESTART_ITERATIONS_THRESHOLD)
 	private int restartInterval;
 
+	@Override
 	protected int step(final int percentage, @NonNull final ModifiableSequences pinnedPotentialRawSequences, @NonNull final ModifiableSequences pinnedCurrentRawSequences) {
 
 		final int iterationsThisStep = Math.min(Math.max(1, (getNumberOfIterations() * percentage) / 100), getNumberOfIterations() - getNumberOfIterationsCompleted());
 		MAIN_LOOP: for (int i = 0; i < iterationsThisStep; i++) {
+			getFitnessEvaluator().step();
 			setNumberOfMovesTried(getNumberOfMovesTried() + 1);
+			if (numberOfMovesTried % 10000 == 0) {
+				System.out.println("iteration:" + numberOfMovesTried);
+			}
 			if (isRestartIteration(getNumberOfMovesTried())) {
 				restart();
 			}
 			if (loggingDataStore != null && (getNumberOfMovesTried() % loggingDataStore.getReportingInterval()) == 0) {
-				loggingDataStore.logProgress(getNumberOfMovesTried(), getNumberOfMovesAccepted(), getNumberOfRejectedMoves(), getNumberOfFailedEvaluations(), getNumberOfFailedToValidate(), getFitnessEvaluator()
-						.getBestFitness(), getFitnessEvaluator().getCurrentFitness(), new Date().getTime());
+				loggingDataStore.logProgress(getNumberOfMovesTried(), getNumberOfMovesAccepted(), getNumberOfRejectedMoves(), getNumberOfFailedEvaluations(), getNumberOfFailedToValidate(),
+						getFitnessEvaluator().getBestFitness(), getFitnessEvaluator().getCurrentFitness(), new Date().getTime());
 			}
 
 			// Generate a new move
@@ -86,7 +93,7 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 
 			// Apply hard constraint checkers
 			for (final IConstraintChecker checker : getConstraintCheckers()) {
-				if (checker.checkConstraints(potentialFullSequences) == false) {
+				if (checker.checkConstraints(potentialFullSequences, move.getAffectedResources()) == false) {
 					if (loggingDataStore != null) {
 						loggingDataStore.logFailedConstraints(checker, move);
 						if (DO_SEQUENCE_LOGGING) {
@@ -109,9 +116,30 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 
 			final IEvaluationState evaluationState = new EvaluationState();
 			for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
-				if (!evaluationProcess.evaluate(potentialFullSequences, evaluationState)) {
+				if (!evaluationProcess.evaluate(Phase.Checked_Evaluation, potentialFullSequences, evaluationState)) {
 					// Problem evaluating, reject move
-					setNumberOfFailedEvaluations(getNumberOfFailedEvaluations() + 1);
+					++numberOfFailedEvaluations;
+
+					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
+					continue MAIN_LOOP;
+				}
+			}
+			// Apply hard constraint checkers
+			for (final IEvaluatedStateConstraintChecker checker : getEvaluatedStateConstraintCheckers()) {
+				if (checker.checkConstraints(potentialRawSequences, potentialFullSequences, evaluationState) == false) {
+					// Problem evaluating, reject move
+					++numberOfFailedEvaluations;
+
+					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
+					// Break out
+					continue MAIN_LOOP;
+				}
+			}
+
+			for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
+				if (!evaluationProcess.evaluate(Phase.Final_Evaluation, potentialFullSequences, evaluationState)) {
+					// Problem evaluating, reject move
+					++numberOfFailedEvaluations;
 
 					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
 					continue MAIN_LOOP;
@@ -142,7 +170,9 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 				if (getFitnessEvaluator().getBestFitness() < best.getSecond()) {
 					best.setFirst(getNumberOfMovesTried());
 					best.setSecond(getFitnessEvaluator().getBestFitness());
-//					System.out.println(best.getFirst() + ":" + best.getSecond());
+					if (false) {
+						System.out.println(best.getFirst() + ":" + best.getSecond());
+					}
 				}
 			} else {
 				// Failed, reset state for old sequences
@@ -156,7 +186,7 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 				updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
 			}
 		}
-		
+
 		updateProgressLogs();
 		setNumberOfIterationsCompleted(getNumberOfMovesTried());
 		return iterationsThisStep;

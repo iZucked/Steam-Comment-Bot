@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core.scenario;
@@ -25,13 +25,13 @@ public interface IOptimisationData {
 	 * @return
 	 */
 	@NonNull
-	List<ISequenceElement> getSequenceElements();
+	List<@NonNull ISequenceElement> getSequenceElements();
 
 	/**
 	 * Returns a list of all the {@link IResource}s in the optimisation.
 	 */
 	@NonNull
-	List<IResource> getResources();
+	List<@NonNull IResource> getResources();
 
 	/**
 	 * Notify {@link IOptimisationData} that it is no longer required and clean up internal references.s

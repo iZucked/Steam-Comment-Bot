@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core;
@@ -38,11 +38,11 @@ public interface IModifiableSequences extends ISequences {
 	 * @return
 	 */
 	@NonNull
-	Map<IResource, IModifiableSequence> getModifiableSequences();
+	Map<@NonNull IResource, @NonNull IModifiableSequence> getModifiableSequences();
 
 	/**
 	 * @return a modifiable list of unused elements.
 	 */
 	@NonNull
-	List<ISequenceElement> getModifiableUnusedElements();
+	List<@NonNull ISequenceElement> getModifiableUnusedElements();
 }

@@ -1,9 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.common.constraints;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -51,15 +52,21 @@ public final class OrderedSequenceElementsConstraintChecker implements IPairwise
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences) {
-		return checkConstraints(sequences, null);
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
+		return checkConstraints(sequences, changedResources, null);
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @Nullable final List<String> messages) {
 
-		for (final IResource resource : sequences.getResources()) {
-			assert resource != null;
+		final Collection<@NonNull IResource> loopResources;
+		if (changedResources == null) {
+			loopResources = sequences.getResources();
+		} else {
+			loopResources = changedResources;
+		}
+
+		for (final IResource resource : loopResources) {
 			final ISequence sequence = sequences.getSequence(resource);
 			if (!checkSequence(sequence, messages)) {
 				return false;

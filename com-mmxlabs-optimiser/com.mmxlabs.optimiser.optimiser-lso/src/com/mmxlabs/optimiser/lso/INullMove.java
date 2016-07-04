@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.lso;
@@ -10,6 +10,6 @@ package com.mmxlabs.optimiser.lso;
  * @author Simon Goodall
  * 
  */
-public interface INullMove extends IMove{
+public interface INullMove extends IMove {
 
 }

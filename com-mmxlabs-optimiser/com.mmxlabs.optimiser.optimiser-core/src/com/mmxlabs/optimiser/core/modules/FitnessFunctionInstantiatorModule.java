@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core.modules;
@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import javax.inject.Singleton;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -34,7 +32,6 @@ public class FitnessFunctionInstantiatorModule extends AbstractModule {
 	}
 
 	@Provides
-	@Singleton
 	private List<IFitnessComponent> provideFitnessComponents(@NonNull final Injector injector, @NonNull final IFitnessHelper fitnessHelper,
 			@NonNull final IFitnessFunctionRegistry fitnessFunctionRegistry, @Named(ENABLED_FITNESS_NAMES) @NonNull final List<String> enabledFitnessNames,
 			final @NonNull IOptimisationData optimisationData) {

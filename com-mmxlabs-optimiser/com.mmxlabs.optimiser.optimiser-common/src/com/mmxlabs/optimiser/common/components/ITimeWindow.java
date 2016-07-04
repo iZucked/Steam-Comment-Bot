@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.common.components;
@@ -12,12 +12,12 @@ package com.mmxlabs.optimiser.common.components;
  */
 public interface ITimeWindow {
 
-	int getStart();
+	int getInclusiveStart();
 
 	// TODO: Should the end be inclusive or exclusive?
-	int getEnd();
+	int getExclusiveEnd();
 	
-	int getEndFlex();
+	int getExclusiveEndFlex();
 	
-	int getEndWithoutFlex();
+	int getExclusiveEndWithoutFlex();
 }

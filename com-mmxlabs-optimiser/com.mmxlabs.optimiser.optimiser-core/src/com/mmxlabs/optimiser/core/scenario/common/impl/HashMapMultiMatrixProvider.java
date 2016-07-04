@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core.scenario.common.impl;
@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixEditor;
@@ -36,6 +35,16 @@ public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements I
 	 * Cached array of keys. This will be reset whenever a new matrix is set and recalculated when {@link #getKeys()} is called.
 	 */
 	private transient String[] keys;
+
+	private transient String[] preSortedKeys;
+
+	public String[] getPreSortedKeys() {
+		return preSortedKeys;
+	}
+
+	public void setPreSortedKeys(String[] preSortedKeys) {
+		this.preSortedKeys = preSortedKeys;
+	}
 
 	public HashMapMultiMatrixProvider() {
 	}
@@ -64,12 +73,10 @@ public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements I
 	}
 
 	@Override
-	public final Set<String> getKeySet() {
-		return matricies.keySet();
-	}
-
-	@Override
 	public final String[] getKeys() {
+		if (preSortedKeys != null) {
+			return preSortedKeys;
+		}
 		if (keys == null) {
 			keys = matricies.keySet().toArray(new String[matricies.size()]);
 			Arrays.sort(keys);
@@ -83,8 +90,10 @@ public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements I
 
 		for (final String key : getKeys()) {
 			final IMatrixProvider<T, U> p = matricies.get(key);
-			final U u = p.get(x, y);
-			entries.add(new MatrixEntry<T, U>(key, x, y, u));
+			if (p != null) {
+				final U u = p.get(x, y);
+				entries.add(new MatrixEntry<T, U>(key, x, y, u));
+			}
 		}
 		return entries;
 	}
@@ -112,25 +121,33 @@ public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements I
 		 * This does not actually return the maximum value, but instead either (a) the maximum non-default value if there is a non-default value or (b) the first default value encountered if there is
 		 * no non-default value.
 		 */
-		U invalid = null;
-		U minimum = null;
+		U invalid = (U) null;
+		U minimum = (U) null;
 		String minKey = null;
 
-		for (final Map.Entry<String, IMatrixProvider<T, U>> entry : matricies.entrySet()) {
-			final String key = entry.getKey();
-			final IMatrixProvider<T, U> p = entry.getValue();
-			if (p.has(x, y)) {
-				final U u = p.get(x, y);
-				if ((minimum == null) || (u.compareTo(minimum) <= 0)) {
-					minimum = u;
+		for (final String key : getKeys()) {
+			final IMatrixProvider<T, U> p = matricies.get(key);
+			//
+			// for (final Map.Entry<String, IMatrixProvider<T, U>> entry : matricies.entrySet()) {
+			// final String key = entry.getKey();
+			// final IMatrixProvider<T, U> p = entry.getValue();
+			if (p != null) {
+				if (p.has(x, y)) {
+					final U u = p.get(x, y);
+					if ((minimum == null) || (u.compareTo(minimum) <= 0)) {
+						minimum = u;
+						minKey = key;
+					}
+				} else if (invalid == null) {
+					invalid = p.get(x, y);
 					minKey = key;
 				}
-			} else if (invalid == null) {
-				invalid = p.get(x, y);
-				minKey = key;
 			}
 		}
-		return new MatrixEntry<T, U>(minKey, x, y, minimum == null ? invalid : minimum);
+		if (minKey != null) {
+			return new MatrixEntry<T, U>(minKey, x, y, minimum == null ? invalid : minimum);
+		}
+		return null;
 	}
 
 	@Override

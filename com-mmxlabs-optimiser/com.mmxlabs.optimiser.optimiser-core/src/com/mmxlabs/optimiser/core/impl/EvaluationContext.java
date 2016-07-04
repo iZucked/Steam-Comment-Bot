@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core.impl;
@@ -28,12 +28,12 @@ public final class EvaluationContext implements IEvaluationContext {
 	private final ISequences initialSequences;
 
 	@NonNull
-	private final List<String> evaluationProcesses;
+	private final List<@NonNull String> evaluationProcesses;
 
 	@NonNull
 	private final IEvaluationProcessRegistry evaluationProcessRegistry;
 
-	public EvaluationContext(@NonNull final IOptimisationData optimisationData, @NonNull final ISequences initialSequences, @NonNull final List<String> evaluationProcesses,
+	public EvaluationContext(@NonNull final IOptimisationData optimisationData, @NonNull final ISequences initialSequences, @NonNull final List<@NonNull String> evaluationProcesses,
 			@NonNull final IEvaluationProcessRegistry evaluationProcessRegistry) {
 		this.optimisationData = optimisationData;
 		this.initialSequences = initialSequences;
@@ -61,7 +61,7 @@ public final class EvaluationContext implements IEvaluationContext {
 
 	@Override
 	@NonNull
-	public List<String> getEvaluationProcesses() {
+	public List<@NonNull String> getEvaluationProcesses() {
 		return evaluationProcesses;
 	}
 }

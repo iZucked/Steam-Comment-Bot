@@ -1,8 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.common.dcproviders;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -22,10 +25,12 @@ public interface IOrderedSequenceElementsDataComponentProvider extends IDataComp
 	 * @param previousElement
 	 * @return
 	 */
-	ISequenceElement getNextElement(ISequenceElement previousElement);
+	@Nullable
+	ISequenceElement getNextElement(@NonNull ISequenceElement previousElement);
 
 	/**
 	 * Returns the element which must precede the given element in a sequence. Returns null if there is no constraint set.
 	 */
-	ISequenceElement getPreviousElement(ISequenceElement nextElement);
+	@Nullable
+	ISequenceElement getPreviousElement(@NonNull ISequenceElement nextElement);
 }

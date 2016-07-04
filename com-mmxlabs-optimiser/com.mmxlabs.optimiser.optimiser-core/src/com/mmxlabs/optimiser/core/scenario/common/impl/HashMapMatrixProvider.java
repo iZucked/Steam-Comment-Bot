@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core.scenario.common.impl;
@@ -26,7 +26,7 @@ public final class HashMapMatrixProvider<T, U> implements IMatrixProvider<T, U>,
 	private U defaultValue;
 
 	public HashMapMatrixProvider() {
-		this(null);
+		this((U) null);
 	}
 
 	public HashMapMatrixProvider(final U defaultValue) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core.fitness.impl;
@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess.Phase;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
@@ -31,7 +32,8 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 public final class FitnessHelper implements IFitnessHelper {
 
 	@Override
-	public boolean evaluateSequencesFromComponents(@NonNull final ISequences fullSequences, @NonNull final IEvaluationState evaluationState, @NonNull final Collection<IFitnessComponent> fitnessComponents) {
+	public boolean evaluateSequencesFromComponents(@NonNull final ISequences fullSequences, @NonNull final IEvaluationState evaluationState,
+			@NonNull final Collection<IFitnessComponent> fitnessComponents) {
 		final Set<IFitnessCore> fitnessCores = getFitnessCores(fitnessComponents);
 
 		return evaluateSequencesFromCores(fullSequences, evaluationState, fitnessCores);
@@ -49,8 +51,8 @@ public final class FitnessHelper implements IFitnessHelper {
 	}
 
 	@Override
-	public boolean evaluateSequencesFromComponents(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState,
-			@NonNull final Collection<IFitnessComponent> fitnessComponents, @Nullable final Collection<IResource> affectedResources) {
+	public boolean evaluateSequencesFromComponents(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @NonNull final Collection<IFitnessComponent> fitnessComponents,
+			@Nullable final Collection<IResource> affectedResources) {
 		final Set<IFitnessCore> fitnessCores = getFitnessCores(fitnessComponents);
 
 		return evaluateSequencesFromCores(sequences, evaluationState, fitnessCores, affectedResources);
@@ -113,7 +115,8 @@ public final class FitnessHelper implements IFitnessHelper {
 		final AnnotatedSolution result = new AnnotatedSolution(fullSequences, context, evaluationState);
 
 		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-			evaluationProcess.annotate(fullSequences, evaluationState, result);
+			evaluationProcess.annotate(Phase.Checked_Evaluation, fullSequences, evaluationState, result);
+			evaluationProcess.annotate(Phase.Final_Evaluation, fullSequences, evaluationState, result);
 		}
 
 		final Set<IFitnessCore> cores = getFitnessCores(fitnessComponents);

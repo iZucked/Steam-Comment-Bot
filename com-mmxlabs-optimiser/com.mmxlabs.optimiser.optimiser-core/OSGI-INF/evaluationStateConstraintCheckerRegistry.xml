@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2016
+    All rights reserved.
+
+-->
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="EvaluatedStateConstraintCheckerRegistryCheckerRegistry">
+   <implementation class="com.mmxlabs.optimiser.core.constraints.impl.EvaluatedStateConstraintCheckerRegistry"/>
+   <service>
+      <provide interface="com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerRegistry"/>
+   </service>
+   <reference bind="registerConstraintCheckerFactory" cardinality="0..n" interface="com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerFactory" name="IEvaluatedStateConstraintCheckerFactory" policy="dynamic" unbind="deregisterConstraintCheckerFactory"/>
+</scr:component>

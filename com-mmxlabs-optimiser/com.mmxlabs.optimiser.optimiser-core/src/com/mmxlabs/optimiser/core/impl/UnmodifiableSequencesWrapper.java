@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core.impl;
@@ -25,7 +25,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 public final class UnmodifiableSequencesWrapper implements ISequences {
 
 	@NonNull
-	private final Map<IResource, ISequence> wrappedSequences = new HashMap<IResource, ISequence>();
+	private final Map<@NonNull IResource, @NonNull ISequence> wrappedSequences = new HashMap<>();
 
 	@NonNull
 	private ISequences wrapped;
@@ -37,7 +37,7 @@ public final class UnmodifiableSequencesWrapper implements ISequences {
 
 	@Override
 	@NonNull
-	public List<IResource> getResources() {
+	public List<@NonNull IResource> getResources() {
 		return wrapped.getResources();
 	}
 
@@ -63,7 +63,7 @@ public final class UnmodifiableSequencesWrapper implements ISequences {
 
 	@Override
 	@NonNull
-	public Map<IResource, ISequence> getSequences() {
+	public Map<@NonNull IResource, @NonNull ISequence> getSequences() {
 		return wrappedSequences;
 	}
 
@@ -92,7 +92,7 @@ public final class UnmodifiableSequencesWrapper implements ISequences {
 
 	@Override
 	@NonNull
-	public List<ISequenceElement> getUnusedElements() {
+	public List<@NonNull ISequenceElement> getUnusedElements() {
 		return wrapped.getUnusedElements();
 	}
 }

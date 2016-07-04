@@ -1,8 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.common.components.impl;
+
+import java.util.Objects;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 
@@ -19,7 +21,7 @@ public final class TimeWindow implements ITimeWindow {
 	private final int end;
 
 	private final int endFlex;
-	
+
 	public TimeWindow(final int start, final int end) {
 		this.start = start;
 		this.end = end;
@@ -33,25 +35,24 @@ public final class TimeWindow implements ITimeWindow {
 	}
 
 	@Override
-	public final int getEnd() {
+	public final int getExclusiveEnd() {
 		return end;
 	}
 
 	@Override
-	public final int getStart() {
+	public final int getInclusiveStart() {
 		return start;
 	}
-	
+
 	@Override
-	public int getEndFlex() {
+	public int getExclusiveEndFlex() {
 		return endFlex;
 	}
-	
+
 	@Override
-	public int getEndWithoutFlex() {
+	public int getExclusiveEndWithoutFlex() {
 		return end - endFlex;
 	}
-
 
 	@Override
 	public final boolean equals(final Object obj) {
@@ -63,6 +64,9 @@ public final class TimeWindow implements ITimeWindow {
 			if (end != tw.end) {
 				return false;
 			}
+			if (endFlex != tw.endFlex) {
+				return false;
+			}
 			return true;
 		}
 
@@ -72,9 +76,9 @@ public final class TimeWindow implements ITimeWindow {
 	@Override
 	public final int hashCode() {
 		// Based on Arrays.hashCode(int[])
-		return (31 * start) + end;
+		return Objects.hash(start, end, endFlex);
 	}
-	
+
 	@Override
 	public String toString() {
 		return String.format("[%d, %d)", start, end);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core.constraints.impl;
@@ -45,20 +45,20 @@ public final class ConstraintCheckerRegistry implements IConstraintCheckerRegist
 	@SuppressWarnings("null")
 	@Override
 	@NonNull
-	public Collection<String> getConstraintCheckerNames() {
+	public Collection<@NonNull String> getConstraintCheckerNames() {
 		return constraintFactoriesByName.keySet();
 	}
 
 	@SuppressWarnings("null")
 	@Override
 	@NonNull
-	public Collection<IConstraintCheckerFactory> getConstraintCheckerFactories() {
+	public Collection<@NonNull IConstraintCheckerFactory> getConstraintCheckerFactories() {
 		return constraintFactoriesByName.values();
 	}
 
 	@Override
 	@NonNull
-	public Set<IConstraintCheckerFactory> getConstraintCheckerFactories(@NonNull final Collection<String> names) {
+	public Set<@NonNull IConstraintCheckerFactory> getConstraintCheckerFactories(@NonNull final Collection<String> names) {
 
 		final Set<IConstraintCheckerFactory> factories = new HashSet<IConstraintCheckerFactory>(names.size());
 

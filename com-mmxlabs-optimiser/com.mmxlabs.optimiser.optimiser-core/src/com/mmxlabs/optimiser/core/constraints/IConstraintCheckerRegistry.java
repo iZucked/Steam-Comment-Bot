@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.core.constraints;
@@ -37,16 +37,16 @@ public interface IConstraintCheckerRegistry {
 	 * 
 	 * @return
 	 */
-	@NonNull 
-	Collection<IConstraintCheckerFactory> getConstraintCheckerFactories();
+	@NonNull
+	Collection<@NonNull IConstraintCheckerFactory> getConstraintCheckerFactories();
 
 	/**
 	 * Returns a {@link Collection} of the registered {@link IConstraintChecker} names.
 	 * 
 	 * @return
 	 */
-	@NonNull 
-	Collection<String> getConstraintCheckerNames();
+	@NonNull
+	Collection<@NonNull String> getConstraintCheckerNames();
 
 	/**
 	 * Returns a {@link Collection} of {@link IConstraintCheckerFactory} instances based on the list of {@link IConstraintChecker} names.
@@ -54,6 +54,6 @@ public interface IConstraintCheckerRegistry {
 	 * @param names
 	 * @return
 	 */
-	@NonNull 
-	Collection<IConstraintCheckerFactory> getConstraintCheckerFactories(@NonNull Collection<String> names);
+	@NonNull
+	Collection<@NonNull IConstraintCheckerFactory> getConstraintCheckerFactories(@NonNull Collection<String> names);
 }

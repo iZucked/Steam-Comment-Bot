@@ -1,8 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.optimiser.common.dcproviders.impl.indexed;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.indexedobjects.IIndexMap;
 import com.mmxlabs.common.indexedobjects.impl.ArrayIndexMap;
@@ -12,15 +15,15 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 
 public final class IndexedElementDurationEditor implements IElementDurationProviderEditor {
 
-	private final IIndexMap<IResource, IIndexMap<ISequenceElement, Integer>> durationByElementByResource = new ArrayIndexMap<IResource, IIndexMap<ISequenceElement, Integer>>();
+	private final IIndexMap<@NonNull IResource, @Nullable IIndexMap<@NonNull ISequenceElement, @Nullable Integer>> durationByElementByResource = new ArrayIndexMap<>();
 
-	private final IIndexMap<ISequenceElement, Integer> durationByElement = new ArrayIndexMap<ISequenceElement, Integer>();
+	private final IIndexMap<@NonNull ISequenceElement, @Nullable Integer> durationByElement = new ArrayIndexMap<>();
 
 	private int defaultDuration;
 
 	@Override
-	public int getElementDuration(final ISequenceElement element, final IResource resource) {
-		final IIndexMap<ISequenceElement, Integer> byElementForResource = durationByElementByResource.maybeGet(resource);
+	public int getElementDuration(@NonNull final ISequenceElement element, @NonNull final IResource resource) {
+		final IIndexMap<@NonNull ISequenceElement, @Nullable Integer> byElementForResource = durationByElementByResource.maybeGet(resource);
 
 		if (byElementForResource != null) {
 			final Integer i = byElementForResource.maybeGet(element);
@@ -43,10 +46,10 @@ public final class IndexedElementDurationEditor implements IElementDurationProvi
 	}
 
 	@Override
-	public void setElementDuration(final ISequenceElement element, final IResource resource, final int duration) {
-		IIndexMap<ISequenceElement, Integer> byElementForResource = durationByElementByResource.maybeGet(resource);
+	public void setElementDuration(final @NonNull ISequenceElement element, @NonNull final IResource resource, final int duration) {
+		IIndexMap<@NonNull ISequenceElement, @Nullable Integer> byElementForResource = durationByElementByResource.maybeGet(resource);
 		if (byElementForResource == null) {
-			byElementForResource = new ArrayIndexMap<ISequenceElement, Integer>();
+			byElementForResource = new ArrayIndexMap<>();
 			durationByElementByResource.set(resource, byElementForResource);
 		}
 
