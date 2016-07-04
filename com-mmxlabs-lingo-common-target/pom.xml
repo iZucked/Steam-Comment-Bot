@@ -48,13 +48,6 @@
 					<resolver>p2</resolver>
 
 					<environments>
-						<!--32 Windows -->
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86</arch>
-						</environment>
-
 						<!-- 64 Windows -->
 						<environment>
 							<os>win32</os>
@@ -63,11 +56,6 @@
 						</environment>
 
 						<!-- 64 Linux -->
-						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86</arch>
-						</environment>
 						<environment>
 							<os>linux</os>
 							<ws>gtk</ws>
