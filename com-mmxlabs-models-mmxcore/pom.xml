@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.models.mmxcore</groupId>
 	<artifactId>com.mmxlabs.models.mmxcore.parent</artifactId>
-	<version>5.0.1-SNAPSHOT</version>
+	<version>3.12.7-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
@@ -27,9 +27,6 @@
 	</ciManagement>
 
 	<modules>
-
-		<module>com.mmxlabs.models.mmxcore.target-definition</module>
-
 		<module>com.mmxlabs.models.mmxcore</module>
 		<module>com.mmxlabs.models.mmxcore.edit</module>
 
@@ -60,11 +57,12 @@
 
 					<target>
 						<artifact>
-							<groupId>com.mmxlabs.models.mmxcore</groupId>
-							<artifactId>com.mmxlabs.models.mmxcore.target-definition</artifactId>
+							<groupId>com.mmxlabs.lingo.common.target</groupId>
+							<artifactId>com.mmxlabs.lingo.common.target-definition</artifactId>
 							<version>${project.version}</version>
 						</artifact>
 					</target>
+
 
 					<environments>
 
@@ -74,24 +72,9 @@
 							<arch>x86_64</arch>
 						</environment>
 						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
 							<os>win32</os>
 							<ws>win32</ws>
 							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>macosx</os>
-							<ws>cocoa</ws>
-							<arch>x86</arch>
 						</environment>
 						<environment>
 							<os>macosx</os>
