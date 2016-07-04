@@ -58,14 +58,15 @@ public enum PortCapability implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	MAINTENANCE(3, "MAINTENANCE", "MAINTENANCE"), /**
-													* The '<em><b>TRANSFER</b></em>' literal object.
-													* <!-- begin-user-doc -->
-													 * <!-- end-user-doc -->
-													* @see #TRANSFER_VALUE
-													* @generated
-													* @ordered
-													*/
+	MAINTENANCE(3, "MAINTENANCE", "MAINTENANCE"),
+	/**
+	* The '<em><b>TRANSFER</b></em>' literal object.
+	* <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	* @see #TRANSFER_VALUE
+	* @generated
+	* @ordered
+	*/
 	TRANSFER(4, "TRANSFER", "TRANSFER");
 
 	/**
