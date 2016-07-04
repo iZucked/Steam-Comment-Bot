@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.rcp.common.actions;
@@ -16,8 +16,8 @@ public interface IAdditionalAttributeProvider {
 	 * @param column
 	 * @return
 	 */
-	@Nullable
-	String[] getAdditionalHeaderAttributes(final GridColumn column);
+	@NonNull
+	String @Nullable [] getAdditionalHeaderAttributes(final GridColumn column);
 
 	/**
 	 * Returns additional style attributes for the grid item at the specified column index.
@@ -26,11 +26,11 @@ public interface IAdditionalAttributeProvider {
 	 * @param columnIdx
 	 * @return
 	 */
-	@Nullable
-	String[] getAdditionalAttributes(final GridItem item, final int columnIdx);
+	@NonNull
+	String @Nullable [] getAdditionalAttributes(@NonNull GridItem item, final int columnIdx);
 
-	@Nullable
-	String[] getAdditionalRowHeaderAttributes(GridItem item);
+	@NonNull
+	String @Nullable [] getAdditionalRowHeaderAttributes(@NonNull GridItem item);
 
 	@NonNull
 	String getTopLeftCellLowerText();
@@ -41,6 +41,6 @@ public interface IAdditionalAttributeProvider {
 	@NonNull
 	String getTopLeftCellText();
 
-	@Nullable
-	String[] getAdditionalPreRows();
+	@NonNull
+	String @Nullable [] getAdditionalPreRows();
 }

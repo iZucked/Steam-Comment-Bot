@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.license.ssl.internal;
@@ -28,6 +28,7 @@ import org.eclipse.ecf.filetransfer.service.IRemoteFileSystemBrowser;
 import org.eclipse.ecf.filetransfer.service.IRemoteFileSystemBrowserFactory;
 import org.eclipse.ecf.provider.filetransfer.httpclient4.HttpClientFileSystemBrowser;
 import org.eclipse.ecf.provider.filetransfer.identity.FileTransferNamespace;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.osgi.util.NLS;
 
 /**
@@ -90,8 +91,8 @@ public class HttpClientBrowseFileTransferFactory implements IRemoteFileSystemBro
 
 			@SuppressWarnings("rawtypes")
 			@Override
-			public Object getAdapter(Class adapter) {
-				return null;
+			public <T> T getAdapter(Class<T> adapter) {
+				return (T)null;
 			}
 
 		};

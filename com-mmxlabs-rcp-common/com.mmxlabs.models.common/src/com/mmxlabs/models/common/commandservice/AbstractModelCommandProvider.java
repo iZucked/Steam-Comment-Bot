@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.common.commandservice;
@@ -38,15 +38,15 @@ public abstract class AbstractModelCommandProvider<T> implements IModelCommandPr
 		}
 		int andIncrement = provisionStack.get().getAndIncrement();
 		if (andIncrement == 0) {
-			provisionContext.set(null);
+			provisionContext.set((T) null);
 		}
 	}
 
 	@Override
 	public void endCommandProvision() {
 		if (provisionStack.get().decrementAndGet() == 0) {
-			provisionContext.set(null);
+			provisionContext.set((T) null);
 		}
 	}
-	
+
 }

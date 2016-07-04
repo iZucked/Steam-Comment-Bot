@@ -1,9 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.rcp.common;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.Viewer;
@@ -16,6 +17,33 @@ import org.eclipse.swt.widgets.Control;
  *
  */
 public final class ViewerHelper {
+
+	/**
+	 * Functional interface to use with #setInput to wrap up input creation in a lambda
+	 *
+	 */
+	@FunctionalInterface
+	public interface InputProvider {
+
+		@Nullable
+		Object getInput();
+	}
+
+	public static void setInput(@Nullable final Viewer viewer, final boolean syncExec, @NonNull final InputProvider inputProvider) {
+		if (viewer == null) {
+			return;
+		}
+		final Runnable runnable = new Runnable() {
+			@Override
+			public void run() {
+				final Control control = viewer.getControl();
+				if (control != null && !control.isDisposed()) {
+					viewer.setInput(inputProvider.getInput());
+				}
+			}
+		};
+		RunnerHelper.exec(runnable, syncExec);
+	}
 
 	public static void setInput(@Nullable final Viewer viewer, final boolean syncExec, @Nullable final Object input) {
 		if (viewer == null) {

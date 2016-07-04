@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.license.features;
@@ -39,7 +39,7 @@ public class LicenseFeatures {
 	private static Set<String> extraEnablementsSet = new HashSet<>();
 
 	public static void initialiseFeatureEnablements(final String... extraEnablements) {
-		for (String s : extraEnablements) {
+		for (final String s : extraEnablements) {
 			extraEnablementsSet.add(s);
 		}
 
@@ -140,5 +140,22 @@ public class LicenseFeatures {
 		feature = feature.replaceAll("\\*", "_");
 
 		return feature;
+	}
+
+	public static void addFeatureEnablements(final String... extraEnablements) {
+		for (final String s : extraEnablements) {
+			extraEnablementsSet.add(s);
+		}
+	}
+
+	/**
+	 * FIXME: I really want a push/pop capability for ITS
+	 * 
+	 * @param extraEnablements
+	 */
+	public static void removeFeatureEnablements(final String... extraEnablements) {
+		for (final String s : extraEnablements) {
+			extraEnablementsSet.remove(s);
+		}
 	}
 }
