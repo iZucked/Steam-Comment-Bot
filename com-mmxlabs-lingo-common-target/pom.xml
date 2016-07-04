@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.lingo.common.target</groupId>
 	<artifactId>com.mmxlabs.lingo.common.target.parent</artifactId>
-	<version>3.11.1-SNAPSHOT</version>
+	<version>3.12.7-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
-		<version>31</version>
+		<version>32</version>
 		<relativePath />
 	</parent>
 
