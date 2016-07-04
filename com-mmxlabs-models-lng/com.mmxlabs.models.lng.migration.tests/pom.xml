@@ -4,11 +4,11 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.lng.parent</artifactId>
 		<groupId>com.mmxlabs.models.lng</groupId>
-		<version>3.12.7-SNAPSHOT</version>
+		<version>3.13.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.models.lng.migration.tests</artifactId>
-	<version>3.12.7-SNAPSHOT</version>
+	<version>3.13.0-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
 
 	<build>
