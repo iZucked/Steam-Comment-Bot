@@ -6,10 +6,10 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.mmxcore.parent</artifactId>
 		<groupId>com.mmxlabs.models.mmxcore</groupId>
-		<version>3.1.1-SNAPSHOT</version>
+		<version>3.12.17-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.models.mmxcore.tests</artifactId>
-	<version>3.1.1-SNAPSHOT</version>
+	<version>3.12.7-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
 </project>
