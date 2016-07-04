@@ -1,8 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
-package com.mmxlabs.lingo.its.tests.csv.microcases;
+package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -10,19 +10,19 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
+import com.mmxlabs.lingo.its.tests.CSVTestDataProvider;
 import com.mmxlabs.lingo.its.tests.category.QuickTest;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
-import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 
@@ -43,9 +43,9 @@ public class SpotDESPurchaseTimezoneBoundaryTest extends AbstractOptimisationRes
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/micro-cases/spot-slot-timezone/");
 
-		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
+		@NonNull
+		LNGScenarioRunner runner = runScenarioWithGCO(new CSVTestDataProvider(url));
 
-		final LNGScenarioRunner runner = runScenarioWithGCO(scenario, new URL(url.toString() + "fitness"));
 		// runner.updateScenario();
 		final Schedule schedule = runner.getSchedule();
 		Assert.assertNotNull(schedule);

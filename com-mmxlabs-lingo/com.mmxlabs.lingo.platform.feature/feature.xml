@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2015
+    Copyright (C) Minimax Labs Ltd., 2010 - 2016
     All rights reserved.
 
 -->
 <feature
       id="com.mmxlabs.lingo.platform.feature"
       label="Lingo Eclipse Platform Feature"
-      version="3.11.1.qualifier"
+      version="3.12.7.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description>
@@ -1534,6 +1534,13 @@
 
    <plugin
          id="org.apache.commons.lang"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.jdt.annotation"
          download-size="0"
          install-size="0"
          version="0.0.0"

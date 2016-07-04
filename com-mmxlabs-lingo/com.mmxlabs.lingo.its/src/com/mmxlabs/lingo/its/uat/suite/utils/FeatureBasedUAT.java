@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.uat.suite.utils;
@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -21,8 +22,11 @@ import java.util.TreeSet;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.jdt.annotation.NonNull;
@@ -31,7 +35,9 @@ import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
+import com.mmxlabs.lingo.its.tests.LNGScenarioRunnerCreator;
 import com.mmxlabs.lingo.its.uat.suite.testers.GlobalUATTestsConfig;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -45,6 +51,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
+import com.mmxlabs.models.mmxcore.NamedObject;
 
 /**
  * Abstract class with methods to extract features from given EMF models for use in producing test files and comparisons for clients. Expected to be subclassed on a per client, per contract basis.
@@ -60,10 +67,20 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		final List<EStructuralFeature> list = new ArrayList<EStructuralFeature>();
 		final List<EStructuralFeature> features = c.getEAllStructuralFeatures();
 		for (final EStructuralFeature f : features) {
-			if (f.getEType() == EcorePackage.Literals.EINT || f.getEType() == EcorePackage.Literals.EINTEGER_OBJECT || f.getEType() == EcorePackage.Literals.EDOUBLE
-					|| f.getEType() == EcorePackage.Literals.EDOUBLE_OBJECT || f.getEType() == EcorePackage.Literals.EBOOLEAN || f.getEType() == EcorePackage.Literals.EBOOLEAN_OBJECT
-					|| f.getEType() == EcorePackage.Literals.ELONG || f.getEType() == EcorePackage.Literals.ELONG_OBJECT) {
-				list.add(f);
+			if (f.getName().equals("contract")) {
+				int z = 0;
+			}
+			if (f instanceof EAttribute) {
+				if (f.getEType() == EcorePackage.Literals.EINT || f.getEType() == EcorePackage.Literals.EINTEGER_OBJECT || f.getEType() == EcorePackage.Literals.EDOUBLE
+						|| f.getEType() == EcorePackage.Literals.EDOUBLE_OBJECT || f.getEType() == EcorePackage.Literals.EBOOLEAN || f.getEType() == EcorePackage.Literals.EBOOLEAN_OBJECT
+						|| f.getEType() == EcorePackage.Literals.ELONG || f.getEType() == EcorePackage.Literals.ELONG_OBJECT || f.getEType().getInstanceClass() == LocalDate.class
+						|| f.getEType() == EcorePackage.Literals.ESTRING) {
+					list.add(f);
+				}
+			} else if (f instanceof EReference) {
+				if (((EReference) f).getUpperBound() == 1 && NamedObject.class.isAssignableFrom(((EReference) f).getEReferenceType().getInstanceClass())) {
+					list.add(f);
+				}
 			}
 		}
 		return list;
@@ -78,7 +95,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		Assert.assertNotNull(url);
 		final LNGScenarioRunner runner;
 		if (isLingoFile) {
-			runner = evaluateScenarioWithGCO(url);
+			runner = LNGScenarioRunnerCreator.createScenarioRunnerForEvaluation(url, false);
 		} else {
 			runner = null;
 		}
@@ -113,11 +130,114 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 	}
 
 	protected void fillFeatureMap(@NonNull final EClass eClass, @NonNull final IdMapContainer baseTable, @NonNull final EObject containedObj, @NonNull final String prefix) {
+
 		if (eClass != null) {
-			for (final EStructuralFeature e : getFeatures(eClass)) {
-				baseTable.getIdMapList().add(new IdMap(prefix.equals("") ? e.getName() : (prefix + "-" + e.getName()), e, containedObj));
+
+			ArrayList<EObject> open = new ArrayList<EObject>();
+			ArrayList<String> handles = new ArrayList<String>();
+			ArrayList<Integer> depth = new ArrayList<Integer>();
+			open.add(containedObj);
+			handles.add(prefix);
+			depth.add(0);
+
+			String previous_handle = handles.get(0);
+
+			Integer i = 0;
+			Integer i2 = 0;
+			Integer k = 0;
+
+			while (open.size() > 0) {
+
+				EObject current_container = open.get(0);
+
+				// Reset for array idices
+				if (!previous_handle.equals(handles.get(0))) {
+					i = 0;
+					i2 = 0;
+					k = 0;
+				}
+
+				EClass current_class = current_container.eClass();
+
+				ArrayList<String> feature_names = new ArrayList<String>();
+
+				for (final EStructuralFeature e : getFeatures(current_class)) {
+
+					Pair name_comparison_results = uniqueHeading(feature_names, e.getName());
+					feature_names = (ArrayList<String>) name_comparison_results.getFirst();
+					String current_name = (String) name_comparison_results.getSecond();
+					
+					if(current_name == "uuid"){
+						//System.out.println("UUID");
+					}
+
+					else if (current_name == "entity") {
+						baseTable.getIdMapList()
+								.add(new IdMap(handles.get(0).equals("") ? current_name + Integer.toString(i) : handles.get(0)  + current_name + Integer.toString(i), e, current_container));
+						i++;
+					} else if (current_name == "profitAndLoss") {
+						baseTable.getIdMapList()
+								.add(new IdMap(handles.get(0).equals("") ? current_name + Integer.toString(i2) : handles.get(0) + current_name + Integer.toString(i2), e, current_container));
+						i2++;
+					} else if (current_name == "profitAndLossPreTax") {
+						baseTable.getIdMapList()
+								.add(new IdMap(handles.get(0).equals("") ? current_name + Integer.toString(k) : handles.get(0)+ current_name + Integer.toString(k), e, current_container));
+						k++;
+
+					} else {
+						baseTable.getIdMapList().add(new IdMap(handles.get(0).equals("") ? current_name : handles.get(0)+ current_name, e, current_container));
+					}
+				}
+
+				Integer j = 0;
+				EList<EObject> child_containers = current_container.eContents();
+
+				ArrayList<String> container_names = new ArrayList<String>();
+
+				for (EObject child_container : child_containers) {
+
+					String child_handle = child_container.eContainmentFeature().getName();
+					open.add(child_container);
+
+					Pair name_comparison_results = uniqueHeading(container_names, child_handle);
+					container_names = (ArrayList<String>) name_comparison_results.getFirst();
+					String current_name = (String) name_comparison_results.getSecond();
+
+					String new_handle = handles.get(0).concat(current_name + '-');
+					handles.add(new_handle);
+					j++;
+					depth.add(depth.get(0) + 1);
+
+				}
+
+				open.remove(0);
+
+				previous_handle = handles.get(0);
+				handles.remove(0);
+
+				depth.remove(0);
+
+			}
+
+		}
+
+	}
+
+	private Pair uniqueHeading(ArrayList<String> names, String name) {
+		Pair result = new Pair();
+		Integer shared_count = 0;
+		for (String existing_name : names) {
+			if (existing_name == name) {
+				shared_count += 1;
 			}
 		}
+		if (shared_count > 0) {
+			name = name.concat(Integer.toString(shared_count + 1));
+		}
+		names.add(name);
+		result.setFirst(names);
+		result.setSecond(name);
+		return result;
 	}
 
 	protected void fillFeatureMap(@NonNull final EClass eClass, @NonNull final IdMapContainer baseTable, @NonNull final EObject containedObj) {
@@ -142,6 +262,21 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		}
 		final int multiplier = getMultiplier(feature);
 		return value * (Math.pow(10, multiplier));
+	}
+
+	private String getLingoOutputString(@NonNull final EObject modelObject, @NonNull final EStructuralFeature feature) {
+		if (modelObject.eGet(feature) == null) {
+			return "null";
+		} else if (feature.getEType().getInstanceClass() == LocalDate.class) {
+			return ((LocalDate) modelObject.eGet(feature)).toString();
+		} else if (feature instanceof EReference) {
+			if (NamedObject.class.isAssignableFrom(((EReference) feature).getEReferenceType().getInstanceClass())) {
+				return ((NamedObject) modelObject.eGet(feature)).getName();
+			}
+		} else if (modelObject.eGet(feature) instanceof String) {
+			return (String) modelObject.eGet(feature);
+		}
+		return "unsupported output";
 	}
 
 	private int getMultiplier(@NonNull final EStructuralFeature e) {
@@ -362,21 +497,32 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 
 	private void addToProperties(@NonNull final Properties prop, @NonNull final List<IdMap> table, @NonNull final String prefix) {
 		for (final IdMap map : table) {
-			prop.setProperty(createPropertyKey(map, prefix), String.format("%.7f", (double) getLingoOutput(map.getContainer(), map.getFeature())));
+			// prop.setProperty(createPropertyKey(map, prefix), String.format("%.7f", (double) getLingoOutput(map.getContainer(), map.getFeature())));
+			prop.setProperty(createPropertyKey(map, prefix), formatProperty(map.getContainer(), map.getFeature()));
 		}
+	}
+
+	private String formatProperty(EObject eObj, EStructuralFeature f) {
+		if (f.getEType() == EcorePackage.Literals.EINT || f.getEType() == EcorePackage.Literals.EINTEGER_OBJECT || f.getEType() == EcorePackage.Literals.EDOUBLE
+				|| f.getEType() == EcorePackage.Literals.EDOUBLE_OBJECT || f.getEType() == EcorePackage.Literals.EBOOLEAN || f.getEType() == EcorePackage.Literals.EBOOLEAN_OBJECT
+				|| f.getEType() == EcorePackage.Literals.ELONG || f.getEType() == EcorePackage.Literals.ELONG_OBJECT) {
+			return String.format("%.7f", (double) getLingoOutput(eObj, f));
+		} else {
+			return getLingoOutputString(eObj, f);
+		}
+
 	}
 
 	private void comparePropertiesToLingo(@NonNull final Properties prop, @NonNull final List<IdMap> table, @NonNull final String prefix, @NonNull final String cargoName) {
 		for (final IdMap map : table) {
 			final String key = createPropertyKey(map, prefix);
-			if (prop.containsKey(key)) {
-				final double propertiesValue = Double.valueOf(prop.getProperty(key));
-				final double lingoValue = getLingoOutput(map.getContainer(), map.getFeature());
-//				Assert.assertEquals(String.format("testing cargo (%s) \"%s:\"", cargoName, key), propertiesValue, lingoValue, 0.000001);
-				if (Math.abs(propertiesValue - lingoValue) > 0.00001) {
-					System.out.println(String.format("testing cargo (%s) \"%s:\"", cargoName, key));
-				}
-//				Assert.assertEquals(String.format("testing cargo (%s) \"%s:\"", cargoName, key), propertiesValue, lingoValue, 0.000001);
+			if (prop.containsKey(key) && !key.contains("uuid")) {
+				final String propertiesValue = prop.getProperty(key);
+				final String lingoValue = formatProperty(map.getContainer(), map.getFeature());
+				Assert.assertEquals(String.format("testing cargo (%s) \"%s:\"", cargoName, key), propertiesValue, lingoValue);
+				// final double propertiesValue = Double.valueOf(prop.getProperty(key));
+				// final double lingoValue = getLingoOutput(map.getContainer(), map.getFeature());
+				// Assert.assertEquals(String.format("testing cargo (%s) \"%s:\"", cargoName, key), propertiesValue, lingoValue, 0.000001);
 			} else {
 				LOG.warn(key + " not in map");
 			}

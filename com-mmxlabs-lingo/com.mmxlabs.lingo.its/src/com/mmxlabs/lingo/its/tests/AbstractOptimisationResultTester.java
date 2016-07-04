@@ -1,13 +1,12 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests;
 
-import static org.junit.Assert.fail;
-
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Dictionary;
@@ -22,11 +21,12 @@ import java.util.concurrent.Executors;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -44,12 +44,13 @@ import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.scenario.exportWizards.ExportCSVWizard;
+import com.mmxlabs.models.lng.scenario.exportWizards.ExportCSVWizard.exportInformation;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.chain.IMultiStateResult;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
@@ -139,7 +140,7 @@ public class AbstractOptimisationResultTester {
 	}
 
 	@AfterClass
-	public static void dregisterCipherProvider() {
+	public static void deregisterCipherProvider() {
 		if (cipherServiceRef != null) {
 			cipherServiceRef.unregister();
 			cipherServiceRef = null;
@@ -150,99 +151,38 @@ public class AbstractOptimisationResultTester {
 		super();
 	}
 
-	//
-	// /**
-	// * If run on two separate occasions the fitnesses generated need to be identical. This method tests this by being run twice. The first execution prints out a map that maps the name of the
-	// fitness
-	// * to the value to the console. This is copied and pasted into the method. The second execution will test that map against a the fitnesses that have been generated again.
-	// *
-	// * @throws Exception
-	// *
-	// * @throws MigrationException
-	// * @throws InterruptedException
-	// */
-	public LNGScenarioRunner runScenarioWithGCO(@NonNull final URL url) throws Exception {
+	@NonNull
+	public LNGScenarioRunner runScenario(@NonNull ITestDataProvider testDataProvider) throws IOException {
 
-		final LNGScenarioModel originalScenario = LNGScenarioRunnerCreator.getScenarioModelFromURL(url);
-
-		return runScenarioWithGCO(originalScenario, url);
-	}
-
-	public LNGScenarioRunner evaluateScenarioWithGCO(@NonNull final URL url) throws Exception {
-
-		final LNGScenarioModel originalScenario = LNGScenarioRunnerCreator.getScenarioModelFromURL(url);
-
-		return evaluateScenarioWithGCO(originalScenario, url);
-	}
-
-	public LNGScenarioRunner evaluateScenario(@NonNull final URL url, @NonNull final OptimiserSettings optimiserSettings) throws Exception {
-
-		final LNGScenarioModel originalScenario = LNGScenarioRunnerCreator.getScenarioModelFromURL(url);
-		final LNGScenarioRunner originalScenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(executorService, originalScenario, optimiserSettings);
-
-		return evaluateScenario(originalScenario, url, originalScenarioRunner);
-	}
-
-	//
-	public LNGScenarioRunner evaluateScenarioWithGCO(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
-
-		if (false) {
-			LNGScenarioRunnerCreator.saveScenarioModel(originalScenario, new File("C:\\temp\\test-scenario.lingo"));
-		}
-
-		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
-		optimiserSettings = LNGScenarioRunnerCreator.createExtendedSettings(optimiserSettings);
-
-		// Limit the number of iterations
-		optimiserSettings.getAnnealingSettings().setIterations(10_000);
-
-		// Enabled by default for ITS
-		optimiserSettings.setGenerateCharterOuts(true);
-
-		// Create scenario runner with optimisation params incase we want to run optimisation outside of the opt run method.
-		final LNGScenarioRunner originalScenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(executorService, originalScenario, optimiserSettings);
-		return evaluateScenario(originalScenario, origURL, originalScenarioRunner);
-	}
-
-	public LNGScenarioRunner evaluateScenario(@NonNull final LNGScenarioModel originalScenario, @Nullable final URL origURL, @NonNull final LNGScenarioRunner scenarioRunner)
-			throws IOException, IncompleteScenarioException {
-
-		scenarioRunner.evaluateInitialState();
-
-		return scenarioRunner;
-	}
-
-	public LNGScenarioRunner runScenarioWithGCO(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException {
-
-		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
-		optimiserSettings = LNGScenarioRunnerCreator.createExtendedSettings(optimiserSettings);
-
-		// Limit the number of iterations
-		optimiserSettings.getAnnealingSettings().setIterations(10000);
-
-		// Enabled by default for ITS
-		optimiserSettings.setGenerateCharterOuts(true);
-
-		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(executorService, originalScenario, optimiserSettings);
+		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, testDataProvider.getScenarioModel(), null, 10_000);
 		assert scenarioRunner != null;
-		scenarioRunner.evaluateInitialState();
-		optimiseScenario(scenarioRunner, origURL, ".properties");
+
+		optimiseScenario(scenarioRunner, testDataProvider);
 		return scenarioRunner;
 	}
 
-	public static void optimiseBasicScenario(@NonNull final LNGScenarioRunner scenarioRunner, @NonNull final URL origURL, @NonNull final String propertiesSuffix) throws IOException {
-		scenarioRunner.evaluateInitialState();
-		optimiseScenario(scenarioRunner, origURL, propertiesSuffix);
+	@NonNull
+	public LNGScenarioRunner runScenarioWithGCO(ITestDataProvider testDataProvider) throws IOException {
+
+		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, testDataProvider.getScenarioModel(), true, 10_000);
+		assert scenarioRunner != null;
+
+		optimiseScenario(scenarioRunner, testDataProvider);
+		return scenarioRunner;
 	}
 
-	public static void optimiseScenario(@NonNull final LNGScenarioRunner scenarioRunner, @NonNull final URL origURL, @NonNull final String propertiesSuffix) throws IOException {
+	public static void optimiseBasicScenario(@NonNull final LNGScenarioRunner scenarioRunner, @NonNull final ITestDataProvider testDataProvider) throws IOException {
+		scenarioRunner.evaluateInitialState();
+		optimiseScenario(scenarioRunner, testDataProvider);
+	}
+
+	public static void optimiseScenario(@NonNull final LNGScenarioRunner scenarioRunner, @NonNull final ITestDataProvider testDataProvider) throws IOException {
 
 		final Schedule intialSchedule = scenarioRunner.getSchedule();
 		Assert.assertNotNull(intialSchedule);
 
 		final EList<Fitness> currentOriginalFitnesses = intialSchedule.getFitnesses();
-		final URL propertiesURL = new URL(origURL.toString() + propertiesSuffix);
-		final Properties props = TesterUtil.getProperties(propertiesURL, storeFitnessMap);
+		final Properties props = TesterUtil.getProperties(testDataProvider.getFitnessDataAsURL(), storeFitnessMap);
 		if (!storeFitnessMap) {
 			// Assert old and new are equal
 			TesterUtil.testOriginalAndCurrentFitnesses(props, originalFitnessesMapName, currentOriginalFitnesses);
@@ -282,7 +222,6 @@ public class AbstractOptimisationResultTester {
 					}
 				}
 			}
-
 		}
 
 		// Check final optimised result
@@ -298,9 +237,7 @@ public class AbstractOptimisationResultTester {
 
 		if (storeFitnessMap) {
 			try {
-				final URL expectedReportOutput = new URL(FileLocator.toFileURL(origURL).toString().replaceAll(" ", "%20") + propertiesSuffix);
-				final File file2 = new File(expectedReportOutput.toURI());
-				TesterUtil.saveProperties(props, file2);
+				TesterUtil.saveProperties(props, testDataProvider.getFitnessDataAsFile());
 			} catch (final URISyntaxException e) {
 				e.printStackTrace();
 				Assert.fail();
@@ -325,10 +262,32 @@ public class AbstractOptimisationResultTester {
 		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
 		try {
 			final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, bundleContext.getService(serviceReference));
+			Assert.assertNotNull(instance);
 			MigrationHelper.migrateAndLoad(instance);
-			ReportTester.testReports(executorService, instance, scenarioURL, reportID, shortName, extension);
+			ReportTester.testReports(instance, scenarioURL, reportID, shortName, extension);
 		} finally {
 			bundleContext.ungetService(serviceReference);
 		}
 	}
+
+	public ScenarioInstance loadScenario(URL url) throws Exception {
+
+		final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
+
+		final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class).getBundleContext();
+		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+		try {
+			final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, bundleContext.getService(serviceReference));
+			Assert.assertNotNull(instance);
+
+			MigrationHelper.migrateAndLoad(instance);
+
+			Assert.assertNotNull(instance.getInstance());
+			return instance;
+		} finally {
+			bundleContext.ungetService(serviceReference);
+		}
+	}
+	
+
 }

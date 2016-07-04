@@ -1,0 +1,13 @@
+type,availability.constant,availability.kind,markets,kind,name,enabled,minQuantity,maxQuantity,volumeLimitsUnit,pricingEvent,cv,priceInfo.priceExpression,priceInfo.kind,entity,destinationPorts,notionalPort
+DES Purchase,,SpotAvailability,"AP,AB,ME,SP",SpotMarketGroup,,,,,,,,,,,,
+DES Sale,,SpotAvailability,"AP,ME,AB,SP",SpotMarketGroup,,,,,,,,,,,,
+FOB Purchase,,SpotAvailability,,SpotMarketGroup,,,,,,,,,,,,
+FOB Sale,,SpotAvailability,,SpotMarketGroup,,,,,,,,,,,,
+,0,SpotAvailability,,DESPurchaseMarket,AP,true,125000,150000,M3,END_DISCHARGE,23.000,EST_AP+0.5,ExpressionPriceParameters,MST,"AP,MANZA",
+,0,SpotAvailability,,DESPurchaseMarket,AB,true,125000,150000,M3,END_DISCHARGE,23.000,MST_AB+0.5,ExpressionPriceParameters,MST,"AB Other,ALT",
+,0,SpotAvailability,,DESPurchaseMarket,ME,true,125000,150000,M3,END_DISCHARGE,23.000,MST_ME+0.5,ExpressionPriceParameters,MST,"INDIA,ME",
+,0,SpotAvailability,,DESPurchaseMarket,SP,true,125000,150000,M3,END_DISCHARGE,23.000,NBP_USD+0.5,ExpressionPriceParameters,MST,SPAIN,
+,0,SpotAvailability,,DESSalesMarket,AP,true,0,170000,M3,END_DISCHARGE,,EST_AP,ExpressionPriceParameters,EST,,Tokyo
+,0,SpotAvailability,,DESSalesMarket,ME,true,0,170000,M3,END_DISCHARGE,,MST_ME,ExpressionPriceParameters,MST,,Hazira
+,0,SpotAvailability,,DESSalesMarket,AB,true,0,170000,M3,END_DISCHARGE,,MST_AB,ExpressionPriceParameters,MST,,Guanabara
+,0,SpotAvailability,,DESSalesMarket,SP,true,0,170000,M3,END_DISCHARGE,,NBP_USD,ExpressionPriceParameters,MST,,Barcelona

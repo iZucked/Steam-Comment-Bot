@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.app.headless;
@@ -12,15 +12,12 @@ import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
-import com.mmxlabs.models.lng.transformer.inject.modules.ActionPlanModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
-import com.mmxlabs.scheduler.optimiser.fitness.components.ISimilarityComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
-import com.mmxlabs.scheduler.optimiser.fitness.components.SimilarityComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.EnumeratingSequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.lso.SequencesConstrainedMoveGeneratorUnit;
 
 /**
  * A {@link Module} providing the data from {@link SettingsOverride} to the {@link Injector} framework.
@@ -42,17 +39,10 @@ public class EvaluationSettingsOverrideModule extends AbstractModule {
 	}
 
 	@Provides
-	@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
+	@Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE)
 	private boolean isOptimiserReevaluating() {
 		return false;
 	}
-
-	@Provides
-	@Named(TravelTimeConstraintChecker.OPTIMISER_START_ELEMENT_FIX)
-	private boolean enableStartOfSequenceFix() {
-		return true;
-	}
-
 
 	@Provides
 	@Singleton
@@ -74,5 +64,5 @@ public class EvaluationSettingsOverrideModule extends AbstractModule {
 
 		return lcp;
 	}
-	
+
 }

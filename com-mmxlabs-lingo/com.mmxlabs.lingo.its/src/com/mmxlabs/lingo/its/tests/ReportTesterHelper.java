@@ -1,40 +1,37 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-
-import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.E4PartWrapper;
 import org.junit.Assert;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.views.IProvideEditorInputScenario;
 import com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView;
 import com.mmxlabs.lingo.reports.views.portrotation.PortRotationReportView;
 import com.mmxlabs.lingo.reports.views.schedule.ConfigurableScheduleReportView;
 import com.mmxlabs.lingo.reports.views.standard.CapacityViolationReportView;
 import com.mmxlabs.lingo.reports.views.standard.CooldownReportView;
+import com.mmxlabs.lingo.reports.views.standard.HeadlineReportView;
+import com.mmxlabs.lingo.reports.views.standard.KPIReportView;
 import com.mmxlabs.lingo.reports.views.standard.LatenessReportView;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 
@@ -67,8 +64,48 @@ public class ReportTesterHelper {
 	public static final String COOLDOWN_REPORT_ID = CooldownReportView.ID;
 	public static final String COOLDOWN_REPORT_SHORTNAME = "CooldownReport";
 
+	public static final String HEADLINE_REPORT_ID = HeadlineReportView.ID;
+	public static final String HEADLINE_REPORT_SHORTNAME = "HeadlineReport";
+
+	public static final String KPI_REPORT_ID = KPIReportView.ID;
+	public static final String KPI_REPORT_SHORTNAME = "KPIReport";
+
+	public static final String CHANGESET_REPORT_ID = "com.mmxlabs.lingo.reports.views.changeset.ChangeSetView";
+	public static final String CHANGESET_REPORT_SHORTNAME = "ChangeSetReport";
+
+	@FunctionalInterface
+	interface IScenarioSelection {
+
+		void updateSelection(IViewPart view, IScenarioServiceSelectionProvider provider);
+
+	}
+
 	@Nullable
 	public IReportContents getReportContents(final ScenarioInstance scenario, final String reportID) throws InterruptedException {
+		return getReportContents(reportID, (v, p) -> {
+
+			final IProvideEditorInputScenario scenarioInputProvider = v.getAdapter(IProvideEditorInputScenario.class);
+			if (scenarioInputProvider != null) {
+				scenarioInputProvider.provideScenarioInstance(scenario);
+			}
+
+			p.deselectAll(true);
+			p.select(scenario, true);
+		});
+	}
+
+	@Nullable
+	public IReportContents getReportContents(final @NonNull ScenarioInstance pinScenario, @NonNull final ScenarioInstance ref, final String reportID) throws InterruptedException {
+		return getReportContents(reportID, (v, p) -> {
+			p.deselectAll(true);
+			p.select(pinScenario, true);
+			p.setPinnedInstance(pinScenario, true);
+			p.select(ref, true);
+		});
+	}
+
+	@Nullable
+	public IReportContents getReportContents(final String reportID, final @NonNull IScenarioSelection callable) throws InterruptedException {
 
 		// Get reference to the selection provider service
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ReportTesterHelper.class).getBundleContext();
@@ -93,7 +130,7 @@ public class ReportTesterHelper {
 						Assert.assertNotNull(view[0]);
 						activePage.activate(view[0]);
 
-					} catch (PartInitException e) {
+					} catch (final PartInitException e) {
 						e.printStackTrace();
 					}
 				}
@@ -102,14 +139,10 @@ public class ReportTesterHelper {
 			// Step two set the new selection, release UI thread
 			Thread.sleep(1000);
 			Thread.yield();
-			Display.getDefault().syncExec(new Runnable() {
 
-				@Override
-				public void run() {
-					provider.deselectAll(true);
-					provider.select(scenario, true);
-				}
-			});
+			RunnerHelper.exec(() -> {
+				callable.updateSelection(view[0], provider);
+			} , true);
 			Thread.yield();
 			Thread.sleep(1000);
 
@@ -119,6 +152,23 @@ public class ReportTesterHelper {
 				@Override
 				public void run() {
 					contents[0] = (IReportContents) view[0].getAdapter(IReportContents.class);
+					if (contents[0] == null) {
+						if (view[0] instanceof E4PartWrapper) {
+							E4PartWrapper e4PartWrapper = (E4PartWrapper) view[0];
+							IViewSite viewSite = view[0].getViewSite();
+							EPartService service = (EPartService) viewSite.getService(EPartService.class);
+							MPart p = service.findPart(reportID);
+							if (p != null) {
+								Object o = p.getObject();
+								if (o instanceof IAdaptable) {
+									IAdaptable adaptable = (IAdaptable) o;
+									contents[0] = (IReportContents) adaptable.getAdapter(IReportContents.class);
+								}
+							}
+							// EModelService
+							// EPartService
+						}
+					}
 				}
 			});
 

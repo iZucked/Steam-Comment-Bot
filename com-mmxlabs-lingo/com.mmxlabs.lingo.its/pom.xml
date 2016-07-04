@@ -4,11 +4,11 @@
 	<parent>
 		<groupId>com.mmxlabs.lingo</groupId>
 		<artifactId>com.mmxlabs.lingo.parent</artifactId>
-		<version>3.11.1-SNAPSHOT</version>
+		<version>3.12.7-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.lingo.its</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
-	<version>3.11.1-SNAPSHOT</version>
+	<version>3.12.7-SNAPSHOT</version>
 
 	<build>
 		<plugins>
@@ -195,24 +195,87 @@
 			</build>
 
 		</profile>
+		<profile>
+			<id>skipITS</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>tycho-surefire-plugin</artifactId>
+						<version>${tycho.version}</version>
+						<configuration>
+							<skipTests>true</skipTests>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+
+		</profile>
+		<profile>
+			<id>excludeCategoryBasedTests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>tycho-surefire-plugin</artifactId>
+						<version>${tycho.version}</version>
+						<configuration>
+							<providerHint>junit47</providerHint>
+          					<providerProperties>
+								<excludegroups>${test.excludeCategories}</excludegroups>
+          					</providerProperties>
+							<failIfNoTests>false</failIfNoTests>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+
+		</profile>
+		<profile>
+			<id>categoryBasedTests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>tycho-surefire-plugin</artifactId>
+						<version>${tycho.version}</version>
+						<configuration>
+							<providerHint>junit47</providerHint>
+          					<providerProperties>
+								<groups>com.mmxlabs.lingo.its.tests.category.${test.category}</groups>
+          					</providerProperties>
+							<failIfNoTests>false</failIfNoTests>
+							<!-- Only run Tests marked with the Quick Test annotation -->
+							<group>com.mmxlabs.lingo.its.tests.category.${test.category}</group>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+
+		</profile>
 
 		<!-- Enable this profile to run the its test independently of the full build. -->
 		<profile>
-			<id>useSnapshotsRepo</id>
+			<id>useBuildRepos</id>
 			<repositories>
 				<repository>
 					<id>lingo-p2</id>
-					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-v2-unzip/content/com/mmxlabs/lingo/com.mmxlabs.lingo.product-definition/${project.version}/com.mmxlabs.lingo.product-definition-${project.version}.zip-unzip/</url>
+					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/lingo/com.mmxlabs.lingo.product-definition/${project.version}/com.mmxlabs.lingo.product-definition-${project.version}.zip-unzip/</url>
 					<layout>p2</layout>
 				</repository>
 			</repositories>
 		</profile>
-		<profile>
-			<id>use_LINGO_P2_REPO</id>
+				<profile>
+			<id>useProvidedRepo</id>
 			<repositories>
 				<repository>
 					<id>lingo-p2</id>
-					<url>${LINGO_P2_REPO}</url>
+					<url>${env.LINGO_P2_REPO}</url>
+					<layout>p2</layout>
+				</repository>
+				<repository>
+					<id>lingo-transformer-its-p2</id>
+					<url>${env.LINGO_TRANSFORMER_ITS_P2_REPO}</url>
 					<layout>p2</layout>
 				</repository>
 			</repositories>

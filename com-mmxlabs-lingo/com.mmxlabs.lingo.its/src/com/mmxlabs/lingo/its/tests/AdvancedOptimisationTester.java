@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests;
@@ -19,10 +19,12 @@ import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import com.google.common.base.Joiner;
+import com.mmxlabs.lingo.its.tests.category.OptimisationTest;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -60,83 +62,99 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 	}
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void advancedOptimisation_Full_NoSimilarity() throws Exception {
 		runAdvancedOptimisationTestCase(false, SimilarityMode.OFF, false, false);
 	}
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void advancedOptimisation_Full_LowSimilarity() throws Exception {
 		runAdvancedOptimisationTestCase(false, SimilarityMode.LOW, false, false);
 	}
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void advancedOptimisation_Full_MediumSimilarity() throws Exception {
 		runAdvancedOptimisationTestCase(false, SimilarityMode.MEDIUM, false, false);
 	}
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void advancedOptimisation_Full_HighSimilarity() throws Exception {
 		runAdvancedOptimisationTestCase(false, SimilarityMode.HIGH, false, false);
 	}
 
 	@Ignore("Not yet permitted")
 	@Test
+	@Category(OptimisationTest.class)
 	public void advancedOptimisation_Full_NoSimilarity_ActionSet() throws Exception {
 		runAdvancedOptimisationTestCase(false, SimilarityMode.OFF, true, false);
 	}
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void advancedOptimisation_Full_LowSimilarity_ActionSet() throws Exception {
 		runAdvancedOptimisationTestCase(false, SimilarityMode.LOW, true, false);
 	}
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void advancedOptimisation_Full_MediumSimilarity_ActionSet() throws Exception {
 		runAdvancedOptimisationTestCase(false, SimilarityMode.MEDIUM, true, false);
 	}
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void advancedOptimisation_Full_HighSimilarity_ActionSet() throws Exception {
 		runAdvancedOptimisationTestCase(false, SimilarityMode.HIGH, true, false);
 	}
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void advancedOptimisation_Limited_NoSimilarity() throws Exception {
 		runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, false, false);
 	}
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void advancedOptimisation_Limited_LowSimilarity() throws Exception {
 		runAdvancedOptimisationTestCase(true, SimilarityMode.LOW, false, false);
 	}
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void advancedOptimisation_Limited_MediumSimilarity() throws Exception {
 		runAdvancedOptimisationTestCase(true, SimilarityMode.MEDIUM, false, false);
 	}
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void advancedOptimisation_Limited_HighSimilarity() throws Exception {
 		runAdvancedOptimisationTestCase(true, SimilarityMode.HIGH, false, false);
 	}
 
 	@Ignore("Not yet permitted")
 	@Test
+	@Category(OptimisationTest.class)
 	public void advancedOptimisation_Limited_NoSimilarity_ActionSet() throws Exception {
 		runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, true, false);
 	}
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void advancedOptimisation_Limited_LowSimilarity_ActionSet() throws Exception {
 		runAdvancedOptimisationTestCase(true, SimilarityMode.LOW, true, false);
 	}
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void advancedOptimisation_Limited_MediumSimilarity_ActionSet() throws Exception {
 		runAdvancedOptimisationTestCase(true, SimilarityMode.MEDIUM, true, false);
 	}
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void advancedOptimisation_Limited_HighSimilarity_ActionSet() throws Exception {
 		runAdvancedOptimisationTestCase(true, SimilarityMode.HIGH, true, false);
 	}
@@ -148,11 +166,6 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 			// Preconditions check - ensure period, otherwise ignore test case
 			Assume.assumeTrue(periodStart != null);
 			Assume.assumeTrue(periodEnd != null);
-
-			// Skip this for now
-			// DEBUG - Remove
-			Assume.assumeFalse(scenarioURL.contains("FB1808"));
-
 		}
 
 		// Only run full iterations if the flag is set
@@ -181,15 +194,15 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(mode);
 
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null);
+		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, originalScenario);
 		Assert.assertNotNull(optimiserSettings);
 
 		if (limitedIterations) {
 			// Limit for quick optimisation
 			// LSO Limit
-			optimiserSettings.getAnnealingSettings().setIterations(10000);
+			optimiserSettings.getAnnealingSettings().setIterations(10_000);
 			// Hill climb limit
-			optimiserSettings.getSolutionImprovementSettings().setIterations(1000);
+			optimiserSettings.getSolutionImprovementSettings().setIterations(1_000);
 		}
 
 		Assert.assertEquals(withActionSets, optimiserSettings.isBuildActionSets());
@@ -227,7 +240,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 					case IRunnerHook.PHASE_LSO:
 					case IRunnerHook.PHASE_HILL:
 					case IRunnerHook.PHASE_INITIAL:
-						save(rawSequences, phase);
+						verify(phase, rawSequences);
 						break;
 					case IRunnerHook.PHASE_ACTION_SETS:
 						break;
@@ -239,7 +252,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 					switch (phase) {
 					case IRunnerHook.PHASE_LSO:
 					case IRunnerHook.PHASE_HILL:
-						return load(phase);
+						// return load(phase);
 					case IRunnerHook.PHASE_INITIAL:
 					case IRunnerHook.PHASE_ACTION_SETS:
 						break;
@@ -279,14 +292,22 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 					}
 					return null;
 				}
+
+				private void verify(final String type, final ISequences actual) {
+					ISequences expected = load(type);
+					if (actual != null && expected != null) {
+						Assert.assertEquals(expected, actual);
+					}
+				}
 			};
 		} else {
 			runnerHook = null;
 		}
-		
-		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(executorService, originalScenario, optimiserSettings);
 
-		optimiseBasicScenario(scenarioRunner, url, String.format(".%s.properties", Joiner.on(".").join(components)));
+		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, originalScenario, optimiserSettings);
+		if (runnerHook != null) {
+			scenarioRunner.setRunnerHook(runnerHook);
+		}
 	}
 
 }

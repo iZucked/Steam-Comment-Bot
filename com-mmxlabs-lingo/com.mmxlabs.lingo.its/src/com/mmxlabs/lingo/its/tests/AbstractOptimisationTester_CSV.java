@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests;
@@ -17,7 +17,7 @@ import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
  * Abstract class to run parameterised tests on optimisation results. Sub classes should create a method similar to the one below to run test cases. May need to also include the @RunWith annotation.
  * 
  * <pre>
- * @Parameters(name = "{0}")
+ * &#64;Parameters(name = "{0}")
  * 	public static Iterable<Object[]> generateTests() {
  * 		return Arrays.asList(new Object[][] {
  * 				{ "Test Prefix", "scenario path/" }, //
@@ -44,9 +44,6 @@ public abstract class AbstractOptimisationTester_CSV extends AbstractOptimisatio
 	@Test
 	public void testOptimisation() throws Exception {
 		final URL url = getClass().getResource(scenario);
-
-		LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
-
-		runScenarioWithGCO(scenario, new URL(url.toString() + "fitness"));
+		runScenarioWithGCO(new CSVTestDataProvider(url));
 	}
 }

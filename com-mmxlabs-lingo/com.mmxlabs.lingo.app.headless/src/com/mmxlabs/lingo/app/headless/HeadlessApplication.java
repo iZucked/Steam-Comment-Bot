@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.app.headless;
@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -37,6 +35,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -166,7 +165,7 @@ public class HeadlessApplication implements IApplication {
 
 		// Create logging module
 		final int no_threads = getNumThreads(headlessParameters);
-		final ExecutorService executorService = Executors.newFixedThreadPool(no_threads);
+		final @NonNull ExecutorService executorService = Executors.newFixedThreadPool(no_threads);
 		try {
 
 			final AbstractRunnerHook runnerHook = new AbstractRunnerHook() {
@@ -208,28 +207,29 @@ public class HeadlessApplication implements IApplication {
 					return null;
 				}
 
-				private void save(final ISequences rawSequences, final String type) {
+				private void save(final @NonNull ISequences rawSequences, final @NonNull String type) {
 					try {
 						final String suffix = instance.getName() + "." + type + ".sequences";
-						final File file2 = new File("/home/ubuntu/scenarios/"+suffix);
-//						final File file2 = new File("c:\\Temp1\\" + suffix);
+						final File file2 = new File("/home/ubuntu/scenarios/" + suffix);
+						// final File file2 = new File("c:\\Temp1\\" + suffix);
 						try (FileOutputStream fos = new FileOutputStream(file2)) {
 							final Injector injector = getInjector();
-							assert(injector != null);
+							assert (injector != null);
 							SequencesSerialiser.save(injector.getInstance(IOptimisationData.class), rawSequences, fos);
 						}
 					} catch (final Exception e) {
 					}
 				}
 
-				private ISequences load(final String type) {
+				@Nullable
+				private ISequences load(final @NonNull String type) {
 					try {
 						final String suffix = instance.getName() + "." + type + ".sequences";
-						final File file2 = new File("/home/ubuntu/scenarios/"+suffix);
-//						final File file2 = new File("c:\\Temp1\\" + suffix);
+						final File file2 = new File("/home/ubuntu/scenarios/" + suffix);
+						// final File file2 = new File("c:\\Temp1\\" + suffix);
 						try (FileInputStream fos = new FileInputStream(file2)) {
 							final Injector injector = getInjector();
-							assert(injector != null);
+							assert (injector != null);
 							return SequencesSerialiser.load(injector.getInstance(IOptimisationData.class), fos);
 						}
 					} catch (final Exception e) {
@@ -246,20 +246,21 @@ public class HeadlessApplication implements IApplication {
 			// FIXME: Replace with an IParameterMode thing
 			final IOptimiserInjectorService localOverrides = new IOptimiserInjectorService() {
 				@Override
-				public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<String> hints) {
+				public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 					return null;
 				}
 
 				@Override
-				public List<Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<String> hints) {
+				@Nullable
+				public List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 					if (moduleType == ModuleType.Module_EvaluationParametersModule) {
-						return Collections.<Module> singletonList(new EvaluationSettingsOverrideModule(overrideSettings));
+						return Collections.<@NonNull Module> singletonList(new EvaluationSettingsOverrideModule(overrideSettings));
 					}
 					if (moduleType == ModuleType.Module_OptimisationParametersModule) {
-						return Collections.<Module> singletonList(new OptimisationSettingsOverrideModule(overrideSettings));
+						return Collections.<@NonNull Module> singletonList(new OptimisationSettingsOverrideModule(overrideSettings));
 					}
 					if (moduleType == ModuleType.Module_Optimisation) {
-						return Collections.<Module> singletonList(createLoggingModule(phaseToLoggerMap, actionSetLogger, runnerHook));
+						return Collections.<@NonNull Module> singletonList(createLoggingModule(phaseToLoggerMap, actionSetLogger, runnerHook));
 					}
 					return null;
 				}
@@ -267,7 +268,7 @@ public class HeadlessApplication implements IApplication {
 
 			try {
 				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, rootObject, null, LNGScenarioRunnerUtils.createExtendedSettings(optimiserSettings),
-						LNGSchedulerJobUtils.createLocalEditingDomain(), null, localOverrides, runnerHook, LNGTransformerHelper.HINT_OPTIMISE_LSO);
+						LNGSchedulerJobUtils.createLocalEditingDomain(), null, localOverrides, runnerHook, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
 				// FIXME
 				// runner.init(monitor);
@@ -306,7 +307,7 @@ public class HeadlessApplication implements IApplication {
 				exportData(phaseToLoggerMap, actionSetLogger, path, outputFolderName, jsonFilePath);
 			} catch (Exception e) {
 				System.out.println("Headless Error");
-				System.err.println("Headless Error:" +e.getMessage());
+				System.err.println("Headless Error:" + e.getMessage());
 				e.printStackTrace();
 			}
 
@@ -323,6 +324,7 @@ public class HeadlessApplication implements IApplication {
 		return Math.min(processorsFromParams, recommended);
 	}
 
+	@NonNull
 	private Module createLoggingModule(Map<String, LSOLogger> phaseToLoggerMap, ActionSetLogger actionSetLogger, AbstractRunnerHook runnerHook) {
 		final LoggingModule loggingModule = new LoggingModule(phaseToLoggerMap, actionSetLogger, runnerHook, 10_000);
 		return loggingModule;
@@ -590,9 +592,9 @@ public class HeadlessApplication implements IApplication {
 			actionSetLogger.export(Paths.get(path, foldername).toString(), "action");
 		}
 		HeadlessJSONParser.copyJSONFile(jsonFilePath, Paths.get(path, foldername, "parameters.json").toString());
-		
+
 		PrintWriter writer = WriterFactory.getWriter(Paths.get(path, foldername, "machineData.txt").toString());
-		writer.write(String.format("maxCPUs,%s",Runtime.getRuntime().availableProcessors()));
+		writer.write(String.format("maxCPUs,%s", Runtime.getRuntime().availableProcessors()));
 		writer.close();
 
 	}

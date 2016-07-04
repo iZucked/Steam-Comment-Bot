@@ -1,0 +1,2 @@
+timeCharterRate,startAfter,startBy,endAfter,endBy,vessel,entity,startAt,endAt,startHeel.volumeAvailable,startHeel.cvValue,startHeel.pricePerMMBTU,startHeel.kind,endHeel.targetEndHeel,endHeel.kind,kind
+CastilloDS,2015-03-27 00:00,2015-04-14 00:00,,,Castillo,MST,Bonny,,100,23.400,10.000,HeelOptions,,EndHeelOptions,VesselAvailability

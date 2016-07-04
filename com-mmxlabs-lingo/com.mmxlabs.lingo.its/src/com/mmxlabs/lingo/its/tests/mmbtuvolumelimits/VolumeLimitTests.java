@@ -1,12 +1,14 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.mmbtuvolumelimits;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
+import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.lingo.its.uat.suite.cases.UATMultiCargoCase;
 import com.mmxlabs.lingo.its.uat.suite.cases.UATTypedCase;
 import com.mmxlabs.lingo.its.uat.suite.testers.MultiCargoTester;
@@ -18,6 +20,7 @@ public class VolumeLimitTests extends AbstractOptimisationResultTester {
 	private boolean write = false;
 
 	@Test
+	@Category(MicroTest.class)
 	public void MMBTU_TESTS() throws Exception {
 		String scenarioFilePath = "/scenarios/mmbtu-volumes/mmbtu-tests.lingo";
 		UATTypedCase[] cargoes = new UATTypedCase[] { 
@@ -49,6 +52,7 @@ public class VolumeLimitTests extends AbstractOptimisationResultTester {
 	}
 	
 	@Test
+	@Category(MicroTest.class)
 	public void MMBTU_SPOT_TESTS() throws Exception {
 		String scenarioFilePath = "/scenarios/mmbtu-volumes/mmbtu-spot-tests.lingo";
 		UATTypedCase[] cargoes = new UATTypedCase[] { 

@@ -1,0 +1,127 @@
+referenceCapacity,ports,entries,LOADCost,DISCHARGECost,DRYDOCKCost,MAINTENANCECost,TRANSFERCost,kind
+,Abu Dhabi,,150000,0,0,0,0,PortCost
+,Aliaga,,0,123000,0,0,0,PortCost
+,Altamira,,0,170000,0,0,0,PortCost
+,Andres,,0,150000,0,0,0,PortCost
+,Aqaba,,0,150000,0,0,0,PortCost
+,Arun,,65415,0,0,0,0,PortCost
+,Arzew,,98000,0,0,0,0,PortCost
+,Bahia Blanca,,0,150000,0,0,0,PortCost
+,Balhaf,,150000,0,0,0,0,PortCost
+,Barcelona,,169000,169000,0,0,0,PortCost
+,Barrow Island,,160000,0,0,0,0,PortCost
+,Bilbao,,0,169000,0,0,0,PortCost
+,Bintulu,,336483,0,0,0,0,PortCost
+,Bonny,,662000,0,0,0,0,PortCost
+,Bontang,,75000,0,0,0,0,PortCost
+,Cai Mep,,0,150000,0,0,0,PortCost
+,Cameron,,150000,0,0,0,0,PortCost
+,Canaport,,0,291000,0,0,0,PortCost
+,Cartagena,,155000,155000,0,0,0,PortCost
+,Chita,,0,132000,0,0,0,PortCost
+,Costa Azul,,0,167000,0,0,0,PortCost
+,Cove Point,,0,120000,0,0,0,PortCost
+,Dabhol,,0,150000,0,0,0,PortCost
+,Dahej,,0,141143,0,0,0,PortCost
+,Dalian,,0,150000,0,0,0,PortCost
+,Damietta,,131000,0,0,0,0,PortCost
+,Dampier,,194574,0,0,0,0,PortCost
+,Dapeng,,0,115000,0,0,0,PortCost
+,Darwin,,150000,0,0,0,0,PortCost
+,Elba,,140000,140000,0,0,0,PortCost
+,Escobar,,0,150000,0,0,0,PortCost
+,Everett,,0,27850,0,0,0,PortCost
+,Fos Sur Mer,,113000,113000,0,0,0,PortCost
+,Freeport,,120000,120000,0,0,0,PortCost
+,Fujian,,0,135000,0,0,0,PortCost
+,Gladstone,,95000,0,0,0,0,PortCost
+,Golden Pass,,150000,0,0,0,0,PortCost
+,Guanabara,,0,70000,0,0,0,PortCost
+,Hadera,,0,500000,0,0,0,PortCost
+,Hainan,,0,115000,0,0,0,PortCost
+,Hammerfest,,218000,0,0,0,0,PortCost
+,Hazira,,0,141143,0,0,0,PortCost
+,Himeji,,0,132000,0,0,0,PortCost
+,Huelva,,200002,200002,0,0,0,PortCost
+,Idku,,358000,0,0,0,0,PortCost
+,Inchon,,0,136000,0,0,0,PortCost
+,Isle of Grain,,0,229634,0,0,0,PortCost
+,Jakarta,,0,150000,0,0,0,PortCost
+,Jebel Ali,,0,78000,0,0,0,PortCost
+,Jiangsu,,0,135000,0,0,0,PortCost
+,Kagoshima,,0,132000,0,0,0,PortCost
+,Karachi,,0,150000,0,0,0,PortCost
+,Kenai,,100000,0,0,0,0,PortCost
+,Klaipeda,,0,150000,0,0,0,PortCost
+,Kochi,,150000,150000,0,0,0,PortCost
+,Kwangyang,,136000,136000,0,0,0,PortCost
+,La Coruna,,0,175000,0,0,0,PortCost
+,Lake Charles,,0,140000,0,0,0,PortCost
+,Limassol,,0,150000,0,0,0,PortCost
+,Livorno,,0,150000,0,0,0,PortCost
+,Malacca,,0,150000,0,0,0,PortCost
+,Malta,,0,150000,0,0,0,PortCost
+,Manzanillo,,0,138551,0,0,0,PortCost
+,Map Ta Phut,,0,107000,0,0,0,PortCost
+,Mejillones,,0,203497,0,0,0,PortCost
+,Milford Haven,,0,93000,0,0,0,PortCost
+,Mina Al Ahmadi,,0,18671,0,0,0,PortCost
+,Montoir,,0,186912,0,0,0,PortCost
+,Niigata,,0,132000,0,0,0,PortCost
+,Okinawa,,0,150000,0,0,0,PortCost
+,Otaru,,0,132000,0,0,0,PortCost
+,P.Melchorita,,150000,0,0,0,0,PortCost
+,Pecem,,0,92000,0,0,0,PortCost
+,Penuelas,,0,150000,0,0,0,PortCost
+,Pluto LNG,,200000,0,0,0,0,PortCost
+,Point Fortin,,150000,0,0,0,0,PortCost
+,Port Moresby,,150000,0,0,0,0,PortCost
+,Port Qasim,,0,150000,0,0,0,PortCost
+,Prigorodnoye,,100000,0,0,0,0,PortCost
+,Puerto Bahia,,150000,0,0,0,0,PortCost
+,Punta Europa,,150000,0,0,0,0,PortCost
+,Pyongtaek,,0,136000,0,0,0,PortCost
+,Qalhat,,85000,0,0,0,0,PortCost
+,Quintero,,0,150000,0,0,0,PortCost
+,Ras Laffan,,115000,0,0,0,0,PortCost
+,Reganosa,,169000,169000,0,0,0,PortCost
+,Revithoussa,,0,98937,0,0,0,PortCost
+,Rotterdam,,147000,147000,0,0,0,PortCost
+,Rovigo,,0,150000,0,0,0,PortCost
+,Sabine Pass,,155000,155000,0,0,0,PortCost
+,Sagunto,,150000,150000,0,0,0,PortCost
+,Salvador,,0,70000,0,0,0,PortCost
+,Samchok,,0,136000,0,0,0,PortCost
+,Seria,,150000,0,0,0,0,PortCost
+,Shanghai,,0,164000,0,0,0,PortCost
+,Sines,,0,82000,0,0,0,PortCost
+,Singapore,,150000,150000,0,0,0,PortCost
+,Skikda,,45000,0,0,0,0,PortCost
+,Sodeshi,,0,115995,0,0,0,PortCost
+,Sokhna,,0,150000,0,0,0,PortCost
+,Soyo,,150000,0,0,0,0,PortCost
+,Swinoujscie,,0,150000,0,0,0,PortCost
+,Tabangao,,0,150000,0,0,0,PortCost
+,Taichung,,0,115000,0,0,0,PortCost
+,Tangguh,,92000,0,0,0,0,PortCost
+,Teesport,,0,150000,0,0,0,PortCost
+,Tobata,,0,132000,0,0,0,PortCost
+,Tokyo,,0,132000,0,0,0,PortCost
+,Yung An,,0,115000,0,0,0,PortCost
+,Zeebrugge,,136000,136000,0,0,0,PortCost
+,Joetsu,,0,150000,0,0,0,PortCost
+,Hatsukaichi,,0,150000,0,0,0,PortCost
+,Mizushima,,0,150000,0,0,0,PortCost
+,Marmara,,0,150000,0,0,0,PortCost
+,H-Ohgishima,,0,150000,0,0,0,PortCost
+,Kawagoe,,0,150000,0,0,0,PortCost
+,Senboku,,0,150000,0,0,0,PortCost
+,Oita,,0,150000,0,0,0,PortCost
+,Negishi,,0,150000,0,0,0,PortCost
+,Futtsu,,0,150000,0,0,0,PortCost
+,Ohgishima,,0,150000,0,0,0,PortCost
+,Sakai,,0,150000,0,0,0,PortCost
+,Ningbo,,0,150000,0,0,0,PortCost
+,Marsa Brega,,150000,150000,0,0,0,PortCost
+,Yokkaichi,,0,150000,0,0,0,PortCost
+,Yanai,,0,150000,0,0,0,PortCost

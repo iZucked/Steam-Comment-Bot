@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.app.headless.utils;
@@ -13,22 +13,22 @@ import java.util.Set;
 import com.mmxlabs.common.Pair;
 
 public class HeadlessParameters {
-	
-	private Map<String, Parameter<?>> parameters = new HashMap<>();
-	private Map<String, Boolean> requiredParameters = new HashMap<>();
-	
+
+	private final Map<String, Parameter<?>> parameters = new HashMap<>();
+	private final Map<String, Boolean> requiredParameters = new HashMap<>();
+
 	public HeadlessParameters() {
 
 	}
-	
-	public JSONParseResult setParametersFromJSON(Map<String, Pair<Object, Class<?>>> jsonParams) {
-		JSONParseResult parseResult = new JSONParseResult();
-		for (String param : jsonParams.keySet()) {
-			Pair<Object, Class<?>> jsonParam = jsonParams.get(param);
-			Object jsonValue = jsonParam.getFirst();
-			Class<?> jsonClass = jsonParam.getSecond();
+
+	public JSONParseResult setParametersFromJSON(final Map<String, Pair<Object, Class<?>>> jsonParams) {
+		final JSONParseResult parseResult = new JSONParseResult();
+		for (final String param : jsonParams.keySet()) {
+			final Pair<Object, Class<?>> jsonParam = jsonParams.get(param);
+			final Object jsonValue = jsonParam.getFirst();
+			final Class<?> jsonClass = jsonParam.getSecond();
 			if (parameters.containsKey(param)) {
-				Parameter<?> parameter = parameters.get(param);
+				final Parameter<?> parameter = parameters.get(param);
 				// check type
 				if (parameter.isOfType(jsonClass)) {
 					parameter.setValue(jsonValue);
@@ -43,18 +43,18 @@ public class HeadlessParameters {
 			}
 		}
 		// note destructive to JSON
-		Set<String> unknowns = jsonParams.keySet();
+		final Set<String> unknowns = jsonParams.keySet();
 		unknowns.removeAll(parameters.keySet());
 		parseResult.setNotInJSON(jsonParams.keySet());
-		for (String defaultKey : requiredParameters.keySet()) {
+		for (final String defaultKey : requiredParameters.keySet()) {
 			if (!requiredParameters.get(defaultKey)) {
 				parseResult.setDefaultNotSet(defaultKey);
 			}
 		}
 		return parseResult;
 	}
-	
-	public <T> void setParameter(String key, T value, Class<T> clazz) {
+
+	public <T> void setParameter(final String key, final T value, final Class<T> clazz) {
 		if (clazz.isAssignableFrom(Boolean.class)) {
 			parameters.put(key, new BooleanParameter(key, (Boolean) value));
 		} else if (clazz.isAssignableFrom(Integer.class)) {
@@ -74,32 +74,32 @@ public class HeadlessParameters {
 		}
 
 	}
-	
-	public <T> void setParameter(String key, T value, Class<T> clazz, boolean required) {
+
+	public <T> void setParameter(final String key, final T value, final Class<T> clazz, final boolean required) {
 		if (required) {
 			requiredParameters.put(key, false);
 		}
 		setParameter(key, value, clazz);
 	}
-	
+
 	public Map<String, Parameter<?>> getParameters() {
 		return parameters;
 	}
-	
-	public <T> T getParameter(String key, Class<T> parameterClass) {
-		Parameter<?> parameter = parameters.get(key);
+
+	public <T> T getParameter(final String key, final Class<T> parameterClass) {
+		final Parameter<?> parameter = parameters.get(key);
 		if (parameter != null) {
 			if (parameterClass.isInstance(parameter)) {
 				return parameterClass.cast(parameter);
 			}
 		}
-		return null;
+		return (T) null;
 	}
-	
-	public <T> T getParameterValue(String key, Class<T> parameterClass) {
-		Parameter<?> parameter = parameters.get(key);
+
+	public <T> T getParameterValue(final String key, final Class<T> parameterClass) {
+		final Parameter<?> parameter = parameters.get(key);
 		if (parameter == null || !parameter.isOfType(parameterClass)) {
-			return null;
+			return (T) null;
 		} else {
 			return (T) parameter.getValue();
 		}

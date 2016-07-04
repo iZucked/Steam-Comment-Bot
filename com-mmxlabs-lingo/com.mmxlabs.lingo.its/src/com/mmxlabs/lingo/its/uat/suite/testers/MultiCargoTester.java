@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.uat.suite.testers;
@@ -23,6 +23,17 @@ public class MultiCargoTester {
 		
 		checkMultiCargoPropertiesFiles(s, typedCases);
 	}
+	
+	public static void writeAndCheckProperties(UATMultiCargoCase multiCargoCase, boolean write, Schedule s) throws Exception {
+		UATTypedCase[] typedCases = multiCargoCase.cases;
+		String lingoFilePath = multiCargoCase.lingoFilePath;
+		if (write && GlobalUATTestsConfig.WRITE_PROPERTIES) {
+			createMultiCargoPropertiesFiles(s, typedCases);
+		}
+		
+		checkMultiCargoPropertiesFiles(s, typedCases);
+	}
+
 	
 	public static void createMultiCargoPropertiesFiles(Schedule schedule, UATTypedCase[] typedCases) throws Exception  {
 			for (UATTypedCase uatCase : typedCases) {

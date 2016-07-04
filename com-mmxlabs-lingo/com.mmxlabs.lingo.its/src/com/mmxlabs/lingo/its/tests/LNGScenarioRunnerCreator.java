@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests;
@@ -8,44 +8,148 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.junit.Assert;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Module;
+import com.google.inject.Provides;
+import com.google.inject.name.Named;
+import com.google.inject.name.Names;
 import com.mmxlabs.lingo.its.internal.Activator;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_OptimiserSettingsModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeExtender;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
+import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.scenario.MigrationHelper;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class LNGScenarioRunnerCreator {
 
 	@NonNull
-	public static LNGScenarioRunner createScenarioRunner(@NonNull final ExecutorService executorService, @NonNull final LNGScenarioModel originalScenario) {
-		final OptimiserSettings settings = createExtendedSettings(ScenarioUtils.createDefaultSettings());
-		return createScenarioRunner(executorService, originalScenario, settings);
+	public static LNGScenarioRunner createScenarioRunnerForEvaluationWithGCO(@NonNull final LNGScenarioModel originalScenario) throws IOException {
+		//
+		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
+		optimiserSettings = createExtendedSettings(optimiserSettings);
+
+		optimiserSettings.setGenerateCharterOuts(true);
+
+		final ExecutorService executorService = Executors.newSingleThreadExecutor();
+		try {
+			final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, originalScenario, optimiserSettings);
+			scenarioRunner.evaluateInitialState();
+			return scenarioRunner;
+		} finally {
+			executorService.shutdown();
+		}
 	}
 
 	@NonNull
-	public static LNGScenarioRunner createScenarioRunner(@NonNull final ExecutorService executorService, @NonNull final LNGScenarioModel originalScenario, @NonNull final OptimiserSettings settings) {
-		final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(executorService, originalScenario, settings, null, LNGTransformerHelper.HINT_OPTIMISE_LSO);
+	public static LNGScenarioRunner createScenarioRunnerForEvaluation(@NonNull final LNGScenarioModel originalScenario) throws IOException {
+
+		final LNGScenarioRunner scenarioRunner = createScenarioRunnerForEvaluation(originalScenario, (Boolean) null);
+		return scenarioRunner;
+	}
+
+	@NonNull
+	public static LNGScenarioRunner createScenarioRunnerForEvaluation(final @NonNull URL url) throws IOException {
+
+		final LNGScenarioRunner scenarioRunner = createScenarioRunnerForEvaluation(getScenarioModelFromURL(url), (Boolean) null);
+		return scenarioRunner;
+	}
+
+	@NonNull
+	public static LNGScenarioRunner createScenarioRunnerForEvaluation(final @NonNull URL url, @Nullable Boolean withGCO) throws IOException {
+
+		final LNGScenarioRunner scenarioRunner = createScenarioRunnerForEvaluation(getScenarioModelFromURL(url), withGCO);
+		return scenarioRunner;
+	}
+
+	@NonNull
+	public static LNGScenarioRunner createScenarioRunnerWithLSO(@NonNull final ExecutorService executorService, final @NonNull URL url, @Nullable Boolean withGCO, @Nullable Integer lsoIterations)
+			throws IOException {
+		return createScenarioRunnerWithLSO(executorService, getScenarioModelFromURL(url), withGCO, lsoIterations);
+	}
+
+	@NonNull
+	public static LNGScenarioRunner createScenarioRunnerWithLSO(@NonNull final ExecutorService executorService, final @NonNull URL url) throws IOException {
+		return createScenarioRunnerWithLSO(executorService, getScenarioModelFromURL(url), null, null);
+	}
+
+	@NonNull
+	public static LNGScenarioRunner createScenarioRunnerForEvaluation(@NonNull final LNGScenarioModel originalScenario, @Nullable Boolean withGCO) {
+
+		final OptimiserSettings settings = createExtendedSettings(ScenarioUtils.createDefaultSettings());
+		if (withGCO != null) {
+			settings.setGenerateCharterOuts(withGCO);
+		}
+		return createScenarioRunnerForEvaluation(originalScenario, settings);
+
+	}
+
+	@NonNull
+	public static LNGScenarioRunner createScenarioRunnerWithLSO(@NonNull final ExecutorService executorService, @NonNull final LNGScenarioModel originalScenario, @Nullable Boolean withGCO,
+			@Nullable Integer lsoIterations) {
+		final OptimiserSettings settings = createExtendedSettings(ScenarioUtils.createDefaultSettings());
+		if (withGCO != null) {
+			settings.setGenerateCharterOuts(withGCO);
+		}
+		if (lsoIterations != null) {
+			settings.getAnnealingSettings().setIterations(lsoIterations);
+		}
+
+		return createScenarioRunnerWithLSO(executorService, originalScenario, settings);
+	}
+
+	@NonNull
+	public static LNGScenarioRunner createScenarioRunnerForEvaluation(@NonNull final LNGScenarioModel originalScenario, @NonNull final OptimiserSettings settings) {
+
+		final @NonNull ExecutorService executorService = Executors.newSingleThreadExecutor();
+		try {
+			final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(executorService, originalScenario, null, settings, LNGSchedulerJobUtils.createLocalEditingDomain(), null,
+					createITSService(), null, true);
+
+			originalScenarioRunner.evaluateInitialState();
+
+			return originalScenarioRunner;
+		} finally {
+			executorService.shutdown();
+		}
+	}
+
+	@NonNull
+	public static LNGScenarioRunner createScenarioRunnerWithLSO(@NonNull final ExecutorService executorService, @NonNull final LNGScenarioModel originalScenario,
+			@NonNull final OptimiserSettings settings) {
+		final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(executorService, originalScenario, null, settings, LNGSchedulerJobUtils.createLocalEditingDomain(), null,
+				createITSService(), null, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
+
+		originalScenarioRunner.evaluateInitialState();
+
 		return originalScenarioRunner;
 	}
 
@@ -100,11 +204,6 @@ public class LNGScenarioRunnerCreator {
 		return scenarioInstance;
 	}
 
-	@NonNull
-	public static LNGScenarioRunner createScenarioRunner(@NonNull final ExecutorService executorService, final @NonNull URL url) throws IOException {
-		return createScenarioRunner(executorService, getScenarioModelFromURL(url));
-	}
-
 	/**
 	 * Use the {@link IParameterModesRegistry} to extend the existing settings object.
 	 * 
@@ -129,5 +228,72 @@ public class LNGScenarioRunnerCreator {
 			}
 		}
 		return optimiserSettings;
+	}
+
+	/**
+	 * Special optimiser injection service to disable special deployment settings during ITS runs
+	 * 
+	 * @return
+	 */
+	@NonNull
+	public static IOptimiserInjectorService createITSService() {
+
+		return new IOptimiserInjectorService() {
+
+			@Override
+			@Nullable
+			public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
+				return null;
+			}
+
+			@Override
+			@Nullable
+			public List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
+				if (moduleType == ModuleType.Module_LNGTransformerModule) {
+					return Collections.<@NonNull Module> singletonList(new AbstractModule() {
+
+						@Override
+						protected void configure() {
+							// Default bindings for caches
+							bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(Boolean.TRUE);
+							bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(Boolean.TRUE);
+							bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(Boolean.TRUE);
+						}
+					});
+				}
+				if (moduleType == ModuleType.Module_EvaluationParametersModule) {
+					return Collections.<@NonNull Module> singletonList(new AbstractModule() {
+
+						@Override
+						protected void configure() {
+
+						}
+
+						@Provides
+						@Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE)
+						private boolean isOptimiserReevaluating() {
+							return false;
+						}
+					});
+				}
+				if (moduleType == ModuleType.Module_OptimisationParametersModule) {
+					return Collections.<@NonNull Module> singletonList(new AbstractModule() {
+
+						@Override
+						protected void configure() {
+
+						}
+
+						@Provides
+						@Named(LNGParameters_OptimiserSettingsModule.PROPERTY_MMX_HALF_SPEED_ACTION_SETS)
+						private boolean isHalfSpeedActionSets() {
+							return false;
+						}
+					});
+
+				}
+				return null;
+			}
+		};
 	}
 }

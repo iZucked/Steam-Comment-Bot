@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests;
@@ -8,7 +8,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.URI;
@@ -45,7 +44,7 @@ import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
  * 
  */
 @RunWith(value = Parameterized.class)
-public abstract class AbstractReportTester_LiNGO extends AbstractOptimisationResultTester {
+public abstract class AbstractReportTester_LiNGO extends AbstractReportTester {
 
 	private static Map<Pair<String, String>, Pair<URL, ScenarioInstance>> cache = new HashMap<>();
 
@@ -56,21 +55,10 @@ public abstract class AbstractReportTester_LiNGO extends AbstractOptimisationRes
 		key = new Pair<>(name, scenarioPath);
 		if (!cache.containsKey(key)) {
 			final URL url = getClass().getResource(scenarioPath);
-			final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
-
-			final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class).getBundleContext();
-			final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
-			try {
-				final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, bundleContext.getService(serviceReference));
-				Assert.assertNotNull(instance);
-
-				MigrationHelper.migrateAndLoad(instance);
-
-				Assert.assertNotNull(instance.getInstance());
-				cache.put(key, new Pair<>(url, instance));
-			} finally {
-				bundleContext.ungetService(serviceReference);
-			}
+			final ScenarioInstance instance = loadScenario(url);
+			Assert.assertNotNull(instance);
+			Assert.assertNotNull(instance.getInstance());
+			cache.put(key, new Pair<>(url, instance));
 		}
 	}
 
@@ -84,6 +72,7 @@ public abstract class AbstractReportTester_LiNGO extends AbstractOptimisationRes
 		}
 	}
 
+	@Override
 	protected void testReports(final String reportID, final String shortName, final String extension) throws Exception {
 		Assert.assertTrue(cache.containsKey(key));
 
@@ -94,48 +83,6 @@ public abstract class AbstractReportTester_LiNGO extends AbstractOptimisationRes
 		final ScenarioInstance instance = triple.getSecond();
 		Assert.assertNotNull(instance);
 		Assert.assertNotNull(instance.getInstance());
-		ReportTester.testReports(executorService, instance, url, reportID, shortName, extension);
-	}
-
-	@Test
-	@Category(ReportTest.class)
-	public void testVerticalReport() throws Exception {
-		testReports(ReportTesterHelper.VERTICAL_REPORT_ID, ReportTesterHelper.VERTICAL_REPORT_SHORTNAME, "html");
-	}
-
-	@Test
-	@Category(ReportTest.class)
-	public void testScheduleSummary() throws Exception {
-		testReports(ReportTesterHelper.SCHEDULE_SUMMARY_ID, ReportTesterHelper.SCHEDULE_SUMMARY_SHORTNAME, "html");
-	}
-
-	@Test
-	@Category(ReportTest.class)
-	public void testPortRotations() throws Exception {
-		testReports(ReportTesterHelper.PORT_ROTATIONS_ID, ReportTesterHelper.PORT_ROTATIONS_SHORTNAME, "html");
-	}
-
-	@Test
-	@Category(ReportTest.class)
-	public void testLatenessReport() throws Exception {
-		testReports(ReportTesterHelper.LATENESS_REPORT_ID, ReportTesterHelper.LATENESS_REPORT_SHORTNAME, "html");
-	}
-
-	@Test
-	@Category(ReportTest.class)
-	public void testCapacityReport() throws Exception {
-		testReports(ReportTesterHelper.CAPACITY_REPORT_ID, ReportTesterHelper.CAPACITY_REPORT_SHORTNAME, "html");
-	}
-
-	@Test
-	@Category(ReportTest.class)
-	public void testVesselReport() throws Exception {
-		testReports(ReportTesterHelper.VESSEL_REPORT_ID, ReportTesterHelper.VESSEL_REPORT_SHORTNAME, "html");
-	}
-
-	@Test
-	@Category(ReportTest.class)
-	public void testCooldownReport() throws Exception {
-		testReports(ReportTesterHelper.COOLDOWN_REPORT_ID, ReportTesterHelper.COOLDOWN_REPORT_SHORTNAME, "html");
+		ReportTester.testReports(instance, url, reportID, shortName, extension);
 	}
 }

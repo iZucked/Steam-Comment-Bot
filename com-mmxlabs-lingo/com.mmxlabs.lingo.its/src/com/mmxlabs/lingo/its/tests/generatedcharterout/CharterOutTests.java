@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.generatedcharterout;
@@ -14,7 +14,7 @@ import org.junit.experimental.categories.Category;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.lingo.its.tests.LNGScenarioRunnerCreator;
-import com.mmxlabs.lingo.its.tests.category.QuickTest;
+import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -25,12 +25,12 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 public class CharterOutTests extends AbstractOptimisationResultTester {
 
 	@Test
-	@Category(QuickTest.class)
+	@Category(MicroTest.class)
 	public void UAT_CharterOut_1() throws Exception {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/charter-out/gco-barca-bonny-point fortin-min days 60.lingo");
 
-		final LNGScenarioRunner runner = evaluateScenarioWithGCO(url);
+		final LNGScenarioRunner runner = LNGScenarioRunnerCreator.createScenarioRunnerForEvaluation(url, true);
 		Assert.assertNotNull(runner);
 
 		// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
@@ -42,12 +42,12 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 	}
 
 	@Test
-	@Category(QuickTest.class)
+	@Category(MicroTest.class)
 	public void UAT_CharterOut_2() throws Exception {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/charter-out/gco-barca-bonny-point fortin.lingo");
 
-		final LNGScenarioRunner runner = evaluateScenarioWithGCO(url);
+		final LNGScenarioRunner runner = LNGScenarioRunnerCreator.createScenarioRunnerForEvaluation(url, true);
 		Assert.assertNotNull(runner);
 
 		// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
@@ -66,12 +66,12 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 	}
 
 	@Test
-	@Category(QuickTest.class)
+	@Category(MicroTest.class)
 	public void UAT_CharterOut_3() throws Exception {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/charter-out/gco-barca-point fortin.lingo");
 
-		final LNGScenarioRunner runner = evaluateScenarioWithGCO(url);
+		final LNGScenarioRunner runner = LNGScenarioRunnerCreator.createScenarioRunnerForEvaluation(url, true);
 		Assert.assertNotNull(runner);
 
 		// Should be the same as the updateScenario as we have only called ScenarioRunner#init()

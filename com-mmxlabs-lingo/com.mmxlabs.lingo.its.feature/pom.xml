@@ -4,10 +4,10 @@
   <parent>
     <artifactId>com.mmxlabs.lingo.parent</artifactId>
     <groupId>com.mmxlabs.lingo</groupId>
-    <version>3.11.1-SNAPSHOT</version>
+    <version>3.12.7-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
   <artifactId>com.mmxlabs.lingo.its.feature</artifactId>
-  <version>3.11.1-SNAPSHOT</version>
+  <version>3.12.7-SNAPSHOT</version>
   <packaging>eclipse-feature</packaging>
 </project>

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Shiplingo Platform: UI
 Bundle-SymbolicName: com.mmxlabs.lingo.ui;singleton:=true
-Bundle-Version: 3.11.1.qualifier
+Bundle-Version: 3.12.7.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.core.runtime;bundle-version="3.7.0",
@@ -11,8 +11,8 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.ui.ide;bundle-version="3.6.0",
  org.eclipse.core.resources;bundle-version="3.7.101",
  org.eclipse.core.filesystem;bundle-version="1.3.100",
- com.mmxlabs.lingo.reports;bundle-version="[3.11.1,4.0.0)",
- com.mmxlabs.lingo.reports.scheduleview;bundle-version="[3.11.1,4.0.0)",
- org.eclipse.jdt.annotation;bundle-version="[1.1.0,2.0.0)";resolution:=optional
+ com.mmxlabs.lingo.reports;bundle-version="[3.12.7,4.0.0)",
+ com.mmxlabs.lingo.reports.scheduleview;bundle-version="[3.12.7,4.0.0)",
+ org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: com.mmxlabs.shiplingo.platform.ui
