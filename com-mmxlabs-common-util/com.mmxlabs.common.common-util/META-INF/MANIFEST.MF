@@ -29,5 +29,6 @@ Export-Package: com.mmxlabs.common,
  com.mmxlabs.common.parser.series.functions,
  com.mmxlabs.common.time,
  com.mmxlabs.common.timezone,
- com.mmxlabs.common.timezone.impl
+ com.mmxlabs.common.timezone.impl,
+ com.mmxlabs.common.util
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
