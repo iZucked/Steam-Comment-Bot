@@ -63,6 +63,8 @@
 <unit id="com.google.inject" version="0.0.0"/>
 <unit id="javax.xml.ws" version="0.0.0"/>
 <unit id="javax.xml" version="0.0.0"/>
+<unit id="javax.jms" version="0.0.0"/>
+<unit id="javax.jms.source" version="0.0.0"/>
 <unit id="org.apache.commons.math" version="0.0.0"/>
 <unit id="org.apache.commons.math.source" version="0.0.0"/>
 <unit id="ch.qos.logback.classic" version="0.0.0"/>
@@ -126,9 +128,7 @@
 <unit id="org.eclipse.emf.cdo.server.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.net4j.util.ui.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.emf.cdo.defs.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.cdo.server.product.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.net4j.db.oracle.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.cdo.explorer.product.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.net4j.db.derby.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.emf.cdo.sdk.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.emf.cdo.migrator.feature.group" version="0.0.0"/>
@@ -141,11 +141,11 @@
 <unit id="org.eclipse.net4j.db.hsqldb.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.net4j.doc.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.emf.cdo.server.db.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/modeling/emf/cdo/drops/R20140610-0212"/>
+<repository location="http://download.eclipse.org/modeling/emf/cdo/drops/R20160216-0037/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.emf.ecp.emfforms.sdk.feature.feature.group" version="1.6.1.20150626-1237"/>
-<repository location="http://download.eclipse.org/ecp/releases/releases_target_16/"/>
+<unit id="org.eclipse.emf.ecp.emfforms.sdk.feature.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/ecp/releases/releases_18/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.nebula.widgets.nattable.extension.glazedlists.feature.feature.group" version="1.3.0.201503261201"/>
