@@ -114,7 +114,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OBJECT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+	int OBJECT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE_1 = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
@@ -123,7 +123,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OBJECT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+	int OBJECT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE_1 = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
@@ -205,7 +205,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int APORT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE = OBJECT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+	int APORT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE_1 = OBJECT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE_1;
 
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
@@ -214,7 +214,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int APORT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = OBJECT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+	int APORT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE_1 = OBJECT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE_1;
 
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
@@ -296,7 +296,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE = OBJECT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+	int AVESSEL_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE_1 = OBJECT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE_1;
 
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
@@ -305,7 +305,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = OBJECT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+	int AVESSEL_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE_1 = OBJECT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE_1;
 
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
