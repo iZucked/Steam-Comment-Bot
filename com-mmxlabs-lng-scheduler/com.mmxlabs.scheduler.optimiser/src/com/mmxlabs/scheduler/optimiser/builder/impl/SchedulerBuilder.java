@@ -728,6 +728,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			// resource
 			// to match the end requirement for the resource
 			timeWindowProvider.setTimeWindows(element, Collections.singletonList(startEndRequirementProvider.getEndRequirement(resource).getTimeWindow()));
+			slot.setTimeWindow(startEndRequirementProvider.getEndRequirement(resource).getTimeWindow()); // DO NOT COMMIT
 		} else {
 			if (vesselProvider.getVesselAvailability(resource).getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER)) {
 				// spot charters have no end time window, because their end date

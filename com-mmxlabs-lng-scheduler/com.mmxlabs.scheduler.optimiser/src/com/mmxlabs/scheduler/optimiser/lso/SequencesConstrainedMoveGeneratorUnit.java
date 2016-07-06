@@ -105,7 +105,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 	@Override
 	public IMove generateMove() {
 		if (owner.validBreaks.isEmpty()) {
-			return new NullMove();
+			return new NullMoveA();
 		}
 
 		final Pair<ISequenceElement, ISequenceElement> newPair = RandomHelper.chooseElementFrom(owner.random, owner.validBreaks);
@@ -116,7 +116,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 		// in this case, we typically need something clever to happen anyway
 		// so this MG will just bail out and give up.
 		if ((pos1.getFirst() == null) || (pos2.getFirst() == null)) {
-			return new NullMove();
+			return new NullMoveB();
 		}
 
 		final IResource sequence1 = pos1.getFirst();
@@ -125,7 +125,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 		int position2 = pos2.getSecond();
 
 		if (position1 == -1 || position2 == -1) {
-			return new NullMove();
+			return new NullMoveC();
 		}
 
 		// are both these elements currently in the same route
