@@ -41,6 +41,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IdleNBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.NBOTravelVoyagePlanChoice;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.ReliqVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider.CharterMarketOptions;
@@ -409,6 +410,12 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		dischargeToCharterPortVoyageOptions.setWarm(originalBallast.getOptions().isWarm());
 		dischargeToCharterPortVoyageOptions.setAllowCooldown(false);
 		dischargeToCharterPortVoyageOptions.setCargoCVValue(originalBallast.getOptions().getCargoCVValue());
+//		if (vessel.getVesselClass().hasReliqCapability()) {
+//			// reliq vessels can only FBO/NBO
+//			dischargeToCharterPortVoyageOptions.setUseNBOForTravel(true);
+//			dischargeToCharterPortVoyageOptions.setUseFBOForSupplement(true);
+//			dischargeToCharterPortVoyageOptions.setUseNBOForIdle(true);
+//		}
 
 		// (2) charter out
 
@@ -437,7 +444,9 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		charterToReturnPortVoyageOptions.setWarm(originalBallast.getOptions().isWarm());
 		charterToReturnPortVoyageOptions.setAllowCooldown(originalBallast.getOptions().getAllowCooldown());
 		charterToReturnPortVoyageOptions.setCargoCVValue(originalBallast.getOptions().getCargoCVValue());
-
+//		if (vessel.getVesselClass().hasReliqCapability()) {
+//			charterToReturnPortVoyageOptions.set
+//		}
 		// add options to new sequence
 		newRawSequence.add(dischargeToCharterPortVoyageOptions);
 		newRawSequence.add(generatedCharterPortOptions);
@@ -533,16 +542,21 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		// vpo.setPortTimesRecord(bigSequence.getPortTimesRecord());
 
 		List<@NonNull IVoyagePlanChoice> vpoChoices = new LinkedList<>();
-		// Add in NBO etc choices (ballast 1)
-		vpoChoices.add(new NBOTravelVoyagePlanChoice(bigSequence.getLaden() == null ? null : bigSequence.getLaden(), bigSequence.getToCharter()));
-		vpoChoices.add(new FBOVoyagePlanChoice(bigSequence.getToCharter()));
-		vpoChoices.add(new IdleNBOVoyagePlanChoice(bigSequence.getToCharter()));
-
-		// Add in NBO etc choices (ballast 2)
-		vpoChoices.add(new NBOTravelVoyagePlanChoice(bigSequence.getToCharter(), bigSequence.getFromCharter()));
-		vpoChoices.add(new FBOVoyagePlanChoice(bigSequence.getFromCharter()));
-		vpoChoices.add(new IdleNBOVoyagePlanChoice(bigSequence.getFromCharter()));
-
+		if (!vessel.getVesselClass().hasReliqCapability()) {
+			// Add in NBO etc choices (ballast 1)
+			vpoChoices.add(new NBOTravelVoyagePlanChoice(bigSequence.getLaden() == null ? null : bigSequence.getLaden(), bigSequence.getToCharter()));
+			vpoChoices.add(new FBOVoyagePlanChoice(bigSequence.getToCharter()));
+			vpoChoices.add(new IdleNBOVoyagePlanChoice(bigSequence.getToCharter()));
+			// Add in NBO etc choices (ballast 2)
+			vpoChoices.add(new NBOTravelVoyagePlanChoice(bigSequence.getToCharter(), bigSequence.getFromCharter()));
+			vpoChoices.add(new FBOVoyagePlanChoice(bigSequence.getFromCharter()));
+			vpoChoices.add(new IdleNBOVoyagePlanChoice(bigSequence.getFromCharter()));
+		} else {
+			// Add in NBO etc choices (ballast 1)
+			vpoChoices.add(new ReliqVoyagePlanChoice(bigSequence.getLaden() == null ? null : bigSequence.getLaden(), bigSequence.getToCharter()));
+			// Add in NBO etc choices (ballast 2)
+			vpoChoices.add(new ReliqVoyagePlanChoice(bigSequence.getToCharter(), bigSequence.getFromCharter()));
+		}
 		// Calculate our new plan
 		// final VoyagePlan newVoyagePlan = vpo.optimise();
 
