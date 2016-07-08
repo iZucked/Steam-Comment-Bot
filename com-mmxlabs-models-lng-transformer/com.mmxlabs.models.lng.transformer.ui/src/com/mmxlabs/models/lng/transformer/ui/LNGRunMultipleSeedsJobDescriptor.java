@@ -14,10 +14,9 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  * @author Simon Goodall
  * 
  */
-public final class LNGRunAllSimilarityJobDescriptor extends AbstractLNGJobDescriptor {
+public final class LNGRunMultipleSeedsJobDescriptor extends AbstractLNGJobDescriptor {
 
-	public LNGRunAllSimilarityJobDescriptor(final String name, final ScenarioInstance scenarioInstance, final OptimiserSettings optimiserSettings, final boolean optimise) {
+	public LNGRunMultipleSeedsJobDescriptor(final String name, final ScenarioInstance scenarioInstance, final OptimiserSettings optimiserSettings, final boolean optimise) {
 		super(name, scenarioInstance, optimiserSettings, optimise);
 	}
-
 }
