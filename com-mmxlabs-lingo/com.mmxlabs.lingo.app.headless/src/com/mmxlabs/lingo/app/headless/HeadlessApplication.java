@@ -188,7 +188,7 @@ public class HeadlessApplication implements IApplication {
 					case IRunnerHook.PHASE_LSO:
 					case IRunnerHook.PHASE_HILL:
 					case IRunnerHook.PHASE_INITIAL:
-						save(rawSequences, phase);
+//						save(rawSequences, phase);
 						break;
 					case IRunnerHook.PHASE_ACTION_SETS:
 						break;
@@ -200,7 +200,7 @@ public class HeadlessApplication implements IApplication {
 					switch (phase) {
 					case IRunnerHook.PHASE_LSO:
 					case IRunnerHook.PHASE_HILL:
-						return load(phase);
+//						return load(phase);
 					case IRunnerHook.PHASE_INITIAL:
 					case IRunnerHook.PHASE_ACTION_SETS:
 						break;
