@@ -201,6 +201,13 @@ public class CargoModelBuilder {
 	}
 
 	@NonNull
+	public SlotMaker<LoadSlot> makeFOBPurchase(@NonNull final String name, @NonNull final LocalDate windowStart, @NonNull final Port port, @Nullable final PurchaseContract purchaseContract,
+			@Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, @Nullable Double cv) {
+
+		return new SlotMaker<LoadSlot>(this).withFOBPurchase(name, windowStart, port, purchaseContract, entity, priceExpression, cv);
+	}
+
+	@NonNull
 	public SlotMaker<LoadSlot> makeDESPurchase(@NonNull final String name, final boolean divertible, @NonNull final LocalDate windowStart, @NonNull final Port port,
 			@Nullable final PurchaseContract purchaseContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, @Nullable Double cv,
 			@Nullable final Vessel nominatedVessel) {
