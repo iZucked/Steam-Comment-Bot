@@ -81,6 +81,7 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 				throw new RuntimeException("Unable to create fork", e);
 			}
 			ref = fork.getReference();
+
 			this.scenarioModel = (LNGScenarioModel) ref.getInstance();
 			// TODO: This is probably a) null and b) bad idea to use the same executor service for sub-processes while the main process is using the pool....
 			// TODO: Is is possible for a job to suspend itself and release the thread?
@@ -100,12 +101,15 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 
 		@Override
 		public void run() {
-			IProgressMonitor pMonitor = monitor;
-			if (pMonitor == null) {
-				pMonitor = new NullProgressMonitor();
+			try {
+				IProgressMonitor pMonitor = monitor;
+				if (pMonitor == null) {
+					pMonitor = new NullProgressMonitor();
+				}
+				runner.runWithProgress(pMonitor);
+			} finally {
+				dispose();
 			}
-			runner.runWithProgress(pMonitor);
-			dispose();
 		}
 
 		public ScenarioInstance createFork(final LNGScenarioModel model) throws IOException {
@@ -154,7 +158,7 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 		jobFactory.accept(jobDescriptor.getOptimiserSettings(), factory);
 
 		// Hmm...
-		final int numberOfThreads = Math.max(1, Runtime.getRuntime().availableProcessors() - 2);
+		final int numberOfThreads = getNumberOfThreads();
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
 		// This executor is for the futures we create and execute here...
 		controlService = Executors.newFixedThreadPool(numberOfThreads);
@@ -164,6 +168,15 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 		if (LicenseFeatures.isPermitted("features:phase-pnl-testing")) {
 			throw new RuntimeException("Optimisation is disabled during the P&L testing phase.");
 		}
+	}
+
+	/**
+	 * Returns the number of theads to use.
+	 * 
+	 * @return
+	 */
+	protected int getNumberOfThreads() {
+		return Math.max(1, Runtime.getRuntime().availableProcessors() - 2);
 	}
 
 	@Override
