@@ -10,7 +10,7 @@ Bundle-Name: common-nauticaldistances
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: com.mmxlabs.common.common-nauticaldistances
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 3.12.8.qualifier
+Bundle-Version: 3.12.8.RELEASE
 Created-By: Apache Maven Bundle Plugin
 Export-Package: com.mmxlabs.common.nauticaldistances;uses:="com.mmxlabs.
  common,org.slf4j,javax.imageio,com.mmxlabs.common.options";version="2.2
