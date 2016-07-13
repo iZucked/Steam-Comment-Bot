@@ -47,11 +47,6 @@ public class LNGScenarioChainBuilder {
 	private static final int PROGRESS_ACTION_SET_OPTIMISATION = 20;
 	private static final int PROGRESS_ACTION_SET_SAVE = 5;
 
-	// TODO: (Alex) - Does not work as class is not injected. See system property.
-	@Inject
-	@Named(LNGParameters_OptimiserSettingsModule.PROPERTY_MMX_HALF_SPEED_ACTION_SETS)
-	private static boolean HALF_SPEED_ACTION_SETS;
-
 	/**
 	 * Creates a {@link IChainRunner} for the "standard" optimisation process (as of 2015/11)
 	 * 
