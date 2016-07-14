@@ -96,6 +96,8 @@ public class LNGScenarioToOptimiserBridge {
 	@NonNull
 	private final LNGDataTransformer originalDataTransformer;
 
+	// Flag to check we can still export as copy. calls to #overwrite can invalidate the state
+	private boolean canExportAsCopy = true;
 	/**
 	 * Integer to count "undo" state of the scenario. Each overwrite evaluation should increment this value. Calls to {@link LNGSchedulerJobUtils#undoPreviousOptimsationStep(EditingDomain, int)}
 	 * should decrement it. Ideally we would track the current state of the command stack, but the API does not appear to permit this (maybe a command stack listener? - can we tell if a command is
@@ -147,6 +149,9 @@ public class LNGScenarioToOptimiserBridge {
 		} else {
 			optimiserDataTransformer = originalDataTransformer;
 		}
+
+		// Reset flag as calls to #overwrite will have set this to false, but these should not have invalidated the internal state
+		canExportAsCopy = true;
 	}
 
 	@NonNull
@@ -199,6 +204,9 @@ public class LNGScenarioToOptimiserBridge {
 	 */
 	public Schedule overwrite(final int currentProgress, @NonNull final ISequences rawSeqences, @Nullable final Map<String, Object> extraAnnotations) {
 
+		// Internal state has changed
+		canExportAsCopy = currentProgress == 0;
+
 		// Clear any previous optimisation state.
 		if (overwriteCommandStackCounter > 0) {
 			if (periodMapping != null) {
@@ -234,7 +242,7 @@ public class LNGScenarioToOptimiserBridge {
 	}
 
 	/**
-	 * Save the sequences in a complete copy of the scenario. Ensure the current scenario is in it's original state (excluding Schedule model and Parameters model changes) -- that is the data model
+	 * Save the sequences in a complete copy of the scenario. *Ensure* the current scenario is in it's original state (excluding Schedule model and Parameters model changes) -- that is the data model
 	 * still represents the initial solution..
 	 * 
 	 * @param rawSequences
@@ -243,6 +251,10 @@ public class LNGScenarioToOptimiserBridge {
 	 */
 	@NonNull
 	public LNGScenarioModel exportAsCopy(@NonNull final ISequences rawSequences, @Nullable final Map<String, Object> extraAnnotations) {
+
+		if (!canExportAsCopy) {
+			throw new IllegalStateException("Unable to export copy - already overwritten data");
+		}
 
 		final EcoreUtil.Copier originalScenarioCopier = new EcoreUtil.Copier();
 		final LNGScenarioModel targetOriginalScenario = (LNGScenarioModel) originalScenarioCopier.copy(originalScenario);
