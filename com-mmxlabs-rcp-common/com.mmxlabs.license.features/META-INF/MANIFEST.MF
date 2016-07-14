@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: License: Features
 Bundle-SymbolicName: com.mmxlabs.license.features;singleton:=true
-Bundle-Version: 3.12.9.qualifier
+Bundle-Version: 3.12.9.RELEASE
 Bundle-Vendor: Minimax Labs Ltd
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
