@@ -231,8 +231,7 @@ public class ChangeSetTransformerUtilTest {
 			Assert.assertSame(oldLoadSlotAllocation, row.getOriginalLoadAllocation());
 
 			Assert.assertSame(newDischargeSlotAllocation, row.getNewDischargeAllocation());
-			// Discharge 2 did not have any previous allocation
-			Assert.assertNull(row.getOriginalDischargeAllocation());
+			Assert.assertSame(oldDischargeSlotAllocation, row.getOriginalDischargeAllocation());
 		}
 		// Open "discharge"
 		{
@@ -254,7 +253,7 @@ public class ChangeSetTransformerUtilTest {
 			Assert.assertNull(row.getOriginalLoadAllocation());
 
 			Assert.assertNull(row.getNewDischargeAllocation());
-			Assert.assertSame(oldDischargeSlotAllocation, row.getOriginalDischargeAllocation());
+			Assert.assertNull(row.getOriginalDischargeAllocation());
 		}
 	}
 
@@ -321,7 +320,7 @@ public class ChangeSetTransformerUtilTest {
 			Assert.assertSame(oldLoadSlotAllocation, row.getOriginalLoadAllocation());
 
 			Assert.assertNull(row.getNewDischargeAllocation());
-			Assert.assertNull(row.getOriginalDischargeAllocation());
+			Assert.assertSame(oldDischargeSlotAllocation, row.getOriginalDischargeAllocation());
 		}
 		// Open "discharge"
 		{
@@ -343,7 +342,7 @@ public class ChangeSetTransformerUtilTest {
 			Assert.assertNull(row.getOriginalLoadAllocation());
 
 			Assert.assertNull(row.getNewDischargeAllocation());
-			Assert.assertSame(oldDischargeSlotAllocation, row.getOriginalDischargeAllocation());
+			Assert.assertNull(row.getOriginalDischargeAllocation());
 		}
 	}
 
@@ -490,7 +489,7 @@ public class ChangeSetTransformerUtilTest {
 			Assert.assertSame(oldLoadSlotAllocation, row.getOriginalLoadAllocation());
 
 			Assert.assertSame(newDischargeSlotAllocation, row.getNewDischargeAllocation());
-			Assert.assertNull(row.getOriginalDischargeAllocation());
+			Assert.assertSame(oldDischargeSlotAllocation, row.getOriginalDischargeAllocation());
 		}
 
 		// Different market type caused second row to be created
@@ -513,7 +512,7 @@ public class ChangeSetTransformerUtilTest {
 			Assert.assertNull(row.getOriginalLoadAllocation());
 
 			Assert.assertNull(row.getNewDischargeAllocation());
-			Assert.assertSame(oldDischargeSlotAllocation, row.getOriginalDischargeAllocation());
+			Assert.assertNull(row.getOriginalDischargeAllocation());
 		}
 	}
 
@@ -722,7 +721,7 @@ public class ChangeSetTransformerUtilTest {
 			Assert.assertSame(oldLoadSlotAllocation2, row.getOriginalLoadAllocation());
 
 			Assert.assertSame(newDischargeSlotAllocation2, row.getNewDischargeAllocation());
-			Assert.assertNull(row.getOriginalDischargeAllocation());
+			Assert.assertSame(oldDischargeSlotAllocation2, row.getOriginalDischargeAllocation());
 		}
 		{
 			final ChangeSetRow row = rows.get(2);
@@ -743,7 +742,7 @@ public class ChangeSetTransformerUtilTest {
 			Assert.assertNull(row.getOriginalLoadAllocation());
 
 			Assert.assertNull(row.getNewDischargeAllocation());
-			Assert.assertSame(oldDischargeSlotAllocation2, row.getOriginalDischargeAllocation());
+			Assert.assertNull(row.getOriginalDischargeAllocation());
 		}
 	}
 
