@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scenario.service.model.util;
 
-import com.mmxlabs.scenario.service.model.*;
 import java.io.Closeable;
 
 import org.eclipse.emf.ecore.EObject;
