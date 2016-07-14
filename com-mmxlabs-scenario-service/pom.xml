@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.scenario.service</groupId>
 	<artifactId>com.mmxlabs.scenario.service.parent</artifactId>
-	<version>3.12.9-SNAPSHOT</version>
+	<version>3.12.9.RELEASE</version>
 	<packaging>pom</packaging>
 
 	<parent>
