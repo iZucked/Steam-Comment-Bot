@@ -137,11 +137,11 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 	protected void fillFeatureMap(@NonNull final EClass eClass, @NonNull final IdMapContainer baseTable, @NonNull final EObject containedObj, @NonNull final String prefix) {
 
 		if (eClass != null) {
-			
-			EList<EObject> x = containedObj.eContents();
 
-			ArrayList<EObject> open = new ArrayList<EObject>();
-			ArrayList<String> handles = new ArrayList<String>();
+			List<EObject> open = new ArrayList<>();
+			List<String> handles = new ArrayList<>();
+			
+			
 		
 			open.add(containedObj);
 			handles.add(prefix);
@@ -152,39 +152,37 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 
 				EClass current_class = current_container.eClass();
 
-				ArrayList<String> feature_names = new ArrayList<String>();
+				List<String> feature_names = new ArrayList<>();
 
 				for (final EStructuralFeature e : getFeatures(current_class)) {
 
-					Pair name_comparison_results = uniqueHeading(feature_names, e.getName());
-					feature_names = (ArrayList<String>) name_comparison_results.getFirst();
-					String current_name = (String) name_comparison_results.getSecond();
+					Pair<List<String>, String> name_comparison_results = uniqueHeading(feature_names, e.getName());
+					feature_names = name_comparison_results.getFirst();
+					String current_name = name_comparison_results.getSecond();
 
-					if (current_name == "uuid") {
-						// Prevent UUID inclusion
-					} else {
-						baseTable.getIdMapList().add(new IdMap(handles.get(0).equals("") ? current_name : handles.get(0) + current_name, e, current_container));
+					if (!current_name.equals("uuid")) {
+						baseTable.getIdMapList().add(new IdMap(handles.get(0).equals("") ? current_name : handles.get(0) + "-" + current_name, e, current_container));
 					}
 				}
 
-				EList<EObject> child_containers = current_container.eContents();
+				List<EObject> child_containers = current_container.eContents();
 
-				if (current_class.getName() == "GroupProfitAndLoss") {
+				if(current_class == SchedulePackage.Literals.GROUP_PROFIT_AND_LOSS){
 					child_containers = orderEntities(child_containers);
 				}
 
-				ArrayList<String> container_names = new ArrayList<String>();
+				List<String> container_names = new ArrayList<String>();
 
 				for (EObject child_container : child_containers) {
 
 					String child_handle = child_container.eContainmentFeature().getName();
 					open.add(child_container);
 
-					Pair name_comparison_results = uniqueHeading(container_names, child_handle);
-					container_names = (ArrayList<String>) name_comparison_results.getFirst();
-					String current_name = (String) name_comparison_results.getSecond();
+					Pair<List<String>, String> name_comparison_results = uniqueHeading(container_names, child_handle);
+					container_names = name_comparison_results.getFirst();
+					String current_name =  name_comparison_results.getSecond();
 
-					String new_handle = handles.get(0).concat(current_name + '-');
+					String new_handle = handles.get(0).concat(current_name);
 					handles.add(new_handle);
 				}
 
@@ -195,36 +193,37 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		}
 	}
 
-	private EList<EObject> orderEntities(EList<EObject> containers) {
+	private List<EObject> orderEntities(List<EObject> containers) {
 
-		List<String> information = new ArrayList();
-		BasicEList<EObject> objects = new BasicEList();
-		BasicEList<EObject> ordered_objects = new BasicEList();
+		List<String> information = new ArrayList<>();
+		List<EObject> objects = new ArrayList<>();
+		List<EObject> ordered_objects = new ArrayList<>();
 
 		int con_count = 0;
 		for (EObject child_container : containers) {
+			assert(SchedulePackage.Literals.ENTITY_PROFIT_AND_LOSS.isInstance(child_container));
 			objects.add(child_container);
 			EClass child_class = child_container.eClass();
 			String info = "";
 			String[] results = new String[3];
 			for (final EStructuralFeature e : getFeatures(child_class)) {
 
-				if (e.getName() == "entity") {
+				if (e == SchedulePackage.Literals.ENTITY_PROFIT_AND_LOSS__ENTITY ) {
 					BaseLegalEntity ble = (BaseLegalEntity) child_container.eGet(e);
 					String name = ble.getName();
 					results[2] = name;
-				} else if (e.getName() == "profitAndLoss") {
+				} else if (e == SchedulePackage.Literals.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS) {
 					long val = (long) child_container.eGet(e);
 					results[0] = Long.toString(val);
-				} else {
+				} else if (e == SchedulePackage.Literals.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX) {
 					long val = (long) child_container.eGet(e);
 					results[1] = Long.toString(val);
 				}
 			}
 			for (String result : results) {
-				info = info.concat(result + "/");
+				info = info + result + "/";
 			}
-			info = info.concat(Integer.toString(con_count));
+			info = info + Integer.toString(con_count);
 
 			information.add(info);
 			con_count++;
@@ -235,15 +234,14 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		for (String info_string : information) {
 			int ind = Integer.parseInt(info_string.split("/")[3]);
 			ordered_objects.add(objects.get(ind));
-		}
+		}	
 
-		containers = ordered_objects;
-
-		return containers;
+		return ordered_objects;
 	}
+	
 
-	private Pair uniqueHeading(ArrayList<String> names, String name) {
-		Pair result = new Pair();
+	private Pair<List<String>, String> uniqueHeading(List<String> names, String name) {
+		Pair<List<String>, String> result = new Pair<>();
 		Integer shared_count = 0;
 		for (String existing_name : names) {
 			if (existing_name == name) {
@@ -252,7 +250,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		}
 		names.add(name);
 		if (shared_count > 0) {
-			name = name.concat(Integer.toString(shared_count));
+			name = name + Integer.toString(shared_count);
 		}
 
 		result.setFirst(names);
