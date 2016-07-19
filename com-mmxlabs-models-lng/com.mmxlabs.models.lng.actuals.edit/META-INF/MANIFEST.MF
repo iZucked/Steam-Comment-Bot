@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.actuals.edit;singleton:=true
-Bundle-Version: 3.12.10.RELEASE
+Bundle-Version: 3.12.11.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.actuals.provider.ActualsEditPlugin$Implementation
 Bundle-Vendor: %providerName
