@@ -4,7 +4,7 @@
 	<groupId>com.mmxlabs.common</groupId>
 	<artifactId>common-util-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>3.12.10.RELEASE</version>
+	<version>3.12.11-SNAPSHOT</version>
 	<name>Common Util: Parent</name>
 
 	<parent>
