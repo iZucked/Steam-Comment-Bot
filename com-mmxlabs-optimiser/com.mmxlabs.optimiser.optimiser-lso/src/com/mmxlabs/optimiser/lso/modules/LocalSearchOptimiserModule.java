@@ -41,6 +41,7 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 
 	public static final boolean instrumenting = true;
 
+	public static final String CLEAN_STATE_NUMBER_OF_ITERATIONS = "CleanState-NumberOfIterations";
 	public static final String LSO_NUMBER_OF_ITERATIONS = "LSO-NumberOfIterations";
 	public static final String SOLUTION_IMPROVER_NUMBER_OF_ITERATIONS = "SOLUTION_IMPROVER-NumberOfIterations";
 	public static final String USE_RESTARTING_OPTIMISER = "useRestartingOptimiser";

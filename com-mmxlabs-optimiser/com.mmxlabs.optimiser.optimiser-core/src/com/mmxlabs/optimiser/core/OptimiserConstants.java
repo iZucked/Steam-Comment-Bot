@@ -9,6 +9,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 @NonNullByDefault
 public class OptimiserConstants {
 
+	public static final String SEQUENCE_TYPE_SEQUENCE_BUILDER = "Sequence-Builder-Sequences";
 	public static final String SEQUENCE_TYPE_INITIAL = "Initial-Sequences";
 	public static final String SEQUENCE_TYPE_INPUT = "Input-Sequences";
 
