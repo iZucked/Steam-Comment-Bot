@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * All rights reserved.
+ */
 package com.mmxlabs.lingo.its.microcases.pricebasedwindows;
 
 import java.util.List;
