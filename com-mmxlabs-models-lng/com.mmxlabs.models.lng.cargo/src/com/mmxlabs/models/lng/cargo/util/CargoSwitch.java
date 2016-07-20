@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.util;
 
-import com.mmxlabs.models.lng.cargo.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;

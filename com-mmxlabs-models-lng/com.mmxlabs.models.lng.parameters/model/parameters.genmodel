@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.parameters/src" modelPluginID="com.mmxlabs.models.lng.parameters"
-    templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.sdk.template/templates/"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.parameters/src" editorDirectory=""
+    modelPluginID="com.mmxlabs.models.lng.parameters" templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.sdk.template/templates/"
     dynamicTemplates="true" modelName="Parameters" testsDirectory="" importerID="org.eclipse.emf.importer.ecore"
     complianceLevel="8.0" copyrightFields="false" runtimeVersion="2.11" usedGenPackages="../../com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore">
   <foreignModel>parameters.ecore</foreignModel>
@@ -22,32 +22,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/generateCharterOuts"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/buildActionSets"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/similarityMode"/>
-    </genClasses>
-    <genClasses ecoreClass="parameters.ecore#//IndividualSolutionImprovementSettings">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//IndividualSolutionImprovementSettings/iterations"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//IndividualSolutionImprovementSettings/improvingSolutions"/>
-    </genClasses>
-    <genClasses ecoreClass="parameters.ecore#//ParametersModel">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//ParametersModel/settings"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference parameters.ecore#//ParametersModel/activeSetting"/>
-    </genClasses>
-    <genClasses ecoreClass="parameters.ecore#//OptimiserSettings">
-      <genFeatures property="None" children="true" createChild="true" propertyDescription="The list of objectives being optimised (or fitness functions)"
-          ecoreFeature="ecore:EReference parameters.ecore#//OptimiserSettings/objectives"/>
-      <genFeatures property="None" children="true" createChild="true" propertyDescription="The list of hard constraints being applied"
-          ecoreFeature="ecore:EReference parameters.ecore#//OptimiserSettings/constraints"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//OptimiserSettings/range"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//OptimiserSettings/annealingSettings"/>
-      <genFeatures createChild="false" propertyDescription="A seed for the random number generator"
-          ecoreFeature="ecore:EAttribute parameters.ecore#//OptimiserSettings/seed"/>
-      <genFeatures property="None" children="true" createChild="true" propertyDescription="A list of extra arguments to the parameters"
-          ecoreFeature="ecore:EReference parameters.ecore#//OptimiserSettings/arguments"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//OptimiserSettings/generateCharterOuts"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//OptimiserSettings/shippingOnly"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//OptimiserSettings/similaritySettings"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//OptimiserSettings/solutionImprovementSettings"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//OptimiserSettings/buildActionSets"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//OptimiserSettings/actionPlanSettings"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/cleanStateOptimisation"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/floatingDaysLimit"/>
     </genClasses>
     <genClasses ecoreClass="parameters.ecore#//Objective">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//Objective/weight"/>
@@ -55,12 +31,6 @@
     </genClasses>
     <genClasses ecoreClass="parameters.ecore#//Constraint">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//Constraint/enabled"/>
-    </genClasses>
-    <genClasses ecoreClass="parameters.ecore#//OptimisationRange">
-      <genFeatures createChild="false" propertyDescription="Only scenario events after this date will be included in the optimisation, if set"
-          ecoreFeature="ecore:EAttribute parameters.ecore#//OptimisationRange/optimiseAfter"/>
-      <genFeatures createChild="false" propertyDescription="Only scenario events before this date will be optimised, if set"
-          ecoreFeature="ecore:EAttribute parameters.ecore#//OptimisationRange/optimiseBefore"/>
     </genClasses>
     <genClasses ecoreClass="parameters.ecore#//AnnealingSettings">
       <genFeatures createChild="false" propertyDescription="The number of adjustments to the schedule to perform before finishing; more iterations may give a better result, but will take longer"
@@ -74,10 +44,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//AnnealingSettings/restarting"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//AnnealingSettings/restartIterationsThreshold"/>
     </genClasses>
-    <genClasses ecoreClass="parameters.ecore#//Argument">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//Argument/name"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//Argument/value"/>
-    </genClasses>
     <genClasses ecoreClass="parameters.ecore#//SimilaritySettings">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//SimilaritySettings/lowInterval"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//SimilaritySettings/medInterval"/>
@@ -88,10 +54,52 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//SimilarityInterval/weight"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//SimilarityInterval/threshold"/>
     </genClasses>
-    <genClasses ecoreClass="parameters.ecore#//ActionPlanSettings">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//ActionPlanSettings/totalEvaluations"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//ActionPlanSettings/inRunEvaluations"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//ActionPlanSettings/searchDepth"/>
+    <genClasses ecoreClass="parameters.ecore#//OptimisationPlan">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference parameters.ecore#//OptimisationPlan/userSettings"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//OptimisationPlan/stages"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//OptimisationPlan/solutionBuilderSettings"/>
+    </genClasses>
+    <genClasses ecoreClass="parameters.ecore#//ConstraintAndFitnessSettings">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//ConstraintAndFitnessSettings/objectives"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//ConstraintAndFitnessSettings/constraints"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//ConstraintAndFitnessSettings/floatingDaysLimit"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//ConstraintAndFitnessSettings/similaritySettings"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="parameters.ecore#//OptimisationStage">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//OptimisationStage/name"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="parameters.ecore#//ConstraintsAndFitnessSettingsStage">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//ConstraintsAndFitnessSettingsStage/constraintAndFitnessSettings"/>
+    </genClasses>
+    <genClasses ecoreClass="parameters.ecore#//ParallisableOptimisationStage"/>
+    <genClasses ecoreClass="parameters.ecore#//ParallelOptimisationStage">
+      <genTypeParameters ecoreTypeParameter="parameters.ecore#//ParallelOptimisationStage/T"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//ParallelOptimisationStage/jobCount"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//ParallelOptimisationStage/template"/>
+    </genClasses>
+    <genClasses ecoreClass="parameters.ecore#//CleanStateOptimisationStage">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//CleanStateOptimisationStage/seed"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//CleanStateOptimisationStage/annealingSettings"/>
+    </genClasses>
+    <genClasses ecoreClass="parameters.ecore#//LocalSearchOptimisationStage">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//LocalSearchOptimisationStage/seed"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//LocalSearchOptimisationStage/annealingSettings"/>
+    </genClasses>
+    <genClasses ecoreClass="parameters.ecore#//HillClimbOptimisationStage">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//HillClimbOptimisationStage/seed"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//HillClimbOptimisationStage/annealingSettings"/>
+    </genClasses>
+    <genClasses ecoreClass="parameters.ecore#//ActionPlanOptimisationStage">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//ActionPlanOptimisationStage/totalEvaluations"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//ActionPlanOptimisationStage/inRunEvaluations"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//ActionPlanOptimisationStage/searchDepth"/>
+    </genClasses>
+    <genClasses ecoreClass="parameters.ecore#//ResetInitialSequencesStage"/>
+    <genClasses ecoreClass="parameters.ecore#//BreakEvenOptmisationStage">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//BreakEvenOptmisationStage/targetProfitAndLoss"/>
+    </genClasses>
+    <genClasses ecoreClass="parameters.ecore#//SolutionBuilderSettings">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//SolutionBuilderSettings/constraintAndFitnessSettings"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

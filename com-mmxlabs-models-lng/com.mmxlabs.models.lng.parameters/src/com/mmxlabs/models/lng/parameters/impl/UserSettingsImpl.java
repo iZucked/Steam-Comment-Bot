@@ -33,6 +33,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isGenerateCharterOuts <em>Generate Charter Outs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isBuildActionSets <em>Build Action Sets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getSimilarityMode <em>Similarity Mode</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isCleanStateOptimisation <em>Clean State Optimisation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getFloatingDaysLimit <em>Floating Days Limit</em>}</li>
  * </ul>
  *
@@ -176,6 +177,26 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * @ordered
 	 */
 	protected SimilarityMode similarityMode = SIMILARITY_MODE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isCleanStateOptimisation() <em>Clean State Optimisation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isCleanStateOptimisation()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean CLEAN_STATE_OPTIMISATION_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isCleanStateOptimisation() <em>Clean State Optimisation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isCleanStateOptimisation()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean cleanStateOptimisation = CLEAN_STATE_OPTIMISATION_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getFloatingDaysLimit() <em>Floating Days Limit</em>}' attribute.
@@ -413,6 +434,27 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isCleanStateOptimisation() {
+		return cleanStateOptimisation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCleanStateOptimisation(boolean newCleanStateOptimisation) {
+		boolean oldCleanStateOptimisation = cleanStateOptimisation;
+		cleanStateOptimisation = newCleanStateOptimisation;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__CLEAN_STATE_OPTIMISATION, oldCleanStateOptimisation, cleanStateOptimisation));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public int getFloatingDaysLimit() {
 		return floatingDaysLimit;
 	}
@@ -449,6 +491,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return isBuildActionSets();
 			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:
 				return getSimilarityMode();
+			case ParametersPackage.USER_SETTINGS__CLEAN_STATE_OPTIMISATION:
+				return isCleanStateOptimisation();
 			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
 				return getFloatingDaysLimit();
 		}
@@ -480,6 +524,9 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return;
 			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:
 				setSimilarityMode((SimilarityMode)newValue);
+				return;
+			case ParametersPackage.USER_SETTINGS__CLEAN_STATE_OPTIMISATION:
+				setCleanStateOptimisation((Boolean)newValue);
 				return;
 			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
 				setFloatingDaysLimit((Integer)newValue);
@@ -514,6 +561,9 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:
 				setSimilarityMode(SIMILARITY_MODE_EDEFAULT);
 				return;
+			case ParametersPackage.USER_SETTINGS__CLEAN_STATE_OPTIMISATION:
+				setCleanStateOptimisation(CLEAN_STATE_OPTIMISATION_EDEFAULT);
+				return;
 			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
 				setFloatingDaysLimit(FLOATING_DAYS_LIMIT_EDEFAULT);
 				return;
@@ -541,6 +591,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return buildActionSets != BUILD_ACTION_SETS_EDEFAULT;
 			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:
 				return similarityMode != SIMILARITY_MODE_EDEFAULT;
+			case ParametersPackage.USER_SETTINGS__CLEAN_STATE_OPTIMISATION:
+				return cleanStateOptimisation != CLEAN_STATE_OPTIMISATION_EDEFAULT;
 			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
 				return floatingDaysLimit != FLOATING_DAYS_LIMIT_EDEFAULT;
 		}
@@ -569,6 +621,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 		result.append(buildActionSets);
 		result.append(", similarityMode: ");
 		result.append(similarityMode);
+		result.append(", cleanStateOptimisation: ");
+		result.append(cleanStateOptimisation);
 		result.append(", floatingDaysLimit: ");
 		result.append(floatingDaysLimit);
 		result.append(')');

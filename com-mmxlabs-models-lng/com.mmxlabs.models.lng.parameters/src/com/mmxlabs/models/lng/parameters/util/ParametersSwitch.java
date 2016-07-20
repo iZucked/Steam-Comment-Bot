@@ -13,13 +13,8 @@ import org.eclipse.emf.ecore.util.Switch;
 
 import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
-import com.mmxlabs.models.lng.parameters.Argument;
 import com.mmxlabs.models.lng.parameters.Constraint;
-import com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings;
 import com.mmxlabs.models.lng.parameters.Objective;
-import com.mmxlabs.models.lng.parameters.OptimisationRange;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
-import com.mmxlabs.models.lng.parameters.ParametersModel;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.SimilarityInterval;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
@@ -40,7 +35,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @see com.mmxlabs.models.lng.parameters.ParametersPackage
  * @generated
  */
-public class ParametersSwitch<@Nullable T> extends Switch<T> {
+public class ParametersSwitch<@Nullable T1> extends Switch<T1> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
@@ -82,40 +77,17 @@ public class ParametersSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	@Override
-	protected T doSwitch(int classifierID, EObject theEObject) {
+	protected T1 doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
 			case ParametersPackage.USER_SETTINGS: {
 				UserSettings userSettings = (UserSettings)theEObject;
-				T result = caseUserSettings(userSettings);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case ParametersPackage.INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS: {
-				IndividualSolutionImprovementSettings individualSolutionImprovementSettings = (IndividualSolutionImprovementSettings)theEObject;
-				T result = caseIndividualSolutionImprovementSettings(individualSolutionImprovementSettings);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case ParametersPackage.PARAMETERS_MODEL: {
-				ParametersModel parametersModel = (ParametersModel)theEObject;
-				T result = caseParametersModel(parametersModel);
-				if (result == null) result = caseUUIDObject(parametersModel);
-				if (result == null) result = caseMMXObject(parametersModel);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case ParametersPackage.OPTIMISER_SETTINGS: {
-				OptimiserSettings optimiserSettings = (OptimiserSettings)theEObject;
-				T result = caseOptimiserSettings(optimiserSettings);
-				if (result == null) result = caseUUIDObject(optimiserSettings);
-				if (result == null) result = caseNamedObject(optimiserSettings);
-				if (result == null) result = caseMMXObject(optimiserSettings);
+				T1 result = caseUserSettings(userSettings);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ParametersPackage.OBJECTIVE: {
 				Objective objective = (Objective)theEObject;
-				T result = caseObjective(objective);
+				T1 result = caseObjective(objective);
 				if (result == null) result = caseNamedObject(objective);
 				if (result == null) result = caseMMXObject(objective);
 				if (result == null) result = defaultCase(theEObject);
@@ -123,45 +95,121 @@ public class ParametersSwitch<@Nullable T> extends Switch<T> {
 			}
 			case ParametersPackage.CONSTRAINT: {
 				Constraint constraint = (Constraint)theEObject;
-				T result = caseConstraint(constraint);
+				T1 result = caseConstraint(constraint);
 				if (result == null) result = caseNamedObject(constraint);
 				if (result == null) result = caseMMXObject(constraint);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ParametersPackage.OPTIMISATION_RANGE: {
-				OptimisationRange optimisationRange = (OptimisationRange)theEObject;
-				T result = caseOptimisationRange(optimisationRange);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case ParametersPackage.ANNEALING_SETTINGS: {
 				AnnealingSettings annealingSettings = (AnnealingSettings)theEObject;
-				T result = caseAnnealingSettings(annealingSettings);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case ParametersPackage.ARGUMENT: {
-				Argument argument = (Argument)theEObject;
-				T result = caseArgument(argument);
+				T1 result = caseAnnealingSettings(annealingSettings);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ParametersPackage.SIMILARITY_SETTINGS: {
 				SimilaritySettings similaritySettings = (SimilaritySettings)theEObject;
-				T result = caseSimilaritySettings(similaritySettings);
+				T1 result = caseSimilaritySettings(similaritySettings);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ParametersPackage.SIMILARITY_INTERVAL: {
 				SimilarityInterval similarityInterval = (SimilarityInterval)theEObject;
-				T result = caseSimilarityInterval(similarityInterval);
+				T1 result = caseSimilarityInterval(similarityInterval);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ParametersPackage.ACTION_PLAN_SETTINGS: {
-				ActionPlanSettings actionPlanSettings = (ActionPlanSettings)theEObject;
-				T result = caseActionPlanSettings(actionPlanSettings);
+			case ParametersPackage.OPTIMISATION_PLAN: {
+				OptimisationPlan optimisationPlan = (OptimisationPlan)theEObject;
+				T1 result = caseOptimisationPlan(optimisationPlan);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ParametersPackage.CONSTRAINT_AND_FITNESS_SETTINGS: {
+				ConstraintAndFitnessSettings constraintAndFitnessSettings = (ConstraintAndFitnessSettings)theEObject;
+				T1 result = caseConstraintAndFitnessSettings(constraintAndFitnessSettings);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ParametersPackage.OPTIMISATION_STAGE: {
+				OptimisationStage optimisationStage = (OptimisationStage)theEObject;
+				T1 result = caseOptimisationStage(optimisationStage);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ParametersPackage.CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE: {
+				ConstraintsAndFitnessSettingsStage constraintsAndFitnessSettingsStage = (ConstraintsAndFitnessSettingsStage)theEObject;
+				T1 result = caseConstraintsAndFitnessSettingsStage(constraintsAndFitnessSettingsStage);
+				if (result == null) result = caseOptimisationStage(constraintsAndFitnessSettingsStage);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ParametersPackage.PARALLISABLE_OPTIMISATION_STAGE: {
+				ParallisableOptimisationStage parallisableOptimisationStage = (ParallisableOptimisationStage)theEObject;
+				T1 result = caseParallisableOptimisationStage(parallisableOptimisationStage);
+				if (result == null) result = caseOptimisationStage(parallisableOptimisationStage);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ParametersPackage.PARALLEL_OPTIMISATION_STAGE: {
+				ParallelOptimisationStage<?> parallelOptimisationStage = (ParallelOptimisationStage<?>)theEObject;
+				T1 result = caseParallelOptimisationStage(parallelOptimisationStage);
+				if (result == null) result = caseOptimisationStage(parallelOptimisationStage);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE: {
+				CleanStateOptimisationStage cleanStateOptimisationStage = (CleanStateOptimisationStage)theEObject;
+				T1 result = caseCleanStateOptimisationStage(cleanStateOptimisationStage);
+				if (result == null) result = caseParallisableOptimisationStage(cleanStateOptimisationStage);
+				if (result == null) result = caseConstraintsAndFitnessSettingsStage(cleanStateOptimisationStage);
+				if (result == null) result = caseOptimisationStage(cleanStateOptimisationStage);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ParametersPackage.LOCAL_SEARCH_OPTIMISATION_STAGE: {
+				LocalSearchOptimisationStage localSearchOptimisationStage = (LocalSearchOptimisationStage)theEObject;
+				T1 result = caseLocalSearchOptimisationStage(localSearchOptimisationStage);
+				if (result == null) result = caseParallisableOptimisationStage(localSearchOptimisationStage);
+				if (result == null) result = caseConstraintsAndFitnessSettingsStage(localSearchOptimisationStage);
+				if (result == null) result = caseOptimisationStage(localSearchOptimisationStage);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ParametersPackage.HILL_CLIMB_OPTIMISATION_STAGE: {
+				HillClimbOptimisationStage hillClimbOptimisationStage = (HillClimbOptimisationStage)theEObject;
+				T1 result = caseHillClimbOptimisationStage(hillClimbOptimisationStage);
+				if (result == null) result = caseParallisableOptimisationStage(hillClimbOptimisationStage);
+				if (result == null) result = caseConstraintsAndFitnessSettingsStage(hillClimbOptimisationStage);
+				if (result == null) result = caseOptimisationStage(hillClimbOptimisationStage);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ParametersPackage.ACTION_PLAN_OPTIMISATION_STAGE: {
+				ActionPlanOptimisationStage actionPlanOptimisationStage = (ActionPlanOptimisationStage)theEObject;
+				T1 result = caseActionPlanOptimisationStage(actionPlanOptimisationStage);
+				if (result == null) result = caseConstraintsAndFitnessSettingsStage(actionPlanOptimisationStage);
+				if (result == null) result = caseOptimisationStage(actionPlanOptimisationStage);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ParametersPackage.RESET_INITIAL_SEQUENCES_STAGE: {
+				ResetInitialSequencesStage resetInitialSequencesStage = (ResetInitialSequencesStage)theEObject;
+				T1 result = caseResetInitialSequencesStage(resetInitialSequencesStage);
+				if (result == null) result = caseOptimisationStage(resetInitialSequencesStage);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ParametersPackage.BREAK_EVEN_OPTMISATION_STAGE: {
+				BreakEvenOptmisationStage breakEvenOptmisationStage = (BreakEvenOptmisationStage)theEObject;
+				T1 result = caseBreakEvenOptmisationStage(breakEvenOptmisationStage);
+				if (result == null) result = caseOptimisationStage(breakEvenOptmisationStage);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ParametersPackage.SOLUTION_BUILDER_SETTINGS: {
+				SolutionBuilderSettings solutionBuilderSettings = (SolutionBuilderSettings)theEObject;
+				T1 result = caseSolutionBuilderSettings(solutionBuilderSettings);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -180,52 +228,7 @@ public class ParametersSwitch<@Nullable T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseUserSettings(UserSettings object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Individual Solution Improvement Settings</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Individual Solution Improvement Settings</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseIndividualSolutionImprovementSettings(IndividualSolutionImprovementSettings object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Model</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Model</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseParametersModel(ParametersModel object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Optimiser Settings</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Optimiser Settings</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseOptimiserSettings(OptimiserSettings object) {
+	public T1 caseUserSettings(UserSettings object) {
 		return null;
 	}
 
@@ -240,7 +243,7 @@ public class ParametersSwitch<@Nullable T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseObjective(Objective object) {
+	public T1 caseObjective(Objective object) {
 		return null;
 	}
 
@@ -255,22 +258,7 @@ public class ParametersSwitch<@Nullable T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseConstraint(Constraint object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Optimisation Range</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Optimisation Range</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseOptimisationRange(OptimisationRange object) {
+	public T1 caseConstraint(Constraint object) {
 		return null;
 	}
 
@@ -285,22 +273,7 @@ public class ParametersSwitch<@Nullable T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseAnnealingSettings(AnnealingSettings object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Argument</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Argument</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseArgument(Argument object) {
+	public T1 caseAnnealingSettings(AnnealingSettings object) {
 		return null;
 	}
 
@@ -315,7 +288,7 @@ public class ParametersSwitch<@Nullable T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseSimilaritySettings(SimilaritySettings object) {
+	public T1 caseSimilaritySettings(SimilaritySettings object) {
 		return null;
 	}
 
@@ -330,22 +303,202 @@ public class ParametersSwitch<@Nullable T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseSimilarityInterval(SimilarityInterval object) {
+	public T1 caseSimilarityInterval(SimilarityInterval object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Action Plan Settings</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Optimisation Stage</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Action Plan Settings</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Optimisation Stage</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseActionPlanSettings(ActionPlanSettings object) {
+	public T1 caseOptimisationStage(OptimisationStage object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Constraints And Fitness Settings Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Constraints And Fitness Settings Stage</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseConstraintsAndFitnessSettingsStage(ConstraintsAndFitnessSettingsStage object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Parallisable Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Parallisable Optimisation Stage</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseParallisableOptimisationStage(ParallisableOptimisationStage object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Parallel Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Parallel Optimisation Stage</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public <T extends ParallisableOptimisationStage> T1 caseParallelOptimisationStage(ParallelOptimisationStage<T> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Clean State Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Clean State Optimisation Stage</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseCleanStateOptimisationStage(CleanStateOptimisationStage object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Local Search Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Local Search Optimisation Stage</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseLocalSearchOptimisationStage(LocalSearchOptimisationStage object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Hill Climb Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Hill Climb Optimisation Stage</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseHillClimbOptimisationStage(HillClimbOptimisationStage object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Action Plan Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Action Plan Optimisation Stage</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseActionPlanOptimisationStage(ActionPlanOptimisationStage object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Reset Initial Sequences Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Reset Initial Sequences Stage</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseResetInitialSequencesStage(ResetInitialSequencesStage object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Constraint And Fitness Settings</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Constraint And Fitness Settings</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseConstraintAndFitnessSettings(ConstraintAndFitnessSettings object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Optimisation Plan</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Optimisation Plan</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseOptimisationPlan(OptimisationPlan object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Break Even Optmisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Break Even Optmisation Stage</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseBreakEvenOptmisationStage(BreakEvenOptmisationStage object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Solution Builder Settings</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Solution Builder Settings</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseSolutionBuilderSettings(SolutionBuilderSettings object) {
 		return null;
 	}
 
@@ -360,22 +513,7 @@ public class ParametersSwitch<@Nullable T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseMMXObject(MMXObject object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>UUID Object</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>UUID Object</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseUUIDObject(UUIDObject object) {
+	public T1 caseMMXObject(MMXObject object) {
 		return null;
 	}
 
@@ -390,7 +528,7 @@ public class ParametersSwitch<@Nullable T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseNamedObject(NamedObject object) {
+	public T1 caseNamedObject(NamedObject object) {
 		return null;
 	}
 
@@ -406,7 +544,7 @@ public class ParametersSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	@Override
-	public T defaultCase(EObject object) {
+	public T1 defaultCase(EObject object) {
 		return null;
 	}
 

@@ -16,7 +16,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -34,7 +33,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getCargoModel <em>Cargo Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getScheduleModel <em>Schedule Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getParameters <em>Parameters</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getActualsModel <em>Actuals Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getPromptPeriodStart <em>Prompt Period Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getPromptPeriodEnd <em>Prompt Period End</em>}</li>
@@ -64,16 +62,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * @ordered
 	 */
 	protected ScheduleModel scheduleModel;
-
-	/**
-	 * The cached value of the '{@link #getParameters() <em>Parameters</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getParameters()
-	 * @generated
-	 * @ordered
-	 */
-	protected OptimiserSettings parameters;
 
 	/**
 	 * The cached value of the '{@link #getActualsModel() <em>Actuals Model</em>}' containment reference.
@@ -312,72 +300,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 		}
 		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULE_MODEL, newScheduleModel, newScheduleModel));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public OptimiserSettings getParameters() {
-		if (parameters != null && parameters.eIsProxy()) {
-			InternalEObject oldParameters = (InternalEObject)parameters;
-			parameters = (OptimiserSettings)eResolveProxy(oldParameters);
-			if (parameters != oldParameters) {
-				InternalEObject newParameters = (InternalEObject)parameters;
-				NotificationChain msgs = oldParameters.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS, null, null);
-				if (newParameters.eInternalContainer() == null) {
-					msgs = newParameters.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS, oldParameters, parameters));
-			}
-		}
-		return parameters;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public OptimiserSettings basicGetParameters() {
-		return parameters;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetParameters(OptimiserSettings newParameters, NotificationChain msgs) {
-		OptimiserSettings oldParameters = parameters;
-		parameters = newParameters;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS, oldParameters, newParameters);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setParameters(OptimiserSettings newParameters) {
-		if (newParameters != parameters) {
-			NotificationChain msgs = null;
-			if (parameters != null)
-				msgs = ((InternalEObject)parameters).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS, null, msgs);
-			if (newParameters != null)
-				msgs = ((InternalEObject)newParameters).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS, null, msgs);
-			msgs = basicSetParameters(newParameters, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS, newParameters, newParameters));
 	}
 
 	/**
@@ -682,8 +604,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return basicSetCargoModel(null, msgs);
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULE_MODEL:
 				return basicSetScheduleModel(null, msgs);
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS:
-				return basicSetParameters(null, msgs);
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ACTUALS_MODEL:
 				return basicSetActualsModel(null, msgs);
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL:
@@ -708,9 +628,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULE_MODEL:
 				if (resolve) return getScheduleModel();
 				return basicGetScheduleModel();
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS:
-				if (resolve) return getParameters();
-				return basicGetParameters();
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ACTUALS_MODEL:
 				if (resolve) return getActualsModel();
 				return basicGetActualsModel();
@@ -741,9 +658,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULE_MODEL:
 				setScheduleModel((ScheduleModel)newValue);
-				return;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS:
-				setParameters((OptimiserSettings)newValue);
 				return;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ACTUALS_MODEL:
 				setActualsModel((ActualsModel)newValue);
@@ -778,9 +692,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULE_MODEL:
 				setScheduleModel((ScheduleModel)null);
 				return;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS:
-				setParameters((OptimiserSettings)null);
-				return;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ACTUALS_MODEL:
 				setActualsModel((ActualsModel)null);
 				return;
@@ -812,8 +723,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return cargoModel != null;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULE_MODEL:
 				return scheduleModel != null;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS:
-				return parameters != null;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ACTUALS_MODEL:
 				return actualsModel != null;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_START:

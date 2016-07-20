@@ -73,6 +73,7 @@ public class UserSettingsItemProvider
 			addGenerateCharterOutsPropertyDescriptor(object);
 			addBuildActionSetsPropertyDescriptor(object);
 			addSimilarityModePropertyDescriptor(object);
+			addCleanStateOptimisationPropertyDescriptor(object);
 			addFloatingDaysLimitPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -211,6 +212,28 @@ public class UserSettingsItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Clean State Optimisation feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCleanStateOptimisationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UserSettings_cleanStateOptimisation_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UserSettings_cleanStateOptimisation_feature", "_UI_UserSettings_type"),
+				 ParametersPackage.Literals.USER_SETTINGS__CLEAN_STATE_OPTIMISATION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Floating Days Limit feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -277,6 +300,7 @@ public class UserSettingsItemProvider
 			case ParametersPackage.USER_SETTINGS__GENERATE_CHARTER_OUTS:
 			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
 			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:
+			case ParametersPackage.USER_SETTINGS__CLEAN_STATE_OPTIMISATION:
 			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

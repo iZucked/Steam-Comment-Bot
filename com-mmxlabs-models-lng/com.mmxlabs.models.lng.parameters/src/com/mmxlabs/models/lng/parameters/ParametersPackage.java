@@ -125,13 +125,22 @@ public interface ParametersPackage extends EPackage {
 	int USER_SETTINGS__SIMILARITY_MODE = 5;
 
 	/**
+	 * The feature id for the '<em><b>Clean State Optimisation</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__CLEAN_STATE_OPTIMISATION = 6;
+
+	/**
 	 * The feature id for the '<em><b>Floating Days Limit</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__FLOATING_DAYS_LIMIT = 6;
+	int USER_SETTINGS__FLOATING_DAYS_LIMIT = 7;
 
 	/**
 	 * The number of structural features of the '<em>User Settings</em>' class.
@@ -140,262 +149,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS_FEATURE_COUNT = 7;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.IndividualSolutionImprovementSettingsImpl <em>Individual Solution Improvement Settings</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.parameters.impl.IndividualSolutionImprovementSettingsImpl
-	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getIndividualSolutionImprovementSettings()
-	 * @generated
-	 */
-	int INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS = 1;
-
-	/**
-	 * The feature id for the '<em><b>Iterations</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS__ITERATIONS = 0;
-
-	/**
-	 * The feature id for the '<em><b>Improving Solutions</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS__IMPROVING_SOLUTIONS = 1;
-
-	/**
-	 * The number of structural features of the '<em>Individual Solution Improvement Settings</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS_FEATURE_COUNT = 2;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ParametersModelImpl <em>Model</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersModelImpl
-	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParametersModel()
-	 * @generated
-	 */
-	int PARAMETERS_MODEL = 2;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARAMETERS_MODEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARAMETERS_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Settings</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARAMETERS_MODEL__SETTINGS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Active Setting</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARAMETERS_MODEL__ACTIVE_SETTING = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Model</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARAMETERS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl <em>Optimiser Settings</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl
-	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getOptimiserSettings()
-	 * @generated
-	 */
-	int OPTIMISER_SETTINGS = 3;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISER_SETTINGS__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISER_SETTINGS__UUID = MMXCorePackage.UUID_OBJECT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISER_SETTINGS__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Objectives</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISER_SETTINGS__OBJECTIVES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Constraints</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISER_SETTINGS__CONSTRAINTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Range</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISER_SETTINGS__RANGE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Annealing Settings</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISER_SETTINGS__ANNEALING_SETTINGS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Seed</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISER_SETTINGS__SEED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
-
-	/**
-	 * The feature id for the '<em><b>Arguments</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISER_SETTINGS__ARGUMENTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
-
-	/**
-	 * The feature id for the '<em><b>Generate Charter Outs</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISER_SETTINGS__GENERATE_CHARTER_OUTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
-
-	/**
-	 * The feature id for the '<em><b>Shipping Only</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISER_SETTINGS__SHIPPING_ONLY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
-
-	/**
-	 * The feature id for the '<em><b>Similarity Settings</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISER_SETTINGS__SIMILARITY_SETTINGS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
-
-	/**
-	 * The feature id for the '<em><b>Solution Improvement Settings</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
-
-	/**
-	 * The feature id for the '<em><b>Build Action Sets</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISER_SETTINGS__BUILD_ACTION_SETS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
-
-	/**
-	 * The feature id for the '<em><b>Action Plan Settings</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
-
-	/**
-	 * The feature id for the '<em><b>Floating Days Limit</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISER_SETTINGS__FLOATING_DAYS_LIMIT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
-
-	/**
-	 * The number of structural features of the '<em>Optimiser Settings</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISER_SETTINGS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
+	int USER_SETTINGS_FEATURE_COUNT = 8;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.
@@ -405,7 +159,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getObjective()
 	 * @generated
 	 */
-	int OBJECTIVE = 4;
+	int OBJECTIVE = 1;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -460,7 +214,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getConstraint()
 	 * @generated
 	 */
-	int CONSTRAINT = 5;
+	int CONSTRAINT = 2;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -499,43 +253,6 @@ public interface ParametersPackage extends EPackage {
 	int CONSTRAINT_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.OptimisationRangeImpl <em>Optimisation Range</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.parameters.impl.OptimisationRangeImpl
-	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getOptimisationRange()
-	 * @generated
-	 */
-	int OPTIMISATION_RANGE = 6;
-
-	/**
-	 * The feature id for the '<em><b>Optimise After</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISATION_RANGE__OPTIMISE_AFTER = 0;
-
-	/**
-	 * The feature id for the '<em><b>Optimise Before</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISATION_RANGE__OPTIMISE_BEFORE = 1;
-
-	/**
-	 * The number of structural features of the '<em>Optimisation Range</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISATION_RANGE_FEATURE_COUNT = 2;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.AnnealingSettingsImpl <em>Annealing Settings</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -543,7 +260,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getAnnealingSettings()
 	 * @generated
 	 */
-	int ANNEALING_SETTINGS = 7;
+	int ANNEALING_SETTINGS = 3;
 
 	/**
 	 * The feature id for the '<em><b>Iterations</b></em>' attribute.
@@ -609,44 +326,6 @@ public interface ParametersPackage extends EPackage {
 	int ANNEALING_SETTINGS_FEATURE_COUNT = 6;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ArgumentImpl <em>Argument</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.parameters.impl.ArgumentImpl
-	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getArgument()
-	 * @generated
-	 */
-	int ARGUMENT = 8;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ARGUMENT__NAME = 0;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ARGUMENT__VALUE = 1;
-
-	/**
-	 * The number of structural features of the '<em>Argument</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ARGUMENT_FEATURE_COUNT = 2;
-
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.SimilaritySettingsImpl <em>Similarity Settings</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -654,7 +333,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSimilaritySettings()
 	 * @generated
 	 */
-	int SIMILARITY_SETTINGS = 9;
+	int SIMILARITY_SETTINGS = 4;
 
 	/**
 	 * The feature id for the '<em><b>Low Interval</b></em>' containment reference.
@@ -710,7 +389,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSimilarityInterval()
 	 * @generated
 	 */
-	int SIMILARITY_INTERVAL = 10;
+	int SIMILARITY_INTERVAL = 5;
 
 	/**
 	 * The feature id for the '<em><b>Weight</b></em>' attribute.
@@ -741,14 +420,447 @@ public interface ParametersPackage extends EPackage {
 
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ActionPlanSettingsImpl <em>Action Plan Settings</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.OptimisationStage <em>Optimisation Stage</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.parameters.impl.ActionPlanSettingsImpl
-	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getActionPlanSettings()
+	 * @see com.mmxlabs.models.lng.parameters.OptimisationStage
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getOptimisationStage()
 	 * @generated
 	 */
-	int ACTION_PLAN_SETTINGS = 11;
+	int OPTIMISATION_STAGE = 8;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ParallisableOptimisationStageImpl <em>Parallisable Optimisation Stage</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParallisableOptimisationStageImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParallisableOptimisationStage()
+	 * @generated
+	 */
+	int PARALLISABLE_OPTIMISATION_STAGE = 10;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ParallelOptimisationStageImpl <em>Parallel Optimisation Stage</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParallelOptimisationStageImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParallelOptimisationStage()
+	 * @generated
+	 */
+	int PARALLEL_OPTIMISATION_STAGE = 11;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.CleanStateOptimisationStageImpl <em>Clean State Optimisation Stage</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.CleanStateOptimisationStageImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getCleanStateOptimisationStage()
+	 * @generated
+	 */
+	int CLEAN_STATE_OPTIMISATION_STAGE = 12;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.LocalSearchOptimisationStageImpl <em>Local Search Optimisation Stage</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.LocalSearchOptimisationStageImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getLocalSearchOptimisationStage()
+	 * @generated
+	 */
+	int LOCAL_SEARCH_OPTIMISATION_STAGE = 13;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.HillClimbOptimisationStageImpl <em>Hill Climb Optimisation Stage</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.HillClimbOptimisationStageImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getHillClimbOptimisationStage()
+	 * @generated
+	 */
+	int HILL_CLIMB_OPTIMISATION_STAGE = 14;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ActionPlanOptimisationStageImpl <em>Action Plan Optimisation Stage</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.ActionPlanOptimisationStageImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getActionPlanOptimisationStage()
+	 * @generated
+	 */
+	int ACTION_PLAN_OPTIMISATION_STAGE = 15;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ResetInitialSequencesStageImpl <em>Reset Initial Sequences Stage</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.ResetInitialSequencesStageImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getResetInitialSequencesStage()
+	 * @generated
+	 */
+	int RESET_INITIAL_SEQUENCES_STAGE = 16;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ConstraintAndFitnessSettingsImpl <em>Constraint And Fitness Settings</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.ConstraintAndFitnessSettingsImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getConstraintAndFitnessSettings()
+	 * @generated
+	 */
+	int CONSTRAINT_AND_FITNESS_SETTINGS = 7;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.OptimisationPlanImpl <em>Optimisation Plan</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.OptimisationPlanImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getOptimisationPlan()
+	 * @generated
+	 */
+	int OPTIMISATION_PLAN = 6;
+
+	/**
+	 * The feature id for the '<em><b>User Settings</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_PLAN__USER_SETTINGS = 0;
+
+	/**
+	 * The feature id for the '<em><b>Stages</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_PLAN__STAGES = 1;
+
+	/**
+	 * The feature id for the '<em><b>Solution Builder Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_PLAN__SOLUTION_BUILDER_SETTINGS = 2;
+
+	/**
+	 * The number of structural features of the '<em>Optimisation Plan</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_PLAN_FEATURE_COUNT = 3;
+
+	/**
+	 * The feature id for the '<em><b>Objectives</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINT_AND_FITNESS_SETTINGS__OBJECTIVES = 0;
+
+	/**
+	 * The feature id for the '<em><b>Constraints</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINT_AND_FITNESS_SETTINGS__CONSTRAINTS = 1;
+
+	/**
+	 * The feature id for the '<em><b>Floating Days Limit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINT_AND_FITNESS_SETTINGS__FLOATING_DAYS_LIMIT = 2;
+
+	/**
+	 * The feature id for the '<em><b>Similarity Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINT_AND_FITNESS_SETTINGS__SIMILARITY_SETTINGS = 3;
+
+	/**
+	 * The number of structural features of the '<em>Constraint And Fitness Settings</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINT_AND_FITNESS_SETTINGS_FEATURE_COUNT = 4;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_STAGE__NAME = 0;
+
+	/**
+	 * The number of structural features of the '<em>Optimisation Stage</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISATION_STAGE_FEATURE_COUNT = 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ConstraintsAndFitnessSettingsStageImpl <em>Constraints And Fitness Settings Stage</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.ConstraintsAndFitnessSettingsStageImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getConstraintsAndFitnessSettingsStage()
+	 * @generated
+	 */
+	int CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE = 9;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE__NAME = OPTIMISATION_STAGE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Constraint And Fitness Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS = OPTIMISATION_STAGE_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Constraints And Fitness Settings Stage</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE_FEATURE_COUNT = OPTIMISATION_STAGE_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARALLISABLE_OPTIMISATION_STAGE__NAME = OPTIMISATION_STAGE__NAME;
+
+	/**
+	 * The number of structural features of the '<em>Parallisable Optimisation Stage</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT = OPTIMISATION_STAGE_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARALLEL_OPTIMISATION_STAGE__NAME = OPTIMISATION_STAGE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Job Count</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARALLEL_OPTIMISATION_STAGE__JOB_COUNT = OPTIMISATION_STAGE_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Template</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARALLEL_OPTIMISATION_STAGE__TEMPLATE = OPTIMISATION_STAGE_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Parallel Optimisation Stage</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARALLEL_OPTIMISATION_STAGE_FEATURE_COUNT = OPTIMISATION_STAGE_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CLEAN_STATE_OPTIMISATION_STAGE__NAME = PARALLISABLE_OPTIMISATION_STAGE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Constraint And Fitness Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CLEAN_STATE_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Seed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CLEAN_STATE_OPTIMISATION_STAGE__SEED = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Annealing Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CLEAN_STATE_OPTIMISATION_STAGE__ANNEALING_SETTINGS = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Clean State Optimisation Stage</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CLEAN_STATE_OPTIMISATION_STAGE_FEATURE_COUNT = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCAL_SEARCH_OPTIMISATION_STAGE__NAME = PARALLISABLE_OPTIMISATION_STAGE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Constraint And Fitness Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCAL_SEARCH_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Seed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCAL_SEARCH_OPTIMISATION_STAGE__SEED = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Annealing Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCAL_SEARCH_OPTIMISATION_STAGE__ANNEALING_SETTINGS = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Local Search Optimisation Stage</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCAL_SEARCH_OPTIMISATION_STAGE_FEATURE_COUNT = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HILL_CLIMB_OPTIMISATION_STAGE__NAME = PARALLISABLE_OPTIMISATION_STAGE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Constraint And Fitness Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HILL_CLIMB_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Seed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HILL_CLIMB_OPTIMISATION_STAGE__SEED = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Annealing Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HILL_CLIMB_OPTIMISATION_STAGE__ANNEALING_SETTINGS = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Hill Climb Optimisation Stage</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HILL_CLIMB_OPTIMISATION_STAGE_FEATURE_COUNT = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTION_PLAN_OPTIMISATION_STAGE__NAME = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Constraint And Fitness Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTION_PLAN_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS;
 
 	/**
 	 * The feature id for the '<em><b>Total Evaluations</b></em>' attribute.
@@ -757,7 +869,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ACTION_PLAN_SETTINGS__TOTAL_EVALUATIONS = 0;
+	int ACTION_PLAN_OPTIMISATION_STAGE__TOTAL_EVALUATIONS = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>In Run Evaluations</b></em>' attribute.
@@ -766,7 +878,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ACTION_PLAN_SETTINGS__IN_RUN_EVALUATIONS = 1;
+	int ACTION_PLAN_OPTIMISATION_STAGE__IN_RUN_EVALUATIONS = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Search Depth</b></em>' attribute.
@@ -775,16 +887,99 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ACTION_PLAN_SETTINGS__SEARCH_DEPTH = 2;
+	int ACTION_PLAN_OPTIMISATION_STAGE__SEARCH_DEPTH = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE_FEATURE_COUNT + 2;
 
 	/**
-	 * The number of structural features of the '<em>Action Plan Settings</em>' class.
+	 * The number of structural features of the '<em>Action Plan Optimisation Stage</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTION_PLAN_SETTINGS_FEATURE_COUNT = 3;
+	int ACTION_PLAN_OPTIMISATION_STAGE_FEATURE_COUNT = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESET_INITIAL_SEQUENCES_STAGE__NAME = OPTIMISATION_STAGE__NAME;
+
+	/**
+	 * The number of structural features of the '<em>Reset Initial Sequences Stage</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESET_INITIAL_SEQUENCES_STAGE_FEATURE_COUNT = OPTIMISATION_STAGE_FEATURE_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.BreakEvenOptmisationStageImpl <em>Break Even Optmisation Stage</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.BreakEvenOptmisationStageImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getBreakEvenOptmisationStage()
+	 * @generated
+	 */
+	int BREAK_EVEN_OPTMISATION_STAGE = 17;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_OPTMISATION_STAGE__NAME = OPTIMISATION_STAGE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Target Profit And Loss</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_OPTMISATION_STAGE__TARGET_PROFIT_AND_LOSS = OPTIMISATION_STAGE_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Break Even Optmisation Stage</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_OPTMISATION_STAGE_FEATURE_COUNT = OPTIMISATION_STAGE_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.SolutionBuilderSettingsImpl <em>Solution Builder Settings</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.SolutionBuilderSettingsImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSolutionBuilderSettings()
+	 * @generated
+	 */
+	int SOLUTION_BUILDER_SETTINGS = 18;
+
+	/**
+	 * The feature id for the '<em><b>Constraint And Fitness Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOLUTION_BUILDER_SETTINGS__CONSTRAINT_AND_FITNESS_SETTINGS = 0;
+
+	/**
+	 * The number of structural features of the '<em>Solution Builder Settings</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOLUTION_BUILDER_SETTINGS_FEATURE_COUNT = 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.SimilarityMode <em>Similarity Mode</em>}' enum.
@@ -794,7 +989,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSimilarityMode()
 	 * @generated
 	 */
-	int SIMILARITY_MODE = 12;
+	int SIMILARITY_MODE = 19;
 
 
 	/**
@@ -874,6 +1069,17 @@ public interface ParametersPackage extends EPackage {
 	EAttribute getUserSettings_SimilarityMode();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isCleanStateOptimisation <em>Clean State Optimisation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Clean State Optimisation</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings#isCleanStateOptimisation()
+	 * @see #getUserSettings()
+	 * @generated
+	 */
+	EAttribute getUserSettings_CleanStateOptimisation();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#getFloatingDaysLimit <em>Floating Days Limit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -883,223 +1089,6 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getUserSettings_FloatingDaysLimit();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings <em>Individual Solution Improvement Settings</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Individual Solution Improvement Settings</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings
-	 * @generated
-	 */
-	EClass getIndividualSolutionImprovementSettings();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings#getIterations <em>Iterations</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Iterations</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings#getIterations()
-	 * @see #getIndividualSolutionImprovementSettings()
-	 * @generated
-	 */
-	EAttribute getIndividualSolutionImprovementSettings_Iterations();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings#isImprovingSolutions <em>Improving Solutions</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Improving Solutions</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings#isImprovingSolutions()
-	 * @see #getIndividualSolutionImprovementSettings()
-	 * @generated
-	 */
-	EAttribute getIndividualSolutionImprovementSettings_ImprovingSolutions();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.ParametersModel <em>Model</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Model</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.ParametersModel
-	 * @generated
-	 */
-	EClass getParametersModel();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.parameters.ParametersModel#getSettings <em>Settings</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Settings</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.ParametersModel#getSettings()
-	 * @see #getParametersModel()
-	 * @generated
-	 */
-	EReference getParametersModel_Settings();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.parameters.ParametersModel#getActiveSetting <em>Active Setting</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Active Setting</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.ParametersModel#getActiveSetting()
-	 * @see #getParametersModel()
-	 * @generated
-	 */
-	EReference getParametersModel_ActiveSetting();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings <em>Optimiser Settings</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Optimiser Settings</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings
-	 * @generated
-	 */
-	EClass getOptimiserSettings();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getObjectives <em>Objectives</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Objectives</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#getObjectives()
-	 * @see #getOptimiserSettings()
-	 * @generated
-	 */
-	EReference getOptimiserSettings_Objectives();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getConstraints <em>Constraints</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Constraints</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#getConstraints()
-	 * @see #getOptimiserSettings()
-	 * @generated
-	 */
-	EReference getOptimiserSettings_Constraints();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getRange <em>Range</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Range</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#getRange()
-	 * @see #getOptimiserSettings()
-	 * @generated
-	 */
-	EReference getOptimiserSettings_Range();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getAnnealingSettings <em>Annealing Settings</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Annealing Settings</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#getAnnealingSettings()
-	 * @see #getOptimiserSettings()
-	 * @generated
-	 */
-	EReference getOptimiserSettings_AnnealingSettings();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getSeed <em>Seed</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Seed</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#getSeed()
-	 * @see #getOptimiserSettings()
-	 * @generated
-	 */
-	EAttribute getOptimiserSettings_Seed();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getArguments <em>Arguments</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Arguments</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#getArguments()
-	 * @see #getOptimiserSettings()
-	 * @generated
-	 */
-	EReference getOptimiserSettings_Arguments();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isGenerateCharterOuts <em>Generate Charter Outs</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Generate Charter Outs</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#isGenerateCharterOuts()
-	 * @see #getOptimiserSettings()
-	 * @generated
-	 */
-	EAttribute getOptimiserSettings_GenerateCharterOuts();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isShippingOnly <em>Shipping Only</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Shipping Only</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#isShippingOnly()
-	 * @see #getOptimiserSettings()
-	 * @generated
-	 */
-	EAttribute getOptimiserSettings_ShippingOnly();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getSimilaritySettings <em>Similarity Settings</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Similarity Settings</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#getSimilaritySettings()
-	 * @see #getOptimiserSettings()
-	 * @generated
-	 */
-	EReference getOptimiserSettings_SimilaritySettings();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getSolutionImprovementSettings <em>Solution Improvement Settings</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Solution Improvement Settings</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#getSolutionImprovementSettings()
-	 * @see #getOptimiserSettings()
-	 * @generated
-	 */
-	EReference getOptimiserSettings_SolutionImprovementSettings();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isBuildActionSets <em>Build Action Sets</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Build Action Sets</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#isBuildActionSets()
-	 * @see #getOptimiserSettings()
-	 * @generated
-	 */
-	EAttribute getOptimiserSettings_BuildActionSets();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getActionPlanSettings <em>Action Plan Settings</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Action Plan Settings</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#getActionPlanSettings()
-	 * @see #getOptimiserSettings()
-	 * @generated
-	 */
-	EReference getOptimiserSettings_ActionPlanSettings();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getFloatingDaysLimit <em>Floating Days Limit</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Floating Days Limit</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#getFloatingDaysLimit()
-	 * @see #getOptimiserSettings()
-	 * @generated
-	 */
-	EAttribute getOptimiserSettings_FloatingDaysLimit();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.Objective <em>Objective</em>}'.
@@ -1153,38 +1142,6 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getConstraint_Enabled();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.OptimisationRange <em>Optimisation Range</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Optimisation Range</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.OptimisationRange
-	 * @generated
-	 */
-	EClass getOptimisationRange();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.OptimisationRange#getOptimiseAfter <em>Optimise After</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Optimise After</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.OptimisationRange#getOptimiseAfter()
-	 * @see #getOptimisationRange()
-	 * @generated
-	 */
-	EAttribute getOptimisationRange_OptimiseAfter();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.OptimisationRange#getOptimiseBefore <em>Optimise Before</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Optimise Before</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.OptimisationRange#getOptimiseBefore()
-	 * @see #getOptimisationRange()
-	 * @generated
-	 */
-	EAttribute getOptimisationRange_OptimiseBefore();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.AnnealingSettings <em>Annealing Settings</em>}'.
@@ -1261,38 +1218,6 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getAnnealingSettings_RestartIterationsThreshold();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.Argument <em>Argument</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Argument</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.Argument
-	 * @generated
-	 */
-	EClass getArgument();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.Argument#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.Argument#getName()
-	 * @see #getArgument()
-	 * @generated
-	 */
-	EAttribute getArgument_Name();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.Argument#getValue <em>Value</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Value</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.Argument#getValue()
-	 * @see #getArgument()
-	 * @generated
-	 */
-	EAttribute getArgument_Value();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.SimilaritySettings <em>Similarity Settings</em>}'.
@@ -1381,47 +1306,376 @@ public interface ParametersPackage extends EPackage {
 	EAttribute getSimilarityInterval_Threshold();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.ActionPlanSettings <em>Action Plan Settings</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.OptimisationStage <em>Optimisation Stage</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Action Plan Settings</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.ActionPlanSettings
+	 * @return the meta object for class '<em>Optimisation Stage</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.OptimisationStage
 	 * @generated
 	 */
-	EClass getActionPlanSettings();
+	EClass getOptimisationStage();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.ActionPlanSettings#getTotalEvaluations <em>Total Evaluations</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.OptimisationStage#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.OptimisationStage#getName()
+	 * @see #getOptimisationStage()
+	 * @generated
+	 */
+	EAttribute getOptimisationStage_Name();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.ConstraintsAndFitnessSettingsStage <em>Constraints And Fitness Settings Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Constraints And Fitness Settings Stage</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.ConstraintsAndFitnessSettingsStage
+	 * @generated
+	 */
+	EClass getConstraintsAndFitnessSettingsStage();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.parameters.ConstraintsAndFitnessSettingsStage#getConstraintAndFitnessSettings <em>Constraint And Fitness Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Constraint And Fitness Settings</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.ConstraintsAndFitnessSettingsStage#getConstraintAndFitnessSettings()
+	 * @see #getConstraintsAndFitnessSettingsStage()
+	 * @generated
+	 */
+	EReference getConstraintsAndFitnessSettingsStage_ConstraintAndFitnessSettings();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.ParallisableOptimisationStage <em>Parallisable Optimisation Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Parallisable Optimisation Stage</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.ParallisableOptimisationStage
+	 * @generated
+	 */
+	EClass getParallisableOptimisationStage();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.ParallelOptimisationStage <em>Parallel Optimisation Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Parallel Optimisation Stage</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.ParallelOptimisationStage
+	 * @generated
+	 */
+	EClass getParallelOptimisationStage();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.ParallelOptimisationStage#getJobCount <em>Job Count</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Job Count</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.ParallelOptimisationStage#getJobCount()
+	 * @see #getParallelOptimisationStage()
+	 * @generated
+	 */
+	EAttribute getParallelOptimisationStage_JobCount();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.parameters.ParallelOptimisationStage#getTemplate <em>Template</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Template</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.ParallelOptimisationStage#getTemplate()
+	 * @see #getParallelOptimisationStage()
+	 * @generated
+	 */
+	EReference getParallelOptimisationStage_Template();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage <em>Clean State Optimisation Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Clean State Optimisation Stage</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage
+	 * @generated
+	 */
+	EClass getCleanStateOptimisationStage();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage#getSeed <em>Seed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Seed</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage#getSeed()
+	 * @see #getCleanStateOptimisationStage()
+	 * @generated
+	 */
+	EAttribute getCleanStateOptimisationStage_Seed();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage#getAnnealingSettings <em>Annealing Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Annealing Settings</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage#getAnnealingSettings()
+	 * @see #getCleanStateOptimisationStage()
+	 * @generated
+	 */
+	EReference getCleanStateOptimisationStage_AnnealingSettings();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage <em>Local Search Optimisation Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Local Search Optimisation Stage</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage
+	 * @generated
+	 */
+	EClass getLocalSearchOptimisationStage();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage#getSeed <em>Seed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Seed</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage#getSeed()
+	 * @see #getLocalSearchOptimisationStage()
+	 * @generated
+	 */
+	EAttribute getLocalSearchOptimisationStage_Seed();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage#getAnnealingSettings <em>Annealing Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Annealing Settings</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage#getAnnealingSettings()
+	 * @see #getLocalSearchOptimisationStage()
+	 * @generated
+	 */
+	EReference getLocalSearchOptimisationStage_AnnealingSettings();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage <em>Hill Climb Optimisation Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Hill Climb Optimisation Stage</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage
+	 * @generated
+	 */
+	EClass getHillClimbOptimisationStage();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage#getSeed <em>Seed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Seed</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage#getSeed()
+	 * @see #getHillClimbOptimisationStage()
+	 * @generated
+	 */
+	EAttribute getHillClimbOptimisationStage_Seed();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage#getAnnealingSettings <em>Annealing Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Annealing Settings</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage#getAnnealingSettings()
+	 * @see #getHillClimbOptimisationStage()
+	 * @generated
+	 */
+	EReference getHillClimbOptimisationStage_AnnealingSettings();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage <em>Action Plan Optimisation Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Action Plan Optimisation Stage</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage
+	 * @generated
+	 */
+	EClass getActionPlanOptimisationStage();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage#getTotalEvaluations <em>Total Evaluations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Total Evaluations</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.ActionPlanSettings#getTotalEvaluations()
-	 * @see #getActionPlanSettings()
+	 * @see com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage#getTotalEvaluations()
+	 * @see #getActionPlanOptimisationStage()
 	 * @generated
 	 */
-	EAttribute getActionPlanSettings_TotalEvaluations();
+	EAttribute getActionPlanOptimisationStage_TotalEvaluations();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.ActionPlanSettings#getInRunEvaluations <em>In Run Evaluations</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage#getInRunEvaluations <em>In Run Evaluations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>In Run Evaluations</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.ActionPlanSettings#getInRunEvaluations()
-	 * @see #getActionPlanSettings()
+	 * @see com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage#getInRunEvaluations()
+	 * @see #getActionPlanOptimisationStage()
 	 * @generated
 	 */
-	EAttribute getActionPlanSettings_InRunEvaluations();
+	EAttribute getActionPlanOptimisationStage_InRunEvaluations();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.ActionPlanSettings#getSearchDepth <em>Search Depth</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage#getSearchDepth <em>Search Depth</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Search Depth</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.ActionPlanSettings#getSearchDepth()
-	 * @see #getActionPlanSettings()
+	 * @see com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage#getSearchDepth()
+	 * @see #getActionPlanOptimisationStage()
 	 * @generated
 	 */
-	EAttribute getActionPlanSettings_SearchDepth();
+	EAttribute getActionPlanOptimisationStage_SearchDepth();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.ResetInitialSequencesStage <em>Reset Initial Sequences Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Reset Initial Sequences Stage</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.ResetInitialSequencesStage
+	 * @generated
+	 */
+	EClass getResetInitialSequencesStage();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings <em>Constraint And Fitness Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Constraint And Fitness Settings</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings
+	 * @generated
+	 */
+	EClass getConstraintAndFitnessSettings();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings#getObjectives <em>Objectives</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Objectives</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings#getObjectives()
+	 * @see #getConstraintAndFitnessSettings()
+	 * @generated
+	 */
+	EReference getConstraintAndFitnessSettings_Objectives();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings#getConstraints <em>Constraints</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Constraints</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings#getConstraints()
+	 * @see #getConstraintAndFitnessSettings()
+	 * @generated
+	 */
+	EReference getConstraintAndFitnessSettings_Constraints();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings#getFloatingDaysLimit <em>Floating Days Limit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Floating Days Limit</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings#getFloatingDaysLimit()
+	 * @see #getConstraintAndFitnessSettings()
+	 * @generated
+	 */
+	EAttribute getConstraintAndFitnessSettings_FloatingDaysLimit();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings#getSimilaritySettings <em>Similarity Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Similarity Settings</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings#getSimilaritySettings()
+	 * @see #getConstraintAndFitnessSettings()
+	 * @generated
+	 */
+	EReference getConstraintAndFitnessSettings_SimilaritySettings();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.OptimisationPlan <em>Optimisation Plan</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Optimisation Plan</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.OptimisationPlan
+	 * @generated
+	 */
+	EClass getOptimisationPlan();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.parameters.OptimisationPlan#getUserSettings <em>User Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>User Settings</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.OptimisationPlan#getUserSettings()
+	 * @see #getOptimisationPlan()
+	 * @generated
+	 */
+	EReference getOptimisationPlan_UserSettings();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.parameters.OptimisationPlan#getStages <em>Stages</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Stages</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.OptimisationPlan#getStages()
+	 * @see #getOptimisationPlan()
+	 * @generated
+	 */
+	EReference getOptimisationPlan_Stages();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.parameters.OptimisationPlan#getSolutionBuilderSettings <em>Solution Builder Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Solution Builder Settings</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.OptimisationPlan#getSolutionBuilderSettings()
+	 * @see #getOptimisationPlan()
+	 * @generated
+	 */
+	EReference getOptimisationPlan_SolutionBuilderSettings();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage <em>Break Even Optmisation Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Break Even Optmisation Stage</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage
+	 * @generated
+	 */
+	EClass getBreakEvenOptmisationStage();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage#getTargetProfitAndLoss <em>Target Profit And Loss</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Target Profit And Loss</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage#getTargetProfitAndLoss()
+	 * @see #getBreakEvenOptmisationStage()
+	 * @generated
+	 */
+	EAttribute getBreakEvenOptmisationStage_TargetProfitAndLoss();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.SolutionBuilderSettings <em>Solution Builder Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Solution Builder Settings</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.SolutionBuilderSettings
+	 * @generated
+	 */
+	EClass getSolutionBuilderSettings();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.parameters.SolutionBuilderSettings#getConstraintAndFitnessSettings <em>Constraint And Fitness Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Constraint And Fitness Settings</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.SolutionBuilderSettings#getConstraintAndFitnessSettings()
+	 * @see #getSolutionBuilderSettings()
+	 * @generated
+	 */
+	EReference getSolutionBuilderSettings_ConstraintAndFitnessSettings();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.parameters.SimilarityMode <em>Similarity Mode</em>}'.
@@ -1514,178 +1768,20 @@ public interface ParametersPackage extends EPackage {
 		EAttribute USER_SETTINGS__SIMILARITY_MODE = eINSTANCE.getUserSettings_SimilarityMode();
 
 		/**
+		 * The meta object literal for the '<em><b>Clean State Optimisation</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER_SETTINGS__CLEAN_STATE_OPTIMISATION = eINSTANCE.getUserSettings_CleanStateOptimisation();
+
+		/**
 		 * The meta object literal for the '<em><b>Floating Days Limit</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute USER_SETTINGS__FLOATING_DAYS_LIMIT = eINSTANCE.getUserSettings_FloatingDaysLimit();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.IndividualSolutionImprovementSettingsImpl <em>Individual Solution Improvement Settings</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.parameters.impl.IndividualSolutionImprovementSettingsImpl
-		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getIndividualSolutionImprovementSettings()
-		 * @generated
-		 */
-		EClass INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS = eINSTANCE.getIndividualSolutionImprovementSettings();
-
-		/**
-		 * The meta object literal for the '<em><b>Iterations</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS__ITERATIONS = eINSTANCE.getIndividualSolutionImprovementSettings_Iterations();
-
-		/**
-		 * The meta object literal for the '<em><b>Improving Solutions</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS__IMPROVING_SOLUTIONS = eINSTANCE.getIndividualSolutionImprovementSettings_ImprovingSolutions();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ParametersModelImpl <em>Model</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersModelImpl
-		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParametersModel()
-		 * @generated
-		 */
-		EClass PARAMETERS_MODEL = eINSTANCE.getParametersModel();
-
-		/**
-		 * The meta object literal for the '<em><b>Settings</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PARAMETERS_MODEL__SETTINGS = eINSTANCE.getParametersModel_Settings();
-
-		/**
-		 * The meta object literal for the '<em><b>Active Setting</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PARAMETERS_MODEL__ACTIVE_SETTING = eINSTANCE.getParametersModel_ActiveSetting();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl <em>Optimiser Settings</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl
-		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getOptimiserSettings()
-		 * @generated
-		 */
-		EClass OPTIMISER_SETTINGS = eINSTANCE.getOptimiserSettings();
-
-		/**
-		 * The meta object literal for the '<em><b>Objectives</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference OPTIMISER_SETTINGS__OBJECTIVES = eINSTANCE.getOptimiserSettings_Objectives();
-
-		/**
-		 * The meta object literal for the '<em><b>Constraints</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference OPTIMISER_SETTINGS__CONSTRAINTS = eINSTANCE.getOptimiserSettings_Constraints();
-
-		/**
-		 * The meta object literal for the '<em><b>Range</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference OPTIMISER_SETTINGS__RANGE = eINSTANCE.getOptimiserSettings_Range();
-
-		/**
-		 * The meta object literal for the '<em><b>Annealing Settings</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference OPTIMISER_SETTINGS__ANNEALING_SETTINGS = eINSTANCE.getOptimiserSettings_AnnealingSettings();
-
-		/**
-		 * The meta object literal for the '<em><b>Seed</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute OPTIMISER_SETTINGS__SEED = eINSTANCE.getOptimiserSettings_Seed();
-
-		/**
-		 * The meta object literal for the '<em><b>Arguments</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference OPTIMISER_SETTINGS__ARGUMENTS = eINSTANCE.getOptimiserSettings_Arguments();
-
-		/**
-		 * The meta object literal for the '<em><b>Generate Charter Outs</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute OPTIMISER_SETTINGS__GENERATE_CHARTER_OUTS = eINSTANCE.getOptimiserSettings_GenerateCharterOuts();
-
-		/**
-		 * The meta object literal for the '<em><b>Shipping Only</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute OPTIMISER_SETTINGS__SHIPPING_ONLY = eINSTANCE.getOptimiserSettings_ShippingOnly();
-
-		/**
-		 * The meta object literal for the '<em><b>Similarity Settings</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference OPTIMISER_SETTINGS__SIMILARITY_SETTINGS = eINSTANCE.getOptimiserSettings_SimilaritySettings();
-
-		/**
-		 * The meta object literal for the '<em><b>Solution Improvement Settings</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS = eINSTANCE.getOptimiserSettings_SolutionImprovementSettings();
-
-		/**
-		 * The meta object literal for the '<em><b>Build Action Sets</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute OPTIMISER_SETTINGS__BUILD_ACTION_SETS = eINSTANCE.getOptimiserSettings_BuildActionSets();
-
-		/**
-		 * The meta object literal for the '<em><b>Action Plan Settings</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS = eINSTANCE.getOptimiserSettings_ActionPlanSettings();
-
-		/**
-		 * The meta object literal for the '<em><b>Floating Days Limit</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute OPTIMISER_SETTINGS__FLOATING_DAYS_LIMIT = eINSTANCE.getOptimiserSettings_FloatingDaysLimit();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.
@@ -1730,32 +1826,6 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CONSTRAINT__ENABLED = eINSTANCE.getConstraint_Enabled();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.OptimisationRangeImpl <em>Optimisation Range</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.parameters.impl.OptimisationRangeImpl
-		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getOptimisationRange()
-		 * @generated
-		 */
-		EClass OPTIMISATION_RANGE = eINSTANCE.getOptimisationRange();
-
-		/**
-		 * The meta object literal for the '<em><b>Optimise After</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute OPTIMISATION_RANGE__OPTIMISE_AFTER = eINSTANCE.getOptimisationRange_OptimiseAfter();
-
-		/**
-		 * The meta object literal for the '<em><b>Optimise Before</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute OPTIMISATION_RANGE__OPTIMISE_BEFORE = eINSTANCE.getOptimisationRange_OptimiseBefore();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.AnnealingSettingsImpl <em>Annealing Settings</em>}' class.
@@ -1814,32 +1884,6 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ANNEALING_SETTINGS__RESTART_ITERATIONS_THRESHOLD = eINSTANCE.getAnnealingSettings_RestartIterationsThreshold();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ArgumentImpl <em>Argument</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.parameters.impl.ArgumentImpl
-		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getArgument()
-		 * @generated
-		 */
-		EClass ARGUMENT = eINSTANCE.getArgument();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ARGUMENT__NAME = eINSTANCE.getArgument_Name();
-
-		/**
-		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ARGUMENT__VALUE = eINSTANCE.getArgument_Value();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.SimilaritySettingsImpl <em>Similarity Settings</em>}' class.
@@ -1910,14 +1954,164 @@ public interface ParametersPackage extends EPackage {
 		EAttribute SIMILARITY_INTERVAL__THRESHOLD = eINSTANCE.getSimilarityInterval_Threshold();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ActionPlanSettingsImpl <em>Action Plan Settings</em>}' class.
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.OptimisationStage <em>Optimisation Stage</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.parameters.impl.ActionPlanSettingsImpl
-		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getActionPlanSettings()
+		 * @see com.mmxlabs.models.lng.parameters.OptimisationStage
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getOptimisationStage()
 		 * @generated
 		 */
-		EClass ACTION_PLAN_SETTINGS = eINSTANCE.getActionPlanSettings();
+		EClass OPTIMISATION_STAGE = eINSTANCE.getOptimisationStage();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OPTIMISATION_STAGE__NAME = eINSTANCE.getOptimisationStage_Name();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ConstraintsAndFitnessSettingsStageImpl <em>Constraints And Fitness Settings Stage</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.ConstraintsAndFitnessSettingsStageImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getConstraintsAndFitnessSettingsStage()
+		 * @generated
+		 */
+		EClass CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE = eINSTANCE.getConstraintsAndFitnessSettingsStage();
+
+		/**
+		 * The meta object literal for the '<em><b>Constraint And Fitness Settings</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS = eINSTANCE.getConstraintsAndFitnessSettingsStage_ConstraintAndFitnessSettings();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ParallisableOptimisationStageImpl <em>Parallisable Optimisation Stage</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParallisableOptimisationStageImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParallisableOptimisationStage()
+		 * @generated
+		 */
+		EClass PARALLISABLE_OPTIMISATION_STAGE = eINSTANCE.getParallisableOptimisationStage();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ParallelOptimisationStageImpl <em>Parallel Optimisation Stage</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParallelOptimisationStageImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParallelOptimisationStage()
+		 * @generated
+		 */
+		EClass PARALLEL_OPTIMISATION_STAGE = eINSTANCE.getParallelOptimisationStage();
+
+		/**
+		 * The meta object literal for the '<em><b>Job Count</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PARALLEL_OPTIMISATION_STAGE__JOB_COUNT = eINSTANCE.getParallelOptimisationStage_JobCount();
+
+		/**
+		 * The meta object literal for the '<em><b>Template</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARALLEL_OPTIMISATION_STAGE__TEMPLATE = eINSTANCE.getParallelOptimisationStage_Template();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.CleanStateOptimisationStageImpl <em>Clean State Optimisation Stage</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.CleanStateOptimisationStageImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getCleanStateOptimisationStage()
+		 * @generated
+		 */
+		EClass CLEAN_STATE_OPTIMISATION_STAGE = eINSTANCE.getCleanStateOptimisationStage();
+
+		/**
+		 * The meta object literal for the '<em><b>Seed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CLEAN_STATE_OPTIMISATION_STAGE__SEED = eINSTANCE.getCleanStateOptimisationStage_Seed();
+
+		/**
+		 * The meta object literal for the '<em><b>Annealing Settings</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CLEAN_STATE_OPTIMISATION_STAGE__ANNEALING_SETTINGS = eINSTANCE.getCleanStateOptimisationStage_AnnealingSettings();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.LocalSearchOptimisationStageImpl <em>Local Search Optimisation Stage</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.LocalSearchOptimisationStageImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getLocalSearchOptimisationStage()
+		 * @generated
+		 */
+		EClass LOCAL_SEARCH_OPTIMISATION_STAGE = eINSTANCE.getLocalSearchOptimisationStage();
+
+		/**
+		 * The meta object literal for the '<em><b>Seed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LOCAL_SEARCH_OPTIMISATION_STAGE__SEED = eINSTANCE.getLocalSearchOptimisationStage_Seed();
+
+		/**
+		 * The meta object literal for the '<em><b>Annealing Settings</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference LOCAL_SEARCH_OPTIMISATION_STAGE__ANNEALING_SETTINGS = eINSTANCE.getLocalSearchOptimisationStage_AnnealingSettings();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.HillClimbOptimisationStageImpl <em>Hill Climb Optimisation Stage</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.HillClimbOptimisationStageImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getHillClimbOptimisationStage()
+		 * @generated
+		 */
+		EClass HILL_CLIMB_OPTIMISATION_STAGE = eINSTANCE.getHillClimbOptimisationStage();
+
+		/**
+		 * The meta object literal for the '<em><b>Seed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute HILL_CLIMB_OPTIMISATION_STAGE__SEED = eINSTANCE.getHillClimbOptimisationStage_Seed();
+
+		/**
+		 * The meta object literal for the '<em><b>Annealing Settings</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference HILL_CLIMB_OPTIMISATION_STAGE__ANNEALING_SETTINGS = eINSTANCE.getHillClimbOptimisationStage_AnnealingSettings();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ActionPlanOptimisationStageImpl <em>Action Plan Optimisation Stage</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.ActionPlanOptimisationStageImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getActionPlanOptimisationStage()
+		 * @generated
+		 */
+		EClass ACTION_PLAN_OPTIMISATION_STAGE = eINSTANCE.getActionPlanOptimisationStage();
 
 		/**
 		 * The meta object literal for the '<em><b>Total Evaluations</b></em>' attribute feature.
@@ -1925,7 +2119,7 @@ public interface ParametersPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute ACTION_PLAN_SETTINGS__TOTAL_EVALUATIONS = eINSTANCE.getActionPlanSettings_TotalEvaluations();
+		EAttribute ACTION_PLAN_OPTIMISATION_STAGE__TOTAL_EVALUATIONS = eINSTANCE.getActionPlanOptimisationStage_TotalEvaluations();
 
 		/**
 		 * The meta object literal for the '<em><b>In Run Evaluations</b></em>' attribute feature.
@@ -1933,7 +2127,7 @@ public interface ParametersPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute ACTION_PLAN_SETTINGS__IN_RUN_EVALUATIONS = eINSTANCE.getActionPlanSettings_InRunEvaluations();
+		EAttribute ACTION_PLAN_OPTIMISATION_STAGE__IN_RUN_EVALUATIONS = eINSTANCE.getActionPlanOptimisationStage_InRunEvaluations();
 
 		/**
 		 * The meta object literal for the '<em><b>Search Depth</b></em>' attribute feature.
@@ -1941,7 +2135,129 @@ public interface ParametersPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute ACTION_PLAN_SETTINGS__SEARCH_DEPTH = eINSTANCE.getActionPlanSettings_SearchDepth();
+		EAttribute ACTION_PLAN_OPTIMISATION_STAGE__SEARCH_DEPTH = eINSTANCE.getActionPlanOptimisationStage_SearchDepth();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ResetInitialSequencesStageImpl <em>Reset Initial Sequences Stage</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.ResetInitialSequencesStageImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getResetInitialSequencesStage()
+		 * @generated
+		 */
+		EClass RESET_INITIAL_SEQUENCES_STAGE = eINSTANCE.getResetInitialSequencesStage();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ConstraintAndFitnessSettingsImpl <em>Constraint And Fitness Settings</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.ConstraintAndFitnessSettingsImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getConstraintAndFitnessSettings()
+		 * @generated
+		 */
+		EClass CONSTRAINT_AND_FITNESS_SETTINGS = eINSTANCE.getConstraintAndFitnessSettings();
+
+		/**
+		 * The meta object literal for the '<em><b>Objectives</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONSTRAINT_AND_FITNESS_SETTINGS__OBJECTIVES = eINSTANCE.getConstraintAndFitnessSettings_Objectives();
+
+		/**
+		 * The meta object literal for the '<em><b>Constraints</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONSTRAINT_AND_FITNESS_SETTINGS__CONSTRAINTS = eINSTANCE.getConstraintAndFitnessSettings_Constraints();
+
+		/**
+		 * The meta object literal for the '<em><b>Floating Days Limit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONSTRAINT_AND_FITNESS_SETTINGS__FLOATING_DAYS_LIMIT = eINSTANCE.getConstraintAndFitnessSettings_FloatingDaysLimit();
+
+		/**
+		 * The meta object literal for the '<em><b>Similarity Settings</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONSTRAINT_AND_FITNESS_SETTINGS__SIMILARITY_SETTINGS = eINSTANCE.getConstraintAndFitnessSettings_SimilaritySettings();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.OptimisationPlanImpl <em>Optimisation Plan</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.OptimisationPlanImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getOptimisationPlan()
+		 * @generated
+		 */
+		EClass OPTIMISATION_PLAN = eINSTANCE.getOptimisationPlan();
+
+		/**
+		 * The meta object literal for the '<em><b>User Settings</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference OPTIMISATION_PLAN__USER_SETTINGS = eINSTANCE.getOptimisationPlan_UserSettings();
+
+		/**
+		 * The meta object literal for the '<em><b>Stages</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference OPTIMISATION_PLAN__STAGES = eINSTANCE.getOptimisationPlan_Stages();
+
+		/**
+		 * The meta object literal for the '<em><b>Solution Builder Settings</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference OPTIMISATION_PLAN__SOLUTION_BUILDER_SETTINGS = eINSTANCE.getOptimisationPlan_SolutionBuilderSettings();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.BreakEvenOptmisationStageImpl <em>Break Even Optmisation Stage</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.BreakEvenOptmisationStageImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getBreakEvenOptmisationStage()
+		 * @generated
+		 */
+		EClass BREAK_EVEN_OPTMISATION_STAGE = eINSTANCE.getBreakEvenOptmisationStage();
+
+		/**
+		 * The meta object literal for the '<em><b>Target Profit And Loss</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BREAK_EVEN_OPTMISATION_STAGE__TARGET_PROFIT_AND_LOSS = eINSTANCE.getBreakEvenOptmisationStage_TargetProfitAndLoss();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.SolutionBuilderSettingsImpl <em>Solution Builder Settings</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.SolutionBuilderSettingsImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSolutionBuilderSettings()
+		 * @generated
+		 */
+		EClass SOLUTION_BUILDER_SETTINGS = eINSTANCE.getSolutionBuilderSettings();
+
+		/**
+		 * The meta object literal for the '<em><b>Constraint And Fitness Settings</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SOLUTION_BUILDER_SETTINGS__CONSTRAINT_AND_FITNESS_SETTINGS = eINSTANCE.getSolutionBuilderSettings_ConstraintAndFitnessSettings();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.SimilarityMode <em>Similarity Mode</em>}' enum.

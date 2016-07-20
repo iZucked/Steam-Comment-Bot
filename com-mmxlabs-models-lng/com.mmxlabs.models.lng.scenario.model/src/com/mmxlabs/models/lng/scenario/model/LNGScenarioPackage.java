@@ -109,22 +109,13 @@ public interface LNGScenarioPackage extends EPackage {
 	int LNG_SCENARIO_MODEL__SCHEDULE_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Parameters</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_SCENARIO_MODEL__PARAMETERS = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Actuals Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL__ACTUALS_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 3;
+	int LNG_SCENARIO_MODEL__ACTUALS_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Prompt Period Start</b></em>' attribute.
@@ -133,7 +124,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL__PROMPT_PERIOD_START = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 4;
+	int LNG_SCENARIO_MODEL__PROMPT_PERIOD_START = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Prompt Period End</b></em>' attribute.
@@ -142,7 +133,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL__PROMPT_PERIOD_END = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 5;
+	int LNG_SCENARIO_MODEL__PROMPT_PERIOD_END = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Reference Model</b></em>' containment reference.
@@ -151,7 +142,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL__REFERENCE_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 6;
+	int LNG_SCENARIO_MODEL__REFERENCE_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>User Settings</b></em>' containment reference.
@@ -160,7 +151,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL__USER_SETTINGS = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 7;
+	int LNG_SCENARIO_MODEL__USER_SETTINGS = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -169,7 +160,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL_FEATURE_COUNT = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 8;
+	int LNG_SCENARIO_MODEL_FEATURE_COUNT = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -374,17 +365,6 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getLNGScenarioModel_ScheduleModel();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getParameters <em>Parameters</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Parameters</em>'.
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getParameters()
-	 * @see #getLNGScenarioModel()
-	 * @generated
-	 */
-	EReference getLNGScenarioModel_Parameters();
 
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getActualsModel <em>Actuals Model</em>}'.

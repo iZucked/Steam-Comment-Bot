@@ -4,26 +4,12 @@
  */
 package com.mmxlabs.models.lng.migration.units;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Function;
-
-import javax.swing.text.MutableAttributeSet;
-
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-
-import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
-import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
 public class MigrateToV50 extends AbstractMigrationUnit {
 

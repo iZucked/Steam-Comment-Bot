@@ -120,7 +120,6 @@ public class LNGScenarioModelItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_CargoModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ScheduleModel());
-			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Parameters());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ActualsModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings());
@@ -184,7 +183,6 @@ public class LNGScenarioModelItemProvider
 				return;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__CARGO_MODEL:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULE_MODEL:
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ACTUALS_MODEL:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS:
@@ -214,11 +212,6 @@ public class LNGScenarioModelItemProvider
 			(createChildParameter
 				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ScheduleModel(),
 				 ScheduleFactory.eINSTANCE.createScheduleModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Parameters(),
-				 ParametersFactory.eINSTANCE.createOptimiserSettings()));
 
 		newChildDescriptors.add
 			(createChildParameter

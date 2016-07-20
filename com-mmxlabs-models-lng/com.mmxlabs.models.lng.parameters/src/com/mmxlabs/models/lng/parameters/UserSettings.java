@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isGenerateCharterOuts <em>Generate Charter Outs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isBuildActionSets <em>Build Action Sets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getSimilarityMode <em>Similarity Mode</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isCleanStateOptimisation <em>Clean State Optimisation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getFloatingDaysLimit <em>Floating Days Limit</em>}</li>
  * </ul>
  *
@@ -250,6 +251,33 @@ public interface UserSettings extends EObject {
 	 * @generated
 	 */
 	void setSimilarityMode(SimilarityMode value);
+
+	/**
+	 * Returns the value of the '<em><b>Clean State Optimisation</b></em>' attribute.
+	 * The default value is <code>"false"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Clean State Optimisation</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Clean State Optimisation</em>' attribute.
+	 * @see #setCleanStateOptimisation(boolean)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_CleanStateOptimisation()
+	 * @model default="false"
+	 * @generated
+	 */
+	boolean isCleanStateOptimisation();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#isCleanStateOptimisation <em>Clean State Optimisation</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Clean State Optimisation</em>' attribute.
+	 * @see #isCleanStateOptimisation()
+	 * @generated
+	 */
+	void setCleanStateOptimisation(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Floating Days Limit</b></em>' attribute.

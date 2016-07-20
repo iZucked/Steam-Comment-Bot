@@ -33,33 +33,6 @@ public interface ParametersFactory extends EFactory {
 	UserSettings createUserSettings();
 
 	/**
-	 * Returns a new object of class '<em>Individual Solution Improvement Settings</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Individual Solution Improvement Settings</em>'.
-	 * @generated
-	 */
-	IndividualSolutionImprovementSettings createIndividualSolutionImprovementSettings();
-
-	/**
-	 * Returns a new object of class '<em>Model</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Model</em>'.
-	 * @generated
-	 */
-	ParametersModel createParametersModel();
-
-	/**
-	 * Returns a new object of class '<em>Optimiser Settings</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Optimiser Settings</em>'.
-	 * @generated
-	 */
-	OptimiserSettings createOptimiserSettings();
-
-	/**
 	 * Returns a new object of class '<em>Objective</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -78,15 +51,6 @@ public interface ParametersFactory extends EFactory {
 	Constraint createConstraint();
 
 	/**
-	 * Returns a new object of class '<em>Optimisation Range</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Optimisation Range</em>'.
-	 * @generated
-	 */
-	OptimisationRange createOptimisationRange();
-
-	/**
 	 * Returns a new object of class '<em>Annealing Settings</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -94,15 +58,6 @@ public interface ParametersFactory extends EFactory {
 	 * @generated
 	 */
 	AnnealingSettings createAnnealingSettings();
-
-	/**
-	 * Returns a new object of class '<em>Argument</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Argument</em>'.
-	 * @generated
-	 */
-	Argument createArgument();
 
 	/**
 	 * Returns a new object of class '<em>Similarity Settings</em>'.
@@ -123,13 +78,103 @@ public interface ParametersFactory extends EFactory {
 	SimilarityInterval createSimilarityInterval();
 
 	/**
-	 * Returns a new object of class '<em>Action Plan Settings</em>'.
+	 * Returns a new object of class '<em>Parallisable Optimisation Stage</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Action Plan Settings</em>'.
+	 * @return a new object of class '<em>Parallisable Optimisation Stage</em>'.
 	 * @generated
 	 */
-	ActionPlanSettings createActionPlanSettings();
+	ParallisableOptimisationStage createParallisableOptimisationStage();
+
+	/**
+	 * Returns a new object of class '<em>Parallel Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Parallel Optimisation Stage</em>'.
+	 * @generated
+	 */
+	<T extends ParallisableOptimisationStage> ParallelOptimisationStage<T> createParallelOptimisationStage();
+
+	/**
+	 * Returns a new object of class '<em>Clean State Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Clean State Optimisation Stage</em>'.
+	 * @generated
+	 */
+	CleanStateOptimisationStage createCleanStateOptimisationStage();
+
+	/**
+	 * Returns a new object of class '<em>Local Search Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Local Search Optimisation Stage</em>'.
+	 * @generated
+	 */
+	LocalSearchOptimisationStage createLocalSearchOptimisationStage();
+
+	/**
+	 * Returns a new object of class '<em>Hill Climb Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Hill Climb Optimisation Stage</em>'.
+	 * @generated
+	 */
+	HillClimbOptimisationStage createHillClimbOptimisationStage();
+
+	/**
+	 * Returns a new object of class '<em>Action Plan Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Action Plan Optimisation Stage</em>'.
+	 * @generated
+	 */
+	ActionPlanOptimisationStage createActionPlanOptimisationStage();
+
+	/**
+	 * Returns a new object of class '<em>Reset Initial Sequences Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Reset Initial Sequences Stage</em>'.
+	 * @generated
+	 */
+	ResetInitialSequencesStage createResetInitialSequencesStage();
+
+	/**
+	 * Returns a new object of class '<em>Constraint And Fitness Settings</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Constraint And Fitness Settings</em>'.
+	 * @generated
+	 */
+	ConstraintAndFitnessSettings createConstraintAndFitnessSettings();
+
+	/**
+	 * Returns a new object of class '<em>Optimisation Plan</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Optimisation Plan</em>'.
+	 * @generated
+	 */
+	OptimisationPlan createOptimisationPlan();
+
+	/**
+	 * Returns a new object of class '<em>Break Even Optmisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Break Even Optmisation Stage</em>'.
+	 * @generated
+	 */
+	BreakEvenOptmisationStage createBreakEvenOptmisationStage();
+
+	/**
+	 * Returns a new object of class '<em>Solution Builder Settings</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Solution Builder Settings</em>'.
+	 * @generated
+	 */
+	SolutionBuilderSettings createSolutionBuilderSettings();
 
 	/**
 	 * Returns the package supported by this factory.

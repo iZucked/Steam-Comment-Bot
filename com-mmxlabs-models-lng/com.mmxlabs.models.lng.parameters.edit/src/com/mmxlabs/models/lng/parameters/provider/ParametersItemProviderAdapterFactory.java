@@ -113,75 +113,6 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected IndividualSolutionImprovementSettingsItemProvider individualSolutionImprovementSettingsItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createIndividualSolutionImprovementSettingsAdapter() {
-		if (individualSolutionImprovementSettingsItemProvider == null) {
-			individualSolutionImprovementSettingsItemProvider = new IndividualSolutionImprovementSettingsItemProvider(this);
-		}
-
-		return individualSolutionImprovementSettingsItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.ParametersModel} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ParametersModelItemProvider parametersModelItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.ParametersModel}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createParametersModelAdapter() {
-		if (parametersModelItemProvider == null) {
-			parametersModelItemProvider = new ParametersModelItemProvider(this);
-		}
-
-		return parametersModelItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.OptimiserSettings} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected OptimiserSettingsItemProvider optimiserSettingsItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.OptimiserSettings}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createOptimiserSettingsAdapter() {
-		if (optimiserSettingsItemProvider == null) {
-			optimiserSettingsItemProvider = new OptimiserSettingsItemProvider(this);
-		}
-
-		return optimiserSettingsItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.Objective} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -228,29 +159,6 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.OptimisationRange} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected OptimisationRangeItemProvider optimisationRangeItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.OptimisationRange}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createOptimisationRangeAdapter() {
-		if (optimisationRangeItemProvider == null) {
-			optimisationRangeItemProvider = new OptimisationRangeItemProvider(this);
-		}
-
-		return optimisationRangeItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.AnnealingSettings} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -271,29 +179,6 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 		}
 
 		return annealingSettingsItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.Argument} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ArgumentItemProvider argumentItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.Argument}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createArgumentAdapter() {
-		if (argumentItemProvider == null) {
-			argumentItemProvider = new ArgumentItemProvider(this);
-		}
-
-		return argumentItemProvider;
 	}
 
 	/**
@@ -343,26 +228,256 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.ActionPlanSettings} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.ParallisableOptimisationStage} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ActionPlanSettingsItemProvider actionPlanSettingsItemProvider;
+	protected ParallisableOptimisationStageItemProvider parallisableOptimisationStageItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.ActionPlanSettings}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.ParallisableOptimisationStage}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createActionPlanSettingsAdapter() {
-		if (actionPlanSettingsItemProvider == null) {
-			actionPlanSettingsItemProvider = new ActionPlanSettingsItemProvider(this);
+	public Adapter createParallisableOptimisationStageAdapter() {
+		if (parallisableOptimisationStageItemProvider == null) {
+			parallisableOptimisationStageItemProvider = new ParallisableOptimisationStageItemProvider(this);
 		}
 
-		return actionPlanSettingsItemProvider;
+		return parallisableOptimisationStageItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.ParallelOptimisationStage} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ParallelOptimisationStageItemProvider parallelOptimisationStageItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.ParallelOptimisationStage}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createParallelOptimisationStageAdapter() {
+		if (parallelOptimisationStageItemProvider == null) {
+			parallelOptimisationStageItemProvider = new ParallelOptimisationStageItemProvider(this);
+		}
+
+		return parallelOptimisationStageItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CleanStateOptimisationStageItemProvider cleanStateOptimisationStageItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCleanStateOptimisationStageAdapter() {
+		if (cleanStateOptimisationStageItemProvider == null) {
+			cleanStateOptimisationStageItemProvider = new CleanStateOptimisationStageItemProvider(this);
+		}
+
+		return cleanStateOptimisationStageItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected LocalSearchOptimisationStageItemProvider localSearchOptimisationStageItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createLocalSearchOptimisationStageAdapter() {
+		if (localSearchOptimisationStageItemProvider == null) {
+			localSearchOptimisationStageItemProvider = new LocalSearchOptimisationStageItemProvider(this);
+		}
+
+		return localSearchOptimisationStageItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected HillClimbOptimisationStageItemProvider hillClimbOptimisationStageItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createHillClimbOptimisationStageAdapter() {
+		if (hillClimbOptimisationStageItemProvider == null) {
+			hillClimbOptimisationStageItemProvider = new HillClimbOptimisationStageItemProvider(this);
+		}
+
+		return hillClimbOptimisationStageItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ActionPlanOptimisationStageItemProvider actionPlanOptimisationStageItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createActionPlanOptimisationStageAdapter() {
+		if (actionPlanOptimisationStageItemProvider == null) {
+			actionPlanOptimisationStageItemProvider = new ActionPlanOptimisationStageItemProvider(this);
+		}
+
+		return actionPlanOptimisationStageItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.ResetInitialSequencesStage} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ResetInitialSequencesStageItemProvider resetInitialSequencesStageItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.ResetInitialSequencesStage}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createResetInitialSequencesStageAdapter() {
+		if (resetInitialSequencesStageItemProvider == null) {
+			resetInitialSequencesStageItemProvider = new ResetInitialSequencesStageItemProvider(this);
+		}
+
+		return resetInitialSequencesStageItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ConstraintAndFitnessSettingsItemProvider constraintAndFitnessSettingsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createConstraintAndFitnessSettingsAdapter() {
+		if (constraintAndFitnessSettingsItemProvider == null) {
+			constraintAndFitnessSettingsItemProvider = new ConstraintAndFitnessSettingsItemProvider(this);
+		}
+
+		return constraintAndFitnessSettingsItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.OptimisationPlan} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected OptimisationPlanItemProvider optimisationPlanItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.OptimisationPlan}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createOptimisationPlanAdapter() {
+		if (optimisationPlanItemProvider == null) {
+			optimisationPlanItemProvider = new OptimisationPlanItemProvider(this);
+		}
+
+		return optimisationPlanItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BreakEvenOptmisationStageItemProvider breakEvenOptmisationStageItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBreakEvenOptmisationStageAdapter() {
+		if (breakEvenOptmisationStageItemProvider == null) {
+			breakEvenOptmisationStageItemProvider = new BreakEvenOptmisationStageItemProvider(this);
+		}
+
+		return breakEvenOptmisationStageItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.SolutionBuilderSettings} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SolutionBuilderSettingsItemProvider solutionBuilderSettingsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.SolutionBuilderSettings}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSolutionBuilderSettingsAdapter() {
+		if (solutionBuilderSettingsItemProvider == null) {
+			solutionBuilderSettingsItemProvider = new SolutionBuilderSettingsItemProvider(this);
+		}
+
+		return solutionBuilderSettingsItemProvider;
 	}
 
 	/**
@@ -500,17 +615,22 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 	@Override
 	public void dispose() {
 		if (userSettingsItemProvider != null) userSettingsItemProvider.dispose();
-		if (individualSolutionImprovementSettingsItemProvider != null) individualSolutionImprovementSettingsItemProvider.dispose();
-		if (parametersModelItemProvider != null) parametersModelItemProvider.dispose();
-		if (optimiserSettingsItemProvider != null) optimiserSettingsItemProvider.dispose();
 		if (objectiveItemProvider != null) objectiveItemProvider.dispose();
 		if (constraintItemProvider != null) constraintItemProvider.dispose();
-		if (optimisationRangeItemProvider != null) optimisationRangeItemProvider.dispose();
 		if (annealingSettingsItemProvider != null) annealingSettingsItemProvider.dispose();
-		if (argumentItemProvider != null) argumentItemProvider.dispose();
 		if (similaritySettingsItemProvider != null) similaritySettingsItemProvider.dispose();
 		if (similarityIntervalItemProvider != null) similarityIntervalItemProvider.dispose();
-		if (actionPlanSettingsItemProvider != null) actionPlanSettingsItemProvider.dispose();
+		if (optimisationPlanItemProvider != null) optimisationPlanItemProvider.dispose();
+		if (constraintAndFitnessSettingsItemProvider != null) constraintAndFitnessSettingsItemProvider.dispose();
+		if (parallisableOptimisationStageItemProvider != null) parallisableOptimisationStageItemProvider.dispose();
+		if (parallelOptimisationStageItemProvider != null) parallelOptimisationStageItemProvider.dispose();
+		if (cleanStateOptimisationStageItemProvider != null) cleanStateOptimisationStageItemProvider.dispose();
+		if (localSearchOptimisationStageItemProvider != null) localSearchOptimisationStageItemProvider.dispose();
+		if (hillClimbOptimisationStageItemProvider != null) hillClimbOptimisationStageItemProvider.dispose();
+		if (actionPlanOptimisationStageItemProvider != null) actionPlanOptimisationStageItemProvider.dispose();
+		if (resetInitialSequencesStageItemProvider != null) resetInitialSequencesStageItemProvider.dispose();
+		if (breakEvenOptmisationStageItemProvider != null) breakEvenOptmisationStageItemProvider.dispose();
+		if (solutionBuilderSettingsItemProvider != null) solutionBuilderSettingsItemProvider.dispose();
 	}
 
 }

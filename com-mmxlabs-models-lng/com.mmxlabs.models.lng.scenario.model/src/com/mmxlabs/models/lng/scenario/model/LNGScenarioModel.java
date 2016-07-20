@@ -10,7 +10,6 @@ import java.time.LocalDate;
 
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -26,7 +25,6 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getCargoModel <em>Cargo Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getScheduleModel <em>Schedule Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getParameters <em>Parameters</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getActualsModel <em>Actuals Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPromptPeriodStart <em>Prompt Period Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPromptPeriodEnd <em>Prompt Period End</em>}</li>
@@ -90,32 +88,6 @@ public interface LNGScenarioModel extends MMXRootObject {
 	 * @generated
 	 */
 	void setScheduleModel(ScheduleModel value);
-
-	/**
-	 * Returns the value of the '<em><b>Parameters</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Parameters</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Parameters</em>' containment reference.
-	 * @see #setParameters(OptimiserSettings)
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_Parameters()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	OptimiserSettings getParameters();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getParameters <em>Parameters</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Parameters</em>' containment reference.
-	 * @see #getParameters()
-	 * @generated
-	 */
-	void setParameters(OptimiserSettings value);
 
 	/**
 	 * Returns the value of the '<em><b>Actuals Model</b></em>' containment reference.

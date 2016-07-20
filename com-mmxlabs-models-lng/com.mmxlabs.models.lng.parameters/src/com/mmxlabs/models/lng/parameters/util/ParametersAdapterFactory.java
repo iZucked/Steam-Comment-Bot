@@ -14,13 +14,8 @@ import org.eclipse.emf.ecore.EObject;
 
 import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
-import com.mmxlabs.models.lng.parameters.Argument;
 import com.mmxlabs.models.lng.parameters.Constraint;
-import com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings;
 import com.mmxlabs.models.lng.parameters.Objective;
-import com.mmxlabs.models.lng.parameters.OptimisationRange;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
-import com.mmxlabs.models.lng.parameters.ParametersModel;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.SimilarityInterval;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
@@ -89,18 +84,6 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 				return createUserSettingsAdapter();
 			}
 			@Override
-			public Adapter caseIndividualSolutionImprovementSettings(IndividualSolutionImprovementSettings object) {
-				return createIndividualSolutionImprovementSettingsAdapter();
-			}
-			@Override
-			public Adapter caseParametersModel(ParametersModel object) {
-				return createParametersModelAdapter();
-			}
-			@Override
-			public Adapter caseOptimiserSettings(OptimiserSettings object) {
-				return createOptimiserSettingsAdapter();
-			}
-			@Override
 			public Adapter caseObjective(Objective object) {
 				return createObjectiveAdapter();
 			}
@@ -109,16 +92,8 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 				return createConstraintAdapter();
 			}
 			@Override
-			public Adapter caseOptimisationRange(OptimisationRange object) {
-				return createOptimisationRangeAdapter();
-			}
-			@Override
 			public Adapter caseAnnealingSettings(AnnealingSettings object) {
 				return createAnnealingSettingsAdapter();
-			}
-			@Override
-			public Adapter caseArgument(Argument object) {
-				return createArgumentAdapter();
 			}
 			@Override
 			public Adapter caseSimilaritySettings(SimilaritySettings object) {
@@ -129,16 +104,60 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 				return createSimilarityIntervalAdapter();
 			}
 			@Override
-			public Adapter caseActionPlanSettings(ActionPlanSettings object) {
-				return createActionPlanSettingsAdapter();
+			public Adapter caseOptimisationPlan(OptimisationPlan object) {
+				return createOptimisationPlanAdapter();
+			}
+			@Override
+			public Adapter caseConstraintAndFitnessSettings(ConstraintAndFitnessSettings object) {
+				return createConstraintAndFitnessSettingsAdapter();
+			}
+			@Override
+			public Adapter caseOptimisationStage(OptimisationStage object) {
+				return createOptimisationStageAdapter();
+			}
+			@Override
+			public Adapter caseConstraintsAndFitnessSettingsStage(ConstraintsAndFitnessSettingsStage object) {
+				return createConstraintsAndFitnessSettingsStageAdapter();
+			}
+			@Override
+			public Adapter caseParallisableOptimisationStage(ParallisableOptimisationStage object) {
+				return createParallisableOptimisationStageAdapter();
+			}
+			@Override
+			public <T extends ParallisableOptimisationStage> Adapter caseParallelOptimisationStage(ParallelOptimisationStage<T> object) {
+				return createParallelOptimisationStageAdapter();
+			}
+			@Override
+			public Adapter caseCleanStateOptimisationStage(CleanStateOptimisationStage object) {
+				return createCleanStateOptimisationStageAdapter();
+			}
+			@Override
+			public Adapter caseLocalSearchOptimisationStage(LocalSearchOptimisationStage object) {
+				return createLocalSearchOptimisationStageAdapter();
+			}
+			@Override
+			public Adapter caseHillClimbOptimisationStage(HillClimbOptimisationStage object) {
+				return createHillClimbOptimisationStageAdapter();
+			}
+			@Override
+			public Adapter caseActionPlanOptimisationStage(ActionPlanOptimisationStage object) {
+				return createActionPlanOptimisationStageAdapter();
+			}
+			@Override
+			public Adapter caseResetInitialSequencesStage(ResetInitialSequencesStage object) {
+				return createResetInitialSequencesStageAdapter();
+			}
+			@Override
+			public Adapter caseBreakEvenOptmisationStage(BreakEvenOptmisationStage object) {
+				return createBreakEvenOptmisationStageAdapter();
+			}
+			@Override
+			public Adapter caseSolutionBuilderSettings(SolutionBuilderSettings object) {
+				return createSolutionBuilderSettingsAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
-			}
-			@Override
-			public Adapter caseUUIDObject(UUIDObject object) {
-				return createUUIDObjectAdapter();
 			}
 			@Override
 			public Adapter caseNamedObject(NamedObject object) {
@@ -179,48 +198,6 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings <em>Individual Solution Improvement Settings</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings
-	 * @generated
-	 */
-	public Adapter createIndividualSolutionImprovementSettingsAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.ParametersModel <em>Model</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.parameters.ParametersModel
-	 * @generated
-	 */
-	public Adapter createParametersModelAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings <em>Optimiser Settings</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings
-	 * @generated
-	 */
-	public Adapter createOptimiserSettingsAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.Objective <em>Objective</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -249,20 +226,6 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.OptimisationRange <em>Optimisation Range</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.parameters.OptimisationRange
-	 * @generated
-	 */
-	public Adapter createOptimisationRangeAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.AnnealingSettings <em>Annealing Settings</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -273,20 +236,6 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAnnealingSettingsAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.Argument <em>Argument</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.parameters.Argument
-	 * @generated
-	 */
-	public Adapter createArgumentAdapter() {
 		return null;
 	}
 
@@ -319,16 +268,184 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.ActionPlanSettings <em>Action Plan Settings</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.OptimisationStage <em>Optimisation Stage</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.parameters.ActionPlanSettings
+	 * @see com.mmxlabs.models.lng.parameters.OptimisationStage
 	 * @generated
 	 */
-	public Adapter createActionPlanSettingsAdapter() {
+	public Adapter createOptimisationStageAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.ConstraintsAndFitnessSettingsStage <em>Constraints And Fitness Settings Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.parameters.ConstraintsAndFitnessSettingsStage
+	 * @generated
+	 */
+	public Adapter createConstraintsAndFitnessSettingsStageAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.ParallisableOptimisationStage <em>Parallisable Optimisation Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.parameters.ParallisableOptimisationStage
+	 * @generated
+	 */
+	public Adapter createParallisableOptimisationStageAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.ParallelOptimisationStage <em>Parallel Optimisation Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.parameters.ParallelOptimisationStage
+	 * @generated
+	 */
+	public Adapter createParallelOptimisationStageAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage <em>Clean State Optimisation Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage
+	 * @generated
+	 */
+	public Adapter createCleanStateOptimisationStageAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage <em>Local Search Optimisation Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage
+	 * @generated
+	 */
+	public Adapter createLocalSearchOptimisationStageAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage <em>Hill Climb Optimisation Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage
+	 * @generated
+	 */
+	public Adapter createHillClimbOptimisationStageAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage <em>Action Plan Optimisation Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage
+	 * @generated
+	 */
+	public Adapter createActionPlanOptimisationStageAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.ResetInitialSequencesStage <em>Reset Initial Sequences Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.parameters.ResetInitialSequencesStage
+	 * @generated
+	 */
+	public Adapter createResetInitialSequencesStageAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings <em>Constraint And Fitness Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings
+	 * @generated
+	 */
+	public Adapter createConstraintAndFitnessSettingsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.OptimisationPlan <em>Optimisation Plan</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.parameters.OptimisationPlan
+	 * @generated
+	 */
+	public Adapter createOptimisationPlanAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage <em>Break Even Optmisation Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage
+	 * @generated
+	 */
+	public Adapter createBreakEvenOptmisationStageAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.SolutionBuilderSettings <em>Solution Builder Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.parameters.SolutionBuilderSettings
+	 * @generated
+	 */
+	public Adapter createSolutionBuilderSettingsAdapter() {
 		return null;
 	}
 
@@ -343,20 +460,6 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createMMXObjectAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.mmxcore.UUIDObject <em>UUID Object</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.mmxcore.UUIDObject
-	 * @generated
-	 */
-	public Adapter createUUIDObjectAdapter() {
 		return null;
 	}
 

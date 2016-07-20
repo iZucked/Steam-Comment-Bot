@@ -13,19 +13,28 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
-import com.mmxlabs.models.lng.parameters.Argument;
+import com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage;
+import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Constraint;
-import com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings;
+import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
+import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
+import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Objective;
-import com.mmxlabs.models.lng.parameters.OptimisationRange;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.OptimisationPlan;
+import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
+import com.mmxlabs.models.lng.parameters.ParallisableOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
-import com.mmxlabs.models.lng.parameters.ParametersModel;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
+import com.mmxlabs.models.lng.parameters.ResetInitialSequencesStage;
 import com.mmxlabs.models.lng.parameters.SimilarityInterval;
+import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
+import com.mmxlabs.models.lng.parameters.SolutionBuilderSettings;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 
 /**
  * <!-- begin-user-doc -->
@@ -72,17 +81,22 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case ParametersPackage.USER_SETTINGS: return createUserSettings();
-			case ParametersPackage.INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS: return createIndividualSolutionImprovementSettings();
-			case ParametersPackage.PARAMETERS_MODEL: return createParametersModel();
-			case ParametersPackage.OPTIMISER_SETTINGS: return createOptimiserSettings();
 			case ParametersPackage.OBJECTIVE: return createObjective();
 			case ParametersPackage.CONSTRAINT: return createConstraint();
-			case ParametersPackage.OPTIMISATION_RANGE: return createOptimisationRange();
 			case ParametersPackage.ANNEALING_SETTINGS: return createAnnealingSettings();
-			case ParametersPackage.ARGUMENT: return createArgument();
 			case ParametersPackage.SIMILARITY_SETTINGS: return createSimilaritySettings();
 			case ParametersPackage.SIMILARITY_INTERVAL: return createSimilarityInterval();
-			case ParametersPackage.ACTION_PLAN_SETTINGS: return createActionPlanSettings();
+			case ParametersPackage.OPTIMISATION_PLAN: return createOptimisationPlan();
+			case ParametersPackage.CONSTRAINT_AND_FITNESS_SETTINGS: return createConstraintAndFitnessSettings();
+			case ParametersPackage.PARALLISABLE_OPTIMISATION_STAGE: return createParallisableOptimisationStage();
+			case ParametersPackage.PARALLEL_OPTIMISATION_STAGE: return createParallelOptimisationStage();
+			case ParametersPackage.CLEAN_STATE_OPTIMISATION_STAGE: return createCleanStateOptimisationStage();
+			case ParametersPackage.LOCAL_SEARCH_OPTIMISATION_STAGE: return createLocalSearchOptimisationStage();
+			case ParametersPackage.HILL_CLIMB_OPTIMISATION_STAGE: return createHillClimbOptimisationStage();
+			case ParametersPackage.ACTION_PLAN_OPTIMISATION_STAGE: return createActionPlanOptimisationStage();
+			case ParametersPackage.RESET_INITIAL_SEQUENCES_STAGE: return createResetInitialSequencesStage();
+			case ParametersPackage.BREAK_EVEN_OPTMISATION_STAGE: return createBreakEvenOptmisationStage();
+			case ParametersPackage.SOLUTION_BUILDER_SETTINGS: return createSolutionBuilderSettings();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -135,39 +149,6 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 * @generated
 	 */
 	@Override
-	public IndividualSolutionImprovementSettings createIndividualSolutionImprovementSettings() {
-		IndividualSolutionImprovementSettingsImpl individualSolutionImprovementSettings = new IndividualSolutionImprovementSettingsImpl();
-		return individualSolutionImprovementSettings;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ParametersModel createParametersModel() {
-		ParametersModelImpl parametersModel = new ParametersModelImpl();
-		return parametersModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public OptimiserSettings createOptimiserSettings() {
-		OptimiserSettingsImpl optimiserSettings = new OptimiserSettingsImpl();
-		return optimiserSettings;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Objective createObjective() {
 		ObjectiveImpl objective = new ObjectiveImpl();
 		return objective;
@@ -190,31 +171,9 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 * @generated
 	 */
 	@Override
-	public OptimisationRange createOptimisationRange() {
-		OptimisationRangeImpl optimisationRange = new OptimisationRangeImpl();
-		return optimisationRange;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public AnnealingSettings createAnnealingSettings() {
 		AnnealingSettingsImpl annealingSettings = new AnnealingSettingsImpl();
 		return annealingSettings;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Argument createArgument() {
-		ArgumentImpl argument = new ArgumentImpl();
-		return argument;
 	}
 
 	/**
@@ -245,9 +204,119 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 * @generated
 	 */
 	@Override
-	public ActionPlanSettings createActionPlanSettings() {
-		ActionPlanSettingsImpl actionPlanSettings = new ActionPlanSettingsImpl();
-		return actionPlanSettings;
+	public ParallisableOptimisationStage createParallisableOptimisationStage() {
+		ParallisableOptimisationStageImpl parallisableOptimisationStage = new ParallisableOptimisationStageImpl();
+		return parallisableOptimisationStage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public <T extends ParallisableOptimisationStage> ParallelOptimisationStage<T> createParallelOptimisationStage() {
+		ParallelOptimisationStageImpl<T> parallelOptimisationStage = new ParallelOptimisationStageImpl<T>();
+		return parallelOptimisationStage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CleanStateOptimisationStage createCleanStateOptimisationStage() {
+		CleanStateOptimisationStageImpl cleanStateOptimisationStage = new CleanStateOptimisationStageImpl();
+		return cleanStateOptimisationStage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public LocalSearchOptimisationStage createLocalSearchOptimisationStage() {
+		LocalSearchOptimisationStageImpl localSearchOptimisationStage = new LocalSearchOptimisationStageImpl();
+		return localSearchOptimisationStage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public HillClimbOptimisationStage createHillClimbOptimisationStage() {
+		HillClimbOptimisationStageImpl hillClimbOptimisationStage = new HillClimbOptimisationStageImpl();
+		return hillClimbOptimisationStage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ActionPlanOptimisationStage createActionPlanOptimisationStage() {
+		ActionPlanOptimisationStageImpl actionPlanOptimisationStage = new ActionPlanOptimisationStageImpl();
+		return actionPlanOptimisationStage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ResetInitialSequencesStage createResetInitialSequencesStage() {
+		ResetInitialSequencesStageImpl resetInitialSequencesStage = new ResetInitialSequencesStageImpl();
+		return resetInitialSequencesStage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ConstraintAndFitnessSettings createConstraintAndFitnessSettings() {
+		ConstraintAndFitnessSettingsImpl constraintAndFitnessSettings = new ConstraintAndFitnessSettingsImpl();
+		return constraintAndFitnessSettings;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public OptimisationPlan createOptimisationPlan() {
+		OptimisationPlanImpl optimisationPlan = new OptimisationPlanImpl();
+		return optimisationPlan;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public BreakEvenOptmisationStage createBreakEvenOptmisationStage() {
+		BreakEvenOptmisationStageImpl breakEvenOptmisationStage = new BreakEvenOptmisationStageImpl();
+		return breakEvenOptmisationStage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SolutionBuilderSettings createSolutionBuilderSettings() {
+		SolutionBuilderSettingsImpl solutionBuilderSettings = new SolutionBuilderSettingsImpl();
+		return solutionBuilderSettings;
 	}
 
 	/**

@@ -31,7 +31,6 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.lng.port.ui.editors.WindowSizeInlineEditor;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;

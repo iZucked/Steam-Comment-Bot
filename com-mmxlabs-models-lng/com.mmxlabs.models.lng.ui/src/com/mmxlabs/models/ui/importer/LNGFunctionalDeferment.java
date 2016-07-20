@@ -5,8 +5,6 @@
 package com.mmxlabs.models.ui.importer;
 
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.csv.IDeferment;

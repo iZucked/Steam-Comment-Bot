@@ -6,7 +6,6 @@
  */
 package com.mmxlabs.models.lng.spotmarkets;
 
-import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
