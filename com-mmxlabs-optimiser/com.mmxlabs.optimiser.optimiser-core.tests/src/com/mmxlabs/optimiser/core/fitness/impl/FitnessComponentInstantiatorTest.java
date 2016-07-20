@@ -66,10 +66,7 @@ public class FitnessComponentInstantiatorTest {
 		final FitnessComponentInstantiator inst = new FitnessComponentInstantiator();
 		final List<IFitnessComponent> components = inst.instantiateFitnesses(registry, Collections.singletonList("Unknown"));
 
-		Assert.assertEquals(1, components.size());
-
-		Assert.assertNull(components.get(0));
-
+		Assert.assertEquals(0, components.size());
 	}
 
 	@Test

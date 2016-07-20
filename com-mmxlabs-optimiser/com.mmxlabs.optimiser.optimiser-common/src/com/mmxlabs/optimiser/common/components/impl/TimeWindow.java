@@ -56,6 +56,10 @@ public final class TimeWindow implements ITimeWindow {
 
 	@Override
 	public final boolean equals(final Object obj) {
+		if (obj == this) {
+			return true;
+		}
+
 		if (obj instanceof TimeWindow) {
 			final TimeWindow tw = (TimeWindow) obj;
 			if (start != tw.start) {
