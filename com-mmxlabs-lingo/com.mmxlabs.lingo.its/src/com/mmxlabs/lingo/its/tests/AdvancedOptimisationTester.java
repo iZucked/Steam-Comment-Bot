@@ -227,8 +227,18 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 		// if (withShippingOnly) {
 		// components.add("shipping");
 		// }
+		LiNGOTestDataProvider provider = new LiNGOTestDataProvider(url) {
+			public File getFitnessDataAsFile() throws java.io.IOException, java.net.URISyntaxException {
+				URL fileURL = FileLocator.toFileURL(url);
+				final URL propertiesFile = new URL(fileURL.toString().replaceAll(" ", "%20") + String.format(".%s.properties", Joiner.on(".").join(components)));
+				return new File(propertiesFile.toURI());
+			};
 
-		// Optionally use pre-stored sequences state.
+			public URL getFitnessDataAsURL() throws java.io.IOException {
+				final URL propertiesFile = new URL(url.toString() + String.format(".%s.properties", Joiner.on(".").join(components)));
+				return propertiesFile;
+			};
+		};
 		final IRunnerHook runnerHook;
 		if (false) {
 			runnerHook = new AbstractRunnerHook() {
@@ -308,6 +318,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 		if (runnerHook != null) {
 			scenarioRunner.setRunnerHook(runnerHook);
 		}
+		optimiseBasicScenario(scenarioRunner, provider);
 	}
 
 }
