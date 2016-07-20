@@ -12,9 +12,7 @@ import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
-import com.mmxlabs.models.lng.transformer.inject.modules.ActionPlanModule;
-import com.mmxlabs.scheduler.optimiser.fitness.components.ExcessIdleTimeComponentParameters;
-import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.chain.LNGParameters_ActionPlanSettingsModule;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ISimilarityComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.SimilarityComponentParameters;
 import com.mmxlabs.scheduler.optimiser.lso.SequencesConstrainedMoveGeneratorUnit;
@@ -65,19 +63,19 @@ public class OptimisationSettingsOverrideModule extends AbstractModule {
 	}
 
 	@Provides
-	@Named(ActionPlanModule.ACTION_PLAN_TOTAL_EVALUATIONS)
+	@Named(LNGParameters_ActionPlanSettingsModule.ACTION_PLAN_TOTAL_EVALUATIONS)
 	private int actionPlanTotalEvals() {
 		return settings.getActionPlanTotalEvals();
 	}
 
 	@Provides
-	@Named(ActionPlanModule.ACTION_PLAN_IN_RUN_EVALUATIONS)
+	@Named(LNGParameters_ActionPlanSettingsModule.ACTION_PLAN_IN_RUN_EVALUATIONS)
 	private int actionPlanInRunEvals() {
 		return settings.getActionPlanInRunEvals();
 	}
 
 	@Provides
-	@Named(ActionPlanModule.ACTION_PLAN_MAX_SEARCH_DEPTH)
+	@Named(LNGParameters_ActionPlanSettingsModule.ACTION_PLAN_MAX_SEARCH_DEPTH)
 	private int actionPlanInRunSearchDepth() {
 		return settings.getActionPlanMaxSearchDepth();
 	}

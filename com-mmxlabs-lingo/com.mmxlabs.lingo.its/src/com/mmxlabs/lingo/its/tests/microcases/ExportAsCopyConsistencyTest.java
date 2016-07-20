@@ -20,8 +20,6 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.parameters.OptimisationRange;
-import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -85,14 +83,9 @@ public class ExportAsCopyConsistencyTest extends AbstractMicroTestCase {
 	@Category({ QuickTest.class, RegressionTest.class })
 	public void testExportAsCopyExportsBaseFuelCostsCorrectlyInPeriod() throws Exception {
 
-		evaluateWithLSOTest(false, settings -> {
-			OptimisationRange range = settings.getRange();
-			if (range == null) {
-				range = ParametersFactory.eINSTANCE.createOptimisationRange();
-				settings.setRange(range);
-			}
-			range.setOptimiseAfter(YearMonth.of(2016, 5));
-			range.setOptimiseBefore(YearMonth.of(2016, 6));
+		evaluateWithLSOTest(false, plan -> {
+			plan.getUserSettings().setPeriodStart(YearMonth.of(2016, 5));
+			plan.getUserSettings().setPeriodEnd(YearMonth.of(2016, 6));
 		}, null, scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();

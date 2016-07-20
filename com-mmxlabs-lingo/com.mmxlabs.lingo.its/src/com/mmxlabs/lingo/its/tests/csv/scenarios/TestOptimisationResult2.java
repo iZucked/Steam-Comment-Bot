@@ -15,10 +15,8 @@ import org.junit.runner.RunWith;
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.lingo.its.tests.CSVTestDataProvider;
 import com.mmxlabs.lingo.its.tests.category.OptimisationTest;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
-import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
 
 @RunWith(value = ShiroRunner.class)
 public class TestOptimisationResult2 extends AbstractOptimisationResultTester {

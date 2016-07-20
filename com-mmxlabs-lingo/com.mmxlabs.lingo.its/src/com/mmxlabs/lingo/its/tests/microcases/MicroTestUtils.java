@@ -16,6 +16,7 @@ import com.google.inject.TypeLiteral;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -27,7 +28,9 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGEvaluationTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGLSOOptimiserTransformerUnit;
+import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
@@ -47,7 +50,8 @@ public class MicroTestUtils {
 	 */
 	public static List<IConstraintChecker> validateConstraintCheckers(@NonNull final LNGDataTransformer dataTransformer, @NonNull final ISequences rawSequences) {
 
-		final LNGEvaluationTransformerUnit evaluationTransformerUnit = new LNGEvaluationTransformerUnit(dataTransformer, dataTransformer.getInitialSequences(), dataTransformer.getHints());
+		final LNGEvaluationTransformerUnit evaluationTransformerUnit = new LNGEvaluationTransformerUnit(dataTransformer, dataTransformer.getInitialSequences(), dataTransformer.getInitialSequences(),
+				dataTransformer.getHints());
 		final List<IConstraintChecker> constraintCheckers = evaluationTransformerUnit.getInjector().getInstance(Key.get(new TypeLiteral<List<IConstraintChecker>>() {
 		}));
 		final ISequencesManipulator sequencesManipulator = evaluationTransformerUnit.getInjector().getInstance(ISequencesManipulator.class);
@@ -73,7 +77,8 @@ public class MicroTestUtils {
 	 */
 	public static List<@NonNull IEvaluatedStateConstraintChecker> validateEvaluatedStateConstraintCheckers(@NonNull final LNGDataTransformer dataTransformer, @NonNull final ISequences rawSequences) {
 
-		final LNGEvaluationTransformerUnit evaluationTransformerUnit = new LNGEvaluationTransformerUnit(dataTransformer, dataTransformer.getInitialSequences(), dataTransformer.getHints());
+		final LNGEvaluationTransformerUnit evaluationTransformerUnit = new LNGEvaluationTransformerUnit(dataTransformer, dataTransformer.getInitialSequences(), dataTransformer.getInitialSequences(),
+				dataTransformer.getHints());
 		final Injector injector = evaluationTransformerUnit.getInjector();
 
 		final List<@NonNull IEvaluatedStateConstraintChecker> constraintCheckers = injector.getInstance(Key.get(new TypeLiteral<List<IEvaluatedStateConstraintChecker>>() {
@@ -121,7 +126,8 @@ public class MicroTestUtils {
 
 	public static Pair<LNGEvaluationTransformerUnit, List<IConstraintChecker>> getConstraintCheckers(@NonNull final LNGDataTransformer dataTransformer) {
 
-		final LNGEvaluationTransformerUnit evaluationTransformerUnit = new LNGEvaluationTransformerUnit(dataTransformer, dataTransformer.getInitialSequences(), dataTransformer.getHints());
+		final LNGEvaluationTransformerUnit evaluationTransformerUnit = new LNGEvaluationTransformerUnit(dataTransformer, dataTransformer.getInitialSequences(), dataTransformer.getInitialSequences(),
+				dataTransformer.getHints());
 		final List<IConstraintChecker> constraintCheckers = evaluationTransformerUnit.getInjector().getInstance(Key.get(new TypeLiteral<List<IConstraintChecker>>() {
 		}));
 
@@ -149,8 +155,10 @@ public class MicroTestUtils {
 	 */
 	public static boolean evaluateLSOSequences(@NonNull final LNGDataTransformer dataTransformer, @NonNull final ISequences rawSequences) {
 
-		final LNGLSOOptimiserTransformerUnit unit = new LNGLSOOptimiserTransformerUnit(dataTransformer, dataTransformer.getOptimiserSettings(), dataTransformer.getInitialSequences(),
-				dataTransformer.getHints());
+		LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
+
+		final LNGLSOOptimiserTransformerUnit unit = new LNGLSOOptimiserTransformerUnit(dataTransformer, IRunnerHook.PHASE_LSO, dataTransformer.getUserSettings(), stage,
+				dataTransformer.getInitialSequences(), dataTransformer.getInitialSequences(), dataTransformer.getHints());
 
 		return true;
 	}

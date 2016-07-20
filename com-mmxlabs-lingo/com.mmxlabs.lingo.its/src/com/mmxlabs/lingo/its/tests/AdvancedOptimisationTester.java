@@ -25,7 +25,7 @@ import org.junit.runners.Parameterized;
 
 import com.google.common.base.Joiner;
 import com.mmxlabs.lingo.its.tests.category.OptimisationTest;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -194,22 +194,23 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(mode);
 
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, originalScenario);
-		Assert.assertNotNull(optimiserSettings);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, originalScenario);
+		Assert.assertNotNull(optimisationPlan);
 
 		if (limitedIterations) {
 			// Limit for quick optimisation
 			// LSO Limit
-			optimiserSettings.getAnnealingSettings().setIterations(10_000);
+			ScenarioUtils.setLSOStageIterations(optimisationPlan, 10_000);
 			// Hill climb limit
-			optimiserSettings.getSolutionImprovementSettings().setIterations(1_000);
-		}
+			ScenarioUtils.setHillClimbStageIterations(optimisationPlan, 1_000);
 
-		Assert.assertEquals(withActionSets, optimiserSettings.isBuildActionSets());
-		Assert.assertEquals(withGeneratedCharterOuts, optimiserSettings.isGenerateCharterOuts());
-		Assert.assertFalse(optimiserSettings.isShippingOnly());
-		Assert.assertEquals(periodStart, optimiserSettings.getRange().getOptimiseAfter());
-		Assert.assertEquals(periodEnd, optimiserSettings.getRange().getOptimiseBefore());
+		}
+		UserSettings planUserSettings = optimisationPlan.getUserSettings();
+		Assert.assertEquals(withActionSets, planUserSettings.isBuildActionSets());
+		Assert.assertEquals(withGeneratedCharterOuts, planUserSettings.isGenerateCharterOuts());
+		Assert.assertFalse(planUserSettings.isShippingOnly());
+		Assert.assertEquals(periodStart, planUserSettings.getPeriodStart());
+		Assert.assertEquals(periodEnd, planUserSettings.getPeriodEnd());
 
 		// scenarioRunner.initAndEval();
 
@@ -314,7 +315,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 			runnerHook = null;
 		}
 
-		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, originalScenario, optimiserSettings);
+		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, originalScenario, optimisationPlan);
 		if (runnerHook != null) {
 			scenarioRunner.setRunnerHook(runnerHook);
 		}

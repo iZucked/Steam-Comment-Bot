@@ -29,16 +29,14 @@ import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.lingo.its.internal.Activator;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
-import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_OptimiserSettingsModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
-import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeExtender;
-import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.scenario.MigrationHelper;
@@ -54,14 +52,14 @@ public class LNGScenarioRunnerCreator {
 	@NonNull
 	public static LNGScenarioRunner createScenarioRunnerForEvaluationWithGCO(@NonNull final LNGScenarioModel originalScenario) throws IOException {
 		//
-		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
-		optimiserSettings = createExtendedSettings(optimiserSettings);
+		OptimisationPlan optimisationPlan = ScenarioUtils.createDefaultOptimisationPlan();
+		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
 
-		optimiserSettings.setGenerateCharterOuts(true);
+		optimisationPlan.getUserSettings().setGenerateCharterOuts(true);
 
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
-			final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, originalScenario, optimiserSettings);
+			final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, originalScenario, optimisationPlan);
 			scenarioRunner.evaluateInitialState();
 			return scenarioRunner;
 		} finally {
@@ -104,34 +102,34 @@ public class LNGScenarioRunnerCreator {
 	@NonNull
 	public static LNGScenarioRunner createScenarioRunnerForEvaluation(@NonNull final LNGScenarioModel originalScenario, @Nullable Boolean withGCO) {
 
-		final OptimiserSettings settings = createExtendedSettings(ScenarioUtils.createDefaultSettings());
+		final OptimisationPlan optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(ScenarioUtils.createDefaultOptimisationPlan());
 		if (withGCO != null) {
-			settings.setGenerateCharterOuts(withGCO);
+			optimisationPlan.getUserSettings().setGenerateCharterOuts(withGCO);
 		}
-		return createScenarioRunnerForEvaluation(originalScenario, settings);
+		return createScenarioRunnerForEvaluation(originalScenario, optimisationPlan);
 
 	}
 
 	@NonNull
 	public static LNGScenarioRunner createScenarioRunnerWithLSO(@NonNull final ExecutorService executorService, @NonNull final LNGScenarioModel originalScenario, @Nullable Boolean withGCO,
 			@Nullable Integer lsoIterations) {
-		final OptimiserSettings settings = createExtendedSettings(ScenarioUtils.createDefaultSettings());
+		final OptimisationPlan optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(ScenarioUtils.createDefaultOptimisationPlan());
 		if (withGCO != null) {
-			settings.setGenerateCharterOuts(withGCO);
+			optimisationPlan.getUserSettings().setGenerateCharterOuts(withGCO);
 		}
 		if (lsoIterations != null) {
-			settings.getAnnealingSettings().setIterations(lsoIterations);
+			ScenarioUtils.setLSOStageIterations(optimisationPlan, lsoIterations);
 		}
 
-		return createScenarioRunnerWithLSO(executorService, originalScenario, settings);
+		return createScenarioRunnerWithLSO(executorService, originalScenario, optimisationPlan);
 	}
 
 	@NonNull
-	public static LNGScenarioRunner createScenarioRunnerForEvaluation(@NonNull final LNGScenarioModel originalScenario, @NonNull final OptimiserSettings settings) {
+	public static LNGScenarioRunner createScenarioRunnerForEvaluation(@NonNull final LNGScenarioModel originalScenario, @NonNull final OptimisationPlan optimisationPlan) {
 
 		final @NonNull ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
-			final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(executorService, originalScenario, null, settings, LNGSchedulerJobUtils.createLocalEditingDomain(), null,
+			final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(executorService, originalScenario, null, optimisationPlan, LNGSchedulerJobUtils.createLocalEditingDomain(), null,
 					createITSService(), null, true);
 
 			originalScenarioRunner.evaluateInitialState();
@@ -144,8 +142,8 @@ public class LNGScenarioRunnerCreator {
 
 	@NonNull
 	public static LNGScenarioRunner createScenarioRunnerWithLSO(@NonNull final ExecutorService executorService, @NonNull final LNGScenarioModel originalScenario,
-			@NonNull final OptimiserSettings settings) {
-		final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(executorService, originalScenario, null, settings, LNGSchedulerJobUtils.createLocalEditingDomain(), null,
+			@NonNull final OptimisationPlan optimisationPlan) {
+		final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(executorService, originalScenario, null, optimisationPlan, LNGSchedulerJobUtils.createLocalEditingDomain(), null,
 				createITSService(), null, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
 		originalScenarioRunner.evaluateInitialState();
@@ -210,25 +208,6 @@ public class LNGScenarioRunnerCreator {
 	 * @param optimiserSettings
 	 * @return
 	 */
-	@NonNull
-	public static OptimiserSettings createExtendedSettings(@NonNull final OptimiserSettings optimiserSettings) {
-		IParameterModesRegistry parameterModesRegistry = null;
-
-		final Activator activator = Activator.getDefault();
-		if (activator != null) {
-			parameterModesRegistry = activator.getParameterModesRegistry();
-		}
-
-		if (parameterModesRegistry != null) {
-			final Collection<IParameterModeExtender> extenders = parameterModesRegistry.getExtenders();
-			if (extenders != null) {
-				for (final IParameterModeExtender extender : extenders) {
-					extender.extend(optimiserSettings, null);
-				}
-			}
-		}
-		return optimiserSettings;
-	}
 
 	/**
 	 * Special optimiser injection service to disable special deployment settings during ITS runs
@@ -275,22 +254,6 @@ public class LNGScenarioRunnerCreator {
 							return false;
 						}
 					});
-				}
-				if (moduleType == ModuleType.Module_OptimisationParametersModule) {
-					return Collections.<@NonNull Module> singletonList(new AbstractModule() {
-
-						@Override
-						protected void configure() {
-
-						}
-
-						@Provides
-						@Named(LNGParameters_OptimiserSettingsModule.PROPERTY_MMX_HALF_SPEED_ACTION_SETS)
-						private boolean isHalfSpeedActionSets() {
-							return false;
-						}
-					});
-
 				}
 				return null;
 			}

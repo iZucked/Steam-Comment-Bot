@@ -27,8 +27,10 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
@@ -39,6 +41,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintChecker;
 
+@SuppressWarnings("unused")
 @RunWith(value = ShiroRunner.class)
 public class NominalMarketTests extends AbstractMicroTestCase {
 
@@ -194,10 +197,10 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2016, 12, 5));
 
-		evaluateWithLSOTest(true, s -> {
+		evaluateWithLSOTest(true, plan -> {
 			// Set iterations to zero to avoid any optimisation changes and rely on the unpairing opt step
-			s.getAnnealingSettings().setIterations(0);
-			s.getSolutionImprovementSettings().setIterations(0);
+			ScenarioUtils.setLSOStageIterations(plan, 0);
+			ScenarioUtils.setHillClimbStageIterations(plan, 0);
 		}, null, scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
@@ -259,16 +262,21 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 5));
 
-		evaluateWithLSOTest(true, s -> {
+		evaluateWithLSOTest(true, plan -> {
+
 			// Set iterations to zero to avoid any optimisation changes and rely on the unpairing opt step
 			// s.getAnnealingSettings().setIterations(0);
-			s.getSolutionImprovementSettings().setIterations(0);
+			ScenarioUtils.setHillClimbStageIterations(plan, 0);
 
-			s.setBuildActionSets(true);
+			plan.getUserSettings().setBuildActionSets(true);
 
+			@NonNull
+			final ActionPlanOptimisationStage stage = ScenarioUtils.createDefaultActionPlanParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
 			// Limit action set
-			s.getActionPlanSettings().setTotalEvaluations(100);
-			s.getActionPlanSettings().setInRunEvaluations(100);
+			stage.setTotalEvaluations(100);
+			stage.setInRunEvaluations(100);
+
+			plan.getStages().add(stage);
 		}, (scenarioRunner) -> {
 			return new AbstractRunnerHook() {
 
@@ -341,10 +349,10 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 12, 4));
 
-		evaluateWithLSOTest(true, s -> {
+		evaluateWithLSOTest(true, plan -> {
 			// Set iterations to zero to avoid any optimisation changes and rely on the unpairing opt step
-			s.getAnnealingSettings().setIterations(0);
-			s.getSolutionImprovementSettings().setIterations(0);
+			ScenarioUtils.setLSOStageIterations(plan, 0);
+			ScenarioUtils.setHillClimbStageIterations(plan, 0);
 
 		}, null, scenarioRunner -> {
 

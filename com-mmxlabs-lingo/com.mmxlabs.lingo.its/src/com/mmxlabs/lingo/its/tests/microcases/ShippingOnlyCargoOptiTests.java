@@ -22,7 +22,6 @@ import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelFinder;
 import com.mmxlabs.models.lng.fleet.util.FleetModelBuilder;
 import com.mmxlabs.models.lng.fleet.util.FleetModelFinder;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -69,7 +68,7 @@ public class ShippingOnlyCargoOptiTests extends AbstractMicroTestCase {
 				.withOptional(true) //
 				.build();
 
-		evaluateWithLSOTest(true, optimiserSettings -> optimiserSettings.setShippingOnly(false), null, scenarioRunner -> {
+		evaluateWithLSOTest(true, plan -> plan.getUserSettings().setShippingOnly(false), null, scenarioRunner -> {
 
 			// Wiring should have changed
 			Assert.assertSame(load2, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(0));
@@ -102,7 +101,7 @@ public class ShippingOnlyCargoOptiTests extends AbstractMicroTestCase {
 		final Slot load2 = cargoModelBuilder.makeDESPurchase("L2", false, LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "1", null, null) //
 				.withOptional(true) //
 				.build();
-		evaluateWithLSOTest(true, optimiserSettings -> optimiserSettings.setShippingOnly(true), null, scenarioRunner -> {
+		evaluateWithLSOTest(true, plan -> plan.getUserSettings().setShippingOnly(true), null, scenarioRunner -> {
 
 			// Wiring should have changed
 			Assert.assertSame(load1, lngScenarioModel.getCargoModel().getCargoes().get(0).getSortedSlots().get(0));
@@ -123,7 +122,7 @@ public class ShippingOnlyCargoOptiTests extends AbstractMicroTestCase {
 		cargoModelBuilder.makeDESSale("D1", LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "7") //
 				.build(); //
 
-		evaluateWithLSOTest(true, optimiserSettings -> optimiserSettings.setShippingOnly(false), null, scenarioRunner -> {
+		evaluateWithLSOTest(true, plan -> plan.getUserSettings().setShippingOnly(false), null, scenarioRunner -> {
 
 			Assert.assertEquals(1, lngScenarioModel.getCargoModel().getCargoes().size());
 
@@ -143,7 +142,7 @@ public class ShippingOnlyCargoOptiTests extends AbstractMicroTestCase {
 		cargoModelBuilder.makeDESSale("D1", LocalDate.of(2016, 2, 18), portFinder.findPort("Isle of Grain"), null, entity, "7") //
 				.build(); //
 
-		evaluateWithLSOTest(true, optimiserSettings -> optimiserSettings.setShippingOnly(true), null, scenarioRunner -> {
+		evaluateWithLSOTest(true, plan -> plan.getUserSettings().setShippingOnly(true), null, scenarioRunner -> {
 
 			Assert.assertEquals(0, lngScenarioModel.getCargoModel().getCargoes().size());
 

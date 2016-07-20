@@ -15,7 +15,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.scenario.exportWizards.ExportCSVWizard;
 import com.mmxlabs.models.lng.scenario.exportWizards.ExportCSVWizard.exportInformation;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class IOTestUtil {
@@ -134,10 +135,10 @@ public class IOTestUtil {
 	 */
 	public static EList<Fitness> ScenarioModeltoFitnessList(@NonNull final LNGScenarioModel model) {
 
-		final OptimiserSettings settings = LNGScenarioRunnerCreator.createExtendedSettings(ScenarioUtils.createDefaultSettings());
+		final OptimisationPlan optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(ScenarioUtils.createDefaultOptimisationPlan());
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-		final LNGScenarioRunner runner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, model, settings);
+		final LNGScenarioRunner runner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, model, optimisationPlan);
 
 		final Schedule schedule = runner.getSchedule();
 		Assert.assertNotNull(schedule);
@@ -149,10 +150,10 @@ public class IOTestUtil {
 
 	public static Schedule ScenarioModeltoSchedule(final LNGScenarioModel model) {
 
-		final OptimiserSettings settings = LNGScenarioRunnerCreator.createExtendedSettings(ScenarioUtils.createDefaultSettings());
+		final OptimisationPlan optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(ScenarioUtils.createDefaultOptimisationPlan());
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-		final LNGScenarioRunner runner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, model, settings);
+		final LNGScenarioRunner runner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, model, optimisationPlan);
 
 		final Schedule schedule = runner.getSchedule();
 

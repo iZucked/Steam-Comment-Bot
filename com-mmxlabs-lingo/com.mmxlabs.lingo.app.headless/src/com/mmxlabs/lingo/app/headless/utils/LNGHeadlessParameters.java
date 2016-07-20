@@ -18,6 +18,12 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 		setParameter("seed", 0, Integer.class, true);
 		setParameter("iterations", 70000, Integer.class, true);
 
+		setParameter("clean-state-iterations", 50000, Integer.class, false);
+		setParameter("do-clean-state", false, Boolean.class, false);
+		setParameter("lso-jobs", 1, Integer.class, false);
+		setParameter("clean-state-jobs", 1, Integer.class, false);
+
+//		ADD STUFF HERE
 		// LSO
 		setParameter("sa-epoch-length", 10000, Integer.class, true);
 		setParameter("sa-temperature", 45000, Integer.class, true);

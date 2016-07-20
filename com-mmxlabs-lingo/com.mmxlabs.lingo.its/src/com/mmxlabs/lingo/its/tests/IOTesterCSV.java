@@ -5,10 +5,7 @@
 package com.mmxlabs.lingo.its.tests;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-
 import org.eclipse.emf.common.util.EList;
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,9 +14,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Fitness;
-import com.mmxlabs.models.lng.schedule.Schedule;
 
 @RunWith(Parameterized.class)
 public class IOTesterCSV {

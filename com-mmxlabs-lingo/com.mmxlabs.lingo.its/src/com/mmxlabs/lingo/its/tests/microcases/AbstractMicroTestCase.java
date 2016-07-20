@@ -20,7 +20,7 @@ import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelFinder;
 import com.mmxlabs.models.lng.fleet.util.FleetModelBuilder;
 import com.mmxlabs.models.lng.fleet.util.FleetModelFinder;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
+import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
@@ -127,7 +128,7 @@ public abstract class AbstractMicroTestCase {
 		evaluateWithLSOTest(true, null, null, checker, overrides);
 	}
 
-	public void evaluateWithLSOTest(final boolean optimise, @Nullable final Consumer<OptimiserSettings> tweaker, @Nullable final Function<LNGScenarioRunner, IRunnerHook> runnerHookFactory,
+	public void evaluateWithLSOTest(final boolean optimise, @Nullable final Consumer<OptimisationPlan> tweaker, @Nullable final Function<LNGScenarioRunner, IRunnerHook> runnerHookFactory,
 			@NonNull final Consumer<LNGScenarioRunner> checker, IOptimiserInjectorService overrides) {
 
 		// Create UserSettings
@@ -137,19 +138,20 @@ public abstract class AbstractMicroTestCase {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
 		if (tweaker != null) {
-			tweaker.accept(optimiserSettings);
+			tweaker.accept(optimisationPlan);
 		} else {
-			optimiserSettings.getAnnealingSettings().setIterations(10_000);
+			ScenarioUtils.setLSOStageIterations(optimisationPlan, 10_000);
 		}
 
 		// Generate internal data
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, null, LNGScenarioRunnerUtils.createExtendedSettings(optimiserSettings),
-					LNGSchedulerJobUtils.createLocalEditingDomain(), new TransformerExtensionTestBootstrapModule(), overrides, null, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, null, optimisationPlan, LNGSchedulerJobUtils.createLocalEditingDomain(),
+					new TransformerExtensionTestBootstrapModule(), overrides, null, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			if (runnerHookFactory != null) {
 				final IRunnerHook runnerHook = runnerHookFactory.apply(scenarioRunner);
 				if (runnerHook != null) {
@@ -169,7 +171,7 @@ public abstract class AbstractMicroTestCase {
 		}
 	}
 
-	public void evaluateTest(@Nullable final Consumer<OptimiserSettings> tweaker, @Nullable final Function<LNGScenarioRunner, IRunnerHook> runnerHookFactory,
+	public void evaluateTest(@Nullable final Consumer<OptimisationPlan> tweaker, @Nullable final Function<LNGScenarioRunner, IRunnerHook> runnerHookFactory,
 			@NonNull final Consumer<LNGScenarioRunner> checker) {
 
 		// Create UserSettings
@@ -179,16 +181,16 @@ public abstract class AbstractMicroTestCase {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 		if (tweaker != null) {
-			tweaker.accept(optimiserSettings);
+			tweaker.accept(optimisationPlan);
 		}
 
 		// Generate internal data
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null, true);
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, true);
 
 			if (runnerHookFactory != null) {
 				final IRunnerHook runnerHook = runnerHookFactory.apply(scenarioRunner);
@@ -204,7 +206,5 @@ public abstract class AbstractMicroTestCase {
 			executorService.shutdownNow();
 		}
 	}
-	
 
-	
 }

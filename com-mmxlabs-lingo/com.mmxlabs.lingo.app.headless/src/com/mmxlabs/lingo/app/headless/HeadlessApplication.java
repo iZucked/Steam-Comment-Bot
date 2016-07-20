@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -50,14 +51,16 @@ import com.mmxlabs.lingo.app.headless.exporter.IRunExporter;
 import com.mmxlabs.lingo.app.headless.utils.DoubleMap;
 import com.mmxlabs.lingo.app.headless.utils.HeadlessJSONParser;
 import com.mmxlabs.lingo.app.headless.utils.HeadlessParameters;
-import com.mmxlabs.lingo.app.headless.utils.IntegerParameter;
 import com.mmxlabs.lingo.app.headless.utils.JSONParseResult;
 import com.mmxlabs.lingo.app.headless.utils.LNGHeadlessParameters;
 import com.mmxlabs.lingo.app.headless.utils.StringParameter;
-import com.mmxlabs.models.lng.parameters.AnnealingSettings;
-import com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings;
-import com.mmxlabs.models.lng.parameters.OptimisationRange;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
+import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
+import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
+import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
+import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
+import com.mmxlabs.models.lng.parameters.OptimisationPlan;
+import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -71,7 +74,6 @@ import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.transformer.util.SequencesSerialiser;
 import com.mmxlabs.models.migration.scenario.MigrationHelper;
-import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
@@ -151,19 +153,21 @@ public class HeadlessApplication implements IApplication {
 
 		final String outputFile = overrideSettings.getOutput();
 
-		OptimiserSettings optimiserSettings = rootObject.getParameters() == null ? ScenarioUtils.createDefaultSettings() : rootObject.getParameters();
-		assert optimiserSettings != null;
+		OptimisationPlan optimisationPlan = ScenarioUtils.createDefaultOptimisationPlan();
+		assert optimisationPlan != null;
 
-		optimiserSettings = LNGScenarioRunnerUtils.createExtendedSettings(optimiserSettings);
+		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
 
-		updateOptimiserSettings(rootObject, optimiserSettings, overrideSettings, headlessParameters);
+		updateOptimiserSettings(rootObject, optimisationPlan, overrideSettings, headlessParameters);
 
-		final String outputFolderName = overrideSettings.getOutputName() == null ? getFolderNameFromSettings(optimiserSettings) : getFolderNameFromSettings(overrideSettings);
+		assert overrideSettings.getOutputName() != null;//
+		// final String outputFolderName = overrideSettings.getOutputName() == null ? getFolderNameFromSettings(optimisationPlan) : getFolderNameFromSettings(overrideSettings);
+		final String outputFolderName = getFolderNameFromSettings(overrideSettings);
 
 		// Ensure dir structure is in place
 		Paths.get(path, outputFolderName).toFile().mkdirs();
 
-//		final IOptimiserProgressMonitor monitor = new RunExporterProgressMonitor(exporters);
+		// final IOptimiserProgressMonitor monitor = new RunExporterProgressMonitor(exporters);
 
 		// Create logging module
 		final int no_threads = getNumThreads(headlessParameters);
@@ -188,7 +192,7 @@ public class HeadlessApplication implements IApplication {
 					case IRunnerHook.PHASE_LSO:
 					case IRunnerHook.PHASE_HILL:
 					case IRunnerHook.PHASE_INITIAL:
-//						save(rawSequences, phase);
+						// save(rawSequences, phase);
 						break;
 					case IRunnerHook.PHASE_ACTION_SETS:
 						break;
@@ -200,7 +204,7 @@ public class HeadlessApplication implements IApplication {
 					switch (phase) {
 					case IRunnerHook.PHASE_LSO:
 					case IRunnerHook.PHASE_HILL:
-//						return load(phase);
+						// return load(phase);
 					case IRunnerHook.PHASE_INITIAL:
 					case IRunnerHook.PHASE_ACTION_SETS:
 						break;
@@ -243,7 +247,7 @@ public class HeadlessApplication implements IApplication {
 
 			// Create logging module
 			final Map<String, LSOLogger> phaseToLoggerMap = new HashMap<>();
-			ActionSetLogger actionSetLogger = optimiserSettings.isBuildActionSets() ? new ActionSetLogger() : null;
+			ActionSetLogger actionSetLogger = optimisationPlan.getUserSettings().isBuildActionSets() ? new ActionSetLogger() : null;
 
 			// FIXME: Replace with an IParameterMode thing
 			final IOptimiserInjectorService localOverrides = new IOptimiserInjectorService() {
@@ -268,9 +272,12 @@ public class HeadlessApplication implements IApplication {
 				}
 			};
 
+			List<String> hints = new LinkedList<>();
+			hints.add(LNGTransformerHelper.HINT_OPTIMISE_LSO);
+
 			try {
-				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, rootObject, null, optimiserSettings, LNGSchedulerJobUtils.createLocalEditingDomain(), null, localOverrides,
-						runnerHook, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
+				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, rootObject, null, optimisationPlan, LNGSchedulerJobUtils.createLocalEditingDomain(), null, localOverrides,
+						runnerHook, false, hints.toArray(new String[hints.size()]));
 
 				// FIXME
 				// runner.init(monitor);
@@ -282,11 +289,11 @@ public class HeadlessApplication implements IApplication {
 				if (outputFile != null) {
 					System.out.println("\toutput='" + outputFile + "',");
 				}
-				System.out.println("\titerations=" + optimiserSettings.getAnnealingSettings().getIterations() + ",");
-				System.out.println("\tseed=" + optimiserSettings.getSeed() + ",");
-				System.out.println("\tcooling=" + optimiserSettings.getAnnealingSettings().getCooling() + ",");
-				System.out.println("\tepochLength=" + optimiserSettings.getAnnealingSettings().getEpochLength() + ",");
-				System.out.println("\ttemp=" + optimiserSettings.getAnnealingSettings().getInitialTemperature() + ",");
+				// System.out.println("\titerations=" + optimiserSettings.getAnnealingSettings().getIterations() + ",");
+				// System.out.println("\tseed=" + optimiserSettings.getSeed() + ",");
+				// System.out.println("\tcooling=" + optimiserSettings.getAnnealingSettings().getCooling() + ",");
+				// System.out.println("\tepochLength=" + optimiserSettings.getAnnealingSettings().getEpochLength() + ",");
+				// System.out.println("\ttemp=" + optimiserSettings.getAnnealingSettings().getInitialTemperature() + ",");
 
 				System.err.println("Starting run...");
 
@@ -465,42 +472,96 @@ public class HeadlessApplication implements IApplication {
 		return true;
 	}
 
-	private void updateOptimiserSettings(final LNGScenarioModel rootObject, final OptimiserSettings settings, final SettingsOverride settingsOverride, final HeadlessParameters headlessParameters) {
-		// standard settings
-		settings.setSeed(headlessParameters.getParameter("seed", IntegerParameter.class).getValue());
-		// LSO settings
-		final AnnealingSettings annealingSettings = settings.getAnnealingSettings();
-		annealingSettings.setInitialTemperature(headlessParameters.getParameterValue("sa-temperature", Integer.class));
-		annealingSettings.setEpochLength(headlessParameters.getParameterValue("sa-epoch-length", Integer.class));
-		annealingSettings.setIterations(headlessParameters.getParameterValue("iterations", Integer.class));
-		annealingSettings.setCooling(headlessParameters.getParameterValue("sa-cooling", Double.class));
-		annealingSettings.setRestarting(headlessParameters.getParameterValue("restarting-useRestarting", Boolean.class));
-		annealingSettings.setRestartIterationsThreshold(headlessParameters.getParameterValue("restarting-restartThreshold", Integer.class));
-		setHillClimbingParameters(settings, headlessParameters);
+	private void updateOptimiserSettings(final LNGScenarioModel rootObject, final OptimisationPlan plan, final SettingsOverride settingsOverride, final HeadlessParameters headlessParameters) {
+
+		List<ConstraintAndFitnessSettings> constraintsAndFitnesses = new LinkedList<>();
+
+		if (headlessParameters.getParameterValue("do-clean-state", Boolean.class)) {
+			CleanStateOptimisationStage stage = ScenarioUtils.createDefaultCleanStateParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
+			stage.setSeed(headlessParameters.getParameterValue("seed", Integer.class));
+
+			stage.getAnnealingSettings().setIterations(headlessParameters.getParameterValue("clean-state-iterations", Integer.class));
+
+			stage.getAnnealingSettings().setInitialTemperature(headlessParameters.getParameterValue("sa-temperature", Integer.class));
+			stage.getAnnealingSettings().setEpochLength(headlessParameters.getParameterValue("sa-epoch-length", Integer.class));
+			stage.getAnnealingSettings().setCooling(headlessParameters.getParameterValue("sa-cooling", Double.class));
+
+			ParallelOptimisationStage<CleanStateOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
+
+			// Add to list to manipulate
+			constraintsAndFitnesses.add(stage.getConstraintAndFitnessSettings());
+
+			pStage.setTemplate(stage);
+			pStage.setJobCount(headlessParameters.getParameterValue("clean-state-jobs", Integer.class));
+
+			plan.getStages().add(pStage);
+		}
+
+		{
+			LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
+			stage.setSeed(headlessParameters.getParameterValue("seed", Integer.class));
+
+			stage.getAnnealingSettings().setIterations(headlessParameters.getParameterValue("iterations", Integer.class));
+			stage.getAnnealingSettings().setInitialTemperature(headlessParameters.getParameterValue("sa-temperature", Integer.class));
+			stage.getAnnealingSettings().setEpochLength(headlessParameters.getParameterValue("sa-epoch-length", Integer.class));
+			stage.getAnnealingSettings().setCooling(headlessParameters.getParameterValue("sa-cooling", Double.class));
+			stage.getAnnealingSettings().setRestarting(headlessParameters.getParameterValue("restarting-useRestarting", Boolean.class));
+			stage.getAnnealingSettings().setRestartIterationsThreshold(headlessParameters.getParameterValue("restarting-restartThreshold", Integer.class));
+
+			ParallelOptimisationStage<LocalSearchOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
+			pStage.setTemplate(stage);
+			pStage.setJobCount(headlessParameters.getParameterValue("lso-jobs", Integer.class));
+
+			// Add to list to manipulate
+			constraintsAndFitnesses.add(stage.getConstraintAndFitnessSettings());
+
+			plan.getStages().add(pStage);
+		}
+		if (headlessParameters.getParameterValue("hillClimbing-useHillClimbing", Boolean.class)) {
+			HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
+			stage.getAnnealingSettings().setIterations(headlessParameters.getParameterValue("hillClimbing-iterations", Integer.class));
+			stage.setSeed(headlessParameters.getParameterValue("seed", Integer.class));
+
+			stage.getAnnealingSettings().setInitialTemperature(headlessParameters.getParameterValue("sa-temperature", Integer.class));
+			stage.getAnnealingSettings().setEpochLength(headlessParameters.getParameterValue("sa-epoch-length", Integer.class));
+			stage.getAnnealingSettings().setCooling(headlessParameters.getParameterValue("sa-cooling", Double.class));
+
+			ParallelOptimisationStage<HillClimbOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
+			pStage.setTemplate(stage);
+			// pStage.setJobCount(headlessParameters.getParameter("clean-state-jobs", Integer.class));
+
+			// Add to list to manipulate
+			constraintsAndFitnesses.add(stage.getConstraintAndFitnessSettings());
+
+			plan.getStages().add(pStage);
+		}
+
+		if (headlessParameters.getParameterValue("actionSets-buildActionSets", Boolean.class)) {
+			ActionPlanOptimisationStage stage = ScenarioUtils.createDefaultActionPlanParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
+			stage.setTotalEvaluations(headlessParameters.getParameterValue("actionSets-totalEvals", Integer.class));
+			stage.setInRunEvaluations(headlessParameters.getParameterValue("actionSets-inRunEvals", Integer.class));
+			stage.setSearchDepth(headlessParameters.getParameterValue("actionSets-maxSearchDepth", Integer.class));
+
+			// Add to list to manipulate
+			constraintsAndFitnesses.add(stage.getConstraintAndFitnessSettings());
+
+			plan.getStages().add(stage);
+		}
+
 		// Scenario settings
-		settings.setShippingOnly(headlessParameters.getParameterValue("shippingonly-optimisation", Boolean.class));
-		settings.setGenerateCharterOuts(headlessParameters.getParameterValue("generatedcharterouts-optimisation", Boolean.class));
+		plan.getUserSettings().setShippingOnly(headlessParameters.getParameterValue("shippingonly-optimisation", Boolean.class));
+		plan.getUserSettings().setGenerateCharterOuts(headlessParameters.getParameterValue("generatedcharterouts-optimisation", Boolean.class));
 		// action sets
-		setActionPlanSettings(settings, settingsOverride, headlessParameters);
-		createObjectives(settings, headlessParameters.getParameterValue("objectives", DoubleMap.class));
-		createDateRanges(settings, headlessParameters);
+
+		createDateRanges(plan, headlessParameters);
+
+		for (ConstraintAndFitnessSettings settings : constraintsAndFitnesses) {
+			createObjectives(settings, headlessParameters.getParameterValue("objectives", DoubleMap.class));
+		}
 		setLatenessParameters(settingsOverride, headlessParameters);
-		createPromptDates(rootObject, headlessParameters);
 		setSimilarityParameters(settingsOverride, headlessParameters);
-	}
 
-	private void setActionPlanSettings(final OptimiserSettings settings, final SettingsOverride settingsOverride, final HeadlessParameters headlessParameters) {
-		settings.setBuildActionSets(headlessParameters.getParameterValue("actionSets-buildActionSets", Boolean.class));
-		settingsOverride.setActionPlanTotalEvals(headlessParameters.getParameterValue("actionSets-totalEvals", Integer.class));
-		settingsOverride.setActionPlanInRunEvals(headlessParameters.getParameterValue("actionSets-inRunEvals", Integer.class));
-		settingsOverride.setActionPlanMaxSearchDepth(headlessParameters.getParameterValue("actionSets-maxSearchDepth", Integer.class));
-	}
-
-	private void setHillClimbingParameters(final OptimiserSettings settings, final HeadlessParameters parameters) {
-		final IndividualSolutionImprovementSettings solutionImprovementSettings = ParametersFactory.eINSTANCE.createIndividualSolutionImprovementSettings();
-		solutionImprovementSettings.setImprovingSolutions(parameters.getParameterValue("hillClimbing-useHillClimbing", Boolean.class));
-		solutionImprovementSettings.setIterations(parameters.getParameterValue("hillClimbing-iterations", Integer.class));
-		settings.setSolutionImprovementSettings(solutionImprovementSettings);
+		createPromptDates(rootObject, headlessParameters);
 	}
 
 	private void createPromptDates(final LNGScenarioModel rootObject, final HeadlessParameters parameters) {
@@ -534,28 +595,25 @@ public class HeadlessApplication implements IApplication {
 		overrideSettings.setSimilarityParameterMap(similarityParameterMap);
 	}
 
-	private void createDateRanges(final OptimiserSettings settings, final HeadlessParameters headlessParameters) {
+	private void createDateRanges(final OptimisationPlan plan, final HeadlessParameters headlessParameters) {
 		final YearMonth dateBefore = headlessParameters.getParameterValue("periodOptimisationDateBefore", YearMonth.class);
 		final YearMonth dateAfter = headlessParameters.getParameterValue("periodOptimisationDateAfter", YearMonth.class);
-		final OptimisationRange range = ParametersFactory.eINSTANCE.createOptimisationRange();
 		if (dateBefore != null) {
-			range.setOptimiseBefore(dateBefore);
+			plan.getUserSettings().setPeriodEnd(dateBefore);
 		}
 		if (dateAfter != null) {
-			range.setOptimiseAfter(dateAfter);
+			plan.getUserSettings().setPeriodStart(dateAfter);
 		}
-		settings.setRange(range);
 	}
 
-	private void createObjectives(final OptimiserSettings settings, final DoubleMap doubleMap) {
-		final ParametersFactory parametersFactory = ParametersFactory.eINSTANCE;
+	private void createObjectives(final ConstraintAndFitnessSettings settings, final DoubleMap doubleMap) {
 		settings.getObjectives().clear();
 		for (final String objectiveName : doubleMap.getDoubleMap().keySet()) {
-			settings.getObjectives().add(ScenarioUtils.createObjective(parametersFactory, objectiveName, doubleMap.getDoubleMap().get(objectiveName)));
+			settings.getObjectives().add(ScenarioUtils.createObjective(objectiveName, doubleMap.getDoubleMap().get(objectiveName)));
 		}
 	}
 
-	private String getFolderNameFromSettings(final OptimiserSettings settings) {
+	private String getFolderNameFromSettings(final OptimisationPlan settings) {
 		final Map<String, Object> nameMap = getSettingsFileNameMap(settings);
 		String name = "";
 		int count = 0;
@@ -569,15 +627,15 @@ public class HeadlessApplication implements IApplication {
 		return settings.getOutputName();
 	}
 
-	private Map<String, Object> getSettingsFileNameMap(final OptimiserSettings settings) {
+	private Map<String, Object> getSettingsFileNameMap(final OptimisationPlan settings) {
 		final Map<String, Object> nameMap = new LinkedHashMap<>();
-		nameMap.put("seed", settings.getSeed());
-		nameMap.put("iterations", settings.getAnnealingSettings().getIterations());
-		nameMap.put("temperature", settings.getAnnealingSettings().getInitialTemperature());
-		nameMap.put("epochLength", settings.getAnnealingSettings().getEpochLength());
-		nameMap.put("cooling", settings.getAnnealingSettings().getCooling());
-		nameMap.put("shippingOnly", settings.isShippingOnly());
-		nameMap.put("gco", settings.isGenerateCharterOuts());
+//		nameMap.put("seed", settings.getSeed());
+//		nameMap.put("iterations", settings.getAnnealingSettings().getIterations());
+//		nameMap.put("temperature", settings.getAnnealingSettings().getInitialTemperature());
+//		nameMap.put("epochLength", settings.getAnnealingSettings().getEpochLength());
+//		nameMap.put("cooling", settings.getAnnealingSettings().getCooling());
+//		nameMap.put("shippingOnly", settings.isShippingOnly());
+//		nameMap.put("gco", settings.isGenerateCharterOuts());
 		return nameMap;
 	}
 
