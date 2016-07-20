@@ -186,7 +186,7 @@ public class VoyagePlanAnnotatorTest {
 		IEvaluationState evaluationState = Mockito.mock(IEvaluationState.class);
 		IOptimisationContext context = Mockito.mock(IOptimisationContext.class);
 
-		final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, context, evaluationState);
+		final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, evaluationState);
 		ISequence sequence = Mockito.mock(ISequence.class);
 		VolumeAllocatedSequence scheduledSequence = new VolumeAllocatedSequence(resource, sequence, 0, plans);
 		annotator.annotateFromVoyagePlan(scheduledSequence, annotatedSolution);

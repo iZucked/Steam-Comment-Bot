@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
@@ -57,6 +58,9 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
+	@Inject
+	private IOptimisationData optimisationData;
+	
 	@Override
 	public boolean evaluate(@NonNull final Phase phase, @NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState) {
 		return evaluate(phase, sequences, evaluationState, null);
@@ -128,13 +132,13 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 				allElements.add(portSlotProvider.getElement(portSlot));
 			}
 		}
-		allElements.addAll(annotatedSolution.getContext().getOptimisationData().getSequenceElements());
+		allElements.addAll(optimisationData.getSequenceElements());
 		return allElements;
 	}
 
 	@NonNull
 	private Set<@NonNull ISequenceElement> getOptimisationSequenceElements(final @NonNull IAnnotatedSolution solution) {
-		final Set<@NonNull ISequenceElement> optimisationElements = new HashSet<>(solution.getContext().getOptimisationData().getSequenceElements());
+		final Set<@NonNull ISequenceElement> optimisationElements = new HashSet<>(optimisationData.getSequenceElements());
 		return optimisationElements;
 	}
 

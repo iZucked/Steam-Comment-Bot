@@ -80,9 +80,9 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 
 	@Inject
 	public void init() {
-		targetElements = new ArrayList<>(owner.context.getOptimisationData().getSequenceElements().size());
+		targetElements = new ArrayList<>(owner.data.getSequenceElements().size());
 		// Determine possible slots which can be moved.
-		for (final ISequenceElement e : owner.context.getOptimisationData().getSequenceElements()) {
+		for (final ISequenceElement e : owner.data.getSequenceElements()) {
 			// TODO: check new API - null might be events or start/ends?
 			// TODO: Really need port type in here
 			final Collection<IResource> resources = racDCP.getAllowedResources(e);

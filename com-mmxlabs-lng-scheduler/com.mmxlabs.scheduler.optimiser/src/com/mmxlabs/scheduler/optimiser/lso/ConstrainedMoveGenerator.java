@@ -14,7 +14,6 @@ import javax.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
-import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -99,7 +98,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	// TODO: Inject
 	private boolean enableSwapElementsMoveGenerator = false;
 
-	protected final IOptimisationContext context;
+	// protected final IOptimisationContext context;
 
 	@Inject
 	private IAlternativeElementProvider alternativeElementProvider;
@@ -123,14 +122,9 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	private IStartEndRequirementProvider startEndRequirementProvider;
 
 	@Inject
-	private IOptimisationData optimisationData;
-
-	@Inject
 	private IFollowersAndPreceders followersAndPreceders;
 
-	public ConstrainedMoveGenerator(final IOptimisationContext context) {
-		this.context = context;
-	}
+	@Inject IOptimisationData data;
 
 	@Inject
 	public void init() {
@@ -141,7 +135,6 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		// LegalSequencingChecker checker2 = new LegalSequencingChecker(context);
 		int initialMaxLateness = checker.getMaxLateness();
 		checker.disallowLateness();
-		final IOptimisationData data = context.getOptimisationData();
 
 		// Build of a map of special cargo elements for FOB/DES cargoes.
 		final Map<ISequenceElement, IResource> spotElementMap = new HashMap<>();
@@ -197,14 +190,14 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 			this.optionalMoveGenerator = null;
 		}
 		// Disable within route element swap for round trip cargoes.
-//		for (final IResource resource : data.getResources()) {
-//			final IVesselAvailability vessel = vesselProvider.getVesselAvailability(resource);
-//			if (vessel.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
-//				this.swapElementsMoveGenerator = new SwapElementsInSequenceMoveGeneratorUnit(this);
-//				injector.injectMembers(swapElementsMoveGenerator);
-//				break;
-//			}
-//		}
+		// for (final IResource resource : data.getResources()) {
+		// final IVesselAvailability vessel = vesselProvider.getVesselAvailability(resource);
+		// if (vessel.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+		// this.swapElementsMoveGenerator = new SwapElementsInSequenceMoveGeneratorUnit(this);
+		// injector.injectMembers(swapElementsMoveGenerator);
+		// break;
+		// }
+		// }
 		checker.setMaxLateness(initialMaxLateness);
 
 	}
@@ -234,7 +227,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		this.sequences = sequences;
 
 		// build table for elements in conventional sequences
-		for (IResource resource : context.getOptimisationData().getResources()) {
+		for (IResource resource : data.getResources()) {
 			final ISequence sequence = sequences.getSequence(resource);
 			for (int j = 0; j < sequence.size(); j++) {
 				final ISequenceElement element = sequence.get(j);

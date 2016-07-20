@@ -232,7 +232,7 @@ public class TestCalculations {
 			final IEvaluationContext context = Mockito.mock(IEvaluationContext.class);
 			final IEvaluationState state = Mockito.mock(IEvaluationState.class);
 
-			final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, context, state);
+			final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, state);
 
 			// try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 			// scope.enter();
@@ -678,7 +678,7 @@ public class TestCalculations {
 			final IEvaluationContext context = Mockito.mock(IEvaluationContext.class);
 			final IEvaluationState state = Mockito.mock(IEvaluationState.class);
 
-			final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, context, state);
+			final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, state);
 
 			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
 			Assert.assertNotNull(volumeAllocatedSequences);
@@ -1118,7 +1118,7 @@ public class TestCalculations {
 			final IEvaluationContext context = Mockito.mock(IEvaluationContext.class);
 			final IEvaluationState state = Mockito.mock(IEvaluationState.class);
 
-			final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, context, state);
+			final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, state);
 
 			final VolumeAllocatedSequences volumeAllocatedSequences = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
 			Assert.assertNotNull(volumeAllocatedSequences);

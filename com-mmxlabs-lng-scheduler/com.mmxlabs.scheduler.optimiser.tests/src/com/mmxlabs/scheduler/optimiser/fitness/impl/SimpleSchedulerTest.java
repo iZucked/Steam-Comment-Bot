@@ -251,7 +251,7 @@ public class SimpleSchedulerTest {
 				}
 			};
 
-			final ILocalSearchOptimiser optimiser = GeneralTestUtils.buildOptimiser(context, new Random(seed), 1000, 5, monitor);
+			final ILocalSearchOptimiser optimiser = GeneralTestUtils.buildOptimiser(context, data, new Random(seed), 1000, 5, monitor);
 
 			for (final IConstraintChecker c : optimiser.getConstraintCheckers()) {
 				injector.injectMembers(c);

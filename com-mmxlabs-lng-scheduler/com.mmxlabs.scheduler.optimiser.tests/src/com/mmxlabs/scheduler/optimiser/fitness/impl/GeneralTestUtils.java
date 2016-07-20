@@ -91,26 +91,24 @@ public final class GeneralTestUtils {
 		return fitnessEvaluator;
 	}
 
-	public static LocalSearchOptimiser buildOptimiser(@NonNull final IOptimisationContext context, @NonNull final Random random, final int numberOfIterations, final int stepSize,
-			final IOptimiserProgressMonitor monitor) {
+	public static LocalSearchOptimiser buildOptimiser(@NonNull final IOptimisationContext context, IOptimisationData data, @NonNull final Random random, final int numberOfIterations,
+			final int stepSize, final IOptimiserProgressMonitor monitor) {
 
 		final EvaluationProcessInstantiator evaluationProcessInstantiator = new EvaluationProcessInstantiator();
 		final List<IEvaluationProcess> evaluationProcesses = evaluationProcessInstantiator.instantiateEvaluationProcesses(context.getEvaluationProcessRegistry(), context.getEvaluationProcesses(),
-				context.getOptimisationData());
+				data);
 
 		final ConstraintCheckerInstantiator constraintCheckerInstantiator = new ConstraintCheckerInstantiator();
-		final List<IConstraintChecker> constraintCheckers = constraintCheckerInstantiator.instantiateConstraintCheckers(context.getConstraintCheckerRegistry(), context.getConstraintCheckers(),
-				context.getOptimisationData());
+		final List<IConstraintChecker> constraintCheckers = constraintCheckerInstantiator.instantiateConstraintCheckers(context.getConstraintCheckerRegistry(), context.getConstraintCheckers(), data);
 
 		final EvaluatedStateConstraintCheckerInstantiator evaluatedStateConstraintCheckerInstantiator = new EvaluatedStateConstraintCheckerInstantiator();
 		final List<IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers = evaluatedStateConstraintCheckerInstantiator
 				.instantiateConstraintCheckers(context.getEvaluatedStateConstraintCheckerRegistry(), context.getEvaluatedStateConstraintCheckers());
-		
+
 		final FitnessComponentInstantiator fitnessComponentInstantiator = new FitnessComponentInstantiator();
 		final List<IFitnessComponent> fitnessComponents = fitnessComponentInstantiator.instantiateFitnesses(context.getFitnessFunctionRegistry(), context.getFitnessComponents());
 
-		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = GeneralTestUtils.createLinearSAFitnessEvaluator(stepSize, numberOfIterations, fitnessComponents, evaluationProcesses,
-				context.getOptimisationData());
+		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = GeneralTestUtils.createLinearSAFitnessEvaluator(stepSize, numberOfIterations, fitnessComponents, evaluationProcesses, data);
 		final IMoveGenerator moveGenerator = GeneralTestUtils.createRandomMoveGenerator(random);
 
 		final DefaultLocalSearchOptimiser lso = new DefaultLocalSearchOptimiser();

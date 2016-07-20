@@ -38,8 +38,8 @@ public class LegalSequencingChecker {
 
 	private IPairwiseConstraintChecker resourceAllocationChecker;
 
-	public LegalSequencingChecker(final IOptimisationContext context) {
-		this(context.getOptimisationData(), createPairwiseCheckers(context));
+	public LegalSequencingChecker(final IOptimisationData data, final IOptimisationContext context) {
+		this(data, createPairwiseCheckers(context));
 	}
 
 	/**
