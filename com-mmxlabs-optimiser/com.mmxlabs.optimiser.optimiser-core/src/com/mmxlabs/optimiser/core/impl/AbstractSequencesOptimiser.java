@@ -104,7 +104,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 
 	@Override
 	public final IAnnotatedSolution getBestSolution() {
-		final IAnnotatedSolution annotatedSolution = fitnessEvaluator.getBestAnnotatedSolution(currentContext);
+		final IAnnotatedSolution annotatedSolution = fitnessEvaluator.getBestAnnotatedSolution();
 		if (annotatedSolution == null) {
 			return null;
 		}
@@ -119,7 +119,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 
 	@Override
 	public final IAnnotatedSolution getCurrentSolution() {
-		final IAnnotatedSolution annotatedSolution = fitnessEvaluator.getCurrentAnnotatedSolution(currentContext);
+		final IAnnotatedSolution annotatedSolution = fitnessEvaluator.getCurrentAnnotatedSolution();
 
 		if (annotatedSolution == null) {
 			return null;

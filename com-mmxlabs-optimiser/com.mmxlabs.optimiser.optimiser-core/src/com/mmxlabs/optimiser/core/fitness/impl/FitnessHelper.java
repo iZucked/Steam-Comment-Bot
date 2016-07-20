@@ -12,12 +12,11 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
-import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess.Phase;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
@@ -107,12 +106,22 @@ public final class FitnessHelper implements IFitnessHelper {
 		}
 	}
 
+	@Override
+	public void addToAnnotatedSolution(@NonNull final ISequences fullSequences, @NonNull final IEvaluationState evaluationState, @NonNull final Collection<IFitnessComponent> fitnessComponents,
+			@NonNull AnnotatedSolution annotatedSolution) {
+
+		final Set<IFitnessCore> cores = getFitnessCores(fitnessComponents);
+		for (final IFitnessCore core : cores) {
+			core.annotate(fullSequences, evaluationState, annotatedSolution);
+		}
+	}
+
 	@NonNull
 	@Override
-	public IAnnotatedSolution buildAnnotatedSolution(@NonNull final IOptimisationContext context, @NonNull final ISequences fullSequences, @NonNull final IEvaluationState evaluationState,
+	public IAnnotatedSolution buildAnnotatedSolution(@NonNull final ISequences fullSequences, @NonNull final IEvaluationState evaluationState,
 			@NonNull final Collection<IFitnessComponent> fitnessComponents, @NonNull final Collection<IEvaluationProcess> evaluationProcesses) {
 
-		final AnnotatedSolution result = new AnnotatedSolution(fullSequences, context, evaluationState);
+		final AnnotatedSolution result = new AnnotatedSolution(fullSequences, evaluationState);
 
 		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
 			evaluationProcess.annotate(Phase.Checked_Evaluation, fullSequences, evaluationState, result);

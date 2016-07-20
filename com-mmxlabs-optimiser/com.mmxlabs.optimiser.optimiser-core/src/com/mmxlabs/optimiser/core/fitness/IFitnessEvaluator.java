@@ -101,7 +101,7 @@ public interface IFitnessEvaluator {
 	 * @return
 	 */
 	@NonNull
-	IAnnotatedSolution getBestAnnotatedSolution(@NonNull final IOptimisationContext context);
+	IAnnotatedSolution getBestAnnotatedSolution();
 
 	/**
 	 * Returns an annotated solution for the current sequences.
@@ -110,10 +110,10 @@ public interface IFitnessEvaluator {
 	 * @return
 	 */
 	@NonNull
-	IAnnotatedSolution getCurrentAnnotatedSolution(@NonNull final IOptimisationContext context);
+	IAnnotatedSolution getCurrentAnnotatedSolution();
 
-	@NonNull
-	IAnnotatedSolution createAnnotatedSolution(final @NonNull IOptimisationContext context, @NonNull ISequences fullSequences, @NonNull IEvaluationState evaluationState);
+//	@NonNull
+//	IAnnotatedSolution createAnnotatedSolution(@NonNull ISequences fullSequences, @NonNull IEvaluationState evaluationState);
 
 	void step();
 

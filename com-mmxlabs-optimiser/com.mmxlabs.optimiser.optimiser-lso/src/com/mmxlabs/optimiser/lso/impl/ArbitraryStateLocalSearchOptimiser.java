@@ -22,7 +22,7 @@ public class ArbitraryStateLocalSearchOptimiser extends DefaultLocalSearchOptimi
 
 		initLogger();
 
-		data = optimiserContext.getOptimisationData();
+//		data = optimiserContext.getOptimisationData();
 
 		final ModifiableSequences currentRawSequences = new ModifiableSequences(inputRawSequences);
 
@@ -36,7 +36,7 @@ public class ArbitraryStateLocalSearchOptimiser extends DefaultLocalSearchOptimi
 		// Set initial sequences
 		getMoveGenerator().setSequences(potentialRawSequences);
 
-		final IAnnotatedSolution annotatedBestSolution = getFitnessEvaluator().getBestAnnotatedSolution(optimiserContext);
+		final IAnnotatedSolution annotatedBestSolution = getFitnessEvaluator().getBestAnnotatedSolution();
 		if (annotatedBestSolution == null) {
 			return null;
 		}

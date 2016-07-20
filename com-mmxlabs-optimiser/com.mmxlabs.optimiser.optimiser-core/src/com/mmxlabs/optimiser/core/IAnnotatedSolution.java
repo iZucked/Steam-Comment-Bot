@@ -32,23 +32,16 @@ public interface IAnnotatedSolution {
 	@NonNull
 	IElementAnnotationsMap getElementAnnotations();
 
-	/**
-	 * Returns the {@link IEvaluationContext} used to create this solution.
-	 * 
-	 * @return
-	 */
-	@NonNull
-	IEvaluationContext getContext();
-
 	@Nullable
 	<U> U getGeneralAnnotation(@NonNull String key, @NonNull Class<U> clz);
 
 	/**
 	 * Get all general annotation keys
+	 * 
 	 * @return
 	 */
 	List<String> getGeneralAnnotationKeys();
-	
+
 	/**
 	 * Set a general annotation.
 	 * 

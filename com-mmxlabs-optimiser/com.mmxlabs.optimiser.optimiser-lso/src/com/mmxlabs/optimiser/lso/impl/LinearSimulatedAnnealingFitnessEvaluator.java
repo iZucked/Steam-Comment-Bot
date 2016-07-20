@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
@@ -109,7 +108,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 		}
 		lastFitness = totalFitness;
 		// Step to the next threshold levels
-//		thresholder.step();
+		// thresholder.step();
 		return accept;
 	}
 
@@ -251,27 +250,27 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 	}
 
 	@Override
-	public IAnnotatedSolution getBestAnnotatedSolution(@NonNull final IOptimisationContext context) {
+	public IAnnotatedSolution getBestAnnotatedSolution() {
 		final Triple<ISequences, ISequences, IEvaluationState> p = getBestSequences();
 		final ISequences fullSequences = p.getSecond();
 		final IEvaluationState evaluationState = p.getThird();
 		assert fullSequences != null;
 		assert evaluationState != null;
-		final IAnnotatedSolution result = fitnessHelper.buildAnnotatedSolution(context, fullSequences, evaluationState, getFitnessComponents(), getEvaluationProcesses());
+		final IAnnotatedSolution result = fitnessHelper.buildAnnotatedSolution(fullSequences, evaluationState, getFitnessComponents(), getEvaluationProcesses());
 		result.setGeneralAnnotation(OptimiserConstants.G_AI_fitnessComponents, new HashMap<String, Long>(bestFitnesses));
 
 		return result;
 	}
 
 	@Override
-	public IAnnotatedSolution getCurrentAnnotatedSolution(@NonNull final IOptimisationContext context) {
+	public IAnnotatedSolution getCurrentAnnotatedSolution() {
 		final Triple<ISequences, ISequences, IEvaluationState> p = getCurrentSequences();
 		final ISequences fullSequences = p.getSecond();
 		final IEvaluationState evaluationState = p.getThird();
 		assert fullSequences != null;
 		assert evaluationState != null;
 
-		final IAnnotatedSolution result = fitnessHelper.buildAnnotatedSolution(context, fullSequences, evaluationState, getFitnessComponents(), getEvaluationProcesses());
+		final IAnnotatedSolution result = fitnessHelper.buildAnnotatedSolution(fullSequences, evaluationState, getFitnessComponents(), getEvaluationProcesses());
 
 		result.setGeneralAnnotation(OptimiserConstants.G_AI_fitnessComponents, new HashMap<String, Long>(currentFitnesses));
 
@@ -283,17 +282,17 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 		thresholder.step();
 	}
 
-	@Override
-	public IAnnotatedSolution createAnnotatedSolution(final IOptimisationContext context, final ISequences fullSequences, final IEvaluationState evaluationState) {
-		assert fullSequences != null;
-		assert evaluationState != null;
-
-		final IAnnotatedSolution result = fitnessHelper.buildAnnotatedSolution(context, fullSequences, evaluationState, getFitnessComponents(), getEvaluationProcesses());
-
-		result.setGeneralAnnotation(OptimiserConstants.G_AI_fitnessComponents, new HashMap<String, Long>(currentFitnesses));
-
-		return result;
-	}
+//	@Override
+//	public IAnnotatedSolution createAnnotatedSolution(final ISequences fullSequences, final IEvaluationState evaluationState) {
+//		assert fullSequences != null;
+//		assert evaluationState != null;
+//
+//		final IAnnotatedSolution result = fitnessHelper.buildAnnotatedSolution(fullSequences, evaluationState, getFitnessComponents(), getEvaluationProcesses());
+//
+//		result.setGeneralAnnotation(OptimiserConstants.G_AI_fitnessComponents, new HashMap<String, Long>(currentFitnesses));
+//
+//		return result;
+//	}
 
 	@Override
 	public void restart() {

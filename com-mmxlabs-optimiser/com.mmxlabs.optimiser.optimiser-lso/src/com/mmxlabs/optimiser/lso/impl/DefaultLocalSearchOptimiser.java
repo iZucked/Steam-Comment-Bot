@@ -39,6 +39,8 @@ import com.mmxlabs.optimiser.lso.logging.LSOLogger;
  * 
  */
 public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
+	
+	@Inject
 	protected IOptimisationData data;
 
 	protected int numberOfMovesTried;
@@ -73,7 +75,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		setCurrentContext(optimiserContext);
 
 		initLogger();
-		data = optimiserContext.getOptimisationData();
+//		data = optimiserContext.getOptimisationData();
 		numberOfMovesTried = 0;
 		numberOfMovesAccepted = 0;
 
@@ -93,7 +95,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		// Set initial sequences
 		getMoveGenerator().setSequences(potentialRawSequences);
 
-		final IAnnotatedSolution annotatedBestSolution = getFitnessEvaluator().getBestAnnotatedSolution(optimiserContext);
+		final IAnnotatedSolution annotatedBestSolution = getFitnessEvaluator().getBestAnnotatedSolution();
 		if (annotatedBestSolution == null) {
 			return null;
 		}

@@ -47,11 +47,11 @@ public final class EvaluationContext implements IEvaluationContext {
 		return initialSequences;
 	}
 
-	@Override
-	@NonNull
-	public IOptimisationData getOptimisationData() {
-		return optimisationData;
-	}
+//	@Override
+//	@NonNull
+//	public IOptimisationData getOptimisationData() {
+//		return optimisationData;
+//	}
 
 	@Override
 	@NonNull

@@ -92,7 +92,7 @@ public class DefaultLocalSearchOptimiserTest {
 
 		final IOptimiserProgressMonitor monitor = new SystemOutProgressMonitor();
 
-		final LocalSearchOptimiser lso = GeneralTestUtils.buildOptimiser(context, random, numberOfIterations, 1, monitor);
+		final LocalSearchOptimiser lso = GeneralTestUtils.buildOptimiser(context, data, random, numberOfIterations, 1, monitor);
 
 		// Perform the optimisation
 		lso.optimise(context);

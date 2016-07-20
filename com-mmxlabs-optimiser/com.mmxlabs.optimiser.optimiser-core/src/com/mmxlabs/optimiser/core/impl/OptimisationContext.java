@@ -80,12 +80,12 @@ public final class OptimisationContext implements IOptimisationContext {
 	public ISequences getInputSequences() {
 		return initialSequences;
 	}
-
-	@Override
-	@NonNull
-	public IOptimisationData getOptimisationData() {
-		return optimisationData;
-	}
+//
+//	@Override
+//	@NonNull
+//	public IOptimisationData getOptimisationData() {
+//		return optimisationData;
+//	}
 
 	@Override
 	@NonNull

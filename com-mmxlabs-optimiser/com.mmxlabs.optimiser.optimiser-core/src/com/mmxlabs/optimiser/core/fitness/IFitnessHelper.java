@@ -11,11 +11,11 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
+import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
@@ -94,17 +94,11 @@ public interface IFitnessHelper {
 	 */
 	void acceptFromCores(@NonNull Collection<IFitnessCore> fitnessCores, @NonNull ISequences fullSequences, @Nullable Collection<IResource> affectedResources);
 
-/**
-	 * The {@link #accept(ISequences, Collection)} method is to be invoked when
-	 * a {@link ISequences} object is accepted as the new state. The
-	 * {@link ISequences} object must have been passed to the
-	 * {@link IFitnessCore#evaluate(ISequences, Collection) method previously.
-	 * This could be directly or via the
+	/**
+	 * The {@link #accept(ISequences, Collection)} method is to be invoked when a {@link ISequences} object is accepted as the new state. The {@link ISequences} object must have been passed to the
+	 * {@link IFitnessCore#evaluate(ISequences, Collection) method previously. This could be directly or via the
 	 * 
-	 * @link #evaluateSequencesFromComponents(ISequences, Collection,
-	 *       Collection)} or
-	 *       {@link #evaluateSequencesFromCores(ISequences, Collection, Collection)}
-	 *       methods.
+	 * @link #evaluateSequencesFromComponents(ISequences, Collection, Collection)} or {@link #evaluateSequencesFromCores(ISequences, Collection, Collection)} methods.
 	 * 
 	 * @param fullSequences
 	 * @param affectedResources
@@ -129,6 +123,9 @@ public interface IFitnessHelper {
 	 * @return
 	 */
 	@NonNull
-	IAnnotatedSolution buildAnnotatedSolution(@NonNull IOptimisationContext context, @NonNull ISequences fullSequences, @NonNull IEvaluationState evaluationState,
-			@NonNull Collection<IFitnessComponent> fitnessComponents, @NonNull Collection<IEvaluationProcess> evaluationProcesses);
+	IAnnotatedSolution buildAnnotatedSolution(@NonNull ISequences fullSequences, @NonNull IEvaluationState evaluationState, @NonNull Collection<IFitnessComponent> fitnessComponents,
+			@NonNull Collection<IEvaluationProcess> evaluationProcesses);
+
+	void addToAnnotatedSolution(@NonNull ISequences fullSequences, @NonNull IEvaluationState evaluationState, @NonNull Collection<IFitnessComponent> fitnessComponents,
+			@NonNull AnnotatedSolution annotatedSolution);
 }

@@ -48,7 +48,7 @@ public class GeneralAnnotationLogger {
 		if (sequencesFromEvaluator == sequences) {
 			return solution;
 		} else {
-			solution = fitnessEvaluator.getBestAnnotatedSolution(context);
+			solution = fitnessEvaluator.getBestAnnotatedSolution();
 			sequences = sequencesFromEvaluator;
 			return solution;
 		}

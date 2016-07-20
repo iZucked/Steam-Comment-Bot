@@ -25,8 +25,8 @@ public interface IEvaluationContext {
 	 * 
 	 * @return
 	 */
-	@NonNull
-	IOptimisationData getOptimisationData();
+//	@NonNull
+//	IOptimisationData getOptimisationData();
 
 	/**
 	 * Returns the initial sequences state - i.e. the starting point of the optimisation process.
