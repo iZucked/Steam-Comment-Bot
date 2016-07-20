@@ -151,8 +151,10 @@ public class HeadlessApplication implements IApplication {
 
 		final String outputFile = overrideSettings.getOutput();
 
-		final OptimiserSettings optimiserSettings = rootObject.getParameters() == null ? ScenarioUtils.createDefaultSettings() : rootObject.getParameters();
+		OptimiserSettings optimiserSettings = rootObject.getParameters() == null ? ScenarioUtils.createDefaultSettings() : rootObject.getParameters();
 		assert optimiserSettings != null;
+
+		optimiserSettings = LNGScenarioRunnerUtils.createExtendedSettings(optimiserSettings);
 
 		updateOptimiserSettings(rootObject, optimiserSettings, overrideSettings, headlessParameters);
 
@@ -161,7 +163,7 @@ public class HeadlessApplication implements IApplication {
 		// Ensure dir structure is in place
 		Paths.get(path, outputFolderName).toFile().mkdirs();
 
-		final IOptimiserProgressMonitor monitor = new RunExporterProgressMonitor(exporters);
+//		final IOptimiserProgressMonitor monitor = new RunExporterProgressMonitor(exporters);
 
 		// Create logging module
 		final int no_threads = getNumThreads(headlessParameters);
@@ -186,7 +188,7 @@ public class HeadlessApplication implements IApplication {
 					case IRunnerHook.PHASE_LSO:
 					case IRunnerHook.PHASE_HILL:
 					case IRunnerHook.PHASE_INITIAL:
-						save(rawSequences, phase);
+//						save(rawSequences, phase);
 						break;
 					case IRunnerHook.PHASE_ACTION_SETS:
 						break;
@@ -198,7 +200,7 @@ public class HeadlessApplication implements IApplication {
 					switch (phase) {
 					case IRunnerHook.PHASE_LSO:
 					case IRunnerHook.PHASE_HILL:
-						return load(phase);
+//						return load(phase);
 					case IRunnerHook.PHASE_INITIAL:
 					case IRunnerHook.PHASE_ACTION_SETS:
 						break;
@@ -267,8 +269,8 @@ public class HeadlessApplication implements IApplication {
 			};
 
 			try {
-				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, rootObject, null, LNGScenarioRunnerUtils.createExtendedSettings(optimiserSettings),
-						LNGSchedulerJobUtils.createLocalEditingDomain(), null, localOverrides, runnerHook, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
+				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, rootObject, null, optimiserSettings, LNGSchedulerJobUtils.createLocalEditingDomain(), null, localOverrides,
+						runnerHook, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
 				// FIXME
 				// runner.init(monitor);
