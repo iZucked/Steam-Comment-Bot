@@ -147,6 +147,14 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 				final Container parent = containerProvider.get();
 				if (parent == null) {
 					// Error?
+					{
+						// Assume ITS run and just try to dump results.
+						final List<NonNullPair<ISequences, Map<String, Object>>> solutions = pState.getSolutions();
+						for (final NonNullPair<ISequences, Map<String, Object>> p : solutions) {
+							runner.exportAsCopy(p.getFirst(), p.getSecond());
+						}
+					}
+
 					return pState;
 				}
 				{
