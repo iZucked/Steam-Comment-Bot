@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
@@ -281,8 +282,8 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			return new AbstractRunnerHook() {
 
 				@Override
-				public @Nullable ISequences getPrestoredSequences(@NonNull final String phase) {
-					if (IRunnerHook.PHASE_LSO.equals(phase)) {
+				public @Nullable ISequences doGetPrestoredSequences(@NonNull final String stage, LNGDataTransformer dataTransformer) {
+					if (IRunnerHook.STAGE_LSO.equals(stage)) {
 						final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 						// Ensure all sequences has been created!

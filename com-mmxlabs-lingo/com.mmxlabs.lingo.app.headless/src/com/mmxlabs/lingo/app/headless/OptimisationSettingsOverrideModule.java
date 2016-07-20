@@ -41,27 +41,6 @@ public class OptimisationSettingsOverrideModule extends AbstractModule {
 	private boolean enableFourOpt2() {
 		return true;
 	}
-
-	@Provides
-	@Singleton
-	private ISimilarityComponentParameters provideSimilarityComponentParameters() {
-		Map<String, Integer> scpm = settings.getSimilarityParameterMap();
-		final SimilarityComponentParameters scp = new SimilarityComponentParameters();
-
-		scp.setThreshold(SimilarityComponentParameters.Interval.LOW, scpm.get("scp-set-low-thresh"));
-		scp.setWeight(SimilarityComponentParameters.Interval.LOW, scpm.get("scp-set-low-weight"));
-
-		scp.setThreshold(SimilarityComponentParameters.Interval.MEDIUM, scpm.get("scp-set-med-thresh"));
-		scp.setWeight(SimilarityComponentParameters.Interval.MEDIUM, scpm.get("scp-set-med-weight"));
-
-		scp.setThreshold(SimilarityComponentParameters.Interval.HIGH, scpm.get("scp-set-high-thresh"));
-		scp.setWeight(SimilarityComponentParameters.Interval.HIGH, scpm.get("scp-set-high-weight"));
-
-		scp.setOutOfBoundsWeight(scpm.get("scp-set-outOfBounds-weight"));
-
-		return scp;
-	}
-
 	@Provides
 	@Named(LNGParameters_ActionPlanSettingsModule.ACTION_PLAN_TOTAL_EVALUATIONS)
 	private int actionPlanTotalEvals() {

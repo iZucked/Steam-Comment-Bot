@@ -5,8 +5,6 @@
 package com.mmxlabs.lingo.app.headless;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Paths;
@@ -19,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -70,12 +69,8 @@ import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.ActionSetLogger;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
-import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
-import com.mmxlabs.models.lng.transformer.util.SequencesSerialiser;
 import com.mmxlabs.models.migration.scenario.MigrationHelper;
-import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
 import com.mmxlabs.optimiser.lso.logging.LSOLoggingExporter;
 import com.mmxlabs.rcp.common.viewfactory.ReplaceableViewManager;
@@ -155,7 +150,7 @@ public class HeadlessApplication implements IApplication {
 
 		OptimisationPlan optimisationPlan = ScenarioUtils.createDefaultOptimisationPlan();
 		assert optimisationPlan != null;
-
+optimisationPlan.getStages().clear();
 		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
 
 		updateOptimiserSettings(rootObject, optimisationPlan, overrideSettings, headlessParameters);
@@ -172,82 +167,87 @@ public class HeadlessApplication implements IApplication {
 		// Create logging module
 		final int no_threads = getNumThreads(headlessParameters);
 		final @NonNull ExecutorService executorService = Executors.newFixedThreadPool(no_threads);
+
+		final Map<String, LSOLogger> phaseToLoggerMap = new ConcurrentHashMap<>();
+		ActionSetLogger actionSetLogger = optimisationPlan.getUserSettings().isBuildActionSets() ? new ActionSetLogger() : null;
+
 		try {
 
 			final AbstractRunnerHook runnerHook = new AbstractRunnerHook() {
-				@Override
-				public void beginPhase(final String phase, final Injector injector) {
-					super.beginPhase(phase, injector);
-				}
 
 				@Override
-				public void endPhase(final String phase) {
-					super.endPhase(phase);
-				}
+				protected void doEndStageJob(@NonNull String stage, int jobID, @Nullable Injector injector) {
 
-				@Override
-				public void reportSequences(String phase, final ISequences rawSequences) {
-					switch (phase) {
-
-					case IRunnerHook.PHASE_LSO:
-					case IRunnerHook.PHASE_HILL:
-					case IRunnerHook.PHASE_INITIAL:
-						// save(rawSequences, phase);
-						break;
-					case IRunnerHook.PHASE_ACTION_SETS:
-						break;
+					String stageAndJobID = getStageAndJobID();
+					final LSOLogger logger = phaseToLoggerMap.remove(stageAndJobID);
+					if (logger != null) {
+						final LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(path, stageAndJobID, outputFolderName, logger);
+						lsoLoggingExporter.exportData("best-fitness", "current-fitness");
 					}
+					// exportData(phaseToLoggerMap, actionSetLogger, path, outputFolderName, jsonFilePath);
 				}
 
-				@Override
-				public ISequences getPrestoredSequences(String phase) {
-					switch (phase) {
-					case IRunnerHook.PHASE_LSO:
-					case IRunnerHook.PHASE_HILL:
-						// return load(phase);
-					case IRunnerHook.PHASE_INITIAL:
-					case IRunnerHook.PHASE_ACTION_SETS:
-						break;
-
-					}
-					return null;
-				}
-
-				private void save(final @NonNull ISequences rawSequences, final @NonNull String type) {
-					try {
-						final String suffix = instance.getName() + "." + type + ".sequences";
-						final File file2 = new File("/home/ubuntu/scenarios/" + suffix);
-						// final File file2 = new File("c:\\Temp1\\" + suffix);
-						try (FileOutputStream fos = new FileOutputStream(file2)) {
-							final Injector injector = getInjector();
-							assert (injector != null);
-							SequencesSerialiser.save(injector.getInstance(IOptimisationData.class), rawSequences, fos);
-						}
-					} catch (final Exception e) {
-					}
-				}
-
-				@Nullable
-				private ISequences load(final @NonNull String type) {
-					try {
-						final String suffix = instance.getName() + "." + type + ".sequences";
-						final File file2 = new File("/home/ubuntu/scenarios/" + suffix);
-						// final File file2 = new File("c:\\Temp1\\" + suffix);
-						try (FileInputStream fos = new FileInputStream(file2)) {
-							final Injector injector = getInjector();
-							assert (injector != null);
-							return SequencesSerialiser.load(injector.getInstance(IOptimisationData.class), fos);
-						}
-					} catch (final Exception e) {
-					}
-					return null;
-				}
+				// @Override
+				// public void reportSequences(String phase, final ISequences rawSequences) {
+				// switch (phase) {
+				//
+				// case IRunnerHook.PHASE_LSO:
+				// case IRunnerHook.PHASE_HILL:
+				// case IRunnerHook.PHASE_INITIAL:
+				// // save(rawSequences, phase);
+				// break;
+				// case IRunnerHook.PHASE_ACTION_SETS:
+				// break;
+				// }
+				// }
+				//
+				// @Override
+				// public ISequences getPrestoredSequences(String phase) {
+				// switch (phase) {
+				// case IRunnerHook.PHASE_LSO:
+				// case IRunnerHook.PHASE_HILL:
+				// // return load(phase);
+				// case IRunnerHook.PHASE_INITIAL:
+				// case IRunnerHook.PHASE_ACTION_SETS:
+				// break;
+				//
+				// }
+				// return null;
+				// }
+				//
+				// private void save(final @NonNull ISequences rawSequences, final @NonNull String type) {
+				// try {
+				// final String suffix = instance.getName() + "." + type + ".sequences";
+				// final File file2 = new File("/home/ubuntu/scenarios/" + suffix);
+				// // final File file2 = new File("c:\\Temp1\\" + suffix);
+				// try (FileOutputStream fos = new FileOutputStream(file2)) {
+				// final Injector injector = getInjector();
+				// assert (injector != null);
+				// SequencesSerialiser.save(injector.getInstance(IOptimisationData.class), rawSequences, fos);
+				// }
+				// } catch (final Exception e) {
+				// }
+				// }
+				//
+				// @Nullable
+				// private ISequences load(final @NonNull String type) {
+				// try {
+				// final String suffix = instance.getName() + "." + type + ".sequences";
+				// final File file2 = new File("/home/ubuntu/scenarios/" + suffix);
+				// // final File file2 = new File("c:\\Temp1\\" + suffix);
+				// try (FileInputStream fos = new FileInputStream(file2)) {
+				// final Injector injector = getInjector();
+				// assert (injector != null);
+				// return SequencesSerialiser.load(injector.getInstance(IOptimisationData.class), fos);
+				// }
+				// } catch (final Exception e) {
+				// }
+				// return null;
+				// }
 
 			};
 
 			// Create logging module
-			final Map<String, LSOLogger> phaseToLoggerMap = new HashMap<>();
-			ActionSetLogger actionSetLogger = optimisationPlan.getUserSettings().isBuildActionSets() ? new ActionSetLogger() : null;
 
 			// FIXME: Replace with an IParameterMode thing
 			final IOptimiserInjectorService localOverrides = new IOptimiserInjectorService() {
@@ -629,25 +629,25 @@ public class HeadlessApplication implements IApplication {
 
 	private Map<String, Object> getSettingsFileNameMap(final OptimisationPlan settings) {
 		final Map<String, Object> nameMap = new LinkedHashMap<>();
-//		nameMap.put("seed", settings.getSeed());
-//		nameMap.put("iterations", settings.getAnnealingSettings().getIterations());
-//		nameMap.put("temperature", settings.getAnnealingSettings().getInitialTemperature());
-//		nameMap.put("epochLength", settings.getAnnealingSettings().getEpochLength());
-//		nameMap.put("cooling", settings.getAnnealingSettings().getCooling());
-//		nameMap.put("shippingOnly", settings.isShippingOnly());
-//		nameMap.put("gco", settings.isGenerateCharterOuts());
+		// nameMap.put("seed", settings.getSeed());
+		// nameMap.put("iterations", settings.getAnnealingSettings().getIterations());
+		// nameMap.put("temperature", settings.getAnnealingSettings().getInitialTemperature());
+		// nameMap.put("epochLength", settings.getAnnealingSettings().getEpochLength());
+		// nameMap.put("cooling", settings.getAnnealingSettings().getCooling());
+		// nameMap.put("shippingOnly", settings.isShippingOnly());
+		// nameMap.put("gco", settings.isGenerateCharterOuts());
 		return nameMap;
 	}
 
 	private void exportData(final Map<String, LSOLogger> loggerMap, ActionSetLogger actionSetLogger, final String path, final String foldername, final String jsonFilePath) {
-		// first export logging data
-		for (final String phase : IRunnerHook.PHASE_ORDER) {
-			final LSOLogger logger = loggerMap.get(phase);
-			if (logger != null) {
-				final LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(path, phase, foldername, logger);
-				lsoLoggingExporter.exportData("best-fitness", "current-fitness");
-			}
-		}
+//		// first export logging data
+//		for (final String phase : IRunnerHook.PHASE_ORDER) {
+//			final LSOLogger logger = loggerMap.get(phase);
+//			if (logger != null) {
+//				final LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(path, phase, foldername, logger);
+//				lsoLoggingExporter.exportData("best-fitness", "current-fitness");
+//			}
+//		}
 		if (actionSetLogger != null) {
 			actionSetLogger.export(Paths.get(path, foldername).toString(), "action");
 		}

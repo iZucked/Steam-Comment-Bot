@@ -24,11 +24,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import com.google.common.base.Joiner;
+import com.google.inject.Injector;
 import com.mmxlabs.lingo.its.tests.category.OptimisationTest;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
@@ -159,6 +161,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 		runAdvancedOptimisationTestCase(true, SimilarityMode.HIGH, true, false);
 	}
 
+	@SuppressWarnings("unused")
 	private void runAdvancedOptimisationTestCase(final boolean limitedIterations, @NonNull final SimilarityMode mode, final boolean withActionSets, final boolean withGeneratedCharterOuts)
 			throws Exception {
 
@@ -245,40 +248,39 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 			runnerHook = new AbstractRunnerHook() {
 
 				@Override
-				public void reportSequences(String phase, final ISequences rawSequences) {
+				public void doReportSequences(String phase, final ISequences rawSequences, LNGDataTransformer dataTransformer) {
 					switch (phase) {
 
-					case IRunnerHook.PHASE_LSO:
-					case IRunnerHook.PHASE_HILL:
-					case IRunnerHook.PHASE_INITIAL:
-						verify(phase, rawSequences);
+					case IRunnerHook.STAGE_LSO:
+					case IRunnerHook.STAGE_HILL:
+					case IRunnerHook.STAGE_INITIAL:
+						verify(phase, rawSequences, dataTransformer.getInjector());
 						break;
-					case IRunnerHook.PHASE_ACTION_SETS:
+					case IRunnerHook.STAGE_ACTION_SETS:
 						break;
 					}
 				}
 
 				@Override
-				public ISequences getPrestoredSequences(String phase) {
-					switch (phase) {
-					case IRunnerHook.PHASE_LSO:
-					case IRunnerHook.PHASE_HILL:
+				public ISequences doGetPrestoredSequences(String stage, LNGDataTransformer dataTransformer) {
+					switch (stage) {
+					case IRunnerHook.STAGE_LSO:
+					case IRunnerHook.STAGE_HILL:
 						// return load(phase);
-					case IRunnerHook.PHASE_INITIAL:
-					case IRunnerHook.PHASE_ACTION_SETS:
+					case IRunnerHook.STAGE_INITIAL:
+					case IRunnerHook.STAGE_ACTION_SETS:
 						break;
 
 					}
 					return null;
 				}
 
-				private void save(final ISequences rawSequences, final String type) {
+				private void save(final ISequences rawSequences, final String type, Injector injector) {
 					try {
 						final String suffix = Joiner.on(".").join(components) + "." + type + ".sequences";
 						final URL expectedReportOutput = new URL(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20") + suffix);
 						final File file2 = new File(expectedReportOutput.toURI());
 						try (FileOutputStream fos = new FileOutputStream(file2)) {
-							// final Injector injector = scenarioRunner.getInjector();
 							Assert.assertNotNull(injector);
 							SequencesSerialiser.save(injector.getInstance(IOptimisationData.class), rawSequences, fos);
 						}
@@ -287,13 +289,12 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 					}
 				}
 
-				private ISequences load(final String type) {
+				private ISequences load(final String type, Injector injector) {
 					try {
 						final String suffix = Joiner.on(".").join(components) + "." + type + ".sequences";
 						final URL expectedReportOutput = new URL(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20") + suffix);
 						final File file2 = new File(expectedReportOutput.toURI());
 						try (FileInputStream fos = new FileInputStream(file2)) {
-							// final Injector injector = scenarioRunner.getInjector();
 							Assert.assertNotNull(injector);
 							return SequencesSerialiser.load(injector.getInstance(IOptimisationData.class), fos);
 						}
@@ -304,8 +305,8 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 					return null;
 				}
 
-				private void verify(final String type, final ISequences actual) {
-					ISequences expected = load(type);
+				private void verify(final String type, final ISequences actual, Injector injector) {
+					ISequences expected = load(type, injector);
 					if (actual != null && expected != null) {
 						Assert.assertEquals(expected, actual);
 					}

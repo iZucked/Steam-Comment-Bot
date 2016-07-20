@@ -22,7 +22,7 @@ public class LoggingProvider implements ILoggingProvider {
 	@Inject
 	@Named("PHASE_TO_LOGGER_MAP")
 	Map<String, LSOLogger> phaseToLoggerMap;
-	
+
 	@Inject
 	@Named("RUNNER_HOOK")
 	AbstractRunnerHook runnerHook;
@@ -32,19 +32,20 @@ public class LoggingProvider implements ILoggingProvider {
 	int reportingInterval;
 
 	@Inject
-	@NonNull Injector injector;
-	
+	@NonNull
+	Injector injector;
 
+	@Override
 	public LSOLogger providerLSOLogger(IFitnessEvaluator fitnessEvaluator, IOptimisationContext context) {
-		final String phase = runnerHook.getPhase();
-		assert phase != null && !phase.isEmpty();
-		if (phaseToLoggerMap.containsKey(phase)) {
-			return phaseToLoggerMap.get(phase);
+		final String stageAndID = runnerHook.getStageAndJobID();
+		assert stageAndID != null && !stageAndID.isEmpty();
+		if (phaseToLoggerMap.containsKey(stageAndID)) {
+			return phaseToLoggerMap.get(stageAndID);
 		}
 		final LSOLogger logger = new LSOLogger(reportingInterval, fitnessEvaluator, context);
 		injector.injectMembers(logger);
 
-		phaseToLoggerMap.put(phase, logger);
+		phaseToLoggerMap.put(stageAndID, logger);
 		return logger;
 	}
 
