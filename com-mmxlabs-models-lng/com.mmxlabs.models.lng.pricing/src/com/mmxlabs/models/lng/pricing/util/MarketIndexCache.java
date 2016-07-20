@@ -10,6 +10,7 @@ package com.mmxlabs.models.lng.pricing.util;
 import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -20,6 +21,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.Index;
+import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
@@ -67,10 +69,14 @@ public class MarketIndexCache extends EContentAdapter {
 				final Index<?> data = curve.getData();
 				if (data instanceof DataIndex<?>) {
 					final DataIndex<?> indexData = (DataIndex<?>) data;
-					return indexData.getPoints().stream() //
+					Optional<?> min = indexData.getPoints().stream() //
 							.min((p1, p2) -> {
 								return p1.getDate().compareTo(p2.getDate());
-							}).get().getDate();
+							});
+					// No data check
+					if (min.isPresent()) {
+						return ((IndexPoint) min.get()).getDate();
+					}
 				}
 				return null;
 			};
