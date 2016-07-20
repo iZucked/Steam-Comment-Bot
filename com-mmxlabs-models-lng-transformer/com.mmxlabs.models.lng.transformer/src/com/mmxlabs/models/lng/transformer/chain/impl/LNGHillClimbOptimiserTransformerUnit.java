@@ -32,7 +32,8 @@ import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.NonNullPair;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
 import com.mmxlabs.models.lng.transformer.chain.ILNGStateTransformerUnit;
@@ -42,8 +43,8 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGOptimisationModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_AnnealingSettingsModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
-import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_OptimiserSettingsModule;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -61,7 +62,8 @@ public class LNGHillClimbOptimiserTransformerUnit implements ILNGStateTransforme
 	private static final Logger LOG = LoggerFactory.getLogger(LNGHillClimbOptimiserTransformerUnit.class);
 
 	@NonNull
-	public static IChainLink chain(@NonNull final ChainBuilder chainBuilder, @NonNull final String phase, final @NonNull OptimiserSettings settings, final int progressTicks) {
+	public static IChainLink chain(@NonNull final ChainBuilder chainBuilder, @NonNull final String phase, final @NonNull UserSettings userSettings, @NonNull HillClimbOptimisationStage stageSettings,
+			final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
 			private LNGHillClimbOptimiserTransformerUnit t;
@@ -80,14 +82,14 @@ public class LNGHillClimbOptimiserTransformerUnit implements ILNGStateTransforme
 
 				@NonNull
 				Collection<@NonNull String> hints = new HashSet<>(dt.getHints());
-				if (settings.isGenerateCharterOuts()) {
+				if (userSettings.isGenerateCharterOuts()) {
 					hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
 				} else {
 					hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
 				}
 				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
-				t = new LNGHillClimbOptimiserTransformerUnit(dt, phase, settings, initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints);
+				t = new LNGHillClimbOptimiserTransformerUnit(dt, phase, userSettings, stageSettings, initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints);
 			}
 
 			@Override
@@ -108,8 +110,8 @@ public class LNGHillClimbOptimiserTransformerUnit implements ILNGStateTransforme
 	}
 
 	@NonNull
-	public static IChainLink chainPool(@NonNull final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final OptimiserSettings settings, final int progressTicks,
-			@NonNull final ExecutorService executorService) {
+	public static IChainLink chainPool(@NonNull final ChainBuilder chainBuilder, @NonNull final String phase, final @NonNull UserSettings userSettings,
+			@NonNull HillClimbOptimisationStage stageSettings, final int progressTicks, @NonNull final ExecutorService executorService) {
 		final IChainLink link = new IChainLink() {
 
 			private LNGHillClimbOptimiserTransformerUnit[] t;
@@ -231,7 +233,7 @@ public class LNGHillClimbOptimiserTransformerUnit implements ILNGStateTransforme
 
 				@NonNull
 				Collection<@NonNull String> hints = new HashSet<>(dt.getHints());
-				if (settings.isGenerateCharterOuts()) {
+				if (userSettings.isGenerateCharterOuts()) {
 					hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
 				} else {
 					hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
@@ -239,8 +241,8 @@ public class LNGHillClimbOptimiserTransformerUnit implements ILNGStateTransforme
 				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
 				for (int i = 0; i < numTasks; ++i) {
-					final OptimiserSettings os = EcoreUtil.copy(settings);
-					t[i] = new LNGHillClimbOptimiserTransformerUnit(dt, phase, os, initialSequences.getSequences(), inputState.getSolutions().get(i).getFirst(), hints);
+					final HillClimbOptimisationStage copyStageSettings = EcoreUtil.copy(stageSettings);
+					t[i] = new LNGHillClimbOptimiserTransformerUnit(dt, phase, userSettings, copyStageSettings, initialSequences.getSequences(), inputState.getSolutions().get(i).getFirst(), hints);
 				}
 			}
 
@@ -276,8 +278,8 @@ public class LNGHillClimbOptimiserTransformerUnit implements ILNGStateTransforme
 	private final String phase;
 
 	@SuppressWarnings("null")
-	public LNGHillClimbOptimiserTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull String phase, @NonNull final OptimiserSettings settings,
-			@NonNull ISequences initialSequences, @NonNull final ISequences inputSequences, @NonNull final Collection<String> hints) {
+	public LNGHillClimbOptimiserTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull String phase, final @NonNull UserSettings userSettings,
+			@NonNull HillClimbOptimisationStage stageSettings, @NonNull ISequences initialSequences, @NonNull final ISequences inputSequences, @NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
 		this.phase = phase;
 
@@ -286,9 +288,9 @@ public class LNGHillClimbOptimiserTransformerUnit implements ILNGStateTransforme
 		final List<Module> modules = new LinkedList<>();
 		modules.add(new InitialSequencesModule(initialSequences));
 		modules.add(new InputSequencesModule(inputSequences));
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(settings), services,
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(userSettings, stageSettings.getConstraintAndFitnessSettings()), services,
 				IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_OptimiserSettingsModule(settings), services,
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_AnnealingSettingsModule(stageSettings.getSeed(), stageSettings.getAnnealingSettings()), services,
 				IOptimiserInjectorService.ModuleType.Module_OptimisationParametersModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGOptimisationModule(), services, IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
@@ -298,7 +300,7 @@ public class LNGHillClimbOptimiserTransformerUnit implements ILNGStateTransforme
 			scope.enter();
 
 			final ConstrainedMoveGenerator cmg = injector.getInstance(ConstrainedMoveGenerator.class);
-			cmg.setRandom(new Random(dataTransformer.getOptimiserSettings().getSeed()));
+			cmg.setRandom(new Random(stageSettings.getSeed()));
 
 			optimiser = injector.getInstance(ArbitraryStateLocalSearchOptimiser.class);
 			optimiser.setProgressMonitor(new NullOptimiserProgressMonitor());

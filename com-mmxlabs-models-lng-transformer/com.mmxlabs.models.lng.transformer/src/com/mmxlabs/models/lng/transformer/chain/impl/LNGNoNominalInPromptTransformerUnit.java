@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
 import com.mmxlabs.models.lng.transformer.chain.ILNGStateTransformerUnit;
@@ -32,7 +32,7 @@ public class LNGNoNominalInPromptTransformerUnit implements ILNGStateTransformer
 	private static final Logger LOG = LoggerFactory.getLogger(LNGNoNominalInPromptTransformerUnit.class);
 
 	@NonNull
-	public static IChainLink chain(@NonNull final ChainBuilder chainBuilder, @NonNull final OptimiserSettings settings, final int progressTicks) {
+	public static IChainLink chain(@NonNull final ChainBuilder chainBuilder, @NonNull final UserSettings userSettings, final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
 			private LNGNoNominalInPromptTransformerUnit t;
@@ -49,7 +49,7 @@ public class LNGNoNominalInPromptTransformerUnit implements ILNGStateTransformer
 			public void init(final SequencesContainer initialSequences, final IMultiStateResult inputState) {
 
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
-				t = new LNGNoNominalInPromptTransformerUnit(dt, settings, initialSequences.getSequences(), inputState.getBestSolution().getFirst(), dt.getHints());
+				t = new LNGNoNominalInPromptTransformerUnit(dt, userSettings, initialSequences.getSequences(), inputState.getBestSolution().getFirst(), dt.getHints());
 			}
 
 			@Override
@@ -81,7 +81,7 @@ public class LNGNoNominalInPromptTransformerUnit implements ILNGStateTransformer
 	@NonNull
 	private final IMultiStateResult inputState;
 
-	public LNGNoNominalInPromptTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final OptimiserSettings settings, @NonNull ISequences initialSequences,
+	public LNGNoNominalInPromptTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final UserSettings userSettings, @NonNull ISequences initialSequences,
 			@NonNull final ISequences inputSequences, @NonNull final Collection<@NonNull String> hints) {
 		this.dataTransformer = dataTransformer;
 

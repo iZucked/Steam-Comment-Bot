@@ -16,7 +16,8 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.SolutionBuilderSettings;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.IChainRunner;
@@ -52,16 +53,19 @@ public class LNGDataTransformer {
 	@NonNull
 	private final Injector injector;
 
-	private final OptimiserSettings settings;
-
 	@Nullable
 	private IRunnerHook runnerHook;
 
-	@SuppressWarnings("null")
-	public LNGDataTransformer(@NonNull final LNGScenarioModel scenarioModel, @NonNull final OptimiserSettings settings, @NonNull final Collection<@NonNull String> hints,
-			@NonNull final Collection<@NonNull IOptimiserInjectorService> services) {
+	private @NonNull UserSettings userSettings;
 
-		this.settings = settings;
+	private @NonNull SolutionBuilderSettings solutionBuilderSettings;
+
+	@SuppressWarnings("null")
+	public LNGDataTransformer(@NonNull final LNGScenarioModel scenarioModel, @NonNull final UserSettings userSettings, @NonNull SolutionBuilderSettings solutionBuilderSettings,
+			@NonNull final Collection<@NonNull String> hints, @NonNull final Collection<@NonNull IOptimiserInjectorService> services) {
+
+		this.userSettings = userSettings;
+		this.solutionBuilderSettings = solutionBuilderSettings;
 		this.hints = hints;
 		this.services = services;
 
@@ -77,9 +81,10 @@ public class LNGDataTransformer {
 		// Create temporary child injector to compute the initial solution and then pass result back into the main injector (as new child). This avoid polluting the injector with evaluation state.
 		{
 			final List<Module> modules2 = new LinkedList<>();
-			modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(settings), services,
+			modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(userSettings, solutionBuilderSettings.getConstraintAndFitnessSettings()), services,
 					IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 			modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
+
 			modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGInitialSequencesModule(), services, IOptimiserInjectorService.ModuleType.Module_InitialSolution, hints));
 
 			final Injector initialSolutionInjector = parentInjector.createChildInjector(modules2);
@@ -105,17 +110,9 @@ public class LNGDataTransformer {
 		return services;
 	}
 
-	//
-	// @SuppressWarnings("null")
-	// @NonNull
-	// public LNGScenarioModel getScenarioModel() {
-	// return injector.getInstance(LNGScenarioModel.class);
-	// }
-	//
-	@SuppressWarnings("null")
 	@NonNull
-	public OptimiserSettings getOptimiserSettings() {
-		return settings;
+	public UserSettings getUserSettings() {
+		return userSettings;
 	}
 
 	@NonNull
@@ -145,5 +142,9 @@ public class LNGDataTransformer {
 
 	public void setRunnerHook(@Nullable IRunnerHook runnerHook) {
 		this.runnerHook = runnerHook;
+	}
+
+	public SolutionBuilderSettings getSolutionBuilderSettings() {
+		return solutionBuilderSettings;
 	}
 }

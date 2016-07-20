@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.stochasticactionsets;
+package com.mmxlabs.models.lng.transformer.ui.breakdown.chain;
 
 import java.util.Collection;
 import java.util.Collections;

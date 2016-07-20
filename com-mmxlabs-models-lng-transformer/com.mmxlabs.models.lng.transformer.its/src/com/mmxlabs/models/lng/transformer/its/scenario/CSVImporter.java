@@ -46,7 +46,6 @@ import com.mmxlabs.models.lng.fleet.importer.BaseFuelImporter;
 import com.mmxlabs.models.lng.fleet.importer.FleetModelImporter;
 import com.mmxlabs.models.lng.fleet.importer.VesselClassImporter;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
-import com.mmxlabs.models.lng.parameters.importers.ParametersModelImporter;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.importer.PortModelImporter;
@@ -261,7 +260,7 @@ public class CSVImporter {
 					subModelImporters.put(CommercialPackage.eINSTANCE.getCommercialModel(), new CommercialModelImporter());
 					subModelImporters.put(FleetPackage.eINSTANCE.getFleetModel(), new FleetModelImporter());
 					// subModelImporters.put(AssignmentPackage.eINSTANCE.getAssignmentModel(), new AssignmentModelImporter());
-					subModelImporters.put(ParametersPackage.eINSTANCE.getParametersModel(), new ParametersModelImporter());
+//					subModelImporters.put(ParametersPackage.eINSTANCE.getParametersModel(), new ParametersModelImporter());
 					subModelImporters.put(PortPackage.eINSTANCE.getPortModel(), new PortModelImporter());
 					subModelImporters.put(PricingPackage.eINSTANCE.getCostModel(), new CostModelImporter());
 					subModelImporters.put(PricingPackage.eINSTANCE.getPricingModel(), new PricingModelImporter());

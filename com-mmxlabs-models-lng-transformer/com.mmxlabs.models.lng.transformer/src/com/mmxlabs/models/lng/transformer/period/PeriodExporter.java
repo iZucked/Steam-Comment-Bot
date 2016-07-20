@@ -237,7 +237,8 @@ public class PeriodExporter {
 		}
 
 		// Copy params model
-		cmd.append(SetCommand.create(editingDomain, originalScenario, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Parameters(), EcoreUtil.copy(periodScenario.getParameters())));
+//		cmd.append(SetCommand.create(editingDomain, originalScenario, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Parameters(), EcoreUtil.copy(periodScenario.getParameters())));
+//		cmd.append(SetCommand.create(editingDomain, originalScenario, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Parameters(), EcoreUtil.copy(periodScenario.getParameters())));
 
 		if (cmd.isEmpty()) {
 			return IdentityCommand.INSTANCE;

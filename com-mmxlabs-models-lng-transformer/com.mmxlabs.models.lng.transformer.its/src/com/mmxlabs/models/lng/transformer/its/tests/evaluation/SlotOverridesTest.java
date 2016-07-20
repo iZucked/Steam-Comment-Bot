@@ -28,7 +28,7 @@ import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.SalesContract;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -76,7 +76,7 @@ public class SlotOverridesTest {
 
 		public SlotTester(@NonNull final LNGScenarioModel scenario, final boolean failSilently) {
 
-			final OptimiserSettings settings = ScenarioUtils.createDefaultSettings();
+			final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 			final @NonNull Set<@NonNull String> hints = LNGTransformerHelper.getHints(settings);
 
 			final Collection<IOptimiserInjectorService> services = LNGTransformerHelper.getOptimiserInjectorServices(new TransformerExtensionTestBootstrapModule(), null);

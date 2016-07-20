@@ -11,7 +11,7 @@ import java.util.Date;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
@@ -24,11 +24,11 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 public class LNGScenarioRunnerUtils {
 
 	@NonNull
-	public static OptimiserSettings createDefaultSettings() {
-		final OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
-		assert optimiserSettings != null;
+	public static OptimisationPlan createDefaultOptimisationPlan() {
+		final OptimisationPlan optimisationPlan = ScenarioUtils.createDefaultOptimisationPlan();
+		assert optimisationPlan != null;
 
-		return createExtendedSettings(optimiserSettings);
+		return createExtendedSettings(optimisationPlan);
 	}
 
 	/**
@@ -38,7 +38,7 @@ public class LNGScenarioRunnerUtils {
 	 * @return
 	 */
 	@NonNull
-	public static OptimiserSettings createExtendedSettings(@NonNull final OptimiserSettings optimiserSettings) {
+	public static OptimisationPlan createExtendedSettings(@NonNull final OptimisationPlan optimisationPlan) {
 		IParameterModesRegistry parameterModesRegistry = null;
 
 		final Activator activator = Activator.getDefault();
@@ -50,16 +50,16 @@ public class LNGScenarioRunnerUtils {
 			final Collection<IParameterModeExtender> extenders = parameterModesRegistry.getExtenders();
 			if (extenders != null) {
 				for (final IParameterModeExtender extender : extenders) {
-					extender.extend(optimiserSettings, null);
+					extender.extend(optimisationPlan);
 				}
 			}
 		}
-		return optimiserSettings;
+		return optimisationPlan;
 	}
 
 	@NonNull
-	public static ScenarioInstance saveScenarioAsChild(@NonNull final ScenarioInstance originalScenarioInstance, @NonNull final Container target, @NonNull final LNGScenarioModel scenarioModel, @NonNull final String newName)
-			throws IOException {
+	public static ScenarioInstance saveScenarioAsChild(@NonNull final ScenarioInstance originalScenarioInstance, @NonNull final Container target, @NonNull final LNGScenarioModel scenarioModel,
+			@NonNull final String newName) throws IOException {
 
 		return saveNewScenario(originalScenarioInstance, target, EcoreUtil.copy(scenarioModel), newName);
 	}
@@ -75,8 +75,8 @@ public class LNGScenarioRunnerUtils {
 	 * @throws IOException
 	 */
 	@NonNull
-	public static ScenarioInstance saveNewScenario(@NonNull final ScenarioInstance originalScenarioInstance, @NonNull final Container target, @NonNull final LNGScenarioModel scenarioModel, @NonNull final String newName)
-			throws IOException {
+	public static ScenarioInstance saveNewScenario(@NonNull final ScenarioInstance originalScenarioInstance, @NonNull final Container target, @NonNull final LNGScenarioModel scenarioModel,
+			@NonNull final String newName) throws IOException {
 		final IScenarioService scenarioService = target.getScenarioService();
 
 		final ScenarioInstance dup = scenarioService.insert(target, scenarioModel);

@@ -37,10 +37,10 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
+import org.omg.PortableInterceptor.SUCCESSFUL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.eclipse.manager.impl.DisposeOnRemoveEclipseListener;
@@ -50,9 +50,12 @@ import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.parameters.ActionPlanSettings;
+import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
+import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
+import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
+import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Objective;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
@@ -138,15 +141,15 @@ public final class OptimisationHelper {
 						return null;
 					}
 				}
-				final Pair<UserSettings, OptimiserSettings> optimiserSettings = getOptimiserSettings(root, !optimising, parameterMode, promptForOptimiserSettings, promptOnlyIfOptionsEnabled);
+				final OptimisationPlan optimisationPlan = getOptimiserSettings(root, !optimising, parameterMode, promptForOptimiserSettings, promptOnlyIfOptionsEnabled);
 
-				if (optimiserSettings == null || optimiserSettings.getSecond() == null) {
+				if (optimisationPlan == null) {
 					return null;
 				}
 				final EditingDomain editingDomain = (EditingDomain) instance.getAdapters().get(EditingDomain.class);
 				if (editingDomain != null) {
 					final CompoundCommand cmd = new CompoundCommand("Update settings");
-					cmd.append(SetCommand.create(editingDomain, root, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings(), optimiserSettings.getFirst()));
+					cmd.append(SetCommand.create(editingDomain, root, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings(), EcoreUtil.copy(optimisationPlan.getUserSettings())));
 					editingDomain.getCommandStack().execute(cmd);
 				}
 				// Pair<UserSettings, OptimiserSettings>
@@ -157,7 +160,7 @@ public final class OptimisationHelper {
 					IJobDescriptor job = null;
 					try {
 						// create a new job
-						job = new LNGSchedulerJobDescriptor(instance.getName(), instance, optimiserSettings.getSecond(), optimising);
+						job = new LNGSchedulerJobDescriptor(instance.getName(), instance, optimisationPlan, optimising);
 
 						// New optimisation, so check there are no validation errors.
 						if (!validateScenario(root, optimising)) {
@@ -279,8 +282,8 @@ public final class OptimisationHelper {
 	}
 
 	@Nullable
-	public static Pair<UserSettings, OptimiserSettings> getOptimiserSettings(@NonNull final LNGScenarioModel scenario, final boolean forEvaluation, @Nullable final String parameterMode,
-			final boolean promptUser, final boolean promptOnlyIfOptionsEnabled) {
+	public static OptimisationPlan getOptimiserSettings(@NonNull final LNGScenarioModel scenario, final boolean forEvaluation, @Nullable final String parameterMode, final boolean promptUser,
+			final boolean promptOnlyIfOptionsEnabled) {
 
 		UserSettings previousSettings = null;
 		if (scenario != null) {
@@ -294,7 +297,6 @@ public final class OptimisationHelper {
 
 		// Permit the user to override the settings object. Use the previous settings as the initial value
 		if (promptUser) {
-
 			previousSettings = openUserDialog(forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled);
 		}
 
@@ -309,14 +311,9 @@ public final class OptimisationHelper {
 			return null;
 		}
 
-		final OptimiserSettings optimiserSettings = transformUserSettings(userSettings, parameterMode, scenario);
+		final OptimisationPlan optimisationPlan = transformUserSettings(userSettings, parameterMode, scenario);
 
-		// Tmp hack - need to update customiser API to avoid needing to back-apply
-		userSettings.setGenerateCharterOuts(optimiserSettings.isGenerateCharterOuts());
-		userSettings.setBuildActionSets(optimiserSettings.isBuildActionSets());
-		userSettings.setShippingOnly(optimiserSettings.isShippingOnly());
-
-		return new Pair<UserSettings, OptimiserSettings>(userSettings, optimiserSettings);
+		return optimisationPlan;
 	}
 
 	public static UserSettings openUserDialog(final boolean forEvaluation, final UserSettings previousSettings, final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled) {
@@ -490,29 +487,22 @@ public final class OptimisationHelper {
 		return copy;
 	}
 
-	public static OptimiserSettings transformUserSettings(@NonNull final UserSettings userSettings, @Nullable final String parameterMode, final LNGScenarioModel lngScenarioModel) {
+	public static OptimisationPlan transformUserSettings(@NonNull final UserSettings userSettings, @Nullable final String parameterMode, final LNGScenarioModel lngScenarioModel) {
 
-		final OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
+		OptimisationPlan plan = ParametersFactory.eINSTANCE.createOptimisationPlan();
 
-		// Copy across params
-		if (userSettings.isSetPeriodStart()) {
-			optimiserSettings.getRange().setOptimiseAfter(userSettings.getPeriodStart());
-		}
-		if (userSettings.isSetPeriodEnd()) {
-			optimiserSettings.getRange().setOptimiseBefore(userSettings.getPeriodEnd());
-		}
+		plan.setUserSettings(userSettings);
 
-		optimiserSettings.setBuildActionSets(userSettings.isBuildActionSets());
-		optimiserSettings.setGenerateCharterOuts(userSettings.isGenerateCharterOuts());
-		optimiserSettings.setShippingOnly(userSettings.isShippingOnly());
+		plan.setSolutionBuilderSettings(ScenarioUtils.createDefaultSolutionBuilderSettings());
 
-		Objective similarityObjective = findObjective(SimilarityFitnessCoreFactory.NAME, optimiserSettings);
+		@NonNull
+		final ConstraintAndFitnessSettings constraintAndFitnessSettings = ScenarioUtils.createDefaultConstraintAndFitnessSettings();
+		Objective similarityObjective = findObjective(SimilarityFitnessCoreFactory.NAME, constraintAndFitnessSettings);
 		if (similarityObjective == null) {
 			similarityObjective = ParametersFactory.eINSTANCE.createObjective();
 			similarityObjective.setName(SimilarityFitnessCoreFactory.NAME);
-			optimiserSettings.getObjectives().add(similarityObjective);
+			constraintAndFitnessSettings.getObjectives().add(similarityObjective);
 		}
-
 		similarityObjective.setEnabled(true);
 		similarityObjective.setWeight(1.0);
 
@@ -524,82 +514,73 @@ public final class OptimisationHelper {
 
 		final SimilarityMode similarityMode = userSettings.getSimilarityMode();
 
+		boolean shouldUseRestartingLSO = false;
+
 		switch (similarityMode) {
 		case ALL:
 			assert false;
 			break;
 		case HIGH:
-			optimiserSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.HIGH, periodStartOrDefault, periodEndOrDefault));
-			optimiserSettings.getAnnealingSettings().setRestarting(true);
+			constraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.HIGH, periodStartOrDefault, periodEndOrDefault));
+			shouldUseRestartingLSO = true;
 			if (shouldDisableActionSets(SimilarityMode.HIGH, periodStart, periodEnd)) {
-				optimiserSettings.setBuildActionSets(false);
+				userSettings.setBuildActionSets(false);
 			}
 			break;
 		case LOW:
-			optimiserSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.LOW, periodStartOrDefault, periodEndOrDefault));
-			optimiserSettings.getAnnealingSettings().setRestarting(false);
+			constraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.LOW, periodStartOrDefault, periodEndOrDefault));
+			shouldUseRestartingLSO = false;
 			if (shouldDisableActionSets(SimilarityMode.LOW, periodStart, periodEnd)) {
-				optimiserSettings.setBuildActionSets(false);
+				userSettings.setBuildActionSets(false);
 			}
 			break;
 		case MEDIUM:
-			optimiserSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.MEDIUM, periodStartOrDefault, periodEndOrDefault));
-			optimiserSettings.getAnnealingSettings().setRestarting(false);
+			constraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.MEDIUM, periodStartOrDefault, periodEndOrDefault));
+			shouldUseRestartingLSO = false;
 			if (shouldDisableActionSets(SimilarityMode.MEDIUM, periodStart, periodEnd)) {
-				optimiserSettings.setBuildActionSets(false);
+				userSettings.setBuildActionSets(false);
 			}
 			break;
 		case OFF:
-			optimiserSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.OFF, periodStartOrDefault, periodEndOrDefault));
-			optimiserSettings.getAnnealingSettings().setRestarting(false);
-			optimiserSettings.setBuildActionSets(false);
+			constraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.OFF, periodStartOrDefault, periodEndOrDefault));
+			shouldUseRestartingLSO = false;
+			userSettings.setBuildActionSets(false);
 			break;
 		default:
 			assert false;
 			break;
 		}
 
-		if (optimiserSettings.isBuildActionSets() && periodStart != null && periodEnd != null) {
-			final ActionPlanSettings apSettings = ActionPlanUIParameters.getActionPlanSettings(similarityMode, periodStart, periodEnd);
-			optimiserSettings.setActionPlanSettings(apSettings);
-		} else {
-			optimiserSettings.setActionPlanSettings(ActionPlanUIParameters.getDefaultSettings());
-		}
-
-		// change epoch length
+		int epochLength;
 		// TODO: make this better!
 		if (userSettings.isSetPeriodStart() && userSettings.isSetPeriodEnd()) {
-			optimiserSettings.getAnnealingSettings().setEpochLength(EPOCH_LENGTH_PERIOD);
+			epochLength = EPOCH_LENGTH_PERIOD;
 		} else {
-			optimiserSettings.getAnnealingSettings().setEpochLength(EPOCH_LENGTH_FULL);
+			epochLength = EPOCH_LENGTH_FULL;
 		}
 
-		final Activator activator = Activator.getDefault();
-		if (activator != null) {
-			final IParameterModesRegistry parameterModesRegistry = activator.getParameterModesRegistry();
+		{
+			LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EcoreUtil.copy(constraintAndFitnessSettings));
+			stage.getAnnealingSettings().setEpochLength(epochLength);
+			stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
+			plan.getStages().add(stage);
+		}
+		{
+			HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(EcoreUtil.copy(constraintAndFitnessSettings));
+			stage.getAnnealingSettings().setEpochLength(epochLength);
+			plan.getStages().add(stage);
+		}
 
-			if (parameterMode != null) {
-
-				if (PARAMETER_MODE_CUSTOM.equals(parameterMode)) {
-					// Nothing...
-				} else {
-
-					final IParameterModeCustomiser customiser = parameterModesRegistry.getCustomiser(parameterMode);
-					if (customiser != null) {
-						customiser.customise(optimiserSettings);
-					}
-				}
-			}
-
-			final Collection<IParameterModeExtender> extenders = parameterModesRegistry.getExtenders();
-			if (extenders != null) {
-				for (final IParameterModeExtender extender : extenders) {
-					extender.extend(optimiserSettings, parameterMode);
-				}
+		if (userSettings.isBuildActionSets()) {
+			if (periodStart != null && periodEnd != null) {
+				final ActionPlanOptimisationStage stage = ScenarioUtils.getActionPlanSettings(similarityMode, periodStart, periodEnd, EcoreUtil.copy(constraintAndFitnessSettings));
+				plan.getStages().add(stage);
+			} else {
+				final ActionPlanOptimisationStage stage = ScenarioUtils.createDefaultActionPlanParameters(EcoreUtil.copy(constraintAndFitnessSettings));
+				plan.getStages().add(stage);
 			}
 		}
-		optimiserSettings.setFloatingDaysLimit(userSettings.getFloatingDaysLimit());
-		return optimiserSettings;
+		return LNGScenarioRunnerUtils.createExtendedSettings(plan);
 	}
 
 	private static boolean shouldDisableActionSets(final SimilarityMode mode, final YearMonth periodStart, final YearMonth periodEnd) {
@@ -674,7 +655,7 @@ public final class OptimisationHelper {
 			to.setSimilarityMode(from.getSimilarityMode());
 		}
 		to.setBuildActionSets(from.isBuildActionSets());
-		
+
 		to.setFloatingDaysLimit(from.getFloatingDaysLimit());
 	}
 
@@ -735,7 +716,7 @@ public final class OptimisationHelper {
 		return true;
 	}
 
-	private static Objective findObjective(final String objective, final OptimiserSettings settings) {
+	private static Objective findObjective(final String objective, final ConstraintAndFitnessSettings settings) {
 		for (final Objective o : settings.getObjectives()) {
 			if (SimilarityFitnessCoreFactory.NAME.equals(o.getName())) {
 				return o;

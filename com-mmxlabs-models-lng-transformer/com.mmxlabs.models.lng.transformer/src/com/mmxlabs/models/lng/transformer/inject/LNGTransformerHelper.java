@@ -25,7 +25,7 @@ import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 /**
@@ -46,7 +46,7 @@ public class LNGTransformerHelper {
 	public static final @NonNull String HINT_SHIPPING_ONLY = "hint-lngtransformer-shipping-only";
 
 	@NonNull
-	public static Set<@NonNull String> getHints(@NonNull final OptimiserSettings settings, @NonNull final String @Nullable... initialHints) {
+	public static Set<@NonNull String> getHints(@NonNull final UserSettings userSettings, @NonNull final String @Nullable... initialHints) {
 
 		final Set<@NonNull String> hints = new HashSet<>();
 		// Check hints
@@ -57,17 +57,17 @@ public class LNGTransformerHelper {
 				}
 			}
 		}
-		if (settings.isGenerateCharterOuts()) {
+		if (userSettings.isGenerateCharterOuts()) {
 			if (LicenseFeatures.isPermitted("features:optimisation-charter-out-generation")) {
 				hints.add(HINT_GENERATE_CHARTER_OUTS);
 			}
 		}
-		if (settings.isShippingOnly()) {
+		if (userSettings.isShippingOnly()) {
 			hints.add(HINT_SHIPPING_ONLY);
 		}
 
 		// Too late for LNGScenarioRunner, but add to hints for modules in case it is needed in the future.
-		if (settings.isBuildActionSets()) {
+		if (userSettings.isBuildActionSets()) {
 			if (LicenseFeatures.isPermitted("features:optimisation-actionset")) {
 				hints.add(HINT_OPTIMISE_BREAKDOWN);
 			}

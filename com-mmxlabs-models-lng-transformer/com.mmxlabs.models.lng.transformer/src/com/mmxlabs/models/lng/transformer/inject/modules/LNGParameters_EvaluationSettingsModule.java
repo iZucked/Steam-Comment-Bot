@@ -5,7 +5,9 @@
 package com.mmxlabs.models.lng.transformer.inject.modules;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Singleton;
 
@@ -15,7 +17,10 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.models.lng.parameters.Constraint;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
+import com.mmxlabs.models.lng.parameters.Objective;
+import com.mmxlabs.models.lng.parameters.SimilaritySettings;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessFactory;
@@ -23,11 +28,15 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.modules.ConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluatedStateConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluationProcessInstantiatorModule;
+import com.mmxlabs.optimiser.core.modules.FitnessFunctionInstantiatorModule;
+import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ISimilarityComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
+import com.mmxlabs.scheduler.optimiser.fitness.components.SimilarityComponentParameters;
 
 /**
  * The {@link LNGParameters_EvaluationSettingsModule} provides user-definable parameters derived from the {@link OptimiserSettings} object such as the random seed and number of iterations
@@ -38,10 +47,13 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 	public static final String OPTIMISER_REEVALUATE = "LNGParameters_EvaluationSettingsModule_OPTIMISER_REEVALUATE";
 
 	@NonNull
-	private final OptimiserSettings settings;
+	private final UserSettings userSettings;
 
-	public LNGParameters_EvaluationSettingsModule(@NonNull OptimiserSettings settings) {
-		this.settings = settings;
+	private ConstraintAndFitnessSettings constraintAndFitnessSettings;
+
+	public LNGParameters_EvaluationSettingsModule(@NonNull UserSettings userSettings, @NonNull ConstraintAndFitnessSettings constraintAndFitnessSettings) {
+		this.userSettings = userSettings;
+		this.constraintAndFitnessSettings = constraintAndFitnessSettings;
 	}
 
 	@Override
@@ -49,22 +61,7 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 
 	}
 
-	@Provides
-	@Singleton
-	@Named(ConstraintCheckerInstantiatorModule.ENABLED_CONSTRAINT_NAMES)
-	private List<String> provideEnabledConstraintNames() {
-		// settings.getConstraints().stream().filter(c -> c.isEnabled()).map(Constraint::getName()).collect(Collectors.toList());
-
-		final List<String> result = new ArrayList<String>();
-
-		for (final Constraint c : settings.getConstraints()) {
-			if (c.isEnabled()) {
-				result.add(c.getName());
-			}
-		}
-
-		return result;
-	}
+	//
 
 	@Provides
 	@Singleton
@@ -108,9 +105,76 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 	}
 
 	@Provides
-	@Named(OPTIMISER_REEVALUATE)
-	private boolean isOptimiserReevaluating() {
-		return true;
+	@Singleton
+	@Named(ConstraintCheckerInstantiatorModule.ENABLED_CONSTRAINT_NAMES)
+	private List<String> provideEnabledConstraintNames() {
+		// settings.getConstraints().stream().filter(c -> c.isEnabled()).map(Constraint::getName()).collect(Collectors.toList());
+
+		final List<String> result = new ArrayList<String>();
+
+		for (final Constraint c : constraintAndFitnessSettings.getConstraints()) {
+			if (c.isEnabled()) {
+				result.add(c.getName());
+			}
+		}
+
+		return result;
+	}
+
+	@Provides
+	@Singleton
+	@Named(FitnessFunctionInstantiatorModule.ENABLED_FITNESS_NAMES)
+	private List<String> provideEnabledFitnessFunctionNames() {
+		final List<String> result = new ArrayList<String>();
+
+		for (final Objective o : constraintAndFitnessSettings.getObjectives()) {
+			if (o.isEnabled() && o.getWeight() > 0) {
+				result.add(o.getName());
+			}
+		}
+
+		return result;
+	}
+
+	@Provides
+	@Named(LinearFitnessEvaluatorModule.LINEAR_FITNESS_WEIGHTS_MAP)
+	Map<String, Double> provideLSOFitnessWeights(@Named(FitnessFunctionInstantiatorModule.ENABLED_FITNESS_NAMES) @NonNull final List<String> enabledFitnessNames) {
+
+		final Map<String, Double> weightsMap = new HashMap<String, Double>();
+		for (final String component : enabledFitnessNames) {
+			if (component != null) {
+				weightsMap.put(component, 0.0);
+			}
+		}
+
+		for (final Objective objective : constraintAndFitnessSettings.getObjectives()) {
+			if (objective.isEnabled()) {
+				if (weightsMap.containsKey(objective.getName())) {
+					weightsMap.put(objective.getName(), objective.getWeight());
+				}
+			}
+		}
+		return weightsMap;
+	}
+
+	@Provides
+	@Singleton
+	private ISimilarityComponentParameters provideSimilarityComponentParameters() {
+
+		final SimilarityComponentParameters scp = new SimilarityComponentParameters();
+
+		// Replace with settings.
+		final SimilaritySettings similaritySettings = constraintAndFitnessSettings.getSimilaritySettings();
+
+		scp.setThreshold(ISimilarityComponentParameters.Interval.LOW, similaritySettings.getLowInterval().getThreshold());
+		scp.setWeight(ISimilarityComponentParameters.Interval.LOW, similaritySettings.getLowInterval().getWeight());
+		scp.setThreshold(ISimilarityComponentParameters.Interval.MEDIUM, similaritySettings.getMedInterval().getThreshold());
+		scp.setWeight(ISimilarityComponentParameters.Interval.MEDIUM, similaritySettings.getMedInterval().getWeight());
+		scp.setThreshold(ISimilarityComponentParameters.Interval.HIGH, similaritySettings.getHighInterval().getThreshold());
+		scp.setWeight(ISimilarityComponentParameters.Interval.HIGH, similaritySettings.getHighInterval().getWeight());
+		scp.setOutOfBoundsWeight(similaritySettings.getOutOfBoundsWeight());
+
+		return scp;
 	}
 
 	@Provides
@@ -137,7 +201,7 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 	@Singleton
 	private IExcessIdleTimeComponentParameters provideIdleComponentParameters() {
 		final ExcessIdleTimeComponentParameters idleParams = new ExcessIdleTimeComponentParameters();
-		int highPeriodInDays = settings.getFloatingDaysLimit();
+		int highPeriodInDays = constraintAndFitnessSettings.getFloatingDaysLimit();
 		int lowPeriodInDays = Math.max(0, highPeriodInDays - 2);
 		idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, lowPeriodInDays * 24);
 		idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, highPeriodInDays * 24);
@@ -148,4 +212,9 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 		return idleParams;
 	}
 
+	@Provides
+	@Named(OPTIMISER_REEVALUATE)
+	private boolean isOptimiserReevaluating() {
+		return true;
+	}
 }

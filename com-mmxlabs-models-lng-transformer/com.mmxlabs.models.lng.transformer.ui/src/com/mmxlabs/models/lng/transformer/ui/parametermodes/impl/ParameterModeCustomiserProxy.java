@@ -6,7 +6,7 @@ package com.mmxlabs.models.lng.transformer.ui.parametermodes.impl;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeCustomiser;
 
 class ParameterModeCustomiserProxy implements IParameterModeCustomiser {
@@ -21,13 +21,13 @@ class ParameterModeCustomiserProxy implements IParameterModeCustomiser {
 	}
 
 	@Override
-	public void customise(@NonNull final OptimiserSettings optimiserSettings) {
+	public void customise(@NonNull final OptimisationPlan optimisationPlan) {
 
 		if (customiser == null) {
 			customiser = parameterModeExtension.createCustomiser();
 		}
 
-		customiser.customise(optimiserSettings);
+		customiser.customise(optimisationPlan);
 	}
 
 }

@@ -19,7 +19,6 @@ import java.util.Set;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.jface.viewers.CellEditor.LayoutData;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -40,9 +39,8 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.parameters.OptimisationRange;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -64,6 +62,7 @@ import com.mmxlabs.models.lng.transformer.period.InclusionChecker.PeriodRecord;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.types.TimePeriod;
 
+@SuppressWarnings("unused")
 public class PeriodTransformerTests {
 
 	@Test
@@ -73,9 +72,9 @@ public class PeriodTransformerTests {
 
 		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
 
-		final OptimiserSettings optimiserSettings = ParametersFactory.eINSTANCE.createOptimiserSettings();
+		final UserSettings settings = ParametersFactory.eINSTANCE.createUserSettings();
 
-		final PeriodRecord periodRecord = transformer.createPeriodRecord(optimiserSettings);
+		final PeriodRecord periodRecord = transformer.createPeriodRecord(settings);
 
 		Assert.assertNotNull(periodRecord);
 		Assert.assertNull(periodRecord.lowerCutoff);
@@ -92,13 +91,11 @@ public class PeriodTransformerTests {
 
 		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
 
-		final OptimiserSettings optimiserSettings = ParametersFactory.eINSTANCE.createOptimiserSettings();
-		final OptimisationRange range = ParametersFactory.eINSTANCE.createOptimisationRange();
+		final UserSettings settings = ParametersFactory.eINSTANCE.createUserSettings();
 
-		optimiserSettings.setRange(range);
-		range.setOptimiseAfter(PeriodTestUtils.createYearMonth(2014, Calendar.FEBRUARY));
+		settings.setPeriodStart(PeriodTestUtils.createYearMonth(2014, Calendar.FEBRUARY));
 
-		final PeriodRecord periodRecord = transformer.createPeriodRecord(optimiserSettings);
+		final PeriodRecord periodRecord = transformer.createPeriodRecord(settings);
 
 		Assert.assertNotNull(periodRecord);
 		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1), periodRecord.lowerCutoff);
@@ -114,13 +111,11 @@ public class PeriodTransformerTests {
 
 		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
 
-		final OptimiserSettings optimiserSettings = ParametersFactory.eINSTANCE.createOptimiserSettings();
-		final OptimisationRange range = ParametersFactory.eINSTANCE.createOptimisationRange();
+		final UserSettings settings = ParametersFactory.eINSTANCE.createUserSettings();
 
-		optimiserSettings.setRange(range);
-		range.setOptimiseBefore(PeriodTestUtils.createYearMonth(2014, Calendar.FEBRUARY));
+		settings.setPeriodEnd(PeriodTestUtils.createYearMonth(2014, Calendar.FEBRUARY));
 
-		final PeriodRecord periodRecord = transformer.createPeriodRecord(optimiserSettings);
+		final PeriodRecord periodRecord = transformer.createPeriodRecord(settings);
 
 		Assert.assertNotNull(periodRecord);
 		Assert.assertNull(periodRecord.lowerCutoff);
@@ -136,14 +131,12 @@ public class PeriodTransformerTests {
 
 		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
 
-		final OptimiserSettings optimiserSettings = ParametersFactory.eINSTANCE.createOptimiserSettings();
-		final OptimisationRange range = ParametersFactory.eINSTANCE.createOptimisationRange();
+		final UserSettings settings = ParametersFactory.eINSTANCE.createUserSettings();
 
-		optimiserSettings.setRange(range);
-		range.setOptimiseAfter(PeriodTestUtils.createYearMonth(2014, Calendar.FEBRUARY));
-		range.setOptimiseBefore(PeriodTestUtils.createYearMonth(2014, Calendar.JULY));
+		settings.setPeriodStart(PeriodTestUtils.createYearMonth(2014, Calendar.FEBRUARY));
+		settings.setPeriodEnd(PeriodTestUtils.createYearMonth(2014, Calendar.JULY));
 
-		final PeriodRecord periodRecord = transformer.createPeriodRecord(optimiserSettings);
+		final PeriodRecord periodRecord = transformer.createPeriodRecord(settings);
 
 		Assert.assertNotNull(periodRecord);
 		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1), periodRecord.lowerCutoff);

@@ -16,7 +16,10 @@ import org.junit.Assert;
 
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
+import com.mmxlabs.models.lng.parameters.OptimisationPlan;
+import com.mmxlabs.models.lng.parameters.OptimisationStage;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -128,10 +131,15 @@ public class SuboptimalScenarioTester {
 		try {
 			// optimise the scenario
 
-			final OptimiserSettings settings = LNGScenarioRunnerUtils.createDefaultSettings();
-			settings.getAnnealingSettings().setIterations(10000);
-			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) scenario, settings, new TransformerExtensionTestBootstrapModule(),
-					null, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
+			final OptimisationPlan plan = LNGScenarioRunnerUtils.createDefaultOptimisationPlan();
+			for (OptimisationStage stage : plan.getStages()) {
+				if (stage instanceof LocalSearchOptimisationStage) {
+					LocalSearchOptimisationStage lsoStage = (LocalSearchOptimisationStage) stage;
+					lsoStage.getAnnealingSettings().setIterations(10_000);
+				}
+			}
+			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) scenario, plan, new TransformerExtensionTestBootstrapModule(), null, false,
+					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			runner.evaluateInitialState();
 			runner.run();
 
@@ -220,9 +228,9 @@ public class SuboptimalScenarioTester {
 	// TODO: rewrite to take a constraint checker factory instead of a constraint checker, so that the expected parameter does not have weird not-initialised semantics
 	public void testConstraintChecker(final boolean expectedResult, final AbstractPairwiseConstraintChecker checker) {
 
-		final OptimiserSettings settings = ScenarioUtils.createDefaultSettings();
+		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
 		final Set<String> hints = LNGTransformerHelper.getHints(settings);
-		final LNGDataTransformer transformer = new LNGDataTransformer(scenario, settings, hints,
+		final LNGDataTransformer transformer = new LNGDataTransformer(scenario, settings, ScenarioUtils.createDefaultSolutionBuilderSettings(), hints,
 				LNGTransformerHelper.getOptimiserInjectorServices(new TransformerExtensionTestBootstrapModule(), null));
 
 		// final LNGDataTransformer transformer = new LNGDataTransformer(scenario, ScenarioUtils.createDefaultSettings(), new TransformerExtensionTestBootstrapModule(), null);

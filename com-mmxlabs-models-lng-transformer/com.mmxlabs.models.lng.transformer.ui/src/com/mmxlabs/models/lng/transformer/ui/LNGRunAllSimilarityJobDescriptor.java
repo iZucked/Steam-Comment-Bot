@@ -5,7 +5,7 @@
 package com.mmxlabs.models.lng.transformer.ui;
 
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
@@ -16,8 +16,8 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  */
 public final class LNGRunAllSimilarityJobDescriptor extends AbstractLNGJobDescriptor {
 
-	public LNGRunAllSimilarityJobDescriptor(final String name, final ScenarioInstance scenarioInstance, final OptimiserSettings optimiserSettings, final boolean optimise) {
-		super(name, scenarioInstance, optimiserSettings, optimise);
+	public LNGRunAllSimilarityJobDescriptor(final String name, final ScenarioInstance scenarioInstance, final OptimisationPlan optimisationPlan, final boolean optimise) {
+		super(name, scenarioInstance, optimisationPlan, optimise);
 	}
 
 }

@@ -4,43 +4,26 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
-import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.BiConsumer;
 
 import org.apache.shiro.SecurityUtils;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.time.Months;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
-import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
-import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
-import com.mmxlabs.models.lng.parameters.OptimisationRange;
+import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
-import com.mmxlabs.models.lng.parameters.ParametersFactory;
-import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.IChainRunner;
-import com.mmxlabs.models.lng.transformer.chain.MultiChainRunner;
-import com.mmxlabs.models.lng.transformer.chain.impl.LNGCleanStateOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGEvaluationTransformerUnit;
-import com.mmxlabs.models.lng.transformer.chain.impl.LNGHillClimbOptimiserTransformerUnit;
-import com.mmxlabs.models.lng.transformer.chain.impl.LNGLSOOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGNoNominalInPromptTransformerUnit;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
-import com.mmxlabs.models.lng.transformer.stochasticactionsets.LNGActionSetTransformerUnit;
-import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 
 public class LNGScenarioChainBuilder {
 
@@ -66,7 +49,7 @@ public class LNGScenarioChainBuilder {
 	 * @return
 	 */
 	public static IChainRunner createStandardOptimisationChain(@Nullable final String childName, @NonNull final LNGDataTransformer dataTransformer,
-			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, @NonNull final OptimiserSettings optimiserSettings, @NonNull final ExecutorService executorService,
+			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, @NonNull final OptimisationPlan optimisationPlan, @NonNull final ExecutorService executorService,
 			@NonNull final String @Nullable... initialHints) {
 
 		boolean createOptimiser = false;
@@ -74,7 +57,7 @@ public class LNGScenarioChainBuilder {
 		boolean doHillClimb = false;
 		boolean doActionSetPostOptimisation = false;
 
-		final Set<String> hints = LNGTransformerHelper.getHints(optimiserSettings, initialHints);
+		final Set<String> hints = LNGTransformerHelper.getHints(optimisationPlan.getUserSettings(), initialHints);
 		for (final String hint : hints) {
 			if (LNGTransformerHelper.HINT_OPTIMISE_LSO.equals(hint)) {
 				createOptimiser = true;
@@ -84,96 +67,53 @@ public class LNGScenarioChainBuilder {
 			}
 		}
 		// Check for break down optimisation here.
-		if (optimiserSettings.isBuildActionSets()) {
+		if (optimisationPlan.getUserSettings().isBuildActionSets()) {
 			if (SecurityUtils.getSubject().isPermitted("features:optimisation-actionset")) {
 				doActionSetPostOptimisation = true;
 			}
 		}
-		doHillClimb = optimiserSettings.getSolutionImprovementSettings().isImprovingSolutions() && SecurityUtils.getSubject().isPermitted("features:optimisation-hillclimb");
 
 		final ChainBuilder builder = new ChainBuilder(dataTransformer);
 		if (createOptimiser) {
 
+			// TODO: Make a stage
 			if (LicenseFeatures.isPermitted("features:no-nominal-in-prompt")) {
-				LNGNoNominalInPromptTransformerUnit.chain(builder, optimiserSettings, 1);
+				LNGNoNominalInPromptTransformerUnit.chain(builder, optimisationPlan.getUserSettings(), 1);
 			}
 
-			if (!optimiserSettings.getStages().isEmpty()) {
-				for (final OptimisationStage stage : optimiserSettings.getStages()) {
+			BiConsumer<LNGScenarioToOptimiserBridge, ContainerProvider> exportCallback = null;
+			if (!optimisationPlan.getStages().isEmpty()) {
+
+				UserSettings userSettings = optimisationPlan.getUserSettings();
+				for (final OptimisationStage stage : optimisationPlan.getStages()) {
 					if (stage instanceof ParallelOptimisationStage<?>) {
 						final ParallelOptimisationStage<? extends OptimisationStage> parallelOptimisationStage = (ParallelOptimisationStage<? extends OptimisationStage>) stage;
 						final OptimisationStage template = parallelOptimisationStage.getTemplate();
-
-						chainUp(builder, executorService, template, parallelOptimisationStage.getJobCount(), optimiserSettings);
-
+						exportCallback = LNGScenarioChainUnitFactory.chainUp(builder, executorService, template, parallelOptimisationStage.getJobCount(), userSettings);
 					} else {
-						chainUp(builder, executorService, stage, 1, optimiserSettings);
+						exportCallback = LNGScenarioChainUnitFactory.chainUp(builder, executorService, stage, 1, userSettings);
 					}
 				}
+			} 
+			
+			final ContainerProvider resultProvider;
+			if (childName != null) {
+				// We have finished all optimisation steps. If we are saving the result in a child scenario rather than overwriting - do that here. Otherwise the result will be returned and the
+				// LNGScenarioRunner will do the save.
+				
+				// Create a ContainerProvider on the original instance.
+				final ContainerProvider containerProvider = new ContainerProvider(scenarioToOptimiserBridge.getScenarioInstance());
+				// Create an empty container to store the child scenario result into so we can then pass it into the action set export
+				resultProvider = new ContainerProvider();
+				// Export a copy of the best result
+				LNGExporterUnit.exportSingle(builder, 1, scenarioToOptimiserBridge, childName, containerProvider, resultProvider);
 			} else {
-				// // Clean state pre-optimiser
-				// if (doCleanStateOptimiser) {
-				//
-				// CleanStateParameters cleanStateSettings = null;
-				// for (final EObject eObj : optimiserSettings.getExtensions()) {
-				// if (eObj instanceof CleanStateParameters) {
-				// cleanStateSettings = (CleanStateParameters) eObj;
-				// }
-				// }
-				// assert cleanStateSettings != null;
-				// final OptimiserSettings settings = EcoreUtil.copy(optimiserSettings);
-				// settings.setSeed(cleanStateSettings.getSeed());
-				// settings.setAnnealingSettings(EcoreUtil.copy(cleanStateSettings.getAnnealingSettings()));
-				// settings.setGenerateCharterOuts(false);
-				//
-				// LNGCleanStateOptimiserTransformerUnit.chain(builder, IRunnerHook.PHASE_CLEAN_STATE, settings, PROGRESS_CLEAN_STATE);
-				// }
-
-				// Run the standard LSO optimisation
-				if (optimiserSettings.getAnnealingSettings().getIterations() > 0) {
-					LNGLSOOptimiserTransformerUnit.chain(builder, IRunnerHook.PHASE_LSO, optimiserSettings, PROGRESS_OPTIMISATION);
-				}
-				if (doHillClimb) {
-					// Run a hill climb opt on the LSO result
-					if (optimiserSettings.getSolutionImprovementSettings().getIterations() > 0) {
-						LNGHillClimbOptimiserTransformerUnit.chain(builder, IRunnerHook.PHASE_HILL, optimiserSettings, PROGRESS_HILLCLIMBING_OPTIMISATION);
-					}
-				}
+				// No child scenario, so export action sets under the original scenario
+				resultProvider = new ContainerProvider(scenarioToOptimiserBridge.getScenarioInstance());
 			}
-			if (doActionSetPostOptimisation) {
-				// Run the action set post optimisation
-				final boolean doSecondRun = doSecondActionSetRun(optimiserSettings);
-				if (doSecondRun) {
-					LNGActionSetTransformerUnit.chainFake(builder, IRunnerHook.PHASE_ACTION_SETS, optimiserSettings, executorService, PROGRESS_ACTION_SET_OPTIMISATION / 2);
-					LNGActionSetTransformerUnit.chain(builder, IRunnerHook.PHASE_ACTION_SETS, optimiserSettings, executorService, PROGRESS_ACTION_SET_OPTIMISATION / 2);
-				} else {
-					LNGActionSetTransformerUnit.chain(builder, IRunnerHook.PHASE_ACTION_SETS, optimiserSettings, executorService, PROGRESS_ACTION_SET_OPTIMISATION);
-
-				}
-				final ContainerProvider resultProvider;
-
-				if (childName != null) {
-					// We have finished all optimisation steps. If we are saving the result in a child scenario rather than overwriting - do that here. Otherwise the result will be returned and the
-					// LNGScenarioRunner will do the save.
-
-					// Create a ContainerProvider on the original instance.
-					final ContainerProvider containerProvider = new ContainerProvider(scenarioToOptimiserBridge.getScenarioInstance());
-					// Create an empty container to store the child scenario result into so we can then pass it into the action set export
-					resultProvider = new ContainerProvider();
-					// Export a copy of the best result
-					LNGExporterUnit.export(builder, 1, scenarioToOptimiserBridge, childName, containerProvider, resultProvider);
-				} else {
-					// No child scenario, so export action sets under the original scenario
-					resultProvider = new ContainerProvider(scenarioToOptimiserBridge.getScenarioInstance());
-				}
-				// Export action sets.
-				LNGActionSetTransformerUnit.export(builder, PROGRESS_ACTION_SET_SAVE, scenarioToOptimiserBridge, resultProvider);
-			} else {
-				// No action sets - then just export the result as a child if required. Ignore the results
-				if (childName != null) {
-					final ContainerProvider containerProvider = new ContainerProvider(scenarioToOptimiserBridge.getScenarioInstance());
-					LNGExporterUnit.export(builder, 1, scenarioToOptimiserBridge, childName, containerProvider, new ContainerProvider());
-				}
+			
+			if (exportCallback != null) {
+				exportCallback.accept(scenarioToOptimiserBridge, resultProvider);
 			}
 		} else {
 			// Just evaluate the current scenario.
@@ -183,115 +123,50 @@ public class LNGScenarioChainBuilder {
 		return builder.build();
 	}
 
-	private static void chainUp(final ChainBuilder builder, final ExecutorService executorService, final OptimisationStage template, final int jobCount, final OptimiserSettings mainSettings) {
-
-		if (template instanceof CleanStateOptimisationStage) {
-			final CleanStateOptimisationStage stage = (CleanStateOptimisationStage) template;
-			final OptimiserSettings settings = EcoreUtil.copy(mainSettings);
-			settings.setSeed(stage.getSeed());
-			settings.setAnnealingSettings(EcoreUtil.copy(stage.getAnnealingSettings()));
-			settings.setGenerateCharterOuts(false);
-
-			final int[] seeds = new int[jobCount];
-			for (int i = 0; i < jobCount; ++i) {
-				seeds[i] = stage.getSeed() + i;
-			}
-
-			LNGCleanStateOptimiserTransformerUnit.chainPool(builder, IRunnerHook.PHASE_CLEAN_STATE, settings, PROGRESS_CLEAN_STATE, executorService, seeds);
-		} else if (template instanceof LocalSearchOptimisationStage) {
-			final LocalSearchOptimisationStage stage = (LocalSearchOptimisationStage) template;
-
-			final OptimiserSettings settings = EcoreUtil.copy(mainSettings);
-			settings.setSeed(stage.getSeed());
-			settings.setAnnealingSettings(EcoreUtil.copy(stage.getAnnealingSettings()));
-			final int[] seeds = new int[jobCount];
-			for (int i = 0; i < jobCount; ++i) {
-				seeds[i] = stage.getSeed() + i;
-			}
-			LNGLSOOptimiserTransformerUnit.chainPool(builder, IRunnerHook.PHASE_LSO, settings, PROGRESS_OPTIMISATION, executorService, seeds);
-
-		} else if (template instanceof HillClimbOptimisationStage) {
-			final HillClimbOptimisationStage stage = (HillClimbOptimisationStage) template;
-			final OptimiserSettings settings = EcoreUtil.copy(mainSettings);
-			settings.setSeed(stage.getSeed());
-			settings.setAnnealingSettings(EcoreUtil.copy(stage.getAnnealingSettings()));
-			settings.getSolutionImprovementSettings().setIterations( stage.getAnnealingSettings().getIterations());
-			if (jobCount > 1) {
-				LNGHillClimbOptimiserTransformerUnit.chainPool(builder, IRunnerHook.PHASE_HILL, settings, PROGRESS_HILLCLIMBING_OPTIMISATION, executorService);
-			} else {
-				LNGHillClimbOptimiserTransformerUnit.chain(builder, IRunnerHook.PHASE_HILL, settings, PROGRESS_HILLCLIMBING_OPTIMISATION);
-			}
-
-		}
-	}
-
-	protected static boolean doSecondActionSetRun(@NonNull final OptimiserSettings optimiserSettings) {
-		if (System.getProperty(PROPERTY_MMX_DISABLE_SECOND_ACTION_SET_RUN) != null) {
-			return false;
-		}
-		boolean over3Months = false;
-		final OptimisationRange range = optimiserSettings.getRange();
-		if (range != null) {
-			if (!range.isSetOptimiseAfter() || !range.isSetOptimiseBefore()) {
-				over3Months = true;
-			} else {
-				final YearMonth after = range.getOptimiseAfter();
-				final YearMonth before = range.getOptimiseBefore();
-				if (after == null || before == null) {
-					over3Months = true;
-
-				} else if (Months.between(after, before) > 3) {
-					over3Months = true;
-				}
-			}
-		}
-		return over3Months;
-	}
-
-	/**
-	 * WIP: Needs UI link up. Generates a run-all similarity mode chain.
-	 * 
-	 * @param dataTransformer
-	 * @param dataExporter
-	 * @param optimiserSettings
-	 * @param initialHints
-	 * @return
-	 */
-	public static IChainRunner createRunAllSimilarityOptimisationChain(@NonNull final LNGDataTransformer dataTransformer, @NonNull final LNGScenarioToOptimiserBridge dataExporter,
-			@NonNull final OptimiserSettings optimiserSettings, @NonNull final ExecutorService executorService, @Nullable final String... initialHints) {
-
-		final UserSettings basicSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		if (optimiserSettings.getRange() != null) {
-			final OptimisationRange range = optimiserSettings.getRange();
-			if (range.isSetOptimiseAfter()) {
-				basicSettings.setPeriodStart(range.getOptimiseAfter());
-			}
-			if (range.isSetOptimiseBefore()) {
-				basicSettings.setPeriodEnd(range.getOptimiseBefore());
-			}
-		}
-		basicSettings.setShippingOnly(optimiserSettings.isShippingOnly());
-		basicSettings.setGenerateCharterOuts(optimiserSettings.isGenerateCharterOuts());
-		basicSettings.setBuildActionSets(optimiserSettings.isBuildActionSets());
-		final List<IChainRunner> runners = new ArrayList<>(SimilarityMode.values().length - 1);
-		for (final SimilarityMode mode : SimilarityMode.values()) {
-			if (mode == SimilarityMode.ALL) {
-				continue;
-			}
-			final UserSettings copy = EcoreUtil.copy(basicSettings);
-			copy.setSimilarityMode(mode);
-
-			OptimisationHelper.checkUserSettings(copy, true);
-
-			final OptimiserSettings settings = OptimisationHelper.transformUserSettings(copy, null, dataExporter.getOptimiserScenario());
-			if (settings != null) {
-				runners.add(createStandardOptimisationChain("Similarity-" + mode.toString(), dataTransformer, dataExporter, settings, executorService, initialHints));
-			}
-		}
-		final MultiChainRunner runner = new MultiChainRunner(dataTransformer, runners, executorService);
-
-		return runner;
-	}
+	// /**
+	// * WIP: Needs UI link up. Generates a run-all similarity mode chain.
+	// *
+	// * @param dataTransformer
+	// * @param dataExporter
+	// * @param optimiserSettings
+	// * @param initialHints
+	// * @return
+	// */
+	// public static IChainRunner createRunAllSimilarityOptimisationChain(@NonNull final LNGDataTransformer dataTransformer, @NonNull final LNGScenarioToOptimiserBridge dataExporter,
+	// @NonNull final OptimisationPlan optimisationPlan, @NonNull final ExecutorService executorService, @Nullable final String... initialHints) {
+	//
+	// final UserSettings basicSettings = ParametersFactory.eINSTANCE.createUserSettings();
+	// if (optimiserSettings.getRange() != null) {
+	// final OptimisationRange range = optimiserSettings.getRange();
+	// if (range.isSetOptimiseAfter()) {
+	// basicSettings.setPeriodStart(range.getOptimiseAfter());
+	// }
+	// if (range.isSetOptimiseBefore()) {
+	// basicSettings.setPeriodEnd(range.getOptimiseBefore());
+	// }
+	// }
+	// basicSettings.setShippingOnly(optimiserSettings.isShippingOnly());
+	// basicSettings.setGenerateCharterOuts(optimiserSettings.isGenerateCharterOuts());
+	// basicSettings.setBuildActionSets(optimiserSettings.isBuildActionSets());
+	// final List<IChainRunner> runners = new ArrayList<>(SimilarityMode.values().length - 1);
+	// for (final SimilarityMode mode : SimilarityMode.values()) {
+	// if (mode == SimilarityMode.ALL) {
+	// continue;
+	// }
+	// final UserSettings copy = EcoreUtil.copy(basicSettings);
+	// copy.setSimilarityMode(mode);
+	//
+	// OptimisationHelper.checkUserSettings(copy, true);
+	//
+	// final OptimiserSettings settings = OptimisationHelper.transformUserSettings(copy, null, dataExporter.getOptimiserScenario());
+	// if (settings != null) {
+	// runners.add(createStandardOptimisationChain("Similarity-" + mode.toString(), dataTransformer, dataExporter, settings, executorService, initialHints));
+	// }
+	// }
+	// final MultiChainRunner runner = new MultiChainRunner(dataTransformer, runners, executorService);
+	//
+	// return runner;
+	// }
 
 	@NonNull
 	public static ExecutorService createExecutorService() {

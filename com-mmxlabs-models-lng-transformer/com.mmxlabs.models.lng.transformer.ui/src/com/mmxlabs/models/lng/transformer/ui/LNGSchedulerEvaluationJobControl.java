@@ -59,7 +59,7 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 			final LNGScenarioModel scenario = (LNGScenarioModel) modelReference.getInstance();
 			final EditingDomain editingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
 
-			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenario, scenarioInstance, jobDescriptor.getOptimiserSettings(), editingDomain, null, true);
+			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenario, scenarioInstance, jobDescriptor.getOptimisationPlan(), editingDomain, null, true);
 			try {
 				runner.evaluateInitialState();
 			} finally {

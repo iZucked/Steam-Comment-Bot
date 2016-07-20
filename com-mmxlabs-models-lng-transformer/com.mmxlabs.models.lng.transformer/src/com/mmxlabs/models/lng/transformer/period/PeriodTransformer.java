@@ -56,8 +56,7 @@ import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.parameters.OptimisationRange;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.DataIndex;
@@ -139,24 +138,23 @@ public class PeriodTransformer {
 	private InclusionChecker inclusionChecker;
 
 	@NonNull
-	public NonNullPair<LNGScenarioModel, EditingDomain> transform(@NonNull final LNGScenarioModel wholeScenario, @NonNull final OptimiserSettings optimiserSettings,
+	public NonNullPair<LNGScenarioModel, EditingDomain> transform(@NonNull final LNGScenarioModel wholeScenario, @NonNull final UserSettings userSettings,
 			@NonNull final IScenarioEntityMapping mapping) {
-		final PeriodRecord periodRecord = createPeriodRecord(optimiserSettings);
-		return transform(wholeScenario, optimiserSettings, periodRecord, mapping);
+		final PeriodRecord periodRecord = createPeriodRecord(userSettings);
+		return transform(wholeScenario, periodRecord, mapping);
 	}
 
 	@NonNull
-	public PeriodRecord createPeriodRecord(@NonNull final OptimiserSettings optimiserSettings) {
+	public PeriodRecord createPeriodRecord(@NonNull final UserSettings userSettings) {
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 
-		final OptimisationRange range = optimiserSettings.getRange();
-		if (range == null) {
+		if (userSettings.getPeriodStart() == null && userSettings.getPeriodEnd() == null) {
 			return periodRecord;
 		}
 
-		final YearMonth startDate = range.getOptimiseAfter();
-		final YearMonth endDate = range.getOptimiseBefore();
+		final YearMonth startDate = userSettings.getPeriodStart();
+		final YearMonth endDate = userSettings.getPeriodEnd();
 
 		final int boundaryFlexInMonths = 1;
 
@@ -177,8 +175,8 @@ public class PeriodTransformer {
 	}
 
 	@NonNull
-	public NonNullPair<LNGScenarioModel, EditingDomain> transform(@NonNull final LNGScenarioModel wholeScenario, @NonNull final OptimiserSettings optimiserSettings,
-			@NonNull final PeriodRecord periodRecord, @NonNull final IScenarioEntityMapping mapping) {
+	public NonNullPair<LNGScenarioModel, EditingDomain> transform(@NonNull final LNGScenarioModel wholeScenario, @NonNull final PeriodRecord periodRecord,
+			@NonNull final IScenarioEntityMapping mapping) {
 
 		// assert - passed validation
 

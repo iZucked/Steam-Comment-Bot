@@ -29,7 +29,7 @@ import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
@@ -62,7 +62,6 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 	private class SimilarityFuture implements Runnable {
 
 		private final LNGScenarioModel scenarioModel;
-		private OptimiserSettings settings;
 		private IProgressMonitor monitor;
 		private final ScenarioInstance parent;
 		private final String name;
@@ -71,7 +70,7 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 		private final ScenarioInstance fork;
 		private final ModelReference ref;
 
-		public SimilarityFuture(final ScenarioInstance parent, final LNGScenarioModel model, final String name, final OptimiserSettings settings, final String... hints) {
+		public SimilarityFuture(final ScenarioInstance parent, final LNGScenarioModel model, final String name, final OptimisationPlan optimisationPlan, final String... hints) {
 
 			this.parent = parent;
 			this.name = name;
@@ -86,7 +85,7 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 			// TODO: This is probably a) null and b) bad idea to use the same executor service for sub-processes while the main process is using the pool....
 			// TODO: Is is possible for a job to suspend itself and release the thread?
 
-			this.runner = new LNGScenarioRunner(runnerService, scenarioModel, fork, settings, (EditingDomain) fork.getAdapters().get(EditingDomain.class), null, false, hints);
+			this.runner = new LNGScenarioRunner(runnerService, scenarioModel, fork, optimisationPlan, (EditingDomain) fork.getAdapters().get(EditingDomain.class), null, false, hints);
 			this.lock = fork.getLock(ScenarioLock.OPTIMISER);
 			this.lock.awaitClaim();
 		}
@@ -142,7 +141,7 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 		}
 	}
 
-	public AbstractLNGRunMultipleForkedJobsControl(final AbstractLNGJobDescriptor jobDescriptor, BiConsumer<OptimiserSettings, BiConsumer<String, OptimiserSettings>> jobFactory) throws IOException {
+	public AbstractLNGRunMultipleForkedJobsControl(final AbstractLNGJobDescriptor jobDescriptor, BiConsumer<OptimisationPlan, BiConsumer<String, OptimisationPlan>> jobFactory) throws IOException {
 		super((jobDescriptor.isOptimising() ? "Optimise " : "Evaluate ") + jobDescriptor.getJobName(),
 				CollectionsUtil.<QualifiedName, Object> makeHashMap(IProgressConstants.ICON_PROPERTY, (jobDescriptor.isOptimising() ? imgOpti : imgEval)));
 		this.jobDescriptor = jobDescriptor;
@@ -151,11 +150,11 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 		this.originalScenario = (LNGScenarioModel) modelReference.getInstance();
 
 		this.jobs = new LinkedList<>();
-		BiConsumer<String, OptimiserSettings> factory = (name, settings) -> {
-			jobs.add(new SimilarityFuture(scenarioInstance, originalScenario, name, settings, LNGTransformerHelper.HINT_OPTIMISE_LSO));
+		BiConsumer<String, OptimisationPlan> factory = (name, optimisationPlan) -> {
+			jobs.add(new SimilarityFuture(scenarioInstance, originalScenario, name, optimisationPlan, LNGTransformerHelper.HINT_OPTIMISE_LSO));
 		};
 
-		jobFactory.accept(jobDescriptor.getOptimiserSettings(), factory);
+		jobFactory.accept(jobDescriptor.getOptimisationPlan(), factory);
 
 		// Hmm...
 		final int numberOfThreads = getNumberOfThreads();

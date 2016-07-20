@@ -5,13 +5,12 @@
 package com.mmxlabs.models.lng.transformer.ui.parametermodes;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 
 /**
  */
 public interface IParameterModeExtender {
 
-	void extend(@NonNull OptimiserSettings settings, @Nullable String parameterMode);
+	void extend(@NonNull OptimisationPlan optimisationPlan);
 }

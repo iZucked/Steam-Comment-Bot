@@ -17,12 +17,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.mmxlabs.models.lng.transformer.stochasticactionsets.StochasticActionSetUtils;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.Change;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeSet;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.Difference;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.JobState;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.MetricType;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.chain.StochasticActionSetUtils;
 import com.mmxlabs.optimiser.common.logging.ILoggingDataStore;
 
 public class ActionSetLogger implements ILoggingDataStore {

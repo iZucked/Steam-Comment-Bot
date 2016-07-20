@@ -7,7 +7,7 @@ package com.mmxlabs.models.lng.transformer.ui;
 import java.io.Serializable;
 
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
@@ -23,21 +23,21 @@ public abstract class AbstractLNGJobDescriptor implements IJobDescriptor, Serial
 
 	private ScenarioInstance scenarioInstance;
 
-	private OptimiserSettings optimiserSettings;
+	private OptimisationPlan optimisationPlan;
 
 	private final boolean optimise;
 
-	protected AbstractLNGJobDescriptor(final String name, final ScenarioInstance scenarioInstance, final OptimiserSettings optimiserSettings, final boolean optimise) {
+	protected AbstractLNGJobDescriptor(final String name, final ScenarioInstance scenarioInstance, final OptimisationPlan optimisationPlan, final boolean optimise) {
 		this.name = name;
 		this.scenarioInstance = scenarioInstance;
-		this.optimiserSettings = optimiserSettings;
+		this.optimisationPlan = optimisationPlan;
 		this.optimise = optimise;
 	}
 
 	@Override
 	public void dispose() {
 		scenarioInstance = null;
-		optimiserSettings = null;
+		optimisationPlan = null;
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public abstract class AbstractLNGJobDescriptor implements IJobDescriptor, Serial
 		return optimise;
 	}
 
-	public OptimiserSettings getOptimiserSettings() {
-		return optimiserSettings;
+	public OptimisationPlan getOptimisationPlan() {
+		return optimisationPlan;
 	}
 }

@@ -146,7 +146,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 				}
 			};
 		}
-		scenarioRunner = new LNGScenarioRunner(executorService, originalScenario, scenarioInstance, jobDescriptor.getOptimiserSettings(), originalEditingDomain, runnerHook, false,
+		scenarioRunner = new LNGScenarioRunner(executorService, originalScenario, scenarioInstance, jobDescriptor.getOptimisationPlan(), originalEditingDomain, runnerHook, false,
 				LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));

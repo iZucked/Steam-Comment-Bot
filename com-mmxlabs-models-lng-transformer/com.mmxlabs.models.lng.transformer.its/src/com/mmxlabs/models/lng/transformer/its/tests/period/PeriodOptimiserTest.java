@@ -19,16 +19,18 @@ import org.junit.runner.RunWith;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
+import com.mmxlabs.models.lng.parameters.OptimisationPlan;
+import com.mmxlabs.models.lng.parameters.OptimisationStage;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.types.PortCapability;
 
@@ -337,10 +339,10 @@ public class PeriodOptimiserTest {
 			ExecutorService executorService = Executors.newSingleThreadExecutor();
 			try {
 
-				final OptimiserSettings settings = getSettings();
+				final OptimisationPlan plan = getPlan();
 
-				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) scenario, settings, new TransformerExtensionTestBootstrapModule(),
-						null, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
+				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) scenario, plan, new TransformerExtensionTestBootstrapModule(), null, false,
+						LNGTransformerHelper.HINT_OPTIMISE_LSO);
 				runner.evaluateInitialState();
 				if (OUTPUT_SCENARIOS) {
 					save(runner.getScenario(), "c:/temp/scenario1.lingo");
@@ -358,10 +360,15 @@ public class PeriodOptimiserTest {
 			}
 		}
 
-		private OptimiserSettings getSettings() {
-			final OptimiserSettings settings = ScenarioUtils.createDefaultSettings();
-			settings.getAnnealingSettings().setIterations(1000);
-			return settings;
+		private OptimisationPlan getPlan() {
+			final OptimisationPlan plan = LNGScenarioRunnerUtils.createDefaultOptimisationPlan();
+			for (OptimisationStage stage : plan.getStages()) {
+				if (stage instanceof LocalSearchOptimisationStage) {
+					LocalSearchOptimisationStage lsoStage = (LocalSearchOptimisationStage) stage;
+					lsoStage.getAnnealingSettings().setIterations(10_000);
+				}
+			}
+			return plan;
 		}
 
 		public void periodOptimise(final YearMonth start, final YearMonth end) throws Exception {
@@ -369,13 +376,13 @@ public class PeriodOptimiserTest {
 
 			try {
 
-				final OptimiserSettings settings = getSettings();
+				final OptimisationPlan plan = getPlan();
 
-				settings.getRange().setOptimiseAfter(start);
-				settings.getRange().setOptimiseBefore(end);
+				plan.getUserSettings().setPeriodStart(start);
+				plan.getUserSettings().setPeriodEnd(end);
 
-				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) scenario, settings, new TransformerExtensionTestBootstrapModule(),
-						null, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
+				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) scenario, plan, new TransformerExtensionTestBootstrapModule(), null, false,
+						LNGTransformerHelper.HINT_OPTIMISE_LSO);
 				runner.evaluateInitialState();
 
 				if (OUTPUT_SCENARIOS) {

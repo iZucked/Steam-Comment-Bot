@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Module;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.chain.IChainRunner;
@@ -57,46 +57,47 @@ public class LNGScenarioRunner {
 	@Nullable
 	private final ScenarioInstance scenarioInstance;
 
-	public LNGScenarioRunner(@NonNull final ExecutorService exectorService, @NonNull final LNGScenarioModel scenarioModel, @NonNull final OptimiserSettings optimiserSettings,
+	public LNGScenarioRunner(@NonNull final ExecutorService exectorService, @NonNull final LNGScenarioModel scenarioModel, @NonNull final OptimisationPlan optimisationPlan,
 			@Nullable final IRunnerHook runnerHook, final boolean evaluationOnly, final String... initialHints) {
-		this(exectorService, scenarioModel, null, optimiserSettings, LNGSchedulerJobUtils.createLocalEditingDomain(), runnerHook, evaluationOnly, initialHints);
+		this(exectorService, scenarioModel, null, optimisationPlan, LNGSchedulerJobUtils.createLocalEditingDomain(), runnerHook, evaluationOnly, initialHints);
 
 	}
 
-	public LNGScenarioRunner(@NonNull final ExecutorService exectorService, @NonNull final LNGScenarioModel scenarioModel, @NonNull final OptimiserSettings optimiserSettings,
+	public LNGScenarioRunner(@NonNull final ExecutorService exectorService, @NonNull final LNGScenarioModel scenarioModel, @NonNull final OptimisationPlan optimisationPlan,
 			@Nullable final Module extraModule, @Nullable final IRunnerHook runnerHook, final boolean evaluationOnly, final String... initialHints) {
-		this(exectorService, scenarioModel, null, optimiserSettings, LNGSchedulerJobUtils.createLocalEditingDomain(), extraModule, null, runnerHook, evaluationOnly, initialHints);
+		this(exectorService, scenarioModel, null, optimisationPlan, LNGSchedulerJobUtils.createLocalEditingDomain(), extraModule, null, runnerHook, evaluationOnly, initialHints);
 	}
 
 	public LNGScenarioRunner(@NonNull final ExecutorService exectorService, @NonNull final LNGScenarioModel scenarioModel, @Nullable final ScenarioInstance scenarioInstance,
-			@NonNull final OptimiserSettings optimiserSettings, @NonNull final EditingDomain editingDomain, @Nullable final IRunnerHook runnerHook, final boolean evaluationOnly,
+			@NonNull final OptimisationPlan optimisationPlan, @NonNull final EditingDomain editingDomain, @Nullable final IRunnerHook runnerHook, final boolean evaluationOnly,
 			final String... initialHints) {
-		this(exectorService, scenarioModel, scenarioInstance, optimiserSettings, editingDomain, null, null, runnerHook, evaluationOnly, initialHints);
+		this(exectorService, scenarioModel, scenarioInstance, optimisationPlan, editingDomain, null, null, runnerHook, evaluationOnly, initialHints);
 	}
 
 	public LNGScenarioRunner(@NonNull final ExecutorService executorService, @NonNull final LNGScenarioModel scenarioModel, @Nullable final ScenarioInstance scenarioInstance,
-			@NonNull final OptimiserSettings optimiserSettings, @NonNull final EditingDomain editingDomain, @Nullable final Module extraModule,
-			@Nullable final IOptimiserInjectorService localOverrides, @Nullable final IRunnerHook runnerHook, final boolean evaluationOnly, final String... initialHints) {
+			@NonNull final OptimisationPlan optimisationPlan, @NonNull final EditingDomain editingDomain, @Nullable final Module extraModule, @Nullable final IOptimiserInjectorService localOverrides,
+			@Nullable final IRunnerHook runnerHook, final boolean evaluationOnly, final String... initialHints) {
 
 		this.scenarioModel = scenarioModel;
 		this.scenarioInstance = scenarioInstance;
 
 		// here we want to take user settings and generate initial state settings
-		scenarioToOptimiserBridge = new LNGScenarioToOptimiserBridge(scenarioModel, scenarioInstance, optimiserSettings, editingDomain, extraModule, localOverrides, evaluationOnly, initialHints);
+		scenarioToOptimiserBridge = new LNGScenarioToOptimiserBridge(scenarioModel, scenarioInstance, optimisationPlan.getUserSettings(), optimisationPlan.getSolutionBuilderSettings(), editingDomain,
+				extraModule, localOverrides, evaluationOnly, initialHints);
 
 		setRunnerHook(runnerHook);
 
-		// FB: 1712 Switch for enabling run-all similarity optimisation. Needs better UI hook ups.
-		if (false) {
-			chainRunner = LNGScenarioChainBuilder.createRunAllSimilarityOptimisationChain(scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings, executorService,
-					initialHints);
-		} else {
-			// chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(null, scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings,
-			// executorService,
-			// LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(null, scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings, executorService,
-					initialHints);
-		}
+		// // FB: 1712 Switch for enabling run-all similarity optimisation. Needs better UI hook ups.
+		// if (false) {
+		// chainRunner = LNGScenarioChainBuilder.createRunAllSimilarityOptimisationChain(scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimisationPlan, executorService,
+		// initialHints);
+		// } else {
+		// chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(null, scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings,
+		// executorService,
+		// LNGTransformerHelper.HINT_OPTIMISE_LSO);
+		chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(null, scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimisationPlan, executorService,
+				initialHints);
+		// }
 	}
 
 	public void dispose() {

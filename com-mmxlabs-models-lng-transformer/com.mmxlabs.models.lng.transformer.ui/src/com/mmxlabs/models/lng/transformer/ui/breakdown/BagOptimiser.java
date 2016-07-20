@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.ui;
+package com.mmxlabs.models.lng.transformer.ui.breakdown;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,22 +34,9 @@ import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.transformer.chain.IMultiStateResult;
 import com.mmxlabs.models.lng.transformer.chain.impl.MultiStateResult;
-import com.mmxlabs.models.lng.transformer.inject.modules.ActionPlanModule;
-import com.mmxlabs.models.lng.transformer.stochasticactionsets.StochasticActionSetUtils;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.ActionSetEvaluationHelper;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.BreakdownSearchData;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.BreakdownSearchStatistics;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.Change;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeChecker;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeSet;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.Difference;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.IncrementingRandomSeed;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.JobBatcher;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.JobState;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.JobStateMode;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.JobStore;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.MetricType;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.SimilarityState;
+import com.mmxlabs.models.lng.transformer.ui.ActionSetLogger;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.chain.LNGParameters_ActionPlanSettingsModule;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.chain.StochasticActionSetUtils;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.independence.ActionSetIndependenceChecking;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -134,11 +121,11 @@ public class BagOptimiser {
 	private final int retrySearchSize = 2_000;
 
 	@Inject
-	@Named(ActionPlanModule.ACTION_PLAN_TOTAL_EVALUATIONS)
+	@Named(LNGParameters_ActionPlanSettingsModule.ACTION_PLAN_TOTAL_EVALUATIONS)
 	private int maxEvaluations;
 
 	@Inject
-	@Named(ActionPlanModule.ACTION_PLAN_IN_RUN_EVALUATIONS)
+	@Named(LNGParameters_ActionPlanSettingsModule.ACTION_PLAN_IN_RUN_EVALUATIONS)
 	private int maxEvaluationsInRun;
 
 	private int maxLeafs = 0;
@@ -182,7 +169,7 @@ public class BagOptimiser {
 	 * @param maxLeafs
 	 * @return
 	 */
-	public IMultiStateResult optimise(@NonNull final ISequences targetRawSequences, @NonNull final IProgressMonitor progressMon_itor, final int maxLeafs) {
+	public IMultiStateResult optimise(@NonNull final ISequences targetRawSequences, @NonNull final IProgressMonitor progressMonitor, final int maxLeafs) {
 
 		init(progressMonitor, maxLeafs);
 

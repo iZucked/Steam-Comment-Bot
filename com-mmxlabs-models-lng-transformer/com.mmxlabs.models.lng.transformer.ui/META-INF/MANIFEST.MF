@@ -51,8 +51,9 @@ Import-Package: com.mmxlabs.models.ui.dates,
  org.eclipse.nebula.widgets.formattedtext,
  org.slf4j;version="1.6.4"
 Service-Component: OSGI-INF/*.xml
-Export-Package: com.mmxlabs.models.lng.transformer.ui,
- com.mmxlabs.models.lng.transformer.stochasticactionsets,
+Export-Package: com.mmxlabs.models.lng.transformer.stochasticactionsets,
+ com.mmxlabs.models.lng.transformer.ui,
  com.mmxlabs.models.lng.transformer.ui.breakdown,
+ com.mmxlabs.models.lng.transformer.ui.breakdown.chain,
  com.mmxlabs.models.lng.transformer.ui.parametermodes,
  com.mmxlabs.models.lng.transformer.ui.parametermodes.impl

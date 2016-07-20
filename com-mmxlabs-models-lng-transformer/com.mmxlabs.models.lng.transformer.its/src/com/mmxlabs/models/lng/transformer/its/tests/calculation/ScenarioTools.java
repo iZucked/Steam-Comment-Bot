@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
+import org.omg.PortableInterceptor.SUCCESSFUL;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -53,7 +54,8 @@ import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.ParametersFactory;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -86,7 +88,6 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -627,10 +628,10 @@ public class ScenarioTools {
 			}
 		}
 
-		final OptimiserSettings settings = ScenarioUtils.createDefaultSettings();
-		settings.setGenerateCharterOuts(withCharterOutGeneration);
-		final Set<String> hints = LNGTransformerHelper.getHints(settings);
-		final LNGDataTransformer dataTransformer = new LNGDataTransformer(scenario, settings, hints,
+		final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
+		userSettings.setGenerateCharterOuts(withCharterOutGeneration);
+		final Set<String> hints = LNGTransformerHelper.getHints(userSettings);
+		final LNGDataTransformer dataTransformer = new LNGDataTransformer(scenario, userSettings, ScenarioUtils.createDefaultSolutionBuilderSettings(), hints,
 				LNGTransformerHelper.getOptimiserInjectorServices(new TransformerExtensionTestBootstrapModule(), null));
 
 		Injector evaluationInjector;
@@ -638,7 +639,8 @@ public class ScenarioTools {
 			final List<Module> modules = new LinkedList<>();
 			modules.add(new InitialSequencesModule(dataTransformer.getInitialSequences()));
 			modules.add(new InputSequencesModule(dataTransformer.getInitialSequences()));
-			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(dataTransformer.getOptimiserSettings()), dataTransformer.getModuleServices(),
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(
+					new LNGParameters_EvaluationSettingsModule(dataTransformer.getUserSettings(), ScenarioUtils.createDefaultConstraintAndFitnessSettings()), dataTransformer.getModuleServices(),
 					IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 			modules.addAll(
 					LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), dataTransformer.getModuleServices(), IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
@@ -651,7 +653,7 @@ public class ScenarioTools {
 		// Construct internal command stack to generate correct output schedule
 		final EditingDomain ed = LNGSchedulerJobUtils.createLocalEditingDomain();
 
-		final Pair<Command, Schedule> p = LNGSchedulerJobUtils.exportSolution(evaluationInjector, scenario, dataTransformer.getOptimiserSettings(), ed, modelEntityMap,
+		final Pair<Command, Schedule> p = LNGSchedulerJobUtils.exportSolution(evaluationInjector, scenario, dataTransformer.getUserSettings(), ed, modelEntityMap,
 				dataTransformer.getInitialSequences(), null);
 		ed.getCommandStack().execute(p.getFirst());
 		return p.getSecond();

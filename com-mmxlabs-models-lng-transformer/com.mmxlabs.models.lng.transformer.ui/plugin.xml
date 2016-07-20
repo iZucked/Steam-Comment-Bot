@@ -446,19 +446,6 @@
       </constraintProvider>
    </extension>
       <extension
-            point="com.mmxlabs.models.lng.transformer.ui.ParameterMode">
-         <ParameterMode
-               class="com.mmxlabs.models.lng.transformer.ui.parametermodes.preset.StandardMode"
-               id="com.mmxlabs.models.lng.transformer.ui.parametermodes.preset.StandardMode"
-               name="Standard">
-         </ParameterMode>
-         <ParameterMode
-               class="com.mmxlabs.models.lng.transformer.ui.parametermodes.preset.ShippingOnlyMode"
-               id="com.mmxlabs.models.lng.transformer.ui.parametermodes.preset.ShippingOnlyMode"
-               name="Shipping Only">
-         </ParameterMode>
-      </extension>
-      <extension
             point="com.mmxlabs.license.features.PluginXMLEnablement">
          <PluginXMLEnablement
                feature="optimisation-charter-out-generation"

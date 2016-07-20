@@ -87,7 +87,8 @@ public class LNGEvaluationTransformerUnit implements ILNGStateTransformerUnit {
 		List<Module> modules = new LinkedList<>();
 		modules.add(new InitialSequencesModule(initialSequences));
 		modules.add(new InputSequencesModule(inputSequences));
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(dataTransformer.getOptimiserSettings()), services,
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(
+				new LNGParameters_EvaluationSettingsModule(dataTransformer.getUserSettings(), dataTransformer.getSolutionBuilderSettings().getConstraintAndFitnessSettings()), services,
 				IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 		injector = dataTransformer.getInjector().createChildInjector(modules);

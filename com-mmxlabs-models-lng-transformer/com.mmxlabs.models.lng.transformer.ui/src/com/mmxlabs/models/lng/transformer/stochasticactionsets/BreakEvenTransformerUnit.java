@@ -7,8 +7,6 @@ package com.mmxlabs.models.lng.transformer.stochasticactionsets;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
@@ -17,7 +15,9 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage;
+import com.mmxlabs.models.lng.parameters.ParametersFactory;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
 import com.mmxlabs.models.lng.transformer.chain.ILNGStateTransformerUnit;
@@ -29,8 +29,6 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
-import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_OptimiserSettingsModule;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.BagMover;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
@@ -40,7 +38,7 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 public class BreakEvenTransformerUnit implements ILNGStateTransformerUnit {
 
 	@NonNull
-	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final OptimiserSettings settings, final int progressTicks) {
+	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final UserSettings userSettings, @NonNull BreakEvenOptmisationStage stageSettings, final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
 			private BreakEvenTransformerUnit t;
@@ -56,7 +54,7 @@ public class BreakEvenTransformerUnit implements ILNGStateTransformerUnit {
 			@Override
 			public void init(SequencesContainer initialSequences, final IMultiStateResult inputState) {
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
-				t = new BreakEvenTransformerUnit(dt, settings, initialSequences.getSequences(), inputState, dt.getHints());
+				t = new BreakEvenTransformerUnit(dt, userSettings, stageSettings, initialSequences.getSequences(), inputState, dt.getHints());
 			}
 
 			@Override
@@ -88,12 +86,12 @@ public class BreakEvenTransformerUnit implements ILNGStateTransformerUnit {
 	private long targetProfitAndLoss;
 
 	@SuppressWarnings("null")
-	public BreakEvenTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final OptimiserSettings settings, @NonNull ISequences initialSequences,
-			@NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
+	public BreakEvenTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final UserSettings userSettings, @NonNull BreakEvenOptmisationStage stageSettings,
+			@NonNull ISequences initialSequences, @NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
 
 		// TODO: Hook in as input e.g. from data model
-		targetProfitAndLoss = 0L;// OptimiserUnitConvertor.convertToInternalFixedCost(settings.getBreakEvenProfitAndLoss());
+		targetProfitAndLoss = OptimiserUnitConvertor.convertToInternalFixedCost(stageSettings.getTargetProfitAndLoss());
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
 
 		// FIXME: Disable main break even evalRuator
@@ -102,10 +100,8 @@ public class BreakEvenTransformerUnit implements ILNGStateTransformerUnit {
 		final List<Module> modules = new LinkedList<>();
 		modules.add(new InitialSequencesModule(initialSequences));
 		modules.add(new InputSequencesModule(inputState.getBestSolution().getFirst()));
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(settings), services,
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(userSettings, ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings()), services,
 				IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_OptimiserSettingsModule(settings), services,
-				IOptimiserInjectorService.ModuleType.Module_OptimisationParametersModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 		// modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGOptimisationModule(), services, IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
 

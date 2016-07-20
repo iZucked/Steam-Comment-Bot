@@ -45,7 +45,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -103,7 +103,7 @@ public class LNGSchedulerJobUtils {
 	 * @param LABEL_PREFIX
 	 * @return
 	 */
-	public static Pair<Command, Schedule> exportSolution(final Injector injector, final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final EditingDomain editingDomain,
+	public static Pair<Command, Schedule> exportSolution(final Injector injector, final LNGScenarioModel scenario, final UserSettings userSettings, final EditingDomain editingDomain,
 			@NonNull final ModelEntityMap modelEntityMap, @NonNull final ISequences rawSequences, @Nullable final Map<String, Object> extraAnnotations) {
 
 		// new LNGExportTransformer(eveal/optimisationTransofrmer, hints);
@@ -148,7 +148,8 @@ public class LNGSchedulerJobUtils {
 
 			command.append(derive(editingDomain, scenario, schedule, cargoModel, postExportProcessors));
 			// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
-			command.append(SetCommand.create(editingDomain, scenario, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Parameters(), optimiserSettings));
+			System.err.println("LNGSchedulerJobUtils: USER SETTINGS / PLAN SETTINGS ARE NOT SAVED !! ");
+			// command.append(SetCommand.create(editingDomain, scenario, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Parameters(), optimiserSettings));
 
 			// Mark schedule as clean
 			command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));

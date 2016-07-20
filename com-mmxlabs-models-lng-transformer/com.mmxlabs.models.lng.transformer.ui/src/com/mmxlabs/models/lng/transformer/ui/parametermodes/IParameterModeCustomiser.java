@@ -6,12 +6,12 @@ package com.mmxlabs.models.lng.transformer.ui.parametermodes;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 
 /**
  * A {@link IParameterModeCustomiser} custo
  */
 public interface IParameterModeCustomiser {
 
-	void customise(@NonNull OptimiserSettings optimiserSettings);
+	void customise(@NonNull OptimisationPlan optimisationPlan);
 }

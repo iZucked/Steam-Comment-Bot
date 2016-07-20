@@ -21,9 +21,9 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.transformer.inject.modules.ActionPlanModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeChecker.DifferenceType;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.chain.LNGParameters_ActionPlanSettingsModule;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.independence.DischargeRewireChange;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.independence.InsertUnusedCargoChange;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.independence.LoadRewireChange;
@@ -106,7 +106,7 @@ public class BagMover {
 	private boolean isReevaluating;
 
 	@Inject
-	@Named(ActionPlanModule.ACTION_PLAN_MAX_SEARCH_DEPTH)
+	@Named(LNGParameters_ActionPlanSettingsModule.ACTION_PLAN_MAX_SEARCH_DEPTH)
 	private int MAX_SEARCH_STATES;
 
 	private int max = 0;

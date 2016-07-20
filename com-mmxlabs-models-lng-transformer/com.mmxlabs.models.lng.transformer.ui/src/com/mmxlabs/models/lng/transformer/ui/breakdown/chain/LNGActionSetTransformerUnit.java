@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.stochasticactionsets;
+package com.mmxlabs.models.lng.transformer.ui.breakdown.chain;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -24,8 +24,8 @@ import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
-import com.mmxlabs.common.NonNullPair;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
 import com.mmxlabs.models.lng.transformer.chain.ILNGStateTransformerUnit;
@@ -38,12 +38,12 @@ import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGOptimisationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
-import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_OptimiserSettingsModule;
-import com.mmxlabs.models.lng.transformer.ui.BagOptimiser;
 import com.mmxlabs.models.lng.transformer.ui.ContainerProvider;
+import com.mmxlabs.models.lng.transformer.ui.LNGExporterUnit;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.ActionSetEvaluationHelper;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BagMover;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.BagOptimiser;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
@@ -51,16 +51,16 @@ import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
-	private final Map<Thread, BagMover> threadCache = new ConcurrentHashMap<>(100);
 
 	@NonNull
-	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final OptimiserSettings settings, final int progressTicks) {
-		return chain(chainBuilder, phase, settings, null, progressTicks);
+	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final UserSettings userSettings, @NonNull ActionPlanOptimisationStage stageSettings,
+			final int progressTicks) {
+		return chain(chainBuilder, phase, userSettings, stageSettings, null, progressTicks);
 	}
 
 	@NonNull
-	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final OptimiserSettings settings, @Nullable final ExecutorService executorService,
-			final int progressTicks) {
+	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final UserSettings userSettings, @NonNull ActionPlanOptimisationStage stageSettings,
+			@Nullable final ExecutorService executorService, final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
 			private LNGActionSetTransformerUnit t;
@@ -79,14 +79,14 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 				@NonNull
 				Collection<@NonNull String> hints = new HashSet<>(dt.getHints());
-				if (settings.isGenerateCharterOuts()) {
+				if (userSettings.isGenerateCharterOuts()) {
 					hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
 				} else {
 					hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
 				}
 				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
-				t = new LNGActionSetTransformerUnit(dt, phase, settings, executorService, initialSequences.getSequences(), inputState, hints);
+				t = new LNGActionSetTransformerUnit(dt, phase, userSettings, stageSettings, executorService, initialSequences.getSequences(), inputState, hints);
 			}
 
 			@Override
@@ -107,8 +107,8 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 	}
 
 	@NonNull
-	public static IChainLink chainFake(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final OptimiserSettings settings, @Nullable final ExecutorService executorService,
-			final int progressTicks) {
+	public static IChainLink chainFake(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final UserSettings userSettings, @NonNull ActionPlanOptimisationStage stageSettings,
+			@Nullable final ExecutorService executorService, final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
 			private LNGActionSetTransformerUnit t;
@@ -125,7 +125,7 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 			@Override
 			public void init(SequencesContainer initialSequences, final IMultiStateResult inputState) {
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
-				t = new LNGActionSetTransformerUnit(dt, phase, settings, executorService, initialSequences.getSequences(), inputState, dt.getHints());
+				t = new LNGActionSetTransformerUnit(dt, phase, userSettings, stageSettings, executorService, initialSequences.getSequences(), inputState, dt.getHints());
 			}
 
 			@Override
@@ -146,93 +146,27 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 	}
 
 	public static IChainLink export(final ChainBuilder chainBuilder, final int progressTicks, @NonNull final LNGScenarioToOptimiserBridge runner, @NonNull final ContainerProvider containerProvider) {
-		final IChainLink link = new IChainLink() {
+		return LNGExporterUnit.exportMultiple(chainBuilder, progressTicks, runner, containerProvider, "Saving action plan", parent -> {
 
-			private IMultiStateResult state;
-
-			@Override
-			public IMultiStateResult run(final IProgressMonitor monitor) {
-				final IMultiStateResult pState = state;
-				if (pState == null) {
-					throw new IllegalStateException("#init has not been called");
+			final List<Container> elementsToRemove = new LinkedList<>();
+			for (final Container c : parent.getElements()) {
+				if (c.getName().startsWith("ActionSet-")) {
+					elementsToRemove.add(c);
 				}
-				// Assuming the scenario data is at the initial state.
-
-				// Remove existing solutions
-				final Container parent = containerProvider.get();
-				if (parent == null) {
-					// Error?
-					{
-						// Assume ITS run and just try to dump results.
-						final List<NonNullPair<ISequences, Map<String, Object>>> solutions = pState.getSolutions();
-						for (final NonNullPair<ISequences, Map<String, Object>> p : solutions) {
-							runner.exportAsCopy(p.getFirst(), p.getSecond());
-						}
-					}
-
-					return pState;
-				}
-				{
-					final List<Container> elementsToRemove = new LinkedList<>();
-					for (final Container c : parent.getElements()) {
-						if (c.getName().startsWith("ActionSet-")) {
-							elementsToRemove.add(c);
-						}
-					}
-					for (final Container c : elementsToRemove) {
-						parent.getScenarioService().delete(c);
-					}
-				}
-				final List<NonNullPair<ISequences, Map<String, Object>>> solutions = pState.getSolutions();
-				monitor.beginTask("Saving action sets", solutions.size());
-				try {
-					int changeSetIdx = 0;
-					for (final NonNullPair<ISequences, Map<String, Object>> changeSet : solutions) {
-						String newName;
-						if (changeSetIdx == 0) {
-							newName = "ActionSet-base";
-							changeSetIdx++;
-						} else {
-							newName = String.format("ActionSet-%s", (changeSetIdx++));
-						}
-
-						try {
-							// Save the scenario as a fork.
-							runner.storeAsCopy(changeSet.getFirst(), newName, parent, null);
-						} catch (final Exception e) {
-							throw new RuntimeException("Unable to store scenario: " + e.getMessage(), e);
-						}
-
-						monitor.worked(1);
-					}
-				} finally {
-					monitor.done();
-				}
-
-				return pState;
 			}
-
-			@Override
-			public void init(SequencesContainer initialSequences, @NonNull final IMultiStateResult inputState) {
-				this.state = inputState;
+			for (final Container c : elementsToRemove) {
+				parent.getScenarioService().delete(c);
 			}
-
-			@Override
-			public int getProgressTicks() {
-				return progressTicks;
+		}, changeSetIdx -> {
+			String newName;
+			if (changeSetIdx == 0) {
+				newName = "ActionSet-base";
+				changeSetIdx++;
+			} else {
+				newName = String.format("ActionSet-%s", (changeSetIdx++));
 			}
-
-			@Override
-			public IMultiStateResult getInputState() {
-				final IMultiStateResult pState = state;
-				if (pState == null) {
-					throw new IllegalStateException("#init has not been called");
-				}
-				return pState;
-			}
-		};
-		chainBuilder.addLink(link);
-		return link;
+			return newName;
+		});
 	}
 
 	@NonNull
@@ -247,9 +181,12 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 	@NonNull
 	private final String phase;
 
+	private final Map<Thread, BagMover> threadCache = new ConcurrentHashMap<>(100);
+
 	@SuppressWarnings("null")
-	public LNGActionSetTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final OptimiserSettings settings,
-			@Nullable final ExecutorService executorService, @NonNull ISequences initialSequences, @NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
+	public LNGActionSetTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final UserSettings userSettings,
+			@NonNull ActionPlanOptimisationStage stageSettings, @Nullable final ExecutorService executorService, @NonNull ISequences initialSequences, @NonNull final IMultiStateResult inputState,
+			@NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
 		this.phase = phase;
 
@@ -258,12 +195,12 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 		final List<Module> modules = new LinkedList<>();
 		modules.add(new InitialSequencesModule(initialSequences));
 		modules.add(new InputSequencesModule(inputState.getBestSolution().getFirst()));
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(settings), services,
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(userSettings, stageSettings.getConstraintAndFitnessSettings()), services,
 				IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_OptimiserSettingsModule(settings), services,
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_ActionPlanSettingsModule(stageSettings), services,
 				IOptimiserInjectorService.ModuleType.Module_OptimisationParametersModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGOptimisationModule(), services, IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGActionPlanModule(), services, IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
 
 		modules.add(new AbstractModule() {
 

@@ -145,7 +145,7 @@ public class PricingTimesScenario {
 
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
-			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) this.scenario, LNGScenarioRunnerUtils.createDefaultSettings(),
+			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) this.scenario, LNGScenarioRunnerUtils.createDefaultOptimisationPlan(),
 					new TransformerExtensionTestBootstrapModule(), null, true);
 			runner.evaluateInitialState();
 

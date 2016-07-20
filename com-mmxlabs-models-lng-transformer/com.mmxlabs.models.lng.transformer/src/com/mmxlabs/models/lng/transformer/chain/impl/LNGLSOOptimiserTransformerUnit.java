@@ -31,7 +31,8 @@ import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.NonNullPair;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
 import com.mmxlabs.models.lng.transformer.chain.ILNGStateTransformerUnit;
@@ -41,8 +42,8 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGOptimisationModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_AnnealingSettingsModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
-import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_OptimiserSettingsModule;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -59,7 +60,8 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 	private static final Logger LOG = LoggerFactory.getLogger(LNGLSOOptimiserTransformerUnit.class);
 
 	@NonNull
-	public static IChainLink chain(@NonNull final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final OptimiserSettings settings, final int progressTicks) {
+	public static IChainLink chain(@NonNull final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final UserSettings userSettings, @NonNull LocalSearchOptimisationStage stageSettings,
+			final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
 			private LNGLSOOptimiserTransformerUnit t;
@@ -78,14 +80,14 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
 				@NonNull
 				Collection<@NonNull String> hints = new HashSet<>(dt.getHints());
-				if (settings.isGenerateCharterOuts()) {
+				if (userSettings.isGenerateCharterOuts()) {
 					hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
 				} else {
 					hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
 				}
 				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
-				t = new LNGLSOOptimiserTransformerUnit(dt, phase, settings, initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints);
+				t = new LNGLSOOptimiserTransformerUnit(dt, phase, userSettings, stageSettings, initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints);
 			}
 
 			@Override
@@ -106,8 +108,8 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 	}
 
 	@NonNull
-	public static IChainLink chainPool(@NonNull final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final OptimiserSettings settings, final int progressTicks,
-			@NonNull final ExecutorService executorService, final int... seeds) {
+	public static IChainLink chainPool(@NonNull final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final UserSettings userSettings,
+			@NonNull LocalSearchOptimisationStage stageSettings, final int progressTicks, @NonNull final ExecutorService executorService, final int... seeds) {
 		final IChainLink link = new IChainLink() {
 
 			private LNGLSOOptimiserTransformerUnit[] t;
@@ -228,7 +230,7 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 
 				@NonNull
 				Collection<@NonNull String> hints = new HashSet<>(dt.getHints());
-				if (settings.isGenerateCharterOuts()) {
+				if (userSettings.isGenerateCharterOuts()) {
 					hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
 				} else {
 					hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
@@ -236,9 +238,9 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
 				for (int i = 0; i < seeds.length; ++i) {
-					final OptimiserSettings os = EcoreUtil.copy(settings);
-					os.setSeed(seeds[i]);
-					t[i] = new LNGLSOOptimiserTransformerUnit(dt, phase, os, initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints);
+					final LocalSearchOptimisationStage copyStageSettings = EcoreUtil.copy(stageSettings);
+					copyStageSettings.setSeed(seeds[i]);
+					t[i] = new LNGLSOOptimiserTransformerUnit(dt, phase, userSettings, copyStageSettings, initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints);
 				}
 			}
 
@@ -274,8 +276,8 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 	@NonNull
 	private final String phase;
 
-	public LNGLSOOptimiserTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull String phase, @NonNull final OptimiserSettings settings, @NonNull ISequences initialSequences,
-			@NonNull final ISequences inputSequences, @NonNull final Collection<@NonNull String> hints) {
+	public LNGLSOOptimiserTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull String phase, @NonNull final UserSettings userSettings,
+			@NonNull LocalSearchOptimisationStage stageSettings, @NonNull ISequences initialSequences, @NonNull final ISequences inputSequences, @NonNull final Collection<@NonNull String> hints) {
 		this.dataTransformer = dataTransformer;
 		this.phase = phase;
 
@@ -285,9 +287,9 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 
 		modules.add(new InitialSequencesModule(initialSequences));
 		modules.add(new InputSequencesModule(inputSequences));
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(settings), services,
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(userSettings, stageSettings.getConstraintAndFitnessSettings()), services,
 				IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_OptimiserSettingsModule(settings), services,
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_AnnealingSettingsModule(stageSettings.getSeed(), stageSettings.getAnnealingSettings()), services,
 				IOptimiserInjectorService.ModuleType.Module_OptimisationParametersModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGOptimisationModule(), services, IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
