@@ -35,34 +35,17 @@ public class LNGNoNominalInPromptTransformerUnit implements ILNGStateTransformer
 	public static IChainLink chain(@NonNull final ChainBuilder chainBuilder, @NonNull final UserSettings userSettings, final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
-			private LNGNoNominalInPromptTransformerUnit t;
-
 			@Override
-			public IMultiStateResult run(final IProgressMonitor monitor) {
-				if (t == null) {
-					throw new IllegalStateException("#init has not been called");
-				}
-				return t.run(monitor);
-			}
-
-			@Override
-			public void init(final SequencesContainer initialSequences, final IMultiStateResult inputState) {
-
+			public IMultiStateResult run(final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
-				t = new LNGNoNominalInPromptTransformerUnit(dt, userSettings, initialSequences.getSequences(), inputState.getBestSolution().getFirst(), dt.getHints());
+				LNGNoNominalInPromptTransformerUnit t = new LNGNoNominalInPromptTransformerUnit(dt, userSettings, initialSequences.getSequences(), inputState.getBestSolution().getFirst(),
+						dt.getHints());
+				return t.run(monitor);
 			}
 
 			@Override
 			public int getProgressTicks() {
 				return progressTicks;
-			}
-
-			@Override
-			public IMultiStateResult getInputState() {
-				if (t == null) {
-					throw new IllegalStateException("#init has not been called");
-				}
-				return t.getInputState();
 			}
 		};
 		chainBuilder.addLink(link);
@@ -125,9 +108,4 @@ public class LNGNoNominalInPromptTransformerUnit implements ILNGStateTransformer
 			}
 		}
 	}
-
-	public IMultiStateResult getInputState() {
-		return inputState;
-	}
-
 }

@@ -36,20 +36,11 @@ public class LNGEvaluationTransformerUnit implements ILNGStateTransformerUnit {
 	public static IChainLink chain(final ChainBuilder chainBuilder, final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
-			private LNGEvaluationTransformerUnit t;
-
 			@Override
-			public IMultiStateResult run(final IProgressMonitor monitor) {
-				if (t == null) {
-					throw new IllegalStateException("#init has not been called");
-				}
-				return t.run(monitor);
-			}
-
-			@Override
-			public void init(SequencesContainer initialSequences, final IMultiStateResult inputState) {
+			public IMultiStateResult run(SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
-				t = new LNGEvaluationTransformerUnit(dt, initialSequences.getSequences(), inputState.getBestSolution().getFirst(), dt.getHints());
+				LNGEvaluationTransformerUnit t = new LNGEvaluationTransformerUnit(dt, initialSequences.getSequences(), inputState.getBestSolution().getFirst(), dt.getHints());
+				return t.run(monitor);
 			}
 
 			@Override
@@ -57,13 +48,6 @@ public class LNGEvaluationTransformerUnit implements ILNGStateTransformerUnit {
 				return progressTicks;
 			}
 
-			@Override
-			public IMultiStateResult getInputState() {
-				if (t == null) {
-					throw new IllegalStateException("#init has not been called");
-				}
-				return t.getInputState();
-			}
 		};
 		chainBuilder.addLink(link);
 		return link;
@@ -110,16 +94,6 @@ public class LNGEvaluationTransformerUnit implements ILNGStateTransformerUnit {
 	@NonNull
 	public Injector getInjector() {
 		return injector;
-	}
-
-	@NonNull
-	public IEvaluationContext getEvaluationContext() {
-		return injector.getInstance(IEvaluationContext.class);
-	}
-
-	@Override
-	public IMultiStateResult getInputState() {
-		return inputState;
 	}
 
 	@Override

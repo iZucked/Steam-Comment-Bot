@@ -70,9 +70,9 @@ public class LNGScenarioChainUnitFactory {
 				final HillClimbOptimisationStage stage = (HillClimbOptimisationStage) template;
 				if (stage.getAnnealingSettings().getIterations() > 0) {
 					if (jobCount > 1) {
-						LNGHillClimbOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_HILLCLIMBING_OPTIMISATION, executorService);
+						LNGHillClimbOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_HILLCLIMBING_OPTIMISATION, executorService, true);
 					} else {
-						LNGHillClimbOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, PROGRESS_HILLCLIMBING_OPTIMISATION);
+						LNGHillClimbOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_HILLCLIMBING_OPTIMISATION, executorService, false);
 					}
 				}
 			}

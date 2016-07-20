@@ -43,18 +43,18 @@ public class BreakEvenTransformerUnit implements ILNGStateTransformerUnit {
 
 			private BreakEvenTransformerUnit t;
 
-			@Override
-			public IMultiStateResult run(final IProgressMonitor monitor) {
-				if (t == null) {
-					throw new IllegalStateException("#init has not been called");
-				}
-				return t.run(monitor);
-			}
+			// @Override
+			// public IMultiStateResult run() {
+			// if (t == null) {
+			// throw new IllegalStateException("#init has not been called");
+			// }
+			// }
 
 			@Override
-			public void init(SequencesContainer initialSequences, final IMultiStateResult inputState) {
+			public IMultiStateResult run(SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
 				t = new BreakEvenTransformerUnit(dt, userSettings, stageSettings, initialSequences.getSequences(), inputState, dt.getHints());
+				return t.run(monitor);
 			}
 
 			@Override
@@ -62,13 +62,13 @@ public class BreakEvenTransformerUnit implements ILNGStateTransformerUnit {
 				return progressTicks;
 			}
 
-			@Override
-			public IMultiStateResult getInputState() {
-				if (t == null) {
-					throw new IllegalStateException("#init has not been called");
-				}
-				return t.getInputState();
-			}
+			// @Override
+			// public IMultiStateResult getInputState() {
+			// if (t == null) {
+			// throw new IllegalStateException("#init has not been called");
+			// }
+			// return t.getInputState();
+			// }
 		};
 		chainBuilder.addLink(link);
 		return link;
@@ -100,8 +100,8 @@ public class BreakEvenTransformerUnit implements ILNGStateTransformerUnit {
 		final List<Module> modules = new LinkedList<>();
 		modules.add(new InitialSequencesModule(initialSequences));
 		modules.add(new InputSequencesModule(inputState.getBestSolution().getFirst()));
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(userSettings, ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings()), services,
-				IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(userSettings, ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings()),
+				services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 		// modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGOptimisationModule(), services, IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
 
@@ -114,12 +114,6 @@ public class BreakEvenTransformerUnit implements ILNGStateTransformerUnit {
 	@NonNull
 	public LNGDataTransformer getDataTransformer() {
 		return dataTransformer;
-	}
-
-	@Override
-	@NonNull
-	public IMultiStateResult getInputState() {
-		return inputState;
 	}
 
 	@Override

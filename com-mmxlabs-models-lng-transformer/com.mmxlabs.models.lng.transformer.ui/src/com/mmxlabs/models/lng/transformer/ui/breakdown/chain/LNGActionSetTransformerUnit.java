@@ -36,7 +36,6 @@ import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
-import com.mmxlabs.models.lng.transformer.inject.modules.LNGOptimisationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.models.lng.transformer.ui.ContainerProvider;
 import com.mmxlabs.models.lng.transformer.ui.LNGExporterUnit;
@@ -44,7 +43,6 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.ActionSetEvaluationHelper;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BagMover;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BagOptimiser;
-import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
@@ -66,16 +64,15 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 			private LNGActionSetTransformerUnit t;
 
-			@Override
-			public IMultiStateResult run(final IProgressMonitor monitor) {
-				if (t == null) {
-					throw new IllegalStateException("#init has not been called");
-				}
-				return t.run(monitor);
-			}
+			// @Override
+			// public IMultiStateResult run() {
+			// if (t == null) {
+			// throw new IllegalStateException("#init has not been called");
+			// }
+			// }
 
 			@Override
-			public void init(SequencesContainer initialSequences, final IMultiStateResult inputState) {
+			public IMultiStateResult run(SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
 
 				@NonNull
@@ -88,6 +85,7 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
 				t = new LNGActionSetTransformerUnit(dt, phase, userSettings, stageSettings, executorService, initialSequences.getSequences(), inputState, hints);
+				return t.run(monitor);
 			}
 
 			@Override
@@ -95,13 +93,13 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 				return progressTicks;
 			}
 
-			@Override
-			public IMultiStateResult getInputState() {
-				if (t == null) {
-					throw new IllegalStateException("#init has not been called");
-				}
-				return t.getInputState();
-			}
+			// @Override
+			// public IMultiStateResult getInputState() {
+			// if (t == null) {
+			// throw new IllegalStateException("#init has not been called");
+			// }
+			// return t.getInputState();
+			// }
 		};
 		chainBuilder.addLink(link);
 		return link;
@@ -115,31 +113,16 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 			private LNGActionSetTransformerUnit t;
 
 			@Override
-			public IMultiStateResult run(final IProgressMonitor monitor) {
-				if (t == null) {
-					throw new IllegalStateException("#init has not been called");
-				}
-				t.run(monitor);
-				return t.getInputState();
-			}
-
-			@Override
-			public void init(SequencesContainer initialSequences, final IMultiStateResult inputState) {
+			public IMultiStateResult run(SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
 				t = new LNGActionSetTransformerUnit(dt, phase, userSettings, stageSettings, executorService, initialSequences.getSequences(), inputState, dt.getHints());
+				t.run(monitor);
+				return inputState;
 			}
 
 			@Override
 			public int getProgressTicks() {
 				return progressTicks;
-			}
-
-			@Override
-			public IMultiStateResult getInputState() {
-				if (t == null) {
-					throw new IllegalStateException("#init has not been called");
-				}
-				return t.getInputState();
 			}
 		};
 		chainBuilder.addLink(link);
@@ -238,11 +221,6 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 		injector = dataTransformer.getInjector().createChildInjector(modules);
 
-		final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
-		if (runnerHook != null) {
-			runnerHook.beginPhase(phase, injector);
-		}
-
 		this.inputState = inputState;
 	}
 
@@ -253,14 +231,7 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 	}
 
 	@Override
-	@NonNull
-	public IMultiStateResult getInputState() {
-		return inputState;
-	}
-
-	@Override
 	public IMultiStateResult run(@NonNull final IProgressMonitor monitor) {
-		final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
 		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 			scope.enter();
 			monitor.beginTask("", 100);
@@ -283,9 +254,6 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 					scope.exit(thread);
 				}
 				threadCache.clear();
-				if (runnerHook != null) {
-					runnerHook.endPhase(phase);
-				}
 			}
 		}
 	}

@@ -25,13 +25,13 @@ public interface ILNGStateTransformerUnit {
 	@NonNull
 	LNGDataTransformer getDataTransformer();
 
-	/**
-	 * Returns the input state given to this unit
-	 * 
-	 * @return
-	 */
-	@NonNull
-	IMultiStateResult getInputState();
+//	/**
+//	 * Returns the input state given to this unit
+//	 * 
+//	 * @return
+//	 */
+//	@NonNull
+//	IMultiStateResult getInputState();
 
 	/**
 	 * Execute the transformation operation

@@ -24,6 +24,7 @@ import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
@@ -71,55 +72,42 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		IRunnerHook runnerHook = null;
 		if (false) {
 			runnerHook = new AbstractRunnerHook() {
-				@Override
-				public void beginPhase(String phase, Injector injector) {
-					super.beginPhase(phase, injector);
-					// for (IRunExporter exporter : exporters) {
-					// exporter.setPhase(phase, injector);
-					// }
-				}
 
 				@Override
-				public void endPhase(String phase) {
-					super.endPhase(phase);
-				}
-
-				@Override
-				public void reportSequences(String phase, final ISequences rawSequences) {
+				public void doReportSequences(String phase, final ISequences rawSequences, LNGDataTransformer dataTransformer) {
 					switch (phase) {
 
-					case IRunnerHook.PHASE_LSO:
-					case IRunnerHook.PHASE_HILL:
-					case IRunnerHook.PHASE_INITIAL:
-						save(rawSequences, phase);
+					case IRunnerHook.STAGE_LSO:
+					case IRunnerHook.STAGE_HILL:
+					case IRunnerHook.STAGE_INITIAL:
+						save(rawSequences, phase, dataTransformer.getInjector());
 						break;
-					case IRunnerHook.PHASE_ACTION_SETS:
+					case IRunnerHook.STAGE_ACTION_SETS:
 						break;
 					}
 				}
 
 				@Override
-				public ISequences getPrestoredSequences(String phase) {
-					switch (phase) {
-					case IRunnerHook.PHASE_LSO:
-					case IRunnerHook.PHASE_HILL:
-						return load(phase);
-					case IRunnerHook.PHASE_INITIAL:
-					case IRunnerHook.PHASE_ACTION_SETS:
+				public ISequences doGetPrestoredSequences(String stage, LNGDataTransformer dataTransformer) {
+					switch (stage) {
+					case IRunnerHook.STAGE_LSO:
+					case IRunnerHook.STAGE_HILL:
+						return load(stage, dataTransformer.getInjector());
+					case IRunnerHook.STAGE_INITIAL:
+					case IRunnerHook.STAGE_ACTION_SETS:
 						break;
 
 					}
 					return null;
 				}
 
-				private void save(final ISequences rawSequences, final String type) {
+				private void save(final ISequences rawSequences, final String type, Injector injector) {
 					// assert false;
 					try {
 						final String suffix = scenarioInstance.getName() + "." + type + ".sequences";
 						// final File file2 = new File("/home/ubuntu/scenarios/"+suffix);
 						final File file2 = new File("c:\\Temp\\" + suffix);
 						try (FileOutputStream fos = new FileOutputStream(file2)) {
-							final Injector injector = getInjector();
 							assert (injector != null);
 							SequencesSerialiser.save(injector.getInstance(IOptimisationData.class), rawSequences, fos);
 						}
@@ -128,13 +116,12 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 					}
 				}
 
-				private ISequences load(final String type) {
+				private ISequences load(final String type, Injector injector) {
 					try {
 						final String suffix = scenarioInstance.getName() + "." + type + ".sequences";
 						// final File file2 = new File("/home/ubuntu/scenarios/"+suffix);
 						final File file2 = new File("c:\\Temp\\" + suffix);
 						try (FileInputStream fos = new FileInputStream(file2)) {
-							final Injector injector = getInjector();
 							assert (injector != null);
 							return SequencesSerialiser.load(injector.getInstance(IOptimisationData.class), fos);
 						}
@@ -177,7 +164,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		} finally {
 			progressMonitor.done();
 			if (false) {
-				System.out.println("done in:"+(System.currentTimeMillis() - start));
+				System.out.println("done in:" + (System.currentTimeMillis() - start));
 			}
 		}
 		// if (scenarioRunner.isFinished()) {

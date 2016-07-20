@@ -23,21 +23,21 @@ public interface IChainLink {
 	 * @return
 	 */
 	int getProgressTicks();
+////
+//	/**
+//	 * Prep the link with this {@link IMultiStateResult} as the starting state.
+//	 * 
+//	 * @param inputState
+//	 */
+//	void init();
 
-	/**
-	 * Prep the link with this {@link IMultiStateResult} as the starting state.
-	 * 
-	 * @param inputState
-	 */
-	void init(@NonNull SequencesContainer initialSequences, @NonNull IMultiStateResult inputState);
-
-	/**
-	 * Returns the initial {@link IMultiStateResult} this link uses. This may be different to that passed into {@link #init(IMultiStateResult)}
-	 * 
-	 * @return
-	 */
-	@NonNull
-	IMultiStateResult getInputState();
+//	/**
+//	 * Returns the initial {@link IMultiStateResult} this link uses. This may be different to that passed into {@link #init(IMultiStateResult)}
+//	 * 
+//	 * @return
+//	 */
+//	@NonNull
+//	IMultiStateResult getInputState();
 
 	/**
 	 * Run the operation this link defines and return the result.
@@ -46,6 +46,6 @@ public interface IChainLink {
 	 * @return
 	 */
 	@NonNull
-	IMultiStateResult run(@NonNull IProgressMonitor monitor);
+	IMultiStateResult run(@NonNull SequencesContainer initialSequences, @NonNull IMultiStateResult inputState, @NonNull IProgressMonitor monitor);
 
 }

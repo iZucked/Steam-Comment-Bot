@@ -29,14 +29,8 @@ public class LNGExporterUnit {
 
 		final IChainLink link = new IChainLink() {
 
-			private IMultiStateResult state;
-
 			@Override
-			public IMultiStateResult run(final IProgressMonitor monitor) {
-				final IMultiStateResult pState = state;
-				if (pState == null) {
-					throw new IllegalStateException("#init has not been called");
-				}
+			public IMultiStateResult run(SequencesContainer initialSequences, @NonNull final IMultiStateResult inputState, final IProgressMonitor monitor) {
 				// Assuming the scenario data is at the initial state.
 
 				// Remove existing solutions
@@ -45,13 +39,13 @@ public class LNGExporterUnit {
 					// Error?
 					{
 						// Assume ITS run and just try to dump results.
-						final List<NonNullPair<ISequences, Map<String, Object>>> solutions = pState.getSolutions();
+						final List<NonNullPair<ISequences, Map<String, Object>>> solutions = inputState.getSolutions();
 						for (final NonNullPair<ISequences, Map<String, Object>> p : solutions) {
 							runner.exportAsCopy(p.getFirst(), p.getSecond());
 						}
 					}
 
-					return pState;
+					return inputState;
 				}
 				if (cleanUpParent != null) {
 					cleanUpParent.accept(parent);
@@ -67,7 +61,7 @@ public class LNGExporterUnit {
 				// parent.getScenarioService().delete(c);
 				// }
 				// }
-				final List<NonNullPair<ISequences, Map<String, Object>>> solutions = pState.getSolutions();
+				final List<NonNullPair<ISequences, Map<String, Object>>> solutions = inputState.getSolutions();
 				monitor.beginTask(taskName, solutions.size());
 				try {
 					int changeSetIdx = 0;
@@ -93,26 +87,12 @@ public class LNGExporterUnit {
 					monitor.done();
 				}
 
-				return pState;
-			}
-
-			@Override
-			public void init(SequencesContainer initialSequences, @NonNull final IMultiStateResult inputState) {
-				this.state = inputState;
+				return inputState;
 			}
 
 			@Override
 			public int getProgressTicks() {
 				return progressTicks;
-			}
-
-			@Override
-			public IMultiStateResult getInputState() {
-				final IMultiStateResult pState = state;
-				if (pState == null) {
-					throw new IllegalStateException("#init has not been called");
-				}
-				return pState;
 			}
 		};
 		chainBuilder.addLink(link);
@@ -123,27 +103,21 @@ public class LNGExporterUnit {
 			@NonNull ContainerProvider containerProvider, @NonNull ContainerProvider resultProvider) {
 		final IChainLink link = new IChainLink() {
 
-			private IMultiStateResult state;
-
 			@Override
-			public IMultiStateResult run(final IProgressMonitor monitor) {
-				final IMultiStateResult pState = state;
-				if (pState == null) {
-					throw new IllegalStateException("#init has not been called");
-				}
+			public IMultiStateResult run(SequencesContainer initialSequences, @NonNull final IMultiStateResult inputState, final IProgressMonitor monitor) {
 				// Assuming the scenario data is at the initial state.
 
 				// Remove existing solutions
 				final Container parent = containerProvider.get();
 				if (parent == null) {
 					// Error?
-					return pState;
+					return inputState;
 				}
 				monitor.beginTask("Saving", 1);
 				try {
 					try {
 						// Save the scenario as a fork.
-						ScenarioInstance child = runner.storeAsCopy(pState.getBestSolution().getFirst(), name, parent, null);
+						ScenarioInstance child = runner.storeAsCopy(inputState.getBestSolution().getFirst(), name, parent, null);
 						resultProvider.set(child);
 					} catch (final Exception e) {
 						throw new RuntimeException("Unable to store scenario: " + e.getMessage(), e);
@@ -154,12 +128,7 @@ public class LNGExporterUnit {
 					monitor.done();
 				}
 
-				return pState;
-			}
-
-			@Override
-			public void init(SequencesContainer initialSequences, @NonNull final IMultiStateResult inputState) {
-				this.state = inputState;
+				return inputState;
 			}
 
 			@Override
@@ -167,14 +136,6 @@ public class LNGExporterUnit {
 				return progressTicks;
 			}
 
-			@Override
-			public IMultiStateResult getInputState() {
-				final IMultiStateResult pState = state;
-				if (pState == null) {
-					throw new IllegalStateException("#init has not been called");
-				}
-				return pState;
-			}
 		};
 		chainBuilder.addLink(link);
 		return link;

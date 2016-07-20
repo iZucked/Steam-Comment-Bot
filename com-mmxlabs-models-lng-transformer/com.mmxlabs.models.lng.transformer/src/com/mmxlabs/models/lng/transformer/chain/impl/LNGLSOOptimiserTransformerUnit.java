@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -60,26 +59,33 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 	private static final Logger LOG = LoggerFactory.getLogger(LNGLSOOptimiserTransformerUnit.class);
 
 	@NonNull
-	public static IChainLink chain(@NonNull final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final UserSettings userSettings, @NonNull LocalSearchOptimisationStage stageSettings,
-			final int progressTicks) {
+	public static IChainLink chainPool(@NonNull final ChainBuilder chainBuilder, @NonNull final String stage, @NonNull final UserSettings userSettings,
+			@NonNull final LocalSearchOptimisationStage stageSettings, final int progressTicks, @NonNull final ExecutorService executorService, final int... seeds) {
 		final IChainLink link = new IChainLink() {
 
-			private LNGLSOOptimiserTransformerUnit t;
-
 			@Override
-			public IMultiStateResult run(final IProgressMonitor monitor) {
-				if (t == null) {
-					throw new IllegalStateException("#init has not been called");
+			public IMultiStateResult run(final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
+				final LNGDataTransformer dataTransformer = chainBuilder.getDataTransformer();
+
+				final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
+				if (runnerHook != null) {
+					runnerHook.beginStage(stage);
+
+					final ISequences preloadedResult = runnerHook.getPrestoredSequences(stage, dataTransformer);
+					if (preloadedResult != null) {
+						monitor.beginTask("", 1);
+						try {
+							monitor.worked(1);
+							return new MultiStateResult(preloadedResult, new HashMap<>());
+						} finally {
+							runnerHook.endStage(stage);
+							monitor.done();
+						}
+					}
 				}
-				return t.run(monitor);
-			}
 
-			@Override
-			public void init(SequencesContainer initialSequences, final IMultiStateResult inputState) {
-
-				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
 				@NonNull
-				Collection<@NonNull String> hints = new HashSet<>(dt.getHints());
+				final Collection<@NonNull String> hints = new HashSet<>(dataTransformer.getHints());
 				if (userSettings.isGenerateCharterOuts()) {
 					hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
 				} else {
@@ -87,61 +93,19 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 				}
 				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
-				t = new LNGLSOOptimiserTransformerUnit(dt, phase, userSettings, stageSettings, initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints);
-			}
-
-			@Override
-			public int getProgressTicks() {
-				return progressTicks;
-			}
-
-			@Override
-			public IMultiStateResult getInputState() {
-				if (t == null) {
-					throw new IllegalStateException("#init has not been called");
-				}
-				return t.getInputState();
-			}
-		};
-		chainBuilder.addLink(link);
-		return link;
-	}
-
-	@NonNull
-	public static IChainLink chainPool(@NonNull final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final UserSettings userSettings,
-			@NonNull LocalSearchOptimisationStage stageSettings, final int progressTicks, @NonNull final ExecutorService executorService, final int... seeds) {
-		final IChainLink link = new IChainLink() {
-
-			private LNGLSOOptimiserTransformerUnit[] t;
-
-			class MyRunnable implements Callable<IMultiStateResult> {
-
-				LNGLSOOptimiserTransformerUnit t;
-				IProgressMonitor m;
-
-				public MyRunnable(final LNGLSOOptimiserTransformerUnit t, final IProgressMonitor monitor, final int ticks) {
-					this.t = t;
-					this.m = new SubProgressMonitor(monitor, ticks);
-				}
-
-				@Override
-				public IMultiStateResult call() throws OperationCanceledException {
-					return t.run(m);
-				}
-			}
-
-			@Override
-			public IMultiStateResult run(final IProgressMonitor monitor) {
+				monitor.beginTask("", 100 * seeds.length);
+				final List<Future<IMultiStateResult>> results = new ArrayList<>(seeds.length);
 				try {
-					if (t == null) {
-						throw new IllegalStateException("#init has not been called");
-					}
-
-					monitor.beginTask("", 100 * seeds.length);
-
-					final List<Future<IMultiStateResult>> results = new ArrayList<>(seeds.length);
 					for (int i = 0; i < seeds.length; ++i) {
-						results.add(executorService.submit(new MyRunnable(t[i], monitor, 100)));
+						final LocalSearchOptimisationStage copyStageSettings = EcoreUtil.copy(stageSettings);
+						copyStageSettings.setSeed(seeds[i]);
+						
+						final int jobId = i;
+						results.add(executorService.submit(() -> {
+							final LNGLSOOptimiserTransformerUnit t = new LNGLSOOptimiserTransformerUnit(dataTransformer, stage, jobId, userSettings, copyStageSettings,
+									initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints);
+							return t.run(new SubProgressMonitor(monitor, 100));
+						}));
 					}
 
 					final List<NonNullPair<ISequences, Map<String, Object>>> output = new LinkedList<>();
@@ -217,44 +181,24 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 						throw new IllegalStateException("No results generated");
 					}
 
+					if (runnerHook != null) {
+						// TODO: Should really be whole multi state result
+						runnerHook.reportSequences(stage, output.get(0).getFirst(), dataTransformer);
+					}
+
 					return new MultiStateResult(output.get(0), output);
 				} finally {
+					if (runnerHook != null) {
+						runnerHook.endStage(stage);
+					}
+
 					monitor.done();
-				}
-			}
-
-			@Override
-			public void init(SequencesContainer initialSequences, final IMultiStateResult inputState) {
-				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
-				t = new LNGLSOOptimiserTransformerUnit[seeds.length];
-
-				@NonNull
-				Collection<@NonNull String> hints = new HashSet<>(dt.getHints());
-				if (userSettings.isGenerateCharterOuts()) {
-					hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-				} else {
-					hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-				}
-				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
-
-				for (int i = 0; i < seeds.length; ++i) {
-					final LocalSearchOptimisationStage copyStageSettings = EcoreUtil.copy(stageSettings);
-					copyStageSettings.setSeed(seeds[i]);
-					t[i] = new LNGLSOOptimiserTransformerUnit(dt, phase, userSettings, copyStageSettings, initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints);
 				}
 			}
 
 			@Override
 			public int getProgressTicks() {
 				return progressTicks;
-			}
-
-			@Override
-			public IMultiStateResult getInputState() {
-				if (t == null) {
-					throw new IllegalStateException("#init has not been called");
-				}
-				return t[0].getInputState();
 			}
 		};
 		chainBuilder.addLink(link);
@@ -271,15 +215,16 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 	private final LocalSearchOptimiser optimiser;
 
 	@NonNull
-	private final IMultiStateResult inputState;
+	private final String stage;
 
-	@NonNull
-	private final String phase;
+	private final int jobID;
 
-	public LNGLSOOptimiserTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull String phase, @NonNull final UserSettings userSettings,
-			@NonNull LocalSearchOptimisationStage stageSettings, @NonNull ISequences initialSequences, @NonNull final ISequences inputSequences, @NonNull final Collection<@NonNull String> hints) {
+	public LNGLSOOptimiserTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String stage, final int jobID, @NonNull final UserSettings userSettings,
+			@NonNull final LocalSearchOptimisationStage stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences,
+			@NonNull final Collection<@NonNull String> hints) {
 		this.dataTransformer = dataTransformer;
-		this.phase = phase;
+		this.stage = stage;
+		this.jobID = jobID;
 
 		final Collection<@NonNull IOptimiserInjectorService> services = dataTransformer.getModuleServices();
 
@@ -295,23 +240,24 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGOptimisationModule(), services, IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
 
 		injector = dataTransformer.getInjector().createChildInjector(modules);
+		final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
+		if (runnerHook != null) {
+			runnerHook.beginStageJob(stage, jobID, injector);
+		}
+
 		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 			scope.enter();
 
 			optimiser = injector.getInstance(LocalSearchOptimiser.class);
 			optimiser.setProgressMonitor(new NullOptimiserProgressMonitor());
 			optimiser.init();
-			final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
-			if (runnerHook != null) {
-				runnerHook.beginPhase(phase, injector);
-			}
 
 			final IAnnotatedSolution startSolution = optimiser.start(injector.getInstance(IOptimisationContext.class),
 					injector.getInstance(Key.get(ISequences.class, Names.named(OptimiserConstants.SEQUENCE_TYPE_INITIAL))), inputSequences);
 			if (startSolution == null) {
 				throw new IllegalStateException("Unable to get starting state");
 			}
-			inputState = new MultiStateResult(inputSequences, LNGSchedulerJobUtils.extractOptimisationAnnotations(startSolution));
+			// inputState = new MultiStateResult(inputSequences, LNGSchedulerJobUtils.extractOptimisationAnnotations(startSolution));
 		}
 	}
 
@@ -326,22 +272,8 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 	}
 
 	@Override
-	public IMultiStateResult run(@NonNull final IProgressMonitor monitor) {
+	public IMultiStateResult run(final @NonNull IProgressMonitor monitor) {
 		final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
-		if (runnerHook != null) {
-			runnerHook.beginPhase(phase, injector);
-			final ISequences preloadedResult = runnerHook.getPrestoredSequences(phase);
-			if (preloadedResult != null) {
-				monitor.beginTask("", 1);
-				try {
-					monitor.worked(1);
-					return new MultiStateResult(preloadedResult, new HashMap<>());
-				} finally {
-					runnerHook.endPhase(phase);
-					monitor.done();
-				}
-			}
-		}
 
 		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 			scope.enter();
@@ -362,24 +294,17 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 				final IAnnotatedSolution bestSolution = optimiser.getBestSolution();
 				final ISequences bestRawSequences = optimiser.getBestRawSequences();
 
-				if (runnerHook != null) {
-					runnerHook.reportSequences(phase, bestRawSequences);
-					runnerHook.endPhase(phase);
-				}
-
 				if (bestRawSequences != null && bestSolution != null) {
 					return new MultiStateResult(bestRawSequences, LNGSchedulerJobUtils.extractOptimisationAnnotations(bestSolution));
 				} else {
 					throw new RuntimeException("Unable to optimise");
 				}
 			} finally {
+				if (runnerHook != null) {
+					runnerHook.endStageJob(stage, jobID, injector);
+				}
 				monitor.done();
 			}
 		}
 	}
-
-	public IMultiStateResult getInputState() {
-		return inputState;
-	}
-
 }

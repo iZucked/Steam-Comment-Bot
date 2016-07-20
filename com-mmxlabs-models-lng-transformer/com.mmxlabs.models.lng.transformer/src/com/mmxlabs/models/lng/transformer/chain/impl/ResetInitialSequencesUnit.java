@@ -21,14 +21,8 @@ public class ResetInitialSequencesUnit {
 			@NonNull final ResetInitialSequencesStage stageSettings, final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
-			private SequencesContainer initialSequencesContainer;
-			private IMultiStateResult inputState;
-
 			@Override
-			public IMultiStateResult run(final IProgressMonitor monitor) {
-				if (inputState == null || initialSequencesContainer == null) {
-					throw new IllegalStateException("#init has not been called");
-				}
+			public IMultiStateResult run(final SequencesContainer initialSequencesContainer, final IMultiStateResult inputState, final IProgressMonitor monitor) {
 				monitor.beginTask("Reset initial sequences", 1);
 				try {
 					initialSequencesContainer.setSequences(inputState.getBestSolution().getFirst());
@@ -40,23 +34,8 @@ public class ResetInitialSequencesUnit {
 			}
 
 			@Override
-			public void init(final SequencesContainer initialSequences, final IMultiStateResult inputState) {
-
-				this.initialSequencesContainer = initialSequences;
-				this.inputState = inputState;
-			}
-
-			@Override
 			public int getProgressTicks() {
 				return progressTicks;
-			}
-
-			@Override
-			public IMultiStateResult getInputState() {
-				if (inputState == null) {
-					throw new IllegalStateException("#init has not been called");
-				}
-				return inputState;
 			}
 		};
 		chainBuilder.addLink(link);
