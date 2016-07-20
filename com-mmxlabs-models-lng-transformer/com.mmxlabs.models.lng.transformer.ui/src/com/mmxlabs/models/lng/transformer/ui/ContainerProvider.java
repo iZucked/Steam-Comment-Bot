@@ -8,6 +8,12 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.scenario.service.model.Container;
 
+/**
+ * The {@link ContainerProvider} is used in the chain builders as a placeholder for a container than will be created as part of the chain,
+ * 
+ * @author sg
+ *
+ */
 public class ContainerProvider {
 	@Nullable
 	private Container container;

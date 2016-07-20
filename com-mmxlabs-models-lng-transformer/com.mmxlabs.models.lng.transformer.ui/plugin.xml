@@ -219,6 +219,13 @@
                   type="com.mmxlabs.jobmanager.jobs.IJobControl">
             </adapter>
          </factory>
+         <factory
+               adaptableType="com.mmxlabs.models.lng.transformer.ui.AbstractLNGJobDescriptor"
+               class="com.mmxlabs.models.lng.transformer.ui.adapterfactories.LNGJobControlAdapterFactory">
+            <adapter
+                  type="com.mmxlabs.jobmanager.jobs.IJobControl">
+            </adapter>
+         </factory>
       </extension>
    
       <extension

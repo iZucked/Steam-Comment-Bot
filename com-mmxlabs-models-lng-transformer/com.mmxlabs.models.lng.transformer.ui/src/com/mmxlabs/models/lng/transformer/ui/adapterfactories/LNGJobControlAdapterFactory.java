@@ -10,10 +10,12 @@ import org.eclipse.core.runtime.IAdapterFactory;
 
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.models.lng.transformer.ui.LNGRunAllSimilarityJobDescriptor;
+import com.mmxlabs.models.lng.transformer.ui.LNGRunMultipleSeedsJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerEvaluationJobControl;
 import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerManyJobsControl;
 import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerOptimiserJobControl;
+import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerRunMultipleSeedsJobControl;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 
 /**
@@ -34,6 +36,17 @@ public class LNGJobControlAdapterFactory implements IAdapterFactory {
 				try {
 					// return new LNGSchedulerRunAllSimilarityJobControl(descriptor);
 					return (T) new LNGSchedulerManyJobsControl(descriptor);
+				} catch (final IOException e) {
+					throw new RuntimeException(e);
+				}
+			}
+		} else if (adaptableObject instanceof LNGRunMultipleSeedsJobDescriptor) {
+
+			final LNGRunMultipleSeedsJobDescriptor descriptor = (LNGRunMultipleSeedsJobDescriptor) adaptableObject;
+			if (descriptor.isOptimising()) {
+				try {
+					// return new LNGSchedulerRunAllSimilarityJobControl(descriptor);
+					return (T) new LNGSchedulerRunMultipleSeedsJobControl(descriptor);
 				} catch (final IOException e) {
 					throw new RuntimeException(e);
 				}

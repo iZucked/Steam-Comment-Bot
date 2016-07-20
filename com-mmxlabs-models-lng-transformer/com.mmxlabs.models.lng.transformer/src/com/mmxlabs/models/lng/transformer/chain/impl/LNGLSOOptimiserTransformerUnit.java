@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -73,8 +74,16 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 			@Override
 			public void init(final IMultiStateResult inputState) {
 
+				
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
-				t = new LNGLSOOptimiserTransformerUnit(dt, settings, inputState.getBestSolution().getFirst(), dt.getHints());
+				@NonNull
+				Collection<@NonNull String> hints = new HashSet<>(dt.getHints());
+				if (settings.isGenerateCharterOuts()) {
+					hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
+				} else {
+					hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
+				}
+				t = new LNGLSOOptimiserTransformerUnit(dt, settings, inputState.getBestSolution().getFirst(), hints);
 			}
 
 			@Override
@@ -214,10 +223,17 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 			public void init(final IMultiStateResult inputState) {
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
 				t = new LNGLSOOptimiserTransformerUnit[seeds.length];
+				@NonNull
+				Collection<@NonNull String> hints = new HashSet<>(dt.getHints());
+				if (settings.isGenerateCharterOuts()) {
+					hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
+				} else {
+					hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
+				}
 				for (int i = 0; i < seeds.length; ++i) {
 					final OptimiserSettings os = EcoreUtil.copy(settings);
 					os.setSeed(seeds[i]);
-					t[i] = new LNGLSOOptimiserTransformerUnit(dt, os, inputState.getBestSolution().getFirst(), dt.getHints());
+					t[i] = new LNGLSOOptimiserTransformerUnit(dt, os, inputState.getBestSolution().getFirst(), hints);
 				}
 			}
 
