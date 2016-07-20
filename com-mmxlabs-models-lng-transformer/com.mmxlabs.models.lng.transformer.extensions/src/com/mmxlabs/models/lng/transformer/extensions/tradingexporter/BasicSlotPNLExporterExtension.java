@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.transformer.export.ExporterExtensionUtils;
 import com.mmxlabs.models.lng.transformer.export.IExporterExtension;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.annotations.ICancellationAnnotation;
@@ -34,6 +35,9 @@ public class BasicSlotPNLExporterExtension implements IExporterExtension {
 	private IPortSlotProvider slotProvider;
 
 	@Inject
+	private IOptimisationData optimisationData;
+	
+	@Inject
 	private ExporterExtensionUtils exporterExtensionUtils;
 
 	@Override
@@ -45,7 +49,7 @@ public class BasicSlotPNLExporterExtension implements IExporterExtension {
 
 	@Override
 	public void finishExporting() {
-		for (final ISequenceElement element : annotatedSolution.getContext().getOptimisationData().getSequenceElements()) {
+		for (final ISequenceElement element : optimisationData.getSequenceElements()) {
 			assert element != null;
 			final IPortSlot slot = slotProvider.getPortSlot(element);
 

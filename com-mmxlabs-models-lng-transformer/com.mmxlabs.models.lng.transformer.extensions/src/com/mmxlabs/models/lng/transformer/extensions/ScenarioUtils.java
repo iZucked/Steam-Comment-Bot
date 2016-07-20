@@ -51,6 +51,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChec
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VesselEventConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
+import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
 
 /**
@@ -409,14 +410,25 @@ public class ScenarioUtils {
 		final ConstraintAndFitnessSettings constraintAndFitnessSettings = createDefaultConstraintAndFitnessSettings();
 		// Fitness not required.
 		// TODO: Keep fitnesses and evaluate to get initial fitness value rather than having to call evaluate to do so.
-		constraintAndFitnessSettings.getObjectives().clear();
+		// constraintAndFitnessSettings.getObjectives().clear();
+		{
+			final Iterator<Objective> itr = constraintAndFitnessSettings.getObjectives().iterator();
+			while (itr.hasNext()) {
+				final Objective c = itr.next();
+				if (SimilarityFitnessCoreFactory.NAME.equals(c.getName())) {
+					itr.remove();
+				}
+			}
+		}
 
 		// Filter out constraints not required.
-		final Iterator<Constraint> itr = constraintAndFitnessSettings.getConstraints().iterator();
-		while (itr.hasNext()) {
-			final Constraint c = itr.next();
-			if (LockedUnusedElementsConstraintCheckerFactory.NAME.equals(c.getName())) {
-				itr.remove();
+		{
+			final Iterator<Constraint> itr = constraintAndFitnessSettings.getConstraints().iterator();
+			while (itr.hasNext()) {
+				final Constraint c = itr.next();
+				if (LockedUnusedElementsConstraintCheckerFactory.NAME.equals(c.getName())) {
+					itr.remove();
+				}
 			}
 		}
 		return createDefaultSolutionBuilderSettings(constraintAndFitnessSettings);

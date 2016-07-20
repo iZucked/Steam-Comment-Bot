@@ -44,6 +44,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.ActionSetEvaluationHelper;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BagMover;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BagOptimiser;
+import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
@@ -237,6 +238,11 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 		injector = dataTransformer.getInjector().createChildInjector(modules);
 
+		final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
+		if (runnerHook != null) {
+			runnerHook.beginPhase(phase, injector);
+		}
+
 		this.inputState = inputState;
 	}
 
@@ -254,6 +260,7 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 	@Override
 	public IMultiStateResult run(@NonNull final IProgressMonitor monitor) {
+		final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
 		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 			scope.enter();
 			monitor.beginTask("", 100);
@@ -276,6 +283,9 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 					scope.exit(thread);
 				}
 				threadCache.clear();
+				if (runnerHook != null) {
+					runnerHook.endPhase(phase);
+				}
 			}
 		}
 	}

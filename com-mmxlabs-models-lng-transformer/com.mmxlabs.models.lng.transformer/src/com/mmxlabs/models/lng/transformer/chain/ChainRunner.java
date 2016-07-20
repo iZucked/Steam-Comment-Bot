@@ -48,12 +48,12 @@ public class ChainRunner implements IChainRunner {
 		this.totalTicks = ticks;
 
 		// Prep initial result for reporting
-		IChainLink firstLink = chain.get(0);
+//		IChainLink firstLink = chain.get(0);
 		@NonNull
-		ISequences solutionBuilderSequences = dataTransformer.getInitialSequences();
-		initialSequencesContainer = new SequencesContainer(solutionBuilderSequences);
-		firstLink.init(initialSequencesContainer, createInitialResult(solutionBuilderSequences));
-		initialState = firstLink.getInputState();
+		IMultiStateResult solutionBuilderSequences = dataTransformer.getInitialResult();
+		initialSequencesContainer = new SequencesContainer(solutionBuilderSequences.getBestSolution().getFirst());
+//		firstLink.init(initialSequencesContainer, solutionBuilderSequences);
+		initialState = solutionBuilderSequences;
 	}
 
 	@NonNull
@@ -72,13 +72,13 @@ public class ChainRunner implements IChainRunner {
 		IMultiStateResult r = initialState;
 		monitor.beginTask("Execute chain", totalTicks);
 		try {
-			boolean firstLink = true;
+//			boolean firstLink = true;
 			for (final IChainLink link : chain) {
-				if (!firstLink) {
+//				if (!firstLink) {
 					link.init(initialSequencesContainer, r);
-				}
+//				}
 				r = link.run(new SubProgressMonitor(monitor, link.getProgressTicks()));
-				firstLink = false;
+//				firstLink = false;
 				if (monitor.isCanceled()) {
 					throw new OperationCanceledException();
 				}

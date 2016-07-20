@@ -72,9 +72,9 @@ public class LNGOptimisationModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private ConstrainedMoveGenerator provideConstrainedMoveGenerator(final Injector injector, final IOptimisationContext context, @Named(LocalSearchOptimiserModule.RANDOM_SEED) final long seed) {
+	private ConstrainedMoveGenerator provideConstrainedMoveGenerator(final Injector injector, @Named(LocalSearchOptimiserModule.RANDOM_SEED) final long seed) {
 
-		final ConstrainedMoveGenerator cmg = new ConstrainedMoveGenerator(context);
+		final ConstrainedMoveGenerator cmg = new ConstrainedMoveGenerator();
 		cmg.setRandom(new Random(seed));
 		injector.injectMembers(cmg);
 		// cmg.init();

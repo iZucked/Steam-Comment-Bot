@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.IChainRunner;
 import com.mmxlabs.models.lng.transformer.chain.ILNGStateTransformerUnit;
+import com.mmxlabs.models.lng.transformer.chain.IMultiStateResult;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGInitialSequencesModule;
@@ -60,6 +61,8 @@ public class LNGDataTransformer {
 
 	private @NonNull SolutionBuilderSettings solutionBuilderSettings;
 
+	private IMultiStateResult solutionBuilderResult;
+
 	@SuppressWarnings("null")
 	public LNGDataTransformer(@NonNull final LNGScenarioModel scenarioModel, @NonNull final UserSettings userSettings, @NonNull SolutionBuilderSettings solutionBuilderSettings,
 			@NonNull final Collection<@NonNull String> hints, @NonNull final Collection<@NonNull IOptimiserInjectorService> services) {
@@ -91,9 +94,9 @@ public class LNGDataTransformer {
 			final PerChainUnitScopeImpl scope = initialSolutionInjector.getInstance(PerChainUnitScopeImpl.class);
 			try {
 				scope.enter();
-				final ISequences initialSequences = initialSolutionInjector.getInstance(Key.get(ISequences.class, Names.named(LNGInitialSequencesModule.KEY_GENERATED_RAW_SEQUENCES)));
+				solutionBuilderResult = initialSolutionInjector.getInstance(Key.get(IMultiStateResult.class, Names.named(LNGInitialSequencesModule.KEY_GENERATED_SOLUTION_PAIR)));
 				// Create a new child injector from the parent (i.e. without the modules2 list) with the initial sequences added
-				injector = parentInjector.createChildInjector(new SequenceBuilderSequencesModule(initialSequences));
+				injector = parentInjector.createChildInjector(new SequenceBuilderSequencesModule(solutionBuilderResult.getBestSolution().getFirst()));
 			} finally {
 				scope.exit();
 			}
@@ -146,5 +149,9 @@ public class LNGDataTransformer {
 
 	public SolutionBuilderSettings getSolutionBuilderSettings() {
 		return solutionBuilderSettings;
+	}
+
+	public @NonNull IMultiStateResult getInitialResult() {
+		return solutionBuilderResult;
 	}
 }

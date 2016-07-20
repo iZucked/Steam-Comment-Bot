@@ -34,6 +34,7 @@ import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
+import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
@@ -70,8 +71,11 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
+import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
+import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.impl.EvaluationContext;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
@@ -117,7 +121,7 @@ public class LNGSchedulerJobUtils {
 			scope.enter();
 
 			final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
-			final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(injector, optimisationData, rawSequences);
+			final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(injector, optimisationData, rawSequences).getFirst();
 
 			// Copy extra annotations - e.g. fitness information
 			if (extraAnnotations != null) {
@@ -476,7 +480,8 @@ public class LNGSchedulerJobUtils {
 
 	}
 
-	public static @NonNull IAnnotatedSolution evaluateCurrentState(@NonNull final Injector injector, @NonNull final IOptimisationData data, @NonNull final ISequences rawSequences) {
+	public static @NonNull Pair<IAnnotatedSolution, IEvaluationState> evaluateCurrentState(@NonNull final Injector injector, @NonNull final IOptimisationData data,
+			@NonNull final ISequences rawSequences) {
 		/**
 		 * Start the full evaluation process.
 		 */
@@ -491,18 +496,14 @@ public class LNGSchedulerJobUtils {
 		manipulator.manipulate(mSequences);
 
 		final EvaluationState state = new EvaluationState();
-		// The output data structured, a solution with all the output data as annotations
-		// Create a fake context
-		final EvaluationProcessRegistry evaluationProcessRegistry = new EvaluationProcessRegistry();
-		final IEvaluationContext context = new EvaluationContext(data, mSequences, Collections.<String> emptyList(), evaluationProcessRegistry);
 
-		final AnnotatedSolution solution = new AnnotatedSolution(mSequences, context, state);
+		final AnnotatedSolution solution = new AnnotatedSolution(mSequences, state);
 
 		final IEvaluationProcess process = injector.getInstance(SchedulerEvaluationProcess.class);
 
 		process.annotate(mSequences, state, solution);
 
-		return solution;
+		return new Pair<>(solution, state);
 	}
 
 	@NonNull
@@ -535,4 +536,23 @@ public class LNGSchedulerJobUtils {
 		return extraAnnotations;
 	}
 
+	// public static void evaluateFitness(ISequences rawSequenes) {
+	//
+	//
+	// IFitnessHelper helper = injector.getInstance(IFitnessHelper.class);
+	//
+	// fitnessHelper.evaluateSequencesFromComponents(currentFullSequences, changeSetEvaluationState, fitnessComponents, null);
+	//
+	// final Map<String, Long> currentFitnesses = new HashMap<>();
+	// for (final IFitnessComponent fitnessComponent : fitnessComponents) {
+	// currentFitnesses.put(fitnessComponent.getName(), fitnessComponent.getFitness());
+	// }
+	//
+	// final Map<String, Object> extraAnnotations = new HashMap<>();
+	// extraAnnotations.put(OptimiserConstants.G_AI_fitnessComponents, currentFitnesses);
+	//
+	// return new NonNullPair<ISequences, Map<String, Object>>(rawSequences, extraAnnotations);
+	// }
+	//
+	// }
 }

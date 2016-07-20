@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.export;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -22,7 +24,7 @@ public interface IExporterExtension {
 	 * @param modelEntityMap
 	 * @param annotatedSolution
 	 */
-	void startExporting(Schedule output, final ModelEntityMap modelEntityMap, final IAnnotatedSolution annotatedSolution);
+	void startExporting(@NonNull Schedule output, @NonNull ModelEntityMap modelEntityMap, @NonNull IAnnotatedSolution annotatedSolution);
 
 	/**
 	 * Called after the main export has happened, and after any other prior export steps have happened.
