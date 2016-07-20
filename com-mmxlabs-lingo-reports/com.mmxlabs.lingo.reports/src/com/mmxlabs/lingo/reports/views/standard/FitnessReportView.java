@@ -178,14 +178,6 @@ public class FitnessReportView extends ViewPart {
 						return String.format("%,d", d.raw);
 					}
 				} else if (index == 3) {
-					if (d.weight != null) {
-						return String.format("%,.1f", d.weight);
-					}
-				} else if (index == 4) {
-					if (d.fitness != null) {
-						return String.format("%,d", d.fitness);
-					}
-				} else if (index == 5) {
 					final Long delta = d.deltaFitness;
 					if (delta != null) {
 						return String.format("%,d", delta);
@@ -253,20 +245,10 @@ public class FitnessReportView extends ViewPart {
 		tvc1.getColumn().pack();
 		addSortSelectionListener(tvc1.getColumn(), 1);
 
-		final GridViewerColumn tvc2 = new GridViewerColumn(viewer, SWT.NONE);
-		tvc2.getColumn().setText("Raw");
-		tvc2.getColumn().pack();
-		addSortSelectionListener(tvc2.getColumn(), 2);
-
-		final GridViewerColumn tvc3 = new GridViewerColumn(viewer, SWT.NONE);
-		tvc3.getColumn().setText("Weight");
-		tvc3.getColumn().pack();
-		addSortSelectionListener(tvc3.getColumn(), 3);
-
 		final GridViewerColumn tvc4 = new GridViewerColumn(viewer, SWT.NONE);
 		tvc4.getColumn().setText("Fitness");
 		tvc4.getColumn().pack();
-		addSortSelectionListener(tvc4.getColumn(), 4);
+		addSortSelectionListener(tvc4.getColumn(), 2);
 
 		viewer.setLabelProvider(new ViewLabelProvider());
 
@@ -276,8 +258,6 @@ public class FitnessReportView extends ViewPart {
 		sortColumns.add(0);
 		sortColumns.add(1);
 		sortColumns.add(2);
-		sortColumns.add(3);
-		sortColumns.add(4);
 
 		viewer.setComparator(new ViewerComparator() {
 			@Override
@@ -298,12 +278,6 @@ public class FitnessReportView extends ViewPart {
 						break;
 					case 2:
 						sort = compare(r1.raw, r2.raw);
-						break;
-					case 3:
-						sort = compare(r1.weight, r2.weight);
-						break;
-					case 4:
-						sort = compare(r1.fitness, r2.fitness);
 						break;
 					}
 				}
