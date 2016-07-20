@@ -141,6 +141,10 @@ public final class OptimiserUnitConvertor {
 		return (long) cost * (long) Calculator.ScaleFactor;
 	}
 
+	public static long convertToInternalFixedCost(final long cost) {
+		return cost * (long) Calculator.ScaleFactor;
+	}
+
 	public static int convertToExternalFixedCost(final long cost) {
 		return (int) (cost / (long) Calculator.ScaleFactor);
 	}
