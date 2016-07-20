@@ -22,6 +22,8 @@ import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
 import com.mmxlabs.models.lng.transformer.chain.ILNGStateTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.IMultiStateResult;
+import com.mmxlabs.models.lng.transformer.chain.SequencesContainer;
+import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
@@ -52,9 +54,9 @@ public class BreakEvenTransformerUnit implements ILNGStateTransformerUnit {
 			}
 
 			@Override
-			public void init(final IMultiStateResult inputState) {
+			public void init(SequencesContainer initialSequences, final IMultiStateResult inputState) {
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
-				t = new BreakEvenTransformerUnit(dt, settings, inputState, dt.getHints());
+				t = new BreakEvenTransformerUnit(dt, settings, initialSequences.getSequences(), inputState, dt.getHints());
 			}
 
 			@Override
@@ -86,19 +88,19 @@ public class BreakEvenTransformerUnit implements ILNGStateTransformerUnit {
 	private long targetProfitAndLoss;
 
 	@SuppressWarnings("null")
-	public BreakEvenTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final OptimiserSettings settings, @NonNull final IMultiStateResult inputState,
-			@NonNull final Collection<String> hints) {
+	public BreakEvenTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final OptimiserSettings settings, @NonNull ISequences initialSequences,
+			@NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
-		
+
 		// TODO: Hook in as input e.g. from data model
 		targetProfitAndLoss = 0L;// OptimiserUnitConvertor.convertToInternalFixedCost(settings.getBreakEvenProfitAndLoss());
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
 
-		
 		// FIXME: Disable main break even evalRuator
 		// FIXME: Disable caches!
 
 		final List<Module> modules = new LinkedList<>();
+		modules.add(new InitialSequencesModule(initialSequences));
 		modules.add(new InputSequencesModule(inputState.getBestSolution().getFirst()));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(settings), services,
 				IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));

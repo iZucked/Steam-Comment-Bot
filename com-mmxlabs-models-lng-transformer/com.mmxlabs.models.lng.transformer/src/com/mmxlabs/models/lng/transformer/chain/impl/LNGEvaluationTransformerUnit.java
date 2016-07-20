@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
 import com.mmxlabs.models.lng.transformer.chain.ILNGStateTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.IMultiStateResult;
+import com.mmxlabs.models.lng.transformer.chain.SequencesContainer;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
@@ -46,9 +47,9 @@ public class LNGEvaluationTransformerUnit implements ILNGStateTransformerUnit {
 			}
 
 			@Override
-			public void init(final IMultiStateResult inputState) {
+			public void init(SequencesContainer initialSequences, final IMultiStateResult inputState) {
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
-				t = new LNGEvaluationTransformerUnit(dt, inputState.getBestSolution().getFirst(), dt.getHints());
+				t = new LNGEvaluationTransformerUnit(dt, initialSequences.getSequences(), inputState.getBestSolution().getFirst(), dt.getHints());
 			}
 
 			@Override
@@ -78,14 +79,16 @@ public class LNGEvaluationTransformerUnit implements ILNGStateTransformerUnit {
 	private final IMultiStateResult inputState;
 
 	@SuppressWarnings("null")
-	public LNGEvaluationTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final ISequences inputSequences,
+	public LNGEvaluationTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull ISequences initialSequences, @NonNull final ISequences inputSequences,
 			/* Evaluation Parameters */ @NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
 
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
 		List<Module> modules = new LinkedList<>();
+		modules.add(new InitialSequencesModule(initialSequences));
 		modules.add(new InputSequencesModule(inputSequences));
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(dataTransformer.getOptimiserSettings()), services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(dataTransformer.getOptimiserSettings()), services,
+				IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 		injector = dataTransformer.getInjector().createChildInjector(modules);
 

@@ -23,12 +23,13 @@ import com.mmxlabs.optimiser.core.ISequences;
 // Either requests a pre-computed sequences object, or reports the results.
 public interface IRunnerHook {
 
-	public static final String PHASE_INITIAL = "initial";
-	public static final String PHASE_LSO = "lso";
-	public static final String PHASE_HILL = "hill";
-	public static final String PHASE_ACTION_SETS = "actionset";
+	public static final @NonNull String PHASE_INITIAL = "initial";
+	public static final @NonNull String PHASE_CLEAN_STATE = "cleanstate";
+	public static final @NonNull String PHASE_LSO = "lso";
+	public static final @NonNull String PHASE_HILL = "hill";
+	public static final @NonNull String PHASE_ACTION_SETS = "actionset";
 
-	public static List<String> PHASE_ORDER = Lists.newArrayList(PHASE_INITIAL, PHASE_LSO, PHASE_HILL, PHASE_ACTION_SETS);
+	public static List<@NonNull String> PHASE_ORDER = Lists.newArrayList(PHASE_INITIAL, PHASE_CLEAN_STATE, PHASE_LSO, PHASE_HILL, PHASE_ACTION_SETS);
 
 	void beginPhase(@NonNull String phase, @Nullable Injector phaseInjector);
 

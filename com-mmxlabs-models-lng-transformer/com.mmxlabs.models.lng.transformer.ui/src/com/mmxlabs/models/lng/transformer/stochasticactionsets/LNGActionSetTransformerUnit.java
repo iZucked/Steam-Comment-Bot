@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.stochasticactionsets;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,8 @@ import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
 import com.mmxlabs.models.lng.transformer.chain.ILNGStateTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.IMultiStateResult;
+import com.mmxlabs.models.lng.transformer.chain.SequencesContainer;
+import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
@@ -51,12 +54,13 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 	private final Map<Thread, BagMover> threadCache = new ConcurrentHashMap<>(100);
 
 	@NonNull
-	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final OptimiserSettings settings, final int progressTicks) {
-		return chain(chainBuilder, settings, null, progressTicks);
+	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final OptimiserSettings settings, final int progressTicks) {
+		return chain(chainBuilder, phase, settings, null, progressTicks);
 	}
 
 	@NonNull
-	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final OptimiserSettings settings, @Nullable final ExecutorService executorService, final int progressTicks) {
+	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final OptimiserSettings settings, @Nullable final ExecutorService executorService,
+			final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
 			private LNGActionSetTransformerUnit t;
@@ -70,9 +74,19 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 			}
 
 			@Override
-			public void init(final IMultiStateResult inputState) {
+			public void init(SequencesContainer initialSequences, final IMultiStateResult inputState) {
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
-				t = new LNGActionSetTransformerUnit(dt, settings, executorService, inputState, dt.getHints());
+
+				@NonNull
+				Collection<@NonNull String> hints = new HashSet<>(dt.getHints());
+				if (settings.isGenerateCharterOuts()) {
+					hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
+				} else {
+					hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
+				}
+				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
+
+				t = new LNGActionSetTransformerUnit(dt, phase, settings, executorService, initialSequences.getSequences(), inputState, hints);
 			}
 
 			@Override
@@ -93,7 +107,8 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 	}
 
 	@NonNull
-	public static IChainLink chainFake(final ChainBuilder chainBuilder, @NonNull final OptimiserSettings settings, @Nullable final ExecutorService executorService, final int progressTicks) {
+	public static IChainLink chainFake(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final OptimiserSettings settings, @Nullable final ExecutorService executorService,
+			final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
 			private LNGActionSetTransformerUnit t;
@@ -108,9 +123,9 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 			}
 
 			@Override
-			public void init(final IMultiStateResult inputState) {
+			public void init(SequencesContainer initialSequences, final IMultiStateResult inputState) {
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
-				t = new LNGActionSetTransformerUnit(dt, settings, executorService, inputState, dt.getHints());
+				t = new LNGActionSetTransformerUnit(dt, phase, settings, executorService, initialSequences.getSequences(), inputState, dt.getHints());
 			}
 
 			@Override
@@ -198,7 +213,7 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 			}
 
 			@Override
-			public void init(@NonNull final IMultiStateResult inputState) {
+			public void init(SequencesContainer initialSequences, @NonNull final IMultiStateResult inputState) {
 				this.state = inputState;
 			}
 
@@ -229,14 +244,19 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 	@NonNull
 	private final IMultiStateResult inputState;
 
+	@NonNull
+	private final String phase;
+
 	@SuppressWarnings("null")
-	public LNGActionSetTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final OptimiserSettings settings, @Nullable final ExecutorService executorService,
-			@NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
+	public LNGActionSetTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final OptimiserSettings settings,
+			@Nullable final ExecutorService executorService, @NonNull ISequences initialSequences, @NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
+		this.phase = phase;
 
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
 
 		final List<Module> modules = new LinkedList<>();
+		modules.add(new InitialSequencesModule(initialSequences));
 		modules.add(new InputSequencesModule(inputState.getBestSolution().getFirst()));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(settings), services,
 				IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));

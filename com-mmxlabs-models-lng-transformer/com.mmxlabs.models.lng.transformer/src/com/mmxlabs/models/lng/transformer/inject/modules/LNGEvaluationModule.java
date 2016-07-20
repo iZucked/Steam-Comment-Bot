@@ -34,6 +34,7 @@ import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.impl.DefaultBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.CleanStateIdleTimeEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.DefaultGeneratedCharterOutEvaluator;
 
 /**
@@ -41,7 +42,6 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.Default
  * 
  */
 public class LNGEvaluationModule extends AbstractModule {
-	private final static int DEFAULT_VPO_CACHE_SIZE = 20000;
 
 	@NonNull
 	private final Collection<String> hints;
@@ -59,7 +59,19 @@ public class LNGEvaluationModule extends AbstractModule {
 		bind(ISequenceScheduler.class).to(DirectRandomSequenceScheduler.class);
 
 		if (hints != null) {
-			if (LicenseFeatures.isPermitted("features:optimisation-charter-out-generation")) {
+
+			boolean isCleanState = false;
+			for (final String hint : hints) {
+				if (LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR.equals(hint)) {
+					bind(IGeneratedCharterOutEvaluator.class).to(CleanStateIdleTimeEvaluator.class);
+					isCleanState = true;
+					break;
+
+				}
+			}
+
+			// GCO and Clean state are not compatible with each other
+			if (!isCleanState && LicenseFeatures.isPermitted("features:optimisation-charter-out-generation")) {
 
 				for (final String hint : hints) {
 					if (LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS.equals(hint)) {
@@ -87,10 +99,5 @@ public class LNGEvaluationModule extends AbstractModule {
 		bind(LegalSequencingChecker.class);
 	}
 
-	@Provides
-	@PerChainUnitScope
-	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(final VoyagePlanOptimiser delegate) {
-		final CachingVoyagePlanOptimiser cachingVoyagePlanOptimiser = new CachingVoyagePlanOptimiser(delegate, DEFAULT_VPO_CACHE_SIZE);
-		return cachingVoyagePlanOptimiser;
-	}
+	
 }

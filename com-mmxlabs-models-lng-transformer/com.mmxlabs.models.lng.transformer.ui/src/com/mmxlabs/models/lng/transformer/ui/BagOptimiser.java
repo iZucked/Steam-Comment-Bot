@@ -182,7 +182,7 @@ public class BagOptimiser {
 	 * @param maxLeafs
 	 * @return
 	 */
-	public IMultiStateResult optimise(@NonNull final ISequences targetRawSequences, @NonNull final IProgressMonitor progressMonitor, final int maxLeafs) {
+	public IMultiStateResult optimise(@NonNull final ISequences targetRawSequences, @NonNull final IProgressMonitor progressMon_itor, final int maxLeafs) {
 
 		init(progressMonitor, maxLeafs);
 

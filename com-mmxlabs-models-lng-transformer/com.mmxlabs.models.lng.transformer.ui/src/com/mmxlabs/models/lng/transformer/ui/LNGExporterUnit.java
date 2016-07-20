@@ -10,6 +10,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
 import com.mmxlabs.models.lng.transformer.chain.IMultiStateResult;
+import com.mmxlabs.models.lng.transformer.chain.SequencesContainer;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -54,7 +55,7 @@ public class LNGExporterUnit {
 			}
 
 			@Override
-			public void init(@NonNull final IMultiStateResult inputState) {
+			public void init(SequencesContainer initialSequences, @NonNull final IMultiStateResult inputState) {
 				this.state = inputState;
 			}
 

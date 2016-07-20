@@ -90,6 +90,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
@@ -635,6 +636,7 @@ public class ScenarioTools {
 		Injector evaluationInjector;
 		{
 			final List<Module> modules = new LinkedList<>();
+			modules.add(new InitialSequencesModule(dataTransformer.getInitialSequences()));
 			modules.add(new InputSequencesModule(dataTransformer.getInitialSequences()));
 			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(dataTransformer.getOptimiserSettings()), dataTransformer.getModuleServices(),
 					IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));

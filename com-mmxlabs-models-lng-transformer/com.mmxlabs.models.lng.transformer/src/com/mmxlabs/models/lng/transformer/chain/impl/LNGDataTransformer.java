@@ -88,7 +88,7 @@ public class LNGDataTransformer {
 				scope.enter();
 				final ISequences initialSequences = initialSolutionInjector.getInstance(Key.get(ISequences.class, Names.named(LNGInitialSequencesModule.KEY_GENERATED_RAW_SEQUENCES)));
 				// Create a new child injector from the parent (i.e. without the modules2 list) with the initial sequences added
-				injector = parentInjector.createChildInjector(new InitialSequencesModule(initialSequences));
+				injector = parentInjector.createChildInjector(new SequenceBuilderSequencesModule(initialSequences));
 			} finally {
 				scope.exit();
 			}
@@ -135,7 +135,7 @@ public class LNGDataTransformer {
 
 	@NonNull
 	public ISequences getInitialSequences() {
-		return injector.getInstance(Key.get(ISequences.class, Names.named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)));
+		return injector.getInstance(Key.get(ISequences.class, Names.named(OptimiserConstants.SEQUENCE_TYPE_SEQUENCE_BUILDER)));
 	}
 
 	@Nullable

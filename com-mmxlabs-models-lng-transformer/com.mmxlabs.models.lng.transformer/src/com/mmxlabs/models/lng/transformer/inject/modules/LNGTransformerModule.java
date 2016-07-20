@@ -51,8 +51,11 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.CachingVolu
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.CheckingVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.CachingVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.DefaultEndEventScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IEndEventScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.CachingTimeWindowSchedulingCanalDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.ITimeWindowSchedulingCanalDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowSchedulingCanalDistanceProvider;
@@ -64,6 +67,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
  * 
  */
 public class LNGTransformerModule extends AbstractModule {
+	private final static int DEFAULT_VPO_CACHE_SIZE = 20_000;
 
 	public static final String EARLIEST_AND_LATEST_TIMES = "earliest-and-latest-times";
 
@@ -223,4 +227,10 @@ public class LNGTransformerModule extends AbstractModule {
 		return months;
 	}
 
+	@Provides
+	@PerChainUnitScope
+	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(final VoyagePlanOptimiser delegate) {
+		final CachingVoyagePlanOptimiser cachingVoyagePlanOptimiser = new CachingVoyagePlanOptimiser(delegate, DEFAULT_VPO_CACHE_SIZE);
+		return cachingVoyagePlanOptimiser;
+	}
 }

@@ -12,20 +12,27 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.shiro.SecurityUtils;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
+import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
+import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
+import com.mmxlabs.models.lng.parameters.OptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.IChainRunner;
 import com.mmxlabs.models.lng.transformer.chain.MultiChainRunner;
+import com.mmxlabs.models.lng.transformer.chain.impl.LNGCleanStateOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGEvaluationTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGHillClimbOptimiserTransformerUnit;
@@ -33,12 +40,14 @@ import com.mmxlabs.models.lng.transformer.chain.impl.LNGLSOOptimiserTransformerU
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGNoNominalInPromptTransformerUnit;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.stochasticactionsets.LNGActionSetTransformerUnit;
+import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 
 public class LNGScenarioChainBuilder {
 
 	public static final String PROPERTY_MMX_NUMBER_OF_CORES = "MMX_NUMBER_OF_CORES";
 	public static final String PROPERTY_MMX_DISABLE_SECOND_ACTION_SET_RUN = "MMX_DISABLE_SECOND_ACTION_SET_RUN";
 
+	private static final int PROGRESS_CLEAN_STATE = 25;
 	private static final int PROGRESS_OPTIMISATION = 100;
 	private static final int PROGRESS_HILLCLIMBING_OPTIMISATION = 10;
 	private static final int PROGRESS_ACTION_SET_OPTIMISATION = 20;
@@ -61,6 +70,7 @@ public class LNGScenarioChainBuilder {
 			@NonNull final String @Nullable... initialHints) {
 
 		boolean createOptimiser = false;
+		boolean doCleanStateOptimiser = false;
 		boolean doHillClimb = false;
 		boolean doActionSetPostOptimisation = false;
 
@@ -68,6 +78,9 @@ public class LNGScenarioChainBuilder {
 		for (final String hint : hints) {
 			if (LNGTransformerHelper.HINT_OPTIMISE_LSO.equals(hint)) {
 				createOptimiser = true;
+			}
+			if (LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR.equals(hint)) {
+				doCleanStateOptimiser = true;
 			}
 		}
 		// Check for break down optimisation here.
@@ -85,25 +98,56 @@ public class LNGScenarioChainBuilder {
 				LNGNoNominalInPromptTransformerUnit.chain(builder, optimiserSettings, 1);
 			}
 
-			// Run the standard LSO optimisation
-			if (optimiserSettings.getAnnealingSettings().getIterations() > 0) {
-				LNGLSOOptimiserTransformerUnit.chain(builder, optimiserSettings, PROGRESS_OPTIMISATION);
-			}
-			if (doHillClimb) {
-				// Run a hill climb opt on the LSO result
-				if (optimiserSettings.getSolutionImprovementSettings().getIterations() > 0) {
-					LNGHillClimbOptimiserTransformerUnit.chain(builder, optimiserSettings, PROGRESS_HILLCLIMBING_OPTIMISATION);
+			if (!optimiserSettings.getStages().isEmpty()) {
+				for (final OptimisationStage stage : optimiserSettings.getStages()) {
+					if (stage instanceof ParallelOptimisationStage<?>) {
+						final ParallelOptimisationStage<? extends OptimisationStage> parallelOptimisationStage = (ParallelOptimisationStage<? extends OptimisationStage>) stage;
+						final OptimisationStage template = parallelOptimisationStage.getTemplate();
+
+						chainUp(builder, executorService, template, parallelOptimisationStage.getJobCount(), optimiserSettings);
+
+					} else {
+						chainUp(builder, executorService, stage, 1, optimiserSettings);
+					}
+				}
+			} else {
+				// // Clean state pre-optimiser
+				// if (doCleanStateOptimiser) {
+				//
+				// CleanStateParameters cleanStateSettings = null;
+				// for (final EObject eObj : optimiserSettings.getExtensions()) {
+				// if (eObj instanceof CleanStateParameters) {
+				// cleanStateSettings = (CleanStateParameters) eObj;
+				// }
+				// }
+				// assert cleanStateSettings != null;
+				// final OptimiserSettings settings = EcoreUtil.copy(optimiserSettings);
+				// settings.setSeed(cleanStateSettings.getSeed());
+				// settings.setAnnealingSettings(EcoreUtil.copy(cleanStateSettings.getAnnealingSettings()));
+				// settings.setGenerateCharterOuts(false);
+				//
+				// LNGCleanStateOptimiserTransformerUnit.chain(builder, IRunnerHook.PHASE_CLEAN_STATE, settings, PROGRESS_CLEAN_STATE);
+				// }
+
+				// Run the standard LSO optimisation
+				if (optimiserSettings.getAnnealingSettings().getIterations() > 0) {
+					LNGLSOOptimiserTransformerUnit.chain(builder, IRunnerHook.PHASE_LSO, optimiserSettings, PROGRESS_OPTIMISATION);
+				}
+				if (doHillClimb) {
+					// Run a hill climb opt on the LSO result
+					if (optimiserSettings.getSolutionImprovementSettings().getIterations() > 0) {
+						LNGHillClimbOptimiserTransformerUnit.chain(builder, IRunnerHook.PHASE_HILL, optimiserSettings, PROGRESS_HILLCLIMBING_OPTIMISATION);
+					}
 				}
 			}
-
 			if (doActionSetPostOptimisation) {
 				// Run the action set post optimisation
 				final boolean doSecondRun = doSecondActionSetRun(optimiserSettings);
 				if (doSecondRun) {
-					LNGActionSetTransformerUnit.chainFake(builder, optimiserSettings, executorService, PROGRESS_ACTION_SET_OPTIMISATION / 2);
-					LNGActionSetTransformerUnit.chain(builder, optimiserSettings, executorService, PROGRESS_ACTION_SET_OPTIMISATION / 2);
+					LNGActionSetTransformerUnit.chainFake(builder, IRunnerHook.PHASE_ACTION_SETS, optimiserSettings, executorService, PROGRESS_ACTION_SET_OPTIMISATION / 2);
+					LNGActionSetTransformerUnit.chain(builder, IRunnerHook.PHASE_ACTION_SETS, optimiserSettings, executorService, PROGRESS_ACTION_SET_OPTIMISATION / 2);
 				} else {
-					LNGActionSetTransformerUnit.chain(builder, optimiserSettings, executorService, PROGRESS_ACTION_SET_OPTIMISATION);
+					LNGActionSetTransformerUnit.chain(builder, IRunnerHook.PHASE_ACTION_SETS, optimiserSettings, executorService, PROGRESS_ACTION_SET_OPTIMISATION);
 
 				}
 				final ContainerProvider resultProvider;
@@ -137,6 +181,48 @@ public class LNGScenarioChainBuilder {
 			LNGEvaluationTransformerUnit.chain(builder, 1);
 		}
 		return builder.build();
+	}
+
+	private static void chainUp(final ChainBuilder builder, final ExecutorService executorService, final OptimisationStage template, final int jobCount, final OptimiserSettings mainSettings) {
+
+		if (template instanceof CleanStateOptimisationStage) {
+			final CleanStateOptimisationStage stage = (CleanStateOptimisationStage) template;
+			final OptimiserSettings settings = EcoreUtil.copy(mainSettings);
+			settings.setSeed(stage.getSeed());
+			settings.setAnnealingSettings(EcoreUtil.copy(stage.getAnnealingSettings()));
+			settings.setGenerateCharterOuts(false);
+
+			final int[] seeds = new int[jobCount];
+			for (int i = 0; i < jobCount; ++i) {
+				seeds[i] = stage.getSeed() + i;
+			}
+
+			LNGCleanStateOptimiserTransformerUnit.chainPool(builder, IRunnerHook.PHASE_CLEAN_STATE, settings, PROGRESS_CLEAN_STATE, executorService, seeds);
+		} else if (template instanceof LocalSearchOptimisationStage) {
+			final LocalSearchOptimisationStage stage = (LocalSearchOptimisationStage) template;
+
+			final OptimiserSettings settings = EcoreUtil.copy(mainSettings);
+			settings.setSeed(stage.getSeed());
+			settings.setAnnealingSettings(EcoreUtil.copy(stage.getAnnealingSettings()));
+			final int[] seeds = new int[jobCount];
+			for (int i = 0; i < jobCount; ++i) {
+				seeds[i] = stage.getSeed() + i;
+			}
+			LNGLSOOptimiserTransformerUnit.chainPool(builder, IRunnerHook.PHASE_LSO, settings, PROGRESS_OPTIMISATION, executorService, seeds);
+
+		} else if (template instanceof HillClimbOptimisationStage) {
+			final HillClimbOptimisationStage stage = (HillClimbOptimisationStage) template;
+			final OptimiserSettings settings = EcoreUtil.copy(mainSettings);
+			settings.setSeed(stage.getSeed());
+			settings.setAnnealingSettings(EcoreUtil.copy(stage.getAnnealingSettings()));
+			settings.getSolutionImprovementSettings().setIterations( stage.getAnnealingSettings().getIterations());
+			if (jobCount > 1) {
+				LNGHillClimbOptimiserTransformerUnit.chainPool(builder, IRunnerHook.PHASE_HILL, settings, PROGRESS_HILLCLIMBING_OPTIMISATION, executorService);
+			} else {
+				LNGHillClimbOptimiserTransformerUnit.chain(builder, IRunnerHook.PHASE_HILL, settings, PROGRESS_HILLCLIMBING_OPTIMISATION);
+			}
+
+		}
 	}
 
 	protected static boolean doSecondActionSetRun(@NonNull final OptimiserSettings optimiserSettings) {

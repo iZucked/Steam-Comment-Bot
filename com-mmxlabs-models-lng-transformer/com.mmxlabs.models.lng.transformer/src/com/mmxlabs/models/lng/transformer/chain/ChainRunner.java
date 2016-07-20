@@ -35,6 +35,9 @@ public class ChainRunner implements IChainRunner {
 	@NonNull
 	private IMultiStateResult initialState;
 
+	@NonNull
+	private SequencesContainer initialSequencesContainer;
+
 	public ChainRunner(@NonNull final LNGDataTransformer dataTransformer, @NonNull List<IChainLink> chain) {
 		this.dataTransformer = dataTransformer;
 		this.chain = chain;
@@ -46,7 +49,10 @@ public class ChainRunner implements IChainRunner {
 
 		// Prep initial result for reporting
 		IChainLink firstLink = chain.get(0);
-		firstLink.init(createInitialResult(dataTransformer.getInitialSequences()));
+		@NonNull
+		ISequences solutionBuilderSequences = dataTransformer.getInitialSequences();
+		initialSequencesContainer = new SequencesContainer(solutionBuilderSequences);
+		firstLink.init(initialSequencesContainer, createInitialResult(solutionBuilderSequences));
 		initialState = firstLink.getInputState();
 	}
 
@@ -69,7 +75,7 @@ public class ChainRunner implements IChainRunner {
 			boolean firstLink = true;
 			for (final IChainLink link : chain) {
 				if (!firstLink) {
-					link.init(r);
+					link.init(initialSequencesContainer, r);
 				}
 				r = link.run(new SubProgressMonitor(monitor, link.getProgressTicks()));
 				firstLink = false;

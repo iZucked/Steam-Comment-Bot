@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.CopiedModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
@@ -337,6 +338,7 @@ public class LNGScenarioToOptimiserBridge {
 					{
 						final Collection<@NonNull IOptimiserInjectorService> services = optimiserDataTransformer.getModuleServices();
 						final List<Module> modules = new LinkedList<>();
+						modules.add(new InitialSequencesModule(optimiserDataTransformer.getInitialSequences()));
 						modules.add(new InputSequencesModule(rawSequences));
 						modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(optimiserDataTransformer.getOptimiserSettings()), services,
 								IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));

@@ -29,7 +29,7 @@ public interface IChainLink {
 	 * 
 	 * @param inputState
 	 */
-	void init(@NonNull IMultiStateResult inputState);
+	void init(@NonNull SequencesContainer initialSequences, @NonNull IMultiStateResult inputState);
 
 	/**
 	 * Returns the initial {@link IMultiStateResult} this link uses. This may be different to that passed into {@link #init(IMultiStateResult)}

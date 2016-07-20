@@ -5,14 +5,19 @@
 package com.mmxlabs.models.lng.transformer.extensions;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
+import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Constraint;
+import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
 import com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings;
+import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityInterval;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
@@ -140,11 +145,51 @@ public class ScenarioUtils {
 		settings.setSimilaritySettings(createOffSimilaritySettings());
 
 		// hill climbing
-		IndividualSolutionImprovementSettings solutionImprovementSettings = parametersFactory.createIndividualSolutionImprovementSettings();
+		final IndividualSolutionImprovementSettings solutionImprovementSettings = parametersFactory.createIndividualSolutionImprovementSettings();
 		solutionImprovementSettings.setImprovingSolutions(true);
 		solutionImprovementSettings.setIterations(50_000);
 
 		settings.setSolutionImprovementSettings(solutionImprovementSettings);
+
+		// {
+		// {
+		// CleanStateOptimisationStage stage = ScenarioUtils.createDefaultCleanStateParameters();
+		// stage.getAnnealingSettings().setIterations(10_000);
+		// stage.setSeed(0);
+		//
+		// ParallelOptimisationStage<CleanStateOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
+		// pStage.setTemplate(stage);
+		// pStage.setJobCount(1);
+		//
+		// settings.getStages().add(pStage);
+		// }
+		//
+		//
+		// {
+		// LocalSearchOptimisationStage stage = ParametersFactory.eINSTANCE.createLocalSearchOptimisationStage();
+		// stage.setAnnealingSettings(EcoreUtil.copy(settings.getAnnealingSettings()));
+		// stage.setSeed(0);
+		//
+		// ParallelOptimisationStage<LocalSearchOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
+		// pStage.setTemplate(stage);
+		// pStage.setJobCount(1);
+		//
+		// settings.getStages().add(pStage);
+		// }
+		//
+		// {
+		// HillClimbOptimisationStage stage = ParametersFactory.eINSTANCE.createHillClimbOptimisationStage();
+		// stage.setAnnealingSettings(EcoreUtil.copy(settings.getAnnealingSettings()));
+		// stage.getAnnealingSettings().setIterations(settings.getSolutionImprovementSettings().getIterations());
+		// stage.setSeed(0);
+		//
+		// ParallelOptimisationStage<HillClimbOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
+		// pStage.setTemplate(stage);
+		// // pStage.setJobCount(headlessParameters.getParameter("clean-state-jobs", Integer.class));
+		//
+		// settings.getStages().add(pStage);
+		// }
+		// }
 		return settings;
 	}
 
@@ -203,7 +248,7 @@ public class ScenarioUtils {
 
 	@NonNull
 	public static UserSettings createDefaultUserSettings() {
-		UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
+		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
@@ -211,6 +256,23 @@ public class ScenarioUtils {
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 		userSettings.setFloatingDaysLimit(15);
 		return userSettings;
+	}
+
+	public static @NonNull CleanStateOptimisationStage createDefaultCleanStateParameters() {
+		final CleanStateOptimisationStage params = ParametersFactory.eINSTANCE.createCleanStateOptimisationStage();
+
+		final AnnealingSettings annealingSettings = ParametersFactory.eINSTANCE.createAnnealingSettings();
+		annealingSettings.setIterations(50_000);
+		annealingSettings.setCooling(0.96);
+		annealingSettings.setEpochLength(10_000);
+		annealingSettings.setInitialTemperature(1_000_000);
+		// restarts
+		annealingSettings.setRestarting(false);
+		params.setAnnealingSettings(annealingSettings);
+
+		params.setSeed(0);
+
+		return params;
 	}
 
 }

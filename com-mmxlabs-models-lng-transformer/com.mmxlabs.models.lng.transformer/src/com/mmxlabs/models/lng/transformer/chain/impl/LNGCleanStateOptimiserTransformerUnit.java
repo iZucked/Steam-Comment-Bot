@@ -54,38 +54,40 @@ import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
-public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit {
+public class LNGCleanStateOptimiserTransformerUnit implements ILNGStateTransformerUnit {
 
-	private static final Logger LOG = LoggerFactory.getLogger(LNGLSOOptimiserTransformerUnit.class);
+	private static final Logger LOG = LoggerFactory.getLogger(LNGCleanStateOptimiserTransformerUnit.class);
 
 	@NonNull
 	public static IChainLink chain(@NonNull final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final OptimiserSettings settings, final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
-			private LNGLSOOptimiserTransformerUnit t;
+			private LNGCleanStateOptimiserTransformerUnit t;
+			private SequencesContainer initialSequencesContainer;
 
 			@Override
 			public IMultiStateResult run(final IProgressMonitor monitor) {
 				if (t == null) {
 					throw new IllegalStateException("#init has not been called");
 				}
-				return t.run(monitor);
+				IMultiStateResult result = t.run(monitor);
+				// Update initial sequences for subsequent optimisation stages
+				initialSequencesContainer.setSequences(result.getBestSolution().getFirst());
+				return result;
 			}
 
 			@Override
 			public void init(SequencesContainer initialSequences, final IMultiStateResult inputState) {
 
+				initialSequencesContainer = initialSequences;
+
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
 				@NonNull
 				Collection<@NonNull String> hints = new HashSet<>(dt.getHints());
-				if (settings.isGenerateCharterOuts()) {
-					hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-				} else {
-					hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-				}
-				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
-
-				t = new LNGLSOOptimiserTransformerUnit(dt, phase, settings, initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints);
+				// Ensure no GCO and add in clean state
+				hints.add(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
+				hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
+				t = new LNGCleanStateOptimiserTransformerUnit(dt, phase, settings, initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints);
 			}
 
 			@Override
@@ -110,14 +112,15 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 			@NonNull final ExecutorService executorService, final int... seeds) {
 		final IChainLink link = new IChainLink() {
 
-			private LNGLSOOptimiserTransformerUnit[] t;
+			private LNGCleanStateOptimiserTransformerUnit[] t;
+			private SequencesContainer initialSequencesContainer;
 
 			class MyRunnable implements Callable<IMultiStateResult> {
 
-				LNGLSOOptimiserTransformerUnit t;
+				LNGCleanStateOptimiserTransformerUnit t;
 				IProgressMonitor m;
 
-				public MyRunnable(final LNGLSOOptimiserTransformerUnit t, final IProgressMonitor monitor, final int ticks) {
+				public MyRunnable(final LNGCleanStateOptimiserTransformerUnit t, final IProgressMonitor monitor, final int ticks) {
 					this.t = t;
 					this.m = new SubProgressMonitor(monitor, ticks);
 				}
@@ -215,7 +218,10 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 						throw new IllegalStateException("No results generated");
 					}
 
-					return new MultiStateResult(output.get(0), output);
+					IMultiStateResult result = new MultiStateResult(output.get(0), output);
+					// Update initial sequences for subsequent optimisation stages
+					initialSequencesContainer.setSequences(result.getBestSolution().getFirst());
+					return result;
 				} finally {
 					monitor.done();
 				}
@@ -223,22 +229,17 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 
 			@Override
 			public void init(SequencesContainer initialSequences, final IMultiStateResult inputState) {
+				this.initialSequencesContainer = initialSequences;
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
-				t = new LNGLSOOptimiserTransformerUnit[seeds.length];
-
+				t = new LNGCleanStateOptimiserTransformerUnit[seeds.length];
 				@NonNull
 				Collection<@NonNull String> hints = new HashSet<>(dt.getHints());
-				if (settings.isGenerateCharterOuts()) {
-					hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-				} else {
-					hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
-				}
-				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
-
+				hints.add(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
+				hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
 				for (int i = 0; i < seeds.length; ++i) {
 					final OptimiserSettings os = EcoreUtil.copy(settings);
 					os.setSeed(seeds[i]);
-					t[i] = new LNGLSOOptimiserTransformerUnit(dt, phase, os, initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints);
+					t[i] = new LNGCleanStateOptimiserTransformerUnit(dt, phase, os, initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints);
 				}
 			}
 
@@ -271,11 +272,10 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 	@NonNull
 	private final IMultiStateResult inputState;
 
-	@NonNull
 	private final String phase;
 
-	public LNGLSOOptimiserTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull String phase, @NonNull final OptimiserSettings settings, @NonNull ISequences initialSequences,
-			@NonNull final ISequences inputSequences, @NonNull final Collection<@NonNull String> hints) {
+	public LNGCleanStateOptimiserTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull String phase, @NonNull final OptimiserSettings settings,
+			@NonNull ISequences initialSequences, @NonNull final ISequences inputSequences, @NonNull final Collection<@NonNull String> hints) {
 		this.dataTransformer = dataTransformer;
 		this.phase = phase;
 

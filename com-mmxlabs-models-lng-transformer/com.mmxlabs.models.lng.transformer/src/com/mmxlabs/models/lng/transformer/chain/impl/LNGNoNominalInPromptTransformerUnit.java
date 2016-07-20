@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
 import com.mmxlabs.models.lng.transformer.chain.ILNGStateTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.IMultiStateResult;
+import com.mmxlabs.models.lng.transformer.chain.SequencesContainer;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
@@ -45,10 +46,10 @@ public class LNGNoNominalInPromptTransformerUnit implements ILNGStateTransformer
 			}
 
 			@Override
-			public void init(final IMultiStateResult inputState) {
+			public void init(final SequencesContainer initialSequences, final IMultiStateResult inputState) {
 
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
-				t = new LNGNoNominalInPromptTransformerUnit(dt, settings, inputState.getBestSolution().getFirst(), dt.getHints());
+				t = new LNGNoNominalInPromptTransformerUnit(dt, settings, initialSequences.getSequences(), inputState.getBestSolution().getFirst(), dt.getHints());
 			}
 
 			@Override
@@ -80,12 +81,13 @@ public class LNGNoNominalInPromptTransformerUnit implements ILNGStateTransformer
 	@NonNull
 	private final IMultiStateResult inputState;
 
-	public LNGNoNominalInPromptTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final OptimiserSettings settings, @NonNull final ISequences inputSequences,
-			@NonNull final Collection<@NonNull String> hints) {
+	public LNGNoNominalInPromptTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final OptimiserSettings settings, @NonNull ISequences initialSequences,
+			@NonNull final ISequences inputSequences, @NonNull final Collection<@NonNull String> hints) {
 		this.dataTransformer = dataTransformer;
 
 		final List<Module> modules = new LinkedList<>();
 
+		modules.add(new InitialSequencesModule(initialSequences));
 		modules.add(new InputSequencesModule(inputSequences));
 
 		injector = dataTransformer.getInjector().createChildInjector(modules);
