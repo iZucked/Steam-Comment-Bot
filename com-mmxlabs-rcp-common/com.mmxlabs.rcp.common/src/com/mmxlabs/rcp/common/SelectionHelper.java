@@ -5,11 +5,13 @@
 package com.mmxlabs.rcp.common;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.internal.e4.compatibility.CompatibilityPart;
@@ -49,6 +51,21 @@ public final class SelectionHelper {
 		if (object instanceof CompatibilityPart) {
 			final CompatibilityPart compatibilityView = (CompatibilityPart) object;
 			return compatibilityView.getPart();
+		}
+		return null;
+	}
+
+	/**
+	 * Convert the given {@link ISelection} to a filtered list of elements of the given input {@link Class} type. May return null or an empty list.
+	 */
+	public static <T> @Nullable List<@NonNull T> convertToList(@Nullable final ISelection selection, final Class<T> cls) {
+		if (selection instanceof IStructuredSelection) {
+			final List<?> l = ((IStructuredSelection) selection) //
+					.toList();
+			return l.stream() //
+					.filter(e -> cls.isInstance(e)) //
+					.map(e -> cls.cast(e)) //
+					.collect(Collectors.toList());
 		}
 		return null;
 	}
