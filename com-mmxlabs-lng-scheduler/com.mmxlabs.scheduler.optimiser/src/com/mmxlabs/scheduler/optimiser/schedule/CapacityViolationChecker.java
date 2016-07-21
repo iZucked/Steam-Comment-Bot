@@ -162,12 +162,14 @@ public class CapacityViolationChecker {
 
 						sell = dischargeOption;
 
+						// We use -1 for the CV as it does not matter - CV is used to convert between m3 and mmbtu, but here we are checking type first so we know conversion will not happen.
+
 						if (dischargeOption.isVolumeSetInM3()) {
-							if (volumeInM3 > dischargeOption.getMaxDischargeVolume()) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_DISCHARGE, volumeInM3 - dischargeOption.getMaxDischargeVolume(),
+							if (volumeInM3 > dischargeOption.getMaxDischargeVolume(-1)) {
+								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_DISCHARGE, volumeInM3 - dischargeOption.getMaxDischargeVolume(-1),
 										volumeAllocatedSequence);
-							} else if (volumeInM3 < dischargeOption.getMinDischargeVolume()) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_DISCHARGE, dischargeOption.getMinDischargeVolume() - volumeInM3,
+							} else if (volumeInM3 < dischargeOption.getMinDischargeVolume(-1)) {
+								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_DISCHARGE, dischargeOption.getMinDischargeVolume(-1) - volumeInM3,
 										volumeAllocatedSequence);
 							}
 
@@ -178,12 +180,12 @@ public class CapacityViolationChecker {
 							// volumes set in MMBTu
 							assert allocationAnnotation != null;
 							int cargoCV = allocationAnnotation.getSlotCargoCV(portSlot);
-							if (volumeInMMBTu > dischargeOption.getMaxDischargeVolumeMMBTU()) {
-								long violationInMMBTu = volumeInMMBTu - dischargeOption.getMaxDischargeVolumeMMBTU();
+							if (volumeInMMBTu > dischargeOption.getMaxDischargeVolumeMMBTU(-1)) {
+								long violationInMMBTu = volumeInMMBTu - dischargeOption.getMaxDischargeVolumeMMBTU(-1);
 								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_DISCHARGE, getViolationInM3(violationInMMBTu, cargoCV),
 										volumeAllocatedSequence);
-							} else if (volumeInMMBTu < dischargeOption.getMinDischargeVolumeMMBTU()) {
-								long violationInMMBTu = dischargeOption.getMinDischargeVolumeMMBTU() - volumeInMMBTu;
+							} else if (volumeInMMBTu < dischargeOption.getMinDischargeVolumeMMBTU(-1)) {
+								long violationInMMBTu = dischargeOption.getMinDischargeVolumeMMBTU(-1) - volumeInMMBTu;
 								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_DISCHARGE, getViolationInM3(violationInMMBTu, cargoCV),
 										volumeAllocatedSequence);
 							}

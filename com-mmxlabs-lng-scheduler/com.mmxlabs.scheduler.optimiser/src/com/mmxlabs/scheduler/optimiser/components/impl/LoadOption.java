@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -77,14 +78,14 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	 * @param cargoCVValue
 	 *            - the CV value for gas here.
 	 */
-	public LoadOption(final @NonNull String id, final IPort port, final @NonNull ITimeWindow timeWindow, final long minLoadVolume, final long maxLoadVolume,
+	public LoadOption(final @NonNull String id, final IPort port, final @NonNull ITimeWindow timeWindow, boolean volumeInM3, final long minLoadVolume, final long maxLoadVolume,
 			final ILoadPriceCalculator loadPriceCalculator, final int cargoCVValue) {
 		super(id, port, timeWindow);
 		setPortType(PortType.Load);
-		this.minLoadVolume = minLoadVolume;
-		this.maxLoadVolume = maxLoadVolume;
 		this.loadPriceCalculator = loadPriceCalculator;
+		assert cargoCVValue != 0;
 		this.cargoCVValue = cargoCVValue;
+		setVolumeLimits(volumeInM3, minLoadVolume, maxLoadVolume);
 	}
 
 	@Override
@@ -93,18 +94,24 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	}
 
 	@Override
-	public void setMinLoadVolume(final long minLoadVolume) {
-		this.minLoadVolume = minLoadVolume;
+	public void setVolumeLimits(boolean volumeInM3, long minVolume, long maxVolume) {
+		this.volumeSetInM3 = volumeInM3;
+		if (volumeInM3) {
+			minLoadVolume = minVolume;
+			maxLoadVolume = maxVolume;
+			minLoadVolumeMMBTU = Calculator.convertM3ToMMBTu(minVolume, getCargoCVValue());
+			maxLoadVolumeMMBTU = maxLoadVolume == Long.MAX_VALUE ? Long.MAX_VALUE : Calculator.convertM3ToMMBTu(maxLoadVolume, getCargoCVValue());
+		} else {
+			minLoadVolumeMMBTU = minVolume;
+			maxLoadVolumeMMBTU = maxVolume;
+			minLoadVolume = Calculator.convertMMBTuToM3(minLoadVolumeMMBTU, getCargoCVValue());
+			maxLoadVolume = maxLoadVolumeMMBTU == Long.MAX_VALUE ? Long.MAX_VALUE : Calculator.convertMMBTuToM3(maxLoadVolumeMMBTU, getCargoCVValue());
+		}
 	}
 
 	@Override
 	public long getMaxLoadVolume() {
 		return maxLoadVolume;
-	}
-
-	@Override
-	public void setMaxLoadVolume(final long maxLoadVolume) {
-		this.maxLoadVolume = maxLoadVolume;
 	}
 
 	public void setLoadPriceCalculator(final ILoadPriceCalculator loadPriceCalculator) {
@@ -118,6 +125,12 @@ public class LoadOption extends PortSlot implements ILoadOption {
 
 	public void setCargoCVValue(final int cargoCVValue) {
 		this.cargoCVValue = cargoCVValue;
+		// CV has changed, so update volume limits
+		if (isVolumeSetInM3()) {
+			setVolumeLimits(true, minLoadVolume, maxLoadVolume);
+		} else {
+			setVolumeLimits(false, minLoadVolumeMMBTU, maxLoadVolumeMMBTU);
+		}
 	}
 
 	@Override
@@ -133,6 +146,10 @@ public class LoadOption extends PortSlot implements ILoadOption {
 
 		if (obj instanceof LoadOption) {
 			final LoadOption lo = (LoadOption) obj;
+			if (volumeSetInM3 != lo.volumeSetInM3) {
+				return false;
+			}
+
 			if (minLoadVolume != lo.minLoadVolume) {
 				return false;
 			}
@@ -183,22 +200,8 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	}
 
 	@Override
-	public void setMinLoadVolumeMMBTU(long volume) {
-		minLoadVolumeMMBTU = volume;
-	}
-
-	@Override
 	public long getMaxLoadVolumeMMBTU() {
 		return maxLoadVolumeMMBTU;
-	}
-
-	@Override
-	public void setMaxLoadVolumeMMBTU(long volume) {
-		maxLoadVolumeMMBTU = volume;
-	}
-
-	public void setVolumeSetInM3(boolean m3) {
-		volumeSetInM3 = m3;
 	}
 
 	@Override

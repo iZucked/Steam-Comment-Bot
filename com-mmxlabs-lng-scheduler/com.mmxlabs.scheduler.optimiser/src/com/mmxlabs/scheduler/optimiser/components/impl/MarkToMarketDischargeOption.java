@@ -24,9 +24,9 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class MarkToMarketDischargeOption implements IDischargeOption, IMarkToMarketOption {
 
 	private final IMarkToMarket markToMarket;
-	private ILoadOption loadOption;
+	private final ILoadOption loadOption;
 
-	public MarkToMarketDischargeOption(IMarkToMarket markToMarket, ILoadOption loadOption) {
+	public MarkToMarketDischargeOption(final IMarkToMarket markToMarket, final ILoadOption loadOption) {
 		this.markToMarket = markToMarket;
 		this.loadOption = loadOption;
 	}
@@ -52,12 +52,12 @@ public class MarkToMarketDischargeOption implements IDischargeOption, IMarkToMar
 	}
 
 	@Override
-	public long getMinDischargeVolume() {
+	public long getMinDischargeVolume(final int cv) {
 		return loadOption.getMinLoadVolume();
 	}
 
 	@Override
-	public long getMaxDischargeVolume() {
+	public long getMaxDischargeVolume(final int cv) {
 		return loadOption.getMaxLoadVolume();
 	}
 
@@ -92,25 +92,22 @@ public class MarkToMarketDischargeOption implements IDischargeOption, IMarkToMar
 	}
 
 	@Override
-	public void setMinDischargeVolume(long volume) {
+	public long getMinDischargeVolumeMMBTU(final int cv) {
+		return loadOption.getMinLoadVolumeMMBTU();
 	}
 
 	@Override
-	public void setMaxDischargeVolume(long volume) {
-	}
-
-	@Override
-	public long getMinDischargeVolumeMMBTU() {
-		return Calculator.convertM3ToMMBTu(loadOption.getMinLoadVolume(), loadOption.getCargoCVValue());
-	}
-
-	@Override
-	public long getMaxDischargeVolumeMMBTU() {
-		return Calculator.convertM3ToMMBTu(loadOption.getMaxLoadVolume(), loadOption.getCargoCVValue());
+	public long getMaxDischargeVolumeMMBTU(final int cv) {
+		return loadOption.getMaxLoadVolumeMMBTU();
 	}
 
 	@Override
 	public boolean isVolumeSetInM3() {
 		return loadOption.isVolumeSetInM3();
+	}
+
+	@Override
+	public void setVolumeLimits(final boolean volumeInM3, final long minVolume, final long maxVolume) {
+		throw new UnsupportedOperationException();
 	}
 }

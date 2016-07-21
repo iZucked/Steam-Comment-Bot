@@ -27,9 +27,9 @@ public final class LoadSlot extends LoadOption implements ILoadSlot {
 	// setPortType(PortType.Load);
 	// }
 
-	public LoadSlot(final @NonNull String id, final @NonNull IPort port, final ITimeWindow timwWindow, final long minLoadVolume, final long maxLoadVolume,
+	public LoadSlot(final @NonNull String id, final @NonNull IPort port, final ITimeWindow timwWindow, boolean volumeInM3, final long minLoadVolume, final long maxLoadVolume,
 			final @NonNull ILoadPriceCalculator loadPriceCalculator, final int cargoCVValue, final boolean cooldownSet, final boolean cooldownForbidden) {
-		super(id, port, timwWindow, minLoadVolume, maxLoadVolume, loadPriceCalculator, cargoCVValue);
+		super(id, port, timwWindow, volumeInM3, minLoadVolume, maxLoadVolume, loadPriceCalculator, cargoCVValue);
 		this.cooldownSet = cooldownSet;
 		this.cooldownForbidden = cooldownForbidden;
 	}
