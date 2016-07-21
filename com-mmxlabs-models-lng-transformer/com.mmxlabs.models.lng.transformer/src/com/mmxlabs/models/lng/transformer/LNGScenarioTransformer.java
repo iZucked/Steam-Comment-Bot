@@ -2079,6 +2079,8 @@ public class LNGScenarioTransformer {
 								}
 								usedIDStrings.add(internalID);
 
+								final boolean isVolumeLimitInM3 = fobPurchaseMarket.getVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
+
 								// Create a fake model object to add in here;
 								final SpotLoadSlot fobSlot = CargoFactory.eINSTANCE.createSpotLoadSlot();
 								fobSlot.setName(externalID);
@@ -2094,7 +2096,7 @@ public class LNGScenarioTransformer {
 
 								final ILoadOption fobPurchaseSlot = builder.createLoadSlot(internalID, notionalIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
 										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, fobSlot.getSlotOrPortDuration(), true, true,
-										IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true, false, true, false);
+										IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3);
 
 								// Key piece of information
 								fobSlot.setMarket(fobPurchaseMarket);
