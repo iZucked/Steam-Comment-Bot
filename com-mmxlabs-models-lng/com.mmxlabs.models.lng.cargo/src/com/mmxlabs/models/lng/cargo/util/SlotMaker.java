@@ -4,11 +4,14 @@
  */
 package com.mmxlabs.models.lng.cargo.util;
 
+import java.time.YearMonth;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 
 public class SlotMaker<T extends Slot> extends AbstractSlotMaker<SlotMaker<T>> {
 
