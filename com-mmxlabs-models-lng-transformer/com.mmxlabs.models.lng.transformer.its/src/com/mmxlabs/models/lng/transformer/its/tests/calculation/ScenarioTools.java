@@ -86,7 +86,6 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -224,14 +223,15 @@ public class ScenarioTools {
 			final int ladenMinConsumption, final int ladenMaxSpeed, final int ladenMaxConsumption, int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate,
 			final boolean useDryDock, final int pilotLightRate, final int minHeelVolume) {
 
-		final LNGScenarioModel scenario = ManifestJointModel.createEmptyInstance(null);
+		final ScenarioModelBuilder scenarioModelBuilder = ScenarioModelBuilder.instantiate();
+		final LNGScenarioModel scenario = scenarioModelBuilder.getLNGScenarioModel();
 
-		final PricingModel pricingModel = scenario.getReferenceModel().getPricingModel();
-		final CostModel costModel = scenario.getReferenceModel().getCostModel();
-		final SpotMarketsModel spotMarketsModel = scenario.getReferenceModel().getSpotMarketsModel();
+		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenario);
+		final CostModel costModel = ScenarioModelUtil.getCostModel(scenario);
 		final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(scenario);
-		final CommercialModelBuilder commercialModelBuilder = new CommercialModelBuilder(commercialModel);
-		final SpotMarketsModelBuilder spotMarketsModelBuilder = new SpotMarketsModelBuilder(spotMarketsModel);
+
+		final CommercialModelBuilder commercialModelBuilder = scenarioModelBuilder.getCommercialModelBuilder();
+		final SpotMarketsModelBuilder spotMarketsModelBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
 
 		final LegalEntity s = commercialModelBuilder.makeLegalEntityAndBooks("Shipping");
 		final LegalEntity e = commercialModelBuilder.makeLegalEntityAndBooks("Other");
@@ -744,7 +744,7 @@ public class ScenarioTools {
 	public static void printSequence(final Sequence seq) {
 
 		if (seq.getVesselAvailability() != null) {
-			VesselAvailability va = seq.getVesselAvailability();
+			final VesselAvailability va = seq.getVesselAvailability();
 
 			System.err.println(va.getStartAfterAsDateTime());
 			System.err.println(va.getEndByAsDateTime());
