@@ -13,6 +13,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelection;
 
 import com.mmxlabs.models.lng.commercial.PricingEvent;
@@ -37,7 +39,7 @@ public class SpotMarketFactory extends DefaultModelFactory {
 	}
 
 	@Override
-	public Collection<ISetting> createInstance(final MMXRootObject rootObject, final EObject container, final EReference containment, final ISelection selection) {
+	public Collection<ISetting> createInstance(final MMXRootObject rootObject, final EObject container, final EReference containment, final @Nullable Collection<@NonNull EObject> selection) {
 		EObject output = null;
 
 		if (prototypeClass == null) {
@@ -82,7 +84,7 @@ public class SpotMarketFactory extends DefaultModelFactory {
 			}
 
 			@Override
-			public ISelection getSelection() {
+			public @Nullable Collection<@NonNull EObject> getSelection() {
 				return selection;
 			}
 		};

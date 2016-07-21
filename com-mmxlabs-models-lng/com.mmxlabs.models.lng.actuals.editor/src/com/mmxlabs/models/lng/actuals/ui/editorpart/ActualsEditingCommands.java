@@ -14,7 +14,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
@@ -48,7 +47,7 @@ public class ActualsEditingCommands {
 		// TODO: Pre-generate and link to UI
 		// TODO: Add FOB/DES etc as explicit slot types.
 		final IModelFactory factory = factories.get(0);
-		final Collection<? extends ISetting> settings = factory.createInstance(rootObject, container, reference, StructuredSelection.EMPTY);
+		final Collection<? extends ISetting> settings = factory.createInstance(rootObject, container, reference, null);
 		if (settings.isEmpty() == false) {
 
 			for (final ISetting setting : settings) {
@@ -66,7 +65,7 @@ public class ActualsEditingCommands {
 
 		final LoadActuals newLoadActuals = createObject(ActualsPackage.eINSTANCE.getLoadActuals(), ActualsPackage.eINSTANCE.getCargoActuals_Actuals(), newCargoActuals);
 		setCommands.add(AddCommand.create(editingDomain, newCargoActuals, ActualsPackage.eINSTANCE.getCargoActuals_Actuals(), newLoadActuals));
-		
+
 		final DischargeActuals newDischargeActuals = createObject(ActualsPackage.eINSTANCE.getDischargeActuals(), ActualsPackage.eINSTANCE.getCargoActuals_Actuals(), newCargoActuals);
 		setCommands.add(AddCommand.create(editingDomain, newCargoActuals, ActualsPackage.eINSTANCE.getCargoActuals_Actuals(), newDischargeActuals));
 		return newCargoActuals;

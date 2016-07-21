@@ -10,6 +10,8 @@ import java.util.Iterator;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
@@ -32,10 +34,10 @@ public class CargoGroupFactory extends DefaultModelFactory {
 	}
 
 	@Override
-	public Collection<ISetting> createInstance(MMXRootObject rootObject, EObject container, EReference containment, ISelection selection) {
+	public Collection<ISetting> createInstance(MMXRootObject rootObject, EObject container, EReference containment, @Nullable Collection<@NonNull EObject> selection) {
 		return super.createInstance(rootObject, container, CargoPackage.eINSTANCE.getCargoModel_CargoGroups(), selection);
 	}
-	
+
 	/**
 	 * Process the selection and generate a list of objects. Search for a many valued reference in the instance and add all objects to it.
 	 * 
@@ -43,7 +45,7 @@ public class CargoGroupFactory extends DefaultModelFactory {
 	 * @param instance
 	 * @param selection
 	 */
-	protected void addSelectionToInstance(EClass cls, EObject instance, ISelection selection) {
+	protected void addSelectionToInstance(@NonNull EClass cls, @NonNull EObject instance, @Nullable Collection<@NonNull EObject> selection) {
 		if (selection == null || selection.isEmpty()) {
 			return;
 		}

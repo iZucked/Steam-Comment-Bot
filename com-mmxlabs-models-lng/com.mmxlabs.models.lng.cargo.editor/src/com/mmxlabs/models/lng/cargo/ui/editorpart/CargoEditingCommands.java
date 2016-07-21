@@ -18,7 +18,6 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -32,13 +31,11 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.ui.Activator;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
 import com.mmxlabs.models.ui.registries.IModelFactoryRegistry;
@@ -49,25 +46,25 @@ public class CargoEditingCommands {
 
 	private final @NonNull EditingDomain editingDomain;
 
-	private final @NonNull LNGScenarioModel scenarioModel;
+	// private final @NonNull LNGScenarioModel scenarioModel;
 
 	private final @NonNull IModelFactoryRegistry modelFactoryRegistry;
 
 	private final @Nullable BaseLegalEntity defaultEntity;
+	private final @NonNull CargoModel cargoModel;
+	private final @NonNull CommercialModel commercialModel;
 
-	/**
-	 */
-	public CargoEditingCommands(final @NonNull EditingDomain editingDomain, final @NonNull LNGScenarioModel rootObject) {
-		this(editingDomain, rootObject, Activator.getDefault().getModelFactoryRegistry());
-	}
+	private @NonNull MMXRootObject rootObject;
 
-	public CargoEditingCommands(final @NonNull EditingDomain editingDomain, final @NonNull LNGScenarioModel rootObject, final @NonNull IModelFactoryRegistry modelFactoryRegistry) {
+	public CargoEditingCommands(final @NonNull EditingDomain editingDomain, final @NonNull MMXRootObject rootObject, @NonNull CargoModel cargoModel, @NonNull CommercialModel commercialModel,
+			final @NonNull IModelFactoryRegistry modelFactoryRegistry) {
 		this.editingDomain = editingDomain;
-		this.scenarioModel = rootObject;
+		this.rootObject = rootObject;
+		this.cargoModel = cargoModel;
+		this.commercialModel = commercialModel;
 		this.modelFactoryRegistry = modelFactoryRegistry;
 
 		// No need for listener to update on change to count as users cannot edit number of entities.
-		CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(scenarioModel);
 		if (commercialModel.getEntities().size() == 1) {
 			defaultEntity = commercialModel.getEntities().get(0);
 		} else {
@@ -82,7 +79,7 @@ public class CargoEditingCommands {
 		// TODO: Pre-generate and link to UI
 		// TODO: Add FOB/DES etc as explicit slot types.
 		final IModelFactory factory = factories.get(0);
-		final Collection<? extends ISetting> settings = factory.createInstance(scenarioModel, container, reference, StructuredSelection.EMPTY);
+		final Collection<? extends ISetting> settings = factory.createInstance(rootObject, container, reference, null);
 		if (settings.isEmpty() == false) {
 
 			for (final ISetting setting : settings) {
@@ -120,11 +117,7 @@ public class CargoEditingCommands {
 		// newLoad.setContract((Contract) market.getContract());
 		newLoad.setOptional(true);
 		newLoad.setName("");
-		
-		if (defaultEntity != null) {
-			newLoad.setEntity(defaultEntity);
-		}
-		
+
 		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
 
 		return newLoad;
@@ -212,7 +205,7 @@ public class CargoEditingCommands {
 		newLoad.setDESPurchase(isDESPurchase);
 		newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 		newLoad.setName("");
-		if (defaultEntity != null) {
+		if (!(newLoad instanceof SpotSlot) && defaultEntity != null) {
 			newLoad.setEntity(defaultEntity);
 		}
 		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
@@ -225,11 +218,11 @@ public class CargoEditingCommands {
 		newDischarge.setFOBSale(isFOBSale);
 		newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 		newDischarge.setName("");
-		
-		if (defaultEntity != null) {
+
+		if (!(newDischarge instanceof SpotSlot) && defaultEntity != null) {
 			newDischarge.setEntity(defaultEntity);
 		}
-		
+
 		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
 		return newDischarge;
 	}
@@ -248,18 +241,12 @@ public class CargoEditingCommands {
 			newDischarge.setPort((Port) desSalesMarket.getNotionalPort());
 		}
 		newDischarge.setOptional(true);
-		
-		if (defaultEntity != null) {
-			newDischarge.setEntity(defaultEntity);
-		}
-		
-		
+
 		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
 		return newDischarge;
 	}
 
 	public void runWiringUpdate(final List<Command> setCommands, final List<Command> deleteCommands, final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {
-		final CargoModel cargoModel = scenarioModel.getCargoModel();
 
 		// Discharge has an existing slot, so remove the cargo & wiring
 		if (dischargeSlot.getCargo() != null) {

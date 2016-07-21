@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.fleet.ui.editorpart;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -15,9 +16,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -44,6 +46,7 @@ import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
+import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 
@@ -183,8 +186,8 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 					}
 
 					@Override
-					public ISelection getCurrentSelection() {
-						return viewer.getSelection();
+					public @Nullable Collection<@NonNull EObject> getCurrentSelection() {
+						return SelectionHelper.convertToList(viewer.getSelection(), EObject.class);
 					}
 				});
 				if (newBase != null) {

@@ -62,6 +62,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
@@ -102,7 +103,8 @@ public class CargoEditorMenuHelper {
 		this.shell = shell;
 		this.scenarioEditingLocation = scenarioEditingLocation;
 		this.scenarioModel = scenarioModel;
-		cec = new CargoEditingCommands(scenarioEditingLocation.getEditingDomain(), scenarioModel);
+		cec = new CargoEditingCommands(scenarioEditingLocation.getEditingDomain(), scenarioModel, ScenarioModelUtil.getCargoModel(scenarioModel), ScenarioModelUtil.getCommercialModel(scenarioModel),
+				Activator.getDefault().getModelFactoryRegistry());
 	}
 
 	private final class EditAction extends Action {
