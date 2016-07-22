@@ -160,9 +160,9 @@ public class LatenessComponentTest {
 		final EndPortSlot endSlot = new EndPortSlot(null, null, null, false, 0L);
 		final PortDetails endDetails = new PortDetails(new PortOptions(endSlot));
 
-		final LoadSlot loadSlot = new LoadSlot("l1", Mockito.mock(IPort.class), window1, 0L, 140_000_000L, Mockito.mock(ILoadPriceCalculator.class), 22400, false, true);
+		final LoadSlot loadSlot = new LoadSlot("l1", Mockito.mock(IPort.class), window1, true, 0L, 140_000_000L, Mockito.mock(ILoadPriceCalculator.class), 22400, false, true);
 
-		final DischargeSlot dischargeSlot = new DischargeSlot("d1", Mockito.mock(IPort.class), window2, 0L, 140_000_000L, Mockito.mock(ISalesPriceCalculator.class), 20_000, 30_000);
+		final DischargeSlot dischargeSlot = new DischargeSlot("d1", Mockito.mock(IPort.class), window2, true, 0L, 140_000_000L, Mockito.mock(ISalesPriceCalculator.class), 20_000, 30_000);
 		dischargeSlot.setTimeWindow(window2);
 
 		final PortDetails loadDetails = new PortDetails(new PortOptions(loadSlot));

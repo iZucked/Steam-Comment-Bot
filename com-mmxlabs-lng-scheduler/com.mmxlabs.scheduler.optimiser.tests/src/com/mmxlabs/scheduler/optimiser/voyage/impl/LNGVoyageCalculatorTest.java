@@ -558,8 +558,8 @@ public class LNGVoyageCalculatorTest {
 		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 
-		final LoadSlot loadSlot = new LoadSlot("load", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 0, false, false);
-		final DischargeSlot dischargeSlot = new DischargeSlot("discharge", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
+		final LoadSlot loadSlot = new LoadSlot("load", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 1_000_000, false, false);
+		final DischargeSlot dischargeSlot = new DischargeSlot("discharge", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
 
 		final PortDetails loadDetails = new PortDetails(new PortOptions(loadSlot));
 		final PortDetails dischargeDetails = new PortDetails(new PortOptions(dischargeSlot));
@@ -610,15 +610,15 @@ public class LNGVoyageCalculatorTest {
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 		Mockito.when(vessel.getCargoCapacity()).thenReturn(Long.MAX_VALUE);
 
-		final LoadSlot loadSlot = new LoadSlot("load", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 0, false, false);
-		final DischargeSlot dischargeSlot = new DischargeSlot("discharge", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
+		final LoadSlot loadSlot = new LoadSlot("load", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 1_000_000, false, false);
+		final DischargeSlot dischargeSlot = new DischargeSlot("discharge", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
 
 		// vesselClass.setBaseFuelConversionFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(1.0));
 		final PortDetails loadDetails = new PortDetails(new PortOptions(loadSlot));
 		final PortDetails dischargeDetails = new PortDetails(new PortOptions(dischargeSlot));
 
-		loadSlot.setMaxLoadVolume(150000L);
-		dischargeSlot.setMaxDischargeVolume(30000L);
+		loadSlot.setVolumeLimits(true, 0, 150000L);
+		dischargeSlot.setVolumeLimits(true, 0, 30000L);
 
 		loadSlot.setLoadPriceCalculator(new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(1)));
 		dischargeSlot.setDischargePriceCalculator(new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(1)));
@@ -725,14 +725,14 @@ public class LNGVoyageCalculatorTest {
 		Mockito.when(vessel.getCargoCapacity()).thenReturn(Long.MAX_VALUE);
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 
-		final LoadSlot loadSlot = new LoadSlot("load", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 0, false, false);
-		final DischargeSlot dischargeSlot = new DischargeSlot("discharge", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
+		final LoadSlot loadSlot = new LoadSlot("load", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 0, false, false);
+		final DischargeSlot dischargeSlot = new DischargeSlot("discharge", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
 
 		final PortDetails loadDetails = new PortDetails(new PortOptions(loadSlot));
 		final PortDetails dischargeDetails = new PortDetails(new PortOptions(dischargeSlot));
 
-		loadSlot.setMaxLoadVolume(119L);
-		dischargeSlot.setMaxDischargeVolume(30L);
+		loadSlot.setVolumeLimits(true, 0, 119L);
+		dischargeSlot.setVolumeLimits(true, 0, 30L);
 
 		final VoyageOptions options = new VoyageOptions(loadSlot, dischargeSlot);
 		final VoyageDetails details = new VoyageDetails(options);
@@ -772,16 +772,16 @@ public class LNGVoyageCalculatorTest {
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 		Mockito.when(vessel.getCargoCapacity()).thenReturn(Long.MAX_VALUE);
 
-		final LoadSlot loadSlot = new LoadSlot("load", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 0, false, false);
-		final DischargeSlot dischargeSlot = new DischargeSlot("discharge", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
+		final LoadSlot loadSlot = new LoadSlot("load", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 1_000_000, false, false);
+		final DischargeSlot dischargeSlot = new DischargeSlot("discharge", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
 		final IPortSlot otherSlot = new EndPortSlot(null, null, null, false, 0L);
 
 		final PortDetails loadDetails = new PortDetails(new PortOptions(loadSlot));
 		final PortDetails dischargeDetails = new PortDetails(new PortOptions(dischargeSlot));
 		final PortDetails otherDetails = new PortDetails(new PortOptions(otherSlot));
 
-		loadSlot.setMaxLoadVolume(150000000L);
-		dischargeSlot.setMaxDischargeVolume(3000000L);
+		loadSlot.setVolumeLimits(true, 0, 150000000L);
+		dischargeSlot.setVolumeLimits(true, 0, 3000000L);
 
 		loadSlot.setLoadPriceCalculator(new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(1)));
 		dischargeSlot.setDischargePriceCalculator(new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(1)));
@@ -863,15 +863,15 @@ public class LNGVoyageCalculatorTest {
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 
 		final PortSlot otherSlot = new StartPortSlot("start", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), null);
-		final LoadSlot loadSlot = new LoadSlot("load", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 0, false, false);
-		final DischargeSlot dischargeSlot = new DischargeSlot("discharge", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
+		final LoadSlot loadSlot = new LoadSlot("load", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 1_000_000, false, false);
+		final DischargeSlot dischargeSlot = new DischargeSlot("discharge", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
 
 		final PortDetails otherDetails = new PortDetails(new PortOptions(otherSlot));
 		final PortDetails loadDetails = new PortDetails(new PortOptions(loadSlot));
 		final PortDetails dischargeDetails = new PortDetails(new PortOptions(dischargeSlot));
 
-		loadSlot.setMaxLoadVolume(150L);
-		dischargeSlot.setMaxDischargeVolume(30L);
+		loadSlot.setVolumeLimits(true, 0, 150L);
+		dischargeSlot.setVolumeLimits(true, 0, 30L);
 
 		loadSlot.setLoadPriceCalculator(new FixedPriceContract(1000));
 		dischargeSlot.setDischargePriceCalculator(new FixedPriceContract(1000));
@@ -930,8 +930,8 @@ public class LNGVoyageCalculatorTest {
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 
 		final PortSlot otherSlot = new StartPortSlot("start", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), null);
-		final LoadSlot loadSlot = new LoadSlot("load", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 0, false, false);
-		final DischargeSlot dischargeSlot = new DischargeSlot("discharge", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
+		final LoadSlot loadSlot = new LoadSlot("load", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 1_000_000, false, false);
+		final DischargeSlot dischargeSlot = new DischargeSlot("discharge", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
 
 		final PortDetails otherDetails = new PortDetails(new PortOptions(otherSlot));
 		final PortDetails loadDetails = new PortDetails(new PortOptions(loadSlot));
@@ -944,8 +944,8 @@ public class LNGVoyageCalculatorTest {
 		final PortDetails dischargeDetails = new PortDetails(new PortOptions(dischargeSlot));
 		dischargeDetails.setFuelConsumption(FuelComponent.Base, 5000);
 
-		loadSlot.setMaxLoadVolume(150L);
-		dischargeSlot.setMaxDischargeVolume(30L);
+		loadSlot.setVolumeLimits(true, 0, 150L);
+		dischargeSlot.setVolumeLimits(true, 0, 30L);
 
 		loadSlot.setLoadPriceCalculator(new FixedPriceContract(1000));
 		dischargeSlot.setDischargePriceCalculator(new FixedPriceContract(1000));

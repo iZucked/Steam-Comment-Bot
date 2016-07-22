@@ -69,13 +69,13 @@ public class VoyagePlanAnnotatorTest {
 		final IPort port1 = Mockito.mock(IPort.class, "port-1");
 		final IPort port2 = Mockito.mock(IPort.class, "port-2");
 
-		final LoadSlot loadSlot1 = new LoadSlot("load1", port1, Mockito.mock(ITimeWindow.class), 0L, 50_000, Mockito.mock(ILoadPriceCalculator.class), 0, false, false);
+		final LoadSlot loadSlot1 = new LoadSlot("load1", port1, Mockito.mock(ITimeWindow.class), true, 0L, 50_000, Mockito.mock(ILoadPriceCalculator.class), 1_000_000, false, false);
 
-		final DischargeSlot dischargeSlot1 = new DischargeSlot("discharge1", port2, Mockito.mock(ITimeWindow.class), 0L, 50_000L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
+		final DischargeSlot dischargeSlot1 = new DischargeSlot("discharge1", port2, Mockito.mock(ITimeWindow.class), true, 0L, 50_000L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
 
-		final LoadSlot loadSlot2 = new LoadSlot("load2", port1, Mockito.mock(ITimeWindow.class), 0L, 50_000, Mockito.mock(ILoadPriceCalculator.class), 0, false, false);
+		final LoadSlot loadSlot2 = new LoadSlot("load2", port1, Mockito.mock(ITimeWindow.class), true, 0L, 50_000, Mockito.mock(ILoadPriceCalculator.class), 1_000_000, false, false);
 
-		final DischargeSlot dischargeSlot2 = new DischargeSlot("discharge2", port2, Mockito.mock(ITimeWindow.class), 0L, 50_000L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
+		final DischargeSlot dischargeSlot2 = new DischargeSlot("discharge2", port2, Mockito.mock(ITimeWindow.class), true, 0L, 50_000L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
 
 		final IPortSlotProviderEditor portSlotEditor = new HashMapPortSlotEditor();
 		portSlotEditor.setPortSlot(element1, loadSlot1);

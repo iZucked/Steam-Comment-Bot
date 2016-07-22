@@ -20,26 +20,16 @@ public interface IDischargeOption extends IPortSlot {
 	 * 
 	 * @return
 	 */
-	long getMinDischargeVolume();
+	long getMinDischargeVolume(int cv);
 
 	/**
 	 * Returns the maximum quantity that can be discharged. A value of {@link Long#MAX_VALUE} is equivalent to no maximum bound.
 	 * 
 	 * @return
 	 */
-	long getMaxDischargeVolume();
+	long getMaxDischargeVolume(int cv);
 
-	/**
-	 * Returns the minimum quantity that can be discharged. A value of zero is equivalent to no minimum bound.
-	 * 
-	 */
-	void setMinDischargeVolume(long volume);
-
-	/**
-	 * Returns the maximum quantity that can be discharged. A value of {@link Long#MAX_VALUE} is equivalent to no maximum bound.
-	 * 
-	 */
-	void setMaxDischargeVolume(long volume);
+	void setVolumeLimits(boolean volumeInM3, long minVolume, long maxVolume);
 
 	/**
 	 * Returns whether the input data volume was set in m3 or MMBTU
@@ -53,14 +43,14 @@ public interface IDischargeOption extends IPortSlot {
 	 * 
 	 * @return
 	 */
-	long getMinDischargeVolumeMMBTU();
+	long getMinDischargeVolumeMMBTU(int cv);
 
 	/**
 	 * Returns the maximum quantity that can be discharged. A value of {@link Long#MAX_VALUE} is equivalent to no maximum bound.
 	 * 
 	 * @return
 	 */
-	long getMaxDischargeVolumeMMBTU();
+	long getMaxDischargeVolumeMMBTU(int cv);
 
 	/**
 	 * Returns the minimum CV for this discharge slot, based on the sales contract. A value of zero is equivalent to no minimum bound.

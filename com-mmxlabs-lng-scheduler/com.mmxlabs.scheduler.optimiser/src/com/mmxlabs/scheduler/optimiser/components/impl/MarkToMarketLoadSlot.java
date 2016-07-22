@@ -52,12 +52,12 @@ public class MarkToMarketLoadSlot implements ILoadSlot, IMarkToMarketOption {
 
 	@Override
 	public long getMinLoadVolume() {
-		return dischargeOption.getMinDischargeVolume();
+		return dischargeOption.getMinDischargeVolume(getCargoCVValue());
 	}
 
 	@Override
 	public long getMaxLoadVolume() {
-		return dischargeOption.getMaxDischargeVolume();
+		return dischargeOption.getMaxDischargeVolume(getCargoCVValue());
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class MarkToMarketLoadSlot implements ILoadSlot, IMarkToMarketOption {
 
 	@Override
 	public int getPricingDate() {
-		return  IPortSlot.NO_PRICING_DATE;
+		return IPortSlot.NO_PRICING_DATE;
 	}
 
 	@Override
@@ -96,33 +96,22 @@ public class MarkToMarketLoadSlot implements ILoadSlot, IMarkToMarketOption {
 	}
 
 	@Override
-	public void setMinLoadVolume(long volume) {
-	}
-
-	@Override
-	public void setMaxLoadVolume(long volume) {
-	}
-
-	@Override
 	public long getMinLoadVolumeMMBTU() {
-		return dischargeOption.getMinDischargeVolumeMMBTU();
-	}
-
-	@Override
-	public void setMinLoadVolumeMMBTU(long volume) {
+		return dischargeOption.getMinDischargeVolumeMMBTU(getCargoCVValue());
 	}
 
 	@Override
 	public long getMaxLoadVolumeMMBTU() {
-		return dischargeOption.getMaxDischargeVolumeMMBTU();
-	}
-
-	@Override
-	public void setMaxLoadVolumeMMBTU(long volume) {
+		return dischargeOption.getMaxDischargeVolumeMMBTU(getCargoCVValue());
 	}
 
 	@Override
 	public boolean isVolumeSetInM3() {
 		return dischargeOption.isVolumeSetInM3();
+	}
+
+	@Override
+	public void setVolumeLimits(final boolean volumeInM3, final long minVolume, final long maxVolume) {
+		throw new UnsupportedOperationException();
 	}
 }

@@ -22,16 +22,12 @@ public interface ILoadOption extends IPortSlot {
 	 */
 	long getMinLoadVolume();
 
-	void setMinLoadVolume(long volume);
-
 	/**
 	 * Returns the maximum quantity that can be loaded. A value of {@link Long#MAX_VALUE} is equivalent to no maximum bound. Units are M3.
 	 * 
 	 * @return
 	 */
 	long getMaxLoadVolume();
-
-	void setMaxLoadVolume(long volume);
 
 	/**
 	 * Returns the minimum quantity that can be loaded. A value of zero is equivalent to no minimum bound. Units are M3.
@@ -40,8 +36,6 @@ public interface ILoadOption extends IPortSlot {
 	 */
 	long getMinLoadVolumeMMBTU();
 
-	void setMinLoadVolumeMMBTU(long volume);
-
 	/**
 	 * Returns the maximum quantity that can be loaded. A value of {@link Long#MAX_VALUE} is equivalent to no maximum bound. Units are M3.
 	 * 
@@ -49,14 +43,14 @@ public interface ILoadOption extends IPortSlot {
 	 */
 	long getMaxLoadVolumeMMBTU();
 
-	void setMaxLoadVolumeMMBTU(long volume);
-
 	/**
 	 * Returns whether the input data volume was set in m3 or MMBTU
 	 * 
 	 * @return
 	 */
 	boolean isVolumeSetInM3();
+
+	void setVolumeLimits(boolean volumeInM3, long minVolume, long maxVolume);
 
 	/**
 	 * Returns the CV of the cargo loaded from this slot. This will be used to convert between M3 and MMBTu of LNG.

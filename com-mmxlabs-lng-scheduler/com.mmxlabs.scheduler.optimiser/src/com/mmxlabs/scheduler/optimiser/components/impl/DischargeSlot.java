@@ -20,8 +20,9 @@ import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 public final class DischargeSlot extends DischargeOption implements IDischargeSlot {
 	/**
 	 */
-	public DischargeSlot(final @NonNull String id, final @NonNull IPort port, final ITimeWindow timeWindow, final long minDischargeVolume, final long maxDischargeVolume,
+	public DischargeSlot(final @NonNull String id, final @NonNull IPort port, final ITimeWindow timeWindow, boolean volumeInM3, final long minDischargeVolume, final long maxDischargeVolume,
 			final ISalesPriceCalculator priceCalculator, final long minCvValue, final long maxCvValue) {
-		super(id, port, timeWindow, minDischargeVolume, maxDischargeVolume, minCvValue, maxCvValue, priceCalculator);
+		super(id, port, timeWindow, volumeInM3, minDischargeVolume, maxDischargeVolume, minCvValue, maxCvValue, priceCalculator);
+
 	}
 }

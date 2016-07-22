@@ -106,12 +106,12 @@ public final class VoyagePlannerTest {
 		final ITimeWindow timeWindow3 = new TimeWindow(15, 16);
 		final ITimeWindow timeWindow4 = new TimeWindow(20, 21);
 
-		final LoadSlot loadSlot1 = new LoadSlot("load-slot-1", port1, timeWindow1, 0L, Long.MAX_VALUE, Mockito.mock(ILoadPriceCalculator.class), 0, false, false);
+		final LoadSlot loadSlot1 = new LoadSlot("load-slot-1", port1, timeWindow1, true, 0L, Long.MAX_VALUE, Mockito.mock(ILoadPriceCalculator.class), 0, false, false);
 
-		final DischargeSlot dischargeSlot1 = new DischargeSlot("discharge-slot-1", port2, timeWindow2, 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
+		final DischargeSlot dischargeSlot1 = new DischargeSlot("discharge-slot-1", port2, timeWindow2, true, 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
 
-		final LoadSlot loadSlot2 = new LoadSlot("load-slot-2", port3, timeWindow3, 0L, Long.MAX_VALUE, Mockito.mock(ILoadPriceCalculator.class), 0, true, true);
-		final DischargeSlot dischargeSlot2 = new DischargeSlot("discharge-slot-2", port4, timeWindow4, 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
+		final LoadSlot loadSlot2 = new LoadSlot("load-slot-2", port3, timeWindow3, true, 0L, Long.MAX_VALUE, Mockito.mock(ILoadPriceCalculator.class), 0, true, true);
+		final DischargeSlot dischargeSlot2 = new DischargeSlot("discharge-slot-2", port4, timeWindow4, true, 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
 
 		loadSlot2.setCooldownForbidden(true);
 		loadSlot2.setCooldownSet(true);
