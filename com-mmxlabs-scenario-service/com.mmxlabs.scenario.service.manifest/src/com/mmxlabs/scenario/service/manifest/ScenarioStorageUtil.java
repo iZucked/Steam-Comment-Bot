@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.io.ByteStreams;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ModelReference;
@@ -122,13 +123,10 @@ public class ScenarioStorageUtil {
 	}
 
 	public static void storeToFile(final ScenarioInstance instance, final File file) throws IOException {
-		final BundleContext bundleContext = FrameworkUtil.getBundle(ScenarioStorageUtil.class).getBundleContext();
-		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
-		try {
-			storeToFile(instance, file, bundleContext.getService(serviceReference));
-		} finally {
-			bundleContext.ungetService(serviceReference);
-		}
+
+		ServiceHelper.withCheckedOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+			storeToFile(instance, file, scenarioCipherProvider);
+		});
 	}
 
 	public static void storeToFile(final ScenarioInstance instance, final File file, final IScenarioCipherProvider scenarioCipherProvider) throws IOException {
@@ -207,13 +205,9 @@ public class ScenarioStorageUtil {
 	}
 
 	public static ScenarioInstance loadInstanceFromFile(final String filePath) {
-		final BundleContext bundleContext = FrameworkUtil.getBundle(ScenarioStorageUtil.class).getBundleContext();
-		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
-		try {
-			return loadInstanceFromFile(filePath, bundleContext.getService(serviceReference));
-		} finally {
-			bundleContext.ungetService(serviceReference);
-		}
+		return ServiceHelper.withOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+			return loadInstanceFromFile(filePath, scenarioCipherProvider);
+		});
 	}
 
 	/**
@@ -223,13 +217,10 @@ public class ScenarioStorageUtil {
 	 * @return
 	 */
 	public static ScenarioInstance loadInstanceFromURI(final URI scenarioURI) {
-		final BundleContext bundleContext = FrameworkUtil.getBundle(ScenarioStorageUtil.class).getBundleContext();
-		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
-		try {
-			return loadInstanceFromURI(scenarioURI, bundleContext.getService(serviceReference));
-		} finally {
-			bundleContext.ungetService(serviceReference);
-		}
+		return ServiceHelper.withOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+
+			return loadInstanceFromURI(scenarioURI, scenarioCipherProvider);
+		});
 	}
 
 	public static ScenarioInstance loadInstanceFromURI(final URI scenarioURI, final IScenarioCipherProvider scenarioCipherProvider) {
@@ -276,5 +267,4 @@ public class ScenarioStorageUtil {
 		}
 		return null;
 	}
-
 }
