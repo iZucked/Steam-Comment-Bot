@@ -20,7 +20,8 @@ import org.eclipse.emf.ecore.EPackage.Registry;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
-import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -41,7 +42,7 @@ public class DefaultModelFactory implements IModelFactory {
 	/**
 	 */
 	protected String classToUseForGivenReference;
-	
+
 	/**
 	 */
 	protected EClass findEClassInClassifiers(String name, EList<EClassifier> eclassifiers) {
@@ -63,8 +64,8 @@ public class DefaultModelFactory implements IModelFactory {
 				result = findEClassInClassifiers(name, containment.getEReferenceType().getEPackage().getEClassifiers());
 				if (result != null)
 					return result;
-			}			
-									
+			}
+
 			// All registry packages...
 			for (final Object obj : Registry.INSTANCE.values()) {
 				if (obj instanceof EPackage) {
@@ -72,7 +73,7 @@ public class DefaultModelFactory implements IModelFactory {
 					if (result != null)
 						return result;
 				}
-	
+
 			}
 		}
 		if (containment != null) {
@@ -80,9 +81,9 @@ public class DefaultModelFactory implements IModelFactory {
 		}
 		return null;
 	}
-	
+
 	@Override
-	public Collection<ISetting> createInstance(final MMXRootObject rootObject, final EObject container, final EReference containment, final ISelection selection) {
+	public Collection<ISetting> createInstance(final MMXRootObject rootObject, final EObject container, final EReference containment, @Nullable Collection<@NonNull EObject> selection) {
 		EObject output = null;
 
 		if (prototypeClass == null) {
@@ -148,7 +149,7 @@ public class DefaultModelFactory implements IModelFactory {
 			}
 
 			@Override
-			public ISelection getSelection() {
+			public @Nullable Collection<@NonNull EObject> getSelection() {
 				return selection;
 			}
 		};
@@ -168,7 +169,6 @@ public class DefaultModelFactory implements IModelFactory {
 
 		return object;
 	}
-	
 
 	protected EObject createSubInstance(final EObject top, final EReference reference) {
 		// override the instance class for the specified attribute if necessary
@@ -177,7 +177,7 @@ public class DefaultModelFactory implements IModelFactory {
 			if (referenceToReplace == reference) {
 				final EClass classToReplaceWith = getEClassFromName(classToUseForGivenReference, null);
 				if (classToReplaceWith != null) {
-					return constructInstance(classToReplaceWith);	
+					return constructInstance(classToReplaceWith);
 				}
 			}
 		}
@@ -203,7 +203,7 @@ public class DefaultModelFactory implements IModelFactory {
 	 * @param instance
 	 * @param selection
 	 */
-	protected void addSelectionToInstance(final EClass cls, final EObject instance, final ISelection selection) {
+	protected void addSelectionToInstance(final @NonNull EClass cls, final @NonNull EObject instance, @Nullable Collection<@NonNull EObject> selection) {
 
 	}
 
