@@ -26,6 +26,59 @@ import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 
 public class DefaultDistanceProviderImplTest {
+	@Test
+	public void testGetRouteAvailable() {
+
+		final IMultiMatrixProvider<IPort, Integer> matrixProvider = Mockito.mock(IMultiMatrixProvider.class);
+		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
+		final IMatrixProvider<IPort, Integer> directMatrix = Mockito.mock(IMatrixProvider.class);
+		final IMatrixProvider<IPort, Integer> suezMatrix = Mockito.mock(IMatrixProvider.class);
+		final IMatrixProvider<IPort, Integer> panamaMatrix = Mockito.mock(IMatrixProvider.class);
+
+		Mockito.when(matrixProvider.get(ERouteOption.DIRECT.name())).thenReturn(directMatrix);
+		Mockito.when(matrixProvider.get(ERouteOption.SUEZ.name())).thenReturn(suezMatrix);
+		Mockito.when(matrixProvider.get(ERouteOption.PANAMA.name())).thenReturn(panamaMatrix);
+
+		final DefaultDistanceProviderImpl distanceProvider = createDistanceProvider(matrixProvider, routeCostProvider);
+
+		Assert.assertEquals(Integer.MIN_VALUE, distanceProvider.getRouteAvailableFrom(ERouteOption.DIRECT));
+		Assert.assertEquals(Integer.MIN_VALUE, distanceProvider.getRouteAvailableFrom(ERouteOption.SUEZ));
+		Assert.assertEquals(Integer.MIN_VALUE, distanceProvider.getRouteAvailableFrom(ERouteOption.PANAMA));
+
+		distanceProvider.setRouteAvailableFrom(ERouteOption.PANAMA, 10);
+
+		Assert.assertEquals(Integer.MIN_VALUE, distanceProvider.getRouteAvailableFrom(ERouteOption.DIRECT));
+		Assert.assertEquals(Integer.MIN_VALUE, distanceProvider.getRouteAvailableFrom(ERouteOption.SUEZ));
+		Assert.assertEquals(10, distanceProvider.getRouteAvailableFrom(ERouteOption.PANAMA));
+	}
+
+	@Test
+	public void testIsRouteAvailable() {
+
+		final IMultiMatrixProvider<IPort, Integer> matrixProvider = Mockito.mock(IMultiMatrixProvider.class);
+		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
+		final IMatrixProvider<IPort, Integer> directMatrix = Mockito.mock(IMatrixProvider.class);
+		final IMatrixProvider<IPort, Integer> suezMatrix = Mockito.mock(IMatrixProvider.class);
+		final IMatrixProvider<IPort, Integer> panamaMatrix = Mockito.mock(IMatrixProvider.class);
+
+		Mockito.when(matrixProvider.get(ERouteOption.DIRECT.name())).thenReturn(directMatrix);
+		Mockito.when(matrixProvider.get(ERouteOption.SUEZ.name())).thenReturn(suezMatrix);
+		Mockito.when(matrixProvider.get(ERouteOption.PANAMA.name())).thenReturn(panamaMatrix);
+
+		final DefaultDistanceProviderImpl distanceProvider = createDistanceProvider(matrixProvider, routeCostProvider);
+
+		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.DIRECT, 0));
+		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.SUEZ, 0));
+		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.PANAMA, 0));
+
+		distanceProvider.setRouteAvailableFrom(ERouteOption.PANAMA, 10);
+
+		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.DIRECT, 0));
+		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.SUEZ, 0));
+
+		Assert.assertFalse(distanceProvider.isRouteAvailable(ERouteOption.PANAMA, 0));
+		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.PANAMA, 10));
+	}
 
 	@SuppressWarnings("deprecation")
 	@Test
