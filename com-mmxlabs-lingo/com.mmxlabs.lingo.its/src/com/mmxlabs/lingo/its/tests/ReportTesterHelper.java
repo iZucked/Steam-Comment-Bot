@@ -17,9 +17,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.E4PartWrapper;
 import org.junit.Assert;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
 
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.views.IProvideEditorInputScenario;
@@ -32,6 +29,7 @@ import com.mmxlabs.lingo.reports.views.standard.HeadlineReportView;
 import com.mmxlabs.lingo.reports.views.standard.KPIReportView;
 import com.mmxlabs.lingo.reports.views.standard.LatenessReportView;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 
@@ -108,15 +106,11 @@ public class ReportTesterHelper {
 	public IReportContents getReportContents(final String reportID, final @NonNull IScenarioSelection callable) throws InterruptedException {
 
 		// Get reference to the selection provider service
-		final BundleContext bundleContext = FrameworkUtil.getBundle(ReportTesterHelper.class).getBundleContext();
-		final ServiceReference<IScenarioServiceSelectionProvider> serviceReference = bundleContext.getServiceReference(IScenarioServiceSelectionProvider.class);
-		Assert.assertNotNull(serviceReference);
-		final IScenarioServiceSelectionProvider provider = bundleContext.getService(serviceReference);
-		Assert.assertNotNull(provider);
 
-		final IViewPart[] view = new IViewPart[1];
-		final IReportContents[] contents = new IReportContents[1];
-		try {
+		return ServiceHelper.withCheckedService(IScenarioServiceSelectionProvider.class, provider -> {
+
+			final IViewPart[] view = new IViewPart[1];
+			final IReportContents[] contents = new IReportContents[1];
 
 			// Step 1 open the view, release UI thread
 			Display.getDefault().syncExec(new Runnable() {
@@ -142,7 +136,7 @@ public class ReportTesterHelper {
 
 			RunnerHelper.exec(() -> {
 				callable.updateSelection(view[0], provider);
-			} , true);
+			}, true);
 			Thread.yield();
 			Thread.sleep(1000);
 
@@ -172,9 +166,7 @@ public class ReportTesterHelper {
 				}
 			});
 
-		} finally {
-			bundleContext.ungetService(serviceReference);
-		}
-		return contents[0];
+			return contents[0];
+		});
 	}
 }
