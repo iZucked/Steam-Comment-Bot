@@ -191,7 +191,7 @@ public class CustomScenarioCreator {
 			final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final int pilotLightRate, final int minHeelVolume,
 			final boolean isTimeChartered) {
 
-		final SpotMarketsModelBuilder spotMarketsModelBuilder = new SpotMarketsModelBuilder(spotMarketsModel);
+		final SpotMarketsModelBuilder spotMarketsModelBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class

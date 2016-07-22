@@ -69,6 +69,7 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.IShippingDaysRestrictionSpeedProvider;
+import com.mmxlabs.models.lng.cargo.util.SpotSlotUtils;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
@@ -1610,7 +1611,7 @@ public class LNGScenarioTransformer {
 				// Calculate the upper bound.
 				final LocalDate endTime = startTime.plusMonths(1);
 				// Get the year/month key
-				final String yearMonthString = getKeyForDate(startTime);
+				final String yearMonthString = SpotSlotUtils.getKeyForDate(startTime);
 
 				// Calculate timezone end date for time window
 				final ZonedDateTime tzEndTime = tzStartTime.plusMonths(1);
@@ -1636,7 +1637,7 @@ public class LNGScenarioTransformer {
 							}
 						}
 
-						final Collection<Slot> existing = getSpotSlots(market, getKeyForDate(startTime));
+						final Collection<Slot> existing = getSpotSlots(market, SpotSlotUtils.getKeyForDate(startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
 						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
@@ -1749,7 +1750,7 @@ public class LNGScenarioTransformer {
 				// Calculate the upper bound.
 				final LocalDate endTime = startTime.plusMonths(1);
 				// Get the year/month key
-				final String yearMonthString = getKeyForDate(startTime);
+				final String yearMonthString = SpotSlotUtils.getKeyForDate(startTime);
 
 				// Calculate timezone end date for time window
 				final ZonedDateTime tzEndTime = tzStartTime.plusMonths(1);
@@ -1775,7 +1776,7 @@ public class LNGScenarioTransformer {
 							}
 						}
 
-						final Collection<Slot> existing = getSpotSlots(market, getKeyForDate(startTime));
+						final Collection<Slot> existing = getSpotSlots(market, SpotSlotUtils.getKeyForDate(startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
 						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
@@ -1919,12 +1920,12 @@ public class LNGScenarioTransformer {
 						// Calculate the upper bound.
 						final LocalDate endTime = startTime.plusMonths(1);
 						// Get the year/month key
-						final String yearMonthString = getKeyForDate(startTime);
+						final String yearMonthString = SpotSlotUtils.getKeyForDate(startTime);
 
 						// Calculate timezone end date for time window
 						final ZonedDateTime tzEndTime = tzStartTime.plusMonths(1);
 
-						final Collection<Slot> existing = getSpotSlots(market, getKeyForDate(startTime));
+						final Collection<Slot> existing = getSpotSlots(market, SpotSlotUtils.getKeyForDate(startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
 						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
@@ -2044,14 +2045,14 @@ public class LNGScenarioTransformer {
 						// Calculate the upper bound.
 						final LocalDate endTime = startTime.plusMonths(1);
 						// Get the year/month key
-						final String yearMonthString = getKeyForDate(startTime);
+						final String yearMonthString = SpotSlotUtils.getKeyForDate(startTime);
 
 						// Calculate timezone end date for time window
 						final ZonedDateTime tzEndTime = tzStartTime.plusMonths(1);
 
 						final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(fobPurchaseMarket.getCv());
 
-						final Collection<Slot> existing = getSpotSlots(market, getKeyForDate(startTime));
+						final Collection<Slot> existing = getSpotSlots(market, SpotSlotUtils.getKeyForDate(startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
 						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
@@ -2079,6 +2080,8 @@ public class LNGScenarioTransformer {
 								}
 								usedIDStrings.add(internalID);
 
+								final boolean isVolumeLimitInM3 = fobPurchaseMarket.getVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
+
 								// Create a fake model object to add in here;
 								final SpotLoadSlot fobSlot = CargoFactory.eINSTANCE.createSpotLoadSlot();
 								fobSlot.setName(externalID);
@@ -2094,7 +2097,7 @@ public class LNGScenarioTransformer {
 
 								final ILoadOption fobPurchaseSlot = builder.createLoadSlot(internalID, notionalIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
 										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, fobSlot.getSlotOrPortDuration(), true, true,
-										IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true, false, true, false);
+										IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3);
 
 								// Key piece of information
 								fobSlot.setMarket(fobPurchaseMarket);
@@ -2810,7 +2813,7 @@ public class LNGScenarioTransformer {
 		}
 		if (spotSlot instanceof Slot) {
 			final Slot slot = (Slot) spotSlot;
-			final String key = getKeyForDate(slot.getWindowStart());
+			final String key = SpotSlotUtils.getKeyForDate(slot.getWindowStart());
 			final Collection<Slot> slots;
 			if (curve.containsKey(key)) {
 				slots = curve.get(key);
@@ -2835,11 +2838,6 @@ public class LNGScenarioTransformer {
 			}
 		}
 		return Collections.emptyList();
-	}
-
-	@NonNull
-	private String getKeyForDate(@NonNull final LocalDate date) {
-		return String.format("%04d-%02d", date.getYear(), date.getMonthValue());
 	}
 
 	@NonNull

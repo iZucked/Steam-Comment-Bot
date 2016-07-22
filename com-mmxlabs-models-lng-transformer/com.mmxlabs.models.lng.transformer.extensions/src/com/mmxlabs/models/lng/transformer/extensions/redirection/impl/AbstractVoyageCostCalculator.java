@@ -120,7 +120,7 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 	}
 
 	protected @NonNull DischargeSlot makeNotionalDischarge(@NonNull IPort dischargePort, int dischargeTime, @NonNull ISalesPriceCalculator salesPriceCalculator) {
-		DischargeSlot dischargeSlot = new DischargeSlot("notional-discharge", dischargePort, new TimeWindow(dischargeTime, dischargeTime), 0L, Long.MAX_VALUE, salesPriceCalculator, 0, 0);
+		DischargeSlot dischargeSlot = new DischargeSlot("notional-discharge", dischargePort, new TimeWindow(dischargeTime, dischargeTime), true, 0L, Long.MAX_VALUE, salesPriceCalculator, 0, 0);
 
 		return dischargeSlot;
 	}
@@ -130,6 +130,7 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 	}
 
 	protected @NonNull LoadSlot makeNotionalLoad(final @NonNull IPort loadPort, final int loadTime, final IVessel vessel, final int cargoCVValue) {
-		return new LoadSlot("notional-load", loadPort, new TimeWindow(loadTime, loadTime), vessel.getCargoCapacity(), vessel.getCargoCapacity(), new FixedPriceContract(0), cargoCVValue, false, true);
+		return new LoadSlot("notional-load", loadPort, new TimeWindow(loadTime, loadTime), true, vessel.getCargoCapacity(), vessel.getCargoCapacity(), new FixedPriceContract(0), cargoCVValue, false,
+				true);
 	}
 }
