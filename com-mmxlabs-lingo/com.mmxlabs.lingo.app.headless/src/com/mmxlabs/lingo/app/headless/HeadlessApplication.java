@@ -150,10 +150,12 @@ public class HeadlessApplication implements IApplication {
 
 		OptimisationPlan optimisationPlan = ScenarioUtils.createDefaultOptimisationPlan();
 		assert optimisationPlan != null;
-optimisationPlan.getStages().clear();
-		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
+		optimisationPlan.getStages().clear();
 
 		updateOptimiserSettings(rootObject, optimisationPlan, overrideSettings, headlessParameters);
+
+		// Add in required extensions, but do not run custom hooks.
+		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan, true, false);
 
 		assert overrideSettings.getOutputName() != null;//
 		// final String outputFolderName = overrideSettings.getOutputName() == null ? getFolderNameFromSettings(optimisationPlan) : getFolderNameFromSettings(overrideSettings);
@@ -640,14 +642,14 @@ optimisationPlan.getStages().clear();
 	}
 
 	private void exportData(final Map<String, LSOLogger> loggerMap, ActionSetLogger actionSetLogger, final String path, final String foldername, final String jsonFilePath) {
-//		// first export logging data
-//		for (final String phase : IRunnerHook.PHASE_ORDER) {
-//			final LSOLogger logger = loggerMap.get(phase);
-//			if (logger != null) {
-//				final LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(path, phase, foldername, logger);
-//				lsoLoggingExporter.exportData("best-fitness", "current-fitness");
-//			}
-//		}
+		// // first export logging data
+		// for (final String phase : IRunnerHook.PHASE_ORDER) {
+		// final LSOLogger logger = loggerMap.get(phase);
+		// if (logger != null) {
+		// final LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(path, phase, foldername, logger);
+		// lsoLoggingExporter.exportData("best-fitness", "current-fitness");
+		// }
+		// }
 		if (actionSetLogger != null) {
 			actionSetLogger.export(Paths.get(path, foldername).toString(), "action");
 		}
