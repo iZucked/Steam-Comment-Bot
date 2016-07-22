@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -227,18 +228,20 @@ public class CargoEditingCommands {
 		return newDischarge;
 	}
 
-	public SpotDischargeSlot createNewSpotDischarge(final List<Command> setCommands, final CargoModel cargoModel, final boolean isFOBSale, final SpotMarket market) {
+	public SpotDischargeSlot createNewSpotDischarge(final List<Command> setCommands, final CargoModel cargoModel, final SpotMarket market) {
 
 		final SpotDischargeSlot newDischarge = createObject(CargoPackage.eINSTANCE.getSpotDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
-		newDischarge.setFOBSale(isFOBSale);
 		newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 		newDischarge.setMarket(market);
-		// newDischarge.setContract((Contract) market.getContract());
 		newDischarge.setName("");
 		if (market instanceof DESSalesMarket) {
-
 			final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
 			newDischarge.setPort((Port) desSalesMarket.getNotionalPort());
+			newDischarge.setFOBSale(false);
+		} else if (market instanceof FOBSalesMarket) {
+			newDischarge.setFOBSale(true);
+		} else {
+			assert false;
 		}
 		newDischarge.setOptional(true);
 
