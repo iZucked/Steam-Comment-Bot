@@ -22,6 +22,7 @@ import org.osgi.framework.ServiceReference;
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.models.migration.IMigrationRegistry;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
@@ -67,25 +68,15 @@ public class MigrationHelper {
 	}
 
 	public static void migrateAndLoad(@NonNull final ScenarioInstance instance, final IScenarioCipherProvider scenarioCipherProvider) throws IOException {
-
-		final BundleContext bundleContext = FrameworkUtil.getBundle(MigrationHelper.class).getBundleContext();
-		final ServiceReference<IMigrationRegistry> serviceReference = bundleContext.getServiceReference(IMigrationRegistry.class);
-		try {
-			migrateAndLoad(instance, scenarioCipherProvider, bundleContext.getService(serviceReference));
-		} finally {
-			bundleContext.ungetService(serviceReference);
-		}
+		ServiceHelper.withCheckedService(IMigrationRegistry.class, migrationRegistry -> {
+			migrateAndLoad(instance, scenarioCipherProvider, migrationRegistry);
+		});
 	}
 
 	public static void migrateAndLoad(@NonNull final ScenarioInstance instance) throws IOException {
-
-		final BundleContext bundleContext = FrameworkUtil.getBundle(MigrationHelper.class).getBundleContext();
-		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
-		try {
-			migrateAndLoad(instance, bundleContext.getService(serviceReference));
-		} finally {
-			bundleContext.ungetService(serviceReference);
-		}
+		ServiceHelper.withCheckedOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+			migrateAndLoad(instance, scenarioCipherProvider);
+		});
 	}
 
 	public static void migrateAndLoad(@NonNull final ScenarioInstance instance, final IScenarioCipherProvider scenarioCipherProvider, final IMigrationRegistry migrationRegistry) throws IOException {
