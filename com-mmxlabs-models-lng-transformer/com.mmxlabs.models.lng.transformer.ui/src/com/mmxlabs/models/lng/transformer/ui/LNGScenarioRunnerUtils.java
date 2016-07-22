@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
+import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeCustomiser;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeExtender;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
 import com.mmxlabs.scenario.service.IScenarioService;
@@ -31,6 +32,11 @@ public class LNGScenarioRunnerUtils {
 		return createExtendedSettings(optimisationPlan);
 	}
 
+	@NonNull
+	public static OptimisationPlan createExtendedSettings(@NonNull final OptimisationPlan optimisationPlan) {
+		return createExtendedSettings(optimisationPlan, true, true);
+	}
+
 	/**
 	 * Use the {@link IParameterModesRegistry} to extend the existing settings object.
 	 * 
@@ -38,7 +44,12 @@ public class LNGScenarioRunnerUtils {
 	 * @return
 	 */
 	@NonNull
-	public static OptimisationPlan createExtendedSettings(@NonNull final OptimisationPlan optimisationPlan) {
+	public static OptimisationPlan createExtendedSettings(@NonNull final OptimisationPlan optimisationPlan, boolean extend, boolean customise) {
+
+		if (!customise && !extend) {
+			return optimisationPlan;
+		}
+
 		IParameterModesRegistry parameterModesRegistry = null;
 
 		final Activator activator = Activator.getDefault();
@@ -47,10 +58,20 @@ public class LNGScenarioRunnerUtils {
 		}
 
 		if (parameterModesRegistry != null) {
-			final Collection<IParameterModeExtender> extenders = parameterModesRegistry.getExtenders();
-			if (extenders != null) {
-				for (final IParameterModeExtender extender : extenders) {
-					extender.extend(optimisationPlan);
+			if (extend) {
+				final Collection<IParameterModeExtender> extenders = parameterModesRegistry.getExtenders();
+				if (extenders != null) {
+					for (final IParameterModeExtender extender : extenders) {
+						extender.extend(optimisationPlan);
+					}
+				}
+			}
+			if (customise) {
+				final Collection<IParameterModeCustomiser> customisers = parameterModesRegistry.getCustomisers();
+				if (customisers != null) {
+					for (final IParameterModeCustomiser extender : customisers) {
+						extender.customise(optimisationPlan);
+					}
 				}
 			}
 		}
