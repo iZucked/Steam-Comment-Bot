@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TimePeriod;
 
@@ -331,5 +332,21 @@ public class CargoModelBuilder {
 	public MaintenanceEventMaker makeMaintenanceEvent(@NonNull final String name, @NonNull final LocalDateTime startAfter, @NonNull final LocalDateTime startBy, @NonNull final Port startPort) {
 
 		return new MaintenanceEventMaker(name, startPort, startAfter, startBy, this);
+	}
+
+	public @NonNull SlotMaker<SpotLoadSlot> makeSpotFOBPurchase(String name, @NonNull YearMonth windowStart, @NonNull FOBPurchasesMarket market) {
+		return new SlotMaker<SpotLoadSlot>(this).withMarketFOBPurchase(name, market, windowStart);
+	}
+
+	public @NonNull SlotMaker<SpotLoadSlot> makeSpotDESPurchase(String name, @NonNull YearMonth windowStart, @NonNull DESPurchaseMarket market, @NonNull Port port) {
+		return new SlotMaker<SpotLoadSlot>(this).withMarketDESPurchase(name, market, windowStart, port);
+	}
+
+	public @NonNull SlotMaker<SpotDischargeSlot> makeSpotDESSale(String name, @NonNull YearMonth windowStart, @NonNull DESSalesMarket market) {
+		return new SlotMaker<SpotDischargeSlot>(this).withMarketDESSale(name, market, windowStart, market.getNotionalPort());
+	}
+
+	public @NonNull SlotMaker<SpotDischargeSlot> makeSpotFOBSale(String name, @NonNull YearMonth windowStart, @NonNull FOBSalesMarket market, @NonNull Port port) {
+		return new SlotMaker<SpotDischargeSlot>(this).withMarketFOBSale(name, market, windowStart, port);
 	}
 }

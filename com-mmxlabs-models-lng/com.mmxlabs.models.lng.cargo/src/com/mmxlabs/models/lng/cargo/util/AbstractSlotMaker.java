@@ -44,10 +44,8 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 		return (T) this;
 	}
 
-	@NonNull
-	public T withDESPurchase(@NonNull final String name, final boolean divertible, @NonNull final LocalDate windowStart, @NonNull final Port port, @Nullable final PurchaseContract purchaseContract,
-			@Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, final @Nullable Double cv, @Nullable final Vessel nominatedVessel) {
-		final Slot slot = cargoModelBuilder.createDESPurchase(name, divertible, windowStart, port, purchaseContract, entity, priceExpression, cv, nominatedVessel);
+	public @NonNull T withMarketFOBPurchase(String name, @NonNull FOBPurchasesMarket market, @NonNull YearMonth windowStart) {
+		final Slot slot = cargoModelBuilder.createSpotFOBPurchase(name, market, windowStart, market.getNotionalPort());
 		this.slot = slot;
 		return (T) this;
 	}
@@ -55,6 +53,14 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 	@NonNull
 	public T withMarketFOBPurchase(@NonNull final String name, @NonNull final FOBPurchasesMarket market, @NonNull final YearMonth windowStart, @NonNull final Port port) {
 		final Slot slot = cargoModelBuilder.createSpotFOBPurchase(name, market, windowStart, port);
+		this.slot = slot;
+		return (T) this;
+	}
+
+	@NonNull
+	public T withDESPurchase(@NonNull final String name, final boolean divertible, @NonNull final LocalDate windowStart, @NonNull final Port port, @Nullable final PurchaseContract purchaseContract,
+			@Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, final @Nullable Double cv, @Nullable final Vessel nominatedVessel) {
+		final Slot slot = cargoModelBuilder.createDESPurchase(name, divertible, windowStart, port, purchaseContract, entity, priceExpression, cv, nominatedVessel);
 		this.slot = slot;
 		return (T) this;
 	}

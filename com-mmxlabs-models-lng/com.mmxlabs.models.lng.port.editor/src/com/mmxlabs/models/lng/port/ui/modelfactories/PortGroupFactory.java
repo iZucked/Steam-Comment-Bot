@@ -10,6 +10,8 @@ import java.util.Iterator;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
@@ -32,7 +34,7 @@ public class PortGroupFactory extends DefaultModelFactory {
 	}
 
 	@Override
-	public Collection<ISetting> createInstance(final MMXRootObject rootObject, final EObject container, final EReference containment, final ISelection selection) {
+	public Collection<ISetting> createInstance(final MMXRootObject rootObject, final EObject container, final EReference containment, @Nullable Collection<@NonNull EObject> selection) {
 		return super.createInstance(rootObject, container, PortPackage.eINSTANCE.getPortModel_PortGroups(), selection);
 	}
 

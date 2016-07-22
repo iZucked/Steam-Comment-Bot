@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.commercial.util;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
@@ -35,7 +36,7 @@ public class CommercialModelBuilder {
 		return entity;
 	}
 
-	public @NonNull SalesContract makeExpressionSalesContract(@NonNull String name, @NonNull LegalEntity entity, @NonNull String expression) {
+	public @NonNull SalesContract makeExpressionSalesContract(@NonNull String name, @NonNull BaseLegalEntity entity, @NonNull String expression) {
 		final SalesContract contract = CommercialFactory.eINSTANCE.createSalesContract();
 		final ExpressionPriceParameters params = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
 		contract.setName(name);
@@ -49,7 +50,7 @@ public class CommercialModelBuilder {
 		return contract;
 	}
 
-	public @NonNull PurchaseContract makeExpressionPurchaseContract(@NonNull String name, @NonNull LegalEntity entity, @NonNull String expression) {
+	public @NonNull PurchaseContract makeExpressionPurchaseContract(@NonNull String name, @NonNull BaseLegalEntity entity, @NonNull String expression) {
 		final PurchaseContract contract = CommercialFactory.eINSTANCE.createPurchaseContract();
 		final ExpressionPriceParameters params = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
 		contract.setName(name);

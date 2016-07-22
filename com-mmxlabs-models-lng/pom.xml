@@ -88,6 +88,7 @@
 		<module>com.mmxlabs.models.lng.cargo.validation.tests</module>
 		<module>com.mmxlabs.models.lng.fleet.validation.tests</module>
 		<module>com.mmxlabs.models.lng.port.validation.tests</module>
+		<module>com.mmxlabs.models.lng.pricing.validation.tests</module>
 		<module>com.mmxlabs.models.lng.spotmarkets.validation.tests</module>
 
 		<module>com.mmxlabs.models.lng.scenario.model</module>
