@@ -131,7 +131,12 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				final int lastArrivalTime = record.portTimesRecord.getSlotTime(slot);
 				final int extraExtent = window == null ? 30 * RELAXATION_STEP : (lastArrivalTime >= window.getExclusiveEnd() ? 0 : window.getExclusiveEnd() - lastArrivalTime);
 
-				evaluateVoyagePlan(record, state, extraExtent);
+				// If this is non-zero then our end event rules will have kicked in and we should not engage the speed step code.
+				if (endOptions.getVisitDuration() > 0) {
+					evaluateVoyagePlan(record, state, 0);
+				} else {
+					evaluateVoyagePlan(record, state, extraExtent);
+				}
 				return;
 			}
 		}
