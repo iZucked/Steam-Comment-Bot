@@ -19,9 +19,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.Assert;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
@@ -40,6 +37,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.scenario.MigrationHelper;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
@@ -163,33 +161,30 @@ public class LNGScenarioRunnerCreator {
 	@NonNull
 	public static LNGScenarioModel getScenarioModelFromURL(final URL url) throws IOException {
 		final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
+		return ServiceHelper.withCheckedService(IScenarioCipherProvider.class, (scenarioCipherProvider) -> {
 
-		final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class).getBundleContext();
-		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
-		try {
-			final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, bundleContext.getService(serviceReference));
+			final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, scenarioCipherProvider);
 			Assert.assertNotNull(instance);
 			final LNGScenarioModel originalScenario = getScenarioModel(instance);
 			Assert.assertNotNull(originalScenario);
 			return originalScenario;
-		} finally {
-			bundleContext.ungetService(serviceReference);
-		}
+		});
 	}
 
 	public static void saveScenarioModel(@NonNull final LNGScenarioModel scenario, @NonNull final File destinationFile) throws IOException {
+		ServiceHelper.withCheckedService(IMigrationRegistry.class, (migrationRegistry) -> {
 
-		final LNGScenarioModel copy = EcoreUtil.copy(scenario);
-		final IMigrationRegistry migrationRegistry = Activator.getDefault().getMigrationRegistry();
-		final String context = migrationRegistry.getDefaultMigrationContext();
-		if (context == null) {
-			throw new NullPointerException("Context cannot be null");
-		}
-		int version = migrationRegistry.getLatestContextVersion(context);
-		if (version < 0) {
-			version = migrationRegistry.getLastReleaseVersion(context);
-		}
-		ScenarioTools.storeToFile(copy, destinationFile, context, version);
+			final LNGScenarioModel copy = EcoreUtil.copy(scenario);
+			final String context = migrationRegistry.getDefaultMigrationContext();
+			if (context == null) {
+				throw new NullPointerException("Context cannot be null");
+			}
+			int version = migrationRegistry.getLatestContextVersion(context);
+			if (version < 0) {
+				version = migrationRegistry.getLastReleaseVersion(context);
+			}
+			ScenarioTools.storeToFile(copy, destinationFile, context, version);
+		});
 	}
 
 	@NonNull

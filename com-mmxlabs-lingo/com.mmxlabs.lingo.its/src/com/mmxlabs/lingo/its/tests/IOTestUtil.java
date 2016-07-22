@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
+import com.google.common.io.Files;
 import com.mmxlabs.models.lng.scenario.exportWizards.ExportCSVWizard;
 import com.mmxlabs.models.lng.scenario.exportWizards.ExportCSVWizard.exportInformation;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -83,9 +84,7 @@ public class IOTestUtil {
 	/**
 	 * Deletes the temporary directory and all its contents
 	 */
-	public static void tempDirectoryTeardown() {
-
-		final File tempDir = new File(System.getProperty("java.io.tmpdir", null), "tempdir-old");
+	public static void tempDirectoryTeardown(final File tempDir) {
 
 		final String[] entries = tempDir.list();
 		for (final String s : entries) {
@@ -94,6 +93,13 @@ public class IOTestUtil {
 		}
 
 		tempDir.delete();
+	}
+	
+	public static URL directoryFileToURL(final File directory) throws MalformedURLException{
+		
+		final URL url = directory.toURI().toURL();
+		
+		return url;
 	}
 
 	/**
@@ -168,25 +174,21 @@ public class IOTestUtil {
 	 * @return - URL by which to locate the temporary directory
 	 * @throws MalformedURLException
 	 */
-	public static URL exportTestCase(final LNGScenarioModel model) throws MalformedURLException {
+	public static File exportTestCase(final LNGScenarioModel model) throws MalformedURLException {
 
 		final ExportCSVWizard ECSVW = new ExportCSVWizard();
 
 		final exportInformation info = ECSVW.new exportInformation();
-
-		final File tempDir = new File(System.getProperty("java.io.tmpdir", null), "tempdir-old");
+		
+		final File tempDir  = Files.createTempDir();
 
 		info.outputDirectory = tempDir;
 		info.delimiter = ',';
 		info.decimalSeparator = '.';
 
-		ECSVW.exportScenario(model, info, true, "holder");
+		ECSVW.exportScenario(model, info, false, "");
 
-		final File restoreDir = new File(System.getProperty("java.io.tmpdir", null), "tempdir-old/holder");
-
-		final URL restoreURL = restoreDir.toURI().toURL();
-
-		return restoreURL;
+		return tempDir;
 	}
 
 }

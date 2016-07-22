@@ -17,10 +17,12 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -40,7 +42,9 @@ import com.mmxlabs.lingo.its.tests.LNGScenarioRunnerCreator;
 import com.mmxlabs.lingo.its.uat.suite.testers.GlobalUATTestsConfig;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
@@ -128,112 +132,126 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		return isLingo;
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void fillFeatureMap(@NonNull final EClass eClass, @NonNull final IdMapContainer baseTable, @NonNull final EObject containedObj, @NonNull final String prefix) {
 
 		if (eClass != null) {
 
-			ArrayList<EObject> open = new ArrayList<EObject>();
-			ArrayList<String> handles = new ArrayList<String>();
-			ArrayList<Integer> depth = new ArrayList<Integer>();
+			List<EObject> open = new ArrayList<>();
+			List<String> handles = new ArrayList<>();
+			
+			
+		
 			open.add(containedObj);
 			handles.add(prefix);
-			depth.add(0);
-
-			String previous_handle = handles.get(0);
-
-			Integer i = 0;
-			Integer i2 = 0;
-			Integer k = 0;
 
 			while (open.size() > 0) {
 
 				EObject current_container = open.get(0);
 
-				// Reset for array idices
-				if (!previous_handle.equals(handles.get(0))) {
-					i = 0;
-					i2 = 0;
-					k = 0;
-				}
-
 				EClass current_class = current_container.eClass();
 
-				ArrayList<String> feature_names = new ArrayList<String>();
+				List<String> feature_names = new ArrayList<>();
 
 				for (final EStructuralFeature e : getFeatures(current_class)) {
 
-					Pair name_comparison_results = uniqueHeading(feature_names, e.getName());
-					feature_names = (ArrayList<String>) name_comparison_results.getFirst();
-					String current_name = (String) name_comparison_results.getSecond();
-					
-					if(current_name == "uuid"){
-						//System.out.println("UUID");
-					}
+					Pair<List<String>, String> name_comparison_results = uniqueHeading(feature_names, e.getName());
+					feature_names = name_comparison_results.getFirst();
+					String current_name = name_comparison_results.getSecond();
 
-					else if (current_name == "entity") {
-						baseTable.getIdMapList()
-								.add(new IdMap(handles.get(0).equals("") ? current_name + Integer.toString(i) : handles.get(0)  + current_name + Integer.toString(i), e, current_container));
-						i++;
-					} else if (current_name == "profitAndLoss") {
-						baseTable.getIdMapList()
-								.add(new IdMap(handles.get(0).equals("") ? current_name + Integer.toString(i2) : handles.get(0) + current_name + Integer.toString(i2), e, current_container));
-						i2++;
-					} else if (current_name == "profitAndLossPreTax") {
-						baseTable.getIdMapList()
-								.add(new IdMap(handles.get(0).equals("") ? current_name + Integer.toString(k) : handles.get(0)+ current_name + Integer.toString(k), e, current_container));
-						k++;
-
-					} else {
-						baseTable.getIdMapList().add(new IdMap(handles.get(0).equals("") ? current_name : handles.get(0)+ current_name, e, current_container));
+					if (!current_name.equals("uuid")) {
+						baseTable.getIdMapList().add(new IdMap(handles.get(0).equals("") ? current_name : handles.get(0) + "-" + current_name, e, current_container));
 					}
 				}
 
-				Integer j = 0;
-				EList<EObject> child_containers = current_container.eContents();
+				List<EObject> child_containers = current_container.eContents();
 
-				ArrayList<String> container_names = new ArrayList<String>();
+				if(current_class == SchedulePackage.Literals.GROUP_PROFIT_AND_LOSS){
+					child_containers = orderEntities(child_containers);
+				}
+
+				List<String> container_names = new ArrayList<String>();
 
 				for (EObject child_container : child_containers) {
 
 					String child_handle = child_container.eContainmentFeature().getName();
 					open.add(child_container);
 
-					Pair name_comparison_results = uniqueHeading(container_names, child_handle);
-					container_names = (ArrayList<String>) name_comparison_results.getFirst();
-					String current_name = (String) name_comparison_results.getSecond();
+					Pair<List<String>, String> name_comparison_results = uniqueHeading(container_names, child_handle);
+					container_names = name_comparison_results.getFirst();
+					String current_name =  name_comparison_results.getSecond();
 
-					String new_handle = handles.get(0).concat(current_name + '-');
+					String new_handle = handles.get(0).concat(current_name);
 					handles.add(new_handle);
-					j++;
-					depth.add(depth.get(0) + 1);
-
 				}
 
 				open.remove(0);
-
-				previous_handle = handles.get(0);
 				handles.remove(0);
-
-				depth.remove(0);
-
 			}
 
 		}
-
 	}
 
-	private Pair uniqueHeading(ArrayList<String> names, String name) {
-		Pair result = new Pair();
+	private List<EObject> orderEntities(List<EObject> containers) {
+
+		List<String> information = new ArrayList<>();
+		List<EObject> objects = new ArrayList<>();
+		List<EObject> ordered_objects = new ArrayList<>();
+
+		int con_count = 0;
+		for (EObject child_container : containers) {
+			assert(SchedulePackage.Literals.ENTITY_PROFIT_AND_LOSS.isInstance(child_container));
+			objects.add(child_container);
+			EClass child_class = child_container.eClass();
+			String info = "";
+			String[] results = new String[3];
+			for (final EStructuralFeature e : getFeatures(child_class)) {
+
+				if (e == SchedulePackage.Literals.ENTITY_PROFIT_AND_LOSS__ENTITY ) {
+					BaseLegalEntity ble = (BaseLegalEntity) child_container.eGet(e);
+					String name = ble.getName();
+					results[2] = name;
+				} else if (e == SchedulePackage.Literals.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS) {
+					long val = (long) child_container.eGet(e);
+					results[0] = Long.toString(val);
+				} else if (e == SchedulePackage.Literals.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX) {
+					long val = (long) child_container.eGet(e);
+					results[1] = Long.toString(val);
+				}
+			}
+			for (String result : results) {
+				info = info + result + "/";
+			}
+			info = info + Integer.toString(con_count);
+
+			information.add(info);
+			con_count++;
+		}
+
+		java.util.Collections.sort(information);
+
+		for (String info_string : information) {
+			int ind = Integer.parseInt(info_string.split("/")[3]);
+			ordered_objects.add(objects.get(ind));
+		}	
+
+		return ordered_objects;
+	}
+	
+
+	private Pair<List<String>, String> uniqueHeading(List<String> names, String name) {
+		Pair<List<String>, String> result = new Pair<>();
 		Integer shared_count = 0;
 		for (String existing_name : names) {
 			if (existing_name == name) {
 				shared_count += 1;
 			}
 		}
-		if (shared_count > 0) {
-			name = name.concat(Integer.toString(shared_count + 1));
-		}
 		names.add(name);
+		if (shared_count > 0) {
+			name = name + Integer.toString(shared_count);
+		}
+
 		result.setFirst(names);
 		result.setSecond(name);
 		return result;
@@ -290,6 +308,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		final IdMapContainer gPLTable = new IdMapContainer("groupProfitAndLoss");
 		if (gPL != null) {
 			fillFeatureMap(gPL.eClass(), gPLTable, gPL);
+
 		}
 		return gPLTable;
 	}
@@ -351,6 +370,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 	protected void addDefaultDetails(@NonNull final List<IdMapContainer> allDetails, @NonNull final CargoAllocation cargoAllocation) {
 		if (GlobalUATTestsConfig.INCLUDE_GROUP_PROFIT_LOSS_DETAILS) {
 			final GroupProfitAndLoss gPL = cargoAllocation.getGroupProfitAndLoss();
+
 			allDetails.add(getGPLFeaturesMap(gPL));
 		}
 		if (GlobalUATTestsConfig.INCLUDE_SLOT_DETAILS) {

@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -38,15 +39,9 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.impl.DefaultB
 
 public class MicroCaseUtils {
 	private void storeToFile(final LNGScenarioModel lngScenarioModel, final String name) throws IOException {
-		final BundleContext bundleContext = FrameworkUtil.getBundle(ScenarioStorageUtil.class).getBundleContext();
-		final ServiceReference<IMigrationRegistry> serviceReference = bundleContext.getServiceReference(IMigrationRegistry.class);
-		try {
-			final IMigrationRegistry migrationRegistry = bundleContext.getService(serviceReference);
-			assert migrationRegistry != null;
+		ServiceHelper.withCheckedService(IMigrationRegistry.class, migrationRegistry -> {
 			storeToFile(lngScenarioModel, migrationRegistry, new File(String.format("C://temp//%s.lingo", name)));
-		} finally {
-			bundleContext.ungetService(serviceReference);
-		}
+		});
 	}
 
 	private void storeToFile(final LNGScenarioModel lngScenarioModel, final IMigrationRegistry migrationRegistry, final File output) throws IOException {
@@ -85,11 +80,11 @@ public class MicroCaseUtils {
 		ScenarioStorageUtil.storeToFile(instance, output);
 
 	}
-	
+
 	public static <T> T getClassFromInjector(@NonNull LNGScenarioToOptimiserBridge bridge, @NonNull Class<T> clazz) {
 		return bridge.getDataTransformer().getInjector().getInstance(clazz);
 	}
-	
+
 	public static <T> T getClassFromChildInjector(@NonNull LNGScenarioToOptimiserBridge bridge, @NonNull Class<T> clazz) {
 		return bridge.getDataTransformer().getInjector().createChildInjector().getInstance(clazz);
 	}
