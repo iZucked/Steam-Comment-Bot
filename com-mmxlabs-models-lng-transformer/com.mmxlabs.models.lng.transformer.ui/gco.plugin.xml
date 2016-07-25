@@ -8,11 +8,5 @@
 <!-- Copyright (C) Minimax Labs Ltd., 2010 - 2015 All rights reserved. -->
 <?eclipse version="3.4"?>
 <plugin>
-	<extension point="com.mmxlabs.models.lng.transformer.ui.ParameterMode">
-		<ParameterMode
-			class="com.mmxlabs.models.lng.transformer.ui.parametermodes.preset.GenerateCharterOutsMode"
-			id="com.mmxlabs.models.lng.transformer.ui.parametermodes.preset.GenerateCharterOutsMode"
-			name="Charter Out Generation">
-		</ParameterMode>
-	</extension>
+
 </plugin>
