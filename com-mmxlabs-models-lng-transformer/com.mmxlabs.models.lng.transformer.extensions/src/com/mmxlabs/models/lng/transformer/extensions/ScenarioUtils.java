@@ -87,9 +87,6 @@ public class ScenarioUtils {
 		return o;
 	}
 
-	// /**
-	// * @return
-	// */
 	@NonNull
 	public static OptimisationPlan createDefaultOptimisationPlan() {
 
@@ -102,127 +99,12 @@ public class ScenarioUtils {
 		@NonNull
 		final ConstraintAndFitnessSettings constraintAndFitnessSettings = createDefaultConstraintAndFitnessSettings();
 
+		// plan.getStages().add(createDefaultCleanStateParameters(EcoreUtil.copy(constraintAndFitnessSettings)));
 		plan.getStages().add(createDefaultLSOParameters(EcoreUtil.copy(constraintAndFitnessSettings)));
 		plan.getStages().add(createDefaultHillClimbingParameters(EcoreUtil.copy(constraintAndFitnessSettings)));
 
 		return plan;
 	}
-	// final ParametersFactory parametersFactory = ParametersFactory.eINSTANCE;
-	//
-	// final OptimiserSettings settings = parametersFactory.createOptimiserSettings();
-	//
-	// settings.setName("Default LSO Settings");
-	//
-	// // create constraints
-	// {
-	// final EList<Constraint> constraints = settings.getConstraints();
-	//
-	// // "Quick" resource allocation checks
-	// constraints.add(createConstraint(parametersFactory, ResourceAllocationConstraintCheckerFactory.NAME, true));
-	// constraints.add(createConstraint(parametersFactory, RoundTripVesselPermissionConstraintCheckerFactory.NAME, true));
-	// constraints.add(createConstraint(parametersFactory, PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME, true));
-	// constraints.add(createConstraint(parametersFactory, AllowedVesselPermissionConstraintCheckerFactory.NAME, true));
-	// constraints.add(createConstraint(parametersFactory, PortExclusionConstraintCheckerFactory.NAME, true));
-	// constraints.add(createConstraint(parametersFactory, VesselEventConstraintCheckerFactory.NAME, true));
-	// constraints.add(createConstraint(parametersFactory, FOBDESCompatibilityConstraintCheckerFactory.NAME, true));
-	//
-	// constraints.add(createConstraint(parametersFactory, OrderedSequenceElementsConstraintCheckerFactory.NAME, true));
-	// constraints.add(createConstraint(parametersFactory, PortTypeConstraintCheckerFactory.NAME, true));
-	// constraints.add(createConstraint(parametersFactory, TravelTimeConstraintCheckerFactory.NAME, true));
-	// constraints.add(createConstraint(parametersFactory, VirtualVesselConstraintCheckerFactory.NAME, true));
-	// constraints.add(createConstraint(parametersFactory, TimeSortConstraintCheckerFactory.NAME, true));
-	//
-	// // BugzId: 1597 - Disable as this causes problems with optimisation performance.
-	// // constraints.add(createConstraint(parametersFactory, SlotGroupCountConstraintCheckerFactory.NAME, true));
-	//
-	// constraints.add(createConstraint(parametersFactory, RestrictedElementsConstraintCheckerFactory.NAME, true));
-	// constraints.add(createConstraint(parametersFactory, ContractCvConstraintCheckerFactory.NAME, true));
-	// constraints.add(createConstraint(parametersFactory, PortCvCompatibilityConstraintCheckerFactory.NAME, true));
-	// if (SPOT_TO_SPOT_CONSTRAINT) {
-	// constraints.add(createConstraint(parametersFactory, SpotToSpotConstraintCheckerFactory.NAME, true));
-	// }
-	// constraints.add(createConstraint(parametersFactory, DifferentSTSVesselsConstraintCheckerFactory.NAME, true));
-	// constraints.add(createConstraint(parametersFactory, ShippingTypeRequirementConstraintCheckerFactory.NAME, true));
-	// constraints.add(createConstraint(parametersFactory, ShippingHoursRestrictionCheckerFactory.NAME, true));
-	// constraints.add(createConstraint(parametersFactory, LockedUnusedElementsConstraintCheckerFactory.NAME, true));
-	// }
-	//
-	// // create objectives
-	// {
-	// final EList<Objective> objectives = settings.getObjectives();
-	// objectives.add(createObjective(parametersFactory, "cargo-scheduler-group-profit", 1));
-	//
-	// objectives.add(createObjective(parametersFactory, CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, 1));
-	// objectives.add(createObjective(parametersFactory, CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, 0.1));
-	// objectives.add(createObjective(parametersFactory, NonOptionalSlotFitnessCoreFactory.NAME, 3_000_000));
-	// objectives.add(createObjective(parametersFactory, "SimilarityFitnessCore", 1.0));
-	// }
-	//
-	// final AnnealingSettings annealingSettings = parametersFactory.createAnnealingSettings();
-	// annealingSettings.setIterations(1_000_000);
-	// annealingSettings.setCooling(0.96);
-	// annealingSettings.setEpochLength(10_000);
-	// annealingSettings.setInitialTemperature(1_000_000);
-	// // restarts
-	// annealingSettings.setRestarting(false);
-	// annealingSettings.setRestartIterationsThreshold(500_000);
-	// settings.setAnnealingSettings(annealingSettings);
-	//
-	// final OptimisationRange range = parametersFactory.createOptimisationRange();
-	// settings.setRange(range);
-	// settings.setSeed(0);
-	//
-	// // similarity
-	// settings.setSimilaritySettings(createOffSimilaritySettings());
-	//
-	// // hill climbing
-	// final IndividualSolutionImprovementSettings solutionImprovementSettings = parametersFactory.createIndividualSolutionImprovementSettings();
-	// solutionImprovementSettings.setImprovingSolutions(true);
-	// solutionImprovementSettings.setIterations(50_000);
-	//
-	// settings.setSolutionImprovementSettings(solutionImprovementSettings);
-	//
-	// // {
-	// // {
-	// // CleanStateOptimisationStage stage = ScenarioUtils.createDefaultCleanStateParameters();
-	// // stage.getAnnealingSettings().setIterations(10_000);
-	// // stage.setSeed(0);
-	// //
-	// // ParallelOptimisationStage<CleanStateOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
-	// // pStage.setTemplate(stage);
-	// // pStage.setJobCount(1);
-	// //
-	// // settings.getStages().add(pStage);
-	// // }
-	// //
-	// //
-	// // {
-	// // LocalSearchOptimisationStage stage = ParametersFactory.eINSTANCE.createLocalSearchOptimisationStage();
-	// // stage.setAnnealingSettings(EcoreUtil.copy(settings.getAnnealingSettings()));
-	// // stage.setSeed(0);
-	// //
-	// // ParallelOptimisationStage<LocalSearchOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
-	// // pStage.setTemplate(stage);
-	// // pStage.setJobCount(1);
-	// //
-	// // settings.getStages().add(pStage);
-	// // }
-	// //
-	// // {
-	// // HillClimbOptimisationStage stage = ParametersFactory.eINSTANCE.createHillClimbOptimisationStage();
-	// // stage.setAnnealingSettings(EcoreUtil.copy(settings.getAnnealingSettings()));
-	// // stage.getAnnealingSettings().setIterations(settings.getSolutionImprovementSettings().getIterations());
-	// // stage.setSeed(0);
-	// //
-	// // ParallelOptimisationStage<HillClimbOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
-	// // pStage.setTemplate(stage);
-	// // // pStage.setJobCount(headlessParameters.getParameter("clean-state-jobs", Integer.class));
-	// //
-	// // settings.getStages().add(pStage);
-	// // }
-	// // }
-	// return settings;
-	// }
 
 	public static SimilaritySettings createOffSimilaritySettings() {
 		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
@@ -510,6 +392,15 @@ public class ScenarioUtils {
 		}
 	}
 
+	public static void setCleanStateStageIterations(final OptimisationPlan plan, final int iterations) {
+		for (final OptimisationStage stage : plan.getStages()) {
+			if (stage instanceof CleanStateOptimisationStage) {
+				final CleanStateOptimisationStage cleanStateOptimisationStage = (CleanStateOptimisationStage) stage;
+				cleanStateOptimisationStage.getAnnealingSettings().setIterations(iterations);
+			}
+		}
+	}
+
 	public static void setHillClimbStageIterations(final OptimisationPlan plan, final int iterations) {
 		for (final OptimisationStage stage : plan.getStages()) {
 			if (stage instanceof HillClimbOptimisationStage) {
@@ -564,7 +455,7 @@ public class ScenarioUtils {
 		if (solutionBuilderSettings != null) {
 			ConstraintAndFitnessSettings settings = solutionBuilderSettings.getConstraintAndFitnessSettings();
 			// No fitness (yet)
-			// createOrUpdateObjective(name, enabled, weight, settings);
+			createOrUpdateObjective(name, enabled, weight, settings);
 		}
 	}
 
