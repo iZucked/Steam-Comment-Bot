@@ -75,6 +75,7 @@ import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
 import com.mmxlabs.models.util.StringEscaper;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -208,14 +209,9 @@ public final class OptimisationHelper {
 
 						final Display display = Display.getDefault();
 						if (display != null) {
-							display.asyncExec(new Runnable() {
-
-								@Override
-								public void run() {
-									final String message = StringEscaper.escapeUIString(ex.getMessage());
-									MessageDialog.openError(display.getActiveShell(), "Error starting optimisation", "An error occured. See Error Log for more details.\n" + message);
-								}
-
+							display.asyncExec(() -> {
+								final String message = StringEscaper.escapeUIString(ex.getMessage());
+								MessageDialog.openError(display.getActiveShell(), "Error starting optimisation", "An error occured. See Error Log for more details.\n" + message);
 							});
 						}
 					}
@@ -249,10 +245,10 @@ public final class OptimisationHelper {
 			}
 		});
 
-		final IValidationService helper = Activator.getDefault().getValidationService();
-		final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(root, false);
-
-		final IStatus status = helper.runValidation(validator, extraContext, Collections.singleton(root));
+		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
+			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(root, false);
+			return helper.runValidation(validator, extraContext, Collections.singleton(root));
+		});
 
 		if (status == null) {
 			return false;

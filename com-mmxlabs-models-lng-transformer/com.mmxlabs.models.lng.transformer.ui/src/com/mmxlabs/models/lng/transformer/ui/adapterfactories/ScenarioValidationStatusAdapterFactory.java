@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IValidationService;
+import com.mmxlabs.rcp.common.ServiceHelper;
 
 /**
  * {@link IAdapterFactory} to adapt a Resource to an IStatus indicating the validation status of the resource's scenario.
@@ -27,10 +28,6 @@ import com.mmxlabs.models.ui.validation.IValidationService;
  * 
  */
 public class ScenarioValidationStatusAdapterFactory implements IAdapterFactory {
-
-	public ScenarioValidationStatusAdapterFactory() {
-		Activator.getDefault().getValidationService();
-	}
 
 	@Override
 	public <T> T getAdapter(final Object adaptableObject, final Class<T> adapterType) {
@@ -60,9 +57,9 @@ public class ScenarioValidationStatusAdapterFactory implements IAdapterFactory {
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
 		validator.setOption(IBatchValidator.OPTION_TRACK_RESOURCES, true);
 
-		final IValidationService helper = Activator.getDefault().getValidationService();
-
-		return helper.runValidation(validator, new DefaultExtraValidationContext(rootObject, false), Collections.singleton(rootObject));
+		return ServiceHelper.withService(IValidationService.class, helper -> {
+			return helper.runValidation(validator, new DefaultExtraValidationContext(rootObject, false), Collections.singleton(rootObject));
+		});
 	}
 
 	@Override
