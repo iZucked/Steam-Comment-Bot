@@ -17,12 +17,10 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
-import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -37,14 +35,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.util.CheckedConsumer;
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.lingo.its.tests.LNGScenarioRunnerCreator;
 import com.mmxlabs.lingo.its.uat.suite.testers.GlobalUATTestsConfig;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
@@ -55,6 +54,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 
 /**
  * Abstract class with methods to extract features from given EMF models for use in producing test files and comparisons for clients. Expected to be subclassed on a per client, per contract basis.
@@ -93,28 +93,27 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 
 	}
 
-	protected LNGScenarioRunner getScenarioRunner(@NonNull final String filePath, final boolean isLingoFile) throws Exception {
+	protected void withScenarioRunner(@NonNull final String filePath, final boolean isLingoFile, CheckedConsumer<LNGScenarioRunner, Exception> consumer) throws Exception {
 		final URL url = getClass().getResource(filePath);
 		Assert.assertNotNull(url);
-		final LNGScenarioRunner runner;
 		if (isLingoFile) {
-			runner = LNGScenarioRunnerCreator.createScenarioRunnerForEvaluation(url, false);
+			LNGScenarioRunnerCreator.withLiNGOFileEvaluationRunner(url, consumer);
 		} else {
-			runner = null;
+			throw new UnsupportedOperationException();
 		}
-		return runner;
 	}
 
-	protected LNGScenarioRunner getScenarioRunner(@NonNull final String filePath) throws Exception {
+	protected void withScenarioRunner(@NonNull final String filePath, CheckedConsumer<LNGScenarioRunner, Exception> consumer) throws Exception {
 
-		return getScenarioRunner(filePath, isLingoFile(filePath));
+		withScenarioRunner(filePath, isLingoFile(filePath), consumer);
 	}
 
-	public Schedule getSchedule(@NonNull final String lingoFileName) throws Exception {
-		final LNGScenarioRunner runner = getScenarioRunner(lingoFileName);
-		Assert.assertNotNull(runner);
-		final Schedule schedule = runner.getSchedule();
-		return schedule;
+	public void withSchedule(@NonNull final String lingoFileName, CheckedConsumer<Schedule, Exception> consumer) throws Exception {
+		withScenarioRunner(lingoFileName, runner -> {
+			Assert.assertNotNull(runner);
+			final Schedule schedule = runner.getSchedule();
+			consumer.accept(schedule);
+		});
 	}
 
 	protected boolean isLingoFile(final String filePath) {
@@ -139,9 +138,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 
 			List<EObject> open = new ArrayList<>();
 			List<String> handles = new ArrayList<>();
-			
-			
-		
+
 			open.add(containedObj);
 			handles.add(prefix);
 
@@ -166,7 +163,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 
 				List<EObject> child_containers = current_container.eContents();
 
-				if(current_class == SchedulePackage.Literals.GROUP_PROFIT_AND_LOSS){
+				if (current_class == SchedulePackage.Literals.GROUP_PROFIT_AND_LOSS) {
 					child_containers = orderEntities(child_containers);
 				}
 
@@ -179,7 +176,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 
 					Pair<List<String>, String> name_comparison_results = uniqueHeading(container_names, child_handle);
 					container_names = name_comparison_results.getFirst();
-					String current_name =  name_comparison_results.getSecond();
+					String current_name = name_comparison_results.getSecond();
 
 					String new_handle = handles.get(0).concat(current_name);
 					handles.add(new_handle);
@@ -200,14 +197,14 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 
 		int con_count = 0;
 		for (EObject child_container : containers) {
-			assert(SchedulePackage.Literals.ENTITY_PROFIT_AND_LOSS.isInstance(child_container));
+			assert (SchedulePackage.Literals.ENTITY_PROFIT_AND_LOSS.isInstance(child_container));
 			objects.add(child_container);
 			EClass child_class = child_container.eClass();
 			String info = "";
 			String[] results = new String[3];
 			for (final EStructuralFeature e : getFeatures(child_class)) {
 
-				if (e == SchedulePackage.Literals.ENTITY_PROFIT_AND_LOSS__ENTITY ) {
+				if (e == SchedulePackage.Literals.ENTITY_PROFIT_AND_LOSS__ENTITY) {
 					BaseLegalEntity ble = (BaseLegalEntity) child_container.eGet(e);
 					String name = ble.getName();
 					results[2] = name;
@@ -233,11 +230,10 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		for (String info_string : information) {
 			int ind = Integer.parseInt(info_string.split("/")[3]);
 			ordered_objects.add(objects.get(ind));
-		}	
+		}
 
 		return ordered_objects;
 	}
-	
 
 	private Pair<List<String>, String> uniqueHeading(List<String> names, String name) {
 		Pair<List<String>, String> result = new Pair<>();
@@ -384,14 +380,14 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 	}
 
 	public void createPropertiesForCase(@NonNull final String lingoFileName, @NonNull final String cargoName) throws Exception {
-		final Schedule schedule = getSchedule(lingoFileName);
+		withSchedule(lingoFileName, schedule -> {
+			final Properties props = getNewProperties(lingoFileName);
+			final URL propsURL = getPropertiesURL(lingoFileName, "");
 
-		final Properties props = getNewProperties(lingoFileName);
-		final URL propsURL = getPropertiesURL(lingoFileName, "");
+			fillProperties(schedule, cargoName, props);
 
-		fillProperties(schedule, cargoName, props);
-
-		writePropertiesFile(props, propsURL);
+			writePropertiesFile(props, propsURL);
+		});
 	}
 
 	public void createPropertiesForTypedCase(@NonNull final Schedule schedule, @NonNull final String lingoFileName, @NonNull final String cargoName) throws Exception {
@@ -455,16 +451,17 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 	public void checkPropertiesForCase(@NonNull final String lingoFileName, @NonNull final String cargoName, final boolean additionalChecks) throws Exception {
 		final Properties props = getExistingProperties(lingoFileName, "");
 
-		final Schedule schedule = getSchedule(lingoFileName);
+		withSchedule(lingoFileName, schedule -> {
 
-		final List<IdMapContainer> idMapContainers = getIdMapContainers(schedule, cargoName);
-		for (final IdMapContainer d : idMapContainers) {
-			comparePropertiesToLingo(props, d.getIdMapList(), d.name, cargoName);
-		}
+			final List<IdMapContainer> idMapContainers = getIdMapContainers(schedule, cargoName);
+			for (final IdMapContainer d : idMapContainers) {
+				comparePropertiesToLingo(props, d.getIdMapList(), d.name, cargoName);
+			}
 
-		if (additionalChecks) {
-			additionalChecks(schedule, cargoName);
-		}
+			if (additionalChecks) {
+				additionalChecks(schedule, cargoName);
+			}
+		});
 	}
 
 	public void checkPropertiesForTypedCase(@NonNull final Schedule schedule, @NonNull final String lingoFileName, @NonNull final String cargoName, final boolean additionalChecks) throws Exception {

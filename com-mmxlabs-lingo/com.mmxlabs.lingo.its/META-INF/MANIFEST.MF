@@ -49,7 +49,8 @@ Require-Bundle: org.junit;bundle-version="4.8.1",
  org.eclipse.emf.common,
  com.mmxlabs.models.lng.cargo,
  com.mmxlabs.models.ui,
- org.eclipse.core.commands
+ org.eclipse.core.commands,
+ com.mmxlabs.models.common
 Bundle-ClassPath: data/,
  .
 Import-Package: org.slf4j;version="1.6.4"

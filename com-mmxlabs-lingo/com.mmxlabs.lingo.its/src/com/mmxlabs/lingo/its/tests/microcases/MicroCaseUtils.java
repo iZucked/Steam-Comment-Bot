@@ -15,9 +15,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
@@ -38,14 +35,13 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEva
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.impl.DefaultBreakEvenEvaluator;
 
 public class MicroCaseUtils {
-	private void storeToFile(final LNGScenarioModel lngScenarioModel, final String name) throws IOException {
+	public static void storeToFile(final LNGScenarioModel lngScenarioModel, final String name) throws IOException {
 		ServiceHelper.withCheckedService(IMigrationRegistry.class, migrationRegistry -> {
 			storeToFile(lngScenarioModel, migrationRegistry, new File(String.format("C://temp//%s.lingo", name)));
 		});
 	}
 
-	private void storeToFile(final LNGScenarioModel lngScenarioModel, final IMigrationRegistry migrationRegistry, final File output) throws IOException {
-
+	public static void storeToFile(final LNGScenarioModel lngScenarioModel, final IMigrationRegistry migrationRegistry, final File output) throws IOException {
 		final ScenarioInstance instance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
 
 		final String scenarioVersionContext = migrationRegistry.getDefaultMigrationContext();
@@ -76,9 +72,7 @@ public class MicroCaseUtils {
 
 		instance.setMetadata(metadata);
 
-		instance.setInstance(EcoreUtil.copy(lngScenarioModel));
 		ScenarioStorageUtil.storeToFile(instance, output);
-
 	}
 
 	public static <T> T getClassFromInjector(@NonNull LNGScenarioToOptimiserBridge bridge, @NonNull Class<T> clazz) {

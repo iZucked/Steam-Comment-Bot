@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lingo.its.tests.csv.scenarios;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.junit.Test;
@@ -23,7 +21,7 @@ public class TestOptimisationResult1 extends AbstractOptimisationResultTester {
 
 	@Test
 	@Category(OptimisationTest.class)
-	public void testOptimisationResult() throws IOException, InterruptedException, IncompleteScenarioException, URISyntaxException {
+	public void testOptimisationResult() throws Exception {
 
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/sample-data/");

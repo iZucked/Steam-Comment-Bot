@@ -20,7 +20,6 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 
 public class TimeWindowsTests extends AbstractOptimisationResultTester {
 
@@ -31,13 +30,13 @@ public class TimeWindowsTests extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/time-windows/L D D D 1.lingo");
 		Assert.assertNotNull(url);
-		final LNGScenarioRunner runner = runScenarioWithGCO(new LiNGOTestDataProvider(url));
-		Assert.assertNotNull(runner);
-		Schedule schedule = runner.getSchedule();
-		Assert.assertNotNull(schedule);
+		runScenarioWithGCO(new LiNGOTestDataProvider(url), runner -> {
+			Assert.assertNotNull(runner);
+			Schedule schedule = runner.getSchedule();
+			Assert.assertNotNull(schedule);
 
-		checkLoadAndDischargeTime(schedule, 3, 4);
-
+			checkLoadAndDischargeTime(schedule, 3, 4);
+		});
 	}
 
 	@Ignore
@@ -47,12 +46,14 @@ public class TimeWindowsTests extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/time-windows/L D D D 2.lingo");
 		Assert.assertNotNull(url);
-		final LNGScenarioRunner runner = runScenarioWithGCO(new LiNGOTestDataProvider(url));
-		Assert.assertNotNull(runner);
-		Schedule schedule = runner.getSchedule();
-		Assert.assertNotNull(schedule);
+		runScenarioWithGCO(new LiNGOTestDataProvider(url), runner -> {
+			Assert.assertNotNull(runner);
+			Schedule schedule = runner.getSchedule();
+			Assert.assertNotNull(schedule);
 
-		checkLoadAndDischargeTime(schedule, 3, 5);
+			checkLoadAndDischargeTime(schedule, 3, 5);
+
+		});
 
 	}
 
@@ -63,12 +64,14 @@ public class TimeWindowsTests extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/time-windows/L D D L 1.lingo");
 		Assert.assertNotNull(url);
-		final LNGScenarioRunner runner = runScenarioWithGCO(new LiNGOTestDataProvider(url));
-		Assert.assertNotNull(runner);
-		Schedule schedule = runner.getSchedule();
-		Assert.assertNotNull(schedule);
+		runScenarioWithGCO(new LiNGOTestDataProvider(url), runner -> {
 
-		checkLoadAndDischargeTime(schedule, 3, 5);
+			Assert.assertNotNull(runner);
+			Schedule schedule = runner.getSchedule();
+			Assert.assertNotNull(schedule);
+
+			checkLoadAndDischargeTime(schedule, 3, 5);
+		});
 
 	}
 
@@ -79,12 +82,12 @@ public class TimeWindowsTests extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/time-windows/L D D L 2.lingo");
 		Assert.assertNotNull(url);
-		final LNGScenarioRunner runner = runScenarioWithGCO(new LiNGOTestDataProvider(url));
-		Assert.assertNotNull(runner);
-		Schedule schedule = runner.getSchedule();
-		Assert.assertNotNull(schedule);
-
-		checkLoadAndDischargeTime(schedule, 4, 4);
+		runScenarioWithGCO(new LiNGOTestDataProvider(url), runner -> {
+			Assert.assertNotNull(runner);
+			Schedule schedule = runner.getSchedule();
+			Assert.assertNotNull(schedule);
+			checkLoadAndDischargeTime(schedule, 4, 4);
+		});
 
 	}
 
@@ -95,13 +98,13 @@ public class TimeWindowsTests extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/time-windows/simpleLD.lingo");
 		Assert.assertNotNull(url);
-		final LNGScenarioRunner runner = runScenarioWithGCO(new LiNGOTestDataProvider(url));
-		Assert.assertNotNull(runner);
-		Schedule schedule = runner.getSchedule();
-		Assert.assertNotNull(schedule);
+		runScenarioWithGCO(new LiNGOTestDataProvider(url), runner -> {
+			Assert.assertNotNull(runner);
+			Schedule schedule = runner.getSchedule();
+			Assert.assertNotNull(schedule);
 
-		checkLoadAndDischargeTime(schedule, 4, 4);
-
+			checkLoadAndDischargeTime(schedule, 4, 4);
+		});
 	}
 
 	private void checkLoadAndDischargeTime(Schedule schedule, int loadMonth, int dischargeMonth) {

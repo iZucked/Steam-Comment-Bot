@@ -20,7 +20,6 @@ import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 
 public class CharterOutTests extends AbstractOptimisationResultTester {
 
@@ -29,16 +28,16 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 	public void UAT_CharterOut_1() throws Exception {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/charter-out/gco-barca-bonny-point fortin-min days 60.lingo");
+		LNGScenarioRunnerCreator.withLiNGOFileLegacyEvaluationRunner(url, true, runner -> {
+			Assert.assertNotNull(runner);
 
-		final LNGScenarioRunner runner = LNGScenarioRunnerCreator.createScenarioRunnerForEvaluation(url, true);
-		Assert.assertNotNull(runner);
+			// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
+			final Schedule schedule = runner.getSchedule();
+			Assert.assertNotNull(schedule);
 
-		// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
-		final Schedule schedule = runner.getSchedule();
-		Assert.assertNotNull(schedule);
-
-		List<GeneratedCharterOut> charterOuts = findGCOEvents(schedule.getSequences().get(0));
-		Assert.assertEquals(charterOuts.size(), 0);
+			List<GeneratedCharterOut> charterOuts = findGCOEvents(schedule.getSequences().get(0));
+			Assert.assertEquals(charterOuts.size(), 0);
+		});
 	}
 
 	@Test
@@ -47,22 +46,23 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/charter-out/gco-barca-bonny-point fortin.lingo");
 
-		final LNGScenarioRunner runner = LNGScenarioRunnerCreator.createScenarioRunnerForEvaluation(url, true);
-		Assert.assertNotNull(runner);
+		LNGScenarioRunnerCreator.withLiNGOFileLegacyEvaluationRunner(url, true, runner -> {
+			Assert.assertNotNull(runner);
 
-		// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
-		final Schedule schedule = runner.getSchedule();
-		Assert.assertNotNull(schedule);
+			// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
+			final Schedule schedule = runner.getSchedule();
+			Assert.assertNotNull(schedule);
 
-		List<GeneratedCharterOut> charterOuts = findGCOEvents(schedule.getSequences().get(0));
-		Assert.assertEquals(charterOuts.size(), 1);
+			List<GeneratedCharterOut> charterOuts = findGCOEvents(schedule.getSequences().get(0));
+			Assert.assertEquals(charterOuts.size(), 1);
 
-		GeneratedCharterOut gco = charterOuts.get(0);
-		Assert.assertEquals(gco.getPort().getName(), "Bonny Is");
-		Assert.assertEquals(gco.getDuration(), 1307);
-		Assert.assertEquals(gco.getGroupProfitAndLoss().getProfitAndLoss(), 5173541);
-		Assert.assertEquals(ballastBeforeOrAfter(gco, true), true); // ballast before
-		Assert.assertEquals(ballastBeforeOrAfter(gco, false), false); // no ballast after
+			GeneratedCharterOut gco = charterOuts.get(0);
+			Assert.assertEquals(gco.getPort().getName(), "Bonny Is");
+			Assert.assertEquals(gco.getDuration(), 1307);
+			Assert.assertEquals(gco.getGroupProfitAndLoss().getProfitAndLoss(), 5173541);
+			Assert.assertEquals(ballastBeforeOrAfter(gco, true), true); // ballast before
+			Assert.assertEquals(ballastBeforeOrAfter(gco, false), false); // no ballast after
+		});
 	}
 
 	@Test
@@ -71,22 +71,23 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/charter-out/gco-barca-point fortin.lingo");
 
-		final LNGScenarioRunner runner = LNGScenarioRunnerCreator.createScenarioRunnerForEvaluation(url, true);
-		Assert.assertNotNull(runner);
+		LNGScenarioRunnerCreator.withLiNGOFileLegacyEvaluationRunner(url, true, runner -> {
+			Assert.assertNotNull(runner);
 
-		// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
-		final Schedule schedule = runner.getSchedule();
-		Assert.assertNotNull(schedule);
+			// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
+			final Schedule schedule = runner.getSchedule();
+			Assert.assertNotNull(schedule);
 
-		List<GeneratedCharterOut> charterOuts = findGCOEvents(schedule.getSequences().get(0));
-		Assert.assertEquals(charterOuts.size(), 1);
+			List<GeneratedCharterOut> charterOuts = findGCOEvents(schedule.getSequences().get(0));
+			Assert.assertEquals(charterOuts.size(), 1);
 
-		GeneratedCharterOut gco = charterOuts.get(0);
-		Assert.assertEquals(gco.getPort().getName(), "Barcelona");
-		Assert.assertEquals(gco.getDuration(), 1293);
-		Assert.assertEquals(gco.getGroupProfitAndLoss().getProfitAndLoss(), 4371850);
-		Assert.assertEquals(ballastBeforeOrAfter(gco, true), true); // ballast before
-		Assert.assertEquals(ballastBeforeOrAfter(gco, false), true); // ballast after
+			GeneratedCharterOut gco = charterOuts.get(0);
+			Assert.assertEquals(gco.getPort().getName(), "Barcelona");
+			Assert.assertEquals(gco.getDuration(), 1293);
+			Assert.assertEquals(gco.getGroupProfitAndLoss().getProfitAndLoss(), 4371850);
+			Assert.assertEquals(ballastBeforeOrAfter(gco, true), true); // ballast before
+			Assert.assertEquals(ballastBeforeOrAfter(gco, false), true); // ballast after
+		});
 	}
 
 	private List<GeneratedCharterOut> findGCOEvents(Sequence sequence) {

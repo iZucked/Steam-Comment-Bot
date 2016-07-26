@@ -15,7 +15,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Fitness;
 
 @RunWith(Parameterized.class)
@@ -45,37 +44,32 @@ public class IOTesterLiNGO {
 
 		});
 	}
-	
-	
+
 	@Test
 	public void testLiNGOInOut() throws Exception {
-		
+
 		final URL url = getClass().getResource(scenarioPath);
-		
-		LNGScenarioModel testCase = IOTestUtil.URLtoScenarioLiNGO(url);
 
-		EList<Fitness> originalFitnesses = IOTestUtil.ScenarioModeltoFitnessList(testCase);
+		final ITestDataProvider testCaseProvider = new LiNGOTestDataProvider(url);
+		testCaseProvider.execute(testCase -> {
 
-		long[] originalArray = IOTestUtil.fitnessListToArrayValues(originalFitnesses);		
+			EList<Fitness> originalFitnesses = IOTestUtil.ScenarioModeltoFitnessList(testCase);
+			long[] originalArray = IOTestUtil.fitnessListToArrayValues(originalFitnesses);
+			File restoredFile = IOTestUtil.exportTestCase(testCase);
 
-		File restoredFile = IOTestUtil.exportTestCase(testCase);
-		
-		try {
-			
-			URL restoredURL = IOTestUtil.directoryFileToURL(restoredFile);
-			
-			LNGScenarioModel restoredCase = IOTestUtil.URLtoScenarioCSV(restoredURL);
-	
-			EList<Fitness> restoredFitnesses = IOTestUtil.ScenarioModeltoFitnessList(restoredCase);
-	
-			long[] restoredArray = IOTestUtil.fitnessListToArrayValues(restoredFitnesses);
-			
-			Assert.assertArrayEquals(originalArray, restoredArray);
-			
-		} finally{
-			// Delete temporary directory
-			IOTestUtil.tempDirectoryTeardown(restoredFile);
-		}
-		
+			try {
+
+				URL restoredURL = IOTestUtil.directoryFileToURL(restoredFile);
+				final ITestDataProvider restoredCaseProvider = new CSVTestDataProvider(restoredURL);
+				restoredCaseProvider.execute(restoredCase -> {
+					EList<Fitness> restoredFitnesses = IOTestUtil.ScenarioModeltoFitnessList(restoredCase);
+					long[] restoredArray = IOTestUtil.fitnessListToArrayValues(restoredFitnesses);
+					Assert.assertArrayEquals(originalArray, restoredArray);
+				});
+			} finally {
+				// Delete temporary directory
+				IOTestUtil.tempDirectoryTeardown(restoredFile);
+			}
+		});
 	}
 }

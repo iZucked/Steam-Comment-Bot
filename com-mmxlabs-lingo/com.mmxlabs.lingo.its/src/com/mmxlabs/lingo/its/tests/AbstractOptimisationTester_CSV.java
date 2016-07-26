@@ -41,6 +41,6 @@ public abstract class AbstractOptimisationTester_CSV extends AbstractOptimisatio
 	@Test
 	public void testOptimisation() throws Exception {
 		final URL url = getClass().getResource(scenario);
-		runScenarioWithGCO(new CSVTestDataProvider(url));
+		runScenarioWithGCO(new CSVTestDataProvider(url), null);
 	}
 }

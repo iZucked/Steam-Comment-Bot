@@ -25,7 +25,7 @@ public class TestDemoCases extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/demo-cases/Bonny problems/0 Bonny.lingo");
 
-		runScenarioWithGCO(new LiNGOTestDataProvider(url));
+		runScenarioWithGCO(new LiNGOTestDataProvider(url),null);
 	}
 
 	@Test

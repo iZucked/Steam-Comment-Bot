@@ -43,6 +43,6 @@ public abstract class AbstractOptimisationTester_LiNGO extends AbstractOptimisat
 
 		// Load the scenario to test
 		final URL scenarioURL = getClass().getResource(scenario);
-		runScenarioWithGCO(new LiNGOTestDataProvider(scenarioURL));
+		runScenarioWithGCO(new LiNGOTestDataProvider(scenarioURL), null);
 	}
 }

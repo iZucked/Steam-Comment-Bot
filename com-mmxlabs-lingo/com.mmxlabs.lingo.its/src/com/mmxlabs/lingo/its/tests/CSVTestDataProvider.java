@@ -11,23 +11,18 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.util.CheckedConsumer;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
 
 public class CSVTestDataProvider implements ITestDataProvider {
 
 	private URL scenarioURL;
-	private LNGScenarioModel scenarioModel;
 
 	public CSVTestDataProvider(URL scenarioURL) throws MalformedURLException {
 		this.scenarioURL = scenarioURL;
-		this.scenarioModel = CSVImporter.importCSVScenario(scenarioURL.toString());
-	}
-
-	@Override
-	public LNGScenarioModel getScenarioModel() {
-		return scenarioModel;
 	}
 
 	@Override
@@ -43,4 +38,10 @@ public class CSVTestDataProvider implements ITestDataProvider {
 		return propertiesFile;
 	}
 
+	@Override
+	public <E extends Exception> void execute(CheckedConsumer<@NonNull LNGScenarioModel, E> testRunner) throws E, MalformedURLException {
+		@NonNull
+		LNGScenarioModel scenarioModel = CSVImporter.importCSVScenario(scenarioURL.toString());
+		testRunner.accept(scenarioModel);
+	}
 }

@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.its.tests;
 import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
+
 import org.eclipse.emf.common.util.EList;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,14 +15,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Fitness;
 
 @RunWith(Parameterized.class)
 public class IOTesterCSV {
 
-	private String name;
-	private String scenarioPath;
+	private final String name;
+	private final String scenarioPath;
 
 	public IOTesterCSV(final String name, final String scenarioPath) throws Exception {
 
@@ -49,35 +49,28 @@ public class IOTesterCSV {
 
 		final URL url = getClass().getResource(this.scenarioPath);
 
-		LNGScenarioModel testCase = IOTestUtil.URLtoScenarioCSV(url);
+		final ITestDataProvider testCaseProvider = new CSVTestDataProvider(url);
+		testCaseProvider.execute(testCase -> {
+			EList<Fitness> originalFitnesses = IOTestUtil.ScenarioModeltoFitnessList(testCase);
+			long[] originalArray = IOTestUtil.fitnessListToArrayValues(originalFitnesses);
+			File restoredFile = IOTestUtil.exportTestCase(testCase);
 
-		EList<Fitness> originalFitnesses = IOTestUtil.ScenarioModeltoFitnessList(testCase);
+			try {
 
-		long[] originalArray = IOTestUtil.fitnessListToArrayValues(originalFitnesses);
-		
-		File restoredFile = IOTestUtil.exportTestCase(testCase);
-			
-		try {
-			
-			URL restoredURL = IOTestUtil.directoryFileToURL(restoredFile);
-			
-			LNGScenarioModel restoredCase = IOTestUtil.URLtoScenarioCSV(restoredURL);
-	
-			EList<Fitness> restoredFitnesses = IOTestUtil.ScenarioModeltoFitnessList(restoredCase);
-	
-			long[] restoredArray = IOTestUtil.fitnessListToArrayValues(restoredFitnesses);
-			
-			Assert.assertArrayEquals(originalArray, restoredArray);
-			
-		} finally{
-			// Delete temporary directory
-			IOTestUtil.tempDirectoryTeardown(restoredFile);
-		}
+				URL restoredURL = IOTestUtil.directoryFileToURL(restoredFile);
 
-		
-		
+				final ITestDataProvider restoredCaseProvider = new CSVTestDataProvider(restoredURL);
+				restoredCaseProvider.execute(restoredCase -> {
+					EList<Fitness> restoredFitnesses = IOTestUtil.ScenarioModeltoFitnessList(restoredCase);
+					long[] restoredArray = IOTestUtil.fitnessListToArrayValues(restoredFitnesses);
+					Assert.assertArrayEquals(originalArray, restoredArray);
+				});
+			} finally {
+				// Delete temporary directory
+				IOTestUtil.tempDirectoryTeardown(restoredFile);
+			}
 
-		
+		});
 
 	}
 

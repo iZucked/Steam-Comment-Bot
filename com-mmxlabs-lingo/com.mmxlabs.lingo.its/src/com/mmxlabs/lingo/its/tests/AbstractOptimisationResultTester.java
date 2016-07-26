@@ -13,13 +13,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -29,6 +29,7 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceRegistration;
 
 import com.mmxlabs.common.NonNullPair;
+import com.mmxlabs.common.util.CheckedConsumer;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalCalendarReportView;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
@@ -107,18 +108,6 @@ public class AbstractOptimisationResultTester {
 	// // Register a cipher provider with the osgi framework for running these tests
 	private static ServiceRegistration<IScenarioCipherProvider> cipherServiceRef = null;
 
-	protected static ExecutorService executorService;
-
-	@BeforeClass
-	public static void createExecutorService() {
-		executorService = Executors.newFixedThreadPool(1);
-	}
-
-	@AfterClass
-	public static void shutdownExecutorService() {
-		executorService.shutdownNow();
-	}
-
 	@BeforeClass
 	public static void registerCipherProvider() {
 		final Bundle bundle = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class);
@@ -142,24 +131,36 @@ public class AbstractOptimisationResultTester {
 		super();
 	}
 
-	@NonNull
-	public LNGScenarioRunner runScenario(@NonNull ITestDataProvider testDataProvider) throws IOException {
-
-		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, testDataProvider.getScenarioModel(), null, 10_000);
-		assert scenarioRunner != null;
-
-		optimiseScenario(scenarioRunner, testDataProvider);
-		return scenarioRunner;
+	public void runScenario(@NonNull ITestDataProvider testDataProvider) throws Exception {
+		runScenario(testDataProvider, null);
 	}
 
-	@NonNull
-	public LNGScenarioRunner runScenarioWithGCO(ITestDataProvider testDataProvider) throws IOException {
+	public void runScenario(@NonNull ITestDataProvider testDataProvider, @Nullable Consumer<LNGScenarioRunner> consumer) throws Exception {
 
-		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, testDataProvider.getScenarioModel(), true, 10_000);
-		assert scenarioRunner != null;
+		testDataProvider.execute(scenarioModel -> {
+			LNGScenarioRunnerCreator.withLegacyOptimisationRunner(scenarioModel, null, 10_000, scenarioRunner -> {
+				optimiseScenario(scenarioRunner, testDataProvider);
+				if (consumer != null) {
+					consumer.accept(scenarioRunner);
+				}
+			});
+		});
+	}
 
-		optimiseScenario(scenarioRunner, testDataProvider);
-		return scenarioRunner;
+	public <E extends Exception> void runScenarioWithGCO(@NonNull ITestDataProvider testDataProvider) throws E, Exception {
+		runScenarioWithGCO(testDataProvider, null);
+	}
+
+	public <E extends Exception> void runScenarioWithGCO(@NonNull ITestDataProvider testDataProvider, @Nullable CheckedConsumer<LNGScenarioRunner, E> consumer) throws E, Exception {
+
+		testDataProvider.execute(scenarioModel -> {
+			LNGScenarioRunnerCreator.withLegacyOptimisationRunner(scenarioModel, true, 10_000, scenarioRunner -> {
+				optimiseScenario(scenarioRunner, testDataProvider);
+				if (consumer != null) {
+					consumer.accept(scenarioRunner);
+				}
+			});
+		});
 	}
 
 	public static void optimiseBasicScenario(@NonNull final LNGScenarioRunner scenarioRunner, @NonNull final ITestDataProvider testDataProvider) throws IOException {

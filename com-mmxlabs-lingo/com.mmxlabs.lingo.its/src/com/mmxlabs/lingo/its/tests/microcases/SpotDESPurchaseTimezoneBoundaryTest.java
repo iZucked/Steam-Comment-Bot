@@ -10,7 +10,6 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -24,7 +23,6 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 
 public class SpotDESPurchaseTimezoneBoundaryTest extends AbstractOptimisationResultTester {
 
@@ -38,32 +36,31 @@ public class SpotDESPurchaseTimezoneBoundaryTest extends AbstractOptimisationRes
 	 */
 	@Test
 	@Category(QuickTest.class)
-	public void spotDESPurchaseTimezoneBoundaryTest() throws IOException, InterruptedException, IncompleteScenarioException, URISyntaxException {
+	public void spotDESPurchaseTimezoneBoundaryTest() throws Exception {
 
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/micro-cases/spot-slot-timezone/");
 
-		@NonNull
-		LNGScenarioRunner runner = runScenarioWithGCO(new CSVTestDataProvider(url));
+		runScenarioWithGCO(new CSVTestDataProvider(url), runner -> {
 
-		// runner.updateScenario();
-		final Schedule schedule = runner.getSchedule();
-		Assert.assertNotNull(schedule);
+			// runner.updateScenario();
+			final Schedule schedule = runner.getSchedule();
+			Assert.assertNotNull(schedule);
 
-		// Expect only two spot cargoes in Jan
-		Assert.assertNotNull(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2014-01-0", schedule));
-		Assert.assertNotNull(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2014-01-1", schedule));
+			// Expect only two spot cargoes in Jan
+			Assert.assertNotNull(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2014-01-0", schedule));
+			Assert.assertNotNull(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2014-01-1", schedule));
 
-		// Should not expect a third Jan cargo
-		Assert.assertNull(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2014-01-2", schedule));
-		// Should not expect a cargo in Dec or Feb
-		Assert.assertNull(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2013-12-0", schedule));
-		Assert.assertNull(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2014-02-0", schedule));
+			// Should not expect a third Jan cargo
+			Assert.assertNull(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2014-01-2", schedule));
+			// Should not expect a cargo in Dec or Feb
+			Assert.assertNull(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2013-12-0", schedule));
+			Assert.assertNull(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2014-02-0", schedule));
 
-		// Check the two valid cargoes
-		checkCargoAllocation(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2014-01-0", schedule));
-		checkCargoAllocation(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2014-01-1", schedule));
-
+			// Check the two valid cargoes
+			checkCargoAllocation(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2014-01-0", schedule));
+			checkCargoAllocation(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2014-01-1", schedule));
+		});
 	}
 
 	// Make sure the spot slot is on jan 1st, midnight in local timezone

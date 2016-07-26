@@ -29,11 +29,9 @@ import com.mmxlabs.lingo.its.tests.category.OptimisationTest;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.util.SequencesSerialiser;
@@ -181,42 +179,6 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 		final URL url = getClass().getResource(scenarioURL);
 		Assert.assertNotNull(url);
 
-		final LNGScenarioModel originalScenario = LNGScenarioRunnerCreator.getScenarioModelFromURL(url);
-
-		final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
-
-		if (periodStart != null) {
-			userSettings.setPeriodStart(periodStart);
-		}
-		if (periodEnd != null) {
-			userSettings.setPeriodEnd(periodEnd);
-		}
-
-		userSettings.setBuildActionSets(withActionSets);
-		userSettings.setGenerateCharterOuts(withGeneratedCharterOuts);
-		userSettings.setShippingOnly(false);
-		userSettings.setSimilarityMode(mode);
-
-		final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, originalScenario);
-		Assert.assertNotNull(optimisationPlan);
-
-		if (limitedIterations) {
-			// Limit for quick optimisation
-			// LSO Limit
-			ScenarioUtils.setLSOStageIterations(optimisationPlan, 10_000);
-			// Hill climb limit
-			ScenarioUtils.setHillClimbStageIterations(optimisationPlan, 1_000);
-
-		}
-		UserSettings planUserSettings = optimisationPlan.getUserSettings();
-		Assert.assertEquals(withActionSets, planUserSettings.isBuildActionSets());
-		Assert.assertEquals(withGeneratedCharterOuts, planUserSettings.isGenerateCharterOuts());
-		Assert.assertFalse(planUserSettings.isShippingOnly());
-		Assert.assertEquals(periodStart, planUserSettings.getPeriodStart());
-		Assert.assertEquals(periodEnd, planUserSettings.getPeriodEnd());
-
-		// scenarioRunner.initAndEval();
-
 		final List<String> components = new LinkedList<>();
 		if (!limitedIterations) {
 			components.add("full-iters");
@@ -231,96 +193,137 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 		// if (withShippingOnly) {
 		// components.add("shipping");
 		// }
+
 		LiNGOTestDataProvider provider = new LiNGOTestDataProvider(url) {
+			@Override
 			public File getFitnessDataAsFile() throws java.io.IOException, java.net.URISyntaxException {
 				URL fileURL = FileLocator.toFileURL(url);
 				final URL propertiesFile = new URL(fileURL.toString().replaceAll(" ", "%20") + String.format(".%s.properties", Joiner.on(".").join(components)));
 				return new File(propertiesFile.toURI());
 			};
 
+			@Override
 			public URL getFitnessDataAsURL() throws java.io.IOException {
 				final URL propertiesFile = new URL(url.toString() + String.format(".%s.properties", Joiner.on(".").join(components)));
 				return propertiesFile;
 			};
 		};
-		final IRunnerHook runnerHook;
-		if (false) {
-			runnerHook = new AbstractRunnerHook() {
+		provider.execute(originalScenario -> {
 
-				@Override
-				public void doReportSequences(String phase, final ISequences rawSequences, LNGDataTransformer dataTransformer) {
-					switch (phase) {
+			final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 
-					case IRunnerHook.STAGE_LSO:
-					case IRunnerHook.STAGE_HILL:
-					case IRunnerHook.STAGE_INITIAL:
-						verify(phase, rawSequences, dataTransformer.getInjector());
-						break;
-					case IRunnerHook.STAGE_ACTION_SETS:
-						break;
-					}
-				}
+			if (periodStart != null) {
+				userSettings.setPeriodStart(periodStart);
+			}
+			if (periodEnd != null) {
+				userSettings.setPeriodEnd(periodEnd);
+			}
 
-				@Override
-				public ISequences doGetPrestoredSequences(String stage, LNGDataTransformer dataTransformer) {
-					switch (stage) {
-					case IRunnerHook.STAGE_LSO:
-					case IRunnerHook.STAGE_HILL:
-						// return load(phase);
-					case IRunnerHook.STAGE_INITIAL:
-					case IRunnerHook.STAGE_ACTION_SETS:
-						break;
+			userSettings.setBuildActionSets(withActionSets);
+			userSettings.setGenerateCharterOuts(withGeneratedCharterOuts);
+			userSettings.setShippingOnly(false);
+			userSettings.setSimilarityMode(mode);
 
-					}
-					return null;
-				}
+			final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, originalScenario);
+			Assert.assertNotNull(optimisationPlan);
 
-				private void save(final ISequences rawSequences, final String type, Injector injector) {
-					try {
-						final String suffix = Joiner.on(".").join(components) + "." + type + ".sequences";
-						final URL expectedReportOutput = new URL(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20") + suffix);
-						final File file2 = new File(expectedReportOutput.toURI());
-						try (FileOutputStream fos = new FileOutputStream(file2)) {
-							Assert.assertNotNull(injector);
-							SequencesSerialiser.save(injector.getInstance(IOptimisationData.class), rawSequences, fos);
+			if (limitedIterations) {
+				// Limit for quick optimisation
+				// LSO Limit
+				ScenarioUtils.setLSOStageIterations(optimisationPlan, 10_000);
+				// Hill climb limit
+				ScenarioUtils.setHillClimbStageIterations(optimisationPlan, 1_000);
+
+			}
+			UserSettings planUserSettings = optimisationPlan.getUserSettings();
+			Assert.assertEquals(withActionSets, planUserSettings.isBuildActionSets());
+			Assert.assertEquals(withGeneratedCharterOuts, planUserSettings.isGenerateCharterOuts());
+			Assert.assertFalse(planUserSettings.isShippingOnly());
+			Assert.assertEquals(periodStart, planUserSettings.getPeriodStart());
+			Assert.assertEquals(periodEnd, planUserSettings.getPeriodEnd());
+
+			// scenarioRunner.initAndEval();
+
+			final IRunnerHook runnerHook;
+			if (false) {
+				runnerHook = new AbstractRunnerHook() {
+
+					@Override
+					public void doReportSequences(String phase, final ISequences rawSequences, LNGDataTransformer dataTransformer) {
+						switch (phase) {
+
+						case IRunnerHook.STAGE_LSO:
+						case IRunnerHook.STAGE_HILL:
+						case IRunnerHook.STAGE_INITIAL:
+							verify(phase, rawSequences, dataTransformer.getInjector());
+							break;
+						case IRunnerHook.STAGE_ACTION_SETS:
+							break;
 						}
-					} catch (final Exception e) {
-						Assert.fail(e.getMessage());
 					}
-				}
 
-				private ISequences load(final String type, Injector injector) {
-					try {
-						final String suffix = Joiner.on(".").join(components) + "." + type + ".sequences";
-						final URL expectedReportOutput = new URL(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20") + suffix);
-						final File file2 = new File(expectedReportOutput.toURI());
-						try (FileInputStream fos = new FileInputStream(file2)) {
-							Assert.assertNotNull(injector);
-							return SequencesSerialiser.load(injector.getInstance(IOptimisationData.class), fos);
+					@Override
+					public ISequences doGetPrestoredSequences(String stage, LNGDataTransformer dataTransformer) {
+						switch (stage) {
+						case IRunnerHook.STAGE_LSO:
+						case IRunnerHook.STAGE_HILL:
+							// return load(phase);
+						case IRunnerHook.STAGE_INITIAL:
+						case IRunnerHook.STAGE_ACTION_SETS:
+							break;
+
 						}
-					} catch (final Exception e) {
-						// return
-						// Assert.fail(e.getMessage());
+						return null;
 					}
-					return null;
-				}
 
-				private void verify(final String type, final ISequences actual, Injector injector) {
-					ISequences expected = load(type, injector);
-					if (actual != null && expected != null) {
-						Assert.assertEquals(expected, actual);
+					private void save(final ISequences rawSequences, final String type, Injector injector) {
+						try {
+							final String suffix = Joiner.on(".").join(components) + "." + type + ".sequences";
+							final URL expectedReportOutput = new URL(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20") + suffix);
+							final File file2 = new File(expectedReportOutput.toURI());
+							try (FileOutputStream fos = new FileOutputStream(file2)) {
+								Assert.assertNotNull(injector);
+								SequencesSerialiser.save(injector.getInstance(IOptimisationData.class), rawSequences, fos);
+							}
+						} catch (final Exception e) {
+							Assert.fail(e.getMessage());
+						}
 					}
-				}
-			};
-		} else {
-			runnerHook = null;
-		}
 
-		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, originalScenario, optimisationPlan);
-		if (runnerHook != null) {
-			scenarioRunner.setRunnerHook(runnerHook);
-		}
-		optimiseBasicScenario(scenarioRunner, provider);
+					private ISequences load(final String type, Injector injector) {
+						try {
+							final String suffix = Joiner.on(".").join(components) + "." + type + ".sequences";
+							final URL expectedReportOutput = new URL(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20") + suffix);
+							final File file2 = new File(expectedReportOutput.toURI());
+							try (FileInputStream fos = new FileInputStream(file2)) {
+								Assert.assertNotNull(injector);
+								return SequencesSerialiser.load(injector.getInstance(IOptimisationData.class), fos);
+							}
+						} catch (final Exception e) {
+							// return
+							// Assert.fail(e.getMessage());
+						}
+						return null;
+					}
+
+					private void verify(final String type, final ISequences actual, Injector injector) {
+						ISequences expected = load(type, injector);
+						if (actual != null && expected != null) {
+							Assert.assertEquals(expected, actual);
+						}
+					}
+				};
+			} else {
+				runnerHook = null;
+			}
+			LNGScenarioRunnerCreator.withOptimisationRunner(originalScenario, optimisationPlan, scenarioRunner -> {
+				if (runnerHook != null) {
+					scenarioRunner.setRunnerHook(runnerHook);
+				}
+				optimiseBasicScenario(scenarioRunner, provider);
+
+			});
+		});
 	}
 
 }
