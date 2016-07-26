@@ -4,18 +4,20 @@
  */
 package com.mmxlabs.common.parser.arithmetic;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.parser.IExpression;
 
 public class NegationOperator extends ArithmeticExpression {
-	final IExpression<Double> argument;
+	final IExpression<@NonNull Double> argument;
 
-	public NegationOperator(IExpression<Double> argument) {
+	public NegationOperator(IExpression<@NonNull Double> argument) {
 		super();
 		this.argument = argument;
 	}
 
 	@Override
-	public Double evaluate() {
+	public @NonNull Double evaluate() {
 		return -argument.evaluate();
 	}
 

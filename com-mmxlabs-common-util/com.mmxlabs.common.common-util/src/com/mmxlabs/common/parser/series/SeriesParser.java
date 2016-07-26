@@ -61,7 +61,7 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 		}
 
 		@Override
-		public ISeries evaluate() {
+		public @NonNull ISeries evaluate() {
 			return construct();
 		}
 	}
@@ -93,14 +93,14 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 			}
 
 			@Override
-			public IExpression<ISeries> createInfixOperator(final char operator, final @NonNull IExpression<ISeries> lhs, final @NonNull IExpression<ISeries> rhs) {
+			public @NonNull IExpression<ISeries> createInfixOperator(final char operator, final @NonNull IExpression<ISeries> lhs, final @NonNull IExpression<ISeries> rhs) {
 				return new SeriesOperatorExpression(operator, lhs, rhs);
 			}
 		});
 
 		setTermFactory(new ITermFactory<ISeries>() {
 			@Override
-			public IExpression<ISeries> createTerm(final @NonNull String term) {
+			public @NonNull IExpression<ISeries> createTerm(final @NonNull String term) {
 				try {
 					final long i = Long.parseLong(term);
 					return new ConstantSeriesExpression(i);
@@ -127,7 +127,7 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 				} else if (name.equals("SHIFT")) {
 					return new IExpression<ISeries>() {
 						@Override
-						public ISeries evaluate() {
+						public @NonNull ISeries evaluate() {
 							return new ShiftedSeries(arguments.get(0).evaluate(), arguments.get(1).evaluate());
 						}
 					};

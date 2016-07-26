@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.parser.ExpressionParser;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.IFunctionFactory;
@@ -56,7 +58,7 @@ public class ArithmeticParser extends ExpressionParser<Double> {
 			}
 
 			@Override
-			public IExpression<Double> createInfixOperator(char operator, IExpression<Double> lhs, IExpression<Double> rhs) {
+			public @NonNull IExpression<Double> createInfixOperator(char operator, IExpression<Double> lhs, IExpression<Double> rhs) {
 				return new ArithmeticOperator(operator, lhs, rhs);
 			}
 		});
@@ -75,7 +77,7 @@ public class ArithmeticParser extends ExpressionParser<Double> {
 
 		setTermFactory(new ITermFactory<Double>() {
 			@Override
-			public IExpression<Double> createTerm(String term) {
+			public @NonNull IExpression<Double> createTerm(String term) {
 				return new ArithmeticTerm(term, variables);
 			}
 		});

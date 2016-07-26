@@ -4,8 +4,10 @@
  */
 package com.mmxlabs.common.parser.arithmetic;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.parser.IExpression;
 
-public abstract class ArithmeticExpression implements IExpression<Double> {
+public abstract class ArithmeticExpression implements IExpression<@NonNull Double> {
 
 }
