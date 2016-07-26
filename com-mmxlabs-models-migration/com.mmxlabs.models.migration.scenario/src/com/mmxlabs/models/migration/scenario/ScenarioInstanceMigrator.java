@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -47,7 +49,7 @@ public class ScenarioInstanceMigrator {
 		this.scenarioCipherProvider = scenarioCipherProvider;
 	}
 
-	public void performMigration(@NonNull final IScenarioService scenarioService, @NonNull final ScenarioInstance scenarioInstance) throws Exception {
+	public void performMigration(@NonNull final IScenarioService scenarioService, @NonNull final ScenarioInstance scenarioInstance, IProgressMonitor monitor) throws Exception {
 		// Check inputs
 		final String scenarioContext = scenarioInstance.getVersionContext();
 		final String clientContext = scenarioInstance.getClientVersionContext();
@@ -70,6 +72,7 @@ public class ScenarioInstanceMigrator {
 		final URI originalURI = scenarioService.resolveURI(subModelURI);
 
 		final List<File> tmpFiles = new ArrayList<File>();
+		monitor.beginTask("Migrate scenario", 100);
 		try {
 			// Copy data files for manipulation
 			assert originalURI != null;
@@ -89,7 +92,8 @@ public class ScenarioInstanceMigrator {
 				currentClientVersion = lastReleaseVersion;
 			}
 			// Apply Migration Chain
-			final int[] migratedVersion = applyMigrationChain(scenarioContext, currentScenarioVersion, latestScenarioVersion, clientContext, currentClientVersion, latestClientVersion, tmpURI);
+			final int[] migratedVersion = applyMigrationChain(scenarioContext, currentScenarioVersion, latestScenarioVersion, clientContext, currentClientVersion, latestClientVersion, tmpURI,
+					new SubProgressMonitor(monitor, 100));
 
 			// Sanity check - can we load the new scenario without error?
 			{
@@ -110,12 +114,12 @@ public class ScenarioInstanceMigrator {
 			}
 			// Make sure the migration has worked!
 			if (migratedVersion[0] != latestScenarioVersion) {
-				throw new ScenarioMigrationException(String.format("Scenario was not migrated to latest version. Expected %d, currently %d.", latestScenarioVersion,
-						scenarioInstance.getScenarioVersion()));
+				throw new ScenarioMigrationException(
+						String.format("Scenario was not migrated to latest version. Expected %d, currently %d.", latestScenarioVersion, scenarioInstance.getScenarioVersion()));
 			}
 			if (migratedVersion[1] != latestClientVersion) {
-				throw new ScenarioMigrationException(String.format("Scenario was not migrated to latest client version. Expected %d, currently %d.", latestClientVersion,
-						scenarioInstance.getClientScenarioVersion()));
+				throw new ScenarioMigrationException(
+						String.format("Scenario was not migrated to latest client version. Expected %d, currently %d.", latestClientVersion, scenarioInstance.getClientScenarioVersion()));
 			}
 
 			// Copy back over original data
@@ -136,6 +140,8 @@ public class ScenarioInstanceMigrator {
 			for (final File f : tmpFiles) {
 				FileDeleter.delete(f);
 			}
+
+			monitor.done();
 		}
 
 	}
@@ -153,29 +159,35 @@ public class ScenarioInstanceMigrator {
 	 * @throws Exception
 	 */
 	public int[] applyMigrationChain(@NonNull final String scenarioContext, final int currentScenarioVersion, final int latestScenarioVersion, @NonNull final String clientContext,
-			final int currentClientVersion, final int latestClientVersion, @NonNull final URI tmpURI) throws Exception {
+			final int currentClientVersion, final int latestClientVersion, @NonNull final URI tmpURI, IProgressMonitor monitor) throws Exception {
 
-		final List<IMigrationUnit> chain = migrationRegistry
-				.getMigrationChain(scenarioContext, currentScenarioVersion, latestScenarioVersion, clientContext, currentClientVersion, latestClientVersion);
+		final List<IMigrationUnit> chain = migrationRegistry.getMigrationChain(scenarioContext, currentScenarioVersion, latestScenarioVersion, clientContext, currentClientVersion,
+				latestClientVersion);
 
 		int scenarioVersion = currentScenarioVersion;
 		int clientVersion = currentClientVersion;
-		for (final IMigrationUnit unit : chain) {
+		monitor.beginTask("Migrate Scenario", chain.size());
+		try {
+			for (final IMigrationUnit unit : chain) {
 
-			unit.migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
+				unit.migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
 
-			if (unit instanceof IClientMigrationUnit) {
-				final IClientMigrationUnit clientMigrationUnit = (IClientMigrationUnit) unit;
-				// Only return real version numbers - ignore snapshot versions
-				if (clientMigrationUnit.getClientDestinationVersion() >= 0) {
-					clientVersion = clientMigrationUnit.getClientDestinationVersion();
+				if (unit instanceof IClientMigrationUnit) {
+					final IClientMigrationUnit clientMigrationUnit = (IClientMigrationUnit) unit;
+					// Only return real version numbers - ignore snapshot versions
+					if (clientMigrationUnit.getClientDestinationVersion() >= 0) {
+						clientVersion = clientMigrationUnit.getClientDestinationVersion();
+					}
 				}
-			}
 
-			// Only return real version numbers - ignore snapshot versions
-			if (unit.getScenarioDestinationVersion() >= 0) {
-				scenarioVersion = unit.getScenarioDestinationVersion();
+				// Only return real version numbers - ignore snapshot versions
+				if (unit.getScenarioDestinationVersion() >= 0) {
+					scenarioVersion = unit.getScenarioDestinationVersion();
+				}
+				monitor.worked(1);
 			}
+		} finally {
+			monitor.done();
 		}
 		return new int[] { scenarioVersion, clientVersion };
 	}

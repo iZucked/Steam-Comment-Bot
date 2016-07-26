@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.models.migration.scenario;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.scenario.service.IScenarioMigrationService;
@@ -20,41 +23,45 @@ public class ScenarioMigrationService implements IScenarioMigrationService {
 	private IScenarioCipherProvider scenarioCipherProvider;
 
 	@Override
-	public void migrateScenario(@NonNull final IScenarioService scenarioService, @NonNull final ScenarioInstance scenarioInstance) throws Exception {
-
-		{
-			String context = scenarioInstance.getVersionContext();
-			if (context == null || context.isEmpty()) {
-				context = migrationRegistry.getDefaultMigrationContext();
-				scenarioInstance.setVersionContext(context);
-				scenarioInstance.setScenarioVersion(0);
+	public void migrateScenario(@NonNull final IScenarioService scenarioService, @NonNull final ScenarioInstance scenarioInstance, final @NonNull IProgressMonitor monitor) throws Exception {
+		monitor.beginTask("Migrate Scenario", 100);
+		try {
+			{
+				String context = scenarioInstance.getVersionContext();
+				if (context == null || context.isEmpty()) {
+					context = migrationRegistry.getDefaultMigrationContext();
+					scenarioInstance.setVersionContext(context);
+					scenarioInstance.setScenarioVersion(0);
+				}
 			}
-		}
-		{
-			String context = scenarioInstance.getClientVersionContext();
+			{
+				String context = scenarioInstance.getClientVersionContext();
 
-			if (context == null || context.isEmpty()) {
-				context = migrationRegistry.getDefaultClientMigrationContext();
-				scenarioInstance.setClientVersionContext(context);
-				scenarioInstance.setClientScenarioVersion(0);
+				if (context == null || context.isEmpty()) {
+					context = migrationRegistry.getDefaultClientMigrationContext();
+					scenarioInstance.setClientVersionContext(context);
+					scenarioInstance.setClientScenarioVersion(0);
+				}
 			}
-		}
-		final String scenarioContext = scenarioInstance.getVersionContext();
-		final String clientContext = scenarioInstance.getClientVersionContext();
+			final String scenarioContext = scenarioInstance.getVersionContext();
+			final String clientContext = scenarioInstance.getClientVersionContext();
 
-		if (scenarioContext != null && getMigrationRegistry().getMigrationContexts().contains(scenarioContext)) {
+			if (scenarioContext != null && getMigrationRegistry().getMigrationContexts().contains(scenarioContext)) {
 
-			final int latestScenarioVersion = getMigrationRegistry().getLatestContextVersion(scenarioContext);
-			final int latestClientVersion = clientContext == null ? 0 : getMigrationRegistry().getLatestClientContextVersion(clientContext);
+				final int latestScenarioVersion = getMigrationRegistry().getLatestContextVersion(scenarioContext);
+				final int latestClientVersion = clientContext == null ? 0 : getMigrationRegistry().getLatestClientContextVersion(clientContext);
 
-			final int scenarioVersion = scenarioInstance.getScenarioVersion();
-			final int clientVersion = clientContext == null ? 0 : scenarioInstance.getClientScenarioVersion();
+				final int scenarioVersion = scenarioInstance.getScenarioVersion();
+				final int clientVersion = clientContext == null ? 0 : scenarioInstance.getClientScenarioVersion();
 
-			if (latestScenarioVersion < 0 || scenarioVersion < latestScenarioVersion || latestClientVersion < 0 || clientVersion < latestClientVersion) {
+				if (latestScenarioVersion < 0 || scenarioVersion < latestScenarioVersion || latestClientVersion < 0 || clientVersion < latestClientVersion) {
 
-				final ScenarioInstanceMigrator migrator = new ScenarioInstanceMigrator(getMigrationRegistry(), getScenarioCipherProvider());
-				migrator.performMigration(scenarioService, scenarioInstance);
+					final ScenarioInstanceMigrator migrator = new ScenarioInstanceMigrator(getMigrationRegistry(), getScenarioCipherProvider());
+					migrator.performMigration(scenarioService, scenarioInstance, new SubProgressMonitor(monitor, 100));
+				}
 			}
+		} finally {
+			monitor.done();
 		}
 	}
 
