@@ -16,7 +16,7 @@ public class NamedSeriesExpression implements IExpression<ISeries> {
 	}
 
 	@Override
-	public ISeries evaluate() {
+	public @NonNull ISeries evaluate() {
 		return series;
 	}
 }

@@ -18,7 +18,7 @@ public class ArithmeticTerm extends ArithmeticExpression {
 	}
 
 	@Override
-	public Double evaluate() {
+	public @NonNull Double evaluate() {
 		try {
 			return Double.parseDouble(term);
 		} catch (final NumberFormatException exception) {

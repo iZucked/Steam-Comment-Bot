@@ -6,17 +6,19 @@ package com.mmxlabs.common.parser.arithmetic;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.parser.IExpression;
 
 public class MeanFunction extends ArithmeticExpression {
-	private List<IExpression<Double>> arguments;
+	private List<IExpression<@NonNull Double>> arguments;
 
-	public MeanFunction(final List<IExpression<Double>> arguments) {
+	public MeanFunction(final List<IExpression<@NonNull Double>> arguments) {
 		this.arguments = arguments;
 	}
 
 	@Override
-	public Double evaluate() {
+	public @NonNull Double evaluate() {
 		double sum = 0;
 		for (final IExpression<Double> arg : arguments)
 			sum += arg.evaluate();

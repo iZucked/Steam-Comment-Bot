@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.common.parser.series;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.parser.IExpression;
 
 public class ConstantSeriesExpression implements IExpression<ISeries> {
@@ -15,7 +17,7 @@ public class ConstantSeriesExpression implements IExpression<ISeries> {
 	}
 
 	@Override
-	public ISeries evaluate() {
+	public @NonNull ISeries evaluate() {
 		return new ISeries() {
 			@Override
 			public int[] getChangePoints() {

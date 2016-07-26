@@ -20,7 +20,7 @@ public class SeriesOperatorExpression implements IExpression<ISeries> {
 	}
 
 	@Override
-	public ISeries evaluate() {
+	public @NonNull ISeries evaluate() {
 		final IOp opImpl;
 		switch (op) {
 		case '*':

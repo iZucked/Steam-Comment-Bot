@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.common.parser.arithmetic;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.parser.IExpression;
 
 public class ArithmeticOperator extends ArithmeticExpression {
@@ -18,7 +20,7 @@ public class ArithmeticOperator extends ArithmeticExpression {
 	}
 
 	@Override
-	public Double evaluate() {
+	public @NonNull Double evaluate() {
 		final Double lhsValue = lhs.evaluate();
 		final Double rhsValue = rhs.evaluate();
 		switch (op) {
