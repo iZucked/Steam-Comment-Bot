@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -19,7 +20,8 @@ public interface IScenarioMigrationService {
 	 * kind.
 	 * 
 	 * @param scenarioService
+	 *            - Needed to resolve relative URIs
 	 * @param scenarioInstance
 	 */
-	void migrateScenario(@NonNull final IScenarioService scenarioService, @NonNull final ScenarioInstance scenarioInstance) throws Exception;
+	void migrateScenario(@NonNull final IScenarioService scenarioService, @NonNull final ScenarioInstance scenarioInstance, @NonNull IProgressMonitor monitor) throws Exception;
 }

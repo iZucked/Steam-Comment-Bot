@@ -14,6 +14,7 @@ import java.util.EventObject;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
@@ -129,7 +130,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		try (final ModelReference modelReference = instance.getReference()) {
 			if (scenarioMigrationService != null) {
 				try {
-					scenarioMigrationService.migrateScenario(this, instance);
+					scenarioMigrationService.migrateScenario(this, instance, new NullProgressMonitor());
 				} catch (final RuntimeException e) {
 					throw e;
 				} catch (final Exception e) {
@@ -283,7 +284,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 				// Perform the migration!
 				if (scenarioMigrationService != null) {
 					try {
-						scenarioMigrationService.migrateScenario(this, cpy);
+						scenarioMigrationService.migrateScenario(this, cpy, new NullProgressMonitor());
 					} catch (final RuntimeException e) {
 						throw e;
 					} catch (final Exception e) {
