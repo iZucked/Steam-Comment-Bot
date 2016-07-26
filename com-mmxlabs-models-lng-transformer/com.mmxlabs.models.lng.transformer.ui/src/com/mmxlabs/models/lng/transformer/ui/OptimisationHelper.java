@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.transformer.ui;
 
 import java.time.YearMonth;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -37,7 +36,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-import org.omg.PortableInterceptor.SUCCESSFUL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +49,7 @@ import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
+import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
@@ -66,9 +65,6 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
-import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeCustomiser;
-import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeExtender;
-import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.DataSection;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.DataType;
@@ -98,6 +94,10 @@ public final class OptimisationHelper {
 	public static final String SWTBOT_SHIPPING_ONLY_PREFIX = "swtbot.shippingonly";
 	public static final String SWTBOT_SHIPPING_ONLY_ON = SWTBOT_SHIPPING_ONLY_PREFIX + ".On";
 	public static final String SWTBOT_SHIPPING_ONLY_OFF = SWTBOT_SHIPPING_ONLY_PREFIX + ".Off";
+
+	public static final String SWTBOT_CLEAN_STATE_PREFIX = "swtbot.cleanstate";
+	public static final String SWTBOT_CLEAN_STATE_ON = SWTBOT_CLEAN_STATE_PREFIX + ".On";
+	public static final String SWTBOT_CLEAN_STATE_OFF = SWTBOT_CLEAN_STATE_PREFIX + ".Off";
 
 	public static final String SWTBOT_ACTION_SET_PREFIX = "swtbot.actionset";
 	public static final String SWTBOT_ACTION_SET_ON = SWTBOT_ACTION_SET_PREFIX + ".On";
@@ -368,6 +368,31 @@ public final class OptimisationHelper {
 				optionAdded = true;
 			}
 
+			if (LicenseFeatures.isPermitted("features:optimisation-clean-state")) {
+				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+				choiceData.addChoice("Off", Boolean.FALSE);
+				choiceData.addChoice("On", Boolean.TRUE);
+				Option option = dialog.addOption(DataSection.Toggles, null, editingDomain, "Clean State: ", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_CLEAN_STATE_PREFIX,
+						ParametersPackage.eINSTANCE.getUserSettings_CleanStateOptimisation());
+				optionAdded = true;
+				enabledOptionAdded = true;
+				dialog.addValidation(option, new IValidator() {
+
+					@Override
+					public IStatus validate(final Object value) {
+						if (value instanceof UserSettings) {
+							final UserSettings userSettings = (UserSettings) value;
+							if (userSettings.isCleanStateOptimisation()) {
+								if (userSettings.getSimilarityMode() != SimilarityMode.OFF) {
+									return ValidationStatus.error("Similarity must be disabled with clean state optimisation");
+								}
+							}
+						}
+						return Status.OK_STATUS;
+					}
+				});
+			}
+
 			{
 				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
 				choiceData.addChoice("Off", Boolean.FALSE);
@@ -489,7 +514,7 @@ public final class OptimisationHelper {
 
 	public static OptimisationPlan transformUserSettings(@NonNull final UserSettings userSettings, @Nullable final String parameterMode, final LNGScenarioModel lngScenarioModel) {
 
-		OptimisationPlan plan = ParametersFactory.eINSTANCE.createOptimisationPlan();
+		final OptimisationPlan plan = ParametersFactory.eINSTANCE.createOptimisationPlan();
 
 		plan.setUserSettings(userSettings);
 
@@ -558,15 +583,19 @@ public final class OptimisationHelper {
 		} else {
 			epochLength = EPOCH_LENGTH_FULL;
 		}
-
+		if (userSettings.isCleanStateOptimisation()) {
+			final CleanStateOptimisationStage stage = ScenarioUtils.createDefaultCleanStateParameters(EcoreUtil.copy(constraintAndFitnessSettings));
+			stage.getAnnealingSettings().setEpochLength(epochLength);
+			plan.getStages().add(stage);
+		}
 		{
-			LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EcoreUtil.copy(constraintAndFitnessSettings));
+			final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EcoreUtil.copy(constraintAndFitnessSettings));
 			stage.getAnnealingSettings().setEpochLength(epochLength);
 			stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
 			plan.getStages().add(stage);
 		}
 		{
-			HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(EcoreUtil.copy(constraintAndFitnessSettings));
+			final HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(EcoreUtil.copy(constraintAndFitnessSettings));
 			stage.getAnnealingSettings().setEpochLength(epochLength);
 			plan.getStages().add(stage);
 		}
