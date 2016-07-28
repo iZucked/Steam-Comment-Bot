@@ -179,7 +179,7 @@ public class LNGScenarioToOptimiserBridge {
 			if (scenarioInstance != null) {
 				@NonNull
 				ScenarioInstance pScenarioInstance = scenarioInstance;
-				if (true) {
+				if (false) {
 					try {
 						assert scenarioInstance != null;
 						LNGScenarioRunnerUtils.saveScenarioAsChild(pScenarioInstance, pScenarioInstance, p.getFirst(), "Period Scenario");
