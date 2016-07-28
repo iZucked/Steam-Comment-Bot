@@ -1283,7 +1283,7 @@ public class LNGScenarioTransformer {
 		}
 
 		if (dischargePriceCalculator == null) {
-			throw new IllegalStateException("Discharge Slot has no contract or other pricing data");
+			throw new IllegalStateException(String.format("Discharge Slot [%s] has no contract or other pricing data", dischargeSlot.getName()));
 		}
 
 		final boolean isVolumeLimitInM3 = dischargeSlot.getSlotOrContractVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
@@ -1449,7 +1449,7 @@ public class LNGScenarioTransformer {
 		}
 
 		if (loadPriceCalculator == null) {
-			throw new IllegalStateException("Load Slot has no contract or other pricing data");
+			throw new IllegalStateException(String.format("Load Slot [%s] has no contract or other pricing data", loadSlot.getName()));
 		}
 
 		final int slotPricingDate = getSlotPricingDate(loadSlot);
@@ -2528,6 +2528,10 @@ public class LNGScenarioTransformer {
 				builder.setVesselClassInaccessiblePorts(vc, inaccessiblePorts);
 			}
 
+			/*
+			 * set up inaccessible routes for vessel class
+			 */
+			getAndSetInaccessibleRoutesForVesselClass(builder, eVc, vc);
 			modelEntityMap.addModelObject(eVc, vc);
 		}
 
@@ -2579,6 +2583,10 @@ public class LNGScenarioTransformer {
 				builder.setVesselInaccessiblePorts(vessel, inaccessiblePorts);
 			}
 
+			/*
+			 * set up inaccessible routes
+			 */
+			getAndSetInaccessibleRoutesForVessel(builder, eVessel, vessel);
 			vesselToAvailabilities.put(vessel, new LinkedList<IVesselAvailability>());
 		}
 
@@ -2661,7 +2669,11 @@ public class LNGScenarioTransformer {
 					spotCharterInToAvailability.put(key, roundTripOption);
 					allVesselAvailabilities.add(roundTripOption);
 					vesselToAvailabilities.put(roundTripOption.getVessel(), Collections.singleton(roundTripOption));
-
+					
+					/*
+					 * set up inaccessible routes
+					 */
+					getAndSetInaccessibleRoutesForSpotCharterInVessel(builder, charterCost, roundTripOption.getVessel());
 				}
 				if (charterCount > 0 && charterCost.isEnabled()) {
 
@@ -2672,6 +2684,11 @@ public class LNGScenarioTransformer {
 						spotCharterInToAvailability.put(key, spotAvailability);
 
 						vesselToAvailabilities.put(spotAvailability.getVessel(), Collections.singleton(spotAvailability));
+						
+						/*
+						 * set up inaccessible routes
+						 */
+						getAndSetInaccessibleRoutesForSpotCharterInVessel(builder, charterCost, spotAvailability.getVessel());
 
 					}
 					allVesselAvailabilities.addAll(spots);
@@ -2718,6 +2735,44 @@ public class LNGScenarioTransformer {
 
 	}
 
+	private void getAndSetInaccessibleRoutesForVessel(final ISchedulerBuilder builder, final Vessel eVessel, final IVessel vessel) {
+		Set<ERouteOption> inaccessibleERoutesForVessel = getInaccessibleERoutesForVessel(eVessel);
+		setInaccessibleRoutesForVessel(builder, vessel, inaccessibleERoutesForVessel);
+	}
+	
+	private void getAndSetInaccessibleRoutesForVesselClass(final ISchedulerBuilder builder, final VesselClass eVesselClass, final IVesselClass vesselClass) {
+		Set<ERouteOption> inaccessibleERoutesForVessel = createRouteOptionSet(true, eVesselClass.getInaccessibleRoutes());
+		setInaccessibleRoutesForVesselClass(builder, vesselClass, inaccessibleERoutesForVessel);
+	}
+
+	private void getAndSetInaccessibleRoutesForSpotCharterInVessel(final ISchedulerBuilder builder, final CharterInMarket charterInMarket, final IVessel vessel) {
+		Set<ERouteOption> inaccessibleERoutesForVessel = createRouteOptionSet(charterInMarket.isOverrideInaccessibleRoutes(), charterInMarket.getInaccessibleRoutes());
+		setInaccessibleRoutesForVessel(builder, vessel, inaccessibleERoutesForVessel);
+	}
+
+	private void setInaccessibleRoutesForVessel(final ISchedulerBuilder builder, final IVessel vessel, Set<ERouteOption> inaccessibleERoutesForVessel) {
+		builder.setVesselInaccessibleRoutes(vessel, inaccessibleERoutesForVessel);
+	}
+
+	private void setInaccessibleRoutesForVesselClass(final ISchedulerBuilder builder, final IVesselClass vesselClass, Set<ERouteOption> inaccessibleERoutesForVessel) {
+		if (!inaccessibleERoutesForVessel.isEmpty()) {
+			builder.setVesselClassInaccessibleRoutes(vesselClass, inaccessibleERoutesForVessel);
+		}
+	}
+
+	public Set<ERouteOption> getInaccessibleERoutesForVessel(final Vessel eVessel) {
+		return createRouteOptionSet(eVessel.isOverrideInaccessibleRoutes(), eVessel.getInaccessibleRoutes());
+	}
+
+	public Set<ERouteOption> createRouteOptionSet(final boolean canOverride, final Collection<RouteOption> routeOptions) {
+		final Set<ERouteOption> inaccessibleERoutes = new HashSet<>();
+		if (canOverride) {
+			for (final RouteOption routeOption : routeOptions) {
+				inaccessibleERoutes.add(mapRouteOption(routeOption));
+			}
+		}
+		return inaccessibleERoutes;
+	}
 	/**
 	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal use; may be subject to change later.
 	 * 
@@ -2881,4 +2936,18 @@ public class LNGScenarioTransformer {
 		}
 		throw new IllegalStateException();
 	}
+	
+	@NonNull
+	public static ERouteOption mapRouteOption(final RouteOption routeOption) {
+		switch (routeOption) {
+		case DIRECT:
+			return ERouteOption.DIRECT;
+		case PANAMA:
+			return ERouteOption.PANAMA;
+		case SUEZ:
+			return ERouteOption.SUEZ;
+		}
+		throw new IllegalStateException();
+	}
+
 }
