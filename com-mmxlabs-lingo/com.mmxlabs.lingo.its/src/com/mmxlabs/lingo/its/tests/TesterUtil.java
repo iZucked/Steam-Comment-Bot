@@ -91,10 +91,6 @@ public class TesterUtil {
 	 */
 	public static void testOriginalAndCurrentFitnesses(final Properties props, final String mapName, final List<Fitness> currentFitnesses) {
 
-		if (true) {
-			return;
-		}
-
 		long totalOriginalFitness = 0;
 		long totalCurrentFitness = 0;
 		System.out.println(">>>> " + mapName + " <<<<");
