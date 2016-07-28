@@ -281,13 +281,31 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__FILL_CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Override Inaccessible Routes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__OVERRIDE_INACCESSIBLE_ROUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Inaccessible Routes</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__INACCESSIBLE_ROUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 5;
+	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -452,13 +470,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__HAS_RELIQ_CAPABILITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 14;
 
 	/**
+	 * The feature id for the '<em><b>Inaccessible Routes</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__INACCESSIBLE_ROUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 15;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Class</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 15;
+	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 16;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.HeelOptionsImpl <em>Heel Options</em>}' class.
@@ -838,6 +865,28 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVessel_FillCapacity();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Override Inaccessible Routes</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#isOverrideInaccessibleRoutes()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_OverrideInaccessibleRoutes();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link com.mmxlabs.models.lng.fleet.Vessel#getInaccessibleRoutes <em>Inaccessible Routes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Inaccessible Routes</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getInaccessibleRoutes()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_InaccessibleRoutes();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.VesselClass <em>Vessel Class</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1011,6 +1060,17 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getVesselClass_HasReliqCapability();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link com.mmxlabs.models.lng.fleet.VesselClass#getInaccessibleRoutes <em>Inaccessible Routes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Inaccessible Routes</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getInaccessibleRoutes()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_InaccessibleRoutes();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.FleetModel <em>Model</em>}'.
@@ -1408,6 +1468,22 @@ public interface FleetPackage extends EPackage {
 		EAttribute VESSEL__FILL_CAPACITY = eINSTANCE.getVessel_FillCapacity();
 
 		/**
+		 * The meta object literal for the '<em><b>Override Inaccessible Routes</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__OVERRIDE_INACCESSIBLE_ROUTES = eINSTANCE.getVessel_OverrideInaccessibleRoutes();
+
+		/**
+		 * The meta object literal for the '<em><b>Inaccessible Routes</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__INACCESSIBLE_ROUTES = eINSTANCE.getVessel_InaccessibleRoutes();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl <em>Vessel Class</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1536,6 +1612,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_CLASS__HAS_RELIQ_CAPABILITY = eINSTANCE.getVesselClass_HasReliqCapability();
+
+		/**
+		 * The meta object literal for the '<em><b>Inaccessible Routes</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__INACCESSIBLE_ROUTES = eINSTANCE.getVesselClass_InaccessibleRoutes();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl <em>Model</em>}' class.

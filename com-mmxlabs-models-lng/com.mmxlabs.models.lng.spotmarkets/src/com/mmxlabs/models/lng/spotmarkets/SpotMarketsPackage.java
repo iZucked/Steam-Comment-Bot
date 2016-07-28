@@ -1117,13 +1117,31 @@ public interface SpotMarketsPackage extends EPackage {
 	int CHARTER_IN_MARKET__SPOT_CHARTER_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Override Inaccessible Routes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET__OVERRIDE_INACCESSIBLE_ROUTES = SPOT_CHARTER_MARKET_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Inaccessible Routes</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET__INACCESSIBLE_ROUTES = SPOT_CHARTER_MARKET_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Charter In Market</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 4;
+	int CHARTER_IN_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.SpotType <em>Spot Type</em>}' enum.
@@ -1599,6 +1617,28 @@ public interface SpotMarketsPackage extends EPackage {
 	EAttribute getCharterInMarket_SpotCharterCount();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Override Inaccessible Routes</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isOverrideInaccessibleRoutes()
+	 * @see #getCharterInMarket()
+	 * @generated
+	 */
+	EAttribute getCharterInMarket_OverrideInaccessibleRoutes();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getInaccessibleRoutes <em>Inaccessible Routes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Inaccessible Routes</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getInaccessibleRoutes()
+	 * @see #getCharterInMarket()
+	 * @generated
+	 */
+	EAttribute getCharterInMarket_InaccessibleRoutes();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterInRate <em>Charter In Rate</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2038,6 +2078,22 @@ public interface SpotMarketsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CHARTER_IN_MARKET__SPOT_CHARTER_COUNT = eINSTANCE.getCharterInMarket_SpotCharterCount();
+
+		/**
+		 * The meta object literal for the '<em><b>Override Inaccessible Routes</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_IN_MARKET__OVERRIDE_INACCESSIBLE_ROUTES = eINSTANCE.getCharterInMarket_OverrideInaccessibleRoutes();
+
+		/**
+		 * The meta object literal for the '<em><b>Inaccessible Routes</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_IN_MARKET__INACCESSIBLE_ROUTES = eINSTANCE.getCharterInMarket_InaccessibleRoutes();
 
 		/**
 		 * The meta object literal for the '<em><b>Charter In Rate</b></em>' attribute feature.

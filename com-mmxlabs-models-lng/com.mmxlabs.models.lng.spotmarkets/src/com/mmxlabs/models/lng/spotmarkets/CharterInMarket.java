@@ -6,9 +6,11 @@
  */
 package com.mmxlabs.models.lng.spotmarkets;
 
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -21,6 +23,8 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterInRate <em>Charter In Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getSpotCharterCount <em>Spot Charter Count</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket()
@@ -69,6 +73,50 @@ public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType
 	 * @generated
 	 */
 	void setSpotCharterCount(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Override Inaccessible Routes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Override Inaccessible Routes</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Override Inaccessible Routes</em>' attribute.
+	 * @see #setOverrideInaccessibleRoutes(boolean)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket_OverrideInaccessibleRoutes()
+	 * @model
+	 * @generated
+	 */
+	boolean isOverrideInaccessibleRoutes();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Override Inaccessible Routes</em>' attribute.
+	 * @see #isOverrideInaccessibleRoutes()
+	 * @generated
+	 */
+	void setOverrideInaccessibleRoutes(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Inaccessible Routes</b></em>' attribute list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.port.RouteOption}.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.port.RouteOption}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Inaccessible Routes</em>' attribute list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Inaccessible Routes</em>' attribute list.
+	 * @see com.mmxlabs.models.lng.port.RouteOption
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket_InaccessibleRoutes()
+	 * @model
+	 * @generated
+	 */
+	EList<RouteOption> getInaccessibleRoutes();
 
 	/**
 	 * Returns the value of the '<em><b>Charter In Rate</b></em>' attribute.

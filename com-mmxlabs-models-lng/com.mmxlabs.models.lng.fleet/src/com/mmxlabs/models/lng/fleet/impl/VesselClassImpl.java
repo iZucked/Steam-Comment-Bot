@@ -13,6 +13,7 @@ import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -25,6 +26,7 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
@@ -52,6 +54,7 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getPilotLightRate <em>Pilot Light Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getMinBaseFuelConsumption <em>Min Base Fuel Consumption</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#isHasReliqCapability <em>Has Reliq Capability</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
  * </ul>
  *
  * @generated
@@ -306,6 +309,16 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 	 * @ordered
 	 */
 	protected boolean hasReliqCapability = HAS_RELIQ_CAPABILITY_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getInaccessibleRoutes() <em>Inaccessible Routes</em>}' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInaccessibleRoutes()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<RouteOption> inaccessibleRoutes;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -687,6 +700,18 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<RouteOption> getInaccessibleRoutes() {
+		if (inaccessibleRoutes == null) {
+			inaccessibleRoutes = new EDataTypeUniqueEList<RouteOption>(RouteOption.class, this, FleetPackage.VESSEL_CLASS__INACCESSIBLE_ROUTES);
+		}
+		return inaccessibleRoutes;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public EList<Vessel> collect(EList<AVesselSet<Vessel>> marked) {
@@ -763,6 +788,8 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 				return getMinBaseFuelConsumption();
 			case FleetPackage.VESSEL_CLASS__HAS_RELIQ_CAPABILITY:
 				return isHasReliqCapability();
+			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_ROUTES:
+				return getInaccessibleRoutes();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -823,6 +850,10 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 			case FleetPackage.VESSEL_CLASS__HAS_RELIQ_CAPABILITY:
 				setHasReliqCapability((Boolean)newValue);
 				return;
+			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_ROUTES:
+				getInaccessibleRoutes().clear();
+				getInaccessibleRoutes().addAll((Collection<? extends RouteOption>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -880,6 +911,9 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 			case FleetPackage.VESSEL_CLASS__HAS_RELIQ_CAPABILITY:
 				setHasReliqCapability(HAS_RELIQ_CAPABILITY_EDEFAULT);
 				return;
+			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_ROUTES:
+				getInaccessibleRoutes().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -922,6 +956,8 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 				return minBaseFuelConsumption != MIN_BASE_FUEL_CONSUMPTION_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__HAS_RELIQ_CAPABILITY:
 				return hasReliqCapability != HAS_RELIQ_CAPABILITY_EDEFAULT;
+			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_ROUTES:
+				return inaccessibleRoutes != null && !inaccessibleRoutes.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -956,6 +992,8 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 		result.append(minBaseFuelConsumption);
 		result.append(", hasReliqCapability: ");
 		result.append(hasReliqCapability);
+		result.append(", inaccessibleRoutes: ");
+		result.append(inaccessibleRoutes);
 		result.append(')');
 		return result.toString();
 	}

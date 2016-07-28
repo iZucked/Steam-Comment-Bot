@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.impl;
 
+import com.mmxlabs.models.lng.port.RouteOption;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -16,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -39,6 +41,8 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getCharterInRate <em>Charter In Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getSpotCharterCount <em>Spot Charter Count</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
  * </ul>
  *
  * @generated
@@ -115,6 +119,36 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	protected int spotCharterCount = SPOT_CHARTER_COUNT_EDEFAULT;
 
 	/**
+	 * The default value of the '{@link #isOverrideInaccessibleRoutes() <em>Override Inaccessible Routes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isOverrideInaccessibleRoutes()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean OVERRIDE_INACCESSIBLE_ROUTES_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isOverrideInaccessibleRoutes() <em>Override Inaccessible Routes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isOverrideInaccessibleRoutes()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean overrideInaccessibleRoutes = OVERRIDE_INACCESSIBLE_ROUTES_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getInaccessibleRoutes() <em>Inaccessible Routes</em>}' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInaccessibleRoutes()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<RouteOption> inaccessibleRoutes;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -185,6 +219,39 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 		spotCharterCount = newSpotCharterCount;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_IN_MARKET__SPOT_CHARTER_COUNT, oldSpotCharterCount, spotCharterCount));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isOverrideInaccessibleRoutes() {
+		return overrideInaccessibleRoutes;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setOverrideInaccessibleRoutes(boolean newOverrideInaccessibleRoutes) {
+		boolean oldOverrideInaccessibleRoutes = overrideInaccessibleRoutes;
+		overrideInaccessibleRoutes = newOverrideInaccessibleRoutes;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_IN_MARKET__OVERRIDE_INACCESSIBLE_ROUTES, oldOverrideInaccessibleRoutes, overrideInaccessibleRoutes));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<RouteOption> getInaccessibleRoutes() {
+		if (inaccessibleRoutes == null) {
+			inaccessibleRoutes = new EDataTypeUniqueEList<RouteOption>(RouteOption.class, this, SpotMarketsPackage.CHARTER_IN_MARKET__INACCESSIBLE_ROUTES);
+		}
+		return inaccessibleRoutes;
 	}
 
 	/**
@@ -276,6 +343,10 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				return getCharterInRate();
 			case SpotMarketsPackage.CHARTER_IN_MARKET__SPOT_CHARTER_COUNT:
 				return getSpotCharterCount();
+			case SpotMarketsPackage.CHARTER_IN_MARKET__OVERRIDE_INACCESSIBLE_ROUTES:
+				return isOverrideInaccessibleRoutes();
+			case SpotMarketsPackage.CHARTER_IN_MARKET__INACCESSIBLE_ROUTES:
+				return getInaccessibleRoutes();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -302,6 +373,13 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__SPOT_CHARTER_COUNT:
 				setSpotCharterCount((Integer)newValue);
 				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__OVERRIDE_INACCESSIBLE_ROUTES:
+				setOverrideInaccessibleRoutes((Boolean)newValue);
+				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__INACCESSIBLE_ROUTES:
+				getInaccessibleRoutes().clear();
+				getInaccessibleRoutes().addAll((Collection<? extends RouteOption>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -326,6 +404,12 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__SPOT_CHARTER_COUNT:
 				setSpotCharterCount(SPOT_CHARTER_COUNT_EDEFAULT);
 				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__OVERRIDE_INACCESSIBLE_ROUTES:
+				setOverrideInaccessibleRoutes(OVERRIDE_INACCESSIBLE_ROUTES_EDEFAULT);
+				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__INACCESSIBLE_ROUTES:
+				getInaccessibleRoutes().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -346,6 +430,10 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				return CHARTER_IN_RATE_EDEFAULT == null ? charterInRate != null : !CHARTER_IN_RATE_EDEFAULT.equals(charterInRate);
 			case SpotMarketsPackage.CHARTER_IN_MARKET__SPOT_CHARTER_COUNT:
 				return spotCharterCount != SPOT_CHARTER_COUNT_EDEFAULT;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__OVERRIDE_INACCESSIBLE_ROUTES:
+				return overrideInaccessibleRoutes != OVERRIDE_INACCESSIBLE_ROUTES_EDEFAULT;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__INACCESSIBLE_ROUTES:
+				return inaccessibleRoutes != null && !inaccessibleRoutes.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -420,6 +508,10 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 		result.append(charterInRate);
 		result.append(", spotCharterCount: ");
 		result.append(spotCharterCount);
+		result.append(", overrideInaccessibleRoutes: ");
+		result.append(overrideInaccessibleRoutes);
+		result.append(", inaccessibleRoutes: ");
+		result.append(inaccessibleRoutes);
 		result.append(')');
 		return result.toString();
 	}

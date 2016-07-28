@@ -63,6 +63,7 @@ public class VesselClassItemProvider
 			addPilotLightRatePropertyDescriptor(object);
 			addMinBaseFuelConsumptionPropertyDescriptor(object);
 			addHasReliqCapabilityPropertyDescriptor(object);
+			addInaccessibleRoutesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -354,6 +355,28 @@ public class VesselClassItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Inaccessible Routes feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addInaccessibleRoutesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselClass_inaccessibleRoutes_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_inaccessibleRoutes_feature", "_UI_VesselClass_type"),
+				 FleetPackage.Literals.VESSEL_CLASS__INACCESSIBLE_ROUTES,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -432,6 +455,7 @@ public class VesselClassItemProvider
 			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
 			case FleetPackage.VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION:
 			case FleetPackage.VESSEL_CLASS__HAS_RELIQ_CAPABILITY:
+			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_ROUTES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:

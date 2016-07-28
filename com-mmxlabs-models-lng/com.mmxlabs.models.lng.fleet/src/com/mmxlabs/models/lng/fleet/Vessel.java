@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.fleet;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVesselSet;
 
@@ -23,6 +24,8 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity <em>Fill Capacity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel()
@@ -206,6 +209,50 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	boolean isSetFillCapacity();
+
+	/**
+	 * Returns the value of the '<em><b>Override Inaccessible Routes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Override Inaccessible Routes</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Override Inaccessible Routes</em>' attribute.
+	 * @see #setOverrideInaccessibleRoutes(boolean)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_OverrideInaccessibleRoutes()
+	 * @model
+	 * @generated
+	 */
+	boolean isOverrideInaccessibleRoutes();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Override Inaccessible Routes</em>' attribute.
+	 * @see #isOverrideInaccessibleRoutes()
+	 * @generated
+	 */
+	void setOverrideInaccessibleRoutes(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Inaccessible Routes</b></em>' attribute list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.port.RouteOption}.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.port.RouteOption}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Inaccessible Routes</em>' attribute list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Inaccessible Routes</em>' attribute list.
+	 * @see com.mmxlabs.models.lng.port.RouteOption
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_InaccessibleRoutes()
+	 * @model
+	 * @generated
+	 */
+	EList<RouteOption> getInaccessibleRoutes();
 
 	/**
 	 * <!-- begin-user-doc -->

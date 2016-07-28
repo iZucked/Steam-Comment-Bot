@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.fleet;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVesselSet;
 
@@ -33,6 +34,7 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getPilotLightRate <em>Pilot Light Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getMinBaseFuelConsumption <em>Min Base Fuel Consumption</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#isHasReliqCapability <em>Has Reliq Capability</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass()
@@ -422,6 +424,24 @@ public interface VesselClass extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	void setHasReliqCapability(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Inaccessible Routes</b></em>' attribute list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.port.RouteOption}.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.port.RouteOption}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Inaccessible Routes</em>' attribute list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Inaccessible Routes</em>' attribute list.
+	 * @see com.mmxlabs.models.lng.port.RouteOption
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_InaccessibleRoutes()
+	 * @model
+	 * @generated
+	 */
+	EList<RouteOption> getInaccessibleRoutes();
 
 } // end of  VesselClass
 

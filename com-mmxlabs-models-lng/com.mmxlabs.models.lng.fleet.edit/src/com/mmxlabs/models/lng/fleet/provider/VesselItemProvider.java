@@ -53,6 +53,8 @@ public class VesselItemProvider
 			addInaccessiblePortsPropertyDescriptor(object);
 			addCapacityPropertyDescriptor(object);
 			addFillCapacityPropertyDescriptor(object);
+			addOverrideInaccessibleRoutesPropertyDescriptor(object);
+			addInaccessibleRoutesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -168,6 +170,50 @@ public class VesselItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Override Inaccessible Routes feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addOverrideInaccessibleRoutesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_overrideInaccessibleRoutes_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_overrideInaccessibleRoutes_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Inaccessible Routes feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addInaccessibleRoutesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_inaccessibleRoutes_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_inaccessibleRoutes_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__INACCESSIBLE_ROUTES,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Vessel.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -207,6 +253,8 @@ public class VesselItemProvider
 			case FleetPackage.VESSEL__SHORT_NAME:
 			case FleetPackage.VESSEL__CAPACITY:
 			case FleetPackage.VESSEL__FILL_CAPACITY:
+			case FleetPackage.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES:
+			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

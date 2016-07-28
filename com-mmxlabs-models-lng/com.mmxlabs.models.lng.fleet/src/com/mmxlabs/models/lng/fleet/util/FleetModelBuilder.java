@@ -64,4 +64,8 @@ public class FleetModelBuilder {
 		fleetModel.getBaseFuels().add(baseFuel);
 		return baseFuel;
 	}
+	
+	public void addVessel(Vessel vessel) {
+		fleetModel.getVessels().add(vessel);
+	}
 }

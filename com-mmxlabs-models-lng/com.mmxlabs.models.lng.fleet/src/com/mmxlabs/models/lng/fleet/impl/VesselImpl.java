@@ -14,12 +14,14 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
@@ -35,6 +37,8 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getCapacity <em>Capacity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getFillCapacity <em>Fill Capacity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
  * </ul>
  *
  * @generated
@@ -135,6 +139,36 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @ordered
 	 */
 	protected boolean fillCapacityESet;
+
+	/**
+	 * The default value of the '{@link #isOverrideInaccessibleRoutes() <em>Override Inaccessible Routes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isOverrideInaccessibleRoutes()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean OVERRIDE_INACCESSIBLE_ROUTES_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isOverrideInaccessibleRoutes() <em>Override Inaccessible Routes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isOverrideInaccessibleRoutes()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean overrideInaccessibleRoutes = OVERRIDE_INACCESSIBLE_ROUTES_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getInaccessibleRoutes() <em>Inaccessible Routes</em>}' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInaccessibleRoutes()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<RouteOption> inaccessibleRoutes;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -313,6 +347,39 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isOverrideInaccessibleRoutes() {
+		return overrideInaccessibleRoutes;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setOverrideInaccessibleRoutes(boolean newOverrideInaccessibleRoutes) {
+		boolean oldOverrideInaccessibleRoutes = overrideInaccessibleRoutes;
+		overrideInaccessibleRoutes = newOverrideInaccessibleRoutes;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES, oldOverrideInaccessibleRoutes, overrideInaccessibleRoutes));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<RouteOption> getInaccessibleRoutes() {
+		if (inaccessibleRoutes == null) {
+			inaccessibleRoutes = new EDataTypeUniqueEList<RouteOption>(RouteOption.class, this, FleetPackage.VESSEL__INACCESSIBLE_ROUTES);
+		}
+		return inaccessibleRoutes;
+	}
+
+	/**
 	 * <!-- begin-user-doc --> 
 	 * <!-- end-user-doc -->
 	 * @generated NOT
@@ -378,6 +445,10 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return getCapacity();
 			case FleetPackage.VESSEL__FILL_CAPACITY:
 				return getFillCapacity();
+			case FleetPackage.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES:
+				return isOverrideInaccessibleRoutes();
+			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
+				return getInaccessibleRoutes();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -406,6 +477,13 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__FILL_CAPACITY:
 				setFillCapacity((Double)newValue);
 				return;
+			case FleetPackage.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES:
+				setOverrideInaccessibleRoutes((Boolean)newValue);
+				return;
+			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
+				getInaccessibleRoutes().clear();
+				getInaccessibleRoutes().addAll((Collection<? extends RouteOption>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -432,6 +510,12 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__FILL_CAPACITY:
 				unsetFillCapacity();
 				return;
+			case FleetPackage.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES:
+				setOverrideInaccessibleRoutes(OVERRIDE_INACCESSIBLE_ROUTES_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
+				getInaccessibleRoutes().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -453,6 +537,10 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return isSetCapacity();
 			case FleetPackage.VESSEL__FILL_CAPACITY:
 				return isSetFillCapacity();
+			case FleetPackage.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES:
+				return overrideInaccessibleRoutes != OVERRIDE_INACCESSIBLE_ROUTES_EDEFAULT;
+			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
+				return inaccessibleRoutes != null && !inaccessibleRoutes.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -472,6 +560,10 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		if (capacityESet) result.append(capacity); else result.append("<unset>");
 		result.append(", fillCapacity: ");
 		if (fillCapacityESet) result.append(fillCapacity); else result.append("<unset>");
+		result.append(", overrideInaccessibleRoutes: ");
+		result.append(overrideInaccessibleRoutes);
+		result.append(", inaccessibleRoutes: ");
+		result.append(inaccessibleRoutes);
 		result.append(')');
 		return result.toString();
 	}

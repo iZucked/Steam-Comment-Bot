@@ -13,11 +13,14 @@ import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.ui.inlineeditors.RouteCostInlineEditor;
+import com.mmxlabs.models.lng.fleet.ui.inlineeditors.RouteExclusionMultiInlineEditor;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.impl.MultiEnumInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -80,6 +83,7 @@ public class VesselClassComponentHelper extends BaseComponentHelper {
 		add_pilotLightRateEditor(detailComposite, topClass);
 		add_minBaseFuelConsumptionEditor(detailComposite, topClass);
 		add_hasReliqCapabilityEditor(detailComposite, topClass);
+		add_inaccessibleRoutesEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the inaccessiblePorts feature on VesselClass
@@ -206,5 +210,14 @@ public class VesselClassComponentHelper extends BaseComponentHelper {
 		if (LicenseFeatures.isPermitted("features:reliq-support")) {
 			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS__HAS_RELIQ_CAPABILITY));
 		}
+	}
+
+	/**
+	 * Create the editor for the inaccessibleRoutes feature on VesselClass
+	 *
+	 * @generated NOT
+	 */
+	protected void add_inaccessibleRoutesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new RouteExclusionMultiInlineEditor(FleetPackage.Literals.VESSEL_CLASS__INACCESSIBLE_ROUTES));
 	}
 }
