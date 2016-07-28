@@ -16,6 +16,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.window.Window;
@@ -54,7 +56,8 @@ public final class AddModelAction {
 
 		public IScenarioEditingLocation getEditorPart();
 
-		ISelection getCurrentSelection();
+		@Nullable
+		Collection<@NonNull EObject> getCurrentSelection();
 	}
 
 	public final static Action create(final EClass eClass, final IAddContext context) {
@@ -102,7 +105,7 @@ class SingleAddAction extends LockableAction {
 	/**
 	 * @param iModelFactory
 	 * @param context
-	 */	
+	 */
 	public SingleAddAction(final IModelFactory factory, final IAddContext context) {
 		super(factory.getLabel(), PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 		setToolTipText("Create new " + factory.getLabel());

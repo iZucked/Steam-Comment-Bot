@@ -2,17 +2,17 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Validation
 Bundle-SymbolicName: com.mmxlabs.models.lng.cargo.validation;singleton:=true
-Bundle-Version: 3.12.10.qualifier
+Bundle-Version: 3.12.11.qualifier
 Bundle-Activator: com.mmxlabs.models.lng.cargo.validation.internal.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.core.runtime;bundle-version="3.7.0",
- com.mmxlabs.models.lng.scenario.model;bundle-version="[3.12.10,4.0.0)",
- com.mmxlabs.models.ui.validation;bundle-version="[3.12.10,4.0.0)",
- com.mmxlabs.scheduler.optimiser;bundle-version="[3.12.10,4.0.0)",
- com.mmxlabs.common.common-util;bundle-version="[3.12.10,4.0.0)",
- com.mmxlabs.models.lng.pricing.validation;bundle-version="[3.12.10,4.0.0)",
- com.mmxlabs.models.lng.commercial.editor;bundle-version="[3.12.10,4.0.0)",
+ com.mmxlabs.models.lng.scenario.model;bundle-version="[3.12.11,4.0.0)",
+ com.mmxlabs.models.ui.validation;bundle-version="[3.12.11,4.0.0)",
+ com.mmxlabs.scheduler.optimiser;bundle-version="[3.12.11,4.0.0)",
+ com.mmxlabs.common.common-util;bundle-version="[3.12.11,4.0.0)",
+ com.mmxlabs.models.lng.pricing.validation;bundle-version="[3.12.11,4.0.0)",
+ com.mmxlabs.models.lng.commercial.editor;bundle-version="[3.12.11,4.0.0)",
  org.ops4j.peaberry;bundle-version="1.3.0",
  com.google.inject;bundle-version="3.0.0",
  com.mmxlabs.models.lng.cargo,

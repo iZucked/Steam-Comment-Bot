@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.models.lng</groupId>
 	<artifactId>com.mmxlabs.models.lng.parent</artifactId>
-	<version>3.12.10-SNAPSHOT</version>
+	<version>3.12.11-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
@@ -89,6 +89,7 @@
 		<module>com.mmxlabs.models.lng.cargo.validation.tests</module>
 		<module>com.mmxlabs.models.lng.fleet.validation.tests</module>
 		<module>com.mmxlabs.models.lng.port.validation.tests</module>
+		<module>com.mmxlabs.models.lng.pricing.validation.tests</module>
 		<module>com.mmxlabs.models.lng.spotmarkets.validation.tests</module>
 
 		<module>com.mmxlabs.models.lng.scenario.model</module>

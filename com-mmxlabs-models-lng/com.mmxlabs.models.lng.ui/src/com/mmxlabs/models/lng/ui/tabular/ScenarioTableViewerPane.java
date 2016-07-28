@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
@@ -80,6 +81,7 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
+import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
@@ -404,8 +406,8 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 			}
 
 			@Override
-			public ISelection getCurrentSelection() {
-				return viewer.getSelection();
+			public @Nullable Collection<@NonNull EObject> getCurrentSelection() {
+				return SelectionHelper.convertToList(viewer.getSelection(), EObject.class);
 			}
 		};
 	}
