@@ -99,6 +99,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProvi
 import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
@@ -146,6 +148,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortVisitDurationProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteCostProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapShipToShipBindingProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapShippingHoursRestrictionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapShortCargoReturnElementProviderEditor;
@@ -264,6 +267,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(IPortExclusionProvider.class).toInstance(portExclusionProvider);
 		bind(IPortExclusionProviderEditor.class).toInstance(portExclusionProvider);
 
+		final IRouteExclusionProviderEditor routeExclusionProviderEditor = new HashMapRouteExclusionProvider();
+		bind(IRouteExclusionProvider.class).toInstance(routeExclusionProviderEditor);
+		bind(IRouteExclusionProviderEditor.class).toInstance(routeExclusionProviderEditor);
+		
 		final IReturnElementProviderEditor returnElementProvider = new HashMapReturnElementProviderEditor();
 		bind(IReturnElementProvider.class).toInstance(returnElementProvider);
 		bind(IReturnElementProviderEditor.class).toInstance(returnElementProvider);

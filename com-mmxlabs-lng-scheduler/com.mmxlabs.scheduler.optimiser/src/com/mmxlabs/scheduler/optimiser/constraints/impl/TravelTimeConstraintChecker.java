@@ -251,7 +251,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		assert tw2 != null;
 		final int visitDuration = elementDurationProvider.getElementDuration(first, resource);
 
-		final int distance = distanceProvider.getDistance(ERouteOption.DIRECT, slot1.getPort(), slot2.getPort(), tw1.getInclusiveStart() + visitDuration);
+		final int distance = distanceProvider.getDistance(ERouteOption.DIRECT, slot1.getPort(), slot2.getPort(), tw1.getInclusiveStart() + visitDuration, vesselProvider.getVesselAvailability(resource).getVessel());
 
 		if (distance == Integer.MAX_VALUE) {
 			return "No edge connecting ports";

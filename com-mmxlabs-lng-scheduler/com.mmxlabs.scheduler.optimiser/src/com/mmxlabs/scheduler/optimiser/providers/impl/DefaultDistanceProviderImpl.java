@@ -27,6 +27,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProvider;
 
 /**
  * A {@link IDataComponentProvider} implementation combining raw distance information with route availability information and offering basic travel time calculation APIs
@@ -43,11 +44,14 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 
 	@Inject
 	private IRouteCostProvider routeCostProvider;
-
+	
+	@Inject
+	private IRouteExclusionProvider routeExclusionProvider;
+	
 	private final Map<ERouteOption, Integer> routeAvailableFrom = new HashMap<>();
 
 	@Override
-	public List<Pair<ERouteOption, Integer>> getDistanceValues(final IPort from, final IPort to, final int voyageStartTime) {
+	public List<Pair<ERouteOption, Integer>> getDistanceValues(final IPort from, final IPort to, final int voyageStartTime, final IVessel vessel) {
 
 		List<Pair<ERouteOption, Integer>> distances = getAllDistanceValues(from, to);
 
@@ -58,7 +62,7 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 			// No distance?
 			if (e.getSecond() == Integer.MAX_VALUE) {
 				itr.remove();
-			} else if (!isRouteAvailable(e.getFirst(), voyageStartTime)) {
+			} else if (!isRouteAvailable(e.getFirst(), vessel, voyageStartTime)) {
 				// Distance available, but route is closed at this time
 				itr.remove();
 			}
@@ -82,10 +86,12 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	}
 
 	@Override
-	public boolean isRouteAvailable(@NonNull final ERouteOption route, final int voyageStartTime) {
-
+	public boolean isRouteAvailable(@NonNull final ERouteOption route, final IVessel vessel, final int voyageStartTime) {
+		if (vessel.getName().equals("Oak-Spirit")) {
+			int z = 0;
+		}
 		final int routeAvailableFrom = getRouteAvailableFrom(route);
-		return (voyageStartTime >= routeAvailableFrom);
+		return (voyageStartTime >= routeAvailableFrom) && routeExclusionProvider.isRouteEnabled(vessel, route);
 	}
 
 	@Override
@@ -94,9 +100,9 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	}
 
 	@Override
-	public int getDistance(@NonNull final ERouteOption route, @NonNull final IPort from, @NonNull final IPort to, final int voyageStartTime) {
+	public int getDistance(@NonNull final ERouteOption route, @NonNull final IPort from, @NonNull final IPort to, final int voyageStartTime, final IVessel vessel) {
 
-		if (!isRouteAvailable(route, voyageStartTime)) {
+		if (!isRouteAvailable(route, vessel, voyageStartTime)) {
 			return Integer.MAX_VALUE;
 		}
 		return getOpenDistance(route, from, to);
@@ -121,7 +127,7 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 		if (speed == 0) {
 			return Integer.MAX_VALUE;
 		}
-		final int distance = getDistance(route, from, to, voyageStartTime);
+		final int distance = getDistance(route, from, to, voyageStartTime, vessel);
 		if (distance == Integer.MAX_VALUE) {
 			return Integer.MAX_VALUE;
 		}

@@ -29,7 +29,7 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	 * @param voyageStartTime
 	 * @return
 	 */
-	boolean isRouteAvailable(@NonNull ERouteOption route, int voyageStartTime);
+	boolean isRouteAvailable(@NonNull ERouteOption route, IVessel vessel, int voyageStartTime);
 
 	/**
 	 * Get available distances. This filters out invalid distances and closed route distances.
@@ -39,12 +39,12 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	 * @return
 	 */
 	@NonNull
-	List<@NonNull Pair<@NonNull ERouteOption, @NonNull Integer>> getDistanceValues(@NonNull IPort from, @NonNull IPort to, int voyageStartTime);
+	List<@NonNull Pair<@NonNull ERouteOption, @NonNull Integer>> getDistanceValues(@NonNull IPort from, @NonNull IPort to, int voyageStartTime, IVessel vessel);
 
 	@Deprecated
 	@NonNull
 	default List<@NonNull Pair<@NonNull ERouteOption, @NonNull Integer>> getDistanceValues(@NonNull IPort from, @NonNull IPort to) {
-		return getDistanceValues(from, to, Integer.MIN_VALUE);
+		return getDistanceValues(from, to, Integer.MIN_VALUE, null);
 	}
 
 	@NonNull
@@ -59,11 +59,11 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	 * @param voyageStartTime
 	 * @return
 	 */
-	int getDistance(@NonNull ERouteOption route, @NonNull IPort from, @NonNull IPort to, int voyageStartTime);
+	int getDistance(@NonNull ERouteOption route, @NonNull IPort from, @NonNull IPort to, int voyageStartTime, IVessel vessel);
 
 	@Deprecated
 	default int getDistance(@NonNull ERouteOption route, @NonNull IPort from, @NonNull IPort to) {
-		return getDistance(route, from, to, Integer.MAX_VALUE);
+		return getDistance(route, from, to, Integer.MAX_VALUE, null);
 	}
 
 	/**

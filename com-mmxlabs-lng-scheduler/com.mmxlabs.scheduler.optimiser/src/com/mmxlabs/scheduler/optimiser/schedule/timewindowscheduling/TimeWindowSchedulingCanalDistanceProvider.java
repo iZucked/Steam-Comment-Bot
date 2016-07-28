@@ -56,7 +56,7 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 		});
 
 		// filter out closed distances
-		allDistanceValues = allDistanceValues.stream().filter(d -> distanceProvider.isRouteAvailable(d.getFirst(), ladenStartTime)).collect(Collectors.toList());
+		allDistanceValues = allDistanceValues.stream().filter(d -> distanceProvider.isRouteAvailable(d.getFirst(), vessel, ladenStartTime)).collect(Collectors.toList());
 
 		// remove dominated distances
 		for (int i = allDistanceValues.size() - 1; i > 0; i--) {

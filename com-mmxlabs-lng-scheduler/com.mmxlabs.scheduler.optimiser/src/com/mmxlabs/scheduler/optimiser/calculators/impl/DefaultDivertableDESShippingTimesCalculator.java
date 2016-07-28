@@ -80,7 +80,7 @@ public class DefaultDivertableDESShippingTimesCalculator implements IDivertableD
 		final int startOfDischarge = dischargeJourney.getFirst();
 		final int completionOfDischarge = startOfDischarge + dischargeDuration;
 
-		final int ballastDistance = distanceProvider.getDistance(ballastRoute, sellOption.getPort(), buyOption.getPort(), completionOfDischarge);
+		final int ballastDistance = distanceProvider.getDistance(ballastRoute, sellOption.getPort(), buyOption.getPort(), completionOfDischarge, nominatedVessel);
 		// Get notional speed
 		final int referenceSpeed = getReferenceSpeed(buyOption, nominatedVessel, VesselState.Ballast);
 
@@ -106,7 +106,7 @@ public class DefaultDivertableDESShippingTimesCalculator implements IDivertableD
 		int shortestTime = Integer.MAX_VALUE;
 		ERouteOption route = ERouteOption.DIRECT;
 		final Collection<ERouteOption> allowedRoutes = shippingHoursRestrictionProvider.getDivertableDESAllowedRoutes(loadOption);
-		final List<Pair<ERouteOption, Integer>> distances = distanceProvider.getDistanceValues(to, from, voyageStartTime);
+		final List<Pair<ERouteOption, Integer>> distances = distanceProvider.getDistanceValues(to, from, voyageStartTime, vessel);
 		for (final Pair<ERouteOption, Integer> d : distances) {
 			final ERouteOption routeOption = d.getFirst();
 			if (allowedRoutes == null || allowedRoutes.isEmpty() || allowedRoutes.contains(routeOption)) {

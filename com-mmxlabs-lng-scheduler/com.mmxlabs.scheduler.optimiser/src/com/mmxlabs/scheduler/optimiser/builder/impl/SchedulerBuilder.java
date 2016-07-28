@@ -122,6 +122,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProviderEditor;
@@ -275,7 +277,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Inject
 	@NonNull
 	private IPortExclusionProviderEditor portExclusionProvider;
-
+	
+	@Inject
+	@NonNull
+	private IRouteExclusionProviderEditor routeExclusionProvider;
+	
 	@Inject
 	@NonNull
 	private IReturnElementProviderEditor returnElementProvider;
@@ -1407,6 +1413,16 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public void setVesselInaccessiblePorts(@NonNull final IVessel vessel, final Set<IPort> inaccessiblePorts) {
 		this.portExclusionProvider.setExcludedPorts(vessel, inaccessiblePorts);
+	}
+
+	@Override
+	public void setVesselInaccessibleRoutes(@NonNull final IVessel vessel, final Set<ERouteOption> inaccessibleRoutes) {
+		this.routeExclusionProvider.setExcludedRoutes(vessel, inaccessibleRoutes);
+	}
+
+	@Override
+	public void setVesselClassInaccessibleRoutes(@NonNull final IVesselClass vesselClass, final Set<ERouteOption> inaccessibleRoutes) {
+		this.routeExclusionProvider.setExcludedRoutes(vesselClass, inaccessibleRoutes);
 	}
 
 	/**
