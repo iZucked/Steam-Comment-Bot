@@ -264,21 +264,22 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			calculateShippingEntityCosts(entityPreTaxProfit, vesselAvailability, plan, cargoPNLData, baseEntity, shippingEntity, false, entityBookDetailTreeMap);
 		}
 
-		// Calculate the value for the fitness function
-		long result = 0L;
 		// Taxed P&L
+		final Map<IEntityBook, Long> entityPostTaxProfit = new HashMap<>();
 		for (final Map.Entry<IEntityBook, Long> e : entityPreTaxProfit.entrySet()) {
-			result += e.getKey().getTaxedProfit(e.getValue(), utcEquivTaxTime);
+			entityPostTaxProfit.put(e.getKey(), e.getKey().getTaxedProfit(e.getValue(), utcEquivTaxTime));
 		}
 
-		final Map<IEntityBook, Long> entityPostTaxProfit = new HashMap<>();
 		// Hook for client specific post tax stuff
 		calculatePostTaxItems(vesselAvailability, plan, cargoPNLData, entityPostTaxProfit, entityBookDetailTreeMap);
 
-		// Non-Taxed P&L
+		// Calculate the value for the fitness function
+		long result = 0L;
 		for (final Map.Entry<IEntityBook, Long> e : entityPostTaxProfit.entrySet()) {
 			result += e.getValue();
 		}
+
+		processProfitAndLossBooks(entityPreTaxProfit, entityPostTaxProfit);
 
 		// Solution Export branch - should called infrequently
 		if (annotatedSolution != null && exportElement != null && entityBookDetailTreeMap != null && portSlotDetailTreeMap != null) {
@@ -291,7 +292,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 						if (preTaxProfit != null || postTaxProfit != null) {
 
 							final long preTaxValue = preTaxProfit == null ? 0 : preTaxProfit.longValue();
-							final long postTaxValue = (postTaxProfit == null ? 0 : postTaxProfit.longValue()) + entity.getShippingBook().getTaxedProfit(preTaxValue, utcEquivTaxTime);
+							final long postTaxValue = (postTaxProfit == null ? 0 : postTaxProfit.longValue());
 							final IDetailTree entityDetails = entityBookDetailTreeMap.get(entity.getShippingBook());
 							final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getShippingBook(), postTaxValue, preTaxValue, entityDetails);
 							entries.add(entry);
@@ -302,7 +303,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 						final Long preTaxProfit = entityPreTaxProfit.get(entity.getTradingBook());
 						if (preTaxProfit != null || postTaxProfit != null) {
 							final long preTaxValue = preTaxProfit == null ? 0 : preTaxProfit.longValue();
-							final long postTaxValue = (postTaxProfit == null ? 0 : postTaxProfit.longValue()) + entity.getTradingBook().getTaxedProfit(preTaxValue, utcEquivTaxTime);
+							final long postTaxValue = (postTaxProfit == null ? 0 : postTaxProfit.longValue());
 							final IDetailTree entityDetails = entityBookDetailTreeMap.get(entity.getTradingBook());
 							final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getTradingBook(), postTaxValue, preTaxValue, entityDetails);
 							entries.add(entry);
@@ -313,7 +314,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 						final Long preTaxProfit = entityPreTaxProfit.get(entity.getUpstreamBook());
 						if (preTaxProfit != null || postTaxProfit != null) {
 							final long preTaxValue = preTaxProfit == null ? 0 : preTaxProfit.longValue();
-							final long postTaxValue = (postTaxProfit == null ? 0 : postTaxProfit.longValue()) + entity.getUpstreamBook().getTaxedProfit(preTaxValue, utcEquivTaxTime);
+							final long postTaxValue = (postTaxProfit == null ? 0 : postTaxProfit.longValue());
 							final IDetailTree entityDetails = entityBookDetailTreeMap.get(entity.getUpstreamBook());
 							final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getUpstreamBook(), postTaxValue, preTaxValue, entityDetails);
 							entries.add(entry);
@@ -351,6 +352,17 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		// }
 
 		return new Pair<>(cargoPNLData, result);
+	}
+
+	/**
+	 * Allow subclasses to post-process the P&L books before final data extraction occurs. E.g. allow custom books to be merged
+	 * 
+	 * @param entityPreTaxProfit
+	 * @param entityPostTaxProfit
+	 */
+
+	protected void processProfitAndLossBooks(@NonNull Map<IEntityBook, Long> entityPreTaxProfit, @NonNull Map<IEntityBook, Long> entityPostTaxProfit) {
+		// Do nothing by default.
 	}
 
 	/**
