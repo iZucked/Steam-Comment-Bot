@@ -158,7 +158,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				final IDischargeOption dischargeOption = (IDischargeOption) slot;
 				int slotPricePerMMBtu = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeOption, cargoPNLData, portSlotDetails);
 				cargoPNLData.setSlotPricePerMMBTu(slot, slotPricePerMMBtu);
-				cargoPNLData.setSlotValue(slot, Calculator.costFromConsumption(cargoPNLData.getSlotVolumeInMMBTu(slot), cargoPNLData.getSlotPricePerMMBTu(slot)));
+				long slotValue = Calculator.costFromConsumption(cargoPNLData.getSlotVolumeInMMBTu(slot), slotPricePerMMBtu);
+				cargoPNLData.setSlotValue(slot, slotValue);
 				slotPricesPerMMBTu[idx] = slotPricePerMMBtu;
 
 			}
