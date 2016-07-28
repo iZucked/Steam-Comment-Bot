@@ -87,9 +87,6 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 
 	@Override
 	public boolean isRouteAvailable(@NonNull final ERouteOption route, final IVessel vessel, final int voyageStartTime) {
-		if (vessel.getName().equals("Oak-Spirit")) {
-			int z = 0;
-		}
 		final int routeAvailableFrom = getRouteAvailableFrom(route);
 		return (voyageStartTime >= routeAvailableFrom) && routeExclusionProvider.isRouteEnabled(vessel, route);
 	}
