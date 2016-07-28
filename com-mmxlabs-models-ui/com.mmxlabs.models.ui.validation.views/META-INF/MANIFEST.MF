@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Validation Views
 Bundle-SymbolicName: com.mmxlabs.models.ui.validation.views;singleton:=true
-Bundle-Version: 3.12.10.qualifier
+Bundle-Version: 3.12.11.qualifier
 Bundle-Activator: com.mmxlabs.models.ui.validation.views.internal.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
@@ -10,11 +10,11 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.emf.validation;bundle-version="1.4.0",
  org.slf4j.api;bundle-version="1.6.4",
  com.mmxlabs.models.mmxcore;bundle-version="[5.0.0,6.0.0)",
- com.mmxlabs.scenario.service.model;bundle-version="[3.12.10,4.0.0)",
- com.mmxlabs.models.ui.validation;bundle-version="[3.12.10,4.0.0)",
- com.mmxlabs.scenario.service.ui;bundle-version="[3.12.10,4.0.0)",
- com.mmxlabs.rcp.common;bundle-version="[3.12.10,4.0.0)",
- com.mmxlabs.common.common-util;bundle-version="[3.12.10,4.0.0)",
+ com.mmxlabs.scenario.service.model;bundle-version="[3.12.11,4.0.0)",
+ com.mmxlabs.models.ui.validation;bundle-version="[3.12.11,4.0.0)",
+ com.mmxlabs.scenario.service.ui;bundle-version="[3.12.11,4.0.0)",
+ com.mmxlabs.rcp.common;bundle-version="[3.12.11,4.0.0)",
+ com.mmxlabs.common.common-util;bundle-version="[3.12.11,4.0.0)",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

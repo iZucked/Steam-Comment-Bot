@@ -2,16 +2,16 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Validation Tests
 Bundle-SymbolicName: com.mmxlabs.models.ui.validation.tests
-Bundle-Version: 3.12.10.qualifier
+Bundle-Version: 3.12.11.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.emf.validation;bundle-version="1.4.0",
  org.junit;bundle-version="4.8.2",
  com.mmxlabs.models.mmxcore;bundle-version="[5.0.0,6.0.0)",
- com.mmxlabs.models.ui.validation;bundle-version="[3.12.10,4.0.0)",
+ com.mmxlabs.models.ui.validation;bundle-version="[3.12.11,4.0.0)",
  org.mockito.mockito-all;bundle-version="1.9.5",
- com.mmxlabs.common.common-util;bundle-version="[3.12.10,4.0.0)",
+ com.mmxlabs.common.common-util;bundle-version="[3.12.11,4.0.0)",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
