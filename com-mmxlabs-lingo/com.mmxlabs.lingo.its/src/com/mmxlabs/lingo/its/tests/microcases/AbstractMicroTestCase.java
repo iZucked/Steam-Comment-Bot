@@ -10,11 +10,13 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.After;
 import org.junit.Before;
 
+import com.google.inject.Module;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelFinder;
@@ -38,6 +40,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public abstract class AbstractMicroTestCase {
@@ -204,7 +207,42 @@ public abstract class AbstractMicroTestCase {
 			executorService.shutdownNow();
 		}
 	}
-	
 
-	
+	public void evaluateWithOverrides(IOptimiserInjectorService localOverrides, @Nullable final Consumer<OptimiserSettings> tweaker, @NonNull final Consumer<LNGScenarioRunner> checker) {
+
+		// Create UserSettings
+		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
+		userSettings.setBuildActionSets(false);
+		userSettings.setGenerateCharterOuts(false);
+		userSettings.setShippingOnly(false);
+		userSettings.setSimilarityMode(SimilarityMode.OFF);
+
+		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		if (tweaker != null) {
+			tweaker.accept(optimiserSettings);
+		}
+
+		// Generate internal data
+		final ExecutorService executorService = Executors.newSingleThreadExecutor();
+		try {
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, null, optimiserSettings, LNGSchedulerJobUtils.createLocalEditingDomain(), null,
+					localOverrides, null, true);
+
+			// final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, null, localOverrides, true);
+			//
+			// if (runnerHookFactory != null) {
+			// final IRunnerHook runnerHook = runnerHookFactory.apply(scenarioRunner);
+			// if (runnerHook != null) {
+			// scenarioRunner.setRunnerHook(runnerHook);
+			// }
+			// }
+
+			scenarioRunner.evaluateInitialState();
+
+			checker.accept(scenarioRunner);
+		} finally {
+			executorService.shutdownNow();
+		}
+	}
+
 }
