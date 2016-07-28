@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -46,10 +47,11 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 
 	/**
 	 */
-	public DischargeOption(final @NonNull String id, final @NonNull IPort port, final ITimeWindow timeWindow, final long minDischargeVolume, final long maxDischargeVolume, final long minCvValue,
-			final long maxCvValue, final ISalesPriceCalculator priceCalculator) {
+	public DischargeOption(final @NonNull String id, final @NonNull IPort port, final ITimeWindow timeWindow, boolean volumeInM3, final long minDischargeVolume, final long maxDischargeVolume,
+			final long minCvValue, final long maxCvValue, final ISalesPriceCalculator priceCalculator) {
 		super(id, port, timeWindow);
 		setPortType(PortType.Discharge);
+		this.volumeSetInM3 = volumeInM3;
 		this.minDischargeVolume = minDischargeVolume;
 		this.maxDischargeVolume = maxDischargeVolume;
 		this.priceCalculator = priceCalculator;
@@ -58,23 +60,26 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 	}
 
 	@Override
-	public long getMinDischargeVolume() {
-		return minDischargeVolume;
+	public long getMinDischargeVolume(int cv) {
+		if (volumeSetInM3) {
+			return minDischargeVolume;
+		} else {
+			assert cv > 0;
+			return Calculator.convertMMBTuToM3(minDischargeVolumeMMBTU, cv);
+		}
 	}
 
 	@Override
-	public void setMinDischargeVolume(final long minDischargeVolume) {
-		this.minDischargeVolume = minDischargeVolume;
-	}
-
-	@Override
-	public long getMaxDischargeVolume() {
-		return maxDischargeVolume;
-	}
-
-	@Override
-	public void setMaxDischargeVolume(final long maxDischargeVolume) {
-		this.maxDischargeVolume = maxDischargeVolume;
+	public long getMaxDischargeVolume(int cv) {
+		if (volumeSetInM3) {
+			return maxDischargeVolume;
+		} else {
+			if (maxDischargeVolumeMMBTU == Long.MAX_VALUE) {
+				return Long.MAX_VALUE;
+			}
+			assert cv > 0;
+			return Calculator.convertMMBTuToM3(maxDischargeVolumeMMBTU, cv);
+		}
 	}
 
 	@Override
@@ -82,6 +87,9 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 		if (obj instanceof DischargeOption) {
 			final DischargeOption slot = (DischargeOption) obj;
 
+			if (volumeSetInM3 != slot.volumeSetInM3) {
+				return false;
+			}
 			if (maxDischargeVolume != slot.maxDischargeVolume) {
 				return false;
 			}
@@ -158,25 +166,41 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 	}
 
 	@Override
-	public long getMinDischargeVolumeMMBTU() {
-		return minDischargeVolumeMMBTU;
-	}
-
-	public void setMinDischargeVolumeMMBTU(long volume) {
-		minDischargeVolumeMMBTU = volume;
+	public long getMinDischargeVolumeMMBTU(int cv) {
+		if (volumeSetInM3) {
+			assert cv > 0;
+			return Calculator.convertM3ToMMBTu(minDischargeVolume, cv);
+		} else {
+			return minDischargeVolumeMMBTU;
+		}
 	}
 
 	@Override
-	public long getMaxDischargeVolumeMMBTU() {
-		return maxDischargeVolumeMMBTU;
+	public long getMaxDischargeVolumeMMBTU(int cv) {
+		if (volumeSetInM3) {
+			if (maxDischargeVolume == Long.MAX_VALUE) {
+				return Long.MAX_VALUE;
+			}
+			assert cv > 0;
+			return Calculator.convertM3ToMMBTu(maxDischargeVolume, cv);
+		} else {
+			return maxDischargeVolumeMMBTU;
+		}
 	}
 
-	public void setMaxDischargeVolumeMMBTU(long volume) {
-		maxDischargeVolumeMMBTU = volume;
-	}
-
-	public void setVolumeSetInM3(boolean m3) {
-		volumeSetInM3 = m3;
+	public void setVolumeLimits(boolean m3, long minVolume, long maxVolume) {
+		this.volumeSetInM3 = m3;
+		if (volumeSetInM3) {
+			this.minDischargeVolume = minVolume;
+			this.maxDischargeVolume = maxVolume;
+			this.minDischargeVolumeMMBTU = 0;
+			this.maxDischargeVolumeMMBTU = 0;
+		} else {
+			this.minDischargeVolume = 0;
+			this.maxDischargeVolume = 0;
+			this.minDischargeVolumeMMBTU = minVolume;
+			this.maxDischargeVolumeMMBTU = maxVolume;
+		}
 	}
 
 	@Override

@@ -152,15 +152,10 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 						maxVolumesInMMBtu.add(actualsDataProvider.getVolumeInMMBtu(slot));
 
 					} else {
-						minVolumesInM3.add(dischargeOption.getMinDischargeVolume());
-						maxVolumesInM3.add(dischargeOption.getMaxDischargeVolume());
-						if (dischargeOption.isVolumeSetInM3()) {
-							minVolumesInMMBtu.add(Calculator.convertM3ToMMBTuWithOverflowProtection(dischargeOption.getMinDischargeVolume(), cargoCV));
-							maxVolumesInMMBtu.add(Calculator.convertM3ToMMBTuWithOverflowProtection(dischargeOption.getMaxDischargeVolume(), cargoCV));
-						} else {
-							minVolumesInMMBtu.add(dischargeOption.getMinDischargeVolumeMMBTU());
-							maxVolumesInMMBtu.add(dischargeOption.getMaxDischargeVolumeMMBTU());
-						}
+						minVolumesInM3.add(dischargeOption.getMinDischargeVolume(cargoCV));
+						maxVolumesInM3.add(dischargeOption.getMaxDischargeVolume(cargoCV));
+						minVolumesInMMBtu.add(dischargeOption.getMinDischargeVolumeMMBTU(cargoCV));
+						maxVolumesInMMBtu.add(dischargeOption.getMaxDischargeVolumeMMBTU(cargoCV));
 					}
 					if (!(dischargeOption instanceof IDischargeSlot)) {
 						nominatedVessel = nominatedVesselProvider.getNominatedVessel(portSlotProvider.getElement(dischargeOption));

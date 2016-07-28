@@ -652,7 +652,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 			// Any violations after this point are slot constraint violations
 
-			final long minDischargeVolumeInM3 = dischargeSlot.getMinDischargeVolume();
+			final long minDischargeVolumeInM3 = dischargeSlot.getMinDischargeVolume(loadSlot.getCargoCVValue());
 
 			final long cargoCapacityInM3 = vessel.getCargoCapacity();
 
@@ -863,7 +863,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		int violationsCount = 0;
 		final long minLoadVolumeInM3 = loadSlot.getMinLoadVolume();
 		long maxLoadVolumeInM3 = loadSlot.getMaxLoadVolume();
-		long maxDischargeVolumeInM3 = dischargeSlot.getMaxDischargeVolume();
+		long maxDischargeVolumeInM3 = dischargeSlot.getMaxDischargeVolume(loadSlot.getCargoCVValue());
 
 		if (maxLoadVolumeInM3 == 0) {
 			maxLoadVolumeInM3 = Long.MAX_VALUE;

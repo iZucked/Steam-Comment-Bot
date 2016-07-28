@@ -5,7 +5,6 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
@@ -52,12 +51,12 @@ public class MarkToMarketDischargeSlot implements IDischargeSlot, IMarkToMarketO
 	}
 
 	@Override
-	public long getMinDischargeVolume() {
+	public long getMinDischargeVolume(int cv) {
 		return loadOption.getMinLoadVolume();
 	}
 
 	@Override
-	public long getMaxDischargeVolume() {
+	public long getMaxDischargeVolume(int cv) {
 		return loadOption.getMaxLoadVolume();
 	}
 
@@ -92,27 +91,22 @@ public class MarkToMarketDischargeSlot implements IDischargeSlot, IMarkToMarketO
 	}
 
 	@Override
-	public void setMinDischargeVolume(long volume) {
+	public long getMinDischargeVolumeMMBTU(int cv) {
+		return loadOption.getMinLoadVolumeMMBTU();
 	}
 
 	@Override
-	public void setMaxDischargeVolume(long volume) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public long getMinDischargeVolumeMMBTU() {
-		return Calculator.convertM3ToMMBTu(loadOption.getMinLoadVolume(), loadOption.getCargoCVValue());
-	}
-
-	@Override
-	public long getMaxDischargeVolumeMMBTU() {
-		return Calculator.convertM3ToMMBTu(loadOption.getMaxLoadVolume(), loadOption.getCargoCVValue());
+	public long getMaxDischargeVolumeMMBTU(int cv) {
+		return loadOption.getMaxLoadVolumeMMBTU();
 	}
 
 	@Override
 	public boolean isVolumeSetInM3() {
 		return loadOption.isVolumeSetInM3();
+	}
+
+	@Override
+	public void setVolumeLimits(final boolean volumeInM3, final long minVolume, final long maxVolume) {
+		throw new UnsupportedOperationException();
 	}
 }

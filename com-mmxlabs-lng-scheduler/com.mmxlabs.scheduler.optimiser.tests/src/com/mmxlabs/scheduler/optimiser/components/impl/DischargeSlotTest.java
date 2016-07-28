@@ -26,37 +26,45 @@ public class DischargeSlotTest {
 		final long maxCvValue = 40L;
 		final ISalesPriceCalculator calculator = Mockito.mock(ISalesPriceCalculator.class);
 
-		final DischargeSlot slot = new DischargeSlot(id, port, tw, minDischargeVolume, maxDischargeVolume, calculator, minCvValue, maxCvValue);
+		final DischargeSlot slot = new DischargeSlot(id, port, tw, true, minDischargeVolume, maxDischargeVolume, calculator, minCvValue, maxCvValue);
 		Assert.assertSame(id, slot.getId());
 		Assert.assertSame(port, slot.getPort());
 		Assert.assertSame(tw, slot.getTimeWindow());
 
-		Assert.assertEquals(minDischargeVolume, slot.getMinDischargeVolume());
-		Assert.assertEquals(maxDischargeVolume, slot.getMaxDischargeVolume());
+		Assert.assertEquals(minDischargeVolume, slot.getMinDischargeVolume(-1));
+		Assert.assertEquals(maxDischargeVolume, slot.getMaxDischargeVolume(-1));
 		Assert.assertSame(calculator, slot.getDischargePriceCalculator());
 
 	}
 
 	@Test
-	public void testGetSetMinDischargeVolume() {
-		final long value = 10;
+	public void testSetVolumes_1() {
 		final DischargeSlot slot = instantiateSlot();
-		Assert.assertEquals(0, slot.getMinDischargeVolume());
-		slot.setMinDischargeVolume(value);
-		Assert.assertEquals(value, slot.getMinDischargeVolume());
-	}
 
-	private DischargeSlot instantiateSlot() {
-		return new DischargeSlot("slot", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
+		slot.setVolumeLimits(true, 5_000_000, 10_000_000);
+		int cv1 = 20_000_000;
+
+		Assert.assertEquals(5_000_000, slot.getMinDischargeVolume(cv1));
+		Assert.assertEquals(10_000_000, slot.getMaxDischargeVolume(cv1));
+		Assert.assertEquals(20 * 5_000_000, slot.getMinDischargeVolumeMMBTU(cv1));
+		Assert.assertEquals(20 * 10_000_000, slot.getMaxDischargeVolumeMMBTU(cv1));
 	}
 
 	@Test
-	public void testGetSetMaxDischargeVolume() {
-		final long value = 10;
+	public void testSetVolumes_2() {
 		final DischargeSlot slot = instantiateSlot();
-		Assert.assertEquals(0, slot.getMaxDischargeVolume());
-		slot.setMaxDischargeVolume(value);
-		Assert.assertEquals(value, slot.getMaxDischargeVolume());
+
+		slot.setVolumeLimits(true, 5_000_000, Long.MAX_VALUE);
+		int cv1 = 20_000_000;
+
+		Assert.assertEquals(5_000_000, slot.getMinDischargeVolume(cv1));
+		Assert.assertEquals(Long.MAX_VALUE, slot.getMaxDischargeVolume(cv1));
+		Assert.assertEquals(20 * 5_000_000, slot.getMinDischargeVolumeMMBTU(cv1));
+		Assert.assertEquals(Long.MAX_VALUE, slot.getMaxDischargeVolumeMMBTU(cv1));
+	}
+
+	private DischargeSlot instantiateSlot() {
+		return new DischargeSlot("slot", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
 	}
 
 	@Test
@@ -80,15 +88,16 @@ public class DischargeSlotTest {
 		final ISalesPriceCalculator curve1 = Mockito.mock(ISalesPriceCalculator.class, "curve1");
 		final ISalesPriceCalculator curve2 = Mockito.mock(ISalesPriceCalculator.class, "curve2");
 
-		final DischargeSlot slot1 = new DischargeSlot(id1, port1, tw1, 10L, 20L, curve1, 30L, 40L);
-		final DischargeSlot slot2 = new DischargeSlot(id1, port1, tw1, 10L, 20L, curve1, 30L, 40L);
+		final DischargeSlot slot1 = new DischargeSlot(id1, port1, tw1, true, 10L, 20L, curve1, 30L, 40L);
+		final DischargeSlot slot2 = new DischargeSlot(id1, port1, tw1, true, 10L, 20L, curve1, 30L, 40L);
 
-		final DischargeSlot slot3 = new DischargeSlot(id2, port1, tw1, 10L, 20L, curve1, 30L, 40L);
-		final DischargeSlot slot4 = new DischargeSlot(id1, port2, tw1, 10L, 20L, curve1, 30L, 40L);
-		final DischargeSlot slot5 = new DischargeSlot(id1, port1, tw2, 10L, 20L, curve1, 30L, 40L);
-		final DischargeSlot slot6 = new DischargeSlot(id1, port1, tw1, 210L, 20L, curve1, 30L, 40L);
-		final DischargeSlot slot7 = new DischargeSlot(id1, port1, tw1, 10L, 220L, curve1, 30L, 40L);
-		final DischargeSlot slot8 = new DischargeSlot(id1, port1, tw1, 10L, 20L, curve2, 30L, 40L);
+		final DischargeSlot slot3 = new DischargeSlot(id2, port1, tw1, true, 10L, 20L, curve1, 30L, 40L);
+		final DischargeSlot slot4 = new DischargeSlot(id1, port2, tw1, true, 10L, 20L, curve1, 30L, 40L);
+		final DischargeSlot slot5 = new DischargeSlot(id1, port1, tw2, true, 10L, 20L, curve1, 30L, 40L);
+		final DischargeSlot slot6 = new DischargeSlot(id1, port1, tw1, true, 210L, 20L, curve1, 30L, 40L);
+		final DischargeSlot slot7 = new DischargeSlot(id1, port1, tw1, true, 10L, 220L, curve1, 30L, 40L);
+		final DischargeSlot slot8 = new DischargeSlot(id1, port1, tw1, true, 10L, 20L, curve2, 30L, 40L);
+		final DischargeSlot slot9 = new DischargeSlot(id1, port1, tw1, false, 10L, 20L, curve1, 30L, 40L);
 
 		Assert.assertTrue(slot1.equals(slot1));
 		Assert.assertTrue(slot1.equals(slot2));
@@ -107,6 +116,7 @@ public class DischargeSlotTest {
 		Assert.assertFalse(slot6.equals(slot1));
 		Assert.assertFalse(slot7.equals(slot1));
 		Assert.assertFalse(slot8.equals(slot1));
+		Assert.assertFalse(slot9.equals(slot1));
 
 		Assert.assertFalse(slot1.equals(new Object()));
 	}

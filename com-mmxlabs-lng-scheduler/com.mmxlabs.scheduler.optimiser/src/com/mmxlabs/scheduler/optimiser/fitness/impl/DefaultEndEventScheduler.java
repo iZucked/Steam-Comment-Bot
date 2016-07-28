@@ -179,7 +179,7 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 				maxLoadInM3 = volume;
 				// LDD!
 				assert partialPortTimesRecord.getSlots().size() == 2;
-				minDischargeInM3 = ((IDischargeSlot) partialPortTimesRecord.getSlots().get(1)).getMinDischargeVolume();
+				minDischargeInM3 = ((IDischargeSlot) partialPortTimesRecord.getSlots().get(1)).getMinDischargeVolume(cargoCV);
 			} else if (firstSlot instanceof IHeelOptionsPortSlot) {
 				final IHeelOptionsPortSlot heelOptionsPortSlot = (IHeelOptionsPortSlot) firstSlot;
 				IHeelOptions heelOptions = heelOptionsPortSlot.getHeelOptions();

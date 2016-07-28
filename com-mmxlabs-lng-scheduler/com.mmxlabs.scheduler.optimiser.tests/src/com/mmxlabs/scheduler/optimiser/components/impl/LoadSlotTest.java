@@ -24,7 +24,7 @@ public class LoadSlotTest {
 		final int cargoCVValue = 40;
 		final ILoadPriceCalculator contract = Mockito.mock(ILoadPriceCalculator.class);
 
-		final LoadSlot slot = new LoadSlot(id, port, tw, minLoadVolume, maxLoadVolume, contract, cargoCVValue, false, true);
+		final LoadSlot slot = new LoadSlot(id, port, tw, true, minLoadVolume, maxLoadVolume, contract, cargoCVValue, false, true);
 		Assert.assertSame(id, slot.getId());
 		Assert.assertSame(port, slot.getPort());
 		Assert.assertSame(tw, slot.getTimeWindow());
@@ -39,25 +39,51 @@ public class LoadSlotTest {
 	}
 
 	@Test
-	public void testGetSetMinLoadVolume() {
-		final long value = 10;
-		final LoadSlot slot = instantiateSlot();
-		Assert.assertEquals(0, slot.getMinLoadVolume());
-		slot.setMinLoadVolume(value);
-		Assert.assertEquals(value, slot.getMinLoadVolume());
-	}
+	public void testSetVolumes_1a() {
+		final LoadOption slot = instantiateSlot();
 
-	private LoadSlot instantiateSlot() {
-		return new LoadSlot("slot", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 0, false, true);
+		int cv1 = 20_000_000;
+		// CV Before vol limits
+		slot.setCargoCVValue(cv1);
+		slot.setVolumeLimits(true, 5_000_000, 10_000_000);
+
+		Assert.assertEquals(5_000_000, slot.getMinLoadVolume());
+		Assert.assertEquals(10_000_000, slot.getMaxLoadVolume());
+		Assert.assertEquals(20 * 5_000_000, slot.getMinLoadVolumeMMBTU());
+		Assert.assertEquals(20 * 10_000_000, slot.getMaxLoadVolumeMMBTU());
 	}
 
 	@Test
-	public void testGetSetMaxLoadVolume() {
-		final long value = 10;
-		final LoadSlot slot = instantiateSlot();
-		Assert.assertEquals(0, slot.getMaxLoadVolume());
-		slot.setMaxLoadVolume(value);
-		Assert.assertEquals(value, slot.getMaxLoadVolume());
+	public void testSetVolumes_1b() {
+		final LoadOption slot = instantiateSlot();
+
+		int cv1 = 20_000_000;
+		slot.setVolumeLimits(true, 5_000_000, 10_000_000);
+		// CV After vol limits
+		slot.setCargoCVValue(cv1);
+
+		Assert.assertEquals(5_000_000, slot.getMinLoadVolume());
+		Assert.assertEquals(10_000_000, slot.getMaxLoadVolume());
+		Assert.assertEquals(20 * 5_000_000, slot.getMinLoadVolumeMMBTU());
+		Assert.assertEquals(20 * 10_000_000, slot.getMaxLoadVolumeMMBTU());
+	}
+
+	@Test
+	public void testSetVolumes_2() {
+		final LoadOption slot = instantiateSlot();
+
+		slot.setVolumeLimits(true, 5_000_000, Long.MAX_VALUE);
+		int cv1 = 20_000_000;
+		slot.setCargoCVValue(cv1);
+
+		Assert.assertEquals(5_000_000, slot.getMinLoadVolume());
+		Assert.assertEquals(Long.MAX_VALUE, slot.getMaxLoadVolume());
+		Assert.assertEquals(20 * 5_000_000, slot.getMinLoadVolumeMMBTU());
+		Assert.assertEquals(Long.MAX_VALUE, slot.getMaxLoadVolumeMMBTU());
+	}
+
+	private LoadSlot instantiateSlot() {
+		return new LoadSlot("slot", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 10, false, true);
 	}
 
 	@Test
@@ -71,9 +97,9 @@ public class LoadSlotTest {
 
 	@Test
 	public void testGetSetCargoCVValue() {
-		final int value = 10;
+		final int value = 20;
 		final LoadSlot slot = instantiateSlot();
-		Assert.assertEquals(0, slot.getCargoCVValue());
+		Assert.assertEquals(10, slot.getCargoCVValue());
 		slot.setCargoCVValue(value);
 		Assert.assertEquals(value, slot.getCargoCVValue());
 	}
@@ -91,24 +117,25 @@ public class LoadSlotTest {
 		final ILoadPriceCalculator curve1 = Mockito.mock(ILoadPriceCalculator.class, "curve1");
 		final ILoadPriceCalculator curve2 = Mockito.mock(ILoadPriceCalculator.class, "curve2");
 
-		final LoadSlot slot1 = new LoadSlot(id1, port1, tw1, 10L, 20L, curve1, 40, false, false);
-		final LoadSlot slot2 = new LoadSlot(id1, port1, tw1, 10L, 20L, curve1, 40, false, false);
+		final LoadSlot slot1 = new LoadSlot(id1, port1, tw1, true, 10L, 20L, curve1, 40, false, false);
+		final LoadSlot slot2 = new LoadSlot(id1, port1, tw1, true, 10L, 20L, curve1, 40, false, false);
 
-		final LoadSlot slot3 = new LoadSlot(id2, port1, tw1, 10L, 20L, curve1, 40, false, false);
-		final LoadSlot slot4 = new LoadSlot(id1, port2, tw1, 10L, 20L, curve1, 40, false, false);
-		final LoadSlot slot5 = new LoadSlot(id1, port1, tw2, 10L, 20L, curve1, 40, false, false);
-		final LoadSlot slot6 = new LoadSlot(id1, port1, tw1, 210L, 20L, curve1, 40, false, false);
-		final LoadSlot slot7 = new LoadSlot(id1, port1, tw1, 10L, 220L, curve1, 40, false, false);
-		final LoadSlot slot8 = new LoadSlot(id1, port1, tw1, 10L, 20L, curve2, 40, false, false);
-		final LoadSlot slot9 = new LoadSlot(id1, port1, tw1, 10L, 20L, curve1, 240, false, false);
+		final LoadSlot slot3 = new LoadSlot(id2, port1, tw1, true, 10L, 20L, curve1, 40, false, false);
+		final LoadSlot slot4 = new LoadSlot(id1, port2, tw1, true, 10L, 20L, curve1, 40, false, false);
+		final LoadSlot slot5 = new LoadSlot(id1, port1, tw2, true, 10L, 20L, curve1, 40, false, false);
+		final LoadSlot slot6 = new LoadSlot(id1, port1, tw1, true, 210L, 20L, curve1, 40, false, false);
+		final LoadSlot slot7 = new LoadSlot(id1, port1, tw1, true, 10L, 220L, curve1, 40, false, false);
+		final LoadSlot slot8 = new LoadSlot(id1, port1, tw1, true, 10L, 20L, curve2, 40, false, false);
+		final LoadSlot slot9 = new LoadSlot(id1, port1, tw1, true, 10L, 20L, curve1, 240, false, false);
 
-		final LoadSlot slot10 = new LoadSlot(id1, port1, tw1, 10L, 20L, curve1, 240, false, true);
+		final LoadSlot slot10 = new LoadSlot(id1, port1, tw1, true, 10L, 20L, curve1, 240, false, true);
 
-		final LoadSlot slot11 = new LoadSlot(id1, port1, tw1, 10L, 20L, curve1, 240, true, true);
+		final LoadSlot slot11 = new LoadSlot(id1, port1, tw1, true, 10L, 20L, curve1, 240, true, true);
 
-		final LoadSlot slot12 = new LoadSlot(id1, port1, tw1, 10L, 20L, curve1, 240, true, false);
+		final LoadSlot slot12 = new LoadSlot(id1, port1, tw1, true, 10L, 20L, curve1, 240, true, false);
 
-		final LoadSlot slot13 = new LoadSlot(id1, port1, tw1, 10L, 20L, curve1, 240, true, true);
+		final LoadSlot slot13 = new LoadSlot(id1, port1, tw1, true, 10L, 20L, curve1, 240, true, true);
+		final LoadSlot slot14 = new LoadSlot(id1, port1, tw1, false, 10L, 20L, curve1, 40, false, false);
 
 		Assert.assertTrue(slot1.equals(slot1));
 		Assert.assertTrue(slot1.equals(slot2));
@@ -142,6 +169,8 @@ public class LoadSlotTest {
 		Assert.assertFalse(slot7.equals(slot1));
 		Assert.assertFalse(slot8.equals(slot1));
 		Assert.assertFalse(slot9.equals(slot1));
+
+		Assert.assertFalse(slot14.equals(slot1));
 
 		Assert.assertFalse(slot1.equals(new Object()));
 	}

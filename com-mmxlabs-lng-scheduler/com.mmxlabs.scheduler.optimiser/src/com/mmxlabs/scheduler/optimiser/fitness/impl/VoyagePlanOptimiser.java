@@ -124,12 +124,18 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				if (resource != null) {
 					final IEndRequirement requirement = startEndRequirementProvider.getEndRequirement(resource);
 					if (requirement != null) {
+						if (requirement.isOpen()) {
+							evaluateVoyagePlan(record, state, 0);
+							return;
+						}
 						window = requirement.getTimeWindow();
 					}
 				}
 
 				final int lastArrivalTime = record.portTimesRecord.getSlotTime(slot);
 				final int extraExtent = window == null ? 30 * RELAXATION_STEP : (lastArrivalTime >= window.getExclusiveEnd() ? 0 : window.getExclusiveEnd() - lastArrivalTime);
+
+				// If this is non-zero then our end event rules will have kicked in and we should not engage the speed step code.
 
 				evaluateVoyagePlan(record, state, extraExtent);
 				return;
