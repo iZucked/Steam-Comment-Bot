@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.rcp.common</groupId>
 	<artifactId>com.mmxlabs.rcp.common.parent</artifactId>
-	<version>3.12.11-SNAPSHOT</version>
+	<version>3.12.11.RELEASE</version>
 	<packaging>pom</packaging>
 
 	<parent>
