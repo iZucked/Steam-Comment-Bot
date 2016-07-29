@@ -6,12 +6,12 @@
 	<parent>
 		<groupId>com.mmxlabs.lingo.reports</groupId>
 		<artifactId>com.mmxlabs.lingo.reports.parent</artifactId>
-		<version>3.12.11.RELEASE</version>
+		<version>3.12.12-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.mmxlabs.lingo.reports.feature</groupId>
 	<artifactId>com.mmxlabs.lingo.reports.feature</artifactId>
-	<version>3.12.11.RELEASE</version>
+	<version>3.12.12-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 
 	<build>
