@@ -69,17 +69,17 @@ public class DefaultDistanceProviderImplTest {
 
 		final DefaultDistanceProviderImpl distanceProvider = createDistanceProvider(matrixProvider, routeCostProvider);
 
-		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.DIRECT, 0));
-		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.SUEZ, 0));
-		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.PANAMA, 0));
+		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.DIRECT, null, 0));
+		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.SUEZ, null, 0));
+		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.PANAMA, null, 0));
 
 		distanceProvider.setRouteAvailableFrom(ERouteOption.PANAMA, 10);
 
-		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.DIRECT, 0));
-		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.SUEZ, 0));
+		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.DIRECT, null, 0));
+		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.SUEZ, null, 0));
 
-		Assert.assertFalse(distanceProvider.isRouteAvailable(ERouteOption.PANAMA, 0));
-		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.PANAMA, 10));
+		Assert.assertFalse(distanceProvider.isRouteAvailable(ERouteOption.PANAMA, null, 0));
+		Assert.assertTrue(distanceProvider.isRouteAvailable(ERouteOption.PANAMA, null, 10));
 	}
 
 	@SuppressWarnings("deprecation")
@@ -364,7 +364,6 @@ public class DefaultDistanceProviderImplTest {
 		
 		HashMapRouteExclusionProvider routeExclusionProvider = new HashMapRouteExclusionProvider();
 		routeExclusionProvider.setExcludedRoutes(vessel, Sets.newHashSet(ERouteOption.PANAMA));
-//		routeExclusionProvider.setExcludedRoutes(vessel, Sets.newHashSet());
 		DefaultDistanceProviderImpl distanceProvider = createDistanceProvider(matrixProvider, routeCostProvider, routeExclusionProvider);
 
 
