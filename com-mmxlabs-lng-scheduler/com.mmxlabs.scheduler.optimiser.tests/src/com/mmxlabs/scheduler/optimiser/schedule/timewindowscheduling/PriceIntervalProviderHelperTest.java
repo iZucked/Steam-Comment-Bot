@@ -1038,11 +1038,11 @@ public class PriceIntervalProviderHelperTest {
 		IDistanceProvider distanceProvider = Mockito.mock(IDistanceProvider.class);
 		Mockito.when(distanceProvider.getAllDistanceValues(Mockito.any(IPort.class), Mockito.any(IPort.class))).thenReturn(distances);
 		for (Pair<ERouteOption, Integer> openings : canalOpenings) {
-			when(distanceProvider.isRouteAvailable(Matchers.eq(openings.getFirst()), Matchers.anyInt())).thenAnswer(new Answer<Boolean>() {
+			when(distanceProvider.isRouteAvailable(Matchers.eq(openings.getFirst()), Matchers.any(), Matchers.anyInt())).thenAnswer(new Answer<Boolean>() {
 				@Override
 				public Boolean answer(final InvocationOnMock invocation) throws Throwable {
 					final Object[] args = invocation.getArguments();
-					final int input = (int) args[1];
+					final int input = (int) args[2];
 					if (input >= openings.getSecond()) {
 						return true;
 					} else {
