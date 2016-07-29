@@ -77,12 +77,14 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImpl;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapBaseFuelCurveEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -111,6 +113,7 @@ public class ScheduleCalculatorTest {
 		final IActualsDataProvider actualsDataProvider = mock(IActualsDataProvider.class);
 		final IStartEndRequirementProvider startEndRequirementProvider = mock(IStartEndRequirementProvider.class);
 		final IShippingHoursRestrictionProvider shippingHoursRestrictionProvider = mock(IShippingHoursRestrictionProvider.class);
+		final IRouteExclusionProvider routeExclusionProvider = new HashMapRouteExclusionProvider();
 		class TestModule extends AbstractModule {
 
 			@Provides
@@ -186,6 +189,7 @@ public class ScheduleCalculatorTest {
 				bind(IDistanceProviderEditor.class).to(DefaultDistanceProviderImpl.class);
 
 				bind(ITimeZoneToUtcOffsetProvider.class).to(TimeZoneToUtcOffsetProvider.class);
+				bind(IRouteExclusionProvider.class).toInstance(routeExclusionProvider);
 
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocationCache)).toInstance(Boolean.FALSE);
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(Boolean.FALSE);
