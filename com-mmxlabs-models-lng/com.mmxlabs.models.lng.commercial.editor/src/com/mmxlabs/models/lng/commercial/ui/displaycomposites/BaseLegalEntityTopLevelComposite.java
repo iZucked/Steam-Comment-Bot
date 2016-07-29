@@ -111,7 +111,8 @@ public class BaseLegalEntityTopLevelComposite extends DefaultTopLevelComposite {
 			} else if (ref == CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK) {
 				g2.setText("Upstream Book");
 			} else {
-				final String groupName = EditorUtils.unmangle(value.eClass().getName());
+				// Unmangle the feature name (to avoid forking this class for client specific books - See FB)
+				final String groupName = EditorUtils.unmangle(ref.getName());
 				g2.setText(groupName);
 			}
 			g2.setLayout(new FillLayout());
@@ -119,8 +120,8 @@ public class BaseLegalEntityTopLevelComposite extends DefaultTopLevelComposite {
 			g2.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 			toolkit.adapt(g2);
 
-			final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass())
-					.createSublevelComposite(g2, value.eClass(), dialogContext, toolkit);
+			final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass()).createSublevelComposite(g2, value.eClass(),
+					dialogContext, toolkit);
 
 			sub.setCommandHandler(commandHandler);
 			sub.setEditorWrapper(editorWrapper);
