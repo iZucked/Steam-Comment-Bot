@@ -175,9 +175,9 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 								final int loadDurationInHours = desPurchase.getSlotOrPortDuration();
 								final int dischargeDurationInHours = dischargeSlot.getSlotOrPortDuration();
 
-								final int ladenTravelTimeInHours = TravelTimeUtils.getMinRouteTimeInHours(desPurchase, desPurchase, dischargeSlot, shippingDaysSpeedProvider, lngScenarioModel, vessel,
+								final int ladenTravelTimeInHours = TravelTimeUtils.getDivertableDESMinRouteTimeInHours(desPurchase, desPurchase, dischargeSlot, shippingDaysSpeedProvider, lngScenarioModel, vessel,
 										TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, desPurchase, vesselClass, true));
-								final int ballastTravelTimeInHours = TravelTimeUtils.getMinRouteTimeInHours(desPurchase, dischargeSlot, desPurchase, shippingDaysSpeedProvider, lngScenarioModel, vessel,
+								final int ballastTravelTimeInHours = TravelTimeUtils.getDivertableDESMinRouteTimeInHours(desPurchase, dischargeSlot, desPurchase, shippingDaysSpeedProvider, lngScenarioModel, vessel,
 										TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, desPurchase, vesselClass, false));
 
 								// Calculate minimum time due to slot windows
