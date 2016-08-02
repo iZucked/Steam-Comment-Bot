@@ -4,8 +4,13 @@
  */
 package com.mmxlabs.models.lng.commercial.util;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -13,6 +18,7 @@ import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.commercial.TaxRate;
 
 public class CommercialModelBuilder {
 
@@ -62,5 +68,42 @@ public class CommercialModelBuilder {
 		commercialModel.getPurchaseContracts().add(contract);
 
 		return contract;
+	}
+
+	public @NonNull TaxRate createTaxRate(@NonNull LocalDate date, float taxRate) {
+
+		// Check sensible bounds.
+		assert taxRate >= 0.0f;
+		assert taxRate <= 1.0f;
+
+		TaxRate rate = CommercialFactory.eINSTANCE.createTaxRate();
+
+		rate.setDate(date);
+		rate.setValue(taxRate);
+
+		return rate;
+	}
+
+	/**
+	 * Replaces existing tax rates with the new entry
+	 * 
+	 * @param book
+	 * @param rate
+	 */
+	public void setTaxRate(@NonNull BaseEntityBook book, @NonNull TaxRate rate) {
+		book.getTaxRates().clear();
+		book.getTaxRates().add(rate);
+	}
+
+	/**
+	 * Replaces existing tax rates with a copy new entry for the standard entity books.
+	 * 
+	 * @param book
+	 * @param rate
+	 */
+	public void setTaxRates(@NonNull BaseLegalEntity entity, @NonNull TaxRate rate) {
+		setTaxRate(entity.getTradingBook(), EcoreUtil.copy(rate));
+		setTaxRate(entity.getShippingBook(), EcoreUtil.copy(rate));
+		setTaxRate(entity.getUpstreamBook(), EcoreUtil.copy(rate));
 	}
 }
