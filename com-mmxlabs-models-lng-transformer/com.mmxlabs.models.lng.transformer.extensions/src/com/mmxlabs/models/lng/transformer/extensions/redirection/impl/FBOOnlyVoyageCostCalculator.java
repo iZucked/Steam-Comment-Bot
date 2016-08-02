@@ -49,7 +49,7 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 		final VoyagePlan notionalPlan = new VoyagePlan();
 		notionalPlan.setCharterInRatePerDay(vesselCharterInRatePerDay);
 
-		final int distance = distanceProvider.getDistance(route, loadPort, dischargePort, loadTime + loadDuration);
+		final int distance = distanceProvider.getDistance(route, loadPort, dischargePort, loadTime + loadDuration, vessel);
 		if (distance == Integer.MAX_VALUE) {
 			return null;
 		}
@@ -111,7 +111,7 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 		final VoyagePlan notionalPlan = new VoyagePlan();
 		notionalPlan.setCharterInRatePerDay(vesselCharterInRatePerDay);
 
-		final int distance = distanceProvider.getDistance(route, loadPort, dischargePort, loadTime + loadDuration);
+		final int distance = distanceProvider.getDistance(route, loadPort, dischargePort, loadTime + loadDuration, vessel);
 		if (distance == Integer.MAX_VALUE) {
 			return null;
 		}
