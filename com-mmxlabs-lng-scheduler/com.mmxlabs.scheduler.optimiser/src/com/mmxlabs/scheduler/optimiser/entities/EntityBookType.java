@@ -5,5 +5,5 @@
 package com.mmxlabs.scheduler.optimiser.entities;
 
 public enum EntityBookType {
-	Trading, Shipping, Upstream
+	Trading, Shipping, Upstream, Custom
 }

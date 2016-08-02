@@ -54,6 +54,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator.EvaluationMode;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
@@ -244,7 +245,7 @@ public class ScheduleCalculatorTest {
 		when(portSlot5.getTimeWindow()).thenReturn(timeWindow);
 
 		Pair<CargoValueAnnotation, Long> p = Mockito.mock(Pair.class);
-		when(entityValueCalculator.evaluate(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.anyInt(), Matchers.any(), Matchers.any())).thenReturn(p);
+		when(entityValueCalculator.evaluate(Matchers.eq(EvaluationMode.FullPNL), Matchers.any(), Matchers.any(), Matchers.any(), Matchers.anyInt(), Matchers.any(), Matchers.any())).thenReturn(p);
 		final ProfitAndLossCalculator profitAndLossCalculator = new ProfitAndLossCalculator();
 		injector.injectMembers(profitAndLossCalculator);
 
