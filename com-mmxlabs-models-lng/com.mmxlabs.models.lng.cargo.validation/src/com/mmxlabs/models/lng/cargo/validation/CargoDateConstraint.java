@@ -167,30 +167,9 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 				for (final VesselClass vc : usedClasses) {
 					maxSpeedKnots = Math.max(vc.getMaxSpeed(), maxSpeedKnots);
 				}
-
-				@SuppressWarnings("unchecked")
-				Map<Pair<Port, Port>, Integer> minTimes = (Map<Pair<Port, Port>, Integer>) ctx.getCurrentConstraintData();
-				final Pair<Port, Port> key = new Pair<Port, Port>(from.getPort(), to.getPort());
-				if (minTimes == null) {
-					minTimes = new HashMap<Pair<Port, Port>, Integer>();
-
-					for (final VesselClass vesselClass : usedClasses) {
-						for (final VesselClassRouteParameters parameters : vesselClass.getRouteParameters()) {
-							collectMinTimes(minTimes, parameters.getRoute(), parameters.getExtraTransitTime(), vesselClass.getMaxSpeed());
-						}
-					}
-
-					for (final Route route : ((LNGScenarioModel) scenario).getReferenceModel().getPortModel().getRoutes()) {
-						if (route.isCanal() == false) {
-							collectMinTimes(minTimes, route, 0, maxSpeedKnots);
-						}
-					}
-
-					ctx.putCurrentConstraintData(minTimes);
-				}
-
-				final Integer minTime = minTimes.get(key);
-
+				
+				final Integer minTime = TravelTimeUtils.getFobMinTimeInHours(from, to, cargo.getSortedSlots().get(0).getWindowStart(), cargo.getVesselAssignmentType(),
+						lngScenarioModel.getReferenceModel().getPortModel(), lngScenarioModel.getReferenceModel().getCostModel(), maxSpeedKnots);
 				int severity = IStatus.ERROR;
 				if (minTime == null) {
 					// distance line is missing
@@ -328,7 +307,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 			failures.add(status);
 		} else {
 
-			int travelTime = TravelTimeUtils.getMinRouteTimeInHours(from, from, to, shippingDaysSpeedProvider, TravelTimeUtils.getScenarioModel(extraContext), vessel,
+			int travelTime = TravelTimeUtils.getDivertableDESMinRouteTimeInHours(from, from, to, shippingDaysSpeedProvider, TravelTimeUtils.getScenarioModel(extraContext), vessel,
 					TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel.getVesselClass(), true));
 			if (travelTime + from.getSlotOrPortDuration() > windowLength) {
 				final String message = String.format("Purchase|%s] is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey by %s", from.getName(),
