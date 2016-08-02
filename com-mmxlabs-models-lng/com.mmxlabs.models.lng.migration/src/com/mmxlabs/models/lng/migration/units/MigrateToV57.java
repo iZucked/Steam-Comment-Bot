@@ -9,7 +9,7 @@ import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 
-public class MigrateToV55 extends AbstractMigrationUnit {
+public class MigrateToV57 extends AbstractMigrationUnit {
 
 	@Override
 	public String getScenarioContext() {
@@ -18,18 +18,16 @@ public class MigrateToV55 extends AbstractMigrationUnit {
 
 	@Override
 	public int getScenarioSourceVersion() {
-		return 54;
+		return 55;
 	}
 
 	@Override
 	public int getScenarioDestinationVersion() {
-		return 55;
+		return 56;
 	}
 
 	@Override
 	protected void doMigrationWithHelper(final MetamodelLoader loader, final EObjectWrapper model) {
 		// Nothing to do
-
-		model.unsetFeature("parameters");
 	}
 }

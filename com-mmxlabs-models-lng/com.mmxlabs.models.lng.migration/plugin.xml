@@ -423,14 +423,14 @@
              to="54">
        </MigrationUnit>
        <MigrationUnit
-             class="com.mmxlabs.models.lng.migration.units.MigrateToV55"
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV56"
              context="com.mmxlabs.lingo"
              from="54"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV55"
              to="55">
        </MigrationUnit>
        <MigrationUnit
-             class="com.mmxlabs.models.lng.migration.units.MigrateToV56"
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV57"
              context="com.mmxlabs.lingo"
              from="55"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV56"

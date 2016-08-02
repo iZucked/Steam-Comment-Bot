@@ -31,43 +31,6 @@
     <eLiterals name="MEDIUM" value="3" literal="MEDIUM"/>
     <eLiterals name="HIGH" value="4" literal="HIGH"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="IndividualSolutionImprovementSettings">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iterations" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="improvingSolutions" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ParametersModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="settings" upperBound="-1"
-        eType="#//OptimiserSettings" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="activeSetting" lowerBound="1"
-        eType="#//OptimiserSettings"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="OptimiserSettings" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="objectives" upperBound="-1"
-        eType="#//Objective" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
-        eType="#//Constraint" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="range" lowerBound="1" eType="#//OptimisationRange"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="annealingSettings" lowerBound="1"
-        eType="#//AnnealingSettings" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="seed" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
-        eType="#//Argument" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="generateCharterOuts" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="shippingOnly" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="similaritySettings" lowerBound="1"
-        eType="#//SimilaritySettings" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="solutionImprovementSettings"
-        lowerBound="1" eType="#//IndividualSolutionImprovementSettings" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="buildActionSets" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="actionPlanSettings" lowerBound="1"
-        eType="#//ActionPlanSettings" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="floatingDaysLimit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
-        defaultValueLiteral="15"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="stages" upperBound="-1"
-        eType="#//OptimisationStage" containment="true"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Objective" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
@@ -77,12 +40,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="Constraint" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="OptimisationRange">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optimiseAfter" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"
-        unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optimiseBefore" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"
-        unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AnnealingSettings">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="iterations" lowerBound="1"
@@ -96,10 +53,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="restarting" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="restartIterationsThreshold"
         lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Argument">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SimilaritySettings">
     <eStructuralFeatures xsi:type="ecore:EReference" name="lowInterval" lowerBound="1"
@@ -115,14 +68,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="threshold" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ActionPlanSettings">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalEvaluations" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inRunEvaluations" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="searchDepth" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OptimisationPlan">

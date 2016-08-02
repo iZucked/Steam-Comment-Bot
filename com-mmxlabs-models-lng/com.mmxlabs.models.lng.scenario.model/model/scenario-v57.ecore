@@ -7,8 +7,6 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="scheduleModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//ScheduleModel"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" eType="ecore:EClass ../../com.mmxlabs.models.lng.parameters/model/parameters.ecore#//OptimiserSettings"
-        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="actualsModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.actuals/model/actuals.ecore#//ActualsModel"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="promptPeriodStart" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"
