@@ -19,6 +19,7 @@ import org.junit.Before;
 import com.google.inject.Module;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.util.CommercialModelBuilder;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelFinder;
 import com.mmxlabs.models.lng.fleet.util.FleetModelBuilder;
 import com.mmxlabs.models.lng.fleet.util.FleetModelFinder;
@@ -52,6 +53,7 @@ public abstract class AbstractMicroTestCase {
 	protected FleetModelFinder fleetModelFinder;
 	protected PortModelFinder portFinder;
 	protected CargoModelBuilder cargoModelBuilder;
+	protected CommercialModelBuilder commercialModelBuilder;
 	protected FleetModelBuilder fleetModelBuilder;
 	protected SpotMarketsModelBuilder spotMarketsModelBuilder;
 	protected PricingModelBuilder pricingModelBuilder;
@@ -91,12 +93,17 @@ public abstract class AbstractMicroTestCase {
 		portFinder = scenarioModelFinder.getPortModelFinder();
 
 		pricingModelBuilder = scenarioModelBuilder.getPricingModelBuilder();
+		commercialModelBuilder = scenarioModelBuilder.getCommercialModelBuilder();
 		cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
 		fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
 		spotMarketsModelBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
 
-		entity = commercialModelFinder.findEntity("Shipping");
+		entity = importDefaultEntity();
 
+	}
+
+	protected BaseLegalEntity importDefaultEntity() {
+		return commercialModelFinder.findEntity("Shipping");
 	}
 
 	@After
@@ -107,6 +114,7 @@ public abstract class AbstractMicroTestCase {
 		commercialModelFinder = null;
 		fleetModelFinder = null;
 		portFinder = null;
+		commercialModelBuilder = null;
 		cargoModelBuilder = null;
 		fleetModelBuilder = null;
 		spotMarketsModelBuilder = null;
