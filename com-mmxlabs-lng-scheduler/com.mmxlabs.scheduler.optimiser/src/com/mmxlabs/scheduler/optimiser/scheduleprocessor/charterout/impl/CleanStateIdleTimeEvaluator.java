@@ -282,7 +282,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		int shortestTime = Integer.MAX_VALUE;
 		ERouteOption route = ERouteOption.DIRECT;
 
-		final List<Pair<ERouteOption, Integer>> distances = distanceProvider.getDistanceValues(slotPort, charterPort, voyageStartTime);
+		final List<Pair<ERouteOption, Integer>> distances = distanceProvider.getDistanceValues(slotPort, charterPort, voyageStartTime, vessel);
 		int directTime = Integer.MAX_VALUE;
 		Pair<ERouteOption, Integer> directEntry = null;
 		for (final Pair<ERouteOption, Integer> d : distances) {
