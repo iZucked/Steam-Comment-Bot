@@ -55,6 +55,8 @@ public class CharterInMarketItemProvider
 			addNamePropertyDescriptor(object);
 			addCharterInRatePropertyDescriptor(object);
 			addSpotCharterCountPropertyDescriptor(object);
+			addOverrideInaccessibleRoutesPropertyDescriptor(object);
+			addInaccessibleRoutesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -93,7 +95,7 @@ public class CharterInMarketItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_NamedObject_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"),
+				 getString("_UI_NamedObject_name_description"),
 				 MMXCorePackage.Literals.NAMED_OBJECT__NAME,
 				 true,
 				 false,
@@ -121,6 +123,50 @@ public class CharterInMarketItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Override Inaccessible Routes feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addOverrideInaccessibleRoutesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterInMarket_overrideInaccessibleRoutes_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterInMarket_overrideInaccessibleRoutes_feature", "_UI_CharterInMarket_type"),
+				 SpotMarketsPackage.Literals.CHARTER_IN_MARKET__OVERRIDE_INACCESSIBLE_ROUTES,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Inaccessible Routes feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addInaccessibleRoutesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterInMarket_inaccessibleRoutes_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterInMarket_inaccessibleRoutes_feature", "_UI_CharterInMarket_type"),
+				 SpotMarketsPackage.Literals.CHARTER_IN_MARKET__INACCESSIBLE_ROUTES,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -217,6 +263,8 @@ public class CharterInMarketItemProvider
 			case SpotMarketsPackage.CHARTER_IN_MARKET__NAME:
 			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_IN_RATE:
 			case SpotMarketsPackage.CHARTER_IN_MARKET__SPOT_CHARTER_COUNT:
+			case SpotMarketsPackage.CHARTER_IN_MARKET__OVERRIDE_INACCESSIBLE_ROUTES:
+			case SpotMarketsPackage.CHARTER_IN_MARKET__INACCESSIBLE_ROUTES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__EXTENSIONS:

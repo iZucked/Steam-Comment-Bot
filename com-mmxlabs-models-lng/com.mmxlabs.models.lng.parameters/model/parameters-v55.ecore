@@ -19,8 +19,6 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="similarityMode" eType="#//SimilarityMode"
         defaultValueLiteral="OFF"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cleanStateOptimisation"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="floatingDaysLimit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         defaultValueLiteral="15"/>
   </eClassifiers>
@@ -65,8 +63,6 @@
         eType="#//ActionPlanSettings" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="floatingDaysLimit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         defaultValueLiteral="15"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="stages" upperBound="-1"
-        eType="#//OptimisationStage" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Objective" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" lowerBound="1"
@@ -124,71 +120,5 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="searchDepth" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="OptimisationPlan">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="userSettings" eType="#//UserSettings"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="stages" upperBound="-1"
-        eType="#//OptimisationStage" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="solutionBuilderSettings"
-        eType="#//SolutionBuilderSettings" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ConstraintAndFitnessSettings">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="objectives" upperBound="-1"
-        eType="#//Objective" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
-        eType="#//Constraint" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="floatingDaysLimit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
-        defaultValueLiteral="15"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="similaritySettings" lowerBound="1"
-        eType="#//SimilaritySettings" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="OptimisationStage" abstract="true" interface="true">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ConstraintsAndFitnessSettingsStage"
-      abstract="true" eSuperTypes="#//OptimisationStage">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="constraintAndFitnessSettings"
-        eType="#//ConstraintAndFitnessSettings" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ParallisableOptimisationStage" eSuperTypes="#//OptimisationStage"/>
-  <eClassifiers xsi:type="ecore:EClass" name="ParallelOptimisationStage" eSuperTypes="#//OptimisationStage">
-    <eTypeParameters name="T">
-      <eBounds eClassifier="#//ParallisableOptimisationStage"/>
-    </eTypeParameters>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jobCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="template" containment="true">
-      <eGenericType eTypeParameter="#//ParallelOptimisationStage/T"/>
-    </eStructuralFeatures>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CleanStateOptimisationStage" eSuperTypes="#//ParallisableOptimisationStage #//ConstraintsAndFitnessSettingsStage">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="seed" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="annealingSettings" lowerBound="1"
-        eType="#//AnnealingSettings" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="LocalSearchOptimisationStage" eSuperTypes="#//ParallisableOptimisationStage #//ConstraintsAndFitnessSettingsStage">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="seed" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="annealingSettings" lowerBound="1"
-        eType="#//AnnealingSettings" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="HillClimbOptimisationStage" eSuperTypes="#//ParallisableOptimisationStage #//ConstraintsAndFitnessSettingsStage">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="seed" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="annealingSettings" lowerBound="1"
-        eType="#//AnnealingSettings" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ActionPlanOptimisationStage" eSuperTypes="#//ConstraintsAndFitnessSettingsStage">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalEvaluations" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inRunEvaluations" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="searchDepth" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ResetInitialSequencesStage" eSuperTypes="#//OptimisationStage"/>
-  <eClassifiers xsi:type="ecore:EClass" name="BreakEvenOptmisationStage" eSuperTypes="#//OptimisationStage">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetProfitAndLoss" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SolutionBuilderSettings">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="constraintAndFitnessSettings"
-        eType="#//ConstraintAndFitnessSettings" containment="true"/>
   </eClassifiers>
 </ecore:EPackage>

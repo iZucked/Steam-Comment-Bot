@@ -12,11 +12,13 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.ui.inlineeditors.RouteExclusionMultiInlineEditor;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.impl.MultiEnumInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -69,6 +71,8 @@ public class VesselComponentHelper extends BaseComponentHelper {
 		add_inaccessiblePortsEditor(detailComposite, topClass);
 		add_capacityEditor(detailComposite, topClass);
 		add_fillCapacityEditor(detailComposite, topClass);
+		add_overrideInaccessibleRoutesEditor(detailComposite, topClass);
+		add_inaccessibleRoutesEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the shortName feature on Vessel
@@ -111,5 +115,23 @@ public class VesselComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_fillCapacityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__FILL_CAPACITY));
+	}
+
+	/**
+	 * Create the editor for the overrideInaccessibleRoutes feature on Vessel
+	 *
+	 * @generated
+	 */
+	protected void add_overrideInaccessibleRoutesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES));
+	}
+
+	/**
+	 * Create the editor for the inaccessibleRoutes feature on Vessel
+	 *
+	 * @generated NOT
+	 */
+	protected void add_inaccessibleRoutesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new RouteExclusionMultiInlineEditor(FleetPackage.Literals.VESSEL__INACCESSIBLE_ROUTES));
 	}
 }
