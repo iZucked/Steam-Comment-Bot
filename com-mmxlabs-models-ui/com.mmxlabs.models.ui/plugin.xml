@@ -75,6 +75,10 @@
                   EDataTypeName="DateTime"
                   EDataTypeURI="http://www.mmxlabs.com/models/datetime/1">
             </EDataTypeIs>
+            <EDataTypeIs
+                  EDataTypeName="EEnumerator"
+                  EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore">
+            </EDataTypeIs>
          </FeatureAnyOf>
       </editorFactory>
    </extension>

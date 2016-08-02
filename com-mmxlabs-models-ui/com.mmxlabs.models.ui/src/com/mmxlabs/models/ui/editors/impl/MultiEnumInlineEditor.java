@@ -39,8 +39,8 @@ import com.mmxlabs.models.ui.editors.util.CommandUtil;
  */
 public class MultiEnumInlineEditor extends BasicAttributeInlineEditor {
 	private Label theLabel;
-	private EEnum myEnum;
-	private Enumerator[] enumerators;
+	protected EEnum myEnum;
+	protected Enumerator[] enumerators;
 
 	public MultiEnumInlineEditor(EStructuralFeature feature) {
 		super(feature);
@@ -63,8 +63,8 @@ public class MultiEnumInlineEditor extends BasicAttributeInlineEditor {
 		gl.marginHeight = 0;
 
 		// final Label label = new Label(buttonAndLabel, SWT.NONE);
-		label = toolkit.createLabel(buttonAndLabel, "");
-		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		label = toolkit.createLabel(buttonAndLabel, "");
+//		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 //		final Button button = new Button(buttonAndLabel, SWT.NONE);
 		final Button button = toolkit.createButton(buttonAndLabel, "Edit", SWT.NONE);
@@ -80,7 +80,7 @@ public class MultiEnumInlineEditor extends BasicAttributeInlineEditor {
 			}
 		});
 
-		theLabel = label;
+//		theLabel = label;
 
 		return super.wrapControl(buttonAndLabel);
 	}
@@ -100,7 +100,7 @@ public class MultiEnumInlineEditor extends BasicAttributeInlineEditor {
 				sb.append(", ");
 			sb.append(obj.getName());
 		}
-		theLabel.setText(sb.toString());
+//		theLabel.setText(sb.toString());
 	}
 
 	protected List<Object> openDialogBox(Control cellEditorWindow) {

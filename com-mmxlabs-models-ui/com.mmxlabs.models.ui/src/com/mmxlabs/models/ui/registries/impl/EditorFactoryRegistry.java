@@ -115,7 +115,7 @@ public class EditorFactoryRegistry extends AbstractRegistry<Pair<EClass, EStruct
 							break;
 						}
 					}
-					badMatch = badMatch || (needsMatchDataType && !matchesDataType);
+					badMatch = badMatch || (needsMatchDataType && !matchesDataType) || (!needsMatchDataType && featureMatcher.getEClassMatchers().length > 0);
 				} else {
 					boolean needsMatchReferenceType = false;
 					for (final IInlineEditorFactoryExtension.IEClassMatcher classMatcher : featureMatcher.getEClassMatchers()) {
@@ -124,7 +124,8 @@ public class EditorFactoryRegistry extends AbstractRegistry<Pair<EClass, EStruct
 								getMinimumGenerations(featureEClass, classMatcher.getEClassName()));
 					}
 					badMatch = badMatch
-							|| (needsMatchReferenceType && referenceTypeMinGenerations == Integer.MAX_VALUE);
+							|| (needsMatchReferenceType && referenceTypeMinGenerations == Integer.MAX_VALUE)
+							|| (!needsMatchReferenceType && featureMatcher.getDataTypeMatchers().length > 0);
 				}
 			}
 			
