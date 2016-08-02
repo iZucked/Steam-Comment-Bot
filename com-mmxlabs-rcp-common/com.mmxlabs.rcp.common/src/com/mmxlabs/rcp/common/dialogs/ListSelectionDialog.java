@@ -374,6 +374,7 @@ public class ListSelectionDialog extends Dialog {
 				final ReversibleViewerComparator sorter = new ReversibleViewerComparator(new ViewerComparator() {
 					@Override
 					public int compare(Viewer viewer, Object arg0, Object arg1) {
+						//FIXME: SG 29/07/2016 - log file reported NPE here!
 						return provider.getText(arg0).compareTo(provider.getText(arg1));
 					}					
 				});
