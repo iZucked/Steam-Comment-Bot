@@ -284,7 +284,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 				break;
 			}
 
-			final List<Pair<ERouteOption, Integer>> distanceValues = distanceProvider.getDistanceValues(fromPort, toPort, lastVoyageStartTime);
+			final List<Pair<ERouteOption, Integer>> distanceValues = distanceProvider.getDistanceValues(fromPort, toPort, lastVoyageStartTime, vesselProvider.getVesselAvailability(resource).getVessel());
 			int distance = Integer.MAX_VALUE;
 			for (final Pair<ERouteOption, Integer> distanceOption : distanceValues) {
 				final int routeDistance = distanceOption.getSecond();

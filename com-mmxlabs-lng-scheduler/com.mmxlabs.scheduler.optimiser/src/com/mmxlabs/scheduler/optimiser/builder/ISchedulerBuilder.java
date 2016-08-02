@@ -735,4 +735,18 @@ public interface ISchedulerBuilder {
 	 * @param window
 	 */
 	void addOpenEndWindow(@NonNull MutableTimeWindow window);
+
+	/**
+	 * Set Inaccessible Routes (canals) for a vessel
+	 * @param vessel
+	 * @param inaccessibleRoutes
+	 */
+	void setVesselInaccessibleRoutes(@NonNull IVessel vessel, Set<ERouteOption> inaccessibleRoutes);
+
+	/**
+	 * Set Inaccessible Routes (canals) for a class of vessel
+	 * @param vessel
+	 * @param inaccessibleRoutes
+	 */
+	void setVesselClassInaccessibleRoutes(@NonNull IVesselClass vesselClass, Set<ERouteOption> inaccessibleRoutes);
 }
