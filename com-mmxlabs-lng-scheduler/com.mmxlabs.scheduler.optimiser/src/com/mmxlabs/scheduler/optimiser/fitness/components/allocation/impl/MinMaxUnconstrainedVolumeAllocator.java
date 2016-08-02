@@ -14,6 +14,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator.EvaluationMode;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord.AllocationMode;
 
@@ -69,7 +70,7 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 		}
 		setTransferVolume(allocationRecord, slots, annotation, maxTransferVolumeMMBTu, maxTransferVolumeM3);
 		final long maxTransferPNL = entityValueCalculator.get()
-				.evaluate(allocationRecord.resourceVoyagePlan, annotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, null).getSecond();
+				.evaluate(EvaluationMode.Estimate, allocationRecord.resourceVoyagePlan, annotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, null).getSecond();
 
 		long minTransferVolumeMMBTu = 0;
 		long minTransferVolumeM3 = -1;
@@ -87,7 +88,7 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 		setTransferVolume(allocationRecord, slots, annotation, minTransferVolumeMMBTu, minTransferVolumeM3);
 
 		final long minTransferPNL = entityValueCalculator.get()
-				.evaluate(allocationRecord.resourceVoyagePlan, annotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, null).getSecond();
+				.evaluate(EvaluationMode.Estimate, allocationRecord.resourceVoyagePlan, annotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, null).getSecond();
 
 		if (maxTransferPNL >= minTransferPNL) {
 			setTransferVolume(allocationRecord, slots, annotation, maxTransferVolumeMMBTu, maxTransferVolumeM3);
@@ -105,19 +106,18 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 
 		final AllocationAnnotation minAnnotation = calculateShippedMode_MinVolumes(allocationRecord, slots, vessel);
 
-		final long minTransferPNL = entityValueClculator.evaluate(allocationRecord.resourceVoyagePlan, minAnnotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, null)
-				.getSecond();
+		final long minTransferPNL = entityValueClculator
+				.evaluate(EvaluationMode.Estimate, allocationRecord.resourceVoyagePlan, minAnnotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, null).getSecond();
 
 		final AllocationAnnotation maxAnnotation = calculateShippedMode_MaxVolumes(allocationRecord, slots, vessel);
-		final long maxTransferPNL = entityValueClculator.evaluate(allocationRecord.resourceVoyagePlan, maxAnnotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, null)
-				.getSecond();
+		final long maxTransferPNL = entityValueClculator
+				.evaluate(EvaluationMode.Estimate, allocationRecord.resourceVoyagePlan, maxAnnotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, null).getSecond();
 
 		if (maxTransferPNL >= minTransferPNL) {
 			return maxAnnotation;
 		} else {
 			return minAnnotation;
 		}
-
 	}
 
 	protected @NonNull AllocationAnnotation calculateShippedMode_MaxVolumes(final @NonNull AllocationRecord allocationRecord, final @NonNull List<@NonNull IPortSlot> slots, final IVessel vessel) {
@@ -305,7 +305,6 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 			unusedVolumeInMMBTU += currentDischargeVolumeInMMBTU;
 			unusedVolumeInMMBTU -= dischargeVolumeInMMBTU;
 			loadVolumeInMMBTU -= unusedVolumeInMMBTU;
-
 		}
 
 		// Check load caps - vessel capacity

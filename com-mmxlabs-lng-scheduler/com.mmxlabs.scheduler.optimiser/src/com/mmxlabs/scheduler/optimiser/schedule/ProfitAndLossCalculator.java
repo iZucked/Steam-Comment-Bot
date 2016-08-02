@@ -43,6 +43,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketVesselAvailab
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator.EvaluationMode;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
@@ -141,14 +142,14 @@ public class ProfitAndLossCalculator {
 							// for now, only handle single load/discharge case
 							assert (currentAllocation.getSlots().size() == 2);
 							final ILoadOption loadSlot = (ILoadOption) currentAllocation.getSlots().get(0);
-							final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculatorProvider.get().evaluate(plan, currentAllocation, vesselAvailability,
-									currentAllocation.getSlotTime(loadSlot), volumeAllocatedSequences, annotatedSolution);
+							final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculatorProvider.get().evaluate(EvaluationMode.FullPNL, plan, currentAllocation,
+									vesselAvailability, currentAllocation.getSlotTime(loadSlot), volumeAllocatedSequences, annotatedSolution);
 							cargoValueAnnotation = p.getFirst();
 							final long cargoGroupValue = p.getSecond();
 							profitAndLossSequences.setVoyagePlanGroupValue(plan, cargoGroupValue);
 						} else {
-							final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculatorProvider.get().evaluate(plan, currentAllocation, vesselAvailability,
-									sequence.getStartTime(), volumeAllocatedSequences, annotatedSolution);
+							final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculatorProvider.get().evaluate(EvaluationMode.FullPNL, plan, currentAllocation,
+									vesselAvailability, sequence.getStartTime(), volumeAllocatedSequences, annotatedSolution);
 							cargoValueAnnotation = p.getFirst();
 							final long cargoGroupValue = p.getSecond();
 							profitAndLossSequences.setVoyagePlanGroupValue(plan, cargoGroupValue);
@@ -168,7 +169,8 @@ public class ProfitAndLossCalculator {
 				}
 
 				if (!cargo) {
-					final long otherGroupValue = entityValueCalculatorProvider.get().evaluate(plan, vesselAvailability, time, sequence.getStartTime(), volumeAllocatedSequences, annotatedSolution);
+					final long otherGroupValue = entityValueCalculatorProvider.get().evaluate(EvaluationMode.FullPNL, plan, vesselAvailability, time, sequence.getStartTime(), volumeAllocatedSequences,
+							annotatedSolution);
 					profitAndLossSequences.setVoyagePlanGroupValue(plan, otherGroupValue);
 				}
 				time += getPlanDuration(plan);
@@ -191,7 +193,7 @@ public class ProfitAndLossCalculator {
 			final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 			if (portSlot instanceof ILoadOption || portSlot instanceof IDischargeOption) {
 				// Calculate P&L
-				final long groupValue = entityValueCalculatorProvider.get().evaluateUnusedSlot(portSlot, volumeAllocatedSequences, annotatedSolution);
+				final long groupValue = entityValueCalculatorProvider.get().evaluateUnusedSlot(EvaluationMode.FullPNL, portSlot, volumeAllocatedSequences, annotatedSolution);
 				profitAndLossSequences.setUnusedSlotGroupValue(portSlot, groupValue);
 			}
 		}
@@ -265,8 +267,8 @@ public class ProfitAndLossCalculator {
 			if (allocationAnnotation != null) {
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
 				// Calculate P&L
-				final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculatorProvider.get().evaluate(voyagePlan, allocationAnnotation, vesselAvailability, time, null,
-						annotatedSolution);
+				final Pair<@NonNull CargoValueAnnotation, @NonNull Long> p = entityValueCalculatorProvider.get().evaluate(EvaluationMode.FullPNL, voyagePlan, allocationAnnotation, vesselAvailability,
+						time, null, annotatedSolution);
 				final CargoValueAnnotation cargoValueAnnotation = p.getFirst();
 
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_cargoValueAllocationInfo, cargoValueAnnotation);

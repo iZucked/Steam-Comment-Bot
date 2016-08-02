@@ -25,6 +25,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.IBreakEvenPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator.EvaluationMode;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
@@ -292,7 +293,8 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 		final IAllocationAnnotation newAllocation = volumeAllocator.get().allocate(vesselAvailability, vesselStartTime, newVoyagePlan, portTimesRecord);
 		assert newAllocation != null;
 
-		final Pair<@NonNull CargoValueAnnotation, @NonNull Long> cargoAnnotation = entityValueCalculator.get().evaluate(newVoyagePlan, newAllocation, vesselAvailability, vesselStartTime, null, null);
+		final Pair<@NonNull CargoValueAnnotation, @NonNull Long> cargoAnnotation = entityValueCalculator.get().evaluate(EvaluationMode.Estimate, newVoyagePlan, newAllocation, vesselAvailability,
+				vesselStartTime, null, null);
 		assert cargoAnnotation != null;
 
 		final long newPnLValue = cargoAnnotation.getSecond();

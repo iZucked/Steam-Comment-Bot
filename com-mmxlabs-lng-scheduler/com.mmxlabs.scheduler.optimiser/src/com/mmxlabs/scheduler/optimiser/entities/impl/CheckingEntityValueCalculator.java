@@ -16,6 +16,7 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator.EvaluationMode;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
@@ -38,14 +39,15 @@ public class CheckingEntityValueCalculator implements IEntityValueCalculator {
 	}
 
 	@Override
-	public @NonNull Pair<@NonNull CargoValueAnnotation, @NonNull Long> evaluate(@NonNull final VoyagePlan plan, @NonNull final IAllocationAnnotation currentAllocation,
+	public @NonNull Pair<@NonNull CargoValueAnnotation, @NonNull Long> evaluate(EvaluationMode evaluationMode, @NonNull final VoyagePlan plan, @NonNull final IAllocationAnnotation currentAllocation,
 			@NonNull final IVesselAvailability vesselAvailability, final int vesselStartTime, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences,
 			@Nullable final IAnnotatedSolution annotatedSolution) {
 
 		long a = System.currentTimeMillis();
-		final Pair<@NonNull CargoValueAnnotation, @NonNull Long> value_d = delegate.evaluate(plan, currentAllocation, vesselAvailability, vesselStartTime, volumeAllocatedSequences, annotatedSolution);
+		final Pair<@NonNull CargoValueAnnotation, @NonNull Long> value_d = delegate.evaluate(evaluationMode, plan, currentAllocation, vesselAvailability, vesselStartTime, volumeAllocatedSequences,
+				annotatedSolution);
 		long b = System.currentTimeMillis();
-		final Pair<@NonNull CargoValueAnnotation, @NonNull Long> value_r = reference.evaluate(plan, currentAllocation, vesselAvailability, vesselStartTime, volumeAllocatedSequences,
+		final Pair<@NonNull CargoValueAnnotation, @NonNull Long> value_r = reference.evaluate(evaluationMode, plan, currentAllocation, vesselAvailability, vesselStartTime, volumeAllocatedSequences,
 				annotatedSolution);
 		long c = System.currentTimeMillis();
 
@@ -74,13 +76,13 @@ public class CheckingEntityValueCalculator implements IEntityValueCalculator {
 	}
 
 	@Override
-	public long evaluate(@NonNull final VoyagePlan plan, @NonNull final IVesselAvailability vesselAvailability, final int planStartTime, final int vesselStartTime,
+	public long evaluate(EvaluationMode evaluationMode, @NonNull final VoyagePlan plan, @NonNull final IVesselAvailability vesselAvailability, final int planStartTime, final int vesselStartTime,
 			@Nullable final VolumeAllocatedSequences volumeAllocatedSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
 
 		long a = System.currentTimeMillis();
-		final long value_d = delegate.evaluate(plan, vesselAvailability, planStartTime, vesselStartTime, volumeAllocatedSequences, annotatedSolution);
+		final long value_d = delegate.evaluate(evaluationMode, plan, vesselAvailability, planStartTime, vesselStartTime, volumeAllocatedSequences, annotatedSolution);
 		long b = System.currentTimeMillis();
-		final long value_r = reference.evaluate(plan, vesselAvailability, planStartTime, vesselStartTime, volumeAllocatedSequences, annotatedSolution);
+		final long value_r = reference.evaluate(evaluationMode, plan, vesselAvailability, planStartTime, vesselStartTime, volumeAllocatedSequences, annotatedSolution);
 		long c = System.currentTimeMillis();
 
 		delegateSeconds += (b - a);
@@ -97,11 +99,12 @@ public class CheckingEntityValueCalculator implements IEntityValueCalculator {
 	}
 
 	@Override
-	public long evaluateUnusedSlot(@NonNull final IPortSlot portSlot, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
+	public long evaluateUnusedSlot(EvaluationMode evaluationMode, @NonNull final IPortSlot portSlot, @Nullable final VolumeAllocatedSequences volumeAllocatedSequences,
+			@Nullable final IAnnotatedSolution annotatedSolution) {
 		long a = System.currentTimeMillis();
-		final long value_d = delegate.evaluateUnusedSlot(portSlot, volumeAllocatedSequences, annotatedSolution);
+		final long value_d = delegate.evaluateUnusedSlot(evaluationMode, portSlot, volumeAllocatedSequences, annotatedSolution);
 		long b = System.currentTimeMillis();
-		final long value_r = reference.evaluateUnusedSlot(portSlot, volumeAllocatedSequences, annotatedSolution);
+		final long value_r = reference.evaluateUnusedSlot(evaluationMode, portSlot, volumeAllocatedSequences, annotatedSolution);
 		long c = System.currentTimeMillis();
 
 		delegateSeconds += (b - a);

@@ -20,6 +20,10 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public interface IEntityValueCalculator {
 
+	public enum EvaluationMode {
+		FullPNL, Estimate
+	}
+
 	/**
 	 * Evaluate a Cargo based {@link VoyagePlan} - returning the post tax P&L value
 	 * 
@@ -31,8 +35,8 @@ public interface IEntityValueCalculator {
 	 * @param annotatedSolution
 	 * @return
 	 */
-	Pair<@NonNull CargoValueAnnotation, @NonNull Long> evaluate(@NonNull VoyagePlan plan, @NonNull IAllocationAnnotation currentAllocation, @NonNull IVesselAvailability vesselAvailability,
-			int vesselStartTime, @Nullable VolumeAllocatedSequences volumeAllocatedSequences, @Nullable IAnnotatedSolution annotatedSolution);
+	Pair<@NonNull CargoValueAnnotation, @NonNull Long> evaluate(@NonNull EvaluationMode evaluationMode, @NonNull VoyagePlan plan, @NonNull IAllocationAnnotation currentAllocation,
+			@NonNull IVesselAvailability vesselAvailability, int vesselStartTime, @Nullable VolumeAllocatedSequences volumeAllocatedSequences, @Nullable IAnnotatedSolution annotatedSolution);
 
 	/**
 	 * Evaluate a non-cargo based {@link VoyagePlan} returning the post tax P&L value
@@ -44,8 +48,8 @@ public interface IEntityValueCalculator {
 	 * @param annotatedSolution
 	 * @return
 	 */
-	long evaluate(@NonNull VoyagePlan plan, @NonNull IVesselAvailability vesselAvailability, int planStartTime, int vesselStartTime, @Nullable VolumeAllocatedSequences volumeAllocatedSequences,
-			@Nullable IAnnotatedSolution annotatedSolution);
+	long evaluate(@NonNull EvaluationMode evaluationMode, @NonNull VoyagePlan plan, @NonNull IVesselAvailability vesselAvailability, int planStartTime, int vesselStartTime,
+			@Nullable VolumeAllocatedSequences volumeAllocatedSequences, @Nullable IAnnotatedSolution annotatedSolution);
 
 	/**
 	 * Evaluate an unused port slot for P&L contributions (e.g. cancellation fees). The port slot is expected to be an instanceof {@link ILoadOption} or {@link IDischargeOption}.
@@ -54,5 +58,6 @@ public interface IEntityValueCalculator {
 	 * @param annotatedSolution
 	 * @return
 	 */
-	long evaluateUnusedSlot(@NonNull IPortSlot portSlot, @Nullable VolumeAllocatedSequences volumeAllocatedSequences, @Nullable IAnnotatedSolution annotatedSolution);
+	long evaluateUnusedSlot(@NonNull EvaluationMode evaluationMode, @NonNull IPortSlot portSlot, @Nullable VolumeAllocatedSequences volumeAllocatedSequences,
+			@Nullable IAnnotatedSolution annotatedSolution);
 }
