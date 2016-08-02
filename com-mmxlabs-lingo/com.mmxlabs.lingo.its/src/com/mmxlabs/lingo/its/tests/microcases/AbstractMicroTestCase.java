@@ -218,7 +218,7 @@ public abstract class AbstractMicroTestCase {
 		}
 	}
 
-	public void evaluateWithOverrides(IOptimiserInjectorService localOverrides, @Nullable final Consumer<OptimiserSettings> tweaker, @NonNull final Consumer<LNGScenarioRunner> checker) {
+	public void evaluateWithOverrides(IOptimiserInjectorService localOverrides, @Nullable final Consumer<OptimisationPlan> tweaker, @NonNull final Consumer<LNGScenarioRunner> checker) {
 
 		// Create UserSettings
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
@@ -227,15 +227,15 @@ public abstract class AbstractMicroTestCase {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
+		final OptimisationPlan optimiserPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 		if (tweaker != null) {
-			tweaker.accept(optimiserSettings);
+			tweaker.accept(optimiserPlan);
 		}
 
 		// Generate internal data
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, null, optimiserSettings, LNGSchedulerJobUtils.createLocalEditingDomain(), null,
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, null, optimiserPlan, LNGSchedulerJobUtils.createLocalEditingDomain(), null,
 					localOverrides, null, true);
 
 			// final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, null, localOverrides, true);
