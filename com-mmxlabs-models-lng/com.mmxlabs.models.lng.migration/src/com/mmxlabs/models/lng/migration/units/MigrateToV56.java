@@ -18,18 +18,16 @@ public class MigrateToV56 extends AbstractMigrationUnit {
 
 	@Override
 	public int getScenarioSourceVersion() {
-		return 54;
-	}
-
-	@Override
-	public int getScenarioDestinationVersion() {
 		return 55;
 	}
 
 	@Override
-	protected void doMigrationWithHelper(final MetamodelLoader loader, final EObjectWrapper model) {
-		// Nothing to do
+	public int getScenarioDestinationVersion() {
+		return 56;
+	}
 
+	@Override
+	protected void doMigrationWithHelper(final MetamodelLoader loader, final EObjectWrapper model) {
 		model.unsetFeature("parameters");
 	}
 }

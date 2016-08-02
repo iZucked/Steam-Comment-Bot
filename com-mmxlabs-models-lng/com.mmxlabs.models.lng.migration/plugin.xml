@@ -436,5 +436,12 @@
              id="com.mmxlabs.models.lng.migration.units.MigrateToV56"
              to="56">
        </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV57"
+             context="com.mmxlabs.lingo"
+             from="56"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV57"
+             to="57">
+       </MigrationUnit>
    </extension>
 </plugin>
