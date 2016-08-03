@@ -28,7 +28,7 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 
 	@Inject
 	@NotCaching
-	private Provider<IEntityValueCalculator> entityValueCalculator;
+	private Provider<IEntityValueCalculator> entityValueCalculatorProvider;
 
 	@Override
 	protected @NonNull AllocationAnnotation calculateTransferMode(final AllocationRecord allocationRecord, final @NonNull List<@NonNull IPortSlot> slots, final @NonNull IVessel vessel) {
@@ -69,7 +69,7 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 			}
 		}
 		setTransferVolume(allocationRecord, slots, annotation, maxTransferVolumeMMBTu, maxTransferVolumeM3);
-		final long maxTransferPNL = entityValueCalculator.get()
+		final long maxTransferPNL = entityValueCalculatorProvider.get()
 				.evaluate(EvaluationMode.Estimate, allocationRecord.resourceVoyagePlan, annotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, null).getSecond();
 
 		long minTransferVolumeMMBTu = 0;
@@ -87,7 +87,7 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 
 		setTransferVolume(allocationRecord, slots, annotation, minTransferVolumeMMBTu, minTransferVolumeM3);
 
-		final long minTransferPNL = entityValueCalculator.get()
+		final long minTransferPNL = entityValueCalculatorProvider.get()
 				.evaluate(EvaluationMode.Estimate, allocationRecord.resourceVoyagePlan, annotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, null).getSecond();
 
 		if (maxTransferPNL >= minTransferPNL) {
@@ -102,15 +102,15 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 
 	@Override
 	protected @NonNull AllocationAnnotation calculateShippedMode(final @NonNull AllocationRecord allocationRecord, final @NonNull List<@NonNull IPortSlot> slots, final @NonNull IVessel vessel) {
-		final IEntityValueCalculator entityValueClculator = entityValueCalculator.get();
+		final IEntityValueCalculator entityValueCalculator = entityValueCalculatorProvider.get();
 
 		final AllocationAnnotation minAnnotation = calculateShippedMode_MinVolumes(allocationRecord, slots, vessel);
 
-		final long minTransferPNL = entityValueClculator
+		final long minTransferPNL = entityValueCalculator
 				.evaluate(EvaluationMode.Estimate, allocationRecord.resourceVoyagePlan, minAnnotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, null).getSecond();
 
 		final AllocationAnnotation maxAnnotation = calculateShippedMode_MaxVolumes(allocationRecord, slots, vessel);
-		final long maxTransferPNL = entityValueClculator
+		final long maxTransferPNL = entityValueCalculator
 				.evaluate(EvaluationMode.Estimate, allocationRecord.resourceVoyagePlan, maxAnnotation, allocationRecord.vesselAvailability, allocationRecord.vesselStartTime, null, null).getSecond();
 
 		if (maxTransferPNL >= minTransferPNL) {
