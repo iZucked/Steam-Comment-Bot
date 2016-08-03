@@ -113,6 +113,12 @@
           eClassName="com.mmxlabs.models.lng.spotmarkets.SpotMarket"
           inheritable="true">
     </classImporter>
+    <classImporter
+          ID="com.mmxlabs.models.lng.spotmarkets.editor.importers.SpotAvailabilityImporter"
+          classImporterClass="com.mmxlabs.models.lng.spotmarkets.editor.importers.SpotAvailabilityImporter"
+          eClassName="com.mmxlabs.models.lng.spotmarkets.SpotAvailability"
+          inheritable="true">
+    </classImporter>
 
  </extension>
  <extension
