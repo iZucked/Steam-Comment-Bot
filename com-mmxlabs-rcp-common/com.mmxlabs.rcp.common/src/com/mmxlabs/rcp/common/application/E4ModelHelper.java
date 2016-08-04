@@ -85,9 +85,15 @@ public class E4ModelHelper {
 			if (parent != null) {
 				parent.getChildren().remove(part);
 				if (parent.getSelectedElement() == part) {
-					if (!parent.getChildren().isEmpty()) {
-						parent.setSelectedElement(parent.getChildren().get(0));
-					} else {
+					boolean foundElement = false;
+					for (MUIElement element : parent.getChildren()) {
+						if (element.isVisible()) {
+							parent.setSelectedElement(element);
+							foundElement = true;
+							break;
+						}
+					}
+					if (!foundElement) {
 						// Parent is empty.
 						// Might be better to remove the parent too, this could get recursive however.
 						parent.setToBeRendered(false);
