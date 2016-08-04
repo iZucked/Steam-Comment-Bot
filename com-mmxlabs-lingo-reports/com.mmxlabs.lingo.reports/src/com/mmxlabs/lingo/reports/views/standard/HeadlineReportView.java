@@ -498,7 +498,7 @@ public class HeadlineReportView extends ViewPart {
 		try {
 			gc.setFont(boldFont);
 			// 8 taken from sum margins in org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer
-			return Math.max(minWidth, 8 + gc.textExtent(string).x);
+			return Math.max(minWidth, 10 + gc.textExtent(string).x);
 		} finally {
 			gc.dispose();
 		}
