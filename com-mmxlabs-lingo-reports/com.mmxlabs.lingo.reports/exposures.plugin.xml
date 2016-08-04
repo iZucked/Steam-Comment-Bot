@@ -12,7 +12,7 @@
   <extension
          point="org.eclipse.ui.views">
       <view
-            name="Index Exposures"
+            name="Exposures"
             icon="icons/cview16/exec_statistic_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.ExposureReportView"
