@@ -15,6 +15,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MWindowElement;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.rcp.common.application.E4ModelHelper;
 
 public class WorkbenchChangeProcessor {
@@ -43,6 +44,10 @@ public class WorkbenchChangeProcessor {
 		}
 
 		E4ModelHelper.removeViewPart("com.mmxlabs.lingo.reports.diff.DiffGroupView", application, modelService);
-		E4ModelHelper.removeViewPart("com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView", application, modelService);
+
+		// Only remove if not permitted.
+		if (!LicenseFeatures.isPermitted("features:exposures")) {
+			E4ModelHelper.removeViewPart("com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView", application, modelService);
+		}
 	}
 }
