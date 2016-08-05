@@ -158,7 +158,7 @@ public abstract class AbstractMicroTestCase {
 		}
 
 		// Generate internal data
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
+		final ExecutorService executorService = createExecutorService();
 		try {
 
 			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, null, optimisationPlan, LNGSchedulerJobUtils.createLocalEditingDomain(),
@@ -182,6 +182,10 @@ public abstract class AbstractMicroTestCase {
 		}
 	}
 
+	protected @NonNull ExecutorService createExecutorService() {
+		return Executors.newSingleThreadExecutor();
+	}
+
 	public void evaluateTest(@Nullable final Consumer<OptimisationPlan> tweaker, @Nullable final Function<LNGScenarioRunner, IRunnerHook> runnerHookFactory,
 			@NonNull final Consumer<LNGScenarioRunner> checker) {
 
@@ -198,7 +202,7 @@ public abstract class AbstractMicroTestCase {
 		}
 
 		// Generate internal data
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
+		final ExecutorService executorService = createExecutorService();
 		try {
 
 			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimisationPlan, new TransformerExtensionTestBootstrapModule(), null, true);
@@ -233,7 +237,7 @@ public abstract class AbstractMicroTestCase {
 		}
 
 		// Generate internal data
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
+		final ExecutorService executorService = createExecutorService();
 		try {
 			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, null, optimiserPlan, LNGSchedulerJobUtils.createLocalEditingDomain(), null,
 					localOverrides, null, true);
