@@ -1247,7 +1247,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * Generate a new return option for each load port in the solution.
 	 */
 	private void createRoundtripCargoReturnElements() {
-		for (final IPortSlot portSlot : permittedRoundTripVesselSlots) {
+//		for (final IPortSlot portSlot : permittedRoundTripVesselSlots) {
+		for (final IPortSlot portSlot : loadSlots) {
 			if (portSlot instanceof ILoadOption) {
 				final ILoadOption loadOption = (ILoadOption) portSlot;
 
