@@ -149,4 +149,27 @@ public interface ILoadPriceCalculator extends ICalculator {
 	default int getCalculatorPricingDate(@NonNull ILoadOption loadOption, @NonNull IPortTimeWindowsRecord portTimeWindowsRecord) {
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
+	
+//	/**
+//	 * Provides an estimate of a shipping netback per MMBTu (divided through by purchase volume)
+//	 * 
+//	 * @param loadOption
+//	 * @param dischargeOption
+//	 * @return
+//	 */
+//	default long getEstimatedShippingNetbackPerMMBTu(@NonNull ILoadOption loadOption, @NonNull IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowsRecord, int startTime, long estimatedShippingCostPerMMBTu) {
+//		return 0L;
+//	}
+//
+//	/**
+//	 * Provides an estimate of a profit share per MMBTu (divided through by purchase volume)
+//	 * 
+//	 * @param loadOption
+//	 * @param dischargeOption
+//	 * @return
+//	 */
+//	default long getEstimatedProfitShareContributionPerMMBTu(@NonNull ILoadOption loadOption, @NonNull IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowsRecord, int startTime, int purchasePricePerMMBTu, int salesPricePerMMBTu, long estimatedShippingCostPerMMBTu) {
+//		return 0L;
+//	}
+
 }

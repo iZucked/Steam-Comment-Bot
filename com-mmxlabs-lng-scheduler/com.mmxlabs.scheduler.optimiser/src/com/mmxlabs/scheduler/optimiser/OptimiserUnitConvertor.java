@@ -149,4 +149,7 @@ public final class OptimiserUnitConvertor {
 		return (int) (cost / (long) Calculator.ScaleFactor);
 	}
 
+	public static long convertToInternalPercentage(final double percentage) {
+		return (long) (percentage * ((double) Calculator.HighScaleFactor));
+	}
 }
