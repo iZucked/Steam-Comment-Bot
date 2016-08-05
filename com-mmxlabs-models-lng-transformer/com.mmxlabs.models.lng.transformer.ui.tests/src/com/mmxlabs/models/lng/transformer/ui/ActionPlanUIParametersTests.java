@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
+import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 
@@ -20,7 +21,7 @@ public class ActionPlanUIParametersTests {
 	public void testLow3Month() {
 		YearMonth start = YearMonth.parse("2015-09");
 		YearMonth end = YearMonth.parse("2015-12");
-		ConstraintAndFitnessSettings s = Mockito.mock(ConstraintAndFitnessSettings.class);
+		ConstraintAndFitnessSettings s = ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings();
 		ActionPlanOptimisationStage settings = ScenarioUtils.getActionPlanSettings(SimilarityMode.LOW, start, end, s);
 		Assert.assertEquals(30_000_000, settings.getTotalEvaluations());
 		Assert.assertEquals(2_000_000, settings.getInRunEvaluations());
@@ -31,7 +32,7 @@ public class ActionPlanUIParametersTests {
 	public void testMed3Month() {
 		YearMonth start = YearMonth.parse("2015-09");
 		YearMonth end = YearMonth.parse("2015-12");
-		ConstraintAndFitnessSettings s = Mockito.mock(ConstraintAndFitnessSettings.class);
+		ConstraintAndFitnessSettings s = ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings();
 		ActionPlanOptimisationStage settings = ScenarioUtils.getActionPlanSettings(SimilarityMode.MEDIUM, start, end, s);
 		Assert.assertEquals(5_000_000, settings.getTotalEvaluations());
 		Assert.assertEquals(1_500_000, settings.getInRunEvaluations());
@@ -43,7 +44,7 @@ public class ActionPlanUIParametersTests {
 	public void testHigh3Month() {
 		YearMonth start = YearMonth.parse("2015-09");
 		YearMonth end = YearMonth.parse("2015-12");
-		ConstraintAndFitnessSettings s = Mockito.mock(ConstraintAndFitnessSettings.class);
+		ConstraintAndFitnessSettings s = ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings();
 		ActionPlanOptimisationStage settings = ScenarioUtils.getActionPlanSettings(SimilarityMode.HIGH, start, end, s);
 		Assert.assertEquals(3_000_000, settings.getTotalEvaluations());
 		Assert.assertEquals(1_000_000, settings.getInRunEvaluations());
@@ -55,7 +56,7 @@ public class ActionPlanUIParametersTests {
 	public void testLow6Month() {
 		YearMonth start = YearMonth.parse("2015-09");
 		YearMonth end = YearMonth.parse("2016-03");
-		ConstraintAndFitnessSettings s = Mockito.mock(ConstraintAndFitnessSettings.class);
+		ConstraintAndFitnessSettings s = ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings();
 
 		ActionPlanOptimisationStage settings = ScenarioUtils.getActionPlanSettings(SimilarityMode.LOW, start, end, s);
 		Assert.assertEquals(60_000_000, settings.getTotalEvaluations());
@@ -68,7 +69,7 @@ public class ActionPlanUIParametersTests {
 	public void testMed6Month() {
 		YearMonth start = YearMonth.parse("2015-09");
 		YearMonth end = YearMonth.parse("2016-03");
-		ConstraintAndFitnessSettings s = Mockito.mock(ConstraintAndFitnessSettings.class);
+		ConstraintAndFitnessSettings s = ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings();
 		ActionPlanOptimisationStage settings = ScenarioUtils.getActionPlanSettings(SimilarityMode.MEDIUM, start, end, s);
 		Assert.assertEquals(30_000_000, settings.getTotalEvaluations());
 		Assert.assertEquals(2_000_000, settings.getInRunEvaluations());
@@ -80,7 +81,7 @@ public class ActionPlanUIParametersTests {
 	public void testHigh6Month() {
 		YearMonth start = YearMonth.parse("2015-09");
 		YearMonth end = YearMonth.parse("2016-03");
-		ConstraintAndFitnessSettings s = Mockito.mock(ConstraintAndFitnessSettings.class);
+		ConstraintAndFitnessSettings s = ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings();
 		ActionPlanOptimisationStage settings = ScenarioUtils.getActionPlanSettings(SimilarityMode.HIGH, start, end, s);
 		Assert.assertEquals(6_000_000, settings.getTotalEvaluations());
 		Assert.assertEquals(2_000_000, settings.getInRunEvaluations());
