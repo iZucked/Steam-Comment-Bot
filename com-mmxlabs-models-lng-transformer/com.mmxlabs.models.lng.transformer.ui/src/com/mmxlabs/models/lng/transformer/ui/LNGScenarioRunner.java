@@ -57,6 +57,8 @@ public class LNGScenarioRunner {
 	@Nullable
 	private final ScenarioInstance scenarioInstance;
 
+	private @NonNull ExecutorService executorService;
+
 	public LNGScenarioRunner(@NonNull final ExecutorService exectorService, @NonNull final LNGScenarioModel scenarioModel, @NonNull final OptimisationPlan optimisationPlan,
 			@Nullable final IRunnerHook runnerHook, final boolean evaluationOnly, final String... initialHints) {
 		this(exectorService, scenarioModel, null, optimisationPlan, LNGSchedulerJobUtils.createLocalEditingDomain(), runnerHook, evaluationOnly, initialHints);
@@ -78,6 +80,7 @@ public class LNGScenarioRunner {
 			@NonNull final OptimisationPlan optimisationPlan, @NonNull final EditingDomain editingDomain, @Nullable final Module extraModule, @Nullable final IOptimiserInjectorService localOverrides,
 			@Nullable final IRunnerHook runnerHook, final boolean evaluationOnly, final String... initialHints) {
 
+		this.executorService = executorService;
 		this.scenarioModel = scenarioModel;
 		this.scenarioInstance = scenarioInstance;
 
@@ -174,5 +177,9 @@ public class LNGScenarioRunner {
 
 	public void setRunnerHook(final @Nullable IRunnerHook runnerHook) {
 		scenarioToOptimiserBridge.getDataTransformer().setRunnerHook(runnerHook);
+	}
+
+	public ExecutorService getExecutorService() {
+		return executorService;
 	}
 }

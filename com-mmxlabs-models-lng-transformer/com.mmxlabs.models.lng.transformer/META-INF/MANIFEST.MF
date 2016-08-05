@@ -31,6 +31,7 @@ Export-Package: com.mmxlabs.models.lng.transformer,
  com.mmxlabs.models.lng.transformer.export,
  com.mmxlabs.models.lng.transformer.inject,
  com.mmxlabs.models.lng.transformer.inject.modules,
+ com.mmxlabs.models.lng.transformer.optimiser.valuepair,
  com.mmxlabs.models.lng.transformer.period,
  com.mmxlabs.models.lng.transformer.period.extensions,
  com.mmxlabs.models.lng.transformer.util
