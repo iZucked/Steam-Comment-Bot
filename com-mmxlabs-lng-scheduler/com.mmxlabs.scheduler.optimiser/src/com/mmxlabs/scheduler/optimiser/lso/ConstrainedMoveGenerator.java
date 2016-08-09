@@ -201,6 +201,13 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		checker.setMaxLateness(initialMaxLateness);
 
 	}
+	
+	public ArrayList<Pair<ISequenceElement, ISequenceElement>> getValidBreaks(){
+		
+		return validBreaks;
+	}
+	
+	
 
 	@Override
 	public IMove generateMove() {
