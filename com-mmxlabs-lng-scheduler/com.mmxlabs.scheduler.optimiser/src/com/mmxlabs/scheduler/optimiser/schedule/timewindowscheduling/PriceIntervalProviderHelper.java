@@ -292,7 +292,8 @@ public class PriceIntervalProviderHelper {
 	public long[] getLadenFuelCosts(final int salesPrice, final long boiloffRateM3, final IVesselClass vesselClass, final int cv, final int[] times, final long distance, final int equivalenceFactor, final int baseFuelPrice, long timeTravelledAtNBOSpeed) {
 		final int totalLadenLengthInHours = (times[1] - times[0]);
 		// estimate speed and rate
-		final int speed = Math.max(vesselClass.getConsumptionRate(VesselState.Laden).getSpeed(Calculator.convertM3ToMT(boiloffRateM3, cv, equivalenceFactor)), Calculator.speedFromDistanceTime(distance, totalLadenLengthInHours));
+		int ladenNBOSpeed = Math.min(vesselClass.getMaxSpeed(), vesselClass.getConsumptionRate(VesselState.Laden).getSpeed(Calculator.convertM3ToMT(boiloffRateM3, cv, equivalenceFactor)));
+		final int speed = Math.max(ladenNBOSpeed, Calculator.speedFromDistanceTime(distance, totalLadenLengthInHours));
 		final long rate = vesselClass.getConsumptionRate(VesselState.Laden).getRate(speed);
 		final long idleTimeInHours = Math.max(totalLadenLengthInHours - timeTravelledAtNBOSpeed, 0);
 		final long ladenTravelTimeInHours = idleTimeInHours == 0 ? totalLadenLengthInHours : timeTravelledAtNBOSpeed;
