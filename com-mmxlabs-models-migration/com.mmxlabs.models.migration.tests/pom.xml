@@ -6,11 +6,11 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.migration.parent</artifactId>
 		<groupId>com.mmxlabs.models.migration</groupId>
-		<version>3.12.12.RELEASE</version>
+		<version>3.12.13-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.models.migration.tests</artifactId>
-	<version>3.12.12.RELEASE</version>
+	<version>3.12.13-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
 	
 	<build>
