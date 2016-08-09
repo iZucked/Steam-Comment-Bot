@@ -131,19 +131,23 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 		Pair<IResource, Integer> pos1 = null;
 		Pair<IResource, Integer> pos2 = null;
 		
-		try{
+		if(positions != null){
 			pos1 = positions.getFirst();
-		
 			pos2 = positions.getSecond();
 			
-		}catch (NullPointerException e){
+			if ((pos1.getFirst() == null) || (pos2.getFirst() == null)) {					
+				return new NullMoveB();			
+			}
 			
 			
+			
+		}else{
+			
+			return new NullMoveB();
+		
 		}
 		
-		if ((pos1 == null) || (pos2 == null) || (pos1.getFirst() == null) || (pos2.getFirst() == null)) {					
-			return new NullMoveB();			
-		}
+		
 		
 
 		final IResource sequence1 = pos1.getFirst();

@@ -65,9 +65,6 @@ public class SequencesConstrainedLoopingMoveGeneratorUnitTest {
 		assertNotNull(secondPair);
 		assertNotEquals(firstPair, secondPair);
 		
-		int loopCount = loopingMoveGenerator.getCurrentLoops();
-		// Check no looped
-		assertEquals(0,loopCount);
 		
 		mockReverseLookup = new HashMap<>();
 
@@ -77,15 +74,7 @@ public class SequencesConstrainedLoopingMoveGeneratorUnitTest {
 		loopingMoveGenerator = new SequencesConstrainedLoopingMoveGeneratorUnit(mockOwner);
 		
 		Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> answerFullLoop = loopingMoveGenerator.findEdge();
-		Pair<IResource,Integer>firstFullPair = answerFullLoop.getFirst();
-		Pair<IResource,Integer>secondFullPair = answerFullLoop.getSecond();
-		
-		int loopCountFullLoop = loopingMoveGenerator.getCurrentLoops();
-		int maxLoops = loopingMoveGenerator.getMaxLoops();
-		// Check maximum loops
-		assertEquals(maxLoops,loopCountFullLoop);
-		assertNull(firstFullPair);
-		assertNull(secondFullPair);
+
 		
 		Pair<IResource,Integer> firstMockNullPair = new Pair<>(null,1);
 		Pair<IResource,Integer> secondMockNullPair = new Pair<>(null,2);
@@ -99,11 +88,11 @@ public class SequencesConstrainedLoopingMoveGeneratorUnitTest {
 		
 		Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> answerNullLoop = loopingMoveGenerator.findEdge();
 		
-		int loopCountNullLoop = loopingMoveGenerator.getCurrentLoops();
+		
 
 		// Check maximum loops
 		assertNull(answerNullLoop);
-		assertEquals(maxLoops,loopCountNullLoop);
+
 		
 		
 		

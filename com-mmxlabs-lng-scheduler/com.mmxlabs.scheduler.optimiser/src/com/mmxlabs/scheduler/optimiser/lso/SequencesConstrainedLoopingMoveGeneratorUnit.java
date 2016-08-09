@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.lso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -36,58 +37,45 @@ import com.mmxlabs.scheduler.optimiser.providers.Followers;
  * @author hinton
  * 
  */
-public class SequencesConstrainedLoopingMoveGeneratorUnit  extends SequencesConstrainedMoveGeneratorUnit{
-	
+public class SequencesConstrainedLoopingMoveGeneratorUnit extends SequencesConstrainedMoveGeneratorUnit {
+
 	private static final int MAX_LOOPS = 200;
-	private int currentLoops = 0;
-			
+
+
 	public SequencesConstrainedLoopingMoveGeneratorUnit(@NonNull final ConstrainedMoveGenerator owner) {
 		super(owner);
 
 	}
 
-	
 	@Override
-	public Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> findEdge(){
-	
+	public Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> findEdge() {
+		int currentLoops = 0;
 		Pair<IResource, Integer> pos1 = null;
 		Pair<IResource, Integer> pos2 = null;
-		Pair<Pair<IResource, Integer>,Pair<IResource, Integer>> positions = null;
-		
-		while(currentLoops < MAX_LOOPS){
-		
-		final Pair<ISequenceElement, ISequenceElement> newPair = RandomHelper.chooseElementFrom(owner.getRandom(), owner.getValidBreaks());
-				
-				try{
-					pos1 = owner.getReverseLookup().get(newPair.getFirst());
-					pos2 = owner.getReverseLookup().get(newPair.getSecond());
-				}catch (NullPointerException e){
-					
-				}
-				
-				positions = new Pair<>(pos1,pos2);
-		
-				if ((pos1 != null) && (pos2 != null) &&(pos1.getFirst() != null) && (pos2.getFirst() != null)) {
-					
+		Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> positions = null;
+
+		while (currentLoops < MAX_LOOPS) {
+
+			final Pair<ISequenceElement, ISequenceElement> newPair = RandomHelper.chooseElementFrom(owner.getRandom(), owner.getValidBreaks());
+			if (newPair != null) {
+				Map<ISequenceElement, Pair<IResource, Integer>> reverseLookup = owner.getReverseLookup();
+				pos1 = reverseLookup.get(newPair.getFirst());
+				pos2 = reverseLookup.get(newPair.getSecond());
+
+				if (pos1 != null && pos2 != null && (pos1.getFirst() != null) && (pos2.getFirst() != null)) {
+					positions = new Pair<>(pos1, pos2);
 					return positions;
 				}
-				
-				currentLoops+=1;
+			}
+			currentLoops += 1;
 		}
-		
-		
-		
+
 		return positions;
 	}
-	
-	public int  getCurrentLoops(){
-	
-	return currentLoops;
 
-	}
-	
-	public int getMaxLoops(){
-		
+
+	public int getMaxLoops() {
+
 		return MAX_LOOPS;
 	}
 }
