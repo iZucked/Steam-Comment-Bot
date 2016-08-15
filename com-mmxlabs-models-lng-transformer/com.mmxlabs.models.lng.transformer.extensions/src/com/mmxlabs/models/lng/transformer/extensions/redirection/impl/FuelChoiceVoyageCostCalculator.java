@@ -26,9 +26,13 @@ import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.FBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.IdleNBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.LinkedFBOVoyagePlanChoice;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.NBOTravelVoyagePlanChoice;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.ReliqVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
@@ -210,6 +214,26 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 				// vpo.addChoice(new FBOVoyagePlanChoice(ballastOptions));
 				// vpo.addChoice(new FBOVoyagePlanChoice(ladenOptions));
 				// vpo.addChoice(new IdleNBOVoyagePlanChoice(ballastOptions));
+				break;
+			case LadenBaseBallastOptimal:
+				ladenOptions.setUseFBOForSupplement(false);
+				if (!vessel.getVesselClass().hasReliqCapability()) {
+					vpoChoices.add(new NBOTravelVoyagePlanChoice(ladenOptions, ballastOptions));
+					vpoChoices.add(new FBOVoyagePlanChoice(ballastOptions));
+					vpoChoices.add(new IdleNBOVoyagePlanChoice(ballastOptions));
+				} else {
+					vpoChoices.add(new ReliqVoyagePlanChoice(ladenOptions, ballastOptions));
+				}
+				break;
+			case LadenFBOBallastOptimal:
+				ladenOptions.setUseFBOForSupplement(true);
+				if (!vessel.getVesselClass().hasReliqCapability()) {
+					vpoChoices.add(new NBOTravelVoyagePlanChoice(ladenOptions, ballastOptions));
+					vpoChoices.add(new FBOVoyagePlanChoice(ballastOptions));
+					vpoChoices.add(new IdleNBOVoyagePlanChoice(ballastOptions));
+				} else {
+					vpoChoices.add(new ReliqVoyagePlanChoice(ladenOptions, ballastOptions));
+				}
 				break;
 			default:
 				break;
