@@ -78,19 +78,20 @@ public class DataIndexImporter extends AbstractClassImporter {
 
 		if (result instanceof DataIndex) {
 			final DataIndex<Number> data = (DataIndex<Number>) result;
-			Set<YearMonth> seenDates = new HashSet<>();
+			final Set<YearMonth> seenDates = new HashSet<>();
 			for (final String s : row.keySet()) {
 				try {
 					final YearMonth date = parseDateString(s);
 					if (date == null) {
 						continue;
 					}
-					if (row.get(s).isEmpty()) {
+					final String valueString = row.get(s);
+					if (valueString.isEmpty()) {
 						continue;
 					}
 
 					try {
-						final Number n = numberImporterHelper.parseNumberString(s, parseAsInt);
+						final Number n = numberImporterHelper.parseNumberString(valueString, parseAsInt);
 						if (n == null) {
 							continue;
 						}
@@ -104,7 +105,7 @@ public class DataIndexImporter extends AbstractClassImporter {
 						point.setValue(n);
 						data.getPoints().add(point);
 					} catch (final NumberFormatException nfe) {
-						context.addProblem(context.createProblem("The value " + row.get(s) + " is not a number", true, true, true));
+						context.addProblem(context.createProblem("The value " + valueString + " is not a number", true, true, true));
 					}
 				} catch (final ParseException ex) {
 					if (s.equals(EXPRESSION) == false) {
