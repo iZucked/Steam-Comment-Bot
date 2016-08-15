@@ -32,8 +32,12 @@ public final class FileDeleter {
 	 * @throws IOException
 	 * @throws FileNotFoundException
 	 */
-	public static void delete(final File file) throws IOException, FileNotFoundException {
+	public static void delete(final File file, boolean secureDelete) throws IOException, FileNotFoundException {
 
+		if (!secureDelete) {
+			file.delete();
+		}
+		
 		if (!file.exists()) {
 			throw new IllegalStateException("File must exist");
 		}
