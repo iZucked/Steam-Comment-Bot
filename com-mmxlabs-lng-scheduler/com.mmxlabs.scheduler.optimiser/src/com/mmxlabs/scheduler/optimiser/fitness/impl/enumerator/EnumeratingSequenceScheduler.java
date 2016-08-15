@@ -29,6 +29,7 @@ import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.RoundTripCargoEnd;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractLoggingSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
@@ -455,18 +456,15 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 		// from voyageplanner --->
 		IPortSlot prevPortSlot = null;
 		// Used for end of sequence checks
-		IPortSlot prevPrevPortSlot = null;
 		PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
 		portTimeWindowsRecord.setResource(resource);
 		// --->
-
 		// first pass, collecting start time windows
 		for (final ISequenceElement element : sequence) {
 			final IPortSlot slot = portSlotProvider.getPortSlot(element);
 
 			// from voyageplanner --->
 			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
-			final PortType portType = portTypeProvider.getPortType(element);
 			final int visitDuration = actualsDataProvider.hasActuals(thisPortSlot) ? actualsDataProvider.getVisitDuration(thisPortSlot) : durationProvider.getElementDuration(element, resource);
 			// --->
 
@@ -531,11 +529,19 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 				// finalise record
 				portTimeWindowsRecords.get(sequenceIndex).add(portTimeWindowsRecord);
 				// create new record
-				portTimeWindowsRecord = new PortTimeWindowsRecord();
-				portTimeWindowsRecord.setResource(resource);
-				portTimeWindowsRecord.setSlot(thisPortSlot, null, visitDuration, index);
+				if (!(thisPortSlot instanceof RoundTripCargoEnd)) {
+					portTimeWindowsRecord = new PortTimeWindowsRecord();
+					portTimeWindowsRecord.setResource(resource);
+					portTimeWindowsRecord.setSlot(thisPortSlot, null, visitDuration, index);
+				}
 			} else {
-				portTimeWindowsRecord.setSlot(thisPortSlot, null, visitDuration, index);
+				if (!(prevPortSlot instanceof RoundTripCargoEnd)) {
+					portTimeWindowsRecord.setSlot(thisPortSlot, null, visitDuration, index);
+				} else {
+					portTimeWindowsRecord = new PortTimeWindowsRecord();
+					portTimeWindowsRecord.setResource(resource);
+					portTimeWindowsRecord.setSlot(thisPortSlot, null, visitDuration, index);
+				}
 			}
 
 			isVirtual[index] = portTypeProvider.getPortType(element) == PortType.Virtual;
@@ -601,6 +607,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 
 			index++;
 			prevElement = element;
+			prevPortSlot = thisPortSlot;
 		}
 		// add the last time window
 		// portTimeWindowsRecords.get(sequenceIndex).add(portTimeWindowsRecord);

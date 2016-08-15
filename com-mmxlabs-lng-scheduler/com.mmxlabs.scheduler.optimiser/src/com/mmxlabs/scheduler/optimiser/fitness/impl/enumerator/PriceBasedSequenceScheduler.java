@@ -12,8 +12,12 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowsTrimming;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
@@ -26,6 +30,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 	@Inject
 	private TimeWindowsTrimming timeWindowsTrimming;
+
+	@Inject
+	private IVesselProvider vesselProvider;
 
 	@Override
 	public int @Nullable [][] schedule(@NonNull final ISequences sequences) {
@@ -49,13 +56,25 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 			List<IPortTimeWindowsRecord> list = portTimeWindowsRecords.get(seqIndex);
 			for (int idx = 0; idx < list.size(); idx++) {
 				IPortTimeWindowsRecord portTimeWindowsRecord = list.get(idx);
-				setFeasibleTimeWindowsUsingPrevious(portTimeWindowsRecord, seqIndex);
+				if (isSequentialVessel(portTimeWindowsRecord.getResource())) {
+					setFeasibleTimeWindowsUsingPrevious(portTimeWindowsRecord, seqIndex);
+				} else {
+					setFeasibleTimeWindowsRoundTrip(portTimeWindowsRecord, seqIndex);
+				}
 				timeWindowsTrimming.processCargo(portTimeWindowsRecord);
 				updateTimeWindows(portTimeWindowsRecord, seqIndex);
 				IPortSlot lastSlot = portTimeWindowsRecord.getSlots().get(portTimeWindowsRecord.getSlots().size() - 1);
 				setTimeWindowsToEarliest(seqIndex, portTimeWindowsRecord.getIndex(lastSlot), portTimeWindowsRecord.getSlotFeasibleTimeWindow(lastSlot));
 			}
 		}
+	}
+
+	private boolean isSequentialVessel(IResource resource) {
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+			return false;
+		}
+		return true;
 	}
 
 	private void updateFollowingPortTimeRecordStartTime(IPortTimeWindowsRecord first, IPortTimeWindowsRecord second) {
@@ -84,6 +103,12 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 		}
 	}
 
+	/**
+	 * The previous cargo will have changed the constraints on the time windows, so we must find the new
+	 * feasible time windows before choosing an arrival time
+	 * @param portTimeWindowsRecord
+	 * @param seqIndex
+	 */
 	private void setFeasibleTimeWindowsUsingPrevious(IPortTimeWindowsRecord portTimeWindowsRecord, int seqIndex) {
 		int prevFeasibleWindowStart = IPortSlot.NO_PRICING_DATE;
 		for (IPortSlot portSlot : portTimeWindowsRecord.getSlots()) {
@@ -102,6 +127,34 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 					feasibleWindowStart = Math.max(windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)], prevFeasibleWindowStart + minTimeToNextElement[seqIndex][portTimeWindowsRecord.getIndex(portSlot) - 1]);
 					feasibleWindowEnd = Math.max(windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)], feasibleWindowStart + 1);
 				}
+				timeWindow = new TimeWindow(feasibleWindowStart, feasibleWindowEnd);
+			}
+			portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, timeWindow);
+			prevFeasibleWindowStart = feasibleWindowStart;
+		}
+	}
+	
+	/**
+	 * For round trip (nominal) cargoes, we don't care what else has happened on this vessel
+	 * @param portTimeWindowsRecord
+	 * @param seqIndex
+	 */
+	private void setFeasibleTimeWindowsRoundTrip(IPortTimeWindowsRecord portTimeWindowsRecord, int seqIndex) {
+		int prevFeasibleWindowStart = IPortSlot.NO_PRICING_DATE;
+		for (IPortSlot portSlot : portTimeWindowsRecord.getSlots()) {
+			final ITimeWindow timeWindow;
+			int feasibleWindowStart, feasibleWindowEnd;
+			if (portTimeWindowsRecord.getFirstSlot().equals(portSlot)) {
+				// first load
+				feasibleWindowStart = windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)];
+				feasibleWindowEnd = windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)];
+				timeWindow = new TimeWindow(feasibleWindowStart, feasibleWindowEnd);
+			} else {
+				feasibleWindowStart = Math.max(windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)],
+						prevFeasibleWindowStart
+								+ minTimeToNextElement[seqIndex][portTimeWindowsRecord.getIndex(portSlot) - 1]);
+				feasibleWindowEnd = Math.max(windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)],
+						feasibleWindowStart + 1);
 				timeWindow = new TimeWindow(feasibleWindowStart, feasibleWindowEnd);
 			}
 			portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, timeWindow);
