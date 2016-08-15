@@ -69,6 +69,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class VoyagePlanner {
 
+	private static final int ROUNDING_EPSILON = 5;
+
 	@Inject
 	private IVesselProvider vesselProvider;
 
@@ -1120,7 +1122,8 @@ public class VoyagePlanner {
 
 			// Sanity check these calculations match expected values
 			assert totalVoyageBOG == planData.getPlan().getLNGFuelVolume();
-			assert planData.getEndHeelVolumeInM3() == currentHeelInM3;
+			// Note: there may be some rounding errors when using MMBTU, so keep an eye on epsilon
+			assert (Math.abs(planData.getEndHeelVolumeInM3() - currentHeelInM3) <= ROUNDING_EPSILON);
 		}
 
 		// Ensure this flag is copied across!
