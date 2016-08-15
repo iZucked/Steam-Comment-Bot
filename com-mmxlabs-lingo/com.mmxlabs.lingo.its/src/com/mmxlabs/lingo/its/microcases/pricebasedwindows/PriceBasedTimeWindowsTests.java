@@ -215,9 +215,9 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 			ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
 			assert load != null;
 			long directCost = priceIntervalProviderHelper.getTotalEstimatedCostForRoute(purchase, sales, salesPrice, loadDuration, o_vesselClass.getNBORate(VesselState.Laden), o_vesselClass,
-					load.getCargoCVValue(), equivalenceFactor, lrd[0]);
+					load.getCargoCVValue(), equivalenceFactor, lrd[0], 0, true);
 			long canalCost = priceIntervalProviderHelper.getTotalEstimatedCostForRoute(purchase, sales, salesPrice, loadDuration, o_vesselClass.getNBORate(VesselState.Laden), o_vesselClass,
-					load.getCargoCVValue(), equivalenceFactor, lrd[1]);
+					load.getCargoCVValue(), equivalenceFactor, lrd[1], 0, true);
 			/*
 			 * Test correct values are being calculated
 			 */
@@ -226,8 +226,8 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 			/*
 			 * Test correct route chosen
 			 */
-			NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCost = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchase, sales, loadDuration, salesPrice, lrd,
-					o_vesselClass.getNBORate(VesselState.Laden), o_vesselClass, load.getCargoCVValue());
+			NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCost = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchase, sales, loadDuration, salesPrice, 0,
+					lrd, o_vesselClass.getNBORate(VesselState.Laden), o_vesselClass, load.getCargoCVValue(), true);
 			Assert.assertEquals(totalEstimatedJourneyCost.getFirst(), lrd[1]);
 			TimeWindowsTrimming timeWindowsTrimming = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, TimeWindowsTrimming.class);
 			int[] findBestBucketPairWithRouteAndBoiloffConsiderations = timeWindowsTrimming.findBestBucketPairWithRouteAndBoiloffConsiderations(o_vesselAvailability.getVessel(), load, lrd,

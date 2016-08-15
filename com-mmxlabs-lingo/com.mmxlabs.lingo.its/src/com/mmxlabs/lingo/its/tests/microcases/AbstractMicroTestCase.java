@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.pricing.util.PricingModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
+import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelFinder;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
@@ -57,6 +58,7 @@ public abstract class AbstractMicroTestCase {
 	protected CommercialModelBuilder commercialModelBuilder;
 	protected FleetModelBuilder fleetModelBuilder;
 	protected SpotMarketsModelBuilder spotMarketsModelBuilder;
+	protected SpotMarketsModelFinder spotMarketsModelFinder;
 	protected PricingModelBuilder pricingModelBuilder;
 	protected BaseLegalEntity entity;
 
@@ -92,7 +94,8 @@ public abstract class AbstractMicroTestCase {
 		commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
 		fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
 		portFinder = scenarioModelFinder.getPortModelFinder();
-
+		spotMarketsModelFinder = scenarioModelFinder.getSpotMarketsModelFinder();
+		
 		pricingModelBuilder = scenarioModelBuilder.getPricingModelBuilder();
 		commercialModelBuilder = scenarioModelBuilder.getCommercialModelBuilder();
 		cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
