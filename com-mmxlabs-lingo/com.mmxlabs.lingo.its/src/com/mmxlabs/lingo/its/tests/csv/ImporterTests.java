@@ -70,8 +70,8 @@ public class ImporterTests {
 
 					Assert.assertEquals(PricingEvent.START_LOAD, spotMarket.getPricingEvent());
 					Assert.assertEquals(VolumeUnits.MMBTU, spotMarket.getVolumeLimitsUnit());
-					Assert.assertEquals(2000000, spotMarket.getMinQuantity());
-					Assert.assertEquals(3000000, spotMarket.getMaxQuantity());
+					Assert.assertEquals(2_000_000, spotMarket.getMinQuantity());
+					Assert.assertEquals(3_000_000, spotMarket.getMaxQuantity());
 
 					final SpotAvailability availability = spotMarket.getAvailability();
 					Assert.assertNotNull(availability);
