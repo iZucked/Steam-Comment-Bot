@@ -57,7 +57,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 		// System.out.println("FOUR_OPT2_MOVES:"+FOUR_OPT2_MOVES);
 	}
 
-	final ConstrainedMoveGenerator owner;
+	final protected ConstrainedMoveGenerator owner;
 
 	class Move2over2A extends Move2over2 {
 
@@ -101,23 +101,54 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 	public void setSequences(final ISequences sequences) {
 
 	}
+	
+
+	public Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> findEdge(){
+		
+		
+		Pair<IResource, Integer> pos1 = null;
+		Pair<IResource, Integer> pos2 = null;
+		
+		
+		final Pair<ISequenceElement, ISequenceElement> newPair = RandomHelper.chooseElementFrom(owner.random, owner.getValidBreaks());
+				pos1 = owner.reverseLookup.get(newPair.getFirst());
+				pos2 = owner.reverseLookup.get(newPair.getSecond());
+	
+		
+		Pair<Pair<IResource, Integer>,Pair<IResource, Integer>> positions = new Pair(pos1,pos2);
+		return positions;
+	}
+	
 
 	@Override
 	public IMove generateMove() {
-		if (owner.validBreaks.isEmpty()) {
+		if (owner.getValidBreaks().isEmpty()) {
 			return new NullMoveA();
 		}
-
-		final Pair<ISequenceElement, ISequenceElement> newPair = RandomHelper.chooseElementFrom(owner.random, owner.validBreaks);
-		final Pair<IResource, Integer> pos1 = owner.reverseLookup.get(newPair.getFirst());
-		final Pair<IResource, Integer> pos2 = owner.reverseLookup.get(newPair.getSecond());
-
-		// Check for special case; elements are not in a sequence
-		// in this case, we typically need something clever to happen anyway
-		// so this MG will just bail out and give up.
-		if ((pos1.getFirst() == null) || (pos2.getFirst() == null)) {
+		
+		Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> positions = findEdge();
+		
+		Pair<IResource, Integer> pos1 = null;
+		Pair<IResource, Integer> pos2 = null;
+		
+		if(positions != null){
+			pos1 = positions.getFirst();
+			pos2 = positions.getSecond();
+			
+			if ((pos1.getFirst() == null) || (pos2.getFirst() == null)) {					
+				return new NullMoveB();			
+			}
+			
+			
+			
+		}else{
+			
 			return new NullMoveB();
+		
 		}
+		
+		
+		
 
 		final IResource sequence1 = pos1.getFirst();
 		final IResource sequence2 = pos2.getFirst();

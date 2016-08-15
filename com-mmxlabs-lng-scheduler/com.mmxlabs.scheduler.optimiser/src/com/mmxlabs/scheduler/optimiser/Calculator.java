@@ -205,4 +205,17 @@ public final class Calculator {
 	public static long multiplyHigh(final long a, final long b) {
 		return (a * b) / HighScaleFactor;
 	}
+	
+	/**
+	 * Simple percentage (scaled by 1,000,000)
+	 * 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static long percentageLow(final long percentage, final long input) {
+		return (input * percentage) / HighScaleFactor;
+	}
+
+	
 }
