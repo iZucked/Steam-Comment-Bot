@@ -23,6 +23,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.common.io.FileDeleter;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.migration.IClientMigrationUnit;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.IMigrationUnit;
@@ -110,12 +111,12 @@ public class ScenarioInstanceMigrator {
 			}
 			// Make sure the migration has worked!
 			if (migratedVersion[0] != latestScenarioVersion) {
-				throw new ScenarioMigrationException(String.format("Scenario was not migrated to latest version. Expected %d, currently %d.", latestScenarioVersion,
-						scenarioInstance.getScenarioVersion()));
+				throw new ScenarioMigrationException(
+						String.format("Scenario was not migrated to latest version. Expected %d, currently %d.", latestScenarioVersion, scenarioInstance.getScenarioVersion()));
 			}
 			if (migratedVersion[1] != latestClientVersion) {
-				throw new ScenarioMigrationException(String.format("Scenario was not migrated to latest client version. Expected %d, currently %d.", latestClientVersion,
-						scenarioInstance.getClientScenarioVersion()));
+				throw new ScenarioMigrationException(
+						String.format("Scenario was not migrated to latest client version. Expected %d, currently %d.", latestClientVersion, scenarioInstance.getClientScenarioVersion()));
 			}
 
 			// Copy back over original data
@@ -133,8 +134,9 @@ public class ScenarioInstanceMigrator {
 			throw new ScenarioMigrationException(e);
 		} finally {
 			// Done! Clean up
+			boolean secureDelete = LicenseFeatures.isPermitted("features:secure-delete");
 			for (final File f : tmpFiles) {
-				FileDeleter.delete(f);
+				FileDeleter.delete(f, secureDelete);
 			}
 		}
 
@@ -155,8 +157,8 @@ public class ScenarioInstanceMigrator {
 	public int[] applyMigrationChain(@NonNull final String scenarioContext, final int currentScenarioVersion, final int latestScenarioVersion, @NonNull final String clientContext,
 			final int currentClientVersion, final int latestClientVersion, @NonNull final URI tmpURI) throws Exception {
 
-		final List<IMigrationUnit> chain = migrationRegistry
-				.getMigrationChain(scenarioContext, currentScenarioVersion, latestScenarioVersion, clientContext, currentClientVersion, latestClientVersion);
+		final List<IMigrationUnit> chain = migrationRegistry.getMigrationChain(scenarioContext, currentScenarioVersion, latestScenarioVersion, clientContext, currentClientVersion,
+				latestClientVersion);
 
 		int scenarioVersion = currentScenarioVersion;
 		int clientVersion = currentClientVersion;
