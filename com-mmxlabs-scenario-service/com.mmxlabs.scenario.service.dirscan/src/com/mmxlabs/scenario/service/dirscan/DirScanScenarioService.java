@@ -42,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.io.FileDeleter;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.manifest.ManifestFactory;
@@ -159,7 +160,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		}
 		if (f.isFile()) {
 			try {
-				FileDeleter.delete(f);
+				FileDeleter.delete(f, LicenseFeatures.isPermitted("features:secure-delete"));
 			} catch (final Exception e) {
 				log.error("Error deleting: " + f.getName(), e);
 			}
