@@ -1,6 +1,5 @@
 package com.mmxlabs.scheduler.optimiser.lso;
 
-import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;

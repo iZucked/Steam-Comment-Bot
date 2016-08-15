@@ -4,37 +4,16 @@
  */
 package com.mmxlabs.scheduler.optimiser.lso;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.lso.IMove;
-import com.mmxlabs.optimiser.lso.impl.Move2over2;
-import com.mmxlabs.optimiser.lso.impl.Move3over2;
-import com.mmxlabs.optimiser.lso.impl.Move4over2;
-import com.mmxlabs.optimiser.lso.impl.NullMove;
-import com.mmxlabs.optimiser.lso.impl.NullMove2Over2;
-import com.mmxlabs.optimiser.lso.impl.NullMove3Over2;
-import com.mmxlabs.optimiser.lso.impl.NullMove4Over2;
-import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
 /**
- * Refactoring of the sequences-related CMG logic into a helper class.
- * 
- * This uses protected access to a lot of {@link ConstrainedMoveGenerator} fields, which isn't great, but if needs be they could all be made accessors. The code is very tightly connected anyway, so it
- * doesn't make that much difference.
- * 
- * @author hinton
  * 
  */
 public class SequencesConstrainedLoopingMoveGeneratorUnit extends SequencesConstrainedMoveGeneratorUnit {

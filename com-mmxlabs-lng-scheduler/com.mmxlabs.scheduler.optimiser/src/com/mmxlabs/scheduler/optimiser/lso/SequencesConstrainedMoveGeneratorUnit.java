@@ -126,30 +126,24 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 			return new NullMoveA();
 		}
 		
+		// get resources for a random edge
 		Pair<Pair<IResource, Integer>, Pair<IResource, Integer>> positions = findEdge();
 		
 		Pair<IResource, Integer> pos1 = null;
 		Pair<IResource, Integer> pos2 = null;
 		
-		if(positions != null){
+		// if no resource found then we have a part of the edge in the unused list
+		// exit! (let another move solve this)
+		if (positions != null) {
 			pos1 = positions.getFirst();
 			pos2 = positions.getSecond();
-			
-			if ((pos1.getFirst() == null) || (pos2.getFirst() == null)) {					
-				return new NullMoveB();			
+			if ((pos1.getFirst() == null) || (pos2.getFirst() == null)) {
+				return new NullMoveB();
 			}
-			
-			
-			
-		}else{
-			
+		} else {
 			return new NullMoveB();
-		
 		}
 		
-		
-		
-
 		final IResource sequence1 = pos1.getFirst();
 		final IResource sequence2 = pos2.getFirst();
 		final int position1 = pos1.getSecond();
