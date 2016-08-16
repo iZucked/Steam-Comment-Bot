@@ -21,6 +21,7 @@ import org.osgi.framework.ServiceReference;
 
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.common.io.FileDeleter;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.Container;
@@ -117,7 +118,7 @@ public class MigrationHelper {
 			scenarioService.load(instance);
 		} finally {
 			if (f != null && f.exists()) {
-				FileDeleter.delete(f);
+				FileDeleter.delete(f, LicenseFeatures.isPermitted("features:secure-delete"));
 				f = null;
 			}
 		}

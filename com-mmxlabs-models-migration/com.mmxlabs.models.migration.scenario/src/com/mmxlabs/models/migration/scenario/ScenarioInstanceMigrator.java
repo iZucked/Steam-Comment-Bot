@@ -25,6 +25,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.common.io.FileDeleter;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.migration.IClientMigrationUnit;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.IMigrationUnit;
@@ -137,8 +138,9 @@ public class ScenarioInstanceMigrator {
 			throw new ScenarioMigrationException(e);
 		} finally {
 			// Done! Clean up
+			boolean secureDelete = LicenseFeatures.isPermitted("features:secure-delete");
 			for (final File f : tmpFiles) {
-				FileDeleter.delete(f);
+				FileDeleter.delete(f, secureDelete);
 			}
 
 			monitor.done();
