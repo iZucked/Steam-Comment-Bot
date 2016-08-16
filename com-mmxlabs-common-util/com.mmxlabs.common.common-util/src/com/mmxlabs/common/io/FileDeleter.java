@@ -36,6 +36,7 @@ public final class FileDeleter {
 
 		if (!secureDelete) {
 			file.delete();
+			return;
 		}
 		
 		if (!file.exists()) {
