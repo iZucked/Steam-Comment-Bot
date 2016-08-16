@@ -43,7 +43,7 @@ public class FileDeleterTest {
 							writer.flush();
 						}
 
-						FileDeleter.delete(f);
+						FileDeleter.delete(f, true);
 
 						Assert.assertFalse(f.exists());
 					} catch (Throwable t) {
