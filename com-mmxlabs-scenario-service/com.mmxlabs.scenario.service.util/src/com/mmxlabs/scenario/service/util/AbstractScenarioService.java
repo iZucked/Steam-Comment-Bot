@@ -42,6 +42,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.common.io.FileDeleter;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.IScenarioMigrationService;
@@ -334,9 +335,10 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 			}
 			return dup;
 		} finally {
+			boolean secureDelete = LicenseFeatures.isPermitted("features:secure-delete");
 			// Clean up tmp files used for migration.
 			for (final File tmpFile : tmpFiles) {
-				FileDeleter.delete(tmpFile);
+				FileDeleter.delete(tmpFile, secureDelete);
 			}
 		}
 	}

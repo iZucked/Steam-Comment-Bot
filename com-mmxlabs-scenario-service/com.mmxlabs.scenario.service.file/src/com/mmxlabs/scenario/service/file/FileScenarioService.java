@@ -48,6 +48,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Files;
 import com.mmxlabs.common.io.FileDeleter;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.file.internal.Activator;
 import com.mmxlabs.scenario.service.file.internal.FileScenarioServiceBackup;
@@ -214,7 +215,7 @@ public class FileScenarioService extends AbstractScenarioService {
 		try {
 			Files.copy(source, dest);
 			monitor.worked(3);
-			FileDeleter.delete(source);
+			FileDeleter.delete(source, LicenseFeatures.isPermitted("features:secure-delete"));
 			monitor.worked(1);
 		} finally {
 			monitor.done();
@@ -360,7 +361,7 @@ public class FileScenarioService extends AbstractScenarioService {
 					instanceResourceSet.getResources().remove(r);
 					final URI scenaruiURI = resolveURI(instance.getUuid() + ".xmi");
 					if (scenaruiURI.isFile()) {
-						FileDeleter.delete(new File(scenaruiURI.toFileString()));
+						FileDeleter.delete(new File(scenaruiURI.toFileString()), LicenseFeatures.isPermitted("features:secure-delete"));
 					} else {
 						log.warn("Unable to securely delete scenario - " + scenaruiURI.toString());
 						r.delete(null);
@@ -378,7 +379,7 @@ public class FileScenarioService extends AbstractScenarioService {
 					instanceResourceSet.getResources().remove(resource);
 					final URI metadataURI = resolveURI("instances/" + instance.getUuid() + ".xmi");
 					if (metadataURI.isFile()) {
-						FileDeleter.delete(new File(metadataURI.toFileString()));
+						FileDeleter.delete(new File(metadataURI.toFileString()), LicenseFeatures.isPermitted("features:secure-delete"));
 					} else {
 						resource.delete(null);
 					}
