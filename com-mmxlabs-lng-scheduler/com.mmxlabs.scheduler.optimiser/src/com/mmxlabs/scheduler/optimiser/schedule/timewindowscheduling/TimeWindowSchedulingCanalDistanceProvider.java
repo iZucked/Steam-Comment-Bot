@@ -99,7 +99,7 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 			final int nbotravelTime = Calculator.getTimeFromSpeedDistance(nboSpeed, d.getSecond());
 			final int transitTime = routeCostProvider.getRouteTransitTime(d.getFirst(), vessel);
 			times[i] = new LadenRouteData(mintravelTime + transitTime, nbotravelTime + transitTime,
-					OptimiserUnitConvertor.convertToInternalDailyCost(routeCostProvider.getRouteCost(d.getFirst(), vessel, costType)), d.getSecond());
+					OptimiserUnitConvertor.convertToInternalDailyCost(routeCostProvider.getRouteCost(d.getFirst(), vessel, costType)), d.getSecond(), transitTime);
 			i++;
 		}
 		return times;
@@ -162,7 +162,7 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 		List<Integer> times = new ArrayList<Integer>();
 		while (speed <= maxSpeed) {
 			for (LadenRouteData ladenRouteData : ladenRouteTimes) {
-				int time = startTime + Calculator.getTimeFromSpeedDistance(speed, ladenRouteData.ladenRouteDistance);
+				int time = startTime + Calculator.getTimeFromSpeedDistance(speed, ladenRouteData.ladenRouteDistance) + ladenRouteData.transitTime;
 				times.add(time);
 			}
 			speed += half_a_knot;

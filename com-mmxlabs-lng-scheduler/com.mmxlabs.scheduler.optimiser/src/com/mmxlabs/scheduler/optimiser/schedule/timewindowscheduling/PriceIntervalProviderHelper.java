@@ -325,6 +325,9 @@ public class PriceIntervalProviderHelper {
 
 		// estimate speed and rate
 		final int nboSpeed = vesselClass.getConsumptionRate(vesselState).getSpeed(Calculator.convertM3ToMT(boiloffRateM3, cv, equivalenceFactor)); // DO NOT COMMIT - alex check
+		if (totalLegLengthInHours == 0) {
+			int z = 0; // DO NOT COMMIT
+		}
 		final int naturalSpeed = Calculator.speedFromDistanceTime(distance, totalLegLengthInHours);
 		final int speed = Math.min(Math.max(nboSpeed, naturalSpeed), vesselClass.getMaxSpeed()); // the speed bounded by NBO and Max
 		final long rate = vesselClass.getConsumptionRate(vesselState).getRate(speed);
@@ -371,9 +374,9 @@ public class PriceIntervalProviderHelper {
 		fuelCosts[1] = OptimiserUnitConvertor.convertToInternalDailyCost(totalBunkerCost);
 		return fuelCosts;
 	}
+	
 	public NonNullPair<LadenRouteData, Long> getBestCanalDetailsWithBoiloff(@NonNull final IntervalData purchase, @NonNull final IntervalData sales, final int loadDuration, final int salesPrice,
 			@NonNull final LadenRouteData[] sortedCanalTimes, final long boiloffRateM3, final int cv, final int loadVolumeMMBTU) {
-
 		assert sortedCanalTimes.length > 0;
 		long bestMargin = Long.MAX_VALUE;
 		long bestBoiloffCostMMBTU = Long.MIN_VALUE;

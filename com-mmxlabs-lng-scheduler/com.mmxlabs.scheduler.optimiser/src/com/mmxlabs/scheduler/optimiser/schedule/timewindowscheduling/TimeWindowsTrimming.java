@@ -141,10 +141,15 @@ public class TimeWindowsTrimming {
 		portTimeWindowRecord.setSlotFeasibleTimeWindow(end, new TimeWindow(feasibleStart, feasibleEnd));
 	}
 
-	private int getEndOfLastNonReturnSlot(IPortTimeWindowsRecord portTimeWindowRecord) {
+	/**
+	 * Gets time effectively for the earliest time we can start
+	 * @param portTimeWindowRecord
+	 * @return
+	 */
+	private int getEarliestStartTimeOfBallastForEndSlot(IPortTimeWindowsRecord portTimeWindowRecord) {
 		List<@NonNull IPortSlot> slots = portTimeWindowRecord.getSlots();
 		IPortSlot lastNonEndSlot = slots.get(slots.size() - 1);
-		ITimeWindow previousFeasibleTimeWindow = lastNonEndSlot.getTimeWindow();
+		ITimeWindow previousFeasibleTimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(lastNonEndSlot);
 		return previousFeasibleTimeWindow.getInclusiveStart() + portTimeWindowRecord.getSlotDuration(lastNonEndSlot);
 	}
 	/**
@@ -202,6 +207,10 @@ public class TimeWindowsTrimming {
 			if (end != null) {
 				List<int[]> dischargePriceIntervalsIndependentOfLoad = getDischargePriceIntervalsIndependentOfLoad(portTimeWindowRecord, discharge);
 				final IVessel vessel = getVesselFromPortTimeWindowsRecord(portTimeWindowRecord);
+				System.out.println("d:"+discharge.getId());
+				if (discharge.getId().equals("DS-T_4")) {
+					int z = 0;
+				}
 				int[] endElementTimes = trimEndElementTimeWindowsWithRouteOptimisationAndBoilOff(portTimeWindowRecord, load, discharge, end, vessel, dischargePriceIntervalsIndependentOfLoad, dischargePriceIntervalsIndependentOfLoad, vesselStartTime);
 				TimeWindow tw = new TimeWindow(endElementTimes[2], endElementTimes[2]+1);
 				portTimeWindowRecord.setSlotFeasibleTimeWindow(end, tw);
@@ -263,9 +272,9 @@ public class TimeWindowsTrimming {
 		assert dischargeTimeWindow != null;
 		final IVesselAvailability vesselAvailability = schedulerCalculationUtils.getVesselAvailabilityFromResource(portTimeWindowsRecord.getResource());
 		// get distances for end ballast journey
-		final LadenRouteData[] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumBallastTravelTimes(load.getPort(), discharge.getPort(), vesselAvailability.getVessel(), Math.max((dischargeTimeWindow.getExclusiveEnd() - 1) + portTimeWindowsRecord.getSlotDuration(discharge), IPortSlot.NO_PRICING_DATE));
+		final LadenRouteData[] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumBallastTravelTimes(discharge.getPort(), endSlot.getPort(), vesselAvailability.getVessel(), Math.max((dischargeTimeWindow.getExclusiveEnd() - 1) + portTimeWindowsRecord.getSlotDuration(discharge), IPortSlot.NO_PRICING_DATE));
 		// get time we'll be starting the final ballast journey
-		int endTimeOfLastNonReturnSlot = getEndOfLastNonReturnSlot(portTimeWindowsRecord);
+		int endTimeOfLastNonReturnSlot = getEarliestStartTimeOfBallastForEndSlot(portTimeWindowsRecord);
 		// set the feasible window for the end slot
 		setFeasibleTimeWindowForEndSlot(portTimeWindowsRecord, endSlot, endTimeOfLastNonReturnSlot, LadenRouteData.getMinimumTravelTime(sortedCanalTimes));
 		// get intervals for the end slot based on different speeds
