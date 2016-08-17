@@ -1103,7 +1103,7 @@ public class VoyagePlanner {
 					}
 					totalVoyageBOG += voyageBOGInM3;
 					currentHeelInM3 -= voyageBOGInM3;
-					assert currentHeelInM3 >= 0;
+					assert currentHeelInM3 + ROUNDING_EPSILON >= 0;
 					voyageTime += voyageDetails.getTravelTime();
 					voyageTime += voyageDetails.getIdleTime();
 
@@ -1118,7 +1118,7 @@ public class VoyagePlanner {
 				// Update current heel - this will still be the start heel value as there was no boil-off
 				currentHeelInM3 = 0;
 			}
-			assert currentHeelInM3 >= 0;
+			assert currentHeelInM3 + ROUNDING_EPSILON >= 0;
 
 			// Sanity check these calculations match expected values
 			assert totalVoyageBOG == planData.getPlan().getLNGFuelVolume();
