@@ -153,8 +153,14 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 		} else {
 			minSpeed = getNBOSpeed(vessel.getVesselClass(), VesselState.Ballast, cv);
 		}
+		// round min and max speeds to allow better speed stepping
 		minSpeed = roundUpToNearest(minSpeed, 100);
 		int maxSpeed = roundDownToNearest(vessel.getVesselClass().getMaxSpeed(), 100);
+		
+		// min speed needs to be bounded!
+		minSpeed = Math.min(minSpeed, maxSpeed);
+		
+		// loop through speeds and canals
 		int speed = minSpeed;
 		@NonNull
 		LadenRouteData @NonNull [] ladenRouteTimes = getMinimumTravelTimes(load, discharge, vessel, startTime, false);

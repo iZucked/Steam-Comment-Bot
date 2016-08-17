@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.inject.name.Named;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
@@ -42,12 +43,16 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 // @PerChainUnitScope
 public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
-
+	public static final String VPO_SPEED_STEPPING = "VPO_SPEED_STEPPING";
 	@Inject
 	private IStartEndRequirementProvider startEndRequirementProvider;
 
 	private static final int RELAXATION_STEP = 6;
 
+//	@com.google.inject.Inject(optional = true)
+//	@Named(VPO_SPEED_STEPPING)
+//	private boolean useVPOSpeedStepping;
+	
 	public static class Record {
 
 		public Record(@Nullable IResource resource, @NonNull IVessel vessel, long startHeel, int baseFuelPricePerMT, long vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
