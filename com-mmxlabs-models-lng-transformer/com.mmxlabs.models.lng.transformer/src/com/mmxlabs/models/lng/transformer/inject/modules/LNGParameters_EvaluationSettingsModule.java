@@ -37,6 +37,8 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentPara
 import com.mmxlabs.scheduler.optimiser.fitness.components.ISimilarityComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.SimilarityComponentParameters;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
+import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
 
 /**
  * The {@link LNGParameters_EvaluationSettingsModule} provides user-definable parameters derived from the {@link OptimiserSettings} object such as the random seed and number of iterations
@@ -45,7 +47,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.SimilarityComponentPar
 public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 
 	public static final String OPTIMISER_REEVALUATE = "LNGParameters_EvaluationSettingsModule_OPTIMISER_REEVALUATE";
-
+	
 	@NonNull
 	private final UserSettings userSettings;
 
@@ -217,4 +219,12 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 	private boolean isOptimiserReevaluating() {
 		return true;
 	}
+
+	@Provides
+	@Named(ConstrainedMoveGenerator.LSO_MOVES_SCMG)
+	private boolean isSCMGLooping() {
+		return false;
+	}
+	
+
 }

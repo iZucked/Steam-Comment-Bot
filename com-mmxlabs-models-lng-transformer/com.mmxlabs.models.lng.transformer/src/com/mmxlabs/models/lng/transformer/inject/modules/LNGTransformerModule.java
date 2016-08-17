@@ -233,4 +233,11 @@ public class LNGTransformerModule extends AbstractModule {
 		final CachingVoyagePlanOptimiser cachingVoyagePlanOptimiser = new CachingVoyagePlanOptimiser(delegate, DEFAULT_VPO_CACHE_SIZE);
 		return cachingVoyagePlanOptimiser;
 	}
+	
+	@Provides
+	@Named(VoyagePlanOptimiser.VPO_SPEED_STEPPING)
+	private boolean isVPOSpeedStepping() {
+		return true;
+	}
+
 }

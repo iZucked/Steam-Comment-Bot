@@ -163,7 +163,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 			super.setProgress(100);
 		} finally {
 			progressMonitor.done();
-			if (false) {
+			if (true) {
 				System.out.println("done in:" + (System.currentTimeMillis() - start));
 			}
 		}
