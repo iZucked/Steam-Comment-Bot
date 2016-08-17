@@ -13,6 +13,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.time.Months;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
@@ -31,6 +32,7 @@ public class LNGScenarioChainUnitFactory {
 
 	public static final String PROPERTY_MMX_NUMBER_OF_CORES = "MMX_NUMBER_OF_CORES";
 	public static final String PROPERTY_MMX_DISABLE_SECOND_ACTION_SET_RUN = "MMX_DISABLE_SECOND_ACTION_SET_RUN";
+	public static final String PROPERTY_MMX_DISABLE_SECOND_LSO_RUN = "MMX_DISABLE_SECOND_LSO_RUN";
 
 	private static final int PROGRESS_CLEAN_STATE = 25;
 	private static final int PROGRESS_OPTIMISATION = 100;
@@ -62,7 +64,15 @@ public class LNGScenarioChainUnitFactory {
 				for (int i = 0; i < jobCount; ++i) {
 					seeds[i] = stage.getSeed() + i;
 				}
-				LNGLSOOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION, executorService, seeds);
+
+				final boolean doSecondRun = doSecondLSORun(userSettings);
+				if (doSecondRun) {
+					LNGLSOOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 2, executorService, seeds);
+					LNGLSOOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 2, executorService, seeds);
+				} else {
+					LNGLSOOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION, executorService, seeds);
+				}
+
 			}
 			return null;
 		} else if (template instanceof HillClimbOptimisationStage) {
@@ -121,5 +131,13 @@ public class LNGScenarioChainUnitFactory {
 			}
 		}
 		return over3Months;
+	}
+
+	protected static boolean doSecondLSORun(@NonNull final UserSettings userSettings) {
+
+		if (System.getProperty(PROPERTY_MMX_DISABLE_SECOND_LSO_RUN) != null) {
+			return false;
+		}
+		return LicenseFeatures.isPermitted("features:optimiser-second-lso-stage");
 	}
 }

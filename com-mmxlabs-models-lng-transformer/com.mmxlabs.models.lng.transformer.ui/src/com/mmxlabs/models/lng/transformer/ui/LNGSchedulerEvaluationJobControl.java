@@ -18,6 +18,7 @@ import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -59,7 +60,9 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 			final LNGScenarioModel scenario = (LNGScenarioModel) modelReference.getInstance();
 			final EditingDomain editingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
 
-			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenario, scenarioInstance, jobDescriptor.getOptimisationPlan(), editingDomain, null, true);
+			// Hack: Add on shipping only hint to avoid generating spot markets during eval.
+			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenario, scenarioInstance, jobDescriptor.getOptimisationPlan(), editingDomain, null, true,
+					LNGTransformerHelper.HINT_SHIPPING_ONLY);
 			try {
 				runner.evaluateInitialState();
 			} finally {

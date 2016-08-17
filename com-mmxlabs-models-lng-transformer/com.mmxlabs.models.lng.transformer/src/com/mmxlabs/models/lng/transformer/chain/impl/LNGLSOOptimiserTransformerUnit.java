@@ -204,6 +204,155 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 		chainBuilder.addLink(link);
 		return link;
 	}
+	@NonNull
+	public static IChainLink chainPoolFake(@NonNull final ChainBuilder chainBuilder, @NonNull final String stage, @NonNull final UserSettings userSettings,
+			@NonNull final LocalSearchOptimisationStage stageSettings, final int progressTicks, @NonNull final ExecutorService executorService, final int... seeds) {
+		final IChainLink link = new IChainLink() {
+			
+			@Override
+			public IMultiStateResult run(final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
+				final LNGDataTransformer dataTransformer = chainBuilder.getDataTransformer();
+				
+				final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
+				if (runnerHook != null) {
+					runnerHook.beginStage(stage);
+					
+					final ISequences preloadedResult = runnerHook.getPrestoredSequences(stage, dataTransformer);
+					if (preloadedResult != null) {
+						monitor.beginTask("", 1);
+						try {
+							monitor.worked(1);
+							return new MultiStateResult(preloadedResult, new HashMap<>());
+						} finally {
+							runnerHook.endStage(stage);
+							monitor.done();
+						}
+					}
+				}
+				
+				@NonNull
+				final Collection<@NonNull String> hints = new HashSet<>(dataTransformer.getHints());
+				if (userSettings.isGenerateCharterOuts()) {
+					hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
+				} else {
+					hints.remove(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
+				}
+				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
+				
+				monitor.beginTask("", 100 * seeds.length);
+				final List<Future<IMultiStateResult>> results = new ArrayList<>(seeds.length);
+				try {
+					for (int i = 0; i < seeds.length; ++i) {
+						final LocalSearchOptimisationStage copyStageSettings = EcoreUtil.copy(stageSettings);
+						copyStageSettings.setSeed(seeds[i]);
+						
+						final int jobId = i;
+						results.add(executorService.submit(() -> {
+							final LNGLSOOptimiserTransformerUnit t = new LNGLSOOptimiserTransformerUnit(dataTransformer, stage, jobId, userSettings, copyStageSettings,
+									initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints);
+							 t.run(new SubProgressMonitor(monitor, 100));
+							 return inputState;
+						}));
+					}
+					
+					final List<NonNullPair<ISequences, Map<String, Object>>> output = new LinkedList<>();
+					try {
+						for (final Future<IMultiStateResult> f : results) {
+							final IMultiStateResult r = f.get();
+							output.add(r.getBestSolution());
+							
+							// Check monitor state
+							if (monitor.isCanceled()) {
+								throw new OperationCanceledException();
+							}
+						}
+					} catch (Throwable e) {
+						// An exception occurred, abort!
+						
+						// Unwrap exception
+						if (e instanceof ExecutionException) {
+							e = e.getCause();
+						}
+						
+						// Abort any other running jobs
+						for (final Future<IMultiStateResult> f : results) {
+							try {
+								f.cancel(true);
+							} catch (final Exception e2) {
+								LOG.error(e2.getMessage(), e2);
+							}
+						}
+						
+						if (e instanceof OperationCanceledException) {
+							throw (OperationCanceledException) e;
+						} else {
+							throw new RuntimeException(e);
+						}
+					}
+					
+					// Check monitor state
+					if (monitor.isCanceled()) {
+						throw new OperationCanceledException();
+					}
+					
+					// Sort results
+					Collections.sort(output, new Comparator<NonNullPair<ISequences, Map<String, Object>>>() {
+						
+						@Override
+						public int compare(final NonNullPair<ISequences, Map<String, Object>> o1, final NonNullPair<ISequences, Map<String, Object>> o2) {
+							final long a = getTotal(o1.getSecond());
+							final long b = getTotal(o2.getSecond());
+							return Long.compare(a, b);
+						}
+						
+						long getTotal(final Map<String, Object> m) {
+							if (m == null) {
+								return 0L;
+							}
+							final Map<String, Long> currentFitnesses = (Map<String, Long>) m.get(OptimiserConstants.G_AI_fitnessComponents);
+							if (currentFitnesses == null) {
+								return 0L;
+							}
+							long sum = 0L;
+							for (final Long l : currentFitnesses.values()) {
+								if (l != null) {
+									sum += l.longValue();
+								}
+							}
+							return sum;
+							
+						}
+					});
+					
+					if (output.isEmpty()) {
+						throw new IllegalStateException("No results generated");
+					}
+					
+					if (runnerHook != null) {
+						// TODO: Should really be whole multi state result
+//						runnerHook.reportSequences(stage, output.get(0).getFirst(), dataTransformer);
+					}
+					
+					 return inputState;
+
+//					return new MultiStateResult(output.get(0), output);
+				} finally {
+					if (runnerHook != null) {
+						runnerHook.endStage(stage);
+					}
+					
+					monitor.done();
+				}
+			}
+			
+			@Override
+			public int getProgressTicks() {
+				return progressTicks;
+			}
+		};
+		chainBuilder.addLink(link);
+		return link;
+	}
 
 	@NonNull
 	private final LNGDataTransformer dataTransformer;
