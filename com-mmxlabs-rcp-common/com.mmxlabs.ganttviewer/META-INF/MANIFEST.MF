@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Ganttviewer
 Bundle-SymbolicName: com.mmxlabs.ganttviewer
-Bundle-Version: 3.12.13.qualifier
+Bundle-Version: 3.12.13.RELEASE
 Bundle-Activator: com.mmxlabs.ganttviewer.internal.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
