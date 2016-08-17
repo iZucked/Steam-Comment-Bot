@@ -55,4 +55,19 @@ public interface ITimeWindowSchedulingCanalDistanceProvider {
 	@NonNull
 	LadenRouteData getBestCanalDetails(@NonNull LadenRouteData @NonNull [] sortedCanalTimes, int maxTime);
 
+	/**
+	 * Return a list of potential end times based on different speeds a vessel can travel and routes it can take
+	 * @param load
+	 * @param discharge
+	 * @param cv TODO
+	 * @param vessel
+	 * @param startTime
+	 * @return
+	 */
+	@NonNull
+	List<Integer> getTimeDataForDifferentSpeedsAndRoutes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int cv, int startTime, boolean isLaden);
+
+	@NonNull
+	LadenRouteData @NonNull [] getMinimumBallastTravelTimes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int ladenStartTime);
+
 }

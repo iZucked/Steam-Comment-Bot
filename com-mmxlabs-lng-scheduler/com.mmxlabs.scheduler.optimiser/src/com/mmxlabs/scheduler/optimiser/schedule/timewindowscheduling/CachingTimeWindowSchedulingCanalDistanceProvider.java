@@ -84,4 +84,14 @@ public class CachingTimeWindowSchedulingCanalDistanceProvider implements ITimeWi
 	public @NonNull LadenRouteData getBestCanalDetails(@NonNull LadenRouteData @NonNull [] sortedCanalTimes, int maxTime) {
 		return delegate.getBestCanalDetails(sortedCanalTimes, maxTime);
 	}
+
+	@Override
+	public @NonNull List<Integer> getTimeDataForDifferentSpeedsAndRoutes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int cv, int startTime, boolean isLaden) {
+		return delegate.getTimeDataForDifferentSpeedsAndRoutes(load, discharge, vessel, cv, startTime, isLaden);
+	}
+
+	@Override
+	public @NonNull LadenRouteData @NonNull [] getMinimumBallastTravelTimes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int ladenStartTime) {
+		return delegate.getMinimumBallastTravelTimes(load, discharge, vessel, ladenStartTime);
+	}
 }

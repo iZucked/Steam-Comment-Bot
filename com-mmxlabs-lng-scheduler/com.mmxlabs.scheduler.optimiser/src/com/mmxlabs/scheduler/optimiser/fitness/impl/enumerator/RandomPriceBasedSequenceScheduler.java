@@ -53,7 +53,7 @@ public class RandomPriceBasedSequenceScheduler extends EnumeratingSequenceSchedu
 		for (int seqIndex = 0; seqIndex < sequences.size(); seqIndex++) {
 			for (final IPortTimeWindowsRecord portTimeWindowsRecord : portTimeWindowsRecords.get(seqIndex)) {
 				setFeasibleTimeWindows(portTimeWindowsRecord, seqIndex);
-				timeWindowsTrimming.processCargo(portTimeWindowsRecord);
+				timeWindowsTrimming.processCargo(portTimeWindowsRecord, arrivalTimes[seqIndex][0]);
 				updateTimeWindows(portTimeWindowsRecord, seqIndex);
 			}
 		}

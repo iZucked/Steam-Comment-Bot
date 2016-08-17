@@ -182,7 +182,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 		final int size = sequences.size();
 		bindings.clear();
 
-		if ((arrivalTimes == null) || (arrivalTimes.length != size)) {
+//		if ((arrivalTimes == null) || (arrivalTimes.length != size)) {
 			arrivalTimes = new int[size][];
 			windowStartTime = new int[size][];
 			windowEndTime = new int[size][];
@@ -192,12 +192,19 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 			useTimeWindow = new boolean[size][];
 			actualisedTimeWindow = new boolean[size][];
 			sizes = new int[size];
-		}
+//		}
 
 		portTimeWindowsRecords.clear();
 		for (int i = 0; i < size; i++) {
 			portTimeWindowsRecords.add(new LinkedList<IPortTimeWindowsRecord>());
 			prepare(i);
+			List<IPortTimeWindowsRecord> records = portTimeWindowsRecords.get(i);
+			if (records.size() > 0) {
+				IPortTimeWindowsRecord lastRecord = records.get(records.size() - 1);
+				if (lastRecord.getIndex(lastRecord.getReturnSlot()) != arrivalTimes[i].length-1) {
+					int z = 0;
+				}
+			}
 		}
 
 		imposeShipToShipConstraints();

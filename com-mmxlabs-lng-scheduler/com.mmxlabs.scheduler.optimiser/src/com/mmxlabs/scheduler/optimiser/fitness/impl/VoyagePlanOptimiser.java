@@ -137,7 +137,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 				// If this is non-zero then our end event rules will have kicked in and we should not engage the speed step code.
 
-				evaluateVoyagePlan(record, state, extraExtent);
+				evaluateVoyagePlan(record, state, 0);
 				return;
 			}
 		}

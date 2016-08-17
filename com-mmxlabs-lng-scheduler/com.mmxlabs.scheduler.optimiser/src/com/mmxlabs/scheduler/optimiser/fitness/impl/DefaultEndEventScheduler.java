@@ -60,7 +60,9 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 	@Override
 	public List<IPortTimesRecord> scheduleEndEvent(final IResource resource, final IVesselAvailability vesselAvailability, final PortTimesRecord partialPortTimesRecord, final int scheduledTime,
 			@NonNull final IPortSlot endEventSlot) {
-
+		if (resource.getName().contains("Melam")) {
+			int z = 0;
+		}
 		final List<IPortTimesRecord> additionalRecords = new LinkedList<>();
 		@NonNull
 		final IEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
