@@ -245,6 +245,7 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 					for (int i = 0; i < seeds.length; ++i) {
 						final LocalSearchOptimisationStage copyStageSettings = EcoreUtil.copy(stageSettings);
 						copyStageSettings.setSeed(seeds[i]);
+						copyStageSettings.getAnnealingSettings().setIterations(copyStageSettings.getAnnealingSettings().getIterations() / 2);
 						
 						final int jobId = i;
 						results.add(executorService.submit(() -> {
