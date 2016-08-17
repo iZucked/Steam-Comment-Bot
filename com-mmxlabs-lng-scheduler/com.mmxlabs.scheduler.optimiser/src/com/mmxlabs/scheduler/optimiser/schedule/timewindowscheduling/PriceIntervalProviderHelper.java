@@ -292,7 +292,7 @@ public class PriceIntervalProviderHelper {
 	public long getTotalEstimatedCostForRoute(final IntervalData purchase, final IntervalData sales, final int salesPrice, final int loadDuration, final long boiloffRateM3, final IVesselClass vesselClass, final int cv,
 			int equivalenceFactor, final LadenRouteData canal, long charterRatePerDay, boolean isLaden) {
 		final int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) canal.ladenTimeAtMaxSpeed, (int) canal.ladenTimeAtNBOSpeed);
-		long[] fuelCosts = getLegFuelCosts(salesPrice, boiloffRateM3, vesselClass, cv, times, canal.ladenRouteDistance, equivalenceFactor, vesselBaseFuelCalculator.getBaseFuelPrice(vesselClass, times[0]), canal.ladenTimeAtNBOSpeed, loadDuration, isLaden);
+		long[] fuelCosts = getLegFuelCosts(salesPrice, boiloffRateM3, vesselClass, cv, times, canal.ladenRouteDistance, equivalenceFactor, vesselBaseFuelCalculator.getBaseFuelPrice(vesselClass, times[0]), canal.transitTime, loadDuration, isLaden);
 
 		final long charterCost = OptimiserUnitConvertor.convertToInternalDailyCost((charterRatePerDay * (times[1] - times[0])) / 24L); // note: converting charter rate to same scale as fuel costs
 		final long cost = canal.ladenRouteCost + fuelCosts[TOTAL_BOILOFF_COSTS_INDEX] + fuelCosts[TOTAL_BUNKER_COSTS_INDEX] + charterCost;
@@ -309,19 +309,19 @@ public class PriceIntervalProviderHelper {
 	 * @param distance
 	 * @param equivalenceFactor
 	 * @param baseFuelPrice
-	 * @param timeTravelledAtNBOSpeed
+	 * @param canalTransitTime
 	 * @param durationAtPort
 	 * @param isLaden TODO
 	 * @return
 	 */
-	public long[] getLegFuelCosts(final int salesPrice, final long boiloffRateM3, final IVesselClass vesselClass, final int cv, final int[] times, final long distance, final int equivalenceFactor, final int baseFuelPrice, long timeTravelledAtNBOSpeed, int durationAtPort, boolean isLaden) {
+	public long[] getLegFuelCosts(final int salesPrice, final long boiloffRateM3, final IVesselClass vesselClass, final int cv, final int[] times, final long distance, final int equivalenceFactor, final int baseFuelPrice, int canalTransitTime, int durationAtPort, boolean isLaden) {
 		final VesselState vesselState;
 		if (isLaden) {
 			vesselState = VesselState.Laden;
 		} else {
 			vesselState = VesselState.Ballast;
 		}
-		final int totalLegLengthInHours = (times[1] - times[0] - durationAtPort);
+		final int totalLegLengthInHours = (times[1] - times[0] - durationAtPort - canalTransitTime);
 
 		// estimate speed and rate
 		final int nboSpeed = vesselClass.getConsumptionRate(vesselState).getSpeed(Calculator.convertM3ToMT(boiloffRateM3, cv, equivalenceFactor)); // DO NOT COMMIT - alex check
@@ -332,7 +332,7 @@ public class PriceIntervalProviderHelper {
 		final int speed = Math.min(Math.max(nboSpeed, naturalSpeed), vesselClass.getMaxSpeed()); // the speed bounded by NBO and Max
 		final long rate = vesselClass.getConsumptionRate(vesselState).getRate(speed);
 		final long vesselTravelTimeInHours = Calculator.getTimeFromSpeedDistance(speed, distance);
-		final long idleTimeInHours = Math.max(totalLegLengthInHours - vesselTravelTimeInHours, 0);
+		final long idleTimeInHours = Math.max(totalLegLengthInHours - vesselTravelTimeInHours, 0) + canalTransitTime; // note: modelling canal time as idle
 
 		final long requiredTotalFuelMT = (rate * vesselTravelTimeInHours) / 24L;
 		final long requiredTotalFuelM3 = Calculator.convertMTToM3(requiredTotalFuelMT, cv, equivalenceFactor);

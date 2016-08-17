@@ -270,6 +270,9 @@ public class TimeWindowsTrimming {
 			final List<int[]> dischargePriceIntervals, List<int[]> boiloffPricingIntervals, int vesselStartTime) {
 		final ITimeWindow dischargeTimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 		assert dischargeTimeWindow != null;
+		if (discharge.getId().contains("DS-MARKET_DES_Egypt-2016-09-0")) {
+			int z = 0;
+		}
 		final IVesselAvailability vesselAvailability = schedulerCalculationUtils.getVesselAvailabilityFromResource(portTimeWindowsRecord.getResource());
 		// get distances for end ballast journey
 		final LadenRouteData[] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumBallastTravelTimes(discharge.getPort(), endSlot.getPort(), vesselAvailability.getVessel(), Math.max((dischargeTimeWindow.getExclusiveEnd() - 1) + portTimeWindowsRecord.getSlotDuration(discharge), IPortSlot.NO_PRICING_DATE));
@@ -390,7 +393,9 @@ public class TimeWindowsTrimming {
 				NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[purchaseIndex], salesIntervals[salesIndex], // D to E
 						loadDuration, boiloffIntervals[purchaseIndex].price, charterRatePerDay, sortedCanalTimes, vesselAvailability.getVessel().getVesselClass().getNBORate(VesselState.Ballast), vesselAvailability.getVessel().getVesselClass(), load.getCargoCVValue(), false);
 				final long estimatedCostMMBTU = totalEstimatedJourneyCostDetails.getSecond() / loadVolumeMMBTU;
-//				System.out.println(String.format("time: %s cost: %s", salesIntervals[salesIndex].start, totalEstimatedJourneyCostDetails.getSecond()));
+				if (vesselAvailability.getVessel().getName().contains("Mel")) {
+					System.out.println(String.format("time: %s cost: %s", salesIntervals[salesIndex].start, totalEstimatedJourneyCostDetails.getSecond()));
+				}
 				final long newMargin = totalEstimatedJourneyCostDetails.getSecond();
 				if (newMargin < bestMargin) {
 					bestMargin = newMargin;

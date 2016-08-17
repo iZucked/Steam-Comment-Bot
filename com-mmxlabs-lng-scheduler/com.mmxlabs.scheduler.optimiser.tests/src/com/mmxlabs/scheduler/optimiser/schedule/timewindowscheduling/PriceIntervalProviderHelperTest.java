@@ -145,8 +145,8 @@ public class PriceIntervalProviderHelperTest {
 		int loadDuration = 0;
 		int salesPrice = 10;
 		LadenRouteData[] lrd = new LadenRouteData[2];
-		lrd[0] = new LadenRouteData(20, 30, 0, 300);
-		lrd[1] = new LadenRouteData(10, 15, OptimiserUnitConvertor.convertToInternalDailyCost(500000), 150);
+		lrd[0] = new LadenRouteData(20, 30, 0, 300, 0);
+		lrd[1] = new LadenRouteData(10, 15, OptimiserUnitConvertor.convertToInternalDailyCost(500000), 150, 0);
 		IVessel iVessel = getIVessel();
 		NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCost = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchase, sales, loadDuration, salesPrice, 0, lrd, 10300, iVessel.getVesselClass(), OptimiserUnitConvertor.convertToInternalDailyRate(22), true);
 		
