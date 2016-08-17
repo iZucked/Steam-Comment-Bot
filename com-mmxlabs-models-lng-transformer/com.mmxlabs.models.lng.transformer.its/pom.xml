@@ -4,11 +4,11 @@
 	<parent>
 		<groupId>com.mmxlabs.models.lng.transformer</groupId>
 		<artifactId>com.mmxlabs.models.lng.transformer.parent</artifactId>
-		<version>3.12.13.RELEASE</version>
+		<version>3.12.14-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.models.lng.transformer.its</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
-	<version>3.12.13.RELEASE</version>
+	<version>3.12.14-SNAPSHOT</version>
 
 	<build>
 		<plugins>
