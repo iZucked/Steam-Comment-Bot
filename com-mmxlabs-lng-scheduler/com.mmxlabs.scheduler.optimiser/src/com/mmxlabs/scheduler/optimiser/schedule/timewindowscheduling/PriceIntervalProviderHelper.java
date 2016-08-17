@@ -194,8 +194,7 @@ public class PriceIntervalProviderHelper {
 
 	public List<int[]> getEndElementPriceIntervals(@NonNull List<Integer> times) {
 		List<int[]> intervals = new LinkedList<>();
-		intervals.add(new int[]{times.get(0), 0});
-		for (int i = 1; i < times.size(); i++) {
+		for (int i = 0; i < times.size(); i++) {
 			intervals.add(new int[]{times.get(i), // time
 					0 // 0 for a price of zero (we don't care about price, only cost for end elements
 					});
@@ -566,6 +565,10 @@ public class PriceIntervalProviderHelper {
 			} else if (intervals.get(i)[0] < exclusiveEnd) {
 				list.add(intervals.get(i));
 			}
+		}
+		if (list.size() == 0) {
+			// start is greater than all intervals we have in the list
+			list.add(new int[] {inclusiveStart, intervals.get(intervals.size() - 1)[1]});
 		}
 		list.add(new int[] { exclusiveEnd, Integer.MIN_VALUE });
 		return list;

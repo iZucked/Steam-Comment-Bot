@@ -201,9 +201,6 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 			List<IPortTimeWindowsRecord> records = portTimeWindowsRecords.get(i);
 			if (records.size() > 0) {
 				IPortTimeWindowsRecord lastRecord = records.get(records.size() - 1);
-				if (lastRecord.getIndex(lastRecord.getReturnSlot()) != arrivalTimes[i].length-1) {
-					int z = 0;
-				}
 			}
 		}
 

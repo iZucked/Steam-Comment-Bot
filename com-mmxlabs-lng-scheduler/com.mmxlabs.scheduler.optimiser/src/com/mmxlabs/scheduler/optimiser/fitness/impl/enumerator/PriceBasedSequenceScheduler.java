@@ -70,21 +70,11 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 				updateTimeWindows(portTimeWindowsRecord, seqIndex);
 				IPortSlot lastSlot = portTimeWindowsRecord.getSlots().get(portTimeWindowsRecord.getSlots().size() - 1);
 				setTimeWindowsToEarliest(seqIndex, portTimeWindowsRecord.getIndex(lastSlot), portTimeWindowsRecord.getSlotFeasibleTimeWindow(lastSlot));
-				if (portTimeWindowsRecord.getReturnSlot() instanceof EndPortSlot && portTimeWindowsRecord.getSlotFeasibleTimeWindow(portTimeWindowsRecord.getReturnSlot()) != null) {
-					if (portTimeWindowsRecord.getResource().getName().contains("Mela")) {
-						int z = 0;
-					}
-					int endIndex = portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getReturnSlot()) + 1;
-					int size = arrivalTimes[seqIndex].length;
-					setTimeWindowsToEarliest(seqIndex, sequences.getSequence(seqIndex).size() - 1, portTimeWindowsRecord.getSlotFeasibleTimeWindow(portTimeWindowsRecord.getReturnSlot()));
-					arrivalTimes[seqIndex][arrivalTimes[seqIndex].length - 1] = portTimeWindowsRecord.getSlotFeasibleTimeWindow(portTimeWindowsRecord.getReturnSlot()).getInclusiveStart();
+				IPortSlot returnSlot = portTimeWindowsRecord.getReturnSlot();
+				if (returnSlot instanceof EndPortSlot && portTimeWindowsRecord.getSlotFeasibleTimeWindow(returnSlot) != null) {
+					// now set end port slots if the window has been changed
+					setTimeWindowsToEarliest(seqIndex, portTimeWindowsRecord.getIndex(returnSlot), portTimeWindowsRecord.getSlotFeasibleTimeWindow(returnSlot));
 					endsSet[seqIndex] = true;
-					if (portTimeWindowsRecord.getSlotFeasibleTimeWindow(lastSlot).getExclusiveEnd() > portTimeWindowsRecord.getSlotFeasibleTimeWindow(portTimeWindowsRecord.getReturnSlot()).getInclusiveStart()) {
-						int z = 0;
-					}
-					if (arrivalTimes[seqIndex][arrivalTimes[seqIndex].length - 1] < windowStartTime[seqIndex][arrivalTimes[seqIndex].length - 1]) {
-						int z = 0;
-					}
 				}
 			}
 		}
@@ -224,9 +214,8 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 
 		if (sizes[seq] > 0) {
 			final int lastIndex = sizes[seq] - 1;
-			for (int pos = 0; pos < lastIndex; pos++) {
+			for (int pos = 0; pos < sizes[seq]; pos++) {
 				final int min = getMinArrivalTime(seq, pos);
-				final int max = getMaxArrivalTime(seq, pos);
 				arrivalTimes[seq][pos] = min;
 				// TODO force sync this with any ship-to-ship bindings
 			}
@@ -234,10 +223,6 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 			// Set the arrival time at the last bit to be as early as possible; VPO will relax it if necessary.
 			if (!endsSet[seq]) {
 				arrivalTimes[seq][lastIndex] = getMinArrivalTime(seq, lastIndex);
-			} else {
-				if (arrivalTimes[seq][lastIndex - 1] > arrivalTimes[seq][lastIndex]) {
-					int z = 0;
-				}
 			}
 
 			arrivalTimes[seq][0] = getMaxArrivalTimeForNextArrival(seq, 0);
