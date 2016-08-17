@@ -89,5 +89,8 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 		// Parallel
 		setParameter("actionSets-maxThreads", 1, Integer.class, false);
 		
+		// Moves
+		setParameter("moves-useLoopingSCMG", false, Boolean.class, false);
+		
 	}
 }

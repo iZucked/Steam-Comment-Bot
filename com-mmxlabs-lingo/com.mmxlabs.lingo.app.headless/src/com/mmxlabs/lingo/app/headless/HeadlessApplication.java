@@ -562,8 +562,12 @@ public class HeadlessApplication implements IApplication {
 		}
 		setLatenessParameters(settingsOverride, headlessParameters);
 		setSimilarityParameters(settingsOverride, headlessParameters);
-
+		setMoveOverrides(settingsOverride, headlessParameters);
 		createPromptDates(rootObject, headlessParameters);
+	}
+
+	private void setMoveOverrides(SettingsOverride settingsOverride, HeadlessParameters headlessParameters) {
+		settingsOverride.setMovesUseLoopingSCMG(headlessParameters.getParameterValue("moves-useLoopingSCMG", Boolean.class));
 	}
 
 	private void createPromptDates(final LNGScenarioModel rootObject, final HeadlessParameters parameters) {

@@ -55,6 +55,8 @@ public final class SettingsOverride {
 	private int actionPlanTotalEvals = 5_000_000;
 	private int actionPlanInRunEvals = 1_500_000;
 	private int actionPlanMaxSearchDepth = 5_000;
+	
+	private boolean movesUseLoopingSCMG = false;
 
 	public String getOutputName() {
 		return outputName;
@@ -150,6 +152,14 @@ public final class SettingsOverride {
 
 	public void setActionPlanMaxSearchDepth(int actionPlanMaxSearchDepth) {
 		this.actionPlanMaxSearchDepth = actionPlanMaxSearchDepth;
+	}
+
+	public boolean isMovesUseLoopingSCMG() {
+		return movesUseLoopingSCMG;
+	}
+
+	public void setMovesUseLoopingSCMG(boolean movesUseLoopingSCMG) {
+		this.movesUseLoopingSCMG = movesUseLoopingSCMG;
 	}
 	
 }

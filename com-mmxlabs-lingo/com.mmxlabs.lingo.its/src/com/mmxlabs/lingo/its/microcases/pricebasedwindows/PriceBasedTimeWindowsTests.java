@@ -199,8 +199,8 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 			IntervalData purchase = new IntervalData(0, 10, OptimiserUnitConvertor.convertToInternalPrice(5));
 			IntervalData sales = new IntervalData(50, 70, OptimiserUnitConvertor.convertToInternalPrice(10));
 			LadenRouteData[] lrd = new LadenRouteData[2];
-			lrd[0] = new LadenRouteData(52, 71, 0, 1000);
-			lrd[1] = new LadenRouteData(26, 35, OptimiserUnitConvertor.convertToInternalDailyCost(500000), 500);
+			lrd[0] = new LadenRouteData(52, 71, 0, 1000, 0);
+			lrd[1] = new LadenRouteData(26, 35, OptimiserUnitConvertor.convertToInternalDailyCost(500000), 500, 0);
 			IVesselAvailability o_vesselAvailability = TimeWindowsTestsUtils.getIVesselAvailabilityWithName(vesselName, optimiserScenario.getCargoModel().getVesselAvailabilities(),
 					scenarioToOptimiserBridge.getDataTransformer().getModelEntityMap());
 			@NonNull
