@@ -12,6 +12,7 @@ import java.util.Random;
 import javax.inject.Inject;
 
 import com.google.inject.Injector;
+import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IResource;
@@ -126,6 +127,12 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 
 	@Inject IOptimisationData data;
 
+	public static final String LSO_MOVES_SCMG = "CMG_LSOMovesSCGM";
+
+	@com.google.inject.Inject(optional = true)
+	@Named(LSO_MOVES_SCMG)
+	private boolean isLoopingSCMG;
+
 	@Inject
 	public void init() {
 		if (random == null) {
@@ -170,7 +177,13 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 				}
 			}
 		}
-		this.sequencesMoveGenerator = new SequencesConstrainedMoveGeneratorUnit(this);
+		
+		if (isLoopingSCMG) {
+			this.sequencesMoveGenerator = new SequencesConstrainedLoopingMoveGeneratorUnit(this);
+		} else {
+			this.sequencesMoveGenerator = new SequencesConstrainedMoveGeneratorUnit(this);
+		}
+		
 		injector.injectMembers(sequencesMoveGenerator);
 
 		this.shuffleMoveGenerator = new ShuffleElementsMoveGenerator(this);
