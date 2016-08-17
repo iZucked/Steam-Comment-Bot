@@ -49,9 +49,9 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	private static final int RELAXATION_STEP = 6;
 
-//	@com.google.inject.Inject(optional = true)
-//	@Named(VPO_SPEED_STEPPING)
-//	private boolean useVPOSpeedStepping;
+	@Inject
+	@Named(VPO_SPEED_STEPPING)
+	private boolean useVPOSpeedStepping;
 	
 	public static class Record {
 
@@ -137,12 +137,18 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 					}
 				}
 
-				final int lastArrivalTime = record.portTimesRecord.getSlotTime(slot);
-				final int extraExtent = window == null ? 30 * RELAXATION_STEP : (lastArrivalTime >= window.getExclusiveEnd() ? 0 : window.getExclusiveEnd() - lastArrivalTime);
-
-				// If this is non-zero then our end event rules will have kicked in and we should not engage the speed step code.
-
-				evaluateVoyagePlan(record, state, 0);
+				if (useVPOSpeedStepping) {
+					final int lastArrivalTime = record.portTimesRecord.getSlotTime(slot);
+					final int extraExtent = window == null ? 30 * RELAXATION_STEP
+							: (lastArrivalTime >= window.getExclusiveEnd() ? 0
+									: window.getExclusiveEnd() - lastArrivalTime);
+					// If this is non-zero then our end event rules will have
+					// kicked in and we should not engage the speed step code.
+					evaluateVoyagePlan(record, state, extraExtent);
+				} else {
+					// assume already determined and no search neccessary
+					evaluateVoyagePlan(record, state, 0);
+				}
 				return;
 			}
 		}
