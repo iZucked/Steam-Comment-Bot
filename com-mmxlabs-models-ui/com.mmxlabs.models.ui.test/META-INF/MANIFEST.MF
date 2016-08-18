@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Fragment-Host: com.mmxlabs.models.ui
 Bundle-SymbolicName: com.mmxlabs.models.ui.test;singleton:=true
-Bundle-Version: 3.13.0.qualifier
+Bundle-Version: 3.13.0.RELEASE
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
