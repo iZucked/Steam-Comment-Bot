@@ -233,8 +233,9 @@ public class TimeWindowsTrimming {
 		final LadenRouteData[] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumLadenTravelTimes(load.getPort(), discharge.getPort(), vessel, loadTimeWindow.getInclusiveStart());
 		assert sortedCanalTimes.length > 0;
 		final int loadDuration = portTimeWindowsRecord.getSlotDuration(load);
-		final int minTime = Math.max(priceIntervalProviderHelper.getMinimumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals) + loadDuration, loadDuration);
-		final int maxTime = priceIntervalProviderHelper.getMaximumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals);
+		final int minTravelTime = priceIntervalProviderHelper.getMinTravelTimeAtMaxSpeed(sortedCanalTimes);
+		final int minTime = Math.max(priceIntervalProviderHelper.getMinimumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals), minTravelTime + loadDuration);
+		final int maxTime = Math.max(priceIntervalProviderHelper.getMaximumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals), minTime);
 		final List<Integer> canalsWeCanUse = schedulingCanalDistanceProvider.getFeasibleRoutes(sortedCanalTimes, minTime, maxTime);
 		if (canalsWeCanUse.size() == 1) {
 			// no options

@@ -506,9 +506,18 @@ public class PriceIntervalProviderHelper {
 	}
 
 	int getMaximumPossibleTimeForCargoIntervals(final List<int[]> loadPriceIntervals, final List<int[]> dischargePriceIntervals) {
-		return dischargePriceIntervals.get(dischargePriceIntervals.size() - 1)[0] - loadPriceIntervals.get(0)[0];
+		return dischargePriceIntervals.get(dischargePriceIntervals.size() - 1)[0] - loadPriceIntervals.get(0)[0] - 1;
 	}
 
+	public int getMinTravelTimeAtMaxSpeed(LadenRouteData[] canalTimes) {
+		int min = Integer.MAX_VALUE;
+		for (LadenRouteData ladenRouteData : canalTimes) {
+			if (ladenRouteData.ladenTimeAtMaxSpeed < min) {
+				min = (int) ladenRouteData.ladenTimeAtMaxSpeed;
+			}
+		}
+		return min;
+	}
 	@Nullable
 	IVessel getVessel(@NonNull final IResource resource) {
 		final IVesselAvailability availability = vesselProvider.getVesselAvailability(resource);
