@@ -305,4 +305,11 @@ public class ScheduleTestModule extends AbstractModule {
 		lcp.setHighWeight(Interval.BEYOND, 1);
 		return lcp;
 	}
+	
+	@Provides
+	@Named(VoyagePlanOptimiser.VPO_SPEED_STEPPING)
+	private boolean isVPOSpeedStepping() {
+		return true;
+	}
+
 }
