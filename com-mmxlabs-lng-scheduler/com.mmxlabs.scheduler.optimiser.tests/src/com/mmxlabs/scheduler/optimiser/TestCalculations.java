@@ -20,6 +20,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
+import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
@@ -1450,6 +1451,12 @@ public class TestCalculations {
 
 		final Injector injector = Guice.createInjector(new PerChainUnitScopeModule(), new DataComponentProviderModule(), new AbstractModule() {
 
+			@Provides
+			@Named(VoyagePlanOptimiser.VPO_SPEED_STEPPING)
+			private boolean isVPOSpeedStepping() {
+				return true;
+			}
+			
 			@Provides
 			@Singleton
 			private ILatenessComponentParameters provideLatenessComponentParameters() {
