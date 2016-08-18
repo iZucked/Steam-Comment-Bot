@@ -4,11 +4,11 @@
 	<parent>
 		<artifactId>common-util-parent</artifactId>
 		<groupId>com.mmxlabs.common</groupId>
-		<version>3.13.0.RELEASE</version>
+		<version>3.13.1-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>com.mmxlabs.common.common-recorder</artifactId>
-	<version>3.13.0.RELEASE</version>
+	<version>3.13.1-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 
 </project>

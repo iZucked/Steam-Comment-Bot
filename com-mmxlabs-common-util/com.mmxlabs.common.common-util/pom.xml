@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>com.mmxlabs.common.common-util</artifactId>
 	<packaging>eclipse-plugin</packaging>
-	<version>3.13.0.RELEASE</version>
+	<version>3.13.1-SNAPSHOT</version>
 	<name>common-util</name>
 
 	<parent>
 		<groupId>com.mmxlabs.common</groupId>
 		<artifactId>common-util-parent</artifactId>
-		<version>3.13.0.RELEASE</version>
+		<version>3.13.1-SNAPSHOT</version>
 	</parent>
 
 </project>
