@@ -1,0 +1,10 @@
+*.orig
+*.rej
+*.swp
+bin/
+target/
+.project
+plugin_customization\.ini
+com\.mmxlabs\.lingo\.g\.doc/index
+*~
+
