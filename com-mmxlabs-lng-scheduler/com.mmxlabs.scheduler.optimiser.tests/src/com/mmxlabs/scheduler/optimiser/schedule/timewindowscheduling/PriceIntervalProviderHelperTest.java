@@ -39,6 +39,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -1025,6 +1026,7 @@ public class PriceIntervalProviderHelperTest {
 				bind(IConsumptionRateCalculator.class).toInstance(Mockito.mock(IConsumptionRateCalculator.class));
 
 				bind(IVesselBaseFuelCalculator.class).toInstance(vesselBaseFuelCalculator);
+				bind(ICharterRateCalculator.class).toInstance(Mockito.mock(ICharterRateCalculator.class));
 				bind(ITimeWindowSchedulingCanalDistanceProvider.class).toInstance(getTimeWindowSchedulingCanalDistanceProvider(distances, canalOpenings));
 			}
 		});
