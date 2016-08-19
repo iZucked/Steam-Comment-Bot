@@ -19,12 +19,34 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.compare.Comparison;
+import org.eclipse.emf.compare.EMFCompare;
+import org.eclipse.emf.compare.match.DefaultComparisonFactory;
+import org.eclipse.emf.compare.match.DefaultEqualityHelperFactory;
+import org.eclipse.emf.compare.match.DefaultMatchEngine;
+import org.eclipse.emf.compare.match.IComparisonFactory;
+import org.eclipse.emf.compare.match.IMatchEngine;
+import org.eclipse.emf.compare.match.eobject.IEObjectMatcher;
+import org.eclipse.emf.compare.match.impl.MatchEngineFactoryImpl;
+import org.eclipse.emf.compare.match.impl.MatchEngineFactoryRegistryImpl;
+import org.eclipse.emf.compare.scope.DefaultComparisonScope;
+import org.eclipse.emf.compare.scope.IComparisonScope;
+import org.eclipse.emf.compare.utils.UseIdentifiers;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
+import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.scenario.service.util.ResourceHelper;
+import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
 public class TesterUtil {
 
@@ -54,12 +76,12 @@ public class TesterUtil {
 	}
 
 	@NonNull
-	public static Properties getProperties(URL propertiesURL, boolean create) throws MalformedURLException, IOException {
+	public static Properties getProperties(final URL propertiesURL, final boolean create) throws MalformedURLException, IOException {
 		if (create) {
 			/**
 			 * Extend to save properties in a sorted order for ease of reading
 			 */
-			Properties props = new Properties() {
+			final Properties props = new Properties() {
 				@Override
 				public Set<Object> keySet() {
 					return Collections.unmodifiableSet(new TreeSet<Object>(super.keySet()));
@@ -73,13 +95,13 @@ public class TesterUtil {
 			return props;
 		} else {
 
-			Properties props = new Properties();
+			final Properties props = new Properties();
 			props.load(propertiesURL.openStream());
 			return props;
 		}
 	}
 
-	public static void saveProperties(@NonNull Properties props, @NonNull File file) throws IOException {
+	public static void saveProperties(@NonNull final Properties props, @NonNull final File file) throws IOException {
 		try (FileOutputStream out = new FileOutputStream(file)) {
 			props.store(out, "Created by " + TesterUtil.class.getName());
 		}
@@ -142,5 +164,46 @@ public class TesterUtil {
 				Assert.assertTrue(seenFitnesses.contains(fName));
 			}
 		}
+	}
+
+	public static boolean validateReloadedState(final LNGScenarioModel original) throws Exception {
+
+		final File f = File.createTempFile("TesterUtil", ".xmi");
+		f.deleteOnExit();
+		try {
+			ServiceHelper.withCheckedOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+
+				final ResourceSet resourceSet = ResourceHelper.createResourceSet(scenarioCipherProvider);
+				final Resource resource = resourceSet.createResource(URI.createFileURI(f.getAbsolutePath()));
+				resource.getContents().add(EcoreUtil.copy(original));
+				ResourceHelper.saveResource(resource);
+			});
+			return ServiceHelper.withCheckedOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+
+				final ResourceSet resourceSet = ResourceHelper.createResourceSet(scenarioCipherProvider);
+				final Resource resource = ResourceHelper.loadResource(resourceSet, URI.createFileURI(f.getAbsolutePath()));
+				final EObject loadedCopy = resource.getContents().get(0);
+
+				final Comparison comparison = compareModels(original, loadedCopy);
+				return comparison.getDifferences().isEmpty();
+			});
+		} finally {
+			f.delete();
+		}
+	}
+
+	public static Comparison compareModels(final EObject left, final EObject right) {
+		final IEObjectMatcher matcher = DefaultMatchEngine.createDefaultEObjectMatcher(UseIdentifiers.NEVER);
+		final IComparisonFactory comparisonFactory = new DefaultComparisonFactory(new DefaultEqualityHelperFactory());
+
+		final IMatchEngine.Factory matchEngineFactory = new MatchEngineFactoryImpl(matcher, comparisonFactory);
+		matchEngineFactory.setRanking(20);
+		final IMatchEngine.Factory.Registry matchEngineRegistry = new MatchEngineFactoryRegistryImpl();
+		matchEngineRegistry.add(matchEngineFactory);
+
+		final EMFCompare comparator = EMFCompare.builder().setMatchEngineFactoryRegistry(matchEngineRegistry).build();
+		// Compare the two models
+		final IComparisonScope scope = new DefaultComparisonScope(left, right, null);
+		return comparator.compare(scope);
 	}
 }

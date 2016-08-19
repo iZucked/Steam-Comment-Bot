@@ -317,6 +317,9 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 				runnerHook = null;
 			}
 			LNGScenarioRunnerCreator.withOptimisationRunner(originalScenario, optimisationPlan, scenarioRunner -> {
+
+				// After initial evaluation, save, reload and compare models.
+				Assert.assertTrue("Validate reloaded model is identical", TesterUtil.validateReloadedState(originalScenario));
 				if (runnerHook != null) {
 					scenarioRunner.setRunnerHook(runnerHook);
 				}
