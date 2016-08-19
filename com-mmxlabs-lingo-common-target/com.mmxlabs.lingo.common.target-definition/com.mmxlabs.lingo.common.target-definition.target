@@ -33,6 +33,11 @@
 <unit id="org.eclipse.swtbot.ide.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.swtbot.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.swtbot.forms.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.transaction.sdk.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.compare.ide.ui.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.compare.ide.ui.source.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.compare.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.compare.source.feature.group" version="0.0.0"/>
 <repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.mars/201602261000/org.eclipse.mars-201602261000.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
@@ -83,6 +88,8 @@
 <unit id="org.apache.commons.cli.source" version="1.2.0.v201404270220"/>
 <unit id="org.apache.commons.lang" version="2.6.0.v201404270220"/>
 <unit id="org.apache.commons.lang.source" version="2.6.0.v201404270220"/>
+<unit id="com.google.guava" version="0.0.0"/>
+<unit id="com.google.guava.source" version="0.0.0"/>
 <repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/orbit/orbit-buildrepo/R20150519210750/orbit-buildrepo-R20150519210750.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
