@@ -230,12 +230,12 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 					// Problem evaluating, reject move
 					++numberOfFailedEvaluations;
 
-					// if (loggingDataStore != null) {
-					// loggingDataStore.logFailedEvaluatedStateConstraints(checker, move);
-					// if (DO_SEQUENCE_LOGGING) {
-					// loggingDataStore.logSequenceFailedEvaluatedStateConstraint(checker, pinnedPotentialRawSequences);
-					// }
-					// }
+					 if (loggingDataStore != null) {
+					 loggingDataStore.logFailedEvaluatedStateConstraints(checker, move);
+					 if (DO_SEQUENCE_LOGGING) {
+					 loggingDataStore.logSequenceFailedEvaluatedStateConstraint(checker, pinnedPotentialRawSequences);
+					 }
+					 }
 					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
 					// Break out
 					continue MAIN_LOOP;

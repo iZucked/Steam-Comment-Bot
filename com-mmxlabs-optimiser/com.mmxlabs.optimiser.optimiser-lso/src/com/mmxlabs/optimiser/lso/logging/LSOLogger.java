@@ -21,6 +21,7 @@ import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.lso.IMove;
@@ -32,6 +33,7 @@ public class LSOLogger implements ILoggingDataStore {
 	private Map<String, AtomicInteger> nullMovesMap = new HashMap<>();
 	private Map<String, AtomicInteger> failedToValidateMoveMap = new HashMap<>();
 	private Map<String, Map<String, AtomicInteger>> failedConstraintsMovesMap = new HashMap<>();
+	private Map<String, Map<String, AtomicInteger>> failedEvaluatedConstraintsMovesMap = new HashMap<>();
 	private Map<EvaluationNumberKey, long[]> progressLogMap = new HashMap<>();
 	private Map<String, Integer> progressKeys = new HashMap<>();
 	private Map<ISequences, SequencesCounts> seenSequencesCount = new HashMap<>();
@@ -161,6 +163,27 @@ public class LSOLogger implements ILoggingDataStore {
 			count.incrementAndGet();
 		}
 	}
+	
+	// REPLICATED FROM FailConstraints
+	public void logFailedEvaluatedStateConstraints(IEvaluatedStateConstraintChecker checker, IMove move) {
+		logFailedEvaluatedConstraints(checker.getName(), move.getClass().getName());
+	}
+	
+	public void logFailedEvaluatedConstraints(String checkerName, String moveName) {
+		Map<String, AtomicInteger> checkerStore;
+		if (!failedEvaluatedConstraintsMovesMap.containsKey(checkerName)) {
+			checkerStore = new HashMap<String, AtomicInteger>();
+			failedEvaluatedConstraintsMovesMap.put(checkerName, checkerStore);
+		} else {
+			checkerStore = failedEvaluatedConstraintsMovesMap.get(checkerName);
+		}
+		AtomicInteger count = checkerStore.get(moveName);
+		if (count == null) {
+			checkerStore.put(moveName, new AtomicInteger(1));
+		} else {
+			count.incrementAndGet();
+		}
+	}
 
 	public void intialiseProgressLog(long bestFitness, long currentFitness) {
 		logProgress(0, 0, 0, 0, 0, bestFitness, currentFitness, new Date().getTime());
@@ -259,7 +282,12 @@ public class LSOLogger implements ILoggingDataStore {
 	public List<String> getFailedConstraints() {
 		return new ArrayList<String>(failedConstraintsMovesMap.keySet());
 	}
-
+	
+	//REPLICATED FROM getFailedConstraints
+	public List<String> getFailedEvaluatedConstraints() {
+		return new ArrayList<String>(failedEvaluatedConstraintsMovesMap.keySet());
+	}
+	
 	public int getFailedConstraintsMovesTotalCount(String constraint) {
 		int count = 0;
 		for (String move : getFailedConstraintsMoves(constraint)) {
@@ -267,13 +295,31 @@ public class LSOLogger implements ILoggingDataStore {
 		}
 		return count;
 	}
+	
+	//REPLICATED FROM getFailedConstraintsMovesTotalCount
+	public int getFailedEvaluatedConstraintsMovesTotalCount(String constraint) {
+		int count = 0;
+		for (String move : getFailedEvaluatedConstraintsMoves(constraint)) {
+			count += failedEvaluatedConstraintsMovesMap.get(constraint).get(move).get();
+		}
+		return count;
+	}
 
 	public List<String> getFailedConstraintsMoves(String constraint) {
 		return new ArrayList<String>(failedConstraintsMovesMap.get(constraint).keySet());
 	}
+	
+	// REPLICATED FROM getFailedConstraintMoves
+	public List<String> getFailedEvaluatedConstraintsMoves(String constraint) {
+		return new ArrayList<String>(failedEvaluatedConstraintsMovesMap.get(constraint).keySet());
+	}
 
 	public int getFailedConstraintsMovesIndividualCount(String constraint, String move) {
 		return failedConstraintsMovesMap.get(constraint).get(move).get();
+	}
+	// REPLICATED FROM getFailedConstraintsMovesIndividualCount
+	public int getFailedEvaluatedConstraintsMovesIndividualCount(String constraint, String move) {
+		return failedEvaluatedConstraintsMovesMap.get(constraint).get(move).get();
 	}
 
 	public void logSequence(IModifiableSequences sequence) {
@@ -300,6 +346,12 @@ public class LSOLogger implements ILoggingDataStore {
 	}
 
 	public void logSequenceFailedConstraint(IConstraintChecker checker, ModifiableSequences pinnedPotentialRawSequences) {
+		SequencesCounts counts = seenSequencesCount.get(pinnedPotentialRawSequences);
+		counts.constraints.incrementAndGet();
+	}
+	
+	// REPLICATED FROM FAILEDCONSTRAINT
+	public void logSequenceFailedEvaluatedStateConstraint(IEvaluatedStateConstraintChecker checker, ModifiableSequences pinnedPotentialRawSequences) {
 		SequencesCounts counts = seenSequencesCount.get(pinnedPotentialRawSequences);
 		counts.constraints.incrementAndGet();
 	}

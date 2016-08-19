@@ -255,6 +255,13 @@ public class LSOLoggingExporter {
 				writer.println(String.format("\t[%s] %s", failedMove, lsoLogger.getFailedConstraintsMovesIndividualCount(failedConstraint, failedMove)));
 			}
 		}
+		writer.println("-----[failedEvaluatedConstraints]-----");
+		for (final String failedEvaluatedConstraint : lsoLogger.getFailedEvaluatedConstraints()) {
+			writer.println(String.format("[%s] %s", failedEvaluatedConstraint, lsoLogger.getFailedEvaluatedConstraintsMovesTotalCount(failedEvaluatedConstraint)));
+			for (final String failedMove : lsoLogger.getFailedEvaluatedConstraintsMoves(failedEvaluatedConstraint)) {
+				writer.println(String.format("\t[%s] %s", failedMove, lsoLogger.getFailedEvaluatedConstraintsMovesIndividualCount(failedEvaluatedConstraint, failedMove)));
+			}
+		}
 	}
 
 	private Path getPath(final String fileType) {
