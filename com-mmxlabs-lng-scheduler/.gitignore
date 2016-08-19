@@ -1,0 +1,8 @@
+*.orig
+*.rej
+*.swp
+bin/
+target/
+.project
+*~
+
