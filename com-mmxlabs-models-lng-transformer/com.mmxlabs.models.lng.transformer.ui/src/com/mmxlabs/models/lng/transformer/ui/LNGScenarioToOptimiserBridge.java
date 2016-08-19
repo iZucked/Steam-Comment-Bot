@@ -468,7 +468,7 @@ public class LNGScenarioToOptimiserBridge {
 
 	}
 
-	@Nullable
+	@NonNull
 	public Injector getInjector() {
 		return optimiserDataTransformer.getInjector();
 	}
