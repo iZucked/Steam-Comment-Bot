@@ -66,7 +66,7 @@ public class LNGExporterUnit {
 				try {
 					int changeSetIdx = 0;
 					for (final NonNullPair<ISequences, Map<String, Object>> changeSet : solutions) {
-						String newName = nameFactory.apply(changeSetIdx);
+						String newName = nameFactory.apply(changeSetIdx++);
 						// if (changeSetIdx == 0) {
 						// newName = "ActionSet-base";
 						// changeSetIdx++;
