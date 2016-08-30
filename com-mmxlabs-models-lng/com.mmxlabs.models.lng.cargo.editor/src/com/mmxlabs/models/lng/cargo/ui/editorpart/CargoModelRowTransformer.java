@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -77,9 +78,13 @@ public class CargoModelRowTransformer {
 		final Map<Cargo, CargoAllocation> cargoAllocationMap = new HashMap<Cargo, CargoAllocation>();
 		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<Slot, SlotAllocation>();
 		final Map<Slot, MarketAllocation> marketAllocationMap = new HashMap<Slot, MarketAllocation>();
+		final Map<Slot, OpenSlotAllocation> openAllocationMap = new HashMap<>();
 		if (schedule != null) {
 			for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 				cargoAllocationMap.put(cargoAllocation.getInputCargo(), cargoAllocation);
+			}
+			for (final OpenSlotAllocation openAllocation : schedule.getOpenSlotAllocations()) {
+				openAllocationMap.put(openAllocation.getSlot(), openAllocation);
 			}
 			for (final MarketAllocation marketAllocation : schedule.getMarketAllocations()) {
 				marketAllocationMap.put(marketAllocation.getSlot(), marketAllocation);
@@ -325,6 +330,7 @@ public class CargoModelRowTransformer {
 			// Hook up allocation objects
 			rd.cargoAllocation = cargoAllocationMap.get(rd.cargo);
 			rd.marketAllocation = marketAllocationMap.get((rd.loadSlot == null) ? rd.dischargeSlot : rd.loadSlot);
+			rd.openSlotAllocation = openAllocationMap.get((rd.loadSlot == null) ? rd.dischargeSlot : rd.loadSlot);
 			rd.loadAllocation = slotAllocationMap.get(rd.loadSlot);
 			rd.dischargeAllocation = slotAllocationMap.get(rd.dischargeSlot);
 
@@ -488,6 +494,7 @@ public class CargoModelRowTransformer {
 		GroupData group;
 		Cargo cargo;
 		CargoAllocation cargoAllocation;
+		OpenSlotAllocation openSlotAllocation;
 		MarketAllocation marketAllocation;
 		LoadSlot loadSlot;
 		SlotAllocation loadAllocation;
@@ -510,7 +517,7 @@ public class CargoModelRowTransformer {
 			if (obj instanceof RowData) {
 				final RowData other = (RowData) obj;
 				return Equality.isEqual(cargo, other.cargo) && Equality.isEqual(loadSlot, other.loadSlot) && Equality.isEqual(dischargeSlot, other.dischargeSlot)
-						&& Equality.isEqual(marketAllocation, other.marketAllocation);
+						&& Equality.isEqual(marketAllocation, other.marketAllocation) && Equality.isEqual(openSlotAllocation, other.openSlotAllocation);
 			}
 
 			return false;
@@ -839,6 +846,16 @@ public class CargoModelRowTransformer {
 					return super.get(rowData.marketAllocation, depth);
 				case CARGO_OR_MARKET_ALLOCATION:
 					return (rowData.cargoAllocation != null) ? (showRecord ? super.get(rowData.cargoAllocation, depth) : null) : super.get(rowData.marketAllocation, depth);
+				case CARGO_OR_MARKET_OR_OPEN_ALLOCATION:
+					if (rowData.cargoAllocation == null) {
+						if (rowData.marketAllocation != null) {
+							return super.get(rowData.marketAllocation);
+						} else {
+							return super.get(rowData.openSlotAllocation);
+						}
+					} else {
+						return showRecord ? super.get(rowData.cargoAllocation, depth) : null;
+					}
 				case DISCHARGE_ALLOCATION:
 					return super.get(rowData.dischargeAllocation, depth);
 				case LOAD_ALLOCATION:
@@ -900,7 +917,10 @@ public class CargoModelRowTransformer {
 
 		/**
 		 */
-		SLOT_OR_CARGO
+		SLOT_OR_CARGO,
+		/**
+		 */
+		CARGO_OR_MARKET_OR_OPEN_ALLOCATION
 	}
 
 	/**
