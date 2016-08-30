@@ -6,13 +6,17 @@ package com.mmxlabs.lingo.reports.views.standard;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.apache.shiro.SecurityUtils;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.util.EList;
@@ -47,6 +51,7 @@ import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
+import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
@@ -113,8 +118,7 @@ public class CargoEconsReport extends ViewPart {
 		// Array content provider as we pass in an array of enums
 		viewer.setContentProvider(new ArrayContentProvider());
 		// Our input!
-		viewer.setInput(FieldType.values());
-
+		viewer.setInput(FieldType.getFilteredValues());
 		viewer.getGrid().setHeaderVisible(true);
 
 		selectionListener = new org.eclipse.e4.ui.workbench.modeling.ISelectionListener() {
@@ -172,7 +176,7 @@ public class CargoEconsReport extends ViewPart {
 				}
 
 				// Trigger view refresh
-				ViewerHelper.setInput(viewer, true, FieldType.values());
+				ViewerHelper.setInput(viewer, true, FieldType.getFilteredValues());
 
 			}
 		};
@@ -225,6 +229,7 @@ public class CargoEconsReport extends ViewPart {
 		SHIPPING_CHARTER_COST_TOTAL("> Charter fees", "$", DollarsFormat), 
 		SELL_REVENUE_TOTAL("Sale Revenue", "$", DollarsFormat),
 		SELL_VOLUME_IN_MMBTU("> Volume", "mmBtu", VolumeMMBtuFormat),
+		EQUITY_PNL("Equity P&L", "$", DollarsFormat),
 		ADDITIONAL_PNL("Addn. P&L", "$", DollarsFormat),
 		PNL_TOTAL("P&L", "$", DollarsFormat),
 //		PNL_TOTAL_NO_TC("P&L (Ex. TC)", "$", DollarsFormat),
@@ -246,6 +251,19 @@ public class CargoEconsReport extends ViewPart {
 		private FieldType(final String name, final String unit, final DecimalFormat df) {
 			this.name = name;
 			this.df = df;
+		}
+		
+		public static FieldType[] getFilteredValues() {
+			Set<FieldType> restrictedValues = restrictedValues();
+			return Arrays.stream(values()).filter(e -> (!restrictedValues.contains(e))).toArray(size -> new FieldType[size]);
+		}
+		
+		public static Set<FieldType> restrictedValues() {
+			Set<FieldType> restricted = new HashSet<>();
+			if (!SecurityUtils.getSubject().isPermitted("features:report-equity-book")) {
+				restricted.add(EQUITY_PNL);
+			}
+			return restricted;
 		}
 	}
 
@@ -318,6 +336,9 @@ public class CargoEconsReport extends ViewPart {
 					return (double) pnl / dischargeVolumeInMMBTu;
 				}
 				break;
+			}
+			case EQUITY_PNL: {
+				return CargoEconsReport.getEquityPNLValue(cargoAllocation);
 			}
 			case ADDITIONAL_PNL: {
 				return CargoEconsReport.getAdditionalPNLValue(cargoAllocation);
@@ -847,6 +868,25 @@ public class CargoEconsReport extends ViewPart {
 		}
 
 		return addnPNL;
+	}
+
+	public static Integer getEquityPNLValue(final ProfitAndLossContainer container) {
+
+		int equityPNL = 0;
+
+		if (container != null) {
+
+			final GroupProfitAndLoss dataWithKey = container.getGroupProfitAndLoss();
+			if (dataWithKey != null) {
+				EList<EntityProfitAndLoss> entityProfitAndLosses = dataWithKey.getEntityProfitAndLosses();
+				for (EntityProfitAndLoss entityProfitAndLoss : entityProfitAndLosses) {
+					equityPNL += entityProfitAndLoss.getProfitAndLoss();
+				}
+				
+			}
+		}
+
+		return equityPNL;
 	}
 
 	// /**
