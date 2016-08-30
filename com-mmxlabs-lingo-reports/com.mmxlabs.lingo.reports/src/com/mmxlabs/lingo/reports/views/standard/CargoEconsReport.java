@@ -880,7 +880,9 @@ public class CargoEconsReport extends ViewPart {
 			if (dataWithKey != null) {
 				EList<EntityProfitAndLoss> entityProfitAndLosses = dataWithKey.getEntityProfitAndLosses();
 				for (EntityProfitAndLoss entityProfitAndLoss : entityProfitAndLosses) {
-					equityPNL += entityProfitAndLoss.getProfitAndLoss();
+					if (entityProfitAndLoss.getEntityBook().equals(entityProfitAndLoss.getEntity().getUpstreamBook())) {
+						equityPNL += entityProfitAndLoss.getProfitAndLoss();
+					}
 				}
 				
 			}
