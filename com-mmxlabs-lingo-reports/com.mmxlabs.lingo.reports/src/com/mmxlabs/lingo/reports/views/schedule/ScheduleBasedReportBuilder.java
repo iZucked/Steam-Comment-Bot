@@ -241,7 +241,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 						ProfitAndLossContainer container = null;
 
 						if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut
-								|| object instanceof OpenSlotAllocation) {
+								|| object instanceof OpenSlotAllocation || object instanceof EndEvent) {
 							container = (ProfitAndLossContainer) object;
 						}
 						if (object instanceof SlotVisit) {
