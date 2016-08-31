@@ -1684,13 +1684,13 @@ public class ChangeSetView implements IAdaptable {
 						if (textualVesselMarkers) {
 							cell.setText("○");
 						}
-					} else {
-						if (isSet(changeSetRow.getNewVesselName())) {
-							cell.setImage(imageClosedCircle);
-							if (textualVesselMarkers) {
-								cell.setText("●");
-							}
-						}
+						// } else {
+						// if (isSet(changeSetRow.getNewVesselName())) {
+						// cell.setImage(imageClosedCircle);
+						// if (textualVesselMarkers) {
+						// cell.setText("●");
+						// }
+						// }
 					}
 				}
 			}
