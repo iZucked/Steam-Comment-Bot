@@ -91,6 +91,7 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -546,7 +547,7 @@ public class ChangeSetView implements IAdaptable {
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
 			gvc.getColumn().setText("+ Cargo other");
 			gvc.getColumn().setWidth(70);
-			gvc.setLabelProvider(createAdditionalPNLDeltaLabelProvider());
+			gvc.setLabelProvider(createCargoOtherPNLDeltaLabelProvider());
 			createWordWrapRenderer(gvc);
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 			gvc.getColumn().setDetail(true);
@@ -1366,7 +1367,7 @@ public class ChangeSetView implements IAdaptable {
 		};
 	}
 
-	private CellLabelProvider createAdditionalPNLDeltaLabelProvider() {
+	private CellLabelProvider createCargoOtherPNLDeltaLabelProvider() {
 
 		return createLambdaLabelProvider(true, false, change -> {
 
@@ -1377,14 +1378,26 @@ public class ChangeSetView implements IAdaptable {
 					return ScheduleModelKPIUtils.getAdditionalProfitAndLoss(cargoAllocation);
 				}
 
+			} else {
+				final ProfitAndLossContainer o = change.getOriginalGroupProfitAndLoss();
+				if (o instanceof OpenSlotAllocation) {
+					return ScheduleModelKPIUtils.getCancellationFees(o);
+				}
 			}
 			return 0;
-		}, change -> {
+		}, change ->
+
+		{
 			final SlotAllocation newLoadAllocation = change.getNewLoadAllocation();
 			if (newLoadAllocation != null) {
 				final CargoAllocation cargoAllocation = newLoadAllocation.getCargoAllocation();
 				if (cargoAllocation != null) {
 					return ScheduleModelKPIUtils.getAdditionalProfitAndLoss(cargoAllocation);
+				}
+			} else {
+				final ProfitAndLossContainer o = change.getNewGroupProfitAndLoss();
+				if (o instanceof OpenSlotAllocation) {
+					return ScheduleModelKPIUtils.getCancellationFees(o);
 				}
 			}
 
