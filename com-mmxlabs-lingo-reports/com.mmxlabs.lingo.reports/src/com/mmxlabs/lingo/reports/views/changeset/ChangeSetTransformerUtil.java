@@ -726,7 +726,7 @@ public final class ChangeSetTransformerUtil {
 					}
 				}
 
-				for (final OpenSlotAllocation openSlotAllocation : fromSchedule.getOpenSlotAllocations()) {
+				for (final OpenSlotAllocation openSlotAllocation : toSchedule.getOpenSlotAllocations()) {
 					pnl += openSlotAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 				}
 			}
@@ -763,7 +763,7 @@ public final class ChangeSetTransformerUtil {
 					}
 				}
 
-				for (final OpenSlotAllocation openSlotAllocation : toSchedule.getOpenSlotAllocations()) {
+				for (final OpenSlotAllocation openSlotAllocation : fromSchedule.getOpenSlotAllocations()) {
 					pnl -= openSlotAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 				}
 			}
