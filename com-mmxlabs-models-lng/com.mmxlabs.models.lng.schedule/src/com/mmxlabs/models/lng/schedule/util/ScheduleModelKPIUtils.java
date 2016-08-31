@@ -251,6 +251,21 @@ public class ScheduleModelKPIUtils {
 		return addnPNL;
 	}
 
+	public static long getCancellationFees(@NonNull final ProfitAndLossContainer profitAndLossContainer) {
+		long addnPNL = 0;
+		for (final GeneralPNLDetails generalPNLDetails : profitAndLossContainer.getGeneralPNLDetails()) {
+			if (generalPNLDetails instanceof SlotPNLDetails) {
+				final SlotPNLDetails slotPNLDetails = (SlotPNLDetails) generalPNLDetails;
+				for (final GeneralPNLDetails details : slotPNLDetails.getGeneralPNLDetails()) {
+					if (details instanceof BasicSlotPNLDetails) {
+						addnPNL -= ((BasicSlotPNLDetails) details).getCancellationFees();
+					}
+				}
+			}
+		}
+		return addnPNL;
+	}
+
 	public static long getAdditionalShippingProfitAndLoss(@NonNull final ProfitAndLossContainer profitAndLossContainer) {
 		long addnPNL = 0;
 		for (final GeneralPNLDetails generalPNLDetails : profitAndLossContainer.getGeneralPNLDetails()) {
