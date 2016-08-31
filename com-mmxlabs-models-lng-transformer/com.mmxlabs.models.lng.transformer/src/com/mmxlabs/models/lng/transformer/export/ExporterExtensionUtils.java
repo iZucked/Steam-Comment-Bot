@@ -85,10 +85,10 @@ public class ExporterExtensionUtils {
 			}
 			if (profitAndLossContainer == null) {
 
-				OpenSlotAllocation openSlotAllocation = null;
+//				OpenSlotAllocation openSlotAllocation = null;
 				for (final OpenSlotAllocation allocation : outputSchedule.getOpenSlotAllocations()) {
 					if (allocation.getSlot() == modelSlot) {
-						openSlotAllocation = allocation;
+						profitAndLossContainer = allocation;
 						break;
 					}
 				}
