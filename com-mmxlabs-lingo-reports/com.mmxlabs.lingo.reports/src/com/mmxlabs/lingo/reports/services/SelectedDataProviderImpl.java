@@ -67,8 +67,7 @@ class SelectedDataProviderImpl implements ISelectedDataProvider {
 
 	@Override
 	public ScenarioInstance getPinnedScenarioInstance() {
-		// TODO Auto-generated method stub
-		return null;
+		return pinnedScenarioInstance;
 	}
 
 	@Override
