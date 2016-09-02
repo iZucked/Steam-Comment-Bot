@@ -124,15 +124,15 @@ public class ScheduleModelKPIUtils {
 		return totalPNL;
 	}
 
-	public static long getElementShippingPNL(final @NonNull ProfitAndLossContainer container) {
+	public static long getElementShippingPNL(final @Nullable ProfitAndLossContainer container) {
 		return getElementPNL(container, CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
 	}
 
-	public static long getElementTradingPNL(final @NonNull ProfitAndLossContainer container) {
+	public static long getElementTradingPNL(final @Nullable ProfitAndLossContainer container) {
 		return getElementPNL(container, CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
 	}
 
-	public static long getElementUpstreamPNL(final @NonNull ProfitAndLossContainer container) {
+	public static long getElementUpstreamPNL(final @Nullable ProfitAndLossContainer container) {
 		return getElementPNL(container, CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK);
 	}
 
