@@ -64,5 +64,13 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="originalVesselShortName"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="newVesselShortName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="originalOpenLoadAllocation"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//OpenSlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="newOpenLoadAllocation"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//OpenSlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="originalOpenDischargeAllocation"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//OpenSlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="newOpenDischargeAllocation"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//OpenSlotAllocation"/>
   </eClassifiers>
 </ecore:EPackage>

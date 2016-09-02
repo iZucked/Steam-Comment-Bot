@@ -157,8 +157,8 @@ public class ChangeSetTransformerUtilTest {
 		Assert.assertNull(row.getLhsWiringLink());
 		Assert.assertNull(row.getRhsWiringLink());
 
-		Assert.assertSame(newOpenSlotAllocation, row.getNewGroupProfitAndLoss());
-		Assert.assertSame(oldOpenSlotAllocation, row.getOriginalGroupProfitAndLoss());
+		Assert.assertSame(newOpenSlotAllocation, row.getNewOpenLoadAllocation());
+		Assert.assertSame(oldOpenSlotAllocation, row.getOriginalOpenLoadAllocation());
 	}
 
 	@Test
@@ -311,7 +311,7 @@ public class ChangeSetTransformerUtilTest {
 			Assert.assertNull(row.getLhsWiringLink());
 			Assert.assertSame(rows.get(1), row.getRhsWiringLink());
 
-			Assert.assertSame(newOpenAllocation1, row.getNewGroupProfitAndLoss());
+			Assert.assertSame(newOpenAllocation1, row.getNewOpenLoadAllocation());
 			Assert.assertSame(oldCargoAllocation, row.getOriginalGroupProfitAndLoss());
 			Assert.assertNull(row.getNewEventGrouping());
 			Assert.assertSame(oldCargoAllocation, row.getOriginalEventGrouping());
@@ -332,7 +332,7 @@ public class ChangeSetTransformerUtilTest {
 			Assert.assertSame(rows.get(0), row.getLhsWiringLink());
 			Assert.assertNull(row.getRhsWiringLink());
 
-			Assert.assertSame(newOpenAllocation2, row.getNewGroupProfitAndLoss());
+			Assert.assertSame(newOpenAllocation2, row.getNewOpenDischargeAllocation());
 			Assert.assertNull(row.getOriginalGroupProfitAndLoss());
 
 			Assert.assertNull(row.getNewEventGrouping());
@@ -402,7 +402,9 @@ public class ChangeSetTransformerUtilTest {
 
 			Assert.assertSame(newCargoAllocation, row.getNewGroupProfitAndLoss());
 			// Arg, what about oldOpenAllocation1?
-			Assert.assertSame(oldOpenAllocation2, row.getOriginalGroupProfitAndLoss());
+			Assert.assertSame(oldOpenAllocation1, row.getOriginalOpenLoadAllocation());
+			Assert.assertSame(oldOpenAllocation2, row.getOriginalOpenDischargeAllocation());
+			Assert.assertNull(row.getOriginalGroupProfitAndLoss());
 			Assert.assertSame(newCargoAllocation, row.getNewEventGrouping());
 			Assert.assertNull(row.getOriginalEventGrouping());
 
@@ -412,10 +414,6 @@ public class ChangeSetTransformerUtilTest {
 			Assert.assertSame(newDischargeSlotAllocation, row.getNewDischargeAllocation());
 			Assert.assertNull(row.getOriginalDischargeAllocation());
 		}
-
-		// Both the OpenSlotAllocation instances can have P&L attached to them. However we are ignoring one of them. We are correctly combining into a single row, but the datastructures do now allow
-		// for this case.
-		Assert.fail("We have passed... Except we only have one original P&L object rather than two");
 	}
 
 	@Test

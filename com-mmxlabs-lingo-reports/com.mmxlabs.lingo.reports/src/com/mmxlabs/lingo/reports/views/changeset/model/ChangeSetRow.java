@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EObject;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 
@@ -43,6 +44,10 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewEventGrouping <em>New Event Grouping</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalVesselShortName <em>Original Vessel Short Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewVesselShortName <em>New Vessel Short Name</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalOpenLoadAllocation <em>Original Open Load Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewOpenLoadAllocation <em>New Open Load Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalOpenDischargeAllocation <em>Original Open Discharge Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewOpenDischargeAllocation <em>New Open Discharge Allocation</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow()
@@ -573,5 +578,109 @@ public interface ChangeSetRow extends EObject {
 	 * @generated
 	 */
 	void setNewVesselShortName(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Original Open Load Allocation</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Original Open Load Allocation</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Original Open Load Allocation</em>' reference.
+	 * @see #setOriginalOpenLoadAllocation(OpenSlotAllocation)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_OriginalOpenLoadAllocation()
+	 * @model
+	 * @generated
+	 */
+	OpenSlotAllocation getOriginalOpenLoadAllocation();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalOpenLoadAllocation <em>Original Open Load Allocation</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Original Open Load Allocation</em>' reference.
+	 * @see #getOriginalOpenLoadAllocation()
+	 * @generated
+	 */
+	void setOriginalOpenLoadAllocation(OpenSlotAllocation value);
+
+	/**
+	 * Returns the value of the '<em><b>New Open Load Allocation</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>New Open Load Allocation</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>New Open Load Allocation</em>' reference.
+	 * @see #setNewOpenLoadAllocation(OpenSlotAllocation)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_NewOpenLoadAllocation()
+	 * @model
+	 * @generated
+	 */
+	OpenSlotAllocation getNewOpenLoadAllocation();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewOpenLoadAllocation <em>New Open Load Allocation</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>New Open Load Allocation</em>' reference.
+	 * @see #getNewOpenLoadAllocation()
+	 * @generated
+	 */
+	void setNewOpenLoadAllocation(OpenSlotAllocation value);
+
+	/**
+	 * Returns the value of the '<em><b>Original Open Discharge Allocation</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Original Open Discharge Allocation</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Original Open Discharge Allocation</em>' reference.
+	 * @see #setOriginalOpenDischargeAllocation(OpenSlotAllocation)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_OriginalOpenDischargeAllocation()
+	 * @model
+	 * @generated
+	 */
+	OpenSlotAllocation getOriginalOpenDischargeAllocation();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalOpenDischargeAllocation <em>Original Open Discharge Allocation</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Original Open Discharge Allocation</em>' reference.
+	 * @see #getOriginalOpenDischargeAllocation()
+	 * @generated
+	 */
+	void setOriginalOpenDischargeAllocation(OpenSlotAllocation value);
+
+	/**
+	 * Returns the value of the '<em><b>New Open Discharge Allocation</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>New Open Discharge Allocation</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>New Open Discharge Allocation</em>' reference.
+	 * @see #setNewOpenDischargeAllocation(OpenSlotAllocation)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_NewOpenDischargeAllocation()
+	 * @model
+	 * @generated
+	 */
+	OpenSlotAllocation getNewOpenDischargeAllocation();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewOpenDischargeAllocation <em>New Open Discharge Allocation</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>New Open Discharge Allocation</em>' reference.
+	 * @see #getNewOpenDischargeAllocation()
+	 * @generated
+	 */
+	void setNewOpenDischargeAllocation(OpenSlotAllocation value);
 
 } // ChangeSetRow

@@ -522,6 +522,42 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getChangeSetRow_OriginalOpenLoadAllocation() {
+		return (EReference)changeSetRowEClass.getEStructuralFeatures().get(20);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getChangeSetRow_NewOpenLoadAllocation() {
+		return (EReference)changeSetRowEClass.getEStructuralFeatures().get(21);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getChangeSetRow_OriginalOpenDischargeAllocation() {
+		return (EReference)changeSetRowEClass.getEStructuralFeatures().get(22);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getChangeSetRow_NewOpenDischargeAllocation() {
+		return (EReference)changeSetRowEClass.getEStructuralFeatures().get(23);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ChangesetFactory getChangesetFactory() {
 		return (ChangesetFactory)getEFactoryInstance();
 	}
@@ -592,6 +628,10 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		createEReference(changeSetRowEClass, CHANGE_SET_ROW__NEW_EVENT_GROUPING);
 		createEAttribute(changeSetRowEClass, CHANGE_SET_ROW__ORIGINAL_VESSEL_SHORT_NAME);
 		createEAttribute(changeSetRowEClass, CHANGE_SET_ROW__NEW_VESSEL_SHORT_NAME);
+		createEReference(changeSetRowEClass, CHANGE_SET_ROW__ORIGINAL_OPEN_LOAD_ALLOCATION);
+		createEReference(changeSetRowEClass, CHANGE_SET_ROW__NEW_OPEN_LOAD_ALLOCATION);
+		createEReference(changeSetRowEClass, CHANGE_SET_ROW__ORIGINAL_OPEN_DISCHARGE_ALLOCATION);
+		createEReference(changeSetRowEClass, CHANGE_SET_ROW__NEW_OPEN_DISCHARGE_ALLOCATION);
 	}
 
 	/**
@@ -676,6 +716,10 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		initEReference(getChangeSetRow_NewEventGrouping(), theSchedulePackage.getEventGrouping(), null, "newEventGrouping", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSetRow_OriginalVesselShortName(), ecorePackage.getEString(), "originalVesselShortName", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSetRow_NewVesselShortName(), ecorePackage.getEString(), "newVesselShortName", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getChangeSetRow_OriginalOpenLoadAllocation(), theSchedulePackage.getOpenSlotAllocation(), null, "originalOpenLoadAllocation", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getChangeSetRow_NewOpenLoadAllocation(), theSchedulePackage.getOpenSlotAllocation(), null, "newOpenLoadAllocation", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getChangeSetRow_OriginalOpenDischargeAllocation(), theSchedulePackage.getOpenSlotAllocation(), null, "originalOpenDischargeAllocation", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getChangeSetRow_NewOpenDischargeAllocation(), theSchedulePackage.getOpenSlotAllocation(), null, "newOpenDischargeAllocation", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

@@ -448,13 +448,13 @@ public class ChangeSetView implements IAdaptable {
 		pnlComponentGroup.addTreeListener(new TreeListener() {
 
 			@Override
-			public void treeExpanded(TreeEvent e) {
+			public void treeExpanded(final TreeEvent e) {
 				pnlComponentGroup.setText("P&L Components");
 
 			}
 
 			@Override
-			public void treeCollapsed(TreeEvent e) {
+			public void treeCollapsed(final TreeEvent e) {
 				pnlComponentGroup.setText("");
 
 			}
@@ -681,14 +681,14 @@ public class ChangeSetView implements IAdaptable {
 		vesselColumnGroup.addTreeListener(new TreeListener() {
 
 			@Override
-			public void treeExpanded(TreeEvent e) {
+			public void treeExpanded(final TreeEvent e) {
 				// TODO Auto-generated method stub
 				vesselColumnGroup.setText("Vessels");
 
 			}
 
 			@Override
-			public void treeCollapsed(TreeEvent e) {
+			public void treeCollapsed(final TreeEvent e) {
 				// TODO Auto-generated method stub
 				vesselColumnGroup.setText("");
 
@@ -805,6 +805,22 @@ public class ChangeSetView implements IAdaptable {
 				if (changeSetRow.getOriginalEventGrouping() instanceof Event) {
 					selectedElements.add(((Event) changeSetRow.getOriginalEventGrouping()).getSequence());
 				}
+				if (changeSetRow.getOriginalOpenLoadAllocation() != null) {
+					selectedElements.add(changeSetRow.getOriginalOpenLoadAllocation());
+					selectedElements.add(changeSetRow.getOriginalOpenLoadAllocation().getSlot());
+				}
+				if (changeSetRow.getOriginalOpenDischargeAllocation() != null) {
+					selectedElements.add(changeSetRow.getOriginalOpenDischargeAllocation());
+					selectedElements.add(changeSetRow.getOriginalOpenDischargeAllocation().getSlot());
+				}
+				if (changeSetRow.getNewOpenLoadAllocation() != null) {
+					selectedElements.add(changeSetRow.getNewOpenLoadAllocation());
+					selectedElements.add(changeSetRow.getNewOpenLoadAllocation().getSlot());
+				}
+				if (changeSetRow.getNewOpenDischargeAllocation() != null) {
+					selectedElements.add(changeSetRow.getNewOpenDischargeAllocation());
+					selectedElements.add(changeSetRow.getNewOpenDischargeAllocation().getSlot());
+				}
 			}
 		});
 		//
@@ -891,8 +907,8 @@ public class ChangeSetView implements IAdaptable {
 					if (element instanceof ChangeSetRow) {
 						final ChangeSetRow row = (ChangeSetRow) element;
 						if (!row.isWiringChange() && !row.isVesselChange()) {
-
-							final long delta = getPNL(row.getNewGroupProfitAndLoss()) - getPNL(row.getOriginalGroupProfitAndLoss());
+							final long delta = ChangeSetTransformerUtil.getNewRowProfitAndLossValue(row, ScheduleModelKPIUtils::getGroupProfitAndLoss)
+									- ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(row, ScheduleModelKPIUtils::getGroupProfitAndLoss);
 							long totalPNLDelta = 0;
 							if (parentElement instanceof ChangeSet) {
 								final ChangeSet changeSet = (ChangeSet) parentElement;
@@ -908,17 +924,6 @@ public class ChangeSetView implements IAdaptable {
 					}
 				}
 				return true;
-			}
-
-			private long getPNL(@Nullable final ProfitAndLossContainer c) {
-				if (c != null) {
-					final GroupProfitAndLoss gpl = c.getGroupProfitAndLoss();
-					if (gpl != null) {
-						return gpl.getProfitAndLoss();
-					}
-				}
-
-				return 0L;
 			}
 		};
 		viewer.setFilters(filters);
@@ -1114,8 +1119,8 @@ public class ChangeSetView implements IAdaptable {
 			final ProfitAndLossContainer pnlContainer = change.getOriginalGroupProfitAndLoss();
 			if (pnlContainer instanceof CargoAllocation) {
 				long sum = 0;
-				CargoAllocation cargoAllocation = (CargoAllocation) pnlContainer;
-				for (SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
+				final CargoAllocation cargoAllocation = (CargoAllocation) pnlContainer;
+				for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
 					if (sa.getSlot() instanceof DischargeSlot) {
 						sum += sa.getVolumeValue();
 					}
@@ -1128,8 +1133,8 @@ public class ChangeSetView implements IAdaptable {
 			final ProfitAndLossContainer pnlContainer = change.getNewGroupProfitAndLoss();
 			if (pnlContainer instanceof CargoAllocation) {
 				long sum = 0;
-				CargoAllocation cargoAllocation = (CargoAllocation) pnlContainer;
-				for (SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
+				final CargoAllocation cargoAllocation = (CargoAllocation) pnlContainer;
+				for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
 					if (sa.getSlot() instanceof DischargeSlot) {
 						sum += sa.getVolumeValue();
 					}
@@ -1143,19 +1148,9 @@ public class ChangeSetView implements IAdaptable {
 
 	private CellLabelProvider createTaxDeltaLabelProvider() {
 		return createLambdaLabelProvider(true, true, change -> {
-			final ProfitAndLossContainer pnlContainer = change.getOriginalGroupProfitAndLoss();
-			if (pnlContainer != null) {
-				return ScheduleModelKPIUtils.getGroupProfitAndLoss(pnlContainer) - ScheduleModelKPIUtils.getGroupPreTaxProfitAndLoss(pnlContainer);
-			}
-			return null;
-
+			return ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(change, ScheduleModelKPIUtils::getGroupPreTaxProfitAndLoss);
 		}, change -> {
-			final ProfitAndLossContainer pnlContainer = change.getNewGroupProfitAndLoss();
-			if (pnlContainer != null) {
-				return ScheduleModelKPIUtils.getGroupProfitAndLoss(pnlContainer) - ScheduleModelKPIUtils.getGroupPreTaxProfitAndLoss(pnlContainer);
-			}
-			return null;
-
+			return ChangeSetTransformerUtil.getNewRowProfitAndLossValue(change, ScheduleModelKPIUtils::getGroupPreTaxProfitAndLoss);
 		});
 	}
 
@@ -1371,93 +1366,40 @@ public class ChangeSetView implements IAdaptable {
 
 		return createLambdaLabelProvider(true, false, change -> {
 
-			final SlotAllocation originalLoadAllocation = change.getOriginalLoadAllocation();
-			if (originalLoadAllocation != null) {
-				final CargoAllocation cargoAllocation = originalLoadAllocation.getCargoAllocation();
-				if (cargoAllocation != null) {
-					return ScheduleModelKPIUtils.getAdditionalProfitAndLoss(cargoAllocation);
-				}
-
-			} else {
-				final ProfitAndLossContainer o = change.getOriginalGroupProfitAndLoss();
-				if (o instanceof OpenSlotAllocation) {
-					return ScheduleModelKPIUtils.getCancellationFees(o);
-				}
-			}
-			return 0;
+			return ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(change, ScheduleModelKPIUtils::getAdditionalProfitAndLoss)
+					+ ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(change, ScheduleModelKPIUtils::getCancellationFees);
 		}, change ->
 
 		{
-			final SlotAllocation newLoadAllocation = change.getNewLoadAllocation();
-			if (newLoadAllocation != null) {
-				final CargoAllocation cargoAllocation = newLoadAllocation.getCargoAllocation();
-				if (cargoAllocation != null) {
-					return ScheduleModelKPIUtils.getAdditionalProfitAndLoss(cargoAllocation);
-				}
-			} else {
-				final ProfitAndLossContainer o = change.getNewGroupProfitAndLoss();
-				if (o instanceof OpenSlotAllocation) {
-					return ScheduleModelKPIUtils.getCancellationFees(o);
-				}
-			}
-
-			return 0;
+			return ChangeSetTransformerUtil.getNewRowProfitAndLossValue(change, ScheduleModelKPIUtils::getAdditionalProfitAndLoss)
+					+ ChangeSetTransformerUtil.getNewRowProfitAndLossValue(change, ScheduleModelKPIUtils::getCancellationFees);
 		});
 	}
 
 	private CellLabelProvider createUpstreamDeltaLabelProvider() {
 
 		return createLambdaLabelProvider(true, true, change -> {
-			final ProfitAndLossContainer pnlContainer = change.getOriginalGroupProfitAndLoss();
-			if (pnlContainer != null) {
-				return ScheduleModelKPIUtils.getElementUpstreamPNL(pnlContainer);
-			}
-			return null;
-
+			return ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(change, ScheduleModelKPIUtils::getElementUpstreamPNL);
 		}, change -> {
-			final ProfitAndLossContainer pnlContainer = change.getNewGroupProfitAndLoss();
-			if (pnlContainer != null) {
-				return ScheduleModelKPIUtils.getElementUpstreamPNL(pnlContainer);
-			}
-			return null;
-
+			return ChangeSetTransformerUtil.getNewRowProfitAndLossValue(change, ScheduleModelKPIUtils::getElementUpstreamPNL);
 		});
 	}
 
 	private CellLabelProvider createAdditionalShippingPNLDeltaLabelProvider() {
 
 		return createLambdaLabelProvider(true, true, change -> {
-			final ProfitAndLossContainer pnlContainer = change.getOriginalGroupProfitAndLoss();
-			if (pnlContainer != null) {
-				return -ScheduleModelKPIUtils.getAdditionalShippingProfitAndLoss(pnlContainer);
-			}
-			return null;
-
+			return -ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(change, ScheduleModelKPIUtils::getAdditionalShippingProfitAndLoss);
 		}, change -> {
-			final ProfitAndLossContainer pnlContainer = change.getNewGroupProfitAndLoss();
-			if (pnlContainer != null) {
-				return -ScheduleModelKPIUtils.getAdditionalShippingProfitAndLoss(pnlContainer);
-			}
-			return null;
-
+			return -ChangeSetTransformerUtil.getNewRowProfitAndLossValue(change, ScheduleModelKPIUtils::getAdditionalShippingProfitAndLoss);
 		});
 
 	}
 
 	private CellLabelProvider createAdditionalUpsidePNLDeltaLabelProvider() {
 		return createLambdaLabelProvider(true, true, change -> {
-			final ProfitAndLossContainer pnlContainer = change.getOriginalGroupProfitAndLoss();
-			if (pnlContainer != null) {
-				return -ScheduleModelKPIUtils.getAdditionalUpsideProfitAndLoss(pnlContainer);
-			}
-			return null;
-
+			return -ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(change, ScheduleModelKPIUtils::getAdditionalUpsideProfitAndLoss);
 		}, change -> {
-			final ProfitAndLossContainer pnlContainer = change.getNewGroupProfitAndLoss();
-			if (pnlContainer != null) {
-				return -ScheduleModelKPIUtils.getAdditionalUpsideProfitAndLoss(pnlContainer);
-			}
-			return null;
+			return -ChangeSetTransformerUtil.getNewRowProfitAndLossValue(change, ScheduleModelKPIUtils::getAdditionalUpsideProfitAndLoss);
 		});
 	}
 
@@ -1884,7 +1826,7 @@ public class ChangeSetView implements IAdaptable {
 				cell.setFont(null);
 				double delta = 0;
 				if (element instanceof ChangeSet) {
-//					cell.setFont(boldFont);
+					// cell.setFont(boldFont);
 					final ChangeSet changeSet = (ChangeSet) element;
 					final List<ChangeSetRow> rows;
 					if (diffToBase) {
@@ -1933,7 +1875,7 @@ public class ChangeSetView implements IAdaptable {
 		};
 	}
 
-	boolean isSet(@Nullable String str) {
+	boolean isSet(@Nullable final String str) {
 		return str != null && !str.isEmpty();
 	}
 }

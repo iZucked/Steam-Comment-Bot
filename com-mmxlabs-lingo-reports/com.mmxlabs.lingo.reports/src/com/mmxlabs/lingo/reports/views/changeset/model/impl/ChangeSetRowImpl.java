@@ -18,6 +18,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 
@@ -49,6 +50,10 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getNewEventGrouping <em>New Event Grouping</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getOriginalVesselShortName <em>Original Vessel Short Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getNewVesselShortName <em>New Vessel Short Name</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getOriginalOpenLoadAllocation <em>Original Open Load Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getNewOpenLoadAllocation <em>New Open Load Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getOriginalOpenDischargeAllocation <em>Original Open Discharge Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getNewOpenDischargeAllocation <em>New Open Discharge Allocation</em>}</li>
  * </ul>
  *
  * @generated
@@ -333,6 +338,46 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * @ordered
 	 */
 	protected String newVesselShortName = NEW_VESSEL_SHORT_NAME_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getOriginalOpenLoadAllocation() <em>Original Open Load Allocation</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOriginalOpenLoadAllocation()
+	 * @generated
+	 * @ordered
+	 */
+	protected OpenSlotAllocation originalOpenLoadAllocation;
+
+	/**
+	 * The cached value of the '{@link #getNewOpenLoadAllocation() <em>New Open Load Allocation</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNewOpenLoadAllocation()
+	 * @generated
+	 * @ordered
+	 */
+	protected OpenSlotAllocation newOpenLoadAllocation;
+
+	/**
+	 * The cached value of the '{@link #getOriginalOpenDischargeAllocation() <em>Original Open Discharge Allocation</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOriginalOpenDischargeAllocation()
+	 * @generated
+	 * @ordered
+	 */
+	protected OpenSlotAllocation originalOpenDischargeAllocation;
+
+	/**
+	 * The cached value of the '{@link #getNewOpenDischargeAllocation() <em>New Open Discharge Allocation</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNewOpenDischargeAllocation()
+	 * @generated
+	 * @ordered
+	 */
+	protected OpenSlotAllocation newOpenDischargeAllocation;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1026,6 +1071,158 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public OpenSlotAllocation getOriginalOpenLoadAllocation() {
+		if (originalOpenLoadAllocation != null && originalOpenLoadAllocation.eIsProxy()) {
+			InternalEObject oldOriginalOpenLoadAllocation = (InternalEObject)originalOpenLoadAllocation;
+			originalOpenLoadAllocation = (OpenSlotAllocation)eResolveProxy(oldOriginalOpenLoadAllocation);
+			if (originalOpenLoadAllocation != oldOriginalOpenLoadAllocation) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_OPEN_LOAD_ALLOCATION, oldOriginalOpenLoadAllocation, originalOpenLoadAllocation));
+			}
+		}
+		return originalOpenLoadAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public OpenSlotAllocation basicGetOriginalOpenLoadAllocation() {
+		return originalOpenLoadAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setOriginalOpenLoadAllocation(OpenSlotAllocation newOriginalOpenLoadAllocation) {
+		OpenSlotAllocation oldOriginalOpenLoadAllocation = originalOpenLoadAllocation;
+		originalOpenLoadAllocation = newOriginalOpenLoadAllocation;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_OPEN_LOAD_ALLOCATION, oldOriginalOpenLoadAllocation, originalOpenLoadAllocation));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public OpenSlotAllocation getNewOpenLoadAllocation() {
+		if (newOpenLoadAllocation != null && newOpenLoadAllocation.eIsProxy()) {
+			InternalEObject oldNewOpenLoadAllocation = (InternalEObject)newOpenLoadAllocation;
+			newOpenLoadAllocation = (OpenSlotAllocation)eResolveProxy(oldNewOpenLoadAllocation);
+			if (newOpenLoadAllocation != oldNewOpenLoadAllocation) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET_ROW__NEW_OPEN_LOAD_ALLOCATION, oldNewOpenLoadAllocation, newOpenLoadAllocation));
+			}
+		}
+		return newOpenLoadAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public OpenSlotAllocation basicGetNewOpenLoadAllocation() {
+		return newOpenLoadAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setNewOpenLoadAllocation(OpenSlotAllocation newNewOpenLoadAllocation) {
+		OpenSlotAllocation oldNewOpenLoadAllocation = newOpenLoadAllocation;
+		newOpenLoadAllocation = newNewOpenLoadAllocation;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__NEW_OPEN_LOAD_ALLOCATION, oldNewOpenLoadAllocation, newOpenLoadAllocation));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public OpenSlotAllocation getOriginalOpenDischargeAllocation() {
+		if (originalOpenDischargeAllocation != null && originalOpenDischargeAllocation.eIsProxy()) {
+			InternalEObject oldOriginalOpenDischargeAllocation = (InternalEObject)originalOpenDischargeAllocation;
+			originalOpenDischargeAllocation = (OpenSlotAllocation)eResolveProxy(oldOriginalOpenDischargeAllocation);
+			if (originalOpenDischargeAllocation != oldOriginalOpenDischargeAllocation) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_OPEN_DISCHARGE_ALLOCATION, oldOriginalOpenDischargeAllocation, originalOpenDischargeAllocation));
+			}
+		}
+		return originalOpenDischargeAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public OpenSlotAllocation basicGetOriginalOpenDischargeAllocation() {
+		return originalOpenDischargeAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setOriginalOpenDischargeAllocation(OpenSlotAllocation newOriginalOpenDischargeAllocation) {
+		OpenSlotAllocation oldOriginalOpenDischargeAllocation = originalOpenDischargeAllocation;
+		originalOpenDischargeAllocation = newOriginalOpenDischargeAllocation;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_OPEN_DISCHARGE_ALLOCATION, oldOriginalOpenDischargeAllocation, originalOpenDischargeAllocation));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public OpenSlotAllocation getNewOpenDischargeAllocation() {
+		if (newOpenDischargeAllocation != null && newOpenDischargeAllocation.eIsProxy()) {
+			InternalEObject oldNewOpenDischargeAllocation = (InternalEObject)newOpenDischargeAllocation;
+			newOpenDischargeAllocation = (OpenSlotAllocation)eResolveProxy(oldNewOpenDischargeAllocation);
+			if (newOpenDischargeAllocation != oldNewOpenDischargeAllocation) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET_ROW__NEW_OPEN_DISCHARGE_ALLOCATION, oldNewOpenDischargeAllocation, newOpenDischargeAllocation));
+			}
+		}
+		return newOpenDischargeAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public OpenSlotAllocation basicGetNewOpenDischargeAllocation() {
+		return newOpenDischargeAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setNewOpenDischargeAllocation(OpenSlotAllocation newNewOpenDischargeAllocation) {
+		OpenSlotAllocation oldNewOpenDischargeAllocation = newOpenDischargeAllocation;
+		newOpenDischargeAllocation = newNewOpenDischargeAllocation;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__NEW_OPEN_DISCHARGE_ALLOCATION, oldNewOpenDischargeAllocation, newOpenDischargeAllocation));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -1117,6 +1314,18 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 				return getOriginalVesselShortName();
 			case ChangesetPackage.CHANGE_SET_ROW__NEW_VESSEL_SHORT_NAME:
 				return getNewVesselShortName();
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_OPEN_LOAD_ALLOCATION:
+				if (resolve) return getOriginalOpenLoadAllocation();
+				return basicGetOriginalOpenLoadAllocation();
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_OPEN_LOAD_ALLOCATION:
+				if (resolve) return getNewOpenLoadAllocation();
+				return basicGetNewOpenLoadAllocation();
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_OPEN_DISCHARGE_ALLOCATION:
+				if (resolve) return getOriginalOpenDischargeAllocation();
+				return basicGetOriginalOpenDischargeAllocation();
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_OPEN_DISCHARGE_ALLOCATION:
+				if (resolve) return getNewOpenDischargeAllocation();
+				return basicGetNewOpenDischargeAllocation();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1188,6 +1397,18 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 				return;
 			case ChangesetPackage.CHANGE_SET_ROW__NEW_VESSEL_SHORT_NAME:
 				setNewVesselShortName((String)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_OPEN_LOAD_ALLOCATION:
+				setOriginalOpenLoadAllocation((OpenSlotAllocation)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_OPEN_LOAD_ALLOCATION:
+				setNewOpenLoadAllocation((OpenSlotAllocation)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_OPEN_DISCHARGE_ALLOCATION:
+				setOriginalOpenDischargeAllocation((OpenSlotAllocation)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_OPEN_DISCHARGE_ALLOCATION:
+				setNewOpenDischargeAllocation((OpenSlotAllocation)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -1261,6 +1482,18 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 			case ChangesetPackage.CHANGE_SET_ROW__NEW_VESSEL_SHORT_NAME:
 				setNewVesselShortName(NEW_VESSEL_SHORT_NAME_EDEFAULT);
 				return;
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_OPEN_LOAD_ALLOCATION:
+				setOriginalOpenLoadAllocation((OpenSlotAllocation)null);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_OPEN_LOAD_ALLOCATION:
+				setNewOpenLoadAllocation((OpenSlotAllocation)null);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_OPEN_DISCHARGE_ALLOCATION:
+				setOriginalOpenDischargeAllocation((OpenSlotAllocation)null);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_OPEN_DISCHARGE_ALLOCATION:
+				setNewOpenDischargeAllocation((OpenSlotAllocation)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1313,6 +1546,14 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 				return ORIGINAL_VESSEL_SHORT_NAME_EDEFAULT == null ? originalVesselShortName != null : !ORIGINAL_VESSEL_SHORT_NAME_EDEFAULT.equals(originalVesselShortName);
 			case ChangesetPackage.CHANGE_SET_ROW__NEW_VESSEL_SHORT_NAME:
 				return NEW_VESSEL_SHORT_NAME_EDEFAULT == null ? newVesselShortName != null : !NEW_VESSEL_SHORT_NAME_EDEFAULT.equals(newVesselShortName);
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_OPEN_LOAD_ALLOCATION:
+				return originalOpenLoadAllocation != null;
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_OPEN_LOAD_ALLOCATION:
+				return newOpenLoadAllocation != null;
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_OPEN_DISCHARGE_ALLOCATION:
+				return originalOpenDischargeAllocation != null;
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_OPEN_DISCHARGE_ALLOCATION:
+				return newOpenDischargeAllocation != null;
 		}
 		return super.eIsSet(featureID);
 	}

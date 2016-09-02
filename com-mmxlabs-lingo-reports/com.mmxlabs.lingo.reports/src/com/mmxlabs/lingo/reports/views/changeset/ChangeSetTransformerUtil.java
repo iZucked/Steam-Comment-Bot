@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.ToLongFunction;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
@@ -239,9 +240,11 @@ public final class ChangeSetTransformerUtil {
 				}
 			}
 			if (isBase) {
-				row.setNewGroupProfitAndLoss(openSlotAllocation);
+				// row.setNewGroupProfitAndLoss(openSlotAllocation);
+				row.setNewOpenLoadAllocation(openSlotAllocation);
 			} else {
-				row.setOriginalGroupProfitAndLoss(openSlotAllocation);
+				// row.setOriginalGroupProfitAndLoss(openSlotAllocation);
+				row.setOriginalOpenLoadAllocation(openSlotAllocation);
 				if (openSlotAllocation.getSlot() != null) {
 					final ChangeSetRow otherRow = lhsRowMap.get(getKeyName(openSlotAllocation.getSlot()));
 					if (otherRow != null) {
@@ -268,9 +271,11 @@ public final class ChangeSetTransformerUtil {
 				}
 			}
 			if (isBase) {
-				row.setNewGroupProfitAndLoss(openSlotAllocation);
+				// row.setNewGroupProfitAndLoss(openSlotAllocation);
+				row.setNewOpenDischargeAllocation(openSlotAllocation);
 			} else {
-				row.setOriginalGroupProfitAndLoss(openSlotAllocation);
+				// row.setOriginalGroupProfitAndLoss(openSlotAllocation);
+				row.setOriginalOpenDischargeAllocation(openSlotAllocation);
 				if (openSlotAllocation.getSlot() != null) {
 					final ChangeSetRow otherRow = rhsRowMap.get(getKeyName(openSlotAllocation.getSlot()));
 					if (otherRow != null) {
@@ -305,6 +310,9 @@ public final class ChangeSetTransformerUtil {
 			lhsRowMap.put(key, row);
 
 			row.setLhsName(eventName);
+			if (event instanceof OpenSlotAllocation) {
+				int ii = 0;
+			}
 			if (event instanceof ProfitAndLossContainer) {
 				row.setNewGroupProfitAndLoss((ProfitAndLossContainer) event);
 			}
@@ -324,7 +332,9 @@ public final class ChangeSetTransformerUtil {
 				lhsRowMap.put(key, row);
 
 			}
-
+			if (event instanceof OpenSlotAllocation) {
+				int ii = 0;
+			}
 			if (event instanceof ProfitAndLossContainer) {
 				row.setOriginalGroupProfitAndLoss((ProfitAndLossContainer) event);
 			}
@@ -517,7 +527,7 @@ public final class ChangeSetTransformerUtil {
 	@NonNull
 	public static String getShortName(@Nullable final VesselAssignmentType t) {
 		if (t instanceof VesselAvailability) {
-			Vessel vessel = ((VesselAvailability) t).getVessel();
+			final Vessel vessel = ((VesselAvailability) t).getVessel();
 			if (vessel != null) {
 				return vessel.getShortenedName();
 			} else {
@@ -607,8 +617,8 @@ public final class ChangeSetTransformerUtil {
 			if (row.isVesselChange()) {
 				continue;
 			}
-			long a = ScheduleModelKPIUtils.getGroupProfitAndLoss(row.getOriginalGroupProfitAndLoss());
-			long b = ScheduleModelKPIUtils.getGroupProfitAndLoss(row.getNewGroupProfitAndLoss());
+			long a = ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(row, ScheduleModelKPIUtils::getGroupProfitAndLoss);
+			long b = ChangeSetTransformerUtil.getNewRowProfitAndLossValue(row, ScheduleModelKPIUtils::getGroupProfitAndLoss);
 			if (a == b) {
 				a = ScheduleModelKPIUtils.getCapacityViolationCount(row.getOriginalEventGrouping());
 				b = ScheduleModelKPIUtils.getCapacityViolationCount(row.getNewEventGrouping());
@@ -622,6 +632,30 @@ public final class ChangeSetTransformerUtil {
 				}
 			}
 		}
+	}
+
+	public static long getNewRowProfitAndLossValue(@Nullable final ChangeSetRow row, final @NonNull ToLongFunction<@Nullable ProfitAndLossContainer> f) {
+		if (row == null) {
+			return 0L;
+		}
+		if (row.getNewOpenLoadAllocation() != null || row.getNewOpenDischargeAllocation() != null) {
+			return f.applyAsLong(row.getNewOpenLoadAllocation()) + f.applyAsLong(row.getNewOpenDischargeAllocation());
+		} else if (row.getNewGroupProfitAndLoss() != null) {
+			return f.applyAsLong(row.getNewGroupProfitAndLoss());
+		}
+		return 0L;
+	}
+
+	public static long getOriginalRowProfitAndLossValue(@Nullable final ChangeSetRow row, final @NonNull ToLongFunction<@Nullable ProfitAndLossContainer> f) {
+		if (row == null) {
+			return 0L;
+		}
+		if (row.getOriginalOpenLoadAllocation() != null || row.getOriginalOpenDischargeAllocation() != null) {
+			return f.applyAsLong(row.getOriginalOpenLoadAllocation()) + f.applyAsLong(row.getOriginalOpenDischargeAllocation());
+		} else if (row.getOriginalGroupProfitAndLoss() != null) {
+			return f.applyAsLong(row.getOriginalGroupProfitAndLoss());
+		}
+		return 0L;
 	}
 
 	public static void sortRows(@NonNull final List<ChangeSetRow> rows) {
@@ -955,6 +989,9 @@ public final class ChangeSetTransformerUtil {
 				head.setNewVesselShortName(tail.getNewVesselShortName());
 				head.setRhsName(tail.getRhsName());
 				head.setDischargeSlot(tail.getDischargeSlot());
+
+				head.setNewOpenLoadAllocation(tail.getNewOpenLoadAllocation());
+				head.setNewOpenDischargeAllocation(tail.getNewOpenDischargeAllocation());
 
 				return true;
 			}

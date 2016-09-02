@@ -525,13 +525,49 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET_ROW__NEW_VESSEL_SHORT_NAME = 19;
 
 	/**
+	 * The feature id for the '<em><b>Original Open Load Allocation</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW__ORIGINAL_OPEN_LOAD_ALLOCATION = 20;
+
+	/**
+	 * The feature id for the '<em><b>New Open Load Allocation</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW__NEW_OPEN_LOAD_ALLOCATION = 21;
+
+	/**
+	 * The feature id for the '<em><b>Original Open Discharge Allocation</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW__ORIGINAL_OPEN_DISCHARGE_ALLOCATION = 22;
+
+	/**
+	 * The feature id for the '<em><b>New Open Discharge Allocation</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW__NEW_OPEN_DISCHARGE_ALLOCATION = 23;
+
+	/**
 	 * The number of structural features of the '<em>Change Set Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_FEATURE_COUNT = 20;
+	int CHANGE_SET_ROW_FEATURE_COUNT = 24;
 
 	/**
 	 * The number of operations of the '<em>Change Set Row</em>' class.
@@ -1012,6 +1048,50 @@ public interface ChangesetPackage extends EPackage {
 	EAttribute getChangeSetRow_NewVesselShortName();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalOpenLoadAllocation <em>Original Open Load Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Original Open Load Allocation</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalOpenLoadAllocation()
+	 * @see #getChangeSetRow()
+	 * @generated
+	 */
+	EReference getChangeSetRow_OriginalOpenLoadAllocation();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewOpenLoadAllocation <em>New Open Load Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>New Open Load Allocation</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewOpenLoadAllocation()
+	 * @see #getChangeSetRow()
+	 * @generated
+	 */
+	EReference getChangeSetRow_NewOpenLoadAllocation();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalOpenDischargeAllocation <em>Original Open Discharge Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Original Open Discharge Allocation</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalOpenDischargeAllocation()
+	 * @see #getChangeSetRow()
+	 * @generated
+	 */
+	EReference getChangeSetRow_OriginalOpenDischargeAllocation();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewOpenDischargeAllocation <em>New Open Discharge Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>New Open Discharge Allocation</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewOpenDischargeAllocation()
+	 * @see #getChangeSetRow()
+	 * @generated
+	 */
+	EReference getChangeSetRow_NewOpenDischargeAllocation();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1387,6 +1467,38 @@ public interface ChangesetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CHANGE_SET_ROW__NEW_VESSEL_SHORT_NAME = eINSTANCE.getChangeSetRow_NewVesselShortName();
+
+		/**
+		 * The meta object literal for the '<em><b>Original Open Load Allocation</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHANGE_SET_ROW__ORIGINAL_OPEN_LOAD_ALLOCATION = eINSTANCE.getChangeSetRow_OriginalOpenLoadAllocation();
+
+		/**
+		 * The meta object literal for the '<em><b>New Open Load Allocation</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHANGE_SET_ROW__NEW_OPEN_LOAD_ALLOCATION = eINSTANCE.getChangeSetRow_NewOpenLoadAllocation();
+
+		/**
+		 * The meta object literal for the '<em><b>Original Open Discharge Allocation</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHANGE_SET_ROW__ORIGINAL_OPEN_DISCHARGE_ALLOCATION = eINSTANCE.getChangeSetRow_OriginalOpenDischargeAllocation();
+
+		/**
+		 * The meta object literal for the '<em><b>New Open Discharge Allocation</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHANGE_SET_ROW__NEW_OPEN_DISCHARGE_ALLOCATION = eINSTANCE.getChangeSetRow_NewOpenDischargeAllocation();
 
 	}
 
