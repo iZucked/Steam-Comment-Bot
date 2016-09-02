@@ -14,7 +14,6 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.shiro.SecurityUtils;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -50,14 +49,12 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
-import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
-import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
@@ -68,8 +65,7 @@ import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.schedule.StartEvent;
-import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -147,7 +143,7 @@ public class CargoEconsReport extends ViewPart {
 
 				// Find valid, selected objects
 
-				final Collection<Object> validObjects = processSelection(e3part, selection);
+				final Collection<Object> validObjects = CargoEconsReport.this.processSelection(e3part, selection);
 
 				for (final Object selectedObject : validObjects) {
 
@@ -220,6 +216,7 @@ public class CargoEconsReport extends ViewPart {
 
 		// @formatter:off
 		BUY_COST_TOTAL("Purchase Cost", "$", DollarsFormat), 
+		BUY_PRICE("> Purchase Price", "$/mmBTu", DollarsPerMMBtuFormat), 
 		BUY_VOLUME_IN_MMBTU("> Volume", "mmBTu", VolumeMMBtuFormat),
 		SHIPPING_COST_TOTAL("Shipping Cost", "$", DollarsFormat),
 		SHIPPING_BUNKERS_COST_TOTAL("> Bunkers", "$", DollarsFormat), 
@@ -228,6 +225,7 @@ public class CargoEconsReport extends ViewPart {
 		SHIPPING_BOIL_OFF_COST_TOTAL("> Boil-off", "$", DollarsFormat), 
 		SHIPPING_CHARTER_COST_TOTAL("> Charter fees", "$", DollarsFormat), 
 		SELL_REVENUE_TOTAL("Sale Revenue", "$", DollarsFormat),
+		SELL_PRICE("> Sales Price", "$/mmBTu", DollarsPerMMBtuFormat), 
 		SELL_VOLUME_IN_MMBTU("> Volume", "mmBtu", VolumeMMBtuFormat),
 		EQUITY_PNL("Equity P&L", "$", DollarsFormat),
 		ADDITIONAL_PNL("Addn. P&L", "$", DollarsFormat),
@@ -307,6 +305,24 @@ public class CargoEconsReport extends ViewPart {
 		public Object getObject(final FieldType fieldType) {
 
 			switch (fieldType) {
+			case BUY_PRICE: {
+				// Returns first purchase price
+				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
+					if (allocation.getSlot() instanceof LoadSlot) {
+						return allocation.getPrice();
+					}
+				}
+				return 0.0;
+			}
+			case SELL_PRICE: {
+				// Returns first sales price
+				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
+					if (allocation.getSlot() instanceof DischargeSlot) {
+						return allocation.getPrice();
+					}
+				}
+				return 0.0;
+			}
 			case BUY_COST_TOTAL: {
 
 				long cost = 0;
@@ -346,21 +362,7 @@ public class CargoEconsReport extends ViewPart {
 			case PNL_TOTAL: {
 				return CargoEconsReport.getPNLValue(cargoAllocation);
 			}
-				// case PNL_TOTAL_NO_TC: {
-				// return CargoEconsReport.getPNLValueNoTC(cargoAllocation);
-				// }
 			case SELL_REVENUE_TOTAL: {
-				double cv = 0.0;
-				// Find the CV
-				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-					if (allocation.getSlot() instanceof LoadSlot) {
-						final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
-
-						// TODO: Avg CV
-						cv = loadSlot.getSlotOrDelegatedCV();
-						break;
-					} // cooldowncooldownviolationsCountviolationsCountviolationsCount violationsCount += cc;
-				}
 				long revenue = 0;
 				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
 					if (allocation.getSlot() instanceof DischargeSlot) {
@@ -524,9 +526,6 @@ public class CargoEconsReport extends ViewPart {
 			case PNL_TOTAL: {
 				return CargoEconsReport.getPNLValue(marketAllocation);
 			}
-				// case PNL_TOTAL_NO_TC: {
-				// return CargoEconsReport.getPNLValueNoTC(marketAllocation);
-				// }
 			case SELL_REVENUE_TOTAL: {
 				// Find the CV & price
 				final double cv;
@@ -688,7 +687,7 @@ public class CargoEconsReport extends ViewPart {
 			while (itr.hasNext()) {
 				Object obj = itr.next();
 				if (obj instanceof Event) {
-					obj = getSegementStart((Event) obj);
+					obj = ScheduleModelUtils.getSegmentStart((Event) obj);
 				}
 
 				if (obj instanceof CargoAllocation) {
@@ -783,45 +782,6 @@ public class CargoEconsReport extends ViewPart {
 			validObjects.remove(null);
 		}
 		return validObjects;
-	}
-
-	/**
-	 * Find the first event in the event chain. E.g. Find the SlotVisit corresponding to the Load in a Cargo.
-	 * 
-	 * @param event
-	 * @return
-	 */
-	private Event getSegementStart(final Event event) {
-
-		Event next = event;
-		while (next != null && !isSegmentStart(next)) {
-			next = next.getPreviousEvent();
-		}
-		return next;
-
-	}
-
-	/**
-	 * TODO: Similar methods in a few places. E.g. SchedulerView
-	 * 
-	 * @param event
-	 * @return
-	 */
-	private boolean isSegmentStart(final Event event) {
-		if (event instanceof VesselEventVisit) {
-			return true;
-		} else if (event instanceof GeneratedCharterOut) {
-			return true;
-		} else if (event instanceof StartEvent) {
-			return true;
-		} else if (event instanceof EndEvent) {
-			return true;
-		} else if (event instanceof SlotVisit) {
-			if (((SlotVisit) event).getSlotAllocation().getSlot() instanceof LoadSlot) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	/**
