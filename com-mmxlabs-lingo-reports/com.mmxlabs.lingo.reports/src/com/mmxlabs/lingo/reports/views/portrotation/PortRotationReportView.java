@@ -74,31 +74,7 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 
 		@Override
 		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
-//
-//			final Runnable r = new Runnable() {
-//				@Override
-//				public void run() {
-//					elements.clear();
-//					elementCollector.beginCollecting(pinned != null);
-//					if (pinned != null) {
-//						elementCollector.collectElements(pinned, (LNGScenarioModel) pinned.getInstance(), true);
-//					}
-//					for (final ScenarioInstance other : others) {
-//						elementCollector.collectElements(other, (LNGScenarioModel) other.getInstance(), false);
-//					}
-//					elementCollector.endCollecting();
-//					viewer.setInput(elements);
-//				}
-//			};
-//			if (block) {
-//				if (Display.getDefault().getThread() == Thread.currentThread()) {
-//					r.run();
-//				} else {
-//					Display.getDefault().syncExec(r);
-//				}
-//			} else {
-//				Display.getDefault().asyncExec(r);
-//			}
+
 			ViewerHelper.setInput(viewer, block, () ->  {
 				elements.clear();
 				elementCollector.beginCollecting(pinned != null);
