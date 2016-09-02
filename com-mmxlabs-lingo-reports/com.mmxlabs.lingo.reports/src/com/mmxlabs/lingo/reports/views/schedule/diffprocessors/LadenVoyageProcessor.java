@@ -88,8 +88,9 @@ public class LadenVoyageProcessor implements IDiffProcessor {
 				LNGScenarioModel scenarioModel = (LNGScenarioModel) scenario;
 				final ScheduleModel scheduleModel = scenarioModel.getScheduleModel();
 				if (scheduleModel != null) {
-					if (scheduleModel.getSchedule() != referenceRow.getSchedule()) {
-						for (final Sequence sequence : scheduleModel.getSchedule().getSequences()) {
+					final Schedule schedule = scheduleModel.getSchedule();
+					if (schedule != referenceRow.getSchedule()) {
+						for (final Sequence sequence : schedule.getSequences()) {
 							// Nominal cargoes never overlap (probably not really true, but right now we can overlap with anything..)
 							if (sequence.getSequenceType() != SequenceType.ROUND_TRIP) {
 								if (sequence.getName().equals(referenceSequence.getName())) {
@@ -97,7 +98,6 @@ public class LadenVoyageProcessor implements IDiffProcessor {
 								}
 							}
 						}
-
 					}
 				}
 			}
