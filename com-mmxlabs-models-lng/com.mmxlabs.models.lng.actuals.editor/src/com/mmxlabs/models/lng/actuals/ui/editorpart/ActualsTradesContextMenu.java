@@ -5,13 +5,11 @@
 package com.mmxlabs.models.lng.actuals.ui.editorpart;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
@@ -60,8 +58,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 
 public class ActualsTradesContextMenu implements ITradesTableContextMenuExtension {
 
@@ -391,17 +388,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 					scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 				}
 
-				final DetailCompositeDialog dcd = new DetailCompositeDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation.getDefaultCommandHandler());
-				final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
-				try {
-					editorLock.claim();
-					scenarioEditingLocation.setDisableUpdates(true);
-
-					dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), Collections.<EObject> singletonList(cargoActuals), scenarioEditingLocation.isLocked());
-				} finally {
-					scenarioEditingLocation.setDisableUpdates(false);
-					editorLock.release();
-				}
+				DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, cargoActuals);
 			}
 		}
 	}

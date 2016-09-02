@@ -75,7 +75,7 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.DefaultToolTipProvider;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
@@ -732,15 +732,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 						return;
 					}
 
-					final DetailCompositeDialog dcd = new DetailCompositeDialog(scenarioViewer.getGrid().getShell(), scenarioEditingLocation.getDefaultCommandHandler());
-					try {
-						editorLock.claim();
-						scenarioEditingLocation.setDisableUpdates(true);
-						dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), structuredSelection.toList(), scenarioViewer.isLocked());
-					} finally {
-						scenarioEditingLocation.setDisableUpdates(false);
-						editorLock.release();
-					}
+					DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, structuredSelection);
 				} else {
 					// No multi-edit for indices
 				}

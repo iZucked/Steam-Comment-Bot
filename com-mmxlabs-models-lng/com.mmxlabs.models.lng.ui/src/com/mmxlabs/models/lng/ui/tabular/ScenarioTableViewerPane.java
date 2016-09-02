@@ -74,8 +74,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.EMFViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
-import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
-import com.mmxlabs.models.ui.editors.dialogs.MultiDetailDialog;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
@@ -299,31 +298,7 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 			public void open(final OpenEvent event) {
 				if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
 					final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
-					if (structuredSelection.isEmpty() == false) {
-						ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
-						if (structuredSelection.size() == 1) {
-							final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getDefaultCommandHandler());
-							try {
-								editorLock.claim();
-								scenarioEditingLocation.setDisableUpdates(true);
-								dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), structuredSelection.toList(), scenarioViewer.isLocked());
-							} finally {
-								scenarioEditingLocation.setDisableUpdates(false);
-								editorLock.release();
-							}
-						} else {
-							try {
-								editorLock.claim();
-								if (scenarioViewer.isLocked() == false) {
-									final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getRootObject(),
-											scenarioEditingLocation.getDefaultCommandHandler());
-									mdd.open(scenarioEditingLocation, structuredSelection.toList());
-								}
-							} finally {
-								editorLock.release();
-							}
-						}
-					}
+					DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, structuredSelection);
 				}
 			}
 		});

@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.pricing.ui.editorpart;
 
-import java.util.Collections;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -19,8 +17,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 
 public class PanamaCanalTariffHandler extends AbstractHandler {
 
@@ -47,16 +44,7 @@ public class PanamaCanalTariffHandler extends AbstractHandler {
 			return null;
 		}
 		if (scenarioEditingLocation.isLocked() == false) {
-			final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
-			try {
-				editorLock.claim();
-				scenarioEditingLocation.setDisableUpdates(true);
-				DetailCompositeDialog dialog = new DetailCompositeDialog(activeShell, scenarioEditingLocation.getDefaultCommandHandler());
-				dialog.open(scenarioEditingLocation, lngScenarioModel, Collections.singletonList(costModel.getPanamaCanalTariff()));
-			} finally {
-				scenarioEditingLocation.setDisableUpdates(false);
-				editorLock.release();
-			}
+			DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, costModel.getPanamaCanalTariff());
 		}
 
 		return null;

@@ -47,6 +47,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.DialogFeatureManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
@@ -182,23 +183,13 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 
 		@Override
 		protected Object openDialogBox(final Control cellEditorWindow, final Object object) {
-			final DetailCompositeDialog dcd = new DetailCompositeDialog(cellEditorWindow.getShell(), jointModelEditor.getDefaultCommandHandler());
 
 			final VesselStateAttributes attributes = (VesselStateAttributes) EcoreUtil.copy((EObject) getValue(object));
 
-			final ScenarioLock editorLock = jointModelEditor.getEditorLock();
-			try {
-				editorLock.claim();
-				jointModelEditor.setDisableUpdates(true);
-
-				if (dcd.open(jointModelEditor, jointModelEditor.getRootObject(), Collections.singletonList((EObject) attributes)) == Window.OK) {
-					return attributes;
-				} else {
-					return null;
-				}
-			} finally {
-				jointModelEditor.setDisableUpdates(false);
-				editorLock.release();
+			if (DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, attributes) == Window.OK) {
+				return attributes;
+			} else {
+				return null;
 			}
 
 		}

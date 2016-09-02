@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.actuals.SlotActuals;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
@@ -54,18 +55,7 @@ public class ActualsEditorMenuHelper {
 
 		@Override
 		public void run() {
-
-			final DetailCompositeDialog dcd = new DetailCompositeDialog(shell, scenarioEditingLocation.getDefaultCommandHandler());
-			final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
-			try {
-				editorLock.claim();
-				scenarioEditingLocation.setDisableUpdates(true);
-
-				dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), Collections.<EObject> singletonList(target), scenarioEditingLocation.isLocked());
-			} finally {
-				scenarioEditingLocation.setDisableUpdates(false);
-				editorLock.release();
-			}
+			DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, target);
 		}
 	}
 
