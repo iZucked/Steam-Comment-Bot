@@ -107,9 +107,9 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 					int numberOfSchedules = 0;
 					List<T> pinnedData = null;
 					if (pinned != null) {
-						LNGScenarioModel instance = (LNGScenarioModel) pinned.getInstance();
-						if (instance != null) {
-							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+						LNGScenarioModel pinnedScenarioModel = selectedDataProvider.getScenarioModel(pinned);
+						if (pinnedScenarioModel != null) {
+							final Schedule schedule = ScenarioModelUtil.findSchedule(pinnedScenarioModel);
 							if (schedule != null) {
 
 								// pinnedData = createData((Schedule) o, synchOutput.getLNGScenarioModel(o), synchOutput.getLNGPortfolioModel(o)).toArray(rowData);
@@ -121,9 +121,9 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 						}
 					}
 					for (final ScenarioInstance other : others) {
-						LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
-						if (instance != null) {
-							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+						LNGScenarioModel otherScenarioModel = selectedDataProvider.getScenarioModel(other);
+						if (otherScenarioModel != null) {
+							final Schedule schedule = ScenarioModelUtil.findSchedule(otherScenarioModel);
 							if (schedule != null) {
 								@Nullable
 								LNGScenarioModel scenarioModel = selectedDataProvider.getScenarioModel(schedule);

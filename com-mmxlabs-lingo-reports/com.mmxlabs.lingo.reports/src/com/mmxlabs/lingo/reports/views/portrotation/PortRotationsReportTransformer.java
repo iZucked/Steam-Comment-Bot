@@ -13,6 +13,7 @@ import java.util.Map;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduledEventCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -28,8 +29,10 @@ public class PortRotationsReportTransformer {
 
 			private int numberOfSchedules;
 			private boolean isPinned;
-			private final Map<Object, ScenarioInstance> elementMap = new HashMap<>();
-			private final List<Object> elementList =  new ArrayList<>();
+			private final Map<Object, ScenarioInstance> elementToInstanceMap = new HashMap<>();
+			private final Map<Object, LNGScenarioModel> elementToModelMap = new HashMap<>();
+			private final List<Object> elementList = new ArrayList<>();
+
 			@Override
 			public void beginCollecting(final boolean pinDiffMode) {
 				super.beginCollecting(pinDiffMode);
@@ -38,21 +41,23 @@ public class PortRotationsReportTransformer {
 				numberOfSchedules = 0;
 				isPinned = false;
 
-				elementMap.clear();
+				elementToInstanceMap.clear();
+				elementToModelMap.clear();
 				elementList.clear();
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean pinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
 				numberOfSchedules++;
 				isPinned |= pinned;
-				final Collection<? extends Object> collectElements = super.collectElements(scenarioInstance, schedule, pinned);
+				final Collection<? extends Object> collectElements = super.collectElements(scenarioInstance, scenarioModel, schedule, pinned);
 				elementList.addAll(collectElements);
-				elementMap.put(schedule, scenarioInstance);
+				elementToInstanceMap.put(schedule, scenarioInstance);
+				elementToModelMap.put(schedule, scenarioModel);
 				for (final Object element : collectElements) {
-					elementMap.put(element, scenarioInstance);
+					elementToInstanceMap.put(element, scenarioInstance);
+					elementToModelMap.put(element, scenarioModel);
 				}
-				elementMap.put(schedule, scenarioInstance);
 				return collectElements;
 			}
 
@@ -69,7 +74,7 @@ public class PortRotationsReportTransformer {
 				super.endCollecting();
 
 				viewer.processInputs(elements);
-				viewer.mapInputs(elementMap);
+				viewer.mapInputs(elementToInstanceMap, elementToModelMap);
 				elements.addAll(elementList);
 				// viewer.setInput(elements);
 			}

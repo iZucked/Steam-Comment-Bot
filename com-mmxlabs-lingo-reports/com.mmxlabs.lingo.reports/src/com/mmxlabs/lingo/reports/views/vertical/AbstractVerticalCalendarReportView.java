@@ -87,10 +87,10 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 					}
 					if (!scenarios.isEmpty()) {
 						final ScenarioInstance scenario = scenarios.get(0);
-						ViewerHelper.setInput(gridViewer, true, scenario.getInstance());
+						ViewerHelper.setInput(gridViewer, true, selectedDataProvider.getScenarioModel(scenario));
 						setCurrentScenario(scenario);
 					} else {
-						ViewerHelper.setInput(gridViewer, true, (Object)null);
+						ViewerHelper.setInput(gridViewer, true, (Object) null);
 						setCurrentScenario(null);
 					}
 				}

@@ -23,6 +23,7 @@ import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -139,9 +140,9 @@ public class ExcessIdleTimeReportView extends EMFReportView {
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean pinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
 
-				final Collection<? extends Object> collectedElements = super.collectElements(scenarioInstance, schedule, pinned);
+				final Collection<? extends Object> collectedElements = super.collectElements(scenarioInstance, scenarioModel, schedule, pinned);
 				final List<EObject> elements = new ArrayList<>(collectedElements.size());
 				for (final Object o : collectedElements) {
 					if (o instanceof EObject) {

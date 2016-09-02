@@ -23,6 +23,7 @@ class SelectedDataProviderImpl implements ISelectedDataProvider {
 	private final List<ScenarioInstance> scenarioInstances = new LinkedList<>();
 	private final List<LNGScenarioModel> scenarioModels = new LinkedList<>();
 
+	private final Map<ScenarioInstance, LNGScenarioModel> instanceToModelMap = new HashMap<>();
 	private final Map<EObject, ScenarioInstance> scenarioInstanceMap = new HashMap<>();
 	private final Map<EObject, LNGScenarioModel> scenarioModelMap = new HashMap<>();
 	private final Map<EObject, Schedule> scheduleMap = new HashMap<>();
@@ -38,6 +39,7 @@ class SelectedDataProviderImpl implements ISelectedDataProvider {
 			scenarioModelMap.put(e, scenarioModel);
 			scheduleMap.put(e, schedule);
 		}
+		instanceToModelMap.put(scenarioInstance, scenarioModel);
 	}
 
 	@Override
@@ -58,6 +60,11 @@ class SelectedDataProviderImpl implements ISelectedDataProvider {
 	@Override
 	public LNGScenarioModel getScenarioModel(final EObject eObject) {
 		return scenarioModelMap.get(eObject);
+	}
+
+	@Override
+	public @NonNull LNGScenarioModel getScenarioModel(@NonNull ScenarioInstance scenarioInstance) {
+		return instanceToModelMap.get(scenarioInstance);
 	}
 
 	@Override

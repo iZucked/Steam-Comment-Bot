@@ -15,7 +15,6 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.IReportContents;
@@ -62,7 +61,8 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 
 	private PortRotationsReportTransformer transformer;
 
-	private Map<Object, ScenarioInstance> elementMap;
+	private Map<Object, ScenarioInstance> elementToInstanceMap;
+	private Map<Object, LNGScenarioModel> elementToModelMap;
 
 	private List<Object> elements;
 
@@ -73,16 +73,16 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 
 		@Override
-		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<@NonNull ScenarioInstance> others, final boolean block) {
 
-			ViewerHelper.setInput(viewer, block, () ->  {
+			ViewerHelper.setInput(viewer, block, () -> {
 				elements.clear();
 				elementCollector.beginCollecting(pinned != null);
 				if (pinned != null) {
-					elementCollector.collectElements(pinned, (LNGScenarioModel) pinned.getInstance(), true);
+					elementCollector.collectElements(pinned, selectedDataProvider.getScenarioModel(pinned), true);
 				}
 				for (final ScenarioInstance other : others) {
-					elementCollector.collectElements(other, (LNGScenarioModel) other.getInstance(), false);
+					elementCollector.collectElements(other, selectedDataProvider.getScenarioModel(other), false);
 				}
 				elementCollector.endCollecting();
 				return elements;
@@ -269,13 +269,21 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 		manager.addColumns(PortRotationBasedReportBuilder.PORT_ROTATION_REPORT_TYPE_ID, getBlockManager());
 	}
 
-	public void mapInputs(final Map<Object, ScenarioInstance> elementMap) {
-		this.elementMap = elementMap;
+	public void mapInputs(final Map<Object, ScenarioInstance> elementToInstanceMap, final Map<Object, LNGScenarioModel> elementToModelMap) {
+		this.elementToInstanceMap = elementToInstanceMap;
+		this.elementToModelMap = elementToModelMap;
 	}
 
 	public ScenarioInstance getScenarioInstance(final Object key) {
-		if (elementMap != null) {
-			return elementMap.get(key);
+		if (elementToInstanceMap != null) {
+			return elementToInstanceMap.get(key);
+		}
+		return null;
+	}
+
+	public LNGScenarioModel getScenarioModel(final Object key) {
+		if (elementToModelMap != null) {
+			return elementToModelMap.get(key);
 		}
 		return null;
 	}

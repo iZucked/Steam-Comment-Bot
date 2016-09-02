@@ -179,10 +179,10 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 
 					elementCollector.beginCollecting(pinned != null);
 					if (pinned != null) {
-						elementCollector.collectElements(pinned, (LNGScenarioModel) pinned.getInstance(), true);
+						elementCollector.collectElements(pinned, selectedDataProvider.getScenarioModel(pinned), true);
 					}
 					for (final ScenarioInstance other : others) {
-						elementCollector.collectElements(other, (LNGScenarioModel) other.getInstance(), false);
+						elementCollector.collectElements(other, selectedDataProvider.getScenarioModel(other), false);
 					}
 					elementCollector.endCollecting();
 					ViewerHelper.setInput(viewer, true, table.getRows());

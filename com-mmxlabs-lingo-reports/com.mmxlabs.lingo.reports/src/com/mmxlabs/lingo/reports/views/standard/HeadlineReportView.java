@@ -120,7 +120,7 @@ public class HeadlineReportView extends ViewPart {
 
 		}
 
-		private ColumnDefinition(final ColumnType columnType, final Object labelOrDefaultLong, final String formatType, String feature) {
+		private ColumnDefinition(final ColumnType columnType, final Object labelOrDefaultLong, final String formatType, final String feature) {
 			this.columnType = columnType;
 			this.labelOrDefaultLong = labelOrDefaultLong;
 			this.feature = feature;
@@ -156,7 +156,7 @@ public class HeadlineReportView extends ViewPart {
 					RowData pPinnedData = null;
 					final List<Object> rowElements = new LinkedList<>();
 					if (pinned != null) {
-						final LNGScenarioModel instance = (LNGScenarioModel) pinned.getInstance();
+						final LNGScenarioModel instance = selectedDataProvider.getScenarioModel(pinned);
 						if (instance != null) {
 							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
 							if (schedule != null) {
@@ -166,7 +166,7 @@ public class HeadlineReportView extends ViewPart {
 					}
 
 					for (final ScenarioInstance other : others) {
-						final LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
+						final LNGScenarioModel instance = selectedDataProvider.getScenarioModel(other);
 						if (instance != null) {
 							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
 							if (schedule != null) {
@@ -202,7 +202,7 @@ public class HeadlineReportView extends ViewPart {
 
 		private final ColumnDefinition columnDefinition;
 
-		public ViewLabelProvider(ColumnDefinition columnDefinition) {
+		public ViewLabelProvider(final ColumnDefinition columnDefinition) {
 			this.columnDefinition = columnDefinition;
 
 		}
@@ -404,7 +404,7 @@ public class HeadlineReportView extends ViewPart {
 			final ColumnDefinition def = ColumnDefinition.values()[i];
 
 			@Nullable
-			String feature = def.getFeature();
+			final String feature = def.getFeature();
 			if (feature != null && !LicenseFeatures.isPermitted(feature)) {
 				continue;
 			}

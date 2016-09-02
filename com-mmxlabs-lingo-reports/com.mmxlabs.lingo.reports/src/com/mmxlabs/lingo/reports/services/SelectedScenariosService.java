@@ -21,7 +21,6 @@ import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IScenarioServiceListener;
 import com.mmxlabs.scenario.service.model.ModelReference;
@@ -42,7 +42,7 @@ public class SelectedScenariosService {
 	private final Set<CommandStack> commandStacks = new HashSet<>();
 	private final Map<ScenarioInstance, ModelReference> scenarioReferences = new HashMap<>();
 	private final Map<CommandStack, ScenarioInstance> commandStackMap = new HashMap<>();
-	// TODO: Create an explicity remove/updateRecord method set to ensure record.dispose() is called.
+	// TODO: Create an explicitly remove/updateRecord method set to ensure record.dispose() is called.
 	private final Map<ScenarioInstance, KeyValueRecord> scenarioRecords = new HashMap<>();
 
 	private IScenarioServiceSelectionProvider selectionProvider;
@@ -64,7 +64,6 @@ public class SelectedScenariosService {
 
 		@Override
 		public void commandStackChanged(final EventObject event) {
-
 			// Only react to changes involving the ScheduleModel
 			final CommandStack commandStack = (CommandStack) event.getSource();
 			final Command mostRecentCommand = commandStack.getMostRecentCommand();
@@ -290,28 +289,14 @@ public class SelectedScenariosService {
 		final int value = counter.incrementAndGet();
 		if (PlatformUI.isWorkbenchRunning()) {
 
-			Runnable r = new Runnable() {
-
-				@Override
-				public void run() {
-					// Mismatch, assume pending job
-					if (value != counter.get()) {
-						return;
-					}
-					doUpdateSelectedScenarios(value, block);
-				}
-			};
 			// Viewer helper!
-			IWorkbench wb = PlatformUI.getWorkbench();
-			if (block) {
-				if (wb.getDisplay().getThread() == Thread.currentThread()) {
-					r.run();
-				} else {
-					wb.getDisplay().syncExec(r);
+			RunnerHelper.exec(() -> {
+				// Mismatch, assume pending job
+				if (value != counter.get()) {
+					return;
 				}
-			} else {
-				wb.getDisplay().asyncExec(r);
-			}
+				doUpdateSelectedScenarios(value, block);
+			}, block);
 		}
 	}
 

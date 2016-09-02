@@ -933,7 +933,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		return new ScheduleElementCollector() {
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule) {
+			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, LNGScenarioModel scenarioModel, final Schedule schedule) {
 				return Collections.singleton(schedule);
 			}
 
@@ -944,7 +944,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean isPinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean isPinned) {
 
 				final List<Event> interestingEvents = new LinkedList<Event>();
 				for (final Sequence sequence : schedule.getSequences()) {

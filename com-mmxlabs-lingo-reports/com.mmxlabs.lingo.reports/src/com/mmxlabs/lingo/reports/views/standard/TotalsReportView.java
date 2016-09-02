@@ -96,7 +96,7 @@ public class TotalsReportView extends ViewPart {
 					int numberOfSchedules = 0;
 					List<RowData> pinnedData = null;
 					if (pinned != null) {
-						LNGScenarioModel instance = (LNGScenarioModel) pinned.getInstance();
+						LNGScenarioModel instance = selectedDataProvider.getScenarioModel(pinned);
 						if (instance != null) {
 							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
 							if (schedule != null) {
@@ -107,7 +107,7 @@ public class TotalsReportView extends ViewPart {
 						}
 					}
 					for (final ScenarioInstance other : others) {
-						LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
+						LNGScenarioModel instance = selectedDataProvider.getScenarioModel(other);
 						if (instance != null) {
 							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
 							if (schedule != null) {

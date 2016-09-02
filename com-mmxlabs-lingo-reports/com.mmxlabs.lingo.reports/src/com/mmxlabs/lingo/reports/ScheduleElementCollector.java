@@ -7,6 +7,8 @@ package com.mmxlabs.lingo.reports;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -27,22 +29,22 @@ public abstract class ScheduleElementCollector implements IScenarioInstanceEleme
 	public Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final LNGScenarioModel rootObject, final boolean pinned) {
 		final Schedule lastScheduleFromScenario = getLastScheduleFromScenario(rootObject);
 		if (lastScheduleFromScenario != null)
-			return collectElements(scenarioInstance, lastScheduleFromScenario, pinned);
+			return collectElements(scenarioInstance, rootObject, lastScheduleFromScenario, pinned);
 		else
 			return Collections.emptySet();
 	}
 
-	protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule) {
-		return collectElements(scenarioInstance, schedule, false);
+	protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final LNGScenarioModel rootObject, final Schedule schedule) {
+		return collectElements(scenarioInstance, rootObject, schedule, false);
 	}
 
-	protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean pinned) {
-		return collectElements(scenarioInstance, schedule);
+	protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final LNGScenarioModel rootObject, final Schedule schedule, final boolean pinned) {
+		return collectElements(scenarioInstance, rootObject, schedule);
 	}
 
 	/**
 	 */
-	public Schedule getLastScheduleFromScenario(final LNGScenarioModel scenario) {
+	public @Nullable Schedule getLastScheduleFromScenario(final @Nullable LNGScenarioModel scenario) {
 		if (scenario == null) {
 			return null;
 		}

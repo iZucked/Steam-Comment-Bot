@@ -130,7 +130,7 @@ public class ScenarioComparisonService {
 			}
 		}
 
-		ScenarioComparisonServiceTransformer.TransformResult result = ScenarioComparisonServiceTransformer.transform(pinned, others, scheduleDiffUtils, customRelatedSlotHandlers);
+		ScenarioComparisonServiceTransformer.TransformResult result = ScenarioComparisonServiceTransformer.transform(pinned, others, selectedDataProvider, scheduleDiffUtils, customRelatedSlotHandlers);
 		result.selectedDataProvider = selectedDataProvider;
 		final Table table = result.table;
 

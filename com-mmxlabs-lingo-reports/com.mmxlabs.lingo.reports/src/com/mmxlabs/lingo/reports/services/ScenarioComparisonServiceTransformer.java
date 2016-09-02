@@ -167,8 +167,8 @@ public class ScenarioComparisonServiceTransformer {
 	}
 
 	@NonNull
-	public static TransformResult transform(final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final ScheduleDiffUtils scheduleDiffUtils,
-			final List<ICustomRelatedSlotHandler> customRelatedSlotHandlers) {
+	public static TransformResult transform(final ScenarioInstance pinned, final Collection<ScenarioInstance> others, @NonNull ISelectedDataProvider selectedDataProvider,
+			final ScheduleDiffUtils scheduleDiffUtils, final List<ICustomRelatedSlotHandler> customRelatedSlotHandlers) {
 
 		final Table table = ScheduleReportFactory.eINSTANCE.createTable();
 		final ScenarioComparisonServiceTransformer transformer = new ScenarioComparisonServiceTransformer(table, scheduleDiffUtils, customRelatedSlotHandlers);
@@ -176,10 +176,10 @@ public class ScenarioComparisonServiceTransformer {
 
 		elementCollector.beginCollecting(pinned != null);
 		if (pinned != null) {
-			elementCollector.collectElements(pinned, (LNGScenarioModel) pinned.getInstance(), true);
+			elementCollector.collectElements(pinned, selectedDataProvider.getScenarioModel(pinned), true);
 		}
 		for (final ScenarioInstance other : others) {
-			elementCollector.collectElements(other, (LNGScenarioModel) other.getInstance(), false);
+			elementCollector.collectElements(other, selectedDataProvider.getScenarioModel(other), false);
 		}
 		elementCollector.endCollecting();
 		final TransformResult result = new TransformResult(table, transformer.equivalancesMap, transformer.rootObjects, pinned, others);
@@ -225,7 +225,7 @@ public class ScenarioComparisonServiceTransformer {
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean isPinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean isPinned) {
 				this.isPinned |= isPinned;
 
 				numberOfSchedules++;
@@ -237,9 +237,9 @@ public class ScenarioComparisonServiceTransformer {
 				rootObjects.add(findScenarioModel(schedule));
 
 				if (isPinned) {
-					table.setPinnedScenario(scenarioInstance.getInstance());
+					table.setPinnedScenario(scenarioModel);
 				}
-				table.getScenarios().add(scenarioInstance.getInstance());
+				table.getScenarios().add(scenarioModel);
 
 				return generateRows(table, scenarioInstance, schedule, isPinned);
 			}
@@ -538,11 +538,6 @@ public class ScenarioComparisonServiceTransformer {
 			}
 		} else if (a instanceof EndEvent) {
 			final EndEvent endEvent = (EndEvent) a;
-//			equivalents.addAll(startEvent.getEvents());
-//			final VesselAvailability vesselAvailability = startEvent.getSequence().getVesselAvailability();
-//			if (vesselAvailability != null) {
-//				equivalents.addAll(Lists.<EObject> newArrayList(startEvent, vesselAvailability.getVessel()));
-//			}
 			equivalents.add(endEvent);
 		} else if (a instanceof OpenSlotAllocation) {
 			final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) a;

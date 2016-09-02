@@ -16,10 +16,10 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public interface ISelectedDataProvider {
 	@NonNull
-	Collection<LNGScenarioModel> getScenarioModels();
+	Collection<@NonNull LNGScenarioModel> getScenarioModels();
 
 	@NonNull
-	Collection<ScenarioInstance> getScenarioInstances();
+	Collection<@NonNull ScenarioInstance> getScenarioInstances();
 
 	@Nullable
 	ScenarioInstance getPinnedScenarioInstance();
@@ -30,6 +30,9 @@ public interface ISelectedDataProvider {
 
 	@Nullable
 	LNGScenarioModel getScenarioModel(EObject eObject);
+
+	@Nullable
+	LNGScenarioModel getScenarioModel(@NonNull ScenarioInstance scenarioInstance);
 
 	@Nullable
 	Schedule getSchedule(EObject eObject);

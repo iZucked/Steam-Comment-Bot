@@ -98,7 +98,7 @@ public class KPIReportView extends ViewPart {
 					int numberOfSchedules = 0;
 					List<RowData> pinnedData = null;
 					if (pinned != null) {
-						final LNGScenarioModel instance = (LNGScenarioModel) pinned.getInstance();
+						final LNGScenarioModel instance = selectedDataProvider.getScenarioModel(pinned);
 						if (instance != null) {
 							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
 							if (schedule != null) {
@@ -109,7 +109,7 @@ public class KPIReportView extends ViewPart {
 						}
 					}
 					for (final ScenarioInstance other : others) {
-						final LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
+						final LNGScenarioModel instance = selectedDataProvider.getScenarioModel(other);
 						if (instance != null) {
 							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
 							if (schedule != null) {

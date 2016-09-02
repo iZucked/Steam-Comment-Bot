@@ -89,27 +89,19 @@ public class FleetReportTransformer {
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean isPinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean isPinned) {
 				this.isPinned |= isPinned;
 
 				numberOfSchedules++;
 
-				rootObjects.add(findScenarioModel(schedule));
+				rootObjects.add(scenarioModel);
 
 				if (isPinned) {
-					table.setPinnedScenario(scenarioInstance.getInstance());
+					table.setPinnedScenario(scenarioModel);
 				}
-				table.getScenarios().add(scenarioInstance.getInstance());
+				table.getScenarios().add(scenarioModel);
 
 				return generateRows(table, scenarioInstance, schedule, isPinned);
-			}
-
-			LNGScenarioModel findScenarioModel(final Schedule schedule) {
-				EObject container = schedule.eContainer();
-				while (container != null && !(container instanceof LNGScenarioModel)) {
-					container = container.eContainer();
-				}
-				return (LNGScenarioModel) container;
 			}
 
 			@Override

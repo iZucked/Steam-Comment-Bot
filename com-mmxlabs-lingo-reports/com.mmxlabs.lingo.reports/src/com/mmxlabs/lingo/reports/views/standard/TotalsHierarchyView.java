@@ -107,7 +107,7 @@ public class TotalsHierarchyView extends ViewPart {
 					final TreeData dummy = new TreeData("");
 					if (instances.size() == 1) {
 						for (final ScenarioInstance other : instances) {
-							LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
+							LNGScenarioModel instance = selectedDataProvider.getScenarioModel(other);
 							if (instance != null) {
 								final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
 								if (schedule != null) {
@@ -119,7 +119,7 @@ public class TotalsHierarchyView extends ViewPart {
 					} else {
 
 						for (final ScenarioInstance other : instances) {
-							LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
+							LNGScenarioModel instance = selectedDataProvider.getScenarioModel(other);
 							if (instance != null) {
 								final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
 								if (schedule != null) {

@@ -307,15 +307,7 @@ public class ChangeSetView implements IAdaptable {
 				}
 			}
 			if (linkedScenario) {
-				final Runnable r = new Runnable() {
-
-					@Override
-					public void run() {
-
-						view.handleAnalyseScenario(null);
-					}
-				};
-				RunnerHelper.syncExec(r);
+				RunnerHelper.syncExec(() -> view.handleAnalyseScenario(null));
 			}
 		}
 
@@ -336,15 +328,7 @@ public class ChangeSetView implements IAdaptable {
 					}
 				}
 				if (linkedScenario) {
-					final Runnable r = new Runnable() {
-
-						@Override
-						public void run() {
-
-							view.handleAnalyseScenario(null);
-						}
-					};
-					RunnerHelper.syncExec(r);
+					RunnerHelper.syncExec(() -> view.handleAnalyseScenario(null));
 				}
 			}
 		}

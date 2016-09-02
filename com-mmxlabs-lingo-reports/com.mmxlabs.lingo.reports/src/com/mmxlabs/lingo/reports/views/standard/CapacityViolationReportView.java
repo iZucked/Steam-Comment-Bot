@@ -31,6 +31,7 @@ import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -185,7 +186,7 @@ public class CapacityViolationReportView extends EMFReportView {
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean pinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
 
 				final List<EObject> rows = new LinkedList<EObject>();
 

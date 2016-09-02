@@ -12,6 +12,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public interface ISelectedScenariosServiceListener {
-	void selectionChanged(@NonNull ISelectedDataProvider selectedDataProvider, @Nullable ScenarioInstance pinned, @NonNull Collection<ScenarioInstance> others, boolean block);
+	void selectionChanged(@NonNull ISelectedDataProvider selectedDataProvider, @Nullable ScenarioInstance pinned, @NonNull Collection<@NonNull ScenarioInstance> others, boolean block);
 
 }

@@ -60,7 +60,6 @@ import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.utils.PinDiffModeColumnManager;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -116,14 +115,14 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 					final IScenarioInstanceElementCollector elementCollector = getElementCollector();
 					elementCollector.beginCollecting(pinned != null);
 					if (pinned != null) {
-						final Collection<? extends Object> elements = elementCollector.collectElements(pinned, (LNGScenarioModel) pinned.getInstance(), true);
+						final Collection<? extends Object> elements = elementCollector.collectElements(pinned, selectedDataProvider.getScenarioModel(pinned), true);
 						for (final Object e : elements) {
 							elementMapping.put(e, new WeakReference<>(pinned));
 						}
 						rowElements.addAll(elements);
 					}
 					for (final ScenarioInstance other : others) {
-						final Collection<? extends Object> elements = elementCollector.collectElements(other, (LNGScenarioModel) other.getInstance(), false);
+						final Collection<? extends Object> elements = elementCollector.collectElements(other, selectedDataProvider.getScenarioModel(other), false);
 						for (final Object e : elements) {
 							elementMapping.put(e, new WeakReference<>(other));
 						}

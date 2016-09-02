@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -15,7 +16,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class ScheduledEventCollector extends ScheduleElementCollector {
 	@Override
-	protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, Schedule schedule) {
+	protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final LNGScenarioModel scenarioModel, final Schedule schedule) {
 		final List<Object> result = new ArrayList<>();
 		for (final Sequence sequence : schedule.getSequences()) {
 			if (filter()) {
@@ -30,9 +31,11 @@ public class ScheduledEventCollector extends ScheduleElementCollector {
 		}
 		return result;
 	}
+
 	protected boolean filter(final Event event) {
 		return true;
 	}
+
 	protected boolean filter() {
 		return false;
 	}
