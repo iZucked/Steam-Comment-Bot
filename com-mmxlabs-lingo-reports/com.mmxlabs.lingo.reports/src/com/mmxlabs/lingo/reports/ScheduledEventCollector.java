@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.reports;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -15,10 +16,14 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 public class ScheduledEventCollector extends ScheduleElementCollector {
 	@Override
 	protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, Schedule schedule) {
-		final ArrayList<Object> result = new ArrayList<Object>();
+		final List<Object> result = new ArrayList<>();
 		for (final Sequence sequence : schedule.getSequences()) {
 			if (filter()) {
-				for (final Event e : sequence.getEvents()) if (filter(e)) result.add(e);
+				for (final Event e : sequence.getEvents()) {
+					if (filter(e)) {
+						result.add(e);
+					}
+				}
 			} else {
 				result.addAll(sequence.getEvents());
 			}
