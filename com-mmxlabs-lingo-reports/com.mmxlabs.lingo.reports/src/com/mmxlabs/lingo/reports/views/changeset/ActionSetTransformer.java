@@ -138,8 +138,6 @@ public class ActionSetTransformer {
 		return changeSet;
 	}
 
-
-
 	private void generateDifferences(final ScenarioInstance from, final ScenarioInstance to, final ChangeSet changeSet, final boolean isBase) {
 		final EquivalanceGroupBuilder equivalanceGroupBuilder = new EquivalanceGroupBuilder();
 
