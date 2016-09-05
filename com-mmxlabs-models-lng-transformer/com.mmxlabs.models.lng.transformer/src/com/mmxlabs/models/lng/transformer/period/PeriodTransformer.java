@@ -212,8 +212,10 @@ public class PeriodTransformer {
 		for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
 			final EndEvent endEvent = (EndEvent) map.get(vesselAvailability);
 			if (!vesselAvailability.isSetEndAfter() && !vesselAvailability.isSetEndBy()) {
-				vesselAvailability.setEndAfter(endEvent.getStart().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime());
-				vesselAvailability.setEndBy(endEvent.getStart().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime());
+				vesselAvailability.setEndAfter(endEvent.getEnd().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime());
+				vesselAvailability.setEndBy(endEvent.getEnd().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime());
+
+				vesselAvailability.setForceHireCostOnlyEndRule(true);
 			}
 			if (!vesselAvailability.getEndAt().isEmpty()) {
 				vesselAvailability.getEndAt().add(endEvent.getPort());

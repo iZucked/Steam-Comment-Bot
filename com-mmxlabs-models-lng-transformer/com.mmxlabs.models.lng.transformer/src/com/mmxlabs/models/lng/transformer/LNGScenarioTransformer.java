@@ -50,7 +50,6 @@ import com.mmxlabs.common.curves.StepwiseLongCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
-import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -257,10 +256,6 @@ public class LNGScenarioTransformer {
 	@Inject
 	@NonNull
 	private IPromptPeriodProviderEditor promptPeriodProviderEditor;
-
-	@Inject
-	@NonNull
-	private ISpotCharterInMarketProvider spotCharterInMarketProvider;
 
 	/**
 	 * Contains the contract transformers for each known contract type, by the EClass of the contract they transform.
@@ -2611,7 +2606,8 @@ public class LNGScenarioTransformer {
 			}
 
 			final IEndRequirement endRequirement = createEndRequirement(builder, portAssociation, eVesselAvailability.isSetEndAfter() ? eVesselAvailability.getEndAfterAsDateTime() : null,
-					eVesselAvailability.isSetEndBy() ? eVesselAvailability.getEndByAsDateTime() : null, SetUtils.getObjects(eVesselAvailability.getEndAt()), endCold, targetEndHeelInM3);
+					eVesselAvailability.isSetEndBy() ? eVesselAvailability.getEndByAsDateTime() : null, SetUtils.getObjects(eVesselAvailability.getEndAt()), endCold, targetEndHeelInM3,
+					eVesselAvailability.isForceHireCostOnlyEndRule());
 
 			final ILongCurve dailyCharterInCurve;
 			if (eVesselAvailability.isSetTimeCharterRate()) {
@@ -2669,7 +2665,7 @@ public class LNGScenarioTransformer {
 					spotCharterInToAvailability.put(key, roundTripOption);
 					allVesselAvailabilities.add(roundTripOption);
 					vesselToAvailabilities.put(roundTripOption.getVessel(), Collections.singleton(roundTripOption));
-					
+
 					/*
 					 * set up inaccessible routes
 					 */
@@ -2684,7 +2680,7 @@ public class LNGScenarioTransformer {
 						spotCharterInToAvailability.put(key, spotAvailability);
 
 						vesselToAvailabilities.put(spotAvailability.getVessel(), Collections.singleton(spotAvailability));
-						
+
 						/*
 						 * set up inaccessible routes
 						 */
@@ -2736,25 +2732,25 @@ public class LNGScenarioTransformer {
 	}
 
 	private void getAndSetInaccessibleRoutesForVessel(final ISchedulerBuilder builder, final Vessel eVessel, final IVessel vessel) {
-		Set<ERouteOption> inaccessibleERoutesForVessel = getInaccessibleERoutesForVessel(eVessel);
+		final Set<ERouteOption> inaccessibleERoutesForVessel = getInaccessibleERoutesForVessel(eVessel);
 		setInaccessibleRoutesForVessel(builder, vessel, inaccessibleERoutesForVessel);
 	}
-	
+
 	private void getAndSetInaccessibleRoutesForVesselClass(final ISchedulerBuilder builder, final VesselClass eVesselClass, final IVesselClass vesselClass) {
-		Set<ERouteOption> inaccessibleERoutesForVessel = createRouteOptionSet(true, eVesselClass.getInaccessibleRoutes());
+		final Set<ERouteOption> inaccessibleERoutesForVessel = createRouteOptionSet(true, eVesselClass.getInaccessibleRoutes());
 		setInaccessibleRoutesForVesselClass(builder, vesselClass, inaccessibleERoutesForVessel);
 	}
 
 	private void getAndSetInaccessibleRoutesForSpotCharterInVessel(final ISchedulerBuilder builder, final CharterInMarket charterInMarket, final IVessel vessel) {
-		Set<ERouteOption> inaccessibleERoutesForVessel = createRouteOptionSet(charterInMarket.isOverrideInaccessibleRoutes(), charterInMarket.getInaccessibleRoutes());
+		final Set<ERouteOption> inaccessibleERoutesForVessel = createRouteOptionSet(charterInMarket.isOverrideInaccessibleRoutes(), charterInMarket.getInaccessibleRoutes());
 		setInaccessibleRoutesForVessel(builder, vessel, inaccessibleERoutesForVessel);
 	}
 
-	private void setInaccessibleRoutesForVessel(final ISchedulerBuilder builder, final IVessel vessel, Set<ERouteOption> inaccessibleERoutesForVessel) {
+	private void setInaccessibleRoutesForVessel(final ISchedulerBuilder builder, final IVessel vessel, final Set<ERouteOption> inaccessibleERoutesForVessel) {
 		builder.setVesselInaccessibleRoutes(vessel, inaccessibleERoutesForVessel);
 	}
 
-	private void setInaccessibleRoutesForVesselClass(final ISchedulerBuilder builder, final IVesselClass vesselClass, Set<ERouteOption> inaccessibleERoutesForVessel) {
+	private void setInaccessibleRoutesForVesselClass(final ISchedulerBuilder builder, final IVesselClass vesselClass, final Set<ERouteOption> inaccessibleERoutesForVessel) {
 		if (!inaccessibleERoutesForVessel.isEmpty()) {
 			builder.setVesselClassInaccessibleRoutes(vesselClass, inaccessibleERoutesForVessel);
 		}
@@ -2773,6 +2769,7 @@ public class LNGScenarioTransformer {
 		}
 		return inaccessibleERoutes;
 	}
+
 	/**
 	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal use; may be subject to change later.
 	 * 
@@ -2813,12 +2810,13 @@ public class LNGScenarioTransformer {
 	 * 
 	 * @param builder
 	 * @param portAssociation
+	 * @param force
 	 * @param pat
 	 * @return
 	 */
 	@NonNull
 	private IEndRequirement createEndRequirement(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @Nullable final ZonedDateTime from,
-			@Nullable final ZonedDateTime to, @Nullable final Set<Port> ports, final boolean endCold, final long targetHeelInM3) {
+			@Nullable final ZonedDateTime to, @Nullable final Set<Port> ports, final boolean endCold, final long targetHeelInM3, final boolean forceHireCostOnlyEndRule) {
 		ITimeWindow window = null;
 
 		boolean isOpenEnded = false;
@@ -2839,10 +2837,12 @@ public class LNGScenarioTransformer {
 		for (final Port p : ports) {
 			portSet.add(portAssociation.lookup(p));
 		}
+		// Is the availability open ended or do we force the end rule?
+		final boolean useHireCostOnlyEndRule = forceHireCostOnlyEndRule || isOpenEnded;
 		if (ports.isEmpty()) {
-			return builder.createEndRequirement(null, window, endCold, targetHeelInM3, isOpenEnded);
+			return builder.createEndRequirement(null, window, endCold, targetHeelInM3, useHireCostOnlyEndRule);
 		} else {
-			return builder.createEndRequirement(portSet, window, endCold, targetHeelInM3, isOpenEnded);
+			return builder.createEndRequirement(portSet, window, endCold, targetHeelInM3, useHireCostOnlyEndRule);
 		}
 
 	}
@@ -2936,7 +2936,7 @@ public class LNGScenarioTransformer {
 		}
 		throw new IllegalStateException();
 	}
-	
+
 	@NonNull
 	public static ERouteOption mapRouteOption(final RouteOption routeOption) {
 		switch (routeOption) {
