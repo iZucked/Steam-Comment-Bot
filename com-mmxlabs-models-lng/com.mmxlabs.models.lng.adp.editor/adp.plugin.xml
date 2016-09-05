@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="com.mmxlabs.models.lng.adp.createplan.command"
+            name="Create ADP Plan">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=exporters">
+         <command
+               commandId="com.mmxlabs.models.lng.adp.createplan.command"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+     
+<extension
+      point="org.eclipse.ui.handlers">
+   <handler
+         class="com.mmxlabs.models.lng.adp.presentation.wizard.ADPWizardHandler"
+         commandId="com.mmxlabs.models.lng.adp.createplan.command">
+         <enabledWhen>
+          <and>
+                  <with
+                        variable="selection">
+               <iterate
+                     ifEmpty="false">
+               
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                  </instanceof>
+               </iterate>
+                  </with>
+                      <count
+                              value="1">
+                        </count>
+                          </and>
+            </enabledWhen>
+            <activeWhen>
+                   <and>
+                  <with
+                        variable="selection">
+               <iterate
+                     ifEmpty="false">
+               
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                  </instanceof>
+               </iterate>
+                  </with>
+                      <count
+                              value="1">
+                        </count>
+                          </and>
+            </activeWhen>
+   </handler>
+</extension>
+
+</plugin>

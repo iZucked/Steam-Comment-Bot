@@ -32,7 +32,13 @@
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//LegalEntity"/>
     <genClasses ecoreClass="commercial.ecore#//Contract">
+      <genFeatures createChild="false" propertyDescription="A short code for the contract."
+          ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/code"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/entity"/>
+      <genFeatures createChild="false" propertyDescription="Optional date this contract is valid from"
+          ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/startDate"/>
+      <genFeatures createChild="false" propertyDescription="Optional date this contract ends"
+          ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/endDate"/>
       <genFeatures notify="false" createChild="false" propertyDescription="The list of ports that this contract can be attached to."
           propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/allowedPorts"/>
       <genFeatures notify="false" createChild="false" propertyDescription="The default port to pick for new slots under this contract."

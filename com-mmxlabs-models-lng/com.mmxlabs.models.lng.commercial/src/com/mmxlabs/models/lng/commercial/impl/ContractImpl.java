@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
+import java.time.YearMonth;
 
 /**
  * <!-- begin-user-doc -->
@@ -35,7 +36,10 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getName <em>Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getCode <em>Code</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getEntity <em>Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getStartDate <em>Start Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getEndDate <em>End Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getAllowedPorts <em>Allowed Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPreferredPort <em>Preferred Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getMinQuantity <em>Min Quantity</em>}</li>
@@ -75,6 +79,26 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	protected String name = NAME_EDEFAULT;
 
 	/**
+	 * The default value of the '{@link #getCode() <em>Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String CODE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getCode() <em>Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected String code = CODE_EDEFAULT;
+
+	/**
 	 * The cached value of the '{@link #getEntity() <em>Entity</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -85,6 +109,64 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	protected BaseLegalEntity entity;
 
 	/**
+	 * The default value of the '{@link #getStartDate() <em>Start Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getStartDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final YearMonth START_DATE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getStartDate() <em>Start Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getStartDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected YearMonth startDate = START_DATE_EDEFAULT;
+
+	/**
+	 * This is true if the Start Date attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean startDateESet;
+
+	/**
+	 * The default value of the '{@link #getEndDate() <em>End Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEndDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final YearMonth END_DATE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getEndDate() <em>End Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEndDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected YearMonth endDate = END_DATE_EDEFAULT;
+
+	/**
+	 * This is true if the End Date attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean endDateESet;
+
+	/**
 	 * The cached value of the '{@link #getAllowedPorts() <em>Allowed Ports</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -93,6 +175,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected EList<APortSet<Port>> allowedPorts;
+
 	/**
 	 * The cached value of the '{@link #getPreferredPort() <em>Preferred Port</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -661,6 +744,119 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getCode() {
+		return code;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCode(String newCode) {
+		String oldCode = code;
+		code = newCode;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__CODE, oldCode, code));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public YearMonth getStartDate() {
+		return startDate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setStartDate(YearMonth newStartDate) {
+		YearMonth oldStartDate = startDate;
+		startDate = newStartDate;
+		boolean oldStartDateESet = startDateESet;
+		startDateESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__START_DATE, oldStartDate, startDate, !oldStartDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetStartDate() {
+		YearMonth oldStartDate = startDate;
+		boolean oldStartDateESet = startDateESet;
+		startDate = START_DATE_EDEFAULT;
+		startDateESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CommercialPackage.CONTRACT__START_DATE, oldStartDate, START_DATE_EDEFAULT, oldStartDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetStartDate() {
+		return startDateESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public YearMonth getEndDate() {
+		return endDate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setEndDate(YearMonth newEndDate) {
+		YearMonth oldEndDate = endDate;
+		endDate = newEndDate;
+		boolean oldEndDateESet = endDateESet;
+		endDateESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__END_DATE, oldEndDate, endDate, !oldEndDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetEndDate() {
+		YearMonth oldEndDate = endDate;
+		boolean oldEndDateESet = endDateESet;
+		endDate = END_DATE_EDEFAULT;
+		endDateESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CommercialPackage.CONTRACT__END_DATE, oldEndDate, END_DATE_EDEFAULT, oldEndDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetEndDate() {
+		return endDateESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -680,9 +876,15 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		switch (featureID) {
 			case CommercialPackage.CONTRACT__NAME:
 				return getName();
+			case CommercialPackage.CONTRACT__CODE:
+				return getCode();
 			case CommercialPackage.CONTRACT__ENTITY:
 				if (resolve) return getEntity();
 				return basicGetEntity();
+			case CommercialPackage.CONTRACT__START_DATE:
+				return getStartDate();
+			case CommercialPackage.CONTRACT__END_DATE:
+				return getEndDate();
 			case CommercialPackage.CONTRACT__ALLOWED_PORTS:
 				return getAllowedPorts();
 			case CommercialPackage.CONTRACT__PREFERRED_PORT:
@@ -726,8 +928,17 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__NAME:
 				setName((String)newValue);
 				return;
+			case CommercialPackage.CONTRACT__CODE:
+				setCode((String)newValue);
+				return;
 			case CommercialPackage.CONTRACT__ENTITY:
 				setEntity((BaseLegalEntity)newValue);
+				return;
+			case CommercialPackage.CONTRACT__START_DATE:
+				setStartDate((YearMonth)newValue);
+				return;
+			case CommercialPackage.CONTRACT__END_DATE:
+				setEndDate((YearMonth)newValue);
 				return;
 			case CommercialPackage.CONTRACT__ALLOWED_PORTS:
 				getAllowedPorts().clear();
@@ -786,8 +997,17 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__NAME:
 				setName(NAME_EDEFAULT);
 				return;
+			case CommercialPackage.CONTRACT__CODE:
+				setCode(CODE_EDEFAULT);
+				return;
 			case CommercialPackage.CONTRACT__ENTITY:
 				setEntity((BaseLegalEntity)null);
+				return;
+			case CommercialPackage.CONTRACT__START_DATE:
+				unsetStartDate();
+				return;
+			case CommercialPackage.CONTRACT__END_DATE:
+				unsetEndDate();
 				return;
 			case CommercialPackage.CONTRACT__ALLOWED_PORTS:
 				getAllowedPorts().clear();
@@ -842,8 +1062,14 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		switch (featureID) {
 			case CommercialPackage.CONTRACT__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case CommercialPackage.CONTRACT__CODE:
+				return CODE_EDEFAULT == null ? code != null : !CODE_EDEFAULT.equals(code);
 			case CommercialPackage.CONTRACT__ENTITY:
 				return entity != null;
+			case CommercialPackage.CONTRACT__START_DATE:
+				return isSetStartDate();
+			case CommercialPackage.CONTRACT__END_DATE:
+				return isSetEndDate();
 			case CommercialPackage.CONTRACT__ALLOWED_PORTS:
 				return allowedPorts != null && !allowedPorts.isEmpty();
 			case CommercialPackage.CONTRACT__PREFERRED_PORT:
@@ -918,6 +1144,12 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", code: ");
+		result.append(code);
+		result.append(", startDate: ");
+		if (startDateESet) result.append(startDate); else result.append("<unset>");
+		result.append(", endDate: ");
+		if (endDateESet) result.append(endDate); else result.append("<unset>");
 		result.append(", minQuantity: ");
 		result.append(minQuantity);
 		result.append(", maxQuantity: ");

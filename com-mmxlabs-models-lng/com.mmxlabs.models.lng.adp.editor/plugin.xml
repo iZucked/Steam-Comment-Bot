@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated adp -->
+      <editor
+            id="com.mmxlabs.models.lng.adp.presentation.ADPEditorID"
+            name="%_UI_ADPEditor_label"
+            icon="icons/full/obj16/ADPModelFile.gif"
+            extensions="adp"
+            class="com.mmxlabs.models.lng.adp.presentation.ADPEditor"
+            contributorClass="com.mmxlabs.models.lng.adp.presentation.ADPActionBarContributor">
+      </editor>
+   </extension>
+ 
+<extension
+      point="com.mmxlabs.models.ui.componenthelpers">
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.CargoSizeDistributionModelComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.CargoSizeDistributionModelComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.CargoSizeDistributionModel">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.CargoNumberDistributionModelComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.CargoNumberDistributionModelComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.CargoNumberDistributionModel">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.SalesContractProfileComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.SalesContractProfileComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.SalesContractProfile">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.PurchaseContractProfileComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.PurchaseContractProfileComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.PurchaseContractProfile">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.SubContractProfileComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.SubContractProfileComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.SubContractProfile">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.ContractProfileComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.ContractProfileComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.ContractProfile">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.CargoByQuarterDistributionModelComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.CargoByQuarterDistributionModelComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.CargoByQuarterDistributionModel">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.CargoIntervalDistributionModelComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.CargoIntervalDistributionModelComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.CargoIntervalDistributionModel">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.FlowTypeComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.FlowTypeComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.FlowType">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.SupplyFromFlowComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.SupplyFromFlowComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.SupplyFromFlow">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.DeliverToFlowComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.DeliverToFlowComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.DeliverToFlow">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.DeliverToSpotFlowComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.DeliverToSpotFlowComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.DeliverToSpotFlow">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.DeliverToProfileFlowComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.DeliverToProfileFlowComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.DeliverToProfileFlow">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.SupplyFromSpotFlowComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.SupplyFromSpotFlowComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.SupplyFromSpotFlow">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.SupplyFromProfileFlowComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.SupplyFromProfileFlowComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.SupplyFromProfileFlow">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.ShippingOptionComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.ShippingOptionComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.ShippingOption">
+   </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.BindingRuleComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.BindingRuleComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.BindingRule">
+   </componentHelper>
+</extension>
+<extension
+      point="com.mmxlabs.models.ui.displaycompositefactories">
+   <displayCompositeFactory
+         eClass="com.mmxlabs.models.lng.adp.ContractProfile"
+         factory="com.mmxlabs.models.lng.adp.presentation.composites.ContractProfileTopLevelCompositeFactory"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.ContractProfileTopLevelCompositeFactory"
+         inheritable="true">
+   </displayCompositeFactory>
+   <displayCompositeFactory
+         eClass="com.mmxlabs.models.lng.adp.BindingRule"
+         factory="com.mmxlabs.models.lng.adp.presentation.composites.BindingRuleDisplayCompositeFactory"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.BindingRuleDisplayCompositeFactory"
+         inheritable="true">
+   </displayCompositeFactory>
+   <displayCompositeFactory
+         eClass="com.mmxlabs.models.lng.adp.SubContractProfile"
+         factory="com.mmxlabs.models.lng.adp.presentation.composites.SubProfileDisplayCompositeFactory"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.SubProfileDisplayCompositeFactory"
+         inheritable="true">
+   </displayCompositeFactory>
+</extension>
+<extension
+      point="com.mmxlabs.models.ui.editorfactories">
+   <editorFactory
+         factoryClass="com.mmxlabs.models.lng.adp.presentation.editors.IntervalTypeInlineEditorFactory"
+         id="com.mmxlabs.models.lng.adp.presentation.editors.IntervalTypeInlineEditorFactory">
+      <FeatureAnyOf>
+         <EDataTypeIs
+               EDataTypeName="IntervalType"
+               EDataTypeURI="http://www.mmxlabs.com/models/lng/adp/1/">
+         </EDataTypeIs>
+      </FeatureAnyOf>
+   </editorFactory>
+</extension>
+<extension
+      point="com.mmxlabs.models.ui.valueproviders">
+   <valueProvider
+         factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.VesselAssignmentTypeValueProviderFactory"
+         id="com.mmxlabs.models.lng.adp.presentation.valueproviders.VesselAssignmentTypeValueProviderFactory"
+         ownerEClass="com.mmxlabs.models.lng.adp.ShippingOption"
+         referenceEClass="com.mmxlabs.models.lng.types.VesselAssignmentType">
+   </valueProvider>
+   <valueProvider
+         factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.ContractProfileValueProviderFactory"
+         id="com.mmxlabs.models.lng.adp.presentation.valueproviders.ContractProfileValueProviderFactory_Purchase"
+         referenceEClass="com.mmxlabs.models.lng.adp.PurchaseContractProfile">
+   </valueProvider>
+   <valueProvider
+         factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.ContractProfileValueProviderFactory"
+         id="com.mmxlabs.models.lng.adp.presentation.valueproviders.ContractProfileValueProviderFactory_Sale"
+         referenceEClass="com.mmxlabs.models.lng.adp.SalesContractProfile">
+   </valueProvider>
+   <valueProvider
+         factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.ContractProfileValueProviderFactory"
+         id="com.mmxlabs.models.lng.adp.presentation.valueproviders.ContractProfileValueProviderFactory"
+         referenceEClass="com.mmxlabs.models.lng.adp.ContractProfile">
+   </valueProvider>
+   <valueProvider
+         factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.SubContractProfileValueProviderFactory"
+         id="com.mmxlabs.models.lng.adp.presentation.valueproviders.SubContractProfileValueProviderFactory"
+         referenceEClass="com.mmxlabs.models.lng.adp.SubContractProfile">
+   </valueProvider>
+   <valueProvider
+         factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.VesselValueProviderFactory"
+         id="com.mmxlabs.models.lng.adp.presentation.valueproviders.VesselValueProviderFactory"
+         ownerEClass="com.mmxlabs.models.lng.adp.ShippingOption"
+         referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
+   </valueProvider>
+   <valueProvider
+         factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.SpotMarketValueProviderFactory"
+         id="com.mmxlabs.models.lng.adp.presentation.valueproviders.SpotMarketValueProviderFactory.Supply"
+         ownerEClass="com.mmxlabs.models.lng.adp.SupplyFromSpotFlow"
+         referenceEClass="com.mmxlabs.models.lng.spotmarkets.SpotMarket">
+   </valueProvider>
+   <valueProvider
+         factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.SpotMarketValueProviderFactory"
+         id="com.mmxlabs.models.lng.adp.presentation.valueproviders.SpotMarketValueProviderFactory.Deliver"
+         ownerEClass="com.mmxlabs.models.lng.adp.DeliverToSpotFlow"
+         referenceEClass="com.mmxlabs.models.lng.spotmarkets.SpotMarket">
+   </valueProvider>
+</extension>
+<extension
+      point="com.mmxlabs.license.features.PluginXMLEnablement">
+   <PluginXMLEnablement
+         feature="adp"
+         plugin.xml="adp.plugin.xml">
+   </PluginXMLEnablement>
+</extension>
+
+</plugin>

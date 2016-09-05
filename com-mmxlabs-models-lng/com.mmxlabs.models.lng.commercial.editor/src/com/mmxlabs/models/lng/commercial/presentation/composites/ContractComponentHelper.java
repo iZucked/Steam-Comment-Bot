@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
@@ -66,7 +67,10 @@ public class ContractComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_codeEditor(detailComposite, topClass);
 		add_entityEditor(detailComposite, topClass);
+		add_startDateEditor(detailComposite, topClass);
+		add_endDateEditor(detailComposite, topClass);
 		add_allowedPortsEditor(detailComposite, topClass);
 		add_preferredPortEditor(detailComposite, topClass);
 		add_minQuantityEditor(detailComposite, topClass);
@@ -127,6 +131,40 @@ public class ContractComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_cancellationExpressionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__CANCELLATION_EXPRESSION));
+	}
+
+	/**
+	 * Create the editor for the code feature on Contract
+	 *
+	 * @generated NO
+	 */
+	protected void add_codeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted("features:adp")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__CODE));
+		}
+
+	}
+
+	/**
+	 * Create the editor for the startDate feature on Contract
+	 *
+	 * @generated NO
+	 */
+	protected void add_startDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted("features:adp")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__START_DATE));
+		}
+	}
+
+	/**
+	 * Create the editor for the endDate feature on Contract
+	 *
+	 * @generated NO
+	 */
+	protected void add_endDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted("features:adp")) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__END_DATE));
+		}
 	}
 
 	/**

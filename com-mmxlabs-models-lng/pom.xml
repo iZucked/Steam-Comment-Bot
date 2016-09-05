@@ -77,6 +77,10 @@
 		<module>com.mmxlabs.models.lng.analytics.validation</module>
 		<module>com.mmxlabs.models.lng.analytics.navigator</module>
 
+		<module>com.mmxlabs.models.lng.adp</module>
+		<module>com.mmxlabs.models.lng.adp.edit</module>
+		<module>com.mmxlabs.models.lng.adp.editor</module>
+		<module>com.mmxlabs.models.lng.adp.validation</module>
 
 		<module>com.mmxlabs.models.lng.actuals</module>
 		<module>com.mmxlabs.models.lng.actuals.edit</module>

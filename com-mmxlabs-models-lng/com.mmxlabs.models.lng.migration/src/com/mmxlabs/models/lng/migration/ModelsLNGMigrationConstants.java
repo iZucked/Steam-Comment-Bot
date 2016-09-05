@@ -38,7 +38,15 @@ public final class ModelsLNGMigrationConstants {
 	/**
 	 */
 	public static final PackageData PKG_DATA_AnalyticsModel = new PackageData(NSURI_AnalyticsModel, "platform:/plugin/com.mmxlabs.models.lng.analytics/model/analytics.ecore",
-			"../../com.mmxlabs.models.lng.port/model/analytics.ecore");
+			"../../com.mmxlabs.models.lng.analytics/model/analytics.ecore");
+
+	/**
+	 */
+	public static final String NSURI_ADPModel = "http://www.mmxlabs.com/models/lng/adp1/";
+	/**
+	 */
+	public static final PackageData PKG_DATA_ADPModel = new PackageData(NSURI_AnalyticsModel, "platform:/plugin/com.mmxlabs.models.lng.adp/model/adp.ecore",
+			"../../com.mmxlabs.models.lng.adp/model/adp.ecore");
 
 	/**
 	 */

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2016
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.emf.validation.constraintProviders">
+      <category
+            id="com.mmxlabs.models.lng.adp.validation.base"
+            mandatory="true"
+            name="ADP Validation">
+      </category>
+      <category
+            id="com.mmxlabs.models.lng.adp.validation.optimisation"
+            mandatory="true"
+            name="ADP Validation (Optimisation Only)">
+      </category>
+      <constraintProvider
+            cache="true">
+         <package
+               namespaceUri="http://www.mmxlabs.com/models/lng/adp/1/">
+         </package>
+         <constraints
+               categories=" com.mmxlabs.models.lng.adp.validation.base">
+            <constraint
+                  class="com.mmxlabs.models.lng.adp.validation.BindingRuleConstraint"
+                  id="com.mmxlabs.models.lng.adp.validation.BindingRuleConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="BindingRuleConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="BindingRule">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.adp.validation.ShippingOptionConstraint"
+                  id="com.mmxlabs.models.lng.adp.validation.ShippingOptionConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="ShippingOptionConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="ShippingOption">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.adp.validation.DeliverToProfileFlowConstraint"
+                  id="com.mmxlabs.models.lng.adp.validation.DeliverToProfileFlowConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="DeliverToProfileFlowConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="DeliverToProfileFlow">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.adp.validation.DeliverToSpotFlowConstraint"
+                  id="com.mmxlabs.models.lng.adp.validation.DeliverToSpotFlowConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="DeliverToSpotFlowConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="DeliverToSpotFlow">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.adp.validation.SupplyFromProfileFlowConstraint"
+                  id="com.mmxlabs.models.lng.adp.validation.SupplyFromProfileFlowConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="SupplyFromProfileFlowConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="SupplyFromProfileFlow">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.adp.validation.SupplyFromSpotFlowConstraint"
+                  id="com.mmxlabs.models.lng.adp.validation.SupplyFromSpotFlowConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="SupplyFromSpotFlowConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="SupplyFromSpotFlow">
+               </target>
+            </constraint>
+                
+        </constraints>
+      </constraintProvider>
+      <constraintProvider
+            cache="true">
+         <package
+               namespaceUri="http://www.mmxlabs.com/models/lng/adp/1/">
+         </package>
+         <constraints
+               categories="com.mmxlabs.models.lng.adp.validation.optimisation">
+           
+         </constraints>
+      </constraintProvider>
+   </extension>
+
+</plugin>

@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import java.time.YearMonth;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,7 +21,10 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getCode <em>Code</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getEntity <em>Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getStartDate <em>Start Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getEndDate <em>End Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getAllowedPorts <em>Allowed Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPreferredPort <em>Preferred Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getMinQuantity <em>Min Quantity</em>}</li>
@@ -416,6 +420,138 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setCancellationExpression(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Code</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Code</em>' attribute.
+	 * @see #setCode(String)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_Code()
+	 * @model
+	 * @generated
+	 */
+	String getCode();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getCode <em>Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Code</em>' attribute.
+	 * @see #getCode()
+	 * @generated
+	 */
+	void setCode(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Start Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Start Date</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Start Date</em>' attribute.
+	 * @see #isSetStartDate()
+	 * @see #unsetStartDate()
+	 * @see #setStartDate(YearMonth)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_StartDate()
+	 * @model unsettable="true" dataType="com.mmxlabs.models.datetime.YearMonth"
+	 * @generated
+	 */
+	YearMonth getStartDate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getStartDate <em>Start Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Start Date</em>' attribute.
+	 * @see #isSetStartDate()
+	 * @see #unsetStartDate()
+	 * @see #getStartDate()
+	 * @generated
+	 */
+	void setStartDate(YearMonth value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getStartDate <em>Start Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetStartDate()
+	 * @see #getStartDate()
+	 * @see #setStartDate(YearMonth)
+	 * @generated
+	 */
+	void unsetStartDate();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getStartDate <em>Start Date</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Start Date</em>' attribute is set.
+	 * @see #unsetStartDate()
+	 * @see #getStartDate()
+	 * @see #setStartDate(YearMonth)
+	 * @generated
+	 */
+	boolean isSetStartDate();
+
+	/**
+	 * Returns the value of the '<em><b>End Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>End Date</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>End Date</em>' attribute.
+	 * @see #isSetEndDate()
+	 * @see #unsetEndDate()
+	 * @see #setEndDate(YearMonth)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_EndDate()
+	 * @model unsettable="true" dataType="com.mmxlabs.models.datetime.YearMonth"
+	 * @generated
+	 */
+	YearMonth getEndDate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getEndDate <em>End Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>End Date</em>' attribute.
+	 * @see #isSetEndDate()
+	 * @see #unsetEndDate()
+	 * @see #getEndDate()
+	 * @generated
+	 */
+	void setEndDate(YearMonth value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getEndDate <em>End Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetEndDate()
+	 * @see #getEndDate()
+	 * @see #setEndDate(YearMonth)
+	 * @generated
+	 */
+	void unsetEndDate();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getEndDate <em>End Date</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>End Date</em>' attribute is set.
+	 * @see #unsetEndDate()
+	 * @see #getEndDate()
+	 * @see #setEndDate(YearMonth)
+	 * @generated
+	 */
+	boolean isSetEndDate();
 
 } // end of  Contract
 

@@ -20,6 +20,7 @@ files = ["port",
 		 "schedule",
 		 "analytics",
 		 "parameters",
+		 "adp",
 		 ]
 for f in files:
 	source = "{0}{1}/model/{1}.ecore".format(root,f)
