@@ -66,7 +66,7 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 
 		if ((vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
 
-			if (endRequirement.isOpen()) {
+			if (endRequirement.isHireCostOnlyEndRule()) {
 				return scheduleOpenEndedVessel(vesselAvailability, partialPortTimesRecord, scheduledTime, endEventSlot);
 			}
 		}

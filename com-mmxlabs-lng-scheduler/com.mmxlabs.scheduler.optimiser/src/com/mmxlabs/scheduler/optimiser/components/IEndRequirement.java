@@ -10,7 +10,7 @@ public interface IEndRequirement extends IStartEndRequirement {
 	 * 
 	 * @return
 	 */
-	boolean isOpen();
+	boolean isHireCostOnlyEndRule();
 
 	boolean isEndCold();
 

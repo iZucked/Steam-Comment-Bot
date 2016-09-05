@@ -129,7 +129,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				if (resource != null) {
 					final IEndRequirement requirement = startEndRequirementProvider.getEndRequirement(resource);
 					if (requirement != null) {
-						if (requirement.isOpen()) {
+						if (requirement.isHireCostOnlyEndRule()) {
 							evaluateVoyagePlan(record, state, 0);
 							return;
 						}
