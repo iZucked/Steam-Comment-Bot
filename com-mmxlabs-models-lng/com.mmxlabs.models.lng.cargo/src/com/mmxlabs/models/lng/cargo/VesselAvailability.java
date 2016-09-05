@@ -39,6 +39,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEndBy <em>End By</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartHeel <em>Start Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEndHeel <em>End Heel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isForceHireCostOnlyEndRule <em>Force Hire Cost Only End Rule</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability()
@@ -422,6 +423,32 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @generated
 	 */
 	void setEndHeel(EndHeelOptions value);
+
+	/**
+	 * Returns the value of the '<em><b>Force Hire Cost Only End Rule</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Force Hire Cost Only End Rule</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Force Hire Cost Only End Rule</em>' attribute.
+	 * @see #setForceHireCostOnlyEndRule(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_ForceHireCostOnlyEndRule()
+	 * @model
+	 * @generated
+	 */
+	boolean isForceHireCostOnlyEndRule();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isForceHireCostOnlyEndRule <em>Force Hire Cost Only End Rule</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Force Hire Cost Only End Rule</em>' attribute.
+	 * @see #isForceHireCostOnlyEndRule()
+	 * @generated
+	 */
+	void setForceHireCostOnlyEndRule(boolean value);
 
 	/**
 	 * <!-- begin-user-doc -->

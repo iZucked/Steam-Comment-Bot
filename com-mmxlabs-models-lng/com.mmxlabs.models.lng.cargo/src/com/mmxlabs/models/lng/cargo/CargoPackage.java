@@ -3584,13 +3584,22 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_AVAILABILITY__END_HEEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
+	 * The feature id for the '<em><b>Force Hire Cost Only End Rule</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Availability</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+	int VESSEL_AVAILABILITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -5745,6 +5754,17 @@ public interface CargoPackage extends EPackage {
 	EReference getVesselAvailability_EndHeel();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isForceHireCostOnlyEndRule <em>Force Hire Cost Only End Rule</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Force Hire Cost Only End Rule</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#isForceHireCostOnlyEndRule()
+	 * @see #getVesselAvailability()
+	 * @generated
+	 */
+	EAttribute getVesselAvailability_ForceHireCostOnlyEndRule();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartByAsDateTime() <em>Get Start By As Date Time</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6905,6 +6925,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference VESSEL_AVAILABILITY__END_HEEL = eINSTANCE.getVesselAvailability_EndHeel();
+
+		/**
+		 * The meta object literal for the '<em><b>Force Hire Cost Only End Rule</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE = eINSTANCE.getVesselAvailability_ForceHireCostOnlyEndRule();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Start By As Date Time</b></em>' operation.

@@ -49,6 +49,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getEndBy <em>End By</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getStartHeel <em>Start Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getEndHeel <em>End Heel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#isForceHireCostOnlyEndRule <em>Force Hire Cost Only End Rule</em>}</li>
  * </ul>
  *
  * @generated
@@ -258,6 +259,26 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @ordered
 	 */
 	protected EndHeelOptions endHeel;
+
+	/**
+	 * The default value of the '{@link #isForceHireCostOnlyEndRule() <em>Force Hire Cost Only End Rule</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isForceHireCostOnlyEndRule()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean FORCE_HIRE_COST_ONLY_END_RULE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isForceHireCostOnlyEndRule() <em>Force Hire Cost Only End Rule</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isForceHireCostOnlyEndRule()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean forceHireCostOnlyEndRule = FORCE_HIRE_COST_ONLY_END_RULE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -705,6 +726,27 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isForceHireCostOnlyEndRule() {
+		return forceHireCostOnlyEndRule;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setForceHireCostOnlyEndRule(boolean newForceHireCostOnlyEndRule) {
+		boolean oldForceHireCostOnlyEndRule = forceHireCostOnlyEndRule;
+		forceHireCostOnlyEndRule = newForceHireCostOnlyEndRule;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE, oldForceHireCostOnlyEndRule, forceHireCostOnlyEndRule));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public ZonedDateTime getStartByAsDateTime() {
@@ -851,6 +893,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__END_HEEL:
 				if (resolve) return getEndHeel();
 				return basicGetEndHeel();
+			case CargoPackage.VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE:
+				return isForceHireCostOnlyEndRule();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -899,6 +943,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__END_HEEL:
 				setEndHeel((EndHeelOptions)newValue);
 				return;
+			case CargoPackage.VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE:
+				setForceHireCostOnlyEndRule((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -944,6 +991,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__END_HEEL:
 				setEndHeel((EndHeelOptions)null);
 				return;
+			case CargoPackage.VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE:
+				setForceHireCostOnlyEndRule(FORCE_HIRE_COST_ONLY_END_RULE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -978,6 +1028,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				return startHeel != null;
 			case CargoPackage.VESSEL_AVAILABILITY__END_HEEL:
 				return endHeel != null;
+			case CargoPackage.VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE:
+				return forceHireCostOnlyEndRule != FORCE_HIRE_COST_ONLY_END_RULE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1022,6 +1074,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		if (endAfterESet) result.append(endAfter); else result.append("<unset>");
 		result.append(", endBy: ");
 		if (endByESet) result.append(endBy); else result.append("<unset>");
+		result.append(", forceHireCostOnlyEndRule: ");
+		result.append(forceHireCostOnlyEndRule);
 		result.append(')');
 		return result.toString();
 	}
