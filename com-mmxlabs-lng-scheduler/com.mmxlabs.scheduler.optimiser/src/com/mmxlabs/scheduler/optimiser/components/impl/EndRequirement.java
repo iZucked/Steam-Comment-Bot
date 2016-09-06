@@ -13,13 +13,13 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 public class EndRequirement extends StartEndRequirement implements IEndRequirement {
 	private final boolean endCold;
 	private final long targetHeelInM3;
-	private final boolean isOpen;
+	private final boolean isHireCostOnlyEndRule;
 
-	public EndRequirement(final Collection<IPort> portSet, final boolean portIsSpecified, final ITimeWindow timeWindow, final boolean endCold, final long tagetHeelInM3, final boolean isOpen) {
+	public EndRequirement(final Collection<IPort> portSet, final boolean portIsSpecified, final ITimeWindow timeWindow, final boolean endCold, final long tagetHeelInM3, final boolean isHireCostOnlyEndRule) {
 		super(portSet.size() == 1 ? portSet.iterator().next() : null, portSet, portIsSpecified, timeWindow);
 		this.endCold = endCold;
 		this.targetHeelInM3 = tagetHeelInM3;
-		this.isOpen = isOpen;
+		this.isHireCostOnlyEndRule = isHireCostOnlyEndRule;
 	}
 
 	@Override
@@ -33,8 +33,8 @@ public class EndRequirement extends StartEndRequirement implements IEndRequireme
 	}
 
 	@Override
-	public boolean isOpen() {
-		return isOpen;
+	public boolean isHireCostOnlyEndRule() {
+		return isHireCostOnlyEndRule;
 	}
 
 }

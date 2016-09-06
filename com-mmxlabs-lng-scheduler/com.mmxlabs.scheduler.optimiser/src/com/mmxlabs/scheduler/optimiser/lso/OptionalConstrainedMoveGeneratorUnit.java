@@ -246,7 +246,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 									} else {
 										final Followers<ISequenceElement> beforeFollowers = followersAndPreceders.getValidFollowers(beforeCandidate);
 
-										final List<ISequenceElement> spares = new ArrayList<ISequenceElement>(owner.sequences.getUnusedElements());
+										final List<ISequenceElement> spares = new ArrayList<>(owner.sequences.getUnusedElements());
 										Collections.shuffle(spares, owner.getRandom());
 										LOOP_SPARES: for (final ISequenceElement spare : spares) {
 
