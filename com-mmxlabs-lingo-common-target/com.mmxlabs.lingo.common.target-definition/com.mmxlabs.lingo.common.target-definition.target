@@ -100,8 +100,6 @@
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.googlecode.json-simple.source" version="0.0.0"/>
 <unit id="com.googlecode.json-simple" version="1.1.1"/>
-<unit id="com.google.guava" version="17.0.0"/>
-<unit id="com.google.guava.source" version="17.0.0"/>
 <unit id="org.ops4j.peaberry.activation.source" version="1.3.0"/>
 <unit id="org.ops4j.peaberry.eclipse.source" version="1.3.0"/>
 <unit id="org.ops4j.peaberry.source" version="1.3.0"/>
