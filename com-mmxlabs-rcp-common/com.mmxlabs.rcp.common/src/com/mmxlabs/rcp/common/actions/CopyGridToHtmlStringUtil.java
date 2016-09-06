@@ -19,8 +19,6 @@ import org.eclipse.swt.graphics.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.html.HtmlEscapers;
-
 /**
  * Copies "rendered" table contents to the clipboard. This will maintain the column order, sort order and label provider output.
  * 
@@ -307,7 +305,13 @@ public class CopyGridToHtmlStringUtil {
 		if (text == null) {
 			return null;
 		}
-		return HtmlEscapers.htmlEscaper().escape(text);
+		return text //
+				.replace("&", "&amp;") //
+				.replace(">", "&gt;") //
+				.replace("<", "&gt;") //
+				.replace("\"", "&quot;") //
+				.replace("'", "&#39;") //
+		;
 	}
 
 	public final void setRowHeadersIncluded(final boolean b) {
