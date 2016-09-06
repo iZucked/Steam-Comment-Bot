@@ -1082,8 +1082,7 @@ public class VoyagePlanner {
 								currentHeelInM3 -= planData.getAllocation().getSlotVolumeInM3(portSlot);
 							}
 						}
-						System.out.println("currentHeel:"+currentHeelInM3);
-						assert currentHeelInM3 >= 0;
+						assert currentHeelInM3 + ROUNDING_EPSILON >= 0;
 					} else {
 						if (portSlot instanceof EndPortSlot) {
 							final EndPortSlot endPortSlot = (EndPortSlot) portSlot;
