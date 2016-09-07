@@ -81,7 +81,7 @@
                       lang="Java"
                       mode="Batch"
                       name="Negative Error"
-                      severity="ERROR"
+                      severity="WARNING"
                       statusCode="1">
                 <message>
                     {0}
