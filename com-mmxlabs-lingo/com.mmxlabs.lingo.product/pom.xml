@@ -5,11 +5,11 @@
 	<parent>
 		<artifactId>com.mmxlabs.lingo.parent</artifactId>
 		<groupId>com.mmxlabs.lingo</groupId>
-		<version>3.13.2.RELEASE</version>
+		<version>3.13.3-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>com.mmxlabs.lingo.product</artifactId>
-	<version>3.13.2.RELEASE</version>
+	<version>3.13.3-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 
 	<build>
