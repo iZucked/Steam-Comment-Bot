@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Validation
 Bundle-SymbolicName: com.mmxlabs.models.lng.port.validation;singleton:=true
-Bundle-Version: 3.13.2.RELEASE
+Bundle-Version: 3.13.3.qualifier
 Bundle-Activator: com.mmxlabs.models.lng.port.validation.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
