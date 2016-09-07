@@ -2,36 +2,36 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Headless Application
 Bundle-SymbolicName: com.mmxlabs.lingo.app.headless;singleton:=true
-Bundle-Version: 3.13.1.qualifier
+Bundle-Version: 3.13.3.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Require-Bundle: com.mmxlabs.models.lng.transformer;bundle-version="[3.13.1,4.0.0)",
- com.mmxlabs.models.lng.scenario.model;bundle-version="[3.13.1,4.0.0)",
- com.mmxlabs.scenario.service.manifest;bundle-version="[3.13.1,4.0.0)",
- com.mmxlabs.scenario.service.model;bundle-version="[3.13.1,4.0.0)",
+Require-Bundle: com.mmxlabs.models.lng.transformer;bundle-version="[3.13.3,4.0.0)",
+ com.mmxlabs.models.lng.scenario.model;bundle-version="[3.13.3,4.0.0)",
+ com.mmxlabs.scenario.service.manifest;bundle-version="[3.13.3,4.0.0)",
+ com.mmxlabs.scenario.service.model;bundle-version="[3.13.3,4.0.0)",
  org.eclipse.core.runtime;bundle-version="3.7.0",
  com.google.guava;bundle-version="13.0.1",
  org.ops4j.peaberry;bundle-version="1.3.0",
  javax.inject;bundle-version="1.0.0",
- com.mmxlabs.scheduler.optimiser;bundle-version="[3.13.1,4.0.0)",
- com.mmxlabs.models.migration;bundle-version="[3.13.1,4.0.0)",
- com.mmxlabs.models.migration.scenario;bundle-version="[3.13.1,4.0.0)",
+ com.mmxlabs.scheduler.optimiser;bundle-version="[3.13.3,4.0.0)",
+ com.mmxlabs.models.migration;bundle-version="[3.13.3,4.0.0)",
+ com.mmxlabs.models.migration.scenario;bundle-version="[3.13.3,4.0.0)",
  org.eclipse.ui;bundle-version="3.7.0",
  org.ops4j.peaberry.eclipse;bundle-version="1.3.0",
  org.eclipse.emf.edit;bundle-version="2.8.0",
- com.mmxlabs.scenario.service.ui;bundle-version="[3.13.1,4.0.0)",
- com.mmxlabs.scenario.service.util;bundle-version="[3.13.1,4.0.0)",
- com.mmxlabs.models.lng.transformer.extensions;bundle-version="[3.13.1,4.0.0)",
- com.mmxlabs.common.common-util;bundle-version="[3.13.1,4.0.0)",
- com.mmxlabs.optimiser.optimiser-common;bundle-version="[3.13.1,4.0.0)",
- com.mmxlabs.optimiser.optimiser-core;bundle-version="[3.13.1,4.0.0)",
- com.mmxlabs.optimiser.optimiser-lso;bundle-version="[3.13.1,4.0.0)",
- com.mmxlabs.models.lng.transformer.ui;bundle-version="[3.13.1,4.0.0)",
+ com.mmxlabs.scenario.service.ui;bundle-version="[3.13.3,4.0.0)",
+ com.mmxlabs.scenario.service.util;bundle-version="[3.13.3,4.0.0)",
+ com.mmxlabs.models.lng.transformer.extensions;bundle-version="[3.13.3,4.0.0)",
+ com.mmxlabs.common.common-util;bundle-version="[3.13.3,4.0.0)",
+ com.mmxlabs.optimiser.optimiser-common;bundle-version="[3.13.3,4.0.0)",
+ com.mmxlabs.optimiser.optimiser-core;bundle-version="[3.13.3,4.0.0)",
+ com.mmxlabs.optimiser.optimiser-lso;bundle-version="[3.13.3,4.0.0)",
+ com.mmxlabs.models.lng.transformer.ui;bundle-version="[3.13.3,4.0.0)",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
- com.mmxlabs.license.features;bundle-version="[3.13.1,4.0.0)",
+ com.mmxlabs.license.features;bundle-version="[3.13.3,4.0.0)",
  org.apache.shiro.core,
- com.mmxlabs.rcp.common;bundle-version="[3.13.1,4.0.0)",
- com.mmxlabs.license.ssl;bundle-version="[3.13.1,4.0.0)"
+ com.mmxlabs.rcp.common;bundle-version="[3.13.3,4.0.0)",
+ com.mmxlabs.license.ssl;bundle-version="[3.13.3,4.0.0)"
 Import-Package: org.apache.commons.cli;version="1.2.0",
  org.json.simple;version="1.1.1",
  org.json.simple.parser;version="1.1.1"
