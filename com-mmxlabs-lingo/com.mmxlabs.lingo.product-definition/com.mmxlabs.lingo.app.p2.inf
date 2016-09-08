@@ -6,4 +6,5 @@ properties.1.name=org.eclipse.equinox.p2.type.category
 properties.1.value=false
 
 instructions.configure=\
-org.eclipse.equinox.p2.touchpoint.natives.remove(path:${installFolder}/eclipsec.exe);
+org.eclipse.equinox.p2.touchpoint.natives.remove(path:${installFolder}/eclipsec.exe); \
+org.eclipse.equinox.p2.touchpoint.eclipse.addProgramArg(eclipse.keyring:path:${installFolder}/secure_storage);
