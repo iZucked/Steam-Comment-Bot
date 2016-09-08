@@ -44,7 +44,8 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)";resolu
  org.apache.shiro.core,
  com.mmxlabs.license.features;bundle-version="[3.13.3,4.0.0)",
  com.mmxlabs.scenario.service.manifest;bundle-version="[3.13.3,4.0.0)",
- com.mmxlabs.rcp.common
+ com.mmxlabs.rcp.common,
+ com.mmxlabs.models.lng.cargo
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: com.mmxlabs.models.ui.dates,
