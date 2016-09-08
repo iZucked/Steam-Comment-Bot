@@ -433,7 +433,7 @@
                   lang="Java"
                   mode="Batch"
                   name="Break Even &amp; Charter Out Constraint"
-                  severity="ERROR"
+                  severity="WARNING"
                   statusCode="1">
                <message>
                   {0}
