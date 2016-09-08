@@ -237,18 +237,28 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 			long minPrice_Value = evaluateSalesPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, portTimesRecord, sequenceElements, originalDischarge, minPricePerMMBTu);
 			while (minPrice_Value > 0) {
 				// Subtract $1
-				minPricePerMMBTu -= OptimiserUnitConvertor.convertToInternalPrice(1.0);
-				minPrice_Value = evaluateSalesPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, portTimesRecord, sequenceElements, originalDischarge, minPricePerMMBTu);
+				int l_minPricePerMMBTu = minPricePerMMBTu - OptimiserUnitConvertor.convertToInternalPrice(0.1);
+				long l_minPrice_Value = evaluateSalesPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, portTimesRecord, sequenceElements, originalDischarge, l_minPricePerMMBTu);
+				if (l_minPrice_Value == Long.MAX_VALUE) {
+					break;
+				}
+				minPricePerMMBTu = l_minPricePerMMBTu;
+				minPrice_Value = l_minPrice_Value;
 			}
 			// Do not go below zero
 			minPricePerMMBTu = Math.max(0, minPricePerMMBTu);
 
-			int maxPricePerMMBTu = 10 * minPricePerMMBTu;
+			int maxPricePerMMBTu = 10 * Math.max(OptimiserUnitConvertor.convertToInternalPrice(5.0), minPricePerMMBTu);
 			long maxPrice_Value = evaluateSalesPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, portTimesRecord, sequenceElements, originalDischarge, maxPricePerMMBTu);
 			while (maxPrice_Value < 0) {
 				// Add $1
-				maxPricePerMMBTu += OptimiserUnitConvertor.convertToInternalPrice(1.0);
-				maxPrice_Value = evaluateSalesPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, portTimesRecord, sequenceElements, originalDischarge, maxPricePerMMBTu);
+				int l_maxPricePerMMBTu = maxPricePerMMBTu + OptimiserUnitConvertor.convertToInternalPrice(1.0);
+				long l_maxPrice_Value = evaluateSalesPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, portTimesRecord, sequenceElements, originalDischarge, l_maxPricePerMMBTu);
+				if (l_maxPrice_Value != Long.MAX_VALUE) {
+					maxPrice_Value = l_maxPrice_Value;
+					maxPricePerMMBTu = l_maxPricePerMMBTu;
+				}
+
 			}
 			// $90/mmBTu is max - anything much larger can cause overflow issues
 			maxPricePerMMBTu = Math.min(OptimiserUnitConvertor.convertToInternalPrice(90.0), maxPricePerMMBTu);
@@ -297,6 +307,11 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 				vesselStartTime, null, null);
 		assert cargoAnnotation != null;
 
+		int slotPricePerMMBTu = cargoAnnotation.getFirst().getSlotPricePerMMBTu(cargoAnnotation.getFirst().getFirstSlot());
+		if (slotPricePerMMBTu < 0) {
+			return Long.MAX_VALUE;
+		}
+
 		final long newPnLValue = cargoAnnotation.getSecond();
 		return newPnLValue;
 	}
@@ -320,7 +335,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 		}
 
 		final long midValue = evaluateSalesPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, portTimesRecord, sequenceElements, originalDischarge, mid);
-
+		assert midValue != Long.MAX_VALUE;
 		if (midValue > 0) {
 			return search(min, minValue, mid, midValue, vesselAvailability, vesselStartTime, vesselCharterRatePerDay, portTimesRecord, sequenceElements, originalDischarge);
 		} else {
