@@ -59,12 +59,27 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 	public LNGSchedulerOptimiserJobControl(final LNGSchedulerJobDescriptor jobDescriptor) {
 		super((jobDescriptor.isOptimising() ? "Optimise " : "Evaluate ") + jobDescriptor.getJobName(),
 				CollectionsUtil.<QualifiedName, Object> makeHashMap(IProgressConstants.ICON_PROPERTY, (jobDescriptor.isOptimising() ? imgOpti : imgEval)));
+		
+		
 		this.jobDescriptor = jobDescriptor;
 		this.scenarioInstance = jobDescriptor.getJobContext();
 		this.modelReference = scenarioInstance.getReference();
 		this.originalScenario = (LNGScenarioModel) modelReference.getInstance();
 		final EditingDomain originalEditingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
 
+		/*
+		 * Error checks
+		 */
+		{
+			// Disable optimisation in P&L testing phase
+			if (LicenseFeatures.isPermitted("features:phase-pnl-testing")) {
+				throw new RuntimeException("Optimisation is disabled during the P&L testing phase.");
+			}
+			if (!OptimisationHelper.isAllowedGCO(this.originalScenario)) {
+				throw new RuntimeException("Optimisation is disabled when missing prices are used");
+			}
+		}
+		
 		// TODO: This should be static / central service?
 		executorService = LNGScenarioChainBuilder.createExecutorService();// Executors.newSingleThreadExecutor();
 
@@ -137,12 +152,6 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 				LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
-
-		// Disable optimisation in P&L testing phase
-		if (LicenseFeatures.isPermitted("features:phase-pnl-testing")) {
-			throw new RuntimeException("Optimisation is disabled during the P&L testing phase.");
-		}
-
 	}
 
 	@Override

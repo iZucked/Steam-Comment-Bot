@@ -418,9 +418,13 @@ public final class OptimisationHelper {
 			choiceData.addChoice("On", Boolean.TRUE);
 
 			choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-charter-out-generation") && isAllowedGCO(scenario);
+			if (choiceData.enabled == false) {
+				// if not enabled make sure to set setting to false
+				copy.setGenerateCharterOuts(false);
+			}
 			// dialog.addOption(DataSection.Main, null, editingDomian, "Similarity", copy, defaultSettings, DataType.Choice, choiceData,
 			// ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
-			dialog.addOption(DataSection.Toggles, null, editingDomain, "Generate charter outs: ", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_CHARTEROUTGENERATION_PREFIX,
+			Option gcoOption = dialog.addOption(DataSection.Toggles, null, editingDomain, "Generate charter outs: ", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_CHARTEROUTGENERATION_PREFIX,
 					ParametersPackage.eINSTANCE.getUserSettings_GenerateCharterOuts());
 			optionAdded = true;
 			enabledOptionAdded = choiceData.enabled;
@@ -799,7 +803,7 @@ public final class OptimisationHelper {
 		}
 	}
 	
-	private static boolean isAllowedGCO(LNGScenarioModel lngScenarioModel) {
+	public static boolean isAllowedGCO(LNGScenarioModel lngScenarioModel) {
 		if (lngScenarioModel == null) {
 			return false;
 		}
