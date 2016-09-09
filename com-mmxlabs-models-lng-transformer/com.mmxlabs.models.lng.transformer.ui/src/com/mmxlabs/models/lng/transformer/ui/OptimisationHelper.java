@@ -800,6 +800,9 @@ public final class OptimisationHelper {
 	}
 	
 	private static boolean isAllowedGCO(LNGScenarioModel lngScenarioModel) {
+		if (lngScenarioModel == null) {
+			return false;
+		}
 		if (!checkBreakEvenInSlot(lngScenarioModel.getCargoModel().getLoadSlots()) && !checkBreakEvenInSlot(lngScenarioModel.getCargoModel().getDischargeSlots())) {
 			return true;
 		}

@@ -368,7 +368,7 @@ public class ParameterModesDialogTest {
 			@Override
 			public UserSettings call() throws Exception {
 				try {
-					return OptimisationHelper.openUserDialog(display, shell, false, initialSettings, initialSettings, false);
+					return OptimisationHelper.openUserDialog(null, display, shell, false, initialSettings, initialSettings, false);
 				} catch (final Exception e) {
 					e.printStackTrace();
 					throw new RuntimeException(e);
