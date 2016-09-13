@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
-		<version>32</version>
+		<version>33</version>
 		<relativePath />
 	</parent>
 
