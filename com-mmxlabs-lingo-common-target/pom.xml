@@ -15,8 +15,8 @@
 	</parent>
 
 	<scm>
-		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-lingo-common-target.hg</connection>
-		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-lingo-common-target.hg</developerConnection>
+		<connection>scm:git:git@codebasehq.com:mmxlabs/repositories/com-mmxlabs-lingo-common-target.git</connection>
+		<developerConnection>scm:git:git@codebasehq.com:mmxlabs/repositories/com-mmxlabs-lingo-common-target.git</developerConnection>
 		<url>https://mmxlabs.codebasehq.com/projects/repositories/repositories/com-mmxlabs-lingo-common-target</url>
 	</scm>
 
