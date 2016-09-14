@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
+import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityInterval;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
@@ -413,6 +414,10 @@ public class ScenarioUtils {
 
 	public static void createOrUpdateAllConstraints(OptimisationPlan plan, String name, boolean enabled) {
 		for (OptimisationStage stage : plan.getStages()) {
+			if(stage instanceof ParallelOptimisationStage){
+				ParallelOptimisationStage parallelOptimisationStage = (ParallelOptimisationStage) stage;
+				stage = parallelOptimisationStage.getTemplate();
+			}
 			if (stage instanceof ConstraintsAndFitnessSettingsStage) {
 				ConstraintAndFitnessSettings settings = ((ConstraintsAndFitnessSettingsStage) stage).getConstraintAndFitnessSettings();
 				createOrUpdateContraints(name, enabled, settings);
@@ -447,6 +452,10 @@ public class ScenarioUtils {
 
 	public static void createOrUpdateAllObjectives(OptimisationPlan plan, String name, boolean enabled, double weight) {
 		for (OptimisationStage stage : plan.getStages()) {
+			if(stage instanceof ParallelOptimisationStage){
+				ParallelOptimisationStage parallelOptimisationStage = (ParallelOptimisationStage) stage;
+				stage = parallelOptimisationStage.getTemplate();
+			}
 			if (stage instanceof ConstraintsAndFitnessSettingsStage) {
 				ConstraintAndFitnessSettings settings = ((ConstraintsAndFitnessSettingsStage) stage).getConstraintAndFitnessSettings();
 				createOrUpdateObjective(name, enabled, weight, settings);
