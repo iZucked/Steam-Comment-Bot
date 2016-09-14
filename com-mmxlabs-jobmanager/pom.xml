@@ -16,8 +16,8 @@
 	</parent>
 
 	<scm>
-		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-jobmanager.hg</connection>
-		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-jobmanager.hg</developerConnection>
+		<connection>scm:git:git@codebasehq.com:mmxlabs/repositories/com-mmxlabs-jobmanager.git</connection>
+		<developerConnection>scm:git:git@codebasehq.com:mmxlabs/repositories/com-mmxlabs-jobmanager.git</developerConnection>
 		<url>https://mmxlabs.codebasehq.com/projects/repositories/repositories/com-mmxlabs-jobmanager</url>
 	</scm>
 
