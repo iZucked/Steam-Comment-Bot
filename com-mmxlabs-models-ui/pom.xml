@@ -16,8 +16,8 @@
 	</parent>
 
 	<scm>
-		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-models-ui.hg</connection>
-		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-models-ui.hg</developerConnection>
+		<connection>scm:git:git@codebasehq.com:mmxlabs/repositories/com-mmxlabs-models-ui.git</connection>
+		<developerConnection>scm:git:git@codebasehq.com:mmxlabs/repositories/com-mmxlabs-models-ui.git</developerConnection>
 		<url>https://mmxlabs.codebasehq.com/projects/repositories/repositories/com-mmxlabs-models-ui</url>
 	</scm>
 
