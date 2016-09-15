@@ -11,7 +11,7 @@
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
 		<relativePath />
-		<version>33</version>
+		<version>35</version>
 	</parent>
 
 	<scm>
