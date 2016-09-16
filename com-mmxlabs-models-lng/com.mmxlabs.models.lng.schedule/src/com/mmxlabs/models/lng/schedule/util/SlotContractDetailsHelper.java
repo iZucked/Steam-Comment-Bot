@@ -50,7 +50,7 @@ public final class SlotContractDetailsHelper {
 	}
 
 	@Nullable
-	public static <T extends @NonNull GeneralPNLDetails> T findSlotContractDetails(final @Nullable CargoAllocation cargoAllocation, final Class<T> detailsCls) {
+	public static <T extends GeneralPNLDetails> T findSlotContractDetails(final @Nullable CargoAllocation cargoAllocation, final Class<T> detailsCls) {
 
 		for (final GeneralPNLDetails generalPNLDetails : cargoAllocation.getGeneralPNLDetails()) {
 			if (generalPNLDetails instanceof SlotPNLDetails) {
