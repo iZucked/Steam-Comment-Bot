@@ -230,7 +230,6 @@ public class CargoEconsReport extends ViewPart {
 		EQUITY_PNL("Equity P&L", "$", DollarsFormat),
 		ADDITIONAL_PNL("Addn. P&L", "$", DollarsFormat),
 		PNL_TOTAL("P&L", "$", DollarsFormat),
-//		PNL_TOTAL_NO_TC("P&L (Ex. TC)", "$", DollarsFormat),
 		PNL_PER_MMBTU("Margin", "$/mmBTu", DollarsPerMMBtuFormat);
 		// @formatter:on
 
