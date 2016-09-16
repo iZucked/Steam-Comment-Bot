@@ -4,6 +4,6 @@ Bundle-Name: RCP Common: Win32
 Bundle-SymbolicName: com.mmxlabs.rcp.common.win32
 Bundle-Version: 3.13.4.RELEASE
 Bundle-Vendor: Minimax Labs Ltd.
-Fragment-Host: com.mmxlabs.rcp.common;bundle-version="3.13.3"
+Fragment-Host: com.mmxlabs.rcp.common;bundle-version="3.13.4"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Eclipse-PlatformFilter: (& (osgi.ws=win32) (osgi.os=win32) )
