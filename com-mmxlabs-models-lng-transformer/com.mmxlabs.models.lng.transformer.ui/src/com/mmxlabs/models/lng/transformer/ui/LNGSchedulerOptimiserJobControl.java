@@ -196,6 +196,10 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 	public void dispose() {
 		executorService.shutdownNow();
 
+		if (modelReference != null) {
+			modelReference.close();
+		}
+		
 		// if (scenarioRunner != null) {
 		// scenarioRunner.dispose();
 		// }
