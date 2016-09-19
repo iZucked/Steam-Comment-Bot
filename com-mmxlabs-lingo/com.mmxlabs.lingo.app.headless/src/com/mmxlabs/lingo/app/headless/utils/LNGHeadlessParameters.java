@@ -31,6 +31,7 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 
 		// Scenario parameters
 		setParameter("scenario", "", String.class, true);
+		setParameter("scenario-path", "", String.class, true);
 		setParameter("generatedcharterouts-optimisation", false, Boolean.class, true);
 		setParameter("shippingonly-optimisation", false, Boolean.class, true);
 		setParameter("periodOptimisationDateBefore", null, YearMonth.class, false);

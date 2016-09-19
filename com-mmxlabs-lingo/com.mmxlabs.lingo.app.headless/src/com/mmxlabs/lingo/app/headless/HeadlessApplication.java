@@ -124,7 +124,7 @@ public class HeadlessApplication implements IApplication {
 		// set output file
 		final String path = overrideSettings.getOutputPath();
 		// set scenario file
-		overrideSettings.setScenario(headlessParameters.getParameter("scenario", StringParameter.class).getValue());
+		overrideSettings.setScenario(headlessParameters.getParameter("scenario-path", StringParameter.class).getValue() + "/" + headlessParameters.getParameter("scenario", StringParameter.class).getValue());
 
 		final String scenarioFile = overrideSettings.getScenario();
 		if (scenarioFile == null || scenarioFile.isEmpty()) {
