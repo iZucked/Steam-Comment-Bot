@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 /**
@@ -390,6 +391,9 @@ public class GeneratedCharterOutImpl extends PortVisitImpl implements GeneratedC
 						return prefix + ((SlotVisit) namedObject).name();
 					} else if (namedObject instanceof VesselEventVisit) {
 						return prefix +  ((VesselEventVisit) namedObject).name();
+					} else if (namedObject instanceof StartEvent) {
+						return prefix + " Start " + ((StartEvent) namedObject).name();
+
 					}
 				}
 			}
