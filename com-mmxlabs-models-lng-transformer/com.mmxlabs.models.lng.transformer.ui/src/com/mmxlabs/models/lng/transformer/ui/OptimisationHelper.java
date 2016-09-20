@@ -135,7 +135,7 @@ public final class OptimisationHelper {
 		}
 
 		// While we only keep the reference for the duration of this method call, the two current concrete implementations of IJobControl will obtain a ModelReference
-		try (final ModelReference modelRefence = instance.getReference()) {
+		try (final ModelReference modelRefence = instance.getReference("OptimisationHelper")) {
 			final EObject object = modelRefence.getInstance();
 
 			if (object instanceof LNGScenarioModel) {

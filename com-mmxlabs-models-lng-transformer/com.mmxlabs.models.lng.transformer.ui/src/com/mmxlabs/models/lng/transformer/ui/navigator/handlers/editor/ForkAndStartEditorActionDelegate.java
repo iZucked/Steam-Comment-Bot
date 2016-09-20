@@ -83,7 +83,7 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 				}
 			}
 
-			try (final ModelReference modelReference = instance.getReference()) {
+			try (final ModelReference modelReference = instance.getReference("ForkAndStartEditorActionDelegate")) {
 				final Object object = modelReference.getInstance();
 				if (object instanceof MMXRootObject) {
 					final MMXRootObject root = (MMXRootObject) object;

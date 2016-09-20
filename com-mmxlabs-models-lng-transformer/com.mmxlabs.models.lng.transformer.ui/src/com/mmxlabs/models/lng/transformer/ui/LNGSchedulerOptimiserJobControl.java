@@ -63,7 +63,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		
 		this.jobDescriptor = jobDescriptor;
 		this.scenarioInstance = jobDescriptor.getJobContext();
-		this.modelReference = scenarioInstance.getReference();
+		this.modelReference = scenarioInstance.getReference("LNGSchedulerOptimiserJobControl");
 		this.originalScenario = (LNGScenarioModel) modelReference.getInstance();
 		final EditingDomain originalEditingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
 
@@ -196,6 +196,10 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 	public void dispose() {
 		executorService.shutdownNow();
 
+		if (modelReference != null) {
+			modelReference.close();
+		}
+		
 		// if (scenarioRunner != null) {
 		// scenarioRunner.dispose();
 		// }

@@ -44,7 +44,7 @@ public abstract class AbstractOptimisationEditorActionDelegate extends Parameter
 				final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
 
 				final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
-				try (final ModelReference modelReference = instance.getReference()) {
+				try (final ModelReference modelReference = instance.getReference("AbstractOptimisationEditorActionDelegate")) {
 					final Object object = modelReference.getInstance();
 					if (object instanceof MMXRootObject) {
 						final String uuid = instance.getUuid();

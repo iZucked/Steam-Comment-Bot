@@ -56,7 +56,7 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 		final ScenarioInstance scenarioInstance = jobDescriptor.getJobContext();
 
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
-		try (final ModelReference modelReference = scenarioInstance.getReference()) {
+		try (final ModelReference modelReference = scenarioInstance.getReference("LNGSchedulerEvaluationJobControl")) {
 			final LNGScenarioModel scenario = (LNGScenarioModel) modelReference.getInstance();
 			final EditingDomain editingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
 

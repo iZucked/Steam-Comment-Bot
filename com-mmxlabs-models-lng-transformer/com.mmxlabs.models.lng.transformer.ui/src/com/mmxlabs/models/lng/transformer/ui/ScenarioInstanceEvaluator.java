@@ -20,7 +20,7 @@ public class ScenarioInstanceEvaluator implements IScenarioInstanceEvaluator {
 
 		final IScenarioService service = instance.getScenarioService();
 		if (service != null) {
-			try (final ModelReference modelRefence = instance.getReference()) {
+			try (final ModelReference modelRefence = instance.getReference("ScenarioInstanceEvaluator")) {
 				final EObject object = modelRefence.getInstance();
 				if (object instanceof LNGScenarioModel) {
 					OptimisationHelper.evaluateScenarioInstance(Activator.getDefault().getJobManager(), instance, null, false, false, ScenarioLock.EVALUATOR, true);

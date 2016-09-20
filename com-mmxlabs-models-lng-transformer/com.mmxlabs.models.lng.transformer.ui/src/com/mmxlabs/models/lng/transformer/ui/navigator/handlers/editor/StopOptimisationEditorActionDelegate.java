@@ -115,7 +115,7 @@ public class StopOptimisationEditorActionDelegate extends AbstractOptimisationEd
 				return;
 			}
 			
-			try (final ModelReference modelReference = instance.getReference()) {
+			try (final ModelReference modelReference = instance.getReference("StopOptimisationEditorActionDelegate")) {
 				final Object object = modelReference.getInstance();
 				if (object instanceof MMXRootObject) {
 					final String uuid = instance.getUuid();
