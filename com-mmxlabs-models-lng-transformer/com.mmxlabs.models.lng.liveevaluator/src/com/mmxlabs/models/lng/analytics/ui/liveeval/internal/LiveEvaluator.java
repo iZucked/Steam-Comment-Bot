@@ -126,7 +126,7 @@ public class LiveEvaluator extends MMXAdapterImpl {
 						}
 
 						final ScenarioLock evaluatorLock = instance.getLock(ScenarioLock.EVALUATOR);
-						try (final ModelReference modelReference = instance.getReference()) {
+						try (final ModelReference modelReference = instance.getReference("LiveEvaluator")) {
 							final LNGScenarioModel root = (LNGScenarioModel) modelReference.getInstance();
 							if (root == null) {
 								// No data model, skip

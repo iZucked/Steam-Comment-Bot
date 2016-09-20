@@ -79,7 +79,7 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 			} catch (IOException e) {
 				throw new RuntimeException("Unable to create fork", e);
 			}
-			ref = fork.getReference();
+			ref = fork.getReference("AbstractLNGRunMultipleForkedJobsControl:1");
 
 			this.scenarioModel = (LNGScenarioModel) ref.getInstance();
 			// TODO: This is probably a) null and b) bad idea to use the same executor service for sub-processes while the main process is using the pool....
@@ -146,7 +146,7 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 				CollectionsUtil.<QualifiedName, Object> makeHashMap(IProgressConstants.ICON_PROPERTY, (jobDescriptor.isOptimising() ? imgOpti : imgEval)));
 		this.jobDescriptor = jobDescriptor;
 		this.scenarioInstance = jobDescriptor.getJobContext();
-		this.modelReference = scenarioInstance.getReference();
+		this.modelReference = scenarioInstance.getReference("AbstractLNGRunMultipleForkedJobsControl:2");
 		this.originalScenario = (LNGScenarioModel) modelReference.getInstance();
 
 		this.jobs = new LinkedList<>();
