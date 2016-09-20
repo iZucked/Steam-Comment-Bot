@@ -64,6 +64,7 @@ public class ActionSetLogger implements ILoggingDataStore {
 
 	List<List<JobState>> initialPopulations = new LinkedList<>();
 	List<ActionSetResult> rootResults = new LinkedList<>();
+	private List<JobState> sortedChangeStates;
 	List<JobState> leafs;
 	List<JobState> limiteds;
 	long startRunTime = 0;
@@ -101,6 +102,32 @@ public class ActionSetLogger implements ILoggingDataStore {
 		exportInitialPopulation(filePath, prefix);
 		exportAggregate(filePath, prefix);
 		exportLimiteds(filePath, prefix);
+	}
+	
+	public void shortExport(String filePath, String prefix) {
+		Path path = Paths.get(filePath, String.format("%s.txt", prefix));
+		PrintWriter writer = getWriter(path);
+		writer.write(shortBreakdown().stream().collect(Collectors.joining("\n")));
+		writer.close();
+		
+	}
+	
+	private List<String> shortBreakdown(){
+		List<String> text = new LinkedList<>();
+		JobState best = sortedChangeStates.get(sortedChangeStates.size()-1);
+		text.add("leaf count:" + Integer.toString(leafs.size()));
+		text.add("----- best action set -----");
+		text.add("pnl:" + best.metricDelta[MetricType.PNL.ordinal()]);
+		text.add("late:" + best.metricDelta[MetricType.LATENESS.ordinal()]);
+		text.add("change set count:" + best.changeSetsAsList.size());
+		text.add("--- change sets ---");
+		for(int i =0; i < best.changeSetsAsList.size(); i++){
+			text.add(String.format("change set: %s - %s changes",i, best.changeSetsAsList.get(i).changesList.size()));
+		}
+		text.add("diffs:" + best.getDifferencesList().size());
+		text.add("pnl per change:" + StochasticActionSetUtils.getTotalPNLPerChange(best.changeSetsAsList));
+		text.add("pnl per change (0.8):" + StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(best.changeSetsAsList, 0.8));
+		return text;
 	}
 
 	private void exportAggregate(String filePath, String prefix) {
@@ -177,6 +204,7 @@ public class ActionSetLogger implements ILoggingDataStore {
 		{
 			int idx = 0;
 			for (ActionSetResult acr : rootResults) {
+
 				{
 					Path path = Paths.get(filePath, String.format("%s.acr.root.%s.verbose.txt", prefix, idx));
 					PrintWriter writer = getWriter(path);
@@ -295,5 +323,15 @@ public class ActionSetLogger implements ILoggingDataStore {
 		}
 		return out;
 	}
+
+	public List<JobState> getSortedChangeStates() {
+		return sortedChangeStates;
+	}
+
+	public void setSortedChangeStates(List<JobState> sortedChangeStates) {
+		this.sortedChangeStates = sortedChangeStates;
+	}
+
+	
 
 }
