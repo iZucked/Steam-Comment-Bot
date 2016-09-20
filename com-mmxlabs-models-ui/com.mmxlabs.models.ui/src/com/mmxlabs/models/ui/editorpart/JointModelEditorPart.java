@@ -432,7 +432,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 			editorLock = instance.getLock(ScenarioLock.EDITORS);
 
-			modelReference = instance.getReference();
+			modelReference = instance.getReference("JointModelEditorPart");
 			final EObject ro = modelReference.getInstance();
 			if (ro == null) {
 				throw new RuntimeException("Instance was not loaded");

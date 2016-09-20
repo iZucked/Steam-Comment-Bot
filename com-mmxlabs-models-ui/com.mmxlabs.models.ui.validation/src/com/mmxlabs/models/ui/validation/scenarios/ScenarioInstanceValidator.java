@@ -60,7 +60,7 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 				public void run() {
 
 					// Create ModelReference to keep model loaded (if already loaded) while validating
-					try (final ModelReference modelReference = scenarioInstance.getReference()) {
+					try (final ModelReference modelReference = scenarioInstance.getReference("ScenarioInstanceValidator")) {
 
 						// Pin member variables
 						final IValidationService pValidationService = validationService;

@@ -203,7 +203,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		if (instance != null) {
 			scenarioInstanceStatusProvider = new ScenarioInstanceStatusProvider(instance);
 			this.scenarioInstance = instance;
-			modelReference = instance.getReference();
+			modelReference = instance.getReference("ScenarioInstanceView");
 			getRootObject();
 
 			this.valueProviderCache = new ReferenceValueProviderCache(getRootObject());
