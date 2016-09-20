@@ -13,6 +13,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.collect.Sets;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -37,6 +38,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
 
 public class ScheduleModelKPIUtils {
 
@@ -399,6 +401,12 @@ public class ScheduleModelKPIUtils {
 				if (event instanceof FuelUsage) {
 					final FuelUsage fuelUsage = (FuelUsage) event;
 					total += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
+					// Start event and charter out events pay for LNG use
+					if (grouping instanceof StartEvent) {
+						total += getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
+					} else if (grouping instanceof CharterOutEvent) {
+						total += getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
+					}
 				}
 
 			}
