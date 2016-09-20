@@ -170,7 +170,7 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 
 	private void doImportAction(final FieldChoice importTarget, final String filename, final char listSeparator, final char decimalSeparator, final ScenarioInstance instance,
 			final Set<String> uniqueProblems, final List<String> allProblems, final boolean multipleDetails) {
-		try (final ModelReference modelReference = instance.getReference()) {
+		try (final ModelReference modelReference = instance.getReference("BulkImportWizard")) {
 			final ImportAction.ImportHooksProvider ihp = getHooksProvider(instance, modelReference, getShell(), filename, listSeparator, decimalSeparator);
 
 			final ImportAction action = getImportAction(importTarget, ihp, multipleDetails);

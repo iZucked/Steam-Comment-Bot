@@ -89,7 +89,7 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 		final boolean createExportDirectories = instances.size() > 1;
 		for (final ScenarioInstance instance : instances) {
 			// Release reference on block exit
-			try (final ModelReference modelReference = instance.getReference()) {
+			try (final ModelReference modelReference = instance.getReference("ExportCSVWizard")) {
 
 				final EObject rootObject = modelReference.getInstance();
 				

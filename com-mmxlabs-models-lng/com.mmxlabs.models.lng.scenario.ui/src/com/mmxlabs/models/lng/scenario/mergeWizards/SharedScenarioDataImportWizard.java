@@ -123,7 +123,7 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 				return;
 			}
 
-			try (final ModelReference sourceModelRef = sourceScenario.getReference()) {
+			try (final ModelReference sourceModelRef = sourceScenario.getReference("SharedScenarioDataImportWizard:1")) {
 				final EObject sourceRoot = sourceModelRef.getInstance();
 
 				if (sourceRoot == null) {
@@ -146,7 +146,7 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 							continue;
 						}
 
-						try (final ModelReference destModelRef = destScenario.getReference()) {
+						try (final ModelReference destModelRef = destScenario.getReference("SharedScenarioDataImportWizard:2")) {
 
 							final EObject destRoot = destModelRef.getInstance();
 
