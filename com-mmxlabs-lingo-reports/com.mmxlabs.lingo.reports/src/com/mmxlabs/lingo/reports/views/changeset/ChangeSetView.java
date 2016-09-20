@@ -1130,9 +1130,11 @@ public class ChangeSetView implements IAdaptable {
 
 	private CellLabelProvider createTaxDeltaLabelProvider() {
 		return createLambdaLabelProvider(true, true, change -> {
-			return ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(change, ScheduleModelKPIUtils::getGroupPreTaxProfitAndLoss);
+			return ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(change, ScheduleModelKPIUtils::getGroupProfitAndLoss)
+					- ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(change, ScheduleModelKPIUtils::getGroupPreTaxProfitAndLoss);
 		}, change -> {
-			return ChangeSetTransformerUtil.getNewRowProfitAndLossValue(change, ScheduleModelKPIUtils::getGroupPreTaxProfitAndLoss);
+			return ChangeSetTransformerUtil.getNewRowProfitAndLossValue(change, ScheduleModelKPIUtils::getGroupProfitAndLoss)
+					- ChangeSetTransformerUtil.getNewRowProfitAndLossValue(change, ScheduleModelKPIUtils::getGroupPreTaxProfitAndLoss);
 		});
 	}
 
