@@ -511,20 +511,11 @@ public interface ScenarioInstance extends Container {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * Obtain a reference to the loaded scenario data. Once obtained, the reference should be released by a call to {@link ModelReference#close}. {@link ModelReference} implements {@link Closeable} allowing use in a try-with-resource block such as;
-	 * <pre>
-	 * try (final ModelReference modelReference = scenarioInstance.getReference()) {
-	 * 	EObject modelInstance = modelReference.getInstance();
-	 * 	if (modelInstance != null) {
-	 * 		// ... do something with loaded model data
-	 * 	} 
-	 * }
-	 * </pre>
 	 * <!-- end-user-doc -->
-	 * @model kind="operation"
+	 * @model
 	 * @generated
 	 */
-	ModelReference getReference();
+	ModelReference getReference(String referenceID);
 
 	/**
 	 * <!-- begin-user-doc -->

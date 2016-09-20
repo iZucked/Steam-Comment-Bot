@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.model.ModelReference#getScenarioInstance <em>Scenario Instance</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ModelReference#getReferenceId <em>Reference Id</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getModelReference()
@@ -52,6 +53,32 @@ public interface ModelReference extends EObject, Closeable {
 	 * @generated
 	 */
 	void setScenarioInstance(ScenarioInstance value);
+
+	/**
+	 * Returns the value of the '<em><b>Reference Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Reference Id</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Reference Id</em>' attribute.
+	 * @see #setReferenceId(String)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getModelReference_ReferenceId()
+	 * @model
+	 * @generated
+	 */
+	String getReferenceId();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ModelReference#getReferenceId <em>Reference Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Reference Id</em>' attribute.
+	 * @see #getReferenceId()
+	 * @generated
+	 */
+	void setReferenceId(String value);
 
 	/**
 	 * <!-- begin-user-doc -->

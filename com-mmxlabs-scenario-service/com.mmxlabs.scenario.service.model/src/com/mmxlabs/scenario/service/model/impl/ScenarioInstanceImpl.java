@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -827,12 +828,13 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public synchronized ModelReference getReference() {
+	public synchronized ModelReference getReference(final String referenceID) {
 
 		final ModelReference modelReference = ScenarioServiceFactory.eINSTANCE.createModelReference();
 		synchronized (this.getModelReferences()) {
 			// Concurrent calls to ModelReference#setScenarioInstance can lead to issues in the references list of the scenario instance, thus we "lock" the scenario instance reference list.
 			modelReference.setScenarioInstance(this);
+			modelReference.setReferenceId(referenceID);
 		}
 
 		return modelReference;
@@ -895,11 +897,11 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			if (getInstance() == null) {
 				return;
 			}
-			
+
 			// Final checks - if still no references here, trigger unload
 			List<ModelReference> refs = getModelReferences();
 			synchronized (refs) {
-				if (refs.isEmpty()) {				
+				if (refs.isEmpty()) {
 					scenarioService.unload(this);
 				}
 			}

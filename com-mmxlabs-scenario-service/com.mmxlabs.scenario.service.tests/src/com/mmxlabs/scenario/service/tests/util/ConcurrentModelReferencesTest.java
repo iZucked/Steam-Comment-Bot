@@ -50,7 +50,7 @@ public class ConcurrentModelReferencesTest {
 			runnables.add(() -> {
 				final List<ModelReference> refs = instance.getModelReferences();
 
-				try (ModelReference ref = instance.getReference()) {
+				try (ModelReference ref = instance.getReference("ConcurrentModelReferencesTest")) {
 					try {
 						Thread.sleep(new Random().nextInt(100) * 10);
 					} catch (final Exception e) {

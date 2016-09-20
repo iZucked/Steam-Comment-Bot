@@ -31,9 +31,9 @@ public class DefaultDiffEditHandler implements IDiffEditHandler {
 
 	public DefaultDiffEditHandler(@NonNull final ScenarioInstance child, @NonNull final ScenarioInstance parent) {
 		this.child = child;
-		this.childModelReference = child.getReference();
+		this.childModelReference = child.getReference("DefaultDiffEditHandler:1");
 		this.parent = parent;
-		this.parentModelReference = parent.getReference();
+		this.parentModelReference = parent.getReference("DefaultDiffEditHandler:2");
 	}
 
 	@Override

@@ -30,11 +30,31 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ModelReferenceImpl#getScenarioInstance <em>Scenario Instance</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ModelReferenceImpl#getReferenceId <em>Reference Id</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class ModelReferenceImpl extends EObjectImpl implements ModelReference {
+	/**
+	 * The default value of the '{@link #getReferenceId() <em>Reference Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getReferenceId()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String REFERENCE_ID_EDEFAULT = null;
+	/**
+	 * The cached value of the '{@link #getReferenceId() <em>Reference Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getReferenceId()
+	 * @generated
+	 * @ordered
+	 */
+	protected String referenceId = REFERENCE_ID_EDEFAULT;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -99,6 +119,27 @@ public class ModelReferenceImpl extends EObjectImpl implements ModelReference {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getReferenceId() {
+		return referenceId;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setReferenceId(String newReferenceId) {
+		String oldReferenceId = referenceId;
+		referenceId = newReferenceId;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.MODEL_REFERENCE__REFERENCE_ID, oldReferenceId, referenceId));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public synchronized EObject getInstance() {
@@ -130,7 +171,7 @@ public class ModelReferenceImpl extends EObjectImpl implements ModelReference {
 		if (scenarioInstance != null) {
 			List<ModelReference> modelReferences = scenarioInstance.getModelReferences();
 			synchronized (modelReferences) {
-				
+
 				setScenarioInstance(null);
 				modelReferences.remove(this);
 			}
@@ -191,6 +232,8 @@ public class ModelReferenceImpl extends EObjectImpl implements ModelReference {
 		switch (featureID) {
 		case ScenarioServicePackage.MODEL_REFERENCE__SCENARIO_INSTANCE:
 			return getScenarioInstance();
+		case ScenarioServicePackage.MODEL_REFERENCE__REFERENCE_ID:
+			return getReferenceId();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -205,6 +248,9 @@ public class ModelReferenceImpl extends EObjectImpl implements ModelReference {
 		switch (featureID) {
 		case ScenarioServicePackage.MODEL_REFERENCE__SCENARIO_INSTANCE:
 			setScenarioInstance((ScenarioInstance) newValue);
+			return;
+		case ScenarioServicePackage.MODEL_REFERENCE__REFERENCE_ID:
+			setReferenceId((String) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -221,6 +267,9 @@ public class ModelReferenceImpl extends EObjectImpl implements ModelReference {
 		case ScenarioServicePackage.MODEL_REFERENCE__SCENARIO_INSTANCE:
 			setScenarioInstance((ScenarioInstance) null);
 			return;
+		case ScenarioServicePackage.MODEL_REFERENCE__REFERENCE_ID:
+			setReferenceId(REFERENCE_ID_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -235,8 +284,27 @@ public class ModelReferenceImpl extends EObjectImpl implements ModelReference {
 		switch (featureID) {
 		case ScenarioServicePackage.MODEL_REFERENCE__SCENARIO_INSTANCE:
 			return getScenarioInstance() != null;
+		case ScenarioServicePackage.MODEL_REFERENCE__REFERENCE_ID:
+			return REFERENCE_ID_EDEFAULT == null ? referenceId != null : !REFERENCE_ID_EDEFAULT.equals(referenceId);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy())
+			return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (referenceId: ");
+		result.append(referenceId);
+		result.append(')');
+		return result.toString();
 	}
 
 } //ModelReferenceImpl

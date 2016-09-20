@@ -688,6 +688,15 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getModelReference_ReferenceId() {
+		return (EAttribute) modelReferenceEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getCloseable() {
 		return closeableEClass;
 	}
@@ -811,6 +820,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 		modelReferenceEClass = createEClass(MODEL_REFERENCE);
 		createEReference(modelReferenceEClass, MODEL_REFERENCE__SCENARIO_INSTANCE);
+		createEAttribute(modelReferenceEClass, MODEL_REFERENCE__REFERENCE_ID);
 
 		closeableEClass = createEClass(CLOSEABLE);
 
@@ -943,7 +953,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		EOperation op = addEOperation(scenarioInstanceEClass, this.getScenarioLock(), "getLock", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, ecorePackage.getEString(), "key", 1, 1, IS_UNIQUE, IS_ORDERED);
 
-		addEOperation(scenarioInstanceEClass, this.getModelReference(), "getReference", 0, 1, IS_UNIQUE, IS_ORDERED);
+		op = addEOperation(scenarioInstanceEClass, this.getModelReference(), "getReference", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "referenceID", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		op = addEOperation(scenarioInstanceEClass, ecorePackage.getEObject(), "load", 0, 1, IS_UNIQUE, IS_ORDERED);
 		addEException(op, this.getIOException());
@@ -998,6 +1009,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		initEClass(modelReferenceEClass, ModelReference.class, "ModelReference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getModelReference_ScenarioInstance(), this.getScenarioInstance(), this.getScenarioInstance_ModelReferences(), "scenarioInstance", null, 0, 1, ModelReference.class, IS_TRANSIENT,
 				!IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getModelReference_ReferenceId(), ecorePackage.getEString(), "referenceId", null, 0, 1, ModelReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(modelReferenceEClass, ecorePackage.getEObject(), "getInstance", 0, 1, IS_UNIQUE, IS_ORDERED);
 

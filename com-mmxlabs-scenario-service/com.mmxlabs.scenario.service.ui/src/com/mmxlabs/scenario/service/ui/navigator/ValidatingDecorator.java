@@ -9,6 +9,7 @@ import java.util.WeakHashMap;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
@@ -29,7 +30,7 @@ import com.mmxlabs.scenario.service.ui.internal.Activator;
  */
 public class ValidatingDecorator extends LabelProvider implements ILightweightLabelDecorator {
 
-	private final Map<ScenarioInstance, EContentAdapter> listenerRefs = new WeakHashMap<ScenarioInstance, EContentAdapter>();
+	private final Map<ScenarioInstance, AdapterImpl> listenerRefs = new WeakHashMap<>();
 
 	public ValidatingDecorator() {
 	}
@@ -37,7 +38,7 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 	@Override
 	public void dispose() {
 
-		for (final Map.Entry<ScenarioInstance, EContentAdapter> entry : listenerRefs.entrySet()) {
+		for (final Map.Entry<ScenarioInstance, AdapterImpl> entry : listenerRefs.entrySet()) {
 			// Remove adapter to new input
 			entry.getKey().eAdapters().remove(entry.getValue());
 		}
@@ -64,27 +65,26 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 	}
 
 	private void addContentAdapter(final ScenarioInstance scenarioInstance) {
+		synchronized (listenerRefs) {
+			if (listenerRefs.containsKey(scenarioInstance)) {
+				return;
+			}
+			final AdapterImpl validationAdapter = new AdapterImpl() {
+				@Override
+				public void notifyChanged(Notification notification) {
+					super.notifyChanged(notification);
+					if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_ValidationStatusCode()) {
+						final LabelProviderChangedEvent event = new LabelProviderChangedEvent(ValidatingDecorator.this, scenarioInstance);
+						RunnerHelper.asyncExec(() -> fireLabelProviderChanged(event));
+					}
+				};
 
-		final EContentAdapter validationAdapter = new EContentAdapter() {
-			@Override
-			public void notifyChanged(Notification notification) {
-				super.notifyChanged(notification);
-				if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_ValidationStatusCode()) {
-					final LabelProviderChangedEvent event = new LabelProviderChangedEvent(ValidatingDecorator.this, scenarioInstance);
-					RunnerHelper.asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							fireLabelProviderChanged(event);
-						}
-					});
-				}
 			};
 
-		};
+			// Add adapter to new input
+			scenarioInstance.eAdapters().add(validationAdapter);
 
-		// Add adapter to new input
-		scenarioInstance.eAdapters().add(validationAdapter);
-
-		listenerRefs.put(scenarioInstance, validationAdapter);
+			listenerRefs.put(scenarioInstance, validationAdapter);
+		}
 	}
 }

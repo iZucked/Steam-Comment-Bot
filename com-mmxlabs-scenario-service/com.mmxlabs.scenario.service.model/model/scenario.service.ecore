@@ -50,7 +50,9 @@
       </eAnnotations>
       <eParameters name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
-    <eOperations name="getReference" eType="#//ModelReference"/>
+    <eOperations name="getReference" eType="#//ModelReference">
+      <eParameters name="referenceID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
     <eOperations name="load" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
         eExceptions="#//IOException"/>
     <eOperations name="unload"/>
@@ -128,6 +130,7 @@
     <eOperations name="getInstance" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="scenarioInstance" eType="#//ScenarioInstance"
         transient="true" eOpposite="#//ScenarioInstance/modelReferences"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="referenceId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Closeable" instanceClassName="java.io.Closeable"
       abstract="true" interface="true">

@@ -4,19 +4,24 @@
  */
 package com.mmxlabs.scenario.service.model.provider;
 
+import com.mmxlabs.scenario.service.model.ModelReference;
+import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.scenario.service.model.ModelReference} object.
@@ -47,8 +52,21 @@ public class ModelReferenceItemProvider extends ItemProviderAdapter
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addReferenceIdPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Reference Id feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addReferenceIdPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ModelReference_referenceId_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ModelReference_referenceId_feature", "_UI_ModelReference_type"),
+				ScenarioServicePackage.eINSTANCE.getModelReference_ReferenceId(), true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -70,7 +88,8 @@ public class ModelReferenceItemProvider extends ItemProviderAdapter
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_ModelReference_type");
+		String label = ((ModelReference) object).getReferenceId();
+		return label == null || label.length() == 0 ? getString("_UI_ModelReference_type") : getString("_UI_ModelReference_type") + " " + label;
 	}
 
 	/**
@@ -83,6 +102,12 @@ public class ModelReferenceItemProvider extends ItemProviderAdapter
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(ModelReference.class)) {
+		case ScenarioServicePackage.MODEL_REFERENCE__REFERENCE_ID:
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+			return;
+		}
 		super.notifyChanged(notification);
 	}
 

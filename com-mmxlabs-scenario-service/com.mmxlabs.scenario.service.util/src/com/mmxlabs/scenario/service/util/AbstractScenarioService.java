@@ -128,7 +128,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		}
 		// Wrap in try-with-resources block on model reference to ensure there is no unload attempt while we are still loading. Do not call ModelReference#getInstance() otherwise we will likely end up
 		// looping.
-		try (final ModelReference modelReference = instance.getReference()) {
+		try (final ModelReference modelReference = instance.getReference("AbstractScenarioService:1")) {
 			if (scenarioMigrationService != null) {
 				try {
 					scenarioMigrationService.migrateScenario(this, instance, new NullProgressMonitor());
@@ -219,7 +219,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		}
 
 		final ScenarioLock lock = scenarioInstance.getLock(ScenarioLock.SAVING);
-		try (final ModelReference modelReference = scenarioInstance.getReference()) {
+		try (final ModelReference modelReference = scenarioInstance.getReference("AbstractScenarioService:2")) {
 			if (lock.awaitClaim()) {
 
 				fireEvent(ScenarioServiceEvent.PRE_SAVE, scenarioInstance);

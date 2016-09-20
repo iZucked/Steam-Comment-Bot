@@ -138,7 +138,7 @@ public class ScenarioStorageUtil {
 
 		// Already loaded?
 		if (instance.getInstance() != null) {
-			try (final ModelReference modelReference = instance.getReference()) {
+			try (final ModelReference modelReference = instance.getReference("ScenarioStorageUtil")) {
 				final EObject rootObject = EcoreUtil.copy(modelReference.getInstance());
 
 				final Resource r = ResourceHelper.createResource(resourceSet, rootObjectURI);

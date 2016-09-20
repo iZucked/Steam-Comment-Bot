@@ -791,13 +791,22 @@ public interface ScenarioServicePackage extends EPackage {
 	int MODEL_REFERENCE__SCENARIO_INSTANCE = CLOSEABLE_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Reference Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_REFERENCE__REFERENCE_ID = CLOSEABLE_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Model Reference</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_REFERENCE_FEATURE_COUNT = CLOSEABLE_FEATURE_COUNT + 1;
+	int MODEL_REFERENCE_FEATURE_COUNT = CLOSEABLE_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '<em>IScenario Service</em>' data type.
@@ -1425,6 +1434,17 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getModelReference_ScenarioInstance();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ModelReference#getReferenceId <em>Reference Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Reference Id</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ModelReference#getReferenceId()
+	 * @see #getModelReference()
+	 * @generated
+	 */
+	EAttribute getModelReference_ReferenceId();
 
 	/**
 	 * Returns the meta object for class '{@link java.io.Closeable <em>Closeable</em>}'.
