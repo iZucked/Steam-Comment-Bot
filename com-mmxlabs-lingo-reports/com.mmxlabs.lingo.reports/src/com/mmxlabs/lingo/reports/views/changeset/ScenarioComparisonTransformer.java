@@ -288,7 +288,8 @@ public class ScenarioComparisonTransformer {
 						lateness += LatenessUtils.getLatenessExcludingFlex(newEventGrouping);
 						violations += ScheduleModelKPIUtils.getCapacityViolationCount(newEventGrouping);
 					}
-
+				}
+				{
 					final ProfitAndLossContainer originalGroupProfitAndLoss = row.getOriginalGroupProfitAndLoss();
 					if (originalGroupProfitAndLoss != null) {
 						final GroupProfitAndLoss groupProfitAndLoss = originalGroupProfitAndLoss.getGroupProfitAndLoss();
