@@ -34,6 +34,7 @@ import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.EventGroupingOver
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.GCOCycleGroupingProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.IDiffProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.LadenVoyageProcessor;
+import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.StartEventProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.StructuralDifferencesProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
@@ -221,6 +222,7 @@ public class ScenarioComparisonServiceTransformer {
 					diffProcessors.add(new GCOCycleGroupingProcessor());
 					diffProcessors.add(new LadenVoyageProcessor());
 					diffProcessors.add(new EventGroupingOverlapProcessor());
+					diffProcessors.add(new StartEventProcessor());
 				}
 			}
 
