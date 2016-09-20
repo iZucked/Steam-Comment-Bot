@@ -87,6 +87,7 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 		setParameter("actionSets-totalEvals", 5_000_000, Integer.class, false);
 		setParameter("actionSets-inRunEvals", 1_500_000, Integer.class, false);
 		setParameter("actionSets-maxSearchDepth", 5_000, Integer.class, false);
+		setParameter("actionSets-verboseLogging", false, Boolean.class, false);
 		// Parallel
 		setParameter("actionSets-maxThreads", 1, Integer.class, false);
 		

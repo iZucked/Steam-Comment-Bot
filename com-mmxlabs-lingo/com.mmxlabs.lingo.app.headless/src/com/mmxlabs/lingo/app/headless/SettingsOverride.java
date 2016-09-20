@@ -55,6 +55,7 @@ public final class SettingsOverride {
 	private int actionPlanTotalEvals = 5_000_000;
 	private int actionPlanInRunEvals = 1_500_000;
 	private int actionPlanMaxSearchDepth = 5_000;
+	private boolean actionPlanVerboseLogger = false;
 	
 	private boolean movesUseLoopingSCMG = false;
 
@@ -160,6 +161,14 @@ public final class SettingsOverride {
 
 	public void setMovesUseLoopingSCMG(boolean movesUseLoopingSCMG) {
 		this.movesUseLoopingSCMG = movesUseLoopingSCMG;
+	}
+
+	public boolean isActionPlanVerboseLogger() {
+		return actionPlanVerboseLogger;
+	}
+
+	public void setActionPlanVerboseLogger(boolean actionPlanVerboseLogger) {
+		this.actionPlanVerboseLogger = actionPlanVerboseLogger;
 	}
 	
 }

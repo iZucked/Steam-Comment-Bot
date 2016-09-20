@@ -110,7 +110,8 @@ public class HeadlessApplication implements IApplication {
 		if (!parseOptions(commandLineArgs, overrideSettings, exporters)) {
 			return IApplication.EXIT_OK;
 		}
-
+		
+		
 		final String jsonFilePath = overrideSettings.getJSON();
 		final Pair<JSONParseResult, LNGHeadlessParameters> jsonParse = setParametersFromJSON(overrideSettings, jsonFilePath);
 		if (!jsonParse.getFirst().allRequirementsPassed()) {
@@ -125,7 +126,8 @@ public class HeadlessApplication implements IApplication {
 		final String path = overrideSettings.getOutputPath();
 		// set scenario file
 		overrideSettings.setScenario(headlessParameters.getParameter("scenario-path", StringParameter.class).getValue() + "/" + headlessParameters.getParameter("scenario", StringParameter.class).getValue());
-
+		// Set verbose Logging
+		overrideSettings.setActionPlanVerboseLogger(headlessParameters.getParameterValue("actionSets-verboseLogging", Boolean.class));
 		final String scenarioFile = overrideSettings.getScenario();
 		if (scenarioFile == null || scenarioFile.isEmpty()) {
 			System.err.println("No scenario specified");
@@ -171,8 +173,9 @@ public class HeadlessApplication implements IApplication {
 		final @NonNull ExecutorService executorService = Executors.newFixedThreadPool(no_threads);
 
 		final Map<String, LSOLogger> phaseToLoggerMap = new ConcurrentHashMap<>();
+		
 		ActionSetLogger actionSetLogger = optimisationPlan.getUserSettings().isBuildActionSets() ? new ActionSetLogger() : null;
-
+//		System.out.println("DEBUGGER");
 		try {
 
 			final AbstractRunnerHook runnerHook = new AbstractRunnerHook() {
@@ -315,7 +318,7 @@ public class HeadlessApplication implements IApplication {
 					saveScenario(Paths.get(path, outputFolderName, outputFile).toString(), instance);
 				}
 
-				exportData(phaseToLoggerMap, actionSetLogger, path, outputFolderName, jsonFilePath);
+				exportData(phaseToLoggerMap, actionSetLogger, path, outputFolderName, jsonFilePath, overrideSettings.isActionPlanVerboseLogger());
 			} catch (Exception e) {
 				System.out.println("Headless Error");
 				System.err.println("Headless Error:" + e.getMessage());
@@ -543,6 +546,7 @@ public class HeadlessApplication implements IApplication {
 			stage.setTotalEvaluations(headlessParameters.getParameterValue("actionSets-totalEvals", Integer.class));
 			stage.setInRunEvaluations(headlessParameters.getParameterValue("actionSets-inRunEvals", Integer.class));
 			stage.setSearchDepth(headlessParameters.getParameterValue("actionSets-maxSearchDepth", Integer.class));
+			plan.getUserSettings().setBuildActionSets(headlessParameters.getParameterValue("actionSets-buildActionSets", Boolean.class));
 
 			// Add to list to manipulate
 			constraintsAndFitnesses.add(stage.getConstraintAndFitnessSettings());
@@ -645,7 +649,7 @@ public class HeadlessApplication implements IApplication {
 		return nameMap;
 	}
 
-	private void exportData(final Map<String, LSOLogger> loggerMap, ActionSetLogger actionSetLogger, final String path, final String foldername, final String jsonFilePath) {
+	private void exportData(final Map<String, LSOLogger> loggerMap, ActionSetLogger actionSetLogger, final String path, final String foldername, final String jsonFilePath, boolean verbose) {
 		// // first export logging data
 		// for (final String phase : IRunnerHook.PHASE_ORDER) {
 		// final LSOLogger logger = loggerMap.get(phase);
@@ -655,7 +659,11 @@ public class HeadlessApplication implements IApplication {
 		// }
 		// }
 		if (actionSetLogger != null) {
-			actionSetLogger.export(Paths.get(path, foldername).toString(), "action");
+			System.out.println(verbose);
+			if(!verbose)
+				actionSetLogger.shortExport(Paths.get(path, foldername).toString(), "actionSets");
+			else
+				actionSetLogger.export(Paths.get(path, foldername).toString(), "action");
 		}
 		HeadlessJSONParser.copyJSONFile(jsonFilePath, Paths.get(path, foldername, "parameters.json").toString());
 
