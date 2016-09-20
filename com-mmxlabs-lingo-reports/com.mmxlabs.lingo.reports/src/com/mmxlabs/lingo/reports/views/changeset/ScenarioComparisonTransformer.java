@@ -50,9 +50,9 @@ public class ScenarioComparisonTransformer {
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 		assert root != null;
 
-		try (final ModelReference toRef = to.getReference()) {
+		try (final ModelReference toRef = to.getReference("ScenarioComparisonTransformer:1")) {
 			toRef.getInstance();
-			try (final ModelReference fromRef = from.getReference()) {
+			try (final ModelReference fromRef = from.getReference("ScenarioComparisonTransformer:2")) {
 				fromRef.getInstance();
 				final Schedule toSchedule = selectedDataProvider.getSchedule(to.getInstance());
 				final Schedule fromSchedule = selectedDataProvider.getSchedule(from.getInstance());
@@ -147,8 +147,8 @@ public class ScenarioComparisonTransformer {
 		final ChangeSet changeSet = ChangesetFactory.eINSTANCE.createChangeSet();
 
 		// final ModelReference baseReference = base.getReference();
-		final ModelReference prevReference = prev.getReference();
-		final ModelReference currentReference = current.getReference();
+		final ModelReference prevReference = prev.getReference("ScenarioComparisonTransformer:3");
+		final ModelReference currentReference = current.getReference("ScenarioComparisonTransformer:4");
 
 		// Pre-Load
 		// baseReference.getInstance();

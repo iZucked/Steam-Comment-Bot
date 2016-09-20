@@ -255,7 +255,7 @@ public class SelectedScenariosService {
 				scenarioService.addScenarioServiceListener(new OnLoadScenarioServiceListener(instance));
 			}
 		}
-		this.scenarioReferences.put(instance, instance.getReference());
+		this.scenarioReferences.put(instance, instance.getReference("SelectedScenariosService:1"));
 	}
 
 	private void detachScenarioInstance(@NonNull final ScenarioInstance instance) {
@@ -350,7 +350,7 @@ public class SelectedScenariosService {
 			this.scenarioModel = scenarioModel;
 			this.schedule = schedule;
 			this.children = children;
-			this.ref = scenarioInstance.getReference();
+			this.ref = scenarioInstance.getReference("SelectedScenariosService:2");
 		}
 
 		public void dispose() {
@@ -393,7 +393,7 @@ public class SelectedScenariosService {
 	@Nullable
 	private KeyValueRecord createKeyValueRecord(@NonNull final ScenarioInstance scenarioInstance) {
 
-		try (ModelReference modelReference = scenarioInstance.getReference()) {
+		try (ModelReference modelReference = scenarioInstance.getReference("SelectedScenariosService:3")) {
 			final EObject instance = modelReference.getInstance();
 
 			if (instance instanceof LNGScenarioModel) {

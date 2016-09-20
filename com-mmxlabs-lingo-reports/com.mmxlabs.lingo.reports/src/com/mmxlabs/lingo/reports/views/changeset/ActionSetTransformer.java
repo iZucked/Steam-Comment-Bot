@@ -115,9 +115,9 @@ public class ActionSetTransformer {
 	}
 
 	private ChangeSet buildChangeSet(final ScenarioInstance base, final ScenarioInstance prev, final ScenarioInstance current) {
-		final ModelReference baseReference = base.getReference();
-		final ModelReference prevReference = prev.getReference();
-		final ModelReference currentReference = current.getReference();
+		final ModelReference baseReference = base.getReference("ActionSetTransformer:1");
+		final ModelReference prevReference = prev.getReference("ActionSetTransformer:2");
+		final ModelReference currentReference = current.getReference("ActionSetTransformer:3");
 
 		// Pre-Load
 		baseReference.getInstance();

@@ -555,7 +555,7 @@ public class HeadlineReportView extends ViewPart {
 				final ScenarioInstance scenarioInstance = ssInput.getScenarioInstance();
 				if (scenarioInstance != null) {
 					if (!scenarioInstance.isLoadFailure()) {
-						this.modelReference = scenarioInstance.getReference();
+						this.modelReference = scenarioInstance.getReference("HeadlineReportView:1");
 						final EObject instance = modelReference.getInstance();
 						if (instance instanceof LNGScenarioModel) {
 							final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
@@ -601,7 +601,7 @@ public class HeadlineReportView extends ViewPart {
 
 					if (scenarioInstance != null) {
 						if (!scenarioInstance.isLoadFailure()) {
-							HeadlineReportView.this.modelReference = scenarioInstance.getReference();
+							HeadlineReportView.this.modelReference = scenarioInstance.getReference("HeadlineReportView:2");
 							final EObject instance = modelReference.getInstance();
 							if (instance instanceof LNGScenarioModel) {
 								final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
