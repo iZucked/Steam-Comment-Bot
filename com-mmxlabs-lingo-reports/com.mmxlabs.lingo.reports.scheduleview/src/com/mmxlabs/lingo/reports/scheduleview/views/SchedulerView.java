@@ -325,6 +325,16 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			public int getSelectionLineStyle() {
 				return SWT.LINE_SOLID;
 			}
+
+			@Override
+			public int getHeaderMonthHeight() {
+				return 22;
+			}
+
+			@Override
+			public int getHeaderDayHeight() {
+				return 22;
+			}
 		};
 
 		final IColorManager colourManager = new DefaultColorManager() {
@@ -336,7 +346,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 			@Override
 			public Color getTextColor() {
-				return ColorCache.getWhite();
+				return ColorCache.getBlack();
 			}
 		};
 
