@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.port.util;
 
+import java.lang.ref.SoftReference;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 
 public class RouteDistanceLineCache extends MMXAdapterImpl {
 
-	private Map<Pair<Port, Port>, Integer> distanceCache = null;
+	private SoftReference<Map<Pair<Port, Port>, Integer>> distanceCache = new SoftReference<>(null);
 
 	private final Route route;
 
@@ -43,19 +44,19 @@ public class RouteDistanceLineCache extends MMXAdapterImpl {
 
 	}
 
-	public synchronized void buildCache() {
-		if (distanceCache == null) {
-			distanceCache = new HashMap<>();
-			for (final RouteLine rl : route.getLines()) {
-				if (rl.getDistance() != Integer.MAX_VALUE && rl.getDistance() >= 0) {
-					distanceCache.put(new Pair<>(rl.getFrom(), rl.getTo()), rl.getFullDistance());
-				}
+	public synchronized Map<Pair<Port, Port>, Integer> buildCache() {
+		Map<Pair<Port, Port>, Integer> distanceCacheObj = new HashMap<>();
+		distanceCache = new SoftReference<>(distanceCacheObj);
+		for (final RouteLine rl : route.getLines()) {
+			if (rl.getDistance() != Integer.MAX_VALUE && rl.getDistance() >= 0) {
+				distanceCacheObj.put(new Pair<>(rl.getFrom(), rl.getTo()), rl.getFullDistance());
 			}
 		}
+		return distanceCacheObj;
 	}
 
 	public synchronized void clearCache() {
-		distanceCache = null;
+		distanceCache.clear();
 	}
 
 	public int getDistance(final Port from, final Port to) {
@@ -66,13 +67,14 @@ public class RouteDistanceLineCache extends MMXAdapterImpl {
 			return 0;
 		}
 
-		if (distanceCache == null) {
-			buildCache();
+		Map<Pair<Port, Port>, Integer> map = distanceCache.get();
+		if (map == null) {
+			map = buildCache();
 		}
 
 		final Pair<Port, Port> key = new Pair<>(from, to);
-		if (distanceCache.containsKey(key)) {
-			final Integer dist = distanceCache.get(key);
+		if (map.containsKey(key)) {
+			final Integer dist = map.get(key);
 			if (dist != null) {
 				return dist.intValue();
 			}

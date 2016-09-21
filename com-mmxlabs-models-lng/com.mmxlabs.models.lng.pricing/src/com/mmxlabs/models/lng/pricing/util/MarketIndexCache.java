@@ -7,6 +7,7 @@
  */
 package com.mmxlabs.models.lng.pricing.util;
 
+import java.lang.ref.SoftReference;
 import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,9 +29,9 @@ import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 
 public class MarketIndexCache extends EContentAdapter {
 
-	private Map<@NonNull PriceIndexType, @NonNull SeriesParser> cache = null;
+	private SoftReference<Map<@NonNull PriceIndexType, @NonNull SeriesParser>> cache = new SoftReference<>(null);
 
-	private Map<@NonNull NamedIndexContainer<?>, @Nullable YearMonth> earlyDateCache = null;
+	private SoftReference<Map<@NonNull NamedIndexContainer<?>, @Nullable YearMonth>> earlyDateCache = new SoftReference<>(null);
 
 	private final @NonNull PricingModel pricingModel;
 
@@ -39,7 +40,7 @@ public class MarketIndexCache extends EContentAdapter {
 	}
 
 	@Override
-	public void notifyChanged(Notification notification) {
+	public void notifyChanged(final Notification notification) {
 		super.notifyChanged(notification);
 
 		if (notification.isTouch()) {
@@ -51,60 +52,63 @@ public class MarketIndexCache extends EContentAdapter {
 		clearCache();
 	}
 
-	public synchronized void buildCache() {
-		if (cache == null) {
-			cache = new HashMap<>();
+	public synchronized Map<@NonNull PriceIndexType, @NonNull SeriesParser> buildCache() {
 
-			cache.put(PriceIndexType.COMMODITY, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.COMMODITY));
-			cache.put(PriceIndexType.CHARTER, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.CHARTER));
-			cache.put(PriceIndexType.BUNKERS, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.BUNKERS));
-		}
+		final Map<@NonNull PriceIndexType, @NonNull SeriesParser> cacheObj = new HashMap<>();
+		cache = new SoftReference<>(cacheObj);
+
+		cacheObj.put(PriceIndexType.COMMODITY, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.COMMODITY));
+		cacheObj.put(PriceIndexType.CHARTER, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.CHARTER));
+		cacheObj.put(PriceIndexType.BUNKERS, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.BUNKERS));
+		return cacheObj;
 	}
 
-	public synchronized void buildDateCache() {
-		if (earlyDateCache == null) {
-			earlyDateCache = new HashMap<>();
-
-			final Function<NamedIndexContainer<?>, @Nullable YearMonth> finder = (curve) -> {
-				final Index<?> data = curve.getData();
-				if (data instanceof DataIndex<?>) {
-					final DataIndex<?> indexData = (DataIndex<?>) data;
-					Optional<?> min = indexData.getPoints().stream() //
-							.min((p1, p2) -> {
-								return p1.getDate().compareTo(p2.getDate());
-							});
-					// No data check
-					if (min.isPresent()) {
-						return ((IndexPoint) min.get()).getDate();
-					}
+	public synchronized Map<@NonNull NamedIndexContainer<?>, @Nullable YearMonth> buildDateCache() {
+		final Map<@NonNull NamedIndexContainer<?>, @Nullable YearMonth> cacheObj = new HashMap<>();
+		earlyDateCache = new SoftReference<>(cacheObj);
+		final Function<NamedIndexContainer<?>, @Nullable YearMonth> finder = (curve) -> {
+			final Index<?> data = curve.getData();
+			if (data instanceof DataIndex<?>) {
+				final DataIndex<?> indexData = (DataIndex<?>) data;
+				final Optional<?> min = indexData.getPoints().stream() //
+						.min((p1, p2) -> {
+							return p1.getDate().compareTo(p2.getDate());
+						});
+				// No data check
+				if (min.isPresent()) {
+					return ((IndexPoint) min.get()).getDate();
 				}
-				return null;
-			};
+			}
+			return null;
+		};
 
-			pricingModel.getCommodityIndices().forEach(c -> earlyDateCache.put(c, finder.apply(c)));
-			pricingModel.getCharterIndices().forEach(c -> earlyDateCache.put(c, finder.apply(c)));
-			pricingModel.getBaseFuelPrices().forEach(c -> earlyDateCache.put(c, finder.apply(c)));
-		}
+		pricingModel.getCommodityIndices().forEach(c -> cacheObj.put(c, finder.apply(c)));
+		pricingModel.getCharterIndices().forEach(c -> cacheObj.put(c, finder.apply(c)));
+		pricingModel.getBaseFuelPrices().forEach(c -> cacheObj.put(c, finder.apply(c)));
+
+		return cacheObj;
 	}
 
 	public synchronized void clearCache() {
-		cache = null;
-		earlyDateCache = null;
+		cache.clear();
+		earlyDateCache.clear();
 	}
 
 	public @NonNull SeriesParser getSeriesParser(final @NonNull PriceIndexType marketIndexType) {
-
-		if (cache == null) {
-			buildCache();
+		Map<@NonNull PriceIndexType, @NonNull SeriesParser> map = cache.get();
+		if (map == null) {
+			map = buildCache();
 		}
-		return cache.get(marketIndexType);
+		return map.get(marketIndexType);
 
 	}
 
 	public @Nullable YearMonth getEarliestDate(final @NonNull NamedIndexContainer<?> index) {
-		if (earlyDateCache == null) {
-			buildDateCache();
+
+		Map<@NonNull NamedIndexContainer<?>, @Nullable YearMonth> map = earlyDateCache.get();
+		if (map == null) {
+			map = buildDateCache();
 		}
-		return earlyDateCache.getOrDefault(index, null);
+		return map.getOrDefault(index, null);
 	}
 }
