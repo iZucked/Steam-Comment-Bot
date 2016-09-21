@@ -58,7 +58,7 @@ public class CopyToClipboardHandler {
 	}
 
 	@Execute
-	public static void packGrid(@Active final MPart part, final IAdapterManager adapterManager) {
+	public static void copyGrid(@Active final MPart part, final IAdapterManager adapterManager) {
 
 		final Grid grid = adaptToGrid(part, adapterManager);
 		if (grid != null) {
