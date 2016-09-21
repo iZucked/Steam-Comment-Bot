@@ -35,7 +35,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +64,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	/**
 	 * Adapter factory instance. This contains all factories registered in the global registry.
 	 */
-	private static final ComposedAdapterFactory FACTORY = createAdapterFactory();
+	private   final ComposedAdapterFactory FACTORY = createAdapterFactory();
 
 	protected IMMXContentProposalProvider proposalHelper;
 
