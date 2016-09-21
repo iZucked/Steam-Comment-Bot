@@ -10,6 +10,7 @@
       <tags>change-set</tags>
       <toolbar xmi:id="_SGHo0FIiEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.toolbar.1">
         <children xsi:type="menu:DirectToolItem" xmi:id="_1ho0kEyjEeWRXMz4UJzhKw" elementId="com.mmxlabs.lingo.reports.directtoolitem.filternonstructuralchanges" label="Filter Non Structural Changes" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif" selected="true" type="Check" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleShowStructuralChangesHandler"/>
+        <children xsi:type="menu:DirectToolItem" xmi:id="_K7G5sH_YEeakT9GEeQgFqg" elementId="com.mmxlabs.lingo.reports.directtoolitem.copy" label="Copy" iconURI="platform:/plugin/com.mmxlabs.rcp.common/icons/copy.gif" tooltip="Copy to clipboard" contributionURI="bundleclass://com.mmxlabs.rcp.common/com.mmxlabs.rcp.common.handlers.CopyToHtmlClipboardHandler"/>
       </toolbar>
     </elements>
     <elements xsi:type="basic:Part" xmi:id="_jxW7gFIiEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.views.changeset.ActionSetView" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.ChangeSetView" label="Action Sets" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/actionsets_view.gif" closeable="true">
@@ -17,6 +18,7 @@
       <toolbar xmi:id="_kD3AwFIiEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.toolbar.0">
         <children xsi:type="menu:DirectToolItem" xmi:id="_kphSkFIiEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.directtoolitem.filternonstructuralchanges" label="Filter Non Structural Changes" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif" selected="true" type="Check" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleShowStructuralChangesHandler"/>
         <children xsi:type="menu:DirectToolItem" xmi:id="_k7mhEFIiEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.directtoolitem.comparetobase" label="Compare to Base" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/compare_to_base.gif" type="Check" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleDiffToBaseHandler"/>
+        <children xsi:type="menu:DirectToolItem" xmi:id="_KHwxMH_YEeakT9GEeQgFqg" elementId="com.mmxlabs.lingo.reports.directtoolitem.copy" label="Copy" iconURI="platform:/plugin/com.mmxlabs.rcp.common/icons/copy.gif" tooltip="Copy to clipboard" contributionURI="bundleclass://com.mmxlabs.rcp.common/com.mmxlabs.rcp.common.handlers.CopyToHtmlClipboardHandler"/>
       </toolbar>
     </elements>
   </fragments>
@@ -25,6 +27,7 @@
       <tags>change-set</tags>
       <toolbar xmi:id="_v8XqYFIjEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.toolbar.2">
         <children xsi:type="menu:DirectToolItem" xmi:id="_x_hN4FIjEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.directtoolitem.filternonstructuralchanges" label="Filter Non Structural Changes" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif" selected="true" type="Check" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleShowStructuralChangesHandler"/>
+        <children xsi:type="menu:DirectToolItem" xmi:id="_7azR8H8xEeakT9GEeQgFqg" elementId="com.mmxlabs.lingo.reports.directtoolitem.copy" label="Copy" iconURI="platform:/plugin/com.mmxlabs.rcp.common/icons/copy.gif" tooltip="Copy to clipboard" contributionURI="bundleclass://com.mmxlabs.rcp.common/com.mmxlabs.rcp.common.handlers.CopyToHtmlClipboardHandler"/>
       </toolbar>
     </elements>
     <elements xsi:type="basic_1:PartDescriptor" xmi:id="_su0wUFIjEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.views.changeset.ActionSetView" label="Action Sets" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/actionsets_view.gif" category="org.eclipse.e4.secondaryDataStack" closeable="true" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.ChangeSetView">
@@ -32,6 +35,7 @@
       <toolbar xmi:id="_y0wz0FIjEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.toolbar.3">
         <children xsi:type="menu:DirectToolItem" xmi:id="_zS2eAFIjEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.directtoolitem.filternonstructuralchanges" label="Filter Non Structural Changes" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif" selected="true" type="Check" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleShowStructuralChangesHandler"/>
         <children xsi:type="menu:DirectToolItem" xmi:id="_zjVxEFIjEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.directtoolitem.comparetobase" label="Compare to Base" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/compare_to_base.gif" type="Check" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleDiffToBaseHandler"/>
+        <children xsi:type="menu:DirectToolItem" xmi:id="_sV8ysH8xEeakT9GEeQgFqg" elementId="com.mmxlabs.lingo.reports.directtoolitem.copy2" label="Copy" iconURI="platform:/plugin/com.mmxlabs.rcp.common/icons/copy.gif" tooltip="Copy to clipboard" contributionURI="bundleclass://com.mmxlabs.rcp.common/com.mmxlabs.rcp.common.handlers.CopyToHtmlClipboardHandler"/>
       </toolbar>
     </elements>
   </fragments>
