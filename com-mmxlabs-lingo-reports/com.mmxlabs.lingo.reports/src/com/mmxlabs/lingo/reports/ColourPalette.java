@@ -127,7 +127,8 @@ public final class ColourPalette {
 
 		setItemColour(ColourPaletteItems.LONG, ColourElements.Background, Orange);
 		setItemColour(ColourPaletteItems.SHORT, ColourElements.Background, Orange);
-
+		
+		setItemColour(ColourPaletteItems.Voyage_Tight_Warning, ColourElements.Background, Warning_Yellow);
 	}
 
 	public enum ColourElements {
