@@ -77,6 +77,29 @@ public final class ViewerHelper {
 		RunnerHelper.exec(runnable, syncExec);
 	}
 
+	/**
+	 * If the viewer has been created and has not been disposed, call a refresh then execute the supplied runnable
+	 * @param viewer
+	 * @param syncExec
+	 * @param then
+	 */
+	public static void refreshThen(@Nullable final Viewer viewer, final boolean syncExec, @NonNull Runnable then) {
+		if (viewer == null) {
+			return;
+		}
+		final Runnable runnable = new Runnable() {
+			@Override
+			public void run() {
+				final Control control = viewer.getControl();
+				if (control != null && !control.isDisposed()) {
+					viewer.refresh();
+					then.run();
+				}
+			}
+		};
+		RunnerHelper.exec(runnable, syncExec);
+	}
+
 	public static void setFocus(@Nullable final Viewer viewer) {
 		if (viewer == null) {
 			return;
