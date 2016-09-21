@@ -582,10 +582,10 @@ public class ScenarioComparisonServiceTransformer {
 		for (final Pair<UserGroup, Integer> p : orderedUserGroup) {
 			final UserGroup userGroup = p.getFirst();
 			// Zero sum user group, remove it.
-			// if (p.getSecond() == 0) {
-			// table.getCycleGroups().addAll(userGroup.getGroups());
-			// continue;
-			// }
+			if (p.getSecond() == 0) {
+				table.getCycleGroups().addAll(userGroup.getGroups());
+				continue;
+			}
 			table.getUserGroups().add(userGroup);
 			userGroup.setComment(String.format("Group %d", userGoupCounter++));
 
