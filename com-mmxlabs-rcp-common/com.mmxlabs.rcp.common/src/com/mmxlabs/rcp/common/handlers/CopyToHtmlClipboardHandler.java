@@ -51,13 +51,18 @@ public class CopyToHtmlClipboardHandler {
 		return element;
 	}
 
+	@Execute
+	public void doPackGrid(@Active final MPart part, final IAdapterManager adapterManager) {
+
+		packGrid(part, adapterManager);
+	}
+
 	@CanExecute
 	public boolean hasGrid(@Active final MPart part, final IAdapterManager adapterManager) {
 		final Grid grid = adaptToGrid(part, adapterManager);
 		return (grid != null);
 	}
 
-	@Execute
 	public static void packGrid(@Active final MPart part, final IAdapterManager adapterManager) {
 
 		final Grid grid = adaptToGrid(part, adapterManager);
@@ -66,7 +71,7 @@ public class CopyToHtmlClipboardHandler {
 		}
 	}
 
-	protected static void copyGrid(@NonNull final Grid grid) {
+	public static void copyGrid(@NonNull final Grid grid) {
 		if (!grid.isDisposed()) {
 			// TODO: This should be a parameterised command
 			final CopyGridToHtmlClipboardAction action = new CopyGridToHtmlClipboardAction(grid, true);
