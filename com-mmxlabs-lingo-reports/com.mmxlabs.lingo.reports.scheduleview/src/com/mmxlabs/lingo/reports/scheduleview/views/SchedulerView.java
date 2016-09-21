@@ -435,7 +435,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 										final SlotAllocation otherAllocation = other.getLoadAllocation();
 										if (otherAllocation != null) {
 											if (differentSequenceChecker.apply(row, other)) {
-												ganttChart.getGanttComposite().addConnection(internalMap.get(loadAllocation.getSlotVisit()), internalMap.get(otherAllocation.getSlotVisit()),
+												ganttChart.getGanttComposite().addConnection(internalMap.get(otherAllocation.getSlotVisit()), internalMap.get(loadAllocation.getSlotVisit()),
 														lineColour);
 											}
 										}
@@ -445,7 +445,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 										if (otherAllocation != null) {
 											if (differentSequenceChecker.apply(row, other)) {
 
-												ganttChart.getGanttComposite().addConnection(internalMap.get(dischargeAllocation.getSlotVisit()), internalMap.get(otherAllocation.getSlotVisit()),
+												ganttChart.getGanttComposite().addConnection(internalMap.get(otherAllocation.getSlotVisit()), internalMap.get(dischargeAllocation.getSlotVisit()),
 														lineColour);
 											}
 										}
