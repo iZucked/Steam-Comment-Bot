@@ -21,6 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiFunction;
 
 import javax.inject.Inject;
 
@@ -59,6 +60,7 @@ import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
@@ -93,6 +95,7 @@ import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
+import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -163,6 +166,8 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 	// New diff stuff
 	private Table table;
+
+	private boolean showConnections = System.getProperty("schedulechart.showConnections") != null;
 
 	/**
 	 * The constructor.
@@ -370,6 +375,86 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			@Override
 			protected void setSelectionToWidget(@SuppressWarnings("rawtypes") final List l, final boolean reveal) {
 
+				if (showConnections) {
+
+					ganttChart.getGanttComposite().getGanttConnections().clear();
+
+					final BiFunction<Row, Row, Boolean> differentSequenceChecker = (r1, r2) -> {
+						final Sequence s1 = r1.getSequence();
+						final Sequence s2 = r2.getSequence();
+						if (s1 == null && s2 == null) {
+							return true;
+						}
+						return !s1.getName().equals(s2.getName());
+					};
+
+					final Set<Row> seenRows = new HashSet<>();
+					for (final Object o : l) {
+						if (o instanceof Row) {
+							final Row row = (Row) o;
+							seenRows.add(row);
+
+							final Color lineColour = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
+
+							final SlotAllocation loadAllocation = row.getLoadAllocation();
+							final SlotAllocation dischargeAllocation = row.getDischargeAllocation();
+							if (row.isReference()) {
+								for (final Row other : row.getReferringRows()) {
+									if (seenRows.contains(other)) {
+										continue;
+									}
+									seenRows.add(other);
+									if (loadAllocation != null) {
+										final SlotAllocation otherAllocation = other.getLoadAllocation();
+										if (otherAllocation != null) {
+											if (differentSequenceChecker.apply(row, other)) {
+												ganttChart.getGanttComposite().addConnection(internalMap.get(loadAllocation.getSlotVisit()), internalMap.get(otherAllocation.getSlotVisit()),
+														lineColour);
+											}
+										}
+									}
+									if (dischargeAllocation != null) {
+										final SlotAllocation otherAllocation = other.getDischargeAllocation();
+										if (otherAllocation != null) {
+											if (differentSequenceChecker.apply(row, other)) {
+												ganttChart.getGanttComposite().addConnection(internalMap.get(dischargeAllocation.getSlotVisit()), internalMap.get(otherAllocation.getSlotVisit()),
+														lineColour);
+											}
+										}
+									}
+								}
+
+							} else {
+								final Row other = row.getReferenceRow();
+								if (other != null) {
+									if (seenRows.contains(other)) {
+										continue;
+									}
+									seenRows.add(other);
+									if (loadAllocation != null) {
+										final SlotAllocation otherAllocation = other.getLoadAllocation();
+										if (otherAllocation != null) {
+											if (differentSequenceChecker.apply(row, other)) {
+												ganttChart.getGanttComposite().addConnection(internalMap.get(loadAllocation.getSlotVisit()), internalMap.get(otherAllocation.getSlotVisit()),
+														lineColour);
+											}
+										}
+									}
+									if (dischargeAllocation != null) {
+										final SlotAllocation otherAllocation = other.getDischargeAllocation();
+										if (otherAllocation != null) {
+											if (differentSequenceChecker.apply(row, other)) {
+
+												ganttChart.getGanttComposite().addConnection(internalMap.get(dischargeAllocation.getSlotVisit()), internalMap.get(otherAllocation.getSlotVisit()),
+														lineColour);
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
 				final ArrayList<GanttEvent> selectedEvents;
 				if (l != null) {
 					// Use the internalMap to obtain the list of events we are selecting
@@ -943,7 +1028,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		return new ScheduleElementCollector() {
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, LNGScenarioModel scenarioModel, final Schedule schedule) {
+			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final LNGScenarioModel scenarioModel, final Schedule schedule) {
 				return Collections.singleton(schedule);
 			}
 
@@ -954,7 +1039,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean isPinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final LNGScenarioModel scenarioModel, final Schedule schedule, final boolean isPinned) {
 
 				final List<Event> interestingEvents = new LinkedList<Event>();
 				for (final Sequence sequence : schedule.getSequences()) {
