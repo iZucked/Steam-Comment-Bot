@@ -25,7 +25,7 @@ public class DiffPerspective implements IPerspectiveFactory {
 		final IFolderLayout diffArea = layout.createFolder("diffArea", IPageLayout.LEFT, 0.2f, IPageLayout.ID_EDITOR_AREA);
 
 		// Horizontal KPI
-		layout.addStandaloneView(HeadlineReportView.ID, false, IPageLayout.TOP, 0.04f, IPageLayout.ID_EDITOR_AREA);
+		layout.addStandaloneView(HeadlineReportView.ID, false, IPageLayout.TOP, 0.06f, IPageLayout.ID_EDITOR_AREA);
 		final IViewLayout viewLayout = layout.getViewLayout(HeadlineReportView.ID);
 		viewLayout.setCloseable(false);
 		viewLayout.setMoveable(false);
