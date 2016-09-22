@@ -44,7 +44,7 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		}
 		// Horizontal KPI
 		{
-			layout.addStandaloneView(HeadlineReportView.ID, false, IPageLayout.TOP, 0.03f, IPageLayout.ID_EDITOR_AREA);
+			layout.addStandaloneView(HeadlineReportView.ID, false, IPageLayout.TOP, 0.05f, IPageLayout.ID_EDITOR_AREA);
 			final IViewLayout viewLayout = layout.getViewLayout(HeadlineReportView.ID);
 			viewLayout.setCloseable(false);
 			viewLayout.setMoveable(false);
