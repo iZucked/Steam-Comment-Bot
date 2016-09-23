@@ -4,17 +4,27 @@
  */
 package com.mmxlabs.models.lng.schedule.util;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.Idle;
+import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 /**
- * TODO: {@link #getSegmentStart(Event)} and {@link #getSegmentEnd(Event)} should be replaceable with the new {@link EventGrouping} interface. 
+ * TODO: {@link #getSegmentStart(Event)} and {@link #getSegmentEnd(Event)} should be replaceable with the new {@link EventGrouping} interface.
+ * 
  * @author sg
  *
  */
@@ -95,4 +105,58 @@ public class ScheduleModelUtils {
 		}
 		return duration;
 	}
+
+	/**
+	 * Returns the main {@link Event} linked to the input. This could be a {@link LoadSlot} {@link SlotVisit}, or {@link VesselEventVisit} etc.
+	 * 
+	 * @param scheduleModelObject
+	 */
+	public static @Nullable PortVisit getMainEvent(EObject scheduleModelObject) {
+		if (scheduleModelObject instanceof CargoAllocation) {
+			final CargoAllocation cargoAllocation = (CargoAllocation) scheduleModelObject;
+			scheduleModelObject = cargoAllocation.getSlotAllocations().get(0);
+		}
+		if (scheduleModelObject instanceof SlotAllocation) {
+			final SlotAllocation slotAllocation = (SlotAllocation) scheduleModelObject;
+			final Slot slot = slotAllocation.getSlot();
+			if (slot instanceof LoadSlot) {
+				return slotAllocation.getSlotVisit();
+			}
+		} else if (scheduleModelObject instanceof VesselEventVisit) {
+			final VesselEventVisit vesselEventVisit = (VesselEventVisit) scheduleModelObject;
+			return vesselEventVisit;
+		} else if (scheduleModelObject instanceof GeneratedCharterOut) {
+			final GeneratedCharterOut generatedCharterOut = (GeneratedCharterOut) scheduleModelObject;
+			return generatedCharterOut;
+		} else if (scheduleModelObject instanceof EndEvent) {
+			final EndEvent endEvent = (EndEvent) scheduleModelObject;
+			return endEvent;
+		} else if (scheduleModelObject instanceof StartEvent) {
+			final StartEvent startEvent = (StartEvent) scheduleModelObject;
+			return startEvent;
+		}
+		return null;
+	}
+
+	public static @Nullable Journey getLinkedJourneyEvent(PortVisit portVisit) {
+		final Event evt = portVisit.getNextEvent();
+		if (evt instanceof Journey) {
+			return (Journey) evt;
+		}
+		return null;
+
+	}
+
+	public static @Nullable Idle getLinkedIdleEvent(PortVisit portVisit) {
+		Event evt = portVisit.getNextEvent();
+		if (evt instanceof Journey) {
+			evt = evt.getNextEvent();
+		}
+		if (evt instanceof Idle) {
+			return (Idle) evt;
+		}
+		return null;
+
+	}
+
 }

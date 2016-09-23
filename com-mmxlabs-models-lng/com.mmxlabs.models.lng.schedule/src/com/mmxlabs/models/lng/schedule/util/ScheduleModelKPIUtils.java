@@ -376,7 +376,7 @@ public class ScheduleModelKPIUtils {
 		return null;
 	}
 
-	public static Long calculateLegCost(final EventGrouping grouping) {
+	public static Long calculateEventShippingCost(final @Nullable EventGrouping grouping, boolean includeAllLNG) {
 		if (grouping != null) {
 
 			// boolean collecting = false;
@@ -402,9 +402,7 @@ public class ScheduleModelKPIUtils {
 					final FuelUsage fuelUsage = (FuelUsage) event;
 					total += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
 					// Start event and charter out events pay for LNG use
-					if (grouping instanceof StartEvent) {
-						total += getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
-					} else if (grouping instanceof CharterOutEvent) {
+					if (includeAllLNG || grouping instanceof StartEvent || grouping instanceof CharterOutEvent) {
 						total += getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
 					}
 				}
@@ -431,7 +429,7 @@ public class ScheduleModelKPIUtils {
 	}
 
 	public static long getTotalShippingCost(@NonNull final EventGrouping eventGrouping) {
-		return calculateLegCost(eventGrouping);
+		return calculateEventShippingCost(eventGrouping, false);
 	}
 
 	public static long getTotalShippingCost(@NonNull final CargoAllocation cargoAllocation) {
