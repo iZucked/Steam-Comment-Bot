@@ -45,35 +45,39 @@ public class CopyGridToHtmlStringUtil {
 	}
 
 	public String convert() {
-
-		final StringWriter sw = new StringWriter();
-
-		// Note this may be zero if no columns have been defined. However an
-		// implicit column will be created in such cases
-		final int numColumns = table.getColumnCount();
-		if (includeBorder) {
-			sw.write("<table border='0'>\n");
-		} else {
-			sw.write("<table >\n");
-
-		}
+		additionalAttributeProvider.begin();
 		try {
-			addPreTableRows(sw);
-			addHeader(sw);
-			// Ensure at least 1 column to grab data
-			final int numberOfColumns = Math.max(5, numColumns);
-			final int[] rowOffsets = new int[numberOfColumns];
+			final StringWriter sw = new StringWriter();
 
-			for (final GridItem item : table.getItems()) {
-				processTableRow(sw, numberOfColumns, item, rowOffsets);
+			// Note this may be zero if no columns have been defined. However an
+			// implicit column will be created in such cases
+			final int numColumns = table.getColumnCount();
+			if (includeBorder) {
+				sw.write("<table border='0'>\n");
+			} else {
+				sw.write("<table >\n");
+
 			}
-		} catch (final IOException e) {
-			// should not occur, since we use a StringWriter
-			LOG.error(e.getMessage(), e);
-		}
-		sw.write("</table>");
+			try {
+				addPreTableRows(sw);
+				addHeader(sw);
+				// Ensure at least 1 column to grab data
+				final int numberOfColumns = Math.max(5, numColumns);
+				final int[] rowOffsets = new int[numberOfColumns];
 
-		return sw.toString();
+				for (final GridItem item : table.getItems()) {
+					processTableRow(sw, numberOfColumns, item, rowOffsets);
+				}
+			} catch (final IOException e) {
+				// should not occur, since we use a StringWriter
+				LOG.error(e.getMessage(), e);
+			}
+			sw.write("</table>");
+
+			return sw.toString();
+		} finally {
+			additionalAttributeProvider.done();
+		}
 	}
 
 	private void addPreTableRows(@NonNull final StringWriter sw) {
@@ -126,8 +130,13 @@ public class CopyGridToHtmlStringUtil {
 			} else {
 				// Part of column group. Only add group if we have not previously seen it.
 				if (seenGroups.add(columnGroup)) {
-					addCell(topRow, "th", columnGroup.getText(),
-							combineAttributes(new String[] { colourString, String.format("colSpan=%d", columnGroup.getColumns().length) }, getAdditionalHeaderAttributes(column)));
+					int groupCount = 0;
+					for (GridColumn c : columnGroup.getColumns()) {
+						if (c.isVisible()) {
+							groupCount++;
+						}
+					}
+					addCell(topRow, "th", columnGroup.getText(), combineAttributes(new String[] { colourString, String.format("colSpan=%d", groupCount) }, getAdditionalHeaderAttributes(column)));
 				}
 				// Add in the bottom row info.
 				addCell(bottomRow, "th", column.getText(), combineAttributes(new String[] { colourString }, getAdditionalHeaderAttributes(column)));

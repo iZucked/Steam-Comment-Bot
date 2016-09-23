@@ -15,10 +15,12 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.menu.MHandledToolItem;
 import org.eclipse.e4.ui.model.application.ui.menu.MMenuFactory;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.osgi.framework.FrameworkUtil;
 
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
+import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
 
 /**
  * Eclipse e4 command handler to copy {@link Grid} data to the clipboard
@@ -67,19 +69,24 @@ public class CopyToHtmlClipboardHandler {
 
 		final Grid grid = adaptToGrid(part, adapterManager);
 		if (grid != null) {
-			copyGrid(grid);
+			final IAdditionalAttributeProvider additionalAttributeProvider = adaptToAdditionalAttributeProvider(part, adapterManager);
+			copyGrid(grid, additionalAttributeProvider);
 		}
 	}
 
-	public static void copyGrid(@NonNull final Grid grid) {
+	public static void copyGrid(@NonNull final Grid grid, @Nullable IAdditionalAttributeProvider additionalAttributeProvider) {
 		if (!grid.isDisposed()) {
 			// TODO: This should be a parameterised command
 			final CopyGridToHtmlClipboardAction action = new CopyGridToHtmlClipboardAction(grid, true);
+			if (additionalAttributeProvider != null) {
+				action.setAdditionalAttributeProvider(additionalAttributeProvider);
+				action.setShowBackgroundColours(true);
+			}
 			action.run();
 		}
 	}
 
-	protected static Grid adaptToGrid(final MPart part, final IAdapterManager adapterManager) {
+	protected static @Nullable Grid adaptToGrid(final MPart part, final IAdapterManager adapterManager) {
 		Grid grid = null;
 		if (part.getObject() instanceof IAdaptable) {
 			final IAdaptable adaptable = (IAdaptable) part.getObject();
@@ -89,5 +96,17 @@ public class CopyToHtmlClipboardHandler {
 			grid = (Grid) adapterManager.getAdapter(part.getObject(), Grid.class);
 		}
 		return grid;
+	}
+
+	protected static @Nullable IAdditionalAttributeProvider adaptToAdditionalAttributeProvider(final MPart part, final IAdapterManager adapterManager) {
+		IAdditionalAttributeProvider additionalAttributeProvider = null;
+		if (part.getObject() instanceof IAdaptable) {
+			final IAdaptable adaptable = (IAdaptable) part.getObject();
+			additionalAttributeProvider = (IAdditionalAttributeProvider) adaptable.getAdapter(IAdditionalAttributeProvider.class);
+		}
+		if (additionalAttributeProvider == null) {
+			additionalAttributeProvider = (IAdditionalAttributeProvider) adapterManager.getAdapter(part.getObject(), IAdditionalAttributeProvider.class);
+		}
+		return additionalAttributeProvider;
 	}
 }

@@ -43,4 +43,10 @@ public interface IAdditionalAttributeProvider {
 
 	@NonNull
 	String @Nullable [] getAdditionalPreRows();
+
+	default void begin() {
+	}
+
+	default void done() {
+	}
 }
