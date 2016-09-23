@@ -5,6 +5,9 @@
 package com.mmxlabs.lingo.reports.views.changeset;
 
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -84,9 +87,11 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
+import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -676,6 +681,14 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(loadGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setText("Date");
+			gvc.getColumn().setWidth(75);
+			gvc.setLabelProvider(createDateLabelProvider(ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_LOAD_ALLOCATION));
+			gvc.getColumn().setCellRenderer(createCellRenderer());
+		}
+		{
+			final GridColumn gc = new GridColumn(loadGroup, SWT.CENTER);
+			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
 			gvc.getColumn().setText("Price");
 			gvc.getColumn().setWidth(50);
 			gvc.setLabelProvider(createDeltaLabelProvider(false, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_LOAD_ALLOCATION, ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_LOAD_ALLOCATION,
@@ -710,6 +723,14 @@ public class ChangeSetView implements IAdaptable {
 			gvc.getColumn().setText("ID");
 			gvc.getColumn().setWidth(75);
 			gvc.setLabelProvider(createStandardLabelProvider(ChangesetPackage.Literals.CHANGE_SET_ROW__RHS_NAME));
+			gvc.getColumn().setCellRenderer(createCellRenderer());
+		}
+		{
+			final GridColumn gc = new GridColumn(dischargeGroup, SWT.CENTER);
+			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setText("Date");
+			gvc.getColumn().setWidth(75);
+			gvc.setLabelProvider(createDateLabelProvider(ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION));
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 		}
 		{
@@ -1080,6 +1101,32 @@ public class ChangeSetView implements IAdaptable {
 				}
 			}
 
+		};
+	}
+
+	private CellLabelProvider createDateLabelProvider(final EStructuralFeature attrib) {
+		return new CellLabelProvider() {
+
+			private DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+
+			@Override
+			public void update(final ViewerCell cell) {
+				final Object element = cell.getElement();
+				cell.setText("");
+				if (element instanceof ChangeSetRow) {
+					final ChangeSetRow change = (ChangeSetRow) element;
+					final SlotAllocation slotAllocation = (SlotAllocation) change.eGet(attrib);
+					if (slotAllocation != null) {
+						final Slot slot = slotAllocation.getSlot();
+						if (slot != null) {
+							LocalDate windowStart = slot.getWindowStart();
+							if (windowStart != null) {
+								cell.setText(windowStart.format(formatter));
+							}
+						}
+					}
+				}
+			}
 		};
 	}
 
@@ -1691,11 +1738,11 @@ public class ChangeSetView implements IAdaptable {
 							String left = "";
 							String right = "";
 
-							LoadSlot load = changeSetRow.getLoadSlot();
+							final LoadSlot load = changeSetRow.getLoadSlot();
 							if (load != null) {
 								left = load.isDESPurchase() ? "○" : "●";
 							}
-							DischargeSlot discharge = changeSetRow.getDischargeSlot();
+							final DischargeSlot discharge = changeSetRow.getDischargeSlot();
 							if (discharge != null) {
 								right = discharge.isFOBSale() ? "●" : "○";
 							}
