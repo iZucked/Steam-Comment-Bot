@@ -22,8 +22,10 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.window.ToolTip;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -175,6 +177,8 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 				// return sortData.sortedChildren;
 				// }
 			};
+			ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.RECREATE);
+
 			viewer.setComparator(sortingSupport.createViewerComparer());
 
 			this.filterSupport = new EObjectTableViewerFilterSupport(viewer, viewer.getGrid());

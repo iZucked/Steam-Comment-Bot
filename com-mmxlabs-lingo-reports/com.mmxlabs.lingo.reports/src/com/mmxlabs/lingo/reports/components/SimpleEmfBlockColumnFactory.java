@@ -42,7 +42,8 @@ public class SimpleEmfBlockColumnFactory extends EmfBlockColumnFactory {
 	public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 		final ColumnBlock block = blockManager.createBlock(blockID, blockDisplayName, columnType);
 		block.tooltip = tooltip;
-		return blockManager.createColumn(block, columnName, formatter, path);
+		ColumnHandler columnHandler = blockManager.createColumn(block, columnName, formatter, path);
+		return columnHandler;
 	}
 
 }

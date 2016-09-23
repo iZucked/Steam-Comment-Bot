@@ -290,25 +290,25 @@ public class ColumnBlockManager {
 
 	public ColumnHandler createColumn(final ColumnBlock block, final String title, final ICellRenderer formatter, final ETypedElement... path) {
 		final ColumnHandler handler = new ColumnHandler(block, formatter, path, title, columnFactory);
-
+		handler.setTooltip(block.tooltip);
 		return configureHandler(block, handler, true);
 	}
 
 	public ColumnHandler createColumn(final ColumnBlock block, final String title, final ICellRenderer formatter, final boolean create, final ETypedElement... path) {
 		final ColumnHandler handler = new ColumnHandler(block, formatter, path, title, columnFactory);
-
+		handler.setTooltip(block.tooltip);
 		return configureHandler(block, handler, create);
 	}
 
 	public ColumnHandler createColumn(final ColumnBlock block, final String title, final ICellRenderer formatter, final boolean create, final ETypedElement[][] path) {
 		final ColumnHandler handler = new ColumnHandler(block, formatter, path, title, columnFactory);
-
+		handler.setTooltip(block.tooltip);
 		return configureHandler(block, handler, true);
 	}
 
 	public ColumnHandler createColumn(final ColumnBlock block, final String title, final ICellRenderer formatter, final ETypedElement[][] path) {
 		final ColumnHandler handler = new ColumnHandler(block, formatter, path, title, columnFactory);
-
+		handler.setTooltip(block.tooltip);
 		return configureHandler(block, handler, true);
 	}
 
