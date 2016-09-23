@@ -28,8 +28,6 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  * 
  * TODO: Start replacing existing code/classes to use this class
  * 
- * TODO: WIP
- * 
  * @noinstantiate
  * @author Simon Goodall
  * 
@@ -110,9 +108,10 @@ public final class ScheduleTools {
 
 		return 0;
 	}
-	
+
 	/**
 	 * Get allocated slot's price
+	 * 
 	 * @param scenario
 	 * @param slot
 	 * @return
