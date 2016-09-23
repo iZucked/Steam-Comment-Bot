@@ -1080,8 +1080,11 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
             if (_settings.drawFillsToBottomWhenUsingGanttSections()) {
             	// Fix for broken vScroll max - sometimes it is too big, so here force it in to the calc to avoid rendering artifacts when the max is bigger than the expected size
                 final Rectangle extraBounds = new Rectangle(0, _mainBounds.y + getHeaderHeight(), _mainBounds.x + _mainBounds.width, _mainBounds.y + Math.max(_vScrollBar.getMaximum(), _mainBounds.height));
-                drawFills(gc, extraBounds);
-                drawVerticalLines(gc, extraBounds, false);
+//                drawFills(gc, extraBounds);
+//                drawVerticalLines(gc, extraBounds, false);
+
+                gc.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+                gc.fillRectangle(extraBounds);
             }
 
             for (int i = 0; i < _ganttSections.size(); i++) {
@@ -1723,7 +1726,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 
         boolean toggle = false;
-        boolean gradient = gs == null || _settings.drawSectionsWithGradients();
+        boolean gradient = false;//gs == null || _settings.drawSectionsWithGradients();
         
         if (!gradient && gs != null ) {
         	// Use the index of the section to determine which fill to use
