@@ -5,9 +5,6 @@
 package com.mmxlabs.lingo.reports.views.changeset;
 
 import java.lang.reflect.InvocationTargetException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -63,7 +60,6 @@ import org.eclipse.nebula.widgets.grid.internal.DefaultColumnHeaderRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.TreeEvent;
 import org.eclipse.swt.events.TreeListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
@@ -74,7 +70,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.google.common.base.Objects;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
@@ -90,12 +85,6 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
-import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalCalendarReportView;
-import com.mmxlabs.lingo.reports.views.vertical.CalendarColumn;
-import com.mmxlabs.lingo.reports.views.vertical.VerticalReportUtils;
-import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalReportVisualiser.Alignment;
-import com.mmxlabs.lingo.reports.views.vertical.labellers.IBorderProvider;
-import com.mmxlabs.lingo.reports.views.vertical.providers.EventProvider;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -109,7 +98,6 @@ import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
-import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
 import com.mmxlabs.scenario.service.IScenarioService;
@@ -1045,7 +1033,7 @@ public class ChangeSetView implements IAdaptable {
 
 	@SuppressWarnings("restriction")
 	private void createWordWrapRenderer(final GridViewerColumn gvc) {
-		final DefaultColumnHeaderRenderer renderer = new DefaultColumnHeaderRenderer();
+		final WrappingColumnHeaderRenderer renderer = new WrappingColumnHeaderRenderer();
 		renderer.setWordWrap(true);
 		gvc.getColumn().setHeaderRenderer(renderer);
 	}
