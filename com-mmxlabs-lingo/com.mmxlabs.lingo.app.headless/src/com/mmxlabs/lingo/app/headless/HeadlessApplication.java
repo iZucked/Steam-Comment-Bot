@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -105,13 +106,13 @@ public class HeadlessApplication implements IApplication {
 		initAccessControl();
 
 		final List<IRunExporter> exporters = new LinkedList<IRunExporter>();
-		final String[] commandLineArgs = Platform.getCommandLineArgs();
+		String[] commandLineArgs = Platform.getCommandLineArgs();
+		commandLineArgs = filterCommandLineArgs(commandLineArgs);
 		final SettingsOverride overrideSettings = new SettingsOverride();
 		if (!parseOptions(commandLineArgs, overrideSettings, exporters)) {
 			return IApplication.EXIT_OK;
 		}
-		
-		
+
 		final String jsonFilePath = overrideSettings.getJSON();
 		final Pair<JSONParseResult, LNGHeadlessParameters> jsonParse = setParametersFromJSON(overrideSettings, jsonFilePath);
 		if (!jsonParse.getFirst().allRequirementsPassed()) {
@@ -125,7 +126,8 @@ public class HeadlessApplication implements IApplication {
 		// set output file
 		final String path = overrideSettings.getOutputPath();
 		// set scenario file
-		overrideSettings.setScenario(headlessParameters.getParameter("scenario-path", StringParameter.class).getValue() + "/" + headlessParameters.getParameter("scenario", StringParameter.class).getValue());
+		overrideSettings
+				.setScenario(headlessParameters.getParameter("scenario-path", StringParameter.class).getValue() + "/" + headlessParameters.getParameter("scenario", StringParameter.class).getValue());
 		// Set verbose Logging
 		overrideSettings.setActionPlanVerboseLogger(headlessParameters.getParameterValue("actionSets-verboseLogging", Boolean.class));
 		final String scenarioFile = overrideSettings.getScenario();
@@ -173,17 +175,17 @@ public class HeadlessApplication implements IApplication {
 		final @NonNull ExecutorService executorService = Executors.newFixedThreadPool(no_threads);
 
 		final Map<String, LSOLogger> phaseToLoggerMap = new ConcurrentHashMap<>();
-		
-		ActionSetLogger actionSetLogger = optimisationPlan.getUserSettings().isBuildActionSets() ? new ActionSetLogger() : null;
-//		System.out.println("DEBUGGER");
+
+		final ActionSetLogger actionSetLogger = optimisationPlan.getUserSettings().isBuildActionSets() ? new ActionSetLogger() : null;
+		// System.out.println("DEBUGGER");
 		try {
 
 			final AbstractRunnerHook runnerHook = new AbstractRunnerHook() {
 
 				@Override
-				protected void doEndStageJob(@NonNull String stage, int jobID, @Nullable Injector injector) {
+				protected void doEndStageJob(@NonNull final String stage, final int jobID, @Nullable final Injector injector) {
 
-					String stageAndJobID = getStageAndJobID();
+					final String stageAndJobID = getStageAndJobID();
 					final LSOLogger logger = phaseToLoggerMap.remove(stageAndJobID);
 					if (logger != null) {
 						final LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(path, stageAndJobID, outputFolderName, logger);
@@ -277,7 +279,7 @@ public class HeadlessApplication implements IApplication {
 				}
 			};
 
-			List<String> hints = new LinkedList<>();
+			final List<String> hints = new LinkedList<>();
 			hints.add(LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
 			try {
@@ -319,7 +321,7 @@ public class HeadlessApplication implements IApplication {
 				}
 
 				exportData(phaseToLoggerMap, actionSetLogger, path, outputFolderName, jsonFilePath, overrideSettings.isActionPlanVerboseLogger());
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				System.out.println("Headless Error");
 				System.err.println("Headless Error:" + e.getMessage());
 				e.printStackTrace();
@@ -332,14 +334,41 @@ public class HeadlessApplication implements IApplication {
 
 	}
 
-	private int getNumThreads(LNGHeadlessParameters headlessParameters) {
-		int processorsFromParams = headlessParameters.getParameterValue("actionSets-maxThreads", Integer.class);
-		int recommended = Math.max(1, Runtime.getRuntime().availableProcessors());
+	/**
+	 * Filter out invalid command line items that getopt cannot work with
+	 * 
+	 * @param commandLineArgs
+	 * @return
+	 */
+	private String[] filterCommandLineArgs(final String[] commandLineArgs) {
+		final List<String> commandLine = new ArrayList<String>(commandLineArgs.length);
+		int skip = 0;
+		for (final String arg : commandLineArgs) {
+			if (skip != 0) {
+				--skip;
+				continue;
+			}
+			if (arg.equals("-eclipse.keyring")) {
+				skip = 1;
+				continue;
+			}
+			if (arg.equals("-eclipse.password")) {
+				skip = 1;
+				continue;
+			}
+
+		}
+		return commandLine.toArray(new String[commandLine.size()]);
+	}
+
+	private int getNumThreads(final LNGHeadlessParameters headlessParameters) {
+		final int processorsFromParams = headlessParameters.getParameterValue("actionSets-maxThreads", Integer.class);
+		final int recommended = Math.max(1, Runtime.getRuntime().availableProcessors());
 		return Math.min(processorsFromParams, recommended);
 	}
 
 	@NonNull
-	private Module createLoggingModule(Map<String, LSOLogger> phaseToLoggerMap, ActionSetLogger actionSetLogger, AbstractRunnerHook runnerHook) {
+	private Module createLoggingModule(final Map<String, LSOLogger> phaseToLoggerMap, final ActionSetLogger actionSetLogger, final AbstractRunnerHook runnerHook) {
 		final LoggingModule loggingModule = new LoggingModule(phaseToLoggerMap, actionSetLogger, runnerHook, 10_000);
 		return loggingModule;
 	}
@@ -479,10 +508,10 @@ public class HeadlessApplication implements IApplication {
 
 	private void updateOptimiserSettings(final LNGScenarioModel rootObject, final OptimisationPlan plan, final SettingsOverride settingsOverride, final HeadlessParameters headlessParameters) {
 
-		List<ConstraintAndFitnessSettings> constraintsAndFitnesses = new LinkedList<>();
+		final List<ConstraintAndFitnessSettings> constraintsAndFitnesses = new LinkedList<>();
 
 		if (headlessParameters.getParameterValue("do-clean-state", Boolean.class)) {
-			CleanStateOptimisationStage stage = ScenarioUtils.createDefaultCleanStateParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
+			final CleanStateOptimisationStage stage = ScenarioUtils.createDefaultCleanStateParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
 			stage.setSeed(headlessParameters.getParameterValue("seed", Integer.class));
 
 			stage.getAnnealingSettings().setIterations(headlessParameters.getParameterValue("clean-state-iterations", Integer.class));
@@ -491,7 +520,7 @@ public class HeadlessApplication implements IApplication {
 			stage.getAnnealingSettings().setEpochLength(headlessParameters.getParameterValue("sa-epoch-length", Integer.class));
 			stage.getAnnealingSettings().setCooling(headlessParameters.getParameterValue("sa-cooling", Double.class));
 
-			ParallelOptimisationStage<CleanStateOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
+			final ParallelOptimisationStage<CleanStateOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
 
 			// Add to list to manipulate
 			constraintsAndFitnesses.add(stage.getConstraintAndFitnessSettings());
@@ -503,7 +532,7 @@ public class HeadlessApplication implements IApplication {
 		}
 
 		{
-			LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
+			final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
 			stage.setSeed(headlessParameters.getParameterValue("seed", Integer.class));
 
 			stage.getAnnealingSettings().setIterations(headlessParameters.getParameterValue("iterations", Integer.class));
@@ -513,7 +542,7 @@ public class HeadlessApplication implements IApplication {
 			stage.getAnnealingSettings().setRestarting(headlessParameters.getParameterValue("restarting-useRestarting", Boolean.class));
 			stage.getAnnealingSettings().setRestartIterationsThreshold(headlessParameters.getParameterValue("restarting-restartThreshold", Integer.class));
 
-			ParallelOptimisationStage<LocalSearchOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
+			final ParallelOptimisationStage<LocalSearchOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
 			pStage.setTemplate(stage);
 			pStage.setJobCount(headlessParameters.getParameterValue("lso-jobs", Integer.class));
 
@@ -523,7 +552,7 @@ public class HeadlessApplication implements IApplication {
 			plan.getStages().add(pStage);
 		}
 		if (headlessParameters.getParameterValue("hillClimbing-useHillClimbing", Boolean.class)) {
-			HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
+			final HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
 			stage.getAnnealingSettings().setIterations(headlessParameters.getParameterValue("hillClimbing-iterations", Integer.class));
 			stage.setSeed(headlessParameters.getParameterValue("seed", Integer.class));
 
@@ -531,7 +560,7 @@ public class HeadlessApplication implements IApplication {
 			stage.getAnnealingSettings().setEpochLength(headlessParameters.getParameterValue("sa-epoch-length", Integer.class));
 			stage.getAnnealingSettings().setCooling(headlessParameters.getParameterValue("sa-cooling", Double.class));
 
-			ParallelOptimisationStage<HillClimbOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
+			final ParallelOptimisationStage<HillClimbOptimisationStage> pStage = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
 			pStage.setTemplate(stage);
 			// pStage.setJobCount(headlessParameters.getParameter("clean-state-jobs", Integer.class));
 
@@ -542,7 +571,7 @@ public class HeadlessApplication implements IApplication {
 		}
 
 		if (headlessParameters.getParameterValue("actionSets-buildActionSets", Boolean.class)) {
-			ActionPlanOptimisationStage stage = ScenarioUtils.createDefaultActionPlanParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
+			final ActionPlanOptimisationStage stage = ScenarioUtils.createDefaultActionPlanParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
 			stage.setTotalEvaluations(headlessParameters.getParameterValue("actionSets-totalEvals", Integer.class));
 			stage.setInRunEvaluations(headlessParameters.getParameterValue("actionSets-inRunEvals", Integer.class));
 			stage.setSearchDepth(headlessParameters.getParameterValue("actionSets-maxSearchDepth", Integer.class));
@@ -561,7 +590,7 @@ public class HeadlessApplication implements IApplication {
 
 		createDateRanges(plan, headlessParameters);
 
-		for (ConstraintAndFitnessSettings settings : constraintsAndFitnesses) {
+		for (final ConstraintAndFitnessSettings settings : constraintsAndFitnesses) {
 			createObjectives(settings, headlessParameters.getParameterValue("objectives", DoubleMap.class));
 		}
 		setLatenessParameters(settingsOverride, headlessParameters);
@@ -570,7 +599,7 @@ public class HeadlessApplication implements IApplication {
 		createPromptDates(rootObject, headlessParameters);
 	}
 
-	private void setMoveOverrides(SettingsOverride settingsOverride, HeadlessParameters headlessParameters) {
+	private void setMoveOverrides(final SettingsOverride settingsOverride, final HeadlessParameters headlessParameters) {
 		settingsOverride.setMovesUseLoopingSCMG(headlessParameters.getParameterValue("moves-useLoopingSCMG", Boolean.class));
 	}
 
@@ -649,7 +678,8 @@ public class HeadlessApplication implements IApplication {
 		return nameMap;
 	}
 
-	private void exportData(final Map<String, LSOLogger> loggerMap, ActionSetLogger actionSetLogger, final String path, final String foldername, final String jsonFilePath, boolean verbose) {
+	private void exportData(final Map<String, LSOLogger> loggerMap, final ActionSetLogger actionSetLogger, final String path, final String foldername, final String jsonFilePath,
+			final boolean verbose) {
 		// // first export logging data
 		// for (final String phase : IRunnerHook.PHASE_ORDER) {
 		// final LSOLogger logger = loggerMap.get(phase);
@@ -660,14 +690,14 @@ public class HeadlessApplication implements IApplication {
 		// }
 		if (actionSetLogger != null) {
 			System.out.println(verbose);
-			if(!verbose)
+			if (!verbose)
 				actionSetLogger.shortExport(Paths.get(path, foldername).toString(), "actionSets");
 			else
 				actionSetLogger.export(Paths.get(path, foldername).toString(), "action");
 		}
 		HeadlessJSONParser.copyJSONFile(jsonFilePath, Paths.get(path, foldername, "parameters.json").toString());
 
-		PrintWriter writer = WriterFactory.getWriter(Paths.get(path, foldername, "machineData.txt").toString());
+		final PrintWriter writer = WriterFactory.getWriter(Paths.get(path, foldername, "machineData.txt").toString());
 		writer.write(String.format("maxCPUs,%s", Runtime.getRuntime().availableProcessors()));
 		writer.close();
 
