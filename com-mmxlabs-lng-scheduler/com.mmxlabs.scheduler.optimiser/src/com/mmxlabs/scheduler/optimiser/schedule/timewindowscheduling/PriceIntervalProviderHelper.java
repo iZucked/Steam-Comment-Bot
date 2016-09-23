@@ -11,6 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Provider;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -49,7 +51,7 @@ public class PriceIntervalProviderHelper {
 	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
 
 	@Inject
-	private IPriceIntervalProducer priceIntervalProducer;
+	private Provider<IPriceIntervalProducer> priceIntervalProducerProvider;
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -553,7 +555,7 @@ public class PriceIntervalProviderHelper {
 		}
 
 		final List<int[]> intervals = getFeasibleIntervalSubSet(timeWindow.getInclusiveStart(), timeWindow.getExclusiveEnd(),
-				priceIntervalProducer.getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(load, discharge, (IPriceIntervalProvider) load.getLoadPriceCalculator(),
+				priceIntervalProducerProvider.get().getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(load, discharge, (IPriceIntervalProvider) load.getLoadPriceCalculator(),
 						(IPriceIntervalProvider) discharge.getDischargePriceCalculator(), portTimeWindowRecord, dateFromLoad));
 		return intervals;
 	}

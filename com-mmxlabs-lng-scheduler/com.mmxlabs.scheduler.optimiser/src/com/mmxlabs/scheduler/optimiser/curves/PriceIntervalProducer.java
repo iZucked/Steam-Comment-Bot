@@ -25,7 +25,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 public class PriceIntervalProducer implements IPriceIntervalProducer {
 
 	@Inject
-	PriceIntervalProviderHelper priceIntervalProviderUtil;
+	private PriceIntervalProviderHelper priceIntervalProviderUtil;
 
 	@Override
 	public List<int @NonNull []> getLoadIntervalsIndependentOfDischarge(final ILoadOption portSlot, final IPortTimeWindowsRecord portTimeWindowRecord) {

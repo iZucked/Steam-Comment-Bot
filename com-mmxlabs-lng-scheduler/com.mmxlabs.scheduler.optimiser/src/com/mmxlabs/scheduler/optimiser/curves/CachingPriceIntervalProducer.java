@@ -29,7 +29,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 
 	@Inject
-	PriceIntervalProviderHelper priceIntervalProviderUtil;
+	private PriceIntervalProviderHelper priceIntervalProviderUtil;
 
 	private final class CacheKey {
 
@@ -89,8 +89,8 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 		}
 	}
 
-	IPriceIntervalProducer delegate;
-	HashMap<CacheKey, List<int[]>> cache = new HashMap<>(800);
+	private IPriceIntervalProducer delegate;
+	private HashMap<CacheKey, List<int[]>> cache = new HashMap<>(800);
 
 	public CachingPriceIntervalProducer(final IPriceIntervalProducer delegate) {
 		this.delegate = delegate;
