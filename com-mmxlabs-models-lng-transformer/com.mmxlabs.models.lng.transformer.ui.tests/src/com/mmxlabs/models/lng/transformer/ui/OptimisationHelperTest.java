@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.parameters.OptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 
 public class OptimisationHelperTest {
 
@@ -78,7 +79,7 @@ public class OptimisationHelperTest {
 				ConstraintAndFitnessSettings constraintAndFitnessSettings = cfStage.getConstraintAndFitnessSettings();
 				Assert.assertNotNull(constraintAndFitnessSettings);
 				Assert.assertNotNull(constraintAndFitnessSettings.getSimilaritySettings());
-				Assert.assertEquals(SimilarityUIParameters.createOffSimilaritySettings(), constraintAndFitnessSettings.getSimilaritySettings());
+				Assert.assertEquals(ScenarioUtils.createOffSimilaritySettings(), constraintAndFitnessSettings.getSimilaritySettings());
 				
 			}
 		}
