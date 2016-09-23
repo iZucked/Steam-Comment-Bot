@@ -40,7 +40,6 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionC
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.DifferentSTSVesselsConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
@@ -110,44 +109,11 @@ public class ScenarioUtils {
 
 	public static SimilaritySettings createOffSimilaritySettings() {
 		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
-
-		similaritySettings.setLowInterval(createSimilarityInterval(8, 0));
-		similaritySettings.setMedInterval(createSimilarityInterval(16, 0));
-		similaritySettings.setHighInterval(createSimilarityInterval(30, 0));
-		similaritySettings.setOutOfBoundsWeight(0);
-
-		return similaritySettings;
-	}
-
-	public static SimilaritySettings createLowSimilaritySettings() {
-		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
-
-		similaritySettings.setLowInterval(createSimilarityInterval(8, 0));
-		similaritySettings.setMedInterval(createSimilarityInterval(16, 0));
-		similaritySettings.setHighInterval(createSimilarityInterval(30, 500_000));
-		similaritySettings.setOutOfBoundsWeight(5_000_000);
-
-		return similaritySettings;
-	}
-
-	public static SimilaritySettings createMediumSimilaritySettings() {
-		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
-
-		similaritySettings.setLowInterval(createSimilarityInterval(8, 0));
-		similaritySettings.setMedInterval(createSimilarityInterval(16, 250_000));
-		similaritySettings.setHighInterval(createSimilarityInterval(30, 500_000));
-		similaritySettings.setOutOfBoundsWeight(1_000_000);
-
-		return similaritySettings;
-	}
-
-	public static SimilaritySettings createHighSimilaritySettings() {
-		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
-
-		similaritySettings.setLowInterval(createSimilarityInterval(8, 250_000));
-		similaritySettings.setMedInterval(createSimilarityInterval(16, 500_000));
-		similaritySettings.setHighInterval(createSimilarityInterval(30, 1_000_000));
-		similaritySettings.setOutOfBoundsWeight(5_000_000);
+		int weight = 50_000;
+		similaritySettings.setLowInterval(createSimilarityInterval(8, weight));
+		similaritySettings.setMedInterval(createSimilarityInterval(16, weight));
+		similaritySettings.setHighInterval(createSimilarityInterval(30, weight));
+		similaritySettings.setOutOfBoundsWeight(weight);
 
 		return similaritySettings;
 	}
@@ -414,7 +380,7 @@ public class ScenarioUtils {
 
 	public static void createOrUpdateAllConstraints(OptimisationPlan plan, String name, boolean enabled) {
 		for (OptimisationStage stage : plan.getStages()) {
-			if(stage instanceof ParallelOptimisationStage){
+			if (stage instanceof ParallelOptimisationStage) {
 				ParallelOptimisationStage parallelOptimisationStage = (ParallelOptimisationStage) stage;
 				stage = parallelOptimisationStage.getTemplate();
 			}
@@ -452,7 +418,7 @@ public class ScenarioUtils {
 
 	public static void createOrUpdateAllObjectives(OptimisationPlan plan, String name, boolean enabled, double weight) {
 		for (OptimisationStage stage : plan.getStages()) {
-			if(stage instanceof ParallelOptimisationStage){
+			if (stage instanceof ParallelOptimisationStage) {
 				ParallelOptimisationStage parallelOptimisationStage = (ParallelOptimisationStage) stage;
 				stage = parallelOptimisationStage.getTemplate();
 			}

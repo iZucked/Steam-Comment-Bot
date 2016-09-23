@@ -17,7 +17,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -27,7 +26,6 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.validation.model.Category;
 import org.eclipse.emf.validation.model.EvaluationMode;
-import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.emf.validation.service.IBatchValidator;
 import org.eclipse.emf.validation.service.IConstraintDescriptor;
 import org.eclipse.emf.validation.service.IConstraintFilter;
@@ -50,7 +48,6 @@ import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
@@ -69,7 +66,6 @@ import com.mmxlabs.models.lng.parameters.provider.ParametersItemProviderAdapterF
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
-import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.DataSection;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.DataType;
@@ -77,7 +73,6 @@ import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.Opt
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.OptionGroup;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
-import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
 import com.mmxlabs.models.util.StringEscaper;
@@ -319,13 +314,14 @@ public final class OptimisationHelper {
 		return optimisationPlan;
 	}
 
-	public static UserSettings openUserDialog(final LNGScenarioModel scenario, final boolean forEvaluation, final UserSettings previousSettings, final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled) {
+	public static UserSettings openUserDialog(final LNGScenarioModel scenario, final boolean forEvaluation, final UserSettings previousSettings, final UserSettings defaultSettings,
+			final boolean displayOnlyIfOptionsEnabled) {
 		return openUserDialog(scenario, PlatformUI.getWorkbench().getDisplay(), PlatformUI.getWorkbench().getDisplay().getActiveShell(), forEvaluation, previousSettings, defaultSettings,
 				displayOnlyIfOptionsEnabled);
 	}
 
-	public static UserSettings openUserDialog(final LNGScenarioModel scenario, final Display display, final Shell shell, final boolean forEvaluation, final UserSettings previousSettings, final UserSettings defaultSettings,
-			final boolean displayOnlyIfOptionsEnabled) {
+	public static UserSettings openUserDialog(final LNGScenarioModel scenario, final Display display, final Shell shell, final boolean forEvaluation, final UserSettings previousSettings,
+			final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled) {
 		boolean optionAdded = false;
 		boolean enabledOptionAdded = false;
 
@@ -375,7 +371,7 @@ public final class OptimisationHelper {
 				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
 				choiceData.addChoice("Off", Boolean.FALSE);
 				choiceData.addChoice("On", Boolean.TRUE);
-				Option option = dialog.addOption(DataSection.Toggles, null, editingDomain, "Clean State: ", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_CLEAN_STATE_PREFIX,
+				final Option option = dialog.addOption(DataSection.Toggles, null, editingDomain, "Clean State: ", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_CLEAN_STATE_PREFIX,
 						ParametersPackage.eINSTANCE.getUserSettings_CleanStateOptimisation());
 				optionAdded = true;
 				enabledOptionAdded = true;
@@ -424,8 +420,8 @@ public final class OptimisationHelper {
 			}
 			// dialog.addOption(DataSection.Main, null, editingDomian, "Similarity", copy, defaultSettings, DataType.Choice, choiceData,
 			// ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
-			Option gcoOption = dialog.addOption(DataSection.Toggles, null, editingDomain, "Generate charter outs: ", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_CHARTEROUTGENERATION_PREFIX,
-					ParametersPackage.eINSTANCE.getUserSettings_GenerateCharterOuts());
+			final Option gcoOption = dialog.addOption(DataSection.Toggles, null, editingDomain, "Generate charter outs: ", copy, defaultSettings, DataType.Choice, choiceData,
+					SWTBOT_CHARTEROUTGENERATION_PREFIX, ParametersPackage.eINSTANCE.getUserSettings_GenerateCharterOuts());
 			optionAdded = true;
 			enabledOptionAdded = choiceData.enabled;
 		}
@@ -637,7 +633,7 @@ public final class OptimisationHelper {
 
 	private static SimilaritySettings createSimilaritySettings(final SimilarityMode mode, final YearMonth periodStart, final YearMonth periodEnd) {
 		if (periodStart == null || periodEnd == null || mode == null) {
-			return SimilarityUIParameters.createOffSimilaritySettings();
+			return ScenarioUtils.createOffSimilaritySettings();
 		} else {
 			return SimilarityUIParameters.getSimilaritySettings(mode, periodStart, periodEnd);
 		}
@@ -802,8 +798,8 @@ public final class OptimisationHelper {
 			return YearMonth.of(loadSlots.get(0).getWindowStartWithSlotOrPortTime().getYear(), loadSlots.get(0).getWindowStartWithSlotOrPortTime().getMonth());
 		}
 	}
-	
-	public static boolean isAllowedGCO(LNGScenarioModel lngScenarioModel) {
+
+	public static boolean isAllowedGCO(final LNGScenarioModel lngScenarioModel) {
 		if (lngScenarioModel == null) {
 			return false;
 		}
@@ -813,8 +809,8 @@ public final class OptimisationHelper {
 		return false;
 	}
 
-	private static boolean checkBreakEvenInSlot(Collection<? extends Slot> slots) {
-		for (Slot slot : slots) {
+	private static boolean checkBreakEvenInSlot(final Collection<? extends Slot> slots) {
+		for (final Slot slot : slots) {
 			if (slot.isSetPriceExpression() && slot.getPriceExpression().contains(IBreakEvenEvaluator.MARKER)) {
 				return true;
 			}
