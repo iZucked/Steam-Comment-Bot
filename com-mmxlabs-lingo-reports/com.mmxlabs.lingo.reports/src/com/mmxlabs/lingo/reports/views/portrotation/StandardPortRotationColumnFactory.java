@@ -147,7 +147,11 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 
 				@Override
 				public Comparable getComparable(final Object object) {
-					return ((Event) object).getDuration();
+					String str = render(object);
+					if (str == null) {
+						return "";
+					}
+					return str;
 				}
 
 			});
