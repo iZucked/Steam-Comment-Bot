@@ -6,13 +6,13 @@
 
 	<groupId>org.eclipse.nebula.widgets</groupId>
 	<artifactId>com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.parent</artifactId>
-	<version>1.0.6-SNAPSHOT</version>
+	<version>3.13.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
-		<version>32</version>
+		<version>35</version>
 	</parent>
 
 	<modules>
@@ -37,6 +37,15 @@
 				<configuration>
 					<resolver>p2</resolver>
 
+					<target>
+						<artifact>
+							<groupId>com.mmxlabs.lingo.common.target</groupId>
+							<artifactId>com.mmxlabs.lingo.common.target-definition</artifactId>
+							<version>${project.version}</version>
+						</artifact>
+					</target>
+
+
 					<environments>
 
 						<environment>
@@ -45,24 +54,9 @@
 							<arch>x86_64</arch>
 						</environment>
 						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
 							<os>win32</os>
 							<ws>win32</ws>
 							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>macosx</os>
-							<ws>cocoa</ws>
-							<arch>x86</arch>
 						</environment>
 						<environment>
 							<os>macosx</os>
@@ -76,26 +70,10 @@
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>plugin-source</id>
-						<goals>
-							<goal>plugin-source</goal>
-						</goals>
-					</execution>
-				</executions>
+				<inherited>true</inherited>
 			</plugin>
 
 		</plugins>
 
 	</build>
-
-	<repositories>
-		<repository>
-			<id>eclipse-3.7</id>
-			<url>http://download.eclipse.org/eclipse/updates/3.7</url>
-			<layout>p2</layout>
-		</repository>
-
-	</repositories>
 </project>
