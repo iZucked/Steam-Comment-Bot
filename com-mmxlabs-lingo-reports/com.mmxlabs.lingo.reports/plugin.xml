@@ -287,6 +287,38 @@
             handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.schedule.discharge-notes">
       </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.laden-idle-days">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.ballast-idle-days">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.laden-travel-days">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.ballast-travel-days">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.duration">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.discharge-duration">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.next-event-date">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.next-event-port">
+      </ScheduleBasedColumn>
    </extension>
    <extension
          point="com.mmxlabs.lingo.reports.ScheduleBasedReportInitialState">

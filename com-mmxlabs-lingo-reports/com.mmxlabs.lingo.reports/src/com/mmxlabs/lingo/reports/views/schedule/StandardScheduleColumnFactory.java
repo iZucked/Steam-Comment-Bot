@@ -6,8 +6,12 @@ package com.mmxlabs.lingo.reports.views.schedule;
 
 import static com.mmxlabs.lingo.reports.views.schedule.ScheduleBasedReportBuilder.CARGO_REPORT_TYPE_ID;
 
+import java.time.ZonedDateTime;
+import java.util.OptionalInt;
+
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jface.viewers.CellLabelProvider;
@@ -55,24 +59,30 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -184,7 +194,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						if (openSlotAllocation != null) {
 							final Slot slot = openSlotAllocation.getSlot();
 							if (slot instanceof LoadSlot) {
-								Contract contract = slot.getContract();
+								final Contract contract = slot.getContract();
 								if (contract != null) {
 									return contract.getName();
 								}
@@ -194,7 +204,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						if (slotAllocation != null) {
 							final Slot slot = slotAllocation.getSlot();
 							if (slot instanceof LoadSlot) {
-								Contract contract = slot.getContract();
+								final Contract contract = slot.getContract();
 								if (contract != null) {
 									return contract.getName();
 								}
@@ -216,7 +226,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						if (openSlotAllocation != null) {
 							final Slot slot = openSlotAllocation.getSlot();
 							if (slot instanceof DischargeSlot) {
-								Contract contract = slot.getContract();
+								final Contract contract = slot.getContract();
 								if (contract != null) {
 									return contract.getName();
 								}
@@ -226,7 +236,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						if (slotAllocation != null) {
 							final Slot slot = slotAllocation.getSlot();
 							if (slot instanceof DischargeSlot) {
-								Contract contract = slot.getContract();
+								final Contract contract = slot.getContract();
 								if (contract != null) {
 									return contract.getName();
 								}
@@ -314,48 +324,29 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Total Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
-					if (object instanceof CargoAllocation) {
-						final CargoAllocation allocation = (CargoAllocation) object;
-
-						int total = 0;
-						for (final Event event : allocation.getEvents()) {
-
-							if (event instanceof SlotVisit) {
-								final SlotVisit slotVisit = (SlotVisit) event;
-								total += slotVisit.getFuelCost();
-								total += slotVisit.getCharterCost();
-								total += slotVisit.getPortCost();
-							} else if (event instanceof Journey) {
-								final Journey journey = (Journey) event;
-								total += journey.getFuelCost();
-								total += journey.getCharterCost();
-								total += journey.getToll();
-							} else if (event instanceof Idle) {
-								final Idle idle = (Idle) event;
-								total += idle.getFuelCost();
-								total += idle.getCharterCost();
-							}
-						}
-						return total;
+					if (object instanceof EventGrouping) {
+						final EventGrouping grouping = (EventGrouping) object;
+						final long total = ScheduleModelKPIUtils.calculateEventShippingCost(grouping, true);
+						return (int) total;
 					}
 					return null;
 
 				}
-			}, cargoAllocationRef));
+			}, targetObjectRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.shipping_cost":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Shipping Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
-					if (object instanceof CargoAllocation) {
-						final CargoAllocation allocation = (CargoAllocation) object;
-						long total = ScheduleModelKPIUtils.calculateLegCost(allocation);
-						return (int)total;
+					if (object instanceof EventGrouping) {
+						final EventGrouping grouping = (EventGrouping) object;
+						final long total = ScheduleModelKPIUtils.calculateEventShippingCost(grouping, false);
+						return (int) total;
 					}
 					return null;
 
 				}
-			}, cargoAllocationRef));
+			}, targetObjectRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_additional":
 
@@ -367,7 +358,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 					ProfitAndLossContainer container = null;
 
-					if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut 
+					if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut
 							|| object instanceof OpenSlotAllocation || object instanceof EndEvent) {
 						container = (ProfitAndLossContainer) object;
 					}
@@ -544,6 +535,323 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.discharge-notes":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sale Notes", "The notes for the discharge slot", ColumnType.NORMAL,
 					Formatters.objectFormatter, dischargeAllocationRef, s.getSlotAllocation_Slot(), c.getSlot_Notes()));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.laden-idle-days":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Laden Idle", "Laden idle days", ColumnType.NORMAL, new BaseFormatter() {
+
+				private OptionalInt getDuration(final Object object) {
+					if (object instanceof EObject) {
+						PortVisit portVisit = ScheduleModelUtils.getMainEvent((EObject) object);
+						if (portVisit != null) {
+							Idle idle = ScheduleModelUtils.getLinkedIdleEvent(portVisit);
+							if (idle != null) {
+								return OptionalInt.of(idle.getDuration());
+							}
+						}
+					}
+					return OptionalInt.empty();
+				}
+
+				@Override
+				public String render(final Object object) {
+
+					final OptionalInt duration = getDuration(object);
+					if (duration.isPresent()) {
+						return Formatters.formatAsDays(duration.getAsInt());
+					}
+
+					return null;
+				}
+
+				@Override
+				public Comparable getComparable(final Object object) {
+					final OptionalInt duration = getDuration(object);
+					if (duration.isPresent()) {
+						return duration.getAsInt();
+					}
+					return 0;
+				}
+			}, targetObjectRef));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.ballast-idle-days":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Ballast Idle", "Ballast idle days", ColumnType.NORMAL, new BaseFormatter() {
+				private OptionalInt getDuration(final Object object) {
+					if (object instanceof SlotVisit) {
+						SlotVisit slotVisit = (SlotVisit) object;
+						final Event event = ScheduleModelUtils.getLinkedIdleEvent(slotVisit);
+						if (event != null) {
+							return OptionalInt.of(event.getDuration());
+						}
+					}
+					return OptionalInt.empty();
+				}
+
+				@Override
+				public String render(final Object object) {
+
+					final OptionalInt duration = getDuration(object);
+					if (duration.isPresent()) {
+						return Formatters.formatAsDays(duration.getAsInt());
+					}
+
+					return null;
+				}
+
+				@Override
+				public Comparable getComparable(final Object object) {
+					final OptionalInt duration = getDuration(object);
+					if (duration.isPresent()) {
+						return duration.getAsInt();
+					}
+					return 0;
+				}
+			}, dischargeAllocationRef, s.getSlotAllocation_SlotVisit()));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.laden-travel-days":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Laden Travel", "Laden travel days", ColumnType.NORMAL, new BaseFormatter() {
+
+				private OptionalInt getDuration(final Object object) {
+					if (object instanceof EObject) {
+						PortVisit portVisit = ScheduleModelUtils.getMainEvent((EObject) object);
+						if (portVisit != null) {
+							Journey journey = ScheduleModelUtils.getLinkedJourneyEvent(portVisit);
+							if (journey != null) {
+								return OptionalInt.of(journey.getDuration());
+							}
+						}
+					}
+					return OptionalInt.empty();
+				}
+
+				@Override
+				public String render(final Object object) {
+
+					final OptionalInt duration = getDuration(object);
+					if (duration.isPresent()) {
+						return Formatters.formatAsDays(duration.getAsInt());
+					}
+
+					return null;
+				}
+
+				@Override
+				public Comparable getComparable(final Object object) {
+					final OptionalInt duration = getDuration(object);
+					if (duration.isPresent()) {
+						return duration.getAsInt();
+					}
+					return 0;
+				}
+			}, targetObjectRef));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.ballast-travel-days":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Ballast Travel", "Ballast travel days", ColumnType.NORMAL, new BaseFormatter() {
+
+				private OptionalInt getDuration(final Object object) {
+					if (object instanceof SlotVisit) {
+						SlotVisit slotVisit = (SlotVisit) object;
+						final Event event = ScheduleModelUtils.getLinkedJourneyEvent(slotVisit);
+						if (event != null) {
+							return OptionalInt.of(event.getDuration());
+						}
+					}
+					return OptionalInt.empty();
+				}
+
+				@Override
+				public String render(final Object object) {
+
+					final OptionalInt duration = getDuration(object);
+					if (duration.isPresent()) {
+						return Formatters.formatAsDays(duration.getAsInt());
+					}
+
+					return null;
+				}
+
+				@Override
+				public Comparable getComparable(final Object object) {
+					final OptionalInt duration = getDuration(object);
+					if (duration.isPresent()) {
+						return duration.getAsInt();
+					}
+					return 0;
+				}
+			}, dischargeAllocationRef, s.getSlotAllocation_SlotVisit()));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.duration":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Load/Event Duration", "Duration of load or other event", ColumnType.NORMAL, new BaseFormatter() {
+
+						private OptionalInt getDuration(final Object object) {
+							if (object instanceof EObject) {
+								final Event event = ScheduleModelUtils.getMainEvent((EObject) object);
+								if (event != null) {
+									return OptionalInt.of(event.getDuration());
+								}
+							}
+
+							return OptionalInt.empty();
+
+						}
+
+						@Override
+						public String render(final Object object) {
+
+							final OptionalInt duration = getDuration(object);
+							if (duration.isPresent()) {
+								return Formatters.formatAsDays(duration.getAsInt());
+							}
+
+							return null;
+						}
+
+						@Override
+						public Comparable getComparable(final Object object) {
+							final OptionalInt duration = getDuration(object);
+							if (duration.isPresent()) {
+								return duration.getAsInt();
+							}
+							return 0;
+						}
+					}, targetObjectRef));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.discharge-duration":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Discharge Duration", "Duration of discharge event", ColumnType.NORMAL, new BaseFormatter() {
+
+				private OptionalInt getDuration(final Object object) {
+					if (object instanceof SlotAllocation) {
+						final SlotAllocation slotAllocation = (SlotAllocation) object;
+						final Slot slot = slotAllocation.getSlot();
+						if (slot instanceof DischargeSlot) {
+							return OptionalInt.of(slotAllocation.getSlotVisit().getDuration());
+						}
+					}
+					return OptionalInt.empty();
+
+				}
+
+				@Override
+				public String render(final Object object) {
+
+					final OptionalInt duration = getDuration(object);
+					if (duration.isPresent()) {
+						return Formatters.formatAsDays(duration.getAsInt());
+					}
+
+					return null;
+				}
+
+				@Override
+				public Comparable getComparable(final Object object) {
+					final OptionalInt duration = getDuration(object);
+					if (duration.isPresent()) {
+						return duration.getAsInt();
+					}
+					return 0;
+				}
+			}, dischargeAllocationRef));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.next-event-date":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Next event date", "Date of the next event in the schedule", ColumnType.NORMAL, new BaseFormatter() {
+
+						ZonedDateTime getNextEventDate(Object object) {
+							if (object instanceof CargoAllocation) {
+								final CargoAllocation cargoAllocation = (CargoAllocation) object;
+								object = cargoAllocation.getSlotAllocations().get(0).getSlotVisit();
+							}
+							if (object instanceof PortVisit) {
+								final PortVisit portVisit = (PortVisit) object;
+								final Sequence seq = portVisit.getSequence();
+								if (seq.getSequenceType() == SequenceType.VESSEL || seq.getSequenceType() == SequenceType.SPOT_VESSEL || seq.getSequenceType() == SequenceType.ROUND_TRIP) {
+									Event evt = portVisit;
+									// Find last element in segment
+									evt = ScheduleModelUtils.getSegmentEnd(evt);
+									if (evt == null) {
+										return null;
+									}
+									evt = evt.getNextEvent();
+									if (evt != null) {
+										return evt.getStart();
+									}
+								}
+							}
+							return null;
+
+						}
+
+						@Override
+						public String render(final Object object) {
+
+							final ZonedDateTime date = getNextEventDate(object);
+							if (date != null) {
+								return Formatters.asLocalDateFormatter.render(date.toLocalDateTime());
+							}
+
+							return null;
+						}
+
+						@Override
+						public Comparable getComparable(final Object object) {
+							final ZonedDateTime date = getNextEventDate(object);
+							return date;
+						}
+					}, targetObjectRef));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.next-event-port":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Next event port", "Port of the next event in the schedule", ColumnType.NORMAL, new BaseFormatter() {
+
+						Port getNextEventPort(Object object) {
+							if (object instanceof CargoAllocation) {
+								final CargoAllocation cargoAllocation = (CargoAllocation) object;
+								object = cargoAllocation.getSlotAllocations().get(0).getSlotVisit();
+							}
+
+							if (object instanceof PortVisit) {
+								final PortVisit portVisit = (PortVisit) object;
+								final Sequence seq = portVisit.getSequence();
+								if (seq.getSequenceType() == SequenceType.VESSEL || seq.getSequenceType() == SequenceType.SPOT_VESSEL || seq.getSequenceType() == SequenceType.ROUND_TRIP) {
+									Event evt = portVisit;
+									// Find last element in segment
+									evt = ScheduleModelUtils.getSegmentEnd(evt);
+									if (evt == null) {
+										return null;
+									}
+									evt = evt.getNextEvent();
+									if (evt != null) {
+										return evt.getPort();
+									}
+								}
+							}
+							return null;
+
+						}
+
+						@Override
+						public String render(final Object object) {
+
+							final Port port = getNextEventPort(object);
+							if (port != null) {
+								return port.getName();
+							}
+
+							return null;
+						}
+
+						@Override
+						public Comparable getComparable(final Object object) {
+							final Port port = getNextEventPort(object);
+							if (port != null) {
+								final String portName = port.getName();
+								if (portName != null) {
+									return portName;
+								}
+							}
+							return "";
+						}
+					}, targetObjectRef));
 			break;
 		}
 	}

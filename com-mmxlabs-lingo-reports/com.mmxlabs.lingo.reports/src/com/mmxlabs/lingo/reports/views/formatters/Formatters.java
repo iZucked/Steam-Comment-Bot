@@ -7,6 +7,8 @@ package com.mmxlabs.lingo.reports.views.formatters;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
 public final class Formatters {
@@ -21,4 +23,7 @@ public final class Formatters {
 
 	public static final IntegerFormatter integerFormatter = new IntegerFormatter();
 
+	public static @NonNull String formatAsDays(int hours) {
+		return String.format("%02d:%02d", hours / 24, hours % 24);
+	}
 }
