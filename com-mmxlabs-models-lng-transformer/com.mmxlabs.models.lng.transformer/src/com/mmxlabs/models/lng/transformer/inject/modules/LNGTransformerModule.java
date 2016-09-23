@@ -58,6 +58,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.CachingTimeWindowSchedulingCanalDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.ITimeWindowSchedulingCanalDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowSchedulingCanalDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
@@ -85,11 +86,11 @@ public class LNGTransformerModule extends AbstractModule {
 
 	public final static String MONTH_ALIGNED_INTEGER_INTERVAL_CURVE = "MonthAlignedIntegerCurve";
 
-	private boolean shippingOnly;
+	private final boolean shippingOnly;
 
 	/**
 	 */
-	public LNGTransformerModule(@NonNull final LNGScenarioModel scenario, @NonNull Collection<@NonNull String> hints) {
+	public LNGTransformerModule(@NonNull final LNGScenarioModel scenario, @NonNull final Collection<@NonNull String> hints) {
 		this.scenario = scenario;
 		this.shippingOnly = hints.contains(LNGTransformerHelper.HINT_SHIPPING_ONLY);
 		assert scenario != null;
@@ -124,6 +125,7 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(VoyagePlanStartDateCharterRateCalculator.class).in(Singleton.class);
 		bind(ICharterRateCalculator.class).to(VoyagePlanStartDateCharterRateCalculator.class);
 
+		bind(PriceIntervalProviderHelper.class);
 		bind(PriceIntervalProducer.class);
 
 		bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
@@ -149,8 +151,8 @@ public class LNGTransformerModule extends AbstractModule {
 
 	@Provides
 	@PerChainUnitScope
-	private IVolumeAllocator provideVolumeAllocator(@NonNull Injector injector, final @NotCaching IVolumeAllocator reference,
-			@Named(SchedulerConstants.Key_VolumeAllocationCache) boolean enableCache) {
+	private IVolumeAllocator provideVolumeAllocator(@NonNull final Injector injector, final @NotCaching IVolumeAllocator reference,
+			@Named(SchedulerConstants.Key_VolumeAllocationCache) final boolean enableCache) {
 		if (enableCache) {
 			final CachingVolumeAllocator cacher = new CachingVolumeAllocator(reference);
 			injector.injectMembers(cacher);
@@ -167,7 +169,7 @@ public class LNGTransformerModule extends AbstractModule {
 	@Provides
 	@PerChainUnitScope
 	private IEntityValueCalculator provideEntityValueCalculator(final @NonNull Injector injector, final @NotCaching IEntityValueCalculator reference,
-			@Named(SchedulerConstants.Key_ProfitandLossCache) boolean enableCache) {
+			@Named(SchedulerConstants.Key_ProfitandLossCache) final boolean enableCache) {
 
 		if (enableCache) {
 			final CachingEntityValueCalculator cacher = new CachingEntityValueCalculator(reference);
@@ -199,17 +201,17 @@ public class LNGTransformerModule extends AbstractModule {
 	}
 
 	@Provides
-	@Singleton
-	IPriceIntervalProducer providePriceIntervalProducer(final PriceIntervalProducer delegate, @NonNull Injector injector) {
+	@PerChainUnitScope
+	private IPriceIntervalProducer providePriceIntervalProducer(final PriceIntervalProducer delegate, @NonNull final Injector injector) {
 		final CachingPriceIntervalProducer cachingPriceIntervalProducer = new CachingPriceIntervalProducer(delegate);
 		injector.injectMembers(cachingPriceIntervalProducer);
 		return cachingPriceIntervalProducer;
 	}
 
 	@Provides
-	@Singleton
-	ITimeWindowSchedulingCanalDistanceProvider provideTimeWindowSchedulingCanalDistanceProvider(@NonNull Injector injector) {
-		TimeWindowSchedulingCanalDistanceProvider delegate = new TimeWindowSchedulingCanalDistanceProvider();
+	@PerChainUnitScope
+	private ITimeWindowSchedulingCanalDistanceProvider provideTimeWindowSchedulingCanalDistanceProvider(@NonNull final Injector injector) {
+		final TimeWindowSchedulingCanalDistanceProvider delegate = new TimeWindowSchedulingCanalDistanceProvider();
 		injector.injectMembers(delegate);
 		final CachingTimeWindowSchedulingCanalDistanceProvider cachingTimeWindowSchedulingCanalDistanceProvider = new CachingTimeWindowSchedulingCanalDistanceProvider(delegate);
 		return cachingTimeWindowSchedulingCanalDistanceProvider;
@@ -218,9 +220,9 @@ public class LNGTransformerModule extends AbstractModule {
 	@Provides
 	@Singleton
 	@Named(MONTH_ALIGNED_INTEGER_INTERVAL_CURVE)
-	private IIntegerIntervalCurve provideMonthAlignedIIntegerIntervalCurve(@NonNull DateAndCurveHelper dateAndCurveHelper, @NonNull IntegerIntervalCurveHelper integerIntervalCurveHelper) {
+	private IIntegerIntervalCurve provideMonthAlignedIIntegerIntervalCurve(@NonNull final DateAndCurveHelper dateAndCurveHelper, @NonNull final IntegerIntervalCurveHelper integerIntervalCurveHelper) {
 
-		IIntegerIntervalCurve months = integerIntervalCurveHelper.getMonthAlignedIntegerIntervalCurve(
+		final IIntegerIntervalCurve months = integerIntervalCurveHelper.getMonthAlignedIntegerIntervalCurve(
 				integerIntervalCurveHelper.getPreviousMonth(dateAndCurveHelper.convertTime(dateAndCurveHelper.getEarliestTime())),
 				integerIntervalCurveHelper.getNextMonth(dateAndCurveHelper.convertTime(dateAndCurveHelper.getLatestTime())), 0);
 
@@ -233,7 +235,7 @@ public class LNGTransformerModule extends AbstractModule {
 		final CachingVoyagePlanOptimiser cachingVoyagePlanOptimiser = new CachingVoyagePlanOptimiser(delegate, DEFAULT_VPO_CACHE_SIZE);
 		return cachingVoyagePlanOptimiser;
 	}
-	
+
 	@Provides
 	@Named(VoyagePlanOptimiser.VPO_SPEED_STEPPING)
 	private boolean isVPOSpeedStepping() {
