@@ -167,6 +167,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 	// New diff stuff
 	private Table table;
 
+	// DEMO
 	private boolean showConnections = System.getProperty("schedulechart.showConnections") != null;
 
 	/**
