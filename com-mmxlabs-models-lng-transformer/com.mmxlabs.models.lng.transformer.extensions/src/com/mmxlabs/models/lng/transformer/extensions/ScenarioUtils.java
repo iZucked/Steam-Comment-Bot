@@ -112,7 +112,7 @@ public class ScenarioUtils {
 		int weight = 0;
 		// DEMO: Demo tweak
 		if (System.getProperty("similarity.smallweight") != null) {
-			weight = 50_000;
+			weight = 10_000;
 		}
 		similaritySettings.setLowInterval(createSimilarityInterval(8, weight));
 		similaritySettings.setMedInterval(createSimilarityInterval(16, weight));
