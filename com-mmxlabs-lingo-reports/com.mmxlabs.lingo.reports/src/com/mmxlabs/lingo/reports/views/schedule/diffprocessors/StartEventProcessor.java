@@ -41,7 +41,7 @@ public class StartEventProcessor implements IDiffProcessor {
 		if (referenceRow.getTarget() instanceof StartEvent) {
 			final StartEvent referenceStartEvent = (StartEvent) referenceRow.getTarget();
 
-			Sequence sequence = referenceStartEvent.getSequence();
+			final Sequence sequence = referenceStartEvent.getSequence();
 			if (sequence.getSequenceType() == SequenceType.ROUND_TRIP) {
 				return;
 			}
@@ -56,18 +56,20 @@ public class StartEventProcessor implements IDiffProcessor {
 				}
 			}
 
-			Set<EObject> set = equivalancesMap.get(referenceStartEvent);
-			for (EObject equiv : set) {
-				if (equiv instanceof StartEvent) {
-					StartEvent equivStartEvent = (StartEvent) equiv;
-					Row row = elementToRowMap.get(equivStartEvent);
-					for (final Event event : equivStartEvent.getEvents()) {
+			final Set<EObject> set = equivalancesMap.get(referenceStartEvent);
+			if (set != null) {
+				for (final EObject equiv : set) {
+					if (equiv instanceof StartEvent) {
+						final StartEvent equivStartEvent = (StartEvent) equiv;
+						final Row row = elementToRowMap.get(equivStartEvent);
+						for (final Event event : equivStartEvent.getEvents()) {
 
-						if (event.getNextEvent() instanceof GeneratedCharterOut) {
-							final UserGroup group = CycleGroupUtils.createOrReturnUserGroup(row.getTable(), row);
-							final Row r = elementToRowMap.get(event.getNextEvent());
-							if (r != null) {
-								CycleGroupUtils.addToOrMergeUserGroup(row.getTable(), r, group);
+							if (event.getNextEvent() instanceof GeneratedCharterOut) {
+								final UserGroup group = CycleGroupUtils.createOrReturnUserGroup(row.getTable(), row);
+								final Row r = elementToRowMap.get(event.getNextEvent());
+								if (r != null) {
+									CycleGroupUtils.addToOrMergeUserGroup(row.getTable(), r, group);
+								}
 							}
 						}
 					}
