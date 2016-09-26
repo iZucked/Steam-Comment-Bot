@@ -326,7 +326,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				public Integer getIntValue(final Object object) {
 					if (object instanceof EventGrouping) {
 						final EventGrouping grouping = (EventGrouping) object;
-						final long total = ScheduleModelKPIUtils.calculateEventShippingCost(grouping, true);
+						final long total = ScheduleModelKPIUtils.calculateEventShippingCost(grouping, true, true);
 						return (int) total;
 					}
 					return null;
@@ -340,7 +340,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				public Integer getIntValue(final Object object) {
 					if (object instanceof EventGrouping) {
 						final EventGrouping grouping = (EventGrouping) object;
-						final long total = ScheduleModelKPIUtils.calculateEventShippingCost(grouping, false);
+						final long total = ScheduleModelKPIUtils.calculateEventShippingCost(grouping, false, false);
 						return (int) total;
 					}
 					return null;

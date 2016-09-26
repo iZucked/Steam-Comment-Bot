@@ -1519,14 +1519,14 @@ public class ChangeSetView implements IAdaptable {
 		return createLambdaLabelProvider(true, false, change -> {
 			final EventGrouping eventGrouping = change.getOriginalEventGrouping();
 			if (eventGrouping != null) {
-				return ScheduleModelKPIUtils.getTotalShippingCost(eventGrouping);
+				return ScheduleModelKPIUtils.calculateEventShippingCost(eventGrouping, false, true);
 			}
 			return null;
 
 		}, change -> {
 			final EventGrouping eventGrouping = change.getNewEventGrouping();
 			if (eventGrouping != null) {
-				return ScheduleModelKPIUtils.getTotalShippingCost(eventGrouping);
+				return ScheduleModelKPIUtils.calculateEventShippingCost(eventGrouping, false, true);
 			}
 			return null;
 		});
