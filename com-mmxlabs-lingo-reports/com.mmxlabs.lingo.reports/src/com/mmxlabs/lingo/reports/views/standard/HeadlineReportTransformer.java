@@ -7,13 +7,8 @@ package com.mmxlabs.lingo.reports.views.standard;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.FuelQuantity;
-import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
-import com.mmxlabs.models.lng.schedule.Idle;
-import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
-import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
@@ -28,8 +23,8 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 class HeadlineReportTransformer {
 
 	public static class RowData {
-		public RowData(final String scheduleName, final Long totalPNL, final Long tradingPNL, final Long shippingPNL, final Long upstreamDownstreamPNL, final Long mtmPnl, final Long shippingCost,
-				final Long idleTime, final Long gcoTime, final Long gcoRevenue, final Long capacityViolationCount, final Long latenessIncludingFlex, final Long latenessExcludingFlex) {
+		public RowData(final String scheduleName, final Long totalPNL, final Long tradingPNL, final Long shippingPNL, final Long upstreamDownstreamPNL, final Long mtmPnl, final Long idleTime,
+				final Long gcoTime, final Long gcoRevenue, final Long capacityViolationCount, final Long latenessIncludingFlex, final Long latenessExcludingFlex) {
 			super();
 			this.scheduleName = scheduleName;
 			this.totalPNL = totalPNL;
@@ -37,7 +32,6 @@ class HeadlineReportTransformer {
 			this.shippingPNL = shippingPNL;
 			this.upstreamDownstreamPNL = upstreamDownstreamPNL;
 			this.mtmPnl = mtmPnl;
-			this.shippingCost = shippingCost;
 			this.idleTime = idleTime;
 			this.gcoTime = gcoTime;
 			this.gcoRevenue = gcoRevenue;
@@ -55,7 +49,6 @@ class HeadlineReportTransformer {
 			this.shippingPNL = null;
 			this.upstreamDownstreamPNL = null;
 			this.mtmPnl = null;
-			this.shippingCost = null;
 			this.idleTime = null;
 			this.gcoTime = null;
 			this.gcoRevenue = null;
@@ -72,7 +65,7 @@ class HeadlineReportTransformer {
 		public final Long shippingPNL;
 		public final Long upstreamDownstreamPNL;
 		public final Long mtmPnl;
-		public final Long shippingCost;
+		// public final Long shippingCost;
 		public final Long idleTime;
 		public final Long gcoTime;
 		public final Long gcoRevenue;
@@ -84,8 +77,6 @@ class HeadlineReportTransformer {
 	@NonNull
 	public RowData transform(@NonNull final Schedule schedule, @NonNull final ScenarioInstance scenarioInstance) {
 
-		long totalCost = 0L;
-
 		long totalMtMPNL = 0L;
 		long totalIdleHours = 0L;
 		long totalGCOHours = 0L;
@@ -94,34 +85,13 @@ class HeadlineReportTransformer {
 		for (final Sequence seq : schedule.getSequences()) {
 
 			for (final Event evt : seq.getEvents()) {
-				if (evt instanceof FuelUsage) {
-					final FuelUsage mix = (FuelUsage) evt;
-					// add up fuel components from mixture
-					for (final FuelQuantity fq : mix.getFuels()) {
-						totalCost += fq.getCost();
-					}
-				}
-				if (evt instanceof Journey) {
-					final Journey journey = (Journey) evt;
-					totalCost += journey.getToll();
-				}
-				if (evt instanceof Idle) {
-					final Idle idle = (Idle) evt;
-					totalIdleHours += idle.getDuration();
-				}
-				if (evt instanceof PortVisit) {
-					final int cost = ((PortVisit) evt).getPortCost();
-					totalCost += cost;
-				}
 
 				if (evt instanceof GeneratedCharterOut) {
 					final GeneratedCharterOut generatedCharterOut = (GeneratedCharterOut) evt;
 					totalGCOHours += evt.getDuration();
 					totalGCORevenue += generatedCharterOut.getRevenue();
 				}
-
 			}
-
 		}
 		for (final MarketAllocation marketAllocation : schedule.getMarketAllocations()) {
 			totalMtMPNL += ScheduleModelKPIUtils.getElementTradingPNL(marketAllocation);
@@ -139,7 +109,7 @@ class HeadlineReportTransformer {
 
 		final long totalCapacityViolationCount = ScheduleModelKPIUtils.getScheduleViolationCount(schedule);
 
-		return new RowData(scenarioInstance.getName(), totalTradingPNL + totalShippingPNL + totalUpstreamPNL, totalTradingPNL, totalShippingPNL, totalUpstreamPNL, totalMtMPNL, totalCost,
-				totalIdleHours, totalGCOHours, totalGCORevenue, totalCapacityViolationCount, totalLatenessHoursIncludingFlex, totalLatenessHoursExcludingFlex);
+		return new RowData(scenarioInstance.getName(), totalTradingPNL + totalShippingPNL + totalUpstreamPNL, totalTradingPNL, totalShippingPNL, totalUpstreamPNL, totalMtMPNL, totalIdleHours,
+				totalGCOHours, totalGCORevenue, totalCapacityViolationCount, totalLatenessHoursIncludingFlex, totalLatenessHoursExcludingFlex);
 	}
 }

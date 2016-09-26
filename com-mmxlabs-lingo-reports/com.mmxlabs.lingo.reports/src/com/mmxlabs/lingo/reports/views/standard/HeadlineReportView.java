@@ -131,6 +131,7 @@ public class HeadlineReportView extends ViewPart {
 
 		/**
 		 * If not null, returns the license feature required to display this data
+		 * 
 		 * @return
 		 */
 		@Nullable
@@ -186,7 +187,7 @@ public class HeadlineReportView extends ViewPart {
 							rowElements.add(pPinnedData);
 							pPinnedData = null;
 						} else {
-							rowElements.add(new RowData("", null, null, null, null, null, null, null, null, null, null, null, null));
+							rowElements.add(new RowData("", null, null, null, null, null, null, null, null, null, null, null));
 						}
 					}
 
