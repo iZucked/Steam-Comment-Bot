@@ -36,6 +36,7 @@ import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.IDiffProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.LadenVoyageProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.StartEventProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.StructuralDifferencesProcessor;
+import com.mmxlabs.lingo.reports.views.schedule.model.ChangeType;
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
@@ -582,12 +583,10 @@ public class ScenarioComparisonServiceTransformer {
 		for (final Pair<UserGroup, Integer> p : orderedUserGroup) {
 			final UserGroup userGroup = p.getFirst();
 			// Zero sum user group, remove it.
-			if (p.getSecond() == 0) {
-				table.getCycleGroups().addAll(userGroup.getGroups());
-				continue;
-			}
-			table.getUserGroups().add(userGroup);
-			userGroup.setComment(String.format("Group %d", userGoupCounter++));
+			// if (p.getSecond() == 0) {
+			// table.getCycleGroups().addAll(userGroup.getGroups());
+			// continue;
+			// }
 
 			final Set<Pair<CycleGroup, Integer>> orderedCycleGroup = new TreeSet<>(new CycleGroupPNLComparator());
 			for (final CycleGroup cycleGroup : userGroup.getGroups()) {
@@ -595,11 +594,14 @@ public class ScenarioComparisonServiceTransformer {
 				if (cycleGroup.getRows().isEmpty()) {
 					continue;
 				}
-				for (final Row row2 : cycleGroup.getRows()) {
-					row2.setVisible(true);
+
+				if (filterCycleGroup(cycleGroup)) {
+					for (final Row row2 : cycleGroup.getRows()) {
+						row2.setVisible(true);
+					}
+					final int pnlDelta = PNLDeltaUtils.getPNLDelta(cycleGroup);
+					orderedCycleGroup.add(new Pair<>(cycleGroup, pnlDelta));
 				}
-				final int pnlDelta = PNLDeltaUtils.getPNLDelta(cycleGroup);
-				orderedCycleGroup.add(new Pair<>(cycleGroup, pnlDelta));
 			}
 
 			userGroup.getGroups().clear();
@@ -607,6 +609,11 @@ public class ScenarioComparisonServiceTransformer {
 				final CycleGroup group = p2.getFirst();
 				userGroup.getGroups().add(group);
 				group.setIndex(cycleGoupCounter++);
+			}
+
+			if (!userGroup.getGroups().isEmpty()) {
+				table.getUserGroups().add(userGroup);
+				userGroup.setComment(String.format("Group %d", userGoupCounter++));
 			}
 		}
 
@@ -619,18 +626,9 @@ public class ScenarioComparisonServiceTransformer {
 				continue;
 			}
 
-			final int pnlDelta = PNLDeltaUtils.getPNLDelta(group);
-			if (pnlDelta != 0) {
+			if (filterCycleGroup(group)) {
+				final int pnlDelta = PNLDeltaUtils.getPNLDelta(group);
 				orderedCycleGroup.add(new Pair<>(group, pnlDelta));
-				// non-zero P&L, show group
-				for (final Row row2 : group.getRows()) {
-					row2.setVisible(true);
-				}
-			} else {
-				// Zero P&L, hide group
-				for (final Row row2 : group.getRows()) {
-					row2.setVisible(false);
-				}
 			}
 		}
 
@@ -660,4 +658,27 @@ public class ScenarioComparisonServiceTransformer {
 		return false;
 	}
 
+	public static boolean filterCycleGroup(@NonNull final CycleGroup group) {
+
+		if (group.getChangeType() == ChangeType.WIRING) {
+			return true;
+		}
+		if (group.getChangeType() == ChangeType.VESSEL) {
+			return true;
+		}
+
+		long delta = PNLDeltaUtils.getPNLDelta(group);
+		if (delta != 0) {
+			return true;
+		}
+		delta = PNLDeltaUtils.getLatenessDelta(group);
+		if (delta != 0) {
+			return true;
+		}
+		delta = PNLDeltaUtils.getCapacityDelta(group);
+		if (delta != 0) {
+			return true;
+		}
+		return false;
+	}
 }
