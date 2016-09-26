@@ -45,7 +45,9 @@ public class CopyGridToHtmlStringUtil {
 	}
 
 	public String convert() {
-		additionalAttributeProvider.begin();
+		if (additionalAttributeProvider != null) {
+			additionalAttributeProvider.begin();
+		}
 		try {
 			final StringWriter sw = new StringWriter();
 
@@ -76,7 +78,9 @@ public class CopyGridToHtmlStringUtil {
 
 			return sw.toString();
 		} finally {
-			additionalAttributeProvider.done();
+			if (additionalAttributeProvider != null) {
+				additionalAttributeProvider.done();
+			}
 		}
 	}
 
