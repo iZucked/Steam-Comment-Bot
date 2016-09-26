@@ -428,6 +428,7 @@ public class AnnotatedSolutionExporter {
 						eventGrouping.getEvents().add(event);
 					} else if (event instanceof GeneratedCharterOut) {
 						eventGrouping = (EventGrouping) event;
+						eventGrouping.getEvents().add(event);
 					} else {
 						eventGrouping = null;
 					}
