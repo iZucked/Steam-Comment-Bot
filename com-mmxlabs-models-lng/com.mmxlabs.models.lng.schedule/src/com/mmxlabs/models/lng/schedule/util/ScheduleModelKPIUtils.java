@@ -15,11 +15,13 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.common.collect.Sets;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
@@ -27,6 +29,7 @@ import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -39,6 +42,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 public class ScheduleModelKPIUtils {
 
@@ -376,14 +380,14 @@ public class ScheduleModelKPIUtils {
 		return null;
 	}
 
-	public static Long calculateEventShippingCost(final @Nullable EventGrouping grouping, boolean includeAllLNG) {
+	public static Long calculateEventShippingCost(final @Nullable EventGrouping grouping, final boolean includeAllLNG, final boolean includeRevenue) {
 		if (grouping != null) {
 
 			// boolean collecting = false;
 			long total = 0L;
 			for (final Event event : grouping.getEvents()) {
 				if (event instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) event;
+					final PortVisit slotVisit = (PortVisit) event;
 					total += slotVisit.getCharterCost();
 					total += slotVisit.getPortCost();
 				} else if (event instanceof Journey) {
@@ -393,25 +397,46 @@ public class ScheduleModelKPIUtils {
 				} else if (event instanceof Idle) {
 					final Idle idle = (Idle) event;
 					total += idle.getCharterCost();
-				} else if (event instanceof PortVisit) {
-					final PortVisit portVisit = (PortVisit) event;
-					total += portVisit.getCharterCost();
-					total += portVisit.getPortCost();
+				} else if (event instanceof GeneratedCharterOut) {
+					final GeneratedCharterOut generatedCharterOut = (GeneratedCharterOut) event;
+					total += generatedCharterOut.getCharterCost();
+					if (includeRevenue) {
+						total -= generatedCharterOut.getRevenue();
+					}
+				} else if (event instanceof VesselEventVisit) {
+					final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
+					total += vesselEventVisit.getPortCost();
+					total += vesselEventVisit.getCharterCost();
+					final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
+					if (vesselEvent instanceof CharterOutEvent) {
+						final CharterOutEvent charterOutEvent = (CharterOutEvent) vesselEvent;
+						total += charterOutEvent.getRepositioningFee();
+						if (includeRevenue) {
+							total -= charterOutEvent.getDurationInDays() * charterOutEvent.getHireRate();
+						}
+
+					}
 				}
 				if (event instanceof FuelUsage) {
 					final FuelUsage fuelUsage = (FuelUsage) event;
 					total += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
 					// Start event and charter out events pay for LNG use
-					if (includeAllLNG || grouping instanceof StartEvent || grouping instanceof CharterOutEvent) {
+					if (includeAllLNG //
+							|| grouping instanceof StartEvent //
+							|| grouping instanceof EndEvent //
+							|| grouping instanceof VesselEventVisit //
+							|| grouping instanceof GeneratedCharterOut //
+					) {
 						total += getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
 					}
 				}
-
 			}
 
 			return total;
+
 		}
 		return null;
+
 	}
 
 	protected static long getFuelCost(final FuelUsage fuelUser, final Fuel... fuels) {
@@ -429,7 +454,7 @@ public class ScheduleModelKPIUtils {
 	}
 
 	public static long getTotalShippingCost(@NonNull final EventGrouping eventGrouping) {
-		return calculateEventShippingCost(eventGrouping, false);
+		return calculateEventShippingCost(eventGrouping, false, false);
 	}
 
 	public static long getTotalShippingCost(@NonNull final CargoAllocation cargoAllocation) {
