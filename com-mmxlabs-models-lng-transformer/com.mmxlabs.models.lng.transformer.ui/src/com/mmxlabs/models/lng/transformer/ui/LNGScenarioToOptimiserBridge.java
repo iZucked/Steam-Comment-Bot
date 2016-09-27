@@ -50,6 +50,7 @@ import com.mmxlabs.models.lng.transformer.period.ScenarioEntityMapping;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.rcp.common.ecore.RunnableCommand;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -316,28 +317,39 @@ public class LNGScenarioToOptimiserBridge {
 		// Create a reference to be able to grab the Schedule object from the command state.
 		final Pair<Command, Schedule> p = new Pair<>();
 		// Create a custom compound command to create and execute changes as they are created during the command to allow us to have a single command in the history rather than several.
-		final CompoundCommand c = new CompoundCommand() {
-			@Override
-			protected boolean prepare() {
-				// Always prepared
-				return true;
-			}
+		final RunnableCommand c = new RunnableCommand(rc -> {
 
-			@Override
-			public boolean canExecute() {
-				// Always true
-				return true;
-			}
+			if (periodMapping == null) {
+				final Injector evaluationInjector;
+				{
+					final Collection<@NonNull IOptimiserInjectorService> services = optimiserDataTransformer.getModuleServices();
+					final List<Module> modules = new LinkedList<>();
+					modules.add(new InitialSequencesModule(optimiserDataTransformer.getInitialSequences()));
+					modules.add(new InputSequencesModule(rawSequences));
+					modules.addAll(LNGTransformerHelper.getModulesWithOverrides(
+							new LNGParameters_EvaluationSettingsModule(optimiserDataTransformer.getUserSettings(),
+									optimiserDataTransformer.getSolutionBuilderSettings().getConstraintAndFitnessSettings()),
+							services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
+					modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
+					evaluationInjector = optimiserDataTransformer.getInjector().createChildInjector(modules);
+				}
+				// This either applies to the real scenario or the period copy if present.
+				final Pair<Command, Schedule> updateCommand = LNGSchedulerJobUtils.exportSolution(evaluationInjector, targetOptimiserScenario, userSettings, targetOptimiserEditingDomain,
+						optimiserModelEntityMap, rawSequences, extraAnnotations);
 
-			@Override
-			public void execute() {
+				// Apply to real scenario
+				rc.appendAndExecute(updateCommand.getFirst());
+				p.setSecond(updateCommand.getSecond());
+			} else {
 
-				if (periodMapping == null) {
+				// TODO This should operate on a copy also
+
+				// Stage 1, update the period scenario
+				{
 					final Injector evaluationInjector;
 					{
 						final Collection<@NonNull IOptimiserInjectorService> services = optimiserDataTransformer.getModuleServices();
-						final List<Module> modules = new LinkedList<>();
-						modules.add(new InitialSequencesModule(optimiserDataTransformer.getInitialSequences()));
+						final List<@NonNull Module> modules = new LinkedList<>();
 						modules.add(new InputSequencesModule(rawSequences));
 						modules.addAll(LNGTransformerHelper.getModulesWithOverrides(
 								new LNGParameters_EvaluationSettingsModule(optimiserDataTransformer.getUserSettings(),
@@ -350,117 +362,90 @@ public class LNGScenarioToOptimiserBridge {
 					final Pair<Command, Schedule> updateCommand = LNGSchedulerJobUtils.exportSolution(evaluationInjector, targetOptimiserScenario, userSettings, targetOptimiserEditingDomain,
 							optimiserModelEntityMap, rawSequences, extraAnnotations);
 
-					// Apply to real scenario
-					appendAndExecute(updateCommand.getFirst());
-					p.setSecond(updateCommand.getSecond());
+					// Period optimisation code path, apply the dual commands to the real scenario.
+
+					// Execute the update command on the period scenario
+					targetOptimiserEditingDomain.getCommandStack().execute(updateCommand.getFirst());
+				}
+
+				// Stage 2: Export the period scenario changes into the original scenario
+				final PeriodExporter e = new PeriodExporter();
+				final CompoundCommand part1 = LNGSchedulerJobUtils.createBlankCommand(currentProgress);
+
+				part1.append(e.updateOriginal(targetOriginalEditingDomain, targetOriginalScenario, targetOptimiserScenario, periodMapping));
+				// part1.append(e.updateOriginal(targetOptimiserEditingDomain, targetOriginalScenario, targetOptimiserScenario, periodMapping));
+				if (part1.canExecute()) {
+					rc.appendAndExecute(part1);
 				} else {
+					throw new RuntimeException("Unable to execute period optimisation merge command");
+				}
 
-					// TODO This should operate on a copy also
+				// Stage 3: Re-evaluate original scenario to make sure it all ties in
+				{
+					final UserSettings userSettings = EcoreUtil.copy(originalDataTransformer.getUserSettings());
+					userSettings.unsetPeriodStart();
+					userSettings.unsetPeriodEnd();
 
-					// Stage 1, update the period scenario
+					final Set<@NonNull String> hints = LNGTransformerHelper.getHints(userSettings);
+
+					// final LNGDataTransformer subTransformer = originalDataTransformer;
+
+					// Always create a new transformer as we have problems with re-use and mapping newly created spot slots (and probably cargoes) between instances
+					ModelEntityMap originalModelEntityMap = the_originalModelEntityMap;
+					final LNGDataTransformer subTransformer;
+					// if (the_originalModelEntityMap instanceof CopiedModelEntityMap) {
+					subTransformer = new LNGDataTransformer(targetOriginalScenario, userSettings, solutionBuilderSettings, hints, originalDataTransformer.getModuleServices());
+					originalModelEntityMap = subTransformer.getModelEntityMap();
+					// } else {
+					// subTransformer = originalDataTransformer;
+					// }
+
+					Injector evaluationInjector2;
+					final Collection<@NonNull IOptimiserInjectorService> services = subTransformer.getModuleServices();
 					{
-						final Injector evaluationInjector;
-						{
-							final Collection<@NonNull IOptimiserInjectorService> services = optimiserDataTransformer.getModuleServices();
-							final List<@NonNull Module> modules = new LinkedList<>();
-							modules.add(new InputSequencesModule(rawSequences));
-							modules.addAll(LNGTransformerHelper.getModulesWithOverrides(
-									new LNGParameters_EvaluationSettingsModule(optimiserDataTransformer.getUserSettings(),
-											optimiserDataTransformer.getSolutionBuilderSettings().getConstraintAndFitnessSettings()),
-									services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
-							modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
-							evaluationInjector = optimiserDataTransformer.getInjector().createChildInjector(modules);
-						}
-						// This either applies to the real scenario or the period copy if present.
-						final Pair<Command, Schedule> updateCommand = LNGSchedulerJobUtils.exportSolution(evaluationInjector, targetOptimiserScenario, userSettings, targetOptimiserEditingDomain,
-								optimiserModelEntityMap, rawSequences, extraAnnotations);
+						final List<Module> modules2 = new LinkedList<>();
+						modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(
+								new LNGParameters_EvaluationSettingsModule(originalDataTransformer.getUserSettings(),
+										originalDataTransformer.getSolutionBuilderSettings().getConstraintAndFitnessSettings()),
+								services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
+						modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 
-						// Period optimisation code path, apply the dual commands to the real scenario.
-
-						// Execute the update command on the period scenario
-						targetOptimiserEditingDomain.getCommandStack().execute(updateCommand.getFirst());
+						evaluationInjector2 = subTransformer.getInjector().createChildInjector(modules2);
 					}
 
-					// Stage 2: Export the period scenario changes into the original scenario
-					final PeriodExporter e = new PeriodExporter();
-					final CompoundCommand part1 = LNGSchedulerJobUtils.createBlankCommand(currentProgress);
+					// Take the new EMF state and generate an ISequences from it to re-evaluate
 
-					part1.append(e.updateOriginal(targetOriginalEditingDomain, targetOriginalScenario, targetOptimiserScenario, periodMapping));
-					// part1.append(e.updateOriginal(targetOptimiserEditingDomain, targetOriginalScenario, targetOptimiserScenario, periodMapping));
-					if (part1.canExecute()) {
-						appendAndExecute(part1);
-					} else {
-						throw new RuntimeException("Unable to execute period optimisation merge command");
+					final ISequences initialSequences;
+					{
+						final List<Module> modules2 = new LinkedList<>();
+						modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGInitialSequencesModule(), services, IOptimiserInjectorService.ModuleType.Module_InitialSolution, hints));
+
+						final Injector initialSolutionInjector = evaluationInjector2.createChildInjector(modules2);
+						final PerChainUnitScopeImpl scope = initialSolutionInjector.getInstance(PerChainUnitScopeImpl.class);
+						try {
+							scope.enter();
+							initialSequences = initialSolutionInjector.getInstance(Key.get(ISequences.class, Names.named(LNGInitialSequencesModule.KEY_GENERATED_RAW_SEQUENCES)));
+						} finally {
+							scope.exit();
+						}
 					}
 
-					// Stage 3: Re-evaluate original scenario to make sure it all ties in
-					{
-						final UserSettings userSettings = EcoreUtil.copy(originalDataTransformer.getUserSettings());
-						userSettings.unsetPeriodStart();
-						userSettings.unsetPeriodEnd();
-
-						final Set<@NonNull String> hints = LNGTransformerHelper.getHints(userSettings);
-
-						// final LNGDataTransformer subTransformer = originalDataTransformer;
-
-						// Always create a new transformer as we have problems with re-use and mapping newly created spot slots (and probably cargoes) between instances
-						ModelEntityMap originalModelEntityMap = the_originalModelEntityMap;
-						final LNGDataTransformer subTransformer;
-						// if (the_originalModelEntityMap instanceof CopiedModelEntityMap) {
-						subTransformer = new LNGDataTransformer(targetOriginalScenario, userSettings, solutionBuilderSettings, hints, originalDataTransformer.getModuleServices());
-						originalModelEntityMap = subTransformer.getModelEntityMap();
-						// } else {
-						// subTransformer = originalDataTransformer;
-						// }
-
-						Injector evaluationInjector2;
-						final Collection<@NonNull IOptimiserInjectorService> services = subTransformer.getModuleServices();
-						{
-							final List<Module> modules2 = new LinkedList<>();
-							modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(
-									new LNGParameters_EvaluationSettingsModule(originalDataTransformer.getUserSettings(),
-											originalDataTransformer.getSolutionBuilderSettings().getConstraintAndFitnessSettings()),
-									services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
-							modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
-
-							evaluationInjector2 = subTransformer.getInjector().createChildInjector(modules2);
-						}
-
-						// Take the new EMF state and generate an ISequences from it to re-evaluate
-
-						final ISequences initialSequences;
-						{
-							final List<Module> modules2 = new LinkedList<>();
-							modules2.addAll(
-									LNGTransformerHelper.getModulesWithOverrides(new LNGInitialSequencesModule(), services, IOptimiserInjectorService.ModuleType.Module_InitialSolution, hints));
-
-							final Injector initialSolutionInjector = evaluationInjector2.createChildInjector(modules2);
-							final PerChainUnitScopeImpl scope = initialSolutionInjector.getInstance(PerChainUnitScopeImpl.class);
-							try {
-								scope.enter();
-								initialSequences = initialSolutionInjector.getInstance(Key.get(ISequences.class, Names.named(LNGInitialSequencesModule.KEY_GENERATED_RAW_SEQUENCES)));
-							} finally {
-								scope.exit();
-							}
-						}
-
-						final Pair<Command, Schedule> part2 = LNGSchedulerJobUtils.exportSolution(evaluationInjector2, targetOriginalScenario, EcoreUtil.copy(userSettings),
-								targetOriginalEditingDomain, originalModelEntityMap, initialSequences, extraAnnotations);
-						if (part2.getFirst().canExecute()) {
-							if (!appendAndExecute(part2.getFirst())) {
-								throw new RuntimeException("Unable to execute period optimisation update command");
-							}
-						} else {
+					final Pair<Command, Schedule> part2 = LNGSchedulerJobUtils.exportSolution(evaluationInjector2, targetOriginalScenario, EcoreUtil.copy(userSettings), targetOriginalEditingDomain,
+							originalModelEntityMap, initialSequences, extraAnnotations);
+					if (part2.getFirst().canExecute()) {
+						if (!rc.appendAndExecute(part2.getFirst())) {
 							throw new RuntimeException("Unable to execute period optimisation update command");
 						}
-
-						// Store reference to the final schedule model
-						p.setSecond(part2.getSecond());
-
+					} else {
+						throw new RuntimeException("Unable to execute period optimisation update command");
 					}
+
+					// Store reference to the final schedule model
+					p.setSecond(part2.getSecond());
+
 				}
 			}
-		};
+		});
 
 		wrapper.append(c);
 		p.setFirst(wrapper);
