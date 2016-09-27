@@ -737,7 +737,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			// if our fuel requirements exceed our onboard fuel
 			if (remainingHeelInM3 < 0) {
 				// This is worse than not using it at all -- case A
-				violationsCount += 2;
+				violationsCount += 100;
 			} else if (remainingHeelInM3 > 0) {
 				voyagePlan.setRemainingHeelInM3(remainingHeelInM3);
 			}
