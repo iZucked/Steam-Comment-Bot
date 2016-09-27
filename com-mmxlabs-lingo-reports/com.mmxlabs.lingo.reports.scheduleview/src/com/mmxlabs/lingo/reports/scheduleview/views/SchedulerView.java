@@ -354,6 +354,92 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			public Color getTextColor() {
 				return ColorCache.getBlack();
 			}
+
+			@Override
+			public Color getActiveSessionBarColorLeft() {
+				return getHeaderColour();
+
+			}
+
+			@Override
+			public Color getActiveSessionBarColorRight() {
+				return getHeaderColour();
+			}
+
+			@Override
+			public Color getNonActiveSessionBarColorLeft() {
+				return getHeaderColour();
+			}
+
+			@Override
+			public Color getNonActiveSessionBarColorRight() {
+				return getHeaderColour();
+			}
+
+			@Override
+			public Color getTextHeaderBackgroundColorTop() {
+				return getHeaderColour();
+			}
+
+			@Override
+			public Color getTopHorizontalLinesColor() {
+				return getDividerColour();
+			}
+
+			@Override
+			public Color getTextHeaderBackgroundColorBottom() {
+				return getHeaderColour();
+			}
+
+			@Override
+			public Color getSaturdayTextColor() {
+				return getHeaderColour();
+			}
+
+			@Override
+			public Color getTimeHeaderBackgroundColorBottom() {
+				return getHeaderColour();
+			}
+
+			@Override
+			public Color getTimeHeaderBackgroundColorTop() {
+
+				return getHeaderColour();
+			}
+
+			@Override
+			public Color getWeekTimeDividerColor() {
+				return getDividerColour();
+			}
+
+			@Override
+			public Color getYearTimeDividerColor() {
+				return getDividerColour();
+			}
+
+			@Override
+			public Color getWeekDividerLineColor() {
+				return getDividerColour();
+			}
+
+			@Override
+			public Color getMonthTimeDividerColor() {
+				return getDividerColour();
+			}
+
+			@Override
+			public Color getHourTimeDividerColor() {
+				return getDividerColour();
+			}
+
+			private Color getHeaderColour() {
+				return ColorCache.getColor(230, 239, 249);
+			}
+
+			private Color getDividerColour() {
+				return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
+			}
+
 		};
 
 		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | GanttFlags.H_SCROLL_FIXED_RANGE, settings, colourManager) {
@@ -414,6 +500,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 											}
 										}
 									}
+									// FIXME: This needs to look up other discharge row which may not be the same as the "other" row if re-wirted
 									if (dischargeAllocation != null) {
 										final SlotAllocation otherAllocation = other.getDischargeAllocation();
 										if (otherAllocation != null) {
@@ -441,6 +528,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 											}
 										}
 									}
+									// FIXME: This needs to look up other discharge row which may not be the same as the "other" row if re-wirted
 									if (dischargeAllocation != null) {
 										final SlotAllocation otherAllocation = other.getDischargeAllocation();
 										if (otherAllocation != null) {
