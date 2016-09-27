@@ -163,9 +163,8 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 		return cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withCharterRate("30000") //
 				.withStartWindow(startStart, startEnd) //
-//				.withEndWindow(endStart) //
-				.withEndWindow(null, null)
-				.build();
+				// .withEndWindow(endStart) //
+				.withEndWindow(null, null).build();
 	}
 
 	/**
@@ -212,39 +211,41 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 			@NonNull
 			IModifiableSequences initialSequences = new ModifiableSequences(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences());
 			ISequencesManipulator sequencesManipulator = scenarioToOptimiserBridge.getInjector().createChildInjector(new SequencesManipulatorModule()).getInstance(ISequencesManipulator.class);
-//			ISequencesManipulator sequencesManipulator = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, ISequencesManipulator.class);
+			// ISequencesManipulator sequencesManipulator = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, ISequencesManipulator.class);
 			sequencesManipulator.manipulate(initialSequences);
-			PriceBasedSequenceScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, PriceBasedSequenceScheduler.class);
-			
-			priceBasedSequenceScheduler.schedule(initialSequences);
+			MicroCaseUtils.withInjectorPerChainScope(scenarioToOptimiserBridge, () -> {
+				PriceBasedSequenceScheduler priceBasedSequenceScheduler = MicroCaseUtils.getClassFromInjector(scenarioToOptimiserBridge, PriceBasedSequenceScheduler.class);
 
-			// get optimiser objects
-			IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, priceBasedSequenceScheduler);
-			IPortTimeWindowsRecord dischargePortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(dischargeName, priceBasedSequenceScheduler);
-			ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
-			IDischargeSlot discharge = getDefaultOptimiserDischargeSlot(scenarioToOptimiserBridge);
+				priceBasedSequenceScheduler.schedule(initialSequences);
 
-			// make sure no objects are null
-			assert load != null;
-			assert discharge != null;
-			assert loadPortTimeWindowsRecord != null;
-			assert dischargePortTimeWindowsRecord != null;
+				// get optimiser objects
+				IPortTimeWindowsRecord loadPortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(loadName, priceBasedSequenceScheduler);
+				IPortTimeWindowsRecord dischargePortTimeWindowsRecord = TimeWindowsTestsUtils.getIPortTimeWindowsRecord(dischargeName, priceBasedSequenceScheduler);
+				ILoadSlot load = getDefaultOptimiserLoadSlot(scenarioToOptimiserBridge);
+				IDischargeSlot discharge = getDefaultOptimiserDischargeSlot(scenarioToOptimiserBridge);
 
-			// get optimised time windows
-			ITimeWindow loadFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
-			ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
+				// make sure no objects are null
+				assert load != null;
+				assert discharge != null;
+				assert loadPortTimeWindowsRecord != null;
+				assert dischargePortTimeWindowsRecord != null;
 
-			// Tests
-			Assert.assertEquals(loadFeasibleTimeWindow.getInclusiveStart(), 5);
-			Assert.assertEquals(dischargeFeasibleTimeWindow.getInclusiveStart(), 1216);
-			Assert.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
-			try {
-				MicroCaseUtils.storeToFile(optimiserScenario, "alex_test");
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	});
+				// get optimised time windows
+				ITimeWindow loadFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
+				ITimeWindow dischargeFeasibleTimeWindow = loadPortTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
+
+				// Tests
+				Assert.assertEquals(loadFeasibleTimeWindow.getInclusiveStart(), 5);
+				Assert.assertEquals(dischargeFeasibleTimeWindow.getInclusiveStart(), 1216);
+				Assert.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
+				try {
+					MicroCaseUtils.storeToFile(optimiserScenario, "alex_test");
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			});
+		});
 	}
 
 	public IDischargeSlot getDefaultOptimiserDischargeSlot(final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge) {

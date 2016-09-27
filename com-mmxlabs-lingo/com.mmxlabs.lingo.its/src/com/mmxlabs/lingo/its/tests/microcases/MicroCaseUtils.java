@@ -12,17 +12,18 @@ import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
+import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.Metadata;
@@ -76,19 +77,29 @@ public class MicroCaseUtils {
 		ScenarioStorageUtil.storeToFile(instance, output);
 	}
 
-	public static <T> T getClassFromInjector(@NonNull LNGScenarioToOptimiserBridge bridge, @NonNull Class<T> clazz) {
+	public static void withInjectorPerChainScope(@NonNull final LNGScenarioToOptimiserBridge bridge, @NonNull final Runnable r) {
+
+		@NonNull
+		final Injector injector = bridge.getDataTransformer().getInjector();
+		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			scope.enter();
+			r.run();
+		}
+	}
+
+	public static <T> T getClassFromInjector(@NonNull final LNGScenarioToOptimiserBridge bridge, @NonNull final Class<T> clazz) {
 		return bridge.getDataTransformer().getInjector().getInstance(clazz);
 	}
 
-	public static <T> T getClassFromChildInjector(@NonNull LNGScenarioToOptimiserBridge bridge, @NonNull Class<T> clazz) {
+	public static <T> T getClassFromChildInjector(@NonNull final LNGScenarioToOptimiserBridge bridge, @NonNull final Class<T> clazz) {
 		return bridge.getDataTransformer().getInjector().createChildInjector().getInstance(clazz);
 	}
 
 	@Nullable
-	public static <T> T getOptimiserObjectFromEMF(@NonNull LNGScenarioToOptimiserBridge bridge, @NonNull EObject object, @NonNull Class<T> clazz) {
-		ModelEntityMap modelEntityMap = bridge.getDataTransformer().getModelEntityMap();
+	public static <T> T getOptimiserObjectFromEMF(@NonNull final LNGScenarioToOptimiserBridge bridge, @NonNull final EObject object, @NonNull final Class<T> clazz) {
+		final ModelEntityMap modelEntityMap = bridge.getDataTransformer().getModelEntityMap();
 		@Nullable
-		T optimiserObject = modelEntityMap.getOptimiserObject(object, clazz);
+		final T optimiserObject = modelEntityMap.getOptimiserObject(object, clazz);
 		return optimiserObject;
 	}
 
