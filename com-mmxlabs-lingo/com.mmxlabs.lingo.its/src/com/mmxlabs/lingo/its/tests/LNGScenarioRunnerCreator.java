@@ -101,14 +101,14 @@ public class LNGScenarioRunnerCreator {
 		}
 	}
 
-	public static <E extends Exception> void withEvaluationRunner(@NonNull final LNGScenarioModel originalScenario, @NonNull final CheckedConsumer<@NonNull LNGScenarioRunner, E> consumer) throws E {
+	public static void withEvaluationRunner(@NonNull final LNGScenarioModel originalScenario, @NonNull final CheckedConsumer<@NonNull LNGScenarioRunner, Exception> consumer) throws Exception {
 		final OptimisationPlan optimiserSettings = LNGScenarioRunnerUtils.createExtendedSettings(ScenarioUtils.createDefaultOptimisationPlan());
 
 		withEvaluationRunner(originalScenario, optimiserSettings, consumer);
 	}
 
-	public static <E extends Exception> void withEvaluationRunner(@NonNull final LNGScenarioModel originalScenario, @NonNull final OptimisationPlan optimisationPlan,
-			@NonNull final CheckedConsumer<@NonNull LNGScenarioRunner, E> consumer) throws E {
+	public static void withEvaluationRunner(@NonNull final LNGScenarioModel originalScenario, @NonNull final OptimisationPlan optimisationPlan,
+			@NonNull final CheckedConsumer<@NonNull LNGScenarioRunner, Exception> consumer) throws Exception {
 		withExecutorService(executorService -> {
 			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, originalScenario, null, optimisationPlan, LNGSchedulerJobUtils.createLocalEditingDomain(), null,
 					createITSService(), null, false);
@@ -118,13 +118,12 @@ public class LNGScenarioRunnerCreator {
 		});
 	}
 
-	public static <E extends Exception> void withEvaluationRunnerWithGCO(@NonNull final LNGScenarioModel originalScenario, @NonNull final CheckedConsumer<@NonNull LNGScenarioRunner, E> consumer)
-			throws E {
+	public static void withEvaluationRunnerWithGCO(@NonNull final LNGScenarioModel originalScenario, @NonNull final CheckedConsumer<@NonNull LNGScenarioRunner, Exception> consumer) throws Exception {
 		withLegacyEvaluationRunner(originalScenario, true, consumer);
 	}
 
-	public static <E extends Exception> void withLegacyEvaluationRunner(@NonNull final LNGScenarioModel originalScenario, @Nullable final Boolean withGCO,
-			@NonNull final CheckedConsumer<@NonNull LNGScenarioRunner, E> consumer) throws E {
+	public static void withLegacyEvaluationRunner(@NonNull final LNGScenarioModel originalScenario, @Nullable final Boolean withGCO,
+			@NonNull final CheckedConsumer<@NonNull LNGScenarioRunner, Exception> consumer) throws Exception {
 		final OptimisationPlan optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(ScenarioUtils.createDefaultOptimisationPlan());
 
 		if (withGCO != null) {
