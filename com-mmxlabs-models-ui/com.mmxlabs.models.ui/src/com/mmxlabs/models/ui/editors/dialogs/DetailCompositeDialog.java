@@ -71,6 +71,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
@@ -82,6 +83,7 @@ import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.util.StringEscaper;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 /**
  * A dialog for editing scenario objects using the generated detail views.
@@ -357,6 +359,11 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			public EditingDomain getEditingDomain() {
 				return commandHandler.getEditingDomain();
 			}
+			
+			@Override
+			public ModelReference getModelReference() {
+				return commandHandler.getModelReference();
+			};
 		};
 	}
 

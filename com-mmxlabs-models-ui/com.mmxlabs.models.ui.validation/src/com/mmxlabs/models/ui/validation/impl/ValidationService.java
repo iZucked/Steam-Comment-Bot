@@ -35,7 +35,7 @@ public class ValidationService implements IValidationService {
 
 	private ThreadPoolExecutor executor;
 
-	public ValidationService() {
+	public void start() {
 
 		// Previously we used Executors.newSingleThreadExecutor() to create our pool. However this tended to result in a memory leak with the ThreadLocals pool resulting out of EMF Validation. This
 		// implementation instead is permitted to kill off the thread when inactive thus freeing up the thread local pool, but still maintain the maximum of one thread.
@@ -48,7 +48,7 @@ public class ValidationService implements IValidationService {
 		executor.allowCoreThreadTimeOut(true);
 	}
 
-	public void shutdown() {
+	public void stop() {
 		executor.shutdown();
 	}
 

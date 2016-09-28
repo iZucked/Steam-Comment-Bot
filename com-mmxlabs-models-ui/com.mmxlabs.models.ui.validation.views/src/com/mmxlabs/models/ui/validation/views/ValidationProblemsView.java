@@ -9,13 +9,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
@@ -49,9 +49,12 @@ import com.mmxlabs.models.ui.validation.gui.IValidationStatusGoto;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusColumnLabelProvider;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusComparator;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusLabelProvider;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
+import com.mmxlabs.scenario.service.model.manager.IScenarioValidationListener;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 
 public class ValidationProblemsView extends ViewPart {
@@ -61,10 +64,11 @@ public class ValidationProblemsView extends ViewPart {
 	public static final String VIEW_ID = "com.mmxlabs.models.ui.validation.views.ValidationProblemsView";
 
 	private TreeViewer viewer;
+	private final Map<ModelRecord, ScenarioInstance> map = new ConcurrentHashMap<>();
 
-	private final Map<ScenarioInstance, IStatus> statusMap = new HashMap<ScenarioInstance, IStatus>();
-	private final Set<ScenarioInstance> notifierInstances = new HashSet<>();
-	private ScenarioInstance currentInstance = null;
+	private final Map<ModelRecord, IStatus> statusMap = new HashMap<>();
+	private final Set<ModelRecord> notifierInstances = new HashSet<>();
+	private ModelRecord currentRecord = null;
 	private IEditorPart editorPart;
 	private final IPartListener partListener = new IPartListener() {
 
@@ -81,9 +85,9 @@ public class ValidationProblemsView extends ViewPart {
 		@Override
 		public void partClosed(final IWorkbenchPart part) {
 			if (part == editorPart) {
-				if (currentInstance != null) {
-					releaseScenarioInstance(currentInstance);
-					currentInstance = null;
+				if (currentRecord != null) {
+					releaseScenarioInstance(currentRecord);
+					currentRecord = null;
 				}
 				editorPart = null;
 				refreshViewer();
@@ -92,20 +96,28 @@ public class ValidationProblemsView extends ViewPart {
 
 		@Override
 		public void partBroughtToTop(final IWorkbenchPart part) {
-			// If the selection tracks editor, then get the scenario instance and make it the only selection.
+			// If the selection tracks editor, then get the scenario instance
+			// and make it the only selection.
 			if (part instanceof IEditorPart) {
+				map.clear();
 				editorPart = (IEditorPart) part;
 				final IEditorInput editorInput = editorPart.getEditorInput();
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
-				if (scenarioInstance != currentInstance) {
-					if (currentInstance != null) {
-						releaseScenarioInstance(currentInstance);
-						currentInstance = null;
+				ModelRecord modelRecord = null;
+				if (scenarioInstance != null) {
+					modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+					map.put(modelRecord, scenarioInstance);
+				}
+
+				if (modelRecord != currentRecord) {
+					if (currentRecord != null) {
+						releaseScenarioInstance(currentRecord);
+						currentRecord = null;
 					}
 
-					if (scenarioInstance != null) {
-						currentInstance = scenarioInstance;
-						hookScenarioInstance(scenarioInstance);
+					if (modelRecord != null) {
+						currentRecord = modelRecord;
+						hookScenarioInstance(modelRecord);
 
 					}
 				}
@@ -116,21 +128,48 @@ public class ValidationProblemsView extends ViewPart {
 		@Override
 		public void partActivated(final IWorkbenchPart part) {
 
-			// If the selection tracks editor, then get the scenario instance and make it the only selection.
+			// If the selection tracks editor, then get the scenario instance
+			// and make it the only selection.
 			if (part instanceof IEditorPart) {
 				editorPart = (IEditorPart) part;
 				final IEditorInput editorInput = editorPart.getEditorInput();
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
-				if (scenarioInstance != currentInstance) {
-					if (currentInstance != null) {
-						releaseScenarioInstance(currentInstance);
-						currentInstance = null;
+				map.clear();
+
+				if (scenarioInstance == null) {
+					System.out.println("DEBUG: ValidationProblemsView: - scenario instance is null");
+					if (currentRecord != null) {
+						releaseScenarioInstance(currentRecord);
+						currentRecord = null;
+					}
+					refreshViewer();
+
+					return;
+				}
+
+				final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+
+				if (modelRecord == null) {
+					System.out.println("DEBUG: ValidationProblemsView: - model record is null");
+					if (currentRecord != null) {
+						releaseScenarioInstance(currentRecord);
+						currentRecord = null;
+					}
+					refreshViewer();
+
+					return;
+				}
+				map.put(modelRecord, scenarioInstance);
+
+				if (modelRecord != currentRecord) {
+					if (currentRecord != null) {
+						releaseScenarioInstance(currentRecord);
+						currentRecord = null;
 					}
 
-					if (scenarioInstance != null) {
-						currentInstance = scenarioInstance;
-						hookScenarioInstance(scenarioInstance);
-
+					if (modelRecord != null) {
+						currentRecord = modelRecord;
+						hookScenarioInstance(modelRecord);
 					}
 				}
 				refreshViewer();
@@ -138,19 +177,17 @@ public class ValidationProblemsView extends ViewPart {
 		}
 	};
 
-	private final EContentAdapter scenarioInstanceChangedListener = new EContentAdapter() {
+	private final @NonNull IScenarioValidationListener scenarioInstanceChangedListener = new IScenarioValidationListener() {
 		@Override
-		public void notifyChanged(final Notification notification) {
-
-			if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_ValidationStatusCode()) {
-				final ScenarioInstance instance = (ScenarioInstance) notification.getNotifier();
-				if (instance.getValidationStatusCode() == IStatus.OK) {
-					statusMap.remove(instance);
-				} else {
-					statusMap.put(instance, (IStatus) instance.getAdapters().get(IStatus.class));
-				}
-				refreshViewer();
+		public void validationChanged(@NonNull final ModelRecord modelRecord, @NonNull final IStatus status) {
+			// final ScenarioInstance instance = (ScenarioInstance)
+			// notification.getNotifier();
+			if (modelRecord.getValidationStatusSeverity() == IStatus.OK) {
+				statusMap.remove(modelRecord);
+			} else {
+				statusMap.put(modelRecord, modelRecord.getValidationStatus());
 			}
+			refreshViewer();
 		}
 	};
 
@@ -193,19 +230,19 @@ public class ValidationProblemsView extends ViewPart {
 					final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
 
 					Object element = iStructuredSelection.getFirstElement();
-					while (element != null && !(element instanceof ScenarioInstance)) {
+					while (element != null && !(element instanceof ModelRecord)) {
 
 						element = contentProvider.getParent(element);
 						if (element instanceof Map.Entry) {
 							element = ((Map.Entry<?, ?>) element).getKey();
 						}
 					}
-					if (element instanceof ScenarioInstance) {
+					if (element instanceof ModelRecord) {
 						try {
 							final IStatus status = (IStatus) iStructuredSelection.getFirstElement();
-							final ScenarioInstance instance = (ScenarioInstance) element;
-							openEditor(instance, status);
-							openViews(instance, status);
+							final ModelRecord record = (ModelRecord) element;
+							openEditor(map.get(record), status);
+							openViews(map.get(record), status);
 						} catch (final PartInitException e) {
 							log.error(e.getMessage(), e);
 						}
@@ -215,7 +252,7 @@ public class ValidationProblemsView extends ViewPart {
 			}
 		});
 
-		CopyTreeToClipboardAction copyAction = new CopyTreeToClipboardAction(viewer.getTree());
+		final CopyTreeToClipboardAction copyAction = new CopyTreeToClipboardAction(viewer.getTree());
 		getViewSite().getActionBars().getToolBarManager().add(copyAction);
 		getViewSite().getActionBars().getToolBarManager().update(true);
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyAction);
@@ -226,8 +263,8 @@ public class ValidationProblemsView extends ViewPart {
 	@Override
 	public void dispose() {
 		getSite().getPage().removePartListener(partListener);
-		for (final ScenarioInstance instance : notifierInstances) {
-			instance.eAdapters().remove(scenarioInstanceChangedListener);
+		for (final ModelRecord instance : notifierInstances) {
+			instance.removeValidationListener(scenarioInstanceChangedListener);
 		}
 
 		super.dispose();
@@ -238,22 +275,19 @@ public class ValidationProblemsView extends ViewPart {
 		viewer.getControl().setFocus();
 	}
 
-	private void hookScenarioInstance(final ScenarioInstance instance) {
-		instance.eAdapters().add(scenarioInstanceChangedListener);
-		notifierInstances.add(instance);
-		if (instance.getValidationStatusCode() != IStatus.OK) {
-			final Map<Class<?>, Object> adapters = instance.getAdapters();
-			if (adapters != null) {
-				statusMap.put(instance, (IStatus) adapters.get(IStatus.class));
-			}
+	private void hookScenarioInstance(final ModelRecord modelRecord) {
+
+		modelRecord.addValidationListener(scenarioInstanceChangedListener);
+		notifierInstances.add(modelRecord);
+		if (modelRecord.getValidationStatusSeverity() != IStatus.OK) {
+			statusMap.put(modelRecord, modelRecord.getValidationStatus());
 		}
 	}
 
-	private void releaseScenarioInstance(final ScenarioInstance instance) {
+	private void releaseScenarioInstance(final ModelRecord instance) {
 		if (instance != null) {
-			instance.eAdapters().remove(scenarioInstanceChangedListener);
-			notifierInstances.add(instance);
-
+			instance.removeValidationListener(scenarioInstanceChangedListener);
+			notifierInstances.remove(instance);
 			statusMap.remove(instance);
 		}
 	}
@@ -352,11 +386,14 @@ public class ValidationProblemsView extends ViewPart {
 	}
 
 	private void refreshViewer() {
-		if (!viewer.getControl().isDisposed()) {
-			// viewer.refresh();
-			// viewer.expandAll();
-			viewer.setInput(null);
-			viewer.setInput(statusMap);
-		}
+		RunnerHelper.asyncExec(() -> {
+			if (!viewer.getControl().isDisposed()) {
+
+				// viewer.refresh();
+				// viewer.expandAll();
+				viewer.setInput(null);
+				viewer.setInput(statusMap);
+			}
+		});
 	}
 }

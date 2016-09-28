@@ -14,6 +14,7 @@ import org.eclipse.jface.viewers.ColumnViewer;
 import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.validation.IStatusProvider.IStatusChangedListener;
+import com.mmxlabs.rcp.common.RunnerHelper;
 
 /**
  * Validation related code for the {@link EObjectTableViewer}
@@ -36,8 +37,7 @@ public class EObjectTableViewerValidationSupport {
 //			}
 
 			validationErrors.clear();
-
-			processStatus(status, true);
+			RunnerHelper.asyncExec(() -> processStatus(status, true));
 		}
 	};
 

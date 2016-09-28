@@ -7,6 +7,7 @@ package com.mmxlabs.models.ui.editorpart;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Shell;
 
@@ -16,7 +17,8 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 public interface IScenarioEditingLocation extends IEditingDomainProvider {
 
@@ -30,6 +32,9 @@ public interface IScenarioEditingLocation extends IEditingDomainProvider {
 
 	@Override
 	EditingDomain getEditingDomain();
+
+	@NonNull
+	ModelReference getModelReference();
 
 	AdapterFactory getAdapterFactory();
 

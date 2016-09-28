@@ -37,6 +37,7 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -58,6 +59,7 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -89,10 +91,13 @@ import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.editors.IPartGotoTarget;
 import com.mmxlabs.rcp.common.editors.IReasonProvider;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
+import com.mmxlabs.scenario.service.model.manager.IScenarioLockListener;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 
@@ -118,21 +123,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 	private final Stack<IExtraValidationContext> validationContextStack = new Stack<IExtraValidationContext>();
 
-	private ModelReference modelReference;
-
-	/**
-	 * The root object from {@link #jointModel}
-	 */
-	private MMXRootObject rootObject;
-
 	private ScenarioInstanceStatusProvider scenarioInstanceStatusProvider;
-
-	/**
-	 * The editing domain for controls to use. This is pretty standard, but hooks command creation to allow extra things there
-	 */
-	private CommandProviderAwareEditingDomain editingDomain;
-	private AdapterFactory adapterFactory;
-	private BasicCommandStack commandStack;
 
 	/**
 	 * This caches reference value provider providers.
@@ -161,6 +152,11 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 		public EditingDomain getEditingDomain() {
 			return JointModelEditorPart.this.getEditingDomain();
 		}
+
+		@Override
+		public ModelReference getModelReference() {
+			return JointModelEditorPart.this.getModelReference();
+		};
 	};
 
 	private final IPartGotoTarget partGotoTarget = new IPartGotoTarget() {
@@ -184,17 +180,35 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	private PropertySheetPage propertySheetPage;
 
 	private ScenarioInstance scenarioInstance;
+	private final @NonNull IScenarioLockListener lockedAdapter = new IScenarioLockListener() {
 
-	private AdapterImpl lockedAdapter;
-	private AdapterImpl scenarioAttributeAdapter;
+		@Override
+		public void lockStateChanged(@NonNull final ModelRecord modelRecord, final boolean writeLocked) {
+			updateLocked();
+		}
+	};
+	private AdapterImpl scenarioNameAttributeAdapter;
 
 	private TreeViewer selectionViewer;
 
 	private Image editorTitleImage;
 
-	private ScenarioLock editorLock;
+	// private ScenarioLock editorLock;
 
-	private ScenarioLock referenceLock;
+	private ScenarioInstance referenceInstance;
+	private ModelRecord modelRecord;
+	private ModelReference modelReference;
+
+	/**
+	 * The root object from {@link #jointModel}
+	 */
+	private MMXRootObject rootObject;
+	/**
+	 * The editing domain for controls to use. This is pretty standard, but hooks command creation to allow extra things there
+	 */
+	private CommandProviderAwareEditingDomain editingDomain;
+	private AdapterFactory adapterFactory;
+	private BasicCommandStack commandStack;
 
 	public JointModelEditorPart() {
 	}
@@ -217,28 +231,20 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 				if (scenarioInstance2 == null) {
 					return;
 				}
-				boolean validationLock = false;
+
 				String title = getEditorInput().getName();
 
+				final boolean newLock = scenarioInstance2.isReadonly() || modelReference.isLocked();
 				if (scenarioInstance2.isReadonly()) {
 					title += " (read-only)";
 				} else {
-					for (final ScenarioLock lock : scenarioInstance2.getLocks()) {
-						if (lock.isClaimed()) {
-							if (lock.getKey() == ScenarioLock.VALIDATION) {
-								// Validation locks should not really stop editing, so track that here
-								validationLock = true;
-							} else {
-								title += " (locked for " + lock.getKey() + ")";
-							}
-						}
+					if (newLock) {
+						title += " (locked)";
 					}
 				}
 				setPartName(title);
 				updateTitleImage(getEditorInput());
-				// It is possible (due to asyncExec) that the lock has since been cleared, so see whether it is still live now
-				// Use the detected lock status, rather than provided to get the new lock status - ignore validation locks
-				final boolean newLock = scenarioInstance2.isReadonly() | (!validationLock && scenarioInstance2.isLocked());
+
 				// Only update state if it has changed.
 				if (JointModelEditorPart.this.locked == newLock) {
 					return;
@@ -265,7 +271,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 				public void run(final IProgressMonitor monitor) throws CoreException {
 					try {
 						saving = true;
-						scenarioInstance.save();
+						modelReference.save();
 						monitor.worked(1);
 					} catch (final IOException e) {
 						log.error("IO Error during save", e);
@@ -352,9 +358,10 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 				throw new IllegalArgumentException("Editor input should be instance of IScenarioServiceEditorInput");
 			}
 
-			editorLock = instance.getLock(ScenarioLock.EDITORS);
+			modelRecord = SSDataManager.Instance.getModelRecord(instance);
+			ProgressMonitorDialog dialog = new ProgressMonitorDialog(site.getShell());
+			dialog.run(true, false, (monitor) -> modelReference = modelRecord.aquireReference("JointModelEditorPart", monitor));
 
-			modelReference = instance.getReference("JointModelEditorPart");
 			final EObject ro = modelReference.getInstance();
 			if (ro == null) {
 				throw new RuntimeException("Instance was not loaded");
@@ -362,27 +369,19 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			scenarioInstance = instance;
 			scenarioInstanceStatusProvider = new ScenarioInstanceStatusProvider(scenarioInstance);
 
-			commandStack = (BasicCommandStack) instance.getAdapters().get(BasicCommandStack.class);
-			editingDomain = (CommandProviderAwareEditingDomain) instance.getAdapters().get(EditingDomain.class);
+			commandStack = (BasicCommandStack) modelReference.getCommandStack();
+			editingDomain = (CommandProviderAwareEditingDomain) modelReference.getEditingDomain();
 
 			adapterFactory = editingDomain.getAdapterFactory();
 
-			lockedAdapter = new AdapterImpl() {
+			modelReference.getLock().addLockListener(lockedAdapter);
+
+			scenarioNameAttributeAdapter = new AdapterImpl() {
 				@Override
 				public void notifyChanged(final Notification msg) {
-					if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioLock_Available()) {
-						updateLocked();
-					}
 					if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Readonly()) {
 						updateLocked();
 					}
-				}
-			};
-			editorLock.eAdapters().add(lockedAdapter);
-
-			scenarioAttributeAdapter = new AdapterImpl() {
-				@Override
-				public void notifyChanged(final Notification msg) {
 					if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getContainer_Name()) {
 						RunnerHelper.asyncExec(new Runnable() {
 							@Override
@@ -391,17 +390,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 							}
 						});
 					}
-					if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Dirty()) {
-						RunnerHelper.asyncExec(new Runnable() {
-							@Override
-							public void run() {
-								firePropertyChange(IEditorPart.PROP_DIRTY);
-							}
-						});
-					}
 				}
 			};
-			instance.eAdapters().add(scenarioAttributeAdapter);
+			instance.eAdapters().add(scenarioNameAttributeAdapter);
 
 			if (ro instanceof MMXRootObject) {
 				root = (MMXRootObject) ro;
@@ -413,6 +404,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 			{
 				commandStack.addCommandStackListener(new CommandStackListener() {
+
 					@Override
 					public void commandStackChanged(final EventObject event) {
 						RunnerHelper.asyncExec(new Runnable() {
@@ -424,8 +416,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 					}
 				});
 
-				// initialize extensions
-
+				// initialise extensions
 				contributions = Activator.getDefault().getJointModelEditorContributionRegistry().initEditorContributions(this, rootObject);
 
 				referenceValueProviderCache = new ReferenceValueProviderCache(rootObject);
@@ -437,6 +428,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			validationContextStack.push(new DefaultExtraValidationContext(getRootObject(), false));
 
 			updateLocked();
+
 		} catch (final Throwable t) {
 			// Clean up internal data structures etc
 			cleanup();
@@ -455,8 +447,16 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 		boolean expandTechnicalDetails = false;
 		IReasonProvider reasonProvider = (IReasonProvider) Platform.getAdapterManager().loadAdapter(t, IReasonProvider.class.getCanonicalName());
 		if (reasonProvider == null) {
-			reasonProvider = new SimpleReasonProvider(t);
-			expandTechnicalDetails = true;
+			if (t instanceof RuntimeException) {
+				if (t.getCause() != null) {
+					reasonProvider = (IReasonProvider) Platform.getAdapterManager().loadAdapter(t.getCause(), IReasonProvider.class.getCanonicalName());
+				}
+			}
+
+			if (reasonProvider == null) {
+				reasonProvider = new SimpleReasonProvider(t);
+				expandTechnicalDetails = true;
+			}
 		}
 		final FormToolkit toolkit = new FormToolkit(getShell().getDisplay());
 		final ScrolledForm scrolledForm = toolkit.createScrolledForm(getContainer());
@@ -574,18 +574,16 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	}
 
 	protected void cleanup() {
-		if (referenceLock != null) {
-			referenceLock.release();
-			referenceLock = null;
+
+		if (modelReference != null) {
+			modelReference.getLock().removeLockListener(lockedAdapter);
+			modelReference.close();
+			modelReference = null;
 		}
 
-		if (editorLock != null) {
-			editorLock.eAdapters().remove(lockedAdapter);
-			this.editorLock = null;
-		}
-		if (scenarioAttributeAdapter != null) {
-			scenarioInstance.eAdapters().remove(scenarioAttributeAdapter);
-			this.scenarioAttributeAdapter = null;
+		if (scenarioNameAttributeAdapter != null) {
+			scenarioInstance.eAdapters().remove(scenarioNameAttributeAdapter);
+			this.scenarioNameAttributeAdapter = null;
 		}
 
 		for (final IJointModelEditorContribution contribution : contributions) {
@@ -616,7 +614,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 		this.currentViewer = null;
 		this.editingDomain = null;
 		this.editorSelection = null;
-		this.lockedAdapter = null;
 		this.validationContextStack.clear();
 		this.selectionViewer = null;
 		this.scenarioInstance = null;
@@ -652,6 +649,11 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	@Override
 	public EditingDomain getEditingDomain() {
 		return editingDomain;
+	}
+
+	@Override
+	public ModelReference getModelReference() {
+		return modelReference;
 	}
 
 	@Override
@@ -882,7 +884,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 	@Override
 	public ScenarioLock getEditorLock() {
-		return editorLock;
+		return modelReference.getLock();
 	}
 
 	@Override

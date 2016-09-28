@@ -6,11 +6,12 @@ package com.mmxlabs.models.ui.editorpart;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
+import com.mmxlabs.scenario.service.model.manager.IScenarioValidationListener;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
 /**
  * 
@@ -18,43 +19,35 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  * 
  */
 public class ScenarioInstanceStatusProvider extends DefaultStatusProvider {
-	private ScenarioInstance scenarioInstance;
-	final AdapterImpl validationAdapter = new AdapterImpl() {
-		@Override
-		public void notifyChanged(final Notification notification) {
-			super.notifyChanged(notification);
-			if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_ValidationStatusCode()) {
-				fireStatusChanged(getStatus());
-			}
-		};
+	private ModelRecord modelRecord;
 
+	private final @NonNull IScenarioValidationListener validationListener = new IScenarioValidationListener() {
+		@Override
+		public void validationChanged(@NonNull ModelRecord modelRecord, @NonNull IStatus status) {
+			fireStatusChanged(status);
+		}
 	};
 
-	public ScenarioInstanceStatusProvider(final ScenarioInstance scenarioInstance) {
-		this.scenarioInstance = scenarioInstance;
-		addContentAdapter(scenarioInstance);
+	public ScenarioInstanceStatusProvider(final @NonNull ScenarioInstance scenarioInstance) {
+		this.modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		this.modelRecord.addValidationListener(validationListener);
 	}
 
 	public void dispose() {
-		if (scenarioInstance != null) {
-			scenarioInstance.eAdapters().remove(validationAdapter);
-			scenarioInstance = null;
+		if (modelRecord != null) {
+			modelRecord.removeValidationListener(validationListener);
+			modelRecord = null;
 		}
 
-	}
-
-	private void addContentAdapter(final ScenarioInstance scenarioInstance) {
-		// Add adapter to new input
-		scenarioInstance.eAdapters().add(validationAdapter);
 	}
 
 	@Override
 	public IStatus getStatus() {
 		// Oops, must be called after dispose....
-		if (scenarioInstance == null) {
+		if (modelRecord == null) {
 			return Status.OK_STATUS;
 		}
-		return (IStatus) scenarioInstance.getAdapters().get(IStatus.class);
+		return modelRecord.getValidationStatus();
 	}
 
 }

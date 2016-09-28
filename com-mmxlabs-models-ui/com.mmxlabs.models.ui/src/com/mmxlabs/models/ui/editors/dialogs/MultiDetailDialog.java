@@ -64,6 +64,7 @@ import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 enum SetMode {
 	IGNORE, REPLACE, UNION, INTERSECTION
@@ -187,6 +188,11 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 			public EditingDomain getEditingDomain() {
 				return commandHandler.getEditingDomain();
 			}
+
+			@Override
+			public ModelReference getModelReference() {
+				return commandHandler.getModelReference();
+			};
 		};
 		displayComposite.setCommandHandler(immediate);
 		displayComposite.display(dialogContext, rootObject, proxies.get(proxies.size() - 1), proxies, dbc);
@@ -371,9 +377,8 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 	}
 
 	/**
-	 * Opens a multiple detail editor dialog allowing the user to edit multiple
-	 * existing objects in place. 
-	 *  
+	 * Opens a multiple detail editor dialog allowing the user to edit multiple existing objects in place.
+	 * 
 	 * @param location
 	 * @param objects
 	 * @return
@@ -602,7 +607,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 					// TODO Auto-generated method stub
 
 				}
-				
+
 				@Override
 				public boolean hasLabel() {
 					return true;

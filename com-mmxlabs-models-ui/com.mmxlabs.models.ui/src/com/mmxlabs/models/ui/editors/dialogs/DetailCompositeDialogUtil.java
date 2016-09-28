@@ -15,7 +15,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 public class DetailCompositeDialogUtil {
 
@@ -75,7 +75,7 @@ public class DetailCompositeDialogUtil {
 
 	public static int editInlock(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final IntSupplier editFunc) {
 		final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
-		editorLock.awaitClaim();
+		editorLock.lock();
 		try {
 			scenarioEditingLocation.setDisableUpdates(true);
 			try {
@@ -84,7 +84,7 @@ public class DetailCompositeDialogUtil {
 				scenarioEditingLocation.setDisableUpdates(false);
 			}
 		} finally {
-			editorLock.release();
+			editorLock.unlock();
 		}
 	}
 }

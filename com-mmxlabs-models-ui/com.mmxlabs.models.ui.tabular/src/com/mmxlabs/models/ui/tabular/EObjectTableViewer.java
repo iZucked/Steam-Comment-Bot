@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
@@ -47,6 +48,8 @@ import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 /**
  * A TableViewer which displays a list of EObjects using the other classes in this package. Factored out of EObjectEditorViewerPane so that it can be used in dialogs without causing trouble, and
@@ -68,7 +71,8 @@ public class EObjectTableViewer extends GridTreeViewer {
 	public static final String COLUMN_SORT_PATH = "COLUMN_SORT_PATH";
 
 	private CommandStack currentCommandStack;
-	private boolean autoResizeable = true;
+	private ModelReference currentModelReference;
+	
 	private final CommandStackListener commandStackListener = new CommandStackListener() {
 
 		@Override
@@ -83,6 +87,8 @@ public class EObjectTableViewer extends GridTreeViewer {
 		}
 	};
 
+	private boolean autoResizeable = true;
+	
 	protected IColorProvider delegateColourProvider;
 
 	protected IToolTipProvider delegateToolTipProvider;
@@ -110,7 +116,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 	/**
 	 */
 	protected void doCommandStackChanged() {
-		refresh();
+		ViewerHelper.refresh(this, false);
 	}
 
 	private final LinkedList<Pair<EMFPath, ICellRenderer>> cellRenderers = new LinkedList<Pair<EMFPath, ICellRenderer>>();
@@ -144,7 +150,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 	/**
 	 * A set containing the elements currently being displayed, which is used by #adapter to determine which row to refresh when a notification comes in
 	 */
-	private final HashSet<EObject> currentElements = new HashSet<EObject>();
+	private final HashSet<EObject> currentElements = new HashSet<>();
 
 	protected boolean lockedForEditing = false;
 
@@ -338,7 +344,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 	public void dispose() {
 		// removeAdapters();
 		cellRenderers.clear();
-
+		currentModelReference = null;
 		if (currentCommandStack != null) {
 			currentCommandStack.removeCommandStackListener(commandStackListener);
 			currentCommandStack = null;
@@ -367,11 +373,14 @@ public class EObjectTableViewer extends GridTreeViewer {
 
 	/**
 	 */
-	public void init(final ITreeContentProvider contentProvider, final CommandStack commandStack) {
+	public void init(final ITreeContentProvider contentProvider, final ModelReference modelReference) {
 		final GridTreeViewer viewer = this;
 		final Grid grid = viewer.getGrid();
 
-		currentCommandStack = commandStack;
+		currentModelReference = modelReference;
+		if (modelReference != null) {
+			currentCommandStack = modelReference.getCommandStack();
+		}
 		if (currentCommandStack != null) {
 			currentCommandStack.addCommandStackListener(commandStackListener);
 		}
@@ -492,7 +501,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 
 	/**
 	 */
-	public void init(final AdapterFactory adapterFactory, final CommandStack commandStack, final EReference... path) {
+	public void init(final AdapterFactory adapterFactory, final ModelReference modelReference, final EReference... path) {
 		init(new ITreeContentProvider() {
 			@SuppressWarnings("rawtypes")
 			@Override
@@ -541,7 +550,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 				return null;
 			}
 
-		}, commandStack);
+		}, modelReference);
 	}
 
 	protected boolean refreshOrGiveUp() {
@@ -588,7 +597,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 
 	/**
 	 */
-	public HashSet<EObject> getCurrentElements() {
+	public Set<EObject> getCurrentElements() {
 		return currentElements;
 	}
 

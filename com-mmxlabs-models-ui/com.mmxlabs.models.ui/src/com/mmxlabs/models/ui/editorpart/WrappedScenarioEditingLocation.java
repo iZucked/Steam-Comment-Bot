@@ -16,7 +16,8 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 public class WrappedScenarioEditingLocation implements IScenarioEditingLocation {
 	private final @NonNull IScenarioEditingLocation original;
@@ -105,5 +106,10 @@ public class WrappedScenarioEditingLocation implements IScenarioEditingLocation 
 	@Override
 	public IStatusProvider getStatusProvider() {
 		return original.getStatusProvider();
+	}
+
+	@Override
+	public @NonNull ModelReference getModelReference() {
+		return original.getModelReference();
 	}
 }

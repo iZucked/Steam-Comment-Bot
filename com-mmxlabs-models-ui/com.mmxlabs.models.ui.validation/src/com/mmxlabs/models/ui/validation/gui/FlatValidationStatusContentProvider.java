@@ -14,7 +14,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
 
 /**
  * Flattened {@link ITreeContentProvider} for {@link IStatus} object hierarchies.
@@ -41,9 +41,9 @@ public class FlatValidationStatusContentProvider implements ITreeContentProvider
 
 		if (inputElement instanceof Map) {
 			@SuppressWarnings("unchecked")
-			final Map<ScenarioInstance, IStatus> map = (Map<ScenarioInstance, IStatus>) inputElement;
+			final Map<ModelRecord, IStatus> map = (Map<ModelRecord, IStatus>) inputElement;
 			final List<Object> values = new ArrayList<Object>(map.size());
-			for (final Map.Entry<ScenarioInstance, IStatus> entry : map.entrySet()) {
+			for (final Map.Entry<ModelRecord, IStatus> entry : map.entrySet()) {
 				if (entry.getValue() != null) {
 					values.add(entry);
 					parentsMap.put(entry, inputElement);
@@ -57,9 +57,9 @@ public class FlatValidationStatusContentProvider implements ITreeContentProvider
 				final List<Object> ret = new LinkedList<>();
 				for (final IStatus c1 : status.getChildren()) {
 					parentsMap.put(c1, inputElement);
-					if (c1.isMultiStatus()) {						
+					if (c1.isMultiStatus()) {
 						for (final Object c2 : getChildren(c1)) {
-							
+
 							ret.add(c2);
 						}
 					} else {
@@ -79,9 +79,9 @@ public class FlatValidationStatusContentProvider implements ITreeContentProvider
 	public Object[] getChildren(final Object parentElement) {
 		if (parentElement instanceof Map) {
 			@SuppressWarnings("unchecked")
-			final Map<ScenarioInstance, IStatus> map = (Map<ScenarioInstance, IStatus>) parentElement;
+			final Map<ModelRecord, IStatus> map = (Map<ModelRecord, IStatus>) parentElement;
 			final List<Object> values = new ArrayList<Object>(map.size());
-			for (final Map.Entry<ScenarioInstance, IStatus> entry : map.entrySet()) {
+			for (final Map.Entry<ModelRecord, IStatus> entry : map.entrySet()) {
 				if (entry.getValue() != null) {
 					values.add(entry);
 					parentsMap.put(entry, parentElement);
@@ -91,7 +91,7 @@ public class FlatValidationStatusContentProvider implements ITreeContentProvider
 		}
 		if (parentElement instanceof Map.Entry) {
 			@SuppressWarnings("unchecked")
-			final Map.Entry<ScenarioInstance, IStatus> entry = (Map.Entry<ScenarioInstance, IStatus>) parentElement;
+			final Map.Entry<ModelRecord, IStatus> entry = (Map.Entry<ModelRecord, IStatus>) parentElement;
 			parentsMap.put(entry.getValue(), entry);
 			return getChildren(entry.getValue());
 		}

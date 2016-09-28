@@ -5,24 +5,20 @@
 package com.mmxlabs.models.ui.editorpart;
 
 import java.util.Collections;
-import java.util.Map;
 import java.util.Stack;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -43,35 +39,32 @@ import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.validation.gui.IValidationStatusGoto;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
-import com.mmxlabs.scenario.service.model.ModelReference;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
-import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
+import com.mmxlabs.scenario.service.model.manager.IScenarioLockListener;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 public abstract class ScenarioInstanceView extends ViewPart implements IScenarioEditingLocation, ISelectionListener, IScenarioInstanceProvider, IMMXRootObjectProvider, IValidationStatusGoto {
 
 	private ScenarioInstance scenarioInstance;
+	private ModelRecord modelRecord;
 	private ModelReference modelReference;
 	private ScenarioInstanceStatusProvider scenarioInstanceStatusProvider;
 	private ReferenceValueProviderCache valueProviderCache;
 
-	private ScenarioLock editorLock;
+	// private ScenarioLock editorLock;
 
 	private boolean locked;
 
-	private final Adapter lockedAdapter = new AdapterImpl() {
-		@Override
-		public void notifyChanged(final Notification notification) {
-			if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioLock_Available()) {
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						setLocked(!notification.getNewBooleanValue() || (scenarioInstance != null && scenarioInstance.isReadonly()));
-					}
-				});
-			}
-		}
+	private final IScenarioLockListener lockListener = new IScenarioLockListener() {
 
+		@Override
+		public void lockStateChanged(@NonNull ModelRecord modelRecord, boolean writeLocked) {
+			RunnerHelper.asyncExec(() -> setLocked(writeLocked || (scenarioInstance != null && scenarioInstance.isReadonly())));
+		};
 	};
 	private IPartListener partListener;
 
@@ -137,23 +130,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	@Override
 	public void dispose() {
-
-		if (editorLock != null) {
-			editorLock.eAdapters().remove(lockedAdapter);
-		}
-		if (valueProviderCache != null) {
-			valueProviderCache.dispose();
-		}
-		if (scenarioInstanceStatusProvider != null) {
-			scenarioInstanceStatusProvider.dispose();
-		}
-
-		if (modelReference != null) {
-			modelReference.close();
-			modelReference = null;
-		}
-
-		scenarioInstance = null;
+		resetState();
 
 		// getSite().getPage().removeSelectionListener(SCENARIO_NAVIGATOR_ID, this);
 		if (partListener != null) {
@@ -164,17 +141,12 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-		if (editorLock != null) {
-			editorLock.eAdapters().remove(lockedAdapter);
-		}
+
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection structured = (IStructuredSelection) selection;
 			if (structured.size() == 1) {
 				if (structured.getFirstElement() instanceof ScenarioInstance) {
 					final ScenarioInstance instance = (ScenarioInstance) structured.getFirstElement();
-					editorLock = instance.getLock(ScenarioLock.EDITORS);
-					editorLock.eAdapters().add(lockedAdapter);
-					setLocked(!editorLock.isAvailable() || instance.isReadonly());
 					displayScenarioInstance(instance);
 					return;
 				}
@@ -184,9 +156,30 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	}
 
 	protected void displayScenarioInstance(final ScenarioInstance instance) {
+		resetState();
+
+		if (instance != null) {
+			scenarioInstanceStatusProvider = new ScenarioInstanceStatusProvider(instance);
+			this.scenarioInstance = instance;
+			this.modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+			this.modelReference = modelRecord.aquireReference("ScenarioInstanceView:1");
+			modelReference.getLock().addLockListener(lockListener);
+			setLocked(modelReference.isLocked() || instance.isReadonly());
+			MMXRootObject rootObject = getRootObject();
+
+			this.valueProviderCache = new ReferenceValueProviderCache(rootObject);
+			extraValidationContext.push(new DefaultExtraValidationContext(rootObject, false));
+			doDisplayScenarioInstance(scenarioInstance, getRootObject());
+		} else {
+			scenarioInstanceStatusProvider = null;
+			valueProviderCache = null;
+			doDisplayScenarioInstance(null, null);
+		}
+	}
+
+	private void resetState() {
 		extraValidationContext.clear();
-		this.scenarioInstance = instance;
-		if (this.valueProviderCache != null) {
+		if (valueProviderCache != null) {
 			valueProviderCache.dispose();
 		}
 
@@ -195,26 +188,13 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		}
 
 		if (modelReference != null) {
+			modelReference.getLock().removeLockListener(lockListener);
 			modelReference.close();
 			modelReference = null;
 		}
+		modelRecord = null;
 
 		scenarioInstance = null;
-
-		if (instance != null) {
-			scenarioInstanceStatusProvider = new ScenarioInstanceStatusProvider(instance);
-			this.scenarioInstance = instance;
-			modelReference = instance.getReference("ScenarioInstanceView");
-			getRootObject();
-
-			this.valueProviderCache = new ReferenceValueProviderCache(getRootObject());
-			extraValidationContext.push(new DefaultExtraValidationContext(getRootObject(), false));
-			doDisplayScenarioInstance(scenarioInstance, getRootObject());
-		} else {
-			scenarioInstanceStatusProvider = null;
-			valueProviderCache = null;
-			doDisplayScenarioInstance(null, null);
-		}
 	}
 
 	protected void doDisplayScenarioInstance(@Nullable ScenarioInstance scenarioInstance, @Nullable MMXRootObject rootObject) {
@@ -249,15 +229,16 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	@Override
 	public EditingDomain getEditingDomain() {
-		if (scenarioInstance == null) {
+		if (modelReference == null) {
 			return null;
 		}
 
-		final Map<Class<?>, Object> adapters = scenarioInstance.getAdapters();
-		if (adapters != null) {
-			return (EditingDomain) adapters.get(EditingDomain.class);
-		}
-		return null;
+		return modelReference.getEditingDomain();
+	}
+
+	@Override
+	public ModelReference getModelReference() {
+		return modelReference;
 	}
 
 	@Override
@@ -293,6 +274,11 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		public EditingDomain getEditingDomain() {
 			return ScenarioInstanceView.this.getEditingDomain();
 		}
+
+		@Override
+		public ModelReference getModelReference() {
+			return ScenarioInstanceView.this.getModelReference();
+		};
 	};
 
 	@Override
@@ -342,7 +328,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	@Override
 	public ScenarioLock getEditorLock() {
-		return editorLock;
+		return modelReference.getLock();
 	}
 
 	@Override
