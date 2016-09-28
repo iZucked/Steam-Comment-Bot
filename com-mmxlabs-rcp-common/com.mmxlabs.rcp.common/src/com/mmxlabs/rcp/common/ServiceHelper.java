@@ -19,6 +19,7 @@ import com.mmxlabs.common.util.CheckedFunction;
 
 public final class ServiceHelper {
 
+	@SuppressWarnings("null")
 	public static <T> void withOptionalService(final Class<T> cls, final Consumer<T> withFunc) {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
 		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
@@ -34,6 +35,7 @@ public final class ServiceHelper {
 		}
 	}
 
+	@SuppressWarnings("null")
 	public static <T, V, E extends Exception> V withCheckedOptionalService(final Class<T> cls, final CheckedFunction<T, V, E> withFunc) throws E {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
 		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
@@ -49,6 +51,7 @@ public final class ServiceHelper {
 		}
 	}
 
+	@SuppressWarnings("null")
 	public static <T, E extends Exception> void withCheckedOptionalService(final Class<T> cls, final CheckedConsumer<T, E> withFunc) throws E {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
 		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
@@ -64,6 +67,7 @@ public final class ServiceHelper {
 		}
 	}
 
+	@SuppressWarnings("null")
 	public static <T, V, E extends Exception> V withOptionalService(final Class<T> cls, final CheckedFunction<T, V, E> withFunc) throws E {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
 		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
