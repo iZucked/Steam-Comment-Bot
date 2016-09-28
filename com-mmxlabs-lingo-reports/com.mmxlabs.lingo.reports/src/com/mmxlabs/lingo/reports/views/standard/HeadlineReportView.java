@@ -41,6 +41,7 @@ import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.IProvideEditorInputScenario;
 import com.mmxlabs.lingo.reports.views.standard.HeadlineReportTransformer.RowData;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -48,8 +49,10 @@ import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
@@ -560,12 +563,14 @@ public class HeadlineReportView extends ViewPart {
 				final IScenarioServiceEditorInput ssInput = (IScenarioServiceEditorInput) editorInput;
 				final ScenarioInstance scenarioInstance = ssInput.getScenarioInstance();
 				if (scenarioInstance != null) {
-					if (!scenarioInstance.isLoadFailure()) {
-						this.modelReference = scenarioInstance.getReference("HeadlineReportView:1");
+					@NonNull
+					ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+					if (!modelRecord.isLoadFailure()) {
+						this.modelReference = modelRecord.aquireReference("HeadlineReportView:1");
 						final EObject instance = modelReference.getInstance();
 						if (instance instanceof LNGScenarioModel) {
 							final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
-							scheduleModel = lngScenarioModel.getScheduleModel();
+							scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
 						}
 					}
 				}
@@ -607,8 +612,10 @@ public class HeadlineReportView extends ViewPart {
 
 					if (scenarioResult != null) {
 						ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
-						if (!scenarioInstance.isLoadFailure()) {
-							HeadlineReportView.this.modelReference = scenarioInstance.getReference("HeadlineReportView:2");
+						final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+						
+						if (!modelRecord.isLoadFailure()) {
+							HeadlineReportView.this.modelReference = modelRecord.aquireReference("HeadlineReportView:2");
 							final EObject instance = modelReference.getInstance();
 							if (instance instanceof LNGScenarioModel) {
 								final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;

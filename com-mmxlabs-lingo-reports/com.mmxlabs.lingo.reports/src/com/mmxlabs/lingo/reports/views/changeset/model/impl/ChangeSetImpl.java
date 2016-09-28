@@ -23,7 +23,6 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
@@ -36,9 +35,6 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
  * <ul>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getMetricsToBase <em>Metrics To Base</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getMetricsToPrevious <em>Metrics To Previous</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getBaseScenarioRef <em>Base Scenario Ref</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getPrevScenarioRef <em>Prev Scenario Ref</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getCurrentScenarioRef <em>Current Scenario Ref</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getBaseScenario <em>Base Scenario</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getPrevScenario <em>Prev Scenario</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getCurrentScenario <em>Current Scenario</em>}</li>
@@ -70,36 +66,6 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * @ordered
 	 */
 	protected DeltaMetrics metricsToPrevious;
-
-	/**
-	 * The cached value of the '{@link #getBaseScenarioRef() <em>Base Scenario Ref</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getBaseScenarioRef()
-	 * @generated
-	 * @ordered
-	 */
-	protected ModelReference baseScenarioRef;
-
-	/**
-	 * The cached value of the '{@link #getPrevScenarioRef() <em>Prev Scenario Ref</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPrevScenarioRef()
-	 * @generated
-	 * @ordered
-	 */
-	protected ModelReference prevScenarioRef;
-
-	/**
-	 * The cached value of the '{@link #getCurrentScenarioRef() <em>Current Scenario Ref</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCurrentScenarioRef()
-	 * @generated
-	 * @ordered
-	 */
-	protected ModelReference currentScenarioRef;
 
 	/**
 	 * The default value of the '{@link #getBaseScenario() <em>Base Scenario</em>}' attribute.
@@ -321,120 +287,6 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ModelReference getBaseScenarioRef() {
-		if (baseScenarioRef != null && baseScenarioRef.eIsProxy()) {
-			InternalEObject oldBaseScenarioRef = (InternalEObject)baseScenarioRef;
-			baseScenarioRef = (ModelReference)eResolveProxy(oldBaseScenarioRef);
-			if (baseScenarioRef != oldBaseScenarioRef) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET__BASE_SCENARIO_REF, oldBaseScenarioRef, baseScenarioRef));
-			}
-		}
-		return baseScenarioRef;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ModelReference basicGetBaseScenarioRef() {
-		return baseScenarioRef;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setBaseScenarioRef(ModelReference newBaseScenarioRef) {
-		ModelReference oldBaseScenarioRef = baseScenarioRef;
-		baseScenarioRef = newBaseScenarioRef;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__BASE_SCENARIO_REF, oldBaseScenarioRef, baseScenarioRef));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ModelReference getPrevScenarioRef() {
-		if (prevScenarioRef != null && prevScenarioRef.eIsProxy()) {
-			InternalEObject oldPrevScenarioRef = (InternalEObject)prevScenarioRef;
-			prevScenarioRef = (ModelReference)eResolveProxy(oldPrevScenarioRef);
-			if (prevScenarioRef != oldPrevScenarioRef) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET__PREV_SCENARIO_REF, oldPrevScenarioRef, prevScenarioRef));
-			}
-		}
-		return prevScenarioRef;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ModelReference basicGetPrevScenarioRef() {
-		return prevScenarioRef;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setPrevScenarioRef(ModelReference newPrevScenarioRef) {
-		ModelReference oldPrevScenarioRef = prevScenarioRef;
-		prevScenarioRef = newPrevScenarioRef;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__PREV_SCENARIO_REF, oldPrevScenarioRef, prevScenarioRef));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ModelReference getCurrentScenarioRef() {
-		if (currentScenarioRef != null && currentScenarioRef.eIsProxy()) {
-			InternalEObject oldCurrentScenarioRef = (InternalEObject)currentScenarioRef;
-			currentScenarioRef = (ModelReference)eResolveProxy(oldCurrentScenarioRef);
-			if (currentScenarioRef != oldCurrentScenarioRef) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET__CURRENT_SCENARIO_REF, oldCurrentScenarioRef, currentScenarioRef));
-			}
-		}
-		return currentScenarioRef;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ModelReference basicGetCurrentScenarioRef() {
-		return currentScenarioRef;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setCurrentScenarioRef(ModelReference newCurrentScenarioRef) {
-		ModelReference oldCurrentScenarioRef = currentScenarioRef;
-		currentScenarioRef = newCurrentScenarioRef;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__CURRENT_SCENARIO_REF, oldCurrentScenarioRef, currentScenarioRef));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public ScenarioResult getBaseScenario() {
 		return baseScenario;
 	}
@@ -615,15 +467,6 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 				return getMetricsToBase();
 			case ChangesetPackage.CHANGE_SET__METRICS_TO_PREVIOUS:
 				return getMetricsToPrevious();
-			case ChangesetPackage.CHANGE_SET__BASE_SCENARIO_REF:
-				if (resolve) return getBaseScenarioRef();
-				return basicGetBaseScenarioRef();
-			case ChangesetPackage.CHANGE_SET__PREV_SCENARIO_REF:
-				if (resolve) return getPrevScenarioRef();
-				return basicGetPrevScenarioRef();
-			case ChangesetPackage.CHANGE_SET__CURRENT_SCENARIO_REF:
-				if (resolve) return getCurrentScenarioRef();
-				return basicGetCurrentScenarioRef();
 			case ChangesetPackage.CHANGE_SET__BASE_SCENARIO:
 				return getBaseScenario();
 			case ChangesetPackage.CHANGE_SET__PREV_SCENARIO:
@@ -656,15 +499,6 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 				return;
 			case ChangesetPackage.CHANGE_SET__METRICS_TO_PREVIOUS:
 				setMetricsToPrevious((DeltaMetrics)newValue);
-				return;
-			case ChangesetPackage.CHANGE_SET__BASE_SCENARIO_REF:
-				setBaseScenarioRef((ModelReference)newValue);
-				return;
-			case ChangesetPackage.CHANGE_SET__PREV_SCENARIO_REF:
-				setPrevScenarioRef((ModelReference)newValue);
-				return;
-			case ChangesetPackage.CHANGE_SET__CURRENT_SCENARIO_REF:
-				setCurrentScenarioRef((ModelReference)newValue);
 				return;
 			case ChangesetPackage.CHANGE_SET__BASE_SCENARIO:
 				setBaseScenario((ScenarioResult)newValue);
@@ -707,15 +541,6 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 			case ChangesetPackage.CHANGE_SET__METRICS_TO_PREVIOUS:
 				setMetricsToPrevious((DeltaMetrics)null);
 				return;
-			case ChangesetPackage.CHANGE_SET__BASE_SCENARIO_REF:
-				setBaseScenarioRef((ModelReference)null);
-				return;
-			case ChangesetPackage.CHANGE_SET__PREV_SCENARIO_REF:
-				setPrevScenarioRef((ModelReference)null);
-				return;
-			case ChangesetPackage.CHANGE_SET__CURRENT_SCENARIO_REF:
-				setCurrentScenarioRef((ModelReference)null);
-				return;
 			case ChangesetPackage.CHANGE_SET__BASE_SCENARIO:
 				setBaseScenario(BASE_SCENARIO_EDEFAULT);
 				return;
@@ -753,12 +578,6 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 				return metricsToBase != null;
 			case ChangesetPackage.CHANGE_SET__METRICS_TO_PREVIOUS:
 				return metricsToPrevious != null;
-			case ChangesetPackage.CHANGE_SET__BASE_SCENARIO_REF:
-				return baseScenarioRef != null;
-			case ChangesetPackage.CHANGE_SET__PREV_SCENARIO_REF:
-				return prevScenarioRef != null;
-			case ChangesetPackage.CHANGE_SET__CURRENT_SCENARIO_REF:
-				return currentScenarioRef != null;
 			case ChangesetPackage.CHANGE_SET__BASE_SCENARIO:
 				return BASE_SCENARIO_EDEFAULT == null ? baseScenario != null : !BASE_SCENARIO_EDEFAULT.equals(baseScenario);
 			case ChangesetPackage.CHANGE_SET__PREV_SCENARIO:

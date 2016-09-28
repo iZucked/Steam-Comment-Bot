@@ -18,7 +18,6 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ScheduleResultListTransformer {
@@ -52,22 +51,11 @@ public class ScheduleResultListTransformer {
 	}
 
 	public ChangeSet buildChangeSet(final ScenarioResult base, final ScenarioResult prev, final ScenarioResult current, @Nullable NamedObject targetToSortFirst) {
-		final ModelReference baseReference = base.getScenarioInstance().getReference("ScheduleResultListTransformer:1");
-		final ModelReference prevReference = prev.getScenarioInstance().getReference("ScheduleResultListTransformer:2");
-		final ModelReference currentReference = current.getScenarioInstance().getReference("ScheduleResultListTransformer:3");
-
-		// Pre-Load
-		baseReference.getInstance();
-		prevReference.getInstance();
-		currentReference.getInstance();
 
 		final ChangeSet changeSet = ChangesetFactory.eINSTANCE.createChangeSet();
 		changeSet.setBaseScenario(base);
-		changeSet.setBaseScenarioRef(baseReference);
 		changeSet.setPrevScenario(prev);
-		changeSet.setPrevScenarioRef(prevReference);
 		changeSet.setCurrentScenario(current);
-		changeSet.setCurrentScenarioRef(currentReference);
 
 		generateDifferences(base, current, changeSet, true, targetToSortFirst);
 		generateDifferences(prev, current, changeSet, false, targetToSortFirst);

@@ -58,4 +58,5 @@ public class SelectedDataProviderImpl implements ISelectedDataProvider {
 	public void setPinnedScenarioInstance(ScenarioResult pinnedScenarioInstance) {
 		this.pinnedScenarioInstance = pinnedScenarioInstance;
 	}
+
 }

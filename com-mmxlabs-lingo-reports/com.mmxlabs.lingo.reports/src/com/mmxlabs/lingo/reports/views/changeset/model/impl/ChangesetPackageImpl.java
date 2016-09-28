@@ -229,35 +229,8 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getChangeSet_BaseScenarioRef() {
-		return (EReference)changeSetEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getChangeSet_PrevScenarioRef() {
-		return (EReference)changeSetEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getChangeSet_CurrentScenarioRef() {
-		return (EReference)changeSetEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getChangeSet_BaseScenario() {
-		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -266,7 +239,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	public EAttribute getChangeSet_PrevScenario() {
-		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(6);
+		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -275,7 +248,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	public EAttribute getChangeSet_CurrentScenario() {
-		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(7);
+		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -284,7 +257,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	public EReference getChangeSet_ChangeSetRowsToBase() {
-		return (EReference)changeSetEClass.getEStructuralFeatures().get(8);
+		return (EReference)changeSetEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -293,7 +266,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	public EReference getChangeSet_ChangeSetRowsToPrevious() {
-		return (EReference)changeSetEClass.getEStructuralFeatures().get(9);
+		return (EReference)changeSetEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -302,7 +275,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	public EReference getChangeSet_CurrentMetrics() {
-		return (EReference)changeSetEClass.getEStructuralFeatures().get(10);
+		return (EReference)changeSetEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -311,7 +284,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	public EAttribute getChangeSet_Description() {
-		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(11);
+		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(8);
 	}
 
 	/**
@@ -969,9 +942,6 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		changeSetEClass = createEClass(CHANGE_SET);
 		createEReference(changeSetEClass, CHANGE_SET__METRICS_TO_BASE);
 		createEReference(changeSetEClass, CHANGE_SET__METRICS_TO_PREVIOUS);
-		createEReference(changeSetEClass, CHANGE_SET__BASE_SCENARIO_REF);
-		createEReference(changeSetEClass, CHANGE_SET__PREV_SCENARIO_REF);
-		createEReference(changeSetEClass, CHANGE_SET__CURRENT_SCENARIO_REF);
 		createEAttribute(changeSetEClass, CHANGE_SET__BASE_SCENARIO);
 		createEAttribute(changeSetEClass, CHANGE_SET__PREV_SCENARIO);
 		createEAttribute(changeSetEClass, CHANGE_SET__CURRENT_SCENARIO);
@@ -1084,7 +1054,6 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		ScenarioServicePackage theScenarioServicePackage = (ScenarioServicePackage)EPackage.Registry.INSTANCE.getEPackage(ScenarioServicePackage.eNS_URI);
 		SchedulePackage theSchedulePackage = (SchedulePackage)EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI);
 		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
 
@@ -1101,9 +1070,6 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		initEClass(changeSetEClass, ChangeSet.class, "ChangeSet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getChangeSet_MetricsToBase(), this.getDeltaMetrics(), null, "metricsToBase", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSet_MetricsToPrevious(), this.getDeltaMetrics(), null, "metricsToPrevious", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getChangeSet_BaseScenarioRef(), theScenarioServicePackage.getModelReference(), null, "baseScenarioRef", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getChangeSet_PrevScenarioRef(), theScenarioServicePackage.getModelReference(), null, "prevScenarioRef", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getChangeSet_CurrentScenarioRef(), theScenarioServicePackage.getModelReference(), null, "currentScenarioRef", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSet_BaseScenario(), this.getScenarioResult(), "baseScenario", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSet_PrevScenario(), this.getScenarioResult(), "prevScenario", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSet_CurrentScenario(), this.getScenarioResult(), "currentScenario", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

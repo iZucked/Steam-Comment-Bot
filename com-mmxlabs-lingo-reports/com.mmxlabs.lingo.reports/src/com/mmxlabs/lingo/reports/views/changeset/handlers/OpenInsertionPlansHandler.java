@@ -29,8 +29,10 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
 public class OpenInsertionPlansHandler extends AbstractHandler {
 
@@ -56,11 +58,8 @@ public class OpenInsertionPlansHandler extends AbstractHandler {
 				final Object o = ss.getFirstElement();
 				if (o instanceof ScenarioInstance) {
 					final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
-					if (scenarioInstance.getInstance() == null) {
-						setBaseEnabled(false);
-						return;
-					}
-					try (ModelReference ref = scenarioInstance.getReference("OpenInsertionPlansHandler:1")) {
+					final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+					try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("OpenInsertionPlansHandler:1")) {
 						if (ref == null) {
 							setBaseEnabled(false);
 							return;
@@ -96,7 +95,8 @@ public class OpenInsertionPlansHandler extends AbstractHandler {
 			final Object o = ss.getFirstElement();
 			if (o instanceof ScenarioInstance) {
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
-				try (ModelReference ref = scenarioInstance.getReference("OpenInsertionPlansHandler:2")) {
+				final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+				try (ModelReference ref = modelRecord.aquireReference("OpenInsertionPlansHandler:2")) {
 					final EObject rootObject = ref.getInstance();
 					if (!(rootObject instanceof LNGScenarioModel)) {
 						return null;

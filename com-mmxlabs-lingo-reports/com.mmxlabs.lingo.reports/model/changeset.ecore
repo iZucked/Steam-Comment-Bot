@@ -11,9 +11,6 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="metricsToPrevious" eType="#//DeltaMetrics"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="baseScenarioRef" eType="ecore:EClass ../../com.mmxlabs.scenario.service.model/model/scenario.service.ecore#//ModelReference"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="prevScenarioRef" eType="ecore:EClass ../../com.mmxlabs.scenario.service.model/model/scenario.service.ecore#//ModelReference"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="currentScenarioRef" eType="ecore:EClass ../../com.mmxlabs.scenario.service.model/model/scenario.service.ecore#//ModelReference"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseScenario" eType="#//ScenarioResult"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="prevScenario" eType="#//ScenarioResult"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentScenario" eType="#//ScenarioResult"/>

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -45,7 +46,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -72,6 +72,8 @@ import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -85,7 +87,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -138,11 +139,14 @@ import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
+import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
-import com.mmxlabs.scenario.service.IScenarioServiceListener;
 import com.mmxlabs.scenario.service.impl.ScenarioServiceListener;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
@@ -252,6 +256,7 @@ public class ChangeSetView implements IAdaptable {
 
 	private @Nullable AnalyticsSolution lastSolution;
 	private @Nullable NamedObject lastTargetSlot;
+	private Collection<Slot> allTargetSlots = new HashSet<>();
 
 	private boolean diffToBase = false;
 	private boolean showNonStructuralChanges = false;
@@ -361,9 +366,9 @@ public class ChangeSetView implements IAdaptable {
 
 			if (newRoot != null) {
 				for (final ChangeSet cs : newRoot.getChangeSets()) {
-					createListener(cs.getBaseScenario());
-					createListener(cs.getCurrentScenario());
-					createListener(cs.getPrevScenario());
+					// createListener(cs.getBaseScenario());
+					// createListener(cs.getCurrentScenario());
+					// createListener(cs.getPrevScenario());
 				}
 			}
 			final ChangeSetTableRoot newTable = diffToBase ? csDdiffToBase : csdiffToPrevious;
@@ -376,6 +381,11 @@ public class ChangeSetView implements IAdaptable {
 			ChangeSetView.this.tableRootToBase = csDdiffToBase;
 			ChangeSetView.this.tableRootToPrevious = csdiffToPrevious;
 			cleanUp(oldRoot);
+
+			// Repack some data column
+			column_SetName.getColumn().pack();
+			column_Lateness.getColumn().pack();
+			column_Violations.getColumn().pack();
 		}
 	}
 
@@ -571,6 +581,12 @@ public class ChangeSetView implements IAdaptable {
 	private final Queue<Runnable> postCreateActions = new ConcurrentLinkedQueue<>();
 	private boolean viewCreated = false;
 
+	private GridViewerColumn column_SetName;
+
+	private GridViewerColumn column_Lateness;
+
+	private GridViewerColumn column_Violations;
+
 	@PostConstruct
 	public void createPartControl(@Optional final MPart part, final Composite parent) {
 		handleEvents = true;
@@ -615,15 +631,15 @@ public class ChangeSetView implements IAdaptable {
 
 		// Create columns
 		{
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("");
-			gvc.getColumn().setTree(true);
-			gvc.getColumn().setWidth(60);
-			gvc.getColumn().setResizeable(true);
-			gvc.getColumn().setMoveable(false);
-			gvc.setLabelProvider(createCSLabelProvider());
-			gvc.getColumn().setCellRenderer(createCellRenderer());
+			column_SetName = new GridViewerColumn(viewer, SWT.CENTER);
+			column_SetName.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+			column_SetName.getColumn().setText("");
+			column_SetName.getColumn().setTree(true);
+			column_SetName.getColumn().setWidth(60);
+			column_SetName.getColumn().setResizeable(true);
+			column_SetName.getColumn().setMoveable(false);
+			column_SetName.setLabelProvider(createCSLabelProvider());
+			column_SetName.getColumn().setCellRenderer(createCellRenderer());
 		}
 
 		final GridColumnGroup pnlComponentGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER | SWT.TOGGLE);
@@ -773,27 +789,27 @@ public class ChangeSetView implements IAdaptable {
 		// Space col
 		createSpacerColumn();
 		{
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("Late");
-			gvc.getColumn().setHeaderTooltip("Lateness");
-			gvc.getColumn().setWidth(50);
-			gvc.setLabelProvider(createLatenessDeltaLabelProvider());
-			gvc.getColumn().setCellRenderer(createCellRenderer());
+			column_Lateness = new GridViewerColumn(viewer, SWT.CENTER);
+			column_Lateness.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+			column_Lateness.getColumn().setText("Late");
+			column_Lateness.getColumn().setHeaderTooltip("Lateness");
+			column_Lateness.getColumn().setWidth(50);
+			column_Lateness.setLabelProvider(createLatenessDeltaLabelProvider());
+			column_Lateness.getColumn().setCellRenderer(createCellRenderer());
 
-			this.latenessColumn = gvc;
+			this.latenessColumn = column_Lateness;
 		}
 		{
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER);
-			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("Violations");
-			gvc.getColumn().setHeaderTooltip("Capacity Violations");
-			gvc.getColumn().setWidth(50);
-			gvc.setLabelProvider(createViolationsDeltaLabelProvider());
-			createWordWrapRenderer(gvc);
-			gvc.getColumn().setCellRenderer(createCellRenderer());
+			column_Violations = new GridViewerColumn(viewer, SWT.CENTER);
+			column_Violations.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+			column_Violations.getColumn().setText("Violations");
+			column_Violations.getColumn().setHeaderTooltip("Capacity Violations");
+			column_Violations.getColumn().setWidth(50);
+			column_Violations.setLabelProvider(createViolationsDeltaLabelProvider());
+			createWordWrapRenderer(column_Violations);
+			column_Violations.getColumn().setCellRenderer(createCellRenderer());
 
-			this.violationColumn = gvc;
+			this.violationColumn = column_Violations;
 
 		}
 
@@ -811,7 +827,7 @@ public class ChangeSetView implements IAdaptable {
 			gvc.getColumn().setText("ID");
 			gvc.getColumn().setWidth(75);
 			gvc.setLabelProvider(createIDLabelProvider(true));
-			gvc.getColumn().setCellRenderer(createCellRenderer());
+			gvc.getColumn().setCellRenderer(createCellRenderer(SlotIDRenderMode.LHS_IN_TARGET));
 		}
 		{
 			final GridColumn gc = new GridColumn(loadGroup, SWT.CENTER);
@@ -862,7 +878,7 @@ public class ChangeSetView implements IAdaptable {
 			gvc.getColumn().setText("ID");
 			gvc.getColumn().setWidth(75);
 			gvc.setLabelProvider(createIDLabelProvider(false));
-			gvc.getColumn().setCellRenderer(createCellRenderer());
+			gvc.getColumn().setCellRenderer(createCellRenderer(SlotIDRenderMode.RHS_IN_TARGET));
 		}
 		{
 			final GridColumn gc = new GridColumn(dischargeGroup, SWT.CENTER);
@@ -1127,8 +1143,9 @@ public class ChangeSetView implements IAdaptable {
 		});
 
 		{
-			final MenuManager mgr = new MenuManager();
-			final ContextMenuManager listener = new ContextMenuManager(mgr);
+			// final MenuManager mgr = new MenuManager();
+			// LocalMenuHelper menuHelper = new LocalMenuHelper(viewer.getGrid());
+			final ContextMenuManager listener = new ContextMenuManager();
 			viewer.getGrid().addMenuDetectListener(listener);
 		}
 		synchronized (postCreateActions) {
@@ -1157,7 +1174,15 @@ public class ChangeSetView implements IAdaptable {
 		}
 	}
 
+	private enum SlotIDRenderMode {
+		None, LHS_IN_TARGET, RHS_IN_TARGET
+	};
+
 	protected DefaultCellRenderer createCellRenderer() {
+		return createCellRenderer(SlotIDRenderMode.None);
+	}
+
+	protected DefaultCellRenderer createCellRenderer(SlotIDRenderMode renderMode) {
 		return new DefaultCellRenderer() {
 
 			@Override
@@ -1177,6 +1202,7 @@ public class ChangeSetView implements IAdaptable {
 					final GridItem gridItem = (GridItem) value;
 					final Object data = gridItem.getData();
 					if (data instanceof ChangeSetTableGroup) {
+						int currentLineWidth = gc.getLineWidth();
 						gc.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 						final int s = gc.getLineStyle();
 						gc.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
@@ -1186,6 +1212,52 @@ public class ChangeSetView implements IAdaptable {
 						// gc.setLineWidth(1);
 						gc.drawLine(getBounds().x, getBounds().y + getBounds().height, getBounds().width + getBounds().x, getBounds().y + getBounds().height);
 						gc.setLineStyle(s);
+						gc.setLineWidth(currentLineWidth);
+
+					} else if (data instanceof ChangeSetTableRow) {
+
+						if (getBounds().height > 1) {
+							int currentLineWidth = gc.getLineWidth();
+							ChangeSetTableRow changeSetTableRow = (ChangeSetTableRow) data;
+							boolean found = false;
+							boolean foundTarget = false;
+							if (renderMode == SlotIDRenderMode.LHS_IN_TARGET) {
+								if (changeSetTableRow.getLhsAfter() != null) {
+									if (allTargetSlots.contains(changeSetTableRow.getLhsAfter().getLoadSlot())) {
+										found = true;
+										if (changeSetTableRow.getLhsAfter().getLoadSlot() == lastTargetSlot) {
+											foundTarget = true;
+										}
+									}
+								}
+							}
+							if (renderMode == SlotIDRenderMode.RHS_IN_TARGET) {
+								if (changeSetTableRow.getRhsAfter() != null) {
+									if (allTargetSlots.contains(changeSetTableRow.getRhsAfter().getDischargeSlot())) {
+										found = true;
+										if (changeSetTableRow.getRhsAfter().getDischargeSlot() == lastTargetSlot) {
+											foundTarget = true;
+										}
+									}
+								}
+							}
+							if (found) {
+								final int s = gc.getLineStyle();
+								gc.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
+								// gc.setLineStyle(SWT.LINE_DOT);
+								// gc.drawLine(getBounds().x, getBounds().y, getBounds().width + getBounds().x, getBounds().y);
+								gc.setLineStyle(SWT.LINE_SOLID);
+								if (foundTarget) {
+									gc.setLineWidth(2);
+								} else {
+									gc.setLineWidth(1);
+								}
+								gc.drawRoundRectangle(getBounds().x, getBounds().y, getBounds().width - 1, getBounds().height, 4, 4);
+								gc.setLineStyle(s);
+							}
+							gc.setLineWidth(currentLineWidth);
+
+						}
 					}
 				}
 
@@ -1303,7 +1375,7 @@ public class ChangeSetView implements IAdaptable {
 						}
 
 					} else {
-						// Unlike other RHS colums where we want to diff against the old and new slot linked to the cargo, we want to show the date diff for this slot.
+						// Unlike other RHS columns where we want to diff against the old and new slot linked to the cargo, we want to show the date diff for this slot.
 						final SlotAllocation originalDischargeAllocation = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
 						final SlotAllocation newDischargeAllocation = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
 
@@ -1678,6 +1750,10 @@ public class ChangeSetView implements IAdaptable {
 		final ChangeSetRoot newRoot = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 		final ChangeSetTableRoot newTableRoot = ChangesetFactory.eINSTANCE.createChangeSetTableRoot();
 
+		this.allTargetSlots.clear();
+		this.lastSolution = null;
+		this.lastTargetSlot = null;
+
 		diagram.setChangeSetRoot(newTableRoot);
 		ViewerHelper.setInput(viewer, true, newTableRoot);
 
@@ -1706,45 +1782,45 @@ public class ChangeSetView implements IAdaptable {
 	private void cleanUp(@Nullable final ChangeSetRoot root) {
 		if (root != null) {
 			for (final ChangeSet cs : root.getChangeSets()) {
-				release(cs.getBaseScenarioRef());
-				release(cs.getPrevScenarioRef());
-				release(cs.getCurrentScenarioRef());
-				removeListener(cs.getBaseScenario());
-				removeListener(cs.getCurrentScenario());
-				removeListener(cs.getPrevScenario());
+				// release(cs.getBaseScenarioRef());
+				// release(cs.getPrevScenarioRef());
+				// release(cs.getCurrentScenarioRef());
+				// removeListener(cs.getBaseScenario());
+				// removeListener(cs.getCurrentScenario());
+				// removeListener(cs.getPrevScenario());
 			}
 		}
 	}
 
-	protected void removeListener(@Nullable final ScenarioResult scenarioInstance) {
-		if (scenarioInstance != null) {
-			final IScenarioServiceListener listener = listenerMap.get(scenarioInstance);
-			final IScenarioService scenarioService = scenarioInstance.getScenarioInstance().getScenarioService();
-			if (scenarioService != null && listener != null) {
-				scenarioService.removeScenarioServiceListener(listener);
-			}
-			listenerMap.remove(scenarioInstance);
+	// protected void removeListener(@Nullable final ScenarioResult scenarioInstance) {
+	// if (scenarioInstance != null) {
+	// final IScenarioServiceListener listener = listenerMap.get(scenarioInstance);
+	// final IScenarioService scenarioService = scenarioInstance.getScenarioInstance().getScenarioService();
+	// if (scenarioService != null && listener != null) {
+	// scenarioService.removeScenarioServiceListener(listener);
+	// }
+	// listenerMap.remove(scenarioInstance);
+	//
+	// }
+	// }
 
-		}
-	}
+	// protected void createListener(@Nullable final ScenarioResult scenarioInstance) {
+	// if (scenarioInstance != null) {
+	// final IScenarioService scenarioService = scenarioInstance.getScenarioInstance().getScenarioService();
+	// if (scenarioService != null) {
+	// final ScenarioInstanceDeletedListener listener = new ScenarioInstanceDeletedListener(scenarioInstance.getScenarioInstance(), this);
+	// listenerMap.put(scenarioInstance, listener);
+	// scenarioService.addScenarioServiceListener(listener);
+	// }
+	//
+	// }
+	// }
 
-	protected void createListener(@Nullable final ScenarioResult scenarioInstance) {
-		if (scenarioInstance != null) {
-			final IScenarioService scenarioService = scenarioInstance.getScenarioInstance().getScenarioService();
-			if (scenarioService != null) {
-				final ScenarioInstanceDeletedListener listener = new ScenarioInstanceDeletedListener(scenarioInstance.getScenarioInstance(), this);
-				listenerMap.put(scenarioInstance, listener);
-				scenarioService.addScenarioServiceListener(listener);
-			}
-
-		}
-	}
-
-	private void release(final ModelReference ref) {
-		if (ref != null) {
-			ref.close();
-		}
-	}
+	// private void release(final ModelReference ref) {
+	// if (ref != null) {
+	// ref.close();
+	// }
+	// }
 
 	private CellLabelProvider createVesselLabelProvider(@NonNull final String name) {
 		return new CellLabelProvider() {
@@ -1878,16 +1954,16 @@ public class ChangeSetView implements IAdaptable {
 		diagram.setChangeSetRoot(ChangesetFactory.eINSTANCE.createChangeSetTableRoot());
 		this.root = null;
 		{
-			for (final Map.Entry<ScenarioResult, ScenarioInstanceDeletedListener> e : listenerMap.entrySet()) {
-				final ScenarioResult scenarioResult = e.getKey();
-				final ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
-				final IScenarioService scenarioService = scenarioInstance.getScenarioService();
-				final ScenarioInstanceDeletedListener listener = e.getValue();
-				if (scenarioService != null && listener != null) {
-					scenarioService.removeScenarioServiceListener(listener);
-				}
-			}
-			listenerMap.clear();
+			// for (final Map.Entry<ScenarioResult, ScenarioInstanceDeletedListener> e : listenerMap.entrySet()) {
+			// final ScenarioResult scenarioResult = e.getKey();
+			// final ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
+			// final IScenarioService scenarioService = scenarioInstance.getScenarioService();
+			// final ScenarioInstanceDeletedListener listener = e.getValue();
+			// if (scenarioService != null && listener != null) {
+			// scenarioService.removeScenarioServiceListener(listener);
+			// }
+			// }
+			// listenerMap.clear();
 		}
 
 		cleanUpVesselColumns();
@@ -1994,7 +2070,7 @@ public class ChangeSetView implements IAdaptable {
 	private void handleShowStructuralChangesToggle(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_NON_STRUCTURAL_CHANGES) final MPart activePart) {
 		if (activePart.getObject() == this) {
 			showNonStructuralChanges = !showNonStructuralChanges;
-			ViewerHelper.refresh(viewer, true);
+			ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 		}
 	}
 
@@ -2003,7 +2079,7 @@ public class ChangeSetView implements IAdaptable {
 	private void handleToggleInsertionPlanDuplicates(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_INSERTION_CHANGES) final MPart activePart) {
 		if (activePart.getObject() == this) {
 			insertionPlanFilter.toggleFilter();
-			ViewerHelper.refresh(viewer, true);
+			ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 		}
 	}
 
@@ -2012,7 +2088,7 @@ public class ChangeSetView implements IAdaptable {
 	private void handleSwitchGroupByModel(@UIEventTopic(ChangeSetViewEventConstants.EVENT_SWITCH_GROUP_BY_MODE) final SwitchGroupModeEvent event) {
 		if (event.activePart.getObject() == this) {
 			insertionPlanFilter.setGroupMode(event.mode);
-			String id = lastTargetSlot == null ? null : lastTargetSlot.getName();
+			final String id = lastTargetSlot == null ? null : lastTargetSlot.getName();
 
 			openAnalyticsSolution(lastSolution, id);
 			// this.solution = solution;
@@ -2250,24 +2326,36 @@ public class ChangeSetView implements IAdaptable {
 
 	private class ContextMenuManager implements MenuDetectListener {
 
-		private final @NonNull MenuManager mgr;
+		// private final @NonNull MenuManager mgr;
+		//
+		// private Menu menu;
 
-		private Menu menu;
+		private final LocalMenuHelper helper = new LocalMenuHelper(viewer.getGrid());
 
-		public ContextMenuManager(@NonNull final MenuManager mgr) {
-			this.mgr = mgr;
+		public ContextMenuManager() {
+			// this.mgr = mgr;
+			viewer.getGrid().addDisposeListener(new DisposeListener() {
+
+				@Override
+				public void widgetDisposed(DisposeEvent e) {
+					helper.dispose();
+
+				}
+			});
+
 		}
 
 		@Override
 		public void menuDetected(final MenuDetectEvent e) {
+
+			helper.clearActions();
+
 			final Grid grid = viewer.getGrid();
-			if (menu == null) {
-				menu = mgr.createContextMenu(grid);
-			}
-			mgr.removeAll();
 
 			final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 			final GridItem[] items = grid.getSelection();
+			boolean showMenu = false;
+			final Set<ChangeSetTableRow> directSelectedRows = new LinkedHashSet<>();
 			if (items.length >= 1) {
 				final Set<ChangeSetTableGroup> selectedSets = new LinkedHashSet<>();
 				final Iterator<?> itr = selection.iterator();
@@ -2278,28 +2366,32 @@ public class ChangeSetView implements IAdaptable {
 					} else if (obj instanceof ChangeSetTableRow) {
 						final ChangeSetTableRow changeSetRow = (ChangeSetTableRow) obj;
 						selectedSets.add((ChangeSetTableGroup) changeSetRow.eContainer());
+						directSelectedRows.add(changeSetRow);
 					}
 				}
-				boolean showMenu = false;
 				if (selectedSets.size() == 1) {
 					if (canExportChangeSet) {
 						if (ChangeSetView.this.viewMode == ViewMode.ACTION_SET) {
 							final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
-							mgr.add(new ExportChangeAction(changeSetTableGroup));
+							helper.addAction(new ExportChangeAction(changeSetTableGroup));
 							showMenu = true;
 						}
 					}
 				}
 				if (selectedSets.size() > 1) {
 					if (ChangeSetView.this.viewMode == ViewMode.COMPARE) {
-						mgr.add(new MergeChangesAction(selectedSets, viewer));
+						helper.addAction(new MergeChangesAction(selectedSets, viewer));
 						showMenu = true;
 					}
 
 				}
-				if (showMenu) {
-					menu.setVisible(true);
+
+				if (directSelectedRows.size() == 1) {
 				}
+			}
+
+			if (showMenu) {
+				helper.open();
 			}
 		}
 	}
@@ -2309,7 +2401,7 @@ public class ChangeSetView implements IAdaptable {
 		openAnalyticsSolution(solution, null);
 	}
 
-	public void openAnalyticsSolution(final AnalyticsSolution solution, @Nullable String slotId) {
+	public void openAnalyticsSolution(final AnalyticsSolution solution, @Nullable final String slotId) {
 		this.lastSolution = solution;
 		this.viewMode = ViewMode.ACTION_SET;
 
@@ -2355,6 +2447,8 @@ public class ChangeSetView implements IAdaptable {
 				pTargetSlot = targetSlot;
 				lastTargetSlot = pTargetSlot;
 			}
+			allTargetSlots.clear();
+			allTargetSlots.addAll(slotInsertionOptions.getSlotsInserted());
 
 			setNewDataData(target, monitor -> {
 				final InsertionPlanTransformer transformer = new InsertionPlanTransformer();
@@ -2414,8 +2508,10 @@ public class ChangeSetView implements IAdaptable {
 						return true;
 					});
 					if (instance[0] != null) {
+						@NonNull
+						final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance[0]);
 						UUIDObject solution = null;
-						try (ModelReference ref = instance[0].getReference("ChangeSetView:restore")) {
+						try (ModelReference ref = modelRecord.aquireReference("ChangeSetView:restore")) {
 							final EObject modelInstance = ref.getInstance();
 							if (modelInstance instanceof LNGScenarioModel) {
 								final LNGScenarioModel scenarioModel = (LNGScenarioModel) modelInstance;
@@ -2433,7 +2529,7 @@ public class ChangeSetView implements IAdaptable {
 
 									final UUIDObject pSolution = solution;
 									synchronized (postCreateActions) {
-										final ModelReference ref2 = instance[0].getReference("ChangeSetView:delayedLoad");
+										final ModelReference ref2 = modelRecord.aquireReference("ChangeSetView:delayedLoad");
 										final Runnable r = () -> {
 											final AnalyticsSolution analyticsSolution = new AnalyticsSolution(instance[0], pSolution, part.getLabel());
 											openAnalyticsSolution(analyticsSolution, null);
@@ -2470,5 +2566,33 @@ public class ChangeSetView implements IAdaptable {
 	@GetCurrentTargetObject
 	public NamedObject getLastSlot() {
 		return lastTargetSlot;
+	}
+
+	@Inject
+	@Optional
+	public void onClosingScenario(@UIEventTopic(ScenarioServiceUtils.EVENT_CLOSING_SCENARIO_INSTANCE) final ScenarioInstance scenarioInstance) {
+		Function<ScenarioResult, Boolean> checker = (sr) -> sr != null && sr.getScenarioInstance() == scenarioInstance;
+		ChangeSetRoot pRoot = this.root;
+		boolean linked = false;
+		if (pRoot != null) {
+			for (ChangeSet changeSet : pRoot.getChangeSets()) {
+				if (checker.apply(changeSet.getBaseScenario())) {
+					linked = true;
+					break;
+				}
+				if (checker.apply(changeSet.getCurrentScenario())) {
+					linked = true;
+					break;
+				}
+				if (checker.apply(changeSet.getPrevScenario())) {
+					linked = true;
+					break;
+				}
+			}
+		}
+		if (linked) {
+			setEmptyData();
+			// TODO: Close view if dynamic
+		}
 	}
 }

@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
@@ -33,8 +32,11 @@ import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IScenarioServiceListener;
-import com.mmxlabs.scenario.service.model.ModelReference;
+import com.mmxlabs.scenario.service.impl.ScenarioServiceListener;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
@@ -102,7 +104,7 @@ public class SelectedScenariosService {
 		}
 	};
 
-	private class OnUnloadScenarioServiceListener implements IScenarioServiceListener {
+	private class OnUnloadScenarioServiceListener extends ScenarioServiceListener {
 
 		@Override
 		public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
@@ -111,38 +113,9 @@ public class SelectedScenariosService {
 		}
 
 		@Override
-		public void onPreScenarioInstanceSave(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-
-		}
-
-		@Override
-		public void onPreScenarioInstanceLoad(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-
-		}
-
-		@Override
 		public void onPreScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
 			detachScenarioInstance(scenarioInstance);
 			updateSelectedScenarios(false);
-		}
-
-		@Override
-		public void onPostScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-		}
-
-		@Override
-		public void onPostScenarioInstanceSave(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-
-		}
-
-		@Override
-		public void onPostScenarioInstanceLoad(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-
-		}
-
-		@Override
-		public void onPostScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-
 		}
 	};
 
@@ -229,43 +202,30 @@ public class SelectedScenariosService {
 		listeners.clear();
 	}
 
-	private CommandStack getCommandStack(final ScenarioResult result) {
-		final ScenarioInstance instance = result.getScenarioInstance();
-		final IScenarioService scenarioService = instance.getScenarioService();
-		if (scenarioService == null) {
-			return null;
-		}
+	private void attachScenarioInstance(@NonNull final ScenarioResult scenarioResult) {
 
-		final Map<Class<?>, Object> adapters = instance.getAdapters();
-		if (adapters != null) {
-			final Object object = adapters.get(BasicCommandStack.class);
-			if (object instanceof CommandStack) {
-				return (CommandStack) object;
-			}
-		}
-
-		return null;
-	}
-
-	private void attachScenarioInstance(@NonNull final ScenarioResult instance) {
-
-		if (this.scenarioReferences.containsKey(instance)) {
+		if (this.scenarioReferences.containsKey(scenarioResult)) {
 			return;
 		}
-		final IScenarioService scenarioService = instance.getScenarioInstance().getScenarioService();
+
+		final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(scenarioResult.getScenarioInstance());
 		if (scenarioService != null && !unloadlisteners.containsKey(scenarioService)) {
 			final IScenarioServiceListener l = new OnUnloadScenarioServiceListener();
 			scenarioService.addScenarioServiceListener(l);
 			unloadlisteners.put(scenarioService, l);
 		}
 
-		final CommandStack commandStack = getCommandStack(instance);
+		@NonNull
+		final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioResult.getScenarioInstance());
+		final ModelReference modelReference = modelRecord.aquireReference("SelectedScenariosService:1");
+
+		final CommandStack commandStack = modelReference.getCommandStack();
 		if (commandStack != null) {
-			final MyCommandStackListener l = new MyCommandStackListener(commandStack, instance);
-			this.commandStacks.put(instance, l);
+			final MyCommandStackListener l = new MyCommandStackListener(commandStack, scenarioResult);
+			this.commandStacks.put(scenarioResult, l);
 
 		}
-		this.scenarioReferences.put(instance, instance.getScenarioInstance().getReference("SelectedScenariosService:1"));
+		this.scenarioReferences.put(scenarioResult, modelReference);
 	}
 
 	private void detachScenarioInstance(@NonNull final ScenarioInstance instance) {
@@ -299,6 +259,9 @@ public class SelectedScenariosService {
 	}
 
 	private void detachScenarioInstance(@NonNull final ScenarioResult result) {
+
+		// FAIL! This is null, put store with the scenario instance.
+
 		final MyCommandStackListener l = commandStacks.remove(result);
 		if (l != null) {
 			l.dispose();
@@ -389,7 +352,7 @@ public class SelectedScenariosService {
 			this.scenarioModel = scenarioModel;
 			this.schedule = schedule;
 			this.children = children;
-			this.ref = scenarioResult.getScenarioInstance().getReference("SelectedScenariosService:2");
+			this.ref = SSDataManager.Instance.getModelRecord(scenarioResult.getScenarioInstance()).aquireReference("SelectedScenariosService:2");
 		}
 
 		public void dispose() {
@@ -432,7 +395,9 @@ public class SelectedScenariosService {
 	@Nullable
 	private KeyValueRecord createKeyValueRecord(@NonNull final ScenarioResult scenarioResult) {
 
-		try (ModelReference modelReference = scenarioResult.getScenarioInstance().getReference("SelectedScenariosService:3")) {
+		@NonNull
+		final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioResult.getScenarioInstance());
+		try (ModelReference modelReference = modelRecord.aquireReference("SelectedScenarioService:3")) {
 			final EObject instance = modelReference.getInstance();
 
 			if (instance instanceof LNGScenarioModel) {
@@ -467,6 +432,7 @@ public class SelectedScenariosService {
 			}
 		}
 		return null;
+
 	}
 
 	@NonNull

@@ -127,40 +127,13 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET__METRICS_TO_PREVIOUS = 1;
 
 	/**
-	 * The feature id for the '<em><b>Base Scenario Ref</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET__BASE_SCENARIO_REF = 2;
-
-	/**
-	 * The feature id for the '<em><b>Prev Scenario Ref</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET__PREV_SCENARIO_REF = 3;
-
-	/**
-	 * The feature id for the '<em><b>Current Scenario Ref</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET__CURRENT_SCENARIO_REF = 4;
-
-	/**
 	 * The feature id for the '<em><b>Base Scenario</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET__BASE_SCENARIO = 5;
+	int CHANGE_SET__BASE_SCENARIO = 2;
 
 	/**
 	 * The feature id for the '<em><b>Prev Scenario</b></em>' attribute.
@@ -169,7 +142,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET__PREV_SCENARIO = 6;
+	int CHANGE_SET__PREV_SCENARIO = 3;
 
 	/**
 	 * The feature id for the '<em><b>Current Scenario</b></em>' attribute.
@@ -178,7 +151,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET__CURRENT_SCENARIO = 7;
+	int CHANGE_SET__CURRENT_SCENARIO = 4;
 
 	/**
 	 * The feature id for the '<em><b>Change Set Rows To Base</b></em>' containment reference list.
@@ -187,7 +160,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET__CHANGE_SET_ROWS_TO_BASE = 8;
+	int CHANGE_SET__CHANGE_SET_ROWS_TO_BASE = 5;
 
 	/**
 	 * The feature id for the '<em><b>Change Set Rows To Previous</b></em>' containment reference list.
@@ -196,7 +169,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET__CHANGE_SET_ROWS_TO_PREVIOUS = 9;
+	int CHANGE_SET__CHANGE_SET_ROWS_TO_PREVIOUS = 6;
 
 	/**
 	 * The feature id for the '<em><b>Current Metrics</b></em>' containment reference.
@@ -205,7 +178,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET__CURRENT_METRICS = 10;
+	int CHANGE_SET__CURRENT_METRICS = 7;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -214,7 +187,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET__DESCRIPTION = 11;
+	int CHANGE_SET__DESCRIPTION = 8;
 
 	/**
 	 * The number of structural features of the '<em>Change Set</em>' class.
@@ -223,7 +196,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_FEATURE_COUNT = 12;
+	int CHANGE_SET_FEATURE_COUNT = 9;
 
 	/**
 	 * The number of operations of the '<em>Change Set</em>' class.
@@ -1063,39 +1036,6 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getChangeSet_MetricsToPrevious();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getBaseScenarioRef <em>Base Scenario Ref</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Base Scenario Ref</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getBaseScenarioRef()
-	 * @see #getChangeSet()
-	 * @generated
-	 */
-	EReference getChangeSet_BaseScenarioRef();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getPrevScenarioRef <em>Prev Scenario Ref</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Prev Scenario Ref</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getPrevScenarioRef()
-	 * @see #getChangeSet()
-	 * @generated
-	 */
-	EReference getChangeSet_PrevScenarioRef();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getCurrentScenarioRef <em>Current Scenario Ref</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Current Scenario Ref</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getCurrentScenarioRef()
-	 * @see #getChangeSet()
-	 * @generated
-	 */
-	EReference getChangeSet_CurrentScenarioRef();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getBaseScenario <em>Base Scenario</em>}'.
@@ -1991,30 +1931,6 @@ public interface ChangesetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CHANGE_SET__METRICS_TO_PREVIOUS = eINSTANCE.getChangeSet_MetricsToPrevious();
-
-		/**
-		 * The meta object literal for the '<em><b>Base Scenario Ref</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CHANGE_SET__BASE_SCENARIO_REF = eINSTANCE.getChangeSet_BaseScenarioRef();
-
-		/**
-		 * The meta object literal for the '<em><b>Prev Scenario Ref</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CHANGE_SET__PREV_SCENARIO_REF = eINSTANCE.getChangeSet_PrevScenarioRef();
-
-		/**
-		 * The meta object literal for the '<em><b>Current Scenario Ref</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CHANGE_SET__CURRENT_SCENARIO_REF = eINSTANCE.getChangeSet_CurrentScenarioRef();
 
 		/**
 		 * The meta object literal for the '<em><b>Base Scenario</b></em>' attribute feature.

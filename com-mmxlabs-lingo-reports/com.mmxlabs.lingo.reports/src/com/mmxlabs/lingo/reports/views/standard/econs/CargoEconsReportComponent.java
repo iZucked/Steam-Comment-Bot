@@ -12,6 +12,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import javax.annotation.PostConstruct;
@@ -24,6 +25,7 @@ import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -74,6 +76,9 @@ import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.application.BindSelectionListener;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 /**
@@ -304,92 +309,60 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 					if (cargo != null) {
 
 						// TODO: Look up ScheduleModel somehow....
-
-						if (part instanceof IEditorPart) {
-							final IEditorPart editorPart = (IEditorPart) part;
-							final IEditorInput editorInput = editorPart.getEditorInput();
-							if (editorInput instanceof IScenarioServiceEditorInput) {
-								final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editorInput;
-								final ScenarioInstance scenarioInstance = scenarioServiceEditorInput.getScenarioInstance();
-								final EObject instance = scenarioInstance.getInstance();
-								if (instance instanceof LNGScenarioModel) {
-									final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
-									final ScheduleModel scheduleModel = lngScenarioModel.getScheduleModel();
-									if (scheduleModel != null) {
-										final Schedule schedule = scheduleModel.getSchedule();
-										if (schedule != null) {
-											for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
-												if (ScheduleModelUtils.matchingSlots(cargo, cargoAllocation)) {
-													validObjects.add(cargoAllocation);
-													break;
-												}
-											}
+						final Cargo pCargo = cargo;
+						getValidObject(part, (lngScenarioModel) -> {
+							final ScheduleModel scheduleModel = lngScenarioModel.getScheduleModel();
+							if (scheduleModel != null) {
+								final Schedule schedule = scheduleModel.getSchedule();
+								if (schedule != null) {
+									for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
+										if (ScheduleModelUtils.matchingSlots(pCargo, cargoAllocation)) {
+											validObjects.add(cargoAllocation);
+											break;
 										}
 									}
 								}
 							}
-						}
+						});
 					} else if (slot != null) {
+						final Slot pSlot = slot;
 
-						// TODO: Look up ScheduleModel somehow....
-
-						if (part instanceof IEditorPart) {
-							final IEditorPart editorPart = (IEditorPart) part;
-							final IEditorInput editorInput = editorPart.getEditorInput();
-							if (editorInput instanceof IScenarioServiceEditorInput) {
-								final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editorInput;
-								final ScenarioInstance scenarioInstance = scenarioServiceEditorInput.getScenarioInstance();
-								final EObject instance = scenarioInstance.getInstance();
-								if (instance instanceof LNGScenarioModel) {
-									final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
-									final ScheduleModel scheduleModel = lngScenarioModel.getScheduleModel();
-									if (scheduleModel != null) {
-										final Schedule schedule = scheduleModel.getSchedule();
-										if (schedule != null) {
-											for (final MarketAllocation marketAllocation : schedule.getMarketAllocations()) {
-												if (slot == marketAllocation.getSlot()) {
-													validObjects.add(marketAllocation);
-													break;
-												}
-											}
+						getValidObject(part, (lngScenarioModel) -> {
+							final ScheduleModel scheduleModel = lngScenarioModel.getScheduleModel();
+							if (scheduleModel != null) {
+								final Schedule schedule = scheduleModel.getSchedule();
+								if (schedule != null) {
+									for (final MarketAllocation marketAllocation : schedule.getMarketAllocations()) {
+										if (pSlot == marketAllocation.getSlot()) {
+											validObjects.add(marketAllocation);
+											break;
 										}
 									}
 								}
 							}
-						}
+						});
 					} else if (event != null) {
+						final VesselEvent pEvent = event;
 
-						// TODO: Look up ScheduleModel somehow....
-
-						if (part instanceof IEditorPart) {
-							final IEditorPart editorPart = (IEditorPart) part;
-							final IEditorInput editorInput = editorPart.getEditorInput();
-							if (editorInput instanceof IScenarioServiceEditorInput) {
-								final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editorInput;
-								final ScenarioInstance scenarioInstance = scenarioServiceEditorInput.getScenarioInstance();
-								final EObject instance = scenarioInstance.getInstance();
-								if (instance instanceof LNGScenarioModel) {
-									final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
-									final ScheduleModel scheduleModel = lngScenarioModel.getScheduleModel();
-									if (scheduleModel != null) {
-										final Schedule schedule = scheduleModel.getSchedule();
-										if (schedule != null) {
-											LOOP: for (final Sequence sequence : schedule.getSequences()) {
-												for (final Event evt : sequence.getEvents()) {
-													if (evt instanceof VesselEventVisit) {
-														final VesselEventVisit vesselEventVisit = (VesselEventVisit) evt;
-														if (vesselEventVisit.getVesselEvent() == event) {
-															validObjects.add(vesselEventVisit);
-															break LOOP;
-														}
-													}
+						getValidObject(part, (lngScenarioModel) -> {
+							final ScheduleModel scheduleModel = lngScenarioModel.getScheduleModel();
+							if (scheduleModel != null) {
+								final Schedule schedule = scheduleModel.getSchedule();
+								if (schedule != null) {
+									LOOP: for (final Sequence sequence : schedule.getSequences()) {
+										for (final Event evt : sequence.getEvents()) {
+											if (evt instanceof VesselEventVisit) {
+												final VesselEventVisit vesselEventVisit = (VesselEventVisit) evt;
+												if (vesselEventVisit.getVesselEvent() == pEvent) {
+													validObjects.add(vesselEventVisit);
+													break LOOP;
 												}
 											}
 										}
 									}
 								}
 							}
-						}
+						});
 					}
 				}
 			}
@@ -397,6 +370,7 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 			validObjects.remove(null);
 		}
 		return validObjects;
+
 	}
 
 	public GridTableViewer getViewer() {
@@ -521,6 +495,38 @@ public class CargoEconsReportComponent implements IAdaptable /* extends ViewPart
 	public void setMarginMode(final MarginBy mode) {
 		options.marginBy = mode;
 		ViewerHelper.refresh(getViewer(), false);
+	}
+
+	private void getValidObject(final IWorkbenchPart part, final Consumer<LNGScenarioModel> objectFinder) {
+		final ModelReference ref = getPartInstanceReference(part);
+		if (ref != null) {
+			try {
+				final EObject instance = ref.getInstance();
+				if (instance instanceof LNGScenarioModel) {
+					final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
+					objectFinder.accept(lngScenarioModel);
+				}
+			} finally {
+				ref.close();
+			}
+		}
+	}
+
+	private @Nullable ModelReference getPartInstanceReference(final IWorkbenchPart part) {
+		if (part instanceof IEditorPart) {
+			final IEditorPart editorPart = (IEditorPart) part;
+			final IEditorInput editorInput = editorPart.getEditorInput();
+			if (editorInput instanceof IScenarioServiceEditorInput) {
+				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editorInput;
+				final ScenarioInstance scenarioInstance = scenarioServiceEditorInput.getScenarioInstance();
+				if (scenarioInstance != null) {
+					@NonNull
+					final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+					return modelRecord.aquireReference("CargoEconsReport");
+				}
+			}
+		}
+		return null;
 	}
 
 	@Override
