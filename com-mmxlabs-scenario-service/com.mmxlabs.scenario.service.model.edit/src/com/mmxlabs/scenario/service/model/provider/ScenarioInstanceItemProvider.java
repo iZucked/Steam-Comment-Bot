@@ -10,17 +10,23 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedImage;
+import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.scenario.service.model.ScenarioInstance} object.
@@ -56,13 +62,7 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider {
 			addVersionContextPropertyDescriptor(object);
 			addClientScenarioVersionPropertyDescriptor(object);
 			addClientVersionContextPropertyDescriptor(object);
-			addAdaptersPropertyDescriptor(object);
-			addLockedPropertyDescriptor(object);
 			addReadonlyPropertyDescriptor(object);
-			addDirtyPropertyDescriptor(object);
-			addValidationStatusCodePropertyDescriptor(object);
-			addLoadFailurePropertyDescriptor(object);
-			addLoadExceptionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -77,30 +77,6 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_ScenarioInstance_uuid_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_uuid_feature", "_UI_ScenarioInstance_type"),
 				ScenarioServicePackage.eINSTANCE.getScenarioInstance_Uuid(), true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Locked feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addLockedPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_ScenarioInstance_locked_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_locked_feature", "_UI_ScenarioInstance_type"),
-				ScenarioServicePackage.eINSTANCE.getScenarioInstance_Locked(), true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Adapters feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addAdaptersPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_ScenarioInstance_adapters_feature"), getString("_UI_ScenarioInstance_adapters_description"), ScenarioServicePackage.eINSTANCE.getScenarioInstance_Adapters(), true,
-				false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -178,54 +154,6 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider {
 	}
 
 	/**
-	 * This adds a property descriptor for the Dirty feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDirtyPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_ScenarioInstance_dirty_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_dirty_feature", "_UI_ScenarioInstance_type"),
-				ScenarioServicePackage.eINSTANCE.getScenarioInstance_Dirty(), true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Validation Status Code feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addValidationStatusCodePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_ScenarioInstance_validationStatusCode_feature"), getString("_UI_ScenarioInstance_validationStatusCode_description"),
-				ScenarioServicePackage.eINSTANCE.getScenarioInstance_ValidationStatusCode(), false, false, false, ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Load Failure feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addLoadFailurePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_ScenarioInstance_loadFailure_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_loadFailure_feature", "_UI_ScenarioInstance_type"),
-				ScenarioServicePackage.eINSTANCE.getScenarioInstance_LoadFailure(), true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Load Exception feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addLoadExceptionPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_ScenarioInstance_loadException_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_loadException_feature", "_UI_ScenarioInstance_type"),
-				ScenarioServicePackage.eINSTANCE.getScenarioInstance_LoadException(), true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
-	}
-
-	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -238,10 +166,7 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Metadata());
-			childrenFeatures.add(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Instance());
 			childrenFeatures.add(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Fragments());
-			childrenFeatures.add(ScenarioServicePackage.eINSTANCE.getScenarioInstance_ModelReferences());
-			childrenFeatures.add(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Locks());
 		}
 		return childrenFeatures;
 	}
@@ -263,30 +188,11 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider {
 	 * This returns ScenarioInstance.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated NOT
+	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		final ScenarioInstance scenarioInstance = (ScenarioInstance) object;
-		final boolean locked = scenarioInstance.isLocked();
-
-		final List<Object> images = new ArrayList<Object>(3);
-		images.add(getResourceLocator().getImage("full/obj16/ScenarioInstance"));
-		if (locked) {
-			final ScenarioLock optLock = scenarioInstance.getLock(ScenarioLock.OPTIMISER);
-			final ScenarioLock evalLock = scenarioInstance.getLock(ScenarioLock.EVALUATOR);
-			if (optLock.isClaimed() || evalLock.isClaimed()) {
-				images.add(getResourceLocator().getImage("overlays/lock_optimising"));
-			} else {
-				images.add(getResourceLocator().getImage("overlays/lock"));
-			}
-
-		}
-		//		boolean archived = ((ScenarioInstance) object).isLocked();
-		//		if (archived) {
-		//			images.add(getResourceLocator().getImage("overlays/archive"));
-		//		}
-		return new ComposedImage(images);
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ScenarioInstance"));
 	}
 
 	/**
@@ -319,20 +225,11 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider {
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VERSION_CONTEXT:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__CLIENT_SCENARIO_VERSION:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__CLIENT_VERSION_CONTEXT:
-		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
-		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKED:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__READONLY:
-		case ScenarioServicePackage.SCENARIO_INSTANCE__DIRTY:
-		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
-		case ScenarioServicePackage.SCENARIO_INSTANCE__LOAD_FAILURE:
-		case ScenarioServicePackage.SCENARIO_INSTANCE__LOAD_EXCEPTION:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:
-		case ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS:
-		case ScenarioServicePackage.SCENARIO_INSTANCE__MODEL_REFERENCES:
-		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		}
@@ -353,10 +250,6 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider {
 		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Metadata(), ScenarioServiceFactory.eINSTANCE.createMetadata()));
 
 		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Fragments(), ScenarioServiceFactory.eINSTANCE.createScenarioFragment()));
-
-		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.eINSTANCE.getScenarioInstance_ModelReferences(), ScenarioServiceFactory.eINSTANCE.createModelReference()));
-
-		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Locks(), ScenarioServiceFactory.eINSTANCE.createScenarioLock()));
 	}
 
 }

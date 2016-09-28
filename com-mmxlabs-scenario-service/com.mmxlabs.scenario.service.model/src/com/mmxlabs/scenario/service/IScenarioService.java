@@ -6,14 +6,19 @@ package com.mmxlabs.scenario.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
+import com.mmxlabs.scenario.service.model.manager.InstanceData;
 
 public interface IScenarioService {
 	/**
@@ -59,18 +64,20 @@ public interface IScenarioService {
 	 * @return a new scenario instance, which will contain a new root object as its instance attribute
 	 * @throws IOException
 	 */
-	ScenarioInstance insert(Container container, EObject rootObject) throws IOException;
+	ScenarioInstance insert(@NonNull Container container, @NonNull EObject rootObject, @Nullable Consumer<ScenarioInstance> customiser) throws Exception;
 
-	/**
-	 * Create a duplicate of the given scenario and place it in the destination. Any models owned by the original will be duplicated into new resources; dependencies of the original will not be
-	 * duplicated.
-	 * 
-	 * @param original
-	 * @param destination
-	 * @return the new, duplicated instance.
-	 * @throws IOException
-	 */
-	ScenarioInstance duplicate(@NonNull ScenarioInstance original, @NonNull Container destination) throws IOException;
+	ScenarioInstance insert(@NonNull Container container, @NonNull URI rootObjectURI, @Nullable Consumer<ScenarioInstance> customiser) throws Exception;
+	//
+	// /**
+	// * Create a duplicate of the given scenario and place it in the destination. Any models owned by the original will be duplicated into new resources; dependencies of the original will not be
+	// * duplicated.
+	// *
+	// * @param original
+	// * @param destination
+	// * @return the new, duplicated instance.
+	// * @throws IOException
+	// */
+	// ScenarioInstance duplicate(@NonNull ScenarioInstance original, @NonNull Container destination, @NonNull String newName) throws Exception;
 
 	/**
 	 * Delete the given scenario instance from this scenario service. Throws an {@link IllegalArgumentException} if the container is owned by another {@link IScenarioService}. This method can also be
@@ -86,24 +93,24 @@ public interface IScenarioService {
 	 * @param instance
 	 * @throws IOException
 	 */
-	EObject load(@NonNull ScenarioInstance instance) throws IOException;
+	InstanceData load(@NonNull ScenarioInstance instance, @NonNull IProgressMonitor monitor) throws Exception;
 
-	/**
-	 * Cause the saving of the given instance.
-	 * 
-	 * @param instance
-	 * @throws IOException
-	 */
-	void save(@NonNull ScenarioInstance instance) throws IOException;
-
-	/**
-	 * Resolves the relative uri stored in a {@link ScenarioInstance} owned by this {@link IScenarioService} into a fully qualified {@link URI}
-	 * 
-	 * @param uriString
-	 * @return
-	 */
-	@NonNull
-	public URI resolveURI(@NonNull String uriString);
+	// /**
+	// * Cause the saving of the given instance.
+	// *
+	// * @param instance
+	// * @throws IOException
+	// */
+	// void save(@NonNull ScenarioInstance instance) throws IOException;
+	//
+	// /**
+	// * Resolves the relative uri stored in a {@link ScenarioInstance} owned by this {@link IScenarioService} into a fully qualified {@link URI}
+	// *
+	// * @param uriString
+	// * @return
+	// */
+	// @NonNull
+	// public URI resolveURI(@NonNull String uriString);
 
 	/**
 	 * Register a {@link IScenarioServiceListener} with this scenario service. Adding a service multiple times has no effect.
@@ -121,17 +128,35 @@ public interface IScenarioService {
 
 	/**
 	 */
-	void unload(@NonNull ScenarioInstance model);
+	// void unload(@NonNull ScenarioInstance model);
 
-	/**
-	 * Move the collection of elements under the destination.
-	 * 
-	 * @param containers
-	 * @param container
-	 */
+	// /**
+	// * Move the collection of elements under the destination.
+	// *
+	// * @param containers
+	// * @param container
+	// */
 	void moveInto(@NonNull List<Container> elements, @NonNull Container destination);
 
 	/**
 	 */
 	void makeFolder(@NonNull Container parent, @NonNull String name);
+
+	<T extends EObject> void execute(@NonNull T instance, @NonNull Consumer<T> c);
+
+	<T extends EObject> void query(@NonNull T viewInstance, @NonNull Consumer<T> c);
+
+	<U extends Container> @NonNull U executeAdd(@NonNull Container viewInstance, @NonNull Supplier<@NonNull U> factory);
+
+	String getSerivceID();
+
+	/**
+	 * Register a runnable to execute when the model has loaded. If it is already loaded, execute immediately.
+	 * 
+	 * @param r
+	 */
+	void notifyReady(Runnable r);
+
+	URI resolveURI(String uriString);
+
 }

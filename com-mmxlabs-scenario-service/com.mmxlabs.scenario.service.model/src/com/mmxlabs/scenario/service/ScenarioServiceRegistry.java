@@ -56,16 +56,19 @@ public final class ScenarioServiceRegistry {
 	public void bindScenarioService(final IScenarioService scenarioService) {
 		// Add to local list
 		scenarioServices.add(scenarioService);
-		// Add to EMF model -- note, this can be blocking!
-		new Thread() {
-			public void run() {
-				ScenarioService serviceModel = scenarioService.getServiceModel();
-				// Avoid concurrent adds
-				synchronized (scenarioModel) {
-					scenarioModel.getScenarioServices().add(serviceModel);
+
+		scenarioService.notifyReady(() -> {
+			// Add to EMF model -- note, this can be blocking!
+			new Thread() {
+				public void run() {
+					ScenarioService serviceModel = scenarioService.getServiceModel();
+					// Avoid concurrent adds
+					synchronized (scenarioModel) {
+						scenarioModel.getScenarioServices().add(serviceModel);
+					}
 				}
-			}
-		}.start();
+			}.start();
+		});
 	}
 
 	/**

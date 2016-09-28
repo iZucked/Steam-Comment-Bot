@@ -28,11 +28,11 @@ import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.Metadata;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
 import com.mmxlabs.scenario.service.model.ScenarioService;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.internal.ScenarioInstanceSavable;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceComposedAdapterFactory;
 
@@ -44,7 +44,6 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 		@Override
 		public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
 			// Remove possible reference to loaded data model
-			filteredElements.remove(scenarioInstance.getInstance());
 			cleanUp(scenarioInstance);
 		}
 
@@ -66,38 +65,8 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 		}
 
 		@Override
-		public void onPreScenarioInstanceSave(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-
-		}
-
-		@Override
-		public void onPreScenarioInstanceLoad(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-
-		}
-
-		@Override
 		public void onPreScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
 			cleanUp(scenarioInstance);
-		}
-
-		@Override
-		public void onPostScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-
-		}
-
-		@Override
-		public void onPostScenarioInstanceSave(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-
-		}
-
-		@Override
-		public void onPostScenarioInstanceLoad(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-
-		}
-
-		@Override
-		public void onPostScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-
 		}
 	};
 
@@ -237,6 +206,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 			final Container container = (Container) object;
 			return container.getElements().toArray();
 		} else {
+
 			elements = super.getChildren(object);
 		}
 
@@ -289,7 +259,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 					filtered = !mayBeShow;
 					if (!saveablesMap.values().contains(scenarioInstance)) {
 
-						final IScenarioService scenarioService = scenarioInstance.getScenarioService();
+						final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(scenarioInstance);
 						if (scenarioService != null) {
 							// Register a scenario service listener if required to clean up the saveables.
 							if (listeningScenarioServices.contains(scenarioService) == false) {
@@ -336,9 +306,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 			} else {
 				filtered = true;
 			}
-			if (e instanceof ModelReference) {
-				// Ignore!
-			} else if (filtered) {
+			if (filtered) {
 				filteredElements.put(e, true);
 			} else {
 				c.add(e);
@@ -365,7 +333,9 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	public void notifyChanged(final Notification arg0) {
 		super.notifyChanged(arg0);
 
-		// Filtered elements are not present in tree viewer, but we may still need to show child entries - force a full refresh rather than a partial update
+		// Filtered elements are not present in tree viewer, but we may still
+		// need to show child entries - force a full refresh rather than a
+		// partial update
 		final Object notifier = arg0.getNotifier();
 		if (filteredElements.containsKey(notifier)) {
 			viewer.getControl().getDisplay().asyncExec(new Runnable() {

@@ -18,7 +18,8 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.common.common-util;bundle-version="[4.2.10,5.0.0)",
  com.google.guava,
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)";resolution:=optional,
- com.mmxlabs.license.features
+ com.mmxlabs.license.features,
+ com.mmxlabs.models.common
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/*

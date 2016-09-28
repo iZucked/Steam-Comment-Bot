@@ -1,0 +1,9 @@
+package com.mmxlabs.scenario.service.model.manager;
+
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jdt.annotation.NonNull;
+
+public interface IScenarioValidationListener {
+
+	void validationChanged(@NonNull ModelRecord modelRecord, @NonNull IStatus status);
+}

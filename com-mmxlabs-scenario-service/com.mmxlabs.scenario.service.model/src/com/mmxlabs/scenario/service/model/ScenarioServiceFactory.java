@@ -70,15 +70,6 @@ public interface ScenarioServiceFactory extends EFactory {
 	Metadata createMetadata();
 
 	/**
-	 * Returns a new object of class '<em>Scenario Lock</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Scenario Lock</em>'.
-	 * @generated
-	 */
-	ScenarioLock createScenarioLock();
-
-	/**
 	 * Returns a new object of class '<em>Scenario Fragment</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -86,15 +77,6 @@ public interface ScenarioServiceFactory extends EFactory {
 	 * @generated
 	 */
 	ScenarioFragment createScenarioFragment();
-
-	/**
-	 * Returns a new object of class '<em>Model Reference</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Model Reference</em>'.
-	 * @generated
-	 */
-	ModelReference createModelReference();
 
 	/**
 	 * Returns the package supported by this factory.

@@ -10,6 +10,7 @@ import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.Saveable;
 import org.eclipse.ui.navigator.SaveablesProvider;
@@ -17,6 +18,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceContentProvider;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 
@@ -29,11 +33,11 @@ import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 public class ScenarioInstanceSavable extends Saveable {
 	private static final Logger log = LoggerFactory.getLogger(ScenarioInstanceSavable.class);
 
-	private final ScenarioInstance scenarioInstance;
+	private final @NonNull ScenarioInstance scenarioInstance;
 
 	private boolean deleted = false;
 
-	public ScenarioInstanceSavable(final ScenarioInstance scenarioInstance) {
+	public ScenarioInstanceSavable(final @NonNull ScenarioInstance scenarioInstance) {
 		this.scenarioInstance = scenarioInstance;
 	}
 
@@ -63,7 +67,16 @@ public class ScenarioInstanceSavable extends Saveable {
 					try {
 						// saving = true;
 						monitor.beginTask("Saving", 1);
-						scenarioInstance.save();
+						ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+						try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ScenarioinstanceSavable")) {
+							if (ref != null) {
+								try {
+								ref.save();
+								} finally {
+									ref.close();
+								}
+							}
+						}
 						monitor.worked(1);
 					} catch (final IOException e) {
 						log.error("IO Error during save", e);
@@ -84,7 +97,14 @@ public class ScenarioInstanceSavable extends Saveable {
 		if (deleted) {
 			return false;
 		}
-		return scenarioInstance.isDirty();
+//		@NonNull
+//		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+//		try (ModelReference ref = modelRecord.aquireReferenceIfLoaded()) {
+//			if (ref != null) {
+//				return ref.isDirty();
+//			}
+//		}
+		return false;
 	}
 
 	@Override

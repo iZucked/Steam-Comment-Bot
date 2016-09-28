@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import com.mmxlabs.scenario.service.ScenarioServiceCommandUtil;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -53,19 +54,19 @@ public class RenameElementHandler extends AbstractHandler {
 
 							final String newName = getNewName(instance.getName());
 							if (newName != null) {
-								instance.setName(newName);
+								ScenarioServiceCommandUtil.execute(instance, i -> i.setName(newName));
 							}
 						} else if (element instanceof Folder) {
 							final Folder folder = (Folder) element;
 							final String newName = getNewName(folder.getName());
 							if (newName != null) {
-								folder.setName(newName);
+								ScenarioServiceCommandUtil.execute(folder, f -> f.setName(newName));
 							}
 						} else if (element instanceof ScenarioFragment) {
 							ScenarioFragment scenarioFragment = (ScenarioFragment) element;
 							final String newName = getNewName(scenarioFragment.getName());
 							if (newName != null) {
-								scenarioFragment.setName(newName);
+								ScenarioServiceCommandUtil.execute(scenarioFragment, f -> f.setName(newName));
 							}
 						}
 					}

@@ -28,9 +28,9 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
  * 
  */
 public class ScenarioServiceSelectionProvider implements IScenarioServiceSelectionProvider {
-	private final List<IScenarioServiceSelectionChangedListener> listeners = new LinkedList<IScenarioServiceSelectionChangedListener>();
+	private final List<@NonNull IScenarioServiceSelectionChangedListener> listeners = new LinkedList<>();
 
-	private final Set<ScenarioResult> selection = new HashSet<>();
+	private final Set<@NonNull ScenarioResult> selection = new HashSet<>();
 
 	private @Nullable ScenarioResult pin = null;
 

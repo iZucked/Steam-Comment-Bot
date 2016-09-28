@@ -25,7 +25,7 @@ public interface IScenarioServiceSelectionProvider {
 	 * @return
 	 */
 	@NonNull
-	Collection<ScenarioResult> getSelection();
+	Collection<@NonNull ScenarioResult> getSelection();
 
 	/**
 	 * @return the currently pinned instance; this is always a member of the selection.

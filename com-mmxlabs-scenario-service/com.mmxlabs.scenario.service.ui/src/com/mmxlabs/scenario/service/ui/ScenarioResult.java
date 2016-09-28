@@ -12,8 +12,10 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.mmxcore.MMXResultRoot;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.rcp.common.ServiceHelper;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
 public class ScenarioResult {
 
@@ -24,7 +26,7 @@ public class ScenarioResult {
 
 	public static @NonNull MMXResultRoot getDefaultRoot(final ScenarioInstance instance, final ModelReference reference) {
 		// Make sure it is a valid reference
-		assert reference.getScenarioInstance() == instance;
+		// assert reference.getScenarioInstance() == instance;
 
 		final MMXResultRoot[] ref = new MMXResultRoot[1];
 		ServiceHelper.withAllServices(IDefaultScenarioResultProvider.class, null, s -> {
@@ -39,7 +41,9 @@ public class ScenarioResult {
 
 	public ScenarioResult(final ScenarioInstance instance) {
 		this.instance = instance;
-		this.modelReference = instance.getReference("ScenarioResult:1");
+		@NonNull
+		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+		this.modelReference = modelRecord.aquireReference("ScenarioResult:1");
 		this.resultRoot = getDefaultRoot(instance, modelReference);
 		this.hash = Objects.hash(instance, resultRoot);
 	}
@@ -48,7 +52,9 @@ public class ScenarioResult {
 		this.instance = instance;
 		this.resultRoot = resultRoot;
 		this.hash = Objects.hash(instance, resultRoot);
-		this.modelReference = instance.getReference("ScenarioResult:2");
+		@NonNull
+		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+		this.modelReference = modelRecord.aquireReference("ScenarioResult:2");
 	}
 
 	@Override
@@ -60,11 +66,11 @@ public class ScenarioResult {
 	}
 
 	public <T extends MMXRootObject> @Nullable T getTypedRoot(final Class<T> cls) {
-		return cls.cast(instance.getInstance());
+		return cls.cast(modelReference.getInstance());
 	}
 
 	public MMXRootObject getRootObject() {
-		return (MMXRootObject) instance.getInstance();
+		return (MMXRootObject) modelReference.getInstance();
 	}
 
 	public MMXResultRoot getResultRoot() {

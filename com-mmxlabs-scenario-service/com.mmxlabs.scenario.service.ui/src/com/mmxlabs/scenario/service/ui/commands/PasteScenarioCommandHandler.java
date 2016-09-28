@@ -19,6 +19,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -31,20 +32,19 @@ import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Files;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
-import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
 /**
@@ -97,9 +97,9 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 
 	private boolean pasteLocal(final Clipboard clipboard, final Container container) throws IOException {
 		final Object localData = clipboard.getContents(LocalTransfer.getInstance());
-		final IScenarioService service = container.getScenarioService();
+		final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(container);
 
-		final Set<String> existingNames = ScenarioServiceModelUtils.getExistingNames(container);
+		final Set<String> existingNames = ScenarioServiceUtils.getExistingNames(container);
 
 		if (localData instanceof Iterable) {
 			final Iterable<?> iterable = (Iterable<?>) localData;
@@ -124,7 +124,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 									monitor.subTask("Copying " + scenarioInstance.getName());
 									log.debug("Local paste " + scenarioInstance.getName());
 									try {
-										final ScenarioInstance duplicate = ScenarioServiceModelUtils.copyScenario(scenarioInstance, container, existingNames);
+										final ScenarioInstance duplicate = ScenarioServiceUtils.copyScenario(scenarioInstance, container, existingNames);
 										if (duplicate != null) {
 											existingNames.add(duplicate.getName());
 										}
@@ -190,81 +190,79 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 	 */
 	private boolean pasteFromFiles(final Clipboard clipboard, final Container container) throws IOException {
 		final Object fileData = clipboard.getContents(FileTransfer.getInstance());
-		final IScenarioService service = container.getScenarioService();
 		if (fileData instanceof String[]) {
+			return ServiceHelper.withOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
 
-			final IScenarioCipherProvider scenarioCipherProvider = getScenarioCipherProvider();
+				final String[] files = (String[]) fileData;
+				final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 
-			final String[] files = (String[]) fileData;
-			final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
-
-			// Scan tree creating folder structure and gathering scenarios.
-			final List<File> scenarioFiles = new LinkedList<>();
-			final Map<File, Container> scenarioContainerMap = new HashMap<>();
-			for (final String filePath : files) {
-				final File f = new File(filePath);
-				if (f.isFile() && Files.getFileExtension(f.getName()).toLowerCase().equals("lingo")) {
-					scenarioFiles.add(f);
-					scenarioContainerMap.put(f, container);
-				} else if (f.isDirectory()) {
-					// Check for existing dir in contents and reuse!
-					Folder folder = null;
-					for (final Container c : container.getElements()) {
-						if (c instanceof Folder && c.getName().equals(f.getName())) {
-							folder = (Folder) c;
-							break;
+				// Scan tree creating folder structure and gathering scenarios.
+				final List<File> scenarioFiles = new LinkedList<>();
+				final Map<File, Container> scenarioContainerMap = new HashMap<>();
+				for (final String filePath : files) {
+					final File f = new File(filePath);
+					if (f.isFile() && Files.getFileExtension(f.getName()).toLowerCase().equals("lingo")) {
+						scenarioFiles.add(f);
+						scenarioContainerMap.put(f, container);
+					} else if (f.isDirectory()) {
+						// Check for existing dir in contents and reuse!
+						Folder folder = null;
+						for (final Container c : container.getElements()) {
+							if (c instanceof Folder && c.getName().equals(f.getName())) {
+								folder = (Folder) c;
+								break;
+							}
 						}
+						if (folder == null) {
+							folder = ScenarioServiceFactory.eINSTANCE.createFolder();
+							folder.setName(f.getName());
+							container.getElements().add(folder);
+						}
+						scanTree(f, scenarioFiles, folder, scenarioContainerMap);
 					}
-					if (folder == null) {
-						folder = ScenarioServiceFactory.eINSTANCE.createFolder();
-						folder.setName(f.getName());
-						container.getElements().add(folder);
-					}
-					scanTree(f, scenarioFiles, folder, scenarioContainerMap);
 				}
-			}
 
-			try {
-				dialog.run(true, true, new IRunnableWithProgress() {
+				try {
+					dialog.run(true, true, new IRunnableWithProgress() {
 
-					@Override
-					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+						@Override
+						public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-						monitor.beginTask("Copying", scenarioFiles.size());
-						try {
+							monitor.beginTask("Copying", 6 * scenarioFiles.size());
+							try {
 
-							for (final File f : scenarioFiles) {
+								for (final File f : scenarioFiles) {
 
-								if (monitor.isCanceled()) {
-									break;
-								}
+									if (monitor.isCanceled()) {
+										break;
+									}
 
-								monitor.subTask("Copying " + f.getName());
-								final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromFile(f.getAbsolutePath(), scenarioCipherProvider);
-								if (instance != null) {
+									monitor.subTask("Copying " + f.getName());
 									final Container destinationContainer = scenarioContainerMap.get(f);
 									assert destinationContainer != null;
-
 									// Get basic name
-									final String scenarioName = ScenarioServiceModelUtils.stripFileExtension(f.getName());
-									final Set<String> existingNames = ScenarioServiceModelUtils.getExistingNames(destinationContainer);
-									final ScenarioInstance duplicate = ScenarioServiceModelUtils.copyScenario(instance, destinationContainer, scenarioName, existingNames);
+									final String scenarioName = ScenarioServiceUtils.stripFileExtension(f.getName());
+									final Set<String> existingNames = ScenarioServiceUtils.getExistingNames(destinationContainer);
+
+									ScenarioStorageUtil.withExternalScenarioFromFile(f.getAbsolutePath(), (instance, modelReference) -> {
+										ScenarioServiceUtils.copyScenario(instance, destinationContainer, scenarioName, existingNames);
+									}, new SubProgressMonitor(monitor, 5));
+
+									monitor.worked(1);
+
 								}
-								monitor.worked(1);
-
+							} catch (final Exception e) {
+								log.error(e.getMessage(), e);
+							} finally {
+								monitor.done();
 							}
-						} catch (final IOException e) {
-							log.error(e.getMessage(), e);
-						} finally {
-							monitor.done();
 						}
-					}
-				});
-			} catch (final InvocationTargetException | InterruptedException e) {
-				log.error(e.getMessage(), e);
-			}
-			return true;
-
+					});
+				} catch (final InvocationTargetException | InterruptedException e) {
+					log.error(e.getMessage(), e);
+				}
+				return true;
+			});
 		}
 		return false;
 	}
@@ -287,16 +285,6 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 					return container;
 				}
 			}
-		}
-		return null;
-	}
-
-	@Nullable
-	private IScenarioCipherProvider getScenarioCipherProvider() {
-		final BundleContext bundleContext = FrameworkUtil.getBundle(PasteScenarioCommandHandler.class).getBundleContext();
-		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
-		if (serviceReference != null) {
-			return bundleContext.getService(serviceReference);
 		}
 		return null;
 	}

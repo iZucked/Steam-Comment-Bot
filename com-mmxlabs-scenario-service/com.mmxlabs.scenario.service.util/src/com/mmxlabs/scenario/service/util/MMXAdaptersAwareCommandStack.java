@@ -13,8 +13,10 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.InstanceData;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 /**
  * Extended version of {@link BasicCommandStack} which overrides undo/redo to disable the {@link MMXAdapterImpl} instances while processing the commands.
@@ -25,7 +27,8 @@ import com.mmxlabs.scenario.service.model.ScenarioLock;
 public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 	private CommandProviderAwareEditingDomain editingDomain;
 	private final Object lockableObject;
-	private final ScenarioLock lock;
+	private InstanceData instanceData;
+
 	/**
 	 * Used to determine when we are executing changes.
 	 */
@@ -34,25 +37,26 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 	private @Nullable ScenarioInstance instance;
 
 	public MMXAdaptersAwareCommandStack(final ScenarioInstance instance) {
-		this(null, instance, instance.getLock(ScenarioLock.EDITORS));
+		this(null, (Object) instance);
 		this.instance = instance;
 	}
 
 	public MMXAdaptersAwareCommandStack(final CommandProviderAwareEditingDomain editingDomain, final ScenarioInstance instance) {
-		this(editingDomain, instance, instance.getLock(ScenarioLock.EDITORS));
+		this(editingDomain, (Object) instance);
 		this.instance = instance;
 	}
 
-	public MMXAdaptersAwareCommandStack(final CommandProviderAwareEditingDomain editingDomain, final Object lockObject, ScenarioLock lock) {
+	public MMXAdaptersAwareCommandStack(final CommandProviderAwareEditingDomain editingDomain, final Object lockObject) {
 		this.editingDomain = editingDomain;
 		this.lockableObject = lockObject;
-		this.lock = lock;
-		// instance.eAdapters().add(externalChangeAdapter);
 	}
 
 	@Override
 	public void execute(final Command command) {
-
+	// All commands should be executed on display thread. Wrap up in
+		// RunnerHelper.syncExecDisplayOptional(() -> { execute(); });
+		assert RunnerHelper.inDisplayThread();
+		
 		if (instance != null) {
 			assert !instance.isReadonly();
 		}
@@ -115,17 +119,29 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 		if (!useLock) {
 			reallyUndo();
 		} else {
-			if (lock.awaitClaim()) {
-				try {
-					reallyUndo();
-				} finally {
-					lock.release();
-				}
+			final ScenarioLock lock = instanceData.getLock();
+			lock.lock();
+			try {
+				reallyUndo();
+			} finally {
+				lock.unlock();
 			}
 		}
 	}
 
-	public void reallyUndo() {
+	/**
+	 * Perform undo without aquiring the lock.
+	 *
+	 * @param lockKey
+	 */
+	public void undoWithoutLock() {
+		reallyUndo();
+	}
+
+	private void reallyUndo() {
+		// All commands should be executed on display thread. Wrap up in
+		// RunnerHelper.syncExecDisplayOptional(() -> { execute(); });
+		assert RunnerHelper.inDisplayThread();
 		stackDepth.incrementAndGet();
 		try {
 			if (editingDomain != null) {
@@ -155,7 +171,12 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 			assert !instance.isReadonly();
 		}
 
-		if (lock.awaitClaim()) {
+		// All commands should be executed on display thread. Wrap up in
+		// RunnerHelper.syncExecDisplayOptional(() -> { execute(); });
+		assert RunnerHelper.inDisplayThread();
+		final ScenarioLock lock = instanceData.getLock();
+		lock.lock();
+		try {
 			stackDepth.incrementAndGet();
 			try {
 				if (editingDomain != null) {
@@ -174,9 +195,10 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 					super.redo();
 				}
 			} finally {
-				lock.release();
 				stackDepth.decrementAndGet();
 			}
+		} finally {
+			lock.unlock();
 		}
 	}
 
@@ -186,6 +208,14 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 
 	public void setEditingDomain(final CommandProviderAwareEditingDomain editingDomain) {
 		this.editingDomain = editingDomain;
+	}
+
+	public InstanceData getInstanceData() {
+		return instanceData;
+	}
+
+	public void setInstanceData(InstanceData instanceData) {
+		this.instanceData = instanceData;
 	}
 
 	@Override

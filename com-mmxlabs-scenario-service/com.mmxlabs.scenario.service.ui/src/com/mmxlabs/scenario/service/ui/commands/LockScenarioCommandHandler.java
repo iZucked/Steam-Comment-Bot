@@ -44,7 +44,8 @@ public class LockScenarioCommandHandler extends AbstractHandler {
 						if (element instanceof ScenarioInstance) {
 							final ScenarioInstance model = (ScenarioInstance) element;
 
-							model.setLocked(!model.isLocked());
+//							model.setLocked(!model.isLocked());
+							throw new UnsupportedOperationException();
 						}
 					}
 				}

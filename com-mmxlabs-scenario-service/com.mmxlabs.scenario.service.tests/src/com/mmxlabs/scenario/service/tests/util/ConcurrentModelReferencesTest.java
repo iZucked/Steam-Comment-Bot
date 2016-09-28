@@ -9,15 +9,23 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.scenario.service.IScenarioService;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
+import com.mmxlabs.scenario.service.model.manager.InstanceData;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
 public class ConcurrentModelReferencesTest {
 
@@ -46,11 +54,16 @@ public class ConcurrentModelReferencesTest {
 		EContentAdapter contentAdapter = new EContentAdapter();
 
 		final List<Runnable> runnables = new LinkedList<>();
+		EditingDomain domain = Mockito.mock(EditingDomain.class);
+		@NonNull
+		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance, (r,m) -> {
+			EObject eObject = EcoreFactory.eINSTANCE.createEObject();
+			return new InstanceData(r, eObject, domain, new BasicCommandStack(), (d)->{}, (d)->{});
+		});
 		for (int i = 0; i < numRunnables; ++i) {
 			runnables.add(() -> {
-				final List<ModelReference> refs = instance.getModelReferences();
 
-				try (ModelReference ref = instance.getReference("ConcurrentModelReferencesTest")) {
+				try (ModelReference ref = modelRecord.aquireReference("ConcurrentModelReferencesTest")) {
 					try {
 						Thread.sleep(new Random().nextInt(100) * 10);
 					} catch (final Exception e) {
@@ -60,23 +73,7 @@ public class ConcurrentModelReferencesTest {
 
 			});
 		}
-		for (int i = 0; i < numRunnables; ++i) {
-			runnables.add(() -> {
-				final List<ModelReference> refs = instance.getModelReferences();
 
-				synchronized (refs) {
-
-					for (final ModelReference ref : refs) {
-						try {
-							Thread.sleep(new Random().nextInt(100) * 10);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
-			});
-		}
 		// Add content adapters to the mix (they will add themselves to all contained objects in the tree)
 		for (int i = 0; i < numRunnables; ++i) {
 			runnables.add(() -> {

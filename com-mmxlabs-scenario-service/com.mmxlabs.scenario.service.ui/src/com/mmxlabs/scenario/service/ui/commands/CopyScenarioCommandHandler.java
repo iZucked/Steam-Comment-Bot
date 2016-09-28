@@ -12,6 +12,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.custom.BusyIndicator;
@@ -23,6 +24,9 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
 /**
  * @author hinton
@@ -49,7 +53,11 @@ public class CopyScenarioCommandHandler extends AbstractHandler {
 							final ScenarioInstance instance = (ScenarioInstance) element;
 							instances.add(instance);
 							try {
-								tempFiles.add(ScenarioStorageUtil.storeToTemporaryFile(instance));
+								@NonNull
+								final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+								try (ModelReference modelReference = modelRecord.aquireReference("CopyScenarioCommandHandler")) {
+									tempFiles.add(ScenarioStorageUtil.storeToTemporaryFile(instance, modelReference.getInstance()));
+								}
 							} catch (final IOException e) {
 								e.printStackTrace();
 							}

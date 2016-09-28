@@ -4,9 +4,6 @@
  */
 package com.mmxlabs.scenario.service.model.util;
 
-import com.mmxlabs.scenario.service.model.*;
-import java.io.Closeable;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -14,10 +11,8 @@ import org.eclipse.emf.ecore.util.Switch;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.Metadata;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
@@ -127,32 +122,9 @@ public class ScenarioServiceSwitch<T> extends Switch<T> {
 				result = defaultCase(theEObject);
 			return result;
 		}
-		case ScenarioServicePackage.SCENARIO_LOCK: {
-			ScenarioLock scenarioLock = (ScenarioLock) theEObject;
-			T result = caseScenarioLock(scenarioLock);
-			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
 		case ScenarioServicePackage.SCENARIO_FRAGMENT: {
 			ScenarioFragment scenarioFragment = (ScenarioFragment) theEObject;
 			T result = caseScenarioFragment(scenarioFragment);
-			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
-		case ScenarioServicePackage.MODEL_REFERENCE: {
-			ModelReference modelReference = (ModelReference) theEObject;
-			T result = caseModelReference(modelReference);
-			if (result == null)
-				result = caseCloseable(modelReference);
-			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
-		case ScenarioServicePackage.CLOSEABLE: {
-			Closeable closeable = (Closeable) theEObject;
-			T result = caseCloseable(closeable);
 			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
@@ -253,21 +225,6 @@ public class ScenarioServiceSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Scenario Lock</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Scenario Lock</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseScenarioLock(ScenarioLock object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Scenario Fragment</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -279,36 +236,6 @@ public class ScenarioServiceSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseScenarioFragment(ScenarioFragment object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Model Reference</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Model Reference</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseModelReference(ModelReference object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Closeable</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Closeable</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseCloseable(Closeable object) {
 		return null;
 	}
 

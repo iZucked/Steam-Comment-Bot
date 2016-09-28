@@ -16,6 +16,7 @@ import java.util.Set;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -32,6 +33,9 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
 
 /**
@@ -59,11 +63,14 @@ public class ScenarioServiceSaveHook {
 					final EObject eObj = itr.next();
 					if (eObj instanceof ScenarioInstance) {
 						final ScenarioInstance scenarioInstance = (ScenarioInstance) eObj;
-						final Map<Class<?>, Object> adapters = scenarioInstance.getAdapters();
-						if (adapters != null) {
-							final BasicCommandStack stack = (BasicCommandStack) adapters.get(BasicCommandStack.class);
-							if (stack != null && stack.isSaveNeeded()) {
-								dirtyScenarios.add(scenarioInstance);
+						@NonNull
+						ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+						try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ScenarioServiceSaveHook:1")) {
+							if (ref != null) {
+								final BasicCommandStack stack = (BasicCommandStack) ref.getCommandStack();
+								if (stack.isSaveNeeded()) {
+									dirtyScenarios.add(scenarioInstance);
+								}
 							}
 						}
 					}
@@ -195,7 +202,17 @@ public class ScenarioServiceSaveHook {
 						for (final Object instance : scenariosToSave) {
 							final ScenarioInstance scenario = (ScenarioInstance) instance;
 							monitor.setTaskName("Saving: " + scenario.getName());
-							scenario.save();
+							@NonNull
+							ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenario);
+							try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ScenarioServiceSaveHook:2")) {
+								if (ref != null) {
+									try {
+										ref.save();
+									} finally {
+										ref.close();
+									}
+								}
+							}
 							monitor.worked(1);
 
 							ignoredInstances.remove(scenario);
@@ -203,7 +220,10 @@ public class ScenarioServiceSaveHook {
 
 						// Forcibly set dirty to false to avoid eclipse framework from prompting to save again.
 						for (final ScenarioInstance ignoredInstance : ignoredInstances) {
-							ignoredInstance.setDirty(false);
+							ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(ignoredInstance);
+							try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ScenarioServiceSaveHook:3")) {
+								// ref.setDirty(false);
+							}
 						}
 
 						success[0] = true;

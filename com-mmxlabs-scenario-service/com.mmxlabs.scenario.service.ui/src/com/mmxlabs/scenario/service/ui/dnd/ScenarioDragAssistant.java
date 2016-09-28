@@ -5,7 +5,6 @@
 package com.mmxlabs.scenario.service.ui.dnd;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -19,7 +18,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.util.LocalSelectionTransfer;
@@ -33,12 +31,10 @@ import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.navigator.CommonDropAdapter;
 import org.eclipse.ui.navigator.CommonDropAdapterAssistant;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
@@ -47,8 +43,10 @@ import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
-import com.mmxlabs.scenario.service.ui.commands.PasteScenarioCommandHandler;
 import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
 /**
@@ -121,7 +119,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 				for (final String filePath : files) {
 					// Expect this type of extension
 					final String lowerFilePath = filePath.toLowerCase();
-					if (!(lowerFilePath.endsWith(".sc2") || lowerFilePath.endsWith(".scn") || lowerFilePath.endsWith(".scenario") || lowerFilePath.endsWith(".lingo"))) {
+					if (!lowerFilePath.endsWith(".lingo")) {
 						return Status.CANCEL_STATUS;
 
 					}
@@ -162,7 +160,9 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 						if (obj instanceof Container) {
 							final Container c = (Container) obj;
 							// Moving between scenario services? Force a copy
-							if (c.getScenarioService() != container.getScenarioService()) {
+							final IScenarioService a = SSDataManager.Instance.findScenarioService(c);
+							final IScenarioService b = SSDataManager.Instance.findScenarioService(container);
+							if (a != b) {
 								detail = DND.DROP_COPY;
 							}
 							containers.add(c);
@@ -178,7 +178,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 
 							@Override
 							public void run() {
-								final IScenarioService scenarioService = container.getScenarioService();
+								final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(container);
 								scenarioService.moveInto(containers, container);
 							}
 						});
@@ -201,13 +201,13 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 											if (c instanceof Folder) {
 												try {
 													copyFolder(container, (Folder) c, new SubProgressMonitor(monitor, 100));
-												} catch (final IOException e) {
+												} catch (final Exception e) {
 													log.error(e.getMessage(), e);
 												}
 											} else {
 												try {
 													copyScenario(container, (ScenarioInstance) c, new SubProgressMonitor(monitor, 100));
-												} catch (final IOException e) {
+												} catch (final Exception e) {
 													log.error(e.getMessage(), e);
 												}
 											}
@@ -233,52 +233,55 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 				if (obj instanceof String[]) {
 
 					final String[] files = (String[]) obj;
-					final IScenarioCipherProvider scenarioCipherProvider = getScenarioCipherProvider();
+					return ServiceHelper.withOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
 
-					final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+						final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 
-					try {
-						dialog.run(true, true, new IRunnableWithProgress() {
+						try {
+							dialog.run(true, true, new IRunnableWithProgress() {
 
-							@Override
-							public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+								@Override
+								public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-								monitor.beginTask("Copying", files.length);
-								try {
+									monitor.beginTask("Copying", 6 * files.length);
+									try {
 
-									for (final String filePath : files) {
-										if (monitor.isCanceled()) {
-											return;
-										}
-										monitor.setTaskName("Copying " + filePath);
-										final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromFile(filePath, scenarioCipherProvider);
-										if (instance != null) {
+										for (final String filePath : files) {
+											if (monitor.isCanceled()) {
+												return;
+											}
+											monitor.setTaskName("Copying " + filePath);
 											try {
-												// Get basic name
-												String scenarioName = new File(filePath).getName();
-												scenarioName = ScenarioServiceModelUtils.stripFileExtension(scenarioName);
+												final EObject rootObjectCopy;
+												final Pair<@NonNull ScenarioInstance, @NonNull ModelReference> p = ScenarioStorageUtil.load(filePath, new SubProgressMonitor(monitor, 5));
+												try {
+													// // Get basic name
+													String scenarioName = new File(filePath).getName();
+													scenarioName = ScenarioServiceUtils.stripFileExtension(scenarioName);
 
-												final Set<String> existingNames = ScenarioServiceModelUtils.getExistingNames(container);
-												ScenarioServiceModelUtils.copyScenario(instance, container, scenarioName, existingNames);
-											} catch (final IOException e) {
+													final Set<String> existingNames = ScenarioServiceUtils.getExistingNames(container);
+													ScenarioServiceUtils.copyScenario(p.getFirst(), container, scenarioName, existingNames);
+												} finally {
+													p.getSecond().close();
+												}
+
+											} catch (final Exception e) {
 												log.error(e.getMessage(), e);
 											}
+											monitor.worked(1);
 										}
-										monitor.worked(1);
+									} finally {
+										monitor.done();
 									}
-								} finally {
-									monitor.done();
 								}
-							}
-						});
-					} catch (final Exception e) {
-						log.error(e.getMessage(), e);
-						return Status.CANCEL_STATUS;
-					}
-
-					return Status.OK_STATUS;
+							});
+						} catch (final Exception e) {
+							log.error(e.getMessage(), e);
+							return Status.CANCEL_STATUS;
+						}
+						return Status.OK_STATUS;
+					});
 				}
-
 			}
 		} else if (aTarget instanceof ScenarioInstance) {
 			ScenarioInstance scenarioInstance = (ScenarioInstance) aTarget;
@@ -308,10 +311,10 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 		return Status.CANCEL_STATUS;
 	}
 
-	private void copyScenario(@NonNull final Container container, @NonNull final ScenarioInstance scenario, @NonNull final IProgressMonitor monitor) throws IOException {
-		monitor.beginTask("Copying " + scenario.getName(), 10);
+	private void copyScenario(@NonNull final Container container, @NonNull final ScenarioInstance scenario, @NonNull final IProgressMonitor monitor) throws Exception {
+		monitor.beginTask("Copying " + scenario.getName(), 20);
 		try {
-			final ScenarioInstance instance = ScenarioServiceModelUtils.copyScenario(scenario, container, ScenarioServiceModelUtils.getExistingNames(container));
+			final ScenarioInstance instance = ScenarioServiceModelUtils.copyScenario(scenario, container, ScenarioServiceUtils.getExistingNames(container), new SubProgressMonitor(monitor, 10));
 
 			if (instance != null) {
 				for (final Container c : scenario.getElements()) {
@@ -331,14 +334,14 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 		}
 	}
 
-	private void copyFolder(@NonNull final Container container, @NonNull final Folder folder, @NonNull final IProgressMonitor monitor) throws IOException {
+	private void copyFolder(@NonNull final Container container, @NonNull final Folder folder, @NonNull final IProgressMonitor monitor) throws Exception {
 
 		// move all of thing into ScenarioServiceModelUtisl
 		monitor.beginTask("Copying " + folder.getName(), 10 * folder.getElements().size());
 		try {
 			// Ensure name is unique in the destination container
-			String name = folder.getName();
-			final Folder f = ScenarioServiceModelUtils.copyFolder(folder, container, name, ScenarioServiceModelUtils.getExistingNames(container));
+			final String name = folder.getName();
+			final Folder f = ScenarioServiceUtils.copyFolder(folder, container, name, ScenarioServiceUtils.getExistingNames(container));
 
 			for (final Container c : folder.getElements()) {
 				if (monitor.isCanceled()) {
@@ -360,15 +363,5 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 	@Override
 	public boolean isSupportedType(final TransferData aTransferType) {
 		return LocalSelectionTransfer.getTransfer().isSupportedType(aTransferType) || FileTransfer.getInstance().isSupportedType(aTransferType);
-	}
-
-	@Nullable
-	private IScenarioCipherProvider getScenarioCipherProvider() {
-		final BundleContext bundleContext = FrameworkUtil.getBundle(PasteScenarioCommandHandler.class).getBundleContext();
-		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
-		if (serviceReference != null) {
-			return bundleContext.getService(serviceReference);
-		}
-		return null;
 	}
 }

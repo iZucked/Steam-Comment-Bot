@@ -23,15 +23,14 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
-import com.mmxlabs.scenario.service.ui.internal.Activator;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 
 public class DeleteScenarioCommandHandler extends AbstractHandler {
 	/**
@@ -87,16 +86,7 @@ public class DeleteScenarioCommandHandler extends AbstractHandler {
 						search.addAll(container.getElements());
 					}
 					for (final ScenarioInstance scenarioInstance : scenarios) {
-						if (scenarioInstance.getInstance() != null) {
-
-							// Deselect from view
-							Activator.getDefault().getScenarioServiceSelectionProvider().deselect(scenarioInstance);
-
-							final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(scenarioInstance);
-							final IEditorReference[] editorReferences = activePage.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
-							// TODO: Prompt to save?
-							activePage.closeEditors(editorReferences, false);
-						}
+						ScenarioServiceModelUtils.closeReferences(scenarioInstance);
 					}
 
 					final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
@@ -113,8 +103,7 @@ public class DeleteScenarioCommandHandler extends AbstractHandler {
 									// Delete scenario instances first
 									for (final ScenarioInstance scenarioInstance : scenarios) {
 										monitor.subTask("Deleting " + scenarioInstance.getName());
-
-										final IScenarioService service = scenarioInstance.getScenarioService();
+										IScenarioService service = SSDataManager.Instance.findScenarioService(scenarioInstance);
 										service.delete(scenarioInstance);
 										filtered.remove(scenarioInstance);
 										monitor.worked(1);
@@ -124,7 +113,7 @@ public class DeleteScenarioCommandHandler extends AbstractHandler {
 										final Container container = (Container) object;
 										monitor.subTask("Deleting " + container.getName());
 
-										final IScenarioService service = container.getScenarioService();
+										IScenarioService service = SSDataManager.Instance.findScenarioService(container);
 										service.delete(container);
 									}
 									monitor.worked(1);

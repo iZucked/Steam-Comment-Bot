@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scenario.service.ui.commands;
 
-import java.io.IOException;
 import java.util.Iterator;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -50,7 +49,7 @@ public class ForkScenarioCommandHandler extends AbstractHandler {
 							final ScenarioInstance instance = (ScenarioInstance) element;
 							try {
 								ScenarioServiceModelUtils.createAndOpenFork(instance, false);
-							} catch (final IOException e) {
+							} catch (final Exception e) {
 								exceptions[0] = e;
 							}
 						}

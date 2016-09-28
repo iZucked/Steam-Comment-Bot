@@ -334,13 +334,22 @@ public interface ScenarioServicePackage extends EPackage {
 	int SCENARIO_SERVICE__LOCAL = CONTAINER_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Service ID</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_SERVICE__SERVICE_ID = CONTAINER_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Scenario Service</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_SERVICE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 6;
+	int SCENARIO_SERVICE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl <em>Scenario Instance</em>}' class.
@@ -461,58 +470,13 @@ public interface ScenarioServicePackage extends EPackage {
 	int SCENARIO_INSTANCE__CLIENT_VERSION_CONTEXT = CONTAINER_FEATURE_COUNT + 6;
 
 	/**
-	 * The feature id for the '<em><b>Instance</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_INSTANCE__INSTANCE = CONTAINER_FEATURE_COUNT + 7;
-
-	/**
 	 * The feature id for the '<em><b>Fragments</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE__FRAGMENTS = CONTAINER_FEATURE_COUNT + 8;
-
-	/**
-	 * The feature id for the '<em><b>Model References</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_INSTANCE__MODEL_REFERENCES = CONTAINER_FEATURE_COUNT + 9;
-
-	/**
-	 * The feature id for the '<em><b>Adapters</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_INSTANCE__ADAPTERS = CONTAINER_FEATURE_COUNT + 10;
-
-	/**
-	 * The feature id for the '<em><b>Locked</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_INSTANCE__LOCKED = CONTAINER_FEATURE_COUNT + 11;
-
-	/**
-	 * The feature id for the '<em><b>Locks</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_INSTANCE__LOCKS = CONTAINER_FEATURE_COUNT + 12;
+	int SCENARIO_INSTANCE__FRAGMENTS = CONTAINER_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Readonly</b></em>' attribute.
@@ -521,43 +485,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE__READONLY = CONTAINER_FEATURE_COUNT + 13;
-
-	/**
-	 * The feature id for the '<em><b>Dirty</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_INSTANCE__DIRTY = CONTAINER_FEATURE_COUNT + 14;
-
-	/**
-	 * The feature id for the '<em><b>Validation Status Code</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_INSTANCE__VALIDATION_STATUS_CODE = CONTAINER_FEATURE_COUNT + 15;
-
-	/**
-	 * The feature id for the '<em><b>Load Failure</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_INSTANCE__LOAD_FAILURE = CONTAINER_FEATURE_COUNT + 16;
-
-	/**
-	 * The feature id for the '<em><b>Load Exception</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_INSTANCE__LOAD_EXCEPTION = CONTAINER_FEATURE_COUNT + 17;
+	int SCENARIO_INSTANCE__READONLY = CONTAINER_FEATURE_COUNT + 8;
 
 	/**
 	 * The number of structural features of the '<em>Scenario Instance</em>' class.
@@ -567,7 +495,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 18;
+	int SCENARIO_INSTANCE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 9;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.MetadataImpl <em>Metadata</em>}' class.
@@ -643,61 +571,6 @@ public interface ScenarioServicePackage extends EPackage {
 	int METADATA_FEATURE_COUNT = 6;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioLockImpl <em>Scenario Lock</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioLockImpl
-	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getScenarioLock()
-	 * @generated
-	 */
-	int SCENARIO_LOCK = 6;
-
-	/**
-	 * The feature id for the '<em><b>Available</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_LOCK__AVAILABLE = 0;
-
-	/**
-	 * The feature id for the '<em><b>Claimed</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_LOCK__CLAIMED = 1;
-
-	/**
-	 * The feature id for the '<em><b>Key</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_LOCK__KEY = 2;
-
-	/**
-	 * The feature id for the '<em><b>Instance</b></em>' container reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_LOCK__INSTANCE = 3;
-
-	/**
-	 * The number of structural features of the '<em>Scenario Lock</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_LOCK_FEATURE_COUNT = 4;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioFragmentImpl <em>Scenario Fragment</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -705,7 +578,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getScenarioFragment()
 	 * @generated
 	 */
-	int SCENARIO_FRAGMENT = 7;
+	int SCENARIO_FRAGMENT = 6;
 
 	/**
 	 * The feature id for the '<em><b>Scenario Instance</b></em>' container reference.
@@ -753,62 +626,6 @@ public interface ScenarioServicePackage extends EPackage {
 	int SCENARIO_FRAGMENT_FEATURE_COUNT = 4;
 
 	/**
-	 * The meta object id for the '{@link java.io.Closeable <em>Closeable</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see java.io.Closeable
-	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getCloseable()
-	 * @generated
-	 */
-	int CLOSEABLE = 9;
-
-	/**
-	 * The number of structural features of the '<em>Closeable</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CLOSEABLE_FEATURE_COUNT = 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.ModelReferenceImpl <em>Model Reference</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.scenario.service.model.impl.ModelReferenceImpl
-	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getModelReference()
-	 * @generated
-	 */
-	int MODEL_REFERENCE = 8;
-
-	/**
-	 * The feature id for the '<em><b>Scenario Instance</b></em>' container reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MODEL_REFERENCE__SCENARIO_INSTANCE = CLOSEABLE_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Reference Id</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MODEL_REFERENCE__REFERENCE_ID = CLOSEABLE_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Model Reference</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MODEL_REFERENCE_FEATURE_COUNT = CLOSEABLE_FEATURE_COUNT + 2;
-
-	/**
 	 * The meta object id for the '<em>IScenario Service</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * @Note: Compatibility filter created
@@ -817,27 +634,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getIScenarioService()
 	 * @generated
 	 */
-	int ISCENARIO_SERVICE = 10;
-
-	/**
-	 * The meta object id for the '<em>IO Exception</em>' data type.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see java.io.IOException
-	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getIOException()
-	 * @generated
-	 */
-	int IO_EXCEPTION = 11;
-
-	/**
-	 * The meta object id for the '<em>Exception</em>' data type.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see java.lang.Exception
-	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getException()
-	 * @generated
-	 */
-	int EXCEPTION = 12;
+	int ISCENARIO_SERVICE = 7;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.ScenarioModel <em>Scenario Model</em>}'.
@@ -1023,6 +820,17 @@ public interface ScenarioServicePackage extends EPackage {
 	EAttribute getScenarioService_Local();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioService#getServiceID <em>Service ID</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Service ID</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioService#getServiceID()
+	 * @see #getScenarioService()
+	 * @generated
+	 */
+	EAttribute getScenarioService_ServiceID();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.ScenarioInstance <em>Scenario Instance</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1053,39 +861,6 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getScenarioInstance_Metadata();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isLocked <em>Locked</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Locked</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#isLocked()
-	 * @see #getScenarioInstance()
-	 * @generated
-	 */
-	EAttribute getScenarioInstance_Locked();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getInstance <em>Instance</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Instance</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getInstance()
-	 * @see #getScenarioInstance()
-	 * @generated
-	 */
-	EReference getScenarioInstance_Instance();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getAdapters <em>Adapters</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Adapters</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getAdapters()
-	 * @see #getScenarioInstance()
-	 * @generated
-	 */
-	EAttribute getScenarioInstance_Adapters();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getRootObjectURI <em>Root Object URI</em>}'.
@@ -1132,17 +907,6 @@ public interface ScenarioServicePackage extends EPackage {
 	EReference getScenarioInstance_Fragments();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getModelReferences <em>Model References</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Model References</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getModelReferences()
-	 * @see #getScenarioInstance()
-	 * @generated
-	 */
-	EReference getScenarioInstance_ModelReferences();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isReadonly <em>Readonly</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1174,61 +938,6 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getScenarioInstance_ClientVersionContext();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isDirty <em>Dirty</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Dirty</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#isDirty()
-	 * @see #getScenarioInstance()
-	 * @generated
-	 */
-	EAttribute getScenarioInstance_Dirty();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getLocks <em>Locks</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Locks</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getLocks()
-	 * @see #getScenarioInstance()
-	 * @generated
-	 */
-	EReference getScenarioInstance_Locks();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getValidationStatusCode <em>Validation Status Code</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Validation Status Code</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getValidationStatusCode()
-	 * @see #getScenarioInstance()
-	 * @generated
-	 */
-	EAttribute getScenarioInstance_ValidationStatusCode();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isLoadFailure <em>Load Failure</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Load Failure</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#isLoadFailure()
-	 * @see #getScenarioInstance()
-	 * @generated
-	 */
-	EAttribute getScenarioInstance_LoadFailure();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getLoadException <em>Load Exception</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Load Exception</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getLoadException()
-	 * @see #getScenarioInstance()
-	 * @generated
-	 */
-	EAttribute getScenarioInstance_LoadException();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.Metadata <em>Metadata</em>}'.
@@ -1307,60 +1016,6 @@ public interface ScenarioServicePackage extends EPackage {
 	EAttribute getMetadata_ContentType();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.ScenarioLock <em>Scenario Lock</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Scenario Lock</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioLock
-	 * @generated
-	 */
-	EClass getScenarioLock();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioLock#isAvailable <em>Available</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Available</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioLock#isAvailable()
-	 * @see #getScenarioLock()
-	 * @generated
-	 */
-	EAttribute getScenarioLock_Available();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioLock#isClaimed <em>Claimed</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Claimed</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioLock#isClaimed()
-	 * @see #getScenarioLock()
-	 * @generated
-	 */
-	EAttribute getScenarioLock_Claimed();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioLock#getKey <em>Key</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Key</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioLock#getKey()
-	 * @see #getScenarioLock()
-	 * @generated
-	 */
-	EAttribute getScenarioLock_Key();
-
-	/**
-	 * Returns the meta object for the container reference '{@link com.mmxlabs.scenario.service.model.ScenarioLock#getInstance <em>Instance</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the container reference '<em>Instance</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioLock#getInstance()
-	 * @see #getScenarioLock()
-	 * @generated
-	 */
-	EReference getScenarioLock_Instance();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.ScenarioFragment <em>Scenario Fragment</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1415,49 +1070,6 @@ public interface ScenarioServicePackage extends EPackage {
 	EAttribute getScenarioFragment_ContentType();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.ModelReference <em>Model Reference</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Model Reference</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ModelReference
-	 * @generated
-	 */
-	EClass getModelReference();
-
-	/**
-	 * Returns the meta object for the container reference '{@link com.mmxlabs.scenario.service.model.ModelReference#getScenarioInstance <em>Scenario Instance</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the container reference '<em>Scenario Instance</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ModelReference#getScenarioInstance()
-	 * @see #getModelReference()
-	 * @generated
-	 */
-	EReference getModelReference_ScenarioInstance();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ModelReference#getReferenceId <em>Reference Id</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Reference Id</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ModelReference#getReferenceId()
-	 * @see #getModelReference()
-	 * @generated
-	 */
-	EAttribute getModelReference_ReferenceId();
-
-	/**
-	 * Returns the meta object for class '{@link java.io.Closeable <em>Closeable</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Closeable</em>'.
-	 * @see java.io.Closeable
-	 * @model instanceClass="java.io.Closeable"
-	 * @generated
-	 */
-	EClass getCloseable();
-
-	/**
 	 * Returns the meta object for data type '{@link com.mmxlabs.scenario.service.IScenarioService <em>IScenario Service</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1467,28 +1079,6 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	EDataType getIScenarioService();
-
-	/**
-	 * Returns the meta object for data type '{@link java.io.IOException <em>IO Exception</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for data type '<em>IO Exception</em>'.
-	 * @see java.io.IOException
-	 * @model instanceClass="java.io.IOException"
-	 * @generated
-	 */
-	EDataType getIOException();
-
-	/**
-	 * Returns the meta object for data type '{@link java.lang.Exception <em>Exception</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for data type '<em>Exception</em>'.
-	 * @see java.lang.Exception
-	 * @model instanceClass="java.lang.Exception"
-	 * @generated
-	 */
-	EDataType getException();
 
 	/**
 	 * Returns the factory that creates the instances of the model.

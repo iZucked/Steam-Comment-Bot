@@ -22,10 +22,11 @@ import org.eclipse.jface.viewers.ViewerColumn;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.navigator.NavigatorDecoratingLabelProvider;
+
+import com.mmxlabs.rcp.common.RunnerHelper;
 
 /**
  * Fork of the {@link NavigatorDecoratingLabelProvider} to override {@link #getColumnImage(Object, int)};
@@ -244,12 +245,8 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		final String property = event.getProperty();
 		if (property.equals(JFacePreferences.QUALIFIER_COLOR) || property.equals(JFacePreferences.COUNTER_COLOR) || property.equals(JFacePreferences.DECORATIONS_COLOR)
 				|| property.equals(IWorkbenchPreferenceConstants.USE_COLORED_LABELS)) {
-			Display.getDefault().asyncExec(new Runnable() {
-				@Override
-				public void run() {
-					refresh();
-				}
-			});
+
+			RunnerHelper.asyncExec(() -> refresh());
 		}
 	}
 

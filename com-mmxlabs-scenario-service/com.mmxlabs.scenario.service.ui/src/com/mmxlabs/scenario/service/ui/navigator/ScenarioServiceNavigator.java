@@ -45,6 +45,7 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
@@ -182,17 +183,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 	}
 
 	protected void tryRefresh() {
-		Display.getDefault().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				final CommonViewer viewer1 = viewer;
-				if (viewer1 != null && !viewer1.getControl().isDisposed()) {
-					viewer1.refresh();
-				}
-			}
-
-		});
+		ViewerHelper.refresh(viewer, false);
 	}
 
 	@Override

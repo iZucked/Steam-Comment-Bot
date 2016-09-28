@@ -28,7 +28,8 @@ import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
 import com.mmxlabs.scenario.service.model.ScenarioService;
-import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceNavigator;
 
 public class NewFolderCommandHandler extends AbstractHandler {
@@ -89,10 +90,10 @@ public class NewFolderCommandHandler extends AbstractHandler {
 
 	private void createFolderInContainer(@NonNull final Shell shell, @NonNull final Container o) {
 
-		final Set<String> existingNames = ScenarioServiceModelUtils.getExistingNames(o);
+		final Set<String> existingNames = ScenarioServiceUtils.getExistingNames(o);
 
 		final String prefix = "New folder";
-		final String initialValue = ScenarioServiceModelUtils.getNextName(prefix, existingNames);
+		final String initialValue = ScenarioServiceUtils.getNextName(prefix, existingNames);
 
 		final InputDialog inputDialog = new InputDialog(shell, "Folder Name", "Enter a name for the new folder", initialValue, new IInputValidator() {
 
@@ -109,7 +110,8 @@ public class NewFolderCommandHandler extends AbstractHandler {
 		if (inputDialog.open() == Window.OK) {
 			final String name = inputDialog.getValue();
 			assert name != null;
-			o.getScenarioService().makeFolder(o, name);
+			final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(o);
+			scenarioService.makeFolder(o, name);
 		}
 	}
 }

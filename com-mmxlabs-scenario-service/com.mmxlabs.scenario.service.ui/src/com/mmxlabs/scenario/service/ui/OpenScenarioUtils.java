@@ -15,7 +15,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorRegistry;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
@@ -42,8 +44,14 @@ public class OpenScenarioUtils {
 	}
 
 	public static void openEditor(final IScenarioServiceEditorInput editorInput) throws PartInitException {
-		final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		openAndReturnEditorPart(activePage, editorInput);
+		IWorkbench workbench = PlatformUI.getWorkbench();
+		IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+		if (activeWorkbenchWindow != null) {
+			final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+			if (activePage != null) {
+				openAndReturnEditorPart(activePage, editorInput);
+			}
+		}
 	}
 
 	/**

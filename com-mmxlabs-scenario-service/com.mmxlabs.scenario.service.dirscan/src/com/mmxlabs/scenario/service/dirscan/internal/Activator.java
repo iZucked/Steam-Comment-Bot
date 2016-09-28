@@ -11,13 +11,16 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.dirscan.DirScanScenarioService;
 import com.mmxlabs.scenario.service.dirscan.preferences.PreferenceConstants;
+import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -29,6 +32,7 @@ public class Activator extends AbstractUIPlugin {
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.mmxlabs.scenario.service.dirscan"; //$NON-NLS-1$
 
+	// First prefix empty for backwards compatibility.
 	private static final String[] prefixes = { "", "option2.", "option3." };
 	private static final int SERVICE_COUNT = prefixes.length;
 
@@ -41,6 +45,9 @@ public class Activator extends AbstractUIPlugin {
 	private final ServiceRegistration<IScenarioService>[] dirScanRegistration = new ServiceRegistration[prefixes.length];
 
 	private final DirScanScenarioService[] dirScanService = new DirScanScenarioService[prefixes.length];
+	private final boolean[] serviceEnabled = new boolean[prefixes.length];
+
+	private ServiceTracker<IScenarioCipherProvider, IScenarioCipherProvider> scenarioCipherProviderTracker = null;
 
 	/**
 	 * The constructor
@@ -58,22 +65,66 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 
+		scenarioCipherProviderTracker = new ServiceTracker<IScenarioCipherProvider, IScenarioCipherProvider>(context, IScenarioCipherProvider.class, null) {
+			@Override
+			public IScenarioCipherProvider addingService(final ServiceReference<IScenarioCipherProvider> reference) {
+
+				final IScenarioCipherProvider provider = super.addingService(reference);
+
+				for (int idx = 0; idx < SERVICE_COUNT; ++idx) {
+					try {
+						final DirScanScenarioService service = dirScanService[idx];
+						if (service != null) {
+							service.setScenarioCipherProvider(provider);
+						}
+					} catch (final Exception e) {
+						log.error(e.getMessage(), e);
+					}
+				}
+
+				return provider;
+			}
+
+			@Override
+			public void removedService(final ServiceReference<IScenarioCipherProvider> reference, final IScenarioCipherProvider provider) {
+				for (int idx = 0; idx < SERVICE_COUNT; ++idx) {
+					try {
+						final DirScanScenarioService service = dirScanService[idx];
+						if (service != null) {
+							final IScenarioCipherProvider scenarioCipherProvider = service.getScenarioCipherProvider();
+							if (scenarioCipherProvider == provider) {
+								service.setScenarioCipherProvider(null);
+							}
+						}
+					} catch (final Exception e) {
+						log.error(e.getMessage(), e);
+					}
+				}
+				super.removedService(reference, provider);
+			}
+		};
+		scenarioCipherProviderTracker.open();
+
 		propertyChangeListener = new IPropertyChangeListener() {
 			@Override
 			public void propertyChange(final PropertyChangeEvent event) {
 				try {
-					for (int idx = 0; idx < SERVICE_COUNT; ++idx) {
-						String property = event.getProperty();
-						if (property.equals(prefixes[idx] + PreferenceConstants.P_ENABLED_KEY)) {
-							Object newValue = event.getNewValue();
-							if (Boolean.TRUE.equals(newValue)) {
-								enableService(idx);
-							} else {
-								disableService(idx);
-							}
-						} else {
-							updateService(idx);
+					final String property = event.getProperty();
+					int service_idx = 0;
+					for (int idx = 1; idx < SERVICE_COUNT; ++idx) {
+						if (property.startsWith(prefixes[idx])) {
+							service_idx = idx;
 						}
+					}
+					if (property.equals(prefixes[service_idx] + PreferenceConstants.P_ENABLED_KEY)) {
+						final Object newValue = event.getNewValue();
+						if (Boolean.TRUE.equals(newValue)) {
+							enableService(service_idx);
+						} else {
+							disableService(service_idx);
+						}
+					} else {
+						updateService(service_idx);
 					}
 				} catch (final Exception e) {
 					log.error(e.getMessage(), e);
@@ -93,9 +144,15 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	private void enableService(final int idx) {
+
+		if (dirScanService[idx] != null || dirScanRegistration[idx] != null) {
+			disableService(idx);
+		}
+
 		final String preferencePrefix = prefixes[idx];
 		final String enabled = getPreferenceStore().getString(preferencePrefix + PreferenceConstants.P_ENABLED_KEY);
 		if ("true".equalsIgnoreCase(enabled)) {
+			this.serviceEnabled[idx] = true;
 
 			final String serviceName = getPreferenceStore().getString(preferencePrefix + PreferenceConstants.P_NAME_KEY);
 			final String path = getPreferenceStore().getString(preferencePrefix + PreferenceConstants.P_PATH_KEY);
@@ -106,16 +163,19 @@ public class Activator extends AbstractUIPlugin {
 			final Hashtable<String, String> props = new Hashtable<String, String>();
 			props.put(PreferenceConstants.P_NAME_KEY, serviceName);
 			props.put(PreferenceConstants.P_PATH_KEY, path);
-			// used internally
+			// used internally by eclipse/OSGi
 			props.put("component.id", preferencePrefix + serviceName);
 
 			try {
-				dirScanService[idx] = new DirScanScenarioService(serviceName);
-				// Various ways of passing properties which do not work...
-				dirScanRegistration[idx] = getBundle().getBundleContext().registerService(IScenarioService.class, dirScanService[idx], props);
-				dirScanRegistration[idx].setProperties(props);
-				// .. the way I've found to make it work...
-				dirScanService[idx].start(props);
+				final DirScanScenarioService service = new DirScanScenarioService(serviceName);
+
+				if (scenarioCipherProviderTracker != null) {
+					service.setScenarioCipherProvider(scenarioCipherProviderTracker.getService());
+				}
+
+				service.start(props);
+				dirScanService[idx] = service;
+				dirScanRegistration[idx] = getBundle().getBundleContext().registerService(IScenarioService.class, service, props);
 			} catch (final IOException e) {
 				log.error("Error starting DirScan Scenario Service: " + e.getMessage(), e);
 			}
@@ -124,8 +184,9 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	private void disableService(final int idx) {
-		if (dirScanRegistration[idx] != null) {
+		this.serviceEnabled[idx] = false;
 
+		if (dirScanRegistration[idx] != null) {
 			dirScanRegistration[idx].unregister();
 			dirScanRegistration[idx] = null;
 		}
@@ -138,6 +199,8 @@ public class Activator extends AbstractUIPlugin {
 	private void updateService(final int idx) {
 		if (dirScanRegistration[idx] != null) {
 			disableService(idx);
+		}
+		if (this.serviceEnabled[idx]) {
 			enableService(idx);
 		}
 	}
@@ -149,13 +212,18 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	@Override
 	public void stop(final BundleContext context) throws Exception {
-
+		getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
 		for (int idx = 0; idx < SERVICE_COUNT; ++idx) {
 			try {
 				disableService(idx);
 			} catch (final Exception e) {
 				log.error(e.getMessage(), e);
 			}
+		}
+
+		if (scenarioCipherProviderTracker != null) {
+			scenarioCipherProviderTracker.close();
+			scenarioCipherProviderTracker = null;
 		}
 
 		plugin = null;

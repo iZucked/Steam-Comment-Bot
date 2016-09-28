@@ -188,29 +188,6 @@ public class ScenarioServiceItemProviderAdapterFactory extends ScenarioServiceAd
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.scenario.service.model.ScenarioLock} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ScenarioLockItemProvider scenarioLockItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.scenario.service.model.ScenarioLock}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createScenarioLockAdapter() {
-		if (scenarioLockItemProvider == null) {
-			scenarioLockItemProvider = new ScenarioLockItemProvider(this);
-		}
-
-		return scenarioLockItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.scenario.service.model.ScenarioFragment} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -231,29 +208,6 @@ public class ScenarioServiceItemProviderAdapterFactory extends ScenarioServiceAd
 		}
 
 		return scenarioFragmentItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.scenario.service.model.ModelReference} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ModelReferenceItemProvider modelReferenceItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.scenario.service.model.ModelReference}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createModelReferenceAdapter() {
-		if (modelReferenceItemProvider == null) {
-			modelReferenceItemProvider = new ModelReferenceItemProvider(this);
-		}
-
-		return modelReferenceItemProvider;
 	}
 
 	/**
@@ -365,12 +319,8 @@ public class ScenarioServiceItemProviderAdapterFactory extends ScenarioServiceAd
 			scenarioInstanceItemProvider.dispose();
 		if (metadataItemProvider != null)
 			metadataItemProvider.dispose();
-		if (scenarioLockItemProvider != null)
-			scenarioLockItemProvider.dispose();
 		if (scenarioFragmentItemProvider != null)
 			scenarioFragmentItemProvider.dispose();
-		if (modelReferenceItemProvider != null)
-			modelReferenceItemProvider.dispose();
 	}
 
 }

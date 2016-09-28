@@ -21,6 +21,7 @@ import com.mmxlabs.scenario.service.IScenarioService;
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#isSupportsImport <em>Supports Import</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#getScenarioModel <em>Scenario Model</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#isLocal <em>Local</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#getServiceID <em>Service ID</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioService()
@@ -185,5 +186,31 @@ public interface ScenarioService extends Container {
 	 * @generated
 	 */
 	void setLocal(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Service ID</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Service ID</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Service ID</em>' attribute.
+	 * @see #setServiceID(String)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioService_ServiceID()
+	 * @model
+	 * @generated
+	 */
+	String getServiceID();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioService#getServiceID <em>Service ID</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Service ID</em>' attribute.
+	 * @see #getServiceID()
+	 * @generated
+	 */
+	void setServiceID(String value);
 
 } // ScenarioService

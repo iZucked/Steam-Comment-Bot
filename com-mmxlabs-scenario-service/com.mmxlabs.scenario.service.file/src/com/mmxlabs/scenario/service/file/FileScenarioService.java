@@ -16,17 +16,19 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.Semaphore;
+import java.util.function.Consumer;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.EList;
@@ -42,6 +44,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.ui.progress.IProgressConstants2;
@@ -50,8 +54,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Files;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.file.internal.Activator;
 import com.mmxlabs.scenario.service.file.internal.FileScenarioServiceBackup;
@@ -59,12 +65,16 @@ import com.mmxlabs.scenario.service.file.preferences.PreferenceConstants;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.Metadata;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
+import com.mmxlabs.scenario.service.model.manager.InstanceData;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 import com.mmxlabs.scenario.service.util.AbstractScenarioService;
+import com.mmxlabs.scenario.service.util.MMXAdaptersAwareCommandStack;
 import com.mmxlabs.scenario.service.util.ResourceHelper;
 
 public class FileScenarioService extends AbstractScenarioService {
@@ -107,8 +117,18 @@ public class FileScenarioService extends AbstractScenarioService {
 
 		storeURI = URI.createFileURI(workspaceLocation + modelURIString);
 
-		// Trigger workspace backup before the full initialisation
-		backupWorkspace();
+		// Initial model load
+		new Thread(() -> {
+			// Trigger workspace backup before the full initialisation
+			try {
+				backupWorkspace();
+			} catch (final Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			getServiceModel();
+			setReady();
+		}).start();
 	}
 
 	/**
@@ -304,13 +324,15 @@ public class FileScenarioService extends AbstractScenarioService {
 
 	@Override
 	public void delete(final Container container) {
-		final IScenarioService scenarioService = container.getScenarioService();
+		final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(container);
+
 		if (scenarioService != null && scenarioService != this) {
 			throw new IllegalArgumentException("Cannot delete a container instance that belongs to another scenario service");
 		}
 		{
 			// Recursively delete contents
 			while (container.getElements().isEmpty() == false) {
+				// assert false; // Caller should do this
 				delete(container.getElements().get(0));
 			}
 		}
@@ -335,19 +357,27 @@ public class FileScenarioService extends AbstractScenarioService {
 		if (container instanceof ScenarioInstance) {
 			final ScenarioInstance instance = (ScenarioInstance) container;
 
-			// Unload scenario prior to deletion
-			unload(instance);
-
 			if (scenarioService != null) {
 				fireEvent(ScenarioServiceEvent.PRE_DELETE, instance);
 			}
 
+			@NonNull
+			final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+
+			System.gc();
+			System.gc();
+			
+			@Nullable
+			final ModelReference ref = modelRecord.aquireReferenceIfLoaded("FileScenarioService:1");
+			if (ref != null) {
+				ref.close();
+				modelRecord.dumpReferences();
+			}
+			// With the ScenarioReferences it is possible we still have some references open at this stage.
+//			assert ref == null;
+
 			// Find a resource set
 			ResourceSet instanceResourceSet = null;
-			if (instance.getAdapters() != null) {
-				// As we have unloaded, we do not expect to get here...
-				instanceResourceSet = (ResourceSet) instance.getAdapters().get(ResourceSet.class);
-			}
 			if (instanceResourceSet == null) {
 				instanceResourceSet = createResourceSet();
 			}
@@ -391,18 +421,18 @@ public class FileScenarioService extends AbstractScenarioService {
 					resourceSet.getResources().remove(resource);
 				} catch (final Throwable th) {
 				}
-				fireEvent(ScenarioServiceEvent.POST_DELETE, instance);
+				// fireEvent(ScenarioServiceEvent.POST_DELETE, instance);
 			}
 		}
 	}
-
-	@Override
-	public void save(final ScenarioInstance scenarioInstance) throws IOException {
-		// store backup manifest
-		saveManifest(scenarioInstance);
-
-		super.save(scenarioInstance);
-	}
+	//
+	// @Override
+	// public void save(final ScenarioInstance scenarioInstance) throws IOException {
+	// // store backup manifest
+	// saveManifest(scenarioInstance);
+	//
+	// super.save(scenarioInstance);
+	// }
 
 	private void saveManifest(final ScenarioInstance scenarioInstance) {
 		try {
@@ -416,7 +446,7 @@ public class FileScenarioService extends AbstractScenarioService {
 	}
 
 	@Override
-	public ScenarioInstance insert(final Container container, final EObject rootObject) throws IOException {
+	public ScenarioInstance insert(final @NonNull Container container, final @NonNull EObject rootObject, @Nullable final Consumer<ScenarioInstance> customiser) throws Exception {
 		log.debug("Inserting scenario into " + container);
 
 		// Create new model nodes
@@ -424,7 +454,7 @@ public class FileScenarioService extends AbstractScenarioService {
 		final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
 
 		// Create a new UUID
-		final String uuid = UUID.randomUUID().toString();
+		final String uuid = EcoreUtil.generateUUID();
 		newInstance.setUuid(uuid);
 
 		newInstance.setMetadata(metadata);
@@ -457,8 +487,56 @@ public class FileScenarioService extends AbstractScenarioService {
 		// Save the scenario instance to a file for recovery
 		saveManifest(newInstance);
 
-		// Clear dirty flag
-		newInstance.setDirty(false);
+		if (customiser != null) {
+			customiser.accept(newInstance);
+		}
+
+		// Finally add to node in the service model.
+		container.getElements().add(newInstance);
+
+		return newInstance;
+	}
+
+	@Override
+	public ScenarioInstance insert(final @NonNull Container container, final @NonNull URI sourceURI, @Nullable final Consumer<ScenarioInstance> customiser) throws Exception {
+		log.debug("Inserting scenario into " + container);
+
+		// Create new model nodes
+		final ScenarioInstance newInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+		final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
+
+		// Create a new UUID
+		final String uuid = EcoreUtil.generateUUID();
+		newInstance.setUuid(uuid);
+
+		newInstance.setMetadata(metadata);
+
+		// Construct new URIs into the model service for our models.
+		final ResourceSet instanceResourceSet = createResourceSet();
+		{
+			// Construct internal URI based on UUID and model class name
+			final String uriString = "./" + uuid + ".xmi";
+			final URI resolved = resolveURI(uriString);
+
+			log.debug("Storing submodel into " + resolved);
+			try {
+				ScenarioServiceUtils.copyURIData(instanceResourceSet.getURIConverter(), sourceURI, resolved);
+			} catch (final IOException e) {
+				return null;
+			}
+			// Record new submodel URI
+			newInstance.setRootObjectURI(uriString);
+		}
+
+		// Update last modified date
+		metadata.setLastModified(new Date());
+
+		// Save the scenario instance to a file for recovery
+		saveManifest(newInstance);
+
+		if (customiser != null) {
+			customiser.accept(newInstance);
+		}
 
 		// Finally add to node in the service model.
 		container.getElements().add(newInstance);
@@ -478,6 +556,7 @@ public class FileScenarioService extends AbstractScenarioService {
 			}
 		}
 
+		@Override
 		protected void addAdapter(final Notifier notifier) {
 			if (!(notifier instanceof ModelReference)) {
 				notifier.eAdapters().add(this);
@@ -518,28 +597,29 @@ public class FileScenarioService extends AbstractScenarioService {
 			// Change to the backup URI
 			if (backupURI.isFile() && !new File(backupURI.toFileString()).exists()) {
 				backupFileExists = false;
+				log.error("Error reading main scenario service models.", ex);
 			} else {
 				// Assume it exists
 				backupFileExists = true;
-			}
 
-			resource.setURI(backupURI);
+				resource.setURI(backupURI);
 
-			try {
-				resource.load(options);
-				resourceExisted = true;
-				log.warn("Scenario service model restored from backup.");
-			} catch (final IOException ex2) {
-				if (mainFileExists && backupFileExists) {
-					log.error("Error reading both main and backup scenario service models.", ex2);
-				} else if (!mainFileExists && backupFileExists) {
-					log.error("Error reading backup scenario service models.", ex2);
-				} else if (mainFileExists && !backupFileExists) {
-					log.error("Error reading main scenario service models.", ex2);
+				try {
+					resource.load(options);
+					resourceExisted = true;
+					log.warn("Scenario service model restored from backup.");
+				} catch (final IOException ex2) {
+					if (mainFileExists && backupFileExists) {
+						log.error("Error reading both main and backup scenario service models.", ex2);
+					} else if (!mainFileExists && backupFileExists) {
+						log.error("Error reading backup scenario service models.", ex2);
+					} else if (mainFileExists && !backupFileExists) {
+						log.error("Error reading main scenario service models.", ex2);
+					}
+				} finally {
+					// Restore original URI for saves later on
+					resource.setURI(storeURI);
 				}
-			} finally {
-				// Restore original URI for saves later on
-				resource.setURI(storeURI);
 			}
 		}
 
@@ -571,6 +651,7 @@ public class FileScenarioService extends AbstractScenarioService {
 
 		final ScenarioService result = (ScenarioService) resource.getContents().get(0);
 
+		result.setServiceID(getSerivceID());
 		result.setDescription("File scenario service with store " + storeURI);
 		result.setLocal(true);
 
@@ -683,8 +764,97 @@ public class FileScenarioService extends AbstractScenarioService {
 	}
 
 	@Override
-	public void moveInto(final List<Container> elements, final Container destination) {
-		destination.getElements().addAll(elements);
+	public String getSerivceID() {
+		return "file-scenario-service";
+	}
+
+	@Override
+	public InstanceData load(final ScenarioInstance scenarioInstance, @NonNull IProgressMonitor monitor) throws IOException {
+
+		try {
+			monitor.beginTask("Loading scenario", 100);
+
+			@NonNull
+			final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+			if (modelRecord.isLoaded()) {
+				throw new IllegalStateException();
+			}
+
+			log.debug("Instance " + scenarioInstance.getName() + " (" + scenarioInstance.getUuid() + ") needs loading");
+
+			if (scenarioMigrationService != null) {
+				try {
+					scenarioMigrationService.migrateScenario(this, scenarioInstance, SubMonitor.convert(monitor, "Migrate scenario", 100));
+				} catch (final RuntimeException e) {
+					throw e;
+				} catch (final Exception e) {
+					throw new RuntimeException("Error migrating scenario", e);
+				}
+			}
+			monitor.setTaskName("Loading scenario");
+
+			log.debug("Instance " + scenarioInstance.getName() + " (" + scenarioInstance.getUuid() + ") needs loading");
+
+			// create MMXRootObject and connect submodel instances into it.
+			final ResourceSet resourceSet = createResourceSet();
+
+			final String rooObjectURI = scenarioInstance.getRootObjectURI();
+			// acquire sub models
+			log.debug("Loading rootObject from " + rooObjectURI);
+			final URI uri = resolveURI(rooObjectURI);
+
+			final Resource resource = ResourceHelper.loadResource(resourceSet, uri);
+			final EObject implementation = resource.getContents().get(0);
+
+			if (implementation == null) {
+				throw new IOException("Null value for model instance " + rooObjectURI);
+			}
+
+			final Pair<@NonNull CommandProviderAwareEditingDomain, @NonNull MMXAdaptersAwareCommandStack> p = initEditingDomain(resourceSet, implementation, scenarioInstance);
+			final EditingDomain domain = p.getFirst();
+
+			final InstanceData data = new InstanceData(modelRecord, implementation, domain, p.getSecond(), (d) -> {
+				try (ModelReference ref = modelRecord.aquireReference("FileScenarioService:2")) {
+					try {
+						ResourceHelper.saveResource(resource);
+					} catch (final Exception e) {
+						e.printStackTrace();
+					}
+					execute(scenarioInstance, (si) -> {
+						// Update last modified date
+						final Metadata metadata = si.getMetadata();
+						if (metadata != null) {
+							metadata.setLastModified(new Date());
+						}
+					});
+					final BasicCommandStack commandStack = (BasicCommandStack) d.getCommandStack();
+					commandStack.saveIsDone();
+				}
+			}, d -> {
+				// Nothing to do
+			});
+			p.getSecond().setInstanceData(data);
+
+			// TODO: This should be linked to a listener...
+			if (scenarioInstance.isReadonly()) {
+				// Mark resources as read-only
+				if (domain instanceof AdapterFactoryEditingDomain) {
+					final AdapterFactoryEditingDomain adapterFactoryEditingDomain = (AdapterFactoryEditingDomain) domain;
+					Map<Resource, Boolean> resourceToReadOnlyMap = adapterFactoryEditingDomain.getResourceToReadOnlyMap();
+					if (resourceToReadOnlyMap == null) {
+						resourceToReadOnlyMap = new HashMap<>();
+						adapterFactoryEditingDomain.setResourceToReadOnlyMap(resourceToReadOnlyMap);
+					}
+					for (final Resource r : data.getEditingDomain().getResourceSet().getResources()) {
+						resourceToReadOnlyMap.put(r, Boolean.TRUE);
+					}
+				}
+			}
+
+			return data;
+		} finally {
+			monitor.done();
+		}
 	}
 
 	@Override
@@ -692,34 +862,16 @@ public class FileScenarioService extends AbstractScenarioService {
 		if (parent instanceof ScenarioInstance) {
 			return;
 		}
-		final Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
-		f.setName(name);
-		parent.getElements().add(f);
+
+		executeAdd(parent, () -> {
+			final Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
+			f.setName(name);
+			return f;
+		});
 	}
 
 	@Override
-	public EObject load(final ScenarioInstance instance) throws IOException {
-		if (instance.getInstance() != null) {
-			// log.debug("Instance " + instance.getUuid() + " already loaded");
-			return instance.getInstance();
-		}
-		final EObject result = super.load(instance);
-		// TODO: This should be linked to a listener...
-		if (instance.isReadonly()) {
-			// Mark resources as read-only
-			final EditingDomain domain = (EditingDomain) instance.getAdapters().get(EditingDomain.class);
-			if (domain instanceof AdapterFactoryEditingDomain) {
-				final AdapterFactoryEditingDomain adapterFactoryEditingDomain = (AdapterFactoryEditingDomain) domain;
-				Map<Resource, Boolean> resourceToReadOnlyMap = adapterFactoryEditingDomain.getResourceToReadOnlyMap();
-				if (resourceToReadOnlyMap == null) {
-					resourceToReadOnlyMap = new HashMap<>();
-					adapterFactoryEditingDomain.setResourceToReadOnlyMap(resourceToReadOnlyMap);
-				}
-				for (final Resource r : domain.getResourceSet().getResources()) {
-					resourceToReadOnlyMap.put(r, Boolean.TRUE);
-				}
-			}
-		}
-		return result;
+	public void moveInto(final List<Container> elements, final Container destination) {
+		destination.getElements().addAll(elements);
 	}
 }

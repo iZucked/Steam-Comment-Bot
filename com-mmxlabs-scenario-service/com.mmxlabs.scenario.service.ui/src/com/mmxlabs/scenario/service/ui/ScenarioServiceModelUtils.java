@@ -4,42 +4,48 @@
  */
 package com.mmxlabs.scenario.service.ui;
 
-import java.io.IOException;
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.Date;
 import java.util.Set;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.ScenarioServiceCommandUtil;
 import com.mmxlabs.scenario.service.model.Container;
-import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
+import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 
 public final class ScenarioServiceModelUtils {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ScenarioServiceModelUtils.class);
 
-	public static final String FORK_PREFIX = "~";
-	public static final String OPTIMISED_PREFIX = "O~";
-
 	@Nullable
-	public static ScenarioInstance createAndOpenFork(@NonNull final ScenarioInstance instance, final boolean forkAndOptimise) throws IOException {
-		final IScenarioService scenarioService = instance.getScenarioService();
+	public static ScenarioInstance createAndOpenFork(@NonNull final ScenarioInstance instance, final boolean forkAndOptimise) throws Exception {
 		final String finalNewName = ScenarioServiceModelUtils.getNewForkName(instance, forkAndOptimise);
 		if (finalNewName != null) {
-			final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
-			fork.setName(finalNewName);
+			final ScenarioInstance fork = ScenarioServiceModelUtils.fork(instance, finalNewName, new NullProgressMonitor());
 
 			try {
 				OpenScenarioUtils.openScenarioInstance(fork);
@@ -51,65 +57,16 @@ public final class ScenarioServiceModelUtils {
 		return null;
 	}
 
-	@SuppressWarnings("null")
-	@NonNull
-	public static String stripFileExtension(@NonNull final String currentName) {
-		String newName = currentName;
-		if (newName.toLowerCase().toLowerCase().endsWith(".lingo")) {
-			// Guava 14+
-			// newoName = Files.getNameWithoutExtension(f);
-			newName = newName.replaceAll("(?i).lingo", "");
-		}
-		return newName;
-	}
-
-	@SuppressWarnings("null")
-	@NonNull
-	public static String getForkName(@NonNull final String currentName) {
-		return String.format("%s%s", FORK_PREFIX, currentName);
-	}
-
-	@SuppressWarnings("null")
-	@NonNull
-	public static String getOptimisedName(@NonNull final String currentName) {
-		return String.format("%s%s", OPTIMISED_PREFIX, currentName);
-	}
-
 	@Nullable
 	public static String getNewForkName(@NonNull final ScenarioInstance instance, final boolean forkAndOptimise) {
 		String oldName = instance.getName();
 		if (oldName == null) {
 			oldName = "(untitled)";
 		}
-		final String namePrefix = forkAndOptimise ? getOptimisedName(oldName) : getForkName(oldName);
-		final Set<String> existingNames = getExistingNames(instance);
-		final String newName = getNextName(namePrefix, existingNames);
+		final String namePrefix = forkAndOptimise ? ScenarioServiceUtils.getOptimisedName(oldName) : ScenarioServiceUtils.getForkName(oldName);
+		final Set<String> existingNames = ScenarioServiceUtils.getExistingNames(instance);
+		final String newName = ScenarioServiceUtils.getNextName(namePrefix, existingNames);
 		return openNewNameForForkPrompt(oldName, newName, existingNames);
-	}
-
-	@NonNull
-	public static String getNextName(@NonNull final String currentName, @NonNull final Set<String> existingNames) {
-
-		// Find a name that does not clash by appending a counter " (n)" if required
-		String newName = currentName;
-		int counter = 1;
-		while (existingNames.contains(newName)) {
-			newName = currentName + " (" + counter++ + ")";
-		}
-		return newName;
-	}
-
-	@NonNull
-	public static Set<String> getExistingNames(@NonNull final Container parent) {
-		final Set<String> existingNames = new HashSet<String>();
-		for (final Container child : parent.getElements()) {
-			if (child instanceof Folder) {
-				existingNames.add(((Folder) child).getName());
-			} else if (child instanceof ScenarioInstance) {
-				existingNames.add(((ScenarioInstance) child).getName());
-			}
-		}
-		return existingNames;
 	}
 
 	@Nullable
@@ -146,63 +103,79 @@ public final class ScenarioServiceModelUtils {
 		return validator;
 	}
 
-	@Nullable
-	public static ScenarioInstance copyScenario(@NonNull final ScenarioInstance scenario, @NonNull final Container destination, @NonNull final Set<String> existingNames) throws IOException {
+	public static boolean closeReferences(@NonNull final ScenarioInstance scenarioInstance) {
 
-		return copyScenario(scenario, destination, scenario.getName(), existingNames);
+		ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class, provider -> {
+
+			// Close all open editors
+			final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(scenarioInstance);
+			final IWorkbench workbench = PlatformUI.getWorkbench();
+			for (final IWorkbenchPage page : workbench.getActiveWorkbenchWindow().getPages()) {
+
+				final IEditorReference[] editorReferences = page.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
+				if (editorReferences != null && editorReferences.length > 0) {
+					assert page.closeEditors(editorReferences, false);
+				}
+			}
+
+			// Deselect from views
+			provider.deselect(scenarioInstance, true);
+		});
+
+		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+		eventBroker.post(ScenarioServiceUtils.EVENT_CLOSING_SCENARIO_INSTANCE, scenarioInstance);
+
+		return true;
 	}
 
 	@Nullable
-	public static ScenarioInstance copyScenario(@NonNull final ScenarioInstance scenario, @NonNull final Container destination, final String currentName, @NonNull final Set<String> existingNames)
-			throws IOException {
-		final IScenarioService service = destination.getScenarioService();
-		if (service == null) {
-			throw new IllegalStateException("Destination has no IScenarioService");
-		}
-
-		// Some services can return null here pending some asynchronous update mechanism
-		final ScenarioInstance duplicate = service.duplicate(scenario, destination);
-		if (duplicate != null) {
-			// Prefix "Copy of" only if we are copying within the container
-			final boolean withinContainer = scenario.getParent() == destination;
-			final String namePrefix = (withinContainer ? "Copy of " : "") + currentName;
-			final String newName = ScenarioServiceModelUtils.getNextName(namePrefix, existingNames);
-			duplicate.setName(newName);
-		}
-		return duplicate;
-
+	public static ScenarioInstance copyScenario(@NonNull final ScenarioInstance scenario, @NonNull final Container destination, @NonNull final Set<String> existingNames,
+			final IProgressMonitor monitor) throws Exception {
+		return copyScenario(scenario, destination, scenario.getName(), existingNames, monitor);
 	}
 
-	/**
-	 * Creates a new {@link Folder} and adds it to the new destination {@link Container}
-	 * 
-	 * @param folder
-	 * @param destination
-	 * @param currentName
-	 * @param existingNames
-	 * @return
-	 */
-	@NonNull
-	public static Folder copyFolder(@NonNull final Folder folder, @NonNull final Container destination, @NonNull final String currentName, @NonNull final Set<String> existingNames) {
+	@Nullable
+	public static ScenarioInstance copyScenario(@NonNull final ScenarioInstance scenario, @NonNull final Container destination, final String currentName, @NonNull final Set<String> existingNames,
+			final IProgressMonitor monitor) throws Exception {
 
-		// Prefix "Copy of" only if we are copying within the container
-		final boolean withinContainer = folder.getParent() == destination;
+		final boolean withinContainer = scenario.getParent() == destination;
 		final String namePrefix = (withinContainer ? "Copy of " : "") + currentName;
-		final String newName = ScenarioServiceModelUtils.getNextName(namePrefix, existingNames);
+		final String newName = ScenarioServiceUtils.getNextName(namePrefix, existingNames);
 
-		final Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
-		f.setName(newName);
-		f.setMetadata(EcoreUtil.copy(folder.getMetadata()));
-		destination.getElements().add(f);
+		final ModelRecord record = SSDataManager.Instance.getModelRecord(scenario);
 
-		return f;
+		// This check forces a slow code path to copy data by loading, migrating, closing and then the user reloads.
+		// Previously we just copied the raw data and delayed load/migration until the user step
+		//
+		try (ModelReference ref = record.aquireReferenceIfLoaded("ScenarioServiceModelUtils#copyScenario")) {
+			if (ref != null) {
+				return ScenarioServiceCommandUtil.copyTo(scenario, destination, newName);
+			} else {
+				final IScenarioService sourceScenarioService = SSDataManager.Instance.findScenarioService(scenario);
+				final URI sourceURI = sourceScenarioService == null ? URI.createURI(scenario.getRootObjectURI()) : sourceScenarioService.resolveURI(scenario.getRootObjectURI());
+
+				final IScenarioService destinationScenarioService = SSDataManager.Instance.findScenarioService(destination);
+
+				return destinationScenarioService.insert(destination, sourceURI, dup -> {
+					dup.setName(newName);
+
+					// Copy across various bits of information
+					dup.getMetadata().setContentType(scenario.getMetadata().getContentType());
+					dup.getMetadata().setCreated(scenario.getMetadata().getCreated());
+					dup.getMetadata().setLastModified(new Date());
+
+					// Copy version context information
+					dup.setVersionContext(scenario.getVersionContext());
+					dup.setScenarioVersion(scenario.getScenarioVersion());
+
+					dup.setClientVersionContext(scenario.getClientVersionContext());
+					dup.setClientScenarioVersion(scenario.getClientScenarioVersion());
+				});
+			}
+		}
 	}
 
-	public static void recursiveCopyFolder() {
-		// pull from scenario drag assistant
-	}
-
-	public static void recursiveCopyScenario() {
-
+	public static ScenarioInstance fork(@NonNull final ScenarioInstance instance, final String finalNewName, final IProgressMonitor monitor) throws Exception {
+		return copyScenario(instance, instance, finalNewName, Collections.emptySet(), monitor);
 	}
 }

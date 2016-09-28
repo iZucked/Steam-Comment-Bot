@@ -6,11 +6,6 @@
         eType="#//ScenarioService" transient="true" eOpposite="#//ScenarioService/scenarioModel"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Container" abstract="true">
-    <eOperations name="getScenarioService" lowerBound="1" eType="#//IScenarioService">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="EObject up = this;&#xA;while (up != null &amp;&amp; !(up instanceof ScenarioService)) {&#xA;&#x9;up = up.eContainer();&#xA;}&#xA;&#xA;if (up instanceof ScenarioService) {&#xA;&#x9;return ((ScenarioService) up).getServiceRef();&#xA;}&#xA;&#xA;return null;"/>
-      </eAnnotations>
-    </eOperations>
     <eOperations name="getContainedInstanceCount" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="int accumulator = 0;&#xA;for (final Container container : getElements()) {&#xA;&#x9;accumulator += container.getContainedInstanceCount();&#xA;}&#xA;return accumulator;"/>
@@ -37,6 +32,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="scenarioModel" eType="#//ScenarioModel"
         transient="true" eOpposite="#//ScenarioModel/scenarioServices"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="local" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="serviceID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ScenarioInstance" eSuperTypes="#//Container">
     <eOperations name="getContainedInstanceCount" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
@@ -44,19 +40,6 @@
         <details key="body" value="return super.getContainedInstanceCount()+1;"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getLock" lowerBound="1" eType="#//ScenarioLock">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="final List&lt;ScenarioLock> locks = getLocks();&#xA;&#x9;&#x9;synchronized (locks) {&#xA;&#x9;&#x9;&#x9;for (final ScenarioLock lock : locks) {&#xA;&#x9;&#x9;&#x9;&#x9;if (lock.getKey().equals(key)) {&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;return lock;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;&#x9;}&#xA;&#xA;&#x9;&#x9;&#x9;final ScenarioLock newLock = ScenarioServiceFactory.eINSTANCE.createScenarioLock();&#xA;&#x9;&#x9;&#x9;newLock.setKey(key);&#xA;&#x9;&#x9;&#x9;locks.add(newLock);&#xA;&#x9;&#x9;&#x9;newLock.init();&#xA;&#x9;&#x9;&#x9;return newLock;&#xA;&#x9;&#x9;}"/>
-      </eAnnotations>
-      <eParameters name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    </eOperations>
-    <eOperations name="getReference" eType="#//ModelReference">
-      <eParameters name="referenceID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    </eOperations>
-    <eOperations name="load" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
-        eExceptions="#//IOException"/>
-    <eOperations name="unload"/>
-    <eOperations name="save" eExceptions="#//IOException"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="uuid" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         iD="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="rootObjectURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -67,32 +50,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="clientScenarioVersion"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="clientVersionContext" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="instance" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
-        transient="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fragments" upperBound="-1"
         eType="#//ScenarioFragment" transient="true" containment="true" eOpposite="#//ScenarioFragment/scenarioInstance"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="modelReferences" upperBound="-1"
-        eType="#//ModelReference" transient="true" containment="true" eOpposite="#//ModelReference/scenarioInstance"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="adapters" transient="true">
-      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaClass">
-          <eTypeArguments/>
-        </eTypeArguments>
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-      </eGenericType>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="locked" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        transient="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="locks" upperBound="-1"
-        eType="#//ScenarioLock" transient="true" containment="true" eOpposite="#//ScenarioLock/instance"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="readonly" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dirty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        transient="true" defaultValueLiteral="false"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="validationStatusCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="loadFailure" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        transient="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="loadException" eType="#//Exception"
-        transient="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Metadata">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="creator" lowerBound="1"
@@ -104,19 +64,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastModifiedBy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="contentType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ScenarioLock">
-    <eOperations name="claim" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eOperations name="awaitClaim" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eOperations name="release" lowerBound="1"/>
-    <eOperations name="init" lowerBound="1"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="available" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="claimed" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="instance" lowerBound="1"
-        eType="#//ScenarioInstance" transient="true" eOpposite="#//ScenarioInstance/locks"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ScenarioFragment">
     <eStructuralFeatures xsi:type="ecore:EReference" name="scenarioInstance" eType="#//ScenarioInstance"
         transient="true" eOpposite="#//ScenarioInstance/fragments"/>
@@ -126,16 +73,4 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="IScenarioService" instanceClassName="com.mmxlabs.scenario.service.IScenarioService"
       serializable="false"/>
-  <eClassifiers xsi:type="ecore:EClass" name="ModelReference" eSuperTypes="#//Closeable">
-    <eOperations name="getInstance" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="scenarioInstance" eType="#//ScenarioInstance"
-        transient="true" eOpposite="#//ScenarioInstance/modelReferences"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="referenceId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Closeable" instanceClassName="java.io.Closeable"
-      abstract="true" interface="true">
-    <eOperations name="close"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EDataType" name="IOException" instanceClassName="java.io.IOException"/>
-  <eClassifiers xsi:type="ecore:EDataType" name="Exception" instanceClassName="java.lang.Exception"/>
 </ecore:EPackage>

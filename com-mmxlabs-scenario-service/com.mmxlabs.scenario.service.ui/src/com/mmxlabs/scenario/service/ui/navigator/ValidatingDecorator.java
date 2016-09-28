@@ -4,13 +4,11 @@
  */
 package com.mmxlabs.scenario.service.ui.navigator;
 
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.Collection;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -19,7 +17,12 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDirtyListener;
+import com.mmxlabs.scenario.service.model.manager.IScenarioLockListener;
+import com.mmxlabs.scenario.service.model.manager.IScenarioValidationListener;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
 
 /**
@@ -30,7 +33,34 @@ import com.mmxlabs.scenario.service.ui.internal.Activator;
  */
 public class ValidatingDecorator extends LabelProvider implements ILightweightLabelDecorator {
 
-	private final Map<ScenarioInstance, AdapterImpl> listenerRefs = new WeakHashMap<>();
+	private final @NonNull IScenarioValidationListener validationListener = new IScenarioValidationListener() {
+
+		@Override
+		public void validationChanged(@NonNull ModelRecord modelRecord, @NonNull IStatus status) {
+			final LabelProviderChangedEvent event = new LabelProviderChangedEvent(ValidatingDecorator.this, modelRecord);
+			RunnerHelper.asyncExec(() -> fireLabelProviderChanged(event));
+		}
+	};
+	private final @NonNull IScenarioDirtyListener dirtyListener = new IScenarioDirtyListener() {
+
+		@Override
+		public void dirtyStatusChanged(@NonNull ModelRecord modelRecord, boolean isDirty) {
+			final LabelProviderChangedEvent event = new LabelProviderChangedEvent(ValidatingDecorator.this, modelRecord.getScenarioInstance());
+			RunnerHelper.asyncExec(() -> fireLabelProviderChanged(event));
+		}
+
+	};
+	private final @NonNull IScenarioLockListener lockListener = new IScenarioLockListener() {
+		@Override
+		public void lockStateChanged(@NonNull ModelRecord modelRecord, boolean writeLocked) {
+
+			final LabelProviderChangedEvent event = new LabelProviderChangedEvent(ValidatingDecorator.this, modelRecord.getScenarioInstance());
+			RunnerHelper.asyncExec(() -> fireLabelProviderChanged(event));
+		}
+
+	};
+
+	private final Collection<ModelRecord> listenerRefs = new ConcurrentLinkedQueue<>();
 
 	public ValidatingDecorator() {
 	}
@@ -38,53 +68,50 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 	@Override
 	public void dispose() {
 
-		for (final Map.Entry<ScenarioInstance, AdapterImpl> entry : listenerRefs.entrySet()) {
+		while (!listenerRefs.isEmpty()) {
+			final ModelRecord entry = listenerRefs.iterator().next();
+			listenerRefs.remove(entry);
 			// Remove adapter to new input
-			entry.getKey().eAdapters().remove(entry.getValue());
+			entry.removeValidationListener(validationListener);
+			entry.removeDirtyListener(dirtyListener);
+			entry.removeLockListener(lockListener);
 		}
-
 	}
 
 	@Override
 	public void decorate(final Object element, final IDecoration decoration) {
 
-		if (element instanceof ScenarioInstance) {
+	if (element instanceof ScenarioInstance) {
 			final ScenarioInstance scenarioInstance = (ScenarioInstance) element;
-			if (scenarioInstance.getValidationStatusCode() == IStatus.ERROR) {
+			@NonNull
+			ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+			if (modelRecord.getValidationStatusSeverity() == IStatus.ERROR) {
 				decoration.addOverlay(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/overlays/error.gif"), IDecoration.BOTTOM_RIGHT);
-			} else if (scenarioInstance.getValidationStatusCode() == IStatus.WARNING) {
+			} else if (modelRecord.getValidationStatusSeverity() == IStatus.WARNING) {
 				decoration.addOverlay(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/overlays/warning.gif"), IDecoration.BOTTOM_RIGHT);
+			} else if (modelRecord.getValidationStatusSeverity() == IStatus.INFO) {
+				decoration.addOverlay(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/overlays/info.gif"), IDecoration.BOTTOM_RIGHT);
 			}
-			// else if (validationStatus.getSeverity() == IStatus.INFO) {
-			// images.add(getResourceLocator().getImage("overlays/info.gif"));
-			// }
-			if (!listenerRefs.containsKey(scenarioInstance)) {
-				addContentAdapter(scenarioInstance);
+
+			try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ValidatingDecorator")) {
+				if (ref != null && ref.isLocked()) {
+					decoration.addOverlay(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/overlays/lock_optimising.gif"), IDecoration.TOP_LEFT);
+				}
+			}
+
+			if (!listenerRefs.contains(modelRecord)) {
+				addContentAdapter(modelRecord);
 			}
 		}
 	}
 
-	private void addContentAdapter(final ScenarioInstance scenarioInstance) {
-		synchronized (listenerRefs) {
-			if (listenerRefs.containsKey(scenarioInstance)) {
-				return;
-			}
-			final AdapterImpl validationAdapter = new AdapterImpl() {
-				@Override
-				public void notifyChanged(Notification notification) {
-					super.notifyChanged(notification);
-					if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_ValidationStatusCode()) {
-						final LabelProviderChangedEvent event = new LabelProviderChangedEvent(ValidatingDecorator.this, scenarioInstance);
-						RunnerHelper.asyncExec(() -> fireLabelProviderChanged(event));
-					}
-				};
+	private void addContentAdapter(final ModelRecord modelRecord) {
 
-			};
+		// Add adapter to new input
+		modelRecord.addValidationListener(validationListener);
+		modelRecord.addDirtyListener(dirtyListener);
+		modelRecord.addLockListener(lockListener);
 
-			// Add adapter to new input
-			scenarioInstance.eAdapters().add(validationAdapter);
-
-			listenerRefs.put(scenarioInstance, validationAdapter);
-		}
+		listenerRefs.add(modelRecord);
 	}
 }

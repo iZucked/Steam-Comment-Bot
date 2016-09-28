@@ -7,6 +7,9 @@ package com.mmxlabs.scenario.service.ui.propertytesters;
 import org.eclipse.core.expressions.PropertyTester;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
 public class ScenarioInstanceFlagsPropertyTester extends PropertyTester {
 	@Override
@@ -16,11 +19,23 @@ public class ScenarioInstanceFlagsPropertyTester extends PropertyTester {
 			if (property.equals("readonly")) {
 				return scenarioInstance.isReadonly();
 			} else if (property.equals("dirty")) {
-				return scenarioInstance.isDirty();
+				final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+				try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ScenarioInstanceFlagsPropertyTester:1")) {
+					if (ref != null) {
+						return ref.isDirty();
+					}
+					return false;
+				}
 			} else if (property.equals("archived")) {
 				return scenarioInstance.isArchived();
 			} else if (property.equals("locked")) {
-				return scenarioInstance.isLocked();
+				final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+				try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ScenarioInstanceFlagsPropertyTester:2")) {
+					if (ref != null) {
+						return ref.isLocked();
+					}
+					return false;
+				}
 			} else if (property.equals("hidden")) {
 				return scenarioInstance.isHidden();
 			}

@@ -21,40 +21,48 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.function.Consumer;
 
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
+import org.eclipse.ui.progress.IProgressConstants2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.manifest.ManifestFactory;
+import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
+import com.mmxlabs.scenario.service.model.manager.InstanceData;
+import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 import com.mmxlabs.scenario.service.util.AbstractScenarioService;
 import com.mmxlabs.scenario.service.util.ResourceHelper;
@@ -127,8 +135,182 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	}
 
 	@Override
-	public ScenarioInstance insert(final Container container, final EObject rootObject) throws IOException {
-		throw new UnsupportedOperationException();
+	public ScenarioInstance insert(final Container destination, final EObject rootObject, @Nullable final Consumer<ScenarioInstance> customiser) throws IOException {
+		// log.debug("Duplicating " + original.getUuid() + " into " + destination);
+		final String uuid = EcoreUtil.generateUUID();
+		final StringBuilder sb = new StringBuilder();
+		{
+			Container c = destination;
+			while (c != null && !(c instanceof ScenarioService)) {
+				sb.insert(0, File.separator + c.getName());
+				c = c.getParent();
+			}
+
+		}
+
+		lock.readLock().lock();
+		try {
+
+			final ResourceSet instanceResourceSet = createResourceSet();
+			final File target = new File(dataPath.toString() + sb.toString() + File.separator + uuid + ".lingo");
+			if (target.exists()) {
+				final boolean[] response = new boolean[1];
+				final Display display = PlatformUI.getWorkbench().getDisplay();
+				display.syncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						response[0] = MessageDialog.openQuestion(display.getActiveShell(), "Target exists - overwrite?",
+								String.format("File \"%s\" already exists. Do you want to overwrite?", target.getAbsoluteFile()));
+
+					}
+				});
+				if (!response[0]) {
+					return null;
+				}
+			}
+
+			log.debug("Inserting scenario into " + destination);
+
+			// Create new model nodes
+			final ScenarioInstance newInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+			final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
+
+			// Create a new UUID
+			newInstance.setUuid(uuid);
+			newInstance.setMetadata(metadata);
+
+			final URI scenarioURI = URI.createFileURI(target.getAbsolutePath());
+
+			final URI destURI = URI.createURI("archive:" + scenarioURI.toString() + "!/rootObject.xmi");
+			assert destURI != null;
+
+			final Resource instanceResource = instanceResourceSet.createResource(destURI);
+			instanceResource.getContents().add(EcoreUtil.copy(rootObject));
+			ResourceHelper.saveResource(instanceResource);
+
+			if (customiser != null) {
+				customiser.accept(newInstance);
+			}
+
+			final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
+			manifest.setScenarioType(newInstance.getMetadata().getContentType());
+			manifest.setUUID(newInstance.getUuid());
+			manifest.setScenarioVersion(newInstance.getScenarioVersion());
+			manifest.setVersionContext(newInstance.getVersionContext());
+
+			manifest.setClientScenarioVersion(newInstance.getClientScenarioVersion());
+			manifest.setClientVersionContext(newInstance.getClientVersionContext());
+			// client version!
+
+			final URI manifestURI = URI.createURI("archive:" + scenarioURI.toString() + "!/MANIFEST.xmi");
+			final Resource manifestResource = instanceResourceSet.createResource(manifestURI);
+
+			manifestResource.getContents().add(manifest);
+
+			manifest.getModelURIs().add("rootObject.xmi");
+			manifestResource.save(null);
+			if (!uuid.equals(newInstance.getName())) {
+				final File newTarget = new File(dataPath.toString() + sb.toString() + File.separator + newInstance.getName() + ".lingo");
+				if (!newTarget.exists()) {
+					target.renameTo(newTarget);
+				}
+			}
+
+		} finally {
+			lock.readLock().unlock();
+			pokeWatchThread();
+		}
+		return null;
+
+	}
+
+	@Override
+	public ScenarioInstance insert(final Container destination, final URI sourceURI, @Nullable final Consumer<ScenarioInstance> customiser) throws IOException {
+		// log.debug("Duplicating " + original.getUuid() + " into " + destination);
+		final String uuid = EcoreUtil.generateUUID();
+		final StringBuilder sb = new StringBuilder();
+		{
+			Container c = destination;
+			while (c != null && !(c instanceof ScenarioService)) {
+				sb.insert(0, File.separator + c.getName());
+				c = c.getParent();
+			}
+
+		}
+
+		lock.readLock().lock();
+		try {
+
+			final ResourceSet instanceResourceSet = createResourceSet();
+			final File target = new File(dataPath.toString() + sb.toString() + File.separator + uuid + ".lingo");
+			if (target.exists()) {
+				final boolean[] response = new boolean[1];
+				final Display display = PlatformUI.getWorkbench().getDisplay();
+				display.syncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						response[0] = MessageDialog.openQuestion(display.getActiveShell(), "Target exists - overwrite?",
+								String.format("File \"%s\" already exists. Do you want to overwrite?", target.getAbsoluteFile()));
+
+					}
+				});
+				if (!response[0]) {
+					return null;
+				}
+			}
+
+			log.debug("Inserting scenario into " + destination);
+
+			// Create new model nodes
+			final ScenarioInstance newInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+			final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
+
+			// Create a new UUID
+			newInstance.setUuid(uuid);
+			newInstance.setMetadata(metadata);
+
+			final URI scenarioURI = URI.createFileURI(target.getAbsolutePath());
+
+			final URI destURI = URI.createURI("archive:" + scenarioURI.toString() + "!/rootObject.xmi");
+			assert destURI != null;
+
+			ScenarioServiceUtils.copyURIData(instanceResourceSet.getURIConverter(), sourceURI, destURI);
+
+			if (customiser != null) {
+				customiser.accept(newInstance);
+			}
+
+			final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
+			manifest.setScenarioType(newInstance.getMetadata().getContentType());
+			manifest.setUUID(newInstance.getUuid());
+			manifest.setScenarioVersion(newInstance.getScenarioVersion());
+			manifest.setVersionContext(newInstance.getVersionContext());
+
+			manifest.setClientScenarioVersion(newInstance.getClientScenarioVersion());
+			manifest.setClientVersionContext(newInstance.getClientVersionContext());
+			// client version!
+
+			final URI manifestURI = URI.createURI("archive:" + scenarioURI.toString() + "!/MANIFEST.xmi");
+			final Resource manifestResource = instanceResourceSet.createResource(manifestURI);
+
+			manifestResource.getContents().add(manifest);
+
+			manifest.getModelURIs().add("rootObject.xmi");
+			manifestResource.save(null);
+			if (!uuid.equals(newInstance.getName())) {
+				final File newTarget = new File(dataPath.toString() + sb.toString() + File.separator + newInstance.getName() + ".lingo");
+				if (!newTarget.exists()) {
+					target.renameTo(newTarget);
+				}
+			}
+
+		} finally {
+			lock.readLock().unlock();
+			pokeWatchThread();
+		}
+		return null;
 
 	}
 
@@ -178,6 +360,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		serviceModel.setName(serviceName);
 		serviceModel.setDescription("Shared folder scenario service");
 		serviceModel.setLocal(false);
+		serviceModel.setServiceID(getSerivceID());
 		serviceModel.eAdapters().add(serviceModelAdapter);
 
 		return serviceModel;
@@ -218,31 +401,53 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 		// Convert to absolute path
 		dataPath = new File(path).getAbsoluteFile();
+		watchThreadRunning = true;
 
 		if (dataPath.exists()) {
 			lock.writeLock().lock();
 
 			try {
-				try {
-					scanDirectory(getServiceModel(), dataPath.toPath());
-				} catch (final Exception e) {
-					log.error(e.getMessage(), e);
-				}
+				// Perform initial scan in workspace job so we can at least see a progress bar somewhere
+				final WorkspaceJob job = new WorkspaceJob("Initial scan") {
+
+					@Override
+					public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
+						// Perform initial scan
+						try {
+							scanDirectory(getServiceModel(), dataPath.toPath(), monitor);
+						} catch (final Exception e) {
+							log.error(e.getMessage(), e);
+						}
+						watchThread.start();
+
+						// Initial model load
+						new Thread(() -> {
+							getServiceModel();
+							setReady();
+						}).start();
+						return Status.OK_STATUS;
+					}
+				};
+				// Mark as system so it stays in the background
+				job.setSystem(true);
+				// Show progress in UI (maybe)
+				job.setProperty(IProgressConstants2.SHOW_IN_TASKBAR_ICON_PROPERTY, Boolean.TRUE);
+				job.schedule();
 			} finally {
 				lock.writeLock().unlock();
 				pokeWatchThread();
 			}
 		}
 
-		watchThreadRunning = true;
 		watchThread = new Thread("DirScan Watcher") {
+
 			@Override
 			public void run() {
 
 				while (watchThreadRunning) {
 					lock.writeLock().lock();
 					try {
-						scanDirectory(getServiceModel(), dataPath.toPath());
+						scanDirectory(getServiceModel(), dataPath.toPath(), new NullProgressMonitor());
 					} catch (final Exception e) {
 						log.error(e.getMessage(), e);
 					} finally {
@@ -255,8 +460,9 @@ public class DirScanScenarioService extends AbstractScenarioService {
 					}
 				}
 			};
+
 		};
-		watchThread.start();
+
 	}
 
 	private void pokeWatchThread() {
@@ -278,62 +484,76 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 	}
 
-	private void scanDirectory(final Container root, final Path dataPath) throws IOException {
+	private void scanDirectory(final Container root, final Path dataPath, final IProgressMonitor monitor) throws IOException {
 
-		final Set<String> newFolders = new HashSet<>();
-		final Set<String> newFiles = new HashSet<>();
+		monitor.beginTask("Scanning dir " + dataPath, IProgressMonitor.UNKNOWN);
+		try {
+			final Set<String> newFolders = new HashSet<>();
+			final Set<String> newFiles = new HashSet<>();
 
-		if (Files.exists(dataPath)) {
-			// register directory and sub-directories
-			Files.walkFileTree(dataPath, new SimpleFileVisitor<Path>() {
-				@Override
-				public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
-					log.debug("preVisitDirectory: " + dir.normalize());
-					addFolder(dir);
-					newFolders.add(dir.normalize().toString());
-					return FileVisitResult.CONTINUE;
-				}
-
-				@Override
-				public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-					log.debug("visitFile: " + file.normalize());
-					try {
-						addFile(file);
-						newFiles.add(file.normalize().toString());
-					} catch (final Exception e) {
-						log.debug(e.getMessage(), e);
+			if (Files.exists(dataPath)) {
+				// register directory and sub-directories
+				Files.walkFileTree(dataPath, new SimpleFileVisitor<Path>() {
+					@Override
+					public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
+						if (!watchThreadRunning) {
+							return FileVisitResult.TERMINATE;
+						}
+						log.debug("preVisitDirectory: " + dir.normalize());
+						monitor.subTask("Scanning " + dir.normalize());
+						addFolder(dir);
+						newFolders.add(dir.normalize().toString());
+						monitor.worked(1);
+						return FileVisitResult.CONTINUE;
 					}
-					return super.visitFile(file, attrs);
-				}
-			});
-		}
-		{
-			final Set<String> currentFiles = new HashSet<>(scenarioMap.keySet());
-			currentFiles.removeAll(newFiles);
-			for (final String file : currentFiles) {
-				final WeakReference<ScenarioInstance> ref = scenarioMap.remove(file);
-				if (ref != null) {
-					final ScenarioInstance scenarioInstance = ref.get();
-					if (scenarioInstance != null) {
-						removeFile(scenarioInstance);
+
+					@Override
+					public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+						if (!watchThreadRunning) {
+							return FileVisitResult.TERMINATE;
+						}
+						monitor.subTask("Scanning " + file.normalize());
+						log.debug("visitFile: " + file.normalize());
+						try {
+							addFile(file);
+							newFiles.add(file.normalize().toString());
+						} catch (final Exception e) {
+							log.debug(e.getMessage(), e);
+						}
+						monitor.worked(1);
+						return super.visitFile(file, attrs);
+					}
+				});
+			}
+			{
+				final Set<String> currentFiles = new HashSet<>(scenarioMap.keySet());
+				currentFiles.removeAll(newFiles);
+				for (final String file : currentFiles) {
+					final WeakReference<ScenarioInstance> ref = scenarioMap.remove(file);
+					if (ref != null) {
+						final ScenarioInstance scenarioInstance = ref.get();
+						if (scenarioInstance != null) {
+							removeFile(scenarioInstance);
+						}
 					}
 				}
 			}
-		}
-		{
-			final Set<String> currentFolders = new HashSet<>(folderMap.keySet());
-			currentFolders.removeAll(newFolders);
-			for (final String file : currentFolders) {
-				final WeakReference<Container> ref = folderMap.remove(file);
-				if (ref != null) {
-					final Container container = ref.get();
-					if (container != null) {
-						removeFolder(container);
+			{
+				final Set<String> currentFolders = new HashSet<>(folderMap.keySet());
+				currentFolders.removeAll(newFolders);
+				for (final String file : currentFolders) {
+					final WeakReference<Container> ref = folderMap.remove(file);
+					if (ref != null) {
+						final Container container = ref.get();
+						if (container != null) {
+							removeFolder(container);
+						}
 					}
 				}
 			}
+		} finally {
+			monitor.done();
 		}
-
 	}
 
 	protected void removeFolder(final Path dir) {
@@ -397,7 +617,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		log.debug("addFile: " + file.normalize());
 
 		// Filter based on file extension
-		if (!(file.toString().endsWith(".lingo") || file.toString().endsWith(".scenario"))) {
+		if (!(file.toString().endsWith(".lingo"))) {
 			return;
 		}
 
@@ -494,85 +714,6 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				}
 			});
 		}
-	}
-
-	@Override
-	public ScenarioInstance duplicate(final ScenarioInstance original, final Container destination) throws IOException {
-		log.debug("Duplicating " + original.getUuid() + " into " + destination);
-		final IScenarioService originalService = original.getScenarioService();
-
-		final StringBuilder sb = new StringBuilder();
-		{
-			Container c = destination;
-			while (c != null && !(c instanceof ScenarioService)) {
-				sb.insert(0, File.separator + c.getName());
-				c = c.getParent();
-			}
-
-		}
-
-		lock.readLock().lock();
-		try {
-
-			final ResourceSet instanceResourceSet = createResourceSet();
-			final File target = new File(dataPath.toString() + sb.toString() + File.separator + original.getName() + ".lingo");
-			if (target.exists()) {
-				final boolean[] response = new boolean[1];
-				final Display display = PlatformUI.getWorkbench().getDisplay();
-				display.syncExec(new Runnable() {
-
-					@Override
-					public void run() {
-						response[0] = MessageDialog.openQuestion(display.getActiveShell(), "Target exists - overwrite?",
-								String.format("File \"%s\" already exists. Do you want to overwrite?", target.getAbsoluteFile()));
-
-					}
-				});
-				if (!response[0]) {
-					return null;
-				}
-			}
-			final URI scenarioURI = URI.createFileURI(target.getAbsolutePath());
-
-			final URI destURI = URI.createURI("archive:" + scenarioURI.toString() + "!/rootObject.xmi");
-			assert destURI != null;
-			if (original.getInstance() == null) {
-				// Not loaded, copy raw data
-				final ExtensibleURIConverterImpl uc = new ExtensibleURIConverterImpl();
-				final String rootObjectURI = original.getRootObjectURI();
-				assert rootObjectURI != null;
-				final URI sourceURI = originalService.resolveURI(rootObjectURI);
-				copyURIData(uc, sourceURI, destURI);
-			} else {
-				// Already loaded? Just use the same instance.
-				final EObject rootObject = EcoreUtil.copy(original.getInstance());
-				final Resource instanceResource = instanceResourceSet.createResource(destURI);
-				instanceResource.getContents().add(rootObject);
-				ResourceHelper.saveResource(instanceResource);
-			}
-
-			final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
-			manifest.setScenarioType(original.getMetadata().getContentType());
-			manifest.setUUID(original.getUuid());
-			manifest.setScenarioVersion(original.getScenarioVersion());
-			manifest.setVersionContext(original.getVersionContext());
-
-			manifest.setClientScenarioVersion(original.getClientScenarioVersion());
-			manifest.setClientVersionContext(original.getClientVersionContext());
-			// client version!
-
-			final URI manifestURI = URI.createURI("archive:" + scenarioURI.toString() + "!/MANIFEST.xmi");
-			final Resource manifestResource = instanceResourceSet.createResource(manifestURI);
-
-			manifestResource.getContents().add(manifest);
-
-			manifest.getModelURIs().add("rootObject.xmi");
-			manifestResource.save(null);
-		} finally {
-			lock.readLock().unlock();
-			pokeWatchThread();
-		}
-		return null;
 	}
 
 	@Override
@@ -687,46 +828,29 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	}
 
 	@Override
-	public EObject load(final ScenarioInstance instance) throws IOException {
+	public InstanceData load(final @NonNull ScenarioInstance instance, @NonNull IProgressMonitor monitor) throws Exception {
 
 		// Make read-only...
-		instance.setReadonly(true);
+		execute(instance, i -> i.setReadonly(true));
+		try {
+			final InstanceData data = ScenarioStorageUtil.loadLocal(instance);
 
-		if (instance.getInstance() == null) {
-
-			try {
-				final EObject eObj = super.load(instance);
-
-				if (eObj != null) {
-					// Forces editor lock to disallow users from editing the scenario.
-					// TODO: This is not a very clean way to do it!
-					final ScenarioLock lock = instance.getLock(ScenarioLock.EDITORS);
-					lock.claim();
+			// Mark resources as read-only
+			final EditingDomain domain = data.getEditingDomain();
+			if (domain instanceof AdapterFactoryEditingDomain) {
+				final AdapterFactoryEditingDomain adapterFactoryEditingDomain = (AdapterFactoryEditingDomain) domain;
+				Map<Resource, Boolean> resourceToReadOnlyMap = adapterFactoryEditingDomain.getResourceToReadOnlyMap();
+				if (resourceToReadOnlyMap == null) {
+					resourceToReadOnlyMap = new HashMap<>();
+					adapterFactoryEditingDomain.setResourceToReadOnlyMap(resourceToReadOnlyMap);
 				}
-
-				// TODO: This should be linked to a listener...
-				{
-					// Mark resources as read-only
-					final EditingDomain domain = (EditingDomain) instance.getAdapters().get(EditingDomain.class);
-					if (domain instanceof AdapterFactoryEditingDomain) {
-						final AdapterFactoryEditingDomain adapterFactoryEditingDomain = (AdapterFactoryEditingDomain) domain;
-						Map<Resource, Boolean> resourceToReadOnlyMap = adapterFactoryEditingDomain.getResourceToReadOnlyMap();
-						if (resourceToReadOnlyMap == null) {
-							resourceToReadOnlyMap = new HashMap<>();
-							adapterFactoryEditingDomain.setResourceToReadOnlyMap(resourceToReadOnlyMap);
-						}
-						for (final Resource r : domain.getResourceSet().getResources()) {
-							resourceToReadOnlyMap.put(r, Boolean.TRUE);
-						}
-					}
+				for (final Resource r : data.getEditingDomain().getResourceSet().getResources()) {
+					resourceToReadOnlyMap.put(r, instance.isReadonly());
 				}
-
-				return eObj;
-			} catch (final Exception e) {
-				throw new DirScanException(getName(), e);
 			}
-		} else {
-			return instance.getInstance();
+			return data;
+		} catch (Exception e) {
+			throw new DirScanException(getName(), e);
 		}
 	}
 
@@ -758,17 +882,8 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		}
 	}
 
-	/**
-	 * Override the normal method as we register the {@link DirScanScenarioService} is a different way. Thus we can avoid keeping a service tracker active.
-	 */
 	@Override
-	public IScenarioCipherProvider getScenarioCipherProvider() {
-		final BundleContext bundleContext = FrameworkUtil.getBundle(DirScanScenarioService.class).getBundleContext();
-		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
-		if (serviceReference != null) {
-			return bundleContext.getService(serviceReference);
-		}
-		return null;
+	public String getSerivceID() {
+		return "dir-scan";
 	}
-
 }

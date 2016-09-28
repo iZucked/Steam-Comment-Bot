@@ -51,6 +51,7 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider {
 			addSupportsImportPropertyDescriptor(object);
 			addScenarioModelPropertyDescriptor(object);
 			addLocalPropertyDescriptor(object);
+			addServiceIDPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -128,6 +129,18 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider {
 	}
 
 	/**
+	 * This adds a property descriptor for the Service ID feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addServiceIDPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioService_serviceID_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioService_serviceID_feature", "_UI_ScenarioService_type"),
+				ScenarioServicePackage.eINSTANCE.getScenarioService_ServiceID(), true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+	}
+
+	/**
 	 * This returns ScenarioService.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -167,6 +180,7 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider {
 		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_FORKING:
 		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_IMPORT:
 		case ScenarioServicePackage.SCENARIO_SERVICE__LOCAL:
+		case ScenarioServicePackage.SCENARIO_SERVICE__SERVICE_ID:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		}
