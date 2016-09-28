@@ -42,6 +42,10 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Widget;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.ui.tabular.renderers.AlternatingRowCellRenderer;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
+import com.mmxlabs.models.ui.tabular.renderers.RowHeaderRenderer;
+import com.mmxlabs.models.ui.tabular.renderers.TopLeftRenderer;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
@@ -189,6 +193,8 @@ public class EObjectTableViewer extends GridTreeViewer {
 		this.validationSupport = createValidationSupport();
 		this.filterSupport = new EObjectTableViewerFilterSupport(this, this.getGrid());
 		ColumnViewerToolTipSupport.enableFor(this);
+		getGrid().setRowHeaderRenderer(new RowHeaderRenderer());
+		getGrid().setTopLeftRenderer(new TopLeftRenderer());
 	}
 
 	/**
@@ -215,6 +221,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 
 		final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
 		final GridColumn tColumn = column.getColumn();
+		tColumn.setHeaderRenderer(new ColumnHeaderRenderer());
 
 		{
 			final Pair<EMFPath, ICellRenderer> pathAndRenderer = new Pair<EMFPath, ICellRenderer>(path, renderer);
@@ -301,6 +308,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 
 		final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
 		final GridColumn tColumn = column.getColumn();
+		tColumn.setHeaderRenderer(new ColumnHeaderRenderer());
 
 		tColumn.setMoveable(true);
 		tColumn.setText(columnName);

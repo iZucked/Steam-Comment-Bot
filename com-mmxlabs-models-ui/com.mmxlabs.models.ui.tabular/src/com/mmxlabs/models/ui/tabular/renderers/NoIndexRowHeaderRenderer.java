@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
-package com.mmxlabs.models.ui.tabular;
+package com.mmxlabs.models.ui.tabular.renderers;
 
 import org.eclipse.nebula.widgets.grid.AbstractRenderer;
 import org.eclipse.nebula.widgets.grid.GridItem;
@@ -12,6 +12,10 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.TextLayout;
+
+import com.mmxlabs.models.ui.tabular.TableColourPalette;
+import com.mmxlabs.models.ui.tabular.TableColourPalette.ColourElements;
+import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
 
 /**
  * The row header renderer.
@@ -43,7 +47,7 @@ public class NoIndexRowHeaderRenderer extends AbstractRenderer {
 
 		Color background = getHeaderBackground(item);
 		if (background == null) {
-			background = getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND);
+			background = TableColourPalette.getInstance().getColourFor(TableItems.RowHeader, ColourElements.Background);
 		}
 		gc.setBackground(background);
 
@@ -105,7 +109,7 @@ public class NoIndexRowHeaderRenderer extends AbstractRenderer {
 
 		Color foreground = getHeaderForeground(item);
 		if (foreground == null) {
-			foreground = getDisplay().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND);
+			foreground = TableColourPalette.getInstance().getColourFor(TableItems.RowHeader, ColourElements.Foreground);
 		}
 
 		gc.setForeground(foreground);

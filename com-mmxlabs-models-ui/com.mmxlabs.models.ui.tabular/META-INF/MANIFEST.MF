@@ -29,5 +29,6 @@ Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.ui.tabular,
  com.mmxlabs.models.ui.tabular.filter,
  com.mmxlabs.models.ui.tabular.generic,
- com.mmxlabs.models.ui.tabular.manipulators
+ com.mmxlabs.models.ui.tabular.manipulators,
+ com.mmxlabs.models.ui.tabular.renderers
 Import-Package: com.google.common.base

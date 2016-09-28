@@ -29,6 +29,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.PropertySheet;
 
+import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
@@ -74,6 +75,7 @@ public abstract class DetailPropertiesView extends ViewPart {
 		// Create columns
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("Attribute");
 			gvc.getColumn().setTree(true);
 			gvc.getColumn().setWidth(100);
@@ -82,6 +84,7 @@ public abstract class DetailPropertiesView extends ViewPart {
 		}
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("Value");
 			gvc.getColumn().setWidth(100);
 
@@ -89,6 +92,7 @@ public abstract class DetailPropertiesView extends ViewPart {
 		}
 		if (showUnitsInColumn) {
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("Units");
 			gvc.getColumn().setWidth(50);
 			gvc.setLabelProvider(createLabelProvider(DetailPropertyColumnType.UNIT, gvc));
