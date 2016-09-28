@@ -110,6 +110,9 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.ui.tabular.TableColourPalette;
+import com.mmxlabs.models.ui.tabular.TableColourPalette.ColourElements;
+import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -433,11 +436,11 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			}
 
 			private Color getHeaderColour() {
-				return ColorCache.getColor(230, 239, 249);
+				return TableColourPalette.getInstance().getColourFor(TableItems.ColumnHeaders, ColourElements.Background);
 			}
 
 			private Color getDividerColour() {
-				return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
+				return TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Background);
 			}
 
 		};
