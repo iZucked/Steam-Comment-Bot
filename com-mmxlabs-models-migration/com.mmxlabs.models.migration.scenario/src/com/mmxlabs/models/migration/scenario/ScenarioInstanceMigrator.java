@@ -51,13 +51,13 @@ public class ScenarioInstanceMigrator {
 		this.scenarioCipherProvider = scenarioCipherProvider;
 	}
 
-	public void performMigration(@NonNull final IScenarioService scenarioService, @NonNull final ScenarioInstance scenarioInstance, IProgressMonitor monitor) throws Exception {
+	public void performMigration(@Nullable final IScenarioService scenarioService, @NonNull final ScenarioInstance scenarioInstance, IProgressMonitor monitor) throws Exception {
 		// Check inputs
 		final String scenarioContext = scenarioInstance.getVersionContext();
 		final String clientContext = scenarioInstance.getClientVersionContext();
 
 		checkArgument(scenarioContext != null, "Scenario has no version context. Unable to migrate");
-		checkArgument(scenarioInstance.getInstance() == null, "Scenario already loaded. Unable to migrate");
+//		checkArgument(scenarioInstance.getInstance() == null, "Scenario already loaded. Unable to migrate");
 
 		assert scenarioContext != null;
 
@@ -72,7 +72,7 @@ public class ScenarioInstanceMigrator {
 		final ExtensibleURIConverterImpl uc = new ExtensibleURIConverterImpl();
 
 		// Get original URI's as a list
-		final URI originalURI = scenarioService.resolveURI(subModelURI);
+		final URI originalURI = scenarioService == null ? URI.createURI(subModelURI) : scenarioService.resolveURI(subModelURI);
 
 		final List<File> tmpFiles = new ArrayList<File>();
 		monitor.beginTask("Migrate scenario", 100);

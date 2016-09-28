@@ -75,6 +75,29 @@ public class MetamodelLoader {
 		}
 	}
 
+	public MetamodelLoader(final @NonNull ResourceSet resourceSet) {
+		ecoreResourceFactory = new XMIResourceFactoryImpl();
+		factoryRegistry = new ResourceFactoryRegistryImpl();
+
+		factoryRegistry.getExtensionToFactoryMap().put("ecore", ecoreResourceFactory);
+		factoryRegistry.getExtensionToFactoryMap().put("*", new EncryptingXMIResourceFactory(getScenarioCipherProvider().getSharedCipher()));
+
+		// Create empty package registry to manipulate and register default ecore package
+		this.resourceSet = resourceSet;
+		final EPackage.Registry packageRegistry = resourceSet.getPackageRegistry();
+		packageRegistry.put("http://www.eclipse.org/emf/2002/Ecore", EcorePackage.eINSTANCE);
+		resourceSet.setPackageRegistry(packageRegistry);
+
+		// resourceSet.setResourceFactoryRegistry(factoryRegistry);
+
+		// Set Default Load Options
+		{
+			resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
+			resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl(true));
+			resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, new HashMap<Object, Object>());
+		}
+	}
+
 	/**
 	 * Load an EPackage from the given location and register it under it's nsURI in the package registry
 	 * 
@@ -92,6 +115,18 @@ public class MetamodelLoader {
 			throw new RuntimeException("Unable to load package");
 		}
 
+		installDateFactory(ePackage);
+
+		// Register the package
+		resourceSet.getPackageRegistry().put(ePackage.getNsURI(), ePackage);
+
+		// Map this package name space to the underlying location
+		resourceSet.getURIConverter().getURIMap().put(URI.createURI(ePackage.getNsURI()), location);
+
+		return ePackage;
+	}
+
+	public static void installDateFactory(final EPackage ePackage) {
 		// Override the default EFactory to return one which creates our DynamicEObjectWrapperImpl instances.
 		ePackage.setEFactoryInstance(new EFactoryImpl() {
 			@Override
@@ -137,14 +172,6 @@ public class MetamodelLoader {
 			}
 
 		});
-
-		// Register the package
-		resourceSet.getPackageRegistry().put(ePackage.getNsURI(), ePackage);
-
-		// Map this package name space to the underlying location
-		resourceSet.getURIConverter().getURIMap().put(URI.createURI(ePackage.getNsURI()), location);
-
-		return ePackage;
 	}
 
 	public EPackage getPackageByNSURI(final String nsURI) {

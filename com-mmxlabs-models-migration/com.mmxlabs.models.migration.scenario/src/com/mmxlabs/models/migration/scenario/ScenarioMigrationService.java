@@ -6,7 +6,9 @@ package com.mmxlabs.models.migration.scenario;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.scenario.service.IScenarioMigrationService;
@@ -21,8 +23,9 @@ public class ScenarioMigrationService implements IScenarioMigrationService {
 	private IMigrationRegistry migrationRegistry;
 	private IScenarioCipherProvider scenarioCipherProvider;
 
+	
 	@Override
-	public void migrateScenario(@NonNull final IScenarioService scenarioService, @NonNull final ScenarioInstance scenarioInstance, final @NonNull IProgressMonitor monitor) throws Exception {
+	public void migrateScenario(@Nullable final IScenarioService scenarioService, @NonNull final ScenarioInstance scenarioInstance, final @NonNull IProgressMonitor monitor) throws Exception {
 		monitor.beginTask("Migrate Scenario", 100);
 		try {
 			{
@@ -78,5 +81,29 @@ public class ScenarioMigrationService implements IScenarioMigrationService {
 
 	public void setScenarioCipherProvider(final IScenarioCipherProvider scenarioCipherProvider) {
 		this.scenarioCipherProvider = scenarioCipherProvider;
+	}
+
+	@Override
+	public String getScenarioContext() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getScenarioVersion() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public String getClientScenarioContext() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getClientScenarioVersion() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
