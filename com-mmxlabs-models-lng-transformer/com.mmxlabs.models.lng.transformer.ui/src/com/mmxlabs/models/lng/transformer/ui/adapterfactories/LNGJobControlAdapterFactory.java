@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.adapterfactories;
 
-import java.io.IOException;
-
 import org.eclipse.core.runtime.IAdapterFactory;
 
 import com.mmxlabs.jobmanager.jobs.IJobControl;
@@ -40,7 +38,7 @@ public class LNGJobControlAdapterFactory implements IAdapterFactory {
 				try {
 					// return new LNGSchedulerRunAllSimilarityJobControl(descriptor);
 					return (T) new LNGSchedulerManyJobsControl(descriptor);
-				} catch (final IOException e) {
+				} catch (final Exception e) {
 					throw new RuntimeException(e);
 				}
 			}
@@ -51,7 +49,7 @@ public class LNGJobControlAdapterFactory implements IAdapterFactory {
 				try {
 					// return new LNGSchedulerRunAllSimilarityJobControl(descriptor);
 					return (T) new LNGSchedulerRunMultipleSeedsJobControl(descriptor);
-				} catch (final IOException e) {
+				} catch (final Exception e) {
 					throw new RuntimeException(e);
 				}
 			}

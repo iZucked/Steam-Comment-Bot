@@ -37,7 +37,7 @@ public class ForkScenarioEditorActionDelegate implements IEditorActionDelegate, 
 				if (instance != null) {
 					try {
 						ScenarioServiceModelUtils.createAndOpenFork(instance, false);
-					} catch (final IOException e) {
+					} catch (final Exception e) {
 						throw new RuntimeException("Unable to fork scenario", e);
 					}
 				}

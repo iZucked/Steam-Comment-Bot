@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.ui.actionablesets;
 
 import java.util.Collections;
+import java.util.concurrent.CountDownLatch;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -48,9 +49,11 @@ import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
 import com.mmxlabs.models.util.StringEscaper;
 import com.mmxlabs.rcp.common.ServiceHelper;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 public class CreateActionableSetPlanContextMenuExtension implements ITradesTableContextMenuExtension {
 	public static final String ChangeSetViewCreatorService_Topic = "create-change-set-view";
@@ -91,8 +94,10 @@ public class CreateActionableSetPlanContextMenuExtension implements ITradesTable
 
 			final ScenarioInstance instance = scenarioEditingLocation.getScenarioInstance();
 			// While we only keep the reference for the duration of this method call, the two current concrete implementations of IJobControl will obtain a ModelReference
-			try (final ModelReference modelRefence = instance.getReference("ActionPlanContextMenuExtension")) {
-				final EObject object = modelRefence.getInstance();
+			@NonNull
+			final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+			try (final ModelReference modelReference = modelRecord.aquireReference("ActionPlanContextMenuExtension")) {
+				final EObject object = modelReference.getInstance();
 
 				if (object instanceof LNGScenarioModel) {
 					final LNGScenarioModel root = (LNGScenarioModel) object;
@@ -105,99 +110,95 @@ public class CreateActionableSetPlanContextMenuExtension implements ITradesTable
 							return;
 						}
 					}
-					UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
-					userSettings = OptimisationHelper.promptForUserSettings(root, false, true, false);
+					final UserSettings userSettings = OptimisationHelper.promptForUserSettings(root, false, true, false);
+					new Thread("CreateActionableSetThread") {
+						@Override
+						public void run() {
+							final ScenarioLock scenarioLock = modelReference.getLock();
 
-					final ScenarioLock scenarioLock = instance.getLock(ScenarioLock.OPTIMISER);
-					if (scenarioLock.awaitClaim()) {
-						IJobControl control = null;
-						IJobDescriptor job = null;
-						try {
-							// create a new job
-							job = new CreateActionableSetPlanJobDescriptor(instance.getName(), instance, userSettings);
+							scenarioLock.lock();
+							// Use a latch to trigger unlock in this thread
+							final CountDownLatch latch = new CountDownLatch(1);
 
-							// New optimisation, so check there are no validation errors.
-							if (!validateScenario(root, false)) {
-								scenarioLock.release();
-								return;
-							}
+							IJobControl control = null;
+							IJobDescriptor job = null;
+							try {
+								// create a new job
+								job = new CreateActionableSetPlanJobDescriptor(instance.getName(), instance, userSettings);
 
-							// Automatically clean up job when removed from manager
-							jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
-							control = jobManager.submitJob(job, uuid);
-							// Add listener to clean up job when it finishes or has an exception.
-							final IJobDescriptor finalJob = job;
-							control.addListener(new IJobControlListener() {
+								// New optimisation, so check there are no validation errors.
+								if (!validateScenario(root, false)) {
+									scenarioLock.unlock();
+									return;
+								}
 
-								@Override
-								public boolean jobStateChanged(final IJobControl jobControl, final EJobState oldState, final EJobState newState) {
+								// Automatically clean up job when removed from manager
+								jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
+								control = jobManager.submitJob(job, uuid);
+								// Add listener to clean up job when it finishes or has an exception.
+								final IJobDescriptor finalJob = job;
+								control.addListener(new IJobControlListener() {
 
-									if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
-										scenarioLock.release();
-										jobManager.removeJob(finalJob);
+									@Override
+									public boolean jobStateChanged(final IJobControl jobControl, final EJobState oldState, final EJobState newState) {
 
-										if (newState == EJobState.COMPLETED) {
-											final ActionableSetPlan plan = (ActionableSetPlan) jobControl.getJobOutput();
-											if (plan != null) {
+										if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
+											latch.countDown();
+											jobManager.removeJob(finalJob);
 
-												final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-												AnalyticsSolution data = new AnalyticsSolution(instance, plan, "My Action Set");
-												data.setCreateDiffToBaseAction(true);
-												eventBroker.post(ChangeSetViewCreatorService_Topic, data);
+											if (newState == EJobState.COMPLETED) {
+												final ActionableSetPlan plan = (ActionableSetPlan) jobControl.getJobOutput();
+												if (plan != null) {
+
+													final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+													final AnalyticsSolution data = new AnalyticsSolution(instance, plan, "My Action Set");
+													data.setCreateDiffToBaseAction(true);
+													eventBroker.post(ChangeSetViewCreatorService_Topic, data);
+												}
 											}
+
+											return false;
 										}
-
-										return false;
+										return true;
 									}
-									return true;
-								}
 
-								@Override
-								public boolean jobProgressUpdated(final IJobControl jobControl, final int progressDelta) {
-									return true;
-								}
-							});
-							// Start the job!
-							control.prepare();
-							control.start();
-						} catch (
-
-						final Throwable ex) {
-							log.error(ex.getMessage(), ex);
-							if (control != null) {
-								control.cancel();
-							}
-							// Manual clean up incase the control listener doesn't fire
-							if (job != null) {
-								jobManager.removeJob(job);
-							}
-							// instance.setLocked(false);
-							scenarioLock.release();
-
-							final Display display = Display.getDefault();
-							if (display != null) {
-								display.asyncExec(() -> {
-									final String message = StringEscaper.escapeUIString(ex.getMessage());
-									MessageDialog.openError(display.getActiveShell(), "Error generating action plan", "An error occured. See Error Log for more details.\n" + message);
+									@Override
+									public boolean jobProgressUpdated(final IJobControl jobControl, final int progressDelta) {
+										return true;
+									}
 								});
+								// Start the job!
+								control.prepare();
+								control.start();
+
+								latch.await();
+								scenarioLock.unlock();
+
+							} catch (final Throwable ex) {
+								log.error(ex.getMessage(), ex);
+								if (control != null) {
+									control.cancel();
+								}
+								// Manual clean up incase the control listener doesn't fire
+								if (job != null) {
+									jobManager.removeJob(job);
+								}
+								// instance.setLocked(false);
+								scenarioLock.unlock();
+
+								final Display display = Display.getDefault();
+								if (display != null) {
+									display.asyncExec(() -> {
+										final String message = StringEscaper.escapeUIString(ex.getMessage());
+										MessageDialog.openError(display.getActiveShell(), "Error generating action plan", "An error occured. See Error Log for more details.\n" + message);
+									});
+								}
 							}
 						}
-					}
+					}.start();
 				}
 			}
-
-			// final DetailCompositeDialog dcd = new DetailCompositeDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation.getDefaultCommandHandler());
-			// final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
-			// try {
-			// editorLock.claim();
-			// scenarioEditingLocation.setDisableUpdates(true);
-			// dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), Collections.<EObject> singletonList(redirectionSlotHistory), scenarioEditingLocation.isLocked());
-			// } finally {
-			// scenarioEditingLocation.setDisableUpdates(false);
-			// editorLock.release();
-			// }
 		}
-
 	}
 
 	public static boolean validateScenario(final MMXRootObject root, final boolean optimising) {

@@ -46,7 +46,9 @@ import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
@@ -131,15 +133,16 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 	public static IChainLink export(final ChainBuilder chainBuilder, final int progressTicks, @NonNull final LNGScenarioToOptimiserBridge runner, @NonNull final ContainerProvider containerProvider) {
 		return LNGExporterUnit.exportMultiple(chainBuilder, progressTicks, runner, containerProvider, "Saving action plan", parent -> {
-
 			final List<Container> elementsToRemove = new LinkedList<>();
 			for (final Container c : parent.getElements()) {
 				if (c.getName().startsWith("ActionSet-")) {
 					elementsToRemove.add(c);
 				}
 			}
+			final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(parent);
 			for (final Container c : elementsToRemove) {
-				parent.getScenarioService().delete(c);
+				scenarioService.delete(c);
+
 			}
 		}, changeSetIdx -> {
 			String newName;
@@ -233,6 +236,8 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 	@Override
 	public IMultiStateResult run(@NonNull final IProgressMonitor monitor) {
+		
+
 		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 			scope.enter();
 			monitor.beginTask("", 100);

@@ -18,7 +18,7 @@ import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 
 /**
@@ -61,9 +61,9 @@ public class ForkAndStartOptimisationHandler extends StartOptimisationHandler {
 							try {
 								ScenarioInstance fork = ScenarioServiceModelUtils.createAndOpenFork(instance, true);
 								if (fork != null) {
-									OptimisationHelper.evaluateScenarioInstance(jobManager, fork, null, /* prompt if optimising */optimising, optimising, ScenarioLock.OPTIMISER, !optimising);
+									OptimisationHelper.evaluateScenarioInstance(jobManager, fork, null, /* prompt if optimising */optimising, optimising, !optimising);
 								}
-							} catch (final IOException e) {
+							} catch (final Exception e) {
 								exceptions[0] = e;
 							}
 						}

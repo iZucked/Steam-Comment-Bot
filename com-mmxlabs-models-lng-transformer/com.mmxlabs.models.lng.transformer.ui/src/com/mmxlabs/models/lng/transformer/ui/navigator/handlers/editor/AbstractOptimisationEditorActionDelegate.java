@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.ui.IEditorActionDelegate;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
@@ -18,8 +19,10 @@ import com.mmxlabs.jobmanager.manager.IJobManagerListener;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.actions.ParameterModesActionDelegate;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 /**
@@ -44,7 +47,10 @@ public abstract class AbstractOptimisationEditorActionDelegate extends Parameter
 				final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
 
 				final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
-				try (final ModelReference modelReference = instance.getReference("AbstractOptimisationEditorActionDelegate")) {
+				@NonNull
+				ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+
+				try (final ModelReference modelReference = modelRecord.aquireReference("AbstractOptimisationEditorActionDelegate")) {
 					final Object object = modelReference.getInstance();
 					if (object instanceof MMXRootObject) {
 						final String uuid = instance.getUuid();

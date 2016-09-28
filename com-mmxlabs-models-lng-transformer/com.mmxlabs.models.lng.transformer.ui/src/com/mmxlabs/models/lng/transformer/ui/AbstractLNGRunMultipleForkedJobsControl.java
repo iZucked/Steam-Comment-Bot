@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
-import java.io.IOException;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -17,8 +15,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.SubProgressMonitor;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.progress.IProgressConstants;
@@ -26,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.util.CheckedBiConsumer;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -34,10 +31,12 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.scenario.service.IScenarioService;
-import com.mmxlabs.scenario.service.model.ModelReference;
+import com.mmxlabs.scenario.service.ScenarioServiceCommandUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 
 public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEclipseJobControl {
@@ -48,6 +47,7 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 
 	private final ScenarioInstance scenarioInstance;
 
+	private final ModelRecord modelRecord;
 	private final ModelReference modelReference;
 
 	private final LNGScenarioModel originalScenario;
@@ -68,26 +68,20 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 		private final LNGScenarioRunner runner;
 		private final ScenarioLock lock;
 		private final ScenarioInstance fork;
-		private final ModelReference ref;
+		private final ModelRecord forkRecord;
+		private final ModelReference forkRef;
 
-		public SimilarityFuture(final ScenarioInstance parent, final LNGScenarioModel model, final String name, final OptimisationPlan optimisationPlan, final String... hints) {
+		public SimilarityFuture(final ScenarioInstance parent, final LNGScenarioModel model, final String name, final OptimisationPlan optimisationPlan, final String... hints) throws Exception {
 
 			this.parent = parent;
 			this.name = name;
-			try {
-				fork = createFork(model);
-			} catch (IOException e) {
-				throw new RuntimeException("Unable to create fork", e);
-			}
-			ref = fork.getReference("AbstractLNGRunMultipleForkedJobsControl:1");
-
-			this.scenarioModel = (LNGScenarioModel) ref.getInstance();
-			// TODO: This is probably a) null and b) bad idea to use the same executor service for sub-processes while the main process is using the pool....
-			// TODO: Is is possible for a job to suspend itself and release the thread?
-
-			this.runner = new LNGScenarioRunner(runnerService, scenarioModel, fork, optimisationPlan, (EditingDomain) fork.getAdapters().get(EditingDomain.class), null, false, hints);
-			this.lock = fork.getLock(ScenarioLock.OPTIMISER);
-			this.lock.awaitClaim();
+			fork = ScenarioServiceCommandUtil.fork(parent, name);
+			forkRecord = SSDataManager.Instance.getModelRecord(fork);
+			forkRef = forkRecord.aquireReference("AbstractLNGRunMultipleForkedJobsControl:1");
+			this.scenarioModel = (LNGScenarioModel) forkRef.getInstance();
+			this.runner = new LNGScenarioRunner(runnerService, scenarioModel, fork, optimisationPlan, forkRef.getEditingDomain(), null, false, hints);
+			this.lock = forkRef.getLock();
+			this.lock.lock();
 		}
 
 		public void init() {
@@ -111,46 +105,28 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 			}
 		}
 
-		public ScenarioInstance createFork(final LNGScenarioModel model) throws IOException {
-			final IScenarioService scenarioService = parent.getScenarioService();
-			final ScenarioInstance fork = scenarioService.insert(parent, EcoreUtil.copy(model));
-			fork.setName(this.name);
-
-			// Copy across various bits of information
-			fork.getMetadata().setContentType(parent.getMetadata().getContentType());
-			fork.getMetadata().setCreated(new Date());
-			fork.getMetadata().setLastModified(new Date());
-
-			// Copy version context information
-			fork.setVersionContext(parent.getVersionContext());
-			fork.setScenarioVersion(parent.getScenarioVersion());
-
-			fork.setClientVersionContext(parent.getClientVersionContext());
-			fork.setClientScenarioVersion(parent.getClientScenarioVersion());
-
-			return fork;
-		}
-
 		public void dispose() {
 			if (lock != null) {
-				lock.release();
+				lock.unlock();
 			}
-			if (ref != null) {
-				ref.close();
+			if (forkRef != null) {
+				forkRef.close();
 			}
 		}
 	}
 
-	public AbstractLNGRunMultipleForkedJobsControl(final AbstractLNGJobDescriptor jobDescriptor, BiConsumer<OptimisationPlan, BiConsumer<String, OptimisationPlan>> jobFactory) throws IOException {
+	public AbstractLNGRunMultipleForkedJobsControl(final AbstractLNGJobDescriptor jobDescriptor,
+			CheckedBiConsumer<OptimisationPlan, CheckedBiConsumer<String, OptimisationPlan, Exception>, Exception> jobFactory) throws Exception {
 		super((jobDescriptor.isOptimising() ? "Optimise " : "Evaluate ") + jobDescriptor.getJobName(),
 				CollectionsUtil.<QualifiedName, Object> makeHashMap(IProgressConstants.ICON_PROPERTY, (jobDescriptor.isOptimising() ? imgOpti : imgEval)));
 		this.jobDescriptor = jobDescriptor;
 		this.scenarioInstance = jobDescriptor.getJobContext();
-		this.modelReference = scenarioInstance.getReference("AbstractLNGRunMultipleForkedJobsControl:2");
+		this.modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		this.modelReference = modelRecord.aquireReference("AbstractLNGRunMultipleForkedJobsControl:2");
 		this.originalScenario = (LNGScenarioModel) modelReference.getInstance();
 
 		this.jobs = new LinkedList<>();
-		BiConsumer<String, OptimisationPlan> factory = (name, optimisationPlan) -> {
+		CheckedBiConsumer<String, OptimisationPlan, Exception> factory = (name, optimisationPlan) -> {
 			jobs.add(new SimilarityFuture(scenarioInstance, originalScenario, name, optimisationPlan, LNGTransformerHelper.HINT_OPTIMISE_LSO));
 		};
 

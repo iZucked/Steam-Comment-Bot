@@ -73,6 +73,8 @@ import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -97,26 +99,26 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 			scenarioRunner.evaluateInitialState();
 			if (parentForFork != null && fork) {
-				final IScenarioService scenarioService = parentForFork.getScenarioService();
+				final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(parentForFork);
 
-				final ScenarioInstance dup = scenarioService.insert(parentForFork, EcoreUtil.copy(lngScenarioModel));
-				dup.setName(forkName);
+				scenarioService.insert(parentForFork, EcoreUtil.copy(lngScenarioModel), dup -> {
+					dup.setName(forkName);
 
-				// Copy across various bits of information
-				dup.getMetadata().setContentType(parentForFork.getMetadata().getContentType());
-				dup.getMetadata().setCreated(parentForFork.getMetadata().getCreated());
-				dup.getMetadata().setLastModified(new Date());
+					// Copy across various bits of information
+					dup.getMetadata().setContentType(parentForFork.getMetadata().getContentType());
+					dup.getMetadata().setCreated(parentForFork.getMetadata().getCreated());
+					dup.getMetadata().setLastModified(new Date());
 
-				// Copy version context information
-				dup.setVersionContext(parentForFork.getVersionContext());
-				dup.setScenarioVersion(parentForFork.getScenarioVersion());
+					// Copy version context information
+					dup.setVersionContext(parentForFork.getVersionContext());
+					dup.setScenarioVersion(parentForFork.getScenarioVersion());
 
-				dup.setClientVersionContext(parentForFork.getClientVersionContext());
-				dup.setClientScenarioVersion(parentForFork.getClientScenarioVersion());
+					dup.setClientVersionContext(parentForFork.getClientVersionContext());
+					dup.setClientScenarioVersion(parentForFork.getClientScenarioVersion());
+				});
 			}
 
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
+		} catch (final Exception e) {
 			e.printStackTrace();
 		} finally {
 			executorService.shutdownNow();
@@ -151,26 +153,25 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			scenarioRunner.evaluateInitialState();
 			scenarioRunner.run();
 			if (parentForFork != null) {
-				final IScenarioService scenarioService = parentForFork.getScenarioService();
+				IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(parentForFork);
+				scenarioService.insert(parentForFork, EcoreUtil.copy(lngScenarioModel), dup -> {
+					dup.setName("What if");
 
-				final ScenarioInstance dup = scenarioService.insert(parentForFork, EcoreUtil.copy(lngScenarioModel));
-				dup.setName("What if");
+					// Copy across various bits of information
+					dup.getMetadata().setContentType(parentForFork.getMetadata().getContentType());
+					dup.getMetadata().setCreated(parentForFork.getMetadata().getCreated());
+					dup.getMetadata().setLastModified(new Date());
 
-				// Copy across various bits of information
-				dup.getMetadata().setContentType(parentForFork.getMetadata().getContentType());
-				dup.getMetadata().setCreated(parentForFork.getMetadata().getCreated());
-				dup.getMetadata().setLastModified(new Date());
+					// Copy version context information
+					dup.setVersionContext(parentForFork.getVersionContext());
+					dup.setScenarioVersion(parentForFork.getScenarioVersion());
 
-				// Copy version context information
-				dup.setVersionContext(parentForFork.getVersionContext());
-				dup.setScenarioVersion(parentForFork.getScenarioVersion());
-
-				dup.setClientVersionContext(parentForFork.getClientVersionContext());
-				dup.setClientScenarioVersion(parentForFork.getClientScenarioVersion());
+					dup.setClientVersionContext(parentForFork.getClientVersionContext());
+					dup.setClientScenarioVersion(parentForFork.getClientScenarioVersion());
+				});
 			}
 
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
+		} catch (final Exception e) {
 			e.printStackTrace();
 		} finally {
 			executorService.shutdownNow();

@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
 
 import java.io.IOException;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IEditorPart;
 
@@ -17,9 +18,11 @@ import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.Container;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
@@ -30,16 +33,15 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 	}
 
 	@Override
-	protected void doRun(final IEclipseJobManager jobManager, final ScenarioInstance instance, final String parameterMode, final boolean promptForOptimiserSettings, final boolean optimising,
-			final String k) {
+	protected void doRun(final IEclipseJobManager jobManager, final ScenarioInstance instance, final String parameterMode, final boolean promptForOptimiserSettings, final boolean optimising) {
 
 		if (instance != null) {
 			try {
 				ScenarioInstance fork = ScenarioServiceModelUtils.createAndOpenFork(instance, true);
 				if (fork != null) {
-					OptimisationHelper.evaluateScenarioInstance(jobManager, fork, parameterMode, promptForOptimiserSettings, optimising, k, !optimising);
+					OptimisationHelper.evaluateScenarioInstance(jobManager, fork, parameterMode, promptForOptimiserSettings, optimising, !optimising);
 				}
-			} catch (final IOException e) {
+			} catch (final Exception e) {
 				throw new RuntimeException("Unable to fork scenario", e);
 			}
 		}
@@ -58,7 +60,9 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 			final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) targetEditor.getEditorInput();
 
 			final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
-			if (instance.isLoadFailure()) {
+			@NonNull
+			ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+			if (modelRecord.isLoadFailure()) {
 				action.setEnabled(false);
 				return;
 			}
@@ -83,7 +87,7 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 				}
 			}
 
-			try (final ModelReference modelReference = instance.getReference("ForkAndStartEditorActionDelegate")) {
+			try (final ModelReference modelReference = modelRecord.aquireReference("ForkAndStartEditorActionDelegate")) {
 				final Object object = modelReference.getInstance();
 				if (object instanceof MMXRootObject) {
 					final MMXRootObject root = (MMXRootObject) object;

@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
@@ -123,8 +124,11 @@ public class LNGScenarioRunner {
 
 		final ISequences startRawSequences = result.getBestSolution().getFirst();
 		final Map<String, Object> extraAnnotations = result.getBestSolution().getSecond();
-		schedule = scenarioToOptimiserBridge.overwrite(0, startRawSequences, extraAnnotations);
-
+		Schedule[] v = new Schedule[1];
+		RunnerHelper.syncExecDisplayOptional(() -> {
+			v[0] = scenarioToOptimiserBridge.overwrite(0, startRawSequences, extraAnnotations);
+		});
+		schedule = v[0];
 		// need to undo this.chainRunner..
 		return schedule;
 	}
@@ -150,7 +154,11 @@ public class LNGScenarioRunner {
 
 		final IMultiStateResult result = chainRunner.run(progressMonitor);
 
-		schedule = scenarioToOptimiserBridge.overwrite(100, result.getBestSolution().getFirst(), result.getBestSolution().getSecond());
+		Schedule[] v = new Schedule[1];
+		RunnerHelper.syncExecDisplayOptional(() -> {
+			v[0] = scenarioToOptimiserBridge.overwrite(100, result.getBestSolution().getFirst(), result.getBestSolution().getSecond());
+		});
+		schedule = v[0];
 		log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
 
 		return result;

@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -48,7 +49,6 @@ import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -58,9 +58,14 @@ import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
 import com.mmxlabs.models.util.StringEscaper;
 import com.mmxlabs.rcp.common.ServiceHelper;
-import com.mmxlabs.scenario.service.model.ModelReference;
+import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.ScenarioServiceCommandUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
+import com.mmxlabs.scenario.service.model.util.ModelReferenceThread;
 
 public class InsertEventContextMenuExtension implements IVesselEventsTableContextMenuExtension {
 
@@ -83,7 +88,7 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 		}
 		if (vesselEvent instanceof CharterOutEvent) {
 
-			final InsertEventAction action = new InsertEventAction(scenarioEditingLocation.getScenarioInstance(), Collections.singletonList(vesselEvent));
+			final InsertEventAction action = new InsertEventAction(scenarioEditingLocation, Collections.singletonList(vesselEvent));
 
 			if (vesselEvent.isLocked()) {
 				action.setEnabled(false);
@@ -117,9 +122,9 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 			}
 
 			if (events.size() > 0) {
-				final InsertEventAction action = new InsertEventAction(scenarioEditingLocation.getScenarioInstance(), events);
+				final InsertEventAction action = new InsertEventAction(scenarioEditingLocation, events);
 
-				for (VesselEvent event : events) {
+				for (final VesselEvent event : events) {
 					if (event.isLocked()) {
 						action.setEnabled(false);
 						action.setText(action.getText() + " (Locked)");
@@ -136,11 +141,11 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 	private static class InsertEventAction extends Action {
 
 		private final List<VesselEvent> originalTargetEvents;
-		private final ScenarioInstance original;
+		private final IScenarioEditingLocation scenarioEditingLocation;
 
-		public InsertEventAction(final ScenarioInstance scenarioInstance, final List<VesselEvent> targetVesselEvents) {
+		public InsertEventAction(final IScenarioEditingLocation scenarioEditingLocation, final List<VesselEvent> targetVesselEvents) {
 			super(generateActionName(targetVesselEvents) + " (Beta)");
-			this.original = scenarioInstance;
+			this.scenarioEditingLocation = scenarioEditingLocation;
 			this.originalTargetEvents = targetVesselEvents;
 		}
 
@@ -148,15 +153,42 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 		public void run() {
 			final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 
+			final ScenarioInstance original = scenarioEditingLocation.getScenarioInstance();
+			UserSettings userSettings = null;
+			{
+
+				final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(original);
+				try (final ModelReference modelReference = modelRecord.aquireReference("InsertEventContextMenuExtension:1")) {
+
+					final EObject object = modelReference.getInstance();
+
+					if (object instanceof LNGScenarioModel) {
+						final LNGScenarioModel root = (LNGScenarioModel) object;
+
+						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false);
+					}
+				}
+			}
+			if (userSettings == null) {
+				return;
+			}
+			// Reset settings not supplied to the user
+			userSettings.setShippingOnly(false);
+			userSettings.setBuildActionSets(false);
+			userSettings.setCleanStateOptimisation(false);
+			userSettings.setSimilarityMode(SimilarityMode.OFF);
+			final UserSettings pUserSettings = userSettings;
+
 			ScenarioInstance duplicate;
 			try {
-				duplicate = original.getScenarioService().duplicate(original, original);
-
-				duplicate.setName(generateActionName(originalTargetEvents));
+				final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(original);
+				duplicate = ScenarioServiceCommandUtil.copyTo(original, original, generateActionName(originalTargetEvents));
 
 				// While we only keep the reference for the duration of this method call, the two current concrete implementations of IJobControl will obtain a ModelReference
-				try (final ModelReference modelRefence = duplicate.getReference("InsertSlotContextMenuExtension")) {
-					final EObject object = modelRefence.getInstance();
+				final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(duplicate);
+				try (final ModelReference modelReference = modelRecord.aquireReference("InsertEventContextMenuExtension:2")) {
+
+					final EObject object = modelReference.getInstance();
 
 					if (object instanceof LNGScenarioModel) {
 						final LNGScenarioModel root = (LNGScenarioModel) object;
@@ -170,47 +202,35 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 							}
 						}
 
-						UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
-						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false);
-
-						if (userSettings == null) {
-							return;
+						// Map between original and fork
+						final List<VesselEvent> targetEvents = new LinkedList<>();
+						final CargoModelFinder finder = new CargoModelFinder(root.getCargoModel());
+						for (final VesselEvent originalEvent : originalTargetEvents) {
+							targetEvents.add(finder.findVesselEvent(originalEvent.getName()));
 						}
-						// Reset settings not supplied to the user
-						userSettings.setShippingOnly(false);
-						userSettings.setBuildActionSets(false);
-						userSettings.setCleanStateOptimisation(false);
-						userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-						// Period is not valid yet
-						// userSettings.unsetPeriodStart();
-						// userSettings.unsetPeriodEnd();
-
-						final ScenarioLock scenarioLock = duplicate.getLock(ScenarioLock.OPTIMISER);
-						if (scenarioLock.awaitClaim()) {
+						new ModelReferenceThread("Insert " + generateActionName(originalTargetEvents), modelRecord, (ref) -> {
+							final ScenarioLock scenarioLock = ref.getLock();
+							scenarioLock.lock();
+							// Use a latch to trigger unlock in this thread
+							final CountDownLatch latch = new CountDownLatch(1);
 							IJobControl control = null;
 							IJobDescriptor job = null;
 							try {
 
-								// Map between original and fork
-								List<VesselEvent> targetEvents = new LinkedList<>();
-								CargoModelFinder finder = new CargoModelFinder(root.getCargoModel());
-								for (VesselEvent original : originalTargetEvents) {
-									targetEvents.add(finder.findVesselEvent(original.getName()));
-								}
-
 								// create a new job
-								job = new LNGSlotInsertionJobDescriptor(generateName(targetEvents), duplicate, userSettings, Collections.emptyList(), targetEvents);
+								job = new LNGSlotInsertionJobDescriptor(generateName(targetEvents), duplicate, pUserSettings, Collections.emptyList(), targetEvents);
 
 								// New optimisation, so check there are no validation errors.
 								if (!validateScenario(root, false)) {
-									scenarioLock.release();
+									scenarioLock.unlock();
 									return;
 								}
 
 								// Automatically clean up job when removed from manager
 								jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
 								control = jobManager.submitJob(job, uuid);
+
 								// Add listener to clean up job when it finishes or has an exception.
 								final IJobDescriptor finalJob = job;
 								control.addListener(new IJobControlListener() {
@@ -220,31 +240,25 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 
 										if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
 
-											scenarioLock.release();
-											try {
-												duplicate.save();
-											} catch (IOException e) {
-												// TODO Auto-generated catch block
-												e.printStackTrace();
-											}
-
 											if (newState == EJobState.COMPLETED) {
-												try (final ModelReference modelRefence = duplicate.getReference("InsertSlotContextMenuExtension:2")) {
-													SlotInsertionOptions plan = (SlotInsertionOptions) jobControl.getJobOutput();
-													if (plan != null) {
-														// Forces editor lock to disallow users from editing the scenario.
-														// TODO: This is not a very clean way to do it!
-														// final ScenarioLock lock = duplicate.getLock(ScenarioLock.EDITORS);
-														// lock.claim();
-														duplicate.setReadonly(true);
+												try {
+													ref.save();
+												} catch (final IOException e) {
+													e.printStackTrace();
+												}
 
-														final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-														AnalyticsSolution data = new AnalyticsSolution(duplicate, plan, generateName(plan));
-														data.setCreateInsertionOptions(true);
-														eventBroker.post(ChangeSetViewCreatorService_Topic, data);
-													}
+												final SlotInsertionOptions plan = (SlotInsertionOptions) jobControl.getJobOutput();
+												if (plan != null) {
+
+													duplicate.setReadonly(true);
+
+													final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+													final AnalyticsSolution data = new AnalyticsSolution(duplicate, plan, generateName(plan));
+													data.setCreateInsertionOptions(true);
+													eventBroker.post(ChangeSetViewCreatorService_Topic, data);
 												}
 											}
+											latch.countDown();
 
 											jobManager.removeJob(finalJob);
 
@@ -261,6 +275,10 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 								// Start the job!
 								control.prepare();
 								control.start();
+
+								latch.await();
+								scenarioLock.unlock();
+
 							} catch (final Throwable ex) {
 								log.error(ex.getMessage(), ex);
 								if (control != null) {
@@ -271,7 +289,7 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 									jobManager.removeJob(job);
 								}
 								// instance.setLocked(false);
-								scenarioLock.release();
+								scenarioLock.unlock();
 
 								final Display display = Display.getDefault();
 								if (display != null) {
@@ -281,23 +299,12 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 									});
 								}
 							}
-						}
+						}) //
+								.start();
 					}
 				}
-
-				// final DetailCompositeDialog dcd = new DetailCompositeDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation.getDefaultCommandHandler());
-				// final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
-				// try {
-				// editorLock.claim();
-				// scenarioEditingLocation.setDisableUpdates(true);
-				// dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), Collections.<EObject> singletonList(redirectionSlotHistory), scenarioEditingLocation.isLocked());
-				// } finally {
-				// scenarioEditingLocation.setDisableUpdates(false);
-				// editorLock.release();
-				// }
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (final Exception e) {
+				log.error(e.getMessage(), e);
 			}
 		}
 	}
@@ -357,30 +364,30 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 		return true;
 	}
 
-	private static String generateName(SlotInsertionOptions plan) {
+	private static String generateName(final SlotInsertionOptions plan) {
 
-		List<String> names = new LinkedList<String>();
-		for (VesselEvent s : plan.getEventsInserted()) {
+		final List<String> names = new LinkedList<String>();
+		for (final VesselEvent s : plan.getEventsInserted()) {
 			names.add(s.getName());
 		}
 
 		return "Inserting: " + Joiner.on(", ").join(names);
 	}
 
-	private static String generateName(Collection<VesselEvent> events) {
+	private static String generateName(final Collection<VesselEvent> events) {
 
-		List<String> names = new LinkedList<String>();
-		for (VesselEvent s : events) {
+		final List<String> names = new LinkedList<String>();
+		for (final VesselEvent s : events) {
 			names.add(s.getName());
 		}
 
 		return "Inserting: " + Joiner.on(", ").join(names);
 	}
 
-	private static String generateActionName(Collection<VesselEvent> events) {
+	private static String generateActionName(final Collection<VesselEvent> events) {
 
-		List<String> names = new LinkedList<String>();
-		for (VesselEvent s : events) {
+		final List<String> names = new LinkedList<String>();
+		for (final VesselEvent s : events) {
 			names.add(s.getName());
 		}
 

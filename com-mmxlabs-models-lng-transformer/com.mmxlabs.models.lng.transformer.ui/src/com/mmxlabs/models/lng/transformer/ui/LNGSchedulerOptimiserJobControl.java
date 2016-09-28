@@ -32,8 +32,10 @@ import com.mmxlabs.models.lng.transformer.util.SequencesSerialiser;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 
 public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
@@ -45,6 +47,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	private final ScenarioInstance scenarioInstance;
 
+	private final ModelRecord modelRecord;
 	private final ModelReference modelReference;
 
 	private final LNGScenarioModel originalScenario;
@@ -59,27 +62,19 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 	public LNGSchedulerOptimiserJobControl(final LNGSchedulerJobDescriptor jobDescriptor) {
 		super((jobDescriptor.isOptimising() ? "Optimise " : "Evaluate ") + jobDescriptor.getJobName(),
 				CollectionsUtil.<QualifiedName, Object> makeHashMap(IProgressConstants.ICON_PROPERTY, (jobDescriptor.isOptimising() ? imgOpti : imgEval)));
-		
-		
+
+		// Disable optimisation in P&L testing phase
+		if (LicenseFeatures.isPermitted("features:phase-pnl-testing")) {
+			throw new RuntimeException("Optimisation is disabled during the P&L testing phase.");
+		}
+
 		this.jobDescriptor = jobDescriptor;
 		this.scenarioInstance = jobDescriptor.getJobContext();
-		this.modelReference = scenarioInstance.getReference("LNGSchedulerOptimiserJobControl");
+		this.modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		this.modelReference = modelRecord.aquireReference("LNGSchedulerOptimiserJobControl");
 		this.originalScenario = (LNGScenarioModel) modelReference.getInstance();
-		final EditingDomain originalEditingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
+		final EditingDomain originalEditingDomain = modelReference.getEditingDomain();
 
-		/*
-		 * Error checks
-		 */
-		{
-			// Disable optimisation in P&L testing phase
-			if (LicenseFeatures.isPermitted("features:phase-pnl-testing")) {
-				throw new RuntimeException("Optimisation is disabled during the P&L testing phase.");
-			}
-			if (!OptimisationHelper.isAllowedGCO(this.originalScenario)) {
-				throw new RuntimeException("Optimisation is disabled when missing prices are used");
-			}
-		}
-		
 		// TODO: This should be static / central service?
 		executorService = LNGScenarioChainBuilder.createExecutorService();// Executors.newSingleThreadExecutor();
 
@@ -89,7 +84,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 			runnerHook = new AbstractRunnerHook() {
 
 				@Override
-				public void doReportSequences(String phase, final ISequences rawSequences, LNGDataTransformer dataTransformer) {
+				public void doReportSequences(final String phase, final ISequences rawSequences, final LNGDataTransformer dataTransformer) {
 					switch (phase) {
 
 					case IRunnerHook.STAGE_LSO:
@@ -103,7 +98,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 				}
 
 				@Override
-				public ISequences doGetPrestoredSequences(String stage, LNGDataTransformer dataTransformer) {
+				public ISequences doGetPrestoredSequences(final String stage, final LNGDataTransformer dataTransformer) {
 					switch (stage) {
 					case IRunnerHook.STAGE_LSO:
 					case IRunnerHook.STAGE_HILL:
@@ -116,7 +111,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 					return null;
 				}
 
-				private void save(final ISequences rawSequences, final String type, Injector injector) {
+				private void save(final ISequences rawSequences, final String type, final Injector injector) {
 					// assert false;
 					try {
 						final String suffix = scenarioInstance.getName() + "." + type + ".sequences";
@@ -131,7 +126,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 					}
 				}
 
-				private ISequences load(final String type, Injector injector) {
+				private ISequences load(final String type, final Injector injector) {
 					try {
 						final String suffix = scenarioInstance.getName() + "." + type + ".sequences";
 						// final File file2 = new File("/home/ubuntu/scenarios/"+suffix);
@@ -156,31 +151,27 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	@Override
 	protected void reallyPrepare() {
+		modelReference.setLastEvaluationFailed(true);
 		scenarioRunner.evaluateInitialState();
 	}
 
 	@Override
-	protected void doRunJob(IProgressMonitor progressMonitor) {
-		long start = System.currentTimeMillis();
+	protected void doRunJob(final IProgressMonitor progressMonitor) {
+		final long start = System.currentTimeMillis();
 		progressMonitor.beginTask("Optimise", 100);
 		try {
-			// TODO Auto-generated method stub
 			if (jobDescriptor.isOptimising() == false) {
 				return; // if we are not optimising, finish.
 			}
 			scenarioRunner.runWithProgress(new SubProgressMonitor(progressMonitor, 100));
 			super.setProgress(100);
+			modelReference.setLastEvaluationFailed(false);
 		} finally {
 			progressMonitor.done();
 			if (true) {
 				System.out.println("done in:" + (System.currentTimeMillis() - start));
 			}
 		}
-		// if (scenarioRunner.isFinished()) {
-		// return false;
-		// } else {
-		// return true;
-		// }
 	}
 
 	/*
@@ -199,10 +190,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		if (modelReference != null) {
 			modelReference.close();
 		}
-		
-		// if (scenarioRunner != null) {
-		// scenarioRunner.dispose();
-		// }
+
 		super.dispose();
 	}
 

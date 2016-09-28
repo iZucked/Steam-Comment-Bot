@@ -19,7 +19,6 @@ import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -64,7 +63,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 					while (itr.hasNext()) {
 						final Object obj = itr.next();
 						if (obj instanceof ScenarioInstance) {
-							OptimisationHelper.evaluateScenarioInstance(jobManager, (ScenarioInstance) obj, null, /* prompt if optimising */ optimising, optimising, ScenarioLock.OPTIMISER, !optimising);
+							OptimisationHelper.evaluateScenarioInstance(jobManager, (ScenarioInstance) obj, null, /* prompt if optimising */ optimising, optimising, !optimising);
 						}
 					}
 				}

@@ -52,6 +52,7 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -131,8 +132,9 @@ public class LNGScenarioToOptimiserBridge {
 		this.optimiserScenario = originalScenario;
 
 		// Trigger initial evaluation - note no fitness state is saved
-		overwrite(0, originalDataTransformer.getInitialSequences(), null);
-
+		RunnerHelper.syncExecDisplayOptional(() -> {
+			overwrite(0, originalDataTransformer.getInitialSequences(), null);
+		});
 		if (!evaluationOnly) {
 			final Triple<@NonNull LNGScenarioModel, @NonNull EditingDomain, @Nullable IScenarioEntityMapping> t = initPeriodOptimisationData(scenarioInstance, originalScenario, originalEditingDomain,
 					userSettings);

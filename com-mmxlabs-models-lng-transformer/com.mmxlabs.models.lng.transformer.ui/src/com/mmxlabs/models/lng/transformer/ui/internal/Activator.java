@@ -23,7 +23,6 @@ import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.impl.ParameterModesExtensionModule;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.ValidationPlugin;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
@@ -66,20 +65,17 @@ public class Activator extends ValidationPlugin {
 
 				for (final ScenarioResult result : selected) {
 					ScenarioInstance instance = result.getScenarioInstance();
-					final Object object = instance.getInstance();
-					if (object instanceof MMXRootObject) {
 
-						final String uuid = instance.getUuid();
+					final String uuid = instance.getUuid();
 
-						final IJobDescriptor job = jobManager.findJobForResource(uuid);
-						if (job == null) {
-							continue;
-						}
+					final IJobDescriptor job = jobManager.findJobForResource(uuid);
+					if (job == null) {
+						continue;
+					}
 
-						final IJobControl control = jobManager.getControlForJob(job);
-						if (control instanceof AbstractEclipseJobControl) {
-							((AbstractEclipseJobControl) control).setJobProperty(IProgressConstants2.SHOW_IN_TASKBAR_ICON_PROPERTY, showInTaskbar);
-						}
+					final IJobControl control = jobManager.getControlForJob(job);
+					if (control instanceof AbstractEclipseJobControl) {
+						((AbstractEclipseJobControl) control).setJobProperty(IProgressConstants2.SHOW_IN_TASKBAR_ICON_PROPERTY, showInTaskbar);
 					}
 				}
 			}

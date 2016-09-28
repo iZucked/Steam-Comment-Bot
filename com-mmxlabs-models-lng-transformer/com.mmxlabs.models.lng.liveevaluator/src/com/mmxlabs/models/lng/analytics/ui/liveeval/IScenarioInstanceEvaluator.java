@@ -4,8 +4,9 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.liveeval;
 
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
 
 /**
  * This is a bodge to make the evaluation handler from the platform available here.
@@ -14,5 +15,5 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  *
  */
 public interface IScenarioInstanceEvaluator {
-	public void evaluate(final ScenarioInstance instance);
+	public void evaluate(final @NonNull ModelRecord modelRecord);
 }

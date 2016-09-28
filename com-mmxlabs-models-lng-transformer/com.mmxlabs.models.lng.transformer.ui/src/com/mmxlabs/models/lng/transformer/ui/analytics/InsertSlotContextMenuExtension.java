@@ -12,10 +12,13 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.validation.model.Category;
 import org.eclipse.emf.validation.model.EvaluationMode;
 import org.eclipse.emf.validation.service.IBatchValidator;
@@ -53,7 +56,6 @@ import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -63,9 +65,14 @@ import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
 import com.mmxlabs.models.util.StringEscaper;
 import com.mmxlabs.rcp.common.ServiceHelper;
-import com.mmxlabs.scenario.service.model.ModelReference;
+import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.ScenarioServiceCommandUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
+import com.mmxlabs.scenario.service.model.util.ModelReferenceThread;
 
 public class InsertSlotContextMenuExtension implements ITradesTableContextMenuExtension {
 
@@ -84,7 +91,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 		}
 
 		if (slot.getCargo() == null) {
-			final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation.getScenarioInstance(), Collections.singletonList(slot));
+			final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation, Collections.singletonList(slot));
 
 			if (slot.isLocked()) {
 				action.setEnabled(false);
@@ -94,10 +101,10 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			menuManager.add(action);
 			return;
 		} else {
-			List<Slot> slots = slot.getCargo().getSortedSlots();
-			final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation.getScenarioInstance(), slots);
+			final List<Slot> slots = slot.getCargo().getSortedSlots();
+			final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation, slots);
 
-			for (Slot slot2 : slots) {
+			for (final Slot slot2 : slots) {
 				if (slot2.isLocked()) {
 					action.setEnabled(false);
 					action.setText(action.getText() + " (Kept open)");
@@ -138,9 +145,9 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			}
 
 			if (slots.size() > 0) {
-				final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation.getScenarioInstance(), slots);
+				final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation, slots);
 
-				for (Slot slot : slots) {
+				for (final Slot slot : slots) {
 					if (slot.isLocked()) {
 						action.setEnabled(false);
 						action.setText(action.getText() + " (Kept open)");
@@ -173,17 +180,17 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			}
 
 			if (cargoes.size() == 1) {
-				List<Slot> slots = cargoes.iterator().next().getSortedSlots();
-				final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation.getScenarioInstance(), slots);
+				final List<Slot> slots = cargoes.iterator().next().getSortedSlots();
+				final InsertSlotAction action = new InsertSlotAction(scenarioEditingLocation, slots);
 
-				for (Slot slot : slots) {
+				for (final Slot slot : slots) {
 					if (slot.isLocked()) {
 						action.setEnabled(false);
 						action.setText(action.getText() + " (Kept open)");
 						break;
 					}
 				}
-				for (Cargo cargo : cargoes) {
+				for (final Cargo cargo : cargoes) {
 					if (cargo.isLocked()) {
 						action.setEnabled(false);
 						action.setText(action.getText() + " (Locked)");
@@ -200,11 +207,11 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 	private static class InsertSlotAction extends Action {
 
 		private final List<Slot> originalTargetSlots;
-		private final ScenarioInstance original;
+		private final IScenarioEditingLocation scenarioEditingLocation;
 
-		public InsertSlotAction(final ScenarioInstance scenarioInstance, final List<Slot> targetSlots) {
+		public InsertSlotAction(final IScenarioEditingLocation scenarioEditingLocation, final List<Slot> targetSlots) {
 			super(generateActionName(targetSlots) + " (Beta)");
-			this.original = scenarioInstance;
+			this.scenarioEditingLocation = scenarioEditingLocation;
 			this.originalTargetSlots = targetSlots;
 		}
 
@@ -212,15 +219,42 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 		public void run() {
 			final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 
+			final ScenarioInstance original = scenarioEditingLocation.getScenarioInstance();
+			UserSettings userSettings = null;
+			{
+
+				final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(original);
+				try (final ModelReference modelReference = modelRecord.aquireReference("InsertSlotContextMenuExtension:1")) {
+
+					final EObject object = modelReference.getInstance();
+
+					if (object instanceof LNGScenarioModel) {
+						final LNGScenarioModel root = (LNGScenarioModel) object;
+
+						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false);
+					}
+				}
+			}
+			if (userSettings == null) {
+				return;
+			}
+			// Reset settings not supplied to the user
+			userSettings.setShippingOnly(false);
+			userSettings.setBuildActionSets(false);
+			userSettings.setCleanStateOptimisation(false);
+			userSettings.setSimilarityMode(SimilarityMode.OFF);
+			final UserSettings pUserSettings = userSettings;
+
 			ScenarioInstance duplicate;
 			try {
-				duplicate = original.getScenarioService().duplicate(original, original);
-
-				duplicate.setName(generateActionName(originalTargetSlots));
+				final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(original);
+				duplicate = ScenarioServiceCommandUtil.copyTo(original, original, generateActionName(originalTargetSlots));
 
 				// While we only keep the reference for the duration of this method call, the two current concrete implementations of IJobControl will obtain a ModelReference
-				try (final ModelReference modelRefence = duplicate.getReference("InsertSlotContextMenuExtension")) {
-					final EObject object = modelRefence.getInstance();
+				final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(duplicate);
+				try (final ModelReference modelReference = modelRecord.aquireReference("InsertSlotContextMenuExtension:2")) {
+
+					final EObject object = modelReference.getInstance();
 
 					if (object instanceof LNGScenarioModel) {
 						final LNGScenarioModel root = (LNGScenarioModel) object;
@@ -234,48 +268,39 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 							}
 						}
 
-						UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
-						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false);
+						// Map between original and fork
+						final List<Slot> targetSlots = new LinkedList<Slot>();
+						final CargoModelFinder finder = new CargoModelFinder(root.getCargoModel());
+						for (final Slot originalSlot : originalTargetSlots) {
+							if (originalSlot instanceof LoadSlot) {
+								targetSlots.add(finder.findLoadSlot(originalSlot.getName()));
+							} else if (originalSlot instanceof DischargeSlot) {
+								targetSlots.add(finder.findDischargeSlot(originalSlot.getName()));
+							}
+						}
 
-						// Reset settings not supplied to the user
-						userSettings.setShippingOnly(false);
-						userSettings.setBuildActionSets(false);
-						userSettings.setCleanStateOptimisation(false);
-						userSettings.setSimilarityMode(SimilarityMode.OFF);
-
-						// Period is not valid yet
-						// userSettings.unsetPeriodStart();
-						// userSettings.unsetPeriodEnd();
-
-						final ScenarioLock scenarioLock = duplicate.getLock(ScenarioLock.OPTIMISER);
-						if (scenarioLock.awaitClaim()) {
+						new ModelReferenceThread("Insert " + generateActionName(originalTargetSlots), modelRecord, (ref) -> {
+							final ScenarioLock scenarioLock = ref.getLock();
+							scenarioLock.lock();
+							// Use a latch to trigger unlock in this thread
+							final CountDownLatch latch = new CountDownLatch(1);
 							IJobControl control = null;
 							IJobDescriptor job = null;
 							try {
 
-								// Map between original and fork
-								List<Slot> targetSlots = new LinkedList<Slot>();
-								CargoModelFinder finder = new CargoModelFinder(root.getCargoModel());
-								for (Slot original : originalTargetSlots) {
-									if (original instanceof LoadSlot) {
-										targetSlots.add(finder.findLoadSlot(original.getName()));
-									} else if (original instanceof DischargeSlot) {
-										targetSlots.add(finder.findDischargeSlot(original.getName()));
-									}
-								}
-
 								// create a new job
-								job = new LNGSlotInsertionJobDescriptor(generateName(targetSlots), duplicate, userSettings, targetSlots, Collections.emptyList());
+								job = new LNGSlotInsertionJobDescriptor(generateName(targetSlots), duplicate, pUserSettings, targetSlots, Collections.emptyList());
 
 								// New optimisation, so check there are no validation errors.
 								if (!validateScenario(root, false)) {
-									scenarioLock.release();
+									scenarioLock.unlock();
 									return;
 								}
 
 								// Automatically clean up job when removed from manager
 								jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
 								control = jobManager.submitJob(job, uuid);
+
 								// Add listener to clean up job when it finishes or has an exception.
 								final IJobDescriptor finalJob = job;
 								control.addListener(new IJobControlListener() {
@@ -285,31 +310,25 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 
 										if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
 
-											scenarioLock.release();
-											try {
-												duplicate.save();
-											} catch (IOException e) {
-												// TODO Auto-generated catch block
-												e.printStackTrace();
-											}
-
 											if (newState == EJobState.COMPLETED) {
-												try (final ModelReference modelRefence = duplicate.getReference("InsertSlotContextMenuExtension:2")) {
-													SlotInsertionOptions plan = (SlotInsertionOptions) jobControl.getJobOutput();
-													if (plan != null) {
-														// Forces editor lock to disallow users from editing the scenario.
-														// TODO: This is not a very clean way to do it!
-														// final ScenarioLock lock = duplicate.getLock(ScenarioLock.EDITORS);
-														// lock.claim();
-														duplicate.setReadonly(true);
+												try {
+													ref.save();
+												} catch (final IOException e) {
+													e.printStackTrace();
+												}
 
-														final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-														AnalyticsSolution data = new AnalyticsSolution(duplicate, plan, generateName(plan));
-														data.setCreateInsertionOptions(true);
-														eventBroker.post(ChangeSetViewCreatorService_Topic, data);
-													}
+												final SlotInsertionOptions plan = (SlotInsertionOptions) jobControl.getJobOutput();
+												if (plan != null) {
+
+													duplicate.setReadonly(true);
+
+													final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+													final AnalyticsSolution data = new AnalyticsSolution(duplicate, plan, generateName(plan));
+													data.setCreateInsertionOptions(true);
+													eventBroker.post(ChangeSetViewCreatorService_Topic, data);
 												}
 											}
+											latch.countDown();
 
 											jobManager.removeJob(finalJob);
 
@@ -326,6 +345,10 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 								// Start the job!
 								control.prepare();
 								control.start();
+
+								latch.await();
+								scenarioLock.unlock();
+
 							} catch (final Throwable ex) {
 								log.error(ex.getMessage(), ex);
 								if (control != null) {
@@ -336,7 +359,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 									jobManager.removeJob(job);
 								}
 								// instance.setLocked(false);
-								scenarioLock.release();
+								scenarioLock.unlock();
 
 								final Display display = Display.getDefault();
 								if (display != null) {
@@ -346,25 +369,15 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 									});
 								}
 							}
-						}
+						}) //
+								.start();
 					}
 				}
-
-				// final DetailCompositeDialog dcd = new DetailCompositeDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation.getDefaultCommandHandler());
-				// final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
-				// try {
-				// editorLock.claim();
-				// scenarioEditingLocation.setDisableUpdates(true);
-				// dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), Collections.<EObject> singletonList(redirectionSlotHistory), scenarioEditingLocation.isLocked());
-				// } finally {
-				// scenarioEditingLocation.setDisableUpdates(false);
-				// editorLock.release();
-				// }
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (final Exception e) {
+				log.error(e.getMessage(), e);
 			}
 		}
+
 	}
 
 	public static boolean validateScenario(final MMXRootObject root, final boolean optimising) {
@@ -422,30 +435,30 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 		return true;
 	}
 
-	private static String generateName(SlotInsertionOptions plan) {
+	private static String generateName(final SlotInsertionOptions plan) {
 
-		List<String> names = new LinkedList<String>();
-		for (Slot s : plan.getSlotsInserted()) {
+		final List<String> names = new LinkedList<String>();
+		for (final Slot s : plan.getSlotsInserted()) {
 			names.add(s.getName());
 		}
 
 		return "Inserting: " + Joiner.on(", ").join(names);
 	}
 
-	private static String generateName(Collection<Slot> slots) {
+	private static String generateName(final Collection<Slot> slots) {
 
-		List<String> names = new LinkedList<String>();
-		for (Slot s : slots) {
+		final List<String> names = new LinkedList<String>();
+		for (final Slot s : slots) {
 			names.add(s.getName());
 		}
 
 		return "Inserting: " + Joiner.on(", ").join(names);
 	}
 
-	private static String generateActionName(Collection<Slot> slots) {
+	private static String generateActionName(final Collection<Slot> slots) {
 
-		List<String> names = new LinkedList<String>();
-		for (Slot s : slots) {
+		final List<String> names = new LinkedList<String>();
+		for (final Slot s : slots) {
 			names.add(s.getName());
 		}
 

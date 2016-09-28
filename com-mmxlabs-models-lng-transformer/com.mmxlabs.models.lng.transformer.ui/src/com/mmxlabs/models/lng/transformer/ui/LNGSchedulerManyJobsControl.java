@@ -12,7 +12,7 @@ import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 
 public class LNGSchedulerManyJobsControl extends AbstractLNGRunMultipleForkedJobsControl {
 
-	public LNGSchedulerManyJobsControl(final LNGRunAllSimilarityJobDescriptor jobDescriptor) throws IOException {
+	public LNGSchedulerManyJobsControl(final LNGRunAllSimilarityJobDescriptor jobDescriptor) throws Exception {
 
 		super(jobDescriptor, (originalPlan, factory) -> {
 			int numCopies = 1;

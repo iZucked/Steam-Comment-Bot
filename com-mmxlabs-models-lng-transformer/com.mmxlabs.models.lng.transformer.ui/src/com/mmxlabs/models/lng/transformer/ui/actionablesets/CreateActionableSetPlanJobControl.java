@@ -52,8 +52,11 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.scenario.service.model.ModelReference;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
 
@@ -86,9 +89,11 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 
 		this.jobDescriptor = jobDescriptor;
 		this.scenarioInstance = jobDescriptor.getJobContext();
-		this.modelReference = scenarioInstance.getReference("LNGActionPlanJobControl");
+		@NonNull
+		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		this.modelReference = modelRecord.aquireReference("LNGActionPlanJobControl");
 		this.originalScenario = (LNGScenarioModel) modelReference.getInstance();
-		originalEditingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
+		originalEditingDomain = modelReference.getEditingDomain();
 
 		// TODO: This should be static / central service?
 		executorService = LNGScenarioChainBuilder.createExecutorService();// Executors.newSingleThreadExecutor();
@@ -238,7 +243,7 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 
 					cmd.append(AddCommand.create(originalEditingDomain, analyticsModel, AnalyticsPackage.Literals.ANALYTICS_MODEL__ACTIONABLE_SET_PLANS, plan));
 
-					originalEditingDomain.getCommandStack().execute(cmd);
+					RunnerHelper.syncExec(() -> originalEditingDomain.getCommandStack().execute(cmd));
 
 					actionableSetPlan = plan;
 

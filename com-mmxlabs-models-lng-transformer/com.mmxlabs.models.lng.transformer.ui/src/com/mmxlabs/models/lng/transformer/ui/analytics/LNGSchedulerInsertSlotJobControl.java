@@ -17,6 +17,7 @@ import java.util.function.Function;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -24,8 +25,8 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
@@ -68,12 +69,14 @@ import com.mmxlabs.models.lng.transformer.stochasticactionsets.BreakEvenTransfor
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
-import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
-import com.mmxlabs.scenario.service.model.ModelReference;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
@@ -81,6 +84,8 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissio
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(LNGSchedulerInsertSlotJobControl.class);
 
 	private final LNGSlotInsertionJobDescriptor jobDescriptor;
 
@@ -116,9 +121,10 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 
 		this.jobDescriptor = jobDescriptor;
 		this.scenarioInstance = jobDescriptor.getJobContext();
-		this.modelReference = scenarioInstance.getReference("LNGSchedulerInsertSlotJobControl");
+		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		this.modelReference = modelRecord.aquireReference("LNGSchedulerInsertSlotJobControl");
 		this.originalScenario = (LNGScenarioModel) modelReference.getInstance();
-		originalEditingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
+		originalEditingDomain = modelReference.getEditingDomain();
 
 		/*
 		 * Error checks
@@ -347,17 +353,24 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 					// We are going to make scenario read-only, make sure it is not marked as dirty
 					cmd.append(SetCommand.create(originalEditingDomain, originalScenario.getScheduleModel(), SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
 
-					try {
-						if (originalEditingDomain instanceof CommandProviderAwareEditingDomain) {
-							((CommandProviderAwareEditingDomain) originalEditingDomain).setCommandProvidersDisabled(true);
+					RunnerHelper.syncExecDisplayOptional(() -> {
+						try {
+							if (originalEditingDomain instanceof CommandProviderAwareEditingDomain) {
+								((CommandProviderAwareEditingDomain) originalEditingDomain).setCommandProvidersDisabled(true);
+							}
+							if (cmd.canExecute()) {
+								originalEditingDomain.getCommandStack().execute(cmd);
+							} else {
+								throw new RuntimeException("Unable to save insertion result");
+							}
+						} catch (Throwable t) {
+							LOGGER.error(t.getMessage(), t);
+						} finally {
+							if (originalEditingDomain instanceof CommandProviderAwareEditingDomain) {
+								((CommandProviderAwareEditingDomain) originalEditingDomain).setCommandProvidersDisabled(false);
+							}
 						}
-						originalEditingDomain.getCommandStack().execute(cmd);
-					} finally {
-						if (originalEditingDomain instanceof CommandProviderAwareEditingDomain) {
-							((CommandProviderAwareEditingDomain) originalEditingDomain).setCommandProvidersDisabled(false);
-						}
-					}
-
+					});
 					slotInsertionPlan = plan;
 
 				} finally {

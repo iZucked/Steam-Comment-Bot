@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
@@ -47,11 +48,11 @@ public class ExportScheduleHelper {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ExportScheduleHelper.class);
 
-	public static void export(final ScenarioResult scenarioResult) throws IOException {
-		export(scenarioResult, null);
+	public static @Nullable ScenarioInstance export(final ScenarioResult scenarioResult) throws Exception {
+		return export(scenarioResult, null, true);
 	}
 
-	public static void export(final ScenarioResult scenarioResult, @Nullable final String nameSuggestion) throws IOException {
+	public static @Nullable ScenarioInstance export(final ScenarioResult scenarioResult, @Nullable final String nameSuggestion, boolean openScenario) throws Exception {
 		// Original data
 		final LNGScenarioModel o_scenarioModel = scenarioResult.getTypedRoot(LNGScenarioModel.class);
 		final ScheduleModel o_scheduleModel = scenarioResult.getTypedResult(ScheduleModel.class);
@@ -60,7 +61,7 @@ public class ExportScheduleHelper {
 		@Nullable
 		final String newForkName = nameSuggestion != null ? nameSuggestion : ScenarioServiceModelUtils.getNewForkName(scenarioInstance, false);
 		if (newForkName == null) {
-			return;
+			return null;
 		}
 
 		// Clone data
@@ -110,31 +111,34 @@ public class ExportScheduleHelper {
 
 		assert EMFUtils.checkValidContainment(scenarioModel);
 
-		final IScenarioService scenarioService = scenarioInstance.getScenarioService();
+		final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(scenarioInstance);
 		if (scenarioService == null) {
-			// Open but deleted scenario? 
-			return;
-		}		
-		final ScenarioInstance fork = scenarioService.insert(scenarioInstance, scenarioModel);
-		fork.setName(newForkName);
-
-		// Copy across various bits of information
-		fork.getMetadata().setContentType(scenarioInstance.getMetadata().getContentType());
-		fork.getMetadata().setCreated(new Date());
-		fork.getMetadata().setLastModified(new Date());
-
-		// Copy version context information
-		fork.setVersionContext(scenarioInstance.getVersionContext());
-		fork.setScenarioVersion(scenarioInstance.getScenarioVersion());
-
-		fork.setClientVersionContext(scenarioInstance.getClientVersionContext());
-		fork.setClientScenarioVersion(scenarioInstance.getClientScenarioVersion());
-
-		try {
-			OpenScenarioUtils.openScenarioInstance(fork);
-		} catch (final PartInitException e) {
-			LOG.error(e.getMessage(), e);
+			// Open but deleted scenario?
+			return null;
 		}
+		final ScenarioInstance theFork = scenarioService.insert(scenarioInstance, scenarioModel, fork -> {
+			fork.setName(newForkName);
+
+			// Copy across various bits of information
+			fork.getMetadata().setContentType(scenarioInstance.getMetadata().getContentType());
+			fork.getMetadata().setCreated(new Date());
+			fork.getMetadata().setLastModified(new Date());
+
+			// Copy version context information
+			fork.setVersionContext(scenarioInstance.getVersionContext());
+			fork.setScenarioVersion(scenarioInstance.getScenarioVersion());
+
+			fork.setClientVersionContext(scenarioInstance.getClientVersionContext());
+			fork.setClientScenarioVersion(scenarioInstance.getClientScenarioVersion());
+		});
+		if (openScenario) {
+			try {
+				OpenScenarioUtils.openScenarioInstance(theFork);
+			} catch (final PartInitException e) {
+				LOG.error(e.getMessage(), e);
+			}
+		}
+		return theFork;
 
 	}
 }

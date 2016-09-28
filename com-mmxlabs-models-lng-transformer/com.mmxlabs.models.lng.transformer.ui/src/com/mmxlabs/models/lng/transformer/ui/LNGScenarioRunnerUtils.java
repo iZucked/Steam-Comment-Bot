@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegis
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
 public class LNGScenarioRunnerUtils {
 
@@ -80,7 +81,7 @@ public class LNGScenarioRunnerUtils {
 
 	@NonNull
 	public static ScenarioInstance saveScenarioAsChild(@NonNull final ScenarioInstance originalScenarioInstance, @NonNull final Container target, @NonNull final LNGScenarioModel scenarioModel,
-			@NonNull final String newName) throws IOException {
+			@NonNull final String newName) throws Exception {
 
 		return saveNewScenario(originalScenarioInstance, target, EcoreUtil.copy(scenarioModel), newName);
 	}
@@ -97,24 +98,24 @@ public class LNGScenarioRunnerUtils {
 	 */
 	@NonNull
 	public static ScenarioInstance saveNewScenario(@NonNull final ScenarioInstance originalScenarioInstance, @NonNull final Container target, @NonNull final LNGScenarioModel scenarioModel,
-			@NonNull final String newName) throws IOException {
-		final IScenarioService scenarioService = target.getScenarioService();
+			@NonNull final String newName) throws Exception {
+		final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(target);
 
-		final ScenarioInstance dup = scenarioService.insert(target, scenarioModel);
-		dup.setName(newName);
+		return scenarioService.insert(target, scenarioModel, theDupe -> {
 
-		// Copy across various bits of information
-		dup.getMetadata().setContentType(originalScenarioInstance.getMetadata().getContentType());
-		dup.getMetadata().setCreated(originalScenarioInstance.getMetadata().getCreated());
-		dup.getMetadata().setLastModified(new Date());
+			theDupe.setName(newName);
 
-		// Copy version context information
-		dup.setVersionContext(originalScenarioInstance.getVersionContext());
-		dup.setScenarioVersion(originalScenarioInstance.getScenarioVersion());
+			// Copy across various bits of information
+			theDupe.getMetadata().setContentType(originalScenarioInstance.getMetadata().getContentType());
+			theDupe.getMetadata().setCreated(originalScenarioInstance.getMetadata().getCreated());
+			theDupe.getMetadata().setLastModified(new Date());
 
-		dup.setClientVersionContext(originalScenarioInstance.getClientVersionContext());
-		dup.setClientScenarioVersion(originalScenarioInstance.getClientScenarioVersion());
+			// Copy version context information
+			theDupe.setVersionContext(originalScenarioInstance.getVersionContext());
+			theDupe.setScenarioVersion(originalScenarioInstance.getScenarioVersion());
 
-		return dup;
+			theDupe.setClientVersionContext(originalScenarioInstance.getClientVersionContext());
+			theDupe.setClientScenarioVersion(originalScenarioInstance.getClientScenarioVersion());
+		});
 	}
 }

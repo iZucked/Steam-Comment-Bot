@@ -138,30 +138,6 @@ public class ActionableSetsTransformerUnit implements ILNGStateTransformerUnit {
 		return link;
 	}
 
-	public static IChainLink export(final ChainBuilder chainBuilder, final int progressTicks, @NonNull final LNGScenarioToOptimiserBridge runner, @NonNull final ContainerProvider containerProvider) {
-		return LNGExporterUnit.exportMultiple(chainBuilder, progressTicks, runner, containerProvider, "Saving action plan", parent -> {
-
-			final List<Container> elementsToRemove = new LinkedList<>();
-			for (final Container c : parent.getElements()) {
-				if (c.getName().startsWith("ActionSet-")) {
-					elementsToRemove.add(c);
-				}
-			}
-			for (final Container c : elementsToRemove) {
-				parent.getScenarioService().delete(c);
-			}
-		}, changeSetIdx -> {
-			String newName;
-			if (changeSetIdx == 0) {
-				newName = "ActionSet-base";
-				changeSetIdx++;
-			} else {
-				newName = String.format("ActionSet-%s", (changeSetIdx++));
-			}
-			return newName;
-		});
-	}
-
 	@NonNull
 	private final LNGDataTransformer dataTransformer;
 

@@ -176,7 +176,7 @@ public class CSVImporter {
 		return dataMap;
 	}
 
-	public static LNGScenarioModel importCSVScenario(@NonNull final String urlRoot, final String... extraMapEntries) throws MalformedURLException {
+	public static @NonNull LNGScenarioModel importCSVScenario(@NonNull final String urlRoot, final String... extraMapEntries) throws MalformedURLException {
 
 		final CSVImporter importer = new CSVImporter();
 
@@ -194,15 +194,13 @@ public class CSVImporter {
 		return importCSVScenario(importer.dataMap);
 	}
 
-	@NonNull
-	public static LNGScenarioModel importCSVScenario(@NonNull final Map<String, URL> dataMap) {
+	public static @NonNull LNGScenarioModel importCSVScenario(@NonNull final Map<String, URL> dataMap) {
 
 		final IImporterRegistry importerRegistry = getImporterRegistry();
 		return importCSVScenario(dataMap, importerRegistry);
 	}
 
-	@NonNull
-	public static LNGScenarioModel importCSVScenario(@NonNull final Map<String, URL> dataMap, @NonNull final IImporterRegistry importerRegistry) {
+	public static @NonNull LNGScenarioModel importCSVScenario(@NonNull final Map<String, URL> dataMap, @NonNull final IImporterRegistry importerRegistry) {
 
 		final DefaultImportContext context = new DefaultImportContext('.');
 

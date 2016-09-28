@@ -4,18 +4,16 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
-import java.io.IOException;
-
 public class LNGSchedulerRunMultipleSeedsJobControl extends AbstractLNGRunMultipleForkedJobsControl {
 
-	public LNGSchedulerRunMultipleSeedsJobControl(final LNGRunMultipleSeedsJobDescriptor jobDescriptor) throws IOException {
+	public LNGSchedulerRunMultipleSeedsJobControl(final LNGRunMultipleSeedsJobDescriptor jobDescriptor) throws Exception {
 		super(jobDescriptor, (originalPlan, factory) -> {
-//			for (int i = 0; i < 20; ++i) {
-//				final OptimisationPlan optimisationPlan = EcoreUtil.copy(originalPlan);
-//				String name = "Seed-" + i;
-//				optimisationPlan.setSeed(i);
-//				factory.accept(name, optimisationPlan);
-//			}
+			// for (int i = 0; i < 20; ++i) {
+			// final OptimisationPlan optimisationPlan = EcoreUtil.copy(originalPlan);
+			// String name = "Seed-" + i;
+			// optimisationPlan.setSeed(i);
+			// factory.accept(name, optimisationPlan);
+			// }
 		});
 	}
 }

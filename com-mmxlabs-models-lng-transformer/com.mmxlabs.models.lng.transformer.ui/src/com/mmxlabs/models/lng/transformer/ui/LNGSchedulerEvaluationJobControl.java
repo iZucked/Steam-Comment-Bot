@@ -19,8 +19,10 @@ import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
 /**
  * A simple {@link IJobControl} to evaluate a schedule.
@@ -56,15 +58,19 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 		final ScenarioInstance scenarioInstance = jobDescriptor.getJobContext();
 
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
-		try (final ModelReference modelReference = scenarioInstance.getReference("LNGSchedulerEvaluationJobControl")) {
+		@NonNull
+		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		try (final ModelReference modelReference = modelRecord.aquireReference("LNGSchedulerEvaluationJobControl")) {
 			final LNGScenarioModel scenario = (LNGScenarioModel) modelReference.getInstance();
-			final EditingDomain editingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
+			final EditingDomain editingDomain = modelReference.getEditingDomain();
 
 			// Hack: Add on shipping only hint to avoid generating spot markets during eval.
 			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenario, scenarioInstance, jobDescriptor.getOptimisationPlan(), editingDomain, null, true,
 					LNGTransformerHelper.HINT_SHIPPING_ONLY);
 			try {
+				modelReference.setLastEvaluationFailed(true);
 				runner.evaluateInitialState();
+				modelReference.setLastEvaluationFailed(false);
 			} finally {
 				// runner.dispose();
 			}
@@ -80,7 +86,10 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 
 	@Override
 	public void cancel() {
-		setJobState(EJobState.CANCELLED);
+		if (getJobState() != EJobState.COMPLETED) {
+			setJobState(EJobState.CANCELLED);
+		}
+
 	}
 
 	@Override

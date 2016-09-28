@@ -1,5 +1,4 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2017
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
@@ -10,6 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.databinding.validation.IValidator;
@@ -77,11 +77,15 @@ import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
 import com.mmxlabs.models.util.StringEscaper;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
+import com.mmxlabs.scenario.service.model.util.ModelReferenceThread;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 
@@ -127,16 +131,16 @@ public final class OptimisationHelper {
 	public static final String SWTBOT_IDLE_DAYS = "swtbot.idledays";
 
 	public static Object evaluateScenarioInstance(@NonNull final IEclipseJobManager jobManager, @NonNull final ScenarioInstance instance, @Nullable final String parameterMode,
-			final boolean promptForOptimiserSettings, final boolean optimising, final String lockName, final boolean promptOnlyIfOptionsEnabled) {
+			final boolean promptForOptimiserSettings, final boolean optimising, final boolean promptOnlyIfOptionsEnabled) {
 
-		final IScenarioService service = instance.getScenarioService();
+		final IScenarioService service = SSDataManager.Instance.findScenarioService(instance);
 		if (service == null) {
 			return null;
 		}
-
+		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 		// While we only keep the reference for the duration of this method call, the two current concrete implementations of IJobControl will obtain a ModelReference
-		try (final ModelReference modelRefence = instance.getReference("OptimisationHelper")) {
-			final EObject object = modelRefence.getInstance();
+		try (final ModelReference modelReference = modelRecord.aquireReference("OptimisationHelper")) {
+			final EObject object = modelReference.getInstance();
 
 			if (object instanceof LNGScenarioModel) {
 				final LNGScenarioModel root = (LNGScenarioModel) object;
@@ -154,16 +158,21 @@ public final class OptimisationHelper {
 				if (optimisationPlan == null) {
 					return null;
 				}
-				final EditingDomain editingDomain = (EditingDomain) instance.getAdapters().get(EditingDomain.class);
+				final EditingDomain editingDomain = modelReference.getEditingDomain();
 				if (editingDomain != null) {
 					final CompoundCommand cmd = new CompoundCommand("Update settings");
 					cmd.append(SetCommand.create(editingDomain, root, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings(), EcoreUtil.copy(optimisationPlan.getUserSettings())));
-					editingDomain.getCommandStack().execute(cmd);
+					RunnerHelper.syncExecDisplayOptional(() -> {
+						editingDomain.getCommandStack().execute(cmd);
+					});
 				}
-				// Pair<UserSettings, OptimiserSettings>
 
-				final ScenarioLock scenarioLock = instance.getLock(lockName);
-				if (scenarioLock.awaitClaim()) {
+				new ModelReferenceThread("Optimise " + instance.getName(), modelRecord, (ref) -> {
+					final ScenarioLock scenarioLock = ref.getLock();
+
+					scenarioLock.lock();
+					// Use a latch to trigger unlock in this thread
+					CountDownLatch latch = new CountDownLatch(1);
 					IJobControl control = null;
 					IJobDescriptor job = null;
 					try {
@@ -172,8 +181,8 @@ public final class OptimisationHelper {
 
 						// New optimisation, so check there are no validation errors.
 						if (!validateScenario(root, optimising)) {
-							scenarioLock.release();
-							return null;
+							scenarioLock.unlock();
+							return;
 						}
 
 						// Automatically clean up job when removed from manager
@@ -187,7 +196,7 @@ public final class OptimisationHelper {
 							public boolean jobStateChanged(final IJobControl jobControl, final EJobState oldState, final EJobState newState) {
 
 								if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
-									scenarioLock.release();
+									latch.countDown();
 									jobManager.removeJob(finalJob);
 									return false;
 								}
@@ -202,6 +211,10 @@ public final class OptimisationHelper {
 						// Start the job!
 						control.prepare();
 						control.start();
+
+						latch.await();
+						scenarioLock.unlock();
+
 					} catch (final Throwable ex) {
 						log.error(ex.getMessage(), ex);
 						if (control != null) {
@@ -212,7 +225,7 @@ public final class OptimisationHelper {
 							jobManager.removeJob(job);
 						}
 						// instance.setLocked(false);
-						scenarioLock.release();
+						scenarioLock.unlock();
 
 						final Display display = Display.getDefault();
 						if (display != null) {
@@ -222,7 +235,7 @@ public final class OptimisationHelper {
 							});
 						}
 					}
-				}
+				}).start();
 			}
 		}
 
