@@ -1017,6 +1017,16 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
     // Note: things are in a certain order, as some stuff draws on top of
     // others, so don't move them around unless you want a different effect
     private void drawChartOntoGC(final GC gc, final Rectangle boundsOverride) {
+    	
+    	// Fix for broken vScroll max - sometimes it is too big, so here force it in to the calc to avoid rendering artifacts when the max is bigger than the expected size
+//        final Rectangle extraBounds = new Rectangle(0, _mainBounds.y + getHeaderHeight(), _mainBounds.x + _mainBounds.width, _mainBounds.y + Math.max(_vScrollBar.getMaximum(), _mainBounds.height));
+//        drawFills(gc, extraBounds);
+//        drawVerticalLines(gc, extraBounds, false);
+
+    	// SG : Always fill white to avoid occasional issue where we do not render over the unused area correctly.
+        gc.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+        gc.fillRectangle(getClientArea());
+    	
         // long totaltime1 = System.currentTimeMillis();
         final boolean drawSections = hasGanttSections();
 
@@ -1078,13 +1088,13 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
             // if we fill the bottom then fill it!
             if (_settings.drawFillsToBottomWhenUsingGanttSections()) {
-            	// Fix for broken vScroll max - sometimes it is too big, so here force it in to the calc to avoid rendering artifacts when the max is bigger than the expected size
-                final Rectangle extraBounds = new Rectangle(0, _mainBounds.y + getHeaderHeight(), _mainBounds.x + _mainBounds.width, _mainBounds.y + Math.max(_vScrollBar.getMaximum(), _mainBounds.height));
-//                drawFills(gc, extraBounds);
-//                drawVerticalLines(gc, extraBounds, false);
-
-                gc.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-                gc.fillRectangle(extraBounds);
+//            	// Fix for broken vScroll max - sometimes it is too big, so here force it in to the calc to avoid rendering artifacts when the max is bigger than the expected size
+//                final Rectangle extraBounds = new Rectangle(0, _mainBounds.y + getHeaderHeight(), _mainBounds.x + _mainBounds.width, _mainBounds.y + Math.max(_vScrollBar.getMaximum(), _mainBounds.height));
+////                drawFills(gc, extraBounds);
+////                drawVerticalLines(gc, extraBounds, false);
+//
+//                gc.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+//                gc.fillRectangle(extraBounds);
             }
 
             for (int i = 0; i < _ganttSections.size(); i++) {
