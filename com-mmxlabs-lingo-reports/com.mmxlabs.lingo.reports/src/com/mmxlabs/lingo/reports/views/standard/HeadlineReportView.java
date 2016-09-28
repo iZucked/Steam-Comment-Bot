@@ -44,6 +44,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
@@ -411,6 +412,7 @@ public class HeadlineReportView extends ViewPart {
 			}
 
 			final GridViewerColumn tvc = new GridViewerColumn(viewer, SWT.NONE);
+			tvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			int width;
 			String string;
 			if (def.columnType == ColumnType.Label) {

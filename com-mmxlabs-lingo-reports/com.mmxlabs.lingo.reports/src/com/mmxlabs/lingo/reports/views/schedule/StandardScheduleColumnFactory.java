@@ -86,6 +86,8 @@ import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
@@ -471,6 +473,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 							final Table table = (Table) report.getAdapter(Table.class);
 
 							final GridColumnGroup group = handler.block.getOrCreateColumnGroup(viewer.getGrid());
+							group.setHeaderRenderer(new ColumnGroupHeaderRenderer());
 
 							final String title = handler.title;
 							final ICellRenderer formatter = handler.getFormatter();
@@ -483,6 +486,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 								col = new GridColumn(viewer.getGrid(), SWT.NONE);
 							}
 							final GridViewerColumn column = new GridViewerColumn(viewer, col);
+							column.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 							column.getColumn().setText(title);
 							column.getColumn().setData(EObjectTableViewer.COLUMN_RENDERER, formatter);
 

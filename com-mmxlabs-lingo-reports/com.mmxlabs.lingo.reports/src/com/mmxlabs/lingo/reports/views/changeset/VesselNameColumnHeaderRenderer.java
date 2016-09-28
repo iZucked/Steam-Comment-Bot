@@ -17,6 +17,10 @@ import org.eclipse.swt.graphics.TextLayout;
 import org.eclipse.swt.graphics.Transform;
 import org.eclipse.swt.widgets.Display;
 
+import com.mmxlabs.models.ui.tabular.TableColourPalette;
+import com.mmxlabs.models.ui.tabular.TableColourPalette.ColourElements;
+import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
+
 /**
  * The column header renderer.
  *
@@ -97,7 +101,7 @@ public class VesselNameColumnHeaderRenderer extends GridHeaderRenderer {
 
 		boolean drawSelected = ((isMouseDown() && isHover()));
 
-		gc.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+		gc.setBackground(TableColourPalette.getInstance().getColourFor(TableItems.ColumnHeaders, ColourElements.Background));
 
 		if (flat && isSelected()) {
 			gc.setBackground(column.getParent().getCellHeaderSelectionBackground());
@@ -131,7 +135,7 @@ public class VesselNameColumnHeaderRenderer extends GridHeaderRenderer {
 			width -= arrowMargin + arrowRenderer.getSize().x + arrowMargin;
 		}
 		
-		gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
+		gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.ColumnHeaders, ColourElements.Foreground));
 
 		// y = bottomMargin;
 

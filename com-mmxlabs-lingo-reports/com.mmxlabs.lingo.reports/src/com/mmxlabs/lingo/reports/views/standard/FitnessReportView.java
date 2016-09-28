@@ -50,6 +50,7 @@ import com.mmxlabs.lingo.reports.views.standard.FitnessTransformer.RowData;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
@@ -236,16 +237,19 @@ public class FitnessReportView extends ViewPart {
 		viewer.setInput(getViewSite());
 
 		scheduleColumnViewer = new GridViewerColumn(viewer, SWT.NONE);
+		scheduleColumnViewer.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 		scheduleColumnViewer.getColumn().setText("Schedule");
 		scheduleColumnViewer.getColumn().pack();
 		addSortSelectionListener(scheduleColumnViewer.getColumn(), 0);
 
 		final GridViewerColumn tvc1 = new GridViewerColumn(viewer, SWT.NONE);
+		tvc1.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 		tvc1.getColumn().setText("Component");
 		tvc1.getColumn().pack();
 		addSortSelectionListener(tvc1.getColumn(), 1);
 
 		final GridViewerColumn tvc4 = new GridViewerColumn(viewer, SWT.NONE);
+		tvc4.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 		tvc4.getColumn().setText("Fitness");
 		tvc4.getColumn().pack();
 		addSortSelectionListener(tvc4.getColumn(), 2);
@@ -383,6 +387,7 @@ public class FitnessReportView extends ViewPart {
 		if (showDeltaColumn) {
 			if (delta == null) {
 				delta = new GridViewerColumn(viewer, SWT.NONE);
+				delta.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 				delta.getColumn().setText("Change");
 				delta.getColumn().pack();
 				addSortSelectionListener(delta.getColumn(), 4);

@@ -54,6 +54,7 @@ import com.mmxlabs.lingo.reports.views.standard.TotalsTransformer.RowData;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
@@ -281,21 +282,28 @@ public class TotalsReportView extends ViewPart {
 		viewer.setInput(getViewSite());
 
 		scheduleColumnViewer = new GridViewerColumn(viewer, SWT.NONE);
+		scheduleColumnViewer.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 		scheduleColumnViewer.getColumn().setText("Schedule");
 		scheduleColumnViewer.getColumn().pack();
 		addSortSelectionListener(scheduleColumnViewer.getColumn(), 0);
 
 		final GridViewerColumn tvc1 = new GridViewerColumn(viewer, SWT.NONE);
+		tvc1.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+
 		tvc1.getColumn().setText("Component");
 		tvc1.getColumn().pack();
 		addSortSelectionListener(tvc1.getColumn(), 1);
 
 		final GridViewerColumn tvc3 = new GridViewerColumn(viewer, SWT.NONE);
+		tvc3.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+
 		tvc3.getColumn().setText("Type");
 		tvc3.getColumn().pack();
 		addSortSelectionListener(tvc3.getColumn(), 2);
 
 		final GridViewerColumn tvc2 = new GridViewerColumn(viewer, SWT.NONE);
+		tvc2.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+
 		tvc2.getColumn().setText("Total");
 		tvc2.getColumn().pack();
 		addSortSelectionListener(tvc2.getColumn(), 3);
@@ -422,6 +430,7 @@ public class TotalsReportView extends ViewPart {
 		if (showDeltaColumn) {
 			if (delta == null) {
 				delta = new GridViewerColumn(viewer, SWT.NONE);
+				delta.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 				delta.getColumn().setText("Change");
 				delta.getColumn().pack();
 				addSortSelectionListener(delta.getColumn(), 4);

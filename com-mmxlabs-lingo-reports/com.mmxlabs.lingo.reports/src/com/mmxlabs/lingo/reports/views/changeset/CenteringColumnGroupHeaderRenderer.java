@@ -19,6 +19,10 @@ import org.eclipse.swt.graphics.TextLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 
+import com.mmxlabs.models.ui.tabular.TableColourPalette;
+import com.mmxlabs.models.ui.tabular.TableColourPalette.ColourElements;
+import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
+
 /**
  * The column group header renderer in Grid.
  *
@@ -54,7 +58,7 @@ public class CenteringColumnGroupHeaderRenderer extends GridHeaderRenderer {
 		if (isSelected()) {
 			gc.setBackground(group.getParent().getCellHeaderSelectionBackground());
 		} else {
-			gc.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+			gc.setBackground(TableColourPalette.getInstance().getColourFor(TableItems.ColumnHeaders, ColourElements.Background));
 		}
 
 		gc.fillRectangle(getBounds().x, getBounds().y, getBounds().width + 1, getBounds().height + 1);
@@ -71,7 +75,7 @@ public class CenteringColumnGroupHeaderRenderer extends GridHeaderRenderer {
 			width -= toggleRenderer.getSize().x;
 		}
 
-		gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
+		gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.ColumnHeaders, ColourElements.Foreground));
 
 		String text = group.getText();
 

@@ -26,6 +26,9 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.vertical.providers.EventProvider;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
+import com.mmxlabs.models.ui.tabular.renderers.RowHeaderRenderer;
+import com.mmxlabs.models.ui.tabular.renderers.TopLeftRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
@@ -129,6 +132,8 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		gridViewer.getGrid().setLinesVisible(true);
 
 		gridViewer.getGrid().setRowHeaderVisible(true);
+		gridViewer.getGrid().setRowHeaderRenderer(new RowHeaderRenderer());
+		gridViewer.getGrid().setTopLeftRenderer(new TopLeftRenderer());
 
 		makeActions();
 
@@ -205,6 +210,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		} else {
 			result = new GridViewerColumn(gridViewer, column);
 		}
+		result.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 		result.setLabelProvider(labeller);
 		result.getColumn().setText(name);
 		result.getColumn().pack();

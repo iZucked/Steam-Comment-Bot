@@ -69,6 +69,7 @@ import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
@@ -104,6 +105,7 @@ public class CargoEconsReport extends ViewPart {
 		// Add the name column
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("Name");
 			gvc.setLabelProvider(new FieldTypeNameLabelProvider());
 			gvc.getColumn().setWidth(100);
@@ -152,6 +154,7 @@ public class CargoEconsReport extends ViewPart {
 						final CargoAllocation cargoAllocation = (CargoAllocation) selectedObject;
 
 						final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+						gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 						// Mark column for disposal on selection change
 						dataColumns.add(gvc);
 						gvc.getColumn().setText(cargoAllocation.getName());
@@ -162,6 +165,8 @@ public class CargoEconsReport extends ViewPart {
 						final MarketAllocation cargoAllocation = (MarketAllocation) selectedObject;
 
 						final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+						gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+
 						// Mark column for disposal on selection change
 						dataColumns.add(gvc);
 						gvc.getColumn().setText(cargoAllocation.getSlot().getName());

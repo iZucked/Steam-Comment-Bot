@@ -12,6 +12,8 @@ import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.swt.SWT;
 
+import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
+
 /**
  * A named group which report columns can be attached to. The configuration dialog allows the user to edit the placement and visibility of these groups, which affects all columns in the group. Saved
  * configurations reflect only the placement and visibility of the groups.
@@ -125,6 +127,7 @@ public class ColumnBlock {
 		if (gridColumnGroup == null) {
 			if (columnHandlers.size() > 1) {
 				gridColumnGroup = new GridColumnGroup(grid, SWT.NONE);
+				gridColumnGroup.setHeaderRenderer(new ColumnGroupHeaderRenderer());
 				gridColumnGroup.setText(blockName);
 			}
 		}

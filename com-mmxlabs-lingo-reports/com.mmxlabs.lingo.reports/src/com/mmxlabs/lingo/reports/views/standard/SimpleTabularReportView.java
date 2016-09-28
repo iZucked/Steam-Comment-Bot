@@ -53,6 +53,7 @@ import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
@@ -410,6 +411,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 		for (ColumnManager<T> cv : columnManagers) {
 			String name = cv.getName();
 			GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			viewerColumns.add(gvc);
 			GridColumn gc = gvc.getColumn();
 			gc.setText(name);

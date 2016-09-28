@@ -99,6 +99,8 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
@@ -244,6 +246,7 @@ public class ChangeSetView implements IAdaptable {
 				assert name != null;
 				final GridColumn gc = new GridColumn(vesselColumnGroup, SWT.NONE);
 				final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+				gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 				gvc.getColumn().setText(shortNameMap.get(name));
 				gvc.getColumn().setHeaderTooltip(name);
 				gvc.getColumn().setWidth(22);
@@ -258,6 +261,7 @@ public class ChangeSetView implements IAdaptable {
 			{
 				final GridColumn gc = new GridColumn(vesselColumnGroup, SWT.NONE);
 				final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+				gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 				gvc.getColumn().setText("");
 				gvc.getColumn().setHeaderTooltip("Vessel assignment changed");
 				gvc.getColumn().setWidth(22);
@@ -497,6 +501,7 @@ public class ChangeSetView implements IAdaptable {
 		// Create columns
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("");
 			gvc.getColumn().setTree(true);
 			gvc.getColumn().setWidth(60);
@@ -507,6 +512,8 @@ public class ChangeSetView implements IAdaptable {
 		}
 
 		final GridColumnGroup pnlComponentGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER | SWT.TOGGLE);
+		pnlComponentGroup.setHeaderRenderer(new ColumnGroupHeaderRenderer());
+
 		// pnlComponentGroup.setText("P&L Components");
 		createCenteringGroupRenderer(pnlComponentGroup);
 		pnlComponentGroup.setExpanded(false);
@@ -528,6 +535,7 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("P&L (m)");
 			gvc.getColumn().setWidth(75);
 			gvc.setLabelProvider(createPNLDeltaLabelProvider());
@@ -553,6 +561,7 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("+ Sales");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createDeltaLabelProvider(true, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION,
@@ -565,6 +574,7 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("- Purchase");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createDeltaLabelProvider(true, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_LOAD_ALLOCATION, ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_LOAD_ALLOCATION,
@@ -577,6 +587,7 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("- Ship FOB");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createShippingDeltaLabelProvider());
@@ -588,6 +599,7 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("- Ship DES");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createAdditionalShippingPNLDeltaLabelProvider());
@@ -599,6 +611,7 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("- Upside");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createAdditionalUpsidePNLDeltaLabelProvider());
@@ -610,6 +623,7 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("+ Cargo other");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createCargoOtherPNLDeltaLabelProvider());
@@ -621,6 +635,7 @@ public class ChangeSetView implements IAdaptable {
 		if (LicenseFeatures.isPermitted("features:report-equity-book")) {
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("+ Equity");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createUpstreamDeltaLabelProvider());
@@ -632,6 +647,7 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("+ Tax, etc.");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createTaxDeltaLabelProvider());
@@ -645,6 +661,7 @@ public class ChangeSetView implements IAdaptable {
 		createSpacerColumn();
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("Late");
 			gvc.getColumn().setHeaderTooltip("Lateness");
 			gvc.getColumn().setWidth(50);
@@ -653,6 +670,7 @@ public class ChangeSetView implements IAdaptable {
 		}
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("Violations");
 			gvc.getColumn().setHeaderTooltip("Capacity Violations");
 			gvc.getColumn().setWidth(50);
@@ -666,11 +684,13 @@ public class ChangeSetView implements IAdaptable {
 		createSpacerColumn();
 
 		final GridColumnGroup loadGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER);
+		loadGroup.setHeaderRenderer(new ColumnGroupHeaderRenderer());
 		loadGroup.setText("Purchase");
 		createCenteringGroupRenderer(loadGroup);
 		{
 			final GridColumn gc = new GridColumn(loadGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("ID");
 			gvc.getColumn().setWidth(75);
 			gvc.setLabelProvider(createStandardLabelProvider(ChangesetPackage.Literals.CHANGE_SET_ROW__LHS_NAME));
@@ -679,6 +699,7 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(loadGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("Date");
 			gvc.getColumn().setWidth(75);
 			gvc.setLabelProvider(createDateLabelProvider(ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_LOAD_ALLOCATION));
@@ -687,6 +708,7 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(loadGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("Price");
 			gvc.getColumn().setWidth(50);
 			gvc.setLabelProvider(createDeltaLabelProvider(false, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_LOAD_ALLOCATION, ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_LOAD_ALLOCATION,
@@ -696,6 +718,7 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(loadGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("tBtu");
 			gvc.getColumn().setWidth(55);
 			gvc.setLabelProvider(createDeltaLabelProvider(true, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_LOAD_ALLOCATION, ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_LOAD_ALLOCATION,
@@ -704,6 +727,7 @@ public class ChangeSetView implements IAdaptable {
 		}
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("Wiring");
 			gvc.getColumn().setResizeable(false);
 			gvc.getColumn().setWidth(100);
@@ -712,12 +736,14 @@ public class ChangeSetView implements IAdaptable {
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 		}
 		final GridColumnGroup dischargeGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER);
+		dischargeGroup.setHeaderRenderer(new ColumnGroupHeaderRenderer());
 		dischargeGroup.setText("Sale");
 		createCenteringGroupRenderer(dischargeGroup);
 
 		{
 			final GridColumn gc = new GridColumn(dischargeGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("ID");
 			gvc.getColumn().setWidth(75);
 			gvc.setLabelProvider(createStandardLabelProvider(ChangesetPackage.Literals.CHANGE_SET_ROW__RHS_NAME));
@@ -726,6 +752,7 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(dischargeGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("Date");
 			gvc.getColumn().setWidth(75);
 			gvc.setLabelProvider(createDateLabelProvider(ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION));
@@ -735,6 +762,7 @@ public class ChangeSetView implements IAdaptable {
 
 			final GridColumn gc = new GridColumn(dischargeGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("Price");
 			gvc.getColumn().setWidth(50);
 			gvc.setLabelProvider(createDeltaLabelProvider(false, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION,
@@ -745,6 +773,7 @@ public class ChangeSetView implements IAdaptable {
 
 			final GridColumn gc = new GridColumn(dischargeGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("tBtu");
 			gvc.getColumn().setWidth(55);
 			gvc.setLabelProvider(createDeltaLabelProvider(true, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION,
@@ -756,6 +785,8 @@ public class ChangeSetView implements IAdaptable {
 		createSpacerColumn();
 
 		vesselColumnGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER | SWT.TOGGLE);
+		vesselColumnGroup.setHeaderRenderer(new ColumnGroupHeaderRenderer());
+
 		// vesselColumnGroup.setText("Vessels");
 		vesselColumnGroup.setExpanded(false);
 		createCenteringGroupRenderer(vesselColumnGroup);
@@ -779,6 +810,7 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(vesselColumnGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("");
 			gvc.getColumn().setResizeable(false);
 			gvc.getColumn().setVisible(false);
@@ -1017,6 +1049,7 @@ public class ChangeSetView implements IAdaptable {
 		{
 
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("");
 			gvc.getColumn().setResizeable(false);
 			gvc.getColumn().setWidth(5);
