@@ -40,6 +40,7 @@ import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 
 /**
  * Set the input to a distance model, and this will let you edit it
@@ -129,7 +130,7 @@ public class DistanceLineViewer extends GridTableViewer {
 		for (final Port p : ports) {
 
 			final GridViewerColumn toColumn = new GridViewerColumn(this, SWT.NONE);
-
+			toColumn.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			toColumn.getColumn().setText(p.getName());
 
 			toColumn.setLabelProvider(new ColumnLabelProvider() {

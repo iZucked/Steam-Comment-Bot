@@ -84,6 +84,7 @@ import com.mmxlabs.models.ui.editors.dialogs.DefaultDialogEditingContext;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogController;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
@@ -590,6 +591,7 @@ public class CreateStripDialog extends FormDialog {
 
 	private void createColumn(final GridTableViewer viewer, final EStructuralFeature feature) {
 		final GridViewerColumn col = new GridViewerColumn(viewer, SWT.NONE);
+		col.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 		col.setLabelProvider(new ValidationLabelProvider(feature));
 		col.getColumn().setWidth(50);
 		col.getColumn().setText(EditorUtils.unmangle(feature.getName()));

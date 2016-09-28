@@ -59,6 +59,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.ILabelLayoutDataProvidingEditor;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.BasicAttributeInlineEditor;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 
 /**
  */
@@ -140,6 +141,7 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 
 	public GridViewerColumn createColumn(final GridTableViewer viewer, final String title) {
 		final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
+		column.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 		column.getColumn().setText(title);
 		return column;
 	}

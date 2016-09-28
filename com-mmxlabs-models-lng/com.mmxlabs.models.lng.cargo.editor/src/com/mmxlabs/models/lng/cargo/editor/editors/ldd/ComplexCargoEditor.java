@@ -73,6 +73,7 @@ import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
@@ -155,6 +156,7 @@ public class ComplexCargoEditor extends Dialog {
 			viewer.getGrid().setLayoutData(new GridData(700, 150));
 			{
 				final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
+				column.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 				column.getColumn().setText("T");
 				column.getColumn().setWidth(15);
 				// final ContractManipulator manipulator = new ContractManipulator(scenarioEditingLocation.getReferenceValueProviderCache(), scenarioEditingLocation.getEditingDomain());
@@ -176,6 +178,7 @@ public class ComplexCargoEditor extends Dialog {
 
 			{
 				final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
+				column.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 				column.getColumn().setText("Name");
 				column.getColumn().setWidth(60);
 
@@ -188,6 +191,7 @@ public class ComplexCargoEditor extends Dialog {
 
 			{
 				final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
+				column.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 				column.getColumn().setText("Contract");
 				column.getColumn().setWidth(150);
 				final ContractManipulator manipulator = new ContractManipulator(sel.getReferenceValueProviderCache(), sel.getEditingDomain());
@@ -200,6 +204,7 @@ public class ComplexCargoEditor extends Dialog {
 			{
 
 				final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
+				column.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 				column.getColumn().setText("Port");
 				column.getColumn().setWidth(100);
 
@@ -212,6 +217,7 @@ public class ComplexCargoEditor extends Dialog {
 
 			{
 				final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
+				column.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 				column.getColumn().setText("Date");
 				column.getColumn().setWidth(100);
 				// column.setLabelProvider(new GenericMapCellLabelProvider("{0}", attributeMap));
@@ -224,6 +230,7 @@ public class ComplexCargoEditor extends Dialog {
 			}
 			{
 				final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
+				column.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 				column.getColumn().setText("Volume (Min)");
 				column.getColumn().setWidth(100);
 
@@ -252,6 +259,7 @@ public class ComplexCargoEditor extends Dialog {
 			}
 			{
 				final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
+				column.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 				column.getColumn().setText("Volume (Max)");
 				column.getColumn().setWidth(100);
 
