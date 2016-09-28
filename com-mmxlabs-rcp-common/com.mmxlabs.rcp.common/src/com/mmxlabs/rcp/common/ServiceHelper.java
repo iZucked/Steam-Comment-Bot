@@ -4,11 +4,14 @@
  */
 package com.mmxlabs.rcp.common;
 
+import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 import com.mmxlabs.common.util.CheckedConsumer;
@@ -16,7 +19,7 @@ import com.mmxlabs.common.util.CheckedFunction;
 
 public final class ServiceHelper {
 
-	public static <T> void withOptionalService(Class<T> cls, final Consumer<T> withFunc) {
+	public static <T> void withOptionalService(final Class<T> cls, final Consumer<T> withFunc) {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
 		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
 		if (serviceReference != null) {
@@ -31,7 +34,7 @@ public final class ServiceHelper {
 		}
 	}
 
-	public static <T, V, E extends Exception> V withCheckedOptionalService(Class<T> cls, final CheckedFunction<T, V, E> withFunc) throws E {
+	public static <T, V, E extends Exception> V withCheckedOptionalService(final Class<T> cls, final CheckedFunction<T, V, E> withFunc) throws E {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
 		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
 		if (serviceReference != null) {
@@ -46,7 +49,7 @@ public final class ServiceHelper {
 		}
 	}
 
-	public static <T, E extends Exception> void withCheckedOptionalService(Class<T> cls, final CheckedConsumer<T, E> withFunc) throws E {
+	public static <T, E extends Exception> void withCheckedOptionalService(final Class<T> cls, final CheckedConsumer<T, E> withFunc) throws E {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
 		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
 		if (serviceReference != null) {
@@ -61,7 +64,7 @@ public final class ServiceHelper {
 		}
 	}
 
-	public static <T, V, E extends Exception> V withOptionalService(Class<T> cls, final CheckedFunction<T, V, E> withFunc) throws E {
+	public static <T, V, E extends Exception> V withOptionalService(final Class<T> cls, final CheckedFunction<T, V, E> withFunc) throws E {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
 		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
 		if (serviceReference != null) {
@@ -76,7 +79,7 @@ public final class ServiceHelper {
 		}
 	}
 
-	public static <T> void withService(Class<T> cls, final Consumer<T> withFunc) {
+	public static <T> void withService(final Class<T> cls, final Consumer<T> withFunc) {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
 		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
 		if (serviceReference == null) {
@@ -90,7 +93,7 @@ public final class ServiceHelper {
 		}
 	}
 
-	public static <T, V> V withService(Class<T> cls, final Function<T, V> withFunc) {
+	public static <T, V> V withService(final Class<T> cls, final Function<T, V> withFunc) {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
 		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
 		if (serviceReference == null) {
@@ -104,8 +107,7 @@ public final class ServiceHelper {
 		}
 	}
 
-	
-	public static <T, V, E extends Exception> V withCheckedService(Class<T> cls, final CheckedFunction<T, V, E> withFunc) throws E {
+	public static <T, V, E extends Exception> V withCheckedService(final Class<T> cls, final CheckedFunction<T, V, E> withFunc) throws E {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
 		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
 		if (serviceReference == null) {
@@ -119,8 +121,7 @@ public final class ServiceHelper {
 		}
 	}
 
-
-	public static <T, E extends Exception> void withCheckedService(Class<T> cls, final CheckedConsumer<T, E> withFunc) throws E {
+	public static <T, E extends Exception> void withCheckedService(final Class<T> cls, final CheckedConsumer<T, E> withFunc) throws E {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
 		final ServiceReference<T> serviceReference = bundleContext.getServiceReference(cls);
 		if (serviceReference == null) {
@@ -131,6 +132,36 @@ public final class ServiceHelper {
 			withFunc.accept(service);
 		} finally {
 			bundleContext.ungetService(serviceReference);
+		}
+	}
+
+	/**
+	 * Loop through all services of requested class. Pass the service instance to the given function. If the function returns false, terminate the loop, otherwise continue to the next service.
+	 * 
+	 * @param cls
+	 * @param withFunc
+	 */
+	public static <T> void withAllServices(final Class<T> cls, final Function<T, @NonNull Boolean> withFunc) {
+		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
+		Collection<ServiceReference<T>> serviceReferences;
+		try {
+			serviceReferences = bundleContext.getServiceReferences(cls, null);
+
+			for (final ServiceReference<T> serviceReference : serviceReferences) {
+				final T service = bundleContext.getService(serviceReference);
+				try {
+					final boolean cont = withFunc.apply(service);
+					if (!cont) {
+						break;
+					}
+				} finally {
+					bundleContext.ungetService(serviceReference);
+				}
+			}
+		} catch (final InvalidSyntaxException e) {
+			// Note: as we pass in a null filter we do not expect to get here.
+			assert false;
+			throw new RuntimeException(e);
 		}
 	}
 }
