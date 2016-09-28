@@ -17,11 +17,9 @@ import com.mmxlabs.common.Pair;
 
 public final class TableColourPalette {
 
-	//
-	//
 	private static final RGB FontColour = new RGB(0, 0, 0);
 	private static final RGB HeaderColour = new RGB(230, 239, 249);
-	private static final RGB BorderColour = new RGB(96, 96, 96);
+	private static final RGB BorderColour = new RGB(220, 220, 220);
 
 	private static TableColourPalette instance;
 	private static Map<String, TableColourPalette> namedInstances = new HashMap<>();
@@ -62,7 +60,8 @@ public final class TableColourPalette {
 		setItemColour(TableItems.ColumnGroupHeaders, ColourElements.Background, HeaderColour);
 		setItemColour(TableItems.RowHeader, ColourElements.Background, HeaderColour);
 		setItemColour(TableItems.TopLeftHeader, ColourElements.Background, HeaderColour);
-		
+
+		setItemColour(TableItems.LineBorders, ColourElements.Foreground, BorderColour);
 		setItemColour(TableItems.ColumnGroupHeaders, ColourElements.Foreground, FontColour);
 		setItemColour(TableItems.ColumnHeaders, ColourElements.Foreground, FontColour);
 		setItemColour(TableItems.RowHeader, ColourElements.Foreground, FontColour);

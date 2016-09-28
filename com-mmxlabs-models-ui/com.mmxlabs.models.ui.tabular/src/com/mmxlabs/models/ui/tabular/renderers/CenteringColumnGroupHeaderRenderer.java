@@ -54,7 +54,7 @@ public class CenteringColumnGroupHeaderRenderer extends GridHeaderRenderer {
 		if (isSelected()) {
 			gc.setBackground(group.getParent().getCellHeaderSelectionBackground());
 		} else {
-			gc.setBackground(TableColourPalette.getInstance().getColourFor(TableItems.ColumnHeaders, ColourElements.Background));
+			gc.setBackground(TableColourPalette.getInstance().getColourFor(TableItems.ColumnGroupHeaders, ColourElements.Background));
 		}
 
 		gc.fillRectangle(getBounds().x, getBounds().y, getBounds().width + 1, getBounds().height + 1);
@@ -71,7 +71,7 @@ public class CenteringColumnGroupHeaderRenderer extends GridHeaderRenderer {
 			width -= toggleRenderer.getSize().x;
 		}
 
-		gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.ColumnHeaders, ColourElements.Foreground));
+		gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.ColumnGroupHeaders, ColourElements.Foreground));
 
 		String text = group.getText();
 
@@ -108,7 +108,7 @@ public class CenteringColumnGroupHeaderRenderer extends GridHeaderRenderer {
 			toggleRenderer.paint(gc, null);
 		}
 
-		gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_DARK_SHADOW));
+		gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Background));
 
 		gc.drawLine(getBounds().x + getBounds().width - 1, getBounds().y, getBounds().x + getBounds().width - 1, getBounds().y + getBounds().height - 1);
 		gc.drawLine(getBounds().x, getBounds().y + getBounds().height - 1, getBounds().x + getBounds().width - 1, getBounds().y + getBounds().height - 1);
