@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
@@ -26,6 +27,7 @@ import org.eclipse.ui.IMemento;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.IGanttChartColourProvider;
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
+import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
@@ -76,16 +78,36 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	private final SelectedScenariosService selectedScenariosService;
 
 	private final VesselAssignmentFormatter vesselFormatter = new VesselAssignmentFormatter();
+	Image pinImage = null;
 
 	public EMFScheduleLabelProvider(final GanttChartViewer viewer, final IMemento memento, @NonNull final SelectedScenariosService selectedScenariosService) {
 		this.viewer = viewer;
 		this.memento = memento;
 		this.selectedScenariosService = selectedScenariosService;
 		this.showCanals = memento.getBoolean(Show_Canals);
+		
+		ImageDescriptor imageDescriptor = Activator.getImageDescriptor("icons/PinnedRow.gif");
+		pinImage = imageDescriptor.createImage();
+	}
+
+	@Override
+	public void dispose() {
+		if (pinImage != null) {
+			pinImage.dispose();
+			pinImage = null;
+
+		}
+		super.dispose();
 	}
 
 	@Override
 	public Image getImage(final Object element) {
+		if (element instanceof Sequence) {
+			Sequence sequence = (Sequence) element;
+			if (selectedScenariosService.getCurrentSelectedDataProvider().isPinnedObject(sequence)) {
+				return pinImage;
+			}
+		}
 		return null;
 	}
 
@@ -106,9 +128,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 					if (selectedDataProvider != null) {
 						if (selectedScenariosService.getPinnedScenario() != null) {
-							if (selectedDataProvider.isPinnedObject(sequence)) {
-								seqText += " (pinned)";
-							}
+							// Do nothing now we have a pin icon
 						} else {
 							final ScenarioInstance instance = selectedDataProvider.getScenarioInstance(sequence);
 							if (instance != null) {
