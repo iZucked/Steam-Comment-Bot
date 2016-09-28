@@ -67,6 +67,7 @@ import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
 public class ImportCSVFilesPage extends WizardPage {
 
@@ -226,7 +227,7 @@ public class ImportCSVFilesPage extends WizardPage {
 		decimalSelectionGroup.setSelectedIndex(decimalValue);
 
 		GridData layout;
-		
+
 		final ExpandableComposite fieldComposite = new ExpandableComposite(top, SWT.NONE);
 		fieldComposite.setText("Custom Files");
 		fieldComposite.setLayout(new GridLayout(1, false));
@@ -235,35 +236,25 @@ public class ImportCSVFilesPage extends WizardPage {
 		layout.heightHint = 300;
 		layout.widthHint = 600;
 		fieldComposite.setLayoutData(layout);
-		
+
 		final ScrolledComposite fieldScroller = new ScrolledComposite(fieldComposite, SWT.V_SCROLL);
 		fieldScroller.setLayout(new GridLayout(1, false));
-		
-		final Composite inner = new Composite(fieldScroller, SWT.NONE);		
+
+		final Composite inner = new Composite(fieldScroller, SWT.NONE);
 		inner.setLayout(new GridLayout(1, false));
 
 		/*
-		fieldComposite.addExpansionListener(new IExpansionListener() {
-			
-			@Override
-			public void expansionStateChanging(ExpansionEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void expansionStateChanged(ExpansionEvent e) {
-				inner.setSize(inner.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-				inner.layout();
-				fieldScroller.setSize(fieldScroller.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-				fieldScroller.layout();
-				fieldComposite.setSize(fieldComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-				fieldComposite.layout();
-			}
-		});
-		*/
-		
-		
+		 * fieldComposite.addExpansionListener(new IExpansionListener() {
+		 * 
+		 * @Override public void expansionStateChanging(ExpansionEvent e) { // TODO Auto-generated method stub
+		 * 
+		 * }
+		 * 
+		 * @Override public void expansionStateChanged(ExpansionEvent e) { inner.setSize(inner.computeSize(SWT.DEFAULT, SWT.DEFAULT)); inner.layout();
+		 * fieldScroller.setSize(fieldScroller.computeSize(SWT.DEFAULT, SWT.DEFAULT)); fieldScroller.layout(); fieldComposite.setSize(fieldComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		 * fieldComposite.layout(); } });
+		 */
+
 		// add a load of fields to the editor based on registered submodel importers
 		for (final ISubmodelImporter importer : Activator.getDefault().getImporterRegistry().getAllSubModelImporters()) {
 			if (importer == null) {
@@ -297,7 +288,6 @@ public class ImportCSVFilesPage extends WizardPage {
 			}
 		}
 
-		
 		for (final IExtraModelImporter importer : Activator.getDefault().getImporterRegistry().getExtraModelImporters()) {
 			if (importer == null) {
 				continue;
@@ -333,8 +323,7 @@ public class ImportCSVFilesPage extends WizardPage {
 		fieldScroller.setContent(inner);
 		fieldScroller.setExpandHorizontal(true);
 		inner.setSize(inner.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		
-		
+
 		c1.setContent(top);
 		// c1.setExpandVertical(true);
 		c1.setExpandHorizontal(true);
@@ -474,48 +463,49 @@ public class ImportCSVFilesPage extends WizardPage {
 
 							ImportCSVFilesPage.this.importContext = context;
 							final Container container = mainPage.getScenarioContainer();
-							final IScenarioService scenarioService = container.getScenarioService();
+							final IScenarioService scenarioService = SSDataManager.Instance.findScenarioService(container);
 
 							try {
-								final ScenarioInstance instance = scenarioService.insert(container, scenarioModel);
+								final ScenarioInstance newInstance = scenarioService.insert(container, scenarioModel, instance -> {
 
-								try {
-									final String scenarioVersionContext = migrationRegistry.getDefaultMigrationContext();
-									final String clientVersionContext = migrationRegistry.getDefaultClientMigrationContext();
-									if (scenarioVersionContext != null) {
-										instance.setVersionContext(scenarioVersionContext);
-										int latestContextVersion = migrationRegistry.getLatestContextVersion(scenarioVersionContext);
-										// Snapshot version - so find last good version number
-										if (latestContextVersion < 0) {
-											latestContextVersion = migrationRegistry.getLastReleaseVersion(scenarioVersionContext);
+									try {
+										final String scenarioVersionContext = migrationRegistry.getDefaultMigrationContext();
+										final String clientVersionContext = migrationRegistry.getDefaultClientMigrationContext();
+										if (scenarioVersionContext != null) {
+											instance.setVersionContext(scenarioVersionContext);
+											int latestContextVersion = migrationRegistry.getLatestContextVersion(scenarioVersionContext);
+											// Snapshot version - so find last good version number
+											if (latestContextVersion < 0) {
+												latestContextVersion = migrationRegistry.getLastReleaseVersion(scenarioVersionContext);
+											}
+											instance.setScenarioVersion(latestContextVersion);
 										}
-										instance.setScenarioVersion(latestContextVersion);
-									}
-									if (clientVersionContext != null) {
-										instance.setClientVersionContext(clientVersionContext);
-										int latestClientContextVersion = migrationRegistry.getLatestClientContextVersion(clientVersionContext);
-										// Snapshot version - so find last good version number
-										if (latestClientContextVersion < 0) {
-											latestClientContextVersion = migrationRegistry.getLastReleaseClientVersion(clientVersionContext);
+										if (clientVersionContext != null) {
+											instance.setClientVersionContext(clientVersionContext);
+											int latestClientContextVersion = migrationRegistry.getLatestClientContextVersion(clientVersionContext);
+											// Snapshot version - so find last good version number
+											if (latestClientContextVersion < 0) {
+												latestClientContextVersion = migrationRegistry.getLastReleaseClientVersion(clientVersionContext);
+											}
+											instance.setClientScenarioVersion(latestClientContextVersion);
 										}
-										instance.setClientScenarioVersion(latestClientContextVersion);
+									} catch (final IllegalArgumentException e) {
+										log.error(e.getMessage(), e);
+										setErrorMessage(e.getMessage());
 									}
-								} catch (final IllegalArgumentException e) {
-									log.error(e.getMessage(), e);
-									setErrorMessage(e.getMessage());
-								}
+
+									instance.setName(mainPage.getFileName());
+
+									final Metadata metadata = instance.getMetadata();
+									metadata.setCreated(new Date());
+									metadata.setLastModified(new Date());
+									metadata.setContentType("com.mmxlabs.shiplingo.platform.models.manifest.scnfile");
+								});
 								monitor.worked(1);
 
-								instance.setName(mainPage.getFileName());
+								ImportCSVFilesPage.this.setScenarioInstance(newInstance);
 
-								final Metadata metadata = instance.getMetadata();
-								metadata.setCreated(new Date());
-								metadata.setLastModified(new Date());
-								metadata.setContentType("com.mmxlabs.shiplingo.platform.models.manifest.scnfile");
-
-								ImportCSVFilesPage.this.setScenarioInstance(instance);
-
-							} catch (final IOException e) {
+							} catch (final Exception e) {
 								// NOTE: in Java SE 7 we can incorporate this into the previous
 								// exception block as catch(final IllegalArgumentException|IOException e)
 								log.error(e.getMessage(), e);

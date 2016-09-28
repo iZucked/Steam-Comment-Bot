@@ -54,9 +54,11 @@ import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.dnd.IScenarioFragmentCopyHandler;
 
 public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
@@ -70,8 +72,9 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 		}
 		
 		final ScenarioInstance source = scenarioFragment.getScenarioInstance();
+		final ModelRecord sourceRecord = SSDataManager.Instance.getModelRecord(source);
 
-		try (ModelReference sourceReference = source.getReference("FragmentCopyHandler:1")) {
+		try (ModelReference sourceReference = sourceRecord.aquireReference("FragmentCopyHandler:1")) {
 			final EObject fragment = scenarioFragment.getFragment();
 			if (fragment instanceof OptionAnalysisModel) {
 				final OptionAnalysisModel sourceModel = (OptionAnalysisModel) fragment;
@@ -81,11 +84,12 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 					final LNGScenarioModel targetModel = (LNGScenarioModel) sourceReference.getInstance();
 					AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(targetModel);
 					analyticsModel.getOptionModels().add(copyModel);
-					target.setDirty(true);
+					sourceReference.setDirty();
 					return true;
 				} else {
 					//
-					try (ModelReference targetReference = target.getReference("FragmentCopyHandler:2")) {
+					ModelRecord targetRecord = SSDataManager.Instance.getModelRecord(target);
+					try (ModelReference targetReference = targetRecord.aquireReference("FragmentCopyHandler:2")) {
 						final LNGScenarioModel targetModel = (LNGScenarioModel) targetReference.getInstance();
 
 						final OptionAnalysisModel copyModel = EcoreUtil.copy(sourceModel);
@@ -205,10 +209,10 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 						for (final ShippingOption opt : copyModel.getShippingTemplates()) {
 							updateShipping.accept(opt);
 						}
-						// target.setDirty(true);
+						// targetReference.setDirty();
 						// targetModel.getOptionModels().add(copyModel);
 
-						final EditingDomain domain = (EditingDomain) target.getAdapters().get(EditingDomain.class);
+						final EditingDomain domain = targetReference.getEditingDomain();
 						AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(targetModel);
 
 						domain.getCommandStack().execute(AddCommand.create(domain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels(), copyModel));

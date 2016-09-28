@@ -42,6 +42,7 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.impl.ReferenceInlineEditor;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 
@@ -182,8 +183,8 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 	}
 
 	@Override
-	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
-		super.init(path, adapterFactory, commandStack);
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
+		super.init(path, adapterFactory, modelReference);
 
 		addTypicalColumn("Entry Point",
 				new SingleReferenceManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_EntryPoint(), scenarioEditingLocation.getReferenceValueProviderCache(), getEditingDomain()));

@@ -31,7 +31,7 @@ public class CanalCostsView extends ScenarioTableViewerView<CanalCostsPane> {
 		final EditingDomain domain = getEditingDomain();
 		if (domain != null) {
 			pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel(), LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_CostModel(),
-					PricingPackage.eINSTANCE.getCostModel_RouteCosts() }), getAdapterFactory(), domain.getCommandStack());
+					PricingPackage.eINSTANCE.getCostModel_RouteCosts() }), getAdapterFactory(), getModelReference());
 			pane.getViewer().setInput(getRootObject());
 		}
 	}

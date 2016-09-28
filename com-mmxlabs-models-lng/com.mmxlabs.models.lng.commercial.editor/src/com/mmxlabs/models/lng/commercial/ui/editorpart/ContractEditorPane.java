@@ -21,6 +21,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class ContractEditorPane extends ScenarioTableViewerPane {
 	public ContractEditorPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
@@ -28,8 +29,8 @@ public class ContractEditorPane extends ScenarioTableViewerPane {
 	}
 
 	@Override
-	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
-		super.init(path, adapterFactory, commandStack);
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
+		super.init(path, adapterFactory, modelReference);
 		addNameManipulator("Name");
 
 		addTypicalColumn("Entity", new SingleReferenceManipulator(CommercialPackage.eINSTANCE.getContract_Entity(), getReferenceValueProviderCache(), getEditingDomain()));

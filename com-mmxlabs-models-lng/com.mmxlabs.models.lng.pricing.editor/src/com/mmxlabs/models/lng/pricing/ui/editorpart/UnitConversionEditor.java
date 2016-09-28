@@ -92,7 +92,7 @@ public class UnitConversionEditor extends Dialog {
 		viewer.addTypicalColumn("in ...", new BasicAttributeManipulator(PricingPackage.Literals.UNIT_CONVERSION__TO, scenarioEditingLocation.getEditingDomain()));
 		viewer.addTypicalColumn("is ...", new NumericAttributeManipulator(PricingPackage.Literals.UNIT_CONVERSION__FACTOR, scenarioEditingLocation.getEditingDomain()));
 
-		viewer.init(scenarioEditingLocation.getAdapterFactory(), scenarioEditingLocation.getEditingDomain().getCommandStack(), PricingPackage.Literals.PRICING_MODEL__CONVERSION_FACTORS);
+		viewer.init(scenarioEditingLocation.getAdapterFactory(), scenarioEditingLocation.getModelReference(), PricingPackage.Literals.PRICING_MODEL__CONVERSION_FACTORS);
 
 		@NonNull
 		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel((LNGScenarioModel) scenarioEditingLocation.getRootObject());

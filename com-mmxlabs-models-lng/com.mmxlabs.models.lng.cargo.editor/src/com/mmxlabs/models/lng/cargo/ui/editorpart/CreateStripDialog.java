@@ -90,7 +90,8 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 /**
  * This dialog is used to create a strip of {@link Slot}s with consistent parameters but with varying date according to some kind of pattern.
@@ -794,8 +795,6 @@ public class CreateStripDialog extends FormDialog {
 	 */
 	private IScenarioEditingLocation createScenarioEditingLocation(final IScenarioEditingLocation original) {
 
-		// final EditingDomain editingDomain = new AdapterFactoryEditingDomain(original.getAdapterFactory(), new BasicCommandStack());
-
 		final ICommandHandler commandHandler = new ICommandHandler() {
 
 			@Override
@@ -814,6 +813,11 @@ public class CreateStripDialog extends FormDialog {
 			public EditingDomain getEditingDomain() {
 				return original.getEditingDomain();
 			}
+
+			@Override
+			public ModelReference getModelReference() {
+				return original.getModelReference();
+			};
 		};
 
 		return new IScenarioEditingLocation() {
@@ -864,6 +868,11 @@ public class CreateStripDialog extends FormDialog {
 			}
 
 			@Override
+			public ModelReference getModelReference() {
+				return original.getModelReference();
+			}
+
+			@Override
 			public MMXRootObject getRootObject() {
 				return original.getRootObject();
 			}
@@ -880,7 +889,7 @@ public class CreateStripDialog extends FormDialog {
 
 			@Override
 			public ScenarioLock getEditorLock() {
-				return null;
+				throw new UnsupportedOperationException();
 			}
 
 			@Override

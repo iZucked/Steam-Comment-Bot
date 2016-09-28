@@ -79,6 +79,7 @@ import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class OptionModellerView extends ScenarioInstanceView implements CommandStackListener {
 
@@ -915,6 +916,11 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				@Override
 				public EditingDomain getEditingDomain() {
 					return superHandler.getEditingDomain();
+				}
+
+				@Override
+				public ModelReference getModelReference() {
+					return superHandler.getModelReference();
 				}
 			};
 		}

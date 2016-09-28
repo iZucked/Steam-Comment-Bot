@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.adp.presentation.wizard;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Shell;
 
@@ -16,10 +17,13 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 public class ADPScenarioEditingLocation implements IScenarioEditingLocation {
 
+	private ModelReference modelReference;
+	
 	@Override
 	public boolean isLocked() {
 		// TODO Auto-generated method stub
@@ -103,17 +107,23 @@ public class ADPScenarioEditingLocation implements IScenarioEditingLocation {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+ 
 	@Override
-	public ScenarioLock getEditorLock() {
+	public IStatusProvider getStatusProvider() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public IStatusProvider getStatusProvider() {
+	public @NonNull ModelReference getModelReference() {
 		// TODO Auto-generated method stub
-		return null;
+		return modelReference;
+	}
+
+	@Override
+	public ScenarioLock getEditorLock() {
+		// TODO Auto-generated method stub
+		return modelReference.getLock();
 	}
 
 }

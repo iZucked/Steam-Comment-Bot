@@ -3,10 +3,14 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.ui.utils;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.mmxcore.UUIDObject;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
 public class AnalyticsSolution {
 	private String title;
@@ -39,8 +43,9 @@ public class AnalyticsSolution {
 		id = instance.getUuid() + title;
 		this.title = title;
 
-		this.modelReference = instance.getReference("AnalyticsSolution:1");
-
+		@NonNull
+		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+		this.modelReference = modelRecord.aquireReference("AnalyticsSolution:1");
 	}
 
 	@Override

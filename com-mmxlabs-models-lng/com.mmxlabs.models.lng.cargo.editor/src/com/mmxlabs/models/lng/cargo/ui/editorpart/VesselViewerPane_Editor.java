@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.util.List;
 
-import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -33,6 +32,7 @@ import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateTimeAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 
@@ -44,8 +44,8 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 	}
 
 	@Override
-	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
-		super.init(path, adapterFactory, commandStack);
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
+		super.init(path, adapterFactory, modelReference);
 		final EditingDomain editingDomain = jointModelEditor.getEditingDomain();
 		ReadOnlyManipulatorWrapper<BasicAttributeManipulator> nameManipulator = new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(
 				new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain));

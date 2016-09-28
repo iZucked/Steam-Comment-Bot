@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.util.List;
 
-import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -20,6 +19,7 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class InventoryCapacityPane extends ScenarioTableViewerPane {
 
@@ -31,8 +31,8 @@ public class InventoryCapacityPane extends ScenarioTableViewerPane {
 	}
 
 	@Override
-	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
-		super.init(path, adapterFactory, commandStack);
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
+		super.init(path, adapterFactory, modelReference);
 		final EditingDomain editingDomain = jointModelEditor.getEditingDomain();
 		addTypicalColumn("Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getInventoryCapacityRow_Date(), editingDomain));
 		addTypicalColumn("Min", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getInventoryCapacityRow_MinVolume(), editingDomain));

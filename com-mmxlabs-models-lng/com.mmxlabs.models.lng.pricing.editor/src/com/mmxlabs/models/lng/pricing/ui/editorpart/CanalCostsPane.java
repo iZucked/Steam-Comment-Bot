@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.NonEditableColumn;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 /**
  * Quick hack for vessel route cost editing
@@ -40,8 +41,8 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 	}
 
 	@Override
-	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
-		super.init(path, adapterFactory, commandStack);
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
+		super.init(path, adapterFactory, modelReference);
 
 		final EditingDomain ed = getEditingDomain();
 

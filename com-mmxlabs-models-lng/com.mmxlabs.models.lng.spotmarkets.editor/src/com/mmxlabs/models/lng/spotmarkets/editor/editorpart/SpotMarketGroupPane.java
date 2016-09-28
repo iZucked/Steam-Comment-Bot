@@ -25,6 +25,7 @@ import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 /**
  * Spot Market Group
@@ -42,8 +43,8 @@ public class SpotMarketGroupPane extends ScenarioTableViewerPane {
 	}
 
 	@Override
-	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
-		super.init(path, adapterFactory, commandStack);
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
+		super.init(path, adapterFactory, modelReference);
 
 		final MMXCorePackage mmx = MMXCorePackage.eINSTANCE;
 		final SpotMarketsPackage pp = SpotMarketsPackage.eINSTANCE;

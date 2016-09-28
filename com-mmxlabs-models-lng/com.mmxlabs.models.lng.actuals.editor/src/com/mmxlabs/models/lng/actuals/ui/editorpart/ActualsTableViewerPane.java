@@ -18,7 +18,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -82,6 +81,7 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.editors.dialogs.MultiDetailDialog;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerValidationSupport;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
@@ -95,7 +95,8 @@ import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 /**
  * Tabular editor displaying cargoes and slots with a custom wiring editor. This implementation is "stupid" in that any changes to the data cause a full update. This has the disadvantage of loosing
@@ -132,7 +133,7 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 
 		final LNGScenarioModel scenarioModel = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
 		this.cec = new ActualsEditingCommands(scenarioEditingLocation.getEditingDomain(), scenarioModel);
-		this.menuHelper = new ActualsEditorMenuHelper(part.getSite().getShell(), scenarioEditingLocation, scenarioModel);
+		this.menuHelper = new ActualsEditorMenuHelper(scenarioEditingLocation, scenarioModel);
 	}
 
 	@Override
@@ -194,8 +195,8 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 			}
 
 			@Override
-			public void init(final AdapterFactory adapterFactory, final CommandStack commandStack, final EReference... path) {
-				super.init(adapterFactory, commandStack, path);
+			public void init(final AdapterFactory adapterFactory, final ModelReference modelReference, final EReference... path) {
+				super.init(adapterFactory, modelReference, path);
 
 				init(new ITreeContentProvider() {
 
@@ -239,7 +240,7 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 						return false;
 					}
 
-				}, commandStack);
+				}, modelReference);
 
 				addFilter(tradesFilter);
 			}
@@ -476,8 +477,8 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 	}
 
 	@Override
-	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
-		getScenarioViewer().init(adapterFactory, commandStack, new EReference[0]);
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
+		getScenarioViewer().init(adapterFactory, modelReference, new EReference[0]);
 
 		final IStatusProvider statusProvider = scenarioEditingLocation.getStatusProvider();
 		getScenarioViewer().setStatusProvider(statusProvider);
@@ -593,8 +594,8 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 		return transformer.transform(actualModel, getScenarioViewer().getValidationSupport().getValidationErrors());
 	}
 
-	public void init(final AdapterFactory adapterFactory, final CommandStack commandStack) {
-		getScenarioViewer().init(adapterFactory, commandStack);
+	public void init(final AdapterFactory adapterFactory, final ModelReference modelReference) {
+		getScenarioViewer().init(adapterFactory, modelReference);
 
 	}
 
@@ -628,28 +629,33 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 							}
 						}
 						if (!editorTargets.isEmpty() && scenarioViewer.isLocked() == false) {
+							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, structuredSelection);
+
 							final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 							try {
-								editorLock.claim();
-								scenarioEditingLocation.setDisableUpdates(true);
-								if (editorTargets.size() > 1) {
-									final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getRootObject(),
-											scenarioEditingLocation.getDefaultCommandHandler());
-									mdd.open(scenarioEditingLocation, editorTargets);
-								} else {
-									final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getDefaultCommandHandler(),
-											~SWT.MAX) {
-										@Override
-										protected void configureShell(final Shell newShell) {
-											newShell.setMinimumSize(SWT.DEFAULT, 630);
-											super.configureShell(newShell);
-										}
-									};
-									dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), editorTargets, scenarioViewer.isLocked());
+								editorLock.lock();
+								try {
+									scenarioEditingLocation.setDisableUpdates(true);
+									if (editorTargets.size() > 1) {
+										final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getRootObject(),
+												scenarioEditingLocation.getDefaultCommandHandler());
+										mdd.open(scenarioEditingLocation, editorTargets);
+									} else {
+										final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getDefaultCommandHandler(),
+												~SWT.MAX) {
+											@Override
+											protected void configureShell(final Shell newShell) {
+												newShell.setMinimumSize(SWT.DEFAULT, 630);
+												super.configureShell(newShell);
+											}
+										};
+										dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), editorTargets, scenarioViewer.isLocked());
+									}
+								} finally {
+									scenarioEditingLocation.setDisableUpdates(false);
 								}
 							} finally {
-								scenarioEditingLocation.setDisableUpdates(false);
-								editorLock.release();
+								editorLock.unlock();
 							}
 						}
 					}

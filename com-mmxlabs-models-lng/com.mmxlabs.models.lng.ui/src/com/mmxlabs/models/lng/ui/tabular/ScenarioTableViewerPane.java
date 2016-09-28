@@ -13,7 +13,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -87,7 +86,8 @@ import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 public class ScenarioTableViewerPane extends EMFViewerPane {
 
@@ -399,8 +399,8 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 
 	/**
 	 */
-	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
-		scenarioViewer.init(adapterFactory, commandStack, path.toArray(new EReference[path.size()]));
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
+		scenarioViewer.init(adapterFactory, modelReference, path.toArray(new EReference[path.size()]));
 
 		scenarioViewer.setStatusProvider(getJointModelEditorPart().getStatusProvider());
 
@@ -531,9 +531,9 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 					public void run() {
 
 						final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
-						editorLock.awaitClaim();
-						getJointModelEditorPart().setDisableUpdates(true);
+						editorLock.lock();
 						try {
+							getJointModelEditorPart().setDisableUpdates(true);
 							final ISelection sel = getLastSelection();
 							if (sel instanceof IStructuredSelection) {
 								final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
@@ -556,7 +556,7 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 								ed.getCommandStack().execute(deleteCommand);
 							}
 						} finally {
-							editorLock.release();
+							editorLock.unlock();
 							getJointModelEditorPart().setDisableUpdates(false);
 						}
 					}

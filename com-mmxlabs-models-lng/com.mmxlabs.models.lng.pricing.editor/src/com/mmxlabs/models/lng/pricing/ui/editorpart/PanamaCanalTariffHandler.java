@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.pricing.ui.editorpart;
 
+import java.util.Collections;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -17,7 +19,9 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 public class PanamaCanalTariffHandler extends AbstractHandler {
 

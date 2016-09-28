@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2017
+    All rights reserved.
+
+-->
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="start" name="com.mmxlabs.models.lng.analytics.navigator.OptionAnalysisModelFragmentService">
+   <implementation class="com.mmxlabs.models.lng.analytics.navigator.OptionAnalysisModelFragmentService"/>
+</scr:component>

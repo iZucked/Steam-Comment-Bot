@@ -86,7 +86,7 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.NonEditableColumn;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 /**
  * The {@link IndexPane} displays data for various indices in a tree format. The {@link IndexTreeTransformer} is used to combine the different indices into an internal dynamic EObject tree
@@ -172,10 +172,10 @@ public class IndexPane extends ScenarioTableViewerPane {
 	}
 
 	@Override
-	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
-		super.init(path, adapterFactory, commandStack);
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
+		super.init(path, adapterFactory, modelReference);
 		// Override default content provider
-		getScenarioViewer().init(transformer.createContentProvider(), commandStack);
+		getScenarioViewer().init(transformer.createContentProvider(), modelReference);
 
 		// TODO: API subject to change!
 		getScenarioViewer().setCurrentContainerAndContainment(pricingModel, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA);
@@ -796,14 +796,12 @@ public class IndexPane extends ScenarioTableViewerPane {
 		if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
 			final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
 			if (structuredSelection.isEmpty() == false) {
-				final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 				if (structuredSelection.size() == 1) {
 
 					// Skip tree model elements
 					if (transformer.getNodeClass().isInstance(structuredSelection.getFirstElement())) {
 						return;
 					}
-
 					DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, structuredSelection);
 				} else {
 					// No multi-edit for indices

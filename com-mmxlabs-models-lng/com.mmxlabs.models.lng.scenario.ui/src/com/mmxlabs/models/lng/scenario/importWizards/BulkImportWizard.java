@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -34,9 +35,11 @@ import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage.FieldChoice;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 /**
  */
@@ -178,7 +181,9 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 
 	private void doImportAction(final FieldChoice importTarget, final String filename, final char listSeparator, final char decimalSeparator, final ScenarioInstance instance,
 			final Set<String> uniqueProblems, final List<String> allProblems, final boolean multipleDetails) {
-		try (final ModelReference modelReference = instance.getReference("BulkImportWizard")) {
+		@NonNull
+		ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(currentScenario);
+		try (final ModelReference modelReference = modelRecord.aquireReference("BulkImportWizard")) {
 			final ImportAction.ImportHooksProvider ihp = getHooksProvider(instance, modelReference, getShell(), filename, listSeparator, decimalSeparator);
 
 			final ImportAction action = getImportAction(importTarget, ihp, multipleDetails);
@@ -222,7 +227,7 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 
 			@Override
 			public EditingDomain getEditingDomain() {
-				return (EditingDomain) instance.getAdapters().get(EditingDomain.class);
+				return (EditingDomain) modelReference.getEditingDomain();
 			}
 
 			@Override
@@ -233,15 +238,15 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 			@Override
 			public void lock() {
 				((CommandProviderAwareEditingDomain) getEditingDomain()).setCommandProvidersDisabled(true);
-				lock = instance.getLock(ScenarioLock.EDITORS);
-				lock.awaitClaim();
+				lock = modelReference.getLock();
+				lock.lock();
 			}
 
 			@Override
 			public void unlock() {
 				((CommandProviderAwareEditingDomain) getEditingDomain()).setCommandProvidersDisabled(false);
 				if (lock != null) {
-					lock.release();
+					lock.unlock();
 				}
 			}
 

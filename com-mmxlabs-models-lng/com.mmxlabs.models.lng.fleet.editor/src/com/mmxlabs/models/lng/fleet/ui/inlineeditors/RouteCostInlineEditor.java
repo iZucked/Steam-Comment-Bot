@@ -32,7 +32,7 @@ public class RouteCostInlineEditor extends DialogInlineEditor {
 	@Override
 	protected Object displayDialog(final Object currentValue) {
 		final CanalCostsDialog ccd = new CanalCostsDialog(getShell());
-		if (ccd.open(new AdapterFactoryImpl(), commandHandler.getEditingDomain(), rootObject, input, (EReference) feature) == Window.OK) {
+		if (ccd.open(new AdapterFactoryImpl(), commandHandler.getModelReference(), rootObject, input, (EReference) feature) == Window.OK) {
 			return ccd.getResult();
 		}
 		return null;

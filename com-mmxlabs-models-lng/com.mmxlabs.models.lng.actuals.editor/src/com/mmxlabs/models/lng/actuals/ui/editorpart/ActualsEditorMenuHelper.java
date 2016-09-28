@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.actuals.ui.editorpart;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -14,7 +13,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.swt.widgets.Shell;
 
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.actuals.CargoActuals;
@@ -23,15 +21,11 @@ import com.mmxlabs.models.lng.actuals.LoadActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
  */
 public class ActualsEditorMenuHelper {
-
-	private final Shell shell;
 
 	private final IScenarioEditingLocation scenarioEditingLocation;
 
@@ -39,8 +33,7 @@ public class ActualsEditorMenuHelper {
 
 	/**
 	 */
-	public ActualsEditorMenuHelper(final Shell shell, final IScenarioEditingLocation scenarioEditingLocation, final LNGScenarioModel scenarioModel) {
-		this.shell = shell;
+	public ActualsEditorMenuHelper(final IScenarioEditingLocation scenarioEditingLocation, final LNGScenarioModel scenarioModel) {
 		this.scenarioEditingLocation = scenarioEditingLocation;
 		cec = new ActualsEditingCommands(scenarioEditingLocation.getEditingDomain(), scenarioModel);
 	}
@@ -93,7 +86,7 @@ public class ActualsEditorMenuHelper {
 			public void menuAboutToShow(final IMenuManager manager) {
 				final LoadActuals loadSlot = loadSlots.get(index);
 				createEditMenu(manager, loadSlot);
-				
+
 				final EObject container = loadSlot.eContainer();
 				if (container instanceof CargoActuals) {
 					final CargoActuals cargoActuals = (CargoActuals) container;
@@ -115,7 +108,7 @@ public class ActualsEditorMenuHelper {
 				final DischargeActuals dischargeSlot = dischargeSlots.get(index);
 
 				createEditMenu(manager, dischargeSlot);
-				
+
 				final EObject container = dischargeSlot.eContainer();
 				if (container instanceof CargoActuals) {
 					final CargoActuals cargoActuals = (CargoActuals) container;
@@ -133,59 +126,59 @@ public class ActualsEditorMenuHelper {
 		newMenuManager.add(new EditAction("Edit Slot", slot));
 	}
 
-//	private void createNewSlotMenu(final IMenuManager menuManager, final SlotActuals source, final ActualsModel actualsModel) {
-//
-//		if (source instanceof LoadActuals) {
-//			menuManager.add(new CreateSlotAction("Discharge Actuals", source, false, actualsModel));
-//		} else {
-//			menuManager.add(new CreateSlotAction("Load Actuals", source, false, actualsModel));
-//		}
-//	}
+	// private void createNewSlotMenu(final IMenuManager menuManager, final SlotActuals source, final ActualsModel actualsModel) {
+	//
+	// if (source instanceof LoadActuals) {
+	// menuManager.add(new CreateSlotAction("Discharge Actuals", source, false, actualsModel));
+	// } else {
+	// menuManager.add(new CreateSlotAction("Load Actuals", source, false, actualsModel));
+	// }
+	// }
 
-//	private class CreateSlotAction extends Action {
-//
-//		private final SlotActuals source;
-//		private final boolean sourceIsLoad;
-//		private final boolean isDesPurchaseOrFobSale;
-//		private ActualsModel actualsModel;
-//
-//		public CreateSlotAction(final String name, final SlotActuals source, final boolean isDesPurchaseOrFobSale, final ActualsModel actualsModel) {
-//			super(name);
-//			this.source = source;
-//			this.actualsModel = actualsModel;
-//			this.sourceIsLoad = source instanceof LoadSlot;
-//			this.isDesPurchaseOrFobSale = isDesPurchaseOrFobSale;
-//		}
-//
-//		@Override
-//		public void run() {
-//
-//			final List<Command> setCommands = new LinkedList<Command>();
-//			// final List<Command> deleteCommands = new LinkedList<Command>();
-//
-//			// when we create another slot, we rewire the cargoes
-//			LoadActuals loadSlot;
-//			DischargeActuals dischargeSlot;
-//			if (sourceIsLoad) {
-//				loadSlot = (LoadActuals) source;
-//				dischargeSlot = cec.createNewDischarge(setCommands, actualsModel, isDesPurchaseOrFobSale);
-//			} else {
-//				dischargeSlot = (DischargeActuals) source;
-//				loadSlot = cec.createNewLoad(setCommands, actualsModel, isDesPurchaseOrFobSale);
-//			}
-//
-//			// make a compound command which adds and sets values before deleting anything
-//			final CompoundCommand currentWiringCommand = new CompoundCommand("Rewire Cargoes");
-//			// Process set before delete
-//			for (final Command c : setCommands) {
-//				currentWiringCommand.append(c);
-//			}
-//			// for (final Command c : deleteCommands) {
-//			// currentWiringCommand.append(c);
-//			// }
-//
-//			scenarioEditingLocation.getEditingDomain().getCommandStack().execute(currentWiringCommand);
-//
-//		}
-//	}
+	// private class CreateSlotAction extends Action {
+	//
+	// private final SlotActuals source;
+	// private final boolean sourceIsLoad;
+	// private final boolean isDesPurchaseOrFobSale;
+	// private ActualsModel actualsModel;
+	//
+	// public CreateSlotAction(final String name, final SlotActuals source, final boolean isDesPurchaseOrFobSale, final ActualsModel actualsModel) {
+	// super(name);
+	// this.source = source;
+	// this.actualsModel = actualsModel;
+	// this.sourceIsLoad = source instanceof LoadSlot;
+	// this.isDesPurchaseOrFobSale = isDesPurchaseOrFobSale;
+	// }
+	//
+	// @Override
+	// public void run() {
+	//
+	// final List<Command> setCommands = new LinkedList<Command>();
+	// // final List<Command> deleteCommands = new LinkedList<Command>();
+	//
+	// // when we create another slot, we rewire the cargoes
+	// LoadActuals loadSlot;
+	// DischargeActuals dischargeSlot;
+	// if (sourceIsLoad) {
+	// loadSlot = (LoadActuals) source;
+	// dischargeSlot = cec.createNewDischarge(setCommands, actualsModel, isDesPurchaseOrFobSale);
+	// } else {
+	// dischargeSlot = (DischargeActuals) source;
+	// loadSlot = cec.createNewLoad(setCommands, actualsModel, isDesPurchaseOrFobSale);
+	// }
+	//
+	// // make a compound command which adds and sets values before deleting anything
+	// final CompoundCommand currentWiringCommand = new CompoundCommand("Rewire Cargoes");
+	// // Process set before delete
+	// for (final Command c : setCommands) {
+	// currentWiringCommand.append(c);
+	// }
+	// // for (final Command c : deleteCommands) {
+	// // currentWiringCommand.append(c);
+	// // }
+	//
+	// scenarioEditingLocation.getEditingDomain().getCommandStack().execute(currentWiringCommand);
+	//
+	// }
+	// }
 }

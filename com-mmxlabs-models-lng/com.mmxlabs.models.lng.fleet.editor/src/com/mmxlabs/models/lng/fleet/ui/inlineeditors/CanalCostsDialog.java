@@ -35,6 +35,7 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 /**
  * A dialog for editing the canal costs associated with a vessel class
@@ -52,6 +53,7 @@ public class CanalCostsDialog extends Dialog {
 
 	private AdapterFactory adapterFactory;
 	private EditingDomain editingDomain;
+	private ModelReference modelReference;
 
 	public CanalCostsDialog(final Shell parentShell) {
 		super(parentShell);
@@ -66,7 +68,7 @@ public class CanalCostsDialog extends Dialog {
 		final Composite content = (Composite) super.createDialogArea(parent);
 		tableViewer = new EObjectTableViewer(content, SWT.FULL_SELECTION | SWT.BORDER);
 
-		tableViewer.init(adapterFactory, editingDomain.getCommandStack(), containment);
+		tableViewer.init(adapterFactory, modelReference, containment);
 
 		final Grid table = tableViewer.getGrid();
 
@@ -95,7 +97,7 @@ public class CanalCostsDialog extends Dialog {
 		return content;
 	}
 
-	public int open(final AdapterFactory adapterFactory, final EditingDomain editingDomain, final MMXRootObject rootObject, final EObject container, final EReference containment) {
+	public int open(final AdapterFactory adapterFactory, final ModelReference modelReference, final MMXRootObject rootObject, final EObject container, final EReference containment) {
 		this.container = EcoreUtil.copy(container);
 		this.containment = containment;
 
@@ -119,7 +121,8 @@ public class CanalCostsDialog extends Dialog {
 			}
 		}
 
-		this.editingDomain = editingDomain;
+		this.modelReference = modelReference;
+		this.editingDomain = modelReference.getEditingDomain();
 		this.adapterFactory = adapterFactory;
 
 		return super.open();

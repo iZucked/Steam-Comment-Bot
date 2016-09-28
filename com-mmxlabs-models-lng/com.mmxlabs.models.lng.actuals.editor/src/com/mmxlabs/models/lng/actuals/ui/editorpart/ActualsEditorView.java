@@ -54,7 +54,7 @@ public class ActualsEditorView extends ScenarioTableViewerView<ActualsTableViewe
 					domain.getCommandStack().execute(SetCommand.create(domain, lngScenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ActualsModel(), actualsModel));
 				}
 			}
-			pane.init(Arrays.asList(new EReference[] { ActualsPackage.eINSTANCE.getActualsModel_CargoActuals() }), null, domain.getCommandStack());
+			pane.init(Arrays.asList(new EReference[] { ActualsPackage.eINSTANCE.getActualsModel_CargoActuals() }), null, getModelReference());
 			pane.getViewer().setInput(actualsModel);
 			//
 			// // Add action to create and edit cargo groups

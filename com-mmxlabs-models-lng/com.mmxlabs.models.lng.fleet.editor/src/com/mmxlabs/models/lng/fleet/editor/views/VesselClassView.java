@@ -30,7 +30,7 @@ public class VesselClassView extends ScenarioTableViewerView<VesselClassViewerPa
 		final EditingDomain domain = getEditingDomain();
 		if (domain != null) {
 			pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel(), LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_FleetModel(),
-					FleetPackage.eINSTANCE.getFleetModel_VesselClasses() }), getAdapterFactory(), domain.getCommandStack());
+					FleetPackage.eINSTANCE.getFleetModel_VesselClasses() }), getAdapterFactory(), getModelReference());
 			pane.getViewer().setInput(getRootObject());
 		}
 	}

@@ -15,10 +15,10 @@ import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -37,13 +37,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.BindingRule;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -57,7 +54,8 @@ import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 public class ADPBindingPage extends WizardPage {
 
@@ -120,7 +118,7 @@ public class ADPBindingPage extends WizardPage {
 		@Override
 		public void rebuild(boolean pack) {
 			// TODO Auto-generated method stub
-			
+
 		}
 	};
 	private DefaultDialogEditingContext dialogContext;
@@ -130,7 +128,7 @@ public class ADPBindingPage extends WizardPage {
 	private AdapterFactoryEditingDomain adapterFactoryEditingDomain;
 	private Composite parent;
 
-	protected ADPBindingPage(final ADPModel adpModel, final LNGScenarioModel scenarioModel) {
+	protected ADPBindingPage(ModelReference modelReference, final ADPModel adpModel, final LNGScenarioModel scenarioModel) {
 		super("ADP Model Bindings", "Create profile bindings", null);
 		this.adpModel = adpModel;
 		this.scenarioModel = scenarioModel;
@@ -157,6 +155,11 @@ public class ADPBindingPage extends WizardPage {
 			public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
 				// TODO Auto-generated method stub
 				command.execute();
+			}
+
+			@Override
+			public ModelReference getModelReference() {
+				return location.getModelReference();
 			}
 
 		};
@@ -235,12 +238,6 @@ public class ADPBindingPage extends WizardPage {
 			}
 
 			@Override
-			public ScenarioLock getEditorLock() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
 			public EditingDomain getEditingDomain() {
 				// TODO Auto-generated method stub
 				return adapterFactoryEditingDomain;
@@ -256,6 +253,18 @@ public class ADPBindingPage extends WizardPage {
 			public AdapterFactory getAdapterFactory() {
 				// TODO Auto-generated method stub
 				return adapterFactory;
+			}
+
+			@Override
+			public @NonNull ModelReference getModelReference() {
+				// TODO Auto-generated method stub
+				return modelReference;
+			}
+
+			@Override
+			public ScenarioLock getEditorLock() {
+				// TODO Auto-generated method stub
+				return modelReference.getLock();
 			}
 		};
 	}

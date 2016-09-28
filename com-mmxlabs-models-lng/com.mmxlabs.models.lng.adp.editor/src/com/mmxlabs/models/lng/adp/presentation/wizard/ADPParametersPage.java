@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Label;
 
 import com.mmxlabs.models.datetime.ui.formatters.YearMonthTextFormatter;
 import com.mmxlabs.models.lng.adp.ADPModel;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class ADPParametersPage extends WizardPage {
 
@@ -22,7 +23,7 @@ public class ADPParametersPage extends WizardPage {
 	private FormattedText formattedText;
 	private YearMonthTextFormatter dateFormatter;
 
-	protected ADPParametersPage(ADPModel adpModel) {
+	protected ADPParametersPage(ModelReference modelReference, ADPModel adpModel) {
 		super("ADP Model Param", "Set main ADP params", null);
 		this.adpModel = adpModel;
 	}

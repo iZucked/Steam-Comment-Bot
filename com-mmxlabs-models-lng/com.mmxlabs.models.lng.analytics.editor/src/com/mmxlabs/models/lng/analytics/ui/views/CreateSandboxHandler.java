@@ -39,8 +39,10 @@ import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.rcp.common.editors.IPartGotoTarget;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
 
 public class CreateSandboxHandler extends AbstractHandler {
@@ -59,8 +61,9 @@ public class CreateSandboxHandler extends AbstractHandler {
 				if (obj instanceof ScenarioInstance) {
 
 					final ScenarioInstance instance = (ScenarioInstance) obj;
+					final ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 
-					try (ModelReference reference = instance.getReference("CreateSandboxHandler")) {
+					try (ModelReference reference = modelRecord.aquireReference("CreateSandboxHandler")) {
 						final EObject rootObject = reference.getInstance();
 						if (!(rootObject instanceof LNGScenarioModel)) {
 							continue;
@@ -68,7 +71,7 @@ public class CreateSandboxHandler extends AbstractHandler {
 
 						final @NonNull AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel((LNGScenarioModel) rootObject);
 
-						final EditingDomain domain = (EditingDomain) instance.getAdapters().get(EditingDomain.class);
+						final EditingDomain domain = reference.getEditingDomain();
 						final Display display = PlatformUI.getWorkbench().getDisplay();
 
 						final ImageDescriptor d = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox.gif");

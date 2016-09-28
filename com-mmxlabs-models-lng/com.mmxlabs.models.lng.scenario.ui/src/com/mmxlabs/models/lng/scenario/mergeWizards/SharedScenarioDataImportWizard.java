@@ -14,6 +14,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -31,9 +32,11 @@ import com.mmxlabs.models.lng.scenario.mergeWizards.SharedDataScenariosSelection
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.ui.merge.EMFModelMergeTools;
 import com.mmxlabs.models.ui.merge.IMappingDescriptor;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 public class SharedScenarioDataImportWizard extends Wizard implements IImportWizard {
 
@@ -122,8 +125,9 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 			if (sourceScenario == null) {
 				return;
 			}
-
-			try (final ModelReference sourceModelRef = sourceScenario.getReference("SharedScenarioDataImportWizard:1")) {
+			@NonNull
+			ModelRecord sourceModelRecord = SSDataManager.Instance.getModelRecord(sourceScenario);
+			try (final ModelReference sourceModelRef = sourceModelRecord.aquireReference("SharedScenarioDataImportWizard:1")) {
 				final EObject sourceRoot = sourceModelRef.getInstance();
 
 				if (sourceRoot == null) {
@@ -145,8 +149,9 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 							monitor.worked(1);
 							continue;
 						}
-
-						try (final ModelReference destModelRef = destScenario.getReference("SharedScenarioDataImportWizard:2")) {
+						@NonNull
+						ModelRecord destModelRecord = SSDataManager.Instance.getModelRecord(destScenario);
+						try (final ModelReference destModelRef = destModelRecord.aquireReference("SharedScenarioDataImportWizard:2")) {
 
 							final EObject destRoot = destModelRef.getInstance();
 
@@ -156,13 +161,12 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 								continue;
 							}
 
-							final ScenarioLock editorLock = destScenario.getLock(ScenarioLock.EDITORS);
-							if (editorLock.awaitClaim()) {
-								try {
-									mergeScenarioData(sourceRoot, destRoot, (EditingDomain) destScenario.getAdapters().get(EditingDomain.class), dataOptions);
-								} finally {
-									editorLock.release();
-								}
+							final ScenarioLock editorLock = destModelRef.getLock();
+							editorLock.lock();
+							try {
+								mergeScenarioData(sourceRoot, destRoot, destModelRef.getEditingDomain(), dataOptions);
+							} finally {
+								editorLock.unlock();
 							}
 
 						}
@@ -174,6 +178,7 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 				}
 			}
 		}
+
 	}
 
 	public void mergeScenarioData(final EObject sourceRoot, final EObject destRoot, final EditingDomain destEditingDomain, final Set<DataOptions> dataOptions) {
@@ -210,16 +215,23 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 			final LNGScenarioModel copiedModel = EcoreUtil.copy(sourceScenarioModel);
 
 			if (dataOptions.contains(DataOptions.PortData)) {
-				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getPortModel(), destScenarioModel.getReferenceModel().getPortModel(), PortPackage.eINSTANCE.getPortModel_Ports()));
-				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getPortModel(), destScenarioModel.getReferenceModel().getPortModel(), PortPackage.eINSTANCE.getPortModel_Routes()));
-				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getPortModel(), destScenarioModel.getReferenceModel().getPortModel(), PortPackage.eINSTANCE.getPortModel_PortGroups()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getPortModel(), destScenarioModel.getReferenceModel().getPortModel(),
+						PortPackage.eINSTANCE.getPortModel_Ports()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getPortModel(), destScenarioModel.getReferenceModel().getPortModel(),
+						PortPackage.eINSTANCE.getPortModel_Routes()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getPortModel(), destScenarioModel.getReferenceModel().getPortModel(),
+						PortPackage.eINSTANCE.getPortModel_PortGroups()));
 			}
 
 			if (dataOptions.contains(DataOptions.FleetDatabase)) {
-				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getFleetModel(), destScenarioModel.getReferenceModel().getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_VesselClasses()));
-				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getFleetModel(), destScenarioModel.getReferenceModel().getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_Vessels()));
-				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getFleetModel(), destScenarioModel.getReferenceModel().getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_VesselGroups()));
-				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getFleetModel(), destScenarioModel.getReferenceModel().getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_BaseFuels()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getFleetModel(), destScenarioModel.getReferenceModel().getFleetModel(),
+						FleetPackage.eINSTANCE.getFleetModel_VesselClasses()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getFleetModel(), destScenarioModel.getReferenceModel().getFleetModel(),
+						FleetPackage.eINSTANCE.getFleetModel_Vessels()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getFleetModel(), destScenarioModel.getReferenceModel().getFleetModel(),
+						FleetPackage.eINSTANCE.getFleetModel_VesselGroups()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getFleetModel(), destScenarioModel.getReferenceModel().getFleetModel(),
+						FleetPackage.eINSTANCE.getFleetModel_BaseFuels()));
 			}
 
 			if (dataOptions.contains(DataOptions.CommercialData)) {

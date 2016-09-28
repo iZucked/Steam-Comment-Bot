@@ -172,6 +172,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.util.emfpath.EMFMultiPath;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.models.util.emfpath.IEMFPath;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
@@ -179,7 +180,8 @@ import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.rcp.common.dnd.BasicDragSource;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 /**
  * Tabular editor displaying cargoes and slots with a custom wiring editor. This implementation is "stupid" in that any changes to the data cause a full update. This has the disadvantage of loosing
@@ -350,8 +352,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 
 			@Override
-			public void init(final AdapterFactory adapterFactory, final CommandStack commandStack, final EReference... path) {
-				super.init(adapterFactory, commandStack, path);
+			public void init(final AdapterFactory adapterFactory, final ModelReference modelReference, final EReference... path) {
+				super.init(adapterFactory, modelReference, path);
 
 				init(new ITreeContentProvider() {
 
@@ -398,7 +400,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						return false;
 					}
 
-				}, commandStack);
+				}, modelReference);
 				// Get default comparator
 				final ViewerComparator vc = getComparator();
 				// Wrap around with group sorter
@@ -723,8 +725,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		return scenarioViewer;
 	}
 
-	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
-		getScenarioViewer().init(adapterFactory, commandStack, new EReference[0]);
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference ModelReference) {
+		getScenarioViewer().init(adapterFactory, ModelReference, new EReference[0]);
 
 		final IStatusProvider statusProvider = scenarioEditingLocation.getStatusProvider();
 		getScenarioViewer().setStatusProvider(statusProvider);
@@ -734,12 +736,14 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 				@Override
 				public void onStatusChanged(final IStatusProvider provider, final IStatus status) {
-					final CargoModelRowTransformer transformer = new CargoModelRowTransformer();
-					final ScenarioTableViewer scenarioViewer2 = getScenarioViewer();
-					if (scenarioViewer2 != null) {
-						transformer.updateWiringValidity(rootData, scenarioViewer2.getValidationSupport().getValidationErrors());
-						wiringDiagram.redraw();
-					}
+					RunnerHelper.asyncExec(() -> {
+						final CargoModelRowTransformer transformer = new CargoModelRowTransformer();
+						final ScenarioTableViewer scenarioViewer2 = getScenarioViewer();
+						if (scenarioViewer2 != null) {
+							transformer.updateWiringValidity(rootData, scenarioViewer2.getValidationSupport().getValidationErrors());
+							wiringDiagram.redraw();
+						}
+					});
 				}
 			};
 			statusProvider.addStatusChangedListener(statusChangedListener);
@@ -1237,8 +1241,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		return transformer.transform(cargoModel, scheduleModel, getScenarioViewer().getValidationSupport().getValidationErrors(), existingData);
 	}
 
-	public void init(final AdapterFactory adapterFactory, final CommandStack commandStack) {
-		getScenarioViewer().init(adapterFactory, commandStack);
+	public void init(final AdapterFactory adapterFactory, final ModelReference modelReference) {
+		getScenarioViewer().init(adapterFactory, modelReference);
 
 	}
 
@@ -1324,8 +1328,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						}
 						if (!editorTargets.isEmpty() && scenarioViewer.isLocked() == false) {
 							final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
+							editorLock.lock();
 							try {
-								editorLock.claim();
 								scenarioEditingLocation.setDisableUpdates(true);
 								if (editorTargets.size() > 1) {
 									final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getRootObject(),
@@ -1344,7 +1348,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 								}
 							} finally {
 								scenarioEditingLocation.setDisableUpdates(false);
-								editorLock.release();
+								editorLock.unlock();
 							}
 						}
 					}
@@ -2037,8 +2041,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		public void run() {
 
 			final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
+			editorLock.lock();
 			try {
-				editorLock.claim();
 				scenarioEditingLocation.setDisableUpdates(true);
 
 				final ComplexCargoEditor editor = new ComplexCargoEditor(getScenarioViewer().getGrid().getShell(), scenarioEditingLocation, true);
@@ -2089,7 +2093,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				}
 			} finally {
 				scenarioEditingLocation.setDisableUpdates(false);
-				editorLock.release();
+				editorLock.unlock();
 			}
 		}
 	}
@@ -2268,60 +2272,63 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 			try {
-				editorLock.claim();
-				scenarioEditingLocation.setDisableUpdates(true);
+				editorLock.lock();
+				try {
+					scenarioEditingLocation.setDisableUpdates(true);
 
-				final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
-				if (rootObject instanceof LNGScenarioModel) {
+					final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
+					if (rootObject instanceof LNGScenarioModel) {
 
-					Slot selectedObject = null;
-					final ISelection selection = TradesWiringViewer.this.getScenarioViewer().getSelection();
-					if (selection instanceof IStructuredSelection) {
-						final IStructuredSelection ss = (IStructuredSelection) selection;
+						Slot selectedObject = null;
+						final ISelection selection = TradesWiringViewer.this.getScenarioViewer().getSelection();
+						if (selection instanceof IStructuredSelection) {
+							final IStructuredSelection ss = (IStructuredSelection) selection;
 
-						final Iterator<?> itr = ss.iterator();
-						while (itr.hasNext()) {
-							Object o = itr.next();
+							final Iterator<?> itr = ss.iterator();
+							while (itr.hasNext()) {
+								Object o = itr.next();
 
-							if (o instanceof RowData) {
-								final RowData rowData = (RowData) o;
-								if (stripType == StripType.TYPE_FOB_PURCHASE_SLOT || stripType == StripType.TYPE_DES_PURCHASE_SLOT) {
-									o = rowData.loadSlot;
-								} else if (stripType == StripType.TYPE_FOB_SALE_SLOT || stripType == StripType.TYPE_DES_SALE_SLOT) {
-									o = rowData.dischargeSlot;
+								if (o instanceof RowData) {
+									final RowData rowData = (RowData) o;
+									if (stripType == StripType.TYPE_FOB_PURCHASE_SLOT || stripType == StripType.TYPE_DES_PURCHASE_SLOT) {
+										o = rowData.loadSlot;
+									} else if (stripType == StripType.TYPE_FOB_SALE_SLOT || stripType == StripType.TYPE_DES_SALE_SLOT) {
+										o = rowData.dischargeSlot;
+									}
 								}
-							}
 
-							if (o instanceof Slot) {
-								selectedObject = (Slot) o;
-								break;
-							}
+								if (o instanceof Slot) {
+									selectedObject = (Slot) o;
+									break;
+								}
 
+							}
 						}
+
+						final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
+						final CreateStripDialog d = new CreateStripDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation, stripType, selectedObject) {
+							@Override
+							protected void configureShell(final Shell newShell) {
+								newShell.setMinimumSize(SWT.DEFAULT, 630);
+								super.configureShell(newShell);
+							}
+						};
+						if (Window.OK == d.open()) {
+							final Command cmd = d.createStrip(scenarioModel.getCargoModel(), getEditingDomain());
+							if (cmd.canExecute()) {
+								getEditingDomain().getCommandStack().execute(cmd);
+							}
+						}
+
+					} else {
+						setEnabled(false);
 					}
 
-					final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
-					final CreateStripDialog d = new CreateStripDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation, stripType, selectedObject) {
-						@Override
-						protected void configureShell(final Shell newShell) {
-							newShell.setMinimumSize(SWT.DEFAULT, 630);
-							super.configureShell(newShell);
-						}
-					};
-					if (Window.OK == d.open()) {
-						final Command cmd = d.createStrip(scenarioModel.getCargoModel(), getEditingDomain());
-						if (cmd.canExecute()) {
-							getEditingDomain().getCommandStack().execute(cmd);
-						}
-					}
-
-				} else {
-					setEnabled(false);
+				} finally {
+					scenarioEditingLocation.setDisableUpdates(false);
 				}
-
 			} finally {
-				scenarioEditingLocation.setDisableUpdates(false);
-				editorLock.release();
+				editorLock.unlock();
 			}
 		}
 	}

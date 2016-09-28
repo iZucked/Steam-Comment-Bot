@@ -71,7 +71,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 
 		this.tradesViewer = new TradesWiringViewer(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		tradesViewer.createControl(parent);
-		tradesViewer.init(Collections.<EReference> emptyList(), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
+		tradesViewer.init(Collections.<EReference> emptyList(), editorPart.getAdapterFactory(), editorPart.getModelReference());
 		tradesViewer.getViewer().setInput(modelObject);
 		tradesViewerPageNumber = editorPart.addPage(tradesViewer.getControl());
 		editorPart.setPageText(tradesViewerPageNumber, "Trades");
@@ -81,11 +81,11 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 
 			vesselViewerPane = new VesselViewerPane_Editor(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 			vesselViewerPane.createControl(sash);
-			vesselViewerPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_VesselAvailabilities()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
+			vesselViewerPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_VesselAvailabilities()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 
 			eventViewerPane = new VesselEventViewerPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 			eventViewerPane.createControl(sash);
-			eventViewerPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_VesselEvents()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
+			eventViewerPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_VesselEvents()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 
 			vesselViewerPane.getViewer().setInput(modelObject);
 			eventViewerPane.getViewer().setInput(modelObject);
@@ -113,17 +113,17 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 
 			inventoryFeedPane = new InventoryFeedPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 			inventoryFeedPane.createControl(sash);
-			inventoryFeedPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getInventory_Feeds()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
+			inventoryFeedPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getInventory_Feeds()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 			inventoryFeedPane.getControl().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 
 			inventoryOfftakePane = new InventoryOfftakePane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 			inventoryOfftakePane.createControl(sash);
-			inventoryOfftakePane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getInventory_Offtakes()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
+			inventoryOfftakePane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getInventory_Offtakes()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 			inventoryOfftakePane.getControl().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 
 			inventoryCapacityPane = new InventoryCapacityPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 			inventoryCapacityPane.createControl(sash);
-			inventoryCapacityPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getInventory_Capacities()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
+			inventoryCapacityPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getInventory_Capacities()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 			inventoryCapacityPane.getControl().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 
 			if (false && modelObject.getInventoryModels().isEmpty()) {
@@ -258,6 +258,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
 
 			EObject target = dcsd.getTarget();
+
 			// Look in child items for potentially handles classes.
 			{
 				boolean foundTarget = false;

@@ -32,7 +32,7 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 
 		indexPane = new IndexPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		indexPane.createControl(parent);
-		indexPane.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_BaseFuelPrices()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
+		indexPane.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_BaseFuelPrices()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 		indexPane.setInput(modelObject);
 
 		indexPage = editorPart.addPage(indexPane.getControl());

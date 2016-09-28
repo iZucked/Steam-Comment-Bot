@@ -47,13 +47,10 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 		entityEditorPane.createControl(sash);
 		charterMarketEditorPane.createControl(sash);
 		
-		entityEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_Entities()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
-		purchaseContractEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()), editorPart.getAdapterFactory(), editorPart.getEditingDomain()
-				.getCommandStack());
-		salesContractEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts()), editorPart.getAdapterFactory(), editorPart.getEditingDomain()
-				.getCommandStack());
-		charterMarketEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_CharteringContracts()), editorPart.getAdapterFactory(), editorPart.getEditingDomain()
-				.getCommandStack());
+		entityEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_Entities()), editorPart.getAdapterFactory(), editorPart.getModelReference());
+		purchaseContractEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()), editorPart.getAdapterFactory(), editorPart.getModelReference());
+		salesContractEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts()), editorPart.getAdapterFactory(), editorPart.getModelReference());
+		charterMarketEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_CharteringContracts()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 
 		
 		entityEditorPane.getViewer().setInput(modelObject);

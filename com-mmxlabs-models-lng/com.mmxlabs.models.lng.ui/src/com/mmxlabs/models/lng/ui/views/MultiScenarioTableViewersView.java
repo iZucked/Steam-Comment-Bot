@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 /**
  * Generalises ScenarioTableViewerView to allow multiple panes.
@@ -108,13 +109,13 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 	abstract protected EReference[][] getPaneRootPaths();
 
 	protected void initViewerPanes(final List<ScenarioTableViewerPane> panes) {
-
+		final ModelReference modelReference = getModelReference();
 		final EditingDomain domain = getEditingDomain();
 		final EReference[][] references = getPaneRootPaths();
 
 		if (domain != null) {
 			for (int i = 0; i < panes.size(); i++) {
-				panes.get(i).init(Arrays.asList(references[i]), getAdapterFactory(), domain.getCommandStack());
+				panes.get(i).init(Arrays.asList(references[i]), getAdapterFactory(), modelReference);
 				panes.get(i).getViewer().setInput(getRootObject());
 			}
 		}

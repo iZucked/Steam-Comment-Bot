@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -45,7 +46,8 @@ import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 public class ADPContractsPage extends WizardPage {
 
@@ -111,7 +113,7 @@ public class ADPContractsPage extends WizardPage {
 		@Override
 		public void rebuild(boolean pack) {
 			// TODO Auto-generated method stub
-			
+
 		}
 	};
 	private DefaultDialogEditingContext dialogContext;
@@ -120,9 +122,11 @@ public class ADPContractsPage extends WizardPage {
 	private ComposedAdapterFactory adapterFactory;
 	private AdapterFactoryEditingDomain adapterFactoryEditingDomain;
 	private Composite parent;
+	private ModelReference modelReference;
 
-	protected ADPContractsPage(final ADPModel adpModel, final LNGScenarioModel scenarioModel, final boolean isPurchase) {
+	protected ADPContractsPage(ModelReference modelReference, final ADPModel adpModel, final LNGScenarioModel scenarioModel, final boolean isPurchase) {
 		super("ADP Model Contracts", isPurchase ? "Define purchase contracts profiles" : "Define sales contracts profiles", null);
+		this.modelReference = modelReference;
 		this.adpModel = adpModel;
 		this.scenarioModel = scenarioModel;
 		this.isPurchase = isPurchase;
@@ -149,6 +153,11 @@ public class ADPContractsPage extends WizardPage {
 			public void handleCommand(Command command, EObject target, EStructuralFeature feature) {
 				// TODO Auto-generated method stub
 				command.execute();
+			}
+
+			@Override
+			public ModelReference getModelReference() {
+				return modelReference;
 			}
 
 		};
@@ -229,8 +238,7 @@ public class ADPContractsPage extends WizardPage {
 
 			@Override
 			public ScenarioLock getEditorLock() {
-				// TODO Auto-generated method stub
-				return null;
+				return modelReference.getLock();
 			}
 
 			@Override
@@ -250,6 +258,13 @@ public class ADPContractsPage extends WizardPage {
 				// TODO Auto-generated method stub
 				return adapterFactory;
 			}
+
+			@Override
+			public @NonNull ModelReference getModelReference() {
+				// TODO Auto-generated method stub
+				return modelReference;
+			}
+
 		};
 	}
 

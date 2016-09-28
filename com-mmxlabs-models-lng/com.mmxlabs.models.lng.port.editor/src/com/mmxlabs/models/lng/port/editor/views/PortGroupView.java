@@ -163,7 +163,7 @@ public class PortGroupView extends ScenarioInstanceView {
 				viewerPane.setExternalToolBarManager((ToolBarManager) getViewSite().getActionBars().getToolBarManager());
 				viewerPane.createControl(sash);
 				viewerPane.init(Lists.newArrayList(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel(), LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_PortModel(), PortPackage.eINSTANCE.getPortModel_PortGroups()), getAdapterFactory(),
-						getEditingDomain().getCommandStack());
+						 getModelReference());
 				viewerPane.getViewer().setInput(getRootObject());
 
 				contentViewer = CheckboxTableViewer.newCheckList(sash, SWT.SINGLE | SWT.V_SCROLL | SWT.BORDER);

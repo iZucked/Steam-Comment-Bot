@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -31,8 +32,10 @@ import com.mmxlabs.models.util.importer.IExtraModelImporter;
 import com.mmxlabs.models.util.importer.IMMXExportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultExportContext;
-import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 
 /**
  * Export the selected scenario to the filesystem somehow.
@@ -89,7 +92,9 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 		final boolean createExportDirectories = instances.size() > 1;
 		for (final ScenarioInstance instance : instances) {
 			// Release reference on block exit
-			try (final ModelReference modelReference = instance.getReference("ExportCSVWizard")) {
+			@NonNull
+			ModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+			try (final ModelReference modelReference = modelRecord.aquireReference("ExportCSVWizard")) {
 
 				final EObject rootObject = modelReference.getInstance();
 				
@@ -173,7 +178,7 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 		subModels.add(scenarioModel.getAnalyticsModel());
 
 		subModels.add(scenarioModel.getCargoModel());
-//		subModels.add(scenarioModel.getActualsModel());
+		// subModels.add(scenarioModel.getActualsModel());
 		subModels.add(scenarioModel.getScheduleModel());
 
 		// Remove any null references

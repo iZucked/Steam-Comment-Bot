@@ -11,7 +11,7 @@ import com.mmxlabs.models.lng.ui.ImageConstants;
 import com.mmxlabs.models.lng.ui.LngUIActivator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 /**
  * @author hinton
@@ -34,15 +34,14 @@ public class DuplicateAction extends ScenarioModifyingAction {
 		dcd.setReturnDuplicates(true);
 
 		final ScenarioLock editorLock = part.getEditorLock();
+		editorLock.lock();
 		try {
-			editorLock.claim();
 			part.setDisableUpdates(true);
 			dcd.open(part, part.getRootObject(), selection.toList());
 		} finally {
 			part.setDisableUpdates(false);
-			editorLock.release();
+			editorLock.unlock();
 		}
-
 	}
 
 	@Override

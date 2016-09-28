@@ -363,7 +363,7 @@ public class BallastBonusContractTableCreator {
 		eViewer.getSortingSupport().clearColumnSortOrder();
 		eViewer.getGrid().recalculateHeader();
 
-		eViewer.init(sel.getAdapterFactory(), sel.getEditingDomain().getCommandStack(), CommercialPackage.eINSTANCE.getRuleBasedBallastBonusContract_Rules());
+		eViewer.init(sel.getAdapterFactory(), sel.getModelReference(), CommercialPackage.eINSTANCE.getRuleBasedBallastBonusContract_Rules());
 
 		eViewer.setInput(ruleBasedBallastBonusContract);
 

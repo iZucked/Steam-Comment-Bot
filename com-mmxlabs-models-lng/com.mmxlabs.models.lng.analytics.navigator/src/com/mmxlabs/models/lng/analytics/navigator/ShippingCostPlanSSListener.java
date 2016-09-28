@@ -61,19 +61,19 @@ public class ShippingCostPlanSSListener extends ScenarioServiceListener {
 		 * Process initial scenario state and create fragments.
 		 */
 		private void processScenario() {
-			final LNGScenarioModel rootObject = (LNGScenarioModel) scenarioInstance.getInstance();
-			analyticsModel = rootObject.getAnalyticsModel();
-
-			if (analyticsModel != null) {
-				for (final ShippingCostPlan plan : analyticsModel.getShippingCostPlans()) {
-					createFragment(plan);
-				}
-				for (final CargoSandbox box : analyticsModel.getCargoSandboxes()) {
-					createFragment(box);
-				}
-
-				analyticsModel.eAdapters().add(ModelAdapter.this);
-			}
+//			final LNGScenarioModel rootObject = (LNGScenarioModel) scenarioInstance.getInstance();
+//			analyticsModel = rootObject.getAnalyticsModel();
+//
+//			if (analyticsModel != null) {
+//				for (final ShippingCostPlan plan : analyticsModel.getShippingCostPlans()) {
+//					createFragment(plan);
+//				}
+//				for (final CargoSandbox box : analyticsModel.getCargoSandboxes()) {
+//					createFragment(box);
+//				}
+//
+//				analyticsModel.eAdapters().add(ModelAdapter.this);
+//			}
 		}
 
 		public void dispose() {
@@ -149,11 +149,11 @@ public class ShippingCostPlanSSListener extends ScenarioServiceListener {
 		}
 	}
 
-	@Override
-	public void onPostScenarioInstanceLoad(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-		final ModelAdapter adapter = new ModelAdapter(scenarioInstance);
-		adapterMap.put(scenarioInstance, adapter);
-	}
+//	@Override
+//	public void onPostScenarioInstanceLoad(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+//		final ModelAdapter adapter = new ModelAdapter(scenarioInstance);
+//		adapterMap.put(scenarioInstance, adapter);
+//	}
 
 	@Override
 	public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
