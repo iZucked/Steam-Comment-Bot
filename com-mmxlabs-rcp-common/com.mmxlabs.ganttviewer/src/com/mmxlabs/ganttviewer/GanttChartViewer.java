@@ -271,7 +271,9 @@ public class GanttChartViewer extends StructuredViewer {
 				for (final Object r : resources) {
 					final String rName = getLabelProviderText(labelProvider, r);
 					final GanttSection section = new GanttSection(ganttChart, rName);
-
+					final Image img = getLabelProviderImage(labelProvider, r);
+					section.setImage(img);
+					
 					final Map<String, GanttGroup> ganttGroups = new TreeMap<String, GanttGroup>();
 
 					if (treeContentProvider.hasChildren(r)) {
