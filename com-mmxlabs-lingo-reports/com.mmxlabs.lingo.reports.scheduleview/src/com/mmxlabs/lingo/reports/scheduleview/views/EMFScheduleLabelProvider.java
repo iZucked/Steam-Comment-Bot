@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.swt.graphics.Color;
@@ -85,7 +86,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		this.memento = memento;
 		this.selectedScenariosService = selectedScenariosService;
 		this.showCanals = memento.getBoolean(Show_Canals);
-		
+
 		ImageDescriptor imageDescriptor = Activator.getImageDescriptor("icons/PinnedRow.gif");
 		pinImage = imageDescriptor.createImage();
 	}
@@ -104,8 +105,12 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	public Image getImage(final Object element) {
 		if (element instanceof Sequence) {
 			Sequence sequence = (Sequence) element;
-			if (selectedScenariosService.getCurrentSelectedDataProvider().isPinnedObject(sequence)) {
-				return pinImage;
+			@Nullable
+			ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+			if (currentSelectedDataProvider != null) {
+				if (currentSelectedDataProvider.isPinnedObject(sequence)) {
+					return pinImage;
+				}
 			}
 		}
 		return null;
