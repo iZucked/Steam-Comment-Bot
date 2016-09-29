@@ -356,6 +356,7 @@ public class HeadlessApplication implements IApplication {
 				skip = 1;
 				continue;
 			}
+			commandLine.add(arg);
 
 		}
 		return commandLine.toArray(new String[commandLine.size()]);
