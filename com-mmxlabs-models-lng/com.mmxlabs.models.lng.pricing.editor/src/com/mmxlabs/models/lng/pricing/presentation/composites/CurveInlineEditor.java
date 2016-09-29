@@ -59,6 +59,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.ILabelLayoutDataProvidingEditor;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.BasicAttributeInlineEditor;
+import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 
 /**
@@ -120,7 +121,7 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 		@Override
 		protected void setValue(final Object element, final Object value) {
 			final EditingDomain ed = commandHandler.getEditingDomain();
-			Command cmd = SetCommand.create(ed, element, feature, value);
+			final Command cmd = SetCommand.create(ed, element, feature, value);
 			assert cmd.canExecute();
 			commandHandler.handleCommand(cmd, (EObject) element, feature);
 			assert ((EObject) element).eGet(feature) == value;
@@ -162,6 +163,8 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 
 	void createTable(final Composite parent) {
 		viewer = new GridTableViewer(parent, SWT.SINGLE);
+		GridViewerHelper.configureLookAndFeel(viewer);
+
 		table = viewer.getGrid();
 
 		table.setLinesVisible(true);
@@ -253,7 +256,7 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 
 		viewer.setComparator(new ViewerComparator() {
 			@Override
-			public int compare(Viewer viewer, Object e1, Object e2) {
+			public int compare(final Viewer viewer, final Object e1, final Object e2) {
 
 				if (e1 instanceof IndexPoint<?> && e2 instanceof IndexPoint<?>) {
 					final IndexPoint<?> arg0 = (IndexPoint<?>) e1;
@@ -309,7 +312,7 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 
 						newPoint.setDate(mMonthYear);
 
-						Command cmd = AddCommand.create(commandHandler.getEditingDomain(), index, indexPointsFeature, newPoint);
+						final Command cmd = AddCommand.create(commandHandler.getEditingDomain(), index, indexPointsFeature, newPoint);
 						assert cmd.canExecute();
 						commandHandler.handleCommand(cmd, index, indexPointsFeature);
 						viewer.refresh();
@@ -332,7 +335,7 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 					return;
 				if (sel instanceof IStructuredSelection) {
 					final IndexPoint<?> indexPoint = (IndexPoint<?>) ((IStructuredSelection) sel).getFirstElement();
-					Command cmd = RemoveCommand.create(commandHandler.getEditingDomain(), indexPoint.eContainer(), indexPoint.eContainingFeature(), indexPoint);
+					final Command cmd = RemoveCommand.create(commandHandler.getEditingDomain(), indexPoint.eContainer(), indexPoint.eContainingFeature(), indexPoint);
 					assert cmd.canExecute();
 					commandHandler.handleCommand(cmd, indexPoint.eContainer(), indexPoint.eContainingFeature());
 					viewer.getControl().setFocus();

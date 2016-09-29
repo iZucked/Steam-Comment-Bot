@@ -45,6 +45,7 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 
 /**
@@ -140,6 +141,7 @@ public class DistanceEditorDialog extends Dialog {
 		barComposite.setLayout(barLayout);
 
 		this.viewer = new DistanceLineViewer(c2, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+		GridViewerHelper.configureLookAndFeel(viewer);
 
 		viewer.init(editingDomain, rootObject);
 

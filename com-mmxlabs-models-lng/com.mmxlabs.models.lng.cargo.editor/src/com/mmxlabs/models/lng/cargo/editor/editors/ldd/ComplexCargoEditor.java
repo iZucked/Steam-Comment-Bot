@@ -69,6 +69,7 @@ import com.mmxlabs.models.ui.editors.dialogs.DefaultDialogEditingContext;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.dialogs.NullDialogController;
+import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
@@ -103,7 +104,7 @@ public class ComplexCargoEditor extends Dialog {
 	// For LDD we need to link min.max discharge volumes
 	private final boolean linkDischargeVolumes = true;
 
-	private IDialogEditingContext dialogContext;
+	private final IDialogEditingContext dialogContext;
 
 	public ComplexCargoEditor(final IShellProvider parentShell, final IScenarioEditingLocation scenarioEditingLocation, final boolean isCargoObjectNew) {
 		super(parentShell);
@@ -144,6 +145,8 @@ public class ComplexCargoEditor extends Dialog {
 		{
 			final Group g = new Group(area, SWT.DEFAULT);
 			viewer = new GridTableViewer(g);
+			GridViewerHelper.configureLookAndFeel(viewer);
+
 			ColumnViewerToolTipSupport.enableFor(viewer);
 
 			viewer.getGrid().setLinesVisible(true);

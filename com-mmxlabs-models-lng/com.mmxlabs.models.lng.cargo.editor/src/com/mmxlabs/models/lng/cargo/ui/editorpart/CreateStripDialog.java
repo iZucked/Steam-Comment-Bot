@@ -84,6 +84,7 @@ import com.mmxlabs.models.ui.editors.dialogs.DefaultDialogEditingContext;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogController;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
+import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
@@ -537,6 +538,8 @@ public class CreateStripDialog extends FormDialog {
 			toolkit.adapt(previewGroup);
 
 			previewWiewer = new GridTableViewer(previewGroup);
+			GridViewerHelper.configureLookAndFeel(previewWiewer);
+
 			previewWiewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 			// Enable tooltip support
 			ColumnViewerToolTipSupport.enableFor(previewWiewer);
@@ -618,7 +621,7 @@ public class CreateStripDialog extends FormDialog {
 			// Ignore
 		}
 
-		int n = calSpacing;
+		final int n = calSpacing;
 
 		// Min of 1 element
 		calSpacing = Math.max(1, calSpacing);
