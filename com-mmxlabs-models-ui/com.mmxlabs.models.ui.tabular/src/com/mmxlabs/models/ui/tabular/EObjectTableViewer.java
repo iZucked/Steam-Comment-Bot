@@ -44,8 +44,6 @@ import org.eclipse.swt.widgets.Widget;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.ui.tabular.renderers.AlternatingRowCellRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
-import com.mmxlabs.models.ui.tabular.renderers.RowHeaderRenderer;
-import com.mmxlabs.models.ui.tabular.renderers.TopLeftRenderer;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
@@ -193,8 +191,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 		this.validationSupport = createValidationSupport();
 		this.filterSupport = new EObjectTableViewerFilterSupport(this, this.getGrid());
 		ColumnViewerToolTipSupport.enableFor(this);
-		getGrid().setRowHeaderRenderer(new RowHeaderRenderer());
-		getGrid().setTopLeftRenderer(new TopLeftRenderer());
+		GridViewerHelper.configureLookAndFeel(this);
 	}
 
 	/**
@@ -407,82 +404,82 @@ public class EObjectTableViewer extends GridTreeViewer {
 		final GridTreeViewer viewer = this;
 		viewer.setContentProvider(
 
-		new ITreeContentProvider() {
+				new ITreeContentProvider() {
 
-			@Override
-			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+					@Override
+					public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 
-				if (oldInput == null) {
-					Display.getDefault().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							if (!viewer.getControl().isDisposed()) {
-								if (viewer instanceof GridTableViewer) {
-									for (final GridColumn tc : ((GridTableViewer) viewer).getGrid().getColumns()) {
-										tc.pack();
-									}
-								} else if (viewer instanceof GridTreeViewer) {
-									for (final GridColumn tc : ((GridTreeViewer) viewer).getGrid().getColumns()) {
-										tc.pack();
+						if (oldInput == null) {
+							Display.getDefault().asyncExec(new Runnable() {
+								@Override
+								public void run() {
+									if (!viewer.getControl().isDisposed()) {
+										if (viewer instanceof GridTableViewer) {
+											for (final GridColumn tc : ((GridTableViewer) viewer).getGrid().getColumns()) {
+												tc.pack();
+											}
+										} else if (viewer instanceof GridTreeViewer) {
+											for (final GridColumn tc : ((GridTreeViewer) viewer).getGrid().getColumns()) {
+												tc.pack();
+											}
+										}
 									}
 								}
+							});
+						}
+
+						contentProvider.inputChanged(viewer, oldInput, newInput);
+					}
+
+					@Override
+					public void dispose() {
+						contentProvider.dispose();
+					}
+
+					@Override
+					public Object[] getElements(final Object inputElement) {
+						// removeAdapters();
+						currentElements.clear();
+						final Object[] elements = contentProvider.getElements(inputElement);
+						for (final Object o : elements) {
+							if (o instanceof EObject) {
+								currentElements.add((EObject) o);
+								// updateObjectExternalNotifiers((EObject) o);
 							}
 						}
-					});
-				}
 
-				contentProvider.inputChanged(viewer, oldInput, newInput);
-			}
+						validationSupport.getValidationErrors().clear();
+						if (inputElement != null) {
+							// Perform initial validation
+							validationSupport.processStatus(false);
+						}
 
-			@Override
-			public void dispose() {
-				contentProvider.dispose();
-			}
-
-			@Override
-			public Object[] getElements(final Object inputElement) {
-				// removeAdapters();
-				currentElements.clear();
-				final Object[] elements = contentProvider.getElements(inputElement);
-				for (final Object o : elements) {
-					if (o instanceof EObject) {
-						currentElements.add((EObject) o);
-						// updateObjectExternalNotifiers((EObject) o);
+						return elements;
 					}
-				}
 
-				validationSupport.getValidationErrors().clear();
-				if (inputElement != null) {
-					// Perform initial validation
-					validationSupport.processStatus(false);
-				}
+					@Override
+					public Object[] getChildren(final Object parentElement) {
 
-				return elements;
-			}
+						final Object[] elements = contentProvider.getChildren(parentElement);
+						for (final Object o : elements) {
+							if (o instanceof EObject) {
+								currentElements.add((EObject) o);
+							}
+						}
 
-			@Override
-			public Object[] getChildren(final Object parentElement) {
-
-				final Object[] elements = contentProvider.getChildren(parentElement);
-				for (final Object o : elements) {
-					if (o instanceof EObject) {
-						currentElements.add((EObject) o);
+						return elements;
 					}
-				}
 
-				return elements;
-			}
+					@Override
+					public Object getParent(final Object element) {
+						return contentProvider.getParent(element);
+					}
 
-			@Override
-			public Object getParent(final Object element) {
-				return contentProvider.getParent(element);
-			}
-
-			@Override
-			public boolean hasChildren(final Object element) {
-				return contentProvider.hasChildren(element);
-			}
-		});
+					@Override
+					public boolean hasChildren(final Object element) {
+						return contentProvider.hasChildren(element);
+					}
+				});
 
 	}
 

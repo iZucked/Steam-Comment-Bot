@@ -29,6 +29,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.PropertySheet;
 
+import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -60,6 +61,7 @@ public abstract class DetailPropertiesView extends ViewPart {
 	public void createPartControl(final Composite parent) {
 
 		viewer = new GridTreeViewer(parent);
+		GridViewerHelper.configureLookAndFeel(viewer);
 
 		// Set defaults
 		viewer.getGrid().setLinesVisible(true);
@@ -167,7 +169,7 @@ public abstract class DetailPropertiesView extends ViewPart {
 				}
 				final ISelection selection = SelectionHelper.adaptSelection(selectedObject);
 				removeAdapters();
-                                // This is very slow with many selected items. Run async to avoid blocking other actions.
+				// This is very slow with many selected items. Run async to avoid blocking other actions.
 				final Runnable r = new Runnable() {
 					@Override
 					public void run() {
