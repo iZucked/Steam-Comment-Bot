@@ -338,7 +338,9 @@ public class BagOptimiser {
 
 				// TODO: Sort by changset P&L and group size.
 				final List<JobState> sortedChangeStates = getSortedLeafStates(finalPopulation);
-				actionSetLogger.setSortedChangeStates(getSortedLeafStates(finalPopulation));
+				if (actionSetLogger != null) {
+					actionSetLogger.setSortedChangeStates(getSortedLeafStates(finalPopulation));
+				}
 				
 				if (DEBUG) {
 					printPopulationInfo(sortedChangeStates);
