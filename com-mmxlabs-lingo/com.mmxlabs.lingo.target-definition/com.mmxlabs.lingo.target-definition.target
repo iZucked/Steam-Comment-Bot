@@ -4,7 +4,7 @@
 <locations>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="jre-jce.feature.feature.group" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/jre/jre-jce.p2/8.45.0.2015a/jre-jce.p2-8.45.0.2015a.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/jre/jre-jce.p2/8.45.0.2016f/jre-jce.p2-8.45.0.2016f.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 </locations>
 </target>
