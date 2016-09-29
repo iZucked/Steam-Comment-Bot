@@ -331,15 +331,17 @@ public class PeriodTransformer {
 		// Remove the spot charter in options and update the mapping arrays
 		for (final Pair<CharterInMarket, Integer> p : chartersToRemove) {
 			final int spotCharterCount = p.getFirst().getSpotCharterCount();
-			assert spotCharterCount > 0;
-			p.getFirst().setSpotCharterCount(spotCharterCount - 1);
-			final int idx = p.getSecond();
-			final int[] m = mapping.get(p.getFirst());
-			// Blank out mapping
-			m[idx] = -1;
-			for (int i = idx; i < m.length; ++i) {
-				if (m[i] >= 0) {
-					m[i]--;
+			if (p.getSecond() >= 0) {
+				assert spotCharterCount > 0;
+				p.getFirst().setSpotCharterCount(spotCharterCount - 1);
+				final int idx = p.getSecond();
+				final int[] m = mapping.get(p.getFirst());
+				// Blank out mapping
+				m[idx] = -1;
+				for (int i = idx; i < m.length; ++i) {
+					if (m[i] >= 0) {
+						m[i]--;
+					}
 				}
 			}
 		}
