@@ -44,6 +44,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -392,6 +393,8 @@ public class HeadlineReportView extends ViewPart {
 		}
 
 		viewer = new GridTableViewer(parent, SWT.FULL_SELECTION | SWT.H_SCROLL);
+		GridViewerHelper.configureLookAndFeel(viewer);
+
 		viewer.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL));
 		viewer.setContentProvider(new ArrayContentProvider());
 

@@ -54,6 +54,7 @@ import com.mmxlabs.lingo.reports.views.standard.TotalsTransformer.RowData;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -278,6 +279,8 @@ public class TotalsReportView extends ViewPart {
 		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
 
 		viewer = new GridTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		GridViewerHelper.configureLookAndFeel(viewer);
+
 		viewer.setContentProvider(new ArrayContentProvider());
 		viewer.setInput(getViewSite());
 

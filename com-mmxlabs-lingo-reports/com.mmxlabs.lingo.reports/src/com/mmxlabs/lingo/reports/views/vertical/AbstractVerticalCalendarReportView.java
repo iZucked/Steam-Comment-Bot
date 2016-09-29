@@ -5,6 +5,7 @@
 package com.mmxlabs.lingo.reports.views.vertical;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,7 +27,10 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.vertical.providers.EventProvider;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
+import com.mmxlabs.models.ui.tabular.renderers.EmptyColumnHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.RowHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.TopLeftRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
@@ -126,6 +130,9 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		container.setLayout(layout);
 
 		gridViewer = new GridTableViewer(container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		GridViewerHelper.configureLookAndFeel(gridViewer);
+
+
 		gridViewer.setContentProvider(createContentProvider());
 
 		gridViewer.getGrid().setHeaderVisible(true);
@@ -134,6 +141,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		gridViewer.getGrid().setRowHeaderVisible(true);
 		gridViewer.getGrid().setRowHeaderRenderer(new RowHeaderRenderer());
 		gridViewer.getGrid().setTopLeftRenderer(new TopLeftRenderer());
+		gridViewer.getGrid().setEmptyColumnHeaderRenderer(new EmptyColumnHeaderRenderer());
 
 		makeActions();
 

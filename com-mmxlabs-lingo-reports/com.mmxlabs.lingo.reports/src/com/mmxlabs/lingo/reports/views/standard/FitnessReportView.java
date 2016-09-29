@@ -50,6 +50,7 @@ import com.mmxlabs.lingo.reports.views.standard.FitnessTransformer.RowData;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -128,7 +129,7 @@ public class FitnessReportView extends ViewPart {
 					int numberOfSchedules = 0;
 					List<RowData> pinnedData = null;
 					if (pinned != null) {
-						LNGScenarioModel instance = selectedDataProvider.getScenarioModel(pinned);
+						final LNGScenarioModel instance = selectedDataProvider.getScenarioModel(pinned);
 						if (instance != null) {
 							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
 							if (schedule != null) {
@@ -139,7 +140,7 @@ public class FitnessReportView extends ViewPart {
 						}
 					}
 					for (final ScenarioInstance other : others) {
-						LNGScenarioModel instance = selectedDataProvider.getScenarioModel(other);
+						final LNGScenarioModel instance = selectedDataProvider.getScenarioModel(other);
 						if (instance != null) {
 							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
 							if (schedule != null) {
@@ -233,6 +234,8 @@ public class FitnessReportView extends ViewPart {
 		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
 
 		viewer = new GridTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+		GridViewerHelper.configureLookAndFeel(viewer);
+
 		viewer.setContentProvider(new ArrayContentProvider());
 		viewer.setInput(getViewSite());
 

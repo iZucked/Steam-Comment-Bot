@@ -99,6 +99,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
+import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
@@ -487,6 +488,8 @@ public class ChangeSetView implements IAdaptable {
 		boldFont = new Font(Display.getDefault(), new FontData(fontData.getName(), fontData.getHeight(), SWT.BOLD));
 		// Create table
 		viewer = new GridTreeViewer(parent, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+		GridViewerHelper.configureLookAndFeel(viewer);
+
 		ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.RECREATE);
 
 		viewer.getGrid().setHeaderVisible(true);
@@ -1140,7 +1143,7 @@ public class ChangeSetView implements IAdaptable {
 	private CellLabelProvider createDateLabelProvider(final EStructuralFeature attrib) {
 		return new CellLabelProvider() {
 
-			private DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+			private final DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
 			@Override
 			public void update(final ViewerCell cell) {
@@ -1152,7 +1155,7 @@ public class ChangeSetView implements IAdaptable {
 					if (slotAllocation != null) {
 						final Slot slot = slotAllocation.getSlot();
 						if (slot != null) {
-							LocalDate windowStart = slot.getWindowStart();
+							final LocalDate windowStart = slot.getWindowStart();
 							if (windowStart != null) {
 								cell.setText(windowStart.format(formatter));
 							}

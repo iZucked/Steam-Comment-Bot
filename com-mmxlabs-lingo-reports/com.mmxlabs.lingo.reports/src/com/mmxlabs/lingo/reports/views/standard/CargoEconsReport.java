@@ -69,6 +69,7 @@ import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -101,6 +102,7 @@ public class CargoEconsReport extends ViewPart {
 	@Override
 	public void createPartControl(final Composite parent) {
 		viewer = new GridTableViewer(parent);
+		GridViewerHelper.configureLookAndFeel(viewer);
 
 		// Add the name column
 		{

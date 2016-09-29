@@ -64,6 +64,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
+import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -177,6 +178,8 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 				// return sortData.sortedChildren;
 				// }
 			};
+			GridViewerHelper.configureLookAndFeel(viewer);
+
 			ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.RECREATE);
 
 			viewer.setComparator(sortingSupport.createViewerComparer());

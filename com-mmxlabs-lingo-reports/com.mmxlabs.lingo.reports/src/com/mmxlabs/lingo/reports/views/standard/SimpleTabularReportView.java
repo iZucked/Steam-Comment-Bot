@@ -54,6 +54,9 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
+import com.mmxlabs.models.ui.tabular.renderers.EmptyColumnHeaderRenderer;
+import com.mmxlabs.models.ui.tabular.renderers.RowHeaderRenderer;
+import com.mmxlabs.models.ui.tabular.renderers.TopLeftRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
@@ -264,6 +267,9 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
 
 		viewer = new GridTreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		viewer.getGrid().setRowHeaderRenderer(new RowHeaderRenderer());
+		viewer.getGrid().setTopLeftRenderer(new TopLeftRenderer());
+		viewer.getGrid().setEmptyColumnHeaderRenderer(new EmptyColumnHeaderRenderer());
 
 		viewer.setContentProvider(createContentProvider());
 		viewer.setInput(getViewSite());
