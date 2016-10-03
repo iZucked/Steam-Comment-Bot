@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * General purpose arithmetic expression parser.
  * 
@@ -63,9 +65,9 @@ public class ExpressionParser<T> implements IExpressionParser<T> {
 		}
 	}
 
-	private IExpression<T> parse(final StreamTokenizer tok) throws IOException {
-		final Stack<Operator> operatorStack = new Stack<Operator>();
-		final Stack<IExpression<T>> fragmentStack = new Stack<IExpression<T>>();
+	private @NonNull IExpression<T> parse(final @NonNull StreamTokenizer tok) throws IOException {
+		final Stack<@NonNull Operator> operatorStack = new Stack<>();
+		final Stack<@NonNull IExpression<T>> fragmentStack = new Stack<>();
 
 		boolean justPushedExpression = false;
 		boolean justSeenWord = false;
@@ -87,12 +89,13 @@ public class ExpressionParser<T> implements IExpressionParser<T> {
 			case '(':
 				if (justSeenWord) {
 					final String functionName = word;
-					final List<IExpression<T>> arguments = new ArrayList<IExpression<T>>();
+					final List<IExpression<T>> arguments = new ArrayList<>();
 					do {
 						final IExpression<T> fragment = parse(tok);
 						arguments.add(fragment);
 					} while (tok.ttype == ',');
 					// create function call
+					assert functionName != null;
 					fragmentStack.push(functionFactory.createFunction(functionName, arguments));
 					justPushedExpression = true;
 				} else {
@@ -127,8 +130,8 @@ public class ExpressionParser<T> implements IExpressionParser<T> {
 
 					if (!operatorStack.isEmpty() && infixFactory.isOperatorHigherPriority(operatorStack.peek().name, opChar)) {
 						final Operator o = operatorStack.pop();
-						final IExpression<T> rhs = fragmentStack.pop();
-						final IExpression<T> lhs = fragmentStack.pop();
+						final @NonNull IExpression<T> rhs = fragmentStack.pop();
+						final @NonNull IExpression<T> lhs = fragmentStack.pop();
 						fragmentStack.push(infixFactory.createInfixOperator(o.name, lhs, rhs));
 					}
 

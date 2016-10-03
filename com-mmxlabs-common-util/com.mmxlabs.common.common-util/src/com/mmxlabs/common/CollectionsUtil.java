@@ -192,9 +192,9 @@ public final class CollectionsUtil {
 	}
 
 	public static class Sets {
-		public static <T> Set<T> merge(Set<T>... sets) {
-			Set<T> merged = new HashSet<T>();
-			for (Set<T> set : sets) {
+		public static <T> Set<T> merge(final Set<T>... sets) {
+			final Set<T> merged = new HashSet<T>();
+			for (final Set<T> set : sets) {
 				merged.addAll(set);
 			}
 			return merged;
@@ -202,8 +202,8 @@ public final class CollectionsUtil {
 	}
 
 	public static class ASet {
-		public static <T> Set<T> of(T... items) {
-			Set<T> set = new HashSet<T>();
+		public static <T> Set<T> of(final T... items) {
+			final Set<T> set = new HashSet<T>();
 			set.addAll(Arrays.asList(items));
 			return set;
 		}

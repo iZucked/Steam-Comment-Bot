@@ -6,6 +6,8 @@ package com.mmxlabs.common.parser;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 public interface IFunctionFactory<T> {
-	public IExpression<T> createFunction(final String name, final List<IExpression<T>> arguments);
+	@NonNull IExpression<T> createFunction(@NonNull String name, @NonNull List<IExpression<T>> arguments);
 }

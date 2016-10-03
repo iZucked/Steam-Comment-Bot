@@ -4,8 +4,11 @@
  */
 package com.mmxlabs.common.parser;
 
-public interface IPrefixOperatorFactory<T> {
-	public IExpression<T> createPrefixOperator(final char operator, final IExpression<T> argument);
+import org.eclipse.jdt.annotation.NonNull;
 
-	public boolean isPrefixOperator(final char operator);
+public interface IPrefixOperatorFactory<T> {
+	@NonNull
+	IExpression<T> createPrefixOperator(char operator, @NonNull IExpression<T> argument);
+
+	boolean isPrefixOperator(char operator);
 }

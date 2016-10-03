@@ -18,25 +18,25 @@ import com.mmxlabs.common.parser.IPrefixOperatorFactory;
 import com.mmxlabs.common.parser.ITermFactory;
 
 public class ArithmeticParser extends ExpressionParser<Double> {
-	private Map<String, Double> variables = new HashMap<String, Double>();
+	private final @NonNull Map<@NonNull String, @NonNull Double> variables = new HashMap<>();
 
 	public ArithmeticParser() {
-		setPrefixOperatorFactory(new IPrefixOperatorFactory<Double>() {
+		setPrefixOperatorFactory(new IPrefixOperatorFactory<@NonNull Double>() {
 
 			@Override
-			public boolean isPrefixOperator(char operator) {
+			public boolean isPrefixOperator(final char operator) {
 				return operator == '-';
 			}
 
 			@Override
-			public IExpression<Double> createPrefixOperator(char operator, IExpression<Double> argument) {
+			public IExpression<Double> createPrefixOperator(final char operator, @NonNull final IExpression<@NonNull Double> argument) {
 				return new NegationOperator(argument);
 			}
 		});
 
 		setInfixOperatorFactory(new IInfixOperatorFactory<Double>() {
 			@Override
-			public boolean isOperatorHigherPriority(char a, char b) {
+			public boolean isOperatorHigherPriority(final char a, final char b) {
 				if (a == b)
 					return false;
 				switch (a) {
@@ -53,20 +53,20 @@ public class ArithmeticParser extends ExpressionParser<Double> {
 			}
 
 			@Override
-			public boolean isInfixOperator(char operator) {
+			public boolean isInfixOperator(final char operator) {
 				return operator == '*' || operator == '/' || operator == '+' || operator == '-';
 			}
 
 			@Override
-			public @NonNull IExpression<Double> createInfixOperator(char operator, IExpression<Double> lhs, IExpression<Double> rhs) {
+			public @NonNull IExpression<Double> createInfixOperator(final char operator, final IExpression<Double> lhs, final IExpression<Double> rhs) {
 				return new ArithmeticOperator(operator, lhs, rhs);
 			}
 		});
 
-		setFunctionFactory(new IFunctionFactory<Double>() {
+		setFunctionFactory(new IFunctionFactory<@NonNull Double>() {
 
 			@Override
-			public IExpression<Double> createFunction(String name, List<IExpression<Double>> arguments) {
+			public IExpression<Double> createFunction(@NonNull final String name, final List<IExpression<@NonNull Double>> arguments) {
 				if (name.equals("avg")) {
 					return new MeanFunction(arguments);
 				} else {
@@ -75,22 +75,24 @@ public class ArithmeticParser extends ExpressionParser<Double> {
 			}
 		});
 
-		setTermFactory(new ITermFactory<Double>() {
+		setTermFactory(new ITermFactory<@NonNull Double>() {
 			@Override
-			public @NonNull IExpression<Double> createTerm(String term) {
+			public @NonNull IExpression<@NonNull Double> createTerm(@NonNull final String term) {
 				return new ArithmeticTerm(term, variables);
 			}
 		});
 	}
 
-	public void addVariable(final String name, final double value) {
+	public void addVariable(final @NonNull String name, final double value) {
 		variables.put(name, value);
 	}
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		final ArithmeticParser parser = new ArithmeticParser();
 		for (int i = 1; i < args.length; i += 2) {
-			parser.addVariable(args[i], Double.parseDouble(args[i + 1]));
+			final String name = args[i];
+			assert name != null;
+			parser.addVariable(name, Double.parseDouble(args[i + 1]));
 		}
 		final IExpression<Double> expression = parser.parse(args[0]);
 		System.err.println(expression + " = " + expression.evaluate());
