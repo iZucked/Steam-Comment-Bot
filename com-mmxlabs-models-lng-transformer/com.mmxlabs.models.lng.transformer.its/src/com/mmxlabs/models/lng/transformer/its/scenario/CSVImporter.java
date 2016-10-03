@@ -56,6 +56,7 @@ import com.mmxlabs.models.lng.pricing.importers.BaseFuelIndexImporter;
 import com.mmxlabs.models.lng.pricing.importers.CharterIndexImporter;
 import com.mmxlabs.models.lng.pricing.importers.CommodityIndexImporter;
 import com.mmxlabs.models.lng.pricing.importers.CostModelImporter;
+import com.mmxlabs.models.lng.pricing.importers.CurrencyIndexImporter;
 import com.mmxlabs.models.lng.pricing.importers.DataIndexImporter;
 import com.mmxlabs.models.lng.pricing.importers.PortCostImporter;
 import com.mmxlabs.models.lng.pricing.importers.PricingModelImporter;
@@ -278,6 +279,7 @@ public class CSVImporter {
 					classImporters.put(FleetPackage.eINSTANCE.getVesselClass(), new VesselClassImporter());
 					classImporters.put(PricingPackage.eINSTANCE.getDataIndex(), new DataIndexImporter());
 					classImporters.put(PricingPackage.eINSTANCE.getBaseFuelIndex(), new BaseFuelIndexImporter());
+					classImporters.put(PricingPackage.eINSTANCE.getCurrencyIndex(), new CurrencyIndexImporter());
 					classImporters.put(PricingPackage.eINSTANCE.getCharterIndex(), new CharterIndexImporter());
 					classImporters.put(PricingPackage.eINSTANCE.getCommodityIndex(), new CommodityIndexImporter());
 

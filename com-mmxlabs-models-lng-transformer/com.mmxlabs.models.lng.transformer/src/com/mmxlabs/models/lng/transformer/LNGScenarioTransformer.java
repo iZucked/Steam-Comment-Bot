@@ -94,6 +94,7 @@ import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
+import com.mmxlabs.models.lng.pricing.CurrencyIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
@@ -104,6 +105,8 @@ import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.pricing.UnitConversion;
+import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -176,7 +179,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEdito
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.ISpotCharterInMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
@@ -452,6 +454,21 @@ public class LNGScenarioTransformer {
 		for (final CharterIndex charterIndex : pricingModel.getCharterIndices()) {
 			final Index<Integer> index = charterIndex.getData();
 			registerIndex(charterIndex.getName(), index, charterIndices);
+		}
+
+		// Currency is added to all the options
+		for (final CurrencyIndex currencyIndex : pricingModel.getCurrencyIndices()) {
+			final Index<Double> index = currencyIndex.getData();
+			assert index != null;
+			final String name = currencyIndex.getName();
+			assert name != null;
+			registerIndex(name, index, commodityIndices);
+			registerIndex(name, index, baseFuelIndices);
+			registerIndex(name, index, charterIndices);
+		}
+
+		for (UnitConversion factor : pricingModel.getConversionFactors()) {
+			registerConversionFactor(factor, commodityIndices, baseFuelIndices, charterIndices);
 		}
 
 		// Now pre-compute our various curve data objects...
@@ -750,6 +767,15 @@ public class LNGScenarioTransformer {
 			indices.addSeriesData(name, times, nums);
 		} else if (index instanceof DerivedIndex) {
 			indices.addSeriesExpression(name, ((DerivedIndex) index).getExpression());
+		}
+	}
+
+	private void registerConversionFactor(@NonNull final UnitConversion factor, @NonNull final SeriesParser... parsers) {
+		String name = PriceIndexUtils.createConversionFactorName(factor);
+		if (name != null) {
+			for (SeriesParser parser : parsers) {
+				parser.addSeriesExpression(name, Double.toString(factor.getFactor()));
+			}
 		}
 	}
 
