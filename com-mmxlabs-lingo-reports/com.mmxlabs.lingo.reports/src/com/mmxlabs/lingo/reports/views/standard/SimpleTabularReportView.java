@@ -83,7 +83,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	private String helpContextId;
 
 	@NonNull
-	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
+	protected final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 
 		@Override
 		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
@@ -387,7 +387,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 		manager.appendToGroup("copy", copyTableAction);
 	}
 
-	private void makeActions() {
+	protected void makeActions() {
 		packColumnsAction = new PackGridTreeColumnsAction(viewer);
 		copyTableAction = new CopyGridToClipboardAction(viewer.getGrid());
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
@@ -435,5 +435,10 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 			gvc.getColumn().dispose();
 		}
 		viewerColumns.clear();
+	}
+
+	protected void refresh() {
+		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
+
 	}
 }

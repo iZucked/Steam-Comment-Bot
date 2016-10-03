@@ -33,6 +33,10 @@ public abstract class AbstractSimpleTabularReportContentProvider<T> implements I
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
+		if (parentElement instanceof Collection<?>) {
+			Collection<?> collection = (Collection<?>) parentElement;
+			return collection.toArray();
+		}
 		return null;
 	}
 
@@ -43,6 +47,6 @@ public abstract class AbstractSimpleTabularReportContentProvider<T> implements I
 
 	@Override
 	public boolean hasChildren(Object element) {
-		return false;
+		return element instanceof Collection<?>;
 	}
 }
