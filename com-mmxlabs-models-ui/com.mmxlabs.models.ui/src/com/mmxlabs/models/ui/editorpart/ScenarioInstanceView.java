@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -160,7 +161,9 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		scenarioInstance = null;
 
 		// getSite().getPage().removeSelectionListener(SCENARIO_NAVIGATOR_ID, this);
-		getSite().getPage().removePartListener(partListener);
+		if (partListener != null) {
+			getSite().getPage().removePartListener(partListener);
+		}
 		super.dispose();
 	}
 
@@ -211,10 +214,16 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 			this.valueProviderCache = new ReferenceValueProviderCache(getRootObject());
 			extraValidationContext.push(new DefaultExtraValidationContext(getRootObject(), false));
+			doDisplayScenarioInstance(scenarioInstance, getRootObject());
 		} else {
 			scenarioInstanceStatusProvider = null;
 			valueProviderCache = null;
+			doDisplayScenarioInstance(null, null);
 		}
+	}
+
+	protected void doDisplayScenarioInstance(@Nullable ScenarioInstance scenarioInstance, @Nullable MMXRootObject rootObject) {
+
 	}
 
 	@Override
