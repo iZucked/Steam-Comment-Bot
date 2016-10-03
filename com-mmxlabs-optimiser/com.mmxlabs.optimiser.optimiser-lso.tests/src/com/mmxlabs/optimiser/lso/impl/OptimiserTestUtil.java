@@ -35,13 +35,12 @@ public class OptimiserTestUtil {
 	 */
 	@NonNull
 	public static IModifiableSequence makeSequence(final int... integers) {
-		final List<ISequenceElement> elementsList = makeList(integers);
+		final List<@NonNull ISequenceElement> elementsList = makeList(integers);
 		return new ListModifiableSequence(elementsList);
 	}
 
-	@NonNull
-	public static List<ISequenceElement> makeList(final int... integers) {
-		final List<ISequenceElement> elementsList = new ArrayList<ISequenceElement>();
+	public static @NonNull List<@NonNull ISequenceElement> makeList(final int... integers) {
+		final @NonNull List<@NonNull ISequenceElement> elementsList = new ArrayList<>();
 		for (final int i : integers) {
 			elementsList.add(new IntegerElement(i));
 		}
@@ -55,8 +54,8 @@ public class OptimiserTestUtil {
 	 * @return
 	 */
 	@NonNull
-	public static IModifiableSequence makeSequence(final ISequenceElement... elements) {
-		final List<ISequenceElement> elementsList = CollectionsUtil.makeArrayList(elements);
+	public static IModifiableSequence makeSequence(final @NonNull ISequenceElement...  elements) {
+		final List<@NonNull ISequenceElement> elementsList = CollectionsUtil.makeArrayList(elements);
 		return new ListModifiableSequence(elementsList);
 	}
 

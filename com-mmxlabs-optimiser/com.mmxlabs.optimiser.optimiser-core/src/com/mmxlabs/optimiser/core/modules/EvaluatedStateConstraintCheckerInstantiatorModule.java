@@ -27,12 +27,13 @@ public class EvaluatedStateConstraintCheckerInstantiatorModule extends AbstractM
 	}
 
 	@Provides
-	private List<IEvaluatedStateConstraintChecker> provideConstraintCheckers(@NonNull final Injector injector, @NonNull final IEvaluatedStateConstraintCheckerRegistry constraintCheckerRegistry,
-			@NonNull @Named(ENABLED_EVALUATED_STATE_CONSTRAINT_NAMES) final List<String> enabledConstraintNames) {
+	private List<@NonNull IEvaluatedStateConstraintChecker> provideConstraintCheckers(@NonNull final Injector injector,
+			@NonNull final IEvaluatedStateConstraintCheckerRegistry constraintCheckerRegistry,
+			@NonNull @Named(ENABLED_EVALUATED_STATE_CONSTRAINT_NAMES) final List<@NonNull String> enabledConstraintNames) {
 		final EvaluatedStateConstraintCheckerInstantiator instantiator = new EvaluatedStateConstraintCheckerInstantiator();
 		final List<IEvaluatedStateConstraintChecker> constraintCheckers = instantiator.instantiateConstraintCheckers(constraintCheckerRegistry, enabledConstraintNames);
 
-		final List<IEvaluatedStateConstraintChecker> result = new ArrayList<>(constraintCheckers.size());
+		final List<@NonNull IEvaluatedStateConstraintChecker> result = new ArrayList<>(constraintCheckers.size());
 		for (final IEvaluatedStateConstraintChecker checker : constraintCheckers) {
 			if (checker != null) {
 				result.add(checker);
