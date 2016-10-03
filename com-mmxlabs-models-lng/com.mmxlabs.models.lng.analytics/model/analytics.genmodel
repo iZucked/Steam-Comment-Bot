@@ -3,7 +3,7 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.analytics/src" modelPluginID="com.mmxlabs.models.lng.analytics"
     templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.sdk.template/templates/"
     dynamicTemplates="true" modelName="Analytics" testsDirectory="" importerID="org.eclipse.emf.importer.ecore"
-    complianceLevel="8.0" copyrightFields="false" runtimeVersion="2.11" usedGenPackages="../../com.mmxlabs.models.lng.commercial/model/commercial.genmodel#//commercial ../../com.mmxlabs.models.lng.fleet/model/fleet.genmodel#//fleet platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore ../../com.mmxlabs.models.lng.port/model/port.genmodel#//port ../../com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime">
+    complianceLevel="8.0" copyrightFields="false" runtimeVersion="2.11" usedGenPackages="../../com.mmxlabs.models.lng.cargo/model/cargo.genmodel#//cargo ../../com.mmxlabs.models.lng.commercial/model/commercial.genmodel#//commercial ../../com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime ../../com.mmxlabs.models.lng.fleet/model/fleet.genmodel#//fleet platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore ../../com.mmxlabs.models.lng.port/model/port.genmodel#//port ../../com.mmxlabs.models.lng.pricing/model/pricing.genmodel#//pricing ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.genmodel#//spotmarkets">
   <foreignModel>analytics.ecore</foreignModel>
   <genPackages prefix="Analytics" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
       multipleEditorPages="false" generateModelWizard="false" extensibleProviderFactory="true"
@@ -113,6 +113,8 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//ProvisionalCargo/vessel"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//ProvisionalCargo/portfolioModel"/>
     </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//BuyOption"/>
+    <genClasses ecoreClass="analytics.ecore#//SellOption"/>
     <genClasses ecoreClass="analytics.ecore#//BuyOpportunity">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BuyOpportunity/port"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BuyOpportunity/contract"/>
@@ -124,6 +126,27 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SellOpportunity/contract"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/date"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/priceExpression"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//BuyMarket">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BuyMarket/market"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//SellMarket">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SellMarket/market"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//BuyReference">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BuyReference/slot"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//SellReference">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SellReference/slot"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//AnalysisResultRow">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalysisResultRow/buyOption"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalysisResultRow/sellOption"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AnalysisResultRow/resultDetail"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//AnalysisResultDetail"/>
+    <genClasses ecoreClass="analytics.ecore#//BreakEvenResult">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BreakEvenResult/price"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.analytics.util;
 
+import com.mmxlabs.models.lng.analytics.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -134,12 +135,100 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createProvisionalCargoAdapter();
 			}
 			@Override
+			public Adapter caseBuyOption(BuyOption object) {
+				return createBuyOptionAdapter();
+			}
+			@Override
+			public Adapter caseSellOption(SellOption object) {
+				return createSellOptionAdapter();
+			}
+			@Override
 			public Adapter caseBuyOpportunity(BuyOpportunity object) {
 				return createBuyOpportunityAdapter();
 			}
 			@Override
 			public Adapter caseSellOpportunity(SellOpportunity object) {
 				return createSellOpportunityAdapter();
+			}
+			@Override
+			public Adapter caseBuyMarket(BuyMarket object) {
+				return createBuyMarketAdapter();
+			}
+			@Override
+			public Adapter caseSellMarket(SellMarket object) {
+				return createSellMarketAdapter();
+			}
+			@Override
+			public Adapter caseBuyReference(BuyReference object) {
+				return createBuyReferenceAdapter();
+			}
+			@Override
+			public Adapter caseSellReference(SellReference object) {
+				return createSellReferenceAdapter();
+			}
+			@Override
+			public Adapter caseBaseCaseRow(BaseCaseRow object) {
+				return createBaseCaseRowAdapter();
+			}
+			@Override
+			public Adapter casePartialCaseRow(PartialCaseRow object) {
+				return createPartialCaseRowAdapter();
+			}
+			@Override
+			public Adapter caseShippingOption(ShippingOption object) {
+				return createShippingOptionAdapter();
+			}
+			@Override
+			public Adapter caseFleetShippingOption(FleetShippingOption object) {
+				return createFleetShippingOptionAdapter();
+			}
+			@Override
+			public Adapter caseRoundTripShippingOption(RoundTripShippingOption object) {
+				return createRoundTripShippingOptionAdapter();
+			}
+			@Override
+			public Adapter caseNominatedShippingOption(NominatedShippingOption object) {
+				return createNominatedShippingOptionAdapter();
+			}
+			@Override
+			public Adapter caseAnalysisResultRow(AnalysisResultRow object) {
+				return createAnalysisResultRowAdapter();
+			}
+			@Override
+			public Adapter caseOptionRule(OptionRule object) {
+				return createOptionRuleAdapter();
+			}
+			@Override
+			public Adapter caseAnalysisResultDetail(AnalysisResultDetail object) {
+				return createAnalysisResultDetailAdapter();
+			}
+			@Override
+			public Adapter caseProfitAndLossResult(ProfitAndLossResult object) {
+				return createProfitAndLossResultAdapter();
+			}
+			@Override
+			public Adapter caseBreakEvenResult(BreakEvenResult object) {
+				return createBreakEvenResultAdapter();
+			}
+			@Override
+			public Adapter caseModeOptionRule(ModeOptionRule object) {
+				return createModeOptionRuleAdapter();
+			}
+			@Override
+			public Adapter caseOptionAnalysisModel(OptionAnalysisModel object) {
+				return createOptionAnalysisModelAdapter();
+			}
+			@Override
+			public Adapter caseResultSet(ResultSet object) {
+				return createResultSetAdapter();
+			}
+			@Override
+			public Adapter caseBaseCase(BaseCase object) {
+				return createBaseCaseAdapter();
+			}
+			@Override
+			public Adapter casePartialCase(PartialCase object) {
+				return createPartialCaseAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -342,6 +431,34 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.BuyOption <em>Buy Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.BuyOption
+	 * @generated
+	 */
+	public Adapter createBuyOptionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SellOption <em>Sell Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SellOption
+	 * @generated
+	 */
+	public Adapter createSellOptionAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity <em>Buy Opportunity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -366,6 +483,286 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSellOpportunityAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.BuyMarket <em>Buy Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.BuyMarket
+	 * @generated
+	 */
+	public Adapter createBuyMarketAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SellMarket <em>Sell Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SellMarket
+	 * @generated
+	 */
+	public Adapter createSellMarketAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.BuyReference <em>Buy Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.BuyReference
+	 * @generated
+	 */
+	public Adapter createBuyReferenceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SellReference <em>Sell Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SellReference
+	 * @generated
+	 */
+	public Adapter createSellReferenceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.BaseCaseRow <em>Base Case Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.BaseCaseRow
+	 * @generated
+	 */
+	public Adapter createBaseCaseRowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.PartialCaseRow <em>Partial Case Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.PartialCaseRow
+	 * @generated
+	 */
+	public Adapter createPartialCaseRowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.ShippingOption <em>Shipping Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.ShippingOption
+	 * @generated
+	 */
+	public Adapter createShippingOptionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.FleetShippingOption <em>Fleet Shipping Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.FleetShippingOption
+	 * @generated
+	 */
+	public Adapter createFleetShippingOptionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.RoundTripShippingOption <em>Round Trip Shipping Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.RoundTripShippingOption
+	 * @generated
+	 */
+	public Adapter createRoundTripShippingOptionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.NominatedShippingOption <em>Nominated Shipping Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.NominatedShippingOption
+	 * @generated
+	 */
+	public Adapter createNominatedShippingOptionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.AnalysisResultRow <em>Analysis Result Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.AnalysisResultRow
+	 * @generated
+	 */
+	public Adapter createAnalysisResultRowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.OptionRule <em>Option Rule</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.OptionRule
+	 * @generated
+	 */
+	public Adapter createOptionRuleAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.AnalysisResultDetail <em>Analysis Result Detail</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.AnalysisResultDetail
+	 * @generated
+	 */
+	public Adapter createAnalysisResultDetailAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.ProfitAndLossResult <em>Profit And Loss Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.ProfitAndLossResult
+	 * @generated
+	 */
+	public Adapter createProfitAndLossResultAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.BreakEvenResult <em>Break Even Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenResult
+	 * @generated
+	 */
+	public Adapter createBreakEvenResultAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.ModeOptionRule <em>Mode Option Rule</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.ModeOptionRule
+	 * @generated
+	 */
+	public Adapter createModeOptionRuleAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel <em>Option Analysis Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.OptionAnalysisModel
+	 * @generated
+	 */
+	public Adapter createOptionAnalysisModelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.ResultSet <em>Result Set</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.ResultSet
+	 * @generated
+	 */
+	public Adapter createResultSetAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.BaseCase <em>Base Case</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.BaseCase
+	 * @generated
+	 */
+	public Adapter createBaseCaseAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.PartialCase <em>Partial Case</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.PartialCase
+	 * @generated
+	 */
+	public Adapter createPartialCaseAdapter() {
 		return null;
 	}
 

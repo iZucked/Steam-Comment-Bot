@@ -81,6 +81,96 @@
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.analytics.SellOpportunity">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.BuyOptionComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.BuyOptionComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.BuyOption">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.SellOptionComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.SellOptionComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.SellOption">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.BuyReferenceComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.BuyReferenceComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.BuyReference">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.SellReferenceComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.SellReferenceComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.SellReference">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.SellMarketComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.SellMarketComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.SellMarket">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.BuyMarketComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.BuyMarketComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.BuyMarket">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.ModeOptionRuleComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.ModeOptionRuleComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.ModeOptionRule">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.OptionRuleComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.OptionRuleComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.OptionRule">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.NominatedShippingOptionComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.NominatedShippingOptionComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.NominatedShippingOption">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.RoundTripShippingOptionComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.RoundTripShippingOptionComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.RoundTripShippingOption">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.ShippingOptionComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.ShippingOptionComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.ShippingOption">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.SellGroupComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.SellGroupComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.SellGroup">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.BuyGroupComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.BuyGroupComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.BuyGroup">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.BaseCaseRowComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.BaseCaseRowComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.BaseCaseRow">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.PartialCaseRowComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.PartialCaseRowComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.PartialCaseRow">
+  </componentHelper>
 		
 	</extension>
  <extension
@@ -156,6 +246,30 @@
           ownerEClass="com.mmxlabs.models.lng.analytics.Journey"
           referenceEClass="com.mmxlabs.models.lng.port.Port">
     </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.analytics.ui.valueproviders.BuyMarketReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.analytics.ui.valueproviders.BuyMarketReferenceValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.analytics.BuyMarket"
+          referenceEClass="com.mmxlabs.models.lng.spotmarkets.SpotMarket">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.analytics.ui.valueproviders.SellMarketReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.analytics.ui.valueproviders.SellMarketReferenceValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.analytics.SellMarket"
+          referenceEClass="com.mmxlabs.models.lng.spotmarkets.SpotMarket">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.analytics.ui.valueproviders.SellReferenceReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.analytics.ui.valueproviders.SellReferenceReferenceValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.analytics.SellReference"
+          referenceEClass="com.mmxlabs.models.lng.cargo.DischargeSlot">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.analytics.ui.valueproviders.BuyReferenceReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.analytics.ui.valueproviders.BuyReferenceReferenceValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.analytics.BuyReference"
+          referenceEClass="com.mmxlabs.models.lng.cargo.LoadSlot">
+    </valueProvider>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.editorfactories">
@@ -180,6 +294,15 @@
             class="com.mmxlabs.models.lng.analytics.presentation.AnalyticsEditor"
             contributorClass="com.mmxlabs.models.lng.analytics.presentation.AnalyticsActionBarContributor">
       </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView"
+            id="com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView"
+            name="Option Modeller"
+            restorable="true">
+      </view>
    </extension>
 
 </plugin>

@@ -44,6 +44,7 @@ public class BuyOpportunityComponentHelper extends BaseComponentHelper {
 	public BuyOpportunityComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.MMX_OBJECT));
+		superClassesHelpers.addAll(registry.getComponentHelpers(AnalyticsPackage.Literals.BUY_OPTION));
 	}
 	
 	/**
@@ -64,11 +65,22 @@ public class BuyOpportunityComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_desPurchaseEditor(detailComposite, topClass);
 		add_portEditor(detailComposite, topClass);
 		add_contractEditor(detailComposite, topClass);
 		add_dateEditor(detailComposite, topClass);
 		add_priceExpressionEditor(detailComposite, topClass);
+		add_entityEditor(detailComposite, topClass);
 	}
+	/**
+	 * Create the editor for the desPurchase feature on BuyOpportunity
+	 *
+	 * @generated
+	 */
+	protected void add_desPurchaseEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DES_PURCHASE));
+	}
+
 	/**
 	 * Create the editor for the port feature on BuyOpportunity
 	 *
@@ -100,5 +112,14 @@ public class BuyOpportunityComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_priceExpressionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.BUY_OPPORTUNITY__PRICE_EXPRESSION));
+	}
+
+	/**
+	 * Create the editor for the entity feature on BuyOpportunity
+	 *
+	 * @generated
+	 */
+	protected void add_entityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.BUY_OPPORTUNITY__ENTITY));
 	}
 }
