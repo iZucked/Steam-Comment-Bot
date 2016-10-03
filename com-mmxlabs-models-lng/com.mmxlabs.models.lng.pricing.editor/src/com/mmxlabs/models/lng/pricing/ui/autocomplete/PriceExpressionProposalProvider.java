@@ -86,7 +86,7 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 
 		}
 
-		final String contents = full_contents.substring(completeFrom);
+		final String contents = full_contents.substring(completeFrom, position);
 		final ArrayList<ContentProposal> list = new ArrayList<ContentProposal>();
 		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
 		final EList<? extends NamedIndexContainer<?>> curves;
