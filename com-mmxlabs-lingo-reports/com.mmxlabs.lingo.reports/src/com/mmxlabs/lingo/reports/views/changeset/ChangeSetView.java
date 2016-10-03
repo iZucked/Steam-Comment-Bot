@@ -72,6 +72,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.google.common.base.Objects;
+import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
@@ -707,7 +708,7 @@ public class ChangeSetView implements IAdaptable {
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("Date");
 			gvc.getColumn().setWidth(75);
-			gvc.setLabelProvider(createDateLabelProvider(ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_LOAD_ALLOCATION));
+			gvc.setLabelProvider(createDateLabelProvider(true));
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 		}
 		{
@@ -760,7 +761,7 @@ public class ChangeSetView implements IAdaptable {
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("Date");
 			gvc.getColumn().setWidth(75);
-			gvc.setLabelProvider(createDateLabelProvider(ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION));
+			gvc.setLabelProvider(createDateLabelProvider(false));
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 		}
 		{
@@ -1140,7 +1141,7 @@ public class ChangeSetView implements IAdaptable {
 		};
 	}
 
-	private CellLabelProvider createDateLabelProvider(final EStructuralFeature attrib) {
+	private CellLabelProvider createDateLabelProvider(boolean isLoadSide) {
 		return new CellLabelProvider() {
 
 			private final DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
@@ -1151,12 +1152,69 @@ public class ChangeSetView implements IAdaptable {
 				cell.setText("");
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
-					final SlotAllocation slotAllocation = (SlotAllocation) change.eGet(attrib);
-					if (slotAllocation != null) {
-						final Slot slot = slotAllocation.getSlot();
-						if (slot != null) {
-							final LocalDate windowStart = slot.getWindowStart();
-							if (windowStart != null) {
+
+					LocalDate windowStart = null;
+					boolean isDelta = false;
+					int deltaHours = 0;
+
+					if (isLoadSide) {
+						final SlotAllocation originalLoadAllocation = change.getOriginalLoadAllocation();
+						final SlotAllocation newLoadAllocation = change.getNewLoadAllocation();
+
+						if (newLoadAllocation != null) {
+							Slot slot = newLoadAllocation.getSlot();
+							if (slot != null) {
+								windowStart = slot.getWindowStart();
+							}
+						} else if (originalLoadAllocation != null) {
+							Slot slot = originalLoadAllocation.getSlot();
+							if (slot != null) {
+								windowStart = slot.getWindowStart();
+							}
+						}
+
+						if (newLoadAllocation != null && originalLoadAllocation != null) {
+							deltaHours = Hours.between(originalLoadAllocation.getSlotVisit().getStart(), newLoadAllocation.getSlotVisit().getStart());
+							if (deltaHours != 0) {
+								isDelta = true;
+							}
+						}
+
+						if (windowStart != null) {
+							if (isDelta) {
+								cell.setText(String.format("%s (%s%.1f)", windowStart.format(formatter), deltaHours < 0 ? "↓" : "↑", Math.abs(deltaHours / 24.0)));
+							} else {
+								cell.setText(windowStart.format(formatter));
+							}
+						}
+
+					} else {
+						final SlotAllocation originalDischargeAllocation = change.getRhsWiringLink() != null ? change.getRhsWiringLink().getOriginalDischargeAllocation() : null;
+						final SlotAllocation newDischargeAllocation = change.getNewDischargeAllocation();
+
+						if (newDischargeAllocation != null) {
+							Slot slot = newDischargeAllocation.getSlot();
+							if (slot != null) {
+								windowStart = slot.getWindowStart();
+							}
+						} else if (originalDischargeAllocation != null) {
+							Slot slot = originalDischargeAllocation.getSlot();
+							if (slot != null) {
+								windowStart = slot.getWindowStart();
+							}
+						}
+
+						if (newDischargeAllocation != null && originalDischargeAllocation != null) {
+							deltaHours = Hours.between(originalDischargeAllocation.getSlotVisit().getStart(), newDischargeAllocation.getSlotVisit().getStart());
+							if (deltaHours != 0) {
+								isDelta = true;
+							}
+						}
+
+						if (windowStart != null) {
+							if (isDelta) {
+								cell.setText(String.format("%s (%s%.1f)", windowStart.format(formatter), deltaHours < 0 ? "↓" : "↑", Math.abs(deltaHours / 24.0)));
+							} else {
 								cell.setText(windowStart.format(formatter));
 							}
 						}
