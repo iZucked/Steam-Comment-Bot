@@ -107,7 +107,7 @@ public final class CollectionsUtil {
 	 * @return
 	 */
 	@NonNull
-	public static <T> @NonNull List<T> makeArrayList(final T... elements) {
+	public static <T> @NonNull List<T> makeArrayList(final @NonNull T... elements) {
 
 		final List<T> collection = new ArrayList<>(elements.length);
 
