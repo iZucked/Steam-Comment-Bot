@@ -301,7 +301,7 @@ public class VesselRestrictionsTest extends AbstractMicroTestCase {
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 		final VesselClass vesselClass2 = fleetModelFinder.findVesselClass("STEAM-138");
 
-		final CharterIndex charterIndex1 = pricingModelBuilder.createCharterIndex("CharterIndex1", "$/day", 50_000);
+		final CharterIndex charterIndex1 = pricingModelBuilder.createCharterIndex("CharterIndex1", "$", "day", 50_000);
 		// final CharterIndex charterIndex2 = pricingModelBuilder.createCharterIndex("CharterIndex2", "$/day", 100_000);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass2, "50000", 1);

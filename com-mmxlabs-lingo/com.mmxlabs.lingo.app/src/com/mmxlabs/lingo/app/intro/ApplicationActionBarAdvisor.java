@@ -433,7 +433,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	private MenuManager createDataMenu() {
 		final MenuManager menu = new MenuManager(DATA_MESSAGE, M_DATA);
 		menu.add(new GroupMarker(DATA_START));
-		menu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+		menu.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
 		menu.add(new GroupMarker(DATA_END));
 		return menu;
 	}
