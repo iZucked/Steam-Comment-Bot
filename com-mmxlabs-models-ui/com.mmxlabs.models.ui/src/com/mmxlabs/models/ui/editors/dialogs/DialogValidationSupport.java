@@ -43,7 +43,7 @@ public class DialogValidationSupport {
 	 */
 	private final IValidator<EObject> validator = ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 
-	private Collection<EObject> validationTargets;
+	private Collection<? extends EObject> validationTargets;
 
 	public DialogValidationSupport(final IExtraValidationContext extraValidationContext) {
 		validationContext = new DefaultExtraValidationContext(extraValidationContext, true);
@@ -82,11 +82,11 @@ public class DialogValidationSupport {
 		return validationContext;
 	}
 
-	public Collection<EObject> getValidationTargets() {
+	public Collection<? extends EObject> getValidationTargets() {
 		return validationTargets;
 	}
 
-	public void setValidationTargets(final Collection<EObject> validationTargets) {
+	public void setValidationTargets(final Collection<? extends EObject> validationTargets) {
 		this.validationTargets = validationTargets;
 	}
 

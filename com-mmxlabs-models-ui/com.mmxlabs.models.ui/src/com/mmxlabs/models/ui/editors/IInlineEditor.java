@@ -15,6 +15,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -32,19 +34,19 @@ import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListe
  * 
  */
 public interface IInlineEditor {
-	public void setCommandHandler(final ICommandHandler handler);
+	void setCommandHandler(final ICommandHandler handler);
 
-	public void display(final IDialogEditingContext dialogContext, final MMXRootObject scenario, final EObject object, final Collection<EObject> range);
+	void display(final IDialogEditingContext dialogContext, final MMXRootObject scenario, final EObject object, final Collection<EObject> range);
 
 	/**
 	 */
-	public Control createControl(final Composite parent, EMFDataBindingContext dbc, final FormToolkit toolkit);
+	Control createControl(final Composite parent, EMFDataBindingContext dbc, final FormToolkit toolkit);
 
 	void processValidation(IStatus status);
 
-	public EStructuralFeature getFeature();
+	EStructuralFeature getFeature();
 
-	public EObject getEditorTarget();
+	EObject getEditorTarget();
 
 	void setLabel(Label label);
 
@@ -79,16 +81,16 @@ public interface IInlineEditor {
 
 	/**
 	 */
-	void addNotificationChangedListener(IInlineEditorExternalNotificationListener listener);
+	void addNotificationChangedListener(@NonNull IInlineEditorExternalNotificationListener listener);
 
 	/**
 	 */
-	void removeNotificationChangedListener(IInlineEditorExternalNotificationListener listener);
+	void removeNotificationChangedListener(@NonNull IInlineEditorExternalNotificationListener listener);
 
 	/** Returns true if the editor has a label for display, false otherwise. */
 	boolean hasLabel();
 
-	public Object createLayoutData(MMXRootObject root, EObject value,
-			Control control);
-
+	default @Nullable Object createLayoutData(MMXRootObject root, EObject value, Control control) {
+		return null;
+	}
 }

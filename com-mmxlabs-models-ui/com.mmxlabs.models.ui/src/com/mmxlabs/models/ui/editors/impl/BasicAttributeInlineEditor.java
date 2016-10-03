@@ -577,10 +577,4 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	public boolean hasLabel() {
 		return true;
 	}
-
-	@Override
-	public Object createLayoutData(MMXRootObject root, EObject value, Control control) {
-		return null;
-	}
-
 }

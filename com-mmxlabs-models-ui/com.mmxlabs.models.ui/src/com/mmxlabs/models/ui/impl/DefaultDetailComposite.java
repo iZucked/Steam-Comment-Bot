@@ -63,7 +63,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	}
 
 	protected final LinkedList<IInlineEditor> editors = new LinkedList<IInlineEditor>();
-	private EObject object;
+	protected EObject object;
 
 	/**
 	 */
