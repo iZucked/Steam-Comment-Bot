@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.ui.editorpart;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Stack;
 
@@ -16,6 +17,7 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -36,6 +38,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.IMMXRootObjectProvider;
 import com.mmxlabs.models.ui.IScenarioInstanceProvider;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
@@ -349,4 +352,8 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		// Do nothing by default
 	}
 
+	public void editObject(@NonNull EObject target) {
+		final DetailCompositeDialog dcd = new DetailCompositeDialog(this.getShell(), this.getDefaultCommandHandler());
+		dcd.open(this, this.getRootObject(), Collections.singletonList((EObject) target));
+	}
 }
