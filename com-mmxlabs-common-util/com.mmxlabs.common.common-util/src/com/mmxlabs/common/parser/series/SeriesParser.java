@@ -161,11 +161,11 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 	}
 
 	public @NonNull ISeries getSeries(final @NonNull String name) {
-		if (evaluatedSeries.containsKey(name)) {
-			return evaluatedSeries.get(name);
-		} else if (unevaluatedSeries.containsKey(name)) {
-			final ISeries ser = parse(unevaluatedSeries.get(name)).evaluate();
-			evaluatedSeries.put(name, ser);
+		if (evaluatedSeries.containsKey(name.toLowerCase())) {
+			return evaluatedSeries.get(name.toLowerCase());
+		} else if (unevaluatedSeries.containsKey(name.toLowerCase())) {
+			final ISeries ser = parse(unevaluatedSeries.get(name.toLowerCase())).evaluate();
+			evaluatedSeries.put(name.toLowerCase(), ser);
 			return ser;
 		} else {
 			throw new RuntimeException("No series with name " + name + " defined");
@@ -173,11 +173,11 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 	}
 
 	public void addConstant(@NonNull final String name, @NonNull final Number value) {
-		evaluatedSeries.put(name, new ConstantSeriesExpression(value).evaluate());
+		evaluatedSeries.put(name.toLowerCase(), new ConstantSeriesExpression(value).evaluate());
 	}
 
 	public void addSeriesData(@NonNull final String name, @NonNull ISeries series) {
-		evaluatedSeries.put(name, series);
+		evaluatedSeries.put(name.toLowerCase(), series);
 		// Invalidate any pre-evaluated expression curves as we may have changed the underlying data
 		for (final String expr : expressionCurves) {
 			evaluatedSeries.remove(expr);
@@ -189,9 +189,9 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 			return;
 		}
 		// Remove any references to the curve
-		evaluatedSeries.remove(name);
-		unevaluatedSeries.remove(name);
-		expressionCurves.remove(name);
+		evaluatedSeries.remove(name.toLowerCase());
+		unevaluatedSeries.remove(name.toLowerCase());
+		expressionCurves.remove(name.toLowerCase());
 		// Invalidate any pre-evaluated expression curves as we may have changed the underlying data
 		for (final String expr : expressionCurves) {
 			evaluatedSeries.remove(expr);
@@ -199,7 +199,7 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 	}
 
 	public void addSeriesData(@NonNull final String name, final int @NonNull [] points, @NonNull final Number[] values) {
-		evaluatedSeries.put(name, new ISeries() {
+		evaluatedSeries.put(name.toLowerCase(), new ISeries() {
 			@Override
 			public int[] getChangePoints() {
 				return points;
@@ -218,13 +218,13 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 
 	public void addSeriesExpression(final @NonNull String name, final @NonNull String expression) {
 		// Register as an expression curve.
-		if (!expressionCurves.add(name)) {
+		if (!expressionCurves.add(name.toLowerCase())) {
 			// Invalidate any pre-evaluated expression curves as we may have changed the underlying data
 			for (final String expr : expressionCurves) {
 				evaluatedSeries.remove(expr);
 			}
 		}
-		unevaluatedSeries.put(name, expression);
+		unevaluatedSeries.put(name.toLowerCase(), expression);
 	}
 
 	public static void main(final String args[]) {
