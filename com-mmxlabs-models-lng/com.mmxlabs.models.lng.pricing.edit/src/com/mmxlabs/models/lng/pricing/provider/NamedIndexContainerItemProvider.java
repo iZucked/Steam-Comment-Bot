@@ -54,7 +54,8 @@ public class NamedIndexContainerItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
-			addUnitsPropertyDescriptor(object);
+			addCurrencyUnitPropertyDescriptor(object);
+			addVolumeUnitPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -71,7 +72,7 @@ public class NamedIndexContainerItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_NamedObject_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"),
+				 getString("_UI_NamedObject_name_description"),
 				 MMXCorePackage.Literals.NAMED_OBJECT__NAME,
 				 true,
 				 false,
@@ -82,19 +83,41 @@ public class NamedIndexContainerItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Units feature.
+	 * This adds a property descriptor for the Currency Unit feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addUnitsPropertyDescriptor(Object object) {
+	protected void addCurrencyUnitPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_NamedIndexContainer_units_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_NamedIndexContainer_units_feature", "_UI_NamedIndexContainer_type"),
-				 PricingPackage.Literals.NAMED_INDEX_CONTAINER__UNITS,
+				 getString("_UI_NamedIndexContainer_currencyUnit_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NamedIndexContainer_currencyUnit_feature", "_UI_NamedIndexContainer_type"),
+				 PricingPackage.Literals.NAMED_INDEX_CONTAINER__CURRENCY_UNIT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Volume Unit feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumeUnitPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NamedIndexContainer_volumeUnit_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NamedIndexContainer_volumeUnit_feature", "_UI_NamedIndexContainer_type"),
+				 PricingPackage.Literals.NAMED_INDEX_CONTAINER__VOLUME_UNIT,
 				 true,
 				 false,
 				 false,
@@ -171,7 +194,8 @@ public class NamedIndexContainerItemProvider
 
 		switch (notification.getFeatureID(NamedIndexContainer.class)) {
 			case PricingPackage.NAMED_INDEX_CONTAINER__NAME:
-			case PricingPackage.NAMED_INDEX_CONTAINER__UNITS:
+			case PricingPackage.NAMED_INDEX_CONTAINER__CURRENCY_UNIT:
+			case PricingPackage.NAMED_INDEX_CONTAINER__VOLUME_UNIT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case PricingPackage.NAMED_INDEX_CONTAINER__DATA:

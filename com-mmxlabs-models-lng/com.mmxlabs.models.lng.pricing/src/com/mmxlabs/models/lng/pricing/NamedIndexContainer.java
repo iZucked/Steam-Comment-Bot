@@ -19,7 +19,8 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer#getData <em>Data</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer#getUnits <em>Units</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer#getCurrencyUnit <em>Currency Unit</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer#getVolumeUnit <em>Volume Unit</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getNamedIndexContainer()
@@ -67,7 +68,7 @@ public interface NamedIndexContainer<Value> extends UUIDObject, NamedObject {
 	 * @model
 	 * @generated
 	 */
-	String getUnits();
+//	String getUnits();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer#getUnits <em>Units</em>}' attribute.
@@ -77,6 +78,58 @@ public interface NamedIndexContainer<Value> extends UUIDObject, NamedObject {
 	 * @see #getUnits()
 	 * @generated
 	 */
-	void setUnits(String value);
+//	void setUnits(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Currency Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Currency Unit</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Currency Unit</em>' attribute.
+	 * @see #setCurrencyUnit(String)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getNamedIndexContainer_CurrencyUnit()
+	 * @model
+	 * @generated
+	 */
+	String getCurrencyUnit();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer#getCurrencyUnit <em>Currency Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Currency Unit</em>' attribute.
+	 * @see #getCurrencyUnit()
+	 * @generated
+	 */
+	void setCurrencyUnit(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Volume Unit</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Volume Unit</em>' attribute.
+	 * @see #setVolumeUnit(String)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getNamedIndexContainer_VolumeUnit()
+	 * @model
+	 * @generated
+	 */
+	String getVolumeUnit();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer#getVolumeUnit <em>Volume Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Volume Unit</em>' attribute.
+	 * @see #getVolumeUnit()
+	 * @generated
+	 */
+	void setVolumeUnit(String value);
 
 } // NamedIndexContainer

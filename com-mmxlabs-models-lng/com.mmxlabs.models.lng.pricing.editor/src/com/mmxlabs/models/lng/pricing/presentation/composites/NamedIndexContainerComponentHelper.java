@@ -68,7 +68,8 @@ public class NamedIndexContainerComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_dataEditor(detailComposite, topClass);
-		add_unitsEditor(detailComposite, topClass);
+		add_currencyUnitEditor(detailComposite, topClass);
+		add_volumeUnitEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the data feature on NamedIndexContainer
@@ -80,11 +81,20 @@ public class NamedIndexContainerComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Create the editor for the units feature on NamedIndexContainer
+	 * Create the editor for the currencyUnit feature on NamedIndexContainer
 	 *
 	 * @generated
 	 */
-	protected void add_unitsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.NAMED_INDEX_CONTAINER__UNITS));
+	protected void add_currencyUnitEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.NAMED_INDEX_CONTAINER__CURRENCY_UNIT));
+	}
+
+	/**
+	 * Create the editor for the volumeUnit feature on NamedIndexContainer
+	 *
+	 * @generated
+	 */
+	protected void add_volumeUnitEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.NAMED_INDEX_CONTAINER__VOLUME_UNIT));
 	}
 }

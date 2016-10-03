@@ -142,6 +142,22 @@
                      class="PortCost">
                </target>
             </constraint>
+             <constraint
+                   class="com.mmxlabs.models.lng.pricing.validation.UnitConversionConstraint"
+                   id="com.mmxlabs.models.lng.pricing.validation.UnitConversionConstraint"
+                   isEnabledByDefault="true"
+                   lang="java"
+                   mode="Batch"
+                   name="Unit Conversion"
+                   severity="ERROR"
+                   statusCode="1">
+                <message>
+                   {0}
+                </message>
+                <target
+                      class="UnitConversion">
+                </target>
+             </constraint>
              
          </constraints>
       </constraintProvider>

@@ -79,6 +79,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.DATA_INDEX: return createDataIndex();
 			case PricingPackage.DERIVED_INDEX: return createDerivedIndex();
 			case PricingPackage.INDEX_POINT: return createIndexPoint();
+			case PricingPackage.CURRENCY_INDEX: return createCurrencyIndex();
 			case PricingPackage.COMMODITY_INDEX: return createCommodityIndex();
 			case PricingPackage.CHARTER_INDEX: return createCharterIndex();
 			case PricingPackage.BASE_FUEL_INDEX: return createBaseFuelIndex();
@@ -95,6 +96,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.PORTS_SPLIT_EXPRESSION_MAP: return createPortsSplitExpressionMap();
 			case PricingPackage.PANAMA_CANAL_TARIFF: return createPanamaCanalTariff();
 			case PricingPackage.PANAMA_CANAL_TARIFF_BAND: return createPanamaCanalTariffBand();
+			case PricingPackage.UNIT_CONVERSION: return createUnitConversion();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -138,6 +140,16 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public <Value> IndexPoint<Value> createIndexPoint() {
 		IndexPointImpl<Value> indexPoint = new IndexPointImpl<Value>();
 		return indexPoint;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CurrencyIndex createCurrencyIndex() {
+		CurrencyIndexImpl currencyIndex = new CurrencyIndexImpl();
+		return currencyIndex;
 	}
 
 	/**
@@ -298,6 +310,16 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public PanamaCanalTariffBand createPanamaCanalTariffBand() {
 		PanamaCanalTariffBandImpl panamaCanalTariffBand = new PanamaCanalTariffBandImpl();
 		return panamaCanalTariffBand;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public UnitConversion createUnitConversion() {
+		UnitConversionImpl unitConversion = new UnitConversionImpl();
+		return unitConversion;
 	}
 
 	/**

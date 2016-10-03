@@ -17,6 +17,7 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
@@ -297,6 +298,7 @@ public class SlotAllocationItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SchedulePackage.Literals.SLOT_ALLOCATION__SLOT);
+			childrenFeatures.add(SchedulePackage.Literals.SLOT_ALLOCATION__EXPOSURES);
 		}
 		return childrenFeatures;
 	}
@@ -361,6 +363,9 @@ public class SlotAllocationItemProvider
 			case SchedulePackage.SLOT_ALLOCATION__VOLUME_VALUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
+			case SchedulePackage.SLOT_ALLOCATION__EXPOSURES:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+				return;
 		}
 		super.notifyChanged(notification);
 	}
@@ -375,6 +380,11 @@ public class SlotAllocationItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SLOT_ALLOCATION__EXPOSURES,
+				 ScheduleFactory.eINSTANCE.createExposureDetail()));
 	}
 
 }

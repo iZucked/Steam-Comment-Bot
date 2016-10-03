@@ -60,6 +60,15 @@ public interface PricingFactory extends EFactory {
 	<Value> IndexPoint<Value> createIndexPoint();
 
 	/**
+	 * Returns a new object of class '<em>Currency Index</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Currency Index</em>'.
+	 * @generated
+	 */
+	CurrencyIndex createCurrencyIndex();
+
+	/**
 	 * Returns a new object of class '<em>Commodity Index</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -202,6 +211,15 @@ public interface PricingFactory extends EFactory {
 	 * @generated
 	 */
 	PanamaCanalTariffBand createPanamaCanalTariffBand();
+
+	/**
+	 * Returns a new object of class '<em>Unit Conversion</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Unit Conversion</em>'.
+	 * @generated
+	 */
+	UnitConversion createUnitConversion();
 
 	/**
 	 * Returns the package supported by this factory.

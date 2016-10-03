@@ -140,7 +140,7 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 		try {
 
 			for (final ScenarioInstance instance : instances) {
-				if (importTarget != FieldChoice.CHOICE_COMMODITY_CHARTER_BASE_FUEL_INDICIES) {
+				if (importTarget != FieldChoice.CHOICE_ALL_INDICIES) {
 					doImportAction(importTarget, filename, listSeparator, decimalSeparator, instance, uniqueProblems, allProblems, false);
 				} else {
 					// iterate through curves we want to import in a unified manner
@@ -194,7 +194,7 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 	}
 
 	private FieldChoice[] getUnifiedChoices() {
-		return new FieldChoice[] { FieldChoice.CHOICE_COMMODITY_INDICES, FieldChoice.CHOICE_CHARTER_INDICES, FieldChoice.CHOICE_BASE_FUEL_CURVES };
+		return new FieldChoice[] { FieldChoice.CHOICE_COMMODITY_INDICES, FieldChoice.CHOICE_CHARTER_INDICES, FieldChoice.CHOICE_BASE_FUEL_CURVES, FieldChoice.CHOICE_CURRENCY_CURVES };
 	}
 
 	public ImportAction.ImportHooksProvider getHooksProvider(final ScenarioInstance instance, final ModelReference modelReference, final Shell shell, final String importFilePath,
@@ -267,6 +267,9 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 			}
 			case CHOICE_CHARTER_INDICES: {
 				return new GenericIndexImportAction(ihp, scenarioModel.getReferenceModel().getPricingModel(), PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES, isMultipleDataTypesInput);
+			}
+			case CHOICE_CURRENCY_CURVES: {
+				return new GenericIndexImportAction(ihp, scenarioModel.getReferenceModel().getPricingModel(), PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES, isMultipleDataTypesInput);
 			}
 			case CHOICE_BASE_FUEL_CURVES: {
 				return new GenericIndexImportAction(ihp, scenarioModel.getReferenceModel().getPricingModel(), PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES, isMultipleDataTypesInput);

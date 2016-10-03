@@ -22,11 +22,13 @@ public class PriceExpressionProposalFactory implements IContentProposalFactory {
 			if (eAnnotation != null) {
 				String value = eAnnotation.getDetails().get(ExpressionAnnotationConstants.ANNOTATION_KEY);
 				if (ExpressionAnnotationConstants.TYPE_COMMODITY.equals(value)) {
-					return new PriceExpressionProposalProvider(PriceIndexType.COMMODITY);
+					return new PriceExpressionProposalProvider(PriceIndexType.COMMODITY, PriceIndexType.CURRENCY);
 				} else if (ExpressionAnnotationConstants.TYPE_CHARTER.equals(value)) {
-					return new PriceExpressionProposalProvider(PriceIndexType.CHARTER);
+					return new PriceExpressionProposalProvider(PriceIndexType.CHARTER, PriceIndexType.CURRENCY);
 				} else if (ExpressionAnnotationConstants.TYPE_BASE_FUEL.equals(value)) {
-					return new PriceExpressionProposalProvider(PriceIndexType.BUNKERS);
+					return new PriceExpressionProposalProvider(PriceIndexType.BUNKERS, PriceIndexType.CURRENCY);
+				} else if (ExpressionAnnotationConstants.TYPE_CURRENCY.equals(value)) {
+					return new PriceExpressionProposalProvider(PriceIndexType.CURRENCY);
 				}
 			}
 		}

@@ -64,10 +64,21 @@ public class PricingModelComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_currencyIndicesEditor(detailComposite, topClass);
 		add_commodityIndicesEditor(detailComposite, topClass);
 		add_charterIndicesEditor(detailComposite, topClass);
 		add_baseFuelPricesEditor(detailComposite, topClass);
+		add_conversionFactorsEditor(detailComposite, topClass);
 	}
+	/**
+	 * Create the editor for the currencyIndices feature on PricingModel
+	 *
+	 * @generated
+	 */
+	protected void add_currencyIndicesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES));
+	}
+
 	/**
 	 * Create the editor for the commodityIndices feature on PricingModel
 	 *
@@ -91,5 +102,14 @@ public class PricingModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_baseFuelPricesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES));
+	}
+
+	/**
+	 * Create the editor for the conversionFactors feature on PricingModel
+	 *
+	 * @generated
+	 */
+	protected void add_conversionFactorsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__CONVERSION_FACTORS));
 	}
 }

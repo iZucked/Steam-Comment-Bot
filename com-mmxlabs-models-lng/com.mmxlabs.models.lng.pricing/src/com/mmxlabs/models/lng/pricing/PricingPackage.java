@@ -88,13 +88,22 @@ public interface PricingPackage extends EPackage {
 	int PRICING_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
+	 * The feature id for the '<em><b>Currency Indices</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICING_MODEL__CURRENCY_INDICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Commodity Indices</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_MODEL__COMMODITY_INDICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+	int PRICING_MODEL__COMMODITY_INDICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Charter Indices</b></em>' containment reference list.
@@ -103,7 +112,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_MODEL__CHARTER_INDICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int PRICING_MODEL__CHARTER_INDICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Base Fuel Prices</b></em>' containment reference list.
@@ -112,7 +121,16 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_MODEL__BASE_FUEL_PRICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int PRICING_MODEL__BASE_FUEL_PRICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Conversion Factors</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICING_MODEL__CONVERSION_FACTORS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -121,7 +139,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int PRICING_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.IndexImpl <em>Index</em>}' class.
@@ -243,7 +261,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getRouteCost()
 	 * @generated
 	 */
-	int ROUTE_COST = 10;
+	int ROUTE_COST = 11;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.BaseFuelCostImpl <em>Base Fuel Cost</em>}' class.
@@ -253,7 +271,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getBaseFuelCost()
 	 * @generated
 	 */
-	int BASE_FUEL_COST = 11;
+	int BASE_FUEL_COST = 12;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl <em>Port Cost</em>}' class.
@@ -263,7 +281,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortCost()
 	 * @generated
 	 */
-	int PORT_COST = 12;
+	int PORT_COST = 13;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortCostEntryImpl <em>Port Cost Entry</em>}' class.
@@ -273,7 +291,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortCostEntry()
 	 * @generated
 	 */
-	int PORT_COST_ENTRY = 13;
+	int PORT_COST_ENTRY = 14;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortsPriceMapImpl <em>Ports Price Map</em>}' class.
@@ -283,7 +301,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortsPriceMap()
 	 * @generated
 	 */
-	int PORTS_PRICE_MAP = 15;
+	int PORTS_PRICE_MAP = 16;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.CooldownPriceImpl <em>Cooldown Price</em>}' class.
@@ -293,7 +311,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCooldownPrice()
 	 * @generated
 	 */
-	int COOLDOWN_PRICE = 14;
+	int COOLDOWN_PRICE = 15;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.CommodityIndexImpl <em>Commodity Index</em>}' class.
@@ -303,7 +321,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCommodityIndex()
 	 * @generated
 	 */
-	int COMMODITY_INDEX = 5;
+	int COMMODITY_INDEX = 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.CharterIndexImpl <em>Charter Index</em>}' class.
@@ -313,7 +331,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCharterIndex()
 	 * @generated
 	 */
-	int CHARTER_INDEX = 6;
+	int CHARTER_INDEX = 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl <em>Named Index Container</em>}' class.
@@ -323,7 +341,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getNamedIndexContainer()
 	 * @generated
 	 */
-	int NAMED_INDEX_CONTAINER = 8;
+	int NAMED_INDEX_CONTAINER = 9;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.BaseFuelIndexImpl <em>Base Fuel Index</em>}' class.
@@ -333,7 +351,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getBaseFuelIndex()
 	 * @generated
 	 */
-	int BASE_FUEL_INDEX = 7;
+	int BASE_FUEL_INDEX = 8;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortsExpressionMapImpl <em>Ports Expression Map</em>}' class.
@@ -343,7 +361,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortsExpressionMap()
 	 * @generated
 	 */
-	int PORTS_EXPRESSION_MAP = 16;
+	int PORTS_EXPRESSION_MAP = 17;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -382,13 +400,22 @@ public interface PricingPackage extends EPackage {
 	int NAMED_INDEX_CONTAINER__DATA = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Units</b></em>' attribute.
+	 * The feature id for the '<em><b>Currency Unit</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NAMED_INDEX_CONTAINER__UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int NAMED_INDEX_CONTAINER__CURRENCY_UNIT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_INDEX_CONTAINER__VOLUME_UNIT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Named Index Container</em>' class.
@@ -397,7 +424,80 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NAMED_INDEX_CONTAINER_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int NAMED_INDEX_CONTAINER_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.CurrencyIndexImpl <em>Currency Index</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.CurrencyIndexImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCurrencyIndex()
+	 * @generated
+	 */
+	int CURRENCY_INDEX = 5;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CURRENCY_INDEX__EXTENSIONS = NAMED_INDEX_CONTAINER__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CURRENCY_INDEX__UUID = NAMED_INDEX_CONTAINER__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CURRENCY_INDEX__NAME = NAMED_INDEX_CONTAINER__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Data</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CURRENCY_INDEX__DATA = NAMED_INDEX_CONTAINER__DATA;
+
+	/**
+	 * The feature id for the '<em><b>Currency Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CURRENCY_INDEX__CURRENCY_UNIT = NAMED_INDEX_CONTAINER__CURRENCY_UNIT;
+
+	/**
+	 * The feature id for the '<em><b>Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CURRENCY_INDEX__VOLUME_UNIT = NAMED_INDEX_CONTAINER__VOLUME_UNIT;
+
+	/**
+	 * The number of structural features of the '<em>Currency Index</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CURRENCY_INDEX_FEATURE_COUNT = NAMED_INDEX_CONTAINER_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -436,13 +536,22 @@ public interface PricingPackage extends EPackage {
 	int COMMODITY_INDEX__DATA = NAMED_INDEX_CONTAINER__DATA;
 
 	/**
-	 * The feature id for the '<em><b>Units</b></em>' attribute.
+	 * The feature id for the '<em><b>Currency Unit</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMMODITY_INDEX__UNITS = NAMED_INDEX_CONTAINER__UNITS;
+	int COMMODITY_INDEX__CURRENCY_UNIT = NAMED_INDEX_CONTAINER__CURRENCY_UNIT;
+
+	/**
+	 * The feature id for the '<em><b>Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_INDEX__VOLUME_UNIT = NAMED_INDEX_CONTAINER__VOLUME_UNIT;
 
 	/**
 	 * The number of structural features of the '<em>Commodity Index</em>' class.
@@ -490,13 +599,22 @@ public interface PricingPackage extends EPackage {
 	int CHARTER_INDEX__DATA = NAMED_INDEX_CONTAINER__DATA;
 
 	/**
-	 * The feature id for the '<em><b>Units</b></em>' attribute.
+	 * The feature id for the '<em><b>Currency Unit</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_INDEX__UNITS = NAMED_INDEX_CONTAINER__UNITS;
+	int CHARTER_INDEX__CURRENCY_UNIT = NAMED_INDEX_CONTAINER__CURRENCY_UNIT;
+
+	/**
+	 * The feature id for the '<em><b>Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_INDEX__VOLUME_UNIT = NAMED_INDEX_CONTAINER__VOLUME_UNIT;
 
 	/**
 	 * The number of structural features of the '<em>Charter Index</em>' class.
@@ -544,13 +662,22 @@ public interface PricingPackage extends EPackage {
 	int BASE_FUEL_INDEX__DATA = NAMED_INDEX_CONTAINER__DATA;
 
 	/**
-	 * The feature id for the '<em><b>Units</b></em>' attribute.
+	 * The feature id for the '<em><b>Currency Unit</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL_INDEX__UNITS = NAMED_INDEX_CONTAINER__UNITS;
+	int BASE_FUEL_INDEX__CURRENCY_UNIT = NAMED_INDEX_CONTAINER__CURRENCY_UNIT;
+
+	/**
+	 * The feature id for the '<em><b>Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FUEL_INDEX__VOLUME_UNIT = NAMED_INDEX_CONTAINER__VOLUME_UNIT;
 
 	/**
 	 * The number of structural features of the '<em>Base Fuel Index</em>' class.
@@ -569,7 +696,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCostModel()
 	 * @generated
 	 */
-	int COST_MODEL = 9;
+	int COST_MODEL = 10;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -930,7 +1057,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortsSplitPriceMap()
 	 * @generated
 	 */
-	int PORTS_SPLIT_PRICE_MAP = 17;
+	int PORTS_SPLIT_PRICE_MAP = 18;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -985,7 +1112,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortsSplitExpressionMap()
 	 * @generated
 	 */
-	int PORTS_SPLIT_EXPRESSION_MAP = 18;
+	int PORTS_SPLIT_EXPRESSION_MAP = 19;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1040,7 +1167,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPanamaCanalTariff()
 	 * @generated
 	 */
-	int PANAMA_CANAL_TARIFF = 19;
+	int PANAMA_CANAL_TARIFF = 20;
 
 	/**
 	 * The feature id for the '<em><b>Bands</b></em>' containment reference list.
@@ -1086,7 +1213,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPanamaCanalTariffBand()
 	 * @generated
 	 */
-	int PANAMA_CANAL_TARIFF_BAND = 20;
+	int PANAMA_CANAL_TARIFF_BAND = 21;
 
 	/**
 	 * The feature id for the '<em><b>Laden Tariff</b></em>' attribute.
@@ -1143,6 +1270,52 @@ public interface PricingPackage extends EPackage {
 	int PANAMA_CANAL_TARIFF_BAND_FEATURE_COUNT = 5;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.UnitConversionImpl <em>Unit Conversion</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.UnitConversionImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getUnitConversion()
+	 * @generated
+	 */
+	int UNIT_CONVERSION = 22;
+
+	/**
+	 * The feature id for the '<em><b>From</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNIT_CONVERSION__FROM = 0;
+
+	/**
+	 * The feature id for the '<em><b>To</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNIT_CONVERSION__TO = 1;
+
+	/**
+	 * The feature id for the '<em><b>Factor</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNIT_CONVERSION__FACTOR = 2;
+
+	/**
+	 * The number of structural features of the '<em>Unit Conversion</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNIT_CONVERSION_FEATURE_COUNT = 3;
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PricingModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1151,6 +1324,17 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getPricingModel();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getCurrencyIndices <em>Currency Indices</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Currency Indices</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getCurrencyIndices()
+	 * @see #getPricingModel()
+	 * @generated
+	 */
+	EReference getPricingModel_CurrencyIndices();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getCommodityIndices <em>Commodity Indices</em>}'.
@@ -1184,6 +1368,17 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPricingModel_BaseFuelPrices();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getConversionFactors <em>Conversion Factors</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Conversion Factors</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getConversionFactors()
+	 * @see #getPricingModel()
+	 * @generated
+	 */
+	EReference getPricingModel_ConversionFactors();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.DataIndex <em>Data Index</em>}'.
@@ -1268,6 +1463,16 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getIndex();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.CurrencyIndex <em>Currency Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Currency Index</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.CurrencyIndex
+	 * @generated
+	 */
+	EClass getCurrencyIndex();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.RouteCost <em>Route Cost</em>}'.
@@ -1503,15 +1708,26 @@ public interface PricingPackage extends EPackage {
 	EReference getNamedIndexContainer_Data();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer#getUnits <em>Units</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer#getCurrencyUnit <em>Currency Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Units</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.NamedIndexContainer#getUnits()
+	 * @return the meta object for the attribute '<em>Currency Unit</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.NamedIndexContainer#getCurrencyUnit()
 	 * @see #getNamedIndexContainer()
 	 * @generated
 	 */
-	EAttribute getNamedIndexContainer_Units();
+	EAttribute getNamedIndexContainer_CurrencyUnit();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer#getVolumeUnit <em>Volume Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Unit</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.NamedIndexContainer#getVolumeUnit()
+	 * @see #getNamedIndexContainer()
+	 * @generated
+	 */
+	EAttribute getNamedIndexContainer_VolumeUnit();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.CostModel <em>Cost Model</em>}'.
@@ -1837,6 +2053,49 @@ public interface PricingPackage extends EPackage {
 	EAttribute getPanamaCanalTariffBand_BandEnd();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.UnitConversion <em>Unit Conversion</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Unit Conversion</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.UnitConversion
+	 * @generated
+	 */
+	EClass getUnitConversion();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.UnitConversion#getFrom <em>From</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>From</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.UnitConversion#getFrom()
+	 * @see #getUnitConversion()
+	 * @generated
+	 */
+	EAttribute getUnitConversion_From();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.UnitConversion#getTo <em>To</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>To</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.UnitConversion#getTo()
+	 * @see #getUnitConversion()
+	 * @generated
+	 */
+	EAttribute getUnitConversion_To();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.UnitConversion#getFactor <em>Factor</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Factor</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.UnitConversion#getFactor()
+	 * @see #getUnitConversion()
+	 * @generated
+	 */
+	EAttribute getUnitConversion_Factor();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1869,6 +2128,14 @@ public interface PricingPackage extends EPackage {
 		EClass PRICING_MODEL = eINSTANCE.getPricingModel();
 
 		/**
+		 * The meta object literal for the '<em><b>Currency Indices</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PRICING_MODEL__CURRENCY_INDICES = eINSTANCE.getPricingModel_CurrencyIndices();
+
+		/**
 		 * The meta object literal for the '<em><b>Commodity Indices</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1891,6 +2158,14 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PRICING_MODEL__BASE_FUEL_PRICES = eINSTANCE.getPricingModel_BaseFuelPrices();
+
+		/**
+		 * The meta object literal for the '<em><b>Conversion Factors</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PRICING_MODEL__CONVERSION_FACTORS = eINSTANCE.getPricingModel_ConversionFactors();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.DataIndexImpl <em>Data Index</em>}' class.
@@ -1963,6 +2238,16 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EClass INDEX = eINSTANCE.getIndex();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.CurrencyIndexImpl <em>Currency Index</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.CurrencyIndexImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCurrencyIndex()
+		 * @generated
+		 */
+		EClass CURRENCY_INDEX = eINSTANCE.getCurrencyIndex();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.RouteCostImpl <em>Route Cost</em>}' class.
@@ -2159,12 +2444,20 @@ public interface PricingPackage extends EPackage {
 		EReference NAMED_INDEX_CONTAINER__DATA = eINSTANCE.getNamedIndexContainer_Data();
 
 		/**
-		 * The meta object literal for the '<em><b>Units</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Currency Unit</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute NAMED_INDEX_CONTAINER__UNITS = eINSTANCE.getNamedIndexContainer_Units();
+		EAttribute NAMED_INDEX_CONTAINER__CURRENCY_UNIT = eINSTANCE.getNamedIndexContainer_CurrencyUnit();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume Unit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NAMED_INDEX_CONTAINER__VOLUME_UNIT = eINSTANCE.getNamedIndexContainer_VolumeUnit();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.CostModelImpl <em>Cost Model</em>}' class.
@@ -2419,6 +2712,40 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PANAMA_CANAL_TARIFF_BAND__BAND_END = eINSTANCE.getPanamaCanalTariffBand_BandEnd();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.UnitConversionImpl <em>Unit Conversion</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.UnitConversionImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getUnitConversion()
+		 * @generated
+		 */
+		EClass UNIT_CONVERSION = eINSTANCE.getUnitConversion();
+
+		/**
+		 * The meta object literal for the '<em><b>From</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute UNIT_CONVERSION__FROM = eINSTANCE.getUnitConversion_From();
+
+		/**
+		 * The meta object literal for the '<em><b>To</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute UNIT_CONVERSION__TO = eINSTANCE.getUnitConversion_To();
+
+		/**
+		 * The meta object literal for the '<em><b>Factor</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute UNIT_CONVERSION__FACTOR = eINSTANCE.getUnitConversion_Factor();
 
 	}
 

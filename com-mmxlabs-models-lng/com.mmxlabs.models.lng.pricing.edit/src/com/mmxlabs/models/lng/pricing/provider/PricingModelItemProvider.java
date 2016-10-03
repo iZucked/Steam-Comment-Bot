@@ -11,6 +11,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
@@ -64,9 +65,11 @@ public class PricingModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
+			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES);
+			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__CONVERSION_FACTORS);
 		}
 		return childrenFeatures;
 	}
@@ -121,9 +124,11 @@ public class PricingModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(PricingModel.class)) {
+			case PricingPackage.PRICING_MODEL__CURRENCY_INDICES:
 			case PricingPackage.PRICING_MODEL__COMMODITY_INDICES:
 			case PricingPackage.PRICING_MODEL__CHARTER_INDICES:
 			case PricingPackage.PRICING_MODEL__BASE_FUEL_PRICES:
+			case PricingPackage.PRICING_MODEL__CONVERSION_FACTORS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -143,6 +148,11 @@ public class PricingModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
+				(PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES,
+				 PricingFactory.eINSTANCE.createCurrencyIndex()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES,
 				 PricingFactory.eINSTANCE.createCommodityIndex()));
 
@@ -155,6 +165,11 @@ public class PricingModelItemProvider
 			(createChildParameter
 				(PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES,
 				 PricingFactory.eINSTANCE.createBaseFuelIndex()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PricingPackage.Literals.PRICING_MODEL__CONVERSION_FACTORS,
+				 PricingFactory.eINSTANCE.createUnitConversion()));
 	}
 
 }

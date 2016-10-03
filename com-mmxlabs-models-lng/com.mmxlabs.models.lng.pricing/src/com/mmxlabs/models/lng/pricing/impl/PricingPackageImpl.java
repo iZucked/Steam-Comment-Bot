@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
+import com.mmxlabs.models.lng.pricing.CurrencyIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
@@ -39,6 +40,7 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
@@ -83,6 +85,13 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	private EClass indexEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass currencyIndexEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -197,6 +206,13 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	private EClass panamaCanalTariffBandEClass = null;
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass unitConversionEClass = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -275,7 +291,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getPricingModel_CommodityIndices() {
+	public EReference getPricingModel_CurrencyIndices() {
 		return (EReference)pricingModelEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -284,7 +300,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getPricingModel_CharterIndices() {
+	public EReference getPricingModel_CommodityIndices() {
 		return (EReference)pricingModelEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -293,8 +309,26 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getPricingModel_BaseFuelPrices() {
+	public EReference getPricingModel_CharterIndices() {
 		return (EReference)pricingModelEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPricingModel_BaseFuelPrices() {
+		return (EReference)pricingModelEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPricingModel_ConversionFactors() {
+		return (EReference)pricingModelEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -367,6 +401,15 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 */
 	public EClass getIndex() {
 		return indexEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getCurrencyIndex() {
+		return currencyIndexEClass;
 	}
 
 	/**
@@ -572,8 +615,17 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getNamedIndexContainer_Units() {
+	public EAttribute getNamedIndexContainer_CurrencyUnit() {
 		return (EAttribute)namedIndexContainerEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNamedIndexContainer_VolumeUnit() {
+		return (EAttribute)namedIndexContainerEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -851,6 +903,42 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getUnitConversion() {
+		return unitConversionEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getUnitConversion_From() {
+		return (EAttribute)unitConversionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getUnitConversion_To() {
+		return (EAttribute)unitConversionEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getUnitConversion_Factor() {
+		return (EAttribute)unitConversionEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public PricingFactory getPricingFactory() {
 		return (PricingFactory)getEFactoryInstance();
 	}
@@ -875,9 +963,11 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 		// Create classes and their features
 		pricingModelEClass = createEClass(PRICING_MODEL);
+		createEReference(pricingModelEClass, PRICING_MODEL__CURRENCY_INDICES);
 		createEReference(pricingModelEClass, PRICING_MODEL__COMMODITY_INDICES);
 		createEReference(pricingModelEClass, PRICING_MODEL__CHARTER_INDICES);
 		createEReference(pricingModelEClass, PRICING_MODEL__BASE_FUEL_PRICES);
+		createEReference(pricingModelEClass, PRICING_MODEL__CONVERSION_FACTORS);
 
 		dataIndexEClass = createEClass(DATA_INDEX);
 		createEReference(dataIndexEClass, DATA_INDEX__POINTS);
@@ -891,6 +981,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 		indexEClass = createEClass(INDEX);
 
+		currencyIndexEClass = createEClass(CURRENCY_INDEX);
+
 		commodityIndexEClass = createEClass(COMMODITY_INDEX);
 
 		charterIndexEClass = createEClass(CHARTER_INDEX);
@@ -899,7 +991,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 		namedIndexContainerEClass = createEClass(NAMED_INDEX_CONTAINER);
 		createEReference(namedIndexContainerEClass, NAMED_INDEX_CONTAINER__DATA);
-		createEAttribute(namedIndexContainerEClass, NAMED_INDEX_CONTAINER__UNITS);
+		createEAttribute(namedIndexContainerEClass, NAMED_INDEX_CONTAINER__CURRENCY_UNIT);
+		createEAttribute(namedIndexContainerEClass, NAMED_INDEX_CONTAINER__VOLUME_UNIT);
 
 		costModelEClass = createEClass(COST_MODEL);
 		createEReference(costModelEClass, COST_MODEL__ROUTE_COSTS);
@@ -959,6 +1052,11 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEAttribute(panamaCanalTariffBandEClass, PANAMA_CANAL_TARIFF_BAND__BALLAST_ROUNDTRIP_TARIFF);
 		createEAttribute(panamaCanalTariffBandEClass, PANAMA_CANAL_TARIFF_BAND__BAND_START);
 		createEAttribute(panamaCanalTariffBandEClass, PANAMA_CANAL_TARIFF_BAND__BAND_END);
+
+		unitConversionEClass = createEClass(UNIT_CONVERSION);
+		createEAttribute(unitConversionEClass, UNIT_CONVERSION__FROM);
+		createEAttribute(unitConversionEClass, UNIT_CONVERSION__TO);
+		createEAttribute(unitConversionEClass, UNIT_CONVERSION__FACTOR);
 	}
 
 	/**
@@ -1013,6 +1111,10 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		g1 = createEGenericType(this.getNamedIndexContainer());
 		g2 = createEGenericType(ecorePackage.getEDoubleObject());
 		g1.getETypeArguments().add(g2);
+		currencyIndexEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getNamedIndexContainer());
+		g2 = createEGenericType(ecorePackage.getEDoubleObject());
+		g1.getETypeArguments().add(g2);
 		commodityIndexEClass.getEGenericSuperTypes().add(g1);
 		g1 = createEGenericType(this.getNamedIndexContainer());
 		g2 = createEGenericType(ecorePackage.getEIntegerObject());
@@ -1036,9 +1138,11 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(pricingModelEClass, PricingModel.class, "PricingModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getPricingModel_CurrencyIndices(), this.getCurrencyIndex(), null, "currencyIndices", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_CommodityIndices(), this.getCommodityIndex(), null, "commodityIndices", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_CharterIndices(), this.getCharterIndex(), null, "charterIndices", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_BaseFuelPrices(), this.getBaseFuelIndex(), null, "baseFuelPrices", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPricingModel_ConversionFactors(), this.getUnitConversion(), null, "conversionFactors", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(dataIndexEClass, DataIndex.class, "DataIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(this.getIndexPoint());
@@ -1073,6 +1177,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		g1 = createEGenericType(indexEClass_Value);
 		initEOperation(op, g1);
 
+		initEClass(currencyIndexEClass, CurrencyIndex.class, "CurrencyIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
 		initEClass(commodityIndexEClass, CommodityIndex.class, "CommodityIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(charterIndexEClass, CharterIndex.class, "CharterIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1084,7 +1190,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		g2 = createEGenericType(namedIndexContainerEClass_Value);
 		g1.getETypeArguments().add(g2);
 		initEReference(getNamedIndexContainer_Data(), g1, null, "data", null, 1, 1, NamedIndexContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getNamedIndexContainer_Units(), ecorePackage.getEString(), "units", null, 0, 1, NamedIndexContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNamedIndexContainer_CurrencyUnit(), ecorePackage.getEString(), "currencyUnit", null, 0, 1, NamedIndexContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNamedIndexContainer_VolumeUnit(), ecorePackage.getEString(), "volumeUnit", null, 0, 1, NamedIndexContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(costModelEClass, CostModel.class, "CostModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCostModel_RouteCosts(), this.getRouteCost(), null, "routeCosts", null, 0, -1, CostModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1163,6 +1270,11 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEAttribute(getPanamaCanalTariffBand_BallastRoundtripTariff(), ecorePackage.getEDouble(), "ballastRoundtripTariff", null, 0, 1, PanamaCanalTariffBand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPanamaCanalTariffBand_BandStart(), ecorePackage.getEInt(), "bandStart", null, 0, 1, PanamaCanalTariffBand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPanamaCanalTariffBand_BandEnd(), ecorePackage.getEInt(), "bandEnd", null, 0, 1, PanamaCanalTariffBand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(unitConversionEClass, UnitConversion.class, "UnitConversion", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getUnitConversion_From(), ecorePackage.getEString(), "from", null, 0, 1, UnitConversion.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUnitConversion_To(), ecorePackage.getEString(), "to", null, 0, 1, UnitConversion.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUnitConversion_Factor(), ecorePackage.getEDouble(), "factor", null, 0, 1, UnitConversion.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);
@@ -1250,6 +1362,21 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		   new String[] {
 			 "unitSuffix", "m3\r\n",
 			 "formatString", "##,###,##0"
+		   });	
+		addAnnotation
+		  (getUnitConversion_Factor(), 
+		   source, 
+		   new String[] {
+			 "formatString", "######0.######"
+		   });
+		addAnnotation
+		  (getUnitConversion_Factor(), 
+		   new boolean[] { true },
+		   "http://www.mmxlabs.com/models/ui/numberFormat",
+		   new String[] {
+			 "scale", "100",
+			 "formatString", "##0.#",
+			 "unit", "%"
 		   });
 	}
 

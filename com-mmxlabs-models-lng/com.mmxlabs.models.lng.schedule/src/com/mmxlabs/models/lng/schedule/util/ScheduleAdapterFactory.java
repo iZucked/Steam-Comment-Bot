@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.schedule.util;
 
+import com.mmxlabs.models.lng.schedule.*;
 import java.util.Map;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -233,6 +234,10 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter casePortVisitLateness(PortVisitLateness object) {
 				return createPortVisitLatenessAdapter();
+			}
+			@Override
+			public Adapter caseExposureDetail(ExposureDetail object) {
+				return createExposureDetailAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -715,6 +720,20 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPortVisitLatenessAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.ExposureDetail <em>Exposure Detail</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.ExposureDetail
+	 * @generated
+	 */
+	public Adapter createExposureDetailAdapter() {
 		return null;
 	}
 

@@ -111,6 +111,10 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 				return createIndexAdapter();
 			}
 			@Override
+			public Adapter caseCurrencyIndex(CurrencyIndex object) {
+				return createCurrencyIndexAdapter();
+			}
+			@Override
 			public Adapter caseCommodityIndex(CommodityIndex object) {
 				return createCommodityIndexAdapter();
 			}
@@ -173,6 +177,10 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter casePanamaCanalTariffBand(PanamaCanalTariffBand object) {
 				return createPanamaCanalTariffBandAdapter();
+			}
+			@Override
+			public Adapter caseUnitConversion(UnitConversion object) {
+				return createUnitConversionAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -273,6 +281,20 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createIndexAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.CurrencyIndex <em>Currency Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.CurrencyIndex
+	 * @generated
+	 */
+	public Adapter createCurrencyIndexAdapter() {
 		return null;
 	}
 
@@ -497,6 +519,20 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPanamaCanalTariffBandAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.UnitConversion <em>Unit Conversion</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.UnitConversion
+	 * @generated
+	 */
+	public Adapter createUnitConversionAdapter() {
 		return null;
 	}
 

@@ -30,6 +30,8 @@ public abstract class AbstractMultipleDataIndexImporter<TargetClass extends Name
 	protected static final String TYPE_KEY = "type_of_index";
 	protected static final String NAME = "name";
 	protected static final String UNITS = "units";
+	protected static final String CURRENCY_UNITS = "currency_units";
+	protected static final String VOLUME_UNITS = "volume_units";
 
 	@Override
 	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IMMXImportContext context) {
@@ -91,7 +93,8 @@ public abstract class AbstractMultipleDataIndexImporter<TargetClass extends Name
 	protected Map<String, String> getNonDateFields(final TargetClass target, final Index<? extends Number> index) {
 		final Map<String, String> result = new LinkedHashMap<>();
 		result.put(NAME, target.getName());
-		result.put(UNITS, target.getUnits());
+		result.put(VOLUME_UNITS, target.getVolumeUnit());
+		result.put(CURRENCY_UNITS, target.getCurrencyUnit());
 		result.putAll(super.getNonDateFields(target, index));
 		return result;
 	}
@@ -116,9 +119,20 @@ public abstract class AbstractMultipleDataIndexImporter<TargetClass extends Name
 		}
 
 		if (row.containsKey(UNITS)) {
-			result.setUnits(row.get(UNITS));
-		} else {
-			// context.addProblem(context.createProblem("CommodityIndex units is missing", true, true, true));
+			String units = row.get(UNITS);
+			int idx = units.indexOf('/');
+			if (idx >= 0) {
+				String currency = units.substring(0, idx);
+				String volume = units.substring(idx + 1);
+				result.setCurrencyUnit(currency);
+				result.setVolumeUnit(volume);
+			}
+		}
+		if (row.containsKey(VOLUME_UNITS)) {
+			result.setVolumeUnit(row.get(VOLUME_UNITS));
+		}
+		if (row.containsKey(CURRENCY_UNITS)) {
+			result.setCurrencyUnit(row.get(CURRENCY_UNITS));
 		}
 		final Index<Double> indexData = importDoubleIndex(row, isUnified ? getIgnoreSet(NAME, TYPE_KEY) : Collections.singleton(NAME), context);
 		result.setData(indexData);

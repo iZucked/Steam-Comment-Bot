@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.schedule.impl;
 import java.lang.reflect.InvocationTargetException;
 
+import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -12,10 +13,13 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.ExposureDetail;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -42,6 +46,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getEnergyTransferred <em>Energy Transferred</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getCv <em>Cv</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getVolumeValue <em>Volume Value</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getExposures <em>Exposures</em>}</li>
  * </ul>
  *
  * @generated
@@ -223,6 +228,16 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * @ordered
 	 */
 	protected int volumeValue = VOLUME_VALUE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getExposures() <em>Exposures</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getExposures()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<ExposureDetail> exposures;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -709,6 +724,18 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<ExposureDetail> getExposures() {
+		if (exposures == null) {
+			exposures = new EObjectContainmentEList<ExposureDetail>(ExposureDetail.class, this, SchedulePackage.SLOT_ALLOCATION__EXPOSURES);
+		}
+		return exposures;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public Port getPort() {
@@ -792,6 +819,8 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return basicSetMarketAllocation(null, msgs);
 			case SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT:
 				return basicUnsetSlotVisit(msgs);
+			case SchedulePackage.SLOT_ALLOCATION__EXPOSURES:
+				return ((InternalEList<?>)getExposures()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -829,6 +858,8 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return getCv();
 			case SchedulePackage.SLOT_ALLOCATION__VOLUME_VALUE:
 				return getVolumeValue();
+			case SchedulePackage.SLOT_ALLOCATION__EXPOSURES:
+				return getExposures();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -838,6 +869,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -870,6 +902,10 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return;
 			case SchedulePackage.SLOT_ALLOCATION__VOLUME_VALUE:
 				setVolumeValue((Integer)newValue);
+				return;
+			case SchedulePackage.SLOT_ALLOCATION__EXPOSURES:
+				getExposures().clear();
+				getExposures().addAll((Collection<? extends ExposureDetail>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -913,6 +949,9 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 			case SchedulePackage.SLOT_ALLOCATION__VOLUME_VALUE:
 				setVolumeValue(VOLUME_VALUE_EDEFAULT);
 				return;
+			case SchedulePackage.SLOT_ALLOCATION__EXPOSURES:
+				getExposures().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -945,6 +984,8 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return cv != CV_EDEFAULT;
 			case SchedulePackage.SLOT_ALLOCATION__VOLUME_VALUE:
 				return volumeValue != VOLUME_VALUE_EDEFAULT;
+			case SchedulePackage.SLOT_ALLOCATION__EXPOSURES:
+				return exposures != null && !exposures.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

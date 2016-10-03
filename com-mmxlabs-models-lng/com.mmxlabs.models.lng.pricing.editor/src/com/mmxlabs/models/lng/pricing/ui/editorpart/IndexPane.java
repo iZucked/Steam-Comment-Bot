@@ -31,6 +31,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.ToolTip;
+import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
@@ -57,6 +58,7 @@ import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.CurrencyIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
@@ -107,6 +109,9 @@ public class IndexPane extends ScenarioTableViewerPane {
 	private PricingModel pricingModel;
 
 	private GridViewerColumn nameViewerColumn;
+	private GridViewerColumn unitViewerColumn;
+
+	private Action unitAction;
 
 	public IndexPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
@@ -153,6 +158,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 		items.add(new Pair<>(PricingPackage.Literals.COMMODITY_INDEX, getAddContext(PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES)));
 		items.add(new Pair<>(PricingPackage.Literals.BASE_FUEL_INDEX, getAddContext(PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES)));
 		items.add(new Pair<>(PricingPackage.Literals.CHARTER_INDEX, getAddContext(PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES)));
+		items.add(new Pair<>(PricingPackage.Literals.CURRENCY_INDEX, getAddContext(PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES)));
 
 		return AddModelAction.create(items, actions);
 	}
@@ -204,18 +210,37 @@ public class IndexPane extends ScenarioTableViewerPane {
 		// Enable the tree controls on this column
 		nameViewerColumn.getColumn().setTree(true);
 
-		addTypicalColumn("Units", new BasicAttributeManipulator(PricingPackage.Literals.NAMED_INDEX_CONTAINER__UNITS, getEditingDomain()) {
-			@Override
-			public boolean canEdit(final Object object) {
-				// Skip tree model elements
-				if (transformer.getNodeClass().isInstance(object)) {
-					return false;
-				}
+		// addTypicalColumn("Units", new BasicAttributeManipulator(PricingPackage.Literals.NAMED_INDEX_CONTAINER__UNITS, getEditingDomain()) {
+		// @Override
+		// public boolean canEdit(final Object object) {
+		// // Skip tree model elements
+		// if (transformer.getNodeClass().isInstance(object)) {
+		// return false;
+		// }
+		//
+		// return super.canEdit(object);
+		// }
+		// });
 
-				return super.canEdit(object);
+		unitViewerColumn = addTypicalColumn("Units", new NonEditableColumn() {
+			@Override
+			public String render(final Object object) {
+
+				if (object instanceof NamedIndexContainer<?>) {
+					final NamedIndexContainer<?> idx = (NamedIndexContainer<?>) object;
+
+					if (!isEmpty(idx.getCurrencyUnit()) && !isEmpty(idx.getVolumeUnit())) {
+						return String.format("%s/%s", idx.getCurrencyUnit(), idx.getVolumeUnit());
+					} else if (!isEmpty(idx.getCurrencyUnit())) {
+						return idx.getCurrencyUnit();
+					} else if (!isEmpty(idx.getVolumeUnit())) {
+						return idx.getVolumeUnit();
+					}
+					// return ((NamedIndexContainer<?>) o).getData();
+				}
+				return "";
 			}
 		});
-
 		addTypicalColumn("Type", new NonEditableColumn() {
 			@Override
 			public String render(Object object) {
@@ -230,6 +255,44 @@ public class IndexPane extends ScenarioTableViewerPane {
 				return "";
 			}
 		});
+
+		unitAction = new Action("Edit unit conversion factors") {
+			@Override
+			public void run() {
+				final UnitConversionEditor dialog = new UnitConversionEditor(scenarioEditingLocation.getShell(), scenarioEditingLocation);
+				dialog.setBlockOnOpen(true);
+
+				DetailCompositeDialogUtil.editInlock(scenarioEditingLocation, () -> {
+					final CommandStack commandStack = scenarioEditingLocation.getEditingDomain().getCommandStack();
+					try {
+						scenarioEditingLocation.setDisableUpdates(true);
+						try {
+							scenarioEditingLocation.setDisableCommandProviders(true);
+							// Record current command so we can undo back to here when cancelling
+							final Command currentCommand = commandStack.getUndoCommand();
+							if (dialog.open() != Window.OK) {
+								// if (commandStack.getMostRecentCommand() != currentCommand) {
+								while (commandStack.getUndoCommand() != currentCommand) {
+									commandStack.undo();
+									// This avoids infinite loop... but should only be valid if currentCommand is also null.
+									if (commandStack.getUndoCommand() == null) {
+										break;
+									}
+									// }
+								}
+							}
+						} finally {
+							scenarioEditingLocation.setDisableCommandProviders(false);
+						}
+					} finally {
+						scenarioEditingLocation.setDisableUpdates(false);
+					}
+					return Window.OK;
+				});
+			}
+		};
+		getMenuManager().add(unitAction);
+		getMenuManager().update(true);
 	}
 
 	private void createSeriesParsers() {
@@ -372,7 +435,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 				}
 
 				@Override
-				public boolean isValueUnset(Object object) {
+				public boolean isValueUnset(final Object object) {
 					return false;
 				}
 
@@ -610,11 +673,13 @@ public class IndexPane extends ScenarioTableViewerPane {
 		scenarioViewer.getGrid().addMouseListener(new MouseAdapter() {
 
 			@Override
-			public void mouseDoubleClick(MouseEvent e) {
+			public void mouseDoubleClick(final MouseEvent e) {
 
-				Point p = new Point(e.x, e.y);
-				GridColumn column = scenarioViewer.getGrid().getColumn(p);
+				final Point p = new Point(e.x, e.y);
+				final GridColumn column = scenarioViewer.getGrid().getColumn(p);
 				if (column == nameViewerColumn.getColumn()) {
+					editIndex();
+				} else if (column == unitViewerColumn.getColumn()) {
 					editIndex();
 				}
 			}
@@ -649,6 +714,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 			return DataType.BaseFuel;
 		} else if (element instanceof CharterIndex) {
 			return DataType.Charter;
+		} else if (element instanceof CurrencyIndex) {
+			return DataType.Currency;
 		}
 		return null;
 
@@ -738,5 +805,13 @@ public class IndexPane extends ScenarioTableViewerPane {
 				}
 			}
 		}
+	}
+
+	private static boolean isEmpty(@Nullable final String str) {
+		return str == null || str.trim().isEmpty();
+	}
+
+	public void openUnitsEditor() {
+		unitAction.run();
 	}
 }

@@ -5,9 +5,10 @@
 package com.mmxlabs.models.lng.pricing.ui.autocomplete;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.fieldassist.ContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposal;
@@ -16,6 +17,8 @@ import org.eclipse.jface.fieldassist.IContentProposalProvider;
 import com.google.common.collect.Sets;
 import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.UnitConversion;
+import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -41,7 +44,7 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 
 	private LNGScenarioModel scenarioModel;
 
-	private final @NonNull PriceIndexType type;
+	private final @NonNull PriceIndexType[] types;
 
 	/**
 	 * Construct a SimpleContentProposalProvider whose content proposals are always the specified array of Objects.
@@ -49,9 +52,9 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 	 * @param proposals
 	 *            the array of Strings to be returned whenever proposals are requested.
 	 */
-	public PriceExpressionProposalProvider(final @NonNull PriceIndexType type) {
+	public PriceExpressionProposalProvider(final @NonNull PriceIndexType... types) {
 		super();
-		this.type = type;
+		this.types = types;
 	}
 
 	/**
@@ -89,27 +92,41 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 		final String contents = full_contents.substring(completeFrom, position);
 		final ArrayList<ContentProposal> list = new ArrayList<ContentProposal>();
 		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
-		final EList<? extends NamedIndexContainer<?>> curves;
-		switch (type) {
-		case BUNKERS:
-			curves = pricingModel.getBaseFuelPrices();
-			break;
-		case CHARTER:
-			curves = pricingModel.getCharterIndices();
-			break;
-		case COMMODITY:
-			curves = pricingModel.getCommodityIndices();
-			break;
-		default:
-			return new IContentProposal[0];
+		final List<NamedIndexContainer<?>> curves = new LinkedList<>();
+		for (final PriceIndexType type : types) {
+			switch (type) {
+			case BUNKERS:
+				curves.addAll(pricingModel.getBaseFuelPrices());
+				break;
+			case CHARTER:
+				curves.addAll(pricingModel.getCharterIndices());
+				break;
+			case COMMODITY:
+				curves.addAll(pricingModel.getCommodityIndices());
+				break;
+			case CURRENCY:
+				curves.addAll(pricingModel.getCurrencyIndices());
+				break;
+			default:
+				return new IContentProposal[0];
+			}
 		}
 		for (final NamedIndexContainer<?> index : curves) {
 			final String proposal = index.getName();
-			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equals(contents)) {
+			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
 				final String c = proposal.substring(contents.length());
 				list.add(new ContentProposal(c, proposal, null, c.length()));
 			}
 		}
+
+		for (final UnitConversion factor : pricingModel.getConversionFactors()) {
+			final String proposal = PriceIndexUtils.createConversionFactorName(factor);
+			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
+				final String c = proposal.substring(contents.length());
+				list.add(new ContentProposal(c, proposal, String.format("Number of %s\'s per %s is %.6f", factor.getFrom(), factor.getTo(), factor.getFactor()), c.length()));
+			}
+		}
+
 		return list.toArray(new IContentProposal[list.size()]);
 
 	}

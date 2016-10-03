@@ -12,10 +12,12 @@ import java.util.TreeSet;
 
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.models.lng.pricing.CurrencyIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
@@ -23,6 +25,7 @@ import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.UnitConversion;
 
 /**
  * 
@@ -34,7 +37,7 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
 public class PriceIndexUtils {
 
 	public enum PriceIndexType {
-		COMMODITY, CHARTER, BUNKERS;
+		COMMODITY, CHARTER, BUNKERS, CURRENCY;
 	}
 
 	/**
@@ -44,18 +47,40 @@ public class PriceIndexUtils {
 	 */
 	public static @NonNull SeriesParser getParserFor(final @NonNull PricingModel pricingModel, final @NonNull EReference reference) {
 
-		YearMonth dateZero = YearMonth.of(2000, 1);
+		final YearMonth dateZero = YearMonth.of(2000, 1);
 
 		final SeriesParser indices = new SeriesParser();
-		final List<NamedIndexContainer<? extends Number>> namedIndexContainerList = (List<NamedIndexContainer<? extends Number>>) pricingModel.eGet(reference);
-		for (final NamedIndexContainer<? extends Number> namedIndexContainer : namedIndexContainerList) {
-			final Index<? extends Number> index = namedIndexContainer.getData();
-			if (index instanceof DataIndex) {
-				addSeriesDataFromDataIndex(indices, namedIndexContainer.getName(), dateZero, (DataIndex<? extends Number>) index);
-			} else if (index instanceof DerivedIndex) {
-				indices.addSeriesExpression(namedIndexContainer.getName(), ((DerivedIndex) index).getExpression());
+		{
+			final List<NamedIndexContainer<? extends Number>> namedIndexContainerList = (List<NamedIndexContainer<? extends Number>>) pricingModel.eGet(reference);
+			for (final NamedIndexContainer<? extends Number> namedIndexContainer : namedIndexContainerList) {
+				final Index<? extends Number> index = namedIndexContainer.getData();
+				if (index instanceof DataIndex) {
+					addSeriesDataFromDataIndex(indices, namedIndexContainer.getName(), dateZero, (DataIndex<? extends Number>) index);
+				} else if (index instanceof DerivedIndex) {
+					indices.addSeriesExpression(namedIndexContainer.getName(), ((DerivedIndex) index).getExpression());
+				}
 			}
 		}
+		// Add in currency curves
+		if (reference != PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES) {
+			final List<CurrencyIndex> namedIndexContainerList = pricingModel.getCurrencyIndices();
+			for (final NamedIndexContainer<? extends Number> namedIndexContainer : namedIndexContainerList) {
+				final Index<? extends Number> index = namedIndexContainer.getData();
+				if (index instanceof DataIndex) {
+					addSeriesDataFromDataIndex(indices, namedIndexContainer.getName(), dateZero, (DataIndex<? extends Number>) index);
+				} else if (index instanceof DerivedIndex) {
+					indices.addSeriesExpression(namedIndexContainer.getName(), ((DerivedIndex) index).getExpression());
+				}
+			}
+		}
+
+		for (final UnitConversion factor : pricingModel.getConversionFactors()) {
+			final String name = createConversionFactorName(factor);
+			if (name != null) {
+				indices.addSeriesExpression(name, Double.toString(factor.getFactor()));
+			}
+		}
+
 		return indices;
 	}
 
@@ -73,6 +98,8 @@ public class PriceIndexUtils {
 			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES);
 		case COMMODITY:
 			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES);
+		case CURRENCY:
+			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES);
 		default:
 			throw new IllegalArgumentException();
 		}
@@ -132,5 +159,21 @@ public class PriceIndexUtils {
 	 */
 	public static int convertTime(final YearMonth earliest, final YearMonth windowStart) {
 		return Hours.between(earliest, windowStart);
+	}
+
+	public static @Nullable String createConversionFactorName(@NonNull final UnitConversion factor) {
+		final String from = getString(factor.getFrom());
+		final String to = getString(factor.getTo());
+		if (from.isEmpty() || to.isEmpty()) {
+			return null;
+		}
+		return String.format("%ss_per_%s", from, to);
+	}
+
+	private static @NonNull String getString(@Nullable final String str) {
+		if (str == null) {
+			return "";
+		}
+		return str.trim();
 	}
 }

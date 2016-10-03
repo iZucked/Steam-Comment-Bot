@@ -125,6 +125,16 @@ public class PricingSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case PricingPackage.CURRENCY_INDEX: {
+				CurrencyIndex currencyIndex = (CurrencyIndex)theEObject;
+				T result = caseCurrencyIndex(currencyIndex);
+				if (result == null) result = caseNamedIndexContainer(currencyIndex);
+				if (result == null) result = caseUUIDObject(currencyIndex);
+				if (result == null) result = caseNamedObject(currencyIndex);
+				if (result == null) result = caseMMXObject(currencyIndex);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case PricingPackage.COMMODITY_INDEX: {
 				CommodityIndex commodityIndex = (CommodityIndex)theEObject;
 				T result = caseCommodityIndex(commodityIndex);
@@ -247,6 +257,12 @@ public class PricingSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case PricingPackage.UNIT_CONVERSION: {
+				UnitConversion unitConversion = (UnitConversion)theEObject;
+				T result = caseUnitConversion(unitConversion);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -323,6 +339,21 @@ public class PricingSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public <Value> T caseIndex(Index<Value> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Currency Index</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Currency Index</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCurrencyIndex(CurrencyIndex object) {
 		return null;
 	}
 
@@ -563,6 +594,21 @@ public class PricingSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePanamaCanalTariffBand(PanamaCanalTariffBand object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Unit Conversion</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Unit Conversion</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseUnitConversion(UnitConversion object) {
 		return null;
 	}
 

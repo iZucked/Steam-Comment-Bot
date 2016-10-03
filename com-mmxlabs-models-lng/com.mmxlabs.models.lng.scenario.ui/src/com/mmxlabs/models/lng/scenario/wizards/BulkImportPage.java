@@ -63,7 +63,12 @@ public class BulkImportPage extends WizardPage {
 
 	// TODO: refactor to remove dependence on this enumeration
 	public enum FieldChoice {
-		CHOICE_COMMODITY_INDICES, CHOICE_CARGOES, CHOICE_CHARTER_INDICES, CHOICE_BASE_FUEL_CURVES, CHOICE_COMMODITY_CHARTER_BASE_FUEL_INDICIES
+		CHOICE_COMMODITY_INDICES, //
+		CHOICE_CARGOES, //
+		CHOICE_CHARTER_INDICES, //
+		CHOICE_BASE_FUEL_CURVES, //
+		CHOICE_CURRENCY_CURVES, //
+		CHOICE_ALL_INDICIES
 	};
 
 	public static final int CHOICE_COMMA = 0;

@@ -20,6 +20,7 @@ import com.mmxlabs.models.datetime.DateTimePackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
@@ -30,6 +31,7 @@ import com.mmxlabs.models.lng.schedule.EntityPNLDetails;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
+import com.mmxlabs.models.lng.schedule.ExposureDetail;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
@@ -293,6 +295,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass portVisitLatenessEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass exposureDetailEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1175,6 +1184,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getSlotAllocation_Exposures() {
+		return (EReference)slotAllocationEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getSlotAllocation__GetPort() {
 		return slotAllocationEClass.getEOperations().get(0);
 	}
@@ -1644,6 +1662,87 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getExposureDetail() {
+		return exposureDetailEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getExposureDetail_Index() {
+		return (EReference)exposureDetailEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getExposureDetail_Date() {
+		return (EAttribute)exposureDetailEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getExposureDetail_VolumeInMMBTU() {
+		return (EAttribute)exposureDetailEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getExposureDetail_VolumeInNativeUnits() {
+		return (EAttribute)exposureDetailEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getExposureDetail_UnitPrice() {
+		return (EAttribute)exposureDetailEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getExposureDetail_NativeValue() {
+		return (EAttribute)exposureDetailEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getExposureDetail_VolumeUnit() {
+		return (EAttribute)exposureDetailEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getExposureDetail_CurrencyUnit() {
+		return (EAttribute)exposureDetailEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getFuelUnit() {
 		return fuelUnitEEnum;
 	}
@@ -1782,6 +1881,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__ENERGY_TRANSFERRED);
 		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__CV);
 		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__VOLUME_VALUE);
+		createEReference(slotAllocationEClass, SLOT_ALLOCATION__EXPOSURES);
 		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_PORT);
 		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_CONTRACT);
 		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_NAME);
@@ -1907,6 +2007,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(portVisitLatenessEClass, PORT_VISIT_LATENESS__TYPE);
 		createEAttribute(portVisitLatenessEClass, PORT_VISIT_LATENESS__LATENESS_IN_HOURS);
 
+		exposureDetailEClass = createEClass(EXPOSURE_DETAIL);
+		createEReference(exposureDetailEClass, EXPOSURE_DETAIL__INDEX);
+		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__DATE);
+		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__VOLUME_IN_MMBTU);
+		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__VOLUME_IN_NATIVE_UNITS);
+		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__UNIT_PRICE);
+		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__NATIVE_VALUE);
+		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__VOLUME_UNIT);
+		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__CURRENCY_UNIT);
+
 		// Create enums
 		sequenceTypeEEnum = createEEnum(SEQUENCE_TYPE);
 		fuelEEnum = createEEnum(FUEL);
@@ -1951,6 +2061,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		CommercialPackage theCommercialPackage = (CommercialPackage)EPackage.Registry.INSTANCE.getEPackage(CommercialPackage.eNS_URI);
 		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
 		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
+		PricingPackage thePricingPackage = (PricingPackage)EPackage.Registry.INSTANCE.getEPackage(PricingPackage.eNS_URI);
 
 		// Create type parameters
 		addETypeParameter(iterableEDataType, "T");
@@ -2049,6 +2160,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getSlotAllocation_EnergyTransferred(), ecorePackage.getEInt(), "energyTransferred", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotAllocation_Cv(), ecorePackage.getEDouble(), "cv", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotAllocation_VolumeValue(), ecorePackage.getEInt(), "volumeValue", null, 0, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSlotAllocation_Exposures(), this.getExposureDetail(), null, "exposures", null, 0, -1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getSlotAllocation__GetPort(), thePortPackage.getPort(), "getPort", 1, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -2184,6 +2296,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEClass(portVisitLatenessEClass, PortVisitLateness.class, "PortVisitLateness", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPortVisitLateness_Type(), this.getPortVisitLatenessType(), "type", null, 0, 1, PortVisitLateness.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPortVisitLateness_LatenessInHours(), ecorePackage.getEInt(), "latenessInHours", null, 0, 1, PortVisitLateness.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(exposureDetailEClass, ExposureDetail.class, "ExposureDetail", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getExposureDetail_Index(), thePricingPackage.getCommodityIndex(), null, "index", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getExposureDetail_Date(), theDateTimePackage.getYearMonth(), "date", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getExposureDetail_VolumeInMMBTU(), ecorePackage.getEDouble(), "volumeInMMBTU", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getExposureDetail_VolumeInNativeUnits(), ecorePackage.getEDouble(), "volumeInNativeUnits", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getExposureDetail_UnitPrice(), ecorePackage.getEDouble(), "unitPrice", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getExposureDetail_NativeValue(), ecorePackage.getEDouble(), "nativeValue", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getExposureDetail_VolumeUnit(), ecorePackage.getEString(), "volumeUnit", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getExposureDetail_CurrencyUnit(), ecorePackage.getEString(), "currencyUnit", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(sequenceTypeEEnum, SequenceType.class, "SequenceType");

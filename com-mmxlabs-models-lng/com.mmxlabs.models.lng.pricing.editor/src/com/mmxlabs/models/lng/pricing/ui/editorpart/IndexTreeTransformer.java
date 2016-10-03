@@ -35,7 +35,9 @@ public class IndexTreeTransformer {
 
 		BaseFuel("Base Fuel", false, PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, false),
 
-		Charter("Chartering", true, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, false);
+		Charter("Chartering", true, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, false),
+		
+		Currency("Currency", false, PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, false);
 
 		private final String name;
 		private final boolean useIntegers;

@@ -139,43 +139,36 @@
          </menuContribution>
          <menuContribution
                allPopups="false"
-               locationURI="menu:data">
+               locationURI="menu:data?after=dataStart">
             <command
-                  commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportUnifiedCurvesHandler"
-                  label="Import All Curves"
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.unified"
+                  label="Import all curves"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.basefuel"
+                  label="Import base fuel curves"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.commodity"
+                  label="Import commodity curves"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.currency"
+                  label="Import currency curves"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.charter"
+                  label="Import charter curves"
                   style="push">
             </command>
          </menuContribution>
          <menuContribution
                allPopups="false"
                locationURI="menu:data?after=additions">
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportDataHandler"
-                  label="Import Price Curves"
-                  style="push">
-            </command>
-         </menuContribution>
-         <menuContribution
-               allPopups="false"
-               locationURI="menu:data?after=com.mmxlabs.models.lng.scenario.importWizards.BulkImportDataHandler">
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCharterCurveHandler"
-                  label="Import Charter Curves"
-                  style="push">
-            </command>
-         </menuContribution>
-         <menuContribution
-               allPopups="false"
-               locationURI="menu:data?after=com.mmxlabs.models.lng.scenario.importWizards.BulkImportCharterCurveHandler">
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportBaseFuelCurveHandler"
-                  label="Import Base Fuel Curves"
-                  style="push">
-            </command>
-         </menuContribution>
-         <menuContribution
-               allPopups="false"
-               locationURI="menu:data?after=com.mmxlabs.models.lng.scenario.importWizards.BulkImportBaseFuelCurveHandler">
             <command
                   commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCargoHandler"
                   label="Import Cargoes"
@@ -208,24 +201,24 @@
                name="Export Scenario as CSV">
          </command>
          <command
-               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportDataHandler"
-               id="com.mmxlabs.models.lng.scenario.importWizards.BulkImportDataHandler"
-               name="Bulk Import Prices from CSV">
+               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCommodityCurveHandler"
+               id="com.mmxlabs.models.lng.scenario.import.wizards.commodity"
+               name="Bulk import commodity curves from CSV">
          </command>
          <command
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCharterCurveHandler"
-               id="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCharterCurveHandler"
-               name="Bulk Import Prices from CSV">
+               id="com.mmxlabs.models.lng.scenario.import.wizards.charter"
+               name="Bulk import charter curves from CSV">
          </command>
          <command
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportBaseFuelCurveHandler"
-               id="com.mmxlabs.models.lng.scenario.importWizards.BulkImportBaseFuelCurveHandler"
-               name="Bulk Import Prices from CSV">
+               id="com.mmxlabs.models.lng.scenario.import.wizards.basefuel"
+               name="Bulk import base fuel curves from CSV">
          </command>
          <command
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportUnifiedCurvesHandler"
-               id="com.mmxlabs.models.lng.scenario.importWizards.BulkImportUnifiedCurvesHandler"
-               name="Bulk Import Prices from CSV">
+               id="com.mmxlabs.models.lng.scenario.import.wizards.unified"
+               name="Bulk import all curves from CSV">
          </command>
          <command
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCargoHandler"
@@ -237,6 +230,12 @@
                id="com.mmxlabs.models.lng.scenario.mergeWizards.SharedScenarioDataImport"
                name="Shared Scenario Data Import">
          </command>
+           <command
+                 defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCurrencyCurveHandler"
+                 id="com.mmxlabs.models.lng.scenario.import.wizards.currency"
+                 name="Bulk import currency curves from CSV">
+           </command>
+          
       </extension>
       <extension
             point="com.mmxlabs.models.util.import.extramodelimporters">

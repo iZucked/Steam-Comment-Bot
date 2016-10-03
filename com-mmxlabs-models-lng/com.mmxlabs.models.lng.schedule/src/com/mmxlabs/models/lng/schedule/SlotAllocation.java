@@ -8,6 +8,7 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.mmxcore.MMXObject;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -28,6 +29,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getEnergyTransferred <em>Energy Transferred</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getCv <em>Cv</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getVolumeValue <em>Volume Value</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getExposures <em>Exposures</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotAllocation()
@@ -381,6 +383,22 @@ public interface SlotAllocation extends MMXObject {
 	 * @generated
 	 */
 	void setVolumeValue(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Exposures</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.schedule.ExposureDetail}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Exposures</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Exposures</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotAllocation_Exposures()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<ExposureDetail> getExposures();
 
 	/**
 	 * <!-- begin-user-doc -->

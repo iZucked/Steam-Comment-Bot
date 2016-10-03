@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.schedule.util;
 
+import com.mmxlabs.models.lng.schedule.*;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
@@ -368,6 +369,12 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 			case SchedulePackage.PORT_VISIT_LATENESS: {
 				PortVisitLateness portVisitLateness = (PortVisitLateness)theEObject;
 				T result = casePortVisitLateness(portVisitLateness);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.EXPOSURE_DETAIL: {
+				ExposureDetail exposureDetail = (ExposureDetail)theEObject;
+				T result = caseExposureDetail(exposureDetail);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -852,6 +859,21 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePortVisitLateness(PortVisitLateness object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Exposure Detail</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Exposure Detail</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseExposureDetail(ExposureDetail object) {
 		return null;
 	}
 

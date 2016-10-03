@@ -294,6 +294,15 @@ public interface ScheduleFactory extends EFactory {
 	PortVisitLateness createPortVisitLateness();
 
 	/**
+	 * Returns a new object of class '<em>Exposure Detail</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Exposure Detail</em>'.
+	 * @generated
+	 */
+	ExposureDetail createExposureDetail();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

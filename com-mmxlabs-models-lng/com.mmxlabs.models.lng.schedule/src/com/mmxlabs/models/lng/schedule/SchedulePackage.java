@@ -1059,13 +1059,22 @@ public interface SchedulePackage extends EPackage {
 	int SLOT_ALLOCATION__VOLUME_VALUE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
 
 	/**
+	 * The feature id for the '<em><b>Exposures</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION__EXPOSURES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
+
+	/**
 	 * The number of structural features of the '<em>Slot Allocation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
+	int SLOT_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -4118,6 +4127,106 @@ public interface SchedulePackage extends EPackage {
 	int PORT_VISIT_LATENESS_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.ExposureDetailImpl <em>Exposure Detail</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.ExposureDetailImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getExposureDetail()
+	 * @generated
+	 */
+	int EXPOSURE_DETAIL = 32;
+
+	/**
+	 * The feature id for the '<em><b>Index</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPOSURE_DETAIL__INDEX = 0;
+
+	/**
+	 * The feature id for the '<em><b>Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPOSURE_DETAIL__DATE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Volume In MMBTU</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPOSURE_DETAIL__VOLUME_IN_MMBTU = 2;
+
+	/**
+	 * The feature id for the '<em><b>Volume In Native Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPOSURE_DETAIL__VOLUME_IN_NATIVE_UNITS = 3;
+
+	/**
+	 * The feature id for the '<em><b>Unit Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPOSURE_DETAIL__UNIT_PRICE = 4;
+
+	/**
+	 * The feature id for the '<em><b>Native Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPOSURE_DETAIL__NATIVE_VALUE = 5;
+
+	/**
+	 * The feature id for the '<em><b>Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPOSURE_DETAIL__VOLUME_UNIT = 6;
+
+	/**
+	 * The feature id for the '<em><b>Currency Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPOSURE_DETAIL__CURRENCY_UNIT = 7;
+
+	/**
+	 * The number of structural features of the '<em>Exposure Detail</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPOSURE_DETAIL_FEATURE_COUNT = 8;
+
+	/**
+	 * The number of operations of the '<em>Exposure Detail</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPOSURE_DETAIL_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4125,7 +4234,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 34;
+	int FUEL_UNIT = 35;
 
 
 	/**
@@ -4136,7 +4245,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuel()
 	 * @generated
 	 */
-	int FUEL = 33;
+	int FUEL = 34;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
@@ -4146,7 +4255,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
 	 * @generated
 	 */
-	int SEQUENCE_TYPE = 32;
+	int SEQUENCE_TYPE = 33;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
@@ -4156,7 +4265,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()
 	 * @generated
 	 */
-	int CAPACITY_VIOLATION_TYPE = 35;
+	int CAPACITY_VIOLATION_TYPE = 36;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.PortVisitLatenessType <em>Port Visit Lateness Type</em>}' enum.
@@ -4166,7 +4275,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisitLatenessType()
 	 * @generated
 	 */
-	int PORT_VISIT_LATENESS_TYPE = 36;
+	int PORT_VISIT_LATENESS_TYPE = 37;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -4176,7 +4285,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 37;
+	int CALENDAR = 38;
 
 
 	/**
@@ -4187,7 +4296,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 38;
+	int ITERABLE = 39;
 
 
 	/**
@@ -4198,7 +4307,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 39;
+	int OBJECT = 40;
 
 
 	/**
@@ -5101,6 +5210,17 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getSlotAllocation_VolumeValue();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getExposures <em>Exposures</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Exposures</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.SlotAllocation#getExposures()
+	 * @see #getSlotAllocation()
+	 * @generated
+	 */
+	EReference getSlotAllocation_Exposures();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getPort() <em>Get Port</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5654,6 +5774,104 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPortVisitLateness_LatenessInHours();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.ExposureDetail <em>Exposure Detail</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Exposure Detail</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ExposureDetail
+	 * @generated
+	 */
+	EClass getExposureDetail();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getIndex <em>Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Index</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ExposureDetail#getIndex()
+	 * @see #getExposureDetail()
+	 * @generated
+	 */
+	EReference getExposureDetail_Index();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getDate <em>Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Date</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ExposureDetail#getDate()
+	 * @see #getExposureDetail()
+	 * @generated
+	 */
+	EAttribute getExposureDetail_Date();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getVolumeInMMBTU <em>Volume In MMBTU</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume In MMBTU</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ExposureDetail#getVolumeInMMBTU()
+	 * @see #getExposureDetail()
+	 * @generated
+	 */
+	EAttribute getExposureDetail_VolumeInMMBTU();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getVolumeInNativeUnits <em>Volume In Native Units</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume In Native Units</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ExposureDetail#getVolumeInNativeUnits()
+	 * @see #getExposureDetail()
+	 * @generated
+	 */
+	EAttribute getExposureDetail_VolumeInNativeUnits();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getUnitPrice <em>Unit Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Unit Price</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ExposureDetail#getUnitPrice()
+	 * @see #getExposureDetail()
+	 * @generated
+	 */
+	EAttribute getExposureDetail_UnitPrice();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getNativeValue <em>Native Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Native Value</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ExposureDetail#getNativeValue()
+	 * @see #getExposureDetail()
+	 * @generated
+	 */
+	EAttribute getExposureDetail_NativeValue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getVolumeUnit <em>Volume Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Unit</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ExposureDetail#getVolumeUnit()
+	 * @see #getExposureDetail()
+	 * @generated
+	 */
+	EAttribute getExposureDetail_VolumeUnit();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getCurrencyUnit <em>Currency Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Currency Unit</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ExposureDetail#getCurrencyUnit()
+	 * @see #getExposureDetail()
+	 * @generated
+	 */
+	EAttribute getExposureDetail_CurrencyUnit();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
@@ -6465,6 +6683,14 @@ public interface SchedulePackage extends EPackage {
 		EAttribute SLOT_ALLOCATION__VOLUME_VALUE = eINSTANCE.getSlotAllocation_VolumeValue();
 
 		/**
+		 * The meta object literal for the '<em><b>Exposures</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT_ALLOCATION__EXPOSURES = eINSTANCE.getSlotAllocation_Exposures();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Port</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6911,6 +7137,80 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORT_VISIT_LATENESS__LATENESS_IN_HOURS = eINSTANCE.getPortVisitLateness_LatenessInHours();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.ExposureDetailImpl <em>Exposure Detail</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.ExposureDetailImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getExposureDetail()
+		 * @generated
+		 */
+		EClass EXPOSURE_DETAIL = eINSTANCE.getExposureDetail();
+
+		/**
+		 * The meta object literal for the '<em><b>Index</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference EXPOSURE_DETAIL__INDEX = eINSTANCE.getExposureDetail_Index();
+
+		/**
+		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EXPOSURE_DETAIL__DATE = eINSTANCE.getExposureDetail_Date();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume In MMBTU</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EXPOSURE_DETAIL__VOLUME_IN_MMBTU = eINSTANCE.getExposureDetail_VolumeInMMBTU();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume In Native Units</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EXPOSURE_DETAIL__VOLUME_IN_NATIVE_UNITS = eINSTANCE.getExposureDetail_VolumeInNativeUnits();
+
+		/**
+		 * The meta object literal for the '<em><b>Unit Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EXPOSURE_DETAIL__UNIT_PRICE = eINSTANCE.getExposureDetail_UnitPrice();
+
+		/**
+		 * The meta object literal for the '<em><b>Native Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EXPOSURE_DETAIL__NATIVE_VALUE = eINSTANCE.getExposureDetail_NativeValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume Unit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EXPOSURE_DETAIL__VOLUME_UNIT = eINSTANCE.getExposureDetail_VolumeUnit();
+
+		/**
+		 * The meta object literal for the '<em><b>Currency Unit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EXPOSURE_DETAIL__CURRENCY_UNIT = eINSTANCE.getExposureDetail_CurrencyUnit();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.

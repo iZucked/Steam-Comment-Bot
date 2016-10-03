@@ -27,6 +27,7 @@ import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
+import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.util.PricingAdapterFactory;
 
@@ -176,6 +177,29 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		}
 
 		return indexPointItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.CurrencyIndex} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CurrencyIndexItemProvider currencyIndexItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.CurrencyIndex}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCurrencyIndexAdapter() {
+		if (currencyIndexItemProvider == null) {
+			currencyIndexItemProvider = new CurrencyIndexItemProvider(this);
+		}
+
+		return currencyIndexItemProvider;
 	}
 
 	/**
@@ -547,6 +571,29 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.UnitConversion} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected UnitConversionItemProvider unitConversionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.UnitConversion}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createUnitConversionAdapter() {
+		if (unitConversionItemProvider == null) {
+			unitConversionItemProvider = new UnitConversionItemProvider(this);
+		}
+
+		return unitConversionItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -676,6 +723,7 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (dataIndexItemProvider != null) dataIndexItemProvider.dispose();
 		if (derivedIndexItemProvider != null) derivedIndexItemProvider.dispose();
 		if (indexPointItemProvider != null) indexPointItemProvider.dispose();
+		if (currencyIndexItemProvider != null) currencyIndexItemProvider.dispose();
 		if (commodityIndexItemProvider != null) commodityIndexItemProvider.dispose();
 		if (charterIndexItemProvider != null) charterIndexItemProvider.dispose();
 		if (baseFuelIndexItemProvider != null) baseFuelIndexItemProvider.dispose();
@@ -692,6 +740,7 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (portsSplitExpressionMapItemProvider != null) portsSplitExpressionMapItemProvider.dispose();
 		if (panamaCanalTariffItemProvider != null) panamaCanalTariffItemProvider.dispose();
 		if (panamaCanalTariffBandItemProvider != null) panamaCanalTariffBandItemProvider.dispose();
+		if (unitConversionItemProvider != null) unitConversionItemProvider.dispose();
 	}
 
 }

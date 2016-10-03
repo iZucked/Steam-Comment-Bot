@@ -46,6 +46,8 @@ import com.mmxlabs.models.util.importer.impl.NumberAttributeImporter;
 abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImporter {
 	protected static final String EXPRESSION = "expression";
 	protected static final String UNITS = "units";
+	protected static final String CURRENCY_UNITS = "currency_units";
+	protected static final String VOLUME_UNITS = "volume_units";
 
 	protected final YearMonthAttributeImporter dateParser = new YearMonthAttributeImporter();
 	protected final LocalDateAttributeImporter dateParser2 = new LocalDateAttributeImporter();
@@ -107,7 +109,13 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 				if (columnsToIgnore.contains(s)) {
 					continue;
 				}
-				if ("units".equals(s)) {
+				if (UNITS.equalsIgnoreCase(s)) {
+					continue;
+				}
+				if (CURRENCY_UNITS.equalsIgnoreCase(s)) {
+					continue;
+				}
+				if (VOLUME_UNITS.equalsIgnoreCase(s)) {
 					continue;
 				}
 				final YearMonth date;

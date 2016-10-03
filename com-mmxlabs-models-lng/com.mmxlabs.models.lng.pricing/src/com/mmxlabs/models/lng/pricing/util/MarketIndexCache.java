@@ -60,6 +60,7 @@ public class MarketIndexCache extends EContentAdapter {
 		cacheObj.put(PriceIndexType.COMMODITY, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.COMMODITY));
 		cacheObj.put(PriceIndexType.CHARTER, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.CHARTER));
 		cacheObj.put(PriceIndexType.BUNKERS, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.BUNKERS));
+		cacheObj.put(PriceIndexType.CURRENCY, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.CURRENCY));
 		return cacheObj;
 	}
 
@@ -85,6 +86,7 @@ public class MarketIndexCache extends EContentAdapter {
 		pricingModel.getCommodityIndices().forEach(c -> cacheObj.put(c, finder.apply(c)));
 		pricingModel.getCharterIndices().forEach(c -> cacheObj.put(c, finder.apply(c)));
 		pricingModel.getBaseFuelPrices().forEach(c -> cacheObj.put(c, finder.apply(c)));
+		pricingModel.getCurrencyIndices().forEach(c -> cacheObj.put(c, finder.apply(c)));
 
 		return cacheObj;
 	}

@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -36,7 +37,6 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 
 		indexPage = editorPart.addPage(indexPane.getControl());
 		editorPart.setPageText(indexPage, "Markets");
-
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(indexPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Markets");
 	}
 
@@ -59,6 +59,9 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 			if (target instanceof IndexPoint) {
 				return true;
 			}
+			if (target instanceof UnitConversion) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -78,6 +81,14 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 				if (indexPane != null) {
 					editorPart.setActivePage(indexPage);
 					indexPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
+				}
+				return;
+			}
+			if (target instanceof UnitConversion) {
+				if (indexPane != null) {
+					editorPart.setActivePage(indexPage);
+					indexPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
+					indexPane.openUnitsEditor();
 				}
 				return;
 			}

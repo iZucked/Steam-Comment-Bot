@@ -139,6 +139,18 @@
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.pricing.PortsExpressionMap">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CurrencyIndexComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.CurrencyIndexComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.pricing.CurrencyIndex">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.UnitConversionComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.UnitConversionComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.pricing.UnitConversion">
+  </componentHelper>
 		
 	</extension>
  <extension
@@ -157,6 +169,11 @@
           factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.BaseFuelIndexReferenceValueProviderFactory"
           id="com.mmxlabs.models.lng.pricing.ui.valueproviders.BaseFuelIndexReferenceValueProviderFactory"
           referenceEClass="com.mmxlabs.models.lng.pricing.BaseFuelIndex">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.CurrencyIndexReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.pricing.ui.valueproviders.CurrencyIndexReferenceValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.pricing.CurrencyIndex">
     </valueProvider>
  </extension>
  <extension
@@ -207,17 +224,15 @@
           eClassName="com.mmxlabs.models.lng.pricing.CharterIndex"
           inheritable="false">
     </classImporter>
+    <classImporter
+          ID="com.mmxlabs.models.lng.pricing.importers.CurrencyIndexImporter"
+          classImporterClass="com.mmxlabs.models.lng.pricing.importers.CurrencyIndexImporter"
+          eClassName="com.mmxlabs.models.lng.pricing.CurrencyIndex"
+          inheritable="false">
+    </classImporter>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.modelfactories">
-    <factory
-          ID="com.mmxlabs.models.lng.pricing.editor.dataIndexFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Commodity Index"
-          targetEClass="com.mmxlabs.models.lng.pricing.CommodityIndex"
-          replacementEReference="data"
-          replacementEClass="com.mmxlabs.models.lng.pricing.DataIndex">
-    </factory>
     <factory
           ID="com.mmxlabs.models.lng.pricing.editor.expressionFactory"
            factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
@@ -253,6 +268,27 @@
           targetEClass="com.mmxlabs.models.lng.pricing.BaseFuelIndex"
           replacementEReference="data"
           replacementEClass="com.mmxlabs.models.lng.pricing.DataIndex">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.editor.dataIndexFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Commodity Index"
+          replacementEClass="com.mmxlabs.models.lng.pricing.DataIndex"
+          replacementEReference="data"
+          targetEClass="com.mmxlabs.models.lng.pricing.CommodityIndex">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.editor.factory1"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Currency Index"
+          replacementEReference="data"
+          targetEClass="com.mmxlabs.models.lng.pricing.editor.EObject1">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.editor.factory.UnitConversion"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Conversion Factor"
+          targetEClass="com.mmxlabs.models.lng.pricing.UnitConversion">
     </factory>
  </extension>
  <extension

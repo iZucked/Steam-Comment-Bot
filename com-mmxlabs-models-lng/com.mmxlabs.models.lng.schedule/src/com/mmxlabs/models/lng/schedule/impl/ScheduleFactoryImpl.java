@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
+import com.mmxlabs.models.lng.schedule.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -137,6 +138,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS: return createBasicSlotPNLDetails();
 			case SchedulePackage.EVENT_GROUPING: return createEventGrouping();
 			case SchedulePackage.PORT_VISIT_LATENESS: return createPortVisitLateness();
+			case SchedulePackage.EXPOSURE_DETAIL: return createExposureDetail();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -508,6 +510,16 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public PortVisitLateness createPortVisitLateness() {
 		PortVisitLatenessImpl portVisitLateness = new PortVisitLatenessImpl();
 		return portVisitLateness;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ExposureDetail createExposureDetail() {
+		ExposureDetailImpl exposureDetail = new ExposureDetailImpl();
+		return exposureDetail;
 	}
 
 	/**

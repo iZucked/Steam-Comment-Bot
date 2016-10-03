@@ -28,12 +28,15 @@ public class PricingModelBuilder {
 	}
 
 	@NonNull
-	public CharterIndex createCharterIndex(@NonNull final String name, @Nullable final String units, final int fixedPricePerDay) {
+	public CharterIndex createCharterIndex(@NonNull final String name, @Nullable final String currencyUnit, @Nullable final String volumeUnit, final int fixedPricePerDay) {
 
 		final CharterIndex charterIndex = PricingFactory.eINSTANCE.createCharterIndex();
 		charterIndex.setName(name);
-		if (units != null) {
-			charterIndex.setUnits(units);
+		if (currencyUnit != null) {
+			charterIndex.setCurrencyUnit(currencyUnit);
+		}
+		if (volumeUnit != null) {
+			charterIndex.setVolumeUnit(volumeUnit);
 		}
 
 		final DerivedIndex<Integer> derivedIndex = PricingFactory.eINSTANCE.createDerivedIndex();

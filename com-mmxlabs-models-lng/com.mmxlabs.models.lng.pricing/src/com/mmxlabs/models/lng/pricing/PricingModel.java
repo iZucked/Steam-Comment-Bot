@@ -16,9 +16,11 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getCurrencyIndices <em>Currency Indices</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getCommodityIndices <em>Commodity Indices</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getCharterIndices <em>Charter Indices</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getBaseFuelPrices <em>Base Fuel Prices</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getConversionFactors <em>Conversion Factors</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel()
@@ -26,6 +28,22 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @generated
  */
 public interface PricingModel extends UUIDObject {
+	/**
+	 * Returns the value of the '<em><b>Currency Indices</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.CurrencyIndex}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Currency Indices</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Currency Indices</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_CurrencyIndices()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<CurrencyIndex> getCurrencyIndices();
+
 	/**
 	 * Returns the value of the '<em><b>Commodity Indices</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.CommodityIndex}.
@@ -73,6 +91,22 @@ public interface PricingModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<BaseFuelIndex> getBaseFuelPrices();
+
+	/**
+	 * Returns the value of the '<em><b>Conversion Factors</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.UnitConversion}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Conversion Factors</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Conversion Factors</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_ConversionFactors()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<UnitConversion> getConversionFactors();
 
 } // end of  PricingModel
 

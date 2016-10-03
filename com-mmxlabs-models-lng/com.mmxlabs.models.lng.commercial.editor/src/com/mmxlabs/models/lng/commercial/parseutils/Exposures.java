@@ -4,26 +4,22 @@
  */
 package com.mmxlabs.models.lng.commercial.parseutils;
 
-import java.time.LocalDate;
 import java.time.YearMonth;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
+import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
-import com.mmxlabs.common.time.Months;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
@@ -33,13 +29,21 @@ import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.pricing.parser.Node;
 import com.mmxlabs.models.lng.pricing.parser.RawTreeParser;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.ExposureDetail;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.rcp.common.ServiceHelper;
 
 /**
  * Utility class to calculate schedule exposure to market indices. Provides static methods
@@ -48,66 +52,97 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  */
 public class Exposures {
 
-	private static final Set<String> operators = CollectionsUtil.makeHashSet("+", "-", "/", "*", "%");
-
-	/**
-	 * Class to store cumulative numeric data by key.
-	 */
-	public static class CumulativeMap<T> extends HashMap<T, Double> {
-		private static final long serialVersionUID = 1L;
-
-		/**
-		 * Adds a cumulative numeric value to the map. If the key is contained in the map, the new value is added to the existing value. Otherwise, the new value is entered into the map. In other
-		 * words, the map conceptually defaults new keys to zero before adding the specified value.
-		 * 
-		 * @param key
-		 * @param value
-		 */
-		public void plusEquals(final T key, final Double value) {
-			if (containsKey(key)) {
-				put(key, get(key) + value);
-			} else {
-				put(key, value);
-			}
-		}
+	public enum Mode {
+		VALUE, VOLUME
 	}
 
-	public static CoEff getExposureCoefficient(final @NonNull String priceExpression, final @NonNull CommodityIndex index, final @NonNull PricingModel pricingModel, @NonNull final YearMonth date) {
+	public enum ValueMode {
+		VOLUME_MMBTU, VOLUME_NATIVE, NATIVE_VALUE
+	}
 
-		// If derived, then skip
-		if (index.getData() instanceof DerivedIndex<?>) {
-			return new CoEff(0, false);
+	public static @NonNull LookupData createLookupData(final PricingModel pricingModel) {
+		final LookupData lookupData = new LookupData();
+		lookupData.pricingModel = pricingModel;
+
+		pricingModel.getCommodityIndices().forEach(idx -> lookupData.commodityMap.put(idx.getName().toLowerCase(), idx));
+		pricingModel.getCurrencyIndices().forEach(idx -> lookupData.currencyMap.put(idx.getName().toLowerCase(), idx));
+		pricingModel.getConversionFactors().forEach(f -> lookupData.conversionMap.put(PriceIndexUtils.createConversionFactorName(f).toLowerCase(), f));
+
+		return lookupData;
+
+	}
+
+	public static void calculateExposures(final LNGScenarioModel scenarioModel, final Schedule schedule, final EditingDomain domain) {
+
+		if (schedule == null) {
+			return;
 		}
+		final CompoundCommand cmd = new CompoundCommand("Calculate Exposures");
 
-		// Null check
-		final String exposedIndexToken = index.getName();
-		if (exposedIndexToken == null) {
-			return new CoEff(0, false);
-		}
+		@NonNull
+		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
+		final LookupData lookupData = createLookupData(pricingModel);
 
-		// Here we perform multiple steps. First we recursively expand out the price expression, replacing terms referencing derived curves with the derived curve data or expression. We also replace
-		// any index reference which is not the target index with the *value* for the given date. Finally we evaluate the expression to determine the multipliers to apply to the index.
+		for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
+			for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
+				cmd.append(SetCommand.create(domain, slotAllocation, SchedulePackage.Literals.SLOT_ALLOCATION__EXPOSURES, SetCommand.UNSET_VALUE));
 
-		final RawTreeParser parser = new RawTreeParser();
-		try {
-			// Parse basic expression
-			final IExpression<Node> parsed = parser.parse(priceExpression);
+				final int volume = slotAllocation.getEnergyTransferred();
+				final Slot slot = slotAllocation.getSlot();
 
-			// Expand out the tree, if a Node is another expression, recursively expand it
-			Node n = expandNode(exposedIndexToken, parsed.evaluate(), pricingModel, date);
-			if (n == null) {
-				n = parsed.evaluate();
+				if (slot == null) {
+					continue;
+				}
+
+				final YearMonth pricingDate = PricingMonthUtils.getPricingDate(slotAllocation);
+				if (pricingDate == null) {
+					continue;
+				}
+
+				final MarkedUpNode node = getExposureCoefficient(slot, slotAllocation, lookupData);
+				if (node == null) {
+					continue;
+				}
+
+				for (final CommodityIndex idx : pricingModel.getCommodityIndices()) {
+					ExposureDetail exposureDetail = createExposureDetail(node, pricingDate, idx, volume, slot instanceof LoadSlot, lookupData);
+					if (exposureDetail != null) {
+
+						// Should be added to a command!
+						cmd.append(AddCommand.create(domain, slotAllocation, SchedulePackage.Literals.SLOT_ALLOCATION__EXPOSURES, exposureDetail));
+					}
+				}
 			}
-			// Does out expanded parse tree contain the index we are looking for?
-			if (!checkIndexNode(exposedIndexToken, n)) {
-				return new CoEff(0, false);
-			}
-
-			// Get the final index co-efficient (apply the arithmetic)
-			return getExposureCoefficient(n, exposedIndexToken);
-		} catch (final Exception e) {
-			return new CoEff(0, false);
 		}
+
+		if (!scenarioModel.getScheduleModel().isDirty())
+
+		{
+			cmd.append(SetCommand.create(domain, scenarioModel.getScheduleModel(), SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
+		}
+		domain.getCommandStack().execute(cmd);
+
+	}
+
+	// private static final Set<String> operators = CollectionsUtil.makeHashSet("+", "-", "/", "*", "%");
+
+	/**
+	 * For unit test use
+	 * 
+	 * @param priceExpression
+	 * @param lookupData
+	 * @return
+	 */
+	public static @Nullable ExposureDetail calculateExposure(final @NonNull String priceExpression, CommodityIndex index, YearMonth date, double volumeInMMBTu, boolean isPurchase,
+			final @NonNull LookupData lookupData) {
+
+		// Parse the expression
+		final IExpression<Node> parse = new RawTreeParser().parse(priceExpression);
+		final Node p = parse.evaluate();
+		final Node node = expandNode(p, lookupData);
+		final MarkedUpNode markedUpNode = markupNodes(node, lookupData);
+
+		return createExposureDetail(markedUpNode, date, index, volumeInMMBTu, isPurchase, lookupData);
 	}
 
 	/**
@@ -120,88 +155,50 @@ public class Exposures {
 	 * @param date
 	 * @return
 	 */
-	private static @Nullable Node expandNode(final @NonNull String exposedIndexToken, @NonNull final Node parentNode, final PricingModel pricingModel, final YearMonth date) {
+	private static @NonNull Node expandNode(@NonNull final Node parentNode, final LookupData lookupData) {
 
-		// Match!, nothing to expand
-		if (exposedIndexToken.equals(parentNode.token)) {
-			return null;
+		if (lookupData.expressionCache.containsKey(parentNode.token)) {
+			return lookupData.expressionCache.get(parentNode.token);
 		}
+
 		if (parentNode.children.length == 0) {
 			// Leaf node, this should be an index or a value
+			if (lookupData.commodityMap.containsKey(parentNode.token)) {
+				final CommodityIndex idx = lookupData.commodityMap.get(parentNode.token);
 
-			// Look to see if this is a derived index
-			for (final CommodityIndex idx : pricingModel.getCommodityIndices()) {
-				// Null checks
-				if (idx.getName() == null) {
-					continue;
-				}
-
-				if (parentNode.token.equals(idx.getName())) {
-					// Matched derived index...
-					if (idx.getData() instanceof DerivedIndex<?>) {
-						final DerivedIndex<?> derivedIndex = (DerivedIndex<?>) idx.getData();
-						// Parse the expression
-						final IExpression<Node> parse = new RawTreeParser().parse(derivedIndex.getExpression());
-						final Node p = parse.evaluate();
-						// Expand the parsed tree again if needed,
-						@Nullable
-						final Node expandNode = expandNode(exposedIndexToken, p, pricingModel, date);
-
-						// return the new sub-parse tree for the expression
-						if (expandNode != null) {
-							return expandNode;
-						}
-						return p;
+				// Matched derived index...
+				if (idx.getData() instanceof DerivedIndex<?>) {
+					final DerivedIndex<?> derivedIndex = (DerivedIndex<?>) idx.getData();
+					// Parse the expression
+					final IExpression<Node> parse = new RawTreeParser().parse(derivedIndex.getExpression());
+					final Node p = parse.evaluate();
+					// Expand the parsed tree again if needed,
+					@Nullable
+					final Node expandNode = expandNode(p, lookupData);
+					// return the new sub-parse tree for the expression
+					if (expandNode != null) {
+						lookupData.expressionCache.put(derivedIndex.getExpression(), expandNode);
+						return expandNode;
 					}
+					return p;
+				} else {
+					return parentNode;
 				}
 			}
-			// Not a derived index, so evaluate the expression to get the current value for the pricing event date
-			try {
-				final SeriesParser p = PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.COMMODITY);
-				final ISeries series = p.getSeries(parentNode.token);
-				// "Magic" date constant used in PriceIndexUtils for date zero
-				final Number evaluate = series.evaluate(Months.between(YearMonth.of(2000, 1), date));
-				return new Node(Double.toString(evaluate.doubleValue()), new Node[0]);
-			} catch (final Exception e) {
-				// Unknown error
-				return null;
-			}
+			return parentNode;
+
+			// return null;
 		} else {
 			// We have children, token *should* be an operator, expand out the child nodes
 			for (int i = 0; i < parentNode.children.length; ++i) {
-				final Node replacement = expandNode(exposedIndexToken, parentNode.children[i], pricingModel, date);
+				final Node replacement = expandNode(parentNode.children[i], lookupData);
 				if (replacement != null) {
 					parentNode.children[i] = replacement;
 				}
 			}
+			return parentNode;
 		}
-		return null;
-	}
-
-	/**
-	 * Examine the {@link Node} tree to see if the target index is present
-	 * 
-	 * @param index
-	 * @param n
-	 * @return
-	 */
-	private static boolean checkIndexNode(final @NonNull String exposedIndexToken, @NonNull final Node n) {
-		// Found index match, pass up the tree
-		if (exposedIndexToken.equals(n.token)) {
-			return true;
-		}
-		// No children, termination condition
-		if (n.children.length == 0) {
-			return false;
-		}
-
-		// Check all the children for the index name
-		for (int i = 0; i < n.children.length; ++i) {
-			if (checkIndexNode(exposedIndexToken, n.children[i])) {
-				return true;
-			}
-		}
-		return false;
+		// return null;
 	}
 
 	/**
@@ -211,9 +208,18 @@ public class Exposures {
 	 * @param index
 	 * @return
 	 */
-	public static CoEff getExposureCoefficient(final @NonNull Slot slot, final @NonNull CommodityIndex index, final @NonNull PricingModel pricingModel, @NonNull final YearMonth date) {
+	public static MarkedUpNode getExposureCoefficient(final @NonNull Slot slot, final @NonNull SlotAllocation slotAllocation, final @NonNull LookupData lookupData) {
 		String priceExpression = null;
-		if (slot.isSetPriceExpression()) {
+		if (slot instanceof SpotSlot) {
+			final SpotSlot spotSlot = (SpotSlot) slot;
+			final SpotMarket market = spotSlot.getMarket();
+			final LNGPriceCalculatorParameters parameters = market.getPriceInfo();
+			// do a case switch on price parameters
+			if (parameters instanceof ExpressionPriceParameters) {
+				final ExpressionPriceParameters pec = (ExpressionPriceParameters) parameters;
+				priceExpression = pec.getPriceExpression();
+			}
+		} else if (slot.isSetPriceExpression()) {
 			priceExpression = slot.getPriceExpression();
 		} else {
 			LNGPriceCalculatorParameters parameters = null;
@@ -225,16 +231,214 @@ public class Exposures {
 			if (parameters instanceof ExpressionPriceParameters) {
 				final ExpressionPriceParameters pec = (ExpressionPriceParameters) parameters;
 				priceExpression = pec.getPriceExpression();
+			} else {
+				// Delegate to services registry to see if we have a provider to help us.
+				String[] result = new String[1];
+				ServiceHelper.withAllServices(IExposuredExpressionProvider.class, provider -> {
+					String exp = provider.provideExposedPriceExpression(slot, slotAllocation);
+					if (exp != null) {
+						result[0] = exp;
+						return false;
+					}
+					return true;
+				});
+				priceExpression = result[0];
 			}
 		}
 
 		if (priceExpression != null && !priceExpression.isEmpty()) {
 			if (!priceExpression.equals("?")) {
-				return getExposureCoefficient(priceExpression, index, pricingModel, date);
+
+				if (lookupData.expressionCache2.containsKey(priceExpression)) {
+					return lookupData.expressionCache2.get(priceExpression);
+				}
+				// Parse the expression
+				final IExpression<Node> parse = new RawTreeParser().parse(priceExpression);
+				final Node p = parse.evaluate();
+				final Node node = expandNode(p, lookupData);
+				final MarkedUpNode markedUpNode = markupNodes(node, lookupData);
+				lookupData.expressionCache2.put(priceExpression, markedUpNode);
+				return markedUpNode;
+				// return getExposureCoefficient(markedUpNode, index, date);
 			}
 		}
 
-		return new CoEff(1, false);
+		return null;
+	}
+
+	private static MarkedUpNode markupNodes(@NonNull final Node parentNode, final LookupData lookupData) {
+		MarkedUpNode n;
+
+		if (parentNode.token.equals("*") || parentNode.token.equals("/") || parentNode.token.equals("+") || parentNode.token.equals("-") || parentNode.token.equals("%")) {
+			n = new OperatorNode(parentNode.token);
+		} else if (lookupData.commodityMap.containsKey(parentNode.token.toLowerCase())) {
+			n = new CommodityNode(lookupData.commodityMap.get(parentNode.token.toLowerCase()));
+
+		} else if (lookupData.currencyMap.containsKey(parentNode.token.toLowerCase())) {
+			n = new CurrencyNode(lookupData.currencyMap.get(parentNode.token.toLowerCase()));
+
+		} else if (lookupData.conversionMap.containsKey(parentNode.token.toLowerCase())) {
+			n = new ConversionNode(parentNode.token, lookupData.conversionMap.get(parentNode.token.toLowerCase()));
+		} else {
+			// This should be a constant
+			try {
+				n = new ConstantNode(Double.parseDouble(parentNode.token));
+			} catch (final Exception e) {
+				throw new RuntimeException("Unexpected token: " + parentNode.token);
+			}
+		}
+
+		for (final Node child : parentNode.children) {
+			n.addChildNode(markupNodes(child, lookupData));
+		}
+		return n;
+	}
+
+	// private void evaluate(MarkedUpNode node, String indexName, YearMonth date) {
+	private static @NonNull CoEff getExposureCoefficient(final @NonNull MarkedUpNode node, final YearMonth date, final CommodityIndex index, final Mode mode, final LookupData lookupData) {
+		if (node instanceof ConstantNode) {
+			final ConstantNode constantNode = (ConstantNode) node;
+			// if (mode == Mode.VALUE) {
+			// return new CoEff(1, false);
+			// } else {
+			return new CoEff(constantNode.getConstant(), false);
+			// }
+		}
+
+		// Arithmetic operator token
+		else if (node instanceof OperatorNode) {
+			final OperatorNode operatorNode = (OperatorNode) node;
+			if (node.getChildren().size() != 2) {
+				throw new IllegalStateException();
+				// Invalid state
+				// return new CoEff(0, false);
+			}
+
+			final String operator = operatorNode.getOperator();
+			final CoEff c0 = getExposureCoefficient(node.getChildren().get(0), date, index, mode, lookupData);
+			final CoEff c1 = getExposureCoefficient(node.getChildren().get(1), date, index, mode, lookupData);
+			if (operator.equals("+")) {
+				if (mode == Mode.VALUE) {
+					if (c0.isExposed() && c1.isExposed()) {
+						return c0;// new CoEff(c0.getCoeff() * c1.getCoeff(), true);
+					} else if (c0.isExposed()) {
+						return c0;
+					} else if (c1.isExposed()) {
+						return c1;
+					} else {
+						return new CoEff(1.0, false);
+					}
+				}
+				// addition: add coefficients of summands
+				if (c0.isExposed() == c1.isExposed()) {
+					return new CoEff(c0.getCoeff() + c1.getCoeff(), c0.isExposed());
+				} else if (c0.isExposed()) {
+					return c0;
+				} else {
+					assert c1.isExposed();
+					return c1;
+				}
+			} else if (operator.equals("*")) {
+				if (mode == Mode.VALUE) {
+					if (c0.isExposed() && c1.isExposed()) {
+						return c0;// new CoEff(c0.getCoeff() * c1.getCoeff(), true);
+					} else if (c0.isExposed()) {
+						return c0;
+					} else if (c1.isExposed()) {
+						return c1;
+					} else {
+						return new CoEff(1.0, false);
+					}
+				}
+				return new CoEff(c0.getCoeff() * c1.getCoeff(), c0.isExposed() | c1.isExposed());
+			} else if (operator.equals("/")) {
+				if (mode == Mode.VALUE) {
+					if (c0.isExposed() && c1.isExposed()) {
+						return c0;// new CoEff(c0.getCoeff() / c1.getCoeff(), true);
+					} else if (c0.isExposed()) {
+						return c0;
+					} else if (c1.isExposed()) {
+						return c1;
+					} else {
+						return new CoEff(1.0, false);
+					}
+				}
+				return new CoEff(c0.getCoeff() / c1.getCoeff(), c0.isExposed() | c1.isExposed());
+			} else if (operator.equals("%")) {
+				if (mode == Mode.VALUE) {
+					if (c1.isExposed()) {
+						return c1;
+					} else {
+						return new CoEff(1.0, false);
+					}
+				}
+				// // In value mode this will be 1.0 rather than real value
+				// return new CoEff(c0.getCoeff() * c1.getCoeff(), c0.isExposed() | c1.isExposed());
+				// } else {
+				return new CoEff(0.01 * c0.getCoeff() * c1.getCoeff(), c0.isExposed() | c1.isExposed());
+				// }
+			} else if (operator.equals("-")) {
+				// subtraction: subtract coefficients
+				if (c0.isExposed() == c1.isExposed()) {
+					return new CoEff(c0.getCoeff() - c1.getCoeff(), c0.isExposed());
+				} else if (c0.isExposed()) {
+					return c0;
+				} else {
+					assert c1.isExposed();
+					return new CoEff(-c1.getCoeff(), c1.isExposed());
+				}
+			} else {
+				throw new IllegalStateException("Invalid operator");
+			}
+		}
+
+		else if (node instanceof CommodityNode) {
+			final CommodityNode commodityNode = (CommodityNode) node;
+
+			// IF MODE == VOLUME
+			if (mode == Mode.VOLUME) {
+				if (commodityNode.getIndex() == index) {
+					return new CoEff(1, true);
+				} else {
+					return new CoEff(1, false);
+				}
+			}
+			if (mode == Mode.VALUE) {
+
+				if (commodityNode.getIndex() == index) {
+					final SeriesParser p = PriceIndexUtils.getParserFor(lookupData.pricingModel, PriceIndexType.COMMODITY);
+					final ISeries series = p.getSeries(commodityNode.getIndex().getName());
+					// "Magic" date constant used in PriceIndexUtils for date zero
+					final Number evaluate = series.evaluate(Hours.between(YearMonth.of(2000, 1), date));
+
+					return new CoEff(evaluate.doubleValue(), true);
+				} else {
+					return new CoEff(1, false);
+				}
+			}
+
+		} else if (node instanceof CurrencyNode) {
+			final CurrencyNode currencyNode = (CurrencyNode) node;
+
+			// IF MODE == VOLUME
+			if (mode == Mode.VOLUME) {
+				return new CoEff(1, false);
+			} else if (mode == Mode.VALUE) {
+				return new CoEff(1, false);
+			}
+		} else if (node instanceof ConversionNode) {
+			final ConversionNode conversionNode = (ConversionNode) node;
+
+			// IF MODE == VOLUME
+			if (mode == Mode.VOLUME) {
+				return new CoEff(1, false);
+			} else if (mode == Mode.VALUE) {
+				return new CoEff(1, false);
+			}
+		}
+
+		throw new IllegalStateException("Unexpected node type");
+
 	}
 
 	/**
@@ -243,52 +447,40 @@ public class Exposures {
 	 * 
 	 * @param schedule
 	 * @param index
+	 * @param filterOn
 	 * @return
 	 */
-	public static Map<YearMonth, Double> getExposuresByMonth(final @NonNull Schedule schedule, final @NonNull CommodityIndex index, @NonNull final PricingModel pricingModel) {
+	public static Map<YearMonth, Double> getExposuresByMonth(final @NonNull Schedule schedule, final @NonNull CommodityIndex index, @NonNull final PricingModel pricingModel, final ValueMode mode,
+			final Collection<Object> filterOn) {
 		final Map<YearMonth, Double> result = new HashMap<>();
 
 		for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 			for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
-				final int volume = slotAllocation.getEnergyTransferred();
-				final Slot slot = slotAllocation.getSlot();
-				if (slot == null) {
-					continue;
+				if (!filterOn.isEmpty()) {
+					final boolean include = filterOn.contains(slotAllocation) || filterOn.contains(slotAllocation.getSlot()) || filterOn.contains(cargoAllocation)
+							|| filterOn.contains(cargoAllocation.getInputCargo());
+					if (!include) {
+						continue;
+					}
 				}
 
-				final YearMonth pricingDate = getPricingDate(slotAllocation);
-				if (pricingDate == null) {
-					continue;
+				for (final ExposureDetail detail : slotAllocation.getExposures()) {
+					if (detail.getIndex() == index) {
+						switch (mode) {
+						case VOLUME_MMBTU:
+							result.merge(detail.getDate(), detail.getVolumeInMMBTU(), (a, b) -> (a + b));
+							break;
+						case VOLUME_NATIVE:
+							result.merge(detail.getDate(), detail.getVolumeInNativeUnits(), (a, b) -> (a + b));
+							break;
+						case NATIVE_VALUE:
+							result.merge(detail.getDate(), detail.getNativeValue(), (a, b) -> (a + b));
+							break;
+						default:
+							throw new IllegalArgumentException();
+						}
+					}
 				}
-				// final ZonedDateTime date = slotAllocation.getSlotVisit().getStart();
-				// YearMonth.of(date.getYear(), date.getMonthValue())
-				//
-				final CoEff exposureCoefficient = getExposureCoefficient(slot, index, pricingModel, pricingDate);
-				if (!exposureCoefficient.exposed) {
-					continue;
-				}
-				if (exposureCoefficient.coeff == 0.0) {
-					continue;
-				}
-
-				double exposure = exposureCoefficient.coeff * volume;
-
-				if (slot instanceof SpotSlot) {
-					// FIXME - Should spot volumes be included?
-					// continue;
-				}
-
-				if (slot instanceof LoadSlot) {
-					// +ve exposure
-				} else if (slot instanceof DischargeSlot) {
-					// -ve exposure
-					exposure = -exposure;
-				} else {
-					// Unknown slot type!
-					throw new IllegalStateException("Unsupported slot type");
-				}
-
-				result.merge(pricingDate, exposure, (a, b) -> (a + b));
 			}
 		}
 
@@ -296,158 +488,56 @@ public class Exposures {
 
 	}
 
-	public static class CoEff {
-		private final double coeff;
-		private final boolean exposed;
-
-		public CoEff(final double coeff, final boolean exposed) {
-			this.coeff = coeff;
-			this.exposed = exposed;
-		}
-
-		public double getCoeff() {
-			return coeff;
-		}
-
-		public boolean isExposed() {
-			return exposed;
-		}
-
-	}
-
-	private static @NonNull CoEff getExposureCoefficient(final @NonNull Node node, final @NonNull String exposedIndexToken) {
-
-		final String token = node.token;
-
-		// Is this our search term?
-		if (node.token.equals(exposedIndexToken)) {
-			return new CoEff(1, true);
-		}
-
-		// Arithmetic operator token
-		if (operators.contains(token)) {
-			if (node.children.length != 2) {
-				// Invalid state
-				return new CoEff(0, false);
+	private static @Nullable ExposureDetail createExposureDetail(final @NonNull MarkedUpNode node, final YearMonth pricingDate, final CommodityIndex idx, double volumeInMMBtu, boolean isPurchase,
+			final LookupData lookupData) {
+		final ExposureDetail exposureDetail = ScheduleFactory.eINSTANCE.createExposureDetail();
+		{
+			final CoEff exposureCoefficient = getExposureCoefficient(node, pricingDate, idx, Mode.VOLUME, lookupData);
+			if (!exposureCoefficient.isExposed()) {
+				return null;
 			}
-			final CoEff c0 = getExposureCoefficient(node.children[0], exposedIndexToken);
-			final CoEff c1 = getExposureCoefficient(node.children[1], exposedIndexToken);
-			if (token.equals("+")) {
-				// addition: add coefficients of summands
-				if (c0.exposed == c1.exposed) {
-					return new CoEff(c0.coeff + c1.coeff, c0.exposed);
-				} else if (c0.exposed) {
-					return c0;
-				} else {
-					assert c1.exposed;
-					return c1;
-				}
-			} else if (node.token.equals("*")) {
-				return new CoEff(c0.coeff * c1.coeff, c0.exposed | c1.exposed);
-			} else if (node.token.equals("/")) {
-				return new CoEff(c0.coeff / c1.coeff, c0.exposed | c1.exposed);
-			} else if (node.token.equals("%")) {
-				return new CoEff(0.01 * c0.coeff * c1.coeff, c0.exposed | c1.exposed);
-			} else if (node.token.equals("-")) {
-				// subtraction: subtract coefficients
-				if (c0.exposed == c1.exposed) {
-					return new CoEff(c0.coeff - c1.coeff, c0.exposed);
-				} else if (c0.exposed) {
-					return c0;
-				} else {
-					assert c1.exposed;
-					return new CoEff(-c1.coeff, c1.exposed);
-				}
-			} else {
-				throw new IllegalStateException("Invalid operator");
+			if (exposureCoefficient.getCoeff() == 0.0) {
+				return null;
 			}
-		}
 
-		// Try and parse token as a number
-		try {
-			final double parsed = Double.parseDouble(token);
-			return new CoEff(parsed, false);
-		} catch (final NumberFormatException e) {
-			// Ignore
-		}
+			double exposure = exposureCoefficient.getCoeff() * volumeInMMBtu;
 
-		// Some kind of unknown thing. (probably an illegal state)
-		return new CoEff(0, false);
-	}
-
-	private static final Function<Optional<SlotAllocation>, Optional<YearMonth>> getCompletionOf = slotAllocation -> {
-		if (slotAllocation.isPresent()) {
-			final ZonedDateTime end = slotAllocation.get().getSlotVisit().getEnd();
-			final ZonedDateTime withZoneSameLocal = end.withZoneSameLocal(ZoneId.of("UTC"));
-			return Optional.of(YearMonth.of(withZoneSameLocal.getYear(), withZoneSameLocal.getMonthValue()));
-		} else {
-			return Optional.empty();
-		}
-	};
-
-	private static final Function<Optional<SlotAllocation>, Optional<YearMonth>> getStartOf = slotAllocation -> {
-		if (slotAllocation.isPresent()) {
-			final ZonedDateTime end = slotAllocation.get().getSlotVisit().getStart();
-			final ZonedDateTime withZoneSameLocal = end.withZoneSameLocal(ZoneId.of("UTC"));
-			return Optional.of(YearMonth.of(withZoneSameLocal.getYear(), withZoneSameLocal.getMonthValue()));
-		} else {
-			return Optional.empty();
-		}
-	};
-
-	private static final BiFunction<Optional<SlotAllocation>, Class<? extends Slot>, Optional<SlotAllocation>> getAllocationOf = (slotAllocation, cls) -> {
-		if (slotAllocation.isPresent()) {
-			final Slot slot = slotAllocation.get().getSlot();
-			if (cls.isInstance(slot)) {
-				return slotAllocation;
+			if (!isPurchase) {
+				// -ve exposure
+				exposure = -exposure;
 			}
-			final CargoAllocation cargoAllocation = slotAllocation.get().getCargoAllocation();
-			if (cargoAllocation != null) {
-				for (final SlotAllocation slotAllocation2 : cargoAllocation.getSlotAllocations()) {
-					if (cls.isInstance(slotAllocation2.getSlot())) {
-						return Optional.of(slotAllocation2);
+
+			exposureDetail.setIndex(idx);
+
+			exposureDetail.setDate(pricingDate);
+			exposureDetail.setVolumeInMMBTU(exposure);
+			{
+				final String u = idx.getVolumeUnit();
+				double nativeVolume = exposure;
+				for (UnitConversion factor : lookupData.pricingModel.getConversionFactors()) {
+					if (factor.getTo().equalsIgnoreCase("mmbtu")) {
+						if (factor.getFrom().equalsIgnoreCase(u)) {
+							nativeVolume *= factor.getFactor();
+							break;
+						}
 					}
 				}
+
+				exposureDetail.setVolumeInNativeUnits(nativeVolume);
+			}
+			exposureDetail.setCurrencyUnit(idx.getCurrencyUnit());
+			exposureDetail.setVolumeUnit(idx.getVolumeUnit());
+		}
+		{
+			final CoEff exposureCoefficient = getExposureCoefficient(node, pricingDate, idx, Mode.VALUE, lookupData);
+			if (exposureCoefficient.isExposed() && exposureCoefficient.getCoeff() != 0.0) {
+
+				// Use abs as any negation link to the co-eff should already be applied to the volume
+				double exposure = Math.abs(exposureCoefficient.getCoeff()) * exposureDetail.getVolumeInNativeUnits();
+				exposureDetail.setNativeValue(exposure);
+				exposureDetail.setUnitPrice(exposureCoefficient.getCoeff());
 			}
 		}
-		return Optional.empty();
-	};
-
-	private static final Function<SlotAllocation, Optional<SlotAllocation>> getLoadAllocationOf = (slotAllocation) -> getAllocationOf.apply(Optional.of(slotAllocation), LoadSlot.class);
-	private static final Function<SlotAllocation, Optional<SlotAllocation>> getDischargeAllocationOf = (slotAllocation) -> getAllocationOf.apply(Optional.of(slotAllocation), DischargeSlot.class);
-
-	/**
-	 * Returns the pricing {@link YearMonth} for this {@link SlotAllocation}
-	 * 
-	 * @param slotAllocation
-	 * @return
-	 */
-	private static @Nullable YearMonth getPricingDate(@NonNull final SlotAllocation slotAllocation) {
-		final Slot slot = slotAllocation.getSlot();
-
-		final Optional<YearMonth> pricingDate;
-		if (slot.isSetPricingDate()) {
-			final LocalDate slotPricingDate = slot.getPricingDate();
-			pricingDate = Optional.of(YearMonth.of(slotPricingDate.getYear(), slotPricingDate.getMonthValue()));
-		} else {
-			switch (slot.getSlotOrDelegatedPricingEvent()) {
-			case END_DISCHARGE:
-				pricingDate = getCompletionOf.apply(getDischargeAllocationOf.apply(slotAllocation));
-				break;
-			case END_LOAD:
-				pricingDate = getCompletionOf.apply(getLoadAllocationOf.apply(slotAllocation));
-				break;
-			case START_DISCHARGE:
-				pricingDate = getStartOf.apply(getDischargeAllocationOf.apply(slotAllocation));
-				break;
-			case START_LOAD:
-				pricingDate = getStartOf.apply(getLoadAllocationOf.apply(slotAllocation));
-				break;
-			default:
-				pricingDate = null;
-			}
-		}
-		return pricingDate.get();
+		return exposureDetail;
 	}
-
 }

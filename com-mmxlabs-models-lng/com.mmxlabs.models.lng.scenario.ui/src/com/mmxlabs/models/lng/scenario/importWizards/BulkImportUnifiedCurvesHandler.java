@@ -10,7 +10,7 @@ public class BulkImportUnifiedCurvesHandler extends BulkImportCSVHandler {
 
 	@Override
 	public FieldChoice getFieldToImport() {
-		return FieldChoice.CHOICE_COMMODITY_CHARTER_BASE_FUEL_INDICIES;
+		return FieldChoice.CHOICE_ALL_INDICIES;
 	}
 
 	@Override

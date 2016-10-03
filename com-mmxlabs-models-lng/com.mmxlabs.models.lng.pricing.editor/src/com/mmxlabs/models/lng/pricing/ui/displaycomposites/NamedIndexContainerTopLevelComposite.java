@@ -25,6 +25,8 @@ public class NamedIndexContainerTopLevelComposite extends DefaultTopLevelComposi
 	public NamedIndexContainerTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
 		super(parent, style, dialogContext, toolkit);
 	}
+	
+
 
 	/**
 	 * Don't display DataIndex child objects for editing.
@@ -39,5 +41,7 @@ public class NamedIndexContainerTopLevelComposite extends DefaultTopLevelComposi
 			super.createChildArea(root, object, parent, ref, value);
 		}
 	}
+	
+	
 
 }

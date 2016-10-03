@@ -29,7 +29,8 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl#getData <em>Data</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl#getUnits <em>Units</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl#getCurrencyUnit <em>Currency Unit</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl#getVolumeUnit <em>Volume Unit</em>}</li>
  * </ul>
  *
  * @generated
@@ -66,24 +67,44 @@ public class NamedIndexContainerImpl<Value> extends UUIDObjectImpl implements Na
 	protected Index<Value> data;
 
 	/**
-	 * The default value of the '{@link #getUnits() <em>Units</em>}' attribute.
+	 * The default value of the '{@link #getCurrencyUnit() <em>Currency Unit</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getUnits()
+	 * @see #getCurrencyUnit()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String UNITS_EDEFAULT = null;
+	protected static final String CURRENCY_UNIT_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getUnits() <em>Units</em>}' attribute.
+	 * The cached value of the '{@link #getCurrencyUnit() <em>Currency Unit</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getUnits()
+	 * @see #getCurrencyUnit()
 	 * @generated
 	 * @ordered
 	 */
-	protected String units = UNITS_EDEFAULT;
+	protected String currencyUnit = CURRENCY_UNIT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getVolumeUnit() <em>Volume Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeUnit()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String VOLUME_UNIT_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getVolumeUnit() <em>Volume Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeUnit()
+	 * @generated
+	 * @ordered
+	 */
+	protected String volumeUnit = VOLUME_UNIT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -174,8 +195,8 @@ public class NamedIndexContainerImpl<Value> extends UUIDObjectImpl implements Na
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getUnits() {
-		return units;
+	public String getCurrencyUnit() {
+		return currencyUnit;
 	}
 
 	/**
@@ -183,11 +204,32 @@ public class NamedIndexContainerImpl<Value> extends UUIDObjectImpl implements Na
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setUnits(String newUnits) {
-		String oldUnits = units;
-		units = newUnits;
+	public void setCurrencyUnit(String newCurrencyUnit) {
+		String oldCurrencyUnit = currencyUnit;
+		currencyUnit = newCurrencyUnit;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.NAMED_INDEX_CONTAINER__UNITS, oldUnits, units));
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.NAMED_INDEX_CONTAINER__CURRENCY_UNIT, oldCurrencyUnit, currencyUnit));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getVolumeUnit() {
+		return volumeUnit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVolumeUnit(String newVolumeUnit) {
+		String oldVolumeUnit = volumeUnit;
+		volumeUnit = newVolumeUnit;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.NAMED_INDEX_CONTAINER__VOLUME_UNIT, oldVolumeUnit, volumeUnit));
 	}
 
 	/**
@@ -216,8 +258,10 @@ public class NamedIndexContainerImpl<Value> extends UUIDObjectImpl implements Na
 				return getName();
 			case PricingPackage.NAMED_INDEX_CONTAINER__DATA:
 				return getData();
-			case PricingPackage.NAMED_INDEX_CONTAINER__UNITS:
-				return getUnits();
+			case PricingPackage.NAMED_INDEX_CONTAINER__CURRENCY_UNIT:
+				return getCurrencyUnit();
+			case PricingPackage.NAMED_INDEX_CONTAINER__VOLUME_UNIT:
+				return getVolumeUnit();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -237,8 +281,11 @@ public class NamedIndexContainerImpl<Value> extends UUIDObjectImpl implements Na
 			case PricingPackage.NAMED_INDEX_CONTAINER__DATA:
 				setData((Index<Value>)newValue);
 				return;
-			case PricingPackage.NAMED_INDEX_CONTAINER__UNITS:
-				setUnits((String)newValue);
+			case PricingPackage.NAMED_INDEX_CONTAINER__CURRENCY_UNIT:
+				setCurrencyUnit((String)newValue);
+				return;
+			case PricingPackage.NAMED_INDEX_CONTAINER__VOLUME_UNIT:
+				setVolumeUnit((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -258,8 +305,11 @@ public class NamedIndexContainerImpl<Value> extends UUIDObjectImpl implements Na
 			case PricingPackage.NAMED_INDEX_CONTAINER__DATA:
 				setData((Index<Value>)null);
 				return;
-			case PricingPackage.NAMED_INDEX_CONTAINER__UNITS:
-				setUnits(UNITS_EDEFAULT);
+			case PricingPackage.NAMED_INDEX_CONTAINER__CURRENCY_UNIT:
+				setCurrencyUnit(CURRENCY_UNIT_EDEFAULT);
+				return;
+			case PricingPackage.NAMED_INDEX_CONTAINER__VOLUME_UNIT:
+				setVolumeUnit(VOLUME_UNIT_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -277,8 +327,10 @@ public class NamedIndexContainerImpl<Value> extends UUIDObjectImpl implements Na
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case PricingPackage.NAMED_INDEX_CONTAINER__DATA:
 				return data != null;
-			case PricingPackage.NAMED_INDEX_CONTAINER__UNITS:
-				return UNITS_EDEFAULT == null ? units != null : !UNITS_EDEFAULT.equals(units);
+			case PricingPackage.NAMED_INDEX_CONTAINER__CURRENCY_UNIT:
+				return CURRENCY_UNIT_EDEFAULT == null ? currencyUnit != null : !CURRENCY_UNIT_EDEFAULT.equals(currencyUnit);
+			case PricingPackage.NAMED_INDEX_CONTAINER__VOLUME_UNIT:
+				return VOLUME_UNIT_EDEFAULT == null ? volumeUnit != null : !VOLUME_UNIT_EDEFAULT.equals(volumeUnit);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -327,8 +379,10 @@ public class NamedIndexContainerImpl<Value> extends UUIDObjectImpl implements Na
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
-		result.append(", units: ");
-		result.append(units);
+		result.append(", currencyUnit: ");
+		result.append(currencyUnit);
+		result.append(", volumeUnit: ");
+		result.append(volumeUnit);
 		result.append(')');
 		return result.toString();
 	}
