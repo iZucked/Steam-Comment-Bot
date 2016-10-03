@@ -205,6 +205,15 @@
             contributorClass="com.mmxlabs.models.lng.fleet.presentation.FleetActionBarContributor">
       </editor>
    </extension>
+   <extension
+         point="com.mmxlabs.models.ui.jointmodeleditors">
+      <jointModelEditor
+            id="com.mmxlabs.models.lng.fleet.ui.editorpart.FleetModelEditorContribution"
+            implementation="com.mmxlabs.models.lng.fleet.ui.editorpart.FleetModelEditorContribution"
+            priority="0"
+            subModelClass="com.mmxlabs.models.lng.fleet.FleetModel">
+      </jointModelEditor>
+   </extension>
 
 
 </plugin>
