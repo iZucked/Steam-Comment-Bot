@@ -957,7 +957,7 @@ public class BagOptimiser {
 							}
 						}
 					}
-					states.addAll(removeLimitedStates(futureStates));
+					states.addAll(removeNonBranchOrLeafStates(futureStates));
 					updateProgress(actionSetOptimisationData, maxEvaluations, progressMonitor);
 				} catch (final ExecutionException e) {
 					throw new RuntimeException(e);
@@ -1092,10 +1092,10 @@ public class BagOptimiser {
 		this.maxLeafs = maxLeafs;
 	}
 
-	private Collection<JobState> removeLimitedStates(final Collection<JobState> futureStates) {
+	private Collection<JobState> removeNonBranchOrLeafStates(final Collection<JobState> futureStates) {
 		final List<JobState> nonLimitedStates = new LinkedList<>();
 		for (final JobState js : futureStates) {
-			if (js.mode != JobStateMode.LIMITED) {
+			if (js.mode == JobStateMode.LEAF || js.mode == JobStateMode.BRANCH) {
 				nonLimitedStates.add(js);
 			}
 		}
