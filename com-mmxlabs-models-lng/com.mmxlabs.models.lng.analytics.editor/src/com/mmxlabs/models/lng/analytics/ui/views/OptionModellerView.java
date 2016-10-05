@@ -303,6 +303,11 @@ public class OptionModellerView extends ScenarioInstanceView {
 		buyOptionsViewer.setContentProvider(new OptionsViewerContentProvider(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS));
 		hookOpenEditor(buyOptionsViewer);
 
+		MenuManager mgr = new MenuManager();
+		BuyOptionsContextMenuManager listener = new BuyOptionsContextMenuManager(buyOptionsViewer, OptionModellerView.this, mgr, () -> refreshAll());
+		listener.setOptionAnalysisModel(model);
+		buyOptionsViewer.getGrid().addMenuDetectListener(listener);
+
 		// Create buttons
 		{
 			{
@@ -384,6 +389,12 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 		sellOptionsViewer.setContentProvider(new OptionsViewerContentProvider(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS));
 		hookOpenEditor(sellOptionsViewer);
+
+		MenuManager mgr = new MenuManager();
+		SellOptionsContextMenuManager listener = new SellOptionsContextMenuManager(sellOptionsViewer, OptionModellerView.this, mgr, () -> refreshAll());
+		listener.setOptionAnalysisModel(model);
+		sellOptionsViewer.getGrid().addMenuDetectListener(listener);
+
 		{
 			{
 				final Button addSell = new Button(sellComposite, SWT.PUSH);
