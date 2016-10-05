@@ -111,8 +111,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 						row.setShipping(AnalyticsFactory.eINSTANCE.createRoundTripShippingOption());
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model.getBaseCase(), AnalyticsPackage.Literals.BASE_CASE__BASE_CASE, row), model.getBaseCase(),
 								AnalyticsPackage.Literals.BASE_CASE__BASE_CASE);
-						baseCaseViewer.refresh();
-						mainComposite.pack();
+						refreshAll();
 					}
 
 					@Override
@@ -161,8 +160,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 						row.setShipping(AnalyticsFactory.eINSTANCE.createRoundTripShippingOption());
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE, row),
 								model.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE);
-						partialCaseViewer.refresh();
-						mainComposite.pack();
+						refreshAll();
 					}
 
 					@Override
@@ -227,8 +225,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 		}
 
-		mainComposite.pack();
-
+		refreshAll();
 		listenToScenarioSelection();
 	}
 
@@ -296,8 +293,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 						final BuyOption row = AnalyticsFactory.eINSTANCE.createBuyReference();
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, row), model,
 								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
-						buyOptionsViewer.refresh();
-						mainComposite.pack();
+						refreshAll();
 					}
 
 					@Override
@@ -317,8 +313,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 						final BuyOption row = AnalyticsFactory.eINSTANCE.createBuyOpportunity();
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, row), model,
 								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
-						buyOptionsViewer.refresh();
-						mainComposite.pack();
+						refreshAll();
 					}
 
 					@Override
@@ -338,8 +333,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 						final BuyMarket row = AnalyticsFactory.eINSTANCE.createBuyMarket();
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, row), model,
 								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
-						buyOptionsViewer.refresh();
-						mainComposite.pack();
+						refreshAll();
 					}
 
 					@Override
@@ -374,8 +368,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 						final SellOption row = AnalyticsFactory.eINSTANCE.createSellReference();
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), model,
 								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
-						sellOptionsViewer.refresh();
-						mainComposite.pack();
+						refreshAll();
 					}
 
 					@Override
@@ -395,8 +388,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 						final SellOption row = AnalyticsFactory.eINSTANCE.createSellOpportunity();
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), model,
 								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
-						sellOptionsViewer.refresh();
-						mainComposite.pack();
+						refreshAll();
 					}
 
 					@Override
@@ -416,8 +408,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 						final SellOption row = AnalyticsFactory.eINSTANCE.createSellMarket();
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), model,
 								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
-						sellOptionsViewer.refresh();
-						mainComposite.pack();
+						refreshAll();
 					}
 
 					@Override
@@ -476,7 +467,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 			@Override
 			public void expansionStateChanged(final ExpansionEvent e) {
-				mainComposite.pack();
+				refreshAll();
 			}
 		});
 

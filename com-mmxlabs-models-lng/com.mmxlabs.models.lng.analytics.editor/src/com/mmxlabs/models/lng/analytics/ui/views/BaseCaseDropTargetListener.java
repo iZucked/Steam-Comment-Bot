@@ -12,6 +12,8 @@ import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.DropTargetListener;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Point;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
@@ -29,30 +31,39 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
+import com.mmxlabs.rcp.common.LocalMenuHelper;
+import com.mmxlabs.rcp.common.actions.RunnableAction;
 
 public class BaseCaseDropTargetListener implements DropTargetListener {
 
 	private final @NonNull IScenarioEditingLocation scenarioEditingLocation;
 
-	private OptionAnalysisModel optionAnalysisModel;
+	private final OptionAnalysisModel optionAnalysisModel;
 
 	private @NonNull final Runnable refreshCallback;
 
-	private @NonNull GridTreeViewer viewer;
+	private @NonNull final GridTreeViewer viewer;
+
+	private final LocalMenuHelper menuHelper;
 
 	public BaseCaseDropTargetListener(final @NonNull IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, @NonNull final Runnable refreshCallback,
-			@NonNull GridTreeViewer viewer) {
+			@NonNull final GridTreeViewer viewer) {
 		this.scenarioEditingLocation = scenarioEditingLocation;
 		this.optionAnalysisModel = optionAnalysisModel;
 		this.refreshCallback = refreshCallback;
 		this.viewer = viewer;
+		menuHelper = new LocalMenuHelper(scenarioEditingLocation.getShell());
+		viewer.getControl().addDisposeListener(new DisposeListener() {
+
+			@Override
+			public void widgetDisposed(final DisposeEvent e) {
+				menuHelper.dispose();
+			}
+		});
 	}
 
-	public BaseCaseDropTargetListener(final @NonNull IScenarioEditingLocation scenarioEditingLocation, @NonNull final Runnable refreshCallback, @NonNull GridTreeViewer viewer) {
-		this.scenarioEditingLocation = scenarioEditingLocation;
-		this.refreshCallback = refreshCallback;
-		this.viewer = viewer;
-
+	public BaseCaseDropTargetListener(final @NonNull IScenarioEditingLocation scenarioEditingLocation, @NonNull final Runnable refreshCallback, @NonNull final GridTreeViewer viewer) {
+		this(scenarioEditingLocation, null, refreshCallback, viewer);
 	}
 
 	@Override
@@ -135,16 +146,45 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 					}
 					refreshCallback.run();
 				} else if (o instanceof VesselClass) {
-					final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
-					opt.setVesselClass((VesselClass) o);
-					if (existing != null) {
-						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-								SetCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), existing,
-								AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
-						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 
-					}
-					refreshCallback.run();
+					final BaseCaseRow pExisting = existing;
+					menuHelper.clearActions();
+					menuHelper.addAction(new RunnableAction("Create RT", () -> {
+						final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
+						opt.setVesselClass((VesselClass) o);
+						if (pExisting != null) {
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+									SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), pExisting,
+									AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
+							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
+
+						}
+						refreshCallback.run();
+					}));
+					menuHelper.addAction(new RunnableAction("Create fleet", () -> {
+						final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
+						opt.setVesselClass((VesselClass) o);
+						if (pExisting != null) {
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+									SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), pExisting,
+									AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
+							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
+
+						}
+						refreshCallback.run();
+					}));
+
+					menuHelper.open();
+					// final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
+					// opt.setVesselClass((VesselClass) o);
+					// if (existing != null) {
+					// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+					// SetCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), existing,
+					// AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
+					// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
+					//
+					// }
+					// refreshCallback.run();
 				}
 			}
 		}
