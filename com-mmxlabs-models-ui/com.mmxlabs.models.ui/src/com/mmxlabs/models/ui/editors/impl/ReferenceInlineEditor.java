@@ -55,7 +55,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	/**
 	 */
 	protected IItemPropertyDescriptor propertyDescriptor = null;
-	
+
 	public ReferenceInlineEditor(final EStructuralFeature feature) {
 		super(feature);
 	}
@@ -94,7 +94,10 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				doSetValue(valueList.get(nameList.indexOf(combo.getText())), false);
+				int indexOf = nameList.indexOf(combo.getText());
+				if (indexOf >= 0) {
+					doSetValue(valueList.get(indexOf), false);
+				}
 			}
 
 			@Override
@@ -161,7 +164,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	@Override
 	public void setControlsEnabled(final boolean enabled) {
 		if (combo != null && !combo.isDisposed()) {
-			combo.setEnabled(!isFeatureReadonly() &&  enabled);
+			combo.setEnabled(!isFeatureReadonly() && enabled);
 		}
 
 		super.setControlsEnabled(enabled);
