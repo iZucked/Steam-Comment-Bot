@@ -2,9 +2,11 @@ package com.mmxlabs.models.lng.analytics.ui.views.providers;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.swt.graphics.Image;
 
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.util.emfpath.EMFPath;
@@ -30,5 +32,10 @@ public class CellFormatterLabelProvider extends CellLabelProvider {
 			element = path.get((EObject) element);
 		}
 		cell.setText(renderer.render(element));
+		cell.setImage(getImage(cell, element));
+	}
+
+	protected @Nullable Image getImage(final @NonNull ViewerCell cell, final @Nullable Object element) {
+		return null;
 	}
 }

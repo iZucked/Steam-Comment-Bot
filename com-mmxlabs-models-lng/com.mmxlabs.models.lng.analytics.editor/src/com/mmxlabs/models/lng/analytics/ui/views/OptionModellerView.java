@@ -1,8 +1,12 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -12,6 +16,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
@@ -21,6 +26,7 @@ import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -31,6 +37,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
@@ -58,8 +65,10 @@ import com.mmxlabs.models.lng.analytics.ui.views.providers.RulesViewerContentPro
 import com.mmxlabs.models.lng.analytics.ui.views.providers.VesselAndClassContentProvider;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
+import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -74,9 +83,16 @@ public class OptionModellerView extends ScenarioInstanceView {
 	private GridTreeViewer vesselViewer;
 	private OptionAnalysisModel model;
 
+	private final Map<Object, IStatus> validationErrors = new HashMap<Object, IStatus>();
+
+	private DialogValidationSupport validationSupport;
+
 	@Override
 	public void createPartControl(final Composite parent) {
 		model = createDemoModel1();
+
+		validationSupport = new DialogValidationSupport(new DefaultExtraValidationContext(getRootObject(), false));
+		validationSupport.setValidationTargets(Collections.singleton(model));
 
 		parent.setLayout(new FillLayout());
 
@@ -248,6 +264,8 @@ public class OptionModellerView extends ScenarioInstanceView {
 	private final EContentAdapter refreshAdapter = new EContentAdapter() {
 		public void notifyChanged(final org.eclipse.emf.common.notify.Notification notification) {
 			super.notifyChanged(notification);
+
+			doValidate();
 
 			// Coarse grained refresh method..
 			refreshAll();
@@ -565,7 +583,39 @@ public class OptionModellerView extends ScenarioInstanceView {
 		gvc.getColumn().setWidth(250);
 		gvc.getColumn().setDetail(true);
 		gvc.getColumn().setSummary(true);
-		gvc.setLabelProvider(new CellFormatterLabelProvider(renderer, pathObjects));
+		gvc.setLabelProvider(new CellFormatterLabelProvider(renderer, pathObjects) {
+
+			Image imgError = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/error.gif").createImage();
+			Image imgWarn = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/warning.gif").createImage();
+			Image imgInfo = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/information.gif").createImage();
+
+			@Override
+			protected @Nullable Image getImage(@NonNull ViewerCell cell, @Nullable Object element) {
+
+				if (validationErrors.containsKey(element)) {
+					IStatus status = validationErrors.get(element);
+					if (!status.isOK()) {
+						if (status.matches(IStatus.ERROR)) {
+							return imgError;
+						}
+						if (status.matches(IStatus.WARNING)) {
+							return imgWarn;
+						}
+						if (status.matches(IStatus.INFO)) {
+							return imgWarn;
+						}
+					}
+				}
+				return null;
+			}
+
+			@Override
+			public void dispose() {
+				imgError.dispose();
+				imgWarn.dispose();
+				imgInfo.dispose();
+			}
+		});
 		return gvc;
 	}
 
@@ -597,5 +647,20 @@ public class OptionModellerView extends ScenarioInstanceView {
 			}
 		}
 		c.pack();
+	}
+
+	private void doValidate() {
+		try {
+			pushExtraValidationContext(validationSupport.getValidationContext());
+			final IStatus status = validationSupport.validate();
+
+			validationErrors.clear();
+			validationSupport.processStatus(status, validationErrors);
+
+		} finally {
+
+			popExtraValidationContext();
+
+		}
 	}
 }
