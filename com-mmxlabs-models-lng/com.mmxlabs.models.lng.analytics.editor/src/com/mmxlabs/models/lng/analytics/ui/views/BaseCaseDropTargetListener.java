@@ -102,8 +102,8 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 					} else {
 						final BaseCaseRow row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
 						final CompoundCommand cmd = new CompoundCommand();
-						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.BASE_CASE__BASE_CASE, row));
-						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION, buyOption));
+						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getBaseCase(), AnalyticsPackage.Literals.BASE_CASE__BASE_CASE, row));
+						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION, buyOption));
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, optionAnalysisModel, null);
 
 					}
@@ -117,8 +117,8 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 					} else {
 						final BaseCaseRow row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
 						final CompoundCommand cmd = new CompoundCommand();
-						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.BASE_CASE__BASE_CASE, row));
-						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION, sellOption));
+						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getBaseCase(), AnalyticsPackage.Literals.BASE_CASE__BASE_CASE, row));
+						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION, sellOption));
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, optionAnalysisModel, null);
 					}
 					refreshCallback.run();

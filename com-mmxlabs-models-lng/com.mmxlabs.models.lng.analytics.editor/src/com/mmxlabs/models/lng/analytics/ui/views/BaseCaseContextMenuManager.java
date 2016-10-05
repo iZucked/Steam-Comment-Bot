@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
@@ -24,8 +26,9 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
+import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
-import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
@@ -38,7 +41,7 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 
 	private final @NonNull MenuManager mgr;
 	private @NonNull final Runnable refreshCallback;
-
+	private OptionAnalysisModel optionAnalysisModel;
 	private Menu menu;
 
 	public BaseCaseContextMenuManager(@NonNull final GridTreeViewer viewer, @NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final MenuManager mgr,
@@ -49,6 +52,7 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 		this.refreshCallback = refreshCallback;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void menuDetected(final MenuDetectEvent e) {
 
@@ -63,14 +67,47 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 
 		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 		final GridItem[] items = grid.getSelection();
-		if (items.length == 1) {
-			mgr.add(new RunnableAction("Delete Row", () -> {
+		if (items.length > 0) {
+
+			mgr.add(new RunnableAction("Delete Row(s)", () -> {
 				final Collection<EObject> c = new LinkedList<>();
 				selection.iterator().forEachRemaining(ee -> c.add((EObject) ee));
 
 				scenarioEditingLocation.getDefaultCommandHandler().handleCommand(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), c), null, null);
 
 			}));
+
+			mgr.add(new RunnableAction("Copy to What if?", () -> {
+				final Collection<EObject> c = new LinkedList<>();
+				selection.iterator().forEachRemaining(ee -> {
+					if (ee instanceof BaseCaseRow) {
+						BaseCaseRow baseCaseRow = (BaseCaseRow) ee;
+						PartialCaseRow partialCaseRow = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
+						if (baseCaseRow.getBuyOption() != null) {
+							partialCaseRow.getBuyOptions().add(baseCaseRow.getBuyOption());
+						}
+						if (baseCaseRow.getSellOption() != null) {
+							partialCaseRow.getSellOptions().add(baseCaseRow.getSellOption());
+						}
+						if (baseCaseRow.getShipping() != null) {
+							partialCaseRow.setShipping(EcoreUtil.copy(baseCaseRow.getShipping()));
+						}
+						if (!(partialCaseRow.getBuyOptions().isEmpty() && partialCaseRow.getSellOptions().isEmpty() && partialCaseRow.getShipping() == null)) {
+							c.add(partialCaseRow);
+						}
+					}
+				});
+
+				if (!c.isEmpty()) {
+					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE, c),
+							optionAnalysisModel.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE);
+					refreshCallback.run();
+				}
+
+			}));
+		}
+		if (items.length == 1) {
 
 			if (column.getText().equals("Buy")) {
 				final Object ed = items[0].getData();
@@ -140,5 +177,13 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 			}
 		}
 		menu.setVisible(true);
+	}
+
+	public OptionAnalysisModel getOptionAnalysisModel() {
+		return optionAnalysisModel;
+	}
+
+	public void setOptionAnalysisModel(OptionAnalysisModel optionAnalysisModel) {
+		this.optionAnalysisModel = optionAnalysisModel;
 	}
 }
