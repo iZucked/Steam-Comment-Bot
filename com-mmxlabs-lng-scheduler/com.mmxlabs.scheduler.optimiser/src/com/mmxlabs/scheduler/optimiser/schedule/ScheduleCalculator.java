@@ -61,6 +61,10 @@ public class ScheduleCalculator {
 	@Inject
 	@Named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)
 	private boolean enableCache;
+	
+	@Inject
+	@Named("hint-lngtransformer-disable-caches")
+	private boolean hintEnableCache;
 
 	private static class Key {
 		private final @NonNull IResource resource;
@@ -152,7 +156,7 @@ public class ScheduleCalculator {
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
 			final VolumeAllocatedSequence volumeAllocatedSequence;
-			if (solution == null && enableCache) {
+			if (solution == null && enableCache && hintEnableCache) {
 				// Is this a good key? Is ISequence the same instance each time (equals will be different...)?
 				final Key key = new Key(resource, sequence, arrivalTimes[i]);
 				volumeAllocatedSequence = cache.get(key);
