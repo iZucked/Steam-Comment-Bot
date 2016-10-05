@@ -171,6 +171,12 @@
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.analytics.PartialCaseRow">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.FleetShippingOptionComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.FleetShippingOptionComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.FleetShippingOption">
+  </componentHelper>
 		
 	</extension>
  <extension
