@@ -58,6 +58,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -271,7 +272,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 	}
 
 	private GridTreeViewer createBuyOptionsViewer(final Composite buyComposite) {
-		final GridTreeViewer buyOptionsViewer = new GridTreeViewer(buyComposite, SWT.BORDER | SWT.MULTI);
+		final GridTreeViewer buyOptionsViewer = new GridTreeViewer(buyComposite, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
 		GridViewerHelper.configureLookAndFeel(buyOptionsViewer);
 		buyOptionsViewer.getGrid().setHeaderVisible(true);
 
@@ -294,6 +295,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, row), model,
 								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
 						refreshAll();
+						editObject(row);
 					}
 
 					@Override
@@ -314,6 +316,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, row), model,
 								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
 						refreshAll();
+						editObject(row);
 					}
 
 					@Override
@@ -334,6 +337,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, row), model,
 								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
 						refreshAll();
+						editObject(row);
 					}
 
 					@Override
@@ -369,6 +373,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), model,
 								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
 						refreshAll();
+						editObject(row);
 					}
 
 					@Override
@@ -389,6 +394,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), model,
 								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
 						refreshAll();
+						editObject(row);
 					}
 
 					@Override
@@ -409,6 +415,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), model,
 								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
 						refreshAll();
+						editObject(row);
 					}
 
 					@Override
@@ -477,7 +484,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 	}
 
 	private Control createBaseCaseViewer(final Composite parent) {
-		baseCaseViewer = new GridTreeViewer(parent, SWT.BORDER);
+		baseCaseViewer = new GridTreeViewer(parent, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
 		GridViewerHelper.configureLookAndFeel(baseCaseViewer);
 		baseCaseViewer.getGrid().setHeaderVisible(true);
 
@@ -581,6 +588,6 @@ public class OptionModellerView extends ScenarioInstanceView {
 		vesselViewer.expandAll();
 		baseCaseProftLabel.setText(String.format("Base P&&L: $%,d", model.getBaseCase().getProfitAndLoss()));
 
-		mainComposite.pack();
+		RunnerHelper.asyncExec(() -> mainComposite.getParent().pack());
 	}
 }
