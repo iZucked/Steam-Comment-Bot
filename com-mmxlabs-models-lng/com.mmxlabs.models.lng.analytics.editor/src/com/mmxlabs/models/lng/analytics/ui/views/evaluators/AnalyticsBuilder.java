@@ -4,6 +4,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
@@ -124,4 +125,60 @@ public class AnalyticsBuilder {
 	public static int calculateTravelDaysForDischarge(final LoadSlot loadSlot, final DischargeSlot dischargeSlot, final ShippingOption shippingOption) {
 		return 20;
 	}
+
+	public static boolean isNonShipped(@NonNull final BaseCaseRow row) {
+
+		final BuyOption buy = row.getBuyOption();
+		if (buy != null && isNonShipped(buy)) {
+			return true;
+		}
+		final SellOption sell = row.getSellOption();
+		if (sell != null && isNonShipped(sell)) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isNonShipped(@NonNull final BuyOption buy) {
+		if (buy instanceof BuyReference) {
+			final BuyReference buyReference = (BuyReference) buy;
+			final LoadSlot load = buyReference.getSlot();
+			if (load != null) {
+				return load.isDESPurchase();
+			}
+			return false;
+
+		} else if (buy instanceof BuyOpportunity) {
+			final BuyOpportunity buyOpportunity = (BuyOpportunity) buy;
+			return buyOpportunity.isDesPurchase();
+		} else if (buy instanceof BuyMarket) {
+			final BuyMarket buyMarket = (BuyMarket) buy;
+			final SpotMarket spotMarket = buyMarket.getMarket();
+			return spotMarket instanceof DESPurchaseMarket;
+		}
+
+		throw new IllegalArgumentException("Unsupported BuyOption type");
+	}
+
+	public static boolean isNonShipped(@NonNull final SellOption sell) {
+		if (sell instanceof SellReference) {
+			final SellReference sellReference = (SellReference) sell;
+			final DischargeSlot discharge = sellReference.getSlot();
+			if (discharge != null) {
+				return discharge.isFOBSale();
+			}
+			return false;
+
+		} else if (sell instanceof SellOpportunity) {
+			final SellOpportunity sellOpportunity = (SellOpportunity) sell;
+			return sellOpportunity.isFobSale();
+		} else if (sell instanceof SellMarket) {
+			final SellMarket buyMarket = (SellMarket) sell;
+			final SpotMarket spotMarket = buyMarket.getMarket();
+			return spotMarket instanceof FOBSalesMarket;
+		}
+
+		throw new IllegalArgumentException("Unsupported SellOption type");
+	}
+
 }

@@ -6,6 +6,7 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.dnd.DND;
@@ -17,13 +18,17 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyOption;
+import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellOption;
+import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 
 public class BaseCaseDropTargetListener implements DropTargetListener {
 
@@ -107,33 +112,37 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 					}
 					refreshCallback.run();
 				} else if (o instanceof Vessel) {
-					final NominatedShippingOption opt = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
-					opt.setNominatedVessel((Vessel) o);
+
 					if (existing != null) {
+						ShippingOption opt = null;
+						if (AnalyticsBuilder.isNonShipped(existing)) {
+							final NominatedShippingOption so = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
+							so.setNominatedVessel((Vessel) o);
+
+							opt = so;
+						} else {
+							final FleetShippingOption so = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
+							so.setVessel((Vessel) o);
+
+							opt = so;
+						}
+						assert opt != null;
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 								SetCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), existing,
 								AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
-					} else {
-						final BaseCaseRow row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
-						final CompoundCommand cmd = new CompoundCommand();
-						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getBaseCase(), AnalyticsPackage.Literals.BASE_CASE__BASE_CASE, row));
-						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt));
-						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, optionAnalysisModel.getBaseCase(), null);
+
+						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 					}
 					refreshCallback.run();
 				} else if (o instanceof VesselClass) {
 					final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
-					// opt.setNominatedVessel((VesselClass) o);
+					opt.setVesselClass((VesselClass) o);
 					if (existing != null) {
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 								SetCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), existing,
 								AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
-					} else {
-						final BaseCaseRow row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
-						final CompoundCommand cmd = new CompoundCommand();
-						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getBaseCase(), AnalyticsPackage.Literals.BASE_CASE__BASE_CASE, row));
-						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt));
-						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, optionAnalysisModel.getBaseCase(), null);
+						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
+
 					}
 					refreshCallback.run();
 				}
