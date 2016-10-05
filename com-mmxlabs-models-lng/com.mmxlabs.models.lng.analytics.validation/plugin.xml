@@ -216,6 +216,63 @@
             </constraint>
          </constraints>
       </constraintProvider>
+      <constraintProvider
+            cache="true">
+         <package
+               namespaceUri="http://www.mmxlabs.com/models/lng/analytics/1/">
+         </package>
+         <constraints
+               categories="com.mmxlabs.models.lng.analytics.validation.constraints.base">
+            <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.BuyReferenceConstraint"
+                  id="com.mmxlabs.models.lng.analytics.validation.BuyReferenceConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="BuyReferenceConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="BuyReference">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.SellReferenceConstraint"
+                  id="com.mmxlabs.models.lng.analytics.validation.SellReferenceConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="SellReferenceConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="SellReference">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.RoundTripShippingOptionContraint"
+                  id="com.mmxlabs.models.lng.analytics.validation.RoundTripShippingOptionContraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="RoundTripShippingOptionContraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="RoundTripShippingOption">
+               </target>
+            </constraint>
+         </constraints>
+      </constraintProvider>
    </extension>
 
 </plugin>

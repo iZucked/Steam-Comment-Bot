@@ -88,7 +88,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 			buyComposite.setLayout(new GridLayout(1, true));
 
 			buyOptionsViewer = createBuyOptionsViewer(buyComposite);
-			buyOptionsViewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+			buyOptionsViewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).hint(SWT.DEFAULT, 400).create());
 
 			// GridDataFactory.generate(addBuy, 1, 1);
 			hookDragSource(buyOptionsViewer);
@@ -207,7 +207,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 			sellOptionsViewer = createSellOptionsViewer(sellComposite);
 
-			sellOptionsViewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+			sellOptionsViewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).hint(SWT.DEFAULT, 400).create());
 
 			hookDragSource(sellOptionsViewer);
 
@@ -228,6 +228,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 		refreshAll();
 		listenToScenarioSelection();
+		packAll(mainComposite);
 	}
 
 	private void hookDragSource(final GridTreeViewer viewer) {
@@ -587,7 +588,16 @@ public class OptionModellerView extends ScenarioInstanceView {
 		vesselViewer.refresh();
 		vesselViewer.expandAll();
 		baseCaseProftLabel.setText(String.format("Base P&&L: $%,d", model.getBaseCase().getProfitAndLoss()));
+		packAll(mainComposite);
+	}
 
-		RunnerHelper.asyncExec(() -> mainComposite.getParent().pack());
+	public void packAll(final Control c) {
+		if ((c instanceof Composite)) {
+			final Composite composite = (Composite) c;
+			for (final Control child : composite.getChildren()) {
+				packAll(child);
+			}
+		}
+		c.pack();
 	}
 }
