@@ -389,6 +389,29 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BreakEvenOptimisationStageItemProvider breakEvenOptimisationStageItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBreakEvenOptimisationStageAdapter() {
+		if (breakEvenOptimisationStageItemProvider == null) {
+			breakEvenOptimisationStageItemProvider = new BreakEvenOptimisationStageItemProvider(this);
+		}
+
+		return breakEvenOptimisationStageItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -432,29 +455,6 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 		}
 
 		return optimisationPlanItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected BreakEvenOptmisationStageItemProvider breakEvenOptmisationStageItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createBreakEvenOptmisationStageAdapter() {
-		if (breakEvenOptmisationStageItemProvider == null) {
-			breakEvenOptmisationStageItemProvider = new BreakEvenOptmisationStageItemProvider(this);
-		}
-
-		return breakEvenOptmisationStageItemProvider;
 	}
 
 	/**
@@ -629,7 +629,7 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 		if (hillClimbOptimisationStageItemProvider != null) hillClimbOptimisationStageItemProvider.dispose();
 		if (actionPlanOptimisationStageItemProvider != null) actionPlanOptimisationStageItemProvider.dispose();
 		if (resetInitialSequencesStageItemProvider != null) resetInitialSequencesStageItemProvider.dispose();
-		if (breakEvenOptmisationStageItemProvider != null) breakEvenOptmisationStageItemProvider.dispose();
+		if (breakEvenOptimisationStageItemProvider != null) breakEvenOptimisationStageItemProvider.dispose();
 		if (solutionBuilderSettingsItemProvider != null) solutionBuilderSettingsItemProvider.dispose();
 	}
 

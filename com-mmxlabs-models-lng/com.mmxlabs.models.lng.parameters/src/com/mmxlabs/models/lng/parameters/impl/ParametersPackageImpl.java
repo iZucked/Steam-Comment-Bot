@@ -18,7 +18,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 import com.mmxlabs.models.datetime.DateTimePackage;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
-import com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage;
+import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
@@ -157,6 +157,13 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass breakEvenOptimisationStageEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass constraintAndFitnessSettingsEClass = null;
 
 	/**
@@ -165,13 +172,6 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	private EClass optimisationPlanEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass breakEvenOptmisationStageEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -743,6 +743,24 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getBreakEvenOptimisationStage() {
+		return breakEvenOptimisationStageEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getBreakEvenOptimisationStage_TargetProfitAndLoss() {
+		return (EAttribute)breakEvenOptimisationStageEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getConstraintAndFitnessSettings() {
 		return constraintAndFitnessSettingsEClass;
 	}
@@ -817,24 +835,6 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 */
 	public EReference getOptimisationPlan_SolutionBuilderSettings() {
 		return (EReference)optimisationPlanEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getBreakEvenOptmisationStage() {
-		return breakEvenOptmisationStageEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getBreakEvenOptmisationStage_TargetProfitAndLoss() {
-		return (EAttribute)breakEvenOptmisationStageEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -971,8 +971,8 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 		resetInitialSequencesStageEClass = createEClass(RESET_INITIAL_SEQUENCES_STAGE);
 
-		breakEvenOptmisationStageEClass = createEClass(BREAK_EVEN_OPTMISATION_STAGE);
-		createEAttribute(breakEvenOptmisationStageEClass, BREAK_EVEN_OPTMISATION_STAGE__TARGET_PROFIT_AND_LOSS);
+		breakEvenOptimisationStageEClass = createEClass(BREAK_EVEN_OPTIMISATION_STAGE);
+		createEAttribute(breakEvenOptimisationStageEClass, BREAK_EVEN_OPTIMISATION_STAGE__TARGET_PROFIT_AND_LOSS);
 
 		solutionBuilderSettingsEClass = createEClass(SOLUTION_BUILDER_SETTINGS);
 		createEReference(solutionBuilderSettingsEClass, SOLUTION_BUILDER_SETTINGS__CONSTRAINT_AND_FITNESS_SETTINGS);
@@ -1029,7 +1029,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		hillClimbOptimisationStageEClass.getESuperTypes().add(this.getConstraintsAndFitnessSettingsStage());
 		actionPlanOptimisationStageEClass.getESuperTypes().add(this.getConstraintsAndFitnessSettingsStage());
 		resetInitialSequencesStageEClass.getESuperTypes().add(this.getOptimisationStage());
-		breakEvenOptmisationStageEClass.getESuperTypes().add(this.getOptimisationStage());
+		breakEvenOptimisationStageEClass.getESuperTypes().add(this.getOptimisationStage());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(userSettingsEClass, UserSettings.class, "UserSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1110,8 +1110,8 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 		initEClass(resetInitialSequencesStageEClass, ResetInitialSequencesStage.class, "ResetInitialSequencesStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(breakEvenOptmisationStageEClass, BreakEvenOptmisationStage.class, "BreakEvenOptmisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getBreakEvenOptmisationStage_TargetProfitAndLoss(), ecorePackage.getELong(), "targetProfitAndLoss", null, 0, 1, BreakEvenOptmisationStage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(breakEvenOptimisationStageEClass, BreakEvenOptimisationStage.class, "BreakEvenOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getBreakEvenOptimisationStage_TargetProfitAndLoss(), ecorePackage.getELong(), "targetProfitAndLoss", null, 0, 1, BreakEvenOptimisationStage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(solutionBuilderSettingsEClass, SolutionBuilderSettings.class, "SolutionBuilderSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSolutionBuilderSettings_ConstraintAndFitnessSettings(), this.getConstraintAndFitnessSettings(), null, "constraintAndFitnessSettings", null, 0, 1, SolutionBuilderSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

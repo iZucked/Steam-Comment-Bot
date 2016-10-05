@@ -1,12 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.parameters.impl;
 
-import com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage;
+import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -18,19 +14,19 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Break Even Optmisation Stage</b></em>'.
+ * An implementation of the model object '<em><b>Break Even Optimisation Stage</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.parameters.impl.BreakEvenOptmisationStageImpl#getName <em>Name</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.parameters.impl.BreakEvenOptmisationStageImpl#getTargetProfitAndLoss <em>Target Profit And Loss</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.BreakEvenOptimisationStageImpl#getName <em>Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.BreakEvenOptimisationStageImpl#getTargetProfitAndLoss <em>Target Profit And Loss</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class BreakEvenOptmisationStageImpl extends EObjectImpl implements BreakEvenOptmisationStage {
+public class BreakEvenOptimisationStageImpl extends EObjectImpl implements BreakEvenOptimisationStage {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -76,7 +72,7 @@ public class BreakEvenOptmisationStageImpl extends EObjectImpl implements BreakE
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected BreakEvenOptmisationStageImpl() {
+	protected BreakEvenOptimisationStageImpl() {
 		super();
 	}
 
@@ -87,7 +83,7 @@ public class BreakEvenOptmisationStageImpl extends EObjectImpl implements BreakE
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ParametersPackage.Literals.BREAK_EVEN_OPTMISATION_STAGE;
+		return ParametersPackage.Literals.BREAK_EVEN_OPTIMISATION_STAGE;
 	}
 
 	/**
@@ -108,7 +104,7 @@ public class BreakEvenOptmisationStageImpl extends EObjectImpl implements BreakE
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.BREAK_EVEN_OPTMISATION_STAGE__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.BREAK_EVEN_OPTIMISATION_STAGE__NAME, oldName, name));
 	}
 
 	/**
@@ -129,7 +125,7 @@ public class BreakEvenOptmisationStageImpl extends EObjectImpl implements BreakE
 		long oldTargetProfitAndLoss = targetProfitAndLoss;
 		targetProfitAndLoss = newTargetProfitAndLoss;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.BREAK_EVEN_OPTMISATION_STAGE__TARGET_PROFIT_AND_LOSS, oldTargetProfitAndLoss, targetProfitAndLoss));
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.BREAK_EVEN_OPTIMISATION_STAGE__TARGET_PROFIT_AND_LOSS, oldTargetProfitAndLoss, targetProfitAndLoss));
 	}
 
 	/**
@@ -140,9 +136,9 @@ public class BreakEvenOptmisationStageImpl extends EObjectImpl implements BreakE
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ParametersPackage.BREAK_EVEN_OPTMISATION_STAGE__NAME:
+			case ParametersPackage.BREAK_EVEN_OPTIMISATION_STAGE__NAME:
 				return getName();
-			case ParametersPackage.BREAK_EVEN_OPTMISATION_STAGE__TARGET_PROFIT_AND_LOSS:
+			case ParametersPackage.BREAK_EVEN_OPTIMISATION_STAGE__TARGET_PROFIT_AND_LOSS:
 				return getTargetProfitAndLoss();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -156,10 +152,10 @@ public class BreakEvenOptmisationStageImpl extends EObjectImpl implements BreakE
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ParametersPackage.BREAK_EVEN_OPTMISATION_STAGE__NAME:
+			case ParametersPackage.BREAK_EVEN_OPTIMISATION_STAGE__NAME:
 				setName((String)newValue);
 				return;
-			case ParametersPackage.BREAK_EVEN_OPTMISATION_STAGE__TARGET_PROFIT_AND_LOSS:
+			case ParametersPackage.BREAK_EVEN_OPTIMISATION_STAGE__TARGET_PROFIT_AND_LOSS:
 				setTargetProfitAndLoss((Long)newValue);
 				return;
 		}
@@ -174,10 +170,10 @@ public class BreakEvenOptmisationStageImpl extends EObjectImpl implements BreakE
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ParametersPackage.BREAK_EVEN_OPTMISATION_STAGE__NAME:
+			case ParametersPackage.BREAK_EVEN_OPTIMISATION_STAGE__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case ParametersPackage.BREAK_EVEN_OPTMISATION_STAGE__TARGET_PROFIT_AND_LOSS:
+			case ParametersPackage.BREAK_EVEN_OPTIMISATION_STAGE__TARGET_PROFIT_AND_LOSS:
 				setTargetProfitAndLoss(TARGET_PROFIT_AND_LOSS_EDEFAULT);
 				return;
 		}
@@ -192,9 +188,9 @@ public class BreakEvenOptmisationStageImpl extends EObjectImpl implements BreakE
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ParametersPackage.BREAK_EVEN_OPTMISATION_STAGE__NAME:
+			case ParametersPackage.BREAK_EVEN_OPTIMISATION_STAGE__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case ParametersPackage.BREAK_EVEN_OPTMISATION_STAGE__TARGET_PROFIT_AND_LOSS:
+			case ParametersPackage.BREAK_EVEN_OPTIMISATION_STAGE__TARGET_PROFIT_AND_LOSS:
 				return targetProfitAndLoss != TARGET_PROFIT_AND_LOSS_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
@@ -218,4 +214,4 @@ public class BreakEvenOptmisationStageImpl extends EObjectImpl implements BreakE
 		return result.toString();
 	}
 
-} //BreakEvenOptmisationStageImpl
+} //BreakEvenOptimisationStageImpl

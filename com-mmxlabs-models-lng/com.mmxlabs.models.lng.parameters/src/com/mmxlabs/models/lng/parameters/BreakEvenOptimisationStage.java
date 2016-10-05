@@ -1,29 +1,25 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.parameters;
 
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Break Even Optmisation Stage</b></em>'.
+ * A representation of the model object '<em><b>Break Even Optimisation Stage</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage#getTargetProfitAndLoss <em>Target Profit And Loss</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage#getTargetProfitAndLoss <em>Target Profit And Loss</em>}</li>
  * </ul>
  *
- * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getBreakEvenOptmisationStage()
+ * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getBreakEvenOptimisationStage()
  * @model
  * @generated
  */
-public interface BreakEvenOptmisationStage extends OptimisationStage {
+public interface BreakEvenOptimisationStage extends OptimisationStage {
 	/**
 	 * Returns the value of the '<em><b>Target Profit And Loss</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -34,14 +30,14 @@ public interface BreakEvenOptmisationStage extends OptimisationStage {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Target Profit And Loss</em>' attribute.
 	 * @see #setTargetProfitAndLoss(long)
-	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getBreakEvenOptmisationStage_TargetProfitAndLoss()
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getBreakEvenOptimisationStage_TargetProfitAndLoss()
 	 * @model
 	 * @generated
 	 */
 	long getTargetProfitAndLoss();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage#getTargetProfitAndLoss <em>Target Profit And Loss</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage#getTargetProfitAndLoss <em>Target Profit And Loss</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Target Profit And Loss</em>' attribute.
@@ -50,4 +46,4 @@ public interface BreakEvenOptmisationStage extends OptimisationStage {
 	 */
 	void setTargetProfitAndLoss(long value);
 
-} // BreakEvenOptmisationStage
+} // BreakEvenOptimisationStage

@@ -205,7 +205,7 @@ public class ParallelOptimisationStageImpl<T extends ParallisableOptimisationSta
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case ParametersPackage.PARALLEL_OPTIMISATION_STAGE__TEMPLATE:
-				return basicSetTemplate((T)null, msgs);
+				return basicSetTemplate((T) null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}

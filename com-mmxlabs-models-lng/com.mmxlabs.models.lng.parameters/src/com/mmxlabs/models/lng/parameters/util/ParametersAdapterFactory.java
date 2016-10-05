@@ -148,8 +148,8 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 				return createResetInitialSequencesStageAdapter();
 			}
 			@Override
-			public Adapter caseBreakEvenOptmisationStage(BreakEvenOptmisationStage object) {
-				return createBreakEvenOptmisationStageAdapter();
+			public Adapter caseBreakEvenOptimisationStage(BreakEvenOptimisationStage object) {
+				return createBreakEvenOptimisationStageAdapter();
 			}
 			@Override
 			public Adapter caseSolutionBuilderSettings(SolutionBuilderSettings object) {
@@ -394,6 +394,20 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage <em>Break Even Optimisation Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage
+	 * @generated
+	 */
+	public Adapter createBreakEvenOptimisationStageAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings <em>Constraint And Fitness Settings</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -418,20 +432,6 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createOptimisationPlanAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage <em>Break Even Optmisation Stage</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage
-	 * @generated
-	 */
-	public Adapter createBreakEvenOptmisationStageAdapter() {
 		return null;
 	}
 

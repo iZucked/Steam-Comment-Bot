@@ -917,14 +917,14 @@ public interface ParametersPackage extends EPackage {
 	int RESET_INITIAL_SEQUENCES_STAGE_FEATURE_COUNT = OPTIMISATION_STAGE_FEATURE_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.BreakEvenOptmisationStageImpl <em>Break Even Optmisation Stage</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.BreakEvenOptimisationStageImpl <em>Break Even Optimisation Stage</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.parameters.impl.BreakEvenOptmisationStageImpl
-	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getBreakEvenOptmisationStage()
+	 * @see com.mmxlabs.models.lng.parameters.impl.BreakEvenOptimisationStageImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getBreakEvenOptimisationStage()
 	 * @generated
 	 */
-	int BREAK_EVEN_OPTMISATION_STAGE = 17;
+	int BREAK_EVEN_OPTIMISATION_STAGE = 17;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -933,7 +933,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BREAK_EVEN_OPTMISATION_STAGE__NAME = OPTIMISATION_STAGE__NAME;
+	int BREAK_EVEN_OPTIMISATION_STAGE__NAME = OPTIMISATION_STAGE__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Target Profit And Loss</b></em>' attribute.
@@ -942,16 +942,16 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BREAK_EVEN_OPTMISATION_STAGE__TARGET_PROFIT_AND_LOSS = OPTIMISATION_STAGE_FEATURE_COUNT + 0;
+	int BREAK_EVEN_OPTIMISATION_STAGE__TARGET_PROFIT_AND_LOSS = OPTIMISATION_STAGE_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of structural features of the '<em>Break Even Optmisation Stage</em>' class.
+	 * The number of structural features of the '<em>Break Even Optimisation Stage</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BREAK_EVEN_OPTMISATION_STAGE_FEATURE_COUNT = OPTIMISATION_STAGE_FEATURE_COUNT + 1;
+	int BREAK_EVEN_OPTIMISATION_STAGE_FEATURE_COUNT = OPTIMISATION_STAGE_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.SolutionBuilderSettingsImpl <em>Solution Builder Settings</em>}' class.
@@ -1539,6 +1539,27 @@ public interface ParametersPackage extends EPackage {
 	EClass getResetInitialSequencesStage();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage <em>Break Even Optimisation Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Break Even Optimisation Stage</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage
+	 * @generated
+	 */
+	EClass getBreakEvenOptimisationStage();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage#getTargetProfitAndLoss <em>Target Profit And Loss</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Target Profit And Loss</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage#getTargetProfitAndLoss()
+	 * @see #getBreakEvenOptimisationStage()
+	 * @generated
+	 */
+	EAttribute getBreakEvenOptimisationStage_TargetProfitAndLoss();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings <em>Constraint And Fitness Settings</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1634,27 +1655,6 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getOptimisationPlan_SolutionBuilderSettings();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage <em>Break Even Optmisation Stage</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Break Even Optmisation Stage</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage
-	 * @generated
-	 */
-	EClass getBreakEvenOptmisationStage();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage#getTargetProfitAndLoss <em>Target Profit And Loss</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Target Profit And Loss</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage#getTargetProfitAndLoss()
-	 * @see #getBreakEvenOptmisationStage()
-	 * @generated
-	 */
-	EAttribute getBreakEvenOptmisationStage_TargetProfitAndLoss();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.SolutionBuilderSettings <em>Solution Builder Settings</em>}'.
@@ -2148,6 +2148,24 @@ public interface ParametersPackage extends EPackage {
 		EClass RESET_INITIAL_SEQUENCES_STAGE = eINSTANCE.getResetInitialSequencesStage();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.BreakEvenOptimisationStageImpl <em>Break Even Optimisation Stage</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.BreakEvenOptimisationStageImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getBreakEvenOptimisationStage()
+		 * @generated
+		 */
+		EClass BREAK_EVEN_OPTIMISATION_STAGE = eINSTANCE.getBreakEvenOptimisationStage();
+
+		/**
+		 * The meta object literal for the '<em><b>Target Profit And Loss</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BREAK_EVEN_OPTIMISATION_STAGE__TARGET_PROFIT_AND_LOSS = eINSTANCE.getBreakEvenOptimisationStage_TargetProfitAndLoss();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ConstraintAndFitnessSettingsImpl <em>Constraint And Fitness Settings</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2222,24 +2240,6 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EReference OPTIMISATION_PLAN__SOLUTION_BUILDER_SETTINGS = eINSTANCE.getOptimisationPlan_SolutionBuilderSettings();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.BreakEvenOptmisationStageImpl <em>Break Even Optmisation Stage</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.parameters.impl.BreakEvenOptmisationStageImpl
-		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getBreakEvenOptmisationStage()
-		 * @generated
-		 */
-		EClass BREAK_EVEN_OPTMISATION_STAGE = eINSTANCE.getBreakEvenOptmisationStage();
-
-		/**
-		 * The meta object literal for the '<em><b>Target Profit And Loss</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute BREAK_EVEN_OPTMISATION_STAGE__TARGET_PROFIT_AND_LOSS = eINSTANCE.getBreakEvenOptmisationStage_TargetProfitAndLoss();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.SolutionBuilderSettingsImpl <em>Solution Builder Settings</em>}' class.

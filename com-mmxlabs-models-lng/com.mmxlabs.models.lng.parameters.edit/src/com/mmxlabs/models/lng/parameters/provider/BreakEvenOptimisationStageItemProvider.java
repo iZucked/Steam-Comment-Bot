@@ -1,13 +1,9 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.parameters.provider;
 
 
-import com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage;
+import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 
 import java.util.Collection;
@@ -31,12 +27,12 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class BreakEvenOptmisationStageItemProvider 
+public class BreakEvenOptimisationStageItemProvider 
 	extends ItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
@@ -50,7 +46,7 @@ public class BreakEvenOptmisationStageItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public BreakEvenOptmisationStageItemProvider(AdapterFactory adapterFactory) {
+	public BreakEvenOptimisationStageItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -104,9 +100,9 @@ public class BreakEvenOptmisationStageItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_BreakEvenOptmisationStage_targetProfitAndLoss_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_BreakEvenOptmisationStage_targetProfitAndLoss_feature", "_UI_BreakEvenOptmisationStage_type"),
-				 ParametersPackage.Literals.BREAK_EVEN_OPTMISATION_STAGE__TARGET_PROFIT_AND_LOSS,
+				 getString("_UI_BreakEvenOptimisationStage_targetProfitAndLoss_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BreakEvenOptimisationStage_targetProfitAndLoss_feature", "_UI_BreakEvenOptimisationStage_type"),
+				 ParametersPackage.Literals.BREAK_EVEN_OPTIMISATION_STAGE__TARGET_PROFIT_AND_LOSS,
 				 true,
 				 false,
 				 false,
@@ -116,14 +112,14 @@ public class BreakEvenOptmisationStageItemProvider
 	}
 
 	/**
-	 * This returns BreakEvenOptmisationStage.gif.
+	 * This returns BreakEvenOptimisationStage.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/BreakEvenOptmisationStage"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/BreakEvenOptimisationStage"));
 	}
 
 	/**
@@ -134,10 +130,10 @@ public class BreakEvenOptmisationStageItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((BreakEvenOptmisationStage)object).getName();
+		String label = ((BreakEvenOptimisationStage)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_BreakEvenOptmisationStage_type") :
-			getString("_UI_BreakEvenOptmisationStage_type") + " " + label;
+			getString("_UI_BreakEvenOptimisationStage_type") :
+			getString("_UI_BreakEvenOptimisationStage_type") + " " + label;
 	}
 	
 
@@ -152,9 +148,9 @@ public class BreakEvenOptmisationStageItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(BreakEvenOptmisationStage.class)) {
-			case ParametersPackage.BREAK_EVEN_OPTMISATION_STAGE__NAME:
-			case ParametersPackage.BREAK_EVEN_OPTMISATION_STAGE__TARGET_PROFIT_AND_LOSS:
+		switch (notification.getFeatureID(BreakEvenOptimisationStage.class)) {
+			case ParametersPackage.BREAK_EVEN_OPTIMISATION_STAGE__NAME:
+			case ParametersPackage.BREAK_EVEN_OPTIMISATION_STAGE__TARGET_PROFIT_AND_LOSS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

@@ -17,7 +17,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
-import com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
@@ -95,7 +94,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 			case ParametersPackage.HILL_CLIMB_OPTIMISATION_STAGE: return createHillClimbOptimisationStage();
 			case ParametersPackage.ACTION_PLAN_OPTIMISATION_STAGE: return createActionPlanOptimisationStage();
 			case ParametersPackage.RESET_INITIAL_SEQUENCES_STAGE: return createResetInitialSequencesStage();
-			case ParametersPackage.BREAK_EVEN_OPTMISATION_STAGE: return createBreakEvenOptmisationStage();
+			case ParametersPackage.BREAK_EVEN_OPTIMISATION_STAGE: return createBreakEvenOptimisationStage();
 			case ParametersPackage.SOLUTION_BUILDER_SETTINGS: return createSolutionBuilderSettings();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -280,6 +279,16 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public BreakEvenOptimisationStage createBreakEvenOptimisationStage() {
+		BreakEvenOptimisationStageImpl breakEvenOptimisationStage = new BreakEvenOptimisationStageImpl();
+		return breakEvenOptimisationStage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public ConstraintAndFitnessSettings createConstraintAndFitnessSettings() {
 		ConstraintAndFitnessSettingsImpl constraintAndFitnessSettings = new ConstraintAndFitnessSettingsImpl();
@@ -295,17 +304,6 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	public OptimisationPlan createOptimisationPlan() {
 		OptimisationPlanImpl optimisationPlan = new OptimisationPlanImpl();
 		return optimisationPlan;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public BreakEvenOptmisationStage createBreakEvenOptmisationStage() {
-		BreakEvenOptmisationStageImpl breakEvenOptmisationStage = new BreakEvenOptmisationStageImpl();
-		return breakEvenOptmisationStage;
 	}
 
 	/**
