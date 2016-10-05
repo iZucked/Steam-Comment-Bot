@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.cargo.util.IAssignableElementDateProvider;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
@@ -270,31 +271,14 @@ public class WrappedAssignableElement {
 		int travelTimeInHours = Integer.MAX_VALUE;
 		if (portModel != null) {
 			for (final Route route : portModel.getRoutes()) {
-				IAdapterManager adapterManager = Platform.isRunning() ? Platform.getAdapterManager() : null;
-				if (adapterManager != null) {
-					final RouteDistanceLineCache cache = (RouteDistanceLineCache) adapterManager.loadAdapter(route, RouteDistanceLineCache.class.getName());
-					if (cache != null) {
-						final int distance = cache.getDistance(from, to);
-
-						if (distance == Integer.MAX_VALUE) {
-							continue;
-						}
-
-						final double travelTime = distance / maxSpeed;
-						int totalTime = (int) (Math.floor(travelTime));
-
-						for (final VesselClassRouteParameters p : vesselClass.getRouteParameters()) {
-							if (p.getRoute() == route) {
-								totalTime += p.getExtraTransitTime();
-							}
-						}
-
-						travelTimeInHours = Math.min(totalTime, travelTimeInHours);
-					}
+				int totalTime = TravelTimeUtils.getTimeForRoute(vesselClass, maxSpeed, route, from, to);
+				if (totalTime != Integer.MAX_VALUE) {
+					travelTimeInHours = Math.min(totalTime, travelTimeInHours);
 				}
 			}
 		}
 		return travelTimeInHours;
+
 	}
 
 	public int getMinEventDurationInHours() {
