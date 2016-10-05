@@ -44,6 +44,9 @@ public class LNGTransformerHelper {
 	public static final @NonNull String HINT_CLEAN_STATE_EVALUATOR = "hint-lngtransformer-clean-state-evaluator";
 
 	public static final @NonNull String HINT_SHIPPING_ONLY = "hint-lngtransformer-shipping-only";
+	
+	public static final @NonNull String HINT_DISABLE_CACHES = "hint-lngtransformer-disable-caches";
+	public static final @NonNull String HINT_PORTFOLIO_BREAKEVEN = "hint-portfolio-breakeven";
 
 	@NonNull
 	public static Set<@NonNull String> getHints(@NonNull final UserSettings userSettings, @NonNull final String @Nullable... initialHints) {

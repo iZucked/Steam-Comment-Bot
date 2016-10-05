@@ -166,6 +166,8 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenLoadPriceCalculat
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenSalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownLumpSumCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownPriceIndexedCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.PortfolioBreakEvenLoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.PortfolioBreakEvenSalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
 import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
@@ -323,6 +325,10 @@ public class LNGScenarioTransformer {
 	@Inject
 	@Named(LNGTransformerHelper.HINT_SHIPPING_ONLY)
 	private boolean shippingOnly;
+
+	@Inject
+	@Named(LNGTransformerHelper.HINT_PORTFOLIO_BREAKEVEN)
+	private boolean portfolioBreakevenFlag;
 
 	@Inject
 	@NonNull
@@ -1261,7 +1267,11 @@ public class LNGScenarioTransformer {
 
 			final String priceExpression = dischargeSlot.getPriceExpression();
 			if (IBreakEvenEvaluator.MARKER.equals(priceExpression)) {
-				dischargePriceCalculator = new BreakEvenSalesPriceCalculator();
+				if (portfolioBreakevenFlag) {
+					dischargePriceCalculator = new PortfolioBreakEvenSalesPriceCalculator();
+				} else {
+					dischargePriceCalculator = new BreakEvenSalesPriceCalculator();
+				}
 			} else {
 				final IExpression<ISeries> expression = commodityIndices.parse(priceExpression);
 				final ISeries parsed = expression.evaluate();
@@ -1423,7 +1433,11 @@ public class LNGScenarioTransformer {
 
 			final String priceExpression = loadSlot.getPriceExpression();
 			if (IBreakEvenEvaluator.MARKER.equals(priceExpression)) {
-				loadPriceCalculator = new BreakEvenLoadPriceCalculator();
+				if (portfolioBreakevenFlag) {
+					loadPriceCalculator = new PortfolioBreakEvenLoadPriceCalculator();
+				} else {
+					loadPriceCalculator = new BreakEvenLoadPriceCalculator();
+				}
 			} else {
 				final IExpression<ISeries> expression = commodityIndices.parse(priceExpression);
 				final ISeries parsed = expression.evaluate();

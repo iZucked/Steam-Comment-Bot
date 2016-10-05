@@ -88,11 +88,14 @@ public class LNGTransformerModule extends AbstractModule {
 
 	private final boolean shippingOnly;
 
+	private final boolean hintEnableCache;
+
 	/**
 	 */
 	public LNGTransformerModule(@NonNull final LNGScenarioModel scenario, @NonNull final Collection<@NonNull String> hints) {
 		this.scenario = scenario;
 		this.shippingOnly = hints.contains(LNGTransformerHelper.HINT_SHIPPING_ONLY);
+		this.hintEnableCache = !hints.contains(LNGTransformerHelper.HINT_DISABLE_CACHES);
 		assert scenario != null;
 	}
 
@@ -101,6 +104,8 @@ public class LNGTransformerModule extends AbstractModule {
 		install(new ScheduleBuilderModule());
 
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_SHIPPING_ONLY)).toInstance(shippingOnly);
+		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_DISABLE_CACHES)).toInstance(hintEnableCache);
+		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_PORTFOLIO_BREAKEVEN)).toInstance(!hintEnableCache);
 
 		bind(LNGScenarioModel.class).toInstance(scenario);
 		// bind(OptimiserSettings.class).toInstance(optimiserSettings);
@@ -153,7 +158,7 @@ public class LNGTransformerModule extends AbstractModule {
 	@PerChainUnitScope
 	private IVolumeAllocator provideVolumeAllocator(@NonNull final Injector injector, final @NotCaching IVolumeAllocator reference,
 			@Named(SchedulerConstants.Key_VolumeAllocationCache) final boolean enableCache) {
-		if (enableCache) {
+		if (enableCache && hintEnableCache) {
 			final CachingVolumeAllocator cacher = new CachingVolumeAllocator(reference);
 			injector.injectMembers(cacher);
 			if (false) {
@@ -171,7 +176,7 @@ public class LNGTransformerModule extends AbstractModule {
 	private IEntityValueCalculator provideEntityValueCalculator(final @NonNull Injector injector, final @NotCaching IEntityValueCalculator reference,
 			@Named(SchedulerConstants.Key_ProfitandLossCache) final boolean enableCache) {
 
-		if (enableCache) {
+		if (enableCache && hintEnableCache) {
 			final CachingEntityValueCalculator cacher = new CachingEntityValueCalculator(reference);
 			injector.injectMembers(cacher);
 			if (false) {

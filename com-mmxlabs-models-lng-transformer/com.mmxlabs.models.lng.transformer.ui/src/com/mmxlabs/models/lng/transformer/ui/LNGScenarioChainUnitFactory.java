@@ -15,6 +15,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
+import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
@@ -26,6 +27,7 @@ import com.mmxlabs.models.lng.transformer.chain.impl.LNGCleanStateOptimiserTrans
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGHillClimbOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGLSOOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.ResetInitialSequencesUnit;
+import com.mmxlabs.models.lng.transformer.stochasticactionsets.BreakEvenTransformerUnit;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.chain.LNGActionSetTransformerUnit;
 
 public class LNGScenarioChainUnitFactory {
@@ -74,6 +76,11 @@ public class LNGScenarioChainUnitFactory {
 				}
 
 			}
+			return null;
+		} else if (template instanceof BreakEvenOptimisationStage) {
+			final BreakEvenOptimisationStage stage = (BreakEvenOptimisationStage) template;
+			long targetProfitAndLoss = stage.getTargetProfitAndLoss();
+			BreakEvenTransformerUnit.chain(builder, userSettings, stage, 100);
 			return null;
 		} else if (template instanceof HillClimbOptimisationStage) {
 			if (SecurityUtils.getSubject().isPermitted("features:optimisation-hillclimb")) {

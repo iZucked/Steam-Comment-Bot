@@ -15,7 +15,7 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
-import com.mmxlabs.models.lng.parameters.BreakEvenOptmisationStage;
+import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
@@ -38,7 +38,7 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 public class BreakEvenTransformerUnit implements ILNGStateTransformerUnit {
 
 	@NonNull
-	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final UserSettings userSettings, @NonNull BreakEvenOptmisationStage stageSettings, final int progressTicks) {
+	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final UserSettings userSettings, @NonNull BreakEvenOptimisationStage stageSettings, final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
 			private BreakEvenTransformerUnit t;
@@ -86,9 +86,10 @@ public class BreakEvenTransformerUnit implements ILNGStateTransformerUnit {
 	private long targetProfitAndLoss;
 
 	@SuppressWarnings("null")
-	public BreakEvenTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final UserSettings userSettings, @NonNull BreakEvenOptmisationStage stageSettings,
+	public BreakEvenTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final UserSettings userSettings, @NonNull BreakEvenOptimisationStage stageSettings,
 			@NonNull ISequences initialSequences, @NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
+		hints.add(LNGEvaluationModule.HINT_PORTFOLIO_BREAKEVEN);
 
 		// TODO: Hook in as input e.g. from data model
 		targetProfitAndLoss = OptimiserUnitConvertor.convertToInternalFixedCost(stageSettings.getTargetProfitAndLoss());
