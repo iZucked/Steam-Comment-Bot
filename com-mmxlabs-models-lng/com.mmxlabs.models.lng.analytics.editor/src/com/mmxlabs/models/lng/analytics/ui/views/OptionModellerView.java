@@ -15,6 +15,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.Transfer;
@@ -26,6 +27,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -130,7 +132,8 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
-					BaseCaseEvaluator.evaluate(OptionModellerView.this, model, model.getBaseCase());
+
+					BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> BaseCaseEvaluator.evaluate(OptionModellerView.this, model, model.getBaseCase()));
 				}
 
 				@Override
@@ -185,7 +188,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				WhatIfEvaluator.evaluate(OptionModellerView.this, model);
+				BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> WhatIfEvaluator.evaluate(OptionModellerView.this, model));
 			}
 
 			@Override
