@@ -137,31 +137,15 @@ public class BaseCaseEvaluator {
 
 	public static void evaluate(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel model, final BaseCase baseCase) {
 
-		final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
-		if (rootObject instanceof LNGScenarioModel) {
-			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-
-			final EcoreUtil.Copier copier = new Copier();
-			final LNGScenarioModel clone = (LNGScenarioModel) copier.copy(lngScenarioModel);
-			final OptionAnalysisModel clonedModel = (OptionAnalysisModel) copier.copy(model);
-			final BaseCase clonedBaseCase = model.getBaseCase() == baseCase ? clonedModel.getBaseCase() : (BaseCase) copier.copy(baseCase);
-			copier.copyReferences();
-
-			final IMapperClass mapper = new Mapper(copier);
-
-			clearData(clone, clonedModel, clonedBaseCase);
-
-			buildScenario(clone, clonedModel, clonedBaseCase, mapper);
-
+		generateScenario(scenarioEditingLocation, model, baseCase, (clone, mapper) -> {
 			evaluateScenario(clone, scenarioEditingLocation.getScenarioInstance());
 
-			updateResults(scenarioEditingLocation, clone, clonedBaseCase, baseCase);
-
-		}
+			updateResults(scenarioEditingLocation, clone, baseCase);
+		});
 
 	}
 
-	private static void updateResults(final IScenarioEditingLocation scenarioEditingLocation, final LNGScenarioModel clone, final BaseCase clonedBaseCase, final BaseCase baseCase) {
+	private static void updateResults(final IScenarioEditingLocation scenarioEditingLocation, final LNGScenarioModel clone, final BaseCase baseCase) {
 
 		final long pnl = ScheduleModelKPIUtils.getScheduleProfitAndLoss(clone.getScheduleModel().getSchedule());
 		scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
