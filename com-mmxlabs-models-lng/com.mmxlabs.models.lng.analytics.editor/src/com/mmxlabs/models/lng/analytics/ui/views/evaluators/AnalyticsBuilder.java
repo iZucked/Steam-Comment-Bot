@@ -119,6 +119,14 @@ public class AnalyticsBuilder {
 	}
 
 	public static int calculateTravelDaysForLoad(final LoadSlot loadSlot, final DischargeSlot dischargeSlot, final ShippingOption shippingOption) {
+
+		// TODO: Get speed from shipping option.
+		// double speed = 17.0;
+		// TODO: Get vessel class from shipping option.
+		// VesselClass vesselClass;
+		// TODO: Single route or closed route?
+		// TravelTimeUtils.getTimeForRoute(, referenceSpeed, route, fromPort, toPort);
+
 		return 20;
 	}
 
