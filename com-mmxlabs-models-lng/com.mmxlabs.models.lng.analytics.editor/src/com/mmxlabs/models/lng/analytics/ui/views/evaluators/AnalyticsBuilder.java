@@ -9,6 +9,7 @@ import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
+import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
@@ -132,6 +133,78 @@ public class AnalyticsBuilder {
 
 	public static int calculateTravelDaysForDischarge(final LoadSlot loadSlot, final DischargeSlot dischargeSlot, final ShippingOption shippingOption) {
 		return 20;
+	}
+
+	public enum ShippingType {
+		Shipped, NonShipped, Mixed
+	}
+
+	public static ShippingType isNonShipped(@NonNull final PartialCaseRow row) {
+		if (row.getBuyOptions().isEmpty() || row.getSellOptions().isEmpty()) {
+			return ShippingType.Mixed;
+		}
+		
+		ShippingType buyType = null;
+		for (final BuyOption buy : row.getBuyOptions()) {
+			buyType = updateTypeForLoad(buy, buyType);
+		}
+		if (buyType == ShippingType.Mixed) {
+			return ShippingType.Mixed;
+		}
+		ShippingType sellType = null;
+		for (final SellOption sell : row.getSellOptions()) {
+			sellType = updateTypeForDischarge(sell, sellType);
+		}
+		if (sellType == ShippingType.Mixed) {
+			return ShippingType.Mixed;
+		}
+		if (buyType == ShippingType.NonShipped && sellType == ShippingType.NonShipped) {
+			return ShippingType.Mixed;
+		}
+		if (buyType == ShippingType.Shipped && sellType == ShippingType.Shipped) {
+			return ShippingType.Shipped;
+		}
+		return ShippingType.NonShipped;
+	}
+
+	private static ShippingType updateTypeForLoad(BuyOption buy, ShippingType type) {
+		if (type == ShippingType.Mixed) {
+			return ShippingType.Mixed;
+		}
+
+		boolean nonShipped = isNonShipped(buy);
+
+		if (type == null) {
+			return nonShipped ? ShippingType.NonShipped : ShippingType.Shipped;
+		} else {
+			if (type == ShippingType.Shipped && !nonShipped) {
+				return ShippingType.Shipped;
+			}
+			if (type == ShippingType.NonShipped && nonShipped) {
+				return ShippingType.NonShipped;
+			}
+		}
+		return ShippingType.Mixed;
+	}
+
+	private static ShippingType updateTypeForDischarge(SellOption sell, ShippingType type) {
+		if (type == ShippingType.Mixed) {
+			return ShippingType.Mixed;
+		}
+
+		boolean nonShipped = isNonShipped(sell);
+
+		if (type == null) {
+			return nonShipped ? ShippingType.NonShipped : ShippingType.Shipped;
+		} else {
+			if (type == ShippingType.Shipped && !nonShipped) {
+				return ShippingType.Shipped;
+			}
+			if (type == ShippingType.NonShipped && nonShipped) {
+				return ShippingType.NonShipped;
+			}
+		}
+		return ShippingType.Mixed;
 	}
 
 	public static boolean isNonShipped(@NonNull final BaseCaseRow row) {

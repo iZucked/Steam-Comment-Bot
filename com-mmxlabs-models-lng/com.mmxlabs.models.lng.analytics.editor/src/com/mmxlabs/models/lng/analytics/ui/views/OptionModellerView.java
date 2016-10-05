@@ -174,7 +174,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 			hookOpenEditor(partialCaseViewer);
 
 			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
-			partialCaseViewer.addDropSupport(DND.DROP_MOVE, types, new PartialCaseDropTargetListener(OptionModellerView.this, model, () -> refreshAll()));
+			partialCaseViewer.addDropSupport(DND.DROP_MOVE, types, new PartialCaseDropTargetListener(OptionModellerView.this, model, () -> refreshAll(), partialCaseViewer));
 		}
 
 		createRulesViewer(composite);
