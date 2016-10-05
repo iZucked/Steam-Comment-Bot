@@ -58,7 +58,6 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
-import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -107,7 +106,6 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 					@Override
 					public void widgetSelected(final SelectionEvent e) {
-						// TODO Auto-generated method stub
 						final BaseCaseRow row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
 						row.setShipping(AnalyticsFactory.eINSTANCE.createRoundTripShippingOption());
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model.getBaseCase(), AnalyticsPackage.Literals.BASE_CASE__BASE_CASE, row), model.getBaseCase(),
@@ -117,7 +115,6 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 					@Override
 					public void widgetDefaultSelected(final SelectionEvent e) {
-						// TODO Auto-generated method stub
 
 					}
 				});
@@ -170,7 +167,6 @@ public class OptionModellerView extends ScenarioInstanceView {
 					}
 				});
 			});
-			//
 
 			hookOpenEditor(partialCaseViewer);
 
@@ -206,7 +202,6 @@ public class OptionModellerView extends ScenarioInstanceView {
 			sellComposite.setLayout(new GridLayout(1, true));
 
 			sellOptionsViewer = createSellOptionsViewer(sellComposite);
-
 			sellOptionsViewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).hint(SWT.DEFAULT, 400).create());
 
 			hookDragSource(sellOptionsViewer);
@@ -471,6 +466,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 			@Override
 			public void expansionStateChanging(final ExpansionEvent e) {
+
 			}
 
 			@Override
@@ -499,7 +495,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 		final MenuManager mgr = new MenuManager();
 
-		baseCaseViewer.getGrid().addMenuDetectListener(new BaseCaseContextMenuManager(baseCaseViewer, OptionModellerView.this, mgr));
+		baseCaseViewer.getGrid().addMenuDetectListener(new BaseCaseContextMenuManager(baseCaseViewer, OptionModellerView.this, mgr, () -> refreshAll()));
 
 		return baseCaseViewer.getGrid();
 	}
@@ -512,7 +508,6 @@ public class OptionModellerView extends ScenarioInstanceView {
 		partialCaseViewer.getGrid().setCellSelectionEnabled(true);
 
 		createColumn(partialCaseViewer, "Buy", new BuyOptionDescriptionFormatter(), AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS).getColumn().setWordWrap(true);
-		;
 		createColumn(partialCaseViewer, "Sell", new SellOptionDescriptionFormatter(), AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS).getColumn().setWordWrap(true);
 		createColumn(partialCaseViewer, "Shipping", new ShippingOptionDescriptionFormatter(), AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING).getColumn().setWordWrap(true);
 

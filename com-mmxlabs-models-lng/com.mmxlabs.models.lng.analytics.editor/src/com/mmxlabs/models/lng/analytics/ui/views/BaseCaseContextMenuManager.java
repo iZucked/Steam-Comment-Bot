@@ -9,6 +9,7 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -21,10 +22,13 @@ import org.eclipse.swt.widgets.Menu;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 
 public class BaseCaseContextMenuManager implements MenuDetectListener {
@@ -33,13 +37,16 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 	private final @NonNull IScenarioEditingLocation scenarioEditingLocation;
 
 	private final @NonNull MenuManager mgr;
+	private @NonNull final Runnable refreshCallback;
 
 	private Menu menu;
 
-	public BaseCaseContextMenuManager(@NonNull final GridTreeViewer viewer, @NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final MenuManager mgr) {
+	public BaseCaseContextMenuManager(@NonNull final GridTreeViewer viewer, @NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final MenuManager mgr,
+			@NonNull final Runnable refreshCallback) {
 		this.mgr = mgr;
 		this.scenarioEditingLocation = scenarioEditingLocation;
 		this.viewer = viewer;
+		this.refreshCallback = refreshCallback;
 	}
 
 	@Override
@@ -57,45 +64,80 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 		final GridItem[] items = grid.getSelection();
 		if (items.length == 1) {
-			mgr.add(new RunnableAction("Delete", () -> {
+			mgr.add(new RunnableAction("Delete Row", () -> {
 				final Collection<EObject> c = new LinkedList<>();
 				selection.iterator().forEachRemaining(ee -> c.add((EObject) ee));
 
 				scenarioEditingLocation.getDefaultCommandHandler().handleCommand(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), c), null, null);
 
 			}));
-			// BAD!
+
+			if (column.getText().equals("Buy")) {
+				final Object ed = items[0].getData();
+				final BaseCaseRow row = (BaseCaseRow) ed;
+				if (row.getShipping() != null) {
+					mgr.add(new RunnableAction("Remove buy", () -> {
+						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION, SetCommand.UNSET_VALUE), row,
+								AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION);
+
+					}));
+				}
+			}
+			if (column.getText().equals("Sell")) {
+				final Object ed = items[0].getData();
+				final BaseCaseRow row = (BaseCaseRow) ed;
+				if (row.getShipping() != null) {
+					mgr.add(new RunnableAction("Remove sell", () -> {
+						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION, SetCommand.UNSET_VALUE), row,
+								AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
+
+					}));
+				}
+			}
+
 			if (column.getText().equals("Shipping")) {
 				final Object ed = items[0].getData();
 				final BaseCaseRow row = (BaseCaseRow) ed;
-				final ShippingOption opt = row.getShipping();
-				// if (opt == null)
-				{
-					mgr.add(new RunnableAction("Create RT", () -> {
-						final Collection<EObject> c = new LinkedList<>();
-						final RoundTripShippingOption o = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
+				if (row.getShipping() != null) {
+					mgr.add(new RunnableAction("Remove shipping", () -> {
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, o), row,
-								AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-
-					}));
-					mgr.add(new RunnableAction("Create Nominated", () -> {
-						final Collection<EObject> c = new LinkedList<>();
-						final NominatedShippingOption o = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
-						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, o), row,
+								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, SetCommand.UNSET_VALUE), row,
 								AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 
 					}));
 				}
-				//
-				// -- filter! no nominated if shipped, etc
-				// ADD Change to:
-				// * RT ->
-				// RT ON Small , Medium, Large
-				// * Nominated on small/medium/large
-			}
+				if (AnalyticsBuilder.isNonShipped(row)) {
+					mgr.add(new RunnableAction("Create Nominated", () -> {
+						final NominatedShippingOption o = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
+						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, o), row,
+								AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
+						refreshCallback.run();
 
+					}));
+				} else {
+					mgr.add(new RunnableAction("Create RT", () -> {
+						final RoundTripShippingOption o = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
+						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, o), row,
+								AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
+
+						refreshCallback.run();
+					}));
+					mgr.add(new RunnableAction("Create fleet", () -> {
+						final FleetShippingOption o = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
+						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, o), row,
+								AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
+						refreshCallback.run();
+					}));
+				}
+			}
 		}
 		menu.setVisible(true);
 	}
