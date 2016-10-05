@@ -2,7 +2,9 @@ package com.mmxlabs.models.lng.analytics.ui.views;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -15,6 +17,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.util.LocalSelectionTransfer;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
@@ -290,6 +293,8 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 	private GridTreeViewer createBuyOptionsViewer(final Composite buyComposite) {
 		final GridTreeViewer buyOptionsViewer = new GridTreeViewer(buyComposite, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
+		ColumnViewerToolTipSupport.enableFor(buyOptionsViewer);
+
 		GridViewerHelper.configureLookAndFeel(buyOptionsViewer);
 		buyOptionsViewer.getGrid().setHeaderVisible(true);
 
@@ -370,6 +375,8 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 	private GridTreeViewer createSellOptionsViewer(final Composite sellComposite) {
 		final GridTreeViewer sellOptionsViewer = new GridTreeViewer(sellComposite, SWT.BORDER | SWT.MULTI);
+		ColumnViewerToolTipSupport.enableFor(sellOptionsViewer);
+
 		GridViewerHelper.configureLookAndFeel(sellOptionsViewer);
 		sellOptionsViewer.getGrid().setHeaderVisible(true);
 
@@ -503,6 +510,8 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 	private Control createBaseCaseViewer(final Composite parent) {
 		baseCaseViewer = new GridTreeViewer(parent, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
+		ColumnViewerToolTipSupport.enableFor(baseCaseViewer);
+
 		GridViewerHelper.configureLookAndFeel(baseCaseViewer);
 		baseCaseViewer.getGrid().setHeaderVisible(true);
 
@@ -523,6 +532,8 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 	private Control createPartialCaseViewer(final Composite parent) {
 		partialCaseViewer = new GridTreeViewer(parent, SWT.BORDER | SWT.WRAP);
+		ColumnViewerToolTipSupport.enableFor(partialCaseViewer);
+
 		GridViewerHelper.configureLookAndFeel(partialCaseViewer);
 		partialCaseViewer.getGrid().setHeaderVisible(true);
 		partialCaseViewer.getGrid().setAutoHeight(true);
@@ -542,7 +553,9 @@ public class OptionModellerView extends ScenarioInstanceView {
 	}
 
 	private Control createResultsViewer(final Composite parent) {
+
 		resultsViewer = new GridTreeViewer(parent, SWT.BORDER);
+		ColumnViewerToolTipSupport.enableFor(resultsViewer);
 		GridViewerHelper.configureLookAndFeel(resultsViewer);
 		resultsViewer.getGrid().setHeaderVisible(true);
 		resultsViewer.setAutoExpandLevel(TreeViewer.ALL_LEVELS);
@@ -590,10 +603,10 @@ public class OptionModellerView extends ScenarioInstanceView {
 			Image imgInfo = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/information.gif").createImage();
 
 			@Override
-			protected @Nullable Image getImage(@NonNull ViewerCell cell, @Nullable Object element) {
+			protected @Nullable Image getImage(@NonNull final ViewerCell cell, @Nullable final Object element) {
 
 				if (validationErrors.containsKey(element)) {
-					IStatus status = validationErrors.get(element);
+					final IStatus status = validationErrors.get(element);
 					if (!status.isOK()) {
 						if (status.matches(IStatus.ERROR)) {
 							return imgError;
@@ -607,6 +620,56 @@ public class OptionModellerView extends ScenarioInstanceView {
 					}
 				}
 				return null;
+			}
+
+			@Override
+			public String getToolTipText(Object element) {
+
+				Set<Object> targetElements = new HashSet<>();
+				targetElements.add(element);
+				// FIXME: Hacky!
+				if (element instanceof BaseCaseRow) {
+					BaseCaseRow baseCaseRow = (BaseCaseRow) element;
+					if ("Buy".equals(name)) {
+						targetElements.add(baseCaseRow.getBuyOption());
+					}
+					if ("Sell".equals(name)) {
+						targetElements.add(baseCaseRow.getSellOption());
+					}
+					if ("Shipping".equals(name)) {
+						targetElements.add(baseCaseRow.getShipping());
+					}
+				}
+				if (element instanceof PartialCaseRow) {
+					PartialCaseRow row = (PartialCaseRow) element;
+					if ("Buy".equals(name)) {
+						targetElements.addAll(row.getBuyOptions());
+					}
+					if ("Sell".equals(name)) {
+						targetElements.addAll(row.getSellOptions());
+					}
+					if ("Shipping".equals(name)) {
+						targetElements.add(row.getShipping());
+					}
+				}
+				targetElements.remove(null);
+
+				StringBuilder sb = new StringBuilder();
+				for (Object target : targetElements) {
+					if (validationErrors.containsKey(target)) {
+						final IStatus status = validationErrors.get(target);
+						if (!status.isOK()) {
+							if (sb.length() > 0) {
+								sb.append("\n");
+							}
+							sb.append(status.getMessage());
+						}
+					}
+				}
+				if (sb.length() > 0) {
+					return sb.toString();
+				}
+				return super.getToolTipText(element);
 			}
 
 			@Override
