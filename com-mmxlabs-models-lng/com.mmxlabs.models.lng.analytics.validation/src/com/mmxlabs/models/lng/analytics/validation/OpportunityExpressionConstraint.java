@@ -32,33 +32,35 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 
 		if (target instanceof BuyOpportunity) {
 			final BuyOpportunity slot = (BuyOpportunity) target;
-			ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, slot, AnalyticsPackage.eINSTANCE.getBuyOpportunity_PriceExpression(), slot.getPriceExpression(),
-					PriceIndexType.COMMODITY);
-			if (!result.isOk()) {
-				final String message = String.format("%s", result.getErrorDetails());
-				DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+			if (!"?".equals(slot.getPriceExpression())) {
+				final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, slot, AnalyticsPackage.eINSTANCE.getBuyOpportunity_PriceExpression(), slot.getPriceExpression(),
+						PriceIndexType.COMMODITY);
+				if (!result.isOk()) {
+					final String message = String.format("%s", result.getErrorDetails());
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
-				dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__PRICE_EXPRESSION);
-				failures.add(dsd);
+					dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__PRICE_EXPRESSION);
+					failures.add(dsd);
+				}
 			}
-			Port port = slot.getPort();
+			final Port port = slot.getPort();
 			if (port == null) {
 				final String message = String.format("Buy has no port");
-				DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__PORT);
 				failures.add(dsd);
 			} else {
 				if (slot.isDesPurchase()) {
 					if (!port.getCapabilities().contains(PortCapability.DISCHARGE)) {
 						final String message = String.format("Buy port should be a discharge port");
-						DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 						dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__PORT);
 						failures.add(dsd);
 					}
 				} else {
 					if (!port.getCapabilities().contains(PortCapability.LOAD)) {
 						final String message = String.format("Buy port should be a load port");
-						DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 						dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__PORT);
 						failures.add(dsd);
 					}
@@ -66,41 +68,44 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 			}
 			if (slot.getEntity() == null && slot.getContract() == null) {
 				final String message = String.format("Buy has no entity");
-				DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__ENTITY);
 				failures.add(dsd);
 			}
 		}
 		if (target instanceof SellOpportunity) {
 			final SellOpportunity slot = (SellOpportunity) target;
-			ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, slot, AnalyticsPackage.eINSTANCE.getSellOpportunity_PriceExpression(), slot.getPriceExpression(),
-					PriceIndexType.COMMODITY);
-			if (!result.isOk()) {
-				final String message = String.format("%s", result.getErrorDetails());
-				DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+			if (!"?".equals(slot.getPriceExpression())) {
 
-				dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__PRICE_EXPRESSION);
-				failures.add(dsd);
+				final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, slot, AnalyticsPackage.eINSTANCE.getSellOpportunity_PriceExpression(), slot.getPriceExpression(),
+						PriceIndexType.COMMODITY);
+				if (!result.isOk()) {
+					final String message = String.format("%s", result.getErrorDetails());
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+
+					dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__PRICE_EXPRESSION);
+					failures.add(dsd);
+				}
 			}
 
-			Port port = slot.getPort();
+			final Port port = slot.getPort();
 			if (port == null) {
 				final String message = String.format("Sell has no port");
-				DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__PORT);
 				failures.add(dsd);
 			} else {
 				if (slot.isFobSale()) {
 					if (!port.getCapabilities().contains(PortCapability.LOAD)) {
 						final String message = String.format("Sell port should be a load port");
-						DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 						dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__PORT);
 						failures.add(dsd);
 					}
 				} else {
 					if (!port.getCapabilities().contains(PortCapability.DISCHARGE)) {
 						final String message = String.format("Sell port should be a discharge port");
-						DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 						dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__PORT);
 						failures.add(dsd);
 					}
@@ -108,7 +113,7 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 			}
 			if (slot.getEntity() == null && slot.getContract() == null) {
 				final String message = String.format("Sell has no entity");
-				DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__ENTITY);
 				failures.add(dsd);
 			}
