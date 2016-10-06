@@ -19,10 +19,9 @@ import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.widgets.Menu;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.SellOpportunity;
-import com.mmxlabs.models.lng.analytics.SellOption;
-import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.SellOpportunity;
+import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
@@ -33,18 +32,15 @@ public class ShippingOptionsContextMenuManager implements MenuDetectListener {
 	private final @NonNull IScenarioEditingLocation scenarioEditingLocation;
 
 	private final @NonNull MenuManager mgr;
-	private @NonNull final Runnable refreshCallback;
 
 	private OptionAnalysisModel optionAnalysisModel;
 
 	private Menu menu;
 
-	public ShippingOptionsContextMenuManager(@NonNull final GridTreeViewer viewer, @NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final MenuManager mgr,
-			@NonNull final Runnable refreshCallback) {
+	public ShippingOptionsContextMenuManager(@NonNull final GridTreeViewer viewer, @NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final MenuManager mgr) {
 		this.mgr = mgr;
 		this.scenarioEditingLocation = scenarioEditingLocation;
 		this.viewer = viewer;
-		this.refreshCallback = refreshCallback;
 	}
 
 	@Override
@@ -80,7 +76,6 @@ public class ShippingOptionsContextMenuManager implements MenuDetectListener {
 							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, copy),
 							optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 					DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(copy));
-					refreshCallback.run();
 				}));
 			}
 		}

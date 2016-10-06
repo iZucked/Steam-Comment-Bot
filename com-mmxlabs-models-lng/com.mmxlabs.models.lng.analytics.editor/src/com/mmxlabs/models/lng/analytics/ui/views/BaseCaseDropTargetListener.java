@@ -40,19 +40,15 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 
 	private final @NonNull IScenarioEditingLocation scenarioEditingLocation;
 
-	private final OptionAnalysisModel optionAnalysisModel;
-
-	private @NonNull final Runnable refreshCallback;
+	private OptionAnalysisModel optionAnalysisModel;
 
 	private @NonNull final GridTreeViewer viewer;
 
 	private final LocalMenuHelper menuHelper;
 
-	public BaseCaseDropTargetListener(final @NonNull IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, @NonNull final Runnable refreshCallback,
-			@NonNull final GridTreeViewer viewer) {
+	public BaseCaseDropTargetListener(final @NonNull IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, @NonNull final GridTreeViewer viewer) {
 		this.scenarioEditingLocation = scenarioEditingLocation;
 		this.optionAnalysisModel = optionAnalysisModel;
-		this.refreshCallback = refreshCallback;
 		this.viewer = viewer;
 		menuHelper = new LocalMenuHelper(scenarioEditingLocation.getShell());
 		viewer.getControl().addDisposeListener(new DisposeListener() {
@@ -64,8 +60,8 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 		});
 	}
 
-	public BaseCaseDropTargetListener(final @NonNull IScenarioEditingLocation scenarioEditingLocation, @NonNull final Runnable refreshCallback, @NonNull final GridTreeViewer viewer) {
-		this(scenarioEditingLocation, null, refreshCallback, viewer);
+	public BaseCaseDropTargetListener(final @NonNull IScenarioEditingLocation scenarioEditingLocation, @NonNull final GridTreeViewer viewer) {
+		this(scenarioEditingLocation, null, viewer);
 	}
 
 	@Override
@@ -109,7 +105,6 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, optionAnalysisModel, null);
 
 					}
-					refreshCallback.run();
 				} else if (o instanceof SellOption) {
 					final SellOption sellOption = (SellOption) o;
 					if (existing != null) {
@@ -123,7 +118,6 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION, sellOption));
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, optionAnalysisModel, null);
 					}
-					refreshCallback.run();
 				} else if (o instanceof Vessel) {
 					final Vessel vessel = (Vessel) o;
 
@@ -137,8 +131,6 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 									AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 
 							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-							refreshCallback.run();
-
 						} else if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.Shipped) {
 							final BaseCaseRow pExisting = existing;
 							menuHelper.clearActions();
@@ -149,7 +141,6 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 										SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), pExisting,
 										AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 								DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-								refreshCallback.run();
 							}));
 							menuHelper.addAction(new RunnableAction("Create fleet", () -> {
 								final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
@@ -159,7 +150,6 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 										SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), pExisting,
 										AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 								DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-								refreshCallback.run();
 							}));
 
 							menuHelper.open();
@@ -176,7 +166,6 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 								SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), pExisting,
 								AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-						refreshCallback.run();
 					}
 				} else if (o instanceof ShippingOption) {
 					if (existing != null) {
@@ -195,7 +184,6 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 									SetCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), existing,
 									AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-							refreshCallback.run();
 						}
 					}
 				}
@@ -239,5 +227,13 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 	@Override
 	public void dragEnter(final DropTargetEvent event) {
 
+	}
+
+	public OptionAnalysisModel getOptionAnalysisModel() {
+		return optionAnalysisModel;
+	}
+
+	public void setOptionAnalysisModel(OptionAnalysisModel optionAnalysisModel) {
+		this.optionAnalysisModel = optionAnalysisModel;
 	}
 }

@@ -32,19 +32,15 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 
 	private final @NonNull IScenarioEditingLocation scenarioEditingLocation;
 
-	private final OptionAnalysisModel optionAnalysisModel;
-
-	private @NonNull final Runnable refreshCallback;
+	private OptionAnalysisModel optionAnalysisModel;
 
 	private @NonNull final GridTreeViewer viewer;
 
 	private final LocalMenuHelper menuHelper;
 
-	public ShippingOptionsDropTargetListener(final @NonNull IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, @NonNull final Runnable refreshCallback,
-			@NonNull final GridTreeViewer viewer) {
+	public ShippingOptionsDropTargetListener(final @NonNull IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, @NonNull final GridTreeViewer viewer) {
 		this.scenarioEditingLocation = scenarioEditingLocation;
 		this.optionAnalysisModel = optionAnalysisModel;
-		this.refreshCallback = refreshCallback;
 		this.viewer = viewer;
 		menuHelper = new LocalMenuHelper(scenarioEditingLocation.getShell());
 		viewer.getControl().addDisposeListener(new DisposeListener() {
@@ -56,8 +52,8 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 		});
 	}
 
-	public ShippingOptionsDropTargetListener(final @NonNull IScenarioEditingLocation scenarioEditingLocation, @NonNull final Runnable refreshCallback, @NonNull final GridTreeViewer viewer) {
-		this(scenarioEditingLocation, null, refreshCallback, viewer);
+	public ShippingOptionsDropTargetListener(final @NonNull IScenarioEditingLocation scenarioEditingLocation, @NonNull final GridTreeViewer viewer) {
+		this(scenarioEditingLocation, null, viewer);
 	}
 
 	@Override
@@ -89,7 +85,6 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 								optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-						refreshCallback.run();
 					}));
 					menuHelper.addAction(new RunnableAction("Create RT", () -> {
 						final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
@@ -98,7 +93,6 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 								AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
 								optionAnalysisModel, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-						refreshCallback.run();
 					}));
 					menuHelper.addAction(new RunnableAction("Create fleet", () -> {
 						final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
@@ -108,7 +102,6 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 								AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
 								optionAnalysisModel, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-						refreshCallback.run();
 					}));
 
 					menuHelper.open();
@@ -120,14 +113,12 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
 							optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 					DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-					refreshCallback.run();
 				} else if (o instanceof ShippingOption) {
 					ShippingOption opt = (ShippingOption) EcoreUtil.copy((ShippingOption) o);
 
 					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
 							optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
-					refreshCallback.run();
 				}
 			}
 		}
@@ -165,5 +156,13 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 	@Override
 	public void dragEnter(final DropTargetEvent event) {
 
+	}
+
+	public OptionAnalysisModel getOptionAnalysisModel() {
+		return optionAnalysisModel;
+	}
+
+	public void setOptionAnalysisModel(OptionAnalysisModel optionAnalysisModel) {
+		this.optionAnalysisModel = optionAnalysisModel;
 	}
 }

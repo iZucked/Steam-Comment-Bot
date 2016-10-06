@@ -41,16 +41,13 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 	private final @NonNull IScenarioEditingLocation scenarioEditingLocation;
 
 	private final @NonNull MenuManager mgr;
-	private @NonNull final Runnable refreshCallback;
 	private OptionAnalysisModel optionAnalysisModel;
 	private Menu menu;
 
-	public BaseCaseContextMenuManager(@NonNull final GridTreeViewer viewer, @NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final MenuManager mgr,
-			@NonNull final Runnable refreshCallback) {
+	public BaseCaseContextMenuManager(@NonNull final GridTreeViewer viewer, @NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final MenuManager mgr) {
 		this.mgr = mgr;
 		this.scenarioEditingLocation = scenarioEditingLocation;
 		this.viewer = viewer;
-		this.refreshCallback = refreshCallback;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -103,9 +100,7 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE, c),
 							optionAnalysisModel.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE);
-					refreshCallback.run();
 				}
-
 			}));
 		}
 		if (items.length == 1) {
@@ -153,7 +148,6 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, o), row,
 								AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
-						refreshCallback.run();
 
 					}));
 				} else if (AnalyticsBuilder.isNonShipped(row) == ShippingType.Shipped) {
@@ -163,8 +157,6 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, o), row,
 								AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
-
-						refreshCallback.run();
 					}));
 					mgr.add(new RunnableAction("Create fleet", () -> {
 						final FleetShippingOption o = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
@@ -173,7 +165,6 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, o), row,
 								AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
-						refreshCallback.run();
 					}));
 				}
 			}

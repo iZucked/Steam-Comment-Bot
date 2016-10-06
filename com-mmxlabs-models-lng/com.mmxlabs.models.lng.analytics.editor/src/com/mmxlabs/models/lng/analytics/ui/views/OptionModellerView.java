@@ -5,6 +5,8 @@ import java.util.EnumSet;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -90,9 +92,6 @@ import com.mmxlabs.models.lng.analytics.ui.views.providers.ResultsViewerContentP
 import com.mmxlabs.models.lng.analytics.ui.views.providers.RulesViewerContentProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.ShippingOptionsContentProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.VesselAndClassContentProvider;
-import com.mmxlabs.models.lng.commercial.CommercialModel;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
@@ -119,11 +118,15 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private GridTreeViewer resultsViewer;
 	private GridTreeViewer vesselViewer;
 	private GridTreeViewer shippingOptionsViewer;
+
 	private OptionAnalysisModel model;
 
 	private final Map<Object, IStatus> validationErrors = new HashMap<Object, IStatus>();
 
 	private DialogValidationSupport validationSupport;
+
+	// Callbacks for objects that need the current input
+	private List<Consumer<OptionAnalysisModel>> inputWants = new LinkedList<>();
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -236,7 +239,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			hookOpenEditor(baseCaseViewer);
 
 			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
-			baseCaseViewer.addDropSupport(DND.DROP_MOVE, types, new BaseCaseDropTargetListener(OptionModellerView.this, model, () -> refreshAll(), baseCaseViewer));
+			BaseCaseDropTargetListener listener = new BaseCaseDropTargetListener(OptionModellerView.this, baseCaseViewer);
+			inputWants.add(model -> listener.setOptionAnalysisModel(model));
+			baseCaseViewer.addDropSupport(DND.DROP_MOVE, types, listener);
 		}
 
 		{
@@ -265,7 +270,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			hookOpenEditor(partialCaseViewer);
 
 			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
-			partialCaseViewer.addDropSupport(DND.DROP_MOVE, types, new PartialCaseDropTargetListener(OptionModellerView.this, model, () -> refreshAll(), partialCaseViewer));
+			PartialCaseDropTargetListener listener = new PartialCaseDropTargetListener(OptionModellerView.this, partialCaseViewer);
+			inputWants.add(model -> listener.setOptionAnalysisModel(model));
+			partialCaseViewer.addDropSupport(DND.DROP_MOVE, types, listener);
 		}
 
 		createRulesViewer(centralComposite);
@@ -354,7 +361,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			// }
 		}
 
-		refreshAll();
 		listenToScenarioSelection();
 		packAll(mainComposite);
 
@@ -428,6 +434,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	protected void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject) {
 
 		setInput(model);
+		for (Consumer<OptionAnalysisModel> want : inputWants) {
+			want.accept(model);
+		}
 	}
 
 	private final EContentAdapter refreshAdapter = new EContentAdapter() {
@@ -490,6 +499,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		if (!model.eAdapters().contains(refreshAdapter)) {
 			model.eAdapters().add(refreshAdapter);
 		}
+		refreshSections(true, EnumSet.allOf(SectionType.class));
 
 	}
 
@@ -506,8 +516,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		hookOpenEditor(buyOptionsViewer);
 
 		final MenuManager mgr = new MenuManager();
-		final BuyOptionsContextMenuManager listener = new BuyOptionsContextMenuManager(buyOptionsViewer, OptionModellerView.this, mgr, () -> refreshAll());
-		listener.setOptionAnalysisModel(model);
+		final BuyOptionsContextMenuManager listener = new BuyOptionsContextMenuManager(buyOptionsViewer, OptionModellerView.this, mgr);
+		inputWants.add(model -> listener.setOptionAnalysisModel(model));
 		buyOptionsViewer.getGrid().addMenuDetectListener(listener);
 
 		// Create buttons
@@ -523,7 +533,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 						final BuyOption row = AnalyticsFactory.eINSTANCE.createBuyReference();
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, row), model,
 								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
-						refreshAll();
 						editObject(row);
 					}
 
@@ -546,7 +555,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, row), model,
 								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
-						refreshAll();
 						editObject(row);
 					}
 
@@ -567,7 +575,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 						final BuyMarket row = AnalyticsFactory.eINSTANCE.createBuyMarket();
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, row), model,
 								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
-						refreshAll();
 						editObject(row);
 					}
 
@@ -595,8 +602,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		hookOpenEditor(sellOptionsViewer);
 
 		final MenuManager mgr = new MenuManager();
-		final SellOptionsContextMenuManager listener = new SellOptionsContextMenuManager(sellOptionsViewer, OptionModellerView.this, mgr, () -> refreshAll());
-		listener.setOptionAnalysisModel(model);
+		final SellOptionsContextMenuManager listener = new SellOptionsContextMenuManager(sellOptionsViewer, OptionModellerView.this, mgr);
+		inputWants.add(model -> listener.setOptionAnalysisModel(model));
 		sellOptionsViewer.getGrid().addMenuDetectListener(listener);
 
 		{
@@ -611,7 +618,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 						final SellOption row = AnalyticsFactory.eINSTANCE.createSellReference();
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), model,
 								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
-						refreshAll();
 						editObject(row);
 					}
 
@@ -633,7 +639,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 						AnalyticsBuilder.setDefaultEntity(OptionModellerView.this, row);
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), model,
 								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
-						refreshAll();
 						editObject(row);
 					}
 
@@ -654,7 +659,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 						final SellOption row = AnalyticsFactory.eINSTANCE.createSellMarket();
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), model,
 								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
-						refreshAll();
 						editObject(row);
 					}
 
@@ -681,12 +685,16 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		shippingOptionsViewer.setContentProvider(new ShippingOptionsContentProvider(this));
 		hookOpenEditor(shippingOptionsViewer);
 
-		Transfer[] transferTypes = new Transfer[] { LocalSelectionTransfer.getTransfer() };
-		shippingOptionsViewer.addDropSupport(DND.DROP_MOVE, transferTypes, new ShippingOptionsDropTargetListener(OptionModellerView.this, model, () -> refreshAll(), shippingOptionsViewer));
+		{
+			Transfer[] transferTypes = new Transfer[] { LocalSelectionTransfer.getTransfer() };
+			ShippingOptionsDropTargetListener listener = new ShippingOptionsDropTargetListener(OptionModellerView.this, shippingOptionsViewer);
+			shippingOptionsViewer.addDropSupport(DND.DROP_MOVE, transferTypes, listener);
+			inputWants.add(model -> listener.setOptionAnalysisModel(model));
+		}
 
 		final MenuManager mgr = new MenuManager();
-		final ShippingOptionsContextMenuManager listener = new ShippingOptionsContextMenuManager(shippingOptionsViewer, OptionModellerView.this, mgr, () -> refreshAll());
-		listener.setOptionAnalysisModel(model);
+		final ShippingOptionsContextMenuManager listener = new ShippingOptionsContextMenuManager(shippingOptionsViewer, OptionModellerView.this, mgr);
+		inputWants.add(model -> listener.setOptionAnalysisModel(model));
 		shippingOptionsViewer.getGrid().addMenuDetectListener(listener);
 
 		{
@@ -706,7 +714,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 									AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 
 							DetailCompositeDialogUtil.editSelection(OptionModellerView.this, new StructuredSelection(opt));
-							refreshAll();
 						}));
 						helper.addAction(new RunnableAction("Round trip vessel", () -> {
 							final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
@@ -716,7 +723,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 									AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 
 							DetailCompositeDialogUtil.editSelection(OptionModellerView.this, new StructuredSelection(opt));
-							refreshAll();
 						}));
 						helper.addAction(new RunnableAction("Fleet vessel", () -> {
 							final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
@@ -726,7 +732,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 									AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 
 							DetailCompositeDialogUtil.editSelection(OptionModellerView.this, new StructuredSelection(opt));
-							refreshAll();
 						}));
 					}
 
@@ -821,8 +826,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		final MenuManager mgr = new MenuManager();
 
-		final BaseCaseContextMenuManager listener = new BaseCaseContextMenuManager(baseCaseViewer, OptionModellerView.this, mgr, () -> refreshAll());
-		listener.setOptionAnalysisModel(model);
+		final BaseCaseContextMenuManager listener = new BaseCaseContextMenuManager(baseCaseViewer, OptionModellerView.this, mgr);
+		inputWants.add(model -> listener.setOptionAnalysisModel(model));
 		baseCaseViewer.getGrid().addMenuDetectListener(listener);
 
 		return baseCaseViewer.getGrid();
@@ -847,9 +852,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		final MenuManager mgr = new MenuManager();
 
-		final PartialCaseContextMenuManager listener = new PartialCaseContextMenuManager(partialCaseViewer, OptionModellerView.this, mgr, () -> refreshAll());
+		final PartialCaseContextMenuManager listener = new PartialCaseContextMenuManager(partialCaseViewer, OptionModellerView.this, mgr);
 		partialCaseViewer.getGrid().addMenuDetectListener(listener);
-		listener.setOptionAnalysisModel(model);
+		inputWants.add(model -> listener.setOptionAnalysisModel(model));
 
 		return partialCaseViewer.getGrid();
 	}
@@ -1026,10 +1031,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		BUYS, MIDDLE, SELLS, VESSEL
 	};
 
-	private void refreshAll() {
-
-	}
-
 	private void refreshSections(boolean layout, EnumSet<SectionType> sections) {
 		// Coarse grained refresh method..
 		if (sections.contains(SectionType.BUYS)) {
@@ -1040,7 +1041,11 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		}
 		if (sections.contains(SectionType.MIDDLE)) {
 			baseCaseViewer.refresh();
-			baseCaseProftLabel.setText(String.format("Base P&&L: $%,d", model.getBaseCase().getProfitAndLoss()));
+			if (model != null) {
+				baseCaseProftLabel.setText(String.format("Base P&&L: $%,d", model.getBaseCase().getProfitAndLoss()));
+			} else {
+				baseCaseProftLabel.setText(String.format("Base P&&L: $---,---,---.--"));
+			}
 			partialCaseViewer.refresh();
 			rulesViewer.refresh();
 			resultsViewer.refresh();
@@ -1142,4 +1147,5 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		super.setLocked(locked);
 	}
+
 }

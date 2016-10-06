@@ -47,17 +47,13 @@ public class PartialCaseDropTargetListener implements DropTargetListener {
 
 	private OptionAnalysisModel optionAnalysisModel;
 
-	private @NonNull final Runnable refreshCallback;
-
 	private @NonNull final GridTreeViewer viewer;
 
 	private final LocalMenuHelper menuHelper;
 
-	public PartialCaseDropTargetListener(final @NonNull IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, @NonNull final Runnable refreshCallback,
-			@NonNull final GridTreeViewer viewer) {
+	public PartialCaseDropTargetListener(final @NonNull IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, @NonNull final GridTreeViewer viewer) {
 		this.scenarioEditingLocation = scenarioEditingLocation;
 		this.optionAnalysisModel = optionAnalysisModel;
-		this.refreshCallback = refreshCallback;
 		this.viewer = viewer;
 		menuHelper = new LocalMenuHelper(scenarioEditingLocation.getShell());
 		viewer.getControl().addDisposeListener(new DisposeListener() {
@@ -69,8 +65,8 @@ public class PartialCaseDropTargetListener implements DropTargetListener {
 		});
 	}
 
-	public PartialCaseDropTargetListener(final @NonNull IScenarioEditingLocation scenarioEditingLocation, @NonNull final Runnable refreshCallback, @NonNull final GridTreeViewer viewer) {
-		this(scenarioEditingLocation, null, refreshCallback, viewer);
+	public PartialCaseDropTargetListener(final @NonNull IScenarioEditingLocation scenarioEditingLocation, @NonNull final GridTreeViewer viewer) {
+		this(scenarioEditingLocation, null, viewer);
 	}
 
 	@Override
@@ -143,7 +139,6 @@ public class PartialCaseDropTargetListener implements DropTargetListener {
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, optionAnalysisModel, null);
 
 					}
-					refreshCallback.run();
 				} else if (o instanceof SellOption) {
 					final SellOption sellOption = (SellOption) o;
 					if (existing != null) {
@@ -157,7 +152,6 @@ public class PartialCaseDropTargetListener implements DropTargetListener {
 						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS, collection));
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, optionAnalysisModel, null);
 					}
-					refreshCallback.run();
 				} else if (o instanceof Vessel) {
 					final Vessel vessel = (Vessel) o;
 
@@ -172,8 +166,6 @@ public class PartialCaseDropTargetListener implements DropTargetListener {
 									AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
 
 							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-							refreshCallback.run();
-
 						} else if (shippingType == ShippingType.Shipped) {
 							final PartialCaseRow pExisting = existing;
 							menuHelper.clearActions();
@@ -184,7 +176,6 @@ public class PartialCaseDropTargetListener implements DropTargetListener {
 										SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt), pExisting,
 										AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
 								DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-								refreshCallback.run();
 							}));
 							menuHelper.addAction(new RunnableAction("Create fleet", () -> {
 								final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
@@ -194,7 +185,6 @@ public class PartialCaseDropTargetListener implements DropTargetListener {
 										SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt), pExisting,
 										AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
 								DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-								refreshCallback.run();
 							}));
 
 							menuHelper.open();
@@ -212,7 +202,6 @@ public class PartialCaseDropTargetListener implements DropTargetListener {
 									SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt), pExisting,
 									AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
 							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-							refreshCallback.run();
 						}
 					}
 				} else if (o instanceof ShippingOption) {
@@ -232,7 +221,6 @@ public class PartialCaseDropTargetListener implements DropTargetListener {
 							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 									SetCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt), existing,
 									AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
-							refreshCallback.run();
 						}
 					}
 				}

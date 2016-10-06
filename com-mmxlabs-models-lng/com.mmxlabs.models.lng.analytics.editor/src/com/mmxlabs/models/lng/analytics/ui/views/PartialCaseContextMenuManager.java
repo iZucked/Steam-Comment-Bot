@@ -23,7 +23,6 @@ import org.eclipse.swt.widgets.Menu;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
@@ -40,19 +39,15 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 	private final @NonNull GridTreeViewer viewer;
 	private final @NonNull IScenarioEditingLocation scenarioEditingLocation;
 
-	private @NonNull final Runnable refreshCallback;
-
 	private final @NonNull MenuManager mgr;
 
 	private Menu menu;
 	private OptionAnalysisModel optionAnalysisModel;
 
-	public PartialCaseContextMenuManager(@NonNull final GridTreeViewer viewer, @NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final MenuManager mgr,
-			@NonNull final Runnable refreshCallback) {
+	public PartialCaseContextMenuManager(@NonNull final GridTreeViewer viewer, @NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final MenuManager mgr) {
 		this.mgr = mgr;
 		this.scenarioEditingLocation = scenarioEditingLocation;
 		this.viewer = viewer;
-		this.refreshCallback = refreshCallback;
 	}
 
 	@Override
@@ -87,8 +82,7 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 
 						final PartialCaseRow newRow = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
 						final CompoundCommand cmd = new CompoundCommand();
-						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE,
-								newRow));
+						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE, newRow));
 						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), newRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS, row.getSellOptions()));
 						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS, SetCommand.UNSET_VALUE));
 
@@ -136,8 +130,6 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, o), row,
 								AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
-						refreshCallback.run();
-
 					}));
 				} else if (AnalyticsBuilder.isNonShipped(row) == ShippingType.Shipped) {
 					mgr.add(new RunnableAction("Create RT", () -> {
@@ -146,8 +138,6 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, o), row,
 								AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
-
-						refreshCallback.run();
 					}));
 					mgr.add(new RunnableAction("Create fleet", () -> {
 						final FleetShippingOption o = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
@@ -156,7 +146,6 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, o), row,
 								AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
-						refreshCallback.run();
 					}));
 				}
 			}
