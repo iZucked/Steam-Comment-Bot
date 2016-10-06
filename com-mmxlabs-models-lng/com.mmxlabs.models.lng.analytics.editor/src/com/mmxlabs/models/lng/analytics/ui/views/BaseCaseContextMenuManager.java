@@ -69,7 +69,7 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 		final GridItem[] items = grid.getSelection();
 		if (items.length > 0) {
 
-			mgr.add(new RunnableAction("Delete Row(s)", () -> {
+			mgr.add(new RunnableAction("Delete row(s)", () -> {
 				final Collection<EObject> c = new LinkedList<>();
 				selection.iterator().forEachRemaining(ee -> c.add((EObject) ee));
 
@@ -112,7 +112,7 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 			if (column.getText().equals("Buy")) {
 				final Object ed = items[0].getData();
 				final BaseCaseRow row = (BaseCaseRow) ed;
-				if (row.getShipping() != null) {
+				if (row.getBuyOption() != null) {
 					mgr.add(new RunnableAction("Remove buy", () -> {
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION, SetCommand.UNSET_VALUE), row,
@@ -124,7 +124,7 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 			if (column.getText().equals("Sell")) {
 				final Object ed = items[0].getData();
 				final BaseCaseRow row = (BaseCaseRow) ed;
-				if (row.getShipping() != null) {
+				if (row.getSellOption() != null) {
 					mgr.add(new RunnableAction("Remove sell", () -> {
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION, SetCommand.UNSET_VALUE), row,

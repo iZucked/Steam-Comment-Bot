@@ -560,7 +560,9 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 		final MenuManager mgr = new MenuManager();
 
-		partialCaseViewer.getGrid().addMenuDetectListener(new PartialCaseContextMenuManager(partialCaseViewer, OptionModellerView.this, mgr));
+		PartialCaseContextMenuManager listener = new PartialCaseContextMenuManager(partialCaseViewer, OptionModellerView.this, mgr, () -> refreshAll());
+		partialCaseViewer.getGrid().addMenuDetectListener(listener);
+		listener.setOptionAnalysisModel(model);
 
 		return partialCaseViewer.getGrid();
 	}
