@@ -76,7 +76,7 @@ public class SellOptionsContextMenuManager implements MenuDetectListener {
 				mgr.add(new RunnableAction("Copy", () -> {
 					SellOption copy = EcoreUtil.copy(row);
 					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, copy), optionAnalysisModel,
+							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, copy), optionAnalysisModel,
 							AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
 					DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(copy));
 					refreshCallback.run();
