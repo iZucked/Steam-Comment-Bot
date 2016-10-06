@@ -17,7 +17,6 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -361,8 +360,10 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		// Do nothing by default
 	}
 
-	public void editObject(@NonNull EObject target) {
-		final DetailCompositeDialog dcd = new DetailCompositeDialog(this.getShell(), this.getDefaultCommandHandler());
-		dcd.open(this, this.getRootObject(), Collections.singletonList((EObject) target));
+	public void editObject(@Nullable EObject target) {
+		if (target != null) {
+			final DetailCompositeDialog dcd = new DetailCompositeDialog(this.getShell(), this.getDefaultCommandHandler());
+			dcd.open(this, this.getRootObject(), Collections.singletonList((EObject) target));
+		}
 	}
 }
