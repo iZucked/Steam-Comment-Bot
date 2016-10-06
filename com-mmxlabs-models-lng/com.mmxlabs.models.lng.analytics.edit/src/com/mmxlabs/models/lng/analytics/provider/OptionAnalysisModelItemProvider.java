@@ -17,6 +17,7 @@ import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IChildCreationExtender;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -24,6 +25,7 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
@@ -62,8 +64,31 @@ public class OptionAnalysisModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addUseTargetPNLPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Use Target PNL feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addUseTargetPNLPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_OptionAnalysisModel_useTargetPNL_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_OptionAnalysisModel_useTargetPNL_feature", "_UI_OptionAnalysisModel_type"),
+				 AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -120,7 +145,8 @@ public class OptionAnalysisModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_OptionAnalysisModel_type");
+		OptionAnalysisModel optionAnalysisModel = (OptionAnalysisModel)object;
+		return getString("_UI_OptionAnalysisModel_type") + " " + optionAnalysisModel.isUseTargetPNL();
 	}
 	
 
@@ -136,6 +162,9 @@ public class OptionAnalysisModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(OptionAnalysisModel.class)) {
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BUYS:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SELLS:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE:

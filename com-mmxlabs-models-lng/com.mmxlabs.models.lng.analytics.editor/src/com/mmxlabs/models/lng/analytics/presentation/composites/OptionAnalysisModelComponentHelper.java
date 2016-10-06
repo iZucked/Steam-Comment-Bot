@@ -73,6 +73,7 @@ public class OptionAnalysisModelComponentHelper extends BaseComponentHelper {
 		add_rulesEditor(detailComposite, topClass);
 		add_partialCaseEditor(detailComposite, topClass);
 		add_resultSetsEditor(detailComposite, topClass);
+		add_useTargetPNLEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the baseCase feature on OptionAnalysisModel
@@ -124,5 +125,14 @@ public class OptionAnalysisModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_resultSetsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS));
+	}
+
+	/**
+	 * Create the editor for the useTargetPNL feature on OptionAnalysisModel
+	 *
+	 * @generated
+	 */
+	protected void add_useTargetPNLEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL));
 	}
 }

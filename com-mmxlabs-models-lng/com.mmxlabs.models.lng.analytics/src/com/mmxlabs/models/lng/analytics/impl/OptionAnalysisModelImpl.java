@@ -44,6 +44,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getRules <em>Rules</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getPartialCase <em>Partial Case</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getResultSets <em>Result Sets</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#isUseTargetPNL <em>Use Target PNL</em>}</li>
  * </ul>
  *
  * @generated
@@ -108,6 +109,26 @@ public class OptionAnalysisModelImpl extends EObjectImpl implements OptionAnalys
 	 * @ordered
 	 */
 	protected EList<ResultSet> resultSets;
+
+	/**
+	 * The default value of the '{@link #isUseTargetPNL() <em>Use Target PNL</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isUseTargetPNL()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean USE_TARGET_PNL_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isUseTargetPNL() <em>Use Target PNL</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isUseTargetPNL()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean useTargetPNL = USE_TARGET_PNL_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -267,6 +288,27 @@ public class OptionAnalysisModelImpl extends EObjectImpl implements OptionAnalys
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isUseTargetPNL() {
+		return useTargetPNL;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setUseTargetPNL(boolean newUseTargetPNL) {
+		boolean oldUseTargetPNL = useTargetPNL;
+		useTargetPNL = newUseTargetPNL;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL, oldUseTargetPNL, useTargetPNL));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -306,6 +348,8 @@ public class OptionAnalysisModelImpl extends EObjectImpl implements OptionAnalys
 				return getPartialCase();
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULT_SETS:
 				return getResultSets();
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL:
+				return isUseTargetPNL();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -341,6 +385,9 @@ public class OptionAnalysisModelImpl extends EObjectImpl implements OptionAnalys
 				getResultSets().clear();
 				getResultSets().addAll((Collection<? extends ResultSet>)newValue);
 				return;
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL:
+				setUseTargetPNL((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -371,6 +418,9 @@ public class OptionAnalysisModelImpl extends EObjectImpl implements OptionAnalys
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULT_SETS:
 				getResultSets().clear();
 				return;
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL:
+				setUseTargetPNL(USE_TARGET_PNL_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -395,8 +445,26 @@ public class OptionAnalysisModelImpl extends EObjectImpl implements OptionAnalys
 				return partialCase != null;
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULT_SETS:
 				return resultSets != null && !resultSets.isEmpty();
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL:
+				return useTargetPNL != USE_TARGET_PNL_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (useTargetPNL: ");
+		result.append(useTargetPNL);
+		result.append(')');
+		return result.toString();
 	}
 
 } //OptionAnalysisModelImpl

@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.analytics.ProfitAndLossResult;
 import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
+import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator.BreakEvenMode;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseEvaluator.IMapperClass;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -81,7 +82,7 @@ public class WhatIfEvaluator {
 	private static void singleEval(final IScenarioEditingLocation scenarioEditingLocation, final long targetPNL, final OptionAnalysisModel model, final BaseCase baseCase) {
 		BaseCaseEvaluator.generateScenario(scenarioEditingLocation, model, baseCase, (lngScenarioModel, mapper) -> {
 
-			evaluateScenario(lngScenarioModel, targetPNL);
+			evaluateScenario(lngScenarioModel, model.isUseTargetPNL(), targetPNL);
 
 			if (lngScenarioModel.getScheduleModel().getSchedule() == null) {
 				return;
@@ -179,13 +180,13 @@ public class WhatIfEvaluator {
 		}
 	}
 
-	private static void evaluateScenario(final LNGScenarioModel lngScenarioModel, final long targetPNL) {
+	private static void evaluateScenario(final LNGScenarioModel lngScenarioModel, boolean useTargetPNL, final long targetPNL) {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		ServiceHelper.withService(IAnalyticsScenarioEvaluator.class, evaluator -> evaluator.breakEvenEvaluate(lngScenarioModel, userSettings, null, targetPNL));
+		ServiceHelper.withService(IAnalyticsScenarioEvaluator.class, evaluator -> evaluator.breakEvenEvaluate(lngScenarioModel, userSettings, null, targetPNL, useTargetPNL ? BreakEvenMode.PORTFOLIO : BreakEvenMode.POINT_TO_POINT));
 	}
 }

@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getRules <em>Rules</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getPartialCase <em>Partial Case</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getResultSets <em>Result Sets</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#isUseTargetPNL <em>Use Target PNL</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getOptionAnalysisModel()
@@ -143,5 +144,31 @@ public interface OptionAnalysisModel extends EObject {
 	 * @generated
 	 */
 	EList<ResultSet> getResultSets();
+
+	/**
+	 * Returns the value of the '<em><b>Use Target PNL</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Use Target PNL</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Use Target PNL</em>' attribute.
+	 * @see #setUseTargetPNL(boolean)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getOptionAnalysisModel_UseTargetPNL()
+	 * @model
+	 * @generated
+	 */
+	boolean isUseTargetPNL();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#isUseTargetPNL <em>Use Target PNL</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Use Target PNL</em>' attribute.
+	 * @see #isUseTargetPNL()
+	 * @generated
+	 */
+	void setUseTargetPNL(boolean value);
 
 } // OptionAnalysisModel

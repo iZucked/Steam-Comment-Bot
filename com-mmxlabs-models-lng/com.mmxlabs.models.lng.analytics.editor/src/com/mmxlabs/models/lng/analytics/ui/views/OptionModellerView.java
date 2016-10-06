@@ -32,6 +32,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -200,6 +201,12 @@ public class OptionModellerView extends ScenarioInstanceView {
 		createRulesViewer(composite);
 		GridDataFactory.generate(rulesViewer.getGrid(), 2, 1);
 
+		/*
+		 * toggle for target pnl
+		 */
+		Composite targetPNLToggle = createUseTargetPNLToggleComposite(composite);
+	    GridDataFactory.generate(targetPNLToggle, 2, 1);
+		
 		final Button generateButton = new Button(composite, SWT.PUSH);
 		generateButton.setText("Generate");
 		GridDataFactory.generate(generateButton, 2, 1);
@@ -247,6 +254,47 @@ public class OptionModellerView extends ScenarioInstanceView {
 		refreshAll();
 		listenToScenarioSelection();
 		packAll(mainComposite);
+	}
+
+	private Composite createUseTargetPNLToggleComposite(final Composite composite) {
+		model.setUseTargetPNL(false);
+	    Composite matching = new Composite(composite, SWT.ALL);
+	    GridLayout gridLayoutRadiosMatching = new GridLayout(3, false);
+	    matching.setLayout(gridLayoutRadiosMatching);
+	    GridData gdM = new GridData(SWT.LEFT, SWT.BEGINNING, false, false);
+	    gdM.horizontalSpan = 2;
+	    matching.setLayoutData(gdM);
+	    new Label(matching, SWT.NONE).setText("Use target pnl from base case");
+	    Button matchingNoButton = new Button(matching, SWT.RADIO|SWT.LEFT);
+	    matchingNoButton.setSelection(true);
+	    matchingNoButton.setText("No");
+	    matchingNoButton.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				model.setUseTargetPNL(false);
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
+
+	    Button matchingYesButton = new Button(matching, SWT.RADIO|SWT.LEFT);
+	    matchingYesButton.setText("Yes");
+	    matchingYesButton.setSelection(false);
+	    matchingYesButton.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				model.setUseTargetPNL(true);
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
+		return matching;
 	}
 
 	private void hookDragSource(final GridTreeViewer viewer) {
