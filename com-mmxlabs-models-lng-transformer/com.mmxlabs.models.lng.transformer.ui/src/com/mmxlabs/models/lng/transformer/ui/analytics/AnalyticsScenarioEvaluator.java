@@ -26,10 +26,6 @@ import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
-	enum BreakEvenMode {
-		POINT_TO_POINT,
-		PORTFOLIO
-	}
 	@Override
 	public void evaluate(@org.eclipse.jdt.annotation.NonNull final LNGScenarioModel lngScenarioModel, @org.eclipse.jdt.annotation.NonNull final UserSettings userSettings,
 			@Nullable final ScenarioInstance parentForFork) {
@@ -74,14 +70,12 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 	}
 
 	@Override
-	public void breakEvenEvaluate(@NonNull LNGScenarioModel lngScenarioModel, @NonNull UserSettings userSettings, @Nullable ScenarioInstance parentForFork, long targetProfitAndLoss) {
+	public void breakEvenEvaluate(@NonNull LNGScenarioModel lngScenarioModel, @NonNull UserSettings userSettings, @Nullable ScenarioInstance parentForFork, long targetProfitAndLoss, BreakEvenMode breakEvenMode) {
 		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
-		OptimisationStage optimisationStage = optimisationPlan.getStages().get(0);
-		BreakEvenMode mode = BreakEvenMode.PORTFOLIO;
-		if (optimisationStage instanceof LocalSearchOptimisationStage) {
+		if (breakEvenMode == BreakEvenMode.PORTFOLIO) {
 			optimisationPlan.getStages().clear();
 			BreakEvenOptimisationStage breakEvenOptimisationStage = ParametersFactory.eINSTANCE.createBreakEvenOptimisationStage();
-			breakEvenOptimisationStage.setTargetProfitAndLoss(3_000_000);
+			breakEvenOptimisationStage.setTargetProfitAndLoss(targetProfitAndLoss);
 			optimisationPlan.getStages().add(breakEvenOptimisationStage);
 		}
 		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
@@ -90,7 +84,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		final ExecutorService executorService = Executors.newFixedThreadPool(1);
 		try {
 			String[] hints;
-			if (mode == BreakEvenMode.POINT_TO_POINT) {
+			if (breakEvenMode == BreakEvenMode.POINT_TO_POINT) {
 				hints = new String[]{};
 			} else {
 				hints = new String[] {LNGTransformerHelper.HINT_DISABLE_CACHES};
