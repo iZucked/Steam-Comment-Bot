@@ -245,6 +245,11 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="entity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cv" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="#0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SellOpportunity" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject #//SellOption">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="fobSale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
@@ -329,6 +334,8 @@
         eType="#//SellOption" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="baseCase" eType="#//BaseCase"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="shippingTemplates" upperBound="-1"
+        eType="#//ShippingOption" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rules" upperBound="-1"
         eType="#//OptionRule" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="partialCase" eType="#//PartialCase"

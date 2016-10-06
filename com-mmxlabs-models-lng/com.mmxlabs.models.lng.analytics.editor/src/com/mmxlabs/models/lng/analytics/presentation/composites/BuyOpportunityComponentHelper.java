@@ -71,6 +71,7 @@ public class BuyOpportunityComponentHelper extends BaseComponentHelper {
 		add_dateEditor(detailComposite, topClass);
 		add_priceExpressionEditor(detailComposite, topClass);
 		add_entityEditor(detailComposite, topClass);
+		add_cvEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the desPurchase feature on BuyOpportunity
@@ -121,5 +122,14 @@ public class BuyOpportunityComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_entityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.BUY_OPPORTUNITY__ENTITY));
+	}
+
+	/**
+	 * Create the editor for the cv feature on BuyOpportunity
+	 *
+	 * @generated
+	 */
+	protected void add_cvEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.BUY_OPPORTUNITY__CV));
 	}
 }

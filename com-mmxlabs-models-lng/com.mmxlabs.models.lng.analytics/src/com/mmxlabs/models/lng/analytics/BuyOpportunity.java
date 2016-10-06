@@ -25,6 +25,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getDate <em>Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getPriceExpression <em>Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getEntity <em>Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getCv <em>Cv</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBuyOpportunity()
@@ -187,6 +188,32 @@ public interface BuyOpportunity extends MMXObject, BuyOption {
 	 * @generated
 	 */
 	void setEntity(BaseLegalEntity value);
+
+	/**
+	 * Returns the value of the '<em><b>Cv</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cv</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cv</em>' attribute.
+	 * @see #setCv(double)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBuyOpportunity_Cv()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#0.###'"
+	 * @generated
+	 */
+	double getCv();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getCv <em>Cv</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cv</em>' attribute.
+	 * @see #getCv()
+	 * @generated
+	 */
+	void setCv(double value);
 
 } // end of  BuyOpportunity
 

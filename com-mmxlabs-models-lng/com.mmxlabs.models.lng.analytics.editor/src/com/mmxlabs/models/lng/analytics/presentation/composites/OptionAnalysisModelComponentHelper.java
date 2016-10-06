@@ -70,6 +70,7 @@ public class OptionAnalysisModelComponentHelper extends BaseComponentHelper {
 		add_buysEditor(detailComposite, topClass);
 		add_sellsEditor(detailComposite, topClass);
 		add_baseCaseEditor(detailComposite, topClass);
+		add_shippingTemplatesEditor(detailComposite, topClass);
 		add_rulesEditor(detailComposite, topClass);
 		add_partialCaseEditor(detailComposite, topClass);
 		add_resultSetsEditor(detailComposite, topClass);
@@ -82,6 +83,15 @@ public class OptionAnalysisModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_baseCaseEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BASE_CASE));
+	}
+
+	/**
+	 * Create the editor for the shippingTemplates feature on OptionAnalysisModel
+	 *
+	 * @generated
+	 */
+	protected void add_shippingTemplatesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES));
 	}
 
 	/**

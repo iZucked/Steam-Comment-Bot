@@ -14,6 +14,7 @@ import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.SellOption;
 
+import com.mmxlabs.models.lng.analytics.ShippingOption;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -41,6 +42,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getBuys <em>Buys</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getSells <em>Sells</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getBaseCase <em>Base Case</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getShippingTemplates <em>Shipping Templates</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getRules <em>Rules</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getPartialCase <em>Partial Case</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getResultSets <em>Result Sets</em>}</li>
@@ -79,6 +81,16 @@ public class OptionAnalysisModelImpl extends EObjectImpl implements OptionAnalys
 	 * @ordered
 	 */
 	protected BaseCase baseCase;
+
+	/**
+	 * The cached value of the '{@link #getShippingTemplates() <em>Shipping Templates</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getShippingTemplates()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<ShippingOption> shippingTemplates;
 
 	/**
 	 * The cached value of the '{@link #getRules() <em>Rules</em>}' containment reference list.
@@ -190,6 +202,18 @@ public class OptionAnalysisModelImpl extends EObjectImpl implements OptionAnalys
 		}
 		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE, newBaseCase, newBaseCase));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<ShippingOption> getShippingTemplates() {
+		if (shippingTemplates == null) {
+			shippingTemplates = new EObjectContainmentEList<ShippingOption>(ShippingOption.class, this, AnalyticsPackage.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+		}
+		return shippingTemplates;
 	}
 
 	/**
@@ -318,6 +342,8 @@ public class OptionAnalysisModelImpl extends EObjectImpl implements OptionAnalys
 				return ((InternalEList<?>)getSells()).basicRemove(otherEnd, msgs);
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE:
 				return basicSetBaseCase(null, msgs);
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES:
+				return ((InternalEList<?>)getShippingTemplates()).basicRemove(otherEnd, msgs);
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RULES:
 				return ((InternalEList<?>)getRules()).basicRemove(otherEnd, msgs);
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__PARTIAL_CASE:
@@ -342,6 +368,8 @@ public class OptionAnalysisModelImpl extends EObjectImpl implements OptionAnalys
 				return getSells();
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE:
 				return getBaseCase();
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES:
+				return getShippingTemplates();
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RULES:
 				return getRules();
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__PARTIAL_CASE:
@@ -373,6 +401,10 @@ public class OptionAnalysisModelImpl extends EObjectImpl implements OptionAnalys
 				return;
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE:
 				setBaseCase((BaseCase)newValue);
+				return;
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES:
+				getShippingTemplates().clear();
+				getShippingTemplates().addAll((Collection<? extends ShippingOption>)newValue);
 				return;
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RULES:
 				getRules().clear();
@@ -409,6 +441,9 @@ public class OptionAnalysisModelImpl extends EObjectImpl implements OptionAnalys
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE:
 				setBaseCase((BaseCase)null);
 				return;
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES:
+				getShippingTemplates().clear();
+				return;
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RULES:
 				getRules().clear();
 				return;
@@ -439,6 +474,8 @@ public class OptionAnalysisModelImpl extends EObjectImpl implements OptionAnalys
 				return sells != null && !sells.isEmpty();
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE:
 				return baseCase != null;
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES:
+				return shippingTemplates != null && !shippingTemplates.isEmpty();
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RULES:
 				return rules != null && !rules.isEmpty();
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__PARTIAL_CASE:

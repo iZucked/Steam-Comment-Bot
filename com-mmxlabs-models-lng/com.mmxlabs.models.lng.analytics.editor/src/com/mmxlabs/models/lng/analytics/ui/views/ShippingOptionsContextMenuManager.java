@@ -21,12 +21,13 @@ import org.eclipse.swt.widgets.Menu;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
+import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 
-public class SellOptionsContextMenuManager implements MenuDetectListener {
+public class ShippingOptionsContextMenuManager implements MenuDetectListener {
 
 	private final @NonNull GridTreeViewer viewer;
 	private final @NonNull IScenarioEditingLocation scenarioEditingLocation;
@@ -38,7 +39,7 @@ public class SellOptionsContextMenuManager implements MenuDetectListener {
 
 	private Menu menu;
 
-	public SellOptionsContextMenuManager(@NonNull final GridTreeViewer viewer, @NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final MenuManager mgr,
+	public ShippingOptionsContextMenuManager(@NonNull final GridTreeViewer viewer, @NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final MenuManager mgr,
 			@NonNull final Runnable refreshCallback) {
 		this.mgr = mgr;
 		this.scenarioEditingLocation = scenarioEditingLocation;
@@ -70,14 +71,14 @@ public class SellOptionsContextMenuManager implements MenuDetectListener {
 		if (items.length == 1) {
 
 			final Object ed = items[0].getData();
-			final SellOption row = (SellOption) ed;
+			final ShippingOption row = (ShippingOption) ed;
 
 			if (row instanceof SellOpportunity) {
 				mgr.add(new RunnableAction("Copy", () -> {
-					SellOption copy = EcoreUtil.copy(row);
+					final ShippingOption copy = EcoreUtil.copy(row);
 					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, copy), optionAnalysisModel,
-							AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
+							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, copy),
+							optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 					DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(copy));
 					refreshCallback.run();
 				}));
@@ -90,7 +91,7 @@ public class SellOptionsContextMenuManager implements MenuDetectListener {
 		return optionAnalysisModel;
 	}
 
-	public void setOptionAnalysisModel(OptionAnalysisModel optionAnalysisModel) {
+	public void setOptionAnalysisModel(final OptionAnalysisModel optionAnalysisModel) {
 		this.optionAnalysisModel = optionAnalysisModel;
 	}
 

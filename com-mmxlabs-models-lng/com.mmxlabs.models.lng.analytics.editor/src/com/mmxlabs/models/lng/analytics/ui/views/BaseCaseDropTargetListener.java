@@ -1,6 +1,7 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
@@ -25,6 +26,7 @@ import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellOption;
+import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder.ShippingType;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -175,10 +177,29 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 						refreshCallback.run();
 					}
+				} else if (o instanceof ShippingOption) {
+					if (existing != null) {
+						ShippingOption opt = null;
+						if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.NonShipped) {
+							if (o instanceof NominatedShippingOption) {
+								opt = (ShippingOption) EcoreUtil.copy((ShippingOption) o);
+							}
+						} else if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.Shipped) {
+
+							if (o instanceof RoundTripShippingOption || o instanceof NominatedShippingOption) {
+								opt = (ShippingOption) EcoreUtil.copy((ShippingOption) o);
+							}
+						}
+						if (opt != null) {
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+									SetCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), existing,
+									AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+							refreshCallback.run();
+						}
+					}
 				}
 			}
 		}
-
 	}
 
 	@Override
@@ -192,6 +213,10 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 					return;
 				}
 				if (o instanceof Vessel || o instanceof VesselClass) {
+					event.operations = DND.DROP_MOVE;
+					return;
+				}
+				if (o instanceof ShippingOption) {
 					event.operations = DND.DROP_MOVE;
 					return;
 				}

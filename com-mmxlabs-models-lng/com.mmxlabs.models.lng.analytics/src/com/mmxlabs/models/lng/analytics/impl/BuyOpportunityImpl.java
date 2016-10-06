@@ -39,6 +39,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getDate <em>Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getPriceExpression <em>Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getEntity <em>Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getCv <em>Cv</em>}</li>
  * </ul>
  *
  * @generated
@@ -133,6 +134,26 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * @ordered
 	 */
 	protected BaseLegalEntity entity;
+
+	/**
+	 * The default value of the '{@link #getCv() <em>Cv</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCv()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double CV_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getCv() <em>Cv</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCv()
+	 * @generated
+	 * @ordered
+	 */
+	protected double cv = CV_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -343,6 +364,27 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public double getCv() {
+		return cv;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCv(double newCv) {
+		double oldCv = cv;
+		cv = newCv;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.BUY_OPPORTUNITY__CV, oldCv, cv));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -361,6 +403,8 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 			case AnalyticsPackage.BUY_OPPORTUNITY__ENTITY:
 				if (resolve) return getEntity();
 				return basicGetEntity();
+			case AnalyticsPackage.BUY_OPPORTUNITY__CV:
+				return getCv();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -392,6 +436,9 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 			case AnalyticsPackage.BUY_OPPORTUNITY__ENTITY:
 				setEntity((BaseLegalEntity)newValue);
 				return;
+			case AnalyticsPackage.BUY_OPPORTUNITY__CV:
+				setCv((Double)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -422,6 +469,9 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 			case AnalyticsPackage.BUY_OPPORTUNITY__ENTITY:
 				setEntity((BaseLegalEntity)null);
 				return;
+			case AnalyticsPackage.BUY_OPPORTUNITY__CV:
+				setCv(CV_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -446,6 +496,8 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 				return PRICE_EXPRESSION_EDEFAULT == null ? priceExpression != null : !PRICE_EXPRESSION_EDEFAULT.equals(priceExpression);
 			case AnalyticsPackage.BUY_OPPORTUNITY__ENTITY:
 				return entity != null;
+			case AnalyticsPackage.BUY_OPPORTUNITY__CV:
+				return cv != CV_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -466,6 +518,8 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 		result.append(date);
 		result.append(", priceExpression: ");
 		result.append(priceExpression);
+		result.append(", cv: ");
+		result.append(cv);
 		result.append(')');
 		return result.toString();
 	}

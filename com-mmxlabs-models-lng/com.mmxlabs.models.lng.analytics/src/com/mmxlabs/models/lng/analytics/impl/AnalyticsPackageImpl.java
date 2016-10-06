@@ -1283,6 +1283,15 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getBuyOpportunity_Cv() {
+		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EClass getSellOpportunity() {
 		return sellOpportunityEClass;
@@ -1711,6 +1720,15 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getOptionAnalysisModel_ShippingTemplates() {
+		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getOptionAnalysisModel_Buys() {
 		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -1775,15 +1793,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	public EReference getOptionAnalysisModel_Rules() {
-		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getOptionAnalysisModel_PartialCase() {
 		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -1792,7 +1801,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getOptionAnalysisModel_ResultSets() {
+	public EReference getOptionAnalysisModel_PartialCase() {
 		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -1801,8 +1810,17 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getOptionAnalysisModel_ResultSets() {
+		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getOptionAnalysisModel_UseTargetPNL() {
-		return (EAttribute)optionAnalysisModelEClass.getEStructuralFeatures().get(6);
+		return (EAttribute)optionAnalysisModelEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -1974,6 +1992,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__DATE);
 		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__PRICE_EXPRESSION);
 		createEReference(buyOpportunityEClass, BUY_OPPORTUNITY__ENTITY);
+		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__CV);
 
 		sellOpportunityEClass = createEClass(SELL_OPPORTUNITY);
 		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__FOB_SALE);
@@ -2041,6 +2060,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__BUYS);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__SELLS);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__BASE_CASE);
+		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__RULES);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__RESULT_SETS);
@@ -2238,6 +2258,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getBuyOpportunity_Date(), theDateTimePackage.getLocalDate(), "date", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBuyOpportunity_PriceExpression(), ecorePackage.getEString(), "priceExpression", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getBuyOpportunity_Entity(), theCommercialPackage.getBaseLegalEntity(), null, "entity", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBuyOpportunity_Cv(), ecorePackage.getEDouble(), "cv", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(sellOpportunityEClass, SellOpportunity.class, "SellOpportunity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSellOpportunity_FobSale(), ecorePackage.getEBoolean(), "fobSale", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2305,6 +2326,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getOptionAnalysisModel_Buys(), this.getBuyOption(), null, "buys", null, 0, -1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptionAnalysisModel_Sells(), this.getSellOption(), null, "sells", null, 0, -1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptionAnalysisModel_BaseCase(), this.getBaseCase(), null, "baseCase", null, 0, 1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getOptionAnalysisModel_ShippingTemplates(), this.getShippingOption(), null, "shippingTemplates", null, 0, -1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptionAnalysisModel_Rules(), this.getOptionRule(), null, "rules", null, 0, -1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptionAnalysisModel_PartialCase(), this.getPartialCase(), null, "partialCase", null, 0, 1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptionAnalysisModel_ResultSets(), this.getResultSet(), null, "resultSets", null, 0, -1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2436,6 +2458,12 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		   source, 
 		   new String[] {
 			 "unit", "$/mmbtu"
+		   });	
+		addAnnotation
+		  (getBuyOpportunity_Cv(), 
+		   source, 
+		   new String[] {
+			 "formatString", "#0.###"
 		   });
 	}
 

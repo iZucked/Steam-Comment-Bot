@@ -1179,13 +1179,22 @@ s	 * <!-- end-user-doc -->
 	int BUY_OPPORTUNITY__ENTITY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Cv</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_OPPORTUNITY__CV = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Buy Opportunity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int BUY_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl <em>Sell Opportunity</em>}' class.
@@ -1818,13 +1827,22 @@ s	 * <!-- end-user-doc -->
 	int OPTION_ANALYSIS_MODEL__BASE_CASE = 2;
 
 	/**
+	 * The feature id for the '<em><b>Shipping Templates</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES = 3;
+
+	/**
 	 * The feature id for the '<em><b>Rules</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL__RULES = 3;
+	int OPTION_ANALYSIS_MODEL__RULES = 4;
 
 	/**
 	 * The feature id for the '<em><b>Partial Case</b></em>' containment reference.
@@ -1833,7 +1851,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL__PARTIAL_CASE = 4;
+	int OPTION_ANALYSIS_MODEL__PARTIAL_CASE = 5;
 
 	/**
 	 * The feature id for the '<em><b>Result Sets</b></em>' containment reference list.
@@ -1842,7 +1860,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL__RESULT_SETS = 5;
+	int OPTION_ANALYSIS_MODEL__RESULT_SETS = 6;
 
 	/**
 	 * The feature id for the '<em><b>Use Target PNL</b></em>' attribute.
@@ -1851,7 +1869,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL__USE_TARGET_PNL = 6;
+	int OPTION_ANALYSIS_MODEL__USE_TARGET_PNL = 7;
 
 	/**
 	 * The number of structural features of the '<em>Option Analysis Model</em>' class.
@@ -1860,7 +1878,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL_FEATURE_COUNT = 7;
+	int OPTION_ANALYSIS_MODEL_FEATURE_COUNT = 8;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ResultSetImpl <em>Result Set</em>}' class.
@@ -2942,6 +2960,17 @@ s	 * <!-- end-user-doc -->
 	EReference getBuyOpportunity_Entity();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getCv <em>Cv</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cv</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BuyOpportunity#getCv()
+	 * @see #getBuyOpportunity()
+	 * @generated
+	 */
+	EAttribute getBuyOpportunity_Cv();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SellOpportunity <em>Sell Opportunity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3439,6 +3468,17 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EReference getOptionAnalysisModel_BaseCase();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getShippingTemplates <em>Shipping Templates</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Shipping Templates</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getShippingTemplates()
+	 * @see #getOptionAnalysisModel()
+	 * @generated
+	 */
+	EReference getOptionAnalysisModel_ShippingTemplates();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getBuys <em>Buys</em>}'.
@@ -4368,6 +4408,14 @@ s	 * <!-- end-user-doc -->
 		EReference BUY_OPPORTUNITY__ENTITY = eINSTANCE.getBuyOpportunity_Entity();
 
 		/**
+		 * The meta object literal for the '<em><b>Cv</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BUY_OPPORTUNITY__CV = eINSTANCE.getBuyOpportunity_Cv();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl <em>Sell Opportunity</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -4778,6 +4826,14 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference OPTION_ANALYSIS_MODEL__BASE_CASE = eINSTANCE.getOptionAnalysisModel_BaseCase();
+
+		/**
+		 * The meta object literal for the '<em><b>Shipping Templates</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES = eINSTANCE.getOptionAnalysisModel_ShippingTemplates();
 
 		/**
 		 * The meta object literal for the '<em><b>Buys</b></em>' containment reference list feature.
