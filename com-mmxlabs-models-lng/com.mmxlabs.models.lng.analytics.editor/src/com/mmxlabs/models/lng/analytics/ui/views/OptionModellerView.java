@@ -18,6 +18,7 @@ import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
@@ -432,7 +433,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	}
 
 	private Composite createUseTargetPNLToggleComposite(final Composite composite) {
-		model.setUseTargetPNL(false);
 		final Composite matching = new Composite(composite, SWT.ALL);
 		final GridLayout gridLayoutRadiosMatching = new GridLayout(3, false);
 		matching.setLayout(gridLayoutRadiosMatching);
@@ -447,7 +447,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				model.setUseTargetPNL(false);
+				getDefaultCommandHandler().handleCommand(SetCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL, Boolean.FALSE), model,
+						AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL);
 			}
 
 			@Override
@@ -462,11 +463,27 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				model.setUseTargetPNL(true);
+				getDefaultCommandHandler().handleCommand(SetCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL, Boolean.TRUE), model,
+						AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL);
 			}
 
 			@Override
 			public void widgetDefaultSelected(final SelectionEvent e) {
+			}
+		});
+
+		// FIXME: This control does not respond to e.g. Undo() calls.
+		// Need to hook up explicitly to the refresh adapter
+
+		inputWants.add(model -> {
+			if (model != null) {
+				if (model.isUseTargetPNL()) {
+					matchingYesButton.setSelection(true);
+					matchingNoButton.setSelection(false);
+				} else {
+					matchingNoButton.setSelection(true);
+					matchingYesButton.setSelection(false);
+				}
 			}
 		});
 		return matching;
@@ -591,6 +608,10 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		if (model != null) {
 			setPartName("Modelling " + model.getName());
+
+			if (!model.eAdapters().contains(refreshAdapter)) {
+				model.eAdapters().add(refreshAdapter);
+			}
 		} else {
 			setPartName("");
 		}
@@ -598,9 +619,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			want.accept(model);
 		}
 
-		if (!model.eAdapters().contains(refreshAdapter)) {
-			model.eAdapters().add(refreshAdapter);
-		}
 		refreshSections(true, EnumSet.allOf(SectionType.class));
 
 	}
@@ -670,6 +688,48 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	}
 
 	private GridTreeViewer createSellOptionsViewer(final Composite sellComposite) {
+		{
+			final Button addSellButton = new Button(sellComposite, SWT.PUSH);
+			addSellButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+
+			addSellButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).grab(true, false).create());
+			addSellButton.addSelectionListener(new SelectionListener() {
+
+				LocalMenuHelper helper = new LocalMenuHelper(addSellButton.getParent());
+				{
+					helper.addAction(new RunnableAction("Existing...", () -> {
+						final SellOption row = AnalyticsFactory.eINSTANCE.createSellReference();
+						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), model,
+								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
+						editObject(row);
+					}));
+					helper.addAction(new RunnableAction("New...", () -> {
+						final SellOpportunity row = AnalyticsFactory.eINSTANCE.createSellOpportunity();
+						AnalyticsBuilder.setDefaultEntity(OptionModellerView.this, row);
+						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), model,
+								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
+						editObject(row);
+					}));
+					helper.addAction(new RunnableAction("From market...", () -> {
+						final SellOption row = AnalyticsFactory.eINSTANCE.createSellMarket();
+						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), model,
+								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
+						editObject(row);
+					}));
+				}
+
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					helper.open();
+				}
+
+				@Override
+				public void widgetDefaultSelected(final SelectionEvent e) {
+
+				}
+			});
+		}
+
 		final GridTreeViewer sellOptionsViewer = new GridTreeViewer(sellComposite, SWT.BORDER | SWT.MULTI);
 		ColumnViewerToolTipSupport.enableFor(sellOptionsViewer);
 
@@ -685,70 +745,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		final SellOptionsContextMenuManager listener = new SellOptionsContextMenuManager(sellOptionsViewer, OptionModellerView.this, mgr);
 		inputWants.add(model -> listener.setOptionAnalysisModel(model));
 		sellOptionsViewer.getGrid().addMenuDetectListener(listener);
-
-		{
-			{
-				final Button addSell = new Button(sellComposite, SWT.PUSH);
-				addSell.setText("Add existing");
-				addSell.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.BOTTOM).grab(true, false).create());
-				addSell.addSelectionListener(new SelectionListener() {
-
-					@Override
-					public void widgetSelected(final SelectionEvent e) {
-						final SellOption row = AnalyticsFactory.eINSTANCE.createSellReference();
-						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), model,
-								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
-						editObject(row);
-					}
-
-					@Override
-					public void widgetDefaultSelected(final SelectionEvent e) {
-
-					}
-				});
-			}
-			{
-				final Button addSell = new Button(sellComposite, SWT.PUSH);
-				addSell.setText("Add option");
-				addSell.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.BOTTOM).grab(true, false).create());
-				addSell.addSelectionListener(new SelectionListener() {
-
-					@Override
-					public void widgetSelected(final SelectionEvent e) {
-						final SellOpportunity row = AnalyticsFactory.eINSTANCE.createSellOpportunity();
-						AnalyticsBuilder.setDefaultEntity(OptionModellerView.this, row);
-						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), model,
-								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
-						editObject(row);
-					}
-
-					@Override
-					public void widgetDefaultSelected(final SelectionEvent e) {
-
-					}
-				});
-			}
-			{
-				final Button addSell = new Button(sellComposite, SWT.PUSH);
-				addSell.setText("Add market");
-				addSell.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.BOTTOM).grab(true, false).create());
-				addSell.addSelectionListener(new SelectionListener() {
-
-					@Override
-					public void widgetSelected(final SelectionEvent e) {
-						final SellOption row = AnalyticsFactory.eINSTANCE.createSellMarket();
-						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), model,
-								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
-						editObject(row);
-					}
-
-					@Override
-					public void widgetDefaultSelected(final SelectionEvent e) {
-
-					}
-				});
-			}
-		}
 
 		return sellOptionsViewer;
 	}
@@ -1135,13 +1131,14 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			currentCommandStack.removeCommandStackListener(this);
 			currentCommandStack = null;
 		}
-
-		undoAction.setEditingDomain(editingDomain);
-		redoAction.setEditingDomain(editingDomain);
-
-		undoAction.setEnabled(editingDomain != null && editingDomain.getCommandStack().canUndo());
-		redoAction.setEnabled(editingDomain != null && editingDomain.getCommandStack().canRedo());
-
+		if (undoAction != null) {
+			undoAction.setEditingDomain(editingDomain);
+			undoAction.setEnabled(editingDomain != null && editingDomain.getCommandStack().canUndo());
+		}
+		if (redoAction != null) {
+			redoAction.setEditingDomain(editingDomain);
+			redoAction.setEnabled(editingDomain != null && editingDomain.getCommandStack().canRedo());
+		}
 		if (editingDomain != null) {
 			currentCommandStack = editingDomain.getCommandStack();
 			currentCommandStack.addCommandStackListener(this);
@@ -1153,8 +1150,12 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	@Override
 	public void commandStackChanged(final EventObject event) {
-		undoAction.update();
-		redoAction.update();
+		if (undoAction != null) {
+			undoAction.update();
+		}
+		if (redoAction != null) {
+			redoAction.update();
+		}
 	}
 
 	@Override
