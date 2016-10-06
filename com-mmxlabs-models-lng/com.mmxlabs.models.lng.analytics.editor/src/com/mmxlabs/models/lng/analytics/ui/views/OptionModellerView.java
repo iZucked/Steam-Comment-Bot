@@ -1,6 +1,7 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -12,7 +13,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.MenuManager;
@@ -28,10 +28,8 @@ import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
-import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
-import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -42,15 +40,14 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
@@ -61,8 +58,10 @@ import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.OptionRule;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellOption;
+import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseEvaluator;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.WhatIfEvaluator;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
@@ -116,7 +115,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 		// parent.setLayout(new FillLayout());
 
-		mainComposite = new Composite(parent, SWT.BORDER);
+		mainComposite = new Composite(parent, SWT.NONE);
 		mainComposite.setLayoutData(GridDataFactory.swtDefaults()//
 				.grab(true, true)//
 				.create());
@@ -128,7 +127,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 				.create());
 
 		{
-			final Composite buyComposite = new Composite(mainComposite, SWT.BORDER);
+			buyComposite = new Composite(mainComposite, SWT.NONE);
 			buyComposite.setLayoutData(GridDataFactory.swtDefaults()//
 					.grab(false, true)//
 					.align(SWT.FILL, SWT.FILL).create());
@@ -149,7 +148,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 		// // sc.getHorizontalBar().setPageIncrement(100);
 		// sc.getVerticalBar().setPageIncrement(100);
 
-		final Composite centralComposite = new Composite(mainComposite, SWT.BORDER);
+		centralComposite = new Composite(mainComposite, SWT.NONE);
 		// sc.setContent(centralComposite);
 		centralComposite.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
@@ -279,7 +278,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 		wrapInExpandable(centralComposite, "Results", p -> createResultsViewer(p));
 
 		{
-			final Composite sellComposite = new Composite(mainComposite, SWT.NONE);
+			sellComposite = new Composite(mainComposite, SWT.NONE);
 			sellComposite.setLayoutData(GridDataFactory.swtDefaults()//
 					.grab(false, true)//
 					.align(SWT.FILL, SWT.FILL).create());
@@ -294,7 +293,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 		{
 			{
-				final Composite vesselComposite = new Composite(mainComposite, SWT.BORDER);
+				vesselComposite = new Composite(mainComposite, SWT.NONE);
 				vesselComposite.setLayoutData(GridDataFactory.swtDefaults()//
 						.grab(true, true)//
 						.align(SWT.FILL, SWT.FILL).create());
@@ -404,12 +403,46 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 			doValidate();
 
-			// Coarse grained refresh method..
-			refreshAll();
+			if (notification.getFeature() == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS) {
+				refreshSections(true, EnumSet.of(SectionType.BUYS));
+			} else if (notification.getFeature() == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS) {
+				refreshSections(true, EnumSet.of(SectionType.SELLS));
+			} else if (notification.getFeature() == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES) {
+				refreshSections(true, EnumSet.of(SectionType.VESSEL));
+			} else if (notification.getFeature() == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS) {
+				refreshSections(true, EnumSet.of(SectionType.MIDDLE));
+			} else if (notification.getFeature() == AnalyticsPackage.Literals.BASE_CASE__BASE_CASE) {
+				refreshSections(true, EnumSet.of(SectionType.MIDDLE));
+			} else if (notification.getFeature() == AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE) {
+				refreshSections(true, EnumSet.of(SectionType.MIDDLE));
+			} else if (notification.getNotifier() instanceof BaseCaseRow) {
+				refreshSections(false, EnumSet.of(SectionType.MIDDLE));
+			} else if (notification.getNotifier() instanceof PartialCaseRow) {
+				refreshSections(false, EnumSet.of(SectionType.MIDDLE));
+			} else if (notification.getNotifier() instanceof BuyOption) {
+				refreshSections(false, EnumSet.of(SectionType.BUYS, SectionType.MIDDLE));
+			} else if (notification.getNotifier() instanceof SellOption) {
+				refreshSections(false, EnumSet.of(SectionType.SELLS, SectionType.MIDDLE));
+			} else if (notification.getNotifier() instanceof ShippingOption) {
+				refreshSections(false, EnumSet.of(SectionType.VESSEL, SectionType.MIDDLE));
+			} else if (notification.getNotifier() instanceof ResultSet) {
+				refreshSections(true, EnumSet.of(SectionType.MIDDLE));
+			} else if (notification.getNotifier() instanceof AnalysisResultRow) {
+				refreshSections(false, EnumSet.of(SectionType.MIDDLE));
+			}
+			// noti
+			// if (.etFeature) {
+			// // Coarse grained refresh method..
+			// refreshAll();
+			// }
 		}
 	};
 	private Label baseCaseProftLabel;
 	private Composite mainComposite;
+	private Composite buyComposite;
+	private Composite centralComposite;
+	private Composite vesselComposite;
+	private Composite sellComposite;
 
 	private void setInput(final OptionAnalysisModel model) {
 		baseCaseViewer.setInput(model);
@@ -725,7 +758,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 			@Override
 			public void expansionStateChanged(final ExpansionEvent e) {
-				composite.pack();
+				composite.layout();
 			}
 		});
 
@@ -950,21 +983,48 @@ public class OptionModellerView extends ScenarioInstanceView {
 		viewer.getGrid().addMouseListener(new EditObjectMouseListener(viewer, OptionModellerView.this));
 	}
 
+	private enum SectionType {
+		BUYS, MIDDLE, SELLS, VESSEL
+	};
+
 	private void refreshAll() {
+
+	}
+
+	private void refreshSections(boolean layout, EnumSet<SectionType> sections) {
 		// Coarse grained refresh method..
-		baseCaseViewer.refresh();
-		partialCaseViewer.refresh();
-		buyOptionsViewer.refresh();
-		sellOptionsViewer.refresh();
-		rulesViewer.refresh();
-		resultsViewer.refresh();
-		resultsViewer.expandAll();
-		vesselViewer.refresh();
-		shippingOptionsViewer.refresh();
-		vesselViewer.expandAll();
-		baseCaseProftLabel.setText(String.format("Base P&&L: $%,d", model.getBaseCase().getProfitAndLoss()));
-		packAll(mainComposite);
-		mainComposite.pack(true);
+		if (sections.contains(SectionType.BUYS)) {
+			buyOptionsViewer.refresh();
+			if (layout) {
+				packAll(buyComposite);
+			}
+		}
+		if (sections.contains(SectionType.MIDDLE)) {
+			baseCaseViewer.refresh();
+			baseCaseProftLabel.setText(String.format("Base P&&L: $%,d", model.getBaseCase().getProfitAndLoss()));
+			partialCaseViewer.refresh();
+			rulesViewer.refresh();
+			resultsViewer.refresh();
+			resultsViewer.expandAll();
+			if (layout) {
+				packAll(centralComposite);
+			}
+		}
+		if (sections.contains(SectionType.SELLS)) {
+			sellOptionsViewer.refresh();
+			if (layout) {
+				packAll(sellComposite);
+			}
+		}
+		if (sections.contains(SectionType.VESSEL)) {
+			vesselViewer.refresh();
+			shippingOptionsViewer.refresh();
+			vesselViewer.expandAll();
+			if (layout) {
+				packAll(vesselComposite);
+			}
+		}
+		// mainComposite.pack(true);
 	}
 
 	public void packAll(final Control c) {
