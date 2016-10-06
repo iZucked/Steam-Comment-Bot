@@ -2,6 +2,7 @@ package com.mmxlabs.models.lng.analytics.ui.views;
 
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.EventObject;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -10,9 +11,14 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.command.CommandStack;
+import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.ui.action.RedoAction;
+import org.eclipse.emf.edit.ui.action.UndoAction;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.MenuManager;
@@ -41,7 +47,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -90,7 +99,11 @@ import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
-public class OptionModellerView extends ScenarioInstanceView {
+public class OptionModellerView extends ScenarioInstanceView implements CommandStackListener {
+
+	private UndoAction undoAction;
+	private RedoAction redoAction;
+	private CommandStack currentCommandStack;
 
 	private GridTreeViewer baseCaseViewer;
 	private GridTreeViewer partialCaseViewer;
@@ -338,6 +351,20 @@ public class OptionModellerView extends ScenarioInstanceView {
 		refreshAll();
 		listenToScenarioSelection();
 		packAll(mainComposite);
+
+		final IActionBars actionBars = getViewSite().getActionBars();
+
+		final ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+		undoAction = new UndoAction();
+		undoAction.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_UNDO));
+		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), undoAction);
+
+		redoAction = new RedoAction();
+		redoAction.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_REDO));
+		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
+
+		updateActions(null);
+
 	}
 
 	private Composite createUseTargetPNLToggleComposite(final Composite composite) {
@@ -852,6 +879,8 @@ public class OptionModellerView extends ScenarioInstanceView {
 	@Override
 	public void setFocus() {
 		ViewerHelper.setFocus(resultsViewer);
+
+		updateActions(getEditingDomain());
 	}
 
 	private GridViewerColumn createColumn(final GridTreeViewer viewer, final String name, final ICellRenderer renderer, final ETypedElement... pathObjects) {
@@ -972,6 +1001,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 				imgError.dispose();
 				imgWarn.dispose();
 				imgInfo.dispose();
+				super.dispose();
 			}
 
 		});
@@ -1051,5 +1081,56 @@ public class OptionModellerView extends ScenarioInstanceView {
 			popExtraValidationContext();
 
 		}
+	}
+
+	private void updateActions(final EditingDomain editingDomain) {
+
+		if (currentCommandStack != null) {
+			currentCommandStack.removeCommandStackListener(this);
+			currentCommandStack = null;
+		}
+
+		undoAction.setEditingDomain(editingDomain);
+		redoAction.setEditingDomain(editingDomain);
+
+		undoAction.setEnabled(editingDomain != null && editingDomain.getCommandStack().canUndo());
+		redoAction.setEnabled(editingDomain != null && editingDomain.getCommandStack().canRedo());
+
+		if (editingDomain != null) {
+			currentCommandStack = editingDomain.getCommandStack();
+			currentCommandStack.addCommandStackListener(this);
+
+			undoAction.update();
+			redoAction.update();
+		}
+	}
+
+	@Override
+	public void commandStackChanged(final EventObject event) {
+		undoAction.update();
+		redoAction.update();
+	}
+
+	@Override
+	public void dispose() {
+		CommandStack pCurrentCommandStack = currentCommandStack;
+		if (pCurrentCommandStack != null) {
+			pCurrentCommandStack.removeCommandStackListener(this);
+			currentCommandStack = null;
+		}
+		super.dispose();
+	}
+
+	@Override
+	public void setLocked(final boolean locked) {
+
+		// Disable while locked.
+		if (locked) {
+			updateActions(null);
+		} else {
+			updateActions(getEditingDomain());
+		}
+
+		super.setLocked(locked);
 	}
 }
