@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
+import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder.ShippingType;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
@@ -145,7 +146,7 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 
 					}));
 				}
-				if (AnalyticsBuilder.isNonShipped(row)) {
+				if (AnalyticsBuilder.isNonShipped(row) == ShippingType.NonShipped) {
 					mgr.add(new RunnableAction("Create Nominated", () -> {
 						final NominatedShippingOption o = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
@@ -155,7 +156,7 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 						refreshCallback.run();
 
 					}));
-				} else {
+				} else if (AnalyticsBuilder.isNonShipped(row) == ShippingType.Shipped) {
 					mgr.add(new RunnableAction("Create RT", () -> {
 						final RoundTripShippingOption o = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(

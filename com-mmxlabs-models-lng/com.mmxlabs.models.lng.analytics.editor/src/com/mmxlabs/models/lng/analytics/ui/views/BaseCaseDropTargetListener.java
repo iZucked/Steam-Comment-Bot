@@ -25,8 +25,8 @@ import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellOption;
-import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
+import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder.ShippingType;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -126,7 +126,7 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 					final Vessel vessel = (Vessel) o;
 
 					if (existing != null) {
-						if (AnalyticsBuilder.isNonShipped(existing)) {
+						if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.NonShipped) {
 							final NominatedShippingOption opt = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
 							opt.setNominatedVessel(vessel);
 
@@ -137,7 +137,7 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 							refreshCallback.run();
 
-						} else {
+						} else if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.Shipped) {
 							final BaseCaseRow pExisting = existing;
 							menuHelper.clearActions();
 							menuHelper.addAction(new RunnableAction("Create RT", () -> {

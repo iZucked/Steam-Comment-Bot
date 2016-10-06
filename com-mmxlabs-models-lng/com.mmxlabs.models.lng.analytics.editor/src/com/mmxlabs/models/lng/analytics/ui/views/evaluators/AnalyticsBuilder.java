@@ -143,7 +143,7 @@ public class AnalyticsBuilder {
 		if (row.getBuyOptions().isEmpty() || row.getSellOptions().isEmpty()) {
 			return ShippingType.Mixed;
 		}
-		
+
 		ShippingType buyType = null;
 		for (final BuyOption buy : row.getBuyOptions()) {
 			buyType = updateTypeForLoad(buy, buyType);
@@ -167,96 +167,110 @@ public class AnalyticsBuilder {
 		return ShippingType.NonShipped;
 	}
 
-	private static ShippingType updateTypeForLoad(BuyOption buy, ShippingType type) {
+	private static ShippingType updateTypeForLoad(final BuyOption buy, final ShippingType type) {
 		if (type == ShippingType.Mixed) {
 			return ShippingType.Mixed;
 		}
 
-		boolean nonShipped = isNonShipped(buy);
+		final ShippingType thisType = getBuyShippingType(buy);
 
 		if (type == null) {
-			return nonShipped ? ShippingType.NonShipped : ShippingType.Shipped;
+			return thisType;
 		} else {
-			if (type == ShippingType.Shipped && !nonShipped) {
+			if (type == ShippingType.Shipped && thisType == ShippingType.Shipped) {
 				return ShippingType.Shipped;
 			}
-			if (type == ShippingType.NonShipped && nonShipped) {
+			if (type == ShippingType.NonShipped && thisType == ShippingType.NonShipped) {
 				return ShippingType.NonShipped;
 			}
 		}
 		return ShippingType.Mixed;
 	}
 
-	private static ShippingType updateTypeForDischarge(SellOption sell, ShippingType type) {
+	private static ShippingType updateTypeForDischarge(final SellOption sell, final ShippingType type) {
 		if (type == ShippingType.Mixed) {
 			return ShippingType.Mixed;
 		}
 
-		boolean nonShipped = isNonShipped(sell);
+		final ShippingType thisType = getSellShippingType(sell);
 
 		if (type == null) {
-			return nonShipped ? ShippingType.NonShipped : ShippingType.Shipped;
+			return thisType;
 		} else {
-			if (type == ShippingType.Shipped && !nonShipped) {
+			if (type == ShippingType.Shipped && thisType == ShippingType.Shipped) {
 				return ShippingType.Shipped;
 			}
-			if (type == ShippingType.NonShipped && nonShipped) {
+			if (type == ShippingType.NonShipped && thisType == ShippingType.NonShipped) {
 				return ShippingType.NonShipped;
 			}
 		}
 		return ShippingType.Mixed;
 	}
 
-	public static boolean isNonShipped(@NonNull final BaseCaseRow row) {
-
+	public static ShippingType isNonShipped(@NonNull final BaseCaseRow row) {
+		if (row.getBuyOption() == null || row.getSellOption() == null) {
+			return ShippingType.Mixed;
+		}
 		final BuyOption buy = row.getBuyOption();
-		if (buy != null && isNonShipped(buy)) {
-			return true;
+
+		final ShippingType buyType = getBuyShippingType(buy);
+
+		if (buyType == ShippingType.Mixed) {
+			return ShippingType.Mixed;
 		}
+
 		final SellOption sell = row.getSellOption();
-		if (sell != null && isNonShipped(sell)) {
-			return true;
+		final ShippingType sellType = getSellShippingType(sell);
+
+		if (sellType == ShippingType.Mixed) {
+			return ShippingType.Mixed;
 		}
-		return false;
+		if (buyType == ShippingType.NonShipped && sellType == ShippingType.NonShipped) {
+			return ShippingType.Mixed;
+		}
+		if (buyType == ShippingType.Shipped && sellType == ShippingType.Shipped) {
+			return ShippingType.Shipped;
+		}
+		return ShippingType.NonShipped;
 	}
 
-	public static boolean isNonShipped(@NonNull final BuyOption buy) {
+	public static ShippingType getBuyShippingType(@NonNull final BuyOption buy) {
 		if (buy instanceof BuyReference) {
 			final BuyReference buyReference = (BuyReference) buy;
 			final LoadSlot load = buyReference.getSlot();
 			if (load != null) {
-				return load.isDESPurchase();
+				return load.isDESPurchase() ? ShippingType.NonShipped : ShippingType.Shipped;
 			}
-			return false;
+			return ShippingType.Mixed;
 
 		} else if (buy instanceof BuyOpportunity) {
 			final BuyOpportunity buyOpportunity = (BuyOpportunity) buy;
-			return buyOpportunity.isDesPurchase();
+			return buyOpportunity.isDesPurchase() ? ShippingType.NonShipped : ShippingType.Shipped;
 		} else if (buy instanceof BuyMarket) {
 			final BuyMarket buyMarket = (BuyMarket) buy;
 			final SpotMarket spotMarket = buyMarket.getMarket();
-			return spotMarket instanceof DESPurchaseMarket;
+			return spotMarket instanceof DESPurchaseMarket ? ShippingType.NonShipped : ShippingType.Shipped;
 		}
 
 		throw new IllegalArgumentException("Unsupported BuyOption type");
 	}
 
-	public static boolean isNonShipped(@NonNull final SellOption sell) {
+	public static ShippingType getSellShippingType(@NonNull final SellOption sell) {
 		if (sell instanceof SellReference) {
 			final SellReference sellReference = (SellReference) sell;
 			final DischargeSlot discharge = sellReference.getSlot();
 			if (discharge != null) {
-				return discharge.isFOBSale();
+				return discharge.isFOBSale() ? ShippingType.NonShipped : ShippingType.Shipped;
 			}
-			return false;
+			return ShippingType.Mixed;
 
 		} else if (sell instanceof SellOpportunity) {
 			final SellOpportunity sellOpportunity = (SellOpportunity) sell;
-			return sellOpportunity.isFobSale();
+			return sellOpportunity.isFobSale() ? ShippingType.NonShipped : ShippingType.Shipped;
 		} else if (sell instanceof SellMarket) {
 			final SellMarket buyMarket = (SellMarket) sell;
 			final SpotMarket spotMarket = buyMarket.getMarket();
-			return spotMarket instanceof FOBSalesMarket;
+			return spotMarket instanceof FOBSalesMarket ? ShippingType.NonShipped : ShippingType.Shipped;
 		}
 
 		throw new IllegalArgumentException("Unsupported SellOption type");

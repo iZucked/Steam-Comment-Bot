@@ -271,6 +271,67 @@
                      class="RoundTripShippingOption">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.BaseCaseRowConstraint"
+                  id="com.mmxlabs.models.lng.analytics.validation.BaseCaseRowConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="BaseCaseRowConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="BaseCaseRow">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.PartialCaseRowConstraint"
+                  id="com.mmxlabs.models.lng.analytics.validation.PartialCaseRowConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="PartialCaseRowConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="PartialCaseRow">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.BaseCaseConstraint"
+                  id="com.mmxlabs.models.lng.analytics.validation.BaseCaseConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="BaseCaseConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.PartialCaseConstraint"
+                  id="com.mmxlabs.models.lng.analytics.validation.PartialCaseConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="PartialCaseConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="PartialCase">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>

@@ -22,6 +22,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.dnd.DND;
@@ -525,6 +526,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 		GridViewerHelper.configureLookAndFeel(baseCaseViewer);
 		baseCaseViewer.getGrid().setHeaderVisible(true);
+		baseCaseViewer.getGrid().setRowHeaderVisible(true);
 
 		createColumn(baseCaseViewer, "Buy", new BuyOptionDescriptionFormatter(), AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION);
 		createColumn(baseCaseViewer, "Sell", new SellOptionDescriptionFormatter(), AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
@@ -551,6 +553,8 @@ public class OptionModellerView extends ScenarioInstanceView {
 		partialCaseViewer.getGrid().setHeaderVisible(true);
 		partialCaseViewer.getGrid().setAutoHeight(true);
 		partialCaseViewer.getGrid().setCellSelectionEnabled(true);
+
+		partialCaseViewer.getGrid().setRowHeaderVisible(true);
 
 		createColumn(partialCaseViewer, "Buy", new BuyOptionDescriptionFormatter(), AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS).getColumn().setWordWrap(true);
 		createColumn(partialCaseViewer, "Sell", new SellOptionDescriptionFormatter(), AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS).getColumn().setWordWrap(true);
@@ -633,6 +637,8 @@ public class OptionModellerView extends ScenarioInstanceView {
 							return imgWarn;
 						}
 					}
+				} else {
+
 				}
 				return null;
 			}
@@ -688,11 +694,39 @@ public class OptionModellerView extends ScenarioInstanceView {
 			}
 
 			@Override
+			public void update(ViewerCell cell) {
+				super.update(cell);
+
+				GridItem item = (GridItem) cell.getItem();
+				item.setHeaderText("");
+				item.setHeaderImage(null);
+
+				Object element = cell.getElement();
+				if (element instanceof BaseCaseRow || element instanceof PartialCaseRow) {
+					if (validationErrors.containsKey(element)) {
+						final IStatus status = validationErrors.get(element);
+						if (!status.isOK()) {
+							if (status.matches(IStatus.ERROR)) {
+								item.setHeaderImage(imgError);
+							}
+							if (status.matches(IStatus.WARNING)) {
+								item.setHeaderImage(imgWarn);
+							}
+							if (status.matches(IStatus.INFO)) {
+								item.setHeaderImage(imgWarn);
+							}
+						}
+					}
+				}
+			}
+
+			@Override
 			public void dispose() {
 				imgError.dispose();
 				imgWarn.dispose();
 				imgInfo.dispose();
 			}
+
 		});
 		return gvc;
 	}
