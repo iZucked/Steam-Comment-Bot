@@ -12,12 +12,15 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
@@ -25,8 +28,10 @@ import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
+import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -37,7 +42,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.events.IExpansionListener;
@@ -49,9 +56,12 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOption;
+import com.mmxlabs.models.lng.analytics.FleetShippingOption;
+import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.OptionRule;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseEvaluator;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.WhatIfEvaluator;
@@ -67,14 +77,18 @@ import com.mmxlabs.models.lng.analytics.ui.views.providers.OptionsViewerContentP
 import com.mmxlabs.models.lng.analytics.ui.views.providers.PartialCaseContentProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.ResultsViewerContentProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.RulesViewerContentProvider;
+import com.mmxlabs.models.lng.analytics.ui.views.providers.ShippingOptionsContentProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.VesselAndClassContentProvider;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
+import com.mmxlabs.rcp.common.LocalMenuHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class OptionModellerView extends ScenarioInstanceView {
@@ -86,6 +100,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 	private GridTreeViewer rulesViewer;
 	private GridTreeViewer resultsViewer;
 	private GridTreeViewer vesselViewer;
+	private GridTreeViewer shippingOptionsViewer;
 	private OptionAnalysisModel model;
 
 	private final Map<Object, IStatus> validationErrors = new HashMap<Object, IStatus>();
@@ -99,14 +114,24 @@ public class OptionModellerView extends ScenarioInstanceView {
 		validationSupport = new DialogValidationSupport(new DefaultExtraValidationContext(getRootObject(), false));
 		validationSupport.setValidationTargets(Collections.singleton(model));
 
-		parent.setLayout(new FillLayout());
+		// parent.setLayout(new FillLayout());
 
-		mainComposite = new Composite(parent, SWT.NONE);
-		mainComposite.setLayout(new GridLayout(4, false));
+		mainComposite = new Composite(parent, SWT.BORDER);
+		mainComposite.setLayoutData(GridDataFactory.swtDefaults()//
+				.grab(true, true)//
+				.create());
+		mainComposite.setLayout(GridLayoutFactory.fillDefaults()//
+				.equalWidth(false) //
+				.numColumns(6) //
+				.spacing(0, 0) //
+				.margins(0, 0)//
+				.create());
 
 		{
-			final Composite buyComposite = new Composite(mainComposite, SWT.NONE);
-			buyComposite.setLayoutData(GridDataFactory.fillDefaults().create());
+			final Composite buyComposite = new Composite(mainComposite, SWT.BORDER);
+			buyComposite.setLayoutData(GridDataFactory.swtDefaults()//
+					.grab(false, true)//
+					.align(SWT.FILL, SWT.FILL).create());
 			buyComposite.setLayout(new GridLayout(1, true));
 
 			buyOptionsViewer = createBuyOptionsViewer(buyComposite);
@@ -117,37 +142,64 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 		}
 
-		final Composite composite = new Composite(mainComposite, SWT.NONE);
-		composite.setLayout(new GridLayout(2, true));
+		// final ScrolledComposite sc = new ScrolledComposite(mainComposite, SWT.BORDER | SWT.V_SCROLL);
+		// sc.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		// sc.setExpandHorizontal(true);
+		// sc.setExpandVertical(true);
+		// // sc.getHorizontalBar().setPageIncrement(100);
+		// sc.getVerticalBar().setPageIncrement(100);
+
+		final Composite centralComposite = new Composite(mainComposite, SWT.BORDER);
+		// sc.setContent(centralComposite);
+		centralComposite.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
+
+		centralComposite.setLayoutData(GridDataFactory.swtDefaults()//
+				.grab(true, true)//
+				.align(SWT.FILL, SWT.FILL).span(1, 1) //
+				.create());
+		// sc.setLayoutData(GridDataFactory.swtDefaults()//
+		// .grab(true, true)//
+		// .align(SWT.FILL, SWT.FILL).span(3, 1) //
+		// .create());
+		// sc.setLayout(new GridLayout(1, true));
+		//
+		// sc.addListener(SWT.Resize, new Listener() {
+		//
+		// public void handleEvent(final Event event) {
+		// sc.setMinSize(centralComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		// }
+		//
+		// });
+		centralComposite.setLayout(new GridLayout(1, true));
 		{
-
-			wrapInExpandable(composite, mainComposite, "Base Case", p -> createBaseCaseViewer(p), expandableCompo -> {
-				final Button textClient = new Button(expandableCompo, SWT.PUSH);
-				textClient.setText("+");
-				expandableCompo.setTextClient(textClient);
-				textClient.addSelectionListener(new SelectionListener() {
-
-					@Override
-					public void widgetSelected(final SelectionEvent e) {
-						final BaseCaseRow row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
-						row.setShipping(AnalyticsFactory.eINSTANCE.createRoundTripShippingOption());
-						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model.getBaseCase(), AnalyticsPackage.Literals.BASE_CASE__BASE_CASE, row), model.getBaseCase(),
-								AnalyticsPackage.Literals.BASE_CASE__BASE_CASE);
-						refreshAll();
-					}
-
-					@Override
-					public void widgetDefaultSelected(final SelectionEvent e) {
-
-					}
-				});
+			// createBaseCaseViewer(centralComposite);
+			wrapInExpandable(centralComposite, "Base Case", p -> createBaseCaseViewer(p), expandableCompo -> {
+				// final Button textClient = new Button(expandableCompo, SWT.PUSH);
+				// textClient.setText("+");
+				// expandableCompo.setTextClient(textClient);
+				// textClient.addSelectionListener(new SelectionListener() {
+				//
+				// @Override
+				// public void widgetSelected(final SelectionEvent e) {
+				// final BaseCaseRow row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+				// row.setShipping(AnalyticsFactory.eINSTANCE.createRoundTripShippingOption());
+				// getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model.getBaseCase(), AnalyticsPackage.Literals.BASE_CASE__BASE_CASE, row), model.getBaseCase(),
+				// AnalyticsPackage.Literals.BASE_CASE__BASE_CASE);
+				// refreshAll();
+				// }
+				//
+				// @Override
+				// public void widgetDefaultSelected(final SelectionEvent e) {
+				//
+				// }
+				// });
 			});
 
-			baseCaseProftLabel = new Label(composite, SWT.NONE);
+			baseCaseProftLabel = new Label(centralComposite, SWT.NONE);
 			GridDataFactory.generate(baseCaseProftLabel, 2, 1);
 			baseCaseProftLabel.setText("Base P&&L: <not calculated>");
 
-			final Button baseCaseCalculator = new Button(composite, SWT.FLAT);
+			final Button baseCaseCalculator = new Button(centralComposite, SWT.FLAT);
 			baseCaseCalculator.setText("Calc.");
 			baseCaseCalculator.addSelectionListener(new SelectionListener() {
 
@@ -170,26 +222,26 @@ public class OptionModellerView extends ScenarioInstanceView {
 		}
 
 		{
-			wrapInExpandable(composite, mainComposite, "What if?", p -> createPartialCaseViewer(p), expandableCompo -> {
-				final Button textClient = new Button(expandableCompo, SWT.PUSH);
-				textClient.setText("+");
-				expandableCompo.setTextClient(textClient);
-				textClient.addSelectionListener(new SelectionListener() {
-
-					@Override
-					public void widgetSelected(final SelectionEvent e) {
-						final PartialCaseRow row = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
-						row.setShipping(AnalyticsFactory.eINSTANCE.createRoundTripShippingOption());
-						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE, row),
-								model.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE);
-						refreshAll();
-					}
-
-					@Override
-					public void widgetDefaultSelected(final SelectionEvent e) {
-
-					}
-				});
+			wrapInExpandable(centralComposite, "What if?", p -> createPartialCaseViewer(p), expandableCompo -> {
+				// final Button textClient = new Button(expandableCompo, SWT.PUSH);
+				// textClient.setText("+");
+				// expandableCompo.setTextClient(textClient);
+				// textClient.addSelectionListener(new SelectionListener() {
+				//
+				// @Override
+				// public void widgetSelected(final SelectionEvent e) {
+				// final PartialCaseRow row = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
+				// row.setShipping(AnalyticsFactory.eINSTANCE.createRoundTripShippingOption());
+				// getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE, row),
+				// model.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE);
+				// refreshAll();
+				// }
+				//
+				// @Override
+				// public void widgetDefaultSelected(final SelectionEvent e) {
+				//
+				// }
+				// });
 			});
 
 			hookOpenEditor(partialCaseViewer);
@@ -198,16 +250,16 @@ public class OptionModellerView extends ScenarioInstanceView {
 			partialCaseViewer.addDropSupport(DND.DROP_MOVE, types, new PartialCaseDropTargetListener(OptionModellerView.this, model, () -> refreshAll(), partialCaseViewer));
 		}
 
-		createRulesViewer(composite);
+		createRulesViewer(centralComposite);
 		GridDataFactory.generate(rulesViewer.getGrid(), 2, 1);
 
 		/*
 		 * toggle for target pnl
 		 */
-		Composite targetPNLToggle = createUseTargetPNLToggleComposite(composite);
-	    GridDataFactory.generate(targetPNLToggle, 2, 1);
-		
-		final Button generateButton = new Button(composite, SWT.PUSH);
+		final Composite targetPNLToggle = createUseTargetPNLToggleComposite(centralComposite);
+		GridDataFactory.generate(targetPNLToggle, 2, 1);
+
+		final Button generateButton = new Button(centralComposite, SWT.PUSH);
 		generateButton.setText("Generate");
 		GridDataFactory.generate(generateButton, 2, 1);
 
@@ -224,11 +276,13 @@ public class OptionModellerView extends ScenarioInstanceView {
 			}
 		});
 
-		wrapInExpandable(composite, mainComposite, "Results", p -> createResultsViewer(p));
+		wrapInExpandable(centralComposite, "Results", p -> createResultsViewer(p));
 
 		{
 			final Composite sellComposite = new Composite(mainComposite, SWT.NONE);
-			sellComposite.setLayoutData(GridDataFactory.fillDefaults().create());
+			sellComposite.setLayoutData(GridDataFactory.swtDefaults()//
+					.grab(false, true)//
+					.align(SWT.FILL, SWT.FILL).create());
 			sellComposite.setLayout(new GridLayout(1, true));
 
 			sellOptionsViewer = createSellOptionsViewer(sellComposite);
@@ -239,16 +293,47 @@ public class OptionModellerView extends ScenarioInstanceView {
 		}
 
 		{
-			final Composite vesselComposite = new Composite(mainComposite, SWT.NONE);
-			vesselComposite.setLayoutData(GridDataFactory.fillDefaults().create());
-			vesselComposite.setLayout(new GridLayout(1, true));
+			{
+				final Composite vesselComposite = new Composite(mainComposite, SWT.BORDER);
+				vesselComposite.setLayoutData(GridDataFactory.swtDefaults()//
+						.grab(true, true)//
+						.align(SWT.FILL, SWT.FILL).create());
+				vesselComposite.setLayout(new GridLayout(1, true));
+				// vesselComposite.setExpanded(true);
+				// final Composite c = new Composite(vesselComposite, SWT.NONE);
 
-			createVesselOptionsViewer(vesselComposite);
-
-			vesselViewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
-
-			hookDragSource(vesselViewer);
-
+				wrapInExpandable(vesselComposite, "Shipping ", p -> createShippingOptionsViewer(p).getGrid());
+				wrapInExpandable(vesselComposite, "Vessels", p -> createVesselOptionsViewer(p).getGrid());
+				//
+				// shippingOptionsViewer = createShippingOptionsViewer(c);
+				// c.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+				// shippingOptionsViewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+				//
+				// hookDragSource(shippingOptionsViewer);
+				//
+				// // final ExpandItem item2 = new ExpandItem(vesselComposite, SWT.BORDER);
+				// item2.setText("Shipping");
+				// item2.setControl(c);
+				// item2.setHeight(c.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+			}
+			// {
+			// final ExpandableComposite vesselComposite = new ExpandableComposite(mainComposite, SWT.BORDER);
+			// vesselComposite.setLayoutData(GridDataFactory.swtDefaults()//
+			// .grab(false, true)//
+			// .align(SWT.FILL, SWT.FILL).create());
+			// vesselComposite.setLayout(new GridLayout(1, true));
+			// vesselComposite.setExpanded(true);
+			// final Composite c = new Composite(vesselComposite, SWT.NONE);
+			// c.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+			// vesselViewer = createVesselOptionsViewer(c);
+			// vesselViewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+			// hookDragSource(vesselViewer);
+			// // final ExpandItem item1 = new ExpandItem(vesselComposite, SWT.BORDER);
+			// // item1.setText("Vessels");
+			// // item1.setControl(c);
+			// // item1.setHeight(c.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+			//
+			// }
 		}
 
 		refreshAll();
@@ -258,40 +343,40 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 	private Composite createUseTargetPNLToggleComposite(final Composite composite) {
 		model.setUseTargetPNL(false);
-	    Composite matching = new Composite(composite, SWT.ALL);
-	    GridLayout gridLayoutRadiosMatching = new GridLayout(3, false);
-	    matching.setLayout(gridLayoutRadiosMatching);
-	    GridData gdM = new GridData(SWT.LEFT, SWT.BEGINNING, false, false);
-	    gdM.horizontalSpan = 2;
-	    matching.setLayoutData(gdM);
-	    new Label(matching, SWT.NONE).setText("Use target pnl from base case");
-	    Button matchingNoButton = new Button(matching, SWT.RADIO|SWT.LEFT);
-	    matchingNoButton.setSelection(true);
-	    matchingNoButton.setText("No");
-	    matchingNoButton.addSelectionListener(new SelectionListener() {
-			
+		final Composite matching = new Composite(composite, SWT.ALL);
+		final GridLayout gridLayoutRadiosMatching = new GridLayout(3, false);
+		matching.setLayout(gridLayoutRadiosMatching);
+		final GridData gdM = new GridData(SWT.LEFT, SWT.BEGINNING, false, false);
+		gdM.horizontalSpan = 2;
+		matching.setLayoutData(gdM);
+		new Label(matching, SWT.NONE).setText("Use target pnl from base case");
+		final Button matchingNoButton = new Button(matching, SWT.RADIO | SWT.LEFT);
+		matchingNoButton.setSelection(true);
+		matchingNoButton.setText("No");
+		matchingNoButton.addSelectionListener(new SelectionListener() {
+
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				model.setUseTargetPNL(false);
 			}
-			
+
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void widgetDefaultSelected(final SelectionEvent e) {
 			}
 		});
 
-	    Button matchingYesButton = new Button(matching, SWT.RADIO|SWT.LEFT);
-	    matchingYesButton.setText("Yes");
-	    matchingYesButton.setSelection(false);
-	    matchingYesButton.addSelectionListener(new SelectionListener() {
-			
+		final Button matchingYesButton = new Button(matching, SWT.RADIO | SWT.LEFT);
+		matchingYesButton.setText("Yes");
+		matchingYesButton.setSelection(false);
+		matchingYesButton.addSelectionListener(new SelectionListener() {
+
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				model.setUseTargetPNL(true);
 			}
-			
+
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void widgetDefaultSelected(final SelectionEvent e) {
 			}
 		});
 		return matching;
@@ -334,6 +419,8 @@ public class OptionModellerView extends ScenarioInstanceView {
 		rulesViewer.setInput(model);
 		resultsViewer.setInput(model);
 		vesselViewer.setInput(this);
+		vesselViewer.expandAll();
+		shippingOptionsViewer.setInput(model);
 		if (!model.eAdapters().contains(refreshAdapter)) {
 			model.eAdapters().add(refreshAdapter);
 		}
@@ -352,8 +439,8 @@ public class OptionModellerView extends ScenarioInstanceView {
 		buyOptionsViewer.setContentProvider(new OptionsViewerContentProvider(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS));
 		hookOpenEditor(buyOptionsViewer);
 
-		MenuManager mgr = new MenuManager();
-		BuyOptionsContextMenuManager listener = new BuyOptionsContextMenuManager(buyOptionsViewer, OptionModellerView.this, mgr, () -> refreshAll());
+		final MenuManager mgr = new MenuManager();
+		final BuyOptionsContextMenuManager listener = new BuyOptionsContextMenuManager(buyOptionsViewer, OptionModellerView.this, mgr, () -> refreshAll());
 		listener.setOptionAnalysisModel(model);
 		buyOptionsViewer.getGrid().addMenuDetectListener(listener);
 
@@ -439,8 +526,8 @@ public class OptionModellerView extends ScenarioInstanceView {
 		sellOptionsViewer.setContentProvider(new OptionsViewerContentProvider(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS));
 		hookOpenEditor(sellOptionsViewer);
 
-		MenuManager mgr = new MenuManager();
-		SellOptionsContextMenuManager listener = new SellOptionsContextMenuManager(sellOptionsViewer, OptionModellerView.this, mgr, () -> refreshAll());
+		final MenuManager mgr = new MenuManager();
+		final SellOptionsContextMenuManager listener = new SellOptionsContextMenuManager(sellOptionsViewer, OptionModellerView.this, mgr, () -> refreshAll());
 		listener.setOptionAnalysisModel(model);
 		sellOptionsViewer.getGrid().addMenuDetectListener(listener);
 
@@ -513,15 +600,95 @@ public class OptionModellerView extends ScenarioInstanceView {
 		return sellOptionsViewer;
 	}
 
-	private void createVesselOptionsViewer(final Composite parent) {
-		vesselViewer = new GridTreeViewer(parent, SWT.BORDER | SWT.MULTI);
+	private GridTreeViewer createShippingOptionsViewer(final Composite vesselComposite) {
+
+		shippingOptionsViewer = new GridTreeViewer(vesselComposite, SWT.BORDER | SWT.MULTI);
+
+		GridViewerHelper.configureLookAndFeel(shippingOptionsViewer);
+
+		shippingOptionsViewer.getGrid().setHeaderVisible(true);
+
+		createColumn(shippingOptionsViewer, "Shipping", new ShippingOptionDescriptionFormatter());
+		shippingOptionsViewer.setContentProvider(new ShippingOptionsContentProvider(this));
+		hookOpenEditor(shippingOptionsViewer);
+
+		Transfer[] transferTypes = new Transfer[] { LocalSelectionTransfer.getTransfer() };
+		shippingOptionsViewer.addDropSupport(DND.DROP_MOVE, transferTypes, new ShippingOptionsDropTargetListener(OptionModellerView.this, model, () -> refreshAll(), shippingOptionsViewer));
+
+		final MenuManager mgr = new MenuManager();
+		final ShippingOptionsContextMenuManager listener = new ShippingOptionsContextMenuManager(shippingOptionsViewer, OptionModellerView.this, mgr, () -> refreshAll());
+		listener.setOptionAnalysisModel(model);
+		shippingOptionsViewer.getGrid().addMenuDetectListener(listener);
+
+		{
+			{
+				final Button addShipping = new Button(vesselComposite, SWT.PUSH);
+				addShipping.setText("Add...");
+				addShipping.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.BOTTOM).grab(true, false).create());
+				addShipping.addSelectionListener(new SelectionListener() {
+
+					LocalMenuHelper helper = new LocalMenuHelper(addShipping.getParent());
+					{
+						helper.addAction(new RunnableAction("Nominated vessel", () -> {
+							final NominatedShippingOption opt = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
+
+							OptionModellerView.this.getDefaultCommandHandler().handleCommand(
+									AddCommand.create(OptionModellerView.this.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt), model,
+									AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+
+							DetailCompositeDialogUtil.editSelection(OptionModellerView.this, new StructuredSelection(opt));
+							refreshAll();
+						}));
+						helper.addAction(new RunnableAction("Round trip vessel", () -> {
+							final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
+
+							OptionModellerView.this.getDefaultCommandHandler().handleCommand(
+									AddCommand.create(OptionModellerView.this.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt), model,
+									AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+
+							DetailCompositeDialogUtil.editSelection(OptionModellerView.this, new StructuredSelection(opt));
+							refreshAll();
+						}));
+						helper.addAction(new RunnableAction("Fleet vessel", () -> {
+							final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
+
+							OptionModellerView.this.getDefaultCommandHandler().handleCommand(
+									AddCommand.create(OptionModellerView.this.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt), model,
+									AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+
+							DetailCompositeDialogUtil.editSelection(OptionModellerView.this, new StructuredSelection(opt));
+							refreshAll();
+						}));
+					}
+
+					@Override
+					public void widgetSelected(final SelectionEvent e) {
+						helper.open();
+					}
+
+					@Override
+					public void widgetDefaultSelected(final SelectionEvent e) {
+
+					}
+				});
+			}
+		}
+		hookDragSource(shippingOptionsViewer);
+		return shippingOptionsViewer;
+	}
+
+	private GridTreeViewer createVesselOptionsViewer(final Composite vesselComposite) {
+		vesselViewer = new GridTreeViewer(vesselComposite, SWT.BORDER | SWT.MULTI);
+
 		GridViewerHelper.configureLookAndFeel(vesselViewer);
+
 		vesselViewer.getGrid().setHeaderVisible(true);
 
 		createColumn(vesselViewer, "Vessels", new VesselDescriptionFormatter());
-
 		vesselViewer.setContentProvider(new VesselAndClassContentProvider(this));
 		hookOpenEditor(vesselViewer);
+		hookDragSource(vesselViewer);
+		return vesselViewer;
 	}
 
 	private void createRulesViewer(final Composite parent) {
@@ -535,12 +702,11 @@ public class OptionModellerView extends ScenarioInstanceView {
 		hookOpenEditor(rulesViewer);
 	}
 
-	private void wrapInExpandable(final Composite composite, final Composite mainComposite, final String name, final Function<Composite, Control> s) {
-		wrapInExpandable(composite, mainComposite, name, s, null);
+	private void wrapInExpandable(final Composite composite, final String name, final Function<Composite, Control> s) {
+		wrapInExpandable(composite, name, s, null);
 	}
 
-	private void wrapInExpandable(final Composite composite, final Composite mainComposite, final String name, final Function<Composite, Control> s,
-			@Nullable final Consumer<ExpandableComposite> customiser) {
+	private void wrapInExpandable(final Composite composite, final String name, final Function<Composite, Control> s, @Nullable final Consumer<ExpandableComposite> customiser) {
 		final ExpandableComposite expandableCompo = new ExpandableComposite(composite, SWT.NONE);
 		expandableCompo.setExpanded(true);
 		expandableCompo.setText(name);
@@ -559,7 +725,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 			@Override
 			public void expansionStateChanged(final ExpansionEvent e) {
-				refreshAll();
+				composite.pack();
 			}
 		});
 
@@ -569,7 +735,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 	}
 
 	private Control createBaseCaseViewer(final Composite parent) {
-		baseCaseViewer = new GridTreeViewer(parent, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
+		baseCaseViewer = new GridTreeViewer(parent, SWT.BORDER | SWT.SINGLE);
 		ColumnViewerToolTipSupport.enableFor(baseCaseViewer);
 
 		GridViewerHelper.configureLookAndFeel(baseCaseViewer);
@@ -586,7 +752,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 		final MenuManager mgr = new MenuManager();
 
-		BaseCaseContextMenuManager listener = new BaseCaseContextMenuManager(baseCaseViewer, OptionModellerView.this, mgr, () -> refreshAll());
+		final BaseCaseContextMenuManager listener = new BaseCaseContextMenuManager(baseCaseViewer, OptionModellerView.this, mgr, () -> refreshAll());
 		listener.setOptionAnalysisModel(model);
 		baseCaseViewer.getGrid().addMenuDetectListener(listener);
 
@@ -612,7 +778,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 		final MenuManager mgr = new MenuManager();
 
-		PartialCaseContextMenuManager listener = new PartialCaseContextMenuManager(partialCaseViewer, OptionModellerView.this, mgr, () -> refreshAll());
+		final PartialCaseContextMenuManager listener = new PartialCaseContextMenuManager(partialCaseViewer, OptionModellerView.this, mgr, () -> refreshAll());
 		partialCaseViewer.getGrid().addMenuDetectListener(listener);
 		listener.setOptionAnalysisModel(model);
 
@@ -692,13 +858,13 @@ public class OptionModellerView extends ScenarioInstanceView {
 			}
 
 			@Override
-			public String getToolTipText(Object element) {
+			public String getToolTipText(final Object element) {
 
-				Set<Object> targetElements = new HashSet<>();
+				final Set<Object> targetElements = new HashSet<>();
 				targetElements.add(element);
 				// FIXME: Hacky!
 				if (element instanceof BaseCaseRow) {
-					BaseCaseRow baseCaseRow = (BaseCaseRow) element;
+					final BaseCaseRow baseCaseRow = (BaseCaseRow) element;
 					if ("Buy".equals(name)) {
 						targetElements.add(baseCaseRow.getBuyOption());
 					}
@@ -710,7 +876,7 @@ public class OptionModellerView extends ScenarioInstanceView {
 					}
 				}
 				if (element instanceof PartialCaseRow) {
-					PartialCaseRow row = (PartialCaseRow) element;
+					final PartialCaseRow row = (PartialCaseRow) element;
 					if ("Buy".equals(name)) {
 						targetElements.addAll(row.getBuyOptions());
 					}
@@ -723,8 +889,8 @@ public class OptionModellerView extends ScenarioInstanceView {
 				}
 				targetElements.remove(null);
 
-				StringBuilder sb = new StringBuilder();
-				for (Object target : targetElements) {
+				final StringBuilder sb = new StringBuilder();
+				for (final Object target : targetElements) {
 					if (validationErrors.containsKey(target)) {
 						final IStatus status = validationErrors.get(target);
 						if (!status.isOK()) {
@@ -742,14 +908,14 @@ public class OptionModellerView extends ScenarioInstanceView {
 			}
 
 			@Override
-			public void update(ViewerCell cell) {
+			public void update(final ViewerCell cell) {
 				super.update(cell);
 
-				GridItem item = (GridItem) cell.getItem();
+				final GridItem item = (GridItem) cell.getItem();
 				item.setHeaderText("");
 				item.setHeaderImage(null);
 
-				Object element = cell.getElement();
+				final Object element = cell.getElement();
 				if (element instanceof BaseCaseRow || element instanceof PartialCaseRow) {
 					if (validationErrors.containsKey(element)) {
 						final IStatus status = validationErrors.get(element);
@@ -794,9 +960,11 @@ public class OptionModellerView extends ScenarioInstanceView {
 		resultsViewer.refresh();
 		resultsViewer.expandAll();
 		vesselViewer.refresh();
+		shippingOptionsViewer.refresh();
 		vesselViewer.expandAll();
 		baseCaseProftLabel.setText(String.format("Base P&&L: $%,d", model.getBaseCase().getProfitAndLoss()));
 		packAll(mainComposite);
+		mainComposite.pack(true);
 	}
 
 	public void packAll(final Control c) {
@@ -805,8 +973,9 @@ public class OptionModellerView extends ScenarioInstanceView {
 			for (final Control child : composite.getChildren()) {
 				packAll(child);
 			}
+			((Composite) c).layout(true);
 		}
-		c.pack();
+		// c.layout (true);
 	}
 
 	private void doValidate() {

@@ -7,6 +7,7 @@ import java.util.LinkedList;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
@@ -30,6 +31,7 @@ import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellOption;
+import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder.ShippingType;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -209,6 +211,26 @@ public class PartialCaseDropTargetListener implements DropTargetListener {
 									SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt), pExisting,
 									AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
 							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
+							refreshCallback.run();
+						}
+					}
+				} else if (o instanceof ShippingOption) {
+					if (existing != null) {
+						ShippingOption opt = null;
+						if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.NonShipped) {
+							if (o instanceof NominatedShippingOption) {
+								opt = (ShippingOption) EcoreUtil.copy((ShippingOption) o);
+							}
+						} else if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.Shipped) {
+
+							if (o instanceof RoundTripShippingOption || o instanceof NominatedShippingOption) {
+								opt = (ShippingOption) EcoreUtil.copy((ShippingOption) o);
+							}
+						}
+						if (opt != null) {
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+									SetCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt), existing,
+									AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
 							refreshCallback.run();
 						}
 					}

@@ -106,6 +106,7 @@ public class OptionAnalysisModelItemProvider
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BASE_CASE);
+			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RULES);
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS);
@@ -168,6 +169,7 @@ public class OptionAnalysisModelItemProvider
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BUYS:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SELLS:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE:
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RULES:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__PARTIAL_CASE:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULT_SETS:
@@ -222,6 +224,26 @@ public class OptionAnalysisModelItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BASE_CASE,
 				 AnalyticsFactory.eINSTANCE.createBaseCase()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
+				 AnalyticsFactory.eINSTANCE.createShippingOption()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
+				 AnalyticsFactory.eINSTANCE.createFleetShippingOption()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
+				 AnalyticsFactory.eINSTANCE.createRoundTripShippingOption()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
+				 AnalyticsFactory.eINSTANCE.createNominatedShippingOption()));
 
 		newChildDescriptors.add
 			(createChildParameter

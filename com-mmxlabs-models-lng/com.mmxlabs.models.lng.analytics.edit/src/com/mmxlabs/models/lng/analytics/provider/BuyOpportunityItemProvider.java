@@ -55,6 +55,7 @@ public class BuyOpportunityItemProvider
 			addDatePropertyDescriptor(object);
 			addPriceExpressionPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
+			addCvPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -192,6 +193,28 @@ public class BuyOpportunityItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Cv feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCvPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_BuyOpportunity_cv_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BuyOpportunity_cv_feature", "_UI_BuyOpportunity_type"),
+				 AnalyticsPackage.Literals.BUY_OPPORTUNITY__CV,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns BuyOpportunity.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -229,6 +252,7 @@ public class BuyOpportunityItemProvider
 			case AnalyticsPackage.BUY_OPPORTUNITY__DES_PURCHASE:
 			case AnalyticsPackage.BUY_OPPORTUNITY__DATE:
 			case AnalyticsPackage.BUY_OPPORTUNITY__PRICE_EXPRESSION:
+			case AnalyticsPackage.BUY_OPPORTUNITY__CV:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
