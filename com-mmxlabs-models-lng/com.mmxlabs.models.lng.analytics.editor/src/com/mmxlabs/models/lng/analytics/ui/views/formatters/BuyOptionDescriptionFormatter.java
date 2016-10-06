@@ -14,8 +14,17 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 	@Override
 	public String render(final Object object) {
 
+		if (object == null) {
+			return "<open>";
+		}
+
 		if (object instanceof Collection<?>) {
 			Collection<?> collection = (Collection<?>) object;
+
+			if (collection.isEmpty()) {
+				return "<open>";
+			}
+
 			final StringBuilder sb = new StringBuilder();
 			boolean first = true;
 			for (final Object o : collection) {
@@ -28,6 +37,10 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 			return sb.toString();
 		} else if (object instanceof Object[]) {
 			Object[] objects = (Object[]) object;
+
+			if (objects.length == 0) {
+				return "<open>";
+			}
 			final StringBuilder sb = new StringBuilder();
 			boolean first = true;
 			for (final Object o : objects) {
