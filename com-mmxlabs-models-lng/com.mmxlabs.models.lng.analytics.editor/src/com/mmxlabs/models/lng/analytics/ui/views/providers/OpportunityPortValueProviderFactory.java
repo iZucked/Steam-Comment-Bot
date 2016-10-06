@@ -83,7 +83,7 @@ public class OpportunityPortValueProviderFactory implements IReferenceValueProvi
 					PortCapability capability = null;
 					if (target instanceof BuyOpportunity) {
 
-						BuyOpportunity buyOpportunity = (BuyOpportunity) target;
+						final BuyOpportunity buyOpportunity = (BuyOpportunity) target;
 						contract = buyOpportunity.getContract();
 						port = buyOpportunity.getPort();
 						if (buyOpportunity.isDesPurchase()) {
@@ -93,7 +93,7 @@ public class OpportunityPortValueProviderFactory implements IReferenceValueProvi
 						}
 					} else if (target instanceof SellOpportunity) {
 
-						SellOpportunity sellOpportunity = (SellOpportunity) target;
+						final SellOpportunity sellOpportunity = (SellOpportunity) target;
 						contract = sellOpportunity.getContract();
 						port = sellOpportunity.getPort();
 						if (sellOpportunity.isFobSale()) {
@@ -125,7 +125,7 @@ public class OpportunityPortValueProviderFactory implements IReferenceValueProvi
 						return filterOne;
 					}
 
-					Set<Port> ports = SetUtils.getObjects(contract.getAllowedPorts());
+					final Set<Port> ports = SetUtils.getObjects(contract.getAllowedPorts());
 
 					if (ports != null && !ports.isEmpty()) {
 						for (final Pair<String, EObject> value : filterOne) {
