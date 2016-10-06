@@ -10,6 +10,7 @@ import org.eclipse.swt.dnd.DragSourceListener;
 public class BasicDragSource implements DragSourceListener {
 
 	private final @NonNull GridTreeViewer viewer;
+	private IStructuredSelection selection;
 
 	public BasicDragSource(@NonNull final GridTreeViewer viewer) {
 		this.viewer = viewer;
@@ -18,12 +19,13 @@ public class BasicDragSource implements DragSourceListener {
 
 	@Override
 	public void dragStart(final DragSourceEvent event) {
+		// Grab selection now as the viewer selection can change (especially if it is also a drop target)
+		selection = (IStructuredSelection) viewer.getSelection();
 
 	}
 
 	@Override
 	public void dragSetData(final DragSourceEvent event) {
-		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 
 		final LocalSelectionTransfer transfer = LocalSelectionTransfer.getTransfer();
 		if (transfer.isSupportedType(event.dataType)) {
@@ -34,7 +36,8 @@ public class BasicDragSource implements DragSourceListener {
 
 	@Override
 	public void dragFinished(final DragSourceEvent event) {
-
+		// Clear reference
+		selection = null;
 	}
 
 }
