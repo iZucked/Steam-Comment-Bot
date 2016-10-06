@@ -309,6 +309,8 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL: {
 				OptionAnalysisModel optionAnalysisModel = (OptionAnalysisModel)theEObject;
 				T result = caseOptionAnalysisModel(optionAnalysisModel);
+				if (result == null) result = caseNamedObject(optionAnalysisModel);
+				if (result == null) result = caseMMXObject(optionAnalysisModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.SellOption;
 
 import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -51,7 +52,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class OptionAnalysisModelImpl extends EObjectImpl implements OptionAnalysisModel {
+public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAnalysisModel {
 	/**
 	 * The cached value of the '{@link #getBuys() <em>Buys</em>}' containment reference list.
 	 * <!-- begin-user-doc -->

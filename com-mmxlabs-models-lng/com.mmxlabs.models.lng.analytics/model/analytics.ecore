@@ -327,7 +327,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="price" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ModeOptionRule" eSuperTypes="#//OptionRule"/>
-  <eClassifiers xsi:type="ecore:EClass" name="OptionAnalysisModel">
+  <eClassifiers xsi:type="ecore:EClass" name="OptionAnalysisModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="buys" upperBound="-1" eType="#//BuyOption"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sells" upperBound="-1"

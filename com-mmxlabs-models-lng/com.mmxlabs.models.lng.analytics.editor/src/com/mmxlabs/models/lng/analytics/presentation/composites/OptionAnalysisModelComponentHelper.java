@@ -8,6 +8,7 @@ package com.mmxlabs.models.lng.analytics.presentation.composites;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -47,6 +48,7 @@ public class OptionAnalysisModelComponentHelper extends BaseComponentHelper {
 	 */
 	public OptionAnalysisModelComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.NAMED_OBJECT));
 	}
 	
 	/**

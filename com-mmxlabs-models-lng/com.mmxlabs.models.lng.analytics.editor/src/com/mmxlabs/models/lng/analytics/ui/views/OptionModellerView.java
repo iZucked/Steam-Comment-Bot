@@ -92,6 +92,8 @@ import com.mmxlabs.models.lng.analytics.ui.views.providers.ResultsViewerContentP
 import com.mmxlabs.models.lng.analytics.ui.views.providers.RulesViewerContentProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.ShippingOptionsContentProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.VesselAndClassContentProvider;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioAdapterFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
@@ -432,7 +434,12 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	@Override
 	protected void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject) {
-
+		if (rootObject instanceof LNGScenarioModel) {
+			LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			if (!lngScenarioModel.getOptionModels().contains(model)) {
+				lngScenarioModel.getOptionModels().add(model);
+			}
+		}
 		setInput(model);
 		for (Consumer<OptionAnalysisModel> want : inputWants) {
 			want.accept(model);
@@ -486,7 +493,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private Composite vesselComposite;
 	private Composite sellComposite;
 
-	private void setInput(final OptionAnalysisModel model) {
+	public void setInput(final OptionAnalysisModel model) {
 		baseCaseViewer.setInput(model);
 		partialCaseViewer.setInput(model);
 		buyOptionsViewer.setInput(model);
@@ -878,6 +885,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private OptionAnalysisModel createDemoModel1() {
 
 		final OptionAnalysisModel model = AnalyticsFactory.eINSTANCE.createOptionAnalysisModel();
+		
+		model.setName("Demo1");
+		
 		model.setBaseCase(AnalyticsFactory.eINSTANCE.createBaseCase());
 		model.setPartialCase(AnalyticsFactory.eINSTANCE.createPartialCase());
 

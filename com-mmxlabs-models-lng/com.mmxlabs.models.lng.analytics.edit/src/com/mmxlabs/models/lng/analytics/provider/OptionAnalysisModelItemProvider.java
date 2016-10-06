@@ -7,6 +7,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 
+import com.mmxlabs.models.mmxcore.provider.NamedObjectItemProvider;
 import java.util.Collection;
 import java.util.List;
 
@@ -36,13 +37,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class OptionAnalysisModelItemProvider 
-	extends ItemProviderAdapter
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends NamedObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -146,8 +141,10 @@ public class OptionAnalysisModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		OptionAnalysisModel optionAnalysisModel = (OptionAnalysisModel)object;
-		return getString("_UI_OptionAnalysisModel_type") + " " + optionAnalysisModel.isUseTargetPNL();
+		String label = ((OptionAnalysisModel)object).getName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_OptionAnalysisModel_type") :
+			getString("_UI_OptionAnalysisModel_type") + " " + label;
 	}
 	
 
@@ -259,17 +256,6 @@ public class OptionAnalysisModelItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS,
 				 AnalyticsFactory.eINSTANCE.createResultSet()));
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return ((IChildCreationExtender)adapterFactory).getResourceLocator();
 	}
 
 }

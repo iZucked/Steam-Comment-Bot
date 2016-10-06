@@ -2,6 +2,7 @@
  */
 package com.mmxlabs.models.lng.analytics;
 
+import com.mmxlabs.models.mmxcore.NamedObject;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
@@ -29,7 +30,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface OptionAnalysisModel extends EObject {
+public interface OptionAnalysisModel extends NamedObject {
 	/**
 	 * Returns the value of the '<em><b>Base Case</b></em>' containment reference.
 	 * <!-- begin-user-doc -->

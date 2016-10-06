@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.scenario.model.util;
 
+import com.mmxlabs.models.lng.scenario.model.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
