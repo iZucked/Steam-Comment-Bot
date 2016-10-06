@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -101,6 +102,7 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 					}));
 					menuHelper.addAction(new RunnableAction("Create fleet", () -> {
 						final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
+						AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
 						opt.setVessel(vessel);
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 								AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),

@@ -151,6 +151,7 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 					}));
 					mgr.add(new RunnableAction("Create fleet", () -> {
 						final FleetShippingOption o = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
+						AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, o);
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, o), row,
 								AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);

@@ -188,6 +188,7 @@ public class PartialCaseDropTargetListener implements DropTargetListener {
 							}));
 							menuHelper.addAction(new RunnableAction("Create fleet", () -> {
 								final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
+								AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
 								opt.setVessel(vessel);
 								scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 										SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, opt), pExisting,

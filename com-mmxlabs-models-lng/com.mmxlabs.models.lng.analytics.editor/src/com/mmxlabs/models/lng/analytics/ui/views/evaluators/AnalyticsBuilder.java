@@ -9,23 +9,30 @@ import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
+import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
 public class AnalyticsBuilder {
 	public static @Nullable LoadSlot makeLoadSlot(final @Nullable BuyOption buy, final @NonNull LNGScenarioModel lngScenarioModel) {
@@ -276,4 +283,35 @@ public class AnalyticsBuilder {
 		throw new IllegalArgumentException("Unsupported SellOption type");
 	}
 
+	public static void setDefaultEntity(final IScenarioEditingLocation scenarioEditingLocation, final BuyOpportunity buy) {
+		final BaseLegalEntity entity = getDefaultEntity(scenarioEditingLocation);
+		if (entity != null) {
+			buy.setEntity(entity);
+		}
+	}
+
+	public static void setDefaultEntity(final IScenarioEditingLocation scenarioEditingLocation, final SellOpportunity sell) {
+		final BaseLegalEntity entity = getDefaultEntity(scenarioEditingLocation);
+		if (entity != null) {
+			sell.setEntity(entity);
+		}
+	}
+
+	public static void setDefaultEntity(final IScenarioEditingLocation scenarioEditingLocation, final FleetShippingOption option) {
+		final BaseLegalEntity entity = getDefaultEntity(scenarioEditingLocation);
+		if (entity != null) {
+			option.setEntity(entity);
+		}
+	}
+
+	public static @Nullable BaseLegalEntity getDefaultEntity(final IScenarioEditingLocation scenarioEditingLocation) {
+		final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
+		if (rootObject instanceof LNGScenarioModel) {
+			final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel((LNGScenarioModel) rootObject);
+			if (commercialModel.getEntities().size() == 1) {
+				return commercialModel.getEntities().get(0);
+			}
+		}
+		return null;
+	}
 }

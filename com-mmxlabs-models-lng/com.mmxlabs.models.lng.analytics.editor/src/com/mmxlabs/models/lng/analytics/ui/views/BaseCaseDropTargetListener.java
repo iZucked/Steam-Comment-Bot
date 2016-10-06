@@ -154,6 +154,7 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 							menuHelper.addAction(new RunnableAction("Create fleet", () -> {
 								final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
 								opt.setVessel(vessel);
+								AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
 								scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 										SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), pExisting,
 										AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);

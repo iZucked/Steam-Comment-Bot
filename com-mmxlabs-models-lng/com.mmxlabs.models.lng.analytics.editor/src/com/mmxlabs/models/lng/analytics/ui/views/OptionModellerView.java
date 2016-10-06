@@ -61,6 +61,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
+import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
@@ -69,8 +70,10 @@ import com.mmxlabs.models.lng.analytics.OptionRule;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
+import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseEvaluator;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.WhatIfEvaluator;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
@@ -87,6 +90,9 @@ import com.mmxlabs.models.lng.analytics.ui.views.providers.ResultsViewerContentP
 import com.mmxlabs.models.lng.analytics.ui.views.providers.RulesViewerContentProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.ShippingOptionsContentProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.VesselAndClassContentProvider;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
@@ -363,7 +369,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		redoAction.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_REDO));
 		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
 
-		updateActions(null);
+		updateActions(getEditingDomain());
 
 	}
 
@@ -535,7 +541,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 					@Override
 					public void widgetSelected(final SelectionEvent e) {
-						final BuyOption row = AnalyticsFactory.eINSTANCE.createBuyOpportunity();
+						final BuyOpportunity row = AnalyticsFactory.eINSTANCE.createBuyOpportunity();
+						AnalyticsBuilder.setDefaultEntity(OptionModellerView.this, row);
+
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, row), model,
 								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
 						refreshAll();
@@ -621,7 +629,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 					@Override
 					public void widgetSelected(final SelectionEvent e) {
-						final SellOption row = AnalyticsFactory.eINSTANCE.createSellOpportunity();
+						final SellOpportunity row = AnalyticsFactory.eINSTANCE.createSellOpportunity();
+						AnalyticsBuilder.setDefaultEntity(OptionModellerView.this, row);
 						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), model,
 								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
 						refreshAll();
@@ -711,7 +720,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 						}));
 						helper.addAction(new RunnableAction("Fleet vessel", () -> {
 							final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
-
+							AnalyticsBuilder.setDefaultEntity(OptionModellerView.this, opt);
 							OptionModellerView.this.getDefaultCommandHandler().handleCommand(
 									AddCommand.create(OptionModellerView.this.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt), model,
 									AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
