@@ -164,7 +164,7 @@ public class BaseCaseEvaluator {
 
 	}
 
-	private static void buildScenario(final LNGScenarioModel clone, final OptionAnalysisModel clonedModel, final BaseCase clonedBaseCase, final IMapperClass mapper) {
+	protected static void buildScenario(final LNGScenarioModel clone, final OptionAnalysisModel clonedModel, final BaseCase clonedBaseCase, final IMapperClass mapper) {
 
 		createShipping(clone, clonedBaseCase);
 
@@ -200,7 +200,7 @@ public class BaseCaseEvaluator {
 
 	}
 
-	private static void setShipping(final @Nullable LoadSlot loadSlot, final @Nullable DischargeSlot dischargeSlot, final @Nullable Cargo cargo, final @Nullable ShippingOption shipping,
+	protected static void setShipping(final @Nullable LoadSlot loadSlot, final @Nullable DischargeSlot dischargeSlot, final @Nullable Cargo cargo, final @Nullable ShippingOption shipping,
 			final @NonNull LNGScenarioModel lngScenarioModel) {
 		if (shipping instanceof NominatedShippingOption) {
 			final NominatedShippingOption nominatedShippingOption = (NominatedShippingOption) shipping;
@@ -258,7 +258,7 @@ public class BaseCaseEvaluator {
 		}
 	}
 
-	private static void createShipping(final LNGScenarioModel clone, final BaseCase clonedBaseCase) {
+	protected static void createShipping(final LNGScenarioModel clone, final BaseCase clonedBaseCase) {
 		// TODO Auto-generated method stub
 
 	}

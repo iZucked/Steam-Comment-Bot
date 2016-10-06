@@ -11,6 +11,7 @@ import java.util.function.Function;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -52,6 +53,7 @@ import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.OptionRule;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseEvaluator;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.WhatIfEvaluator;
@@ -822,5 +824,10 @@ public class OptionModellerView extends ScenarioInstanceView {
 			popExtraValidationContext();
 
 		}
+	}
+	
+	private void makeForkOfResultsSet(ResultSet rs) {
+		copyScenario = EcoreUtil.copy(scenarioModel);
+
 	}
 }
