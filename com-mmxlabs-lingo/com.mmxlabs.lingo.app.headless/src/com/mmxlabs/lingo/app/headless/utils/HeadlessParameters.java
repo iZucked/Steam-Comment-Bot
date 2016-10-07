@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.common.Pair;
 
 public class HeadlessParameters {
@@ -75,7 +77,7 @@ public class HeadlessParameters {
 
 	}
 
-	public <T> void setParameter(final String key, final T value, final Class<T> clazz, final boolean required) {
+	public <T> void setParameter(final String key, final @Nullable T value, final Class<T> clazz, final boolean required) {
 		if (required) {
 			requiredParameters.put(key, false);
 		}
