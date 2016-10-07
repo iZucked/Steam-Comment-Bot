@@ -318,7 +318,7 @@
       <view
             class="com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView"
             id="com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView"
-            name="Option Modeller"
+            name="Sandbox"
             restorable="true">
       </view>
    </extension>

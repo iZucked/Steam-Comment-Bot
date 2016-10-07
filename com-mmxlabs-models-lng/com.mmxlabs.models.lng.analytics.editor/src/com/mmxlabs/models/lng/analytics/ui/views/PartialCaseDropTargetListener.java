@@ -237,8 +237,12 @@ public class PartialCaseDropTargetListener implements DropTargetListener {
 					final SellOption sellRef = AnalyticsBuilder.getOrCreateSellOption(dischargeSlot, optionAnalysisModel, scenarioEditingLocation, cmd);
 
 					final PartialCaseRow row = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
-					row.getBuyOptions().add(buyRef);
-					row.getSellOptions().add(sellRef);
+					if (buyRef != null) {
+						row.getBuyOptions().add(buyRef);
+					}
+					if (sellRef != null) {
+						row.getSellOptions().add(sellRef);
+					}
 
 					final ShippingOption shippingOption = AnalyticsBuilder.getOrCreateShippingOption(rowData.getCargo(), loadSlot, dischargeSlot, optionAnalysisModel, scenarioEditingLocation, cmd);
 					row.setShipping(shippingOption);

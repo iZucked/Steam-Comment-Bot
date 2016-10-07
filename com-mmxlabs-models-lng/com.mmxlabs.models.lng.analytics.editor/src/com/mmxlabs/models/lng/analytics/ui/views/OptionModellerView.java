@@ -41,11 +41,13 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
+import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -59,7 +61,6 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.eclipse.ui.internal.handlers.DisplayHelpHandler;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
@@ -96,7 +97,8 @@ import com.mmxlabs.models.lng.analytics.ui.views.providers.PartialCaseContentPro
 import com.mmxlabs.models.lng.analytics.ui.views.providers.ResultsViewerContentProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.RulesViewerContentProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.ShippingOptionsContentProvider;
-import com.mmxlabs.models.lng.analytics.ui.views.providers.VesselAndClassContentProvider;
+import com.mmxlabs.models.lng.analytics.ui.views.providers.VesselClassContentProvider;
+import com.mmxlabs.models.lng.analytics.ui.views.providers.VesselContentProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -126,6 +128,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private GridTreeViewer rulesViewer;
 	private GridTreeViewer resultsViewer;
 	private GridTreeViewer vesselViewer;
+	private GridTreeViewer vesselClassViewer;
 	private GridTreeViewer shippingOptionsViewer;
 
 	private OptionAnalysisModel model;
@@ -135,11 +138,17 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private DialogValidationSupport validationSupport;
 
 	// Callbacks for objects that need the current input
-	private List<Consumer<OptionAnalysisModel>> inputWants = new LinkedList<>();
+	private final List<Consumer<OptionAnalysisModel>> inputWants = new LinkedList<>();
 	private Label errorLabel;
+
+	private Image image_calculate;
+	private Image image_generate;
 
 	@Override
 	public void createPartControl(final Composite parent) {
+
+		image_calculate = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_calc.gif").createImage();
+		image_generate = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_generate.gif").createImage();
 
 		validationSupport = new DialogValidationSupport(new DefaultExtraValidationContext(getRootObject(), false));
 		validationSupport.setValidationTargets(Collections.singleton(model));
@@ -166,7 +175,66 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					.align(SWT.FILL, SWT.FILL).create());
 			buyComposite.setLayout(new GridLayout(1, true));
 
-			buyOptionsViewer = createBuyOptionsViewer(buyComposite);
+			wrapInExpandable(buyComposite, "Buys", p -> createBuyOptionsViewer(p), expandableComposite -> {
+
+				{
+					final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
+					final BuysDropTargetListener listener = new BuysDropTargetListener(OptionModellerView.this, buyOptionsViewer);
+					inputWants.add(model -> listener.setOptionAnalysisModel(model));
+					// Control control = getControl();
+					DropTarget dropTarget = new DropTarget(expandableComposite, DND.DROP_MOVE);
+					dropTarget.setTransfer(types);
+					dropTarget.addDropListener(listener);
+					// expandableComposite.addDropSupport(DND.DROP_MOVE, types, listener);
+				}
+
+				final Label c = new Label(expandableComposite, SWT.NONE);
+				expandableComposite.setTextClient(c);
+				c.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+				c.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).hint(16, 16).grab(true, false).create());
+				c.addMouseListener(new MouseListener() {
+					LocalMenuHelper helper = new LocalMenuHelper(c.getParent());
+					{
+						helper.addAction(new RunnableAction("Existing", () -> {
+							final BuyOption row = AnalyticsFactory.eINSTANCE.createBuyReference();
+							getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, row), model,
+									AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
+							editObject(row);
+						}));
+						helper.addAction(new RunnableAction("New", () -> {
+							final BuyOpportunity row = AnalyticsFactory.eINSTANCE.createBuyOpportunity();
+							AnalyticsBuilder.setDefaultEntity(OptionModellerView.this, row);
+
+							getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, row), model,
+									AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
+							editObject(row);
+						}));
+						helper.addAction(new RunnableAction("From market", () -> {
+							final BuyMarket row = AnalyticsFactory.eINSTANCE.createBuyMarket();
+							getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, row), model,
+									AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
+							editObject(row);
+						}));
+					}
+
+					@Override
+					public void mouseUp(final MouseEvent e) {
+
+					}
+
+					@Override
+					public void mouseDown(final MouseEvent e) {
+						helper.open();
+
+					}
+
+					@Override
+					public void mouseDoubleClick(final MouseEvent e) {
+
+					}
+				});
+
+			});
 			buyOptionsViewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).hint(SWT.DEFAULT, 400).create());
 
 			// GridDataFactory.generate(addBuy, 1, 1);
@@ -174,7 +242,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		}
 
-		// final ScrolledComposite sc = new ScrolledComposite(mainComposite, SWT.BORDER | SWT.V_SCROLL);
+		// final ScrolledComposite sc = new ScrolledComposite(mainComposite, SWT.NONE | SWT.V_SCROLL);
 		// sc.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		// sc.setExpandHorizontal(true);
 		// sc.setExpandVertical(true);
@@ -206,33 +274,28 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		{
 			// createBaseCaseViewer(centralComposite);
 			wrapInExpandable(centralComposite, "Base Case", p -> createBaseCaseViewer(p), expandableCompo -> {
-				// final Button textClient = new Button(expandableCompo, SWT.PUSH);
-				// textClient.setText("+");
-				// expandableCompo.setTextClient(textClient);
-				// textClient.addSelectionListener(new SelectionListener() {
-				//
-				// @Override
-				// public void widgetSelected(final SelectionEvent e) {
-				// final BaseCaseRow row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
-				// row.setShipping(AnalyticsFactory.eINSTANCE.createRoundTripShippingOption());
-				// getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model.getBaseCase(), AnalyticsPackage.Literals.BASE_CASE__BASE_CASE, row), model.getBaseCase(),
-				// AnalyticsPackage.Literals.BASE_CASE__BASE_CASE);
-				// refreshAll();
-				// }
-				//
-				// @Override
-				// public void widgetDefaultSelected(final SelectionEvent e) {
-				//
-				// }
-				// });
+
+				final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
+				final BaseCaseDropTargetListener listener = new BaseCaseDropTargetListener(OptionModellerView.this, baseCaseViewer);
+				inputWants.add(model -> listener.setOptionAnalysisModel(model));
+				// Control control = getControl();
+				DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE);
+				dropTarget.setTransfer(types);
+				dropTarget.addDropListener(listener);
 			});
 
-			baseCaseProftLabel = new Label(centralComposite, SWT.NONE);
-			GridDataFactory.generate(baseCaseProftLabel, 2, 1);
+			final Composite c = new Composite(centralComposite, SWT.NONE);
+			GridDataFactory.generate(c, 1, 1);
+			c.setLayout(new GridLayout(2, false));
+			baseCaseProftLabel = new Label(c, SWT.NONE);
+			GridDataFactory.generate(baseCaseProftLabel, 1, 1);
 			baseCaseProftLabel.setText("Base P&&L: <not calculated>");
 
-			final Button baseCaseCalculator = new Button(centralComposite, SWT.FLAT);
-			baseCaseCalculator.setText("Calc.");
+			final Button baseCaseCalculator = new Button(c, SWT.FLAT);
+			// baseCaseCalculator.setText("Calc."); --cogs
+			baseCaseCalculator.setImage(image_calculate);
+			GridDataFactory.generate(baseCaseCalculator, 1, 1);
+
 			baseCaseCalculator.addSelectionListener(new SelectionListener() {
 
 				@Override
@@ -250,44 +313,30 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			hookOpenEditor(baseCaseViewer);
 
 			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
-			BaseCaseDropTargetListener listener = new BaseCaseDropTargetListener(OptionModellerView.this, baseCaseViewer);
+			final BaseCaseDropTargetListener listener = new BaseCaseDropTargetListener(OptionModellerView.this, baseCaseViewer);
 			inputWants.add(model -> listener.setOptionAnalysisModel(model));
 			baseCaseViewer.addDropSupport(DND.DROP_MOVE, types, listener);
 		}
 
 		{
-			wrapInExpandable(centralComposite, "What if?", p -> createPartialCaseViewer(p), expandableCompo -> {
-				// final Button textClient = new Button(expandableCompo, SWT.PUSH);
-				// textClient.setText("+");
-				// expandableCompo.setTextClient(textClient);
-				// textClient.addSelectionListener(new SelectionListener() {
-				//
-				// @Override
-				// public void widgetSelected(final SelectionEvent e) {
-				// final PartialCaseRow row = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
-				// row.setShipping(AnalyticsFactory.eINSTANCE.createRoundTripShippingOption());
-				// getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE, row),
-				// model.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE);
-				// refreshAll();
-				// }
-				//
-				// @Override
-				// public void widgetDefaultSelected(final SelectionEvent e) {
-				//
-				// }
-				// });
+			wrapInExpandable(centralComposite, "Options", p -> createPartialCaseViewer(p), expandableCompo -> {
+
+				final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
+				final PartialCaseDropTargetListener listener = new PartialCaseDropTargetListener(OptionModellerView.this, partialCaseViewer);
+				inputWants.add(model -> listener.setOptionAnalysisModel(model));
+				// Control control = getControl();
+				DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE);
+				dropTarget.setTransfer(types);
+				dropTarget.addDropListener(listener);
 			});
 
 			hookOpenEditor(partialCaseViewer);
 
 			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
-			PartialCaseDropTargetListener listener = new PartialCaseDropTargetListener(OptionModellerView.this, partialCaseViewer);
+			final PartialCaseDropTargetListener listener = new PartialCaseDropTargetListener(OptionModellerView.this, partialCaseViewer);
 			inputWants.add(model -> listener.setOptionAnalysisModel(model));
 			partialCaseViewer.addDropSupport(DND.DROP_MOVE, types, listener);
 		}
-
-		createRulesViewer(centralComposite);
-		GridDataFactory.generate(rulesViewer.getGrid(), 2, 1);
 
 		/*
 		 * toggle for target pnl
@@ -295,8 +344,12 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		final Composite targetPNLToggle = createUseTargetPNLToggleComposite(centralComposite);
 		GridDataFactory.generate(targetPNLToggle, 2, 1);
 
+		createRulesViewer(centralComposite);
+		GridDataFactory.generate(rulesViewer.getGrid(), 2, 1);
+
 		final Button generateButton = new Button(centralComposite, SWT.PUSH);
-		generateButton.setText("Generate");
+		// generateButton.setText("Generate"); -- play icon
+		generateButton.setImage(image_generate);
 		GridDataFactory.generate(generateButton, 2, 1);
 
 		generateButton.addSelectionListener(new SelectionListener() {
@@ -321,7 +374,53 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					.align(SWT.FILL, SWT.FILL).create());
 			sellComposite.setLayout(new GridLayout(1, true));
 
-			sellOptionsViewer = createSellOptionsViewer(sellComposite);
+			wrapInExpandable(sellComposite, "Sells", p -> createSellOptionsViewer(p), expandableComposite -> {
+				final Label addSellButton = new Label(expandableComposite, SWT.NONE);
+				addSellButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+				expandableComposite.setTextClient(addSellButton);
+				addSellButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).grab(true, false).create());
+				addSellButton.addMouseListener(new MouseListener() {
+
+					LocalMenuHelper helper = new LocalMenuHelper(addSellButton.getParent());
+					{
+						helper.addAction(new RunnableAction("Existing", () -> {
+							final SellOption row = AnalyticsFactory.eINSTANCE.createSellReference();
+							getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), model,
+									AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
+							editObject(row);
+						}));
+						helper.addAction(new RunnableAction("New", () -> {
+							final SellOpportunity row = AnalyticsFactory.eINSTANCE.createSellOpportunity();
+							AnalyticsBuilder.setDefaultEntity(OptionModellerView.this, row);
+							getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), model,
+									AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
+							editObject(row);
+						}));
+						helper.addAction(new RunnableAction("From market", () -> {
+							final SellOption row = AnalyticsFactory.eINSTANCE.createSellMarket();
+							getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), model,
+									AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
+							editObject(row);
+						}));
+					}
+
+					@Override
+					public void mouseDoubleClick(final MouseEvent e) {
+
+					}
+
+					@Override
+					public void mouseDown(final MouseEvent e) {
+						helper.open();
+
+					}
+
+					@Override
+					public void mouseUp(final MouseEvent e) {
+
+					}
+				});
+			});
 			sellOptionsViewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).hint(SWT.DEFAULT, 400).create());
 
 			hookDragSource(sellOptionsViewer);
@@ -338,13 +437,24 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				// vesselComposite.setExpanded(true);
 				// final Composite c = new Composite(vesselComposite, SWT.NONE);
 
-				wrapInExpandable(vesselComposite, "Shipping ", p -> createShippingOptionsViewer(p).getGrid(), expandableCompo -> {
-					final Button addShipping = new Button(expandableCompo, SWT.PUSH);
+				wrapInExpandable(vesselComposite, "Shipping Templates", p -> createShippingOptionsViewer(p).getGrid(), expandableCompo -> {
+
+					{
+						final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
+						final ShippingOptionsDropTargetListener listener = new ShippingOptionsDropTargetListener(OptionModellerView.this, shippingOptionsViewer);
+						inputWants.add(model -> listener.setOptionAnalysisModel(model));
+						// Control control = getControl();
+						DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE);
+						dropTarget.setTransfer(types);
+						dropTarget.addDropListener(listener);
+					}
+
+					final Label addShipping = new Label(expandableCompo, SWT.NONE);
 					expandableCompo.setTextClient(addShipping);
 					addShipping.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 
-					addShipping.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.BOTTOM).grab(true, false).create());
-					addShipping.addSelectionListener(new SelectionListener() {
+					addShipping.setLayoutData(GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.BOTTOM).grab(true, false).create());
+					addShipping.addMouseListener(new MouseListener() {
 
 						LocalMenuHelper helper = new LocalMenuHelper(addShipping.getParent());
 						{
@@ -378,18 +488,27 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 						}
 
 						@Override
-						public void widgetSelected(final SelectionEvent e) {
-							helper.open();
+						public void mouseDoubleClick(final MouseEvent e) {
+
 						}
 
 						@Override
-						public void widgetDefaultSelected(final SelectionEvent e) {
+						public void mouseDown(final MouseEvent e) {
+							helper.open();
+
+						}
+
+						@Override
+						public void mouseUp(final MouseEvent e) {
 
 						}
 					});
 				});
+				// Failed attempt to set a minimum size on the table
+				shippingOptionsViewer.getGrid().setLayoutData(GridDataFactory.swtDefaults().hint(SWT.DEFAULT, 150).create());
 
 				wrapInExpandable(vesselComposite, "Vessels", p -> createVesselOptionsViewer(p).getGrid());
+				wrapInExpandable(vesselComposite, "Vessel Classes", p -> createVesselClassOptionsViewer(p).getGrid());
 				//
 				// shippingOptionsViewer = createShippingOptionsViewer(c);
 				// c.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
@@ -447,16 +566,16 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		final GridData gdM = new GridData(SWT.LEFT, SWT.BEGINNING, false, false);
 		gdM.horizontalSpan = 2;
 		matching.setLayoutData(gdM);
-		new Label(matching, SWT.NONE).setText("Use target pnl from base case");
-		final Button matchingNoButton = new Button(matching, SWT.RADIO | SWT.LEFT);
-		matchingNoButton.setSelection(true);
-		matchingNoButton.setText("No");
-		matchingNoButton.addSelectionListener(new SelectionListener() {
+		new Label(matching, SWT.NONE).setText("Target base case P&&L");
+		final Button matchingButton = new Button(matching, SWT.CHECK | SWT.LEFT);
+		matchingButton.setSelection(false);
+		// matchingButton.setText("No");
+		matchingButton.addSelectionListener(new SelectionListener() {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				getDefaultCommandHandler().handleCommand(SetCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL, Boolean.FALSE), model,
-						AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL);
+				getDefaultCommandHandler().handleCommand(SetCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL, matchingButton.getSelection()),
+						model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL);
 			}
 
 			@Override
@@ -464,34 +583,28 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 		});
 
-		final Button matchingYesButton = new Button(matching, SWT.RADIO | SWT.LEFT);
-		matchingYesButton.setText("Yes");
-		matchingYesButton.setSelection(false);
-		matchingYesButton.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				getDefaultCommandHandler().handleCommand(SetCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL, Boolean.TRUE), model,
-						AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL);
-			}
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-			}
-		});
+		// final Button matchingYesButton = new Button(matching, SWT.RADIO | SWT.LEFT);
+		// matchingYesButton.setText("Yes");
+		// matchingYesButton.setSelection(false);
+		// matchingYesButton.addSelectionListener(new SelectionListener() {
+		//
+		// @Override
+		// public void widgetSelected(final SelectionEvent e) {
+		// getDefaultCommandHandler().handleCommand(SetCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL, Boolean.TRUE), model,
+		// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL);
+		// }
+		//
+		// @Override
+		// public void widgetDefaultSelected(final SelectionEvent e) {
+		// }
+		// });
 
 		// FIXME: This control does not respond to e.g. Undo() calls.
 		// Need to hook up explicitly to the refresh adapter
 
 		inputWants.add(model -> {
 			if (model != null) {
-				if (model.isUseTargetPNL()) {
-					matchingYesButton.setSelection(true);
-					matchingNoButton.setSelection(false);
-				} else {
-					matchingNoButton.setSelection(true);
-					matchingYesButton.setSelection(false);
-				}
+				matchingButton.setSelection(model.isUseTargetPNL());
 			}
 		});
 		return matching;
@@ -531,7 +644,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			mainComposite.getParent().layout(true);
 
 			if (rootObject instanceof LNGScenarioModel) {
-				LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				if (lngScenarioModel.getOptionModels().isEmpty()) {
 					model = createDemoModel1();
 					lngScenarioModel.getOptionModels().add(model);
@@ -552,7 +665,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 
 			if (notification.getNotifier() == model && notification.getFeature() == MMXCorePackage.Literals.NAMED_OBJECT__NAME) {
-				setPartName("Modelling " + model.getName());
+				setPartName("Sandbox " + model.getName());
 				return;
 			}
 
@@ -622,19 +735,20 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		rulesViewer.setInput(model);
 		resultsViewer.setInput(model);
 		vesselViewer.setInput(this);
+		vesselClassViewer.setInput(this);
 		vesselViewer.expandAll();
 		shippingOptionsViewer.setInput(model);
 
 		if (model != null) {
-			setPartName("Modelling " + model.getName());
+			setPartName("Sandbox " + model.getName());
 
 			if (!model.eAdapters().contains(refreshAdapter)) {
 				model.eAdapters().add(refreshAdapter);
 			}
 		} else {
-			setPartName("");
+			setPartName("Sandbox");
 		}
-		for (Consumer<OptionAnalysisModel> want : inputWants) {
+		for (final Consumer<OptionAnalysisModel> want : inputWants) {
 			want.accept(model);
 		}
 
@@ -642,56 +756,13 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	}
 
-	private GridTreeViewer createBuyOptionsViewer(final Composite buyComposite) {
+	private Control createBuyOptionsViewer(final Composite buyComposite) {
 
-		{
-			final Button addBuyButton = new Button(buyComposite, SWT.PUSH);
-			addBuyButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
-
-			addBuyButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).grab(true, false).create());
-			addBuyButton.addSelectionListener(new SelectionListener() {
-
-				LocalMenuHelper helper = new LocalMenuHelper(addBuyButton.getParent());
-				{
-					helper.addAction(new RunnableAction("Existing...", () -> {
-						final BuyOption row = AnalyticsFactory.eINSTANCE.createBuyReference();
-						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, row), model,
-								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
-						editObject(row);
-					}));
-					helper.addAction(new RunnableAction("New...", () -> {
-						final BuyOpportunity row = AnalyticsFactory.eINSTANCE.createBuyOpportunity();
-						AnalyticsBuilder.setDefaultEntity(OptionModellerView.this, row);
-
-						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, row), model,
-								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
-						editObject(row);
-					}));
-					helper.addAction(new RunnableAction("From market...", () -> {
-						final BuyMarket row = AnalyticsFactory.eINSTANCE.createBuyMarket();
-						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, row), model,
-								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
-						editObject(row);
-					}));
-				}
-
-				@Override
-				public void widgetSelected(final SelectionEvent e) {
-					helper.open();
-				}
-
-				@Override
-				public void widgetDefaultSelected(final SelectionEvent e) {
-
-				}
-			});
-		}
-
-		final GridTreeViewer buyOptionsViewer = new GridTreeViewer(buyComposite, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
+		buyOptionsViewer = new GridTreeViewer(buyComposite, SWT.NONE | SWT.MULTI | SWT.V_SCROLL);
 		ColumnViewerToolTipSupport.enableFor(buyOptionsViewer);
 
 		GridViewerHelper.configureLookAndFeel(buyOptionsViewer);
-		buyOptionsViewer.getGrid().setHeaderVisible(true);
+		buyOptionsViewer.getGrid().setHeaderVisible(false);
 
 		createColumn(buyOptionsViewer, "Buy", new BuyOptionDescriptionFormatter());
 
@@ -705,62 +776,21 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		}
 		{
 			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
-			BuysDropTargetListener listener = new BuysDropTargetListener(OptionModellerView.this, buyOptionsViewer);
+			final BuysDropTargetListener listener = new BuysDropTargetListener(OptionModellerView.this, buyOptionsViewer);
 			inputWants.add(model -> listener.setOptionAnalysisModel(model));
 			buyOptionsViewer.addDropSupport(DND.DROP_MOVE, types, listener);
 		}
 
-		return buyOptionsViewer;
+		return buyOptionsViewer.getControl();
 	}
 
-	private GridTreeViewer createSellOptionsViewer(final Composite sellComposite) {
-		{
-			final Button addSellButton = new Button(sellComposite, SWT.PUSH);
-			addSellButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+	private Control createSellOptionsViewer(final Composite sellComposite) {
 
-			addSellButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).grab(true, false).create());
-			addSellButton.addSelectionListener(new SelectionListener() {
-
-				LocalMenuHelper helper = new LocalMenuHelper(addSellButton.getParent());
-				{
-					helper.addAction(new RunnableAction("Existing...", () -> {
-						final SellOption row = AnalyticsFactory.eINSTANCE.createSellReference();
-						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), model,
-								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
-						editObject(row);
-					}));
-					helper.addAction(new RunnableAction("New...", () -> {
-						final SellOpportunity row = AnalyticsFactory.eINSTANCE.createSellOpportunity();
-						AnalyticsBuilder.setDefaultEntity(OptionModellerView.this, row);
-						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), model,
-								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
-						editObject(row);
-					}));
-					helper.addAction(new RunnableAction("From market...", () -> {
-						final SellOption row = AnalyticsFactory.eINSTANCE.createSellMarket();
-						getDefaultCommandHandler().handleCommand(AddCommand.create(getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), model,
-								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
-						editObject(row);
-					}));
-				}
-
-				@Override
-				public void widgetSelected(final SelectionEvent e) {
-					helper.open();
-				}
-
-				@Override
-				public void widgetDefaultSelected(final SelectionEvent e) {
-
-				}
-			});
-		}
-
-		final GridTreeViewer sellOptionsViewer = new GridTreeViewer(sellComposite, SWT.BORDER | SWT.MULTI);
+		sellOptionsViewer = new GridTreeViewer(sellComposite, SWT.NONE | SWT.MULTI);
 		ColumnViewerToolTipSupport.enableFor(sellOptionsViewer);
 
 		GridViewerHelper.configureLookAndFeel(sellOptionsViewer);
-		sellOptionsViewer.getGrid().setHeaderVisible(true);
+		sellOptionsViewer.getGrid().setHeaderVisible(false);
 
 		createColumn(sellOptionsViewer, "Sell", new SellOptionDescriptionFormatter());
 
@@ -774,57 +804,71 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		}
 		{
 			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
-			SellsDropTargetListener listener = new SellsDropTargetListener(OptionModellerView.this, sellOptionsViewer);
+			final SellsDropTargetListener listener = new SellsDropTargetListener(OptionModellerView.this, sellOptionsViewer);
 			inputWants.add(model -> listener.setOptionAnalysisModel(model));
 			sellOptionsViewer.addDropSupport(DND.DROP_MOVE, types, listener);
 		}
-		return sellOptionsViewer;
+		return sellOptionsViewer.getControl();
 	}
 
 	private GridTreeViewer createShippingOptionsViewer(final Composite vesselComposite) {
 
-		shippingOptionsViewer = new GridTreeViewer(vesselComposite, SWT.BORDER | SWT.MULTI);
+		shippingOptionsViewer = new GridTreeViewer(vesselComposite, SWT.NONE | SWT.MULTI);
 
 		GridViewerHelper.configureLookAndFeel(shippingOptionsViewer);
 
-		shippingOptionsViewer.getGrid().setHeaderVisible(true);
+		shippingOptionsViewer.getGrid().setHeaderVisible(false);
 
-		createColumn(shippingOptionsViewer, "Shipping Templates", new ShippingOptionDescriptionFormatter());
+		createColumn(shippingOptionsViewer, "Templates", new ShippingOptionDescriptionFormatter());
 		shippingOptionsViewer.setContentProvider(new ShippingOptionsContentProvider(this));
 		hookOpenEditor(shippingOptionsViewer);
 
 		{
-			Transfer[] transferTypes = new Transfer[] { LocalSelectionTransfer.getTransfer() };
-			ShippingOptionsDropTargetListener listener = new ShippingOptionsDropTargetListener(OptionModellerView.this, shippingOptionsViewer);
+			final Transfer[] transferTypes = new Transfer[] { LocalSelectionTransfer.getTransfer() };
+			final ShippingOptionsDropTargetListener listener = new ShippingOptionsDropTargetListener(OptionModellerView.this, shippingOptionsViewer);
 			shippingOptionsViewer.addDropSupport(DND.DROP_MOVE, transferTypes, listener);
 			inputWants.add(model -> listener.setOptionAnalysisModel(model));
 		}
 
 		final MenuManager mgr = new MenuManager();
 		final ShippingOptionsContextMenuManager listener = new ShippingOptionsContextMenuManager(shippingOptionsViewer, OptionModellerView.this, mgr);
-		inputWants.add(model -> listener.setOptionAnalysisModel(model));
 		shippingOptionsViewer.getGrid().addMenuDetectListener(listener);
 
 		hookDragSource(shippingOptionsViewer);
+
 		return shippingOptionsViewer;
 	}
 
 	private GridTreeViewer createVesselOptionsViewer(final Composite vesselComposite) {
-		vesselViewer = new GridTreeViewer(vesselComposite, SWT.BORDER | SWT.MULTI);
+		vesselViewer = new GridTreeViewer(vesselComposite, SWT.NONE | SWT.MULTI);
 
 		GridViewerHelper.configureLookAndFeel(vesselViewer);
+		vesselViewer.getGrid().setHeaderVisible(false);
 
-		vesselViewer.getGrid().setHeaderVisible(true);
+		// vesselViewer.getGrid().setHeaderVisible(true);
 
 		createColumn(vesselViewer, "Vessels", new VesselDescriptionFormatter());
-		vesselViewer.setContentProvider(new VesselAndClassContentProvider(this));
-		hookOpenEditor(vesselViewer);
+		vesselViewer.setContentProvider(new VesselContentProvider(this));
 		hookDragSource(vesselViewer);
 		return vesselViewer;
 	}
 
+	private GridTreeViewer createVesselClassOptionsViewer(final Composite vesselComposite) {
+		vesselClassViewer = new GridTreeViewer(vesselComposite, SWT.NONE | SWT.MULTI);
+
+		GridViewerHelper.configureLookAndFeel(vesselClassViewer);
+		vesselClassViewer.getGrid().setHeaderVisible(false);
+
+		// vesselViewer.getGrid().setHeaderVisible(true);
+
+		createColumn(vesselClassViewer, "Vessel Classes", new VesselDescriptionFormatter());
+		vesselClassViewer.setContentProvider(new VesselClassContentProvider(this));
+		hookDragSource(vesselClassViewer);
+		return vesselClassViewer;
+	}
+
 	private void createRulesViewer(final Composite parent) {
-		rulesViewer = new GridTreeViewer(parent, SWT.BORDER);
+		rulesViewer = new GridTreeViewer(parent, SWT.NONE);
 		GridViewerHelper.configureLookAndFeel(rulesViewer);
 		rulesViewer.getGrid().setHeaderVisible(true);
 
@@ -842,7 +886,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		final ExpandableComposite expandableCompo = new ExpandableComposite(composite, SWT.NONE);
 		expandableCompo.setExpanded(true);
 		expandableCompo.setText(name);
-		expandableCompo.setLayout(new FillLayout());
+		expandableCompo.setLayout(new GridLayout(1, false));
 
 		final Control client = s.apply(expandableCompo);
 		GridDataFactory.generate(expandableCompo, 2, 2);
@@ -857,7 +901,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 			@Override
 			public void expansionStateChanged(final ExpansionEvent e) {
-				composite.layout();
+				composite.layout(true);
 			}
 		});
 
@@ -867,7 +911,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	}
 
 	private Control createBaseCaseViewer(final Composite parent) {
-		baseCaseViewer = new GridTreeViewer(parent, SWT.BORDER | SWT.SINGLE);
+		baseCaseViewer = new GridTreeViewer(parent, SWT.NONE | SWT.SINGLE);
 		ColumnViewerToolTipSupport.enableFor(baseCaseViewer);
 
 		GridViewerHelper.configureLookAndFeel(baseCaseViewer);
@@ -892,7 +936,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	}
 
 	private Control createPartialCaseViewer(final Composite parent) {
-		partialCaseViewer = new GridTreeViewer(parent, SWT.BORDER | SWT.WRAP);
+		partialCaseViewer = new GridTreeViewer(parent, SWT.NONE | SWT.WRAP);
 		ColumnViewerToolTipSupport.enableFor(partialCaseViewer);
 
 		GridViewerHelper.configureLookAndFeel(partialCaseViewer);
@@ -919,7 +963,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	private Control createResultsViewer(final Composite parent) {
 
-		resultsViewer = new GridTreeViewer(parent, SWT.BORDER);
+		resultsViewer = new GridTreeViewer(parent, SWT.NONE);
 		ColumnViewerToolTipSupport.enableFor(resultsViewer);
 		GridViewerHelper.configureLookAndFeel(resultsViewer);
 		resultsViewer.getGrid().setHeaderVisible(true);
@@ -1098,7 +1142,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		BUYS, MIDDLE, SELLS, VESSEL
 	};
 
-	private void refreshSections(boolean layout, EnumSet<SectionType> sections) {
+	private void refreshSections(final boolean layout, final EnumSet<SectionType> sections) {
 
 		RunnerHelper.syncExec(() -> {
 
@@ -1131,9 +1175,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				}
 			}
 			if (sections.contains(SectionType.VESSEL)) {
-				vesselViewer.refresh();
 				shippingOptionsViewer.refresh();
-				vesselViewer.expandAll();
+				vesselViewer.refresh();
+				vesselClassViewer.refresh();
 				if (layout) {
 					packAll(vesselComposite);
 				}
@@ -1202,12 +1246,19 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	@Override
 	public void dispose() {
+		if (image_calculate != null) {
+			image_calculate.dispose();
+		}
+		if (image_generate != null) {
+			image_generate.dispose();
+		}
+
 		if (model != null) {
 			model.eAdapters().remove(refreshAdapter);
 			model = null;
 		}
 
-		CommandStack pCurrentCommandStack = currentCommandStack;
+		final CommandStack pCurrentCommandStack = currentCommandStack;
 		if (pCurrentCommandStack != null) {
 			pCurrentCommandStack.removeCommandStackListener(this);
 			currentCommandStack = null;
@@ -1228,11 +1279,11 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		super.setLocked(locked);
 	}
 
-	private void createResultSetFork(ResultSet rs) {
-		BaseCase bc = AnalyticsFactory.eINSTANCE.createBaseCase();
-		EList<BaseCaseRow> baseCase = bc.getBaseCase();
-		for (AnalysisResultRow analysisResultRow : rs.getRows()) {
-			BaseCaseRow bcr = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+	private void createResultSetFork(final ResultSet rs) {
+		final BaseCase bc = AnalyticsFactory.eINSTANCE.createBaseCase();
+		final EList<BaseCaseRow> baseCase = bc.getBaseCase();
+		for (final AnalysisResultRow analysisResultRow : rs.getRows()) {
+			final BaseCaseRow bcr = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
 			bcr.setBuyOption(analysisResultRow.getBuyOption());
 			bcr.setSellOption(analysisResultRow.getSellOption());
 			bcr.setShipping(analysisResultRow.getShipping());
