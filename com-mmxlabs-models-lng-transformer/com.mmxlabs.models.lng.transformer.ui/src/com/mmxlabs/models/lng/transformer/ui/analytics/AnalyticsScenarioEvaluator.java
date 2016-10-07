@@ -11,9 +11,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
 import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
-import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
-import com.mmxlabs.models.lng.parameters.OptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -28,7 +26,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 	@Override
 	public void evaluate(@org.eclipse.jdt.annotation.NonNull final LNGScenarioModel lngScenarioModel, @org.eclipse.jdt.annotation.NonNull final UserSettings userSettings,
-			@Nullable final ScenarioInstance parentForFork) {
+			@Nullable final ScenarioInstance parentForFork, final boolean fork, final String forkName) {
 
 		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
@@ -44,11 +42,11 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 					false);
 
 			scenarioRunner.evaluateInitialState();
-			if (parentForFork != null) {
+			if (parentForFork != null && fork) {
 				final IScenarioService scenarioService = parentForFork.getScenarioService();
 
 				final ScenarioInstance dup = scenarioService.insert(parentForFork, EcoreUtil.copy(lngScenarioModel));
-				dup.setName("Base Case");
+				dup.setName(forkName);
 
 				// Copy across various bits of information
 				dup.getMetadata().setContentType(parentForFork.getMetadata().getContentType());
