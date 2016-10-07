@@ -154,12 +154,12 @@ public class AnalyticsBuilder {
 	}
 
 	public enum ShippingType {
-		Shipped, NonShipped, Mixed
+		None, Shipped, NonShipped, Mixed
 	}
 
 	public static ShippingType isNonShipped(@NonNull final PartialCaseRow row) {
 		if (row.getBuyOptions().isEmpty() || row.getSellOptions().isEmpty()) {
-			return ShippingType.Mixed;
+			return ShippingType.None;
 		}
 
 		ShippingType buyType = null;
@@ -195,6 +195,9 @@ public class AnalyticsBuilder {
 		if (type == null) {
 			return thisType;
 		} else {
+			if (thisType == ShippingType.None) {
+				return type;
+			}
 			if (type == ShippingType.Shipped && thisType == ShippingType.Shipped) {
 				return ShippingType.Shipped;
 			}
@@ -215,6 +218,9 @@ public class AnalyticsBuilder {
 		if (type == null) {
 			return thisType;
 		} else {
+			if (thisType == ShippingType.None) {
+				return type;
+			}
 			if (type == ShippingType.Shipped && thisType == ShippingType.Shipped) {
 				return ShippingType.Shipped;
 			}
@@ -226,9 +232,7 @@ public class AnalyticsBuilder {
 	}
 
 	public static ShippingType isNonShipped(@NonNull final BaseCaseRow row) {
-		if (row.getBuyOption() == null || row.getSellOption() == null) {
-			return ShippingType.Mixed;
-		}
+
 		final BuyOption buy = row.getBuyOption();
 
 		final ShippingType buyType = getBuyShippingType(buy);
@@ -249,11 +253,19 @@ public class AnalyticsBuilder {
 		if (buyType == ShippingType.Shipped && sellType == ShippingType.Shipped) {
 			return ShippingType.Shipped;
 		}
+		if (buyType == ShippingType.None) {
+			return sellType;
+		}
+		if (sellType == ShippingType.None) {
+			return buyType;
+		}
 		return ShippingType.NonShipped;
 	}
 
-	public static ShippingType getBuyShippingType(@NonNull final BuyOption buy) {
-		if (buy instanceof BuyReference) {
+	public static ShippingType getBuyShippingType(@Nullable final BuyOption buy) {
+		if (buy == null) {
+			return ShippingType.None;
+		} else if (buy instanceof BuyReference) {
 			final BuyReference buyReference = (BuyReference) buy;
 			final LoadSlot load = buyReference.getSlot();
 			if (load != null) {
@@ -273,8 +285,10 @@ public class AnalyticsBuilder {
 		throw new IllegalArgumentException("Unsupported BuyOption type");
 	}
 
-	public static ShippingType getSellShippingType(@NonNull final SellOption sell) {
-		if (sell instanceof SellReference) {
+	public static ShippingType getSellShippingType(@Nullable final SellOption sell) {
+		if (sell == null) {
+			return ShippingType.None;
+		} else if (sell instanceof SellReference) {
 			final SellReference sellReference = (SellReference) sell;
 			final DischargeSlot discharge = sellReference.getSlot();
 			if (discharge != null) {

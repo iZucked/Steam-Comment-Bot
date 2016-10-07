@@ -30,16 +30,24 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 
 			ShippingType nonShipped = AnalyticsBuilder.isNonShipped(baseCaseRow);
 			if (nonShipped == ShippingType.Shipped) {
-				if (baseCaseRow.getShipping() == null) {
-					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Base case - no shipping option defined."));
-					deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-					statuses.add(deco);
+				if (baseCaseRow.getBuyOption() != null && baseCaseRow.getSellOption() != null) {
+					if (baseCaseRow.getShipping() == null) {
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Base case - no shipping option defined."));
+						deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+						statuses.add(deco);
+					}
+					if (!(baseCaseRow.getShipping() instanceof FleetShippingOption || baseCaseRow.getShipping() instanceof RoundTripShippingOption)) {
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus("Base case - incompatible shipping option defined."));
+						deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+						statuses.add(deco);
+					}
 				}
-				if (!(baseCaseRow.getShipping() instanceof FleetShippingOption || baseCaseRow.getShipping() instanceof RoundTripShippingOption)) {
-					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Base case - incompatible shipping option defined."));
-					deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-					statuses.add(deco);
-				}
+			} else if (nonShipped == ShippingType.Mixed) {
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Base case - incompatible slot combination."));
+				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION);
+				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
+				statuses.add(deco);
 			}
 		}
 
