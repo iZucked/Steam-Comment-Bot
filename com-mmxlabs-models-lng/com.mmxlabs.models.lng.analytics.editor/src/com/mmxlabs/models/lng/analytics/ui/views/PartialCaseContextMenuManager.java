@@ -92,61 +92,64 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 				}
 			}
 
-			if (column.getText().equals("Buy")) {
+			if (column != null) {
 
-				if (!row.getBuyOptions().isEmpty()) {
-					mgr.add(new RunnableAction("Remove buy(s)", () -> {
-						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS, SetCommand.UNSET_VALUE), row,
-								AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS);
+				if (column.getText().equals("Buy")) {
 
-					}));
+					if (!row.getBuyOptions().isEmpty()) {
+						mgr.add(new RunnableAction("Remove buy(s)", () -> {
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+									SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS, SetCommand.UNSET_VALUE), row,
+									AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS);
+
+						}));
+					}
 				}
-			}
-			if (column.getText().equals("Sell")) {
-				if (!row.getSellOptions().isEmpty()) {
-					mgr.add(new RunnableAction("Remove sell(s)", () -> {
-						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS, SetCommand.UNSET_VALUE), row,
-								AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS);
+				if (column.getText().equals("Sell")) {
+					if (!row.getSellOptions().isEmpty()) {
+						mgr.add(new RunnableAction("Remove sell(s)", () -> {
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+									SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS, SetCommand.UNSET_VALUE), row,
+									AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS);
 
-					}));
+						}));
+					}
 				}
-			}
 
-			if (column.getText().equals("Shipping")) {
-				if (row.getShipping() != null) {
-					mgr.add(new RunnableAction("Remove shipping", () -> {
-						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, SetCommand.UNSET_VALUE), row,
-								AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
+				if (column.getText().equals("Shipping")) {
+					if (row.getShipping() != null) {
+						mgr.add(new RunnableAction("Remove shipping", () -> {
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+									SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, SetCommand.UNSET_VALUE), row,
+									AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
 
-					}));
-				}
-				if (AnalyticsBuilder.isNonShipped(row) == ShippingType.NonShipped) {
-					mgr.add(new RunnableAction("Create Nominated", () -> {
-						final NominatedShippingOption o = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
-						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, o), row,
-								AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
-						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
-					}));
-				} else if (AnalyticsBuilder.isNonShipped(row) == ShippingType.Shipped) {
-					mgr.add(new RunnableAction("Create RT", () -> {
-						final RoundTripShippingOption o = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
-						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, o), row,
-								AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
-						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
-					}));
-					mgr.add(new RunnableAction("Create fleet", () -> {
-						final FleetShippingOption o = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
-						AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, o);
-						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-								SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, o), row,
-								AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
-						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
-					}));
+						}));
+					}
+					if (AnalyticsBuilder.isNonShipped(row) == ShippingType.NonShipped) {
+						mgr.add(new RunnableAction("Create Nominated", () -> {
+							final NominatedShippingOption o = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+									SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, o), row,
+									AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
+							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
+						}));
+					} else if (AnalyticsBuilder.isNonShipped(row) == ShippingType.Shipped) {
+						mgr.add(new RunnableAction("Create RT", () -> {
+							final RoundTripShippingOption o = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+									SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, o), row,
+									AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
+							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
+						}));
+						mgr.add(new RunnableAction("Create fleet", () -> {
+							final FleetShippingOption o = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
+							AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, o);
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+									SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, o), row,
+									AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
+							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
+						}));
+					}
 				}
 			}
 		}
