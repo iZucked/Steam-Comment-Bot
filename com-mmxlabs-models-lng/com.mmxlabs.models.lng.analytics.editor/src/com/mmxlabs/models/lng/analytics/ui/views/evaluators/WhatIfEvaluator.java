@@ -95,7 +95,7 @@ public class WhatIfEvaluator {
 				res.setBuyOption(row.getBuyOption());
 				res.setSellOption(row.getSellOption());
 				res.setShipping(row.getShipping());
-				
+
 				Triple<SlotAllocation, SlotAllocation, CargoAllocation> t = finder(lngScenarioModel, row, mapper);
 				SlotAllocation loadAllocation = t.getFirst();
 				SlotAllocation dischargeAllocation = t.getSecond();
@@ -188,6 +188,7 @@ public class WhatIfEvaluator {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		ServiceHelper.withService(IAnalyticsScenarioEvaluator.class, evaluator -> evaluator.breakEvenEvaluate(lngScenarioModel, userSettings, null, targetPNL, useTargetPNL ? BreakEvenMode.PORTFOLIO : BreakEvenMode.POINT_TO_POINT));
+		ServiceHelper.<IAnalyticsScenarioEvaluator> withService(IAnalyticsScenarioEvaluator.class,
+				evaluator -> evaluator.breakEvenEvaluate(lngScenarioModel, userSettings, null, targetPNL, useTargetPNL ? BreakEvenMode.PORTFOLIO : BreakEvenMode.POINT_TO_POINT));
 	}
 }
