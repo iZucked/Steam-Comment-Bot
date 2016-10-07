@@ -855,7 +855,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		baseCaseViewer.getGrid().setRowHeaderVisible(true);
 
 		createColumn(baseCaseViewer, "Buy", new BuyOptionDescriptionFormatter(), AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION);
-		createColumn(baseCaseViewer, "Sell", new BuyOptionDescriptionFormatter(), AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
+		createColumn(baseCaseViewer, "Sell", new SellOptionDescriptionFormatter(), AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
 		createColumn(baseCaseViewer, "Shipping", new ShippingOptionDescriptionFormatter(), AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 
 		baseCaseViewer.getGrid().setCellSelectionEnabled(true);
