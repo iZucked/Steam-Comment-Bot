@@ -141,6 +141,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		// parent.setLayout(new FillLayout());
 
 		mainComposite = new Composite(parent, SWT.NONE);
+		mainComposite.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
+
 		mainComposite.setLayoutData(GridDataFactory.swtDefaults()//
 				.grab(true, true)//
 				.create());
@@ -507,6 +509,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 			if (errorLabel == null) {
 				errorLabel = new Label(mainComposite.getParent(), SWT.NONE);
+				errorLabel.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 				errorLabel.setText("No scenario selected");
 			}
 
