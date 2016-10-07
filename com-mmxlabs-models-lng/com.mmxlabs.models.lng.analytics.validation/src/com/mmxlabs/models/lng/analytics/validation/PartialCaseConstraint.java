@@ -12,8 +12,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.BaseCase;
-import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.PartialCase;
@@ -43,7 +41,7 @@ public class PartialCaseConstraint extends AbstractModelMultiConstraint {
 			final Set<DischargeSlot> duplicatdDischargeSlots = new HashSet<>();
 
 			// First pass, find problem slots
-			processBaseCase(partialCase, (row, slot) -> {
+			processPartialCase(partialCase, (row, slot) -> {
 				if (!loadSlots.add(slot)) {
 					duplicatedLoadSlots.add(slot);
 				}
@@ -53,7 +51,7 @@ public class PartialCaseConstraint extends AbstractModelMultiConstraint {
 				}
 			});
 			// Second pass, report problem slots
-			processBaseCase(partialCase, (row, slot) -> {
+			processPartialCase(partialCase, (row, slot) -> {
 				if (duplicatedLoadSlots.contains(slot)) {
 					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("What if? - existing slot used multiple times."));
 					deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS);
@@ -71,7 +69,7 @@ public class PartialCaseConstraint extends AbstractModelMultiConstraint {
 		return Activator.PLUGIN_ID;
 	}
 
-	public void processBaseCase(final PartialCase partialCase, final BiConsumer<PartialCaseRow, LoadSlot> visitLoadSlot, final BiConsumer<PartialCaseRow, DischargeSlot> visitDischargeSlot) {
+	public void processPartialCase(final PartialCase partialCase, final BiConsumer<PartialCaseRow, LoadSlot> visitLoadSlot, final BiConsumer<PartialCaseRow, DischargeSlot> visitDischargeSlot) {
 		for (final PartialCaseRow row : partialCase.getPartialCase()) {
 			{
 				for (final BuyOption buy : row.getBuyOptions()) {
