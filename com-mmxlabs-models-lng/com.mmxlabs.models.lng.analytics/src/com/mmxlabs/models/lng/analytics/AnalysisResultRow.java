@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.AnalysisResultRow#getBuyOption <em>Buy Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AnalysisResultRow#getSellOption <em>Sell Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AnalysisResultRow#getResultDetail <em>Result Detail</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.AnalysisResultRow#getShipping <em>Shipping</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalysisResultRow()
@@ -100,5 +101,31 @@ public interface AnalysisResultRow extends EObject {
 	 * @generated
 	 */
 	void setResultDetail(AnalysisResultDetail value);
+
+	/**
+	 * Returns the value of the '<em><b>Shipping</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Shipping</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Shipping</em>' containment reference.
+	 * @see #setShipping(ShippingOption)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalysisResultRow_Shipping()
+	 * @model containment="true"
+	 * @generated
+	 */
+	ShippingOption getShipping();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.AnalysisResultRow#getShipping <em>Shipping</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Shipping</em>' containment reference.
+	 * @see #getShipping()
+	 * @generated
+	 */
+	void setShipping(ShippingOption value);
 
 } // AnalysisResultRow

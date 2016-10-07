@@ -1200,4 +1200,14 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		super.setLocked(locked);
 	}
 
+	private void createResultSetFork(ResultSet rs) {
+		BaseCase bc = AnalyticsFactory.eINSTANCE.createBaseCase();
+		EList<BaseCaseRow> baseCase = bc.getBaseCase();
+		for (AnalysisResultRow analysisResultRow : rs.getRows()) {
+			BaseCaseRow bcr = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+			bcr.setBuyOption(analysisResultRow.getBuyOption());
+			bcr.setSellOption(analysisResultRow.getSellOption());
+			bcr.setShipping(analysisResultRow.getShipping());
+		}
+	}
 }

@@ -57,7 +57,7 @@ public class BaseCaseEvaluator {
 
 	}
 
-	private static class Mapper implements IMapperClass {
+	static class Mapper implements IMapperClass {
 		private final EcoreUtil.Copier copier;
 
 		Map<BuyOption, LoadSlot> buyMap = new HashMap<>();
@@ -145,7 +145,7 @@ public class BaseCaseEvaluator {
 
 	}
 
-	private static void updateResults(final IScenarioEditingLocation scenarioEditingLocation, final LNGScenarioModel clone, final BaseCase baseCase) {
+	protected static void updateResults(final IScenarioEditingLocation scenarioEditingLocation, final LNGScenarioModel clone, final BaseCase baseCase) {
 
 		final long pnl = ScheduleModelKPIUtils.getScheduleProfitAndLoss(clone.getScheduleModel().getSchedule());
 		scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
@@ -153,7 +153,7 @@ public class BaseCaseEvaluator {
 				AnalyticsPackage.Literals.BASE_CASE__PROFIT_AND_LOSS);
 	}
 
-	private static void evaluateScenario(final LNGScenarioModel lngScenarioModel, final ScenarioInstance scenarioInstance) {
+	protected static void evaluateScenario(final LNGScenarioModel lngScenarioModel, final ScenarioInstance scenarioInstance) {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
@@ -164,7 +164,7 @@ public class BaseCaseEvaluator {
 
 	}
 
-	private static void buildScenario(final LNGScenarioModel clone, final OptionAnalysisModel clonedModel, final BaseCase clonedBaseCase, final IMapperClass mapper) {
+	protected static void buildScenario(final LNGScenarioModel clone, final OptionAnalysisModel clonedModel, final BaseCase clonedBaseCase, final IMapperClass mapper) {
 
 		createShipping(clone, clonedBaseCase);
 
@@ -200,7 +200,7 @@ public class BaseCaseEvaluator {
 
 	}
 
-	private static void setShipping(final @Nullable LoadSlot loadSlot, final @Nullable DischargeSlot dischargeSlot, final @Nullable Cargo cargo, final @Nullable ShippingOption shipping,
+	protected static void setShipping(final @Nullable LoadSlot loadSlot, final @Nullable DischargeSlot dischargeSlot, final @Nullable Cargo cargo, final @Nullable ShippingOption shipping,
 			final @NonNull LNGScenarioModel lngScenarioModel) {
 		if (shipping instanceof NominatedShippingOption) {
 			final NominatedShippingOption nominatedShippingOption = (NominatedShippingOption) shipping;
@@ -258,12 +258,12 @@ public class BaseCaseEvaluator {
 		}
 	}
 
-	private static void createShipping(final LNGScenarioModel clone, final BaseCase clonedBaseCase) {
+	protected static void createShipping(final LNGScenarioModel clone, final BaseCase clonedBaseCase) {
 		// TODO Auto-generated method stub
 
 	}
 
-	private static void clearData(final LNGScenarioModel clone, final OptionAnalysisModel model, final BaseCase bc) {
+	protected static void clearData(final LNGScenarioModel clone, final OptionAnalysisModel model, final BaseCase bc) {
 
 		clone.getScheduleModel().setSchedule(null);
 

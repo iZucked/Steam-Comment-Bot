@@ -315,6 +315,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="sellOption" eType="#//SellOption"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="resultDetail" eType="#//AnalysisResultDetail"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="shipping" eType="#//ShippingOption"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OptionRule" abstract="true" interface="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

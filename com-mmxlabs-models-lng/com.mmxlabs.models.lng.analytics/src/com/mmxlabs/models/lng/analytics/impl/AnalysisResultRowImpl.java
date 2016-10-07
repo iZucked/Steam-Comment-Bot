@@ -8,6 +8,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.SellOption;
 
+import com.mmxlabs.models.lng.analytics.ShippingOption;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -28,6 +29,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalysisResultRowImpl#getBuyOption <em>Buy Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalysisResultRowImpl#getSellOption <em>Sell Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalysisResultRowImpl#getResultDetail <em>Result Detail</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalysisResultRowImpl#getShipping <em>Shipping</em>}</li>
  * </ul>
  *
  * @generated
@@ -62,6 +64,16 @@ public class AnalysisResultRowImpl extends EObjectImpl implements AnalysisResult
 	 * @ordered
 	 */
 	protected AnalysisResultDetail resultDetail;
+
+	/**
+	 * The cached value of the '{@link #getShipping() <em>Shipping</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getShipping()
+	 * @generated
+	 * @ordered
+	 */
+	protected ShippingOption shipping;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -206,11 +218,56 @@ public class AnalysisResultRowImpl extends EObjectImpl implements AnalysisResult
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public ShippingOption getShipping() {
+		return shipping;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetShipping(ShippingOption newShipping, NotificationChain msgs) {
+		ShippingOption oldShipping = shipping;
+		shipping = newShipping;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AnalyticsPackage.ANALYSIS_RESULT_ROW__SHIPPING, oldShipping, newShipping);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setShipping(ShippingOption newShipping) {
+		if (newShipping != shipping) {
+			NotificationChain msgs = null;
+			if (shipping != null)
+				msgs = ((InternalEObject)shipping).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.ANALYSIS_RESULT_ROW__SHIPPING, null, msgs);
+			if (newShipping != null)
+				msgs = ((InternalEObject)newShipping).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.ANALYSIS_RESULT_ROW__SHIPPING, null, msgs);
+			msgs = basicSetShipping(newShipping, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.ANALYSIS_RESULT_ROW__SHIPPING, newShipping, newShipping));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case AnalyticsPackage.ANALYSIS_RESULT_ROW__RESULT_DETAIL:
 				return basicSetResultDetail(null, msgs);
+			case AnalyticsPackage.ANALYSIS_RESULT_ROW__SHIPPING:
+				return basicSetShipping(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -231,6 +288,8 @@ public class AnalysisResultRowImpl extends EObjectImpl implements AnalysisResult
 				return basicGetSellOption();
 			case AnalyticsPackage.ANALYSIS_RESULT_ROW__RESULT_DETAIL:
 				return getResultDetail();
+			case AnalyticsPackage.ANALYSIS_RESULT_ROW__SHIPPING:
+				return getShipping();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -251,6 +310,9 @@ public class AnalysisResultRowImpl extends EObjectImpl implements AnalysisResult
 				return;
 			case AnalyticsPackage.ANALYSIS_RESULT_ROW__RESULT_DETAIL:
 				setResultDetail((AnalysisResultDetail)newValue);
+				return;
+			case AnalyticsPackage.ANALYSIS_RESULT_ROW__SHIPPING:
+				setShipping((ShippingOption)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -273,6 +335,9 @@ public class AnalysisResultRowImpl extends EObjectImpl implements AnalysisResult
 			case AnalyticsPackage.ANALYSIS_RESULT_ROW__RESULT_DETAIL:
 				setResultDetail((AnalysisResultDetail)null);
 				return;
+			case AnalyticsPackage.ANALYSIS_RESULT_ROW__SHIPPING:
+				setShipping((ShippingOption)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -291,6 +356,8 @@ public class AnalysisResultRowImpl extends EObjectImpl implements AnalysisResult
 				return sellOption != null;
 			case AnalyticsPackage.ANALYSIS_RESULT_ROW__RESULT_DETAIL:
 				return resultDetail != null;
+			case AnalyticsPackage.ANALYSIS_RESULT_ROW__SHIPPING:
+				return shipping != null;
 		}
 		return super.eIsSet(featureID);
 	}
