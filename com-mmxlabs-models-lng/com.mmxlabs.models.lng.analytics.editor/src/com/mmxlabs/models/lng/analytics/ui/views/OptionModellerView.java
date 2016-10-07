@@ -95,6 +95,7 @@ import com.mmxlabs.models.lng.analytics.ui.views.providers.RulesViewerContentPro
 import com.mmxlabs.models.lng.analytics.ui.views.providers.ShippingOptionsContentProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.VesselAndClassContentProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
@@ -542,6 +543,11 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			if (notification.getEventType() == Notification.REMOVING_ADAPTER) {
+				return;
+			}
+
+			if (notification.getNotifier() == model && notification.getFeature() == MMXCorePackage.Literals.NAMED_OBJECT__NAME) {
+				setPartName("Modelling " + model.getName());
 				return;
 			}
 
