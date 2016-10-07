@@ -21,13 +21,11 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyOption;
-import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellOption;
-import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder.ShippingType;
@@ -181,7 +179,7 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 							}
 						} else if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.Shipped) {
 
-							if (o instanceof RoundTripShippingOption || o instanceof NominatedShippingOption) {
+							if (o instanceof RoundTripShippingOption || o instanceof FleetShippingOption) {
 								opt = (ShippingOption) EcoreUtil.copy((ShippingOption) o);
 							}
 						}

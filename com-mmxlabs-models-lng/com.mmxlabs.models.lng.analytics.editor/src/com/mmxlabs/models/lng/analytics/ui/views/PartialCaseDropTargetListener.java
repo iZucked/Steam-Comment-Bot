@@ -24,7 +24,6 @@ import org.eclipse.swt.events.DisposeListener;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
@@ -217,7 +216,7 @@ public class PartialCaseDropTargetListener implements DropTargetListener {
 							}
 						} else if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.Shipped) {
 
-							if (o instanceof RoundTripShippingOption || o instanceof NominatedShippingOption) {
+							if (o instanceof RoundTripShippingOption || o instanceof FleetShippingOption) {
 								opt = (ShippingOption) EcoreUtil.copy((ShippingOption) o);
 							}
 						}
