@@ -106,6 +106,7 @@ import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.rcp.common.LocalMenuHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.rcp.common.dnd.BasicDragSource;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class OptionModellerView extends ScenarioInstanceView implements CommandStackListener {

@@ -1,36 +1,47 @@
 package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
+import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
+import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
-import com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
@@ -313,5 +324,100 @@ public class AnalyticsBuilder {
 			}
 		}
 		return null;
+	}
+
+	public static BuyOption getOrCreateBuyOption(final LoadSlot loadSlot, final OptionAnalysisModel optionAnalysisModel, final IScenarioEditingLocation scenarioEditingLocation,
+			final CompoundCommand cmd) {
+
+		BuyReference buyRef = null;
+
+		if (loadSlot != null) {
+			for (final BuyOption buy : optionAnalysisModel.getBuys()) {
+				if (buy instanceof BuyReference) {
+					final BuyReference buyReference = (BuyReference) buy;
+					if (buyReference.getSlot() == loadSlot) {
+						buyRef = buyReference;
+						break;
+					}
+				}
+			}
+			if (buyRef == null) {
+				buyRef = AnalyticsFactory.eINSTANCE.createBuyReference();
+				buyRef.setSlot(loadSlot);
+				cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, buyRef));
+			}
+		}
+		return buyRef;
+	}
+
+	public static ShippingOption getOrCreateShippingOption(final Cargo cargo, final LoadSlot load, final DischargeSlot dischargeSlot, final OptionAnalysisModel optionAnalysisModel,
+			final IScenarioEditingLocation scenarioEditingLocation, final CompoundCommand cmd) {
+
+		if (cargo != null) {
+			if (cargo.getCargoType() == CargoType.FLEET) {
+				final VesselAssignmentType vat = cargo.getVesselAssignmentType();
+				if (vat instanceof VesselAvailability) {
+					final VesselAvailability vesselAvailability = (VesselAvailability) vat;
+
+					final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
+					opt.setEntity(vesselAvailability.getEntity());
+					opt.setHireCost(vesselAvailability.getTimeCharterRate());
+					opt.setVessel(vesselAvailability.getVessel());
+
+					return opt;
+				} else if (vat instanceof CharterInMarket) {
+					final CharterInMarket charterInMarket = (CharterInMarket) vat;
+
+					final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
+					opt.setHireCost(charterInMarket.getCharterInRate());
+					opt.setVesselClass(charterInMarket.getVesselClass());
+
+					return opt;
+				}
+
+			}
+		} else if (load != null) {
+			if (load.isDESPurchase()) {
+				if (load.getNominatedVessel() != null) {
+					final NominatedShippingOption opt = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
+					opt.setNominatedVessel(load.getNominatedVessel());
+
+					return opt;
+				}
+			}
+		} else if (dischargeSlot != null) {
+			if (dischargeSlot.isFOBSale()) {
+				if (dischargeSlot.getNominatedVessel() != null) {
+					final NominatedShippingOption opt = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
+					opt.setNominatedVessel(dischargeSlot.getNominatedVessel());
+
+					return opt;
+				}
+			}
+		}
+		return null;
+	}
+
+	public static SellOption getOrCreateSellOption(final DischargeSlot dischargeSlot, final OptionAnalysisModel optionAnalysisModel, final IScenarioEditingLocation scenarioEditingLocation,
+			final CompoundCommand cmd) {
+		SellReference sellRef = null;
+
+		if (dischargeSlot != null) {
+			for (final SellOption sell : optionAnalysisModel.getSells()) {
+				if (sell instanceof SellReference) {
+					final SellReference sellReference = (SellReference) sell;
+					if (sellReference.getSlot() == dischargeSlot) {
+						sellRef = sellReference;
+						break;
+					}
+				}
+			}
+			if (sellRef == null) {
+				sellRef = AnalyticsFactory.eINSTANCE.createSellReference();
+				sellRef.setSlot(dischargeSlot);
+				cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, sellRef));
+			}
+		}
+		return sellRef;
 	}
 }

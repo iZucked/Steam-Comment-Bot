@@ -21,14 +21,19 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyOption;
+import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellOption;
+import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder.ShippingType;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -186,6 +191,28 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 									AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 						}
 					}
+				} else if (o instanceof CargoModelRowTransformer.RowData) {
+					final CargoModelRowTransformer.RowData rowData = (CargoModelRowTransformer.RowData) o;
+					final CompoundCommand cmd = new CompoundCommand();
+
+					final LoadSlot loadSlot = rowData.getLoadSlot();
+					final BuyOption buyRef = AnalyticsBuilder.getOrCreateBuyOption(loadSlot, optionAnalysisModel, scenarioEditingLocation, cmd);
+
+					final DischargeSlot dischargeSlot = rowData.getDischargeSlot();
+					final SellOption sellRef = AnalyticsBuilder.getOrCreateSellOption(dischargeSlot, optionAnalysisModel, scenarioEditingLocation, cmd);
+
+					final BaseCaseRow row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+					row.setBuyOption(buyRef);
+					row.setSellOption(sellRef);
+
+					final ShippingOption shippingOption = AnalyticsBuilder.getOrCreateShippingOption(rowData.getCargo(), loadSlot, dischargeSlot, optionAnalysisModel, scenarioEditingLocation, cmd);
+					row.setShipping(shippingOption);
+
+					cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getBaseCase(), AnalyticsPackage.Literals.BASE_CASE__BASE_CASE, row));
+
+					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, null, null);
+
+					return;
 				}
 			}
 		}
@@ -206,6 +233,10 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 					return;
 				}
 				if (o instanceof ShippingOption) {
+					event.operations = DND.DROP_MOVE;
+					return;
+				}
+				if (o instanceof CargoModelRowTransformer.RowData) {
 					event.operations = DND.DROP_MOVE;
 					return;
 				}
@@ -233,7 +264,7 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 		return optionAnalysisModel;
 	}
 
-	public void setOptionAnalysisModel(OptionAnalysisModel optionAnalysisModel) {
+	public void setOptionAnalysisModel(final OptionAnalysisModel optionAnalysisModel) {
 		this.optionAnalysisModel = optionAnalysisModel;
 	}
 }
