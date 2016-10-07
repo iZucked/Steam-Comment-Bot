@@ -15,6 +15,7 @@ import java.util.function.Function;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -94,7 +95,6 @@ import com.mmxlabs.models.lng.analytics.ui.views.providers.RulesViewerContentPro
 import com.mmxlabs.models.lng.analytics.ui.views.providers.ShippingOptionsContentProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.VesselAndClassContentProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioAdapterFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
@@ -539,8 +539,11 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	}
 
 	private final EContentAdapter refreshAdapter = new EContentAdapter() {
-		public void notifyChanged(final org.eclipse.emf.common.notify.Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
+			if (notification.getEventType() == Notification.REMOVING_ADAPTER) {
+				return;
+			}
 
 			doValidate();
 
@@ -1163,6 +1166,11 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	@Override
 	public void dispose() {
+		if (model != null) {
+			model.eAdapters().remove(refreshAdapter);
+			model = null;
+		}
+
 		CommandStack pCurrentCommandStack = currentCommandStack;
 		if (pCurrentCommandStack != null) {
 			pCurrentCommandStack.removeCommandStackListener(this);
