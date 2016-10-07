@@ -697,11 +697,18 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		buyOptionsViewer.setContentProvider(new OptionsViewerContentProvider(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS));
 		hookOpenEditor(buyOptionsViewer);
-
-		final MenuManager mgr = new MenuManager();
-		final BuyOptionsContextMenuManager listener = new BuyOptionsContextMenuManager(buyOptionsViewer, OptionModellerView.this, mgr);
-		inputWants.add(model -> listener.setOptionAnalysisModel(model));
-		buyOptionsViewer.getGrid().addMenuDetectListener(listener);
+		{
+			final MenuManager mgr = new MenuManager();
+			final BuyOptionsContextMenuManager listener = new BuyOptionsContextMenuManager(buyOptionsViewer, OptionModellerView.this, mgr);
+			inputWants.add(model -> listener.setOptionAnalysisModel(model));
+			buyOptionsViewer.getGrid().addMenuDetectListener(listener);
+		}
+		{
+			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
+			BuysDropTargetListener listener = new BuysDropTargetListener(OptionModellerView.this, buyOptionsViewer);
+			inputWants.add(model -> listener.setOptionAnalysisModel(model));
+			buyOptionsViewer.addDropSupport(DND.DROP_MOVE, types, listener);
+		}
 
 		return buyOptionsViewer;
 	}
@@ -759,12 +766,18 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		sellOptionsViewer.setContentProvider(new OptionsViewerContentProvider(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS));
 		hookOpenEditor(sellOptionsViewer);
-
-		final MenuManager mgr = new MenuManager();
-		final SellOptionsContextMenuManager listener = new SellOptionsContextMenuManager(sellOptionsViewer, OptionModellerView.this, mgr);
-		inputWants.add(model -> listener.setOptionAnalysisModel(model));
-		sellOptionsViewer.getGrid().addMenuDetectListener(listener);
-
+		{
+			final MenuManager mgr = new MenuManager();
+			final SellOptionsContextMenuManager listener = new SellOptionsContextMenuManager(sellOptionsViewer, OptionModellerView.this, mgr);
+			inputWants.add(model -> listener.setOptionAnalysisModel(model));
+			sellOptionsViewer.getGrid().addMenuDetectListener(listener);
+		}
+		{
+			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
+			SellsDropTargetListener listener = new SellsDropTargetListener(OptionModellerView.this, sellOptionsViewer);
+			inputWants.add(model -> listener.setOptionAnalysisModel(model));
+			sellOptionsViewer.addDropSupport(DND.DROP_MOVE, types, listener);
+		}
 		return sellOptionsViewer;
 	}
 

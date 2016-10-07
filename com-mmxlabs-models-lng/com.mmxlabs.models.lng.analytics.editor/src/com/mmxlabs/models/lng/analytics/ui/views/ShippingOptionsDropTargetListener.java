@@ -1,5 +1,6 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.jdt.annotation.NonNull;
@@ -21,6 +22,9 @@ import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -120,6 +124,23 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
 							optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 				}
+				if (o instanceof CargoModelRowTransformer.RowData) {
+					final CargoModelRowTransformer.RowData rowData = (CargoModelRowTransformer.RowData) o;
+					final CompoundCommand cmd = new CompoundCommand();
+
+					final LoadSlot loadSlot = rowData.getLoadSlot();
+					final DischargeSlot dischargeSlot = rowData.getDischargeSlot();
+
+					final ShippingOption shippingOption = AnalyticsBuilder.getOrCreateShippingOption(rowData.getCargo(), loadSlot, dischargeSlot, optionAnalysisModel, scenarioEditingLocation, cmd);
+					if (shippingOption != null) {
+						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
+								shippingOption));
+					}
+					if (!cmd.isEmpty()) {
+						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, null, null);
+					}
+					return;
+				}
 			}
 		}
 	}
@@ -135,6 +156,10 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 					return;
 				}
 				if (o instanceof ShippingOption) {
+					event.operations = DND.DROP_MOVE;
+					return;
+				}
+				if (o instanceof CargoModelRowTransformer.RowData) {
 					event.operations = DND.DROP_MOVE;
 					return;
 				}
