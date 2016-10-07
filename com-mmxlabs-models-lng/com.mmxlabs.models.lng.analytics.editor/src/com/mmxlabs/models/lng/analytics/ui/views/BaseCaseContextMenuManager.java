@@ -140,6 +140,13 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 									AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 
 						}));
+						mgr.add(new RunnableAction("Copy shipping to templates", () -> {
+							scenarioEditingLocation.getDefaultCommandHandler()
+									.handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel,
+											AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, EcoreUtil.copy(row.getShipping())), optionAnalysisModel,
+											AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+
+						}));
 					}
 					if (AnalyticsBuilder.isNonShipped(row) == ShippingType.NonShipped) {
 						mgr.add(new RunnableAction("Create Nominated", () -> {

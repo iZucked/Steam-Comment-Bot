@@ -770,7 +770,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		shippingOptionsViewer.getGrid().setHeaderVisible(true);
 
-		createColumn(shippingOptionsViewer, "Shipping", new ShippingOptionDescriptionFormatter());
+		createColumn(shippingOptionsViewer, "Shipping Templates", new ShippingOptionDescriptionFormatter());
 		shippingOptionsViewer.setContentProvider(new ShippingOptionsContentProvider(this));
 		hookOpenEditor(shippingOptionsViewer);
 

@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -122,6 +123,13 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 									SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, SetCommand.UNSET_VALUE), row,
 									AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
+
+						}));
+						mgr.add(new RunnableAction("Copy shipping to templates", () -> {
+							scenarioEditingLocation.getDefaultCommandHandler()
+									.handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel,
+											AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, EcoreUtil.copy(row.getShipping())), optionAnalysisModel,
+											AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 
 						}));
 					}
