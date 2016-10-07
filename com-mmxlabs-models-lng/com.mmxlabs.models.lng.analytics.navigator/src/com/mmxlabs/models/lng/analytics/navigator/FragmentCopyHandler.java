@@ -61,135 +61,146 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 			final EObject fragment = scenarioFragment.getFragment();
 			if (fragment instanceof OptionAnalysisModel) {
 				final OptionAnalysisModel sourceModel = (OptionAnalysisModel) fragment;
-				try (ModelReference targetReference = target.getReference("FragmentCopyHandler:2")) {
-					final LNGScenarioModel targetModel = (LNGScenarioModel) targetReference.getInstance();
 
+				if (target == source) {
 					final OptionAnalysisModel copyModel = EcoreUtil.copy(sourceModel);
-
-					final Map<String, PurchaseContract> purchaseContractMapping = generatePurchaseContractMapping(targetModel);
-					final Map<String, SalesContract> salesContractMapping = generateSalesContractMapping(targetModel);
-					final Map<String, Port> portMapping = generatePortMapping(targetModel);
-					final Map<String, BaseLegalEntity> entityMapping = generateEntityMapping(targetModel);
-
-					final Map<String, LoadSlot> loadMapping = generateLoadMapping(targetModel);
-					final Map<String, DischargeSlot> dischargeMapping = generateDischargeMapping(targetModel);
-
-					final Map<String, SpotMarket> desSaleMarketMapping = generateDESSaleMarketMapping(targetModel);
-					final Map<String, SpotMarket> fobSaleMarketMapping = generateFOBSaleMarketMapping(targetModel);
-					final Map<String, SpotMarket> desPurchaseMarketMapping = generateDESPurchaseMarketMapping(targetModel);
-					final Map<String, SpotMarket> fobPurchaseMarketMapping = generateFOBPurchaseMarketMapping(targetModel);
-
-					final Map<String, Vessel> vesselMapping = generateVesselMapping(targetModel);
-					final Map<String, VesselClass> vesselClassMapping = generateVesselClassMapping(targetModel);
-
-					for (final BuyOption buy : copyModel.getBuys()) {
-						if (buy instanceof BuyReference) {
-							final BuyReference b = (BuyReference) buy;
-							if (b.getSlot() != null) {
-								b.setSlot(loadMapping.get(b.getSlot().getName()));
-							}
-						} else if (buy instanceof BuyOpportunity) {
-							final BuyOpportunity b = (BuyOpportunity) buy;
-							if (b.getPort() != null) {
-								b.setPort(portMapping.get(b.getPort().getName()));
-							}
-							if (b.getContract() != null) {
-								b.setContract(purchaseContractMapping.get(b.getContract().getName()));
-							}
-							if (b.getEntity() != null) {
-								b.setEntity(entityMapping.get(b.getEntity().getName()));
-							}
-						} else if (buy instanceof BuyMarket) {
-							final BuyMarket b = (BuyMarket) buy;
-							if (b.getMarket() != null) {
-								if (b.getMarket() instanceof FOBPurchasesMarket) {
-									b.setMarket(fobPurchaseMarketMapping.get(b.getMarket().getName()));
-								}
-								if (b.getMarket() instanceof DESPurchaseMarket) {
-									b.setMarket(desPurchaseMarketMapping.get(b.getMarket().getName()));
-								}
-							}
-
-						} else {
-							assert false;
-						}
-					}
-					for (final SellOption sell : copyModel.getSells()) {
-						if (sell instanceof SellReference) {
-							final SellReference b = (SellReference) sell;
-							if (b.getSlot() != null) {
-								b.setSlot(dischargeMapping.get(b.getSlot().getName()));
-							}
-						} else if (sell instanceof SellOpportunity) {
-							final SellOpportunity b = (SellOpportunity) sell;
-							if (b.getPort() != null) {
-								b.setPort(portMapping.get(b.getPort().getName()));
-							}
-							if (b.getContract() != null) {
-								b.setContract(salesContractMapping.get(b.getContract().getName()));
-							}
-							if (b.getEntity() != null) {
-								b.setEntity(entityMapping.get(b.getEntity().getName()));
-							}
-						} else if (sell instanceof SellMarket) {
-							final SellMarket b = (SellMarket) sell;
-							if (b.getMarket() != null) {
-								if (b.getMarket() instanceof FOBSalesMarket) {
-									b.setMarket(fobSaleMarketMapping.get(b.getMarket().getName()));
-								}
-								if (b.getMarket() instanceof DESSalesMarket) {
-									b.setMarket(desSaleMarketMapping.get(b.getMarket().getName()));
-								}
-							}
-
-						} else {
-							assert false;
-						}
-					}
-
-					Consumer<ShippingOption> updateShipping = (option) -> {
-						if (option == null) {
-							return;
-						}
-						if (option instanceof NominatedShippingOption) {
-							NominatedShippingOption opt = (NominatedShippingOption) option;
-							if (opt.getNominatedVessel() != null) {
-								opt.setNominatedVessel(vesselMapping.get(opt.getNominatedVessel().getName()));
-							}
-						} else if (option instanceof FleetShippingOption) {
-							FleetShippingOption opt = (FleetShippingOption) option;
-							if (opt.getVessel() != null) {
-								opt.setVessel(vesselMapping.get(opt.getVessel().getName()));
-							}
-							if (opt.getEntity() != null) {
-								opt.setEntity(entityMapping.get(opt.getEntity().getName()));
-							}
-						} else if (option instanceof RoundTripShippingOption) {
-							RoundTripShippingOption opt = (RoundTripShippingOption) option;
-							if (opt.getVesselClass() != null) {
-								opt.setVesselClass(vesselClassMapping.get(opt.getVesselClass().getName()));
-							}
-						}
-					};
-
-					for (BaseCaseRow row : copyModel.getBaseCase().getBaseCase()) {
-						updateShipping.accept(row.getShipping());
-					}
-					for (PartialCaseRow row : copyModel.getPartialCase().getPartialCase()) {
-						updateShipping.accept(row.getShipping());
-					}
-					for (ShippingOption opt : copyModel.getShippingTemplates()) {
-						updateShipping.accept(opt);
-					}
-					target.setDirty(true);
+					final LNGScenarioModel targetModel = (LNGScenarioModel) sourceReference.getInstance();
 					targetModel.getOptionModels().add(copyModel);
+					target.setDirty(true);
 					return true;
+				} else {
+					//
+					try (ModelReference targetReference = target.getReference("FragmentCopyHandler:2")) {
+						final LNGScenarioModel targetModel = (LNGScenarioModel) targetReference.getInstance();
+
+						final OptionAnalysisModel copyModel = EcoreUtil.copy(sourceModel);
+
+						final Map<String, PurchaseContract> purchaseContractMapping = generatePurchaseContractMapping(targetModel);
+						final Map<String, SalesContract> salesContractMapping = generateSalesContractMapping(targetModel);
+						final Map<String, Port> portMapping = generatePortMapping(targetModel);
+						final Map<String, BaseLegalEntity> entityMapping = generateEntityMapping(targetModel);
+
+						final Map<String, LoadSlot> loadMapping = generateLoadMapping(targetModel);
+						final Map<String, DischargeSlot> dischargeMapping = generateDischargeMapping(targetModel);
+
+						final Map<String, SpotMarket> desSaleMarketMapping = generateDESSaleMarketMapping(targetModel);
+						final Map<String, SpotMarket> fobSaleMarketMapping = generateFOBSaleMarketMapping(targetModel);
+						final Map<String, SpotMarket> desPurchaseMarketMapping = generateDESPurchaseMarketMapping(targetModel);
+						final Map<String, SpotMarket> fobPurchaseMarketMapping = generateFOBPurchaseMarketMapping(targetModel);
+
+						final Map<String, Vessel> vesselMapping = generateVesselMapping(targetModel);
+						final Map<String, VesselClass> vesselClassMapping = generateVesselClassMapping(targetModel);
+
+						for (final BuyOption buy : copyModel.getBuys()) {
+							if (buy instanceof BuyReference) {
+								final BuyReference b = (BuyReference) buy;
+								if (b.getSlot() != null) {
+									b.setSlot(loadMapping.get(b.getSlot().getName()));
+								}
+							} else if (buy instanceof BuyOpportunity) {
+								final BuyOpportunity b = (BuyOpportunity) buy;
+								if (b.getPort() != null) {
+									b.setPort(portMapping.get(b.getPort().getName()));
+								}
+								if (b.getContract() != null) {
+									b.setContract(purchaseContractMapping.get(b.getContract().getName()));
+								}
+								if (b.getEntity() != null) {
+									b.setEntity(entityMapping.get(b.getEntity().getName()));
+								}
+							} else if (buy instanceof BuyMarket) {
+								final BuyMarket b = (BuyMarket) buy;
+								if (b.getMarket() != null) {
+									if (b.getMarket() instanceof FOBPurchasesMarket) {
+										b.setMarket(fobPurchaseMarketMapping.get(b.getMarket().getName()));
+									}
+									if (b.getMarket() instanceof DESPurchaseMarket) {
+										b.setMarket(desPurchaseMarketMapping.get(b.getMarket().getName()));
+									}
+								}
+
+							} else {
+								assert false;
+							}
+						}
+						for (final SellOption sell : copyModel.getSells()) {
+							if (sell instanceof SellReference) {
+								final SellReference b = (SellReference) sell;
+								if (b.getSlot() != null) {
+									b.setSlot(dischargeMapping.get(b.getSlot().getName()));
+								}
+							} else if (sell instanceof SellOpportunity) {
+								final SellOpportunity b = (SellOpportunity) sell;
+								if (b.getPort() != null) {
+									b.setPort(portMapping.get(b.getPort().getName()));
+								}
+								if (b.getContract() != null) {
+									b.setContract(salesContractMapping.get(b.getContract().getName()));
+								}
+								if (b.getEntity() != null) {
+									b.setEntity(entityMapping.get(b.getEntity().getName()));
+								}
+							} else if (sell instanceof SellMarket) {
+								final SellMarket b = (SellMarket) sell;
+								if (b.getMarket() != null) {
+									if (b.getMarket() instanceof FOBSalesMarket) {
+										b.setMarket(fobSaleMarketMapping.get(b.getMarket().getName()));
+									}
+									if (b.getMarket() instanceof DESSalesMarket) {
+										b.setMarket(desSaleMarketMapping.get(b.getMarket().getName()));
+									}
+								}
+
+							} else {
+								assert false;
+							}
+						}
+
+						Consumer<ShippingOption> updateShipping = (option) -> {
+							if (option == null) {
+								return;
+							}
+							if (option instanceof NominatedShippingOption) {
+								NominatedShippingOption opt = (NominatedShippingOption) option;
+								if (opt.getNominatedVessel() != null) {
+									opt.setNominatedVessel(vesselMapping.get(opt.getNominatedVessel().getName()));
+								}
+							} else if (option instanceof FleetShippingOption) {
+								FleetShippingOption opt = (FleetShippingOption) option;
+								if (opt.getVessel() != null) {
+									opt.setVessel(vesselMapping.get(opt.getVessel().getName()));
+								}
+								if (opt.getEntity() != null) {
+									opt.setEntity(entityMapping.get(opt.getEntity().getName()));
+								}
+							} else if (option instanceof RoundTripShippingOption) {
+								RoundTripShippingOption opt = (RoundTripShippingOption) option;
+								if (opt.getVesselClass() != null) {
+									opt.setVesselClass(vesselClassMapping.get(opt.getVesselClass().getName()));
+								}
+							}
+						};
+
+						for (BaseCaseRow row : copyModel.getBaseCase().getBaseCase()) {
+							updateShipping.accept(row.getShipping());
+						}
+						for (PartialCaseRow row : copyModel.getPartialCase().getPartialCase()) {
+							updateShipping.accept(row.getShipping());
+						}
+						for (ShippingOption opt : copyModel.getShippingTemplates()) {
+							updateShipping.accept(opt);
+						}
+						target.setDirty(true);
+						targetModel.getOptionModels().add(copyModel);
+						return true;
+					}
 				}
 			}
 		}
 
 		// TODO Auto-generated method stub
 		return false;
+
 	}
 
 	private Map<String, Port> generatePortMapping(LNGScenarioModel lngScenarioModel) {
