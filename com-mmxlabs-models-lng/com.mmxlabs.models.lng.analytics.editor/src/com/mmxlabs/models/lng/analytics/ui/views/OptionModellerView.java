@@ -238,7 +238,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
 
-					BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> BaseCaseEvaluator.evaluate(OptionModellerView.this, model, model.getBaseCase()));
+					BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> BaseCaseEvaluator.evaluate(OptionModellerView.this, model, model.getBaseCase(), true, "Base Case"));
 				}
 
 				@Override
@@ -928,6 +928,12 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		createColumn(resultsViewer, "Buy", new BuyOptionDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__BUY_OPTION);
 		createColumn(resultsViewer, "Sell", new SellOptionDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SELL_OPTION);
 		createColumn(resultsViewer, "Details", new ResultDetailsDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAIL);
+
+		final MenuManager mgr = new MenuManager();
+
+		final ResultsContextMenuManager listener = new ResultsContextMenuManager(resultsViewer, OptionModellerView.this, mgr);
+		inputWants.add(model -> listener.setOptionAnalysisModel(model));
+		resultsViewer.getGrid().addMenuDetectListener(listener);
 
 		resultsViewer.setContentProvider(new ResultsViewerContentProvider());
 		return resultsViewer.getControl();
