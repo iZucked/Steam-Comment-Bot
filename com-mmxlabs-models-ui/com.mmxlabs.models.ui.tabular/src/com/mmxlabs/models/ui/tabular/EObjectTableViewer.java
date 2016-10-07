@@ -42,7 +42,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Widget;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.ui.tabular.renderers.AlternatingRowCellRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.util.emfpath.EMFPath;
@@ -286,7 +285,10 @@ public class EObjectTableViewer extends GridTreeViewer {
 		});
 		sortingSupport.addSortableColumn(viewer, column, tColumn);
 
-		column.getColumn().setCellRenderer(createCellRenderer());
+		GridCellRenderer r = createCellRenderer();
+		if (r != null) {
+			column.getColumn().setCellRenderer(r);
+		}
 
 		return column;
 	}
@@ -316,7 +318,10 @@ public class EObjectTableViewer extends GridTreeViewer {
 		if (sortable) {
 			sortingSupport.addSortableColumn(viewer, column, tColumn);
 		}
-		column.getColumn().setCellRenderer(createCellRenderer());
+		GridCellRenderer r = createCellRenderer();
+		if (r != null) {
+			column.getColumn().setCellRenderer(r);
+		}
 
 		return column;
 	}
@@ -324,7 +329,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 	/**
 	 */
 	protected GridCellRenderer createCellRenderer() {
-		return new AlternatingRowCellRenderer();
+		return null;
 	}
 
 	public <T extends ICellManipulator & ICellRenderer> void addTypicalColumn(final String columnName, final T manipulatorAndRenderer, final ETypedElement... path) {

@@ -18,7 +18,7 @@ import com.mmxlabs.common.Pair;
 public final class TableColourPalette {
 
 	private static final RGB FontColour = new RGB(0, 0, 0);
-	private static final RGB HeaderColour = new RGB(230, 239, 249);
+	private static final RGB HeaderColour = new RGB(255, 255, 255);
 	private static final RGB BorderColour = new RGB(220, 220, 220);
 
 	private static TableColourPalette instance;

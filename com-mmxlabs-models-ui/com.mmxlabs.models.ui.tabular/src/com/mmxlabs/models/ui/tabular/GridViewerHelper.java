@@ -6,8 +6,10 @@ import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 
+import com.mmxlabs.models.ui.tabular.renderers.CellRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
+import com.mmxlabs.models.ui.tabular.renderers.EmptyCellRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.EmptyColumnHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.RowHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.TopLeftRenderer;
@@ -18,19 +20,24 @@ public final class GridViewerHelper {
 		viewer.getGrid().setRowHeaderRenderer(new RowHeaderRenderer());
 		viewer.getGrid().setTopLeftRenderer(new TopLeftRenderer());
 		viewer.getGrid().setEmptyColumnHeaderRenderer(new EmptyColumnHeaderRenderer());
+		viewer.getGrid().setEmptyCellRenderer(new EmptyCellRenderer());
+
 	}
 
 	public static void configureLookAndFeel(final @NonNull GridTreeViewer viewer) {
 		viewer.getGrid().setRowHeaderRenderer(new RowHeaderRenderer());
 		viewer.getGrid().setTopLeftRenderer(new TopLeftRenderer());
 		viewer.getGrid().setEmptyColumnHeaderRenderer(new EmptyColumnHeaderRenderer());
+		viewer.getGrid().setEmptyCellRenderer(new EmptyCellRenderer());
 	}
 
 	public static void configureLookAndFeel(final @NonNull GridViewerColumn column) {
 		column.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+		column.getColumn().setCellRenderer(new CellRenderer());
 	}
 
 	public static void configureLookAndFeel(final @NonNull GridColumnGroup group) {
 		group.setHeaderRenderer(new ColumnGroupHeaderRenderer());
+
 	}
 }
