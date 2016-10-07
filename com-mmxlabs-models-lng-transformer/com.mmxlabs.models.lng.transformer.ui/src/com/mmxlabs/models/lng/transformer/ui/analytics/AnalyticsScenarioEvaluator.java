@@ -33,6 +33,9 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
 
+		// No optimisation going on, clear stages. Need better OptimisationHelper API?
+		optimisationPlan.getStages().clear();
+		
 		// Generate internal data
 		final ExecutorService executorService = Executors.newFixedThreadPool(1);
 		try {
