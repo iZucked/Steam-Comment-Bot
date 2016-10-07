@@ -107,7 +107,7 @@ public class BagOptimiser {
 
 	protected static final Logger LOG = LoggerFactory.getLogger(BagOptimiser.class);
 
-	private static final boolean DEBUG = false;
+	private static final boolean DEBUG = true;
 
 	protected static final boolean BUILD_DEPENDANCY_GRAPH = false;
 
@@ -217,12 +217,12 @@ public class BagOptimiser {
 			final long initialLateness = evaluationHelper.calculateScheduleLateness(initialFullSequences, initialVolumeAllocatedSequences);
 			final long initialCapacity = evaluationHelper.calculateScheduleCapacity(initialFullSequences, initialVolumeAllocatedSequences);
 			final long initialPNL = evaluationHelper.calculateSchedulePNL(initialFullSequences, initialProfitAndLossSequences);
-
 			// Generate the initial set of changes, one level deep
 			final List<ChangeSet> changeSets = new LinkedList<>();
 			final List<Change> changes = new LinkedList<>();
 			final long time2 = System.currentTimeMillis();
-
+			
+			actionSetLogger.setInitialPnL(initialPNL/1000);
 			targetSimilarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()] = initialLateness;
 			targetSimilarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()] = initialCapacity;
 			targetSimilarityState.getBaseMetrics()[MetricType.PNL.ordinal()] = initialPNL;
@@ -338,9 +338,7 @@ public class BagOptimiser {
 
 				// TODO: Sort by changset P&L and group size.
 				final List<JobState> sortedChangeStates = getSortedLeafStates(finalPopulation);
-				if (actionSetLogger != null) {
-					actionSetLogger.setSortedChangeStates(getSortedLeafStates(finalPopulation));
-				}
+				actionSetLogger.setSortedChangeStates(getSortedLeafStates(finalPopulation));
 				
 				if (DEBUG) {
 					printPopulationInfo(sortedChangeStates);
@@ -387,6 +385,9 @@ public class BagOptimiser {
 		final Map<String, Long> currentFitnesses = new HashMap<>();
 		for (final IFitnessComponent fitnessComponent : fitnessComponents) {
 			currentFitnesses.put(fitnessComponent.getName(), fitnessComponent.getFitness());
+			if(fitnessComponent.getName().equals("cargo-scheduler-group-profit")){
+				actionSetLogger.setTarget_pnl(fitnessComponent.getFitness());
+			}
 		}
 
 		final Map<String, Object> extraAnnotations = new HashMap<>();

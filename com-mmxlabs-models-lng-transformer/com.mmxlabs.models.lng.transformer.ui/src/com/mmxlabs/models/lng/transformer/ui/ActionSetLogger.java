@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.transformer.ui.breakdown.JobState;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.MetricType;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.chain.StochasticActionSetUtils;
 import com.mmxlabs.optimiser.common.logging.ILoggingDataStore;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 
 public class ActionSetLogger implements ILoggingDataStore {
 
@@ -65,10 +66,16 @@ public class ActionSetLogger implements ILoggingDataStore {
 	List<List<JobState>> initialPopulations = new LinkedList<>();
 	List<ActionSetResult> rootResults = new LinkedList<>();
 	private List<JobState> sortedChangeStates;
+	private long target_pnl;
+	private long initialPnL;
 	List<JobState> leafs;
 	List<JobState> limiteds;
 	long startRunTime = 0;
 	long endRunTime = 0;
+	
+	public void setInitialPnL(long initialPnL) {
+		this.initialPnL = initialPnL;
+	}
 
 	public void logRootActionSet(JobState root, JobState bestResult, int noLeafs, int pnlEvaluations,
 			int constraintEvaluations, List<Difference> changesRemaining, long runTime) {
@@ -112,21 +119,51 @@ public class ActionSetLogger implements ILoggingDataStore {
 		
 	}
 	
+	private String percentageChangeSets(ChangeSet cs, long achievedPnLUplift){
+		
+		long dollars = StochasticActionSetUtils.getChangeSetPNL(cs)/Calculator.ScaleFactor;
+		long actualPercentage = (dollars/achievedPnLUplift)*100;
+		long potentialPercentage = (dollars/-target_pnl)*100;
+		
+		String out = String.format("\tPnL Uplift($):%s\n\tActionSet Percentage:%s\n\tTheoretical Percentage:%s",
+				Long.toString(dollars),Long.toString(Math.round(actualPercentage)),Long.toString(Math.round(potentialPercentage)));
+		
+		return out;
+	}
+	
 	private List<String> shortBreakdown(){
 		List<String> text = new LinkedList<>();
 		JobState best = sortedChangeStates.get(sortedChangeStates.size()-1);
-		text.add("leaf count:" + Integer.toString(leafs.size()));
-		text.add("----- best action set -----");
-		text.add("pnl:" + best.metricDelta[MetricType.PNL.ordinal()]);
-		text.add("late:" + best.metricDelta[MetricType.LATENESS.ordinal()]);
-		text.add("change set count:" + best.changeSetsAsList.size());
-		text.add("--- change sets ---");
+		text.add("Leaf Count:" + Integer.toString(leafs.size()));
+		
+		
+		text.add("Initial P&L($):" + initialPnL);
+		text.add("Final P&L($):" + -target_pnl);
+		
+		long PnLUplift = -target_pnl - initialPnL;
+		text.add("P&L Uplift($):" + PnLUplift);
+		text.add("\n----- Best Action Set -----");
+		
+		long achievedPnLUplift = best.metricDelta[MetricType.PNL.ordinal()]/Calculator.ScaleFactor;
+		text.add("P&L Uplift Achieved($):" + achievedPnLUplift);
+		
+		long PnLUpliftPercentage = (achievedPnLUplift / PnLUplift)*100;
+		text.add("Potential P&L Uplift(%):" + PnLUpliftPercentage);
+		
+		text.add("Lateness Change:" + best.metricDelta[MetricType.LATENESS.ordinal()]);
+		text.add("Change Set Count:" + best.changeSetsAsList.size());
+		text.add("Diffs:" + best.getDifferencesList().size());
+		text.add("PnL per Change($):" + Math.round(StochasticActionSetUtils.getTotalPNLPerChange(best.changeSetsAsList)/Calculator.ScaleFactor));
+		text.add("PnL per Change($)(0.8):" + Math.round(StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(best.changeSetsAsList, 0.8)/Calculator.ScaleFactor));
+		
+		text.add("\n--- Change Sets ---");
+		
 		for(int i =0; i < best.changeSetsAsList.size(); i++){
-			text.add(String.format("change set: %s - %s changes",i, best.changeSetsAsList.get(i).changesList.size()));
+			text.add(String.format("Change Set: %s - %s changes",i, best.changeSetsAsList.get(i).changesList.size()));
+			text.add(percentageChangeSets(best.changeSetsAsList.get(i),achievedPnLUplift));
 		}
-		text.add("diffs:" + best.getDifferencesList().size());
-		text.add("pnl per change:" + StochasticActionSetUtils.getTotalPNLPerChange(best.changeSetsAsList));
-		text.add("pnl per change (0.8):" + StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(best.changeSetsAsList, 0.8));
+		
+		
 		return text;
 	}
 
@@ -330,6 +367,14 @@ public class ActionSetLogger implements ILoggingDataStore {
 
 	public void setSortedChangeStates(List<JobState> sortedChangeStates) {
 		this.sortedChangeStates = sortedChangeStates;
+	}
+
+	public long getTarget_pnl() {
+		return target_pnl;
+	}
+
+	public void setTarget_pnl(long target_pnl) {
+		this.target_pnl = target_pnl;
 	}
 
 	
