@@ -69,6 +69,9 @@
             <instanceof
                   value="com.mmxlabs.scenario.service.model.Container">
             </instanceof>
+            <instanceof
+                  value="com.mmxlabs.scenario.service.model.ScenarioFragment">
+            </instanceof>
          </triggerPoints>
          <dropAssistant
                class="com.mmxlabs.scenario.service.ui.dnd.ScenarioDragAssistant"
@@ -79,9 +82,14 @@
                </instanceof></possibleDropTargets>
          </dropAssistant>
          <possibleChildren>
-            <instanceof
-                  value="com.mmxlabs.scenario.service.model.Container">
-            </instanceof>
+            <or>
+               <instanceof
+                     value="com.mmxlabs.scenario.service.model.ScenarioFragment">
+               </instanceof>
+               <instanceof
+                     value="com.mmxlabs.scenario.service.model.Container">
+               </instanceof>
+            </or>
          </possibleChildren>
          <commonSorter
                class="com.mmxlabs.scenario.service.ui.ScenarioServiceSorter"

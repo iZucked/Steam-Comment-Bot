@@ -39,10 +39,12 @@ import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
+import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
@@ -72,19 +74,29 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 		if (LocalSelectionTransfer.getTransfer().isSupportedType(transferType) && (target instanceof Container || target == null)) {
 			final ISelection selection = LocalSelectionTransfer.getTransfer().getSelection();
 			if (selection instanceof IStructuredSelection) {
+				IStructuredSelection ss = (IStructuredSelection) selection;
 				final HashSet<EObject> containers = new HashSet<EObject>();
 				EObject eTarget = (EObject) target;
 				if (target instanceof ScenarioService) {
 					return Status.CANCEL_STATUS;
 				}
 				if (target instanceof ScenarioInstance) {
-					return Status.CANCEL_STATUS;
+					// Could open up to multipe?
+					if (!(ss.size() == 1 && ss.getFirstElement() instanceof ScenarioFragment)) {
+						return Status.CANCEL_STATUS;
+					}
 				}
 				while (eTarget != null) {
 					containers.add(eTarget);
 					eTarget = eTarget.eContainer();
 				}
 				for (final Object o : ((IStructuredSelection) selection).toArray()) {
+					if (o instanceof ScenarioFragment) {
+						if (!(target instanceof ScenarioInstance)) {
+							return Status.CANCEL_STATUS;
+
+						}
+					}
 					if (o instanceof EObject) {
 						// since containers contains the full hierarchy above the drop target, if o is in that hierarchy then we are dragging
 						// something into something which it contains, so cancel the drop
@@ -268,6 +280,29 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 				}
 
 			}
+		} else if (aTarget instanceof ScenarioInstance) {
+			ScenarioInstance scenarioInstance = (ScenarioInstance) aTarget;
+			final TransferData currentTransfer = aDropAdapter.getCurrentTransfer();
+			if (LocalSelectionTransfer.getTransfer().isSupportedType(currentTransfer)) {
+
+				final ISelection selection = LocalSelectionTransfer.getTransfer().getSelection();
+				if (selection instanceof IStructuredSelection) {
+					IStructuredSelection ss = (IStructuredSelection) selection;
+					Object e = ss.getFirstElement();
+					if (e instanceof ScenarioFragment) {
+						ScenarioFragment scenarioFragment = (ScenarioFragment) e;
+						ServiceHelper.withAllServices(IScenarioFragmentCopyHandler.class, handler -> {
+							boolean handled = handler.copy(scenarioFragment, scenarioInstance);
+							return !handled;
+						});
+					}
+
+				}
+			}
+
+			// if (!(ss.size() == 1 && ss.getFirstElement() instanceof ScenarioFragment)) {
+			// return Status.CANCEL_STATUS;
+			// }
 		}
 
 		return Status.CANCEL_STATUS;
@@ -298,7 +333,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 
 	private void copyFolder(@NonNull final Container container, @NonNull final Folder folder, @NonNull final IProgressMonitor monitor) throws IOException {
 
-//		move all of thing into ScenarioServiceModelUtisl
+		// move all of thing into ScenarioServiceModelUtisl
 		monitor.beginTask("Copying " + folder.getName(), 10 * folder.getElements().size());
 		try {
 			// Ensure name is unique in the destination container
