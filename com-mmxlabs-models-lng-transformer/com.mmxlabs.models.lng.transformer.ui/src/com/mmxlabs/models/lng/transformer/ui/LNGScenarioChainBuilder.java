@@ -91,6 +91,7 @@ public class LNGScenarioChainBuilder {
 					if (stage instanceof ParallelOptimisationStage<?>) {
 						final ParallelOptimisationStage<? extends OptimisationStage> parallelOptimisationStage = (ParallelOptimisationStage<? extends OptimisationStage>) stage;
 						final OptimisationStage template = parallelOptimisationStage.getTemplate();
+						assert template != null;
 						exportCallback = LNGScenarioChainUnitFactory.chainUp(builder, executorService, template, parallelOptimisationStage.getJobCount(), userSettings);
 					} else {
 						exportCallback = LNGScenarioChainUnitFactory.chainUp(builder, executorService, stage, 1, userSettings);

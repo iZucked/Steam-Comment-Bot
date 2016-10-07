@@ -191,6 +191,7 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 			@Override
 			protected void configure() {
 				// bind(BagMover.class).in(PerChainUnitScope.class);
+				assert executorService != null;
 				bind(ExecutorService.class).toInstance(executorService);
 			}
 
