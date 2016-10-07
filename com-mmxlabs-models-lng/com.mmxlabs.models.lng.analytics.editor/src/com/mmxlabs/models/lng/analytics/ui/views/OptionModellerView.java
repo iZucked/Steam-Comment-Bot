@@ -566,6 +566,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				refreshSections(true, EnumSet.of(SectionType.MIDDLE));
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.BASE_CASE__BASE_CASE) {
 				refreshSections(true, EnumSet.of(SectionType.MIDDLE));
+			} else if (notification.getFeature() == AnalyticsPackage.Literals.BASE_CASE__PROFIT_AND_LOSS) {
+				refreshSections(false, EnumSet.of(SectionType.MIDDLE));
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE) {
 				refreshSections(true, EnumSet.of(SectionType.MIDDLE));
 			} else if (notification.getNotifier() instanceof BaseCaseRow) {
