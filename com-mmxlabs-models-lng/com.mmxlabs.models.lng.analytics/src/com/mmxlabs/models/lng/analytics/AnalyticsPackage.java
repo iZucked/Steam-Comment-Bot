@@ -1650,13 +1650,22 @@ s	 * <!-- end-user-doc -->
 	int ANALYSIS_RESULT_ROW__RESULT_DETAIL = 2;
 
 	/**
+	 * The feature id for the '<em><b>Shipping</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYSIS_RESULT_ROW__SHIPPING = 3;
+
+	/**
 	 * The number of structural features of the '<em>Analysis Result Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYSIS_RESULT_ROW_FEATURE_COUNT = 3;
+	int ANALYSIS_RESULT_ROW_FEATURE_COUNT = 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.OptionRule <em>Option Rule</em>}' class.
@@ -3366,6 +3375,17 @@ s	 * <!-- end-user-doc -->
 	EReference getAnalysisResultRow_ResultDetail();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.AnalysisResultRow#getShipping <em>Shipping</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Shipping</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AnalysisResultRow#getShipping()
+	 * @see #getAnalysisResultRow()
+	 * @generated
+	 */
+	EReference getAnalysisResultRow_Shipping();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.OptionRule <em>Option Rule</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4734,6 +4754,14 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference ANALYSIS_RESULT_ROW__RESULT_DETAIL = eINSTANCE.getAnalysisResultRow_ResultDetail();
+
+		/**
+		 * The meta object literal for the '<em><b>Shipping</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ANALYSIS_RESULT_ROW__SHIPPING = eINSTANCE.getAnalysisResultRow_Shipping();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.OptionRule <em>Option Rule</em>}' class.

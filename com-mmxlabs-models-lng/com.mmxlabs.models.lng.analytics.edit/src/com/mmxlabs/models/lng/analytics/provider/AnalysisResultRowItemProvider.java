@@ -81,6 +81,7 @@ public class AnalysisResultRowItemProvider
 			childrenFeatures.add(AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__BUY_OPTION);
 			childrenFeatures.add(AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SELL_OPTION);
 			childrenFeatures.add(AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAIL);
+			childrenFeatures.add(AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SHIPPING);
 		}
 		return childrenFeatures;
 	}
@@ -136,6 +137,7 @@ public class AnalysisResultRowItemProvider
 			case AnalyticsPackage.ANALYSIS_RESULT_ROW__BUY_OPTION:
 			case AnalyticsPackage.ANALYSIS_RESULT_ROW__SELL_OPTION:
 			case AnalyticsPackage.ANALYSIS_RESULT_ROW__RESULT_DETAIL:
+			case AnalyticsPackage.ANALYSIS_RESULT_ROW__SHIPPING:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -197,6 +199,26 @@ public class AnalysisResultRowItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAIL,
 				 AnalyticsFactory.eINSTANCE.createBreakEvenResult()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SHIPPING,
+				 AnalyticsFactory.eINSTANCE.createShippingOption()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SHIPPING,
+				 AnalyticsFactory.eINSTANCE.createFleetShippingOption()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SHIPPING,
+				 AnalyticsFactory.eINSTANCE.createRoundTripShippingOption()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SHIPPING,
+				 AnalyticsFactory.eINSTANCE.createNominatedShippingOption()));
 	}
 
 	/**

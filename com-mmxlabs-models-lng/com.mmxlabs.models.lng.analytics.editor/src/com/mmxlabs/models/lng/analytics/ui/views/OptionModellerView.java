@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -44,14 +45,17 @@ import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.OptionRule;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseEvaluator;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.WhatIfEvaluator;
@@ -821,6 +825,17 @@ public class OptionModellerView extends ScenarioInstanceView {
 
 			popExtraValidationContext();
 
+		}
+	}
+	
+	private void createResultSetFork(ResultSet rs) {
+		BaseCase bc = AnalyticsFactory.eINSTANCE.createBaseCase();
+		EList<BaseCaseRow> baseCase = bc.getBaseCase();
+		for (AnalysisResultRow analysisResultRow : rs.getRows()) {
+			BaseCaseRow bcr = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+			bcr.setBuyOption(analysisResultRow.getBuyOption());
+			bcr.setSellOption(analysisResultRow.getSellOption());
+			bcr.setShipping(analysisResultRow.getShipping());
 		}
 	}
 }
