@@ -18,10 +18,14 @@ import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.widgets.Menu;
 
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
+import com.mmxlabs.models.lng.analytics.SellReference;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
@@ -68,7 +72,31 @@ public class SellOptionsContextMenuManager implements MenuDetectListener {
 
 			final Object ed = items[0].getData();
 			final SellOption row = (SellOption) ed;
+			if (row instanceof SellReference) {
+				final SellReference sellReference = (SellReference) row;
+				final DischargeSlot slot = sellReference.getSlot();
+				if (slot != null) {
+					mgr.add(new RunnableAction("Copy", () -> {
+						final SellOpportunity newSell = AnalyticsFactory.eINSTANCE.createSellOpportunity();
+						newSell.setFobSale(slot.isFOBSale());
+						newSell.setPort(slot.getPort());
+						newSell.setDate(slot.getWindowStart());
+						if (slot.isSetContract()) {
+							newSell.setContract((SalesContract) slot.getContract());
+						} else {
+							newSell.setEntity(slot.getSlotOrDelegatedEntity());
+						}
+						if (slot.isSetPriceExpression()) {
+							newSell.setPriceExpression(slot.getPriceExpression());
+						}
 
+						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+
+								AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, newSell),
+								optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
+					}));
+				}
+			}
 			if (row instanceof SellOpportunity) {
 				mgr.add(new RunnableAction("Copy", () -> {
 					SellOption copy = EcoreUtil.copy(row);

@@ -18,10 +18,14 @@ import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.widgets.Menu;
 
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
+import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
@@ -68,10 +72,38 @@ public class BuyOptionsContextMenuManager implements MenuDetectListener {
 
 			final Object ed = items[0].getData();
 			final BuyOption row = (BuyOption) ed;
+			if (row instanceof BuyReference) {
+				final BuyReference buyReference = (BuyReference) row;
+				final LoadSlot slot = buyReference.getSlot();
+				if (slot != null) {
+					mgr.add(new RunnableAction("Copy", () -> {
+						final BuyOpportunity newBuy = AnalyticsFactory.eINSTANCE.createBuyOpportunity();
+						newBuy.setDesPurchase(slot.isDESPurchase());
+						newBuy.setPort(slot.getPort());
+						newBuy.setDate(slot.getWindowStart());
+						if (slot.isSetContract()) {
+							newBuy.setContract((PurchaseContract) slot.getContract());
+						} else {
+							newBuy.setEntity(slot.getSlotOrDelegatedEntity());
+							newBuy.setCv(slot.getSlotOrDelegatedCV());
+						}
+						if (slot.isSetCargoCV()) {
+							newBuy.setCv(slot.getCargoCV());
+						}
+						if (slot.isSetPriceExpression()) {
+							newBuy.setPriceExpression(slot.getPriceExpression());
+						}
 
+						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+
+								AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, newBuy), optionAnalysisModel,
+								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
+					}));
+				}
+			}
 			if (row instanceof BuyOpportunity) {
 				mgr.add(new RunnableAction("Copy", () -> {
-					BuyOption copy = EcoreUtil.copy(row);
+					final BuyOption copy = EcoreUtil.copy(row);
 					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, copy), optionAnalysisModel,
 							AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
@@ -86,7 +118,7 @@ public class BuyOptionsContextMenuManager implements MenuDetectListener {
 		return optionAnalysisModel;
 	}
 
-	public void setOptionAnalysisModel(OptionAnalysisModel optionAnalysisModel) {
+	public void setOptionAnalysisModel(final OptionAnalysisModel optionAnalysisModel) {
 		this.optionAnalysisModel = optionAnalysisModel;
 	}
 
