@@ -59,6 +59,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.eclipse.ui.internal.handlers.DisplayHelpHandler;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
@@ -106,6 +107,7 @@ import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.rcp.common.LocalMenuHelper;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.dnd.BasicDragSource;
@@ -1078,43 +1080,46 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	};
 
 	private void refreshSections(boolean layout, EnumSet<SectionType> sections) {
-		// Coarse grained refresh method..
-		if (sections.contains(SectionType.BUYS)) {
-			buyOptionsViewer.refresh();
-			if (layout) {
-				packAll(buyComposite);
+
+		RunnerHelper.syncExec(() -> {
+
+			// Coarse grained refresh method..
+			if (sections.contains(SectionType.BUYS)) {
+				buyOptionsViewer.refresh();
+				if (layout) {
+					packAll(buyComposite);
+				}
 			}
-		}
-		if (sections.contains(SectionType.MIDDLE)) {
-			baseCaseViewer.refresh();
-			if (model != null) {
-				baseCaseProftLabel.setText(String.format("Base P&&L: $%,d", model.getBaseCase().getProfitAndLoss()));
-			} else {
-				baseCaseProftLabel.setText(String.format("Base P&&L: $---,---,---.--"));
+			if (sections.contains(SectionType.MIDDLE)) {
+				baseCaseViewer.refresh();
+				if (model != null) {
+					baseCaseProftLabel.setText(String.format("Base P&&L: $%,d", model.getBaseCase().getProfitAndLoss()));
+				} else {
+					baseCaseProftLabel.setText(String.format("Base P&&L: $---,---,---.--"));
+				}
+				partialCaseViewer.refresh();
+				rulesViewer.refresh();
+				resultsViewer.refresh();
+				resultsViewer.expandAll();
+				if (layout) {
+					packAll(centralComposite);
+				}
 			}
-			partialCaseViewer.refresh();
-			rulesViewer.refresh();
-			resultsViewer.refresh();
-			resultsViewer.expandAll();
-			if (layout) {
-				packAll(centralComposite);
+			if (sections.contains(SectionType.SELLS)) {
+				sellOptionsViewer.refresh();
+				if (layout) {
+					packAll(sellComposite);
+				}
 			}
-		}
-		if (sections.contains(SectionType.SELLS)) {
-			sellOptionsViewer.refresh();
-			if (layout) {
-				packAll(sellComposite);
+			if (sections.contains(SectionType.VESSEL)) {
+				vesselViewer.refresh();
+				shippingOptionsViewer.refresh();
+				vesselViewer.expandAll();
+				if (layout) {
+					packAll(vesselComposite);
+				}
 			}
-		}
-		if (sections.contains(SectionType.VESSEL)) {
-			vesselViewer.refresh();
-			shippingOptionsViewer.refresh();
-			vesselViewer.expandAll();
-			if (layout) {
-				packAll(vesselComposite);
-			}
-		}
-		// mainComposite.pack(true);
+		});
 	}
 
 	public void packAll(final Control c) {
