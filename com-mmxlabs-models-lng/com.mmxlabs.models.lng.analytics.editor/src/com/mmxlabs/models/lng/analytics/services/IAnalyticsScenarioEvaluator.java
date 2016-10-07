@@ -13,7 +13,7 @@ public interface IAnalyticsScenarioEvaluator {
 		PORTFOLIO
 	}
 
-	void evaluate(@NonNull LNGScenarioModel lngScenarioModel, @NonNull UserSettings userSettings, @Nullable ScenarioInstance parentForFork);
+	void evaluate(@NonNull LNGScenarioModel lngScenarioModel, @NonNull UserSettings userSettings, @Nullable ScenarioInstance parentForFork, boolean fork, String forkName);
 	
 	void breakEvenEvaluate(@NonNull LNGScenarioModel lngScenarioModel, @NonNull UserSettings userSettings, @Nullable ScenarioInstance parentForFork, long targetProfitAndLoss, BreakEvenMode breakEvenMode);
 

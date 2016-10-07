@@ -135,10 +135,10 @@ public class BaseCaseEvaluator {
 		return null;
 	}
 
-	public static void evaluate(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel model, final BaseCase baseCase) {
+	public static void evaluate(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel model, final BaseCase baseCase, final boolean fork, final String forkName) {
 
 		generateScenario(scenarioEditingLocation, model, baseCase, (clone, mapper) -> {
-			evaluateScenario(clone, scenarioEditingLocation.getScenarioInstance());
+			evaluateScenario(clone, scenarioEditingLocation.getScenarioInstance(), fork, forkName);
 
 			updateResults(scenarioEditingLocation, clone, baseCase);
 		});
@@ -153,14 +153,14 @@ public class BaseCaseEvaluator {
 				AnalyticsPackage.Literals.BASE_CASE__PROFIT_AND_LOSS);
 	}
 
-	protected static void evaluateScenario(final LNGScenarioModel lngScenarioModel, final ScenarioInstance scenarioInstance) {
+	protected static void evaluateScenario(final LNGScenarioModel lngScenarioModel, final ScenarioInstance scenarioInstance, final boolean fork, final String forkName) {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		ServiceHelper.withService(IAnalyticsScenarioEvaluator.class, evaluator -> evaluator.evaluate(lngScenarioModel, userSettings, scenarioInstance));
+		ServiceHelper.withService(IAnalyticsScenarioEvaluator.class, evaluator -> evaluator.evaluate(lngScenarioModel, userSettings, scenarioInstance, fork, forkName));
 
 	}
 
