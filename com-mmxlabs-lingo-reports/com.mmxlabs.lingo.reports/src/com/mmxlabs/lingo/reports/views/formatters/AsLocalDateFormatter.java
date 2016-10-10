@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.formatters;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.time.ZonedDateTime;
@@ -20,6 +21,10 @@ public class AsLocalDateFormatter extends BaseFormatter {
 	public String render(final Object object) {
 		if (object == null) {
 			return "";
+		}
+		if (object instanceof LocalDate) {
+			LocalDate localDate = (LocalDate)object;
+			return localDate.format(dateFormat);
 		}
 		LocalDateTime localDate = getLocalDate(object);
 		if (localDate != null) {

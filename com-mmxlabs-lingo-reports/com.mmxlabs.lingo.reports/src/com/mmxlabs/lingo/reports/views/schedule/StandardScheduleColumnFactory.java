@@ -151,6 +151,19 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.vessel":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Vessel", null, ColumnType.NORMAL, new VesselAssignmentFormatter(), targetObjectRef));
 			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.loadwindow": {
+			final ETypedElement[][] paths = new ETypedElement[][] { { loadAllocationRef, s.getSlotAllocation_Slot(), c.getSlot_WindowStart() },
+					{ targetObjectRef, s.getVesselEventVisit_VesselEvent(), c.getVesselEvent_StartAfter() } };
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
+					new MultiObjectEmfBlockColumnFactory(columnID, "Load/Start Window", "Load or vessel event window start date", ColumnType.NORMAL, Formatters.asLocalDateFormatter, paths));
+			break;
+		}
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.dischargewindow": {
+			final ETypedElement[][] paths = new ETypedElement[][] { { dischargeAllocationRef, s.getSlotAllocation_Slot(), c.getSlot_WindowStart() } };
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
+					new MultiObjectEmfBlockColumnFactory(columnID, "Discharge Window", "Discharge window start date", ColumnType.NORMAL, Formatters.asLocalDateFormatter, paths));
+			break;
+		}
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.loaddate": {
 			final ETypedElement[][] paths = new ETypedElement[][] { { loadAllocationRef, s.getSlotAllocation_SlotVisit(), s.getEvent_Start() }, { targetObjectRef, s.getEvent_Start() } };
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new MultiObjectEmfBlockColumnFactory(columnID, "Load/Start Date", null, ColumnType.NORMAL, Formatters.asLocalDateFormatter, paths));
