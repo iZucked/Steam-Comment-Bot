@@ -147,6 +147,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.editors.dialogs.MultiDetailDialog;
 import com.mmxlabs.models.ui.tabular.DefaultToolTipProvider;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
@@ -767,13 +768,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		deleteAction = createDeleteAction(objectsToDelete -> {
 
 			final List<Object> extraObjects = new LinkedList<>();
-			for (Object o : objectsToDelete) {
+			for (final Object o : objectsToDelete) {
 				Cargo c = null;
 				if (o instanceof Slot) {
 					c = ((Slot) o).getCargo();
 				}
 				if (c != null) {
-					for (Slot s : c.getSlots()) {
+					for (final Slot s : c.getSlots()) {
 						if (s instanceof SpotSlot) {
 							extraObjects.add(s);
 						}
@@ -993,12 +994,15 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 
 		addPNLColumn("P&L (Trade)", CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK,
-				new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(), editingDomain), new RowDataEMFPath(true, Type.CARGO_OR_MARKET_OR_OPEN_ALLOCATION));
+				new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(), editingDomain),
+				new RowDataEMFPath(true, Type.CARGO_OR_MARKET_OR_OPEN_ALLOCATION));
 		addPNLColumn("P&L (Shipping)", CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK,
-				new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(), editingDomain), new RowDataEMFPath(true, Type.CARGO_OR_MARKET_OR_OPEN_ALLOCATION));
+				new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(), editingDomain),
+				new RowDataEMFPath(true, Type.CARGO_OR_MARKET_OR_OPEN_ALLOCATION));
 		if (SecurityUtils.getSubject().isPermitted("features:report-equity-book")) {
 			addPNLColumn("P&L (Equity)", CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK,
-					new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(), editingDomain), new RowDataEMFPath(true, Type.CARGO_OR_MARKET_OR_OPEN_ALLOCATION));
+					new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(), editingDomain),
+					new RowDataEMFPath(true, Type.CARGO_OR_MARKET_OR_OPEN_ALLOCATION));
 		}
 		wiringDiagram = new TradesWiringDiagram(getScenarioViewer().getGrid()) {
 
@@ -1713,6 +1717,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 
 			final CargoModel cargoModel = getScenarioModel().getCargoModel();
+			final CommandStack commandStack = scenarioEditingLocation.getEditingDomain().getCommandStack();
 
 			RowData discoveredRowData = null;
 			final ISelection selection = getScenarioViewer().getSelection();
@@ -1760,7 +1765,14 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 						final CompoundCommand cmd = new CompoundCommand("FOB Purchase");
 						setCommands.forEach(c -> cmd.append(c));
-						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+
+						commandStack.execute(cmd);
+						DetailCompositeDialogUtil.editSingleObject(getJointModelEditorPart(), newLoad, () -> {
+							// If not ok, revert state;
+							// Revert state
+							assert commandStack.getUndoCommand() == cmd;
+							commandStack.undo();
+						});
 					}
 				};
 				addActionToMenu(newLoad, menu);
@@ -1776,7 +1788,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 						final CompoundCommand cmd = new CompoundCommand("DES Purchase");
 						setCommands.forEach(c -> cmd.append(c));
-						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+						commandStack.execute(cmd);
+						DetailCompositeDialogUtil.editSingleObject(getJointModelEditorPart(), newLoad, () -> {
+							// If not ok, revert state;
+							// Revert state
+							assert commandStack.getUndoCommand() == cmd;
+							commandStack.undo();
+						});
 					}
 				};
 				addActionToMenu(newDESPurchase, menu);
@@ -1793,7 +1811,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						final CompoundCommand cmd = new CompoundCommand("DES Sale");
 						setCommands.forEach(c -> cmd.append(c));
 
-						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+						commandStack.execute(cmd);
+						DetailCompositeDialogUtil.editSingleObject(getJointModelEditorPart(), newDischarge, () -> {
+							// If not ok, revert state;
+							// Revert state
+							assert commandStack.getUndoCommand() == cmd;
+							commandStack.undo();
+						});
 					}
 				};
 
@@ -1811,7 +1835,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						final CompoundCommand cmd = new CompoundCommand("FOB Sale");
 						setCommands.forEach(c -> cmd.append(c));
 
-						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+						commandStack.execute(cmd);
+						DetailCompositeDialogUtil.editSingleObject(getJointModelEditorPart(), newDischarge, () -> {
+							// If not ok, revert state;
+							// Revert state
+							assert commandStack.getUndoCommand() == cmd;
+							commandStack.undo();
+						});
 					}
 				};
 				addActionToMenu(newFOBSale, menu);
