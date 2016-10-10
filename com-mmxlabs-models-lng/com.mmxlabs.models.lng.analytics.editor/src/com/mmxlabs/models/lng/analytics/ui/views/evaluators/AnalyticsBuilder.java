@@ -1,5 +1,8 @@
 package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -23,6 +26,8 @@ import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
+import com.mmxlabs.models.lng.analytics.ui.views.formatters.SellOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoType;
@@ -46,15 +51,28 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
 public class AnalyticsBuilder {
+	private static BuyOptionDescriptionFormatter buyOptionDescriptionFormatter = new BuyOptionDescriptionFormatter();
+	private static SellOptionDescriptionFormatter sellOptionDescriptionFormatter = new SellOptionDescriptionFormatter();
+	
 	public static @Nullable LoadSlot makeLoadSlot(final @Nullable BuyOption buy, final @NonNull LNGScenarioModel lngScenarioModel) {
 
+		String baseName = buyOptionDescriptionFormatter.render(buy);
+		
+		// Get existing names
+		final Set<String> usedIDStrings = new HashSet<>();
+		for (final LoadSlot lSlot : lngScenarioModel.getCargoModel().getLoadSlots()) {
+			usedIDStrings.add(lSlot.getName());
+		}
+		
+		String id = getUniqueID(baseName, usedIDStrings);
+		
 		if (buy instanceof BuyReference) {
 			return ((BuyReference) buy).getSlot();
 		} else if (buy instanceof BuyOpportunity) {
 			final BuyOpportunity buyOpportunity = (BuyOpportunity) buy;
 			final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
 			slot.setOptional(true);
-			slot.setName(EcoreUtil.generateUUID());
+			slot.setName(id);
 			slot.setPort(buyOpportunity.getPort());
 			if (buyOpportunity.isDesPurchase()) {
 				slot.setDESPurchase(true);
@@ -84,7 +102,9 @@ public class AnalyticsBuilder {
 				slot.setPort(desSalesMarket.getNotionalPort());
 			}
 			slot.setMarket(market);
-			slot.setName(EcoreUtil.generateUUID());
+			
+
+			slot.setName(id);
 
 			return slot;
 		}
@@ -92,14 +112,46 @@ public class AnalyticsBuilder {
 		return null;
 	}
 
+	public static String getUniqueID(String baseName, final Set<String> usedIDStrings) {
+		String id;
+		if (usedIDStrings.contains(baseName)) {
+		int i = 1;
+		id = baseName + "-" + (i);
+		while (usedIDStrings.contains(id)) {
+			id = baseName + "-" + (i++);
+		}
+		} else {
+			id = baseName;
+		}
+		return id;
+	}
+
+	public static String createIncrementedName(final String base, int increment) {
+		if (increment == 0) {
+			return base;
+		} else {
+			return base+"-"+increment;
+		}
+	}
+	
 	public static @Nullable DischargeSlot makeDischargeSlot(final @Nullable SellOption sell, final @NonNull LNGScenarioModel lngScenarioModel) {
+		String baseName = sellOptionDescriptionFormatter.render(sell);
+		
+		// Get existing names
+		final Set<String> usedIDStrings = new HashSet<>();
+		for (final DischargeSlot dSlot : lngScenarioModel.getCargoModel().getDischargeSlots()) {
+			usedIDStrings.add(dSlot.getName());
+		}
+		
+		String id = getUniqueID(baseName, usedIDStrings);
+
 		if (sell instanceof SellReference) {
 			return ((SellReference) sell).getSlot();
 		} else if (sell instanceof SellOpportunity) {
 			final SellOpportunity sellOpportunity = (SellOpportunity) sell;
 			final DischargeSlot slot = CargoFactory.eINSTANCE.createDischargeSlot();
 			slot.setOptional(true);
-			slot.setName(EcoreUtil.generateUUID());
+			slot.setName(id);
 			slot.setPort(sellOpportunity.getPort());
 			if (sellOpportunity.isFobSale()) {
 				slot.setFOBSale(true);
@@ -129,7 +181,7 @@ public class AnalyticsBuilder {
 				slot.setPort(desSalesMarket.getNotionalPort());
 			}
 			slot.setMarket(market);
-			slot.setName(EcoreUtil.generateUUID());
+			slot.setName(id);
 
 			return slot;
 		}

@@ -2,9 +2,11 @@ package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -26,6 +28,7 @@ import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
+import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -34,6 +37,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -57,6 +61,7 @@ public class BaseCaseEvaluator {
 
 	}
 
+	private static final ShippingOptionDescriptionFormatter SHIPPING_OPTION_DESCRIPTION_FORMATTER = new ShippingOptionDescriptionFormatter();
 	static class Mapper implements IMapperClass {
 		private final EcoreUtil.Copier copier;
 
@@ -114,13 +119,20 @@ public class BaseCaseEvaluator {
 		final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			List<Port> dd = lngScenarioModel.getReferenceModel().getPortModel().getPorts().stream().filter(p->p.getName().contains("Darwin")).collect(Collectors.toList());
 
 			final EcoreUtil.Copier copier = new Copier();
 			final LNGScenarioModel clone = (LNGScenarioModel) copier.copy(lngScenarioModel);
+			List<Port> ddd = clone.getReferenceModel().getPortModel().getPorts().stream().filter(p->p.getName().contains("Darwin")).collect(Collectors.toList());
 			final OptionAnalysisModel clonedModel = (OptionAnalysisModel) copier.copy(model);
-			final BaseCase clonedBaseCase = model.getBaseCase() == baseCase ? clonedModel.getBaseCase() : (BaseCase) copier.copy(baseCase);
+			final BaseCase clonedBaseCase;
+			if (model.getBaseCase() == baseCase) {
+				clonedBaseCase = clonedModel.getBaseCase();
+			} else {
+				clonedBaseCase = (BaseCase) copier.copy(baseCase);
+			}
 			copier.copyReferences();
-
+			List<Port> dddd = clone.getReferenceModel().getPortModel().getPorts().stream().filter(p->p.getName().contains("Darwin")).collect(Collectors.toList());
 			final IMapperClass mapper = new Mapper(copier);
 
 			clearData(clone, clonedModel, clonedBaseCase);
@@ -160,7 +172,7 @@ public class BaseCaseEvaluator {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		ServiceHelper.<IAnalyticsScenarioEvaluator> withService(IAnalyticsScenarioEvaluator.class, evaluator -> evaluator.evaluate(lngScenarioModel, userSettings, null, fork, forkName));
+		ServiceHelper.<IAnalyticsScenarioEvaluator> withService(IAnalyticsScenarioEvaluator.class, evaluator -> evaluator.evaluate(lngScenarioModel, userSettings, scenarioInstance, fork, forkName));
 
 	}
 
@@ -240,6 +252,12 @@ public class BaseCaseEvaluator {
 			final RoundTripShippingOption roundTripShippingOption = (RoundTripShippingOption) shipping;
 			if (cargo != null) {
 				final CharterInMarket market = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
+				String baseName = SHIPPING_OPTION_DESCRIPTION_FORMATTER.render(roundTripShippingOption);
+				@NonNull
+				Set<String> usedIDStrings = lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets()
+					.stream().map(c -> c.getName()).collect(Collectors.toSet());
+				String id = AnalyticsBuilder.getUniqueID(baseName, usedIDStrings);
+				market.setName(id);
 				market.setCharterInRate(roundTripShippingOption.getHireCost());
 				market.setVesselClass(roundTripShippingOption.getVesselClass());
 				cargo.setVesselAssignmentType(market);

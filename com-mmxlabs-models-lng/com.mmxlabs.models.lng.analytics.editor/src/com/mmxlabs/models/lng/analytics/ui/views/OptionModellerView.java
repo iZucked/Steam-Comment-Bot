@@ -975,7 +975,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		final MenuManager mgr = new MenuManager();
 
-		final ResultsContextMenuManager listener = new ResultsContextMenuManager(resultsViewer, OptionModellerView.this, mgr);
+		final ResultsContextMenuManager listener = new ResultsContextMenuManager(resultsViewer, baseCaseViewer, OptionModellerView.this, mgr);
 		inputWants.add(model -> listener.setOptionAnalysisModel(model));
 		resultsViewer.getGrid().addMenuDetectListener(listener);
 

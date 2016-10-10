@@ -55,13 +55,16 @@ import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 public class ResultsContextMenuManager implements MenuDetectListener {
 
 	private final @NonNull GridTreeViewer viewer;
+	private final @NonNull GridTreeViewer baseCaseViewer;
+
 	private final @NonNull IScenarioEditingLocation scenarioEditingLocation;
 
 	private final @NonNull MenuManager mgr;
 	private OptionAnalysisModel optionAnalysisModel;
 	private Menu menu;
 
-	public ResultsContextMenuManager(@NonNull final GridTreeViewer viewer, @NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final MenuManager mgr) {
+	public ResultsContextMenuManager(@NonNull final GridTreeViewer viewer, @NonNull final GridTreeViewer baseCaseViewer, @NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final MenuManager mgr) {
+		this.baseCaseViewer = baseCaseViewer;
 		this.mgr = mgr;
 		this.scenarioEditingLocation = scenarioEditingLocation;
 		this.viewer = viewer;
@@ -84,60 +87,48 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 		final GridItem[] items = grid.getSelection();
 		if (items.length > 0) {
 
+			Object selectedElement = selection.getFirstElement();
+			ResultSet resultSet;
+			if (selectedElement instanceof ResultSet) {
+				resultSet = (ResultSet) selectedElement;
+			} else if (selectedElement instanceof AnalysisResultRow) {
+				EObject eContainer = ((AnalysisResultRow) selectedElement).eContainer();
+				if (eContainer instanceof ResultSet) {
+					resultSet = (ResultSet) eContainer;
+				} else {
+					resultSet = null;
+				}
+			} else {
+				resultSet = null;
+			}
 			mgr.add(new RunnableAction("Create fork", () -> {
-				Object selectedElement = selection.getFirstElement();
-				ResultSet resultSet = null;
-				if (selectedElement instanceof ResultSet) {
-					resultSet = (ResultSet) selectedElement;
-				} else if (selectedElement instanceof AnalysisResultRow) {
-					EObject eContainer = ((AnalysisResultRow) selectedElement).eContainer();
-					if (eContainer instanceof ResultSet) {
-						resultSet = (ResultSet) eContainer;
-					}
-				}
 				if (resultSet != null) {
-					BaseCase bc = createBaseCaseFromRS((ResultSet) selectedElement);
+					BaseCase bc = createBaseCaseFromRS(resultSet, true);
 					String newForkName = ScenarioServiceModelUtils.getNewForkName(scenarioEditingLocation.getScenarioInstance(), false);
-					OptionAnalysisModel optionAnalysisModel = AnalyticsFactory.eINSTANCE.createOptionAnalysisModel();
+					OptionAnalysisModel optionAnalysisModel2 = AnalyticsFactory.eINSTANCE.createOptionAnalysisModel();
+					optionAnalysisModel2.setBaseCase(bc);
+					optionAnalysisModel2.getBuys().addAll(bc.getBaseCase().stream().map(b -> b.getBuyOption()).collect(Collectors.toList()));
+					optionAnalysisModel2.getSells().addAll(bc.getBaseCase().stream().map(b -> b.getSellOption()).collect(Collectors.toList()));
+					BaseCaseEvaluator.evaluate(scenarioEditingLocation, optionAnalysisModel2, bc, true, newForkName);
+				}
+			}));
+			
+			mgr.add(new RunnableAction("Convert to base case", () -> {
+				if (resultSet != null) {
+					BaseCase bc = updateBaseCaseFromRS(resultSet, optionAnalysisModel.getBaseCase() != null ? optionAnalysisModel.getBaseCase() : AnalyticsFactory.eINSTANCE.createBaseCase());
 					optionAnalysisModel.setBaseCase(bc);
-					optionAnalysisModel.getBuys().addAll(bc.getBaseCase().stream().map(b -> b.getBuyOption()).collect(Collectors.toList()));
-					optionAnalysisModel.getSells().addAll(bc.getBaseCase().stream().map(b -> b.getSellOption()).collect(Collectors.toList()));
-					BaseCaseEvaluator.evaluate(scenarioEditingLocation, optionAnalysisModel, bc, true, newForkName);
-				}
-//				ScenarioServiceModelUtils.openNewNameForForkPrompt(scenarioEditingLocation.getScenarioInstance().getName(), "~"+scenarioEditingLocation.getScenarioInstance().getName(), existingNames);
-//				selection.iterator().forEachRemaining(ee -> c.add((EObject) ee));
-//
-//				scenarioEditingLocation.getDefaultCommandHandler().handleCommand(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), c), null, null);
-
-			}));
-
-			mgr.add(new RunnableAction("Copy to What if?", () -> {
-				final Collection<EObject> c = new LinkedList<>();
-				selection.iterator().forEachRemaining(ee -> {
-					if (ee instanceof BaseCaseRow) {
-						BaseCaseRow baseCaseRow = (BaseCaseRow) ee;
-						PartialCaseRow partialCaseRow = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
-						if (baseCaseRow.getBuyOption() != null) {
-							partialCaseRow.getBuyOptions().add(baseCaseRow.getBuyOption());
-						}
-						if (baseCaseRow.getSellOption() != null) {
-							partialCaseRow.getSellOptions().add(baseCaseRow.getSellOption());
-						}
-						if (baseCaseRow.getShipping() != null) {
-							partialCaseRow.setShipping(EcoreUtil.copy(baseCaseRow.getShipping()));
-						}
-						if (!(partialCaseRow.getBuyOptions().isEmpty() && partialCaseRow.getSellOptions().isEmpty() && partialCaseRow.getShipping() == null)) {
-							c.add(partialCaseRow);
-						}
-					}
-				});
-
-				if (!c.isEmpty()) {
-					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE, c),
-							optionAnalysisModel.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE);
+					// add new slots
+					optionAnalysisModel.getBuys().addAll(bc.getBaseCase().stream().filter(b -> !optionAnalysisModel.getBuys().contains(b.getBuyOption())).map(b -> b.getBuyOption()).collect(Collectors.toList()));
+					optionAnalysisModel.getSells().addAll(bc.getBaseCase().stream().filter(b -> !optionAnalysisModel.getSells().contains(b.getBuyOption())).map(b -> b.getSellOption()).collect(Collectors.toList()));
+					baseCaseViewer.refresh();
+					baseCaseViewer.notifyAll();
+					baseCaseViewer.notify();
+					baseCaseViewer.expandAll();
+					baseCaseViewer.refresh();
 				}
 			}));
+
+
 		}
 		menu.setVisible(true);
 	}
@@ -150,104 +141,95 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 		this.optionAnalysisModel = optionAnalysisModel;
 	}
 	
-	private BaseCase createBaseCaseFromRS(ResultSet rs) {
+	private BaseCase createBaseCaseFromRS(ResultSet rs, boolean copy) {
 		BaseCase bc = AnalyticsFactory.eINSTANCE.createBaseCase();
 		EList<BaseCaseRow> baseCase = bc.getBaseCase();
 		for (AnalysisResultRow analysisResultRow : rs.getRows()) {
 			BaseCaseRow bcr = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
-			bcr.setBuyOption(getFixedBuyOption(analysisResultRow));
-			bcr.setSellOption(getFixedSellOption(analysisResultRow));
+			bcr.setBuyOption(getFixedBuyOption(analysisResultRow, copy));
+			bcr.setSellOption(getFixedSellOption(analysisResultRow, copy));
+//			bcr.setShipping(copy ? EcoreUtil.copy(analysisResultRow.getShipping()) : analysisResultRow.getShipping());
+			bcr.setShipping(EcoreUtil.copy(analysisResultRow.getShipping()));
+			baseCase.add(bcr);
+		}
+		return bc;
+	}
+
+	private BaseCase updateBaseCaseFromRS(ResultSet rs, BaseCase bc) {
+		EList<BaseCaseRow> baseCase = bc.getBaseCase();
+		baseCase.clear();
+		for (AnalysisResultRow analysisResultRow : rs.getRows()) {
+			BaseCaseRow bcr = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+			bcr.setBuyOption(getFixedBuyOption(analysisResultRow, false));
+			bcr.setSellOption(getFixedSellOption(analysisResultRow, false));
 			bcr.setShipping(EcoreUtil.copy(analysisResultRow.getShipping()));
 			baseCase.add(bcr);
 		}
 		return bc;
 	}
 	
-	private BuyOption getFixedBuyOption(AnalysisResultRow row) {
+	private BuyOption getFixedBuyOption(AnalysisResultRow row, boolean createCopy) {
 		BuyOption buyOption = row.getBuyOption();
 		if (row.getResultDetail() instanceof BreakEvenResult) {
 			BreakEvenResult result = (BreakEvenResult) row.getResultDetail();
 			if (buyOption instanceof BuyOpportunity) {
 				if (((BuyOpportunity) buyOption).getPriceExpression().contains("?")) {
-					BuyOpportunity copy = (BuyOpportunity) EcoreUtil.copy(buyOption);
-					copy.setPriceExpression(""+result.getPrice());
-					return copy;
+					BuyOpportunity buyOpportunity;
+					if (createCopy) {
+						buyOpportunity = (BuyOpportunity) EcoreUtil.copy(buyOption);
+					} else {
+						buyOpportunity = (BuyOpportunity) buyOption;
+					}
+					buyOpportunity.setPriceExpression(""+result.getPrice());
+					return buyOpportunity;
 				}
 			} else if (buyOption instanceof BuyReference) {
 				if (((BuyReference) buyOption).getSlot().getPriceExpression().contains("?")) {
-					LoadSlot slotCopy = EcoreUtil.copy((LoadSlot) ((BuyReference) buyOption).getSlot());
-					BuyReference copy = AnalyticsFactory.eINSTANCE.createBuyReference();
-					slotCopy.setPriceExpression(""+result.getPrice());
-					copy.setSlot(slotCopy);
-					return copy;
-				} else {
-					LoadSlot slotCopy = EcoreUtil.copy((LoadSlot) ((BuyReference) buyOption).getSlot());
-					BuyReference copy = AnalyticsFactory.eINSTANCE.createBuyReference();
-					copy.setSlot(slotCopy);
-					return copy;
+//					LoadSlot slotCopy = EcoreUtil.copy((LoadSlot) ((BuyReference) buyOption).getSlot());
+//					BuyReference copy = AnalyticsFactory.eINSTANCE.createBuyReference();
+//					slotCopy.setPriceExpression(""+result.getPrice());
+//					copy.setSlot(slotCopy);
+//					return copy;
 				}
 			}
-		} else {
-			if (buyOption instanceof BuyReference) {
-					LoadSlot slotCopy = EcoreUtil.copy((LoadSlot) ((BuyReference) buyOption).getSlot());
-					BuyReference copy = AnalyticsFactory.eINSTANCE.createBuyReference();
-					copy.setSlot(slotCopy);
-					return copy;
-			} else if (buyOption instanceof BuyOpportunity) {
-//				BuyOpportunity copy = AnalyticsFactory.eINSTANCE.createBuyOpportunity();
-//				copy.setContract(((BuyOpportunity) buyOption).getContract());
-//				copy.setPort(((BuyOpportunity) buyOption).getPort());
-//				copy.setPriceExpression(((BuyOpportunity) buyOption).getPriceExpression());
-//				copy.setDate(((BuyOpportunity) buyOption).getDate());
-//				copy.setCv(((BuyOpportunity) buyOption).getCv());
-//				copy.setEntity(((BuyOpportunity) buyOption).getEntity());
-//				return copy;
-			}
 		}
-		return EcoreUtil.copy(row.getBuyOption());
+		if (createCopy) {
+			return EcoreUtil.copy(row.getBuyOption());
+		} else {
+			return row.getBuyOption();
+		}
 	}
 
-	private SellOption getFixedSellOption(AnalysisResultRow row) {
+	private SellOption getFixedSellOption(AnalysisResultRow row, boolean createCopy) {
 		SellOption sellOption = row.getSellOption();
 		if (row.getResultDetail() instanceof BreakEvenResult) {
 			BreakEvenResult result = (BreakEvenResult) row.getResultDetail();
 			if (sellOption instanceof BuyOpportunity) {
 				if (((SellOpportunity) sellOption).getPriceExpression().contains("?")) {
-					SellOpportunity copy = (SellOpportunity) EcoreUtil.copy(sellOption);
-					copy.setPriceExpression(""+result.getPrice());
-					return copy;
+					SellOpportunity opportunity;
+					if (createCopy) {
+						opportunity = (SellOpportunity) EcoreUtil.copy(sellOption);
+					} else {
+						opportunity = (SellOpportunity) sellOption;
+					}
+					opportunity.setPriceExpression(""+result.getPrice());
+					return opportunity;
 				}
 			} else if (sellOption instanceof SellReference) {
 				if (((SellReference) sellOption).getSlot().getPriceExpression().contains("?")) {
-					DischargeSlot slotCopy = EcoreUtil.copy((DischargeSlot) ((SellReference) sellOption).getSlot());
-					SellReference copy = AnalyticsFactory.eINSTANCE.createSellReference();
-					slotCopy.setPriceExpression(""+result.getPrice());
-					copy.setSlot(slotCopy);
-					return copy;
-				} else {
-					DischargeSlot slotCopy = EcoreUtil.copy((DischargeSlot) ((SellReference) sellOption).getSlot());
-					SellReference copy = AnalyticsFactory.eINSTANCE.createSellReference();
-					copy.setSlot(slotCopy);
-					return copy;
-				}
-			}
-		} else {
-			if (sellOption instanceof SellReference) {
-					DischargeSlot slotCopy = EcoreUtil.copy((DischargeSlot) ((SellReference) sellOption).getSlot());
-					SellReference copy = AnalyticsFactory.eINSTANCE.createSellReference();
-					copy.setSlot(slotCopy);
-					return copy;
-				} else if (sellOption instanceof SellOpportunity) {
-//					SellOpportunity copy = AnalyticsFactory.eINSTANCE.createSellOpportunity();
-//					copy.setContract(((SellOpportunity) sellOption).getContract());
-//					copy.setPort(((SellOpportunity) sellOption).getPort());
-//					copy.setPriceExpression(((SellOpportunity) sellOption).getPriceExpression());
-//					copy.setDate(((SellOpportunity) sellOption).getDate());
-//					copy.setEntity(((SellOpportunity) sellOption).getEntity());
+//					DischargeSlot slotCopy = EcoreUtil.copy((DischargeSlot) ((SellReference) sellOption).getSlot());
+//					SellReference copy = AnalyticsFactory.eINSTANCE.createSellReference();
+//					slotCopy.setPriceExpression(""+result.getPrice());
+//					copy.setSlot(slotCopy);
 //					return copy;
 				}
+			}
 		}
-		return EcoreUtil.copy(row.getSellOption());
+		if (createCopy) {
+			return EcoreUtil.copy(sellOption);
+		} else {
+			return sellOption;
+		}
 	}
 
 }
