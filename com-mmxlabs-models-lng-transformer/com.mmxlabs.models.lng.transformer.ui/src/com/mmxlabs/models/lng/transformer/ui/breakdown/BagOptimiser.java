@@ -223,7 +223,9 @@ public class BagOptimiser {
 			final List<Change> changes = new LinkedList<>();
 			final long time2 = System.currentTimeMillis();
 			
-			actionSetLogger.setInitialPnL(initialPNL/Calculator.ScaleFactor);
+			if (actionSetLogger != null) {
+				actionSetLogger.setInitialPnL(initialPNL / Calculator.ScaleFactor);
+			}
 			targetSimilarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()] = initialLateness;
 			targetSimilarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()] = initialCapacity;
 			targetSimilarityState.getBaseMetrics()[MetricType.PNL.ordinal()] = initialPNL;
@@ -339,8 +341,10 @@ public class BagOptimiser {
 
 				// TODO: Sort by changset P&L and group size.
 				final List<JobState> sortedChangeStates = getSortedLeafStates(finalPopulation);
-				actionSetLogger.setSortedChangeStates(getSortedLeafStates(finalPopulation));
-				
+				if (actionSetLogger != null) {
+					actionSetLogger.setSortedChangeStates(getSortedLeafStates(finalPopulation));
+				}
+
 				if (DEBUG) {
 					printPopulationInfo(sortedChangeStates);
 				}
@@ -386,8 +390,10 @@ public class BagOptimiser {
 		final Map<String, Long> currentFitnesses = new HashMap<>();
 		for (final IFitnessComponent fitnessComponent : fitnessComponents) {
 			currentFitnesses.put(fitnessComponent.getName(), fitnessComponent.getFitness());
-			if(fitnessComponent.getName().equals("cargo-scheduler-group-profit")){
-				actionSetLogger.setTarget_pnl(fitnessComponent.getFitness());
+			if (fitnessComponent.getName().equals("cargo-scheduler-group-profit")) {
+				if (actionSetLogger != null) {
+					actionSetLogger.setTarget_pnl(fitnessComponent.getFitness());
+				}
 			}
 		}
 
