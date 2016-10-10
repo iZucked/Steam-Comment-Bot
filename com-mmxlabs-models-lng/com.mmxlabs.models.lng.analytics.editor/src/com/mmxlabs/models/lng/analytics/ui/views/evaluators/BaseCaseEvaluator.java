@@ -119,11 +119,8 @@ public class BaseCaseEvaluator {
 		final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-			List<Port> dd = lngScenarioModel.getReferenceModel().getPortModel().getPorts().stream().filter(p->p.getName().contains("Darwin")).collect(Collectors.toList());
-
 			final EcoreUtil.Copier copier = new Copier();
 			final LNGScenarioModel clone = (LNGScenarioModel) copier.copy(lngScenarioModel);
-			List<Port> ddd = clone.getReferenceModel().getPortModel().getPorts().stream().filter(p->p.getName().contains("Darwin")).collect(Collectors.toList());
 			final OptionAnalysisModel clonedModel = (OptionAnalysisModel) copier.copy(model);
 			final BaseCase clonedBaseCase;
 			if (model.getBaseCase() == baseCase) {
@@ -132,7 +129,6 @@ public class BaseCaseEvaluator {
 				clonedBaseCase = (BaseCase) copier.copy(baseCase);
 			}
 			copier.copyReferences();
-			List<Port> dddd = clone.getReferenceModel().getPortModel().getPorts().stream().filter(p->p.getName().contains("Darwin")).collect(Collectors.toList());
 			final IMapperClass mapper = new Mapper(copier);
 
 			clearData(clone, clonedModel, clonedBaseCase);
