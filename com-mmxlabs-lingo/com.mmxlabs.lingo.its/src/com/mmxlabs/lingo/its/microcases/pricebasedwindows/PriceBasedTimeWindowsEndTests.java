@@ -238,12 +238,12 @@ public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 				Assert.assertEquals(loadFeasibleTimeWindow.getInclusiveStart(), 5);
 				Assert.assertEquals(dischargeFeasibleTimeWindow.getInclusiveStart(), 1216);
 				Assert.assertEquals(8.5, ScheduleTools.getPrice(optimiserScenario, getDefaultEMFDischargeSlot()), 0.0001);
-				try {
-					MicroCaseUtils.storeToFile(optimiserScenario, "alex_test");
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+//				try {
+//					MicroCaseUtils.storeToFile(optimiserScenario, "alex_test");
+//				} catch (Exception e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 			});
 		});
 	}
