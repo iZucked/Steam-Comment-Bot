@@ -121,8 +121,6 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 					optionAnalysisModel.getBuys().addAll(bc.getBaseCase().stream().filter(b -> !optionAnalysisModel.getBuys().contains(b.getBuyOption())).map(b -> b.getBuyOption()).collect(Collectors.toList()));
 					optionAnalysisModel.getSells().addAll(bc.getBaseCase().stream().filter(b -> !optionAnalysisModel.getSells().contains(b.getBuyOption())).map(b -> b.getSellOption()).collect(Collectors.toList()));
 					baseCaseViewer.refresh();
-					baseCaseViewer.notifyAll();
-					baseCaseViewer.notify();
 					baseCaseViewer.expandAll();
 					baseCaseViewer.refresh();
 				}
@@ -204,7 +202,7 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 		SellOption sellOption = row.getSellOption();
 		if (row.getResultDetail() instanceof BreakEvenResult) {
 			BreakEvenResult result = (BreakEvenResult) row.getResultDetail();
-			if (sellOption instanceof BuyOpportunity) {
+			if (sellOption instanceof SellOpportunity) {
 				if (((SellOpportunity) sellOption).getPriceExpression().contains("?")) {
 					SellOpportunity opportunity;
 					if (createCopy) {
