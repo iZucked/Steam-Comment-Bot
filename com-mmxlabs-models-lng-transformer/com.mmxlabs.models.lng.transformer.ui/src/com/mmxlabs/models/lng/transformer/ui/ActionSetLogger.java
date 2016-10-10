@@ -121,13 +121,8 @@ public class ActionSetLogger implements ILoggingDataStore {
 	
 	private String percentageChangeSets(ChangeSet cs, long achievedPnLUplift){
 		
-		long dollars = StochasticActionSetUtils.getChangeSetPNL(cs)/Calculator.ScaleFactor;
-		long actualPercentage = (dollars/achievedPnLUplift)*100;
-		long potentialPercentage = (dollars/-target_pnl)*100;
-		
-		String out = String.format("\tPnL Uplift($):%s\n\tActionSet Percentage:%s\n\tTheoretical Percentage:%s",
-				Long.toString(dollars),Long.toString(Math.round(actualPercentage)),Long.toString(Math.round(potentialPercentage)));
-		
+		long dollars = StochasticActionSetUtils.getChangeSetPNL(cs)/Calculator.ScaleFactor;	
+		String out = String.format("\tPnL Uplift($):%s", Long.toString(dollars));	
 		return out;
 	}
 	
@@ -135,8 +130,7 @@ public class ActionSetLogger implements ILoggingDataStore {
 		List<String> text = new LinkedList<>();
 		JobState best = sortedChangeStates.get(sortedChangeStates.size()-1);
 		text.add("Leaf Count:" + Integer.toString(leafs.size()));
-		
-		
+			
 		text.add("Initial P&L($):" + initialPnL);
 		text.add("Final P&L($):" + -target_pnl);
 		
@@ -146,9 +140,6 @@ public class ActionSetLogger implements ILoggingDataStore {
 		
 		long achievedPnLUplift = best.metricDelta[MetricType.PNL.ordinal()]/Calculator.ScaleFactor;
 		text.add("P&L Uplift Achieved($):" + achievedPnLUplift);
-		
-		long PnLUpliftPercentage = (achievedPnLUplift / PnLUplift)*100;
-		text.add("Potential P&L Uplift(%):" + PnLUpliftPercentage);
 		
 		text.add("Lateness Change:" + best.metricDelta[MetricType.LATENESS.ordinal()]);
 		text.add("Change Set Count:" + best.changeSetsAsList.size());
@@ -161,9 +152,8 @@ public class ActionSetLogger implements ILoggingDataStore {
 		for(int i =0; i < best.changeSetsAsList.size(); i++){
 			text.add(String.format("Change Set: %s - %s changes",i, best.changeSetsAsList.get(i).changesList.size()));
 			text.add(percentageChangeSets(best.changeSetsAsList.get(i),achievedPnLUplift));
-		}
-		
-		
+			text.add(String.format("\tLateness Change: %s",best.changeSetsAsList.get(i).metricDelta[MetricType.LATENESS.ordinal()]));
+		}	
 		return text;
 	}
 

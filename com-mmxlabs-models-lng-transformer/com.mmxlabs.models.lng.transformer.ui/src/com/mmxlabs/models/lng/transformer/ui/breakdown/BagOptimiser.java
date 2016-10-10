@@ -50,6 +50,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCore;
@@ -107,7 +108,7 @@ public class BagOptimiser {
 
 	protected static final Logger LOG = LoggerFactory.getLogger(BagOptimiser.class);
 
-	private static final boolean DEBUG = true;
+	private static final boolean DEBUG = false;
 
 	protected static final boolean BUILD_DEPENDANCY_GRAPH = false;
 
@@ -222,7 +223,7 @@ public class BagOptimiser {
 			final List<Change> changes = new LinkedList<>();
 			final long time2 = System.currentTimeMillis();
 			
-			actionSetLogger.setInitialPnL(initialPNL/1000);
+			actionSetLogger.setInitialPnL(initialPNL/Calculator.ScaleFactor);
 			targetSimilarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()] = initialLateness;
 			targetSimilarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()] = initialCapacity;
 			targetSimilarityState.getBaseMetrics()[MetricType.PNL.ordinal()] = initialPNL;
