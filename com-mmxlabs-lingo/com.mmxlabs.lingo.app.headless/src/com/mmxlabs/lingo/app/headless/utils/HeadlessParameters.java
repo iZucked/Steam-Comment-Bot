@@ -56,7 +56,7 @@ public class HeadlessParameters {
 		return parseResult;
 	}
 
-	public <T> void setParameter(final String key, final T value, final Class<T> clazz) {
+	public <T> void setParameter(final String key, final @Nullable T value, final Class<T> clazz) {
 		if (clazz.isAssignableFrom(Boolean.class)) {
 			parameters.put(key, new BooleanParameter(key, (Boolean) value));
 		} else if (clazz.isAssignableFrom(Integer.class)) {
