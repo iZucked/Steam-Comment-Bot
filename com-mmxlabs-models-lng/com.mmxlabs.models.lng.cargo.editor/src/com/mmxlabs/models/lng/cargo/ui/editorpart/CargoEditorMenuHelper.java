@@ -430,7 +430,9 @@ public class CargoEditorMenuHelper {
 			}
 
 			if (nominalMenuUsed) {
-				reassignMenuManager.add(nominalMenu);
+				if (LicenseFeatures.isPermitted("features:nominals")) {
+					reassignMenuManager.add(nominalMenu);
+				}
 			}
 			if (marketMenuUsed) {
 				reassignMenuManager.add(marketMenu);
