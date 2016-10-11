@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.common;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * A class for holding a triple of heterogenous items
  * 
@@ -35,8 +37,10 @@ public class Triple<A, B, C> {
 		this.third = third;
 	}
 
-	public Triple(final Triple<A, B, C> copy) {
-		setAll(copy.getFirst(), copy.getSecond(), copy.getThird());
+	public Triple(final @NonNull Triple<A, B, C> copy) {
+		this.first = copy.getFirst();
+		this.second = copy.getSecond();
+		this.third = copy.getThird();
 	}
 
 	public final A getFirst() {
