@@ -14,7 +14,9 @@ public class FeatureEnablementPropertyTester extends PropertyTester {
 
 		boolean permitted = args.length > 0;
 		for (final Object arg : args) {
-			permitted &= LicenseFeatures.isPermitted(arg.toString());
+			if (arg != null) {
+				permitted &= LicenseFeatures.isPermitted(arg.toString());
+			}
 		}
 		return permitted;
 	}
