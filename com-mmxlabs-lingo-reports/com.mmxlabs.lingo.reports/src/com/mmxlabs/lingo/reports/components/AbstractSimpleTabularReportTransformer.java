@@ -66,5 +66,5 @@ public abstract class AbstractSimpleTabularReportTransformer<T> {
 
 	/**
 	 */
-	abstract public List<T> createData(final Schedule schedule, LNGScenarioModel rootObject);
+	abstract public @NonNull List<@NonNull T> createData(@NonNull Schedule schedule, @NonNull LNGScenarioModel rootObject);
 }

@@ -242,6 +242,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				selected = selected.stream().filter(s -> s instanceof Slot || s instanceof SlotAllocation || s instanceof Cargo || s instanceof CargoAllocation).collect(Collectors.toList());
 
 				for (final CommodityIndex index : indices) {
+					assert index != null;
 					final Map<YearMonth, Double> exposures = Exposures.getExposuresByMonth(schedule, index, ScenarioModelUtil.getPricingModel(rootObject), mode, selected);
 					if (exposures.size() != 0.0) {
 						final String currencyUnit = index.getCurrencyUnit();

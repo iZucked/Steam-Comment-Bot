@@ -79,7 +79,7 @@ public class StartEventProcessor implements IDiffProcessor {
 	}
 
 	@Override
-	public void runDiffProcess(@NonNull final Table table, @NonNull final List<EObject> referenceElements, @NonNull final List<EObject> uniqueElements,
+	public void runDiffProcess(@NonNull final Table table, @NonNull final List<@NonNull EObject> referenceElements, @NonNull final List<@NonNull EObject> uniqueElements,
 			@NonNull final Map<EObject, Set<EObject>> equivalancesMap, @NonNull final Map<EObject, Row> elementToRowMap) {
 
 		for (final EObject referenceElement : referenceElements) {

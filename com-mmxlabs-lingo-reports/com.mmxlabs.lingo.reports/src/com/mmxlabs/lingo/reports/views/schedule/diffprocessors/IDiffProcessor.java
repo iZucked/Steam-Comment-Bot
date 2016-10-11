@@ -39,7 +39,7 @@ public interface IDiffProcessor {
 	 * @param equivalancesMap
 	 * @param elementToRowMap
 	 */
-	void runDiffProcess(@NonNull Table table, @NonNull List<EObject> referenceElements, @NonNull List<EObject> uniqueElements, @NonNull final Map<EObject, Set<EObject>> equivalancesMap,
+	void runDiffProcess(@NonNull Table table, @NonNull List<@NonNull EObject> referenceElements, @NonNull List<@NonNull EObject> uniqueElements, @NonNull final Map<EObject, Set<EObject>> equivalancesMap,
 			@NonNull Map<EObject, Row> elementToRowMap);
 
 }

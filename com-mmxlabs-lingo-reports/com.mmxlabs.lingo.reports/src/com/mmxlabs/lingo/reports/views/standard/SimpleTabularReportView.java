@@ -80,57 +80,45 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 	private Action copyTableAction;
 
-	private String helpContextId;
+	private final String helpContextId;
 
 	@NonNull
 	protected final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 
 		@Override
-		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+		public void selectionChanged(final @NonNull ISelectedDataProvider selectedDataProvider, final @Nullable ScenarioInstance pinned, final Collection<@NonNull ScenarioInstance> others,
+				final boolean block) {
 
 			final Runnable r = new Runnable() {
 				@Override
 				public void run() {
-					AbstractSimpleTabularReportTransformer<T> transformer = createTransformer();
+					final AbstractSimpleTabularReportTransformer<T> transformer = createTransformer();
 
 					columnManagers.clear();
 
-					// pinnedData.clear();
-					// rowData = (T[]) new Object[0];
-					// if (newInput instanceof IScenarioViewerSynchronizerOutput) {
-					// final IScenarioViewerSynchronizerOutput synchOutput = (IScenarioViewerSynchronizerOutput) newInput;
-					// for (final Object o : synchOutput.getCollectedElements()) {
-					// if (o instanceof Schedule) {
-					// rowData = createData((Schedule) o, synchOutput.getLNGScenarioModel(o), synchOutput.getLNGPortfolioModel(o)).toArray(rowData);
-					// return;
-					// }
-					// }
-					// }
-					//
 					final List<Object> rowElements = new LinkedList<>();
 					int numberOfSchedules = 0;
 					List<T> pinnedData = null;
 					if (pinned != null) {
-						LNGScenarioModel pinnedScenarioModel = selectedDataProvider.getScenarioModel(pinned);
+						final LNGScenarioModel pinnedScenarioModel = selectedDataProvider.getScenarioModel(pinned);
 						if (pinnedScenarioModel != null) {
 							final Schedule schedule = ScenarioModelUtil.findSchedule(pinnedScenarioModel);
-							if (schedule != null) {
-
-								// pinnedData = createData((Schedule) o, synchOutput.getLNGScenarioModel(o), synchOutput.getLNGPortfolioModel(o)).toArray(rowData);
-
-								pinnedData = transformer.createData(schedule, selectedDataProvider.getScenarioModel(schedule));
+							@Nullable
+							final LNGScenarioModel scenarioModel = selectedDataProvider.getScenarioModel(schedule);
+							if (schedule != null && scenarioModel != null) {
+								pinnedData = transformer.createData(schedule, scenarioModel);
 								rowElements.addAll(pinnedData);
 								numberOfSchedules++;
 							}
 						}
 					}
 					for (final ScenarioInstance other : others) {
-						LNGScenarioModel otherScenarioModel = selectedDataProvider.getScenarioModel(other);
+						final LNGScenarioModel otherScenarioModel = selectedDataProvider.getScenarioModel(other);
 						if (otherScenarioModel != null) {
 							final Schedule schedule = ScenarioModelUtil.findSchedule(otherScenarioModel);
 							if (schedule != null) {
 								@Nullable
-								LNGScenarioModel scenarioModel = selectedDataProvider.getScenarioModel(schedule);
+								final LNGScenarioModel scenarioModel = selectedDataProvider.getScenarioModel(schedule);
 								if (scenarioModel != null) {
 									rowElements.addAll(transformer.createData(schedule, scenarioModel));
 									numberOfSchedules++;
@@ -167,7 +155,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 		@Override
 		public void dispose() {
-			for (ColumnManager<T> manager : columnManagers) {
+			for (final ColumnManager<T> manager : columnManagers) {
 				manager.dispose();
 			}
 
@@ -207,7 +195,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public Color getForeground(Object obj, int index) {
+		public Color getForeground(final Object obj, final int index) {
 			// TODO Auto-generated method stub
 			return columnManagers.get(index).getForeground((T) obj);
 		}
@@ -218,7 +206,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	 * 
 	 * @param helpContextId
 	 */
-	public SimpleTabularReportView(String helpContextId) {
+	public SimpleTabularReportView(final String helpContextId) {
 		this.helpContextId = helpContextId;
 	}
 
@@ -292,8 +280,8 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 			@Override
 			public int compare(final Viewer viewer, final Object e1, final Object e2) {
 				final int d = inverseSort ? -1 : 1;
-				for (ColumnManager<T> cm : sortColumns) {
-					int sort = cm.compare((T) e1, (T) e2);
+				for (final ColumnManager<T> cm : sortColumns) {
+					final int sort = cm.compare((T) e1, (T) e2);
 					if (sort != 0) {
 						return d * sort;
 					}
@@ -409,17 +397,17 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 		super.dispose();
 	}
 
-	private void setShowColumns(final boolean showDeltaColumn, int numberOfSchedules) {
+	private void setShowColumns(final boolean showDeltaColumn, final int numberOfSchedules) {
 
 	}
 
 	private void addColumns() {
-		for (ColumnManager<T> cv : columnManagers) {
-			String name = cv.getName();
-			GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+		for (final ColumnManager<T> cv : columnManagers) {
+			final String name = cv.getName();
+			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			viewerColumns.add(gvc);
-			GridColumn gc = gvc.getColumn();
+			final GridColumn gc = gvc.getColumn();
 			gc.setText(name);
 			gc.pack();
 			addSortSelectionListener(gc, cv);
@@ -431,7 +419,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	}
 
 	private void clearColumns() {
-		for (GridViewerColumn gvc : viewerColumns) {
+		for (final GridViewerColumn gvc : viewerColumns) {
 			gvc.getColumn().dispose();
 		}
 		viewerColumns.clear();

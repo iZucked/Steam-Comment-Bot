@@ -5,7 +5,6 @@
 package com.mmxlabs.lingo.reports.views.vertical;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,7 +26,6 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.vertical.providers.EventProvider;
-import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
@@ -80,16 +78,18 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 
 		@Override
-		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+		public void selectionChanged(final @NonNull ISelectedDataProvider selectedDataProvider, final @Nullable ScenarioInstance pinned, final @NonNull Collection<@NonNull ScenarioInstance> others,
+				final boolean block) {
 
 			final Runnable r = new Runnable() {
 				@Override
 				public void run() {
-					final List<ScenarioInstance> scenarios = new LinkedList<>(others);
+					final List<@NonNull ScenarioInstance> scenarios = new LinkedList<>(others);
 					if (pinned != null) {
 						scenarios.add(0, pinned);
 					}
 					if (!scenarios.isEmpty()) {
+						@SuppressWarnings("null")
 						final ScenarioInstance scenario = scenarios.get(0);
 						ViewerHelper.setInput(gridViewer, true, selectedDataProvider.getScenarioModel(scenario));
 						setCurrentScenario(scenario);
@@ -128,7 +128,6 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 		gridViewer = new GridTableViewer(container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		GridViewerHelper.configureLookAndFeel(gridViewer);
-
 
 		gridViewer.setContentProvider(createContentProvider());
 

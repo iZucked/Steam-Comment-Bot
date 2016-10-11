@@ -29,7 +29,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 public abstract class ColumnCollator {
 	private final ArrayList<HashMapEventProvider> columns = new ArrayList<>();
 	private final ScheduleSequenceData data;
-	private final AbstractVerticalReportVisualiser verticalReportVisualiser;
+	private final @NonNull AbstractVerticalReportVisualiser verticalReportVisualiser;
 
 	/**
 	 * @param data

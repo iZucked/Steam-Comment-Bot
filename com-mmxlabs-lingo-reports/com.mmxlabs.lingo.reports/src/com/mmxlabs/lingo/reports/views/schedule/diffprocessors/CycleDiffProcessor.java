@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
@@ -33,10 +34,10 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 
 public class CycleDiffProcessor implements IDiffProcessor {
 
-	private final List<ICustomRelatedSlotHandler> customRelatedSlotHandlers;
-	private final RelatedSlotAllocations relatedSlotAllocations = new RelatedSlotAllocations();
+	private final List<@NonNull ICustomRelatedSlotHandler> customRelatedSlotHandlers;
+	private final @NonNull RelatedSlotAllocations relatedSlotAllocations = new RelatedSlotAllocations();
 
-	public CycleDiffProcessor(final List<ICustomRelatedSlotHandler> customRelatedSlotHandlers) {
+	public CycleDiffProcessor(final List<@NonNull ICustomRelatedSlotHandler> customRelatedSlotHandlers) {
 		this.customRelatedSlotHandlers = customRelatedSlotHandlers;
 	}
 
@@ -50,12 +51,13 @@ public class CycleDiffProcessor implements IDiffProcessor {
 				if (event instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) event;
 					final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
+					if (cargoAllocation != null) {
+						// TODO: Only required for pin/diff mode really.
+						relatedSlotAllocations.updateRelatedSetsFor(cargoAllocation);
 
-					// TODO: Only required for pin/diff mode really.
-					relatedSlotAllocations.updateRelatedSetsFor(cargoAllocation);
-
-					for (final ICustomRelatedSlotHandler h : this.customRelatedSlotHandlers) {
-						h.addRelatedSlots(relatedSlotAllocations, schedule, cargoAllocation);
+						for (final ICustomRelatedSlotHandler h : this.customRelatedSlotHandlers) {
+							h.addRelatedSlots(relatedSlotAllocations, schedule, cargoAllocation);
+						}
 					}
 				}
 
@@ -63,6 +65,7 @@ public class CycleDiffProcessor implements IDiffProcessor {
 		}
 		//
 		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
+			assert openSlotAllocation != null;
 			// Always consider open positions for permutations, even if filtered out
 			for (final ICustomRelatedSlotHandler h : customRelatedSlotHandlers) {
 				h.addRelatedSlots(relatedSlotAllocations, schedule, openSlotAllocation);

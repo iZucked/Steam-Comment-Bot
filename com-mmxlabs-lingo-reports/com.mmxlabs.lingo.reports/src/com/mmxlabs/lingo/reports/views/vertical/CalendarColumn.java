@@ -6,6 +6,8 @@ package com.mmxlabs.lingo.reports.views.vertical;
 
 import java.time.format.DateTimeFormatter;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
@@ -22,13 +24,14 @@ import com.mmxlabs.lingo.reports.views.vertical.providers.EventProvider;
  *
  */
 public final class CalendarColumn {
-	private final EventProvider provider;
-	private final EventLabelProvider labeller;
-	private final String title;
-	private final GridColumnGroup columnGroup;
-	private final DateTimeFormatter df;
+	private final @NonNull EventProvider provider;
+	private final @NonNull EventLabelProvider labeller;
+	private final @Nullable String title;
+	private final @Nullable GridColumnGroup columnGroup;
+	private final @NonNull DateTimeFormatter df;
 
-	public CalendarColumn(final DateTimeFormatter df, final EventProvider provider, final EventLabelProvider labeller, final String title, final GridColumnGroup columnGroup) {
+	public CalendarColumn(final @NonNull DateTimeFormatter df, final @NonNull EventProvider provider, final @NonNull EventLabelProvider labeller, final @Nullable String title,
+			final @Nullable GridColumnGroup columnGroup) {
 		this.df = df;
 		this.provider = provider;
 		this.labeller = labeller;
@@ -36,20 +39,21 @@ public final class CalendarColumn {
 		this.columnGroup = columnGroup;
 	}
 
-	public ColumnLabelProvider createColumnLabelProvider(final ReportNebulaGridManager manager) {
+	public ColumnLabelProvider createColumnLabelProvider(final @NonNull ReportNebulaGridManager manager) {
 		return new LocalDateColumnLabelProvider(df, provider, labeller, manager);
 	}
 
-	public String getTitle() {
+	public @Nullable String getTitle() {
 		return title;
 	}
 
 	@Override
 	public String toString() {
-		return (title == null) ? "(null)" : title;
+		final String pTitle = title;
+		return (pTitle == null) ? "(null)" : pTitle;
 	}
 
-	public GridColumnGroup getColumnGroup() {
+	public @Nullable GridColumnGroup getColumnGroup() {
 		return columnGroup;
 	}
 
