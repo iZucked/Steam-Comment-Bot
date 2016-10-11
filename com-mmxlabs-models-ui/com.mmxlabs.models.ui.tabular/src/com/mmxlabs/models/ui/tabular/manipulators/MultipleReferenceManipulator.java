@@ -38,7 +38,7 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 	/** @see PortMultiReferenceInlineEditor */
 	private final static int MAX_DISPLAY_LENGTH = 32;
 	private static final int MIN_DISPLAY_NAMES = 2;
-	
+
 	private final com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider valueProvider;
 	private final EAttribute nameAttribute;
 
@@ -47,16 +47,17 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 		this.valueProvider = valueProvider;
 		this.nameAttribute = nameAttribute;
 	}
-	
+
 	public MultipleReferenceManipulator(final EStructuralFeature field, final IReferenceValueProviderProvider providerProvider, final EditingDomain editingDomain, final EAttribute nameAttribute) {
 		this(field, editingDomain, providerProvider.getReferenceValueProvider(field.getEContainingClass(), (EReference) field), nameAttribute);
 	}
 
 	@Override
 	protected String renderValue(final Object value) {
-		if (! (value instanceof List)) {
+		if (!(value instanceof List)) {
 			return "";
 		}
+		@SuppressWarnings("unchecked")
 		final List<? extends EObject> selectedValues = (List<? extends EObject>) value;
 		final StringBuilder sb = new StringBuilder();
 		int numNamesAdded = 0;
@@ -65,11 +66,11 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 			if (sb.length() > 0) {
 				sb.append(", ");
 			}
-			if (sb.length() + name.length() <= MAX_DISPLAY_LENGTH || numNamesAdded <= MIN_DISPLAY_NAMES-1){
+			if (sb.length() + name.length() <= MAX_DISPLAY_LENGTH || numNamesAdded <= MIN_DISPLAY_NAMES - 1) {
 				sb.append(name);
 				++numNamesAdded;
 			} else {
-				sb.append("...");				
+				sb.append("...");
 				break;
 			}
 		}
@@ -82,7 +83,7 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 		if (Equality.isEqual(currentValue, value)) {
 			return;
 		}
-		editingDomain.getCommandStack().execute(CommandUtil.createMultipleAttributeSetter(editingDomain, (EObject) object, field, (Collection) value));
+		editingDomain.getCommandStack().execute(CommandUtil.createMultipleAttributeSetter(editingDomain, (EObject) object, field, (Collection<?>) value));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -96,13 +97,13 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 
 		final ListSelectionDialog listSelectionDialog = new ListSelectionDialog(cellEditorWindow.getShell(), options.toArray(), new ArrayContentProvider(),
 
-		new LabelProvider() {
+				new LabelProvider() {
 
-			@Override
-			public String getText(final Object element) {
-				return ((Pair<String, ?>) element).getFirst();
-			}
-		});
+					@Override
+					public String getText(final Object element) {
+						return ((Pair<String, ?>) element).getFirst();
+					}
+				});
 		final ListSelectionDialog dlg = listSelectionDialog;// , "Select values:");
 		dlg.setTitle("Value Selection");
 
@@ -147,7 +148,8 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 	@Override
 	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 		if (object != null) {
-			final EList<EObject> values = (EList) super.getValue(object);
+			@SuppressWarnings("unchecked")
+			final EList<EObject> values = (EList<EObject>) super.getValue(object);
 			final LinkedList<Pair<Notifier, List<Object>>> notifiers = new LinkedList<Pair<Notifier, List<Object>>>();
 			for (final EObject ref : values) {
 				for (final Pair<Notifier, List<Object>> p : valueProvider.getNotifiers((EObject) object, (EReference) field, ref)) {
