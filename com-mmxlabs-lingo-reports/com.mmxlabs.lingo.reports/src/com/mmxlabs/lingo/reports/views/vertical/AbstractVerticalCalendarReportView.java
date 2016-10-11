@@ -30,9 +30,6 @@ import com.mmxlabs.lingo.reports.views.vertical.providers.EventProvider;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
-import com.mmxlabs.models.ui.tabular.renderers.EmptyColumnHeaderRenderer;
-import com.mmxlabs.models.ui.tabular.renderers.RowHeaderRenderer;
-import com.mmxlabs.models.ui.tabular.renderers.TopLeftRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
@@ -139,9 +136,6 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		gridViewer.getGrid().setLinesVisible(true);
 
 		gridViewer.getGrid().setRowHeaderVisible(true);
-		gridViewer.getGrid().setRowHeaderRenderer(new RowHeaderRenderer());
-		gridViewer.getGrid().setTopLeftRenderer(new TopLeftRenderer());
-		gridViewer.getGrid().setEmptyColumnHeaderRenderer(new EmptyColumnHeaderRenderer());
 
 		makeActions();
 
