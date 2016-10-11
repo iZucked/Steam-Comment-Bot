@@ -21,15 +21,14 @@ import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.osgi.util.tracker.ServiceTracker;
 
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
-import com.mmxlabs.scenario.service.ui.internal.Activator;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceNavigator;
 
 public class NewFolderCommandHandler extends AbstractHandler {
@@ -66,22 +65,16 @@ public class NewFolderCommandHandler extends AbstractHandler {
 					}
 
 					// create a new folder in the top scenario service?
-					final ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> tracker = new ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry>(
-							Activator.getDefault().getBundle().getBundleContext(), ScenarioServiceRegistry.class, null);
-					tracker.open();
+					ServiceHelper.withOptionalService(ScenarioServiceRegistry.class, serviceRegistry -> {
+						if (serviceRegistry != null) {
+							final Collection<IScenarioService> scenarioServices = serviceRegistry.getScenarioServices();
+							if (scenarioServices.size() == 1) {
 
-					final ScenarioServiceRegistry serviceRegistry = tracker.getService();
-					if (serviceRegistry != null) {
-
-						final Collection<IScenarioService> scenarioServices = serviceRegistry.getScenarioServices();
-						if (scenarioServices.size() == 1) {
-
-							final ScenarioService top = scenarioServices.iterator().next().getServiceModel();
-							createFolderInContainer(shell, top);
+								final ScenarioService top = scenarioServices.iterator().next().getServiceModel();
+								createFolderInContainer(shell, top);
+							}
 						}
-					}
-
-					tracker.close();
+					});
 				} else if (selection instanceof IStructuredSelection) {
 					final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 					final Object o = strucSelection.getFirstElement();
@@ -99,7 +92,7 @@ public class NewFolderCommandHandler extends AbstractHandler {
 		final Set<String> existingNames = ScenarioServiceModelUtils.getExistingNames(o);
 
 		final String prefix = "New folder";
-		String initialValue = ScenarioServiceModelUtils.getNextName(prefix, existingNames);
+		final String initialValue = ScenarioServiceModelUtils.getNextName(prefix, existingNames);
 
 		final InputDialog inputDialog = new InputDialog(shell, "Folder Name", "Enter a name for the new folder", initialValue, new IInputValidator() {
 
