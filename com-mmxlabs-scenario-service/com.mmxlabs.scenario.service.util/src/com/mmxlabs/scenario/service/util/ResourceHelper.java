@@ -29,7 +29,7 @@ import com.mmxlabs.scenario.service.util.encryption.impl.PassthroughCipherProvid
 
 public final class ResourceHelper {
 
-	public static ResourceSet createResourceSet(IScenarioCipherProvider scenarioCipherProvider) {
+	public static @NonNull ResourceSet createResourceSet(IScenarioCipherProvider scenarioCipherProvider) {
 		final ResourceSet resourceSet = new ResourceSetImpl();
 
 		// Fall back
