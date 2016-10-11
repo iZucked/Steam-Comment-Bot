@@ -6,10 +6,10 @@
 	<parent>
 		<groupId>com.mmxlabs.optimiser</groupId>
 		<artifactId>optimiser-parent</artifactId>
-		<version>3.11.0-SNAPSHOT</version>
+		<version>4.0.0-SNAPSHOT</version>
 	</parent>
 
-	<version>3.11.0-SNAPSHOT</version>
+	<version>4.0.0-SNAPSHOT</version>
 	<artifactId>com.mmxlabs.optimiser.target-definition</artifactId>
 	<packaging>eclipse-target-definition</packaging>
 </project>
