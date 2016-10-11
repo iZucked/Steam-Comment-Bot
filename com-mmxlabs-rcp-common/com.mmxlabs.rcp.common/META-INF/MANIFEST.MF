@@ -36,6 +36,7 @@ Export-Package: com.mmxlabs.rcp.common,
  com.mmxlabs.rcp.common.editors,
  com.mmxlabs.rcp.common.handlers,
  com.mmxlabs.rcp.common.loginject,
+ com.mmxlabs.rcp.common.menus,
  com.mmxlabs.rcp.common.viewfactory
 Import-Package: javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"

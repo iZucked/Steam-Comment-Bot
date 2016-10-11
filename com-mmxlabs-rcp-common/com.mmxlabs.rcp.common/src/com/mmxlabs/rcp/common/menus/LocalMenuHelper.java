@@ -1,8 +1,10 @@
-package com.mmxlabs.rcp.common;
+package com.mmxlabs.rcp.common.menus;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuListener2;
@@ -15,12 +17,14 @@ public class LocalMenuHelper {
 
 	private final MenuManager mgr;
 
-	private final List<IAction> menuActions = new LinkedList<>();
+	private final List<IMenuType> menuActions = new LinkedList<>();
 
 	private final Composite control;
 	private Menu menu;
 
 	private IMenuListener listener;
+
+	private String title;
 
 	public LocalMenuHelper(final Composite control) {
 		this.control = control;
@@ -35,8 +39,18 @@ public class LocalMenuHelper {
 				}
 				mgr.removeAll();
 
-				for (final IAction action : menuActions) {
-					mgr.add(action);
+				if (title != null) {
+					mgr.add(new GroupMarker(title));
+				}
+
+				for (final IMenuType menu : menuActions) {
+					if (menu instanceof ActionMenuType) {
+						final ActionMenuType actionMenuType = (ActionMenuType) menu;
+						mgr.add(actionMenuType.getAction());
+					} else if (menu instanceof SubMenuType) {
+						SubMenuType subMenu = (SubMenuType) menu;
+						mgr.add(subMenu.getSubMenu().createSubMenu());
+					}
 				}
 
 				menu.setVisible(true);
@@ -57,8 +71,12 @@ public class LocalMenuHelper {
 		this.menuActions.clear();
 	}
 
-	public void addAction(final IAction action) {
-		this.menuActions.add(action);
+	public void addAction(final @NonNull IAction action) {
+		this.menuActions.add(new ActionMenuType(action));
+	}
+
+	public void addSubMenu(final @NonNull SubLocalMenuHelper subMenuType) {
+		this.menuActions.add(new SubMenuType(subMenuType));
 	}
 
 	public void open() {
@@ -72,4 +90,7 @@ public class LocalMenuHelper {
 		mgr.dispose();
 	}
 
+	public void setTitle(String title) {
+		this.title = title;
+	}
 }
