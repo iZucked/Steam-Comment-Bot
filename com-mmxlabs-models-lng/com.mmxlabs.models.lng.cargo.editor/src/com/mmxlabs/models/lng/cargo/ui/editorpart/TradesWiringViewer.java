@@ -102,6 +102,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -170,6 +171,7 @@ import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
+import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
@@ -218,6 +220,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	private Action resetSortOrder;
 
 	private PromptToolbarEditor promptToolbarEditor;
+
+	private GridViewerColumn assignmentColumn;
 
 	public TradesWiringViewer(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation scenarioEditingLocation, final IActionBars actionBars) {
 		super(page, part, scenarioEditingLocation, actionBars);
@@ -959,7 +963,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		{
 			final AssignmentManipulator assignmentManipulator = new AssignmentManipulator(scenarioEditingLocation);
 			final RowDataEMFPath assignmentPath = new RowDataEMFPath(true, Type.SLOT_OR_CARGO);
-			final GridViewerColumn assignmentColumn = addTradesColumn(loadColumns, "Vessel", new ReadOnlyManipulatorWrapper<>(assignmentManipulator), assignmentPath);
+			assignmentColumn = addTradesColumn(loadColumns, "Vessel", new ReadOnlyManipulatorWrapper<>(assignmentManipulator), assignmentPath);
 			assignmentColumn.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), assignmentManipulator, assignmentPath) {
 				@Override
 				public Image getImage(final Object element) {
@@ -1194,6 +1198,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	@Override
 	protected void enableOpenListener() {
 		scenarioViewer.addOpenListener(new IOpenListener() {
+			LocalMenuHelper helper = new LocalMenuHelper(getScenarioViewer().getGrid());
+
+			AssignToMenuHelper assignToHelper = new AssignToMenuHelper(scenarioEditingLocation.getShell(), scenarioEditingLocation, getScenarioModel());
 
 			@Override
 			public void open(final OpenEvent event) {
@@ -1214,8 +1221,30 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 									final Grid grid = getScenarioViewer().getGrid();
 
 									final Point mousePoint = grid.toControl(cursorLocation);
-									grid.getColumn(mousePoint);
+									if (assignmentColumn.getColumn() == grid.getColumn(mousePoint)) {
 
+										final Iterator<?> itr = structuredSelection.iterator();
+										final Object obj = itr.next();
+										EObject target = null;
+										if (obj instanceof RowData) {
+											final RowData rd = (RowData) obj;
+											if (rd.cargo != null && rd.cargo.getCargoType() == CargoType.FLEET) {
+												helper.clearActions();
+												assignToHelper.createAssignmentMenus(helper, rd.cargo);
+												helper.open();
+											} else if (rd.loadSlot != null && rd.loadSlot.isDESPurchase()) {
+												helper.clearActions();
+												assignToHelper.createAssignmentMenus(helper, rd.loadSlot);
+												helper.open();
+											} else if (rd.dischargeSlot != null && rd.dischargeSlot.isFOBSale()) {
+												helper.clearActions();
+												assignToHelper.createAssignmentMenus(helper, rd.dischargeSlot);
+												helper.open();
+											}
+										}
+
+										return;
+									}
 								}
 							}
 						}
@@ -2179,4 +2208,26 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	protected Action createDuplicateAction() {
 		return new CreateStripMenuAction("Create Strip");
 	}
+
+	/**
+	 * A combined {@link MouseListener} and {@link MouseMoveListener} to scroll the table during wiring operations.
+	 * 
+	 */
+	private class AssignmentMenuListener implements MouseListener {
+
+		@Override
+		public void mouseDoubleClick(final MouseEvent e) {
+
+		}
+
+		@Override
+		public void mouseDown(final MouseEvent e) {
+
+		}
+
+		@Override
+		public void mouseUp(final MouseEvent e) {
+		}
+	}
+
 }
