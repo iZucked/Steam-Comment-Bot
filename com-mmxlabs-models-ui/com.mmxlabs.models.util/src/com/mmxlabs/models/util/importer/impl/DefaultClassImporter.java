@@ -173,6 +173,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 		final EClass rowClass = getTrueOutputClass(eClass, row.get(KIND_KEY));
 		try {
 			final EObject instance = rowClass.getEPackage().getEFactoryInstance().create(rowClass);
+			assert instance != null;
 			final ImportResults results = new ImportResults(instance);
 			importAttributes(row, context, rowClass, instance);
 			if (row instanceof IFieldMap) {
@@ -193,13 +194,15 @@ public class DefaultClassImporter extends AbstractClassImporter {
 	 * @param reference
 	 * @return
 	 */
-	protected EClass getEReferenceLinkType(final EReference reference) {
-		return reference.getEReferenceType();
+	protected @NonNull EClass getEReferenceLinkType(final @NonNull EReference reference) {
+		final EClass eReferenceType = reference.getEReferenceType();
+		assert eReferenceType != null;
+		return eReferenceType;
 	}
 
 	/**
 	 */
-	protected void importReferences(final IFieldMap row, final IMMXImportContext context, final EClass rowClass, final EObject instance) {
+	protected void importReferences(final @NonNull IFieldMap row, final @NonNull IMMXImportContext context, final @NonNull EClass rowClass, final @NonNull EObject instance) {
 		for (final EReference reference : rowClass.getEAllReferences()) {
 			if (!shouldImportReference(reference)) {
 				continue;
@@ -387,8 +390,9 @@ public class DefaultClassImporter extends AbstractClassImporter {
 		target.eSet(reference, content);
 	}
 
-	protected void importAttributes(final Map<String, String> row, final IMMXImportContext context, final EClass rowClass, final EObject instance) {
+	protected void importAttributes(final @NonNull Map<String, String> row, final @NonNull IMMXImportContext context, final @NonNull EClass rowClass, final @NonNull EObject instance) {
 		for (final EAttribute attribute : rowClass.getEAllAttributes()) {
+			assert attribute != null;
 			if (!checkLicensedAttribute(attribute)) {
 				continue;
 			}
@@ -446,12 +450,14 @@ public class DefaultClassImporter extends AbstractClassImporter {
 		final Map<String, String> result = new LinkedHashMap<String, String>();
 
 		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
+			assert attribute != null;
 			if (shouldExportFeature(attribute)) {
 				exportAttribute(object, attribute, result, context);
 			}
 		}
 
 		for (final EReference reference : object.eClass().getEAllReferences()) {
+			assert reference != null;
 			if (shouldExportFeature(reference)) {
 				exportReference(object, reference, result, context);
 			}
@@ -460,7 +466,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 		return result;
 	}
 
-	protected void exportAttribute(final EObject object, final EAttribute attribute, final Map<String, String> result, @NonNull final IMMXExportContext context) {
+	protected void exportAttribute(final @NonNull EObject object, final @NonNull EAttribute attribute, final @NonNull Map<String, String> result, @NonNull final IMMXExportContext context) {
 		if (!checkLicensedAttribute(attribute)) {
 			return;
 		}
@@ -486,7 +492,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 		}
 	}
 
-	protected void exportReference(final EObject object, final EReference reference, final Map<String, String> result, final IMMXExportContext context) {
+	protected void exportReference(final @NonNull EObject object, final @NonNull EReference reference, final @NonNull Map<String, String> result, final @NonNull IMMXExportContext context) {
 		if (shouldFlattenReference(reference)) {
 			final EObject value = (EObject) object.eGet(reference);
 			if (value != null) {
@@ -533,7 +539,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 								sb.append(",");
 							}
 							comma = true;
-							String rawName = EncoderUtil.encode(no.getName());
+							final String rawName = EncoderUtil.encode(no.getName());
 							sb.append(rawName);
 						}
 					}
@@ -572,7 +578,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 	public static boolean checkLicensedAttribute(final @NonNull EAttribute attribute) {
 		final EAnnotation annotation = attribute.getEAnnotation("http://www.mmxlabs.com/models/ui/featureEnablement");
 		if (annotation != null) {
-			String requiredFeature = annotation.getDetails().get("feature");
+			final String requiredFeature = annotation.getDetails().get("feature");
 			if (requiredFeature != null) {
 				return LicenseFeatures.isPermitted(String.format("features:%s", requiredFeature));
 			}
