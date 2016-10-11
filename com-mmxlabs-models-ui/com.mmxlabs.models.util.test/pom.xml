@@ -6,11 +6,11 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.ui.parent</artifactId>
 		<groupId>com.mmxlabs.models.ui</groupId>
-		<version>3.13.5-SNAPSHOT</version>
+		<version>4.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.models.util.test</artifactId>
-	<version>3.13.5-SNAPSHOT</version>
+	<version>4.0.0-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
 	
 	<build>
