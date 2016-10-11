@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.models.migration.feature"
       label="Model Migration Feature"
-      version="3.13.5.qualifier"
+      version="4.0.0.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description url="http://www.example.com/description">
