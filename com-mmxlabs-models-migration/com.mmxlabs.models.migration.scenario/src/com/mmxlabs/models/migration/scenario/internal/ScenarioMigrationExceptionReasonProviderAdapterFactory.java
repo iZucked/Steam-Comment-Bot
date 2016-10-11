@@ -12,6 +12,7 @@ import com.mmxlabs.rcp.common.editors.IReasonProvider;
 
 public class ScenarioMigrationExceptionReasonProviderAdapterFactory implements IAdapterFactory {
 
+	@SuppressWarnings({ "null", "unchecked" })
 	@Override
 	public <T> T getAdapter(final Object adaptableObject, final Class<T> adapterType) {
 
@@ -69,6 +70,7 @@ public class ScenarioMigrationExceptionReasonProviderAdapterFactory implements I
 		return (T) null;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Class[] getAdapterList() {
 		return new Class[] { IReasonProvider.class };

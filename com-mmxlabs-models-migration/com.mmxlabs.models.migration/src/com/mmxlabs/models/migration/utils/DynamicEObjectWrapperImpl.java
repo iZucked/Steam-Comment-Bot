@@ -55,6 +55,7 @@ public class DynamicEObjectWrapperImpl extends DynamicEObjectImpl implements EOb
 		eSet(feature, value);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getAttrib(final String name) {
 		final EAttribute feature = (EAttribute) eClass().getEStructuralFeature(name);

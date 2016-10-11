@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.common.io.FileDeleter;
@@ -61,11 +62,12 @@ public class ScenarioInstanceMigrator {
 		assert scenarioContext != null;
 
 		final int latestScenarioVersion = migrationRegistry.getLatestContextVersion(scenarioContext);
-		final int latestClientVersion = migrationRegistry.getLatestClientContextVersion(clientContext);
+		final int latestClientVersion = clientContext == null ? 0 : migrationRegistry.getLatestClientContextVersion(clientContext);
 		int currentScenarioVersion = scenarioInstance.getScenarioVersion();
 		int currentClientVersion = scenarioInstance.getClientScenarioVersion();
 
 		final String subModelURI = scenarioInstance.getRootObjectURI();
+		assert subModelURI != null;
 
 		final ExtensibleURIConverterImpl uc = new ExtensibleURIConverterImpl();
 
@@ -89,6 +91,7 @@ public class ScenarioInstanceMigrator {
 				currentScenarioVersion = lastReleaseVersion;
 			}
 			if (currentClientVersion < 0) {
+				assert clientContext != null;
 				final int lastReleaseVersion = migrationRegistry.getLastReleaseClientVersion(clientContext);
 				currentClientVersion = lastReleaseVersion;
 			}
@@ -160,7 +163,7 @@ public class ScenarioInstanceMigrator {
 	 * @return
 	 * @throws Exception
 	 */
-	public int[] applyMigrationChain(@NonNull final String scenarioContext, final int currentScenarioVersion, final int latestScenarioVersion, @NonNull final String clientContext,
+	public int[] applyMigrationChain(@NonNull final String scenarioContext, final int currentScenarioVersion, final int latestScenarioVersion, @Nullable final String clientContext,
 			final int currentClientVersion, final int latestClientVersion, @NonNull final URI tmpURI, IProgressMonitor monitor) throws Exception {
 
 		final List<IMigrationUnit> chain = migrationRegistry.getMigrationChain(scenarioContext, currentScenarioVersion, latestScenarioVersion, clientContext, currentClientVersion,
@@ -194,7 +197,6 @@ public class ScenarioInstanceMigrator {
 		return new int[] { scenarioVersion, clientVersion };
 	}
 
-	@SuppressWarnings("resource")
 	public void copyURIData(@NonNull final URIConverter uc, @NonNull final URI sourceURI, @NonNull final URI destURI) throws IOException {
 		InputStream is = null;
 		OutputStream os = null;

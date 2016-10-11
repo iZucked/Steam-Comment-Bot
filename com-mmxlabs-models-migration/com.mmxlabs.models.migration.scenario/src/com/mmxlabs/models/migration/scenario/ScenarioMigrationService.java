@@ -7,7 +7,6 @@ package com.mmxlabs.models.migration.scenario;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.scenario.service.IScenarioMigrationService;

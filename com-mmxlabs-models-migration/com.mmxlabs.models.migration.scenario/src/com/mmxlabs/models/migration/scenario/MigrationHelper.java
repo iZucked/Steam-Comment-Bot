@@ -15,9 +15,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.jdt.annotation.NonNull;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
 
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.common.io.FileDeleter;
@@ -95,6 +92,7 @@ public class MigrationHelper {
 		try {
 
 			final String subModelURI = instance.getRootObjectURI();
+			assert subModelURI != null;
 
 			final ExtensibleURIConverterImpl uc = new ExtensibleURIConverterImpl();
 
