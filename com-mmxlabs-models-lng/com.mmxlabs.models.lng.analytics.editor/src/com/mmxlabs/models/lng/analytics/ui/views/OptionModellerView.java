@@ -727,7 +727,11 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		this.model = model;
 
 		validationSupport = new DialogValidationSupport(new DefaultExtraValidationContext(getRootObject(), false));
-		validationSupport.setValidationTargets(Collections.singleton(model));
+		if (model != null) {
+			validationSupport.setValidationTargets(Collections.singleton(model));
+		} else {
+			validationSupport.setValidationTargets(Collections.emptySet());
+		}
 
 		doValidate();
 
