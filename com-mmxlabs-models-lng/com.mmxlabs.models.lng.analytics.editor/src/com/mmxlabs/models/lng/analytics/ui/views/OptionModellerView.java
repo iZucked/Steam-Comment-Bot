@@ -300,8 +300,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
-
-					BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> BaseCaseEvaluator.evaluate(OptionModellerView.this, model, model.getBaseCase(), true, "Base Case"));
+					if (model != null) {
+						BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> BaseCaseEvaluator.evaluate(OptionModellerView.this, model, model.getBaseCase(), true, "Base Case"));
+					}
 				}
 
 				@Override
@@ -356,7 +357,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> WhatIfEvaluator.evaluate(OptionModellerView.this, model));
+				if (model != null) {
+					BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> WhatIfEvaluator.evaluate(OptionModellerView.this, model));
+				}
 			}
 
 			@Override
