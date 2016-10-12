@@ -68,6 +68,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
+import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -1109,7 +1110,17 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 		source.setTransfer(types);
 
-		source.addDragListener(new BasicDragSource(viewer));
+		source.addDragListener(new BasicDragSource(viewer) {
+			@Override
+			public void dragStart(final DragSourceEvent event) {
+				if (getScenarioViewer().getGrid().getColumn(new Point(event.x, event.y)) == wiringColumn.getColumn()) {
+					event.doit = false;
+					return;
+				}
+
+				super.dragStart(event);
+			}
+		});
 	}
 
 	private <T extends ICellManipulator & ICellRenderer> GridViewerColumn addPNLColumn(final String columnName, final EStructuralFeature bookContainmentFeature, final T manipulator,
