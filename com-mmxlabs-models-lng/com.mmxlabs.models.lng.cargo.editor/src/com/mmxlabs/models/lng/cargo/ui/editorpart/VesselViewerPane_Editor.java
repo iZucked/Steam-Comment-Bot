@@ -36,7 +36,7 @@ import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 
 	// TODO: Make these colours a preference so they can be consistently used across various UI parts
-	private final Color tcVessel = new Color(Display.getDefault(), 150, 210, 230);
+	private static final Color tcVessel = new Color(Display.getDefault(), 150, 210, 230);
 
 	private final IScenarioEditingLocation jointModelEditor;
 
