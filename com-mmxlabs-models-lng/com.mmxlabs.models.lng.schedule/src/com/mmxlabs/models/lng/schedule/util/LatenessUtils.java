@@ -108,8 +108,8 @@ public class LatenessUtils {
 		return 0;
 	}
 
-	public static long getLatenessAfterFlex(@Nullable final EventGrouping eventGrouping) {
-		long lateness = 0;
+	public static int getLatenessAfterFlex(@Nullable final EventGrouping eventGrouping) {
+		int lateness = 0;
 		if (eventGrouping != null) {
 
 			for (final Event evt : eventGrouping.getEvents()) {
