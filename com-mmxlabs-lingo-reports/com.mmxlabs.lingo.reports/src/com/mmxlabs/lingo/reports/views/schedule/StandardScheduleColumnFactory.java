@@ -81,6 +81,8 @@ import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.util.CapacityUtils;
+import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -869,6 +871,66 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 							return "";
 						}
 					}, targetObjectRef));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.lateness":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Lateness", null, ColumnType.NORMAL, new BaseFormatter() {
+				int getViolationCount(Object object) {
+					if (object instanceof Row) {
+						Row row = (Row) object;
+						if (row.getTarget() instanceof EventGrouping) {
+							return LatenessUtils.getLatenessAfterFlex((EventGrouping) row.getTarget());
+						}
+					}
+
+					return 0;
+				}
+
+				@Override
+				public String render(final Object object) {
+
+					final int lateness = getViolationCount(object);
+					if (lateness != 0) {
+						return LatenessUtils.formatLatenessHours(lateness);
+					}
+
+					return null;
+				}
+
+				@Override
+				public Comparable getComparable(final Object object) {
+					return getViolationCount(object);
+				}
+			});
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.capacity_violation":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Violation", null, ColumnType.NORMAL, new BaseFormatter() {
+				int getViolationCount(Object object) {
+					if (object instanceof Row) {
+						Row row = (Row) object;
+						if (row.getTarget() instanceof EventGrouping) {
+							return CapacityUtils.getViolationCount((EventGrouping) row.getTarget());
+						}
+					}
+
+					return 0;
+				}
+
+				@Override
+				public String render(final Object object) {
+
+					final int count = getViolationCount(object);
+					if (count != 0) {
+						return String.format("%,d", count);
+					}
+
+					return null;
+				}
+
+				@Override
+				public Comparable getComparable(final Object object) {
+					return getViolationCount(object);
+				}
+			});
 			break;
 		}
 	}
