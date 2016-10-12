@@ -31,6 +31,8 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -42,10 +44,12 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
@@ -66,8 +70,10 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
@@ -117,6 +123,9 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 
 public class ChangeSetView implements IAdaptable {
+
+	@Inject
+	private EPartService partService;
 
 	public static enum ViewMode {
 		COMPARE, ACTION_SET
@@ -210,6 +219,10 @@ public class ChangeSetView implements IAdaptable {
 	private ViewMode viewMode = ViewMode.COMPARE;
 
 	private IAdditionalAttributeProvider additionalAttributeProvider;
+
+	private GridViewerColumn violationColumn;
+
+	private GridViewerColumn latenessColumn;
 
 	// private MPart part;
 
@@ -673,6 +686,8 @@ public class ChangeSetView implements IAdaptable {
 			gvc.getColumn().setWidth(50);
 			gvc.setLabelProvider(createLatenessDeltaLabelProvider());
 			gvc.getColumn().setCellRenderer(createCellRenderer());
+
+			this.latenessColumn = gvc;
 		}
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER);
@@ -683,6 +698,8 @@ public class ChangeSetView implements IAdaptable {
 			gvc.setLabelProvider(createViolationsDeltaLabelProvider());
 			createWordWrapRenderer(gvc);
 			gvc.getColumn().setCellRenderer(createCellRenderer());
+
+			this.violationColumn = gvc;
 
 		}
 
@@ -886,7 +903,6 @@ public class ChangeSetView implements IAdaptable {
 						// Update selected elements
 						scenarioComparisonService.setSelectedElements(selectedElements);
 
-						// set the selection to the service
 						eSelectionService.setPostSelection(new StructuredSelection(selectedElements.toArray()));
 					}
 				}
@@ -1049,6 +1065,46 @@ public class ChangeSetView implements IAdaptable {
 
 		scenarioComparisonService.addListener(listener);
 		scenarioComparisonService.triggerListener(listener);
+
+		viewer.addOpenListener(new IOpenListener() {
+
+			@Override
+			public void open(final OpenEvent event) {
+				if (viewer.getSelection() instanceof IStructuredSelection) {
+					final IStructuredSelection structuredSelection = (IStructuredSelection) viewer.getSelection();
+					if (structuredSelection.isEmpty() == false) {
+
+						// Attempt to detect the column we clicked on.
+						final GridColumn column = null;
+						final IWorkbench workbench = PlatformUI.getWorkbench();
+						if (workbench != null) {
+							final Display display = workbench.getDisplay();
+							if (display != null) {
+								final Point cursorLocation = display.getCursorLocation();
+								if (cursorLocation != null) {
+
+									final Grid grid = viewer.getGrid();
+
+									final Point mousePoint = grid.toControl(cursorLocation);
+									final GridColumn targetColumn = grid.getColumn(mousePoint);
+									// Point cell = grid.getCell(mousePoint);
+									ViewerCell cell = viewer.getCell(mousePoint);
+									if (cell != null && !cell.getText().isEmpty()) {
+										if (latenessColumn != null && latenessColumn.getColumn() == targetColumn) {
+											openView("com.mmxlabs.shiplingo.platform.reports.views.LatenessReportView");
+										} else if (violationColumn != null && violationColumn.getColumn() == targetColumn) {
+											openView("com.mmxlabs.shiplingo.platform.reports.views.CapacityViolationReportView");
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+
+			}
+		});
+
 	}
 
 	protected void createSpacerColumn() {
@@ -1141,7 +1197,7 @@ public class ChangeSetView implements IAdaptable {
 		};
 	}
 
-	private CellLabelProvider createDateLabelProvider(boolean isLoadSide) {
+	private CellLabelProvider createDateLabelProvider(final boolean isLoadSide) {
 		return new CellLabelProvider() {
 
 			private final DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
@@ -1162,12 +1218,12 @@ public class ChangeSetView implements IAdaptable {
 						final SlotAllocation newLoadAllocation = change.getNewLoadAllocation();
 
 						if (newLoadAllocation != null) {
-							Slot slot = newLoadAllocation.getSlot();
+							final Slot slot = newLoadAllocation.getSlot();
 							if (slot != null) {
 								windowStart = slot.getWindowStart();
 							}
 						} else if (originalLoadAllocation != null) {
-							Slot slot = originalLoadAllocation.getSlot();
+							final Slot slot = originalLoadAllocation.getSlot();
 							if (slot != null) {
 								windowStart = slot.getWindowStart();
 							}
@@ -1193,12 +1249,12 @@ public class ChangeSetView implements IAdaptable {
 						final SlotAllocation newDischargeAllocation = change.getNewDischargeAllocation();
 
 						if (newDischargeAllocation != null) {
-							Slot slot = newDischargeAllocation.getSlot();
+							final Slot slot = newDischargeAllocation.getSlot();
 							if (slot != null) {
 								windowStart = slot.getWindowStart();
 							}
 						} else if (originalDischargeAllocation != null) {
-							Slot slot = originalDischargeAllocation.getSlot();
+							final Slot slot = originalDischargeAllocation.getSlot();
 							if (slot != null) {
 								windowStart = slot.getWindowStart();
 							}
@@ -2115,5 +2171,11 @@ public class ChangeSetView implements IAdaptable {
 
 	boolean isSet(@Nullable final String str) {
 		return str != null && !str.isEmpty();
+	}
+
+	private void openView(final @NonNull String viewId) {
+		// Open, but do not focus the view.
+		// FIXME: If this causes the view to be created the selection will not be correct. However attempting to re-set the selection does not appear to work.
+		partService.showPart(viewId, PartState.VISIBLE);
 	}
 }
