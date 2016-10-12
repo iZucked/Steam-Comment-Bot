@@ -50,6 +50,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
@@ -70,6 +71,9 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 	public void createPartControl(final Composite parent) {
 
 		viewer = new GridTreeViewer(parent);
+		GridViewerHelper.configureLookAndFeel(viewer);
+
+		
 		viewer.getGrid().setHeaderVisible(true);
 		viewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
 
@@ -203,14 +207,14 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 	private GridViewerColumn createColumn(final String title, final GridColumnGroup colGroup, final EStructuralFeature reference) {
 		final GridColumn column = new GridColumn(colGroup, SWT.NONE);
 		final GridViewerColumn col = new GridViewerColumn(viewer, column);
-		col.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+		GridViewerHelper.configureLookAndFeel(col);
 
 		return createColumn(col, title, reference);
 	}
 
 	private GridColumnGroup createGroup(final String title) {
 		final GridColumnGroup group = new GridColumnGroup(viewer.getGrid(), SWT.NONE);
-		group.setHeaderRenderer(new ColumnGroupHeaderRenderer());
+		GridViewerHelper.configureLookAndFeel(group);
 
 		group.setText(title);
 		return group;
@@ -218,7 +222,7 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 
 	private GridViewerColumn createColumn(final String title, final EStructuralFeature reference) {
 		final GridViewerColumn col = new GridViewerColumn(viewer, SWT.NONE);
-		col.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+		GridViewerHelper.configureLookAndFeel(col);
 		return createColumn(col, title, reference);
 	}
 
