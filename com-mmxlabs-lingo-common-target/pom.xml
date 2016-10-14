@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.lingo.common.target</groupId>
 	<artifactId>com.mmxlabs.lingo.common.target.parent</artifactId>
-	<version>4.0.0-SNAPSHOT</version>
+	<version>4.0.0.RELEASE</version>
 	<packaging>pom</packaging>
 
 	<parent>
