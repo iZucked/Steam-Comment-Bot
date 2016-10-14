@@ -561,7 +561,7 @@ public class Exposures {
 			for (final UnitConversion factor : lookupData.pricingModel.getConversionFactors()) {
 				if (factor.getTo().equalsIgnoreCase("mmbtu")) {
 					if (factor.getFrom().equalsIgnoreCase(u)) {
-						nativeVolume *= factor.getFactor();
+						nativeVolume /= factor.getFactor();
 						break;
 					}
 				}
