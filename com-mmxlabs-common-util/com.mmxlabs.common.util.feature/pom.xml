@@ -6,10 +6,10 @@
 <parent>
 		<groupId>com.mmxlabs.common</groupId>
 		<artifactId>common-util-parent</artifactId>
-		<version>4.0.0-SNAPSHOT</version>
+		<version>4.0.0.RELEASE</version>
 	</parent>
 	<artifactId>com.mmxlabs.common.util.feature</artifactId>
-	<version>4.0.0-SNAPSHOT</version>
+	<version>4.0.0.RELEASE</version>
 	<packaging>eclipse-feature</packaging>
 
 
