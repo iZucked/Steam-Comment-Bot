@@ -131,7 +131,7 @@ public class PriceExpressionUtils {
 				parsed = expression.evaluate();
 
 			} catch (final EmptyStackException e) {
-				final String operatorPattern = "([+-/*%][+-/*%]+)";
+				final String operatorPattern = "([-/*+][-/*+]+)";
 				final Pattern p = Pattern.compile(operatorPattern);
 				final Matcher m = p.matcher(priceExpression);
 				if (m.find()) {

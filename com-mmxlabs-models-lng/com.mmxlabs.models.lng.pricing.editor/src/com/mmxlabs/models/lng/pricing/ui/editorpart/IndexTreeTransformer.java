@@ -17,11 +17,13 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 public class IndexTreeTransformer {
@@ -31,13 +33,13 @@ public class IndexTreeTransformer {
 	 * 
 	 */
 	public enum DataType {
-		Commodity("Commodity", false, PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, true),
+		Commodity("Commodity", false, PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, true, PriceIndexType.COMMODITY),
 
-		BaseFuel("Base Fuel", false, PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, false),
+		BaseFuel("Base Fuel", false, PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, false, PriceIndexType.BUNKERS),
 
-		Charter("Chartering", true, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, false),
-		
-		Currency("Currency", false, PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, false);
+		Charter("Chartering", true, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, false, PriceIndexType.CHARTER),
+
+		Currency("Currency", false, PricingPackage.Literals.PRICING_MODEL__CURRENCY_INDICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, false, PriceIndexType.CURRENCY);
 
 		private final String name;
 		private final boolean useIntegers;
@@ -45,12 +47,16 @@ public class IndexTreeTransformer {
 		private final EReference indexFeature;
 		private final boolean expandedByDefault;
 
-		private DataType(final String name, final boolean useIntegers, final EReference containerFeature, final EReference indexFeature, final boolean expandedByDefault) {
+		private final PriceIndexType priceIndexType;
+
+		private DataType(final String name, final boolean useIntegers, final EReference containerFeature, final EReference indexFeature, final boolean expandedByDefault,
+				PriceIndexType priceIndexType) {
 			this.name = name;
 			this.useIntegers = useIntegers;
 			this.containerFeature = containerFeature;
 			this.indexFeature = indexFeature;
 			this.expandedByDefault = expandedByDefault;
+			this.priceIndexType = priceIndexType;
 		}
 
 		/**
@@ -76,6 +82,10 @@ public class IndexTreeTransformer {
 
 		public boolean isExpandedByDefault() {
 			return expandedByDefault;
+		}
+
+		public @NonNull PriceIndexType getPriceIndexType() {
+			return priceIndexType;
 		}
 	}
 

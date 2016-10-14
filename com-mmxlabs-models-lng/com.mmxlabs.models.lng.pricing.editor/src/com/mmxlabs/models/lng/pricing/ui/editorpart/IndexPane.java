@@ -99,7 +99,7 @@ import com.mmxlabs.scenario.service.model.ScenarioLock;
  */
 public class IndexPane extends ScenarioTableViewerPane {
 
-	private static final YearMonth dateZero = YearMonth.now();
+	private static final YearMonth dateZero = YearMonth.of(2000,1);
 
 	private YearMonth minDisplayDate = null;
 	private YearMonth maxDisplayDate = null;
@@ -300,33 +300,38 @@ public class IndexPane extends ScenarioTableViewerPane {
 		seriesParsers.clear();
 
 		for (final DataType dt : DataType.values()) {
-
-			final SeriesParser seriesParser = new SeriesParser();
+			// PriceIndexUtils.getParserFor(pricingModel, priceIndexType)
+			// final SeriesParser seriesParser = new SeriesParser();
+			// if (pricingModel != null) {
+			// @SuppressWarnings("unchecked")
+			// final List<EObject> indexObjects = (List<EObject>) pricingModel.eGet(dt.getContainerFeature());
+			//
+			// for (final EObject indexObject : indexObjects) {
+			//
+			// if (!indexObject.eIsSet(dt.getIndexFeature())) {
+			// continue;
+			// }
+			//
+			// String name = "Unknown";
+			// if (indexObject instanceof NamedObject) {
+			// final NamedObject namedObject = (NamedObject) indexObject;
+			// if (namedObject.getName() != null) {
+			// name = namedObject.getName();
+			// }
+			// }
+			//
+			// final Index<?> idx = (Index<?>) indexObject.eGet(dt.getIndexFeature());
+			// if (idx instanceof DataIndex) {
+			// PriceIndexUtils.addSeriesDataFromDataIndex(seriesParser, name, dateZero, (DataIndex<? extends Number>) idx);
+			// } else if (idx instanceof DerivedIndex) {
+			// seriesParser.addSeriesExpression(name, ((DerivedIndex) idx).getExpression());
+			// }
+			// }
+			// }
+			// seriesParsers.put(dt, seriesParser);
 			if (pricingModel != null) {
-				@SuppressWarnings("unchecked")
-				final List<EObject> indexObjects = (List<EObject>) pricingModel.eGet(dt.getContainerFeature());
-
-				for (final EObject indexObject : indexObjects) {
-
-					if (!indexObject.eIsSet(dt.getIndexFeature())) {
-						continue;
-					}
-
-					String name = "Unknown";
-					if (indexObject instanceof NamedObject) {
-						final NamedObject namedObject = (NamedObject) indexObject;
-						name = namedObject.getName();
-					}
-
-					final Index<?> idx = (Index<?>) indexObject.eGet(dt.getIndexFeature());
-					if (idx instanceof DataIndex) {
-						PriceIndexUtils.addSeriesDataFromDataIndex(seriesParser, name, dateZero, (DataIndex<? extends Number>) idx);
-					} else if (idx instanceof DerivedIndex) {
-						seriesParser.addSeriesExpression(name, ((DerivedIndex) idx).getExpression());
-					}
-				}
+				seriesParsers.put(dt, PriceIndexUtils.getParserFor(pricingModel, dt.getPriceIndexType()));
 			}
-			seriesParsers.put(dt, seriesParser);
 		}
 	}
 
@@ -747,7 +752,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 					try {
 						final ISeries series = seriesParser.getSeries(name);
 						if (series != null) {
-							return series.evaluate(PriceIndexUtils.convertTime(dateZero, colDate));
+							return series.evaluate(PriceIndexUtils.convertTime(PriceIndexUtils.dateZero, colDate));
 						}
 					} catch (final Exception e) {
 						// Ignore, anything from seried parser should be picked up via validation
