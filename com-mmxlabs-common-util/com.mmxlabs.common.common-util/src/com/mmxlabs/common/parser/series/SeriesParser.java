@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.IntFunction;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -27,6 +28,7 @@ import com.mmxlabs.common.parser.series.functions.InOrder;
 import com.mmxlabs.common.parser.series.functions.Max;
 import com.mmxlabs.common.parser.series.functions.Mean;
 import com.mmxlabs.common.parser.series.functions.Min;
+import com.mmxlabs.common.parser.series.functions.Minus;
 import com.mmxlabs.common.parser.series.functions.Or;
 import com.mmxlabs.common.parser.series.functions.ShiftedSeries;
 
@@ -34,6 +36,16 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 	private final @NonNull Map<@NonNull String, @NonNull ISeries> evaluatedSeries = new HashMap<>();
 	private final @NonNull Map<@NonNull String, @NonNull String> unevaluatedSeries = new HashMap<>();
 	private final @NonNull Set<@NonNull String> expressionCurves = new HashSet<>();
+
+	private @Nullable ShiftFunctionMapper shiftMapper;
+
+	public ShiftFunctionMapper getShiftMapper() {
+		return shiftMapper;
+	}
+
+	public void setShiftMapper(ShiftFunctionMapper shiftMapper) {
+		this.shiftMapper = shiftMapper;
+	}
 
 	private class FunctionConstructor implements IExpression<ISeries> {
 		private final Class<? extends ISeries> clazz;
@@ -125,10 +137,18 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 				} else if (name.equals("AVG")) {
 					return new FunctionConstructor(Mean.class, arguments);
 				} else if (name.equals("SHIFT")) {
+					@Nullable
+					ShiftFunctionMapper pShiftMapper = shiftMapper;
+					if (pShiftMapper == null) {
+						throw new IllegalStateException("No shift mapper function defined");
+					}
 					return new IExpression<ISeries>() {
 						@Override
 						public @NonNull ISeries evaluate() {
-							return new ShiftedSeries(arguments.get(0).evaluate(), arguments.get(1).evaluate());
+							@NonNull
+							ISeries shiftExpression = arguments.get(1).evaluate();
+							Number evaluate = shiftExpression.evaluate(0);
+							return new ShiftedSeries(arguments.get(0).evaluate(), evaluate.intValue(), pShiftMapper);
 						}
 					};
 				} else if (name.equals("AND")) {
@@ -150,11 +170,23 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 		setPrefixOperatorFactory(new IPrefixOperatorFactory<ISeries>() {
 			@Override
 			public boolean isPrefixOperator(final char operator) {
+				if (operator == '-') {
+					return true;
+				}
 				return false;
 			}
 
 			@Override
 			public IExpression<ISeries> createPrefixOperator(final char operator, final IExpression<ISeries> argument) {
+				if (operator == '-') {
+					return new IExpression<ISeries> () {
+						@Override
+						public @NonNull ISeries evaluate() {
+							return new Minus(argument.evaluate());
+						}
+					};
+				}
+				
 				throw new RuntimeException("Unknown prefix op " + operator);
 			}
 		});
