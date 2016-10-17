@@ -42,6 +42,14 @@ public class VesselAvailabilityVesselValueProviderFactory implements IReferenceV
 				@Override
 				public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
 					// determine the current vessel attached to the availability
+					return getAllVesselsList(cargoModel, fleetModel, target);
+				}
+
+				private List<Pair<String, EObject>> getAllVesselsList(final CargoModel cargoModel, final FleetModel fleetModel, final EObject target) {
+					return getSortedNames(fleetModel.getVessels(), MMXCorePackage.Literals.NAMED_OBJECT__NAME);
+				}
+				
+				private List<Pair<String, EObject>> getRestrictedVesselsList(final CargoModel cargoModel, final FleetModel fleetModel, final EObject target) {
 					Vessel currentValue = null;
 
 					if (target instanceof VesselAvailability) {

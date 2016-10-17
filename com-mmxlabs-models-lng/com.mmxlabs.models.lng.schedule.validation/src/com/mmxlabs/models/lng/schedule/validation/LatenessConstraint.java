@@ -36,7 +36,7 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 				EObject obj = null;
 				EStructuralFeature feature = null;
 				String message = null;
-
+				boolean multipleAvailabilityError = false;
 				if (target instanceof SlotVisit) {
 					SlotAllocation allocation = ((SlotVisit) target).getSlotAllocation();
 					if (allocation != null) {
@@ -54,12 +54,13 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 					obj = event.getSequence().getVesselAvailability();
 					feature = CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY;
 					message = Constants.GENERATED_SCHEDULE_LABEL + " Schedule has vessel travelling after it is no longer available.";
+					multipleAvailabilityError = true;
 				} else {
 					message = Constants.GENERATED_SCHEDULE_LABEL + " Late arrival in schedule.";
 				}
 
 				if (message != null) {
-					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message), multipleAvailabilityError ? IStatus.ERROR : IStatus.WARNING);
 					if (obj != null) {
 						failure.addEObjectAndFeature(obj, feature);
 					}

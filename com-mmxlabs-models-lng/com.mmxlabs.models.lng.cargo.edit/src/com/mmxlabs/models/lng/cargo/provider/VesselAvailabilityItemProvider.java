@@ -12,6 +12,8 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -340,12 +342,20 @@ public class VesselAvailabilityItemProvider
 	public String getText(Object object) {
 		String label = "";
 		Vessel v = ((VesselAvailability) object).getVessel();
+		uniqueAvailability((VesselAvailability) object);
 		if(v != null){
 			label = v.getName();		
 		} else{
 			label = "<unspecified>";			
 		}
 		return label;
+	}
+	
+	private boolean uniqueAvailability(VesselAvailability va) {
+		EObject eContainer = va.eContainer();
+		EStructuralFeature eContainingFeature = va.eContainingFeature();
+		EReference eContainmentFeature = va.eContainmentFeature();
+		return false;
 	}
 
 	/**

@@ -140,6 +140,7 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 					// filter the globally permissible values by the settings for this cargo
 					for (final Pair<String, EObject> pair : vesselAvailabilityResult) {
 						final VesselAvailability vesselAvailability = (VesselAvailability) pair.getSecond();
+						boolean uniqueAvailability = uniqueAvailability(cargoModel.getVesselAvailabilities(), vesselAvailability);
 						if (vesselAvailability == null) {
 							continue;
 						}
@@ -213,6 +214,10 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 					result.add(0, new Pair<String, EObject>("<Unassigned>", null));
 
 					return result;
+				}
+
+				private boolean uniqueAvailability(List<VesselAvailability> vesselAvailability, VesselAvailability va) {
+					return vesselAvailability.stream().filter(v -> v.getVessel().equals(va.getVessel())).count() > 1;
 				}
 
 				@Override

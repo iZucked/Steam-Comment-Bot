@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.valueproviders;
 
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -22,6 +25,7 @@ import com.mmxlabs.models.ui.valueproviders.SimpleReferenceValueProvider;
 
 public class CargoValueProviderFactory implements IReferenceValueProviderFactory {
 
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yyyy");
 	@Override
 	public IReferenceValueProvider createReferenceValueProvider(final EClass owner, final EReference reference, final MMXRootObject rootObject) {
 		if (rootObject instanceof LNGScenarioModel) {
@@ -37,14 +41,21 @@ public class CargoValueProviderFactory implements IReferenceValueProviderFactory
 						if (referenceValue instanceof VesselAvailability) {
 							final VesselAvailability vesselAvailability = (VesselAvailability) referenceValue;
 							final Vessel vessel = vesselAvailability.getVessel();
-							if (vessel != null) {
+							boolean uniqueAvailability = uniqueAvailability(cm.getVesselAvailabilities(), vesselAvailability);
+							if (vessel != null && uniqueAvailability) {
 								return vessel.getName();
+							} else if (vessel != null && !uniqueAvailability) {
+								return String.format("%s (%s)", vessel.getName(), vesselAvailability.getStartAfter() == null ? formatter.format(vesselAvailability.getStartBy()): formatter.format(vesselAvailability.getStartAfter()));
 							} else {
 								return "";
 							}
 
 						}
 						return super.getName(referer, feature, referenceValue);
+					}
+
+					private boolean uniqueAvailability(List<VesselAvailability> vesselAvailability, VesselAvailability va) {
+						return vesselAvailability.stream().filter(v -> v.getVessel().equals(va.getVessel())).count() == 1;
 					}
 
 					@Override
