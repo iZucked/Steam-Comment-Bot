@@ -37,8 +37,8 @@ import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 
 /**
- * This is the central singleton for the model edit plugin. <!-- begin-user-doc --> <!-- end-user-doc -->
- * 
+ * This is the central singleton for the model edit plugin.
+ * <!-- begin-user-doc --> <!-- end-user-doc -->
  * @generated
  */
 public final class Activator extends EMFPlugin {
@@ -47,32 +47,42 @@ public final class Activator extends EMFPlugin {
 	public static final String PLUGIN_ID = "com.mmxlabs.lingo.reports"; //$NON-NLS-1$
 
 	/**
-	 * Keep track of the singleton. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Keep track of the singleton.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static final Activator INSTANCE = new Activator();
 
 	/**
-	 * Keep track of the singleton. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Keep track of the singleton.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	private static Implementation plugin;
 
 	/**
-	 * Create the instance. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Create the instance.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public Activator() {
-		super(new ResourceLocator[] { CargoEditPlugin.INSTANCE, CommercialEditPlugin.INSTANCE, FleetEditPlugin.INSTANCE, LNGTypesEditPlugin.INSTANCE, MmxcoreEditPlugin.INSTANCE,
-				PortEditPlugin.INSTANCE, PricingEditPlugin.INSTANCE, ScheduleEditPlugin.INSTANCE, SpotMarketsEditPlugin.INSTANCE, });
+		super
+		  (new ResourceLocator [] {
+		     CargoEditPlugin.INSTANCE,
+		     CommercialEditPlugin.INSTANCE,
+		     FleetEditPlugin.INSTANCE,
+		     LNGTypesEditPlugin.INSTANCE,
+		     MmxcoreEditPlugin.INSTANCE,
+		     PortEditPlugin.INSTANCE,
+		     PricingEditPlugin.INSTANCE,
+		     ScheduleEditPlugin.INSTANCE,
+		     SpotMarketsEditPlugin.INSTANCE,
+		   });
 	}
 
 	/**
-	 * Returns the singleton instance of the Eclipse plugin. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the singleton instance of the Eclipse plugin.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the singleton instance.
 	 * @generated
 	 */
@@ -82,8 +92,8 @@ public final class Activator extends EMFPlugin {
 	}
 
 	/**
-	 * Returns the singleton instance of the Eclipse plugin. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the singleton instance of the Eclipse plugin.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the singleton instance.
 	 * @generated
 	 */
@@ -102,8 +112,8 @@ public final class Activator extends EMFPlugin {
 	}
 
 	/**
-	 * The actual implementation of the Eclipse <b>Plugin</b>. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The actual implementation of the Eclipse <b>Plugin</b>.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static class Implementation extends EclipsePlugin {
@@ -120,8 +130,8 @@ public final class Activator extends EMFPlugin {
 		private IPropertyChangeListener propertyChangeListener;
 
 		/**
-		 * Creates an instance. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 * Creates an instance.
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 * @generated
 		 */
 		public Implementation() {

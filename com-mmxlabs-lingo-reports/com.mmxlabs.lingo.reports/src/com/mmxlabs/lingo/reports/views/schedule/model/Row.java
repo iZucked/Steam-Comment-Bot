@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#isVisible <em>Visible</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getCycleGroup <em>Cycle Group</em>}</li>
@@ -41,8 +42,8 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getRowGroup <em>Row Group</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getScenario <em>Scenario</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getTable <em>Table</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getLinkedSequences <em>Linked Sequences</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getRow()
  * @model
@@ -507,5 +508,21 @@ public interface Row extends EObject {
 	 * @generated
 	 */
 	void setTable(Table value);
+
+	/**
+	 * Returns the value of the '<em><b>Linked Sequences</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.schedule.Sequence}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Linked Sequences</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Linked Sequences</em>' reference list.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getRow_LinkedSequences()
+	 * @model
+	 * @generated
+	 */
+	EList<Sequence> getLinkedSequences();
 
 } // Row

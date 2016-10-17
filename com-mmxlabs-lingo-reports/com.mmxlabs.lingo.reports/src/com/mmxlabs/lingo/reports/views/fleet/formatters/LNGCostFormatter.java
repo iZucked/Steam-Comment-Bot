@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.reports.views.fleet.formatters;
 
+import java.util.List;
+
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -16,22 +18,44 @@ public class LNGCostFormatter extends IntegerFormatter {
 
 	@Override
 	public Integer getIntValue(Object object) {
-
-		if (object instanceof Row) {
-			object = ((Row) object).getSequence();
-		}
 		int cost = 0;
-		if (object instanceof Sequence) {
+		if (object instanceof Row) {
+			Row row = ((Row) object);
+			if (row.getLinkedSequences().size() > 0) {
+				for (Sequence s : row.getLinkedSequences()) {
+					cost += getCost(s);
+				}
+			} else {
+				if (row.getSequence() != null) {
+					cost += getCost(row.getSequence());
+				}
+			}
+		} else if (object instanceof Sequence) {
 			final Sequence sequence = (Sequence) object;
-			for (final Event evt : sequence.getEvents()) {
-				if (evt instanceof FuelUsage) {
-					final FuelUsage fuelUsage = (FuelUsage) evt;
-					cost += getFuelCost(Fuel.NBO, fuelUsage);
-					cost += getFuelCost(Fuel.FBO, fuelUsage);
+			cost += getCost(sequence);
+		} else if (object instanceof List) {
+			List objects = (List) object;
+			if (objects.size() > 0) {
+				for (Object o : objects) {
+					if (o instanceof Sequence) {
+						cost += getCost((Sequence) o);
+					}
 				}
 			}
 		}
 
+		return cost;
+	}
+
+	private int getCost(final Sequence sequence) {
+		int cost = 0;
+		for (final Event evt : sequence.getEvents()) {
+			if (evt instanceof FuelUsage) {
+				final FuelUsage fuelUsage = (FuelUsage) evt;
+				cost += getFuelCost(Fuel.NBO, fuelUsage);
+				cost += getFuelCost(Fuel.FBO, fuelUsage);
+			}
+		}
 		return cost;
 	}
 

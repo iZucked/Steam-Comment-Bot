@@ -52,6 +52,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -152,6 +153,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					text = route.getName().replace("canal", "");
 				}
 			}
+		} else if (element instanceof CombinedSequence) {
+			return element.toString();
 		}
 		return text;
 	}

@@ -7,10 +7,12 @@ package com.mmxlabs.lingo.reports.views.vertical;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.views.vertical.labellers.EventLabelProvider;
 import com.mmxlabs.lingo.reports.views.vertical.providers.SequenceEventProvider;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 
 public class DefaultVerticalReportView extends AbstractVerticalCalendarReportView {
@@ -34,12 +36,12 @@ public class DefaultVerticalReportView extends AbstractVerticalCalendarReportVie
 				new EventLabelProvider(verticalReportVisualiser), "FOB/DES", null);
 		result.add(fobDesColumn);
 
+		List<CombinedSequence> combinedSequences = CombinedSequence.createCombinedSequences(Lists.newArrayList(data.vessels));
 		// add a column for each vessel in the scenario
-		final Sequence[] vessels = data.vessels;
-		if (vessels != null) {
-			for (final Sequence seq : vessels) {
-				final CalendarColumn column = new CalendarColumn(verticalReportVisualiser.createDateFormat(), new SequenceEventProvider(seq, null, verticalReportVisualiser),
-						new EventLabelProvider(verticalReportVisualiser), seq.getName(), null);
+		if (!combinedSequences.isEmpty()) {
+			for (final CombinedSequence seq : combinedSequences) {
+				final CalendarColumn column = new CalendarColumn(verticalReportVisualiser.createDateFormat(), new SequenceEventProvider(seq.getSequences().toArray(new Sequence[seq.getSequences().size()]), null, verticalReportVisualiser),
+						new EventLabelProvider(verticalReportVisualiser), seq.getVessel().getName(), null);
 				result.add(column);
 			}
 		}

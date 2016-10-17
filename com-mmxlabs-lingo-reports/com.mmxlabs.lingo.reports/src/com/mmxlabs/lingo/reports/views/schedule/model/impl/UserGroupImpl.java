@@ -28,12 +28,12 @@ import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.UserGroupImpl#getComment <em>Comment</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.UserGroupImpl#getGroups <em>Groups</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.UserGroupImpl#getDelta <em>Delta</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

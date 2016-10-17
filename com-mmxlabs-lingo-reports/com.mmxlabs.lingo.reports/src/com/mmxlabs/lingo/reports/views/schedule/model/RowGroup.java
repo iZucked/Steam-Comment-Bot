@@ -16,10 +16,10 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.RowGroup#getRows <em>Rows</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getRowGroup()
  * @model

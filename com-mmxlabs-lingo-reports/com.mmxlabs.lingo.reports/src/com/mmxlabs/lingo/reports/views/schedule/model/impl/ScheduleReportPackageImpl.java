@@ -426,6 +426,15 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getRow_LinkedSequences() {
+		return (EReference)rowEClass.getEStructuralFeatures().get(18);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EClass getCycleGroup() {
 		return cycleGroupEClass;
@@ -648,6 +657,7 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 		createEReference(rowEClass, ROW__ROW_GROUP);
 		createEReference(rowEClass, ROW__SCENARIO);
 		createEReference(rowEClass, ROW__TABLE);
+		createEReference(rowEClass, ROW__LINKED_SEQUENCES);
 
 		cycleGroupEClass = createEClass(CYCLE_GROUP);
 		createEAttribute(cycleGroupEClass, CYCLE_GROUP__DESCRIPTION);
@@ -735,6 +745,7 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 		initEReference(getRow_RowGroup(), this.getRowGroup(), this.getRowGroup_Rows(), "rowGroup", null, 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRow_Scenario(), ecorePackage.getEObject(), null, "scenario", null, 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRow_Table(), this.getTable(), this.getTable_Rows(), "table", null, 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRow_LinkedSequences(), theSchedulePackage.getSequence(), null, "linkedSequences", null, 0, -1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(cycleGroupEClass, CycleGroup.class, "CycleGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCycleGroup_Description(), ecorePackage.getEString(), "description", null, 0, 1, CycleGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

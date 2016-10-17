@@ -26,10 +26,10 @@ import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowGroupImpl#getRows <em>Rows</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

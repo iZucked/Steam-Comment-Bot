@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getDescription <em>Description</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getRows <em>Rows</em>}</li>
@@ -24,7 +25,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getDelta <em>Delta</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getChangeType <em>Change Type</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getCycleGroup()
  * @model

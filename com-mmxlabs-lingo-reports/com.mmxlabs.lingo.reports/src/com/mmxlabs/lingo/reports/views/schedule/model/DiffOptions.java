@@ -15,11 +15,11 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions#isFilterSelectedElements <em>Filter Selected Elements</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions#isFilterSelectedSequences <em>Filter Selected Sequences</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getDiffOptions()
  * @model

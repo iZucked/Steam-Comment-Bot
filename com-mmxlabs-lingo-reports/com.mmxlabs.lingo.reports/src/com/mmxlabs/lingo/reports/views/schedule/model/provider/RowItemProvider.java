@@ -80,6 +80,7 @@ public class RowItemProvider
 			addReferencePropertyDescriptor(object);
 			addRowGroupPropertyDescriptor(object);
 			addScenarioPropertyDescriptor(object);
+			addLinkedSequencesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -450,6 +451,28 @@ public class RowItemProvider
 				 getString("_UI_Row_scenario_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Row_scenario_feature", "_UI_Row_type"),
 				 ScheduleReportPackage.Literals.ROW__SCENARIO,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Linked Sequences feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLinkedSequencesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Row_linkedSequences_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Row_linkedSequences_feature", "_UI_Row_type"),
+				 ScheduleReportPackage.Literals.ROW__LINKED_SEQUENCES,
 				 true,
 				 false,
 				 true,

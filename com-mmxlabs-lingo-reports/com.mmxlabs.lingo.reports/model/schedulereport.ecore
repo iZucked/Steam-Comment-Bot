@@ -45,6 +45,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="scenario" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="#//Table"
         eOpposite="#//Table/rows"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkedSequences" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//Sequence"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CycleGroup">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

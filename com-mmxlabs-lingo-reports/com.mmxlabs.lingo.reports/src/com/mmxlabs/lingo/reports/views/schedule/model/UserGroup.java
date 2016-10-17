@@ -16,12 +16,12 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.UserGroup#getComment <em>Comment</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.UserGroup#getGroups <em>Groups</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.UserGroup#getDelta <em>Delta</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getUserGroup()
  * @model

@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#isVisible <em>Visible</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getCycleGroup <em>Cycle Group</em>}</li>
@@ -57,8 +58,8 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getRowGroup <em>Row Group</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getScenario <em>Scenario</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getTable <em>Table</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getLinkedSequences <em>Linked Sequences</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
@@ -272,6 +273,16 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * @ordered
 	 */
 	protected EObject scenario;
+
+	/**
+	 * The cached value of the '{@link #getLinkedSequences() <em>Linked Sequences</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLinkedSequences()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Sequence> linkedSequences;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -962,6 +973,18 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<Sequence> getLinkedSequences() {
+		if (linkedSequences == null) {
+			linkedSequences = new EObjectResolvingEList<Sequence>(Sequence.class, this, ScheduleReportPackage.ROW__LINKED_SEQUENCES);
+		}
+		return linkedSequences;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -1079,6 +1102,8 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 				return basicGetScenario();
 			case ScheduleReportPackage.ROW__TABLE:
 				return getTable();
+			case ScheduleReportPackage.ROW__LINKED_SEQUENCES:
+				return getLinkedSequences();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1148,6 +1173,10 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 			case ScheduleReportPackage.ROW__TABLE:
 				setTable((Table)newValue);
 				return;
+			case ScheduleReportPackage.ROW__LINKED_SEQUENCES:
+				getLinkedSequences().clear();
+				getLinkedSequences().addAll((Collection<? extends Sequence>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1214,6 +1243,9 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 			case ScheduleReportPackage.ROW__TABLE:
 				setTable((Table)null);
 				return;
+			case ScheduleReportPackage.ROW__LINKED_SEQUENCES:
+				getLinkedSequences().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1262,6 +1294,8 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 				return scenario != null;
 			case ScheduleReportPackage.ROW__TABLE:
 				return getTable() != null;
+			case ScheduleReportPackage.ROW__LINKED_SEQUENCES:
+				return linkedSequences != null && !linkedSequences.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

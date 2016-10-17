@@ -5,6 +5,7 @@
 package com.mmxlabs.lingo.reports.views.fleet.formatters;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.Nullable;
@@ -39,14 +40,12 @@ public class GeneratedCharterRevenueFormatter extends IntegerFormatter {
 				selectedElements = row.getTable().getSelectedElements();
 			}
 
-			final Sequence currentSequence = row.getSequence();
-			final int currentRevenue = getSequenceRevenue(selectedElements, currentSequence);
+			final int currentRevenue = getSequenceRevenue(selectedElements, row.getLinkedSequences());
 			if (diffMode) {
 				int referenceRevenue = 0;
 				if (row.getReferenceRow() != null) {
 					final Row referenceRow = row.getReferenceRow();
-					final Sequence referenceSequence = referenceRow.getSequence();
-					referenceRevenue = getSequenceRevenue(selectedElements, referenceSequence);
+					referenceRevenue = getSequenceRevenue(selectedElements, referenceRow.getLinkedSequences());
 				}
 				return currentRevenue - referenceRevenue;
 			} else {
@@ -56,18 +55,20 @@ public class GeneratedCharterRevenueFormatter extends IntegerFormatter {
 		return null;
 	}
 
-	protected int getSequenceRevenue(@Nullable final Collection<EObject> selectedElements, final Sequence sequence) {
+	protected int getSequenceRevenue(@Nullable final Collection<EObject> selectedElements, final List<Sequence> sequences) {
 		int revenue = 0;
-		for (final Event evt : sequence.getEvents()) {
-			if (selectedElements != null) {
-				if (!selectedElements.contains(evt)) {
-					continue;
+		for (Sequence sequence : sequences) {
+			for (final Event evt : sequence.getEvents()) {
+				if (selectedElements != null) {
+					if (!selectedElements.contains(evt)) {
+						continue;
+					}
 				}
-			}
-			if (evt instanceof GeneratedCharterOut) {
-				revenue += ((GeneratedCharterOut) evt).getRevenue();
-			}
+				if (evt instanceof GeneratedCharterOut) {
+					revenue += ((GeneratedCharterOut) evt).getRevenue();
+				}
 
+			}
 		}
 		return revenue;
 	}

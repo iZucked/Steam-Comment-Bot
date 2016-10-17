@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getOptions <em>Options</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getRows <em>Rows</em>}</li>
@@ -26,7 +27,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getUserGroups <em>User Groups</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getSelectedElements <em>Selected Elements</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getTable()
  * @model

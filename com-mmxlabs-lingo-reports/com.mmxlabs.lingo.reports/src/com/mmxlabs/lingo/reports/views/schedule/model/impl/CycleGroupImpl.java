@@ -31,6 +31,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl#getRows <em>Rows</em>}</li>
@@ -39,7 +40,6 @@ import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl#getDelta <em>Delta</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl#getChangeType <em>Change Type</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

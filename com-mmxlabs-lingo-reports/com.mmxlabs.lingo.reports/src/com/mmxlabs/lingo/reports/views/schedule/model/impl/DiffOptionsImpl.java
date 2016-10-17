@@ -20,11 +20,11 @@ import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.DiffOptionsImpl#isFilterSelectedElements <em>Filter Selected Elements</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.DiffOptionsImpl#isFilterSelectedSequences <em>Filter Selected Sequences</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

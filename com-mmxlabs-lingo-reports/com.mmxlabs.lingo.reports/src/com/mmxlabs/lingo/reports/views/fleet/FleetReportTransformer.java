@@ -12,7 +12,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -24,6 +26,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
@@ -141,9 +144,13 @@ public class FleetReportTransformer {
 
 		final List<EObject> interestingEvents = new LinkedList<EObject>();
 		final Set<EObject> allEvents = new HashSet<EObject>();
+		final Set<Vessel> seenVessels = new HashSet<Vessel>();
 		for (final Sequence sequence : schedule.getSequences()) {
 			if (builder.showEvent(sequence)) {
-				interestingEvents.add(sequence);
+				if (!seenVessels.contains(sequence.getVesselAvailability().getVessel())) {
+					interestingEvents.add(sequence);
+					seenVessels.add(sequence.getVesselAvailability().getVessel());
+				}
 			}
 			allEvents.add(sequence);
 		}
@@ -166,6 +173,10 @@ public class FleetReportTransformer {
 				row.setTarget(sequence);
 				row.setName(sequence.getName());
 				row.setSequence(sequence);
+				EList<Sequence> linkedSequences = row.getLinkedSequences();
+				List<Sequence> foundSequences = schedule.getSequences().stream().filter(s -> (s.getVesselAvailability() != null && s.getVesselAvailability().getVessel() != null && s.getVesselAvailability().getVessel()
+						.equals(sequence.getVesselAvailability().getVessel()))).collect(Collectors.toList());
+				linkedSequences.addAll(foundSequences);
 				rows.add(row);
 
 				elementToRowMap.put(sequence, row);

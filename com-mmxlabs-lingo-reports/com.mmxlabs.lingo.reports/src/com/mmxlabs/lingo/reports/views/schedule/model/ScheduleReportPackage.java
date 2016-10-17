@@ -334,13 +334,22 @@ public interface ScheduleReportPackage extends EPackage {
 	int ROW__TABLE = 17;
 
 	/**
+	 * The feature id for the '<em><b>Linked Sequences</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROW__LINKED_SEQUENCES = 18;
+
+	/**
 	 * The number of structural features of the '<em>Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROW_FEATURE_COUNT = 18;
+	int ROW_FEATURE_COUNT = 19;
 
 	/**
 	 * The number of operations of the '<em>Row</em>' class.
@@ -892,6 +901,17 @@ public interface ScheduleReportPackage extends EPackage {
 	EReference getRow_Table();
 
 	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getLinkedSequences <em>Linked Sequences</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Linked Sequences</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Row#getLinkedSequences()
+	 * @see #getRow()
+	 * @generated
+	 */
+	EReference getRow_LinkedSequences();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup <em>Cycle Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1324,6 +1344,14 @@ public interface ScheduleReportPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ROW__TABLE = eINSTANCE.getRow_Table();
+
+		/**
+		 * The meta object literal for the '<em><b>Linked Sequences</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ROW__LINKED_SEQUENCES = eINSTANCE.getRow_LinkedSequences();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl <em>Cycle Group</em>}' class.

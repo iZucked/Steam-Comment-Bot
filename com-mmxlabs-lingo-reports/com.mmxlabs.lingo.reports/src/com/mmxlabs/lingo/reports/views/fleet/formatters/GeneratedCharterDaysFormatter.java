@@ -5,6 +5,7 @@
 package com.mmxlabs.lingo.reports.views.fleet.formatters;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.Nullable;
@@ -40,14 +41,13 @@ public class GeneratedCharterDaysFormatter extends NumberOfDPFormatter {
 				selectedElements = row.getTable().getSelectedElements();
 			}
 
-			final Sequence currentSequence = row.getSequence();
-			final int currentHours = getSequenceHours(selectedElements, currentSequence);
+			final int currentHours = getSequenceHours(selectedElements, row.getLinkedSequences());
 			if (diffMode) {
 				int referenceHours = 0;
 				if (row.getReferenceRow() != null) {
 					final Row referenceRow = row.getReferenceRow();
 					final Sequence referenceSequence = referenceRow.getSequence();
-					referenceHours = getSequenceHours(selectedElements, referenceSequence);
+					referenceHours = getSequenceHours(selectedElements, referenceRow.getLinkedSequences());
 				}
 				return ((double) (currentHours - referenceHours)) / 24.0;
 			} else {
@@ -57,19 +57,20 @@ public class GeneratedCharterDaysFormatter extends NumberOfDPFormatter {
 		return null;
 	}
 
-	protected int getSequenceHours(@Nullable final Collection<EObject> selectedElements, final Sequence sequence) {
+	protected int getSequenceHours(@Nullable final Collection<EObject> selectedElements, final List<Sequence> sequences) {
 		int time = 0;
-		for (final Event evt : sequence.getEvents()) {
-			if (selectedElements != null) {
-				if (!selectedElements.contains(evt)) {
-					continue;
+		for (Sequence sequence : sequences) {
+			for (final Event evt : sequence.getEvents()) {
+				if (selectedElements != null) {
+					if (!selectedElements.contains(evt)) {
+						continue;
+					}
+				}
+				if (evt instanceof GeneratedCharterOut) {
+
+					time += evt.getDuration();
 				}
 			}
-			if (evt instanceof GeneratedCharterOut) {
-
-				time += evt.getDuration();
-			}
-
 		}
 		return time;
 	}

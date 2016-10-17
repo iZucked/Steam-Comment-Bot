@@ -35,6 +35,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.TableImpl#getOptions <em>Options</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.TableImpl#getRows <em>Rows</em>}</li>
@@ -45,7 +46,6 @@ import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.TableImpl#getUserGroups <em>User Groups</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.TableImpl#getSelectedElements <em>Selected Elements</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

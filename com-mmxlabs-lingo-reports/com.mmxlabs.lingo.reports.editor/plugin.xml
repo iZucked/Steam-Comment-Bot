@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated schedulereport -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="com.mmxlabs.lingo.reports.views.schedule.model.presentation.ScheduleReportModelWizardID"
+            name="%_UI_ScheduleReportModelWizard_label"
+            class="com.mmxlabs.lingo.reports.views.schedule.model.presentation.ScheduleReportModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/ScheduleReportModelFile.gif">
+         <description>%_UI_ScheduleReportModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated schedulereport -->
+      <editor
+            id="com.mmxlabs.lingo.reports.views.schedule.model.presentation.ScheduleReportEditorID"
+            name="%_UI_ScheduleReportEditor_label"
+            icon="icons/full/obj16/ScheduleReportModelFile.gif"
+            extensions="schedulereport"
+            class="com.mmxlabs.lingo.reports.views.schedule.model.presentation.ScheduleReportEditor"
+            contributorClass="com.mmxlabs.lingo.reports.views.schedule.model.presentation.ScheduleReportActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>
