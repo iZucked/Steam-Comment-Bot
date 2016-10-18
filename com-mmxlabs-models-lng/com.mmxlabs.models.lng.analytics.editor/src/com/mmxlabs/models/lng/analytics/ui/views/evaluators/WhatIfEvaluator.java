@@ -94,7 +94,7 @@ public class WhatIfEvaluator {
 				final AnalysisResultRow res = AnalyticsFactory.eINSTANCE.createAnalysisResultRow();
 				res.setBuyOption(row.getBuyOption());
 				res.setSellOption(row.getSellOption());
-				res.setShipping(row.getShipping());
+				res.setShipping(EcoreUtil.copy(row.getShipping()));
 
 				Triple<SlotAllocation, SlotAllocation, CargoAllocation> t = finder(lngScenarioModel, row, mapper);
 				SlotAllocation loadAllocation = t.getFirst();
