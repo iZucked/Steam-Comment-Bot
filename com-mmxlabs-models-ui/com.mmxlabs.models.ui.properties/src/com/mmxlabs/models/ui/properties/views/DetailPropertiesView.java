@@ -41,7 +41,7 @@ public abstract class DetailPropertiesView extends ViewPart {
 	protected GridTreeViewer viewer;
 	private org.eclipse.e4.ui.workbench.modeling.ISelectionListener selectionListener;
 
-	private final String category;
+	private final @NonNull String category;
 	private final String helpContextId;
 
 	private final boolean showUnitsInColumn;
@@ -192,7 +192,7 @@ public abstract class DetailPropertiesView extends ViewPart {
 		selectionListener.selectionChanged(null, getSite().getPage().getSelection());
 	}
 
-	protected CellLabelProvider createLabelProvider(final DetailPropertyColumnType columnType, final GridViewerColumn gvc) {
+	protected CellLabelProvider createLabelProvider(final @NonNull DetailPropertyColumnType columnType, final @NonNull GridViewerColumn gvc) {
 		return new DetailPropertyLabelProvider(columnType);
 	}
 

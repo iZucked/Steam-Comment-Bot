@@ -1,5 +1,10 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * All rights reserved.
+ */
 package com.mmxlabs.models.ui.tabular.renderers;
 
+import org.eclipse.emf.edit.tree.impl.TreePackageImpl;
 import org.eclipse.nebula.widgets.grid.AbstractRenderer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridItem;
@@ -59,11 +64,11 @@ public class RowHeaderRenderer extends AbstractRenderer {
 		gc.fillRectangle(getBounds().x, getBounds().y, getBounds().width, getBounds().height + 1);
 
 		if (!item.getParent().getCellSelectionEnabled()) {
-			if (isSelected()) {
+//			if (isSelected()) {
+//				gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
+//			} else {
 				gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
-			} else {
-				gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
-			}
+//			}
 
 //			gc.drawLine(getBounds().x, getBounds().y, getBounds().x + getBounds().width - 1, getBounds().y);
 //			gc.drawLine(getBounds().x, getBounds().y, getBounds().x, getBounds().y + getBounds().height - 1);
