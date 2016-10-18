@@ -405,7 +405,7 @@ public class ScenarioUtils {
 		for (Constraint constraint : constraints) {
 			if (constraint.getName().equals(name)) {
 				constraint.setEnabled(enabled);
-				break;
+				return;
 			}
 		}
 		constraints.add(createConstraint(name, enabled));
@@ -445,7 +445,7 @@ public class ScenarioUtils {
 			if (objective.getName().equals(name)) {
 				objective.setEnabled(true);
 				objective.setWeight(weight);
-				break;
+				return;
 			}
 		}
 		objectives.add(createObjective(name, weight, enabled));
