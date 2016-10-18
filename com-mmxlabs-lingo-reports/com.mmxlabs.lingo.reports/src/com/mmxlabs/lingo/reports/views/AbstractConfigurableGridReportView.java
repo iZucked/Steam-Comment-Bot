@@ -349,7 +349,13 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 						@Override
 						public Object[] resetColumnStates() {
+							// Hide everything
+							for (final String blockId : getBlockManager().getBlockIDOrder()) {
+								getBlockManager().getBlockByID(blockId).setUserVisible(false);
+							}
+							// Apply the initial state
 							setInitialState();
+							// Return!
 							return getBlockManager().getBlocksInVisibleOrder().toArray();
 						}
 

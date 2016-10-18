@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TrayDialog;
@@ -75,7 +76,7 @@ import com.mmxlabs.lingo.reports.internal.Activator;
  * 
  */
 public abstract class ColumnConfigurationDialog extends TrayDialog {
-	
+
 	private static int RESET_ID = IDialogConstants.CLIENT_ID + 1;
 
 	/** The list contains columns that are currently visible in viewer */
@@ -132,17 +133,20 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 			public void widgetSelected(final SelectionEvent e) {
 				// hack: reset the visible / non-visible columns to the default states
 				setColumnsObjs(doGetColumnUpdater().resetColumnStates());
+				
 				// and refresh the table viewers
 				visibleViewer.refresh();
 				nonVisibleViewer.refresh();
+
+				// Refresh check box state.
+				refreshCheckboxes();
 			}
 
 			@Override
 			public void widgetDefaultSelected(final SelectionEvent e) {
-				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 		});
 		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
 	}
@@ -241,9 +245,10 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 			final Label label = new Label(composite, SWT.NONE);
 			label.setText(manager.title);
-			final Set<String> store = manager.store;
+			final Set<String> store = manager.store.get();
 			for (final OptionInfo option : manager.options) {
 				final Button button = new Button(composite, SWT.CHECK);
+				option.button = button;
 				button.setText(option.label);
 				button.setSelection(store.contains(option.id));
 				button.addListener(SWT.Selection, new Listener() {
@@ -1228,36 +1233,37 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 	}
 
-	public void addCheckBoxInfo(final String title, final OptionInfo[] options, final Set<String> store) {
+	public void addCheckBoxInfo(final String title, final OptionInfo[] options, final Supplier<Set<String>> store) {
 		checkboxInfo.add(new CheckboxInfoManager(title, options, store));
 	}
 
 	public static class OptionInfo {
 		public final String id;
 		public final String label;
-		
+		public Button button = null;
+
 		public OptionInfo(String id, String label) {
 			this.id = id;
 			this.label = label;
 		}
-		
-		public static Collection<? extends String> getIds(OptionInfo [] options) {
+
+		public static Collection<? extends String> getIds(OptionInfo[] options) {
 			List<String> result = new LinkedList<>();
-			for (OptionInfo option: options) {
+			for (OptionInfo option : options) {
 				result.add(option.id);
 			}
 			return result;
 		}
 	}
 
-	
 	static class CheckboxInfoManager {
-		
+
 		final String title;
 		final OptionInfo[] options;
-		final Set<String> store;
+		final Supplier<Set<String>> store;
+		final Button button = null;
 
-		public CheckboxInfoManager(final String title, final OptionInfo[] options, final Set<String> store) {
+		public CheckboxInfoManager(final String title, final OptionInfo[] options, final Supplier<Set<String>> store) {
 			this.title = title;
 			this.options = options;
 			this.store = store;
@@ -1265,4 +1271,15 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 	}
 
+	protected void refreshCheckboxes() {
+		for (final CheckboxInfoManager manager : checkboxInfo) {
+			final Set<String> store = manager.store.get();
+			for (final OptionInfo option : manager.options) {
+				final Button button = option.button;
+				if (button != null && !button.isDisposed()) {
+					button.setSelection(store.contains(option.id));
+				}
+			}
+		}
+	}
 }

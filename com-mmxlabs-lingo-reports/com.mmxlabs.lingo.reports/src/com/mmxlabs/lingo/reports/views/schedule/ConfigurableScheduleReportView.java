@@ -366,8 +366,8 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 
 	@Override
 	protected void addDialogCheckBoxes(final ColumnConfigurationDialog dialog) {
-		dialog.addCheckBoxInfo("Show rows for", builder.ROW_FILTER_ALL, builder.getRowFilterInfo());
-		dialog.addCheckBoxInfo("In diff mode", builder.DIFF_FILTER_ALL, builder.getDiffFilterInfo());
+		dialog.addCheckBoxInfo("Show rows for", builder.ROW_FILTER_ALL, () -> builder.getRowFilterInfo());
+		dialog.addCheckBoxInfo("In diff mode", builder.DIFF_FILTER_ALL, () -> builder.getDiffFilterInfo());
 	}
 
 	@Override
