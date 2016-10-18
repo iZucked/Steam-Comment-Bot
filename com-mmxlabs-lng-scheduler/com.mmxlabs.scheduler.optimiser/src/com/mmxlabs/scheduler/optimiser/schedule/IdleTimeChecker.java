@@ -34,7 +34,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.util.LDCargoDetailsWrapper;
  *
  */
 public class IdleTimeChecker {
-
+	public final static String GA_IDLE_TIME_HOURS_LOW = "GA_IDLE_TIME_HOURS_LOW";
+	public final static String GA_IDLE_TIME_HOURS_HIGH = "GA_IDLE_TIME_HOURS_HIGH";
 	@Inject
 	private IExcessIdleTimeComponentParameters idleTimeComponentParameters;
 
@@ -47,11 +48,11 @@ public class IdleTimeChecker {
 		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans = volumeAllocatedSequence.getVoyagePlans();
 		for (final Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord> planStructure : voyagePlans) {
 			final VoyagePlan plan = planStructure.getFirst();
-			applyPenaltyToPlan(volumeAllocatedSequence, plan);
+			applyPenaltyToPlan(volumeAllocatedSequence, plan, annotatedSolution);
 		}
 	}
 
-	public void applyPenaltyToPlan(final VolumeAllocatedSequence volumeAllocatedSequence, final VoyagePlan plan) {
+	private void applyPenaltyToPlan(final VolumeAllocatedSequence volumeAllocatedSequence, final VoyagePlan plan, @Nullable final IAnnotatedSolution annotatedSolution) {
 		if (LDCargoDetailsWrapper.isCargoVoyage(plan.getSequence())) {
 			final LDCargoDetailsWrapper cargoDetails = new LDCargoDetailsWrapper(plan.getSequence());
 			if (cargoDetails.getLoadOption() instanceof ILoadSlot) {
@@ -63,30 +64,30 @@ public class IdleTimeChecker {
 					final eIdleDetails idleDetails = ((IExcessIdleTimeConstrainedSlotProvider) load.getLoadPriceCalculator()).getSlotIdleConstraintDetails(load, discharge, returnSlot);
 					if (idleDetails == eIdleDetails.LADEN || idleDetails == eIdleDetails.BOTH) {
 						// penalty on laden
-						addPenalty(volumeAllocatedSequence, cargoDetails.getLaden());
+						addPenalty(volumeAllocatedSequence, cargoDetails.getLaden(), annotatedSolution);
 					}
 					if (idleDetails == eIdleDetails.BALLAST || idleDetails == eIdleDetails.BOTH) {
 						// penalty on ballast
-						addPenalty(volumeAllocatedSequence, cargoDetails.getBallast());
+						addPenalty(volumeAllocatedSequence, cargoDetails.getBallast(), annotatedSolution);
 					}
 				}
 			}
 		}
 	}
 
-	public void addPenalty(final VolumeAllocatedSequence volumeAllocatedSequence, final VoyageDetails voyageDetails) {
+	private void addPenalty(final VolumeAllocatedSequence volumeAllocatedSequence, final VoyageDetails voyageDetails, @Nullable final IAnnotatedSolution annotatedSolution) {
 		final int idleTimeInHours = voyageDetails.getIdleTime();
 		final int violatingHours = getViolatingHours(idleTimeInHours);
 		if (violatingHours > 0) {
 			final IPortSlot idleTimeSlot = voyageDetails.getOptions().getFromPortSlot();
 			final boolean isEnd = voyageDetails.getOptions().getToPortSlot() instanceof EndPortSlot;
-			final long penalty = getIdleTimePenalty(idleTimeInHours, isEnd);
+			final long penalty = getIdleTimePenalty(idleTimeInHours, isEnd, annotatedSolution);
 			volumeAllocatedSequence.addIdleHoursViolation(idleTimeSlot, violatingHours);
 			volumeAllocatedSequence.addIdleWeightedCost(idleTimeSlot, penalty);
 		}
 	}
 
-	private long getIdleTimePenalty(final int idleTimeInHours, final boolean isEnd) {
+	private long getIdleTimePenalty(final int idleTimeInHours, final boolean isEnd, IAnnotatedSolution annotatedSolution) {
 		final int violatingHours = Math.max(idleTimeInHours - idleTimeComponentParameters.getThreshold(Interval.LOW), 0);
 		if (violatingHours > 0) {
 			if (!isEnd) {
@@ -94,6 +95,20 @@ public class IdleTimeChecker {
 				final int highHours = violatingHours - lowHours;
 				final long penaltyLow = lowHours * idleTimeComponentParameters.getWeight(Interval.LOW);
 				final long penaltyHigh = highHours * idleTimeComponentParameters.getWeight(Interval.HIGH);
+				if (annotatedSolution != null) {
+					Integer gaLow = annotatedSolution.getGeneralAnnotation(GA_IDLE_TIME_HOURS_LOW, Integer.class);
+					Integer gaHigh = annotatedSolution.getGeneralAnnotation(GA_IDLE_TIME_HOURS_HIGH, Integer.class);
+					if (gaLow == null) {
+						gaLow = 0;
+					}
+					if (gaHigh == null) {
+						gaHigh = 0;
+					}
+					gaHigh += lowHours;
+					gaHigh += highHours;
+					annotatedSolution.setGeneralAnnotation(GA_IDLE_TIME_HOURS_LOW, gaLow);
+					annotatedSolution.setGeneralAnnotation(GA_IDLE_TIME_HOURS_HIGH, gaHigh);
+				}
 				return penaltyLow + penaltyHigh;
 			} else {
 				return violatingHours * idleTimeComponentParameters.getEndWeight();
