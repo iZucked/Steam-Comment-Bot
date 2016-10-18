@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.pricing.util;
 
+import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.Comparator;
 import java.util.List;
@@ -35,6 +36,8 @@ import com.mmxlabs.models.lng.pricing.UnitConversion;
  * 
  */
 public class PriceIndexUtils {
+	public static final @NonNull YearMonth dateZero = YearMonth.of(2000, 1);
+	public static final @NonNull LocalDateTime dateTimeZero = LocalDateTime.of(dateZero.getYear(), dateZero.getMonthValue(), 1, 0, 0);
 
 	public enum PriceIndexType {
 		COMMODITY, CHARTER, BUNKERS, CURRENCY;
@@ -47,12 +50,20 @@ public class PriceIndexUtils {
 	 */
 	public static @NonNull SeriesParser getParserFor(final @NonNull PricingModel pricingModel, final @NonNull EReference reference) {
 
-		final YearMonth dateZero = YearMonth.of(2000, 1);
-
 		final SeriesParser indices = new SeriesParser();
+		indices.setShiftMapper((date, shift) -> {
+			// Get input as local date time and shift.
+			@NonNull
+			final LocalDateTime plusMonths = dateTimeZero.plusHours(date).minusMonths(shift);
+			// Convert back to internal time units.
+			return Hours.between(dateTimeZero, plusMonths);
+		});
 		{
 			final List<NamedIndexContainer<? extends Number>> namedIndexContainerList = (List<NamedIndexContainer<? extends Number>>) pricingModel.eGet(reference);
 			for (final NamedIndexContainer<? extends Number> namedIndexContainer : namedIndexContainerList) {
+				if (namedIndexContainer.getName() == null) {
+					continue;
+				}
 				final Index<? extends Number> index = namedIndexContainer.getData();
 				if (index instanceof DataIndex) {
 					addSeriesDataFromDataIndex(indices, namedIndexContainer.getName(), dateZero, (DataIndex<? extends Number>) index);

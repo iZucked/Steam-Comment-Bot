@@ -91,7 +91,7 @@ public class CargoEditorMenuHelper {
 	private final IScenarioEditingLocation scenarioEditingLocation;
 
 	private final CargoEditingCommands cec;
-	private CargoEditingHelper helper;
+	private final CargoEditingHelper helper;
 	private final LNGScenarioModel scenarioModel;
 
 	private static final boolean enableSTSMenus = LicenseFeatures.isPermitted("features:shiptoship");
@@ -325,10 +325,46 @@ public class CargoEditorMenuHelper {
 
 			final IReferenceValueProvider valueProvider = valueProviderFactory.createReferenceValueProvider(CargoPackage.eINSTANCE.getSlot(), CargoPackage.eINSTANCE.getSlot_NominatedVessel(),
 					scenarioModel);
+			final List<Pair<String, EObject>> allowedValues = valueProvider.getAllowedValues(slot, CargoPackage.eINSTANCE.getSlot_NominatedVessel());
+			if (allowedValues.size() > 15) {
+				int counter = 0;
+				MenuManager m = new MenuManager("...", null);
+				String firstEntry = null;
+				String lastEntry = null;
+				for (final Pair<String, EObject> p : allowedValues) {
+					if (p.getSecond() == null) {
+						continue;
+					}
+					if (p.getSecond() == slot.getNominatedVessel()) {
+						continue;
+					}
+					m.add(new AssignAction(p.getFirst(), (Vessel) p.getSecond()));
+					counter++;
+					if (firstEntry == null) {
+						firstEntry = p.getFirst();
+					}
+					lastEntry = p.getFirst();
 
-			for (final Pair<String, EObject> p : valueProvider.getAllowedValues(slot, CargoPackage.eINSTANCE.getSlot_NominatedVessel())) {
-				if (p.getSecond() != slot.getNominatedVessel()) {
-					reassignMenuManager.add(new AssignAction(p.getFirst(), (Vessel) p.getSecond()));
+					if (counter == 15) {
+						final String title = String.format("%s ... %s", firstEntry, lastEntry);
+						m.setMenuText(title);
+						reassignMenuManager.add(m);
+						m = new MenuManager("...", null);
+						counter = 0;
+						firstEntry = null;
+						lastEntry = null;
+					}
+				}
+				if (counter > 0) {
+					final String title = String.format("%s ... %s", firstEntry, lastEntry);
+					m.setMenuText(title);
+					reassignMenuManager.add(m);
+				}
+			} else {
+				for (final Pair<String, EObject> p : allowedValues) {
+					if (p.getSecond() != slot.getNominatedVessel()) {
+						reassignMenuManager.add(new AssignAction(p.getFirst(), (Vessel) p.getSecond()));
+					}
 				}
 			}
 
@@ -349,7 +385,7 @@ public class CargoEditorMenuHelper {
 	private void createAssignmentMenus(final IMenuManager menuManager, final Cargo cargo) {
 		menuManager.add(new Separator());
 
-		if (cargo != null) {
+		if (cargo != null && cargo.getCargoType() == CargoType.FLEET) {
 			final MenuManager reassignMenuManager = new MenuManager("Assign to...", null);
 			menuManager.add(reassignMenuManager);
 
@@ -358,33 +394,12 @@ public class CargoEditorMenuHelper {
 			boolean marketMenuUsed = false;
 			boolean nominalMenuUsed = false;
 
-			// class AssignAction extends Action {
-			// private final VesselAssignmentType vessel;
-			// private final int spotIndex;
-			//
-			// public AssignAction(final String label, final VesselAssignmentType vessel, final int spotIndex) {
-			// super(label);
-			// this.vessel = vessel;
-			// this.spotIndex = spotIndex;
-			// }
-			//
-			// public void run() {
-			// helper.assignCargoToVesselAassignment(label, cargo, vesselAssignmentType, spotIndex);
-			// final Object value = vessel == null ? SetCommand.UNSET_VALUE : vessel;
-			// final CompoundCommand cc = new CompoundCommand("Set assignment");
-			// cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, value));
-			// cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, spotIndex));
-			// scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
-			// {
-			// cec.verifyCargoModel(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getCargoModel());
-			// }
-			// }
-			// }
-
 			final IReferenceValueProviderFactory valueProviderFactory = Activator.getDefault().getReferenceValueProviderFactoryRegistry()
 					.getValueProviderFactory(CargoPackage.eINSTANCE.getAssignableElement(), CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType());
 			final IReferenceValueProvider valueProvider = valueProviderFactory.createReferenceValueProvider(CargoPackage.eINSTANCE.getAssignableElement(),
 					CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType(), scenarioModel);
+
+			final List<Pair<String, EObject>> vesselAvailabilityOptions = new LinkedList<>();
 
 			for (final Pair<String, EObject> p : valueProvider.getAllowedValues(cargo, CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType())) {
 				final EObject assignmentOption = p.getSecond();
@@ -422,15 +437,62 @@ public class CargoEditorMenuHelper {
 				} else if (assignmentOption instanceof VesselAvailability) {
 					final VesselAvailability vesselAvailability = (VesselAvailability) assignmentOption;
 					if (assignmentOption != cargo.getVesselAssignmentType()) {
-						reassignMenuManager.add(new RunnableAction(p.getFirst(), () -> helper.assignCargoToVesselAvailability(String.format("Assign to %s", p.getFirst()), cargo, vesselAvailability)));
+						vesselAvailabilityOptions.add(p);
+
+						// reassignMenuManager.add(new RunnableAction(p.getFirst(), () -> helper.assignCargoToVesselAvailability(String.format("Assign to %s", p.getFirst()), cargo,
+						// vesselAvailability)));
 					}
 				} else {
 					assert false;
 				}
 			}
+			{
+				if (vesselAvailabilityOptions.size() > 15) {
+					int counter = 0;
+					MenuManager m = new MenuManager("", null);
+					String firstEntry = null;
+					String lastEntry = null;
+					for (final Pair<String, EObject> p : vesselAvailabilityOptions) {
+						if (p.getSecond() == null) {
+							continue;
+						}
+
+						m.add(new RunnableAction(p.getFirst(), () -> helper.assignCargoToVesselAvailability(String.format("Assign to %s", p.getFirst()), cargo, (VesselAvailability) p.getSecond())));
+						counter++;
+						if (firstEntry == null) {
+							firstEntry = p.getFirst();
+						}
+						lastEntry = p.getFirst();
+
+						if (counter == 15) {
+							final String title = String.format("%s ... %s", firstEntry, lastEntry);
+							m.setMenuText(title);
+							reassignMenuManager.add(m);
+							m = new MenuManager("", null);
+							counter = 0;
+							firstEntry = null;
+							lastEntry = null;
+						}
+					}
+					if (counter > 0) {
+						final String title = String.format("%s ... %s", firstEntry, lastEntry);
+						m.setMenuText(title);
+						reassignMenuManager.add(m);
+					}
+
+					// Carve up menu
+				} else {
+					for (final Pair<String, EObject> p : vesselAvailabilityOptions) {
+						reassignMenuManager.add(
+								new RunnableAction(p.getFirst(), () -> helper.assignCargoToVesselAvailability(String.format("Assign to %s", p.getFirst()), cargo, (VesselAvailability) p.getSecond())));
+					}
+				}
+			}
 
 			if (nominalMenuUsed) {
-				reassignMenuManager.add(nominalMenu);
+				if (LicenseFeatures.isPermitted("features:nominals")) {
+					reassignMenuManager.add(nominalMenu);
+				}
 			}
 			if (marketMenuUsed) {
 				reassignMenuManager.add(marketMenu);

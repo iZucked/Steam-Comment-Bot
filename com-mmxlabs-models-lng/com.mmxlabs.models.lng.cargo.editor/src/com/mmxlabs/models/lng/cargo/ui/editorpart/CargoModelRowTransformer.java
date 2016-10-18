@@ -47,7 +47,7 @@ public class CargoModelRowTransformer {
 	static final Color InvalidTerminalColour = Display.getDefault().getSystemColor(SWT.COLOR_RED);
 	private final Color InvalidWireColour = Display.getDefault().getSystemColor(SWT.COLOR_DARK_RED);
 
-	private final Color Grey = new Color(Display.getCurrent(), new RGB(64, 64, 64));
+	private static final Color Grey = new Color(Display.getDefault(), new RGB(64, 64, 64));
 	static final Color ValidTerminalColour = TradesWiringDiagram.Light_Green;
 	private final Color RewirableColour = Grey;// Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
 	private final Color FixedWireColour = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);

@@ -41,9 +41,9 @@ public class RawTreeParser extends ExpressionParser<Node> {
 					return b == '/' || b == '+' || b == '-';
 				case '/':
 					return b == '+' || b == '-';
-				case '+':
-					return b == '-';
 				case '-':
+					return b == '+';
+				case '+':
 					return false;
 				}
 				return false;
@@ -80,11 +80,21 @@ public class RawTreeParser extends ExpressionParser<Node> {
 		setPrefixOperatorFactory(new IPrefixOperatorFactory<Node>() {
 			@Override
 			public boolean isPrefixOperator(final char operator) {
+				if (operator == '-') {
+					return true;
+				}
 				return false;
 			}
 
 			@Override
 			public IExpression<Node> createPrefixOperator(final char operator, final IExpression<Node> argument) {
+				if (operator == '-') {
+					final @NonNull Node[] children = new Node[1];
+
+					children[0] = argument.evaluate();
+
+					return new NodeExpression("-", children);
+				}
 				throw new RuntimeException("Unknown prefix op " + operator);
 			}
 		});

@@ -7,7 +7,12 @@ package com.mmxlabs.models.lng.commercial.parseutils;
 import java.time.YearMonth;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -104,13 +109,11 @@ public class Exposures {
 					continue;
 				}
 
-				for (final CommodityIndex idx : pricingModel.getCommodityIndices()) {
-					ExposureDetail exposureDetail = createExposureDetail(node, pricingDate, idx, volume, slot instanceof LoadSlot, lookupData);
-					if (exposureDetail != null) {
+				final Collection<ExposureDetail> exposureDetail = createExposureDetail(node, pricingDate, volume, slot instanceof LoadSlot, lookupData);
+				if (exposureDetail != null && !exposureDetail.isEmpty()) {
 
-						// Should be added to a command!
-						cmd.append(AddCommand.create(domain, slotAllocation, SchedulePackage.Literals.SLOT_ALLOCATION__EXPOSURES, exposureDetail));
-					}
+					// Should be added to a command!
+					cmd.append(AddCommand.create(domain, slotAllocation, SchedulePackage.Literals.SLOT_ALLOCATION__EXPOSURES, exposureDetail));
 				}
 			}
 		}
@@ -124,16 +127,12 @@ public class Exposures {
 
 	}
 
-	// private static final Set<String> operators = CollectionsUtil.makeHashSet("+", "-", "/", "*", "%");
-
 	/**
 	 * For unit test use
 	 * 
-	 * @param priceExpression
-	 * @param lookupData
-	 * @return
 	 */
-	public static @Nullable ExposureDetail calculateExposure(final @NonNull String priceExpression, CommodityIndex index, YearMonth date, double volumeInMMBTu, boolean isPurchase,
+
+	public static @Nullable Collection<ExposureDetail> calculateExposure(final @NonNull String priceExpression, final YearMonth date, final double volumeInMMBTu, final boolean isPurchase,
 			final @NonNull LookupData lookupData) {
 
 		// Parse the expression
@@ -141,8 +140,10 @@ public class Exposures {
 		final Node p = parse.evaluate();
 		final Node node = expandNode(p, lookupData);
 		final MarkedUpNode markedUpNode = markupNodes(node, lookupData);
-
-		return createExposureDetail(markedUpNode, date, index, volumeInMMBTu, isPurchase, lookupData);
+		if (markedUpNode == null) {
+			return null;
+		}
+		return createExposureDetail(markedUpNode, date, volumeInMMBTu, isPurchase, lookupData);
 	}
 
 	/**
@@ -163,8 +164,8 @@ public class Exposures {
 
 		if (parentNode.children.length == 0) {
 			// Leaf node, this should be an index or a value
-			if (lookupData.commodityMap.containsKey(parentNode.token)) {
-				final CommodityIndex idx = lookupData.commodityMap.get(parentNode.token);
+			if (lookupData.commodityMap.containsKey(parentNode.token.toLowerCase())) {
+				final CommodityIndex idx = lookupData.commodityMap.get(parentNode.token.toLowerCase());
 
 				// Matched derived index...
 				if (idx.getData() instanceof DerivedIndex<?>) {
@@ -233,9 +234,9 @@ public class Exposures {
 				priceExpression = pec.getPriceExpression();
 			} else {
 				// Delegate to services registry to see if we have a provider to help us.
-				String[] result = new String[1];
+				final String[] result = new String[1];
 				ServiceHelper.withAllServices(IExposuredExpressionProvider.class, provider -> {
-					String exp = provider.provideExposedPriceExpression(slot, slotAllocation);
+					final String exp = provider.provideExposedPriceExpression(slot, slotAllocation);
 					if (exp != null) {
 						result[0] = exp;
 						return false;
@@ -269,7 +270,38 @@ public class Exposures {
 	private static MarkedUpNode markupNodes(@NonNull final Node parentNode, final LookupData lookupData) {
 		MarkedUpNode n;
 
-		if (parentNode.token.equals("*") || parentNode.token.equals("/") || parentNode.token.equals("+") || parentNode.token.equals("-") || parentNode.token.equals("%")) {
+		if (parentNode.token.equalsIgnoreCase("SHIFT")) {
+			final MarkedUpNode child = markupNodes(parentNode.children[0], lookupData);
+			final MarkedUpNode shiftValue = markupNodes(parentNode.children[1], lookupData);
+			final double shift;
+			if (shiftValue instanceof ConstantNode) {
+				ConstantNode constantNode = (ConstantNode) shiftValue;
+				shift = constantNode.getConstant();
+			} else if (shiftValue instanceof OperatorNode) {
+				// FIXME: Only allow a specific operation here -- effectively the expression -x, generated as 0-x.
+				OperatorNode operatorNode = (OperatorNode) shiftValue;
+				if (operatorNode.getOperator().equals("-") && operatorNode.getChildren().size() == 2 && operatorNode.getChildren().get(0) instanceof ConstantNode
+						&& operatorNode.getChildren().get(1) instanceof ConstantNode) {
+					shift = ((ConstantNode) operatorNode.getChildren().get(0)).getConstant() - ((ConstantNode) operatorNode.getChildren().get(1)).getConstant();
+				} else {
+					throw new IllegalStateException();
+				}
+			} else {
+				throw new IllegalStateException();
+			}
+			// = Integer.parseInt(parentNode.children[1].token);
+			// for (final Node child : parentNode.children) {
+			// }
+			// n = new CommodityNode(lookupData.commodityMap.get(parentNode.token.toLowerCase()));
+			n = new ShiftNode(child, (int) Math.round(shift));
+			return n;
+		} else if (parentNode.token.equals("-") && parentNode.children.length == 1) {
+			// Prefix operator! - Convert to 0-expr
+			n = new OperatorNode(parentNode.token);
+			n.addChildNode(new ConstantNode(0.0));
+			n.addChildNode(markupNodes(parentNode.children[0], lookupData));
+			return n;
+		} else if (parentNode.token.equals("*") || parentNode.token.equals("/") || parentNode.token.equals("+") || parentNode.token.equals("-") || parentNode.token.equals("%")) {
 			n = new OperatorNode(parentNode.token);
 		} else if (lookupData.commodityMap.containsKey(parentNode.token.toLowerCase())) {
 			n = new CommodityNode(lookupData.commodityMap.get(parentNode.token.toLowerCase()));
@@ -292,153 +324,6 @@ public class Exposures {
 			n.addChildNode(markupNodes(child, lookupData));
 		}
 		return n;
-	}
-
-	// private void evaluate(MarkedUpNode node, String indexName, YearMonth date) {
-	private static @NonNull CoEff getExposureCoefficient(final @NonNull MarkedUpNode node, final YearMonth date, final CommodityIndex index, final Mode mode, final LookupData lookupData) {
-		if (node instanceof ConstantNode) {
-			final ConstantNode constantNode = (ConstantNode) node;
-			// if (mode == Mode.VALUE) {
-			// return new CoEff(1, false);
-			// } else {
-			return new CoEff(constantNode.getConstant(), false);
-			// }
-		}
-
-		// Arithmetic operator token
-		else if (node instanceof OperatorNode) {
-			final OperatorNode operatorNode = (OperatorNode) node;
-			if (node.getChildren().size() != 2) {
-				throw new IllegalStateException();
-				// Invalid state
-				// return new CoEff(0, false);
-			}
-
-			final String operator = operatorNode.getOperator();
-			final CoEff c0 = getExposureCoefficient(node.getChildren().get(0), date, index, mode, lookupData);
-			final CoEff c1 = getExposureCoefficient(node.getChildren().get(1), date, index, mode, lookupData);
-			if (operator.equals("+")) {
-				if (mode == Mode.VALUE) {
-					if (c0.isExposed() && c1.isExposed()) {
-						return c0;// new CoEff(c0.getCoeff() * c1.getCoeff(), true);
-					} else if (c0.isExposed()) {
-						return c0;
-					} else if (c1.isExposed()) {
-						return c1;
-					} else {
-						return new CoEff(1.0, false);
-					}
-				}
-				// addition: add coefficients of summands
-				if (c0.isExposed() == c1.isExposed()) {
-					return new CoEff(c0.getCoeff() + c1.getCoeff(), c0.isExposed());
-				} else if (c0.isExposed()) {
-					return c0;
-				} else {
-					assert c1.isExposed();
-					return c1;
-				}
-			} else if (operator.equals("*")) {
-				if (mode == Mode.VALUE) {
-					if (c0.isExposed() && c1.isExposed()) {
-						return c0;// new CoEff(c0.getCoeff() * c1.getCoeff(), true);
-					} else if (c0.isExposed()) {
-						return c0;
-					} else if (c1.isExposed()) {
-						return c1;
-					} else {
-						return new CoEff(1.0, false);
-					}
-				}
-				return new CoEff(c0.getCoeff() * c1.getCoeff(), c0.isExposed() | c1.isExposed());
-			} else if (operator.equals("/")) {
-				if (mode == Mode.VALUE) {
-					if (c0.isExposed() && c1.isExposed()) {
-						return c0;// new CoEff(c0.getCoeff() / c1.getCoeff(), true);
-					} else if (c0.isExposed()) {
-						return c0;
-					} else if (c1.isExposed()) {
-						return c1;
-					} else {
-						return new CoEff(1.0, false);
-					}
-				}
-				return new CoEff(c0.getCoeff() / c1.getCoeff(), c0.isExposed() | c1.isExposed());
-			} else if (operator.equals("%")) {
-				if (mode == Mode.VALUE) {
-					if (c1.isExposed()) {
-						return c1;
-					} else {
-						return new CoEff(1.0, false);
-					}
-				}
-				// // In value mode this will be 1.0 rather than real value
-				// return new CoEff(c0.getCoeff() * c1.getCoeff(), c0.isExposed() | c1.isExposed());
-				// } else {
-				return new CoEff(0.01 * c0.getCoeff() * c1.getCoeff(), c0.isExposed() | c1.isExposed());
-				// }
-			} else if (operator.equals("-")) {
-				// subtraction: subtract coefficients
-				if (c0.isExposed() == c1.isExposed()) {
-					return new CoEff(c0.getCoeff() - c1.getCoeff(), c0.isExposed());
-				} else if (c0.isExposed()) {
-					return c0;
-				} else {
-					assert c1.isExposed();
-					return new CoEff(-c1.getCoeff(), c1.isExposed());
-				}
-			} else {
-				throw new IllegalStateException("Invalid operator");
-			}
-		}
-
-		else if (node instanceof CommodityNode) {
-			final CommodityNode commodityNode = (CommodityNode) node;
-
-			// IF MODE == VOLUME
-			if (mode == Mode.VOLUME) {
-				if (commodityNode.getIndex() == index) {
-					return new CoEff(1, true);
-				} else {
-					return new CoEff(1, false);
-				}
-			}
-			if (mode == Mode.VALUE) {
-
-				if (commodityNode.getIndex() == index) {
-					final SeriesParser p = PriceIndexUtils.getParserFor(lookupData.pricingModel, PriceIndexType.COMMODITY);
-					final ISeries series = p.getSeries(commodityNode.getIndex().getName());
-					// "Magic" date constant used in PriceIndexUtils for date zero
-					final Number evaluate = series.evaluate(Hours.between(YearMonth.of(2000, 1), date));
-
-					return new CoEff(evaluate.doubleValue(), true);
-				} else {
-					return new CoEff(1, false);
-				}
-			}
-
-		} else if (node instanceof CurrencyNode) {
-			final CurrencyNode currencyNode = (CurrencyNode) node;
-
-			// IF MODE == VOLUME
-			if (mode == Mode.VOLUME) {
-				return new CoEff(1, false);
-			} else if (mode == Mode.VALUE) {
-				return new CoEff(1, false);
-			}
-		} else if (node instanceof ConversionNode) {
-			final ConversionNode conversionNode = (ConversionNode) node;
-
-			// IF MODE == VOLUME
-			if (mode == Mode.VOLUME) {
-				return new CoEff(1, false);
-			} else if (mode == Mode.VALUE) {
-				return new CoEff(1, false);
-			}
-		}
-
-		throw new IllegalStateException("Unexpected node type");
-
 	}
 
 	/**
@@ -488,56 +373,243 @@ public class Exposures {
 
 	}
 
-	private static @Nullable ExposureDetail createExposureDetail(final @NonNull MarkedUpNode node, final YearMonth pricingDate, final CommodityIndex idx, double volumeInMMBtu, boolean isPurchase,
+	private static Collection<ExposureDetail> createExposureDetail(final @NonNull MarkedUpNode node, final YearMonth pricingDate, final double volumeInMMBtu, final boolean isPurchase,
 			final LookupData lookupData) {
-		final ExposureDetail exposureDetail = ScheduleFactory.eINSTANCE.createExposureDetail();
-		{
-			final CoEff exposureCoefficient = getExposureCoefficient(node, pricingDate, idx, Mode.VOLUME, lookupData);
-			if (!exposureCoefficient.isExposed()) {
-				return null;
+		final List<ExposureDetail> m = new LinkedList<>();
+
+		final InputRecord inputRecord = new InputRecord();
+		inputRecord.volumeInMMBTU = volumeInMMBtu;
+		final IExposureNode enode = getExposureNode(inputRecord, node, pricingDate, lookupData);
+		if (enode instanceof ExposureRecords) {
+			final ExposureRecords exposureRecords = (ExposureRecords) enode;
+			for (final ExposureRecord record : exposureRecords.records) {
+				final ExposureDetail exposureDetail = ScheduleFactory.eINSTANCE.createExposureDetail();
+
+				exposureDetail.setIndex(record.index);
+				exposureDetail.setCurrencyUnit(record.index.getCurrencyUnit());
+				exposureDetail.setVolumeUnit(record.index.getVolumeUnit());
+
+				exposureDetail.setDate(record.date);
+				exposureDetail.setUnitPrice(record.unitPrice);
+
+				exposureDetail.setVolumeInMMBTU(isPurchase ? record.mmbtuVolume : -record.mmbtuVolume);
+				exposureDetail.setVolumeInNativeUnits(isPurchase ? record.nativeVolume : -record.nativeVolume);
+				exposureDetail.setNativeValue(isPurchase ? record.nativeValue : -record.nativeValue);
+
+				m.add(exposureDetail);
 			}
-			if (exposureCoefficient.getCoeff() == 0.0) {
-				return null;
+		}
+		return m;
+	}
+
+	static interface IExposureNode {
+
+	}
+
+	static class Constant implements IExposureNode {
+
+		public Constant(final double constant) {
+			this.constant = constant;
+		}
+
+		double constant;
+
+		public double getConstant() {
+			return constant;
+		}
+	}
+
+	static class ExposureRecords implements IExposureNode {
+
+		List<ExposureRecord> records = new LinkedList<>();
+
+		public ExposureRecords(final ExposureRecord record) {
+			records.add(record);
+		}
+
+		public ExposureRecords() {
+		}
+
+	}
+
+	static class ExposureRecord {
+		CommodityIndex index;
+		double unitPrice;
+		double nativeVolume;
+		double nativeValue;
+		double mmbtuVolume;
+		YearMonth date;
+
+		ExposureRecord(final CommodityIndex index, final double unitPrice, final double nativeVolume, final double nativeValue, final double mmbtuVolume, final YearMonth date) {
+			this.index = index;
+			this.unitPrice = unitPrice;
+			this.nativeVolume = nativeVolume;
+			this.nativeValue = nativeValue;
+			this.mmbtuVolume = mmbtuVolume;
+			this.date = date;
+
+		}
+
+	}
+
+	static class InputRecord {
+		double volumeInMMBTU;
+	}
+
+	// private void evaluate(MarkedUpNode node, String indexName, YearMonth date) {
+	private static @NonNull IExposureNode getExposureNode(final InputRecord inputRecord, final @NonNull MarkedUpNode node, final YearMonth date, final LookupData lookupData) {
+		if (node instanceof ShiftNode) {
+			final ShiftNode shiftNode = (ShiftNode) node;
+			return getExposureNode(inputRecord, shiftNode.getChild(), date.minusMonths(shiftNode.getMonths()), lookupData);
+		} else if (node instanceof ConstantNode) {
+			final ConstantNode constantNode = (ConstantNode) node;
+			return new Constant(constantNode.getConstant());
+		}
+
+		// Arithmetic operator token
+		else if (node instanceof OperatorNode) {
+			final OperatorNode operatorNode = (OperatorNode) node;
+			if (node.getChildren().size() != 2) {
+				throw new IllegalStateException();
 			}
 
-			double exposure = exposureCoefficient.getCoeff() * volumeInMMBtu;
+			final String operator = operatorNode.getOperator();
+			final IExposureNode c0 = getExposureNode(inputRecord, node.getChildren().get(0), date, lookupData);
+			final IExposureNode c1 = getExposureNode(inputRecord, node.getChildren().get(1), date, lookupData);
+			if (operator.equals("+")) {
+				// addition: add coefficients of summands
+				if (c0 instanceof Constant && c1 instanceof Constant) {
+					return new Constant(((Constant) c0).getConstant() + ((Constant) c1).getConstant());
+				} else if (c0 instanceof ExposureRecords && c1 instanceof Constant) {
+					return c0;
+				} else if (c0 instanceof Constant && c1 instanceof ExposureRecords) {
+					return c1;
+				} else {
+					return merge((ExposureRecords) c0, (ExposureRecords) c1, (c_0, c_1) -> new ExposureRecord(c_0.index, c_0.unitPrice, c_0.nativeVolume + c_1.nativeVolume,
+							c_0.nativeValue + c_1.nativeValue, c_0.mmbtuVolume + c_1.mmbtuVolume, c_0.date));
+				}
+			} else if (operator.equals("-")) {
+				if (c0 instanceof Constant && c1 instanceof Constant) {
+					return new Constant(((Constant) c0).getConstant() - ((Constant) c1).getConstant());
+				} else if (c0 instanceof ExposureRecords && c1 instanceof Constant) {
+					return c0;// modify((ExposureRecords) c0, c -> new ExposureRecord(c.index, c.unitPrice, -c.nativeVolume, -c.nativeValue, -c.mmbtuVolume, c.date));
+				} else if (c0 instanceof Constant && c1 instanceof ExposureRecords) {
+					return modify((ExposureRecords) c1, c -> new ExposureRecord(c.index, c.unitPrice, -c.nativeVolume, -c.nativeValue, -c.mmbtuVolume, c.date));
+				} else {
+					final ExposureRecords newC1 = modify((ExposureRecords) c1, c -> new ExposureRecord(c.index, c.unitPrice, -c.nativeVolume, -c.nativeValue, -c.mmbtuVolume, c.date));
+					return merge((ExposureRecords) c0, newC1, (c_0, c_1) -> new ExposureRecord(c_0.index, c_0.unitPrice, c_0.nativeVolume + c_1.nativeVolume, c_0.nativeValue + c_1.nativeValue,
+							c_0.mmbtuVolume + c_1.mmbtuVolume, c_0.date));
+				}
+			} else if (operator.equals("*")) {
+				if (c0 instanceof Constant && c1 instanceof Constant) {
+					return new Constant(((Constant) c0).getConstant() * ((Constant) c1).getConstant());
+				} else if (c0 instanceof ExposureRecords && c1 instanceof Constant) {
+					final double constant = ((Constant) c1).getConstant();
+					return modify((ExposureRecords) c0, c -> new ExposureRecord(c.index, c.unitPrice, c.nativeVolume * constant, c.nativeValue * constant, c.mmbtuVolume * constant, c.date));
+				} else if (c0 instanceof Constant && c1 instanceof ExposureRecords) {
+					final double constant = ((Constant) c0).getConstant();
+					return modify((ExposureRecords) c1, c -> new ExposureRecord(c.index, c.unitPrice, constant * c.nativeVolume, constant * c.nativeValue, constant * c.mmbtuVolume, c.date));
+				} else {
+					return merge((ExposureRecords) c0, (ExposureRecords) c1, (c_0, c_1) -> new ExposureRecord(c_0.index, c_0.unitPrice, c_0.nativeVolume * c_1.nativeVolume,
+							c_0.nativeValue * c_1.nativeValue, c_0.mmbtuVolume * c_1.mmbtuVolume, c_0.date));
+				}
+			} else if (operator.equals("/")) {
+				if (c0 instanceof Constant && c1 instanceof Constant) {
+					return new Constant(((Constant) c0).getConstant() / ((Constant) c1).getConstant());
+				} else if (c0 instanceof ExposureRecords && c1 instanceof Constant) {
+					final double constant = ((Constant) c1).getConstant();
+					return modify((ExposureRecords) c0, c -> new ExposureRecord(c.index, c.unitPrice, c.nativeVolume / constant, c.nativeValue / constant, c.mmbtuVolume / constant, c.date));
+				} else if (c0 instanceof Constant && c1 instanceof ExposureRecords) {
+					final double constant = ((Constant) c0).getConstant();
+					return modify((ExposureRecords) c1, c -> new ExposureRecord(c.index, c.unitPrice, constant / c.nativeVolume, constant / c.nativeValue, constant / c.mmbtuVolume, c.date));
+				} else {
+					return merge((ExposureRecords) c0, (ExposureRecords) c1, (c_0, c_1) -> new ExposureRecord(c_0.index, c_0.unitPrice, c_0.nativeVolume / c_1.nativeVolume,
+							c_0.nativeValue / c_1.nativeValue, c_0.mmbtuVolume / c_1.mmbtuVolume, c_0.date));
+				}
+			} else if (operator.equals("%")) {
 
-			if (!isPurchase) {
-				// -ve exposure
-				exposure = -exposure;
+				if (c0 instanceof Constant && c1 instanceof Constant) {
+					return new Constant(0.01 * ((Constant) c0).getConstant() * ((Constant) c1).getConstant());
+				} else if (c0 instanceof ExposureRecords && c1 instanceof Constant) {
+					assert false;
+					throw new UnsupportedOperationException();
+					// return modify((ExposureRecords) c0, c -> new ExposureRecord(c.index, c.unitPrice, -c.nativeVolume, -c.nativeValue, -c.mmbtuVolume, c.date));
+				} else if (c0 instanceof Constant && c1 instanceof ExposureRecords) {
+					final double constant = 0.01 * ((Constant) c0).getConstant();
+					return modify((ExposureRecords) c1, c -> new ExposureRecord(c.index, c.unitPrice, constant * c.nativeVolume, constant * c.nativeValue, constant * c.mmbtuVolume, c.date));
+				} else {
+					// return merge((ExposureRecords) c0, (ExposureRecords) c1, (c_0, c_1) -> new ExposureRecord(c_0.index, c_0.unitPrice, c_0.nativeVolume - c_1.nativeVolume,
+					// c_0.nativeValue - c_1.nativeValue, c_0.mmbtuVolume - c_1.mmbtuVolume, c_0.date));
+					throw new UnsupportedOperationException();
+				}
+			} else {
+				throw new IllegalStateException("Invalid operator");
 			}
+		} else if (node instanceof CommodityNode) {
+			final CommodityNode commodityNode = (CommodityNode) node;
 
-			exposureDetail.setIndex(idx);
+			// Should really look up actual value from curve...
+			final SeriesParser p = PriceIndexUtils.getParserFor(lookupData.pricingModel, PriceIndexType.COMMODITY);
+			final ISeries series = p.getSeries(commodityNode.getIndex().getName());
+			final Number evaluate = series.evaluate(Hours.between(PriceIndexUtils.dateZero, date));
 
-			exposureDetail.setDate(pricingDate);
-			exposureDetail.setVolumeInMMBTU(exposure);
-			{
-				final String u = idx.getVolumeUnit();
-				double nativeVolume = exposure;
-				for (UnitConversion factor : lookupData.pricingModel.getConversionFactors()) {
-					if (factor.getTo().equalsIgnoreCase("mmbtu")) {
-						if (factor.getFrom().equalsIgnoreCase(u)) {
-							nativeVolume *= factor.getFactor();
-							break;
-						}
+			final double unitPrice = evaluate.doubleValue();
+			double nativeVolume = inputRecord.volumeInMMBTU;
+
+			// Perform units conversion.
+			final String u = commodityNode.getIndex().getVolumeUnit();
+			for (final UnitConversion factor : lookupData.pricingModel.getConversionFactors()) {
+				if (factor.getTo().equalsIgnoreCase("mmbtu")) {
+					if (factor.getFrom().equalsIgnoreCase(u)) {
+						nativeVolume /= factor.getFactor();
+						break;
 					}
 				}
-
-				exposureDetail.setVolumeInNativeUnits(nativeVolume);
 			}
-			exposureDetail.setCurrencyUnit(idx.getCurrencyUnit());
-			exposureDetail.setVolumeUnit(idx.getVolumeUnit());
-		}
-		{
-			final CoEff exposureCoefficient = getExposureCoefficient(node, pricingDate, idx, Mode.VALUE, lookupData);
-			if (exposureCoefficient.isExposed() && exposureCoefficient.getCoeff() != 0.0) {
 
-				// Use abs as any negation link to the co-eff should already be applied to the volume
-				double exposure = Math.abs(exposureCoefficient.getCoeff()) * exposureDetail.getVolumeInNativeUnits();
-				exposureDetail.setNativeValue(exposure);
-				exposureDetail.setUnitPrice(exposureCoefficient.getCoeff());
-			}
+			final ExposureRecord record = new ExposureRecord(commodityNode.getIndex(), unitPrice, nativeVolume, nativeVolume * unitPrice, inputRecord.volumeInMMBTU, date);
+			return new ExposureRecords(record);
+		} else if (node instanceof CurrencyNode) {
+			return new Constant(1.0);
+		} else if (node instanceof ConversionNode) {
+			return new Constant(1.0);
 		}
-		return exposureDetail;
+
+		throw new IllegalStateException("Unexpected node type");
+
+	}
+
+	private static ExposureRecords merge(final ExposureRecords c0, final ExposureRecords c1, final BiFunction<ExposureRecord, ExposureRecord, ExposureRecord> mapper) {
+		final ExposureRecords n = new ExposureRecords();
+		final Iterator<ExposureRecord> c0Itr = c0.records.iterator();
+		LOOP_C0: while (c0Itr.hasNext()) {
+			final ExposureRecord c_c0 = c0Itr.next();
+			final Iterator<ExposureRecord> c1Itr = c1.records.iterator();
+			while (c1Itr.hasNext()) {
+				final ExposureRecord c_c1 = c1Itr.next();
+				if (c_c0.index == c_c1.index) {
+					if (c_c0.date.equals(c_c1.date)) {
+						n.records.add(mapper.apply(c_c0, c_c1));
+						c1Itr.remove();
+						c0Itr.remove();
+						continue LOOP_C0;
+					}
+				}
+			}
+			n.records.add(c_c0);
+			c0Itr.remove();
+		}
+		// Add remaining.
+		n.records.addAll(c1.records);
+
+		return n;
+	}
+
+	private static ExposureRecords modify(final ExposureRecords c0, final Function<ExposureRecord, ExposureRecord> mapper) {
+		final ExposureRecords n = new ExposureRecords();
+		for (final ExposureRecord c : c0.records) {
+			n.records.add(mapper.apply(c));
+		}
+		return n;
 	}
 }

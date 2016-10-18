@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.ui.actions;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,8 +18,6 @@ import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -31,12 +28,11 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
-import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
  * Action
@@ -130,24 +126,12 @@ class SingleAddAction extends LockableAction {
 			final CommandStack commandStack = context.getCommandHandler().getEditingDomain().getCommandStack();
 			commandStack.execute(add);
 
-			final DetailCompositeDialog editor = new DetailCompositeDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), context.getCommandHandler());
-
-			final IScenarioEditingLocation editorPart = context.getEditorPart();
-			final ScenarioLock editorLock = editorPart.getEditorLock();
-			try {
-				editorLock.claim();
-				editorPart.setDisableUpdates(true);
-				if (editor.open(editorPart, context.getRootObject(), Collections.singletonList(settings.iterator().next().getInstance())) != Window.OK) {
-					// Revert state
-					assert commandStack.getUndoCommand() == add;
-					commandStack.undo();
-				} else {
-				}
-			} finally {
-				editorPart.setDisableUpdates(false);
-				editorLock.release();
-			}
-
+			DetailCompositeDialogUtil.editSingleObject(context.getEditorPart(), settings.iterator().next().getInstance(), () -> {
+				// If not ok, revert state;
+				// Revert state
+				assert commandStack.getUndoCommand() == add;
+				commandStack.undo();
+			});
 		}
 	}
 
