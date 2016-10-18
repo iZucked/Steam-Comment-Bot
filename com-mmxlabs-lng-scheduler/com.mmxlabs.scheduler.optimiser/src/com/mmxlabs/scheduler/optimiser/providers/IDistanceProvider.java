@@ -44,7 +44,7 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	@Deprecated
 	@NonNull
 	default List<@NonNull Pair<@NonNull ERouteOption, @NonNull Integer>> getDistanceValues(@NonNull IPort from, @NonNull IPort to) {
-		return getDistanceValues(from, to, Integer.MIN_VALUE, null);
+		return getDistanceValues(from, to, Integer.MAX_VALUE, null);
 	}
 
 	@NonNull
