@@ -66,8 +66,9 @@ public class PackAction extends Action {
 			final int ratio = (int) (Math.floor((float) viewWidth / (float) daysNeeded));
 
 			int zoom = ISettings.MAX_ZOOM_LEVEL - (ratio - 1);
-			if (zoom < ISettings.MIN_ZOOM_LEVEL) {
-				zoom = ISettings.MIN_ZOOM_LEVEL;
+			// Lower than 5 is a bit too zoomed in.
+			if (zoom < 5) {
+				zoom = 5;
 			}
 			composite.setZoomLevel(zoom);
 
