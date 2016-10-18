@@ -34,8 +34,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.util.LDCargoDetailsWrapper;
  *
  */
 public class IdleTimeChecker {
-	public final static String GA_IDLE_TIME_HOURS_LOW = "GA_IDLE_TIME_HOURS_LOW";
-	public final static String GA_IDLE_TIME_HOURS_HIGH = "GA_IDLE_TIME_HOURS_HIGH";
+	public final static String GA_IDLE_TIME_HOURS_LOW = "info-idle-time-hours-low";
+	public final static String GA_IDLE_TIME_HOURS_HIGH = "info-idle-time-hours-high";
 	@Inject
 	private IExcessIdleTimeComponentParameters idleTimeComponentParameters;
 
