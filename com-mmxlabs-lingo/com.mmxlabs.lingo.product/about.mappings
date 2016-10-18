@@ -1,2 +1,2 @@
 0=${unqualifiedVersion}
-1=${unqualifiedVersion}.${buildQualifier} - ${changeSet}
+1=${unqualifiedVersion}.${buildQualifier} - ${buildNumber}
