@@ -23,7 +23,27 @@ public final class Formatters {
 
 	public static final IntegerFormatter integerFormatter = new IntegerFormatter();
 
+	public enum DurationMode {
+		DAYS_HOURS, DECIMAL
+	}
+
+	private static DurationMode DURATION_MODE = DurationMode.DAYS_HOURS;
+
+	public static DurationMode getDurationMode() {
+		return DURATION_MODE;
+	}
+	
+	public static void setDurationMode(@NonNull DurationMode mode) {
+		DURATION_MODE = mode;
+	}
+
 	public static @NonNull String formatAsDays(int hours) {
-		return String.format("%02d:%02d", hours / 24, hours % 24);
+		switch (DURATION_MODE) {
+		case DAYS_HOURS:
+			return String.format("%02d:%02d", hours / 24, hours % 24);
+		case DECIMAL:
+			return String.format("%.01f", (double) hours / 24.0);
+		}
+		throw new IllegalArgumentException("Unknown duration mode");
 	}
 }

@@ -20,6 +20,7 @@ import org.eclipse.ui.views.properties.PropertyDescriptor;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider.SimpleLabelProvider;
+import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -172,7 +173,7 @@ public class EventPropertySource implements IPropertySource {
 				public String getText(final Object element) {
 					if (element instanceof Number) {
 						final int x = ((Number) element).intValue();
-						return String.format("%02d:%02d", x / 24, x % 24);
+						return Formatters.formatAsDays(x);
 					}
 					return super.getText(element);
 				}
