@@ -888,30 +888,15 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 	}
 
 	public void redraw() {
-		RunnerHelper.asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (!viewer.getControl().isDisposed()) {
-
-					viewer.setInput(viewer.getInput());
-				}
+		RunnerHelper.asyncExec(() -> {
+			if (!viewer.getControl().isDisposed()) {
+				viewer.setInput(viewer.getInput());
 			}
 		});
-
 	}
 
 	public void refresh() {
-		RunnerHelper.asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (!viewer.getControl().isDisposed()) {
-
-					viewer.refresh();
-				}
-			}
-		});
+		ViewerHelper.refresh(viewer, false);
 	}
 
 	public void setInput(final Object input) {
