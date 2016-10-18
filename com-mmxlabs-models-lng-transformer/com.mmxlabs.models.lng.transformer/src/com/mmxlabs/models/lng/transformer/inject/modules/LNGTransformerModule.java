@@ -18,6 +18,7 @@ import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.common.parser.series.ShiftFunctionMapper;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.DefaultModelEntityMap;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
@@ -109,14 +110,6 @@ public class LNGTransformerModule extends AbstractModule {
 
 		bind(LNGScenarioModel.class).toInstance(scenario);
 		// bind(OptimiserSettings.class).toInstance(optimiserSettings);
-
-		// Parser for each section
-		final SeriesParser commodityParser = new SeriesParser();
-		bind(SeriesParser.class).annotatedWith(Names.named(Parser_Commodity)).toInstance(commodityParser);
-		final SeriesParser charterParser = new SeriesParser();
-		bind(SeriesParser.class).annotatedWith(Names.named(Parser_Charter)).toInstance(charterParser);
-		final SeriesParser baseFuelParser = new SeriesParser();
-		bind(SeriesParser.class).annotatedWith(Names.named(Parser_BaseFuel)).toInstance(baseFuelParser);
 
 		bind(LNGScenarioTransformer.class).in(Singleton.class);
 
@@ -247,4 +240,49 @@ public class LNGTransformerModule extends AbstractModule {
 		return true;
 	}
 
+	@Provides
+	private ShiftFunctionMapper getMapperFunction(final ModelEntityMap map, final DateAndCurveHelper helper) {
+		return new ShiftFunctionMapper() {
+
+			@Override
+			public int mapChangePoint(final int currentChangePoint, final int shiftAmount) {
+				// Convert internal time units back into UTC date/time
+				@NonNull
+				final ZonedDateTime dateFromHours = map.getDateFromHours(currentChangePoint, "Etc/UTC");
+				// Shift the time by number of months
+				@NonNull
+				final ZonedDateTime shiftedTime = dateFromHours.minusMonths(shiftAmount);
+				// Convert back to internal time units.
+				final int result = helper.convertTime(shiftedTime);
+				return result;
+			}
+		};
+	}
+
+	@Provides
+	@Named(Parser_Commodity)
+	@Singleton
+	private SeriesParser provideCommodityParser(final ShiftFunctionMapper shiftMapper) {
+		final SeriesParser parser = new SeriesParser();
+		parser.setShiftMapper(shiftMapper);
+		return parser;
+	}
+
+	@Provides
+	@Named(Parser_Charter)
+	@Singleton
+	private SeriesParser provideCharterParser(final ShiftFunctionMapper shiftMapper) {
+		final SeriesParser parser = new SeriesParser();
+		parser.setShiftMapper(shiftMapper);
+		return parser;
+	}
+
+	@Provides
+	@Named(Parser_BaseFuel)
+	@Singleton
+	private SeriesParser provideBaseFuelParser(final ShiftFunctionMapper shiftMapper) {
+		final SeriesParser parser = new SeriesParser();
+		parser.setShiftMapper(shiftMapper);
+		return parser;
+	}
 }

@@ -50,6 +50,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCore;
@@ -217,12 +218,14 @@ public class BagOptimiser {
 			final long initialLateness = evaluationHelper.calculateScheduleLateness(initialFullSequences, initialVolumeAllocatedSequences);
 			final long initialCapacity = evaluationHelper.calculateScheduleCapacity(initialFullSequences, initialVolumeAllocatedSequences);
 			final long initialPNL = evaluationHelper.calculateSchedulePNL(initialFullSequences, initialProfitAndLossSequences);
-
 			// Generate the initial set of changes, one level deep
 			final List<ChangeSet> changeSets = new LinkedList<>();
 			final List<Change> changes = new LinkedList<>();
 			final long time2 = System.currentTimeMillis();
-
+			
+			if (actionSetLogger != null) {
+				actionSetLogger.setInitialPnL(initialPNL / Calculator.ScaleFactor);
+			}
 			targetSimilarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()] = initialLateness;
 			targetSimilarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()] = initialCapacity;
 			targetSimilarityState.getBaseMetrics()[MetricType.PNL.ordinal()] = initialPNL;
@@ -341,7 +344,7 @@ public class BagOptimiser {
 				if (actionSetLogger != null) {
 					actionSetLogger.setSortedChangeStates(getSortedLeafStates(finalPopulation));
 				}
-				
+
 				if (DEBUG) {
 					printPopulationInfo(sortedChangeStates);
 				}
@@ -387,6 +390,11 @@ public class BagOptimiser {
 		final Map<String, Long> currentFitnesses = new HashMap<>();
 		for (final IFitnessComponent fitnessComponent : fitnessComponents) {
 			currentFitnesses.put(fitnessComponent.getName(), fitnessComponent.getFitness());
+			if (fitnessComponent.getName().equals("cargo-scheduler-group-profit")) {
+				if (actionSetLogger != null) {
+					actionSetLogger.setTarget_pnl(fitnessComponent.getFitness());
+				}
+			}
 		}
 
 		final Map<String, Object> extraAnnotations = new HashMap<>();

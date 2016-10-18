@@ -121,6 +121,14 @@ public class StochasticActionSetUtils {
 
 		return totalPnl;
 	}
+	/**
+	 * Returns the total p&L per change for an individual changeSets
+	 * 
+	 * @return
+	 */
+	public static long getChangeSetPNL(final ChangeSet changeSet){
+		return changeSet.metricDelta[MetricType.PNL.ordinal()];	
+	}
 
 	/**
 	 * Returns the total p&L per change for a collection of changeSets
