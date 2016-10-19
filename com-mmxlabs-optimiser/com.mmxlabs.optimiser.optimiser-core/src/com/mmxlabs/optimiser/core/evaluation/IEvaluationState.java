@@ -11,7 +11,6 @@ public interface IEvaluationState {
 
 	void setData(@NonNull String key, @NonNull Object data);
 
-	@Nullable
-	<T> T getData(@NonNull String key, @NonNull Class<T> cls);
+	<T> T getData(@NonNull String key, Class<T> cls);
 
 }

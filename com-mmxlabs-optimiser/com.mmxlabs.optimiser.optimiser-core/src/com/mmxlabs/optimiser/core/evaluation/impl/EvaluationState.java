@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 
@@ -23,8 +22,7 @@ public final class EvaluationState implements IEvaluationState {
 	}
 
 	@Override
-	@Nullable
-	public <T> T getData(@NonNull final String key, @NonNull final Class<T> cls) {
+	public <T> T getData(@NonNull final String key, final Class<T> cls) {
 		return cls.cast(dataMap.get(key));
 	}
 
