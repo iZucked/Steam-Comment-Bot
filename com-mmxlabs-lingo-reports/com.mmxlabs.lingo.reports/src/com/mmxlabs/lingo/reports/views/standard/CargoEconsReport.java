@@ -66,9 +66,6 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
-import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
-import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.SelectionHelper;
@@ -256,12 +253,12 @@ public class CargoEconsReport extends ViewPart {
 			this.name = name;
 			this.df = df;
 		}
-		
+
 		public static FieldType[] getFilteredValues() {
 			Set<FieldType> restrictedValues = restrictedValues();
 			return Arrays.stream(values()).filter(e -> (!restrictedValues.contains(e))).toArray(size -> new FieldType[size]);
 		}
-		
+
 		public static Set<FieldType> restrictedValues() {
 			Set<FieldType> restricted = new HashSet<>();
 			if (!SecurityUtils.getSubject().isPermitted("features:report-equity-book")) {
@@ -482,37 +479,13 @@ public class CargoEconsReport extends ViewPart {
 
 			switch (fieldType) {
 			case BUY_COST_TOTAL: {
-				// Find the CV & price
-				final double cv;
-				final double price;
 				final SlotAllocation allocation = marketAllocation.getSlotAllocation();
-				if (allocation.getSlot() instanceof LoadSlot) {
-					final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
-					cv = loadSlot.getSlotOrDelegatedCV();
-					price = allocation.getPrice();
-				} else {
-					cv = getMarketCV(marketAllocation.getMarket());
-					price = marketAllocation.getPrice();
-				}
-
-				final int loadVolumeVolumeInM3 = allocation.getVolumeTransferred();
-				final double volumeInMMBTu = (loadVolumeVolumeInM3 * cv);
-				return volumeInMMBTu * price;
+				return allocation.getVolumeValue();
 			}
 			case BUY_VOLUME_IN_MMBTU: {
-				// / Find the CV
-				final double cv;
+				
 				final SlotAllocation allocation = marketAllocation.getSlotAllocation();
-				if (allocation.getSlot() instanceof LoadSlot) {
-					final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
-					cv = loadSlot.getSlotOrDelegatedCV();
-				} else {
-					cv = getMarketCV(marketAllocation.getMarket());
-				}
-
-				final int loadVolumeVolumeInM3 = allocation.getVolumeTransferred();
-				final double volumeInMMBTu = (loadVolumeVolumeInM3 * cv);
-				return volumeInMMBTu;
+				return allocation.getEnergyTransferred();
 			}
 			case PNL_PER_MMBTU: {
 				final Integer pnl = CargoEconsReport.getPNLValue(marketAllocation);
@@ -533,37 +506,12 @@ public class CargoEconsReport extends ViewPart {
 				return CargoEconsReport.getPNLValue(marketAllocation);
 			}
 			case SELL_REVENUE_TOTAL: {
-				// Find the CV & price
-				final double cv;
-				final double price;
 				final SlotAllocation allocation = marketAllocation.getSlotAllocation();
-				if (allocation.getSlot() instanceof LoadSlot) {
-					final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
-					cv = loadSlot.getSlotOrDelegatedCV();
-					price = marketAllocation.getPrice();
-				} else {
-					cv = getMarketCV(marketAllocation.getMarket());
-					price = allocation.getPrice();
-				}
-
-				final int volumeInM3 = allocation.getVolumeTransferred();
-				final double volumeInMMBTu = (volumeInM3 * cv);
-				return volumeInMMBTu * price;
+ 				return allocation.getVolumeValue();
 			}
 			case SELL_VOLUME_IN_MMBTU: {
-				double cv = 0.0;
-				// Find the CV
 				final SlotAllocation allocation = marketAllocation.getSlotAllocation();
-				if (allocation.getSlot() instanceof LoadSlot) {
-					final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
-					// TODO: Avg CV
-					cv = loadSlot.getSlotOrDelegatedCV();
-				} else {
-					cv = getMarketCV(marketAllocation.getMarket());
-				}
-				final int loadVolumeVolumeInM3 = allocation.getVolumeTransferred();
-				final double volumeInMMBTu = (loadVolumeVolumeInM3 * cv);
-				return volumeInMMBTu;
+				return allocation.getEnergyTransferred();
 			}
 			case SHIPPING_BOIL_OFF_COST_TOTAL:
 			case SHIPPING_BUNKERS_COST_TOTAL:
@@ -593,17 +541,6 @@ public class CargoEconsReport extends ViewPart {
 			}
 
 			return null;
-		}
-
-		private double getMarketCV(final SpotMarket market) {
-			if (market instanceof DESPurchaseMarket) {
-				return ((DESPurchaseMarket) market).getCv();
-			}
-			if (market instanceof FOBPurchasesMarket) {
-				return ((FOBPurchasesMarket) market).getCv();
-			}
-			return 0.0;
-
 		}
 	}
 
@@ -850,7 +787,7 @@ public class CargoEconsReport extends ViewPart {
 						equityPNL += entityProfitAndLoss.getProfitAndLoss();
 					}
 				}
-				
+
 			}
 		}
 
