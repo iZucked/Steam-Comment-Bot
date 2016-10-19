@@ -48,6 +48,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getPartialCase <em>Partial Case</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getResultSets <em>Result Sets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#isUseTargetPNL <em>Use Target PNL</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl#getChildren <em>Children</em>}</li>
  * </ul>
  *
  * @generated
@@ -142,6 +143,16 @@ public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAn
 	 * @ordered
 	 */
 	protected boolean useTargetPNL = USE_TARGET_PNL_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getChildren() <em>Children</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getChildren()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<OptionAnalysisModel> children;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -334,6 +345,18 @@ public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<OptionAnalysisModel> getChildren() {
+		if (children == null) {
+			children = new EObjectContainmentEList<OptionAnalysisModel>(OptionAnalysisModel.class, this, AnalyticsPackage.OPTION_ANALYSIS_MODEL__CHILDREN);
+		}
+		return children;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -351,6 +374,8 @@ public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAn
 				return basicSetPartialCase(null, msgs);
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULT_SETS:
 				return ((InternalEList<?>)getResultSets()).basicRemove(otherEnd, msgs);
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__CHILDREN:
+				return ((InternalEList<?>)getChildren()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -379,6 +404,8 @@ public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAn
 				return getResultSets();
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL:
 				return isUseTargetPNL();
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__CHILDREN:
+				return getChildren();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -421,6 +448,10 @@ public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAn
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL:
 				setUseTargetPNL((Boolean)newValue);
 				return;
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__CHILDREN:
+				getChildren().clear();
+				getChildren().addAll((Collection<? extends OptionAnalysisModel>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -457,6 +488,9 @@ public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAn
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL:
 				setUseTargetPNL(USE_TARGET_PNL_EDEFAULT);
 				return;
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__CHILDREN:
+				getChildren().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -485,6 +519,8 @@ public class OptionAnalysisModelImpl extends NamedObjectImpl implements OptionAn
 				return resultSets != null && !resultSets.isEmpty();
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL:
 				return useTargetPNL != USE_TARGET_PNL_EDEFAULT;
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__CHILDREN:
+				return children != null && !children.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

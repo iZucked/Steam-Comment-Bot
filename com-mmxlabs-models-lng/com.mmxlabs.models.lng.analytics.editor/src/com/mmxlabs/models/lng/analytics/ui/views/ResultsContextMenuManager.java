@@ -1,20 +1,16 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
-import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.DeleteCommand;
-import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -24,33 +20,25 @@ import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Menu;
 
+import com.mmxlabs.models.lng.analytics.AnalysisResultDetail;
 import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BreakEvenResult;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
-import com.mmxlabs.models.lng.analytics.FleetShippingOption;
-import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
-import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.PartialCase;
+import com.mmxlabs.models.lng.analytics.ProfitAndLossResult;
 import com.mmxlabs.models.lng.analytics.ResultSet;
-import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
-import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseEvaluator;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder.ShippingType;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
-import com.mmxlabs.scenario.service.model.util.*;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 public class ResultsContextMenuManager implements MenuDetectListener {
 
@@ -58,13 +46,15 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 	private final @NonNull GridTreeViewer baseCaseViewer;
 
 	private final @NonNull IScenarioEditingLocation scenarioEditingLocation;
+	private final @NonNull OptionModellerView optionModellerView;
 
 	private final @NonNull MenuManager mgr;
 	private OptionAnalysisModel optionAnalysisModel;
 	private Menu menu;
 
-	public ResultsContextMenuManager(@NonNull final GridTreeViewer viewer, @NonNull final GridTreeViewer baseCaseViewer, @NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final MenuManager mgr) {
+	public ResultsContextMenuManager(@NonNull final GridTreeViewer viewer, @NonNull final GridTreeViewer baseCaseViewer, @NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final OptionModellerView optionModellerView, @NonNull final MenuManager mgr) {
 		this.baseCaseViewer = baseCaseViewer;
+		this.optionModellerView = optionModellerView;
 		this.mgr = mgr;
 		this.scenarioEditingLocation = scenarioEditingLocation;
 		this.viewer = viewer;
@@ -79,9 +69,6 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 			menu = mgr.createContextMenu(grid);
 		}
 		mgr.removeAll();
-
-		final Point mousePoint = grid.toControl(new Point(e.x, e.y));
-		final GridColumn column = grid.getColumn(mousePoint);
 
 		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 		final GridItem[] items = grid.getSelection();
@@ -103,7 +90,7 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 			}
 			mgr.add(new RunnableAction("Create fork", () -> {
 				if (resultSet != null) {
-					BaseCase bc = createBaseCaseFromRS(resultSet, true);
+					BaseCase bc = createBaseCaseFromRS(resultSet, true, null);
 					String newForkName = ScenarioServiceModelUtils.getNewForkName(scenarioEditingLocation.getScenarioInstance(), false);
 					OptionAnalysisModel optionAnalysisModel2 = AnalyticsFactory.eINSTANCE.createOptionAnalysisModel();
 					optionAnalysisModel2.setBaseCase(bc);
@@ -115,20 +102,49 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 			
 			mgr.add(new RunnableAction("Convert to base case", () -> {
 				if (resultSet != null) {
-					BaseCase bc = updateBaseCaseFromRS(resultSet, optionAnalysisModel.getBaseCase() != null ? optionAnalysisModel.getBaseCase() : AnalyticsFactory.eINSTANCE.createBaseCase());
-					optionAnalysisModel.setBaseCase(bc);
+					OptionAnalysisModel newModel = AnalyticsFactory.eINSTANCE.createOptionAnalysisModel();
+
+					Copier copier = new Copier();
+					// create a new model copy
+					newModel.getBuys().addAll(copier.copyAll(optionAnalysisModel.getBuys()));
+					newModel.getSells().addAll(copier.copyAll(optionAnalysisModel.getSells()));
+					newModel.setPartialCase((PartialCase) copier.copy(optionAnalysisModel.getPartialCase()));
+					newModel.getResultSets().addAll(copier.copyAll(optionAnalysisModel.getResultSets()));
+					newModel.getRules().addAll(copier.copyAll(optionAnalysisModel.getRules()));
+					newModel.setUseTargetPNL(optionAnalysisModel.isUseTargetPNL());
+					copier.copyReferences();
+					newModel.setBaseCase(createBaseCaseFromRS(resultSet, false, copier));
+					
+					// create a name from description
+					String name = createNameFromRow(resultSet);
+					newModel.setName(name);
+					
+
 					// add new slots
-					optionAnalysisModel.getBuys().addAll(bc.getBaseCase().stream().filter(b -> !optionAnalysisModel.getBuys().contains(b.getBuyOption())).map(b -> b.getBuyOption()).collect(Collectors.toList()));
-					optionAnalysisModel.getSells().addAll(bc.getBaseCase().stream().filter(b -> !optionAnalysisModel.getSells().contains(b.getBuyOption())).map(b -> b.getSellOption()).collect(Collectors.toList()));
-					baseCaseViewer.refresh();
-					baseCaseViewer.expandAll();
-					baseCaseViewer.refresh();
+					newModel.getBuys().addAll(newModel.getBaseCase().getBaseCase().stream().filter(b -> !newModel.getBuys().contains(b.getBuyOption())).map(b -> b.getBuyOption()).collect(Collectors.toList()));
+					newModel.getSells().addAll(newModel.getBaseCase().getBaseCase().stream().filter(b -> !newModel.getSells().contains(b.getBuyOption())).map(b -> b.getSellOption()).collect(Collectors.toList()));
+					optionAnalysisModel.getChildren().add(newModel);
+					optionModellerView.setInput(newModel);
 				}
 			}));
 
 
 		}
 		menu.setVisible(true);
+	}
+
+	private String createNameFromRow(ResultSet resultSet) {
+		EList<AnalysisResultRow> rows = resultSet.getRows();
+		List<String> s = new LinkedList<>();
+		for (AnalysisResultRow analysisResultRow : rows) {
+			AnalysisResultDetail resultDetail = analysisResultRow.getResultDetail();
+			if (resultDetail instanceof BreakEvenResult) {
+				s.add(String.format("b/e %.2f",((BreakEvenResult) resultDetail).getPrice()));
+			} else if (resultDetail instanceof ProfitAndLossResult) {
+				s.add(String.format("prof %d",(long) ((ProfitAndLossResult) resultDetail).getValue()));
+			}
+		}
+		return String.join(" ", s);
 	}
 
 	public OptionAnalysisModel getOptionAnalysisModel() {
@@ -139,35 +155,21 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 		this.optionAnalysisModel = optionAnalysisModel;
 	}
 	
-	private BaseCase createBaseCaseFromRS(ResultSet rs, boolean copy) {
-		BaseCase bc = AnalyticsFactory.eINSTANCE.createBaseCase();
-		EList<BaseCaseRow> baseCase = bc.getBaseCase();
+	private BaseCase createBaseCaseFromRS(ResultSet rs, boolean copy, Copier copier) {
+		BaseCase newBaseCase = AnalyticsFactory.eINSTANCE.createBaseCase();
+		EList<BaseCaseRow> baseCaseRows = newBaseCase.getBaseCase();
 		for (AnalysisResultRow analysisResultRow : rs.getRows()) {
 			BaseCaseRow bcr = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
-			bcr.setBuyOption(getFixedBuyOption(analysisResultRow, copy));
-			bcr.setSellOption(getFixedSellOption(analysisResultRow, copy));
-//			bcr.setShipping(copy ? EcoreUtil.copy(analysisResultRow.getShipping()) : analysisResultRow.getShipping());
+			bcr.setBuyOption(getFixedBuyOption(analysisResultRow, copy, copier));
+			bcr.setSellOption(getFixedSellOption(analysisResultRow, copy, copier));
 			bcr.setShipping(EcoreUtil.copy(analysisResultRow.getShipping()));
-			baseCase.add(bcr);
+			baseCaseRows.add(bcr);
 		}
-		return bc;
-	}
-
-	private BaseCase updateBaseCaseFromRS(ResultSet rs, BaseCase bc) {
-		EList<BaseCaseRow> baseCase = bc.getBaseCase();
-		baseCase.clear();
-		for (AnalysisResultRow analysisResultRow : rs.getRows()) {
-			BaseCaseRow bcr = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
-			bcr.setBuyOption(getFixedBuyOption(analysisResultRow, false));
-			bcr.setSellOption(getFixedSellOption(analysisResultRow, false));
-			bcr.setShipping(EcoreUtil.copy(analysisResultRow.getShipping()));
-			baseCase.add(bcr);
-		}
-		return bc;
+		return newBaseCase;
 	}
 	
-	private BuyOption getFixedBuyOption(AnalysisResultRow row, boolean createCopy) {
-		BuyOption buyOption = row.getBuyOption();
+	private BuyOption getFixedBuyOption(AnalysisResultRow row, boolean createCopy, Copier copier) {
+		BuyOption buyOption = copier != null ? (BuyOption) copier.get(row.getBuyOption()) : row.getBuyOption();
 		if (row.getResultDetail() instanceof BreakEvenResult) {
 			BreakEvenResult result = (BreakEvenResult) row.getResultDetail();
 			if (buyOption instanceof BuyOpportunity) {
@@ -194,12 +196,12 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 		if (createCopy) {
 			return EcoreUtil.copy(row.getBuyOption());
 		} else {
-			return row.getBuyOption();
+			return buyOption;
 		}
 	}
 
-	private SellOption getFixedSellOption(AnalysisResultRow row, boolean createCopy) {
-		SellOption sellOption = row.getSellOption();
+	private SellOption getFixedSellOption(AnalysisResultRow row, boolean createCopy, Copier copier) {
+		SellOption sellOption = copier != null ? (SellOption) copier.get(row.getSellOption()) : row.getSellOption();
 		if (row.getResultDetail() instanceof BreakEvenResult) {
 			BreakEvenResult result = (BreakEvenResult) row.getResultDetail();
 			if (sellOption instanceof SellOpportunity) {
