@@ -40,6 +40,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getPriceExpression <em>Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getCv <em>Cv</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getCancellationExpression <em>Cancellation Expression</em>}</li>
  * </ul>
  *
  * @generated
@@ -154,6 +155,26 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * @ordered
 	 */
 	protected double cv = CV_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getCancellationExpression() <em>Cancellation Expression</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCancellationExpression()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String CANCELLATION_EXPRESSION_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getCancellationExpression() <em>Cancellation Expression</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCancellationExpression()
+	 * @generated
+	 * @ordered
+	 */
+	protected String cancellationExpression = CANCELLATION_EXPRESSION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -385,6 +406,27 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getCancellationExpression() {
+		return cancellationExpression;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCancellationExpression(String newCancellationExpression) {
+		String oldCancellationExpression = cancellationExpression;
+		cancellationExpression = newCancellationExpression;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.BUY_OPPORTUNITY__CANCELLATION_EXPRESSION, oldCancellationExpression, cancellationExpression));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -405,6 +447,8 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 				return basicGetEntity();
 			case AnalyticsPackage.BUY_OPPORTUNITY__CV:
 				return getCv();
+			case AnalyticsPackage.BUY_OPPORTUNITY__CANCELLATION_EXPRESSION:
+				return getCancellationExpression();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -439,6 +483,9 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 			case AnalyticsPackage.BUY_OPPORTUNITY__CV:
 				setCv((Double)newValue);
 				return;
+			case AnalyticsPackage.BUY_OPPORTUNITY__CANCELLATION_EXPRESSION:
+				setCancellationExpression((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -472,6 +519,9 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 			case AnalyticsPackage.BUY_OPPORTUNITY__CV:
 				setCv(CV_EDEFAULT);
 				return;
+			case AnalyticsPackage.BUY_OPPORTUNITY__CANCELLATION_EXPRESSION:
+				setCancellationExpression(CANCELLATION_EXPRESSION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -498,6 +548,8 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 				return entity != null;
 			case AnalyticsPackage.BUY_OPPORTUNITY__CV:
 				return cv != CV_EDEFAULT;
+			case AnalyticsPackage.BUY_OPPORTUNITY__CANCELLATION_EXPRESSION:
+				return CANCELLATION_EXPRESSION_EDEFAULT == null ? cancellationExpression != null : !CANCELLATION_EXPRESSION_EDEFAULT.equals(cancellationExpression);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -520,6 +572,8 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 		result.append(priceExpression);
 		result.append(", cv: ");
 		result.append(cv);
+		result.append(", cancellationExpression: ");
+		result.append(cancellationExpression);
 		result.append(')');
 		return result.toString();
 	}

@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -89,6 +88,9 @@ public class AnalyticsBuilder {
 			if (buyOpportunity.getEntity() != null) {
 				slot.setEntity(buyOpportunity.getEntity());
 			}
+			if (buyOpportunity.getCancellationExpression() != null && !buyOpportunity.getCancellationExpression().isEmpty()) {
+				slot.setCancellationExpression(buyOpportunity.getCancellationExpression());
+			}
 			return slot;
 		} else if (buy instanceof BuyMarket) {
 			final BuyMarket buyMarket = (BuyMarket) buy;
@@ -167,6 +169,9 @@ public class AnalyticsBuilder {
 			}
 			if (sellOpportunity.getEntity() != null) {
 				slot.setEntity(sellOpportunity.getEntity());
+			}
+			if (sellOpportunity.getCancellationExpression() != null && !sellOpportunity.getCancellationExpression().isEmpty()) {
+				slot.setCancellationExpression(sellOpportunity.getCancellationExpression());
 			}
 			return slot;
 		} else if (sell instanceof SellMarket) {

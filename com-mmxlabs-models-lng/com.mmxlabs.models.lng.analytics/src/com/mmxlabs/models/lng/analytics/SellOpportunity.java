@@ -25,6 +25,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getDate <em>Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getPriceExpression <em>Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getEntity <em>Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getCancellationExpression <em>Cancellation Expression</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSellOpportunity()
@@ -187,6 +188,32 @@ public interface SellOpportunity extends MMXObject, SellOption {
 	 * @generated
 	 */
 	void setEntity(BaseLegalEntity value);
+
+	/**
+	 * Returns the value of the '<em><b>Cancellation Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cancellation Expression</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cancellation Expression</em>' attribute.
+	 * @see #setCancellationExpression(String)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSellOpportunity_CancellationExpression()
+	 * @model annotation="http://www.mmxlabs.com/models/pricing/expressionType type='commodity'"
+	 * @generated
+	 */
+	String getCancellationExpression();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getCancellationExpression <em>Cancellation Expression</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cancellation Expression</em>' attribute.
+	 * @see #getCancellationExpression()
+	 * @generated
+	 */
+	void setCancellationExpression(String value);
 
 } // end of  SellOpportunity
 

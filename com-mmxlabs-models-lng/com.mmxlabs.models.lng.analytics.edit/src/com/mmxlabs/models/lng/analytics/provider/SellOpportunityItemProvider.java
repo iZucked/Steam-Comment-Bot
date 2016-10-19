@@ -55,6 +55,7 @@ public class SellOpportunityItemProvider
 			addDatePropertyDescriptor(object);
 			addPriceExpressionPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
+			addCancellationExpressionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -192,6 +193,28 @@ public class SellOpportunityItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Cancellation Expression feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCancellationExpressionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SellOpportunity_cancellationExpression_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SellOpportunity_cancellationExpression_feature", "_UI_SellOpportunity_type"),
+				 AnalyticsPackage.Literals.SELL_OPPORTUNITY__CANCELLATION_EXPRESSION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns SellOpportunity.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -229,6 +252,7 @@ public class SellOpportunityItemProvider
 			case AnalyticsPackage.SELL_OPPORTUNITY__FOB_SALE:
 			case AnalyticsPackage.SELL_OPPORTUNITY__DATE:
 			case AnalyticsPackage.SELL_OPPORTUNITY__PRICE_EXPRESSION:
+			case AnalyticsPackage.SELL_OPPORTUNITY__CANCELLATION_EXPRESSION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
