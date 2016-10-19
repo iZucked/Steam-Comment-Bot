@@ -121,8 +121,8 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 					
 
 					// add new slots
-					newModel.getBuys().addAll(newModel.getBaseCase().getBaseCase().stream().filter(b -> !newModel.getBuys().contains(b.getBuyOption())).map(b -> b.getBuyOption()).collect(Collectors.toList()));
-					newModel.getSells().addAll(newModel.getBaseCase().getBaseCase().stream().filter(b -> !newModel.getSells().contains(b.getBuyOption())).map(b -> b.getSellOption()).collect(Collectors.toList()));
+					newModel.getBuys().addAll(newModel.getBaseCase().getBaseCase().stream().filter(b -> !newModel.getBuys().contains(b.getBuyOption())).filter(b-> b.getBuyOption() !=null).map(b -> b.getBuyOption()).collect(Collectors.toList()));
+					newModel.getSells().addAll(newModel.getBaseCase().getBaseCase().stream().filter(b -> !newModel.getSells().contains(b.getSellOption())).filter(b-> b.getSellOption() !=null).map(b -> b.getSellOption()).collect(Collectors.toList()));
 					optionAnalysisModel.getChildren().add(newModel);
 					optionModellerView.setInput(newModel);
 				}
