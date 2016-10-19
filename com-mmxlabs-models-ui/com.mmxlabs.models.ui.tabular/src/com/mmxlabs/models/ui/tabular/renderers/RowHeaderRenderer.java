@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.ui.tabular.renderers;
 
-import org.eclipse.emf.edit.tree.impl.TreePackageImpl;
 import org.eclipse.nebula.widgets.grid.AbstractRenderer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridItem;

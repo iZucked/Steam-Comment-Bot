@@ -15,6 +15,7 @@ import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.EmptyCellRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.EmptyColumnHeaderRenderer;
+import com.mmxlabs.models.ui.tabular.renderers.EmptyRowHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.RowHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.TopLeftRenderer;
 
@@ -24,6 +25,7 @@ public final class GridViewerHelper {
 		viewer.getGrid().setRowHeaderRenderer(new RowHeaderRenderer());
 		viewer.getGrid().setTopLeftRenderer(new TopLeftRenderer());
 		viewer.getGrid().setEmptyColumnHeaderRenderer(new EmptyColumnHeaderRenderer());
+		viewer.getGrid().setEmptyRowHeaderRenderer(new EmptyRowHeaderRenderer());
 		viewer.getGrid().setEmptyCellRenderer(new EmptyCellRenderer());
 
 	}
@@ -32,6 +34,7 @@ public final class GridViewerHelper {
 		viewer.getGrid().setRowHeaderRenderer(new RowHeaderRenderer());
 		viewer.getGrid().setTopLeftRenderer(new TopLeftRenderer());
 		viewer.getGrid().setEmptyColumnHeaderRenderer(new EmptyColumnHeaderRenderer());
+		viewer.getGrid().setEmptyRowHeaderRenderer(new EmptyRowHeaderRenderer());
 		viewer.getGrid().setEmptyCellRenderer(new EmptyCellRenderer());
 	}
 
