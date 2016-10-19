@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * All rights reserved.
+ */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
 import static org.junit.Assert.assertEquals;
