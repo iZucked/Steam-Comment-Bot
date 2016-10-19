@@ -104,7 +104,7 @@ public class IdleTimeChecker {
 					if (gaHigh == null) {
 						gaHigh = 0;
 					}
-					gaHigh += lowHours;
+					gaLow += lowHours;
 					gaHigh += highHours;
 					annotatedSolution.setGeneralAnnotation(GA_IDLE_TIME_HOURS_LOW, gaLow);
 					annotatedSolution.setGeneralAnnotation(GA_IDLE_TIME_HOURS_HIGH, gaHigh);
