@@ -31,8 +31,18 @@ public class VolumeAllocatedSequences extends ArrayList<@NonNull VolumeAllocated
 	private final Map<@NonNull IResource, @NonNull VolumeAllocatedSequence> resourceToScheduledSequenceMap = new HashMap<>();
 	private final Map<IPortSlot, VolumeAllocatedSequence> slotToSequenceCache = new HashMap<>();
 	private final Map<@NonNull VolumeAllocatedSequence, @NonNull IVesselAvailability> sequenceToAvailabilityMap = new HashMap<>();
+	
+	public VolumeAllocatedSequences(){
+		
+	}
+	
+	//Unit Test Constructor
+	public VolumeAllocatedSequences(ArrayList<VolumeAllocatedSequence> list) {
+			super.addAll(list);
+	}
 
-	@Override
+
+	//	@Override 
 	@Deprecated
 	public boolean add(@NonNull final VolumeAllocatedSequence scheduledSequence) {
 		// Call the other #add(IVesselAvailability,VolumeAllocatedSequence) method
