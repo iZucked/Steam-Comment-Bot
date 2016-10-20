@@ -13,6 +13,8 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ExcessIdleTimeComponentParameters;
+import com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ISimilarityComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
@@ -62,6 +64,7 @@ public class EvaluationSettingsOverrideModule extends AbstractModule {
 		lcp.setLowWeight(Interval.BEYOND, latenessParameterMap.get("lcp-set-beyond-lowWeight"));
 		lcp.setHighWeight(Interval.BEYOND, latenessParameterMap.get("lcp-set-beyond-highWeight"));
 
+
 		return lcp;
 	}
 
@@ -83,6 +86,19 @@ public class EvaluationSettingsOverrideModule extends AbstractModule {
 		scp.setOutOfBoundsWeight(scpm.get("scp-set-outOfBounds-weight"));
 
 		return scp;
+	}
+	
+	@Provides
+	@Singleton
+	private IExcessIdleTimeComponentParameters provideIdleComponentParameters() {
+		final ExcessIdleTimeComponentParameters idleParams = new ExcessIdleTimeComponentParameters();
+		idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, 13 * 24);
+		idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, 15 * 24);
+		idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, settings.getIdleTimeLow());
+		idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, settings.getIdleTimeHigh());
+		idleParams.setEndWeight(settings.getIdleTimeHigh());
+		
+		return idleParams;
 	}
 
 }

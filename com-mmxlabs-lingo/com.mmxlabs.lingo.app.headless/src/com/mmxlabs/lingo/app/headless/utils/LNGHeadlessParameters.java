@@ -94,5 +94,9 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 		// Moves
 		setParameter("moves-useLoopingSCMG", false, Boolean.class, false);
 		
+		//Idle Time
+		setParameter("idle-time-low",2_500, Integer.class, false);
+		setParameter("idle-time-high",10_000, Integer.class, false);
+		
 	}
 }

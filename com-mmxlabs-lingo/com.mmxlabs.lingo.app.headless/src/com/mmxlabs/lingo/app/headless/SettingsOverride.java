@@ -58,6 +58,27 @@ public final class SettingsOverride {
 	private boolean actionPlanVerboseLogger = false;
 	
 	private boolean movesUseLoopingSCMG = false;
+	
+	private int idleTimeLow = 2_500;
+	private int idleTimeHigh = 10_000;
+	
+	public int getIdleTimeLow() {
+		return idleTimeLow;
+	}
+
+	public void setIdleTimeLow(int idleTimeLow) {
+		this.idleTimeLow = idleTimeLow;
+	}
+
+	public int getIdleTimeHigh() {
+		return idleTimeHigh;
+	}
+
+	public void setIdleTimeHigh(int idleTimeHigh) {
+		this.idleTimeHigh = idleTimeHigh;
+	}
+
+	
 
 	public String getOutputName() {
 		return outputName;
