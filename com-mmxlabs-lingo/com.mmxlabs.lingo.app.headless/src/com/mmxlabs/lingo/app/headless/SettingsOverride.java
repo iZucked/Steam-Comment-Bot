@@ -61,6 +61,15 @@ public final class SettingsOverride {
 	
 	private int idleTimeLow = 2_500;
 	private int idleTimeHigh = 10_000;
+	private int idleTimeEnd = 10_000;
+	
+	public int getIdleTimeEnd() {
+		return idleTimeEnd;
+	}
+
+	public void setIdleTimeEnd(int idleTimeEnd) {
+		this.idleTimeEnd = idleTimeEnd;
+	}
 	
 	public int getIdleTimeLow() {
 		return idleTimeLow;

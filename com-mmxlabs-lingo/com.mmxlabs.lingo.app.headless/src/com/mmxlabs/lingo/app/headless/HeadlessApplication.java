@@ -128,6 +128,7 @@ public class HeadlessApplication implements IApplication {
 		//Set Idle time levels
 		overrideSettings.setIdleTimeLow(headlessParameters.getParameterValue("idle-time-low", Integer.class));
 		overrideSettings.setIdleTimeHigh(headlessParameters.getParameterValue("idle-time-high", Integer.class));
+		overrideSettings.setIdleTimeEnd(headlessParameters.getParameterValue("idle-time-end", Integer.class));
 		// set scenario file
 		overrideSettings
 				.setScenario(headlessParameters.getParameter("scenario-path", StringParameter.class).getValue() + "/" + headlessParameters.getParameter("scenario", StringParameter.class).getValue());

@@ -96,7 +96,7 @@ public class EvaluationSettingsOverrideModule extends AbstractModule {
 		idleParams.setThreshold(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, 15 * 24);
 		idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.LOW, settings.getIdleTimeLow());
 		idleParams.setWeight(com.mmxlabs.scheduler.optimiser.fitness.components.IExcessIdleTimeComponentParameters.Interval.HIGH, settings.getIdleTimeHigh());
-		idleParams.setEndWeight(settings.getIdleTimeHigh());
+		idleParams.setEndWeight(settings.getIdleTimeEnd());
 		
 		return idleParams;
 	}
