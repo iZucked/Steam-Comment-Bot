@@ -30,6 +30,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.util.LocalSelectionTransfer;
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -96,6 +97,7 @@ import com.mmxlabs.models.lng.analytics.ui.views.providers.CellFormatterLabelPro
 import com.mmxlabs.models.lng.analytics.ui.views.providers.OptionsTreeViewerContentProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.OptionsViewerContentProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.PartialCaseContentProvider;
+import com.mmxlabs.models.lng.analytics.ui.views.providers.ResultsFormatterLabelProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.ResultsViewerContentProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.RulesViewerContentProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.ShippingOptionsContentProvider;
@@ -305,7 +307,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
 					if (getModel() != null) {
-						BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> BaseCaseEvaluator.evaluate(OptionModellerView.this, getModel(), getModel().getBaseCase(), true, "Base Case"));
+						BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(),
+								() -> BaseCaseEvaluator.evaluate(OptionModellerView.this, getModel(), getModel().getBaseCase(), true, "Base Case"));
 					}
 				}
 
@@ -581,8 +584,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				getDefaultCommandHandler().handleCommand(SetCommand.create(getEditingDomain(), getModel(), AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL, matchingButton.getSelection()),
-						getModel(), AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL);
+				getDefaultCommandHandler().handleCommand(
+						SetCommand.create(getEditingDomain(), getModel(), AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL, matchingButton.getSelection()), getModel(),
+						AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL);
 			}
 
 			@Override
@@ -672,7 +676,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 		}
 	};
-	
+
 	private final EContentAdapter refreshAdapter = new EContentAdapter() {
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
@@ -767,7 +771,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		vesselClassViewer.setInput(this);
 		vesselViewer.expandAll();
 		shippingOptionsViewer.setInput(model);
-		
+
 		if (rootModel != null) {
 			rootModel.eAdapters().remove(historyRenameAdaptor);
 		}
@@ -1018,9 +1022,14 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		resultsViewer.getGrid().setHeaderVisible(true);
 		resultsViewer.setAutoExpandLevel(TreeViewer.ALL_LEVELS);
 
-		createColumn(resultsViewer, "Buy", new BuyOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__BUY_OPTION);
-		createColumn(resultsViewer, "Sell", new SellOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SELL_OPTION);
-		createColumn(resultsViewer, "Details", new ResultDetailsDescriptionFormatter(), false, AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAIL);
+		createColumn(resultsViewer, "Buy", new ResultsFormatterLabelProvider(new BuyOptionDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__BUY_OPTION), false,
+				AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__BUY_OPTION);
+		createColumn(resultsViewer, "Sell", new ResultsFormatterLabelProvider(new SellOptionDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SELL_OPTION), false,
+				AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SELL_OPTION);
+		createColumn(resultsViewer, "Shipping", new ResultsFormatterLabelProvider(new ShippingOptionDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SHIPPING), false,
+				AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SHIPPING);
+		createColumn(resultsViewer, "Details", new ResultsFormatterLabelProvider(new ResultDetailsDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAIL), false,
+				AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAIL);
 
 		final MenuManager mgr = new MenuManager();
 
@@ -1045,7 +1054,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		final MenuManager mgr = new MenuManager();
 
 		final OptionsTreeViewerContextMenuManager listener = new OptionsTreeViewerContextMenuManager(optionsTreeViewer, OptionModellerView.this, OptionModellerView.this, mgr);
-//		inputWants.add(model -> listener.setOptionAnalysisModel(model));
+		// inputWants.add(model -> listener.setOptionAnalysisModel(model));
 		optionsTreeViewer.getGrid().addMenuDetectListener(listener);
 
 		optionsTreeViewer.setContentProvider(new OptionsTreeViewerContentProvider());
@@ -1201,6 +1210,19 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 
 		});
+		return gvc;
+	}
+
+	private GridViewerColumn createColumn(final GridTreeViewer viewer, final String name, final CellLabelProvider labelProvider, boolean isTree, final ETypedElement... pathObjects) {
+
+		final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER | SWT.WRAP);
+		gvc.getColumn().setTree(isTree);
+		GridViewerHelper.configureLookAndFeel(gvc);
+		gvc.getColumn().setText(name);
+		gvc.getColumn().setWidth(200);
+		gvc.getColumn().setDetail(true);
+		gvc.getColumn().setSummary(true);
+		gvc.setLabelProvider(labelProvider);
 		return gvc;
 	}
 

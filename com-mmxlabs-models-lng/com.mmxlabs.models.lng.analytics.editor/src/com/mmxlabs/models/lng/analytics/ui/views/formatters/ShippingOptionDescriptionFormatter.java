@@ -17,7 +17,7 @@ public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 			Collection<?> collection = (Collection<?>) object;
 
 			if (collection.isEmpty()) {
-				return "<open>";
+				return "<unset>";
 			}
 
 			final StringBuilder sb = new StringBuilder();
