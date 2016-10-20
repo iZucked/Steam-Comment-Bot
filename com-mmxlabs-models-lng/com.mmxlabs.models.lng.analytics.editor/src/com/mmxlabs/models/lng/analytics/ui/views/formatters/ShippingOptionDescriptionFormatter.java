@@ -1,5 +1,7 @@
 package com.mmxlabs.models.lng.analytics.ui.views.formatters;
 
+import java.util.Collection;
+
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
@@ -11,7 +13,40 @@ public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 	@Override
 	public String render(final Object object) {
 
-		if (object instanceof RoundTripShippingOption) {
+		if (object instanceof Collection<?>) {
+			Collection<?> collection = (Collection<?>) object;
+
+			if (collection.isEmpty()) {
+				return "<open>";
+			}
+
+			final StringBuilder sb = new StringBuilder();
+			boolean first = true;
+			for (final Object o : collection) {
+				if (!first) {
+					sb.append("\n");
+				}
+				sb.append(render(o));
+				first = false;
+			}
+			return sb.toString();
+		} else if (object instanceof Object[]) {
+			Object[] objects = (Object[]) object;
+
+			if (objects.length == 0) {
+				return "<open>";
+			}
+			final StringBuilder sb = new StringBuilder();
+			boolean first = true;
+			for (final Object o : objects) {
+				if (!first) {
+					sb.append("\n");
+				}
+				sb.append(render(o));
+				first = false;
+			}
+			return sb.toString();
+		} else if (object instanceof RoundTripShippingOption) {
 			RoundTripShippingOption option = (RoundTripShippingOption) object;
 			VesselClass vesselClass = option.getVesselClass();
 			String vesselName = "<No vessel>";

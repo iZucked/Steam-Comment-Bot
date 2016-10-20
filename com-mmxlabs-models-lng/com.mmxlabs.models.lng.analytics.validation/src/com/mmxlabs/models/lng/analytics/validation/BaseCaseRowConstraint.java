@@ -49,6 +49,12 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
 				statuses.add(deco);
 			}
+
+			if (baseCaseRow.getShipping() != null && baseCaseRow.getShipping().eContainer() == null) {
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Base case - uncontained shipping"));
+				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+				statuses.add(deco);
+			}
 		}
 
 		return Activator.PLUGIN_ID;

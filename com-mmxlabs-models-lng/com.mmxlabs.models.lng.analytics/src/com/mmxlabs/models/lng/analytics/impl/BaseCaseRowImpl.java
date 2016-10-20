@@ -54,7 +54,7 @@ public class BaseCaseRowImpl extends EObjectImpl implements BaseCaseRow {
 	protected SellOption sellOption;
 
 	/**
-	 * The cached value of the '{@link #getShipping() <em>Shipping</em>}' containment reference.
+	 * The cached value of the '{@link #getShipping() <em>Shipping</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getShipping()
@@ -164,6 +164,14 @@ public class BaseCaseRowImpl extends EObjectImpl implements BaseCaseRow {
 	 * @generated
 	 */
 	public ShippingOption getShipping() {
+		if (shipping != null && shipping.eIsProxy()) {
+			InternalEObject oldShipping = (InternalEObject)shipping;
+			shipping = (ShippingOption)eResolveProxy(oldShipping);
+			if (shipping != oldShipping) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AnalyticsPackage.BASE_CASE_ROW__SHIPPING, oldShipping, shipping));
+			}
+		}
 		return shipping;
 	}
 
@@ -172,14 +180,8 @@ public class BaseCaseRowImpl extends EObjectImpl implements BaseCaseRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetShipping(ShippingOption newShipping, NotificationChain msgs) {
-		ShippingOption oldShipping = shipping;
-		shipping = newShipping;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AnalyticsPackage.BASE_CASE_ROW__SHIPPING, oldShipping, newShipping);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
+	public ShippingOption basicGetShipping() {
+		return shipping;
 	}
 
 	/**
@@ -188,31 +190,10 @@ public class BaseCaseRowImpl extends EObjectImpl implements BaseCaseRow {
 	 * @generated
 	 */
 	public void setShipping(ShippingOption newShipping) {
-		if (newShipping != shipping) {
-			NotificationChain msgs = null;
-			if (shipping != null)
-				msgs = ((InternalEObject)shipping).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.BASE_CASE_ROW__SHIPPING, null, msgs);
-			if (newShipping != null)
-				msgs = ((InternalEObject)newShipping).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.BASE_CASE_ROW__SHIPPING, null, msgs);
-			msgs = basicSetShipping(newShipping, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.BASE_CASE_ROW__SHIPPING, newShipping, newShipping));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case AnalyticsPackage.BASE_CASE_ROW__SHIPPING:
-				return basicSetShipping(null, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
+		ShippingOption oldShipping = shipping;
+		shipping = newShipping;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.BASE_CASE_ROW__SHIPPING, oldShipping, shipping));
 	}
 
 	/**
@@ -230,7 +211,8 @@ public class BaseCaseRowImpl extends EObjectImpl implements BaseCaseRow {
 				if (resolve) return getSellOption();
 				return basicGetSellOption();
 			case AnalyticsPackage.BASE_CASE_ROW__SHIPPING:
-				return getShipping();
+				if (resolve) return getShipping();
+				return basicGetShipping();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}

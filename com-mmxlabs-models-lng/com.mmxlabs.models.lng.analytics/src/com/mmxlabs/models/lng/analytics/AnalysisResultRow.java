@@ -103,26 +103,26 @@ public interface AnalysisResultRow extends EObject {
 	void setResultDetail(AnalysisResultDetail value);
 
 	/**
-	 * Returns the value of the '<em><b>Shipping</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Shipping</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Shipping</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Shipping</em>' containment reference.
+	 * @return the value of the '<em>Shipping</em>' reference.
 	 * @see #setShipping(ShippingOption)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalysisResultRow_Shipping()
-	 * @model containment="true"
+	 * @model
 	 * @generated
 	 */
 	ShippingOption getShipping();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.AnalysisResultRow#getShipping <em>Shipping</em>}' containment reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.AnalysisResultRow#getShipping <em>Shipping</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Shipping</em>' containment reference.
+	 * @param value the new value of the '<em>Shipping</em>' reference.
 	 * @see #getShipping()
 	 * @generated
 	 */

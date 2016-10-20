@@ -290,16 +290,15 @@
   <eClassifiers xsi:type="ecore:EClass" name="BaseCaseRow">
     <eStructuralFeatures xsi:type="ecore:EReference" name="buyOption" eType="#//BuyOption"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sellOption" eType="#//SellOption"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="shipping" eType="#//ShippingOption"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="shipping" eType="#//ShippingOption"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PartialCaseRow">
     <eStructuralFeatures xsi:type="ecore:EReference" name="buyOptions" upperBound="-1"
         eType="#//BuyOption"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sellOptions" upperBound="-1"
         eType="#//SellOption"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="shipping" eType="#//ShippingOption"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="shipping" upperBound="-1"
+        eType="#//ShippingOption"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ShippingOption"/>
   <eClassifiers xsi:type="ecore:EClass" name="FleetShippingOption" eSuperTypes="#//ShippingOption">
@@ -327,8 +326,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="sellOption" eType="#//SellOption"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="resultDetail" eType="#//AnalysisResultDetail"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="shipping" eType="#//ShippingOption"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="shipping" eType="#//ShippingOption"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OptionRule" abstract="true" interface="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

@@ -37,6 +37,7 @@ import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -52,19 +53,19 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 public class AnalyticsBuilder {
 	private static BuyOptionDescriptionFormatter buyOptionDescriptionFormatter = new BuyOptionDescriptionFormatter();
 	private static SellOptionDescriptionFormatter sellOptionDescriptionFormatter = new SellOptionDescriptionFormatter();
-	
+
 	public static @Nullable LoadSlot makeLoadSlot(final @Nullable BuyOption buy, final @NonNull LNGScenarioModel lngScenarioModel) {
 
 		String baseName = buyOptionDescriptionFormatter.render(buy);
-		
+
 		// Get existing names
 		final Set<String> usedIDStrings = new HashSet<>();
 		for (final LoadSlot lSlot : lngScenarioModel.getCargoModel().getLoadSlots()) {
 			usedIDStrings.add(lSlot.getName());
 		}
-		
+
 		String id = getUniqueID(baseName, usedIDStrings);
-		
+
 		if (buy instanceof BuyReference) {
 			return ((BuyReference) buy).getSlot();
 		} else if (buy instanceof BuyOpportunity) {
@@ -104,7 +105,6 @@ public class AnalyticsBuilder {
 				slot.setPort(desSalesMarket.getNotionalPort());
 			}
 			slot.setMarket(market);
-			
 
 			slot.setName(id);
 
@@ -117,11 +117,11 @@ public class AnalyticsBuilder {
 	public static String getUniqueID(String baseName, final Set<String> usedIDStrings) {
 		String id;
 		if (usedIDStrings.contains(baseName)) {
-		int i = 1;
-		id = baseName + "-" + (i);
-		while (usedIDStrings.contains(id)) {
-			id = baseName + "-" + (i++);
-		}
+			int i = 1;
+			id = baseName + "-" + (i);
+			while (usedIDStrings.contains(id)) {
+				id = baseName + "-" + (i++);
+			}
 		} else {
 			id = baseName;
 		}
@@ -132,19 +132,19 @@ public class AnalyticsBuilder {
 		if (increment == 0) {
 			return base;
 		} else {
-			return base+"-"+increment;
+			return base + "-" + increment;
 		}
 	}
-	
+
 	public static @Nullable DischargeSlot makeDischargeSlot(final @Nullable SellOption sell, final @NonNull LNGScenarioModel lngScenarioModel) {
 		String baseName = sellOptionDescriptionFormatter.render(sell);
-		
+
 		// Get existing names
 		final Set<String> usedIDStrings = new HashSet<>();
 		for (final DischargeSlot dSlot : lngScenarioModel.getCargoModel().getDischargeSlots()) {
 			usedIDStrings.add(dSlot.getName());
 		}
-		
+
 		String id = getUniqueID(baseName, usedIDStrings);
 
 		if (sell instanceof SellReference) {
@@ -490,5 +490,21 @@ public class AnalyticsBuilder {
 			}
 		}
 		return sellRef;
+	}
+
+	public static NominatedShippingOption getOrCreatNominatedShippingOption(OptionAnalysisModel optionAnalysisModel, Vessel vessel) {
+		for (ShippingOption opt : optionAnalysisModel.getShippingTemplates()) {
+			if (opt instanceof NominatedShippingOption) {
+				NominatedShippingOption nominatedShippingOption = (NominatedShippingOption) opt;
+				if (nominatedShippingOption.getNominatedVessel() == vessel) {
+					return nominatedShippingOption;
+				}
+			}
+		}
+		final NominatedShippingOption opt = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
+		opt.setNominatedVessel(vessel);
+
+		return opt;
+
 	}
 }

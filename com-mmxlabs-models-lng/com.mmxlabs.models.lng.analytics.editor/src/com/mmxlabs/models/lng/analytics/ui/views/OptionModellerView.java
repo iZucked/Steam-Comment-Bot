@@ -253,7 +253,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		// // sc.getHorizontalBar().setPageIncrement(100);
 		// sc.getVerticalBar().setPageIncrement(100);
 
-		centralComposite = new Composite(mainComposite, SWT.BORDER | SWT.BORDER_DASH);
+		centralComposite = new Composite(mainComposite, SWT.NONE);
 		// sc.setContent(centralComposite);
 		centralComposite.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 

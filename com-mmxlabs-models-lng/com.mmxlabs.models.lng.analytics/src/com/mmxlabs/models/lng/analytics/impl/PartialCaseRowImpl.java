@@ -57,14 +57,14 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 	protected EList<SellOption> sellOptions;
 
 	/**
-	 * The cached value of the '{@link #getShipping() <em>Shipping</em>}' containment reference.
+	 * The cached value of the '{@link #getShipping() <em>Shipping</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getShipping()
 	 * @generated
 	 * @ordered
 	 */
-	protected ShippingOption shipping;
+	protected EList<ShippingOption> shipping;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -114,56 +114,11 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ShippingOption getShipping() {
+	public EList<ShippingOption> getShipping() {
+		if (shipping == null) {
+			shipping = new EObjectResolvingEList<ShippingOption>(ShippingOption.class, this, AnalyticsPackage.PARTIAL_CASE_ROW__SHIPPING);
+		}
 		return shipping;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetShipping(ShippingOption newShipping, NotificationChain msgs) {
-		ShippingOption oldShipping = shipping;
-		shipping = newShipping;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AnalyticsPackage.PARTIAL_CASE_ROW__SHIPPING, oldShipping, newShipping);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setShipping(ShippingOption newShipping) {
-		if (newShipping != shipping) {
-			NotificationChain msgs = null;
-			if (shipping != null)
-				msgs = ((InternalEObject)shipping).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.PARTIAL_CASE_ROW__SHIPPING, null, msgs);
-			if (newShipping != null)
-				msgs = ((InternalEObject)newShipping).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.PARTIAL_CASE_ROW__SHIPPING, null, msgs);
-			msgs = basicSetShipping(newShipping, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.PARTIAL_CASE_ROW__SHIPPING, newShipping, newShipping));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case AnalyticsPackage.PARTIAL_CASE_ROW__SHIPPING:
-				return basicSetShipping(null, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -202,7 +157,8 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 				getSellOptions().addAll((Collection<? extends SellOption>)newValue);
 				return;
 			case AnalyticsPackage.PARTIAL_CASE_ROW__SHIPPING:
-				setShipping((ShippingOption)newValue);
+				getShipping().clear();
+				getShipping().addAll((Collection<? extends ShippingOption>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -223,7 +179,7 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 				getSellOptions().clear();
 				return;
 			case AnalyticsPackage.PARTIAL_CASE_ROW__SHIPPING:
-				setShipping((ShippingOption)null);
+				getShipping().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -242,7 +198,7 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 			case AnalyticsPackage.PARTIAL_CASE_ROW__SELL_OPTIONS:
 				return sellOptions != null && !sellOptions.isEmpty();
 			case AnalyticsPackage.PARTIAL_CASE_ROW__SHIPPING:
-				return shipping != null;
+				return shipping != null && !shipping.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

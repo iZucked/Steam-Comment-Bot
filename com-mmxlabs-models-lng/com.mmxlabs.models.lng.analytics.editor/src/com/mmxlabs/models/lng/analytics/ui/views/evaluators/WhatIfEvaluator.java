@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.ProfitAndLossResult;
 import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.SellOption;
+import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator.BreakEvenMode;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseEvaluator.IMapperClass;
@@ -69,7 +70,17 @@ public class WhatIfEvaluator {
 			} else if (r.getSellOptions().size() == 1) {
 				bcr.setSellOption(r.getSellOptions().get(0));
 			}
-			bcr.setShipping(EcoreUtil.copy(r.getShipping()));
+			if (r.getShipping().size() > 1) {
+				final List<Runnable> options = new LinkedList<>();
+				for (final ShippingOption o : r.getShipping()) {
+					options.add(() -> {
+						bcr.setShipping(o);
+					});
+				}
+				combinations.add(options);
+			} else if (r.getShipping().size() == 1) {
+				bcr.setShipping(r.getShipping().get(0));
+			}
 			baseCase.getBaseCase().add(bcr);
 		}
 		// TODO:Command
@@ -96,7 +107,7 @@ public class WhatIfEvaluator {
 				final AnalysisResultRow res = AnalyticsFactory.eINSTANCE.createAnalysisResultRow();
 				res.setBuyOption(row.getBuyOption());
 				res.setSellOption(row.getSellOption());
-				res.setShipping(EcoreUtil.copy(row.getShipping()));
+				res.setShipping(row.getShipping());
 
 				final Triple<SlotAllocation, SlotAllocation, CargoAllocation> t = finder(lngScenarioModel, row, mapper);
 				final SlotAllocation loadAllocation = t.getFirst();

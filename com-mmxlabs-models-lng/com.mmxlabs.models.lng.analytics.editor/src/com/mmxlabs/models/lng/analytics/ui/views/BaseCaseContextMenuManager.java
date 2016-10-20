@@ -88,7 +88,7 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 							partialCaseRow.getSellOptions().add(baseCaseRow.getSellOption());
 						}
 						if (baseCaseRow.getShipping() != null) {
-							partialCaseRow.setShipping(EcoreUtil.copy(baseCaseRow.getShipping()));
+							partialCaseRow.getShipping().add(baseCaseRow.getShipping());
 						}
 						if (!(partialCaseRow.getBuyOptions().isEmpty() && partialCaseRow.getSellOptions().isEmpty() && partialCaseRow.getShipping() == null)) {
 							c.add(partialCaseRow);
@@ -140,39 +140,49 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 									AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 
 						}));
-						mgr.add(new RunnableAction("Copy shipping to templates", () -> {
-							scenarioEditingLocation.getDefaultCommandHandler()
-									.handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel,
-											AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, EcoreUtil.copy(row.getShipping())), optionAnalysisModel,
-											AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
-
-						}));
+						// mgr.add(new RunnableAction("Copy shipping to templates", () -> {
+						// scenarioEditingLocation.getDefaultCommandHandler()
+						// .handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel,
+						// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, EcoreUtil.copy(row.getShipping())), optionAnalysisModel,
+						// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+						//
+						// }));
 					}
 					if (AnalyticsBuilder.isNonShipped(row) == ShippingType.NonShipped) {
-						mgr.add(new RunnableAction("Create Nominated", () -> {
-							final NominatedShippingOption o = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
-							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-									SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, o), row,
-									AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
 
-						}));
+//						mgr.add(new RunnableAction("Create Nominated", () -> {
+//							// final NominatedShippingOption o = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
+//							// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+//							// SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, o), row,
+//							// AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+//							// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
+//							NominatedShippingOption opt = AnalyticsBuilder.getOrCreatNominatedShippingOption(optionAnalysisModel, vessel);
+//							if (opt.eContainer() == null) {
+//								scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+//										AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
+//										optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+//							}
+//
+//							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+//									SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), row,
+//									AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+//						}));
 					} else if (AnalyticsBuilder.isNonShipped(row) == ShippingType.Shipped) {
-						mgr.add(new RunnableAction("Create RT", () -> {
-							final RoundTripShippingOption o = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
-							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-									SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, o), row,
-									AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
-						}));
-						mgr.add(new RunnableAction("Create fleet", () -> {
-							final FleetShippingOption o = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
-							AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, o);
-							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-									SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, o), row,
-									AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
-						}));
+						// mgr.add(new RunnableAction("Create RT", () -> {
+						// final RoundTripShippingOption o = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
+						// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+						// SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, o), row,
+						// AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+						// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
+						// }));
+						// mgr.add(new RunnableAction("Create fleet", () -> {
+						// final FleetShippingOption o = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
+						// AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, o);
+						// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+						// SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, o), row,
+						// AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+						// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
+						// }));
 					}
 				}
 			}

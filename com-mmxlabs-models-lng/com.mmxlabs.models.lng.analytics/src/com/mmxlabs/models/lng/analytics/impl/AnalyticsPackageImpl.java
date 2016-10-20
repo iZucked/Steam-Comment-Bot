@@ -2326,12 +2326,12 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEClass(baseCaseRowEClass, BaseCaseRow.class, "BaseCaseRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getBaseCaseRow_BuyOption(), this.getBuyOption(), null, "buyOption", null, 0, 1, BaseCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getBaseCaseRow_SellOption(), this.getSellOption(), null, "sellOption", null, 0, 1, BaseCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getBaseCaseRow_Shipping(), this.getShippingOption(), null, "shipping", null, 0, 1, BaseCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBaseCaseRow_Shipping(), this.getShippingOption(), null, "shipping", null, 0, 1, BaseCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(partialCaseRowEClass, PartialCaseRow.class, "PartialCaseRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPartialCaseRow_BuyOptions(), this.getBuyOption(), null, "buyOptions", null, 0, -1, PartialCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPartialCaseRow_SellOptions(), this.getSellOption(), null, "sellOptions", null, 0, -1, PartialCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPartialCaseRow_Shipping(), this.getShippingOption(), null, "shipping", null, 0, 1, PartialCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPartialCaseRow_Shipping(), this.getShippingOption(), null, "shipping", null, 0, -1, PartialCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(shippingOptionEClass, ShippingOption.class, "ShippingOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -2351,7 +2351,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getAnalysisResultRow_BuyOption(), this.getBuyOption(), null, "buyOption", null, 0, 1, AnalysisResultRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAnalysisResultRow_SellOption(), this.getSellOption(), null, "sellOption", null, 0, 1, AnalysisResultRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAnalysisResultRow_ResultDetail(), this.getAnalysisResultDetail(), null, "resultDetail", null, 0, 1, AnalysisResultRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getAnalysisResultRow_Shipping(), this.getShippingOption(), null, "shipping", null, 0, 1, AnalysisResultRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAnalysisResultRow_Shipping(), this.getShippingOption(), null, "shipping", null, 0, 1, AnalysisResultRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(optionRuleEClass, OptionRule.class, "OptionRule", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getOptionRule_Name(), ecorePackage.getEString(), "name", null, 0, 1, OptionRule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

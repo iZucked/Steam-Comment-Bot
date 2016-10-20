@@ -1437,7 +1437,7 @@ s	 * <!-- end-user-doc -->
 	int BASE_CASE_ROW__SELL_OPTION = 1;
 
 	/**
-	 * The feature id for the '<em><b>Shipping</b></em>' containment reference.
+	 * The feature id for the '<em><b>Shipping</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1483,7 +1483,7 @@ s	 * <!-- end-user-doc -->
 	int PARTIAL_CASE_ROW__SELL_OPTIONS = 1;
 
 	/**
-	 * The feature id for the '<em><b>Shipping</b></em>' containment reference.
+	 * The feature id for the '<em><b>Shipping</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1668,7 +1668,7 @@ s	 * <!-- end-user-doc -->
 	int ANALYSIS_RESULT_ROW__RESULT_DETAIL = 2;
 
 	/**
-	 * The feature id for the '<em><b>Shipping</b></em>' containment reference.
+	 * The feature id for the '<em><b>Shipping</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -3239,10 +3239,10 @@ s	 * <!-- end-user-doc -->
 	EReference getBaseCaseRow_SellOption();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#getShipping <em>Shipping</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#getShipping <em>Shipping</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Shipping</em>'.
+	 * @return the meta object for the reference '<em>Shipping</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.BaseCaseRow#getShipping()
 	 * @see #getBaseCaseRow()
 	 * @generated
@@ -3282,10 +3282,10 @@ s	 * <!-- end-user-doc -->
 	EReference getPartialCaseRow_SellOptions();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getShipping <em>Shipping</em>}'.
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getShipping <em>Shipping</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Shipping</em>'.
+	 * @return the meta object for the reference list '<em>Shipping</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.PartialCaseRow#getShipping()
 	 * @see #getPartialCaseRow()
 	 * @generated
@@ -3442,10 +3442,10 @@ s	 * <!-- end-user-doc -->
 	EReference getAnalysisResultRow_ResultDetail();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.AnalysisResultRow#getShipping <em>Shipping</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.AnalysisResultRow#getShipping <em>Shipping</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Shipping</em>'.
+	 * @return the meta object for the reference '<em>Shipping</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.AnalysisResultRow#getShipping()
 	 * @see #getAnalysisResultRow()
 	 * @generated
@@ -4686,7 +4686,7 @@ s	 * <!-- end-user-doc -->
 		EReference BASE_CASE_ROW__SELL_OPTION = eINSTANCE.getBaseCaseRow_SellOption();
 
 		/**
-		 * The meta object literal for the '<em><b>Shipping</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Shipping</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -4720,7 +4720,7 @@ s	 * <!-- end-user-doc -->
 		EReference PARTIAL_CASE_ROW__SELL_OPTIONS = eINSTANCE.getPartialCaseRow_SellOptions();
 
 		/**
-		 * The meta object literal for the '<em><b>Shipping</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Shipping</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -4850,7 +4850,7 @@ s	 * <!-- end-user-doc -->
 		EReference ANALYSIS_RESULT_ROW__RESULT_DETAIL = eINSTANCE.getAnalysisResultRow_ResultDetail();
 
 		/**
-		 * The meta object literal for the '<em><b>Shipping</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Shipping</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

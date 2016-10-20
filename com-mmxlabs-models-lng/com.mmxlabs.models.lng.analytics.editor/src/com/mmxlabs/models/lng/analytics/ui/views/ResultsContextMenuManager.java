@@ -108,8 +108,10 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 					// create a new model copy
 					newModel.getBuys().addAll(copier.copyAll(optionAnalysisModel.getBuys()));
 					newModel.getSells().addAll(copier.copyAll(optionAnalysisModel.getSells()));
-					newModel.setPartialCase((PartialCase) copier.copy(optionAnalysisModel.getPartialCase()));
-					newModel.getResultSets().addAll(copier.copyAll(optionAnalysisModel.getResultSets()));
+					newModel.getShippingTemplates().addAll(copier.copyAll(optionAnalysisModel.getShippingTemplates()));
+					newModel.setPartialCase(AnalyticsFactory.eINSTANCE.createPartialCase());
+//					newModel.setPartialCase((PartialCase) copier.copy(optionAnalysisModel.getPartialCase()));
+//					newModel.getResultSets().addAll(copier.copyAll(optionAnalysisModel.getResultSets()));
 					newModel.getRules().addAll(copier.copyAll(optionAnalysisModel.getRules()));
 					newModel.setUseTargetPNL(optionAnalysisModel.isUseTargetPNL());
 					copier.copyReferences();

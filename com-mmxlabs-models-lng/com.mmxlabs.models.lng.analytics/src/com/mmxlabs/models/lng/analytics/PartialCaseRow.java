@@ -57,29 +57,19 @@ public interface PartialCaseRow extends EObject {
 	EList<SellOption> getSellOptions();
 
 	/**
-	 * Returns the value of the '<em><b>Shipping</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Shipping</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.ShippingOption}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Shipping</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Shipping</em>' containment reference.
-	 * @see #setShipping(ShippingOption)
+	 * @return the value of the '<em>Shipping</em>' reference list.
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getPartialCaseRow_Shipping()
-	 * @model containment="true"
+	 * @model
 	 * @generated
 	 */
-	ShippingOption getShipping();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getShipping <em>Shipping</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Shipping</em>' containment reference.
-	 * @see #getShipping()
-	 * @generated
-	 */
-	void setShipping(ShippingOption value);
+	EList<ShippingOption> getShipping();
 
 } // PartialCaseRow

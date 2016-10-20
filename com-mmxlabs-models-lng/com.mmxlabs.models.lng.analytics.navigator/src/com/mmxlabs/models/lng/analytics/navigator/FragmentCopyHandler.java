@@ -181,12 +181,12 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 							}
 						};
 
-						for (BaseCaseRow row : copyModel.getBaseCase().getBaseCase()) {
-							updateShipping.accept(row.getShipping());
-						}
-						for (PartialCaseRow row : copyModel.getPartialCase().getPartialCase()) {
-							updateShipping.accept(row.getShipping());
-						}
+//						for (BaseCaseRow row : copyModel.getBaseCase().getBaseCase()) {
+//							updateShipping.accept(row.getShipping());
+//						}
+//						for (PartialCaseRow row : copyModel.getPartialCase().getPartialCase()) {
+//							updateShipping.accept(row.getShipping());
+//						}
 						for (ShippingOption opt : copyModel.getShippingTemplates()) {
 							updateShipping.accept(opt);
 						}

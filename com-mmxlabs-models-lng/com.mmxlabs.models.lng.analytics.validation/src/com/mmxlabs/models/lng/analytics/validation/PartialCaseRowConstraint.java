@@ -9,10 +9,10 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
+import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder.ShippingType;
 import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
@@ -36,9 +36,19 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 					deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
 					statuses.add(deco);
 				}
-				if (!(partialCaseRow.getShipping() instanceof FleetShippingOption || partialCaseRow.getShipping() instanceof RoundTripShippingOption)) {
-					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus("Partial case - incompatible shipping option defined."));
+				for (ShippingOption opt : partialCaseRow.getShipping()) {
+					if (!(opt instanceof FleetShippingOption || opt instanceof RoundTripShippingOption)) {
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus("Partial case - incompatible shipping option defined."));
+						deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
+						statuses.add(deco);
+					}
+				}
+			}
+
+			for (ShippingOption opt : partialCaseRow.getShipping()) {
+				if (opt.eContainer() == null) {
+					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Partial case - uncontained shipping"));
 					deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
 					statuses.add(deco);
 				}

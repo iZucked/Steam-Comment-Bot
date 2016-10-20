@@ -1,5 +1,7 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
+import javax.print.attribute.standard.MediaSize.ISO;
+
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -126,61 +128,63 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 
 					if (existing != null) {
 						if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.NonShipped) {
-							final NominatedShippingOption opt = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
-							opt.setNominatedVessel(vessel);
+							NominatedShippingOption opt = AnalyticsBuilder.getOrCreatNominatedShippingOption(optionAnalysisModel, vessel);
+							if (opt.eContainer() == null) {
+								scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+										AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
+										optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+							}
 
 							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 									SetCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), existing,
 									AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-
-							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 						} else if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.Shipped) {
-							final BaseCaseRow pExisting = existing;
-							menuHelper.clearActions();
-							menuHelper.addAction(new RunnableAction("Create RT", () -> {
-								final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
-								opt.setVesselClass(vessel.getVesselClass());
-								scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-										SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), pExisting,
-										AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-								DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-							}));
-							menuHelper.addAction(new RunnableAction("Create fleet", () -> {
-								final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
-								opt.setVessel(vessel);
-								AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
-								scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-										SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), pExisting,
-										AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-								DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-							}));
-
-							menuHelper.open();
+							// final BaseCaseRow pExisting = existing;
+							// menuHelper.clearActions();
+							// menuHelper.addAction(new RunnableAction("Create RT", () -> {
+							// final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
+							// opt.setVesselClass(vessel.getVesselClass());
+							// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+							// SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), pExisting,
+							// AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+							// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
+							// }));
+							// menuHelper.addAction(new RunnableAction("Create fleet", () -> {
+							// final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
+							// opt.setVessel(vessel);
+							// AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
+							// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+							// SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), pExisting,
+							// AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+							// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
+							// }));
+							//
+							// menuHelper.open();
 						}
 					}
 				} else if (o instanceof VesselClass) {
-
-					final BaseCaseRow pExisting = existing;
-
-					final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
-					opt.setVesselClass((VesselClass) o);
-					if (pExisting != null) {
-						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-								SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), pExisting,
-								AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-					}
+					//
+					// final BaseCaseRow pExisting = existing;
+					//
+					// final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
+					// opt.setVesselClass((VesselClass) o);
+					// if (pExisting != null) {
+					// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+					// SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), pExisting,
+					// AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+					// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
+					// }
 				} else if (o instanceof ShippingOption) {
 					if (existing != null) {
 						ShippingOption opt = null;
 						if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.NonShipped) {
 							if (o instanceof NominatedShippingOption) {
-								opt = (ShippingOption) EcoreUtil.copy((ShippingOption) o);
+								opt = (ShippingOption)o;
 							}
 						} else if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.Shipped) {
 
 							if (o instanceof RoundTripShippingOption || o instanceof FleetShippingOption) {
-								opt = (ShippingOption) EcoreUtil.copy((ShippingOption) o);
+								opt = (ShippingOption)o;
 							}
 						}
 						if (opt != null) {

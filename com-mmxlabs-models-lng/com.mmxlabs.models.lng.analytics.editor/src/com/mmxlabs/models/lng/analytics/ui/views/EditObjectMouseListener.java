@@ -68,10 +68,7 @@ public class EditObjectMouseListener implements MouseListener {
 				} else if (cell.getColumnIndex() == 1) {
 					DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(row.getSellOptions()));
 				} else if (cell.getColumnIndex() == 2) {
-					target = row.getShipping();
-					if (target != null) {
-						DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, target);
-					}
+					DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(row.getShipping()));
 				}
 			} else if (element instanceof EObject) {
 				DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, (EObject) element);
