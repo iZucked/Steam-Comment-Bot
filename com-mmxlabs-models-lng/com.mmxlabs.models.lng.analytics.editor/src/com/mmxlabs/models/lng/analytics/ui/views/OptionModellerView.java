@@ -129,7 +129,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private GridTreeViewer partialCaseViewer;
 	private GridTreeViewer buyOptionsViewer;
 	private GridTreeViewer sellOptionsViewer;
-	private GridTreeViewer rulesViewer;
+//	private GridTreeViewer rulesViewer;
 	private GridTreeViewer resultsViewer;
 	private GridTreeViewer vesselViewer;
 	private GridTreeViewer vesselClassViewer;
@@ -352,8 +352,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		final Composite targetPNLToggle = createUseTargetPNLToggleComposite(centralComposite);
 		GridDataFactory.generate(targetPNLToggle, 2, 1);
 
-		createRulesViewer(centralComposite);
-		GridDataFactory.generate(rulesViewer.getGrid(), 2, 1);
+//		createRulesViewer(centralComposite);
+//		GridDataFactory.generate(rulesViewer.getGrid(), 2, 1);
 
 		final Button generateButton = new Button(centralComposite, SWT.PUSH);
 		// generateButton.setText("Generate"); -- play icon
@@ -765,7 +765,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		partialCaseViewer.setInput(model);
 		buyOptionsViewer.setInput(model);
 		sellOptionsViewer.setInput(model);
-		rulesViewer.setInput(model);
+//		rulesViewer.setInput(model);
 		resultsViewer.setInput(model);
 		vesselViewer.setInput(this);
 		vesselClassViewer.setInput(this);
@@ -920,16 +920,16 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		return vesselClassViewer;
 	}
 
-	private void createRulesViewer(final Composite parent) {
-		rulesViewer = new GridTreeViewer(parent, SWT.NONE);
-		GridViewerHelper.configureLookAndFeel(rulesViewer);
-		rulesViewer.getGrid().setHeaderVisible(true);
-
-		createColumn(rulesViewer, "Rule", new RuleDescriptionFormatter(), false);
-
-		rulesViewer.setContentProvider(new RulesViewerContentProvider());
-		hookOpenEditor(rulesViewer);
-	}
+//	private void createRulesViewer(final Composite parent) {
+//		rulesViewer = new GridTreeViewer(parent, SWT.NONE);
+//		GridViewerHelper.configureLookAndFeel(rulesViewer);
+//		rulesViewer.getGrid().setHeaderVisible(true);
+//
+//		createColumn(rulesViewer, "Rule", new RuleDescriptionFormatter(), false);
+//
+//		rulesViewer.setContentProvider(new RulesViewerContentProvider());
+//		hookOpenEditor(rulesViewer);
+//	}
 
 	private void wrapInExpandable(final Composite composite, final String name, final Function<Composite, Control> s) {
 		wrapInExpandable(composite, name, s, null);
@@ -1256,7 +1256,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					baseCaseProftLabel.setText(String.format("Base P&&L: $---,---,---.--"));
 				}
 				partialCaseViewer.refresh();
-				rulesViewer.refresh();
+//				rulesViewer.refresh();
 				resultsViewer.refresh();
 				resultsViewer.expandAll();
 				if (layout) {
