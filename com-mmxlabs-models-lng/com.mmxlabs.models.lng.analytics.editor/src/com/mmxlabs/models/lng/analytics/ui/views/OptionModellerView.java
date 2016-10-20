@@ -242,7 +242,22 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 			});
 			buyOptionsViewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).hint(SWT.DEFAULT, 400).create());
-			wrapInExpandable(buyComposite, "Options history", p -> createOptionsTreeViewer(p));
+			wrapInExpandable(buyComposite, "Options history", p -> createOptionsTreeViewer(p), expandableCompo -> {
+
+				final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
+				final OptionsTreeViewerDropTargetListener listener = new OptionsTreeViewerDropTargetListener(OptionModellerView.this, optionsTreeViewer);
+				DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE);
+				dropTarget.setTransfer(types);
+				dropTarget.addDropListener(listener);
+			});
+			optionsTreeViewer.getGrid().setCellSelectionEnabled(true);
+			
+			{
+			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
+			final OptionsTreeViewerDropTargetListener listener = new OptionsTreeViewerDropTargetListener(OptionModellerView.this, optionsTreeViewer);
+			optionsTreeViewer.addDropSupport(DND.DROP_MOVE, types, listener);
+			}
+
 
 			// GridDataFactory.generate(addBuy, 1, 1);
 			hookDragSource(buyOptionsViewer);
