@@ -360,26 +360,34 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			GridDataFactory.generate(generateComposite, 2, 1);
 
 			generateComposite.setLayout(new GridLayout(1, true));
-			
-			final Button generateButton = new Button(generateComposite, SWT.PUSH);
-			// generateButton.setText("Generate"); -- play icon
-			generateButton.setImage(image_generate);
-			generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(true, false).create());
-			
 
-			generateButton.addSelectionListener(new SelectionListener() {
+			final Label generateButton = new Label(generateComposite, SWT.NONE);
+			generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(true, false).create());
+			generateButton.setImage(image_generate);
+			generateButton.addMouseListener(new MouseListener() {
 
 				@Override
-				public void widgetSelected(final SelectionEvent e) {
+				public void mouseDown(MouseEvent e) {
+
 					if (getModel() != null) {
 						BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> WhatIfEvaluator.evaluate(OptionModellerView.this, getModel()));
 					}
 				}
 
 				@Override
-				public void widgetDefaultSelected(final SelectionEvent e) {
+				public void mouseDoubleClick(MouseEvent e) {
 
 				}
+
+				@Override
+				public void mouseUp(MouseEvent e) {
+
+				}
+
+				// @Override
+				// public void widgetDefaultSelected(final SelectionEvent e) {
+				//
+				// }
 			});
 		}
 
