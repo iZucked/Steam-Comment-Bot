@@ -421,6 +421,18 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			sellComposite.setLayout(new GridLayout(1, true));
 
 			wrapInExpandable(sellComposite, "Sells", p -> createSellOptionsViewer(p), expandableComposite -> {
+				
+				{
+					final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
+					final SellsDropTargetListener listener = new SellsDropTargetListener(OptionModellerView.this, sellOptionsViewer);
+					inputWants.add(model -> listener.setOptionAnalysisModel(model));
+					// Control control = getControl();
+					final DropTarget dropTarget = new DropTarget(expandableComposite, DND.DROP_MOVE);
+					dropTarget.setTransfer(types);
+					dropTarget.addDropListener(listener);
+					// expandableComposite.addDropSupport(DND.DROP_MOVE, types, listener);
+				}
+				
 				final Label addSellButton = new Label(expandableComposite, SWT.NONE);
 				addSellButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 				expandableComposite.setTextClient(addSellButton);
