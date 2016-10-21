@@ -64,7 +64,10 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 		}
 	}
 
-	private void disableAdapters(final EObject top) {
+	/**
+	 * Do not call this directly - use {@link #setAdaptersEnabled(boolean)} instead. This method is exposed so transient references can be processed.
+	 */
+	public void disableAdapters(final EObject top) {
 
 		for (final Adapter a : top.eAdapters().toArray(new Adapter[top.eAdapters().size()])) {
 			if (a instanceof IMMXAdapter) {
@@ -88,7 +91,10 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 		}
 	}
 
-	private void enableAdapters(final EObject top, final boolean skip) {
+	/**
+	 * Do not call this directly - use {@link #setAdaptersEnabled(boolean)} instead. This method is exposed so transient references can be processed.
+	 */
+	public void enableAdapters(final EObject top, final boolean skip) {
 		for (final Adapter a : top.eAdapters().toArray(new Adapter[top.eAdapters().size()])) {
 			if (a instanceof IMMXAdapter) {
 				((IMMXAdapter) a).enable(skip);
@@ -132,7 +138,7 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 			final CompoundCommand wrapper = new CompoundCommand();
 
 			final List<IModelCommandProvider> providers = Activator.getPlugin().getModelCommandProviders();
-			
+
 			// TODO: Maybe separate API here?
 			startBatchCommand();
 
