@@ -14,6 +14,7 @@ import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 
+import com.mmxlabs.models.lng.pricing.SuezCanalTariff;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 import java.util.Collection;
@@ -43,6 +44,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CostModelImpl#getCooldownCosts <em>Cooldown Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CostModelImpl#getBaseFuelCosts <em>Base Fuel Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CostModelImpl#getPanamaCanalTariff <em>Panama Canal Tariff</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CostModelImpl#getSuezCanalTariff <em>Suez Canal Tariff</em>}</li>
  * </ul>
  *
  * @generated
@@ -97,6 +99,16 @@ public class CostModelImpl extends UUIDObjectImpl implements CostModel {
 	 * @ordered
 	 */
 	protected PanamaCanalTariff panamaCanalTariff;
+
+	/**
+	 * The cached value of the '{@link #getSuezCanalTariff() <em>Suez Canal Tariff</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSuezCanalTariff()
+	 * @generated
+	 * @ordered
+	 */
+	protected SuezCanalTariff suezCanalTariff;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -213,6 +225,49 @@ public class CostModelImpl extends UUIDObjectImpl implements CostModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public SuezCanalTariff getSuezCanalTariff() {
+		return suezCanalTariff;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetSuezCanalTariff(SuezCanalTariff newSuezCanalTariff, NotificationChain msgs) {
+		SuezCanalTariff oldSuezCanalTariff = suezCanalTariff;
+		suezCanalTariff = newSuezCanalTariff;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PricingPackage.COST_MODEL__SUEZ_CANAL_TARIFF, oldSuezCanalTariff, newSuezCanalTariff);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSuezCanalTariff(SuezCanalTariff newSuezCanalTariff) {
+		if (newSuezCanalTariff != suezCanalTariff) {
+			NotificationChain msgs = null;
+			if (suezCanalTariff != null)
+				msgs = ((InternalEObject)suezCanalTariff).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PricingPackage.COST_MODEL__SUEZ_CANAL_TARIFF, null, msgs);
+			if (newSuezCanalTariff != null)
+				msgs = ((InternalEObject)newSuezCanalTariff).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PricingPackage.COST_MODEL__SUEZ_CANAL_TARIFF, null, msgs);
+			msgs = basicSetSuezCanalTariff(newSuezCanalTariff, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.COST_MODEL__SUEZ_CANAL_TARIFF, newSuezCanalTariff, newSuezCanalTariff));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -226,6 +281,8 @@ public class CostModelImpl extends UUIDObjectImpl implements CostModel {
 				return ((InternalEList<?>)getBaseFuelCosts()).basicRemove(otherEnd, msgs);
 			case PricingPackage.COST_MODEL__PANAMA_CANAL_TARIFF:
 				return basicSetPanamaCanalTariff(null, msgs);
+			case PricingPackage.COST_MODEL__SUEZ_CANAL_TARIFF:
+				return basicSetSuezCanalTariff(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -248,6 +305,8 @@ public class CostModelImpl extends UUIDObjectImpl implements CostModel {
 				return getBaseFuelCosts();
 			case PricingPackage.COST_MODEL__PANAMA_CANAL_TARIFF:
 				return getPanamaCanalTariff();
+			case PricingPackage.COST_MODEL__SUEZ_CANAL_TARIFF:
+				return getSuezCanalTariff();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -280,6 +339,9 @@ public class CostModelImpl extends UUIDObjectImpl implements CostModel {
 			case PricingPackage.COST_MODEL__PANAMA_CANAL_TARIFF:
 				setPanamaCanalTariff((PanamaCanalTariff)newValue);
 				return;
+			case PricingPackage.COST_MODEL__SUEZ_CANAL_TARIFF:
+				setSuezCanalTariff((SuezCanalTariff)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -307,6 +369,9 @@ public class CostModelImpl extends UUIDObjectImpl implements CostModel {
 			case PricingPackage.COST_MODEL__PANAMA_CANAL_TARIFF:
 				setPanamaCanalTariff((PanamaCanalTariff)null);
 				return;
+			case PricingPackage.COST_MODEL__SUEZ_CANAL_TARIFF:
+				setSuezCanalTariff((SuezCanalTariff)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -329,6 +394,8 @@ public class CostModelImpl extends UUIDObjectImpl implements CostModel {
 				return baseFuelCosts != null && !baseFuelCosts.isEmpty();
 			case PricingPackage.COST_MODEL__PANAMA_CANAL_TARIFF:
 				return panamaCanalTariff != null;
+			case PricingPackage.COST_MODEL__SUEZ_CANAL_TARIFF:
+				return suezCanalTariff != null;
 		}
 		return super.eIsSet(featureID);
 	}

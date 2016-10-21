@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity <em>Fill Capacity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getScnt <em>Scnt</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
  * </ul>
@@ -209,6 +210,59 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	boolean isSetFillCapacity();
+
+	/**
+	 * Returns the value of the '<em><b>Scnt</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Scnt</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Scnt</em>' attribute.
+	 * @see #isSetScnt()
+	 * @see #unsetScnt()
+	 * @see #setScnt(int)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_Scnt()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	int getScnt();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getScnt <em>Scnt</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Scnt</em>' attribute.
+	 * @see #isSetScnt()
+	 * @see #unsetScnt()
+	 * @see #getScnt()
+	 * @generated
+	 */
+	void setScnt(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getScnt <em>Scnt</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetScnt()
+	 * @see #getScnt()
+	 * @see #setScnt(int)
+	 * @generated
+	 */
+	void unsetScnt();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getScnt <em>Scnt</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Scnt</em>' attribute is set.
+	 * @see #unsetScnt()
+	 * @see #getScnt()
+	 * @see #setScnt(int)
+	 * @generated
+	 */
+	boolean isSetScnt();
 
 	/**
 	 * Returns the value of the '<em><b>Override Inaccessible Routes</b></em>' attribute.

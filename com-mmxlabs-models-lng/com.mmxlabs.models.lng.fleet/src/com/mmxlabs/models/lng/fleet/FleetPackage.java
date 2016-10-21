@@ -281,13 +281,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__FILL_CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Scnt</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__SCNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 5;
+
+	/**
 	 * The feature id for the '<em><b>Override Inaccessible Routes</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__OVERRIDE_INACCESSIBLE_ROUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 5;
+	int VESSEL__OVERRIDE_INACCESSIBLE_ROUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Inaccessible Routes</b></em>' attribute list.
@@ -296,7 +305,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__INACCESSIBLE_ROUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 6;
+	int VESSEL__INACCESSIBLE_ROUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 7;
 
 	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
@@ -305,7 +314,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 7;
+	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -479,13 +488,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__INACCESSIBLE_ROUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 15;
 
 	/**
+	 * The feature id for the '<em><b>Scnt</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__SCNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 16;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Class</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 16;
+	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 17;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.HeelOptionsImpl <em>Heel Options</em>}' class.
@@ -865,6 +883,17 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVessel_FillCapacity();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getScnt <em>Scnt</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Scnt</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getScnt()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_Scnt();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1071,6 +1100,17 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getVesselClass_InaccessibleRoutes();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getScnt <em>Scnt</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Scnt</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getScnt()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_Scnt();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.FleetModel <em>Model</em>}'.
@@ -1468,6 +1508,14 @@ public interface FleetPackage extends EPackage {
 		EAttribute VESSEL__FILL_CAPACITY = eINSTANCE.getVessel_FillCapacity();
 
 		/**
+		 * The meta object literal for the '<em><b>Scnt</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__SCNT = eINSTANCE.getVessel_Scnt();
+
+		/**
 		 * The meta object literal for the '<em><b>Override Inaccessible Routes</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1620,6 +1668,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_CLASS__INACCESSIBLE_ROUTES = eINSTANCE.getVesselClass_InaccessibleRoutes();
+
+		/**
+		 * The meta object literal for the '<em><b>Scnt</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__SCNT = eINSTANCE.getVesselClass_Scnt();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl <em>Model</em>}' class.

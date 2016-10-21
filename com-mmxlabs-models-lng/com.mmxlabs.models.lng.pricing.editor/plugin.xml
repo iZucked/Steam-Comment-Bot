@@ -306,6 +306,12 @@
           inheritable="true"
           modelClass="com.mmxlabs.models.lng.pricing.PanamaCanalTariff">
     </componentHelper>
+    <componentHelper
+          helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.SuezCanalTariffComponentHelper"
+          id="com.mmxlabs.models.lng.pricing.SuezCanalTariff"
+          inheritable="true"
+          modelClass="com.mmxlabs.models.lng.pricing.SuezCanalTariff">
+    </componentHelper>
  </extension>
  <extension
        point="com.mmxlabs.models.util.import.classes">
@@ -385,6 +391,18 @@
                </test>
             </visibleWhen>
          </command>
+         <command
+               commandId="com.mmxlabs.models.lng.pricing.editor.commands.EditSuezCanalTariff"
+               style="push">
+               <visibleWhen
+                  checkEnabled="false">
+               <test
+                     args="features:suez-canal"
+                     forcePluginActivation="true"
+                     property="com.mmxlabs.license.features.enablement">
+               </test>
+            </visibleWhen>
+         </command>
       </menuContribution>
    </extension>
    <extension
@@ -394,6 +412,32 @@
             id="com.mmxlabs.models.lng.pricing.editor.commands.EditPanamaCanalTariff"
             name="Edit Panama Canal Tariff">
       </command>
+      <command
+            defaultHandler="com.mmxlabs.models.lng.pricing.ui.editorpart.SuezCanalTariffHandler"
+            id="com.mmxlabs.models.lng.pricing.editor.commands.EditSuezCanalTariff"
+            name="Edit Suez Canal Tariff">
+      </command>
+   </extension>
+   <extension
+         point="com.mmxlabs.models.ui.editorfactories">
+      <editorFactory
+            factoryClass="com.mmxlabs.models.lng.pricing.ui.displaycomposites.SuezCanalTariffBandInlineEditorFactory"
+            id="com.mmxlabs.models.lng.pricing.ui.displaycomposites.SuezCanalTariffBandInlineEditorFactory">
+         <FeatureAnyOf>
+            <EClassExtends
+                  EClass="com.mmxlabs.models.lng.pricing.SuezCanalTariffBand">
+            </EClassExtends>
+         </FeatureAnyOf>
+      </editorFactory>
+      <editorFactory
+            factoryClass="com.mmxlabs.models.lng.pricing.ui.displaycomposites.SuezCanalTariffTugBandInlineEditorFactory"
+            id="com.mmxlabs.models.lng.pricing.ui.displaycomposites.SuezCanalTariffTugBandInlineEditorFactory">
+         <FeatureAnyOf>
+            <EClassExtends
+                  EClass="com.mmxlabs.models.lng.pricing.SuezCanalTugBand">
+            </EClassExtends>
+         </FeatureAnyOf>
+      </editorFactory>
    </extension>
 
 </plugin>

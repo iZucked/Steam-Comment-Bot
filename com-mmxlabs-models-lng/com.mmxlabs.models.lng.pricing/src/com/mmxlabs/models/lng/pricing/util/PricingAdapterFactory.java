@@ -179,6 +179,18 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 				return createPanamaCanalTariffBandAdapter();
 			}
 			@Override
+			public Adapter caseSuezCanalTugBand(SuezCanalTugBand object) {
+				return createSuezCanalTugBandAdapter();
+			}
+			@Override
+			public Adapter caseSuezCanalTariff(SuezCanalTariff object) {
+				return createSuezCanalTariffAdapter();
+			}
+			@Override
+			public Adapter caseSuezCanalTariffBand(SuezCanalTariffBand object) {
+				return createSuezCanalTariffBandAdapter();
+			}
+			@Override
 			public Adapter caseUnitConversion(UnitConversion object) {
 				return createUnitConversionAdapter();
 			}
@@ -519,6 +531,48 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPanamaCanalTariffBandAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.SuezCanalTugBand <em>Suez Canal Tug Band</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTugBand
+	 * @generated
+	 */
+	public Adapter createSuezCanalTugBandAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff <em>Suez Canal Tariff</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTariff
+	 * @generated
+	 */
+	public Adapter createSuezCanalTariffAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariffBand <em>Suez Canal Tariff Band</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTariffBand
+	 * @generated
+	 */
+	public Adapter createSuezCanalTariffBandAdapter() {
 		return null;
 	}
 

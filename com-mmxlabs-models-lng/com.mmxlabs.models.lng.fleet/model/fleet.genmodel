@@ -27,9 +27,13 @@
           propertySortChoices="true" ecoreFeature="ecore:EReference fleet.ecore#//Vessel/inaccessiblePorts"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/capacity"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/fillCapacity"/>
+      <genFeatures createChild="false" propertyDescription="Override Suez Canal Net Tonnage"
+          ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/scnt"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/overrideInaccessibleRoutes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/inaccessibleRoutes"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrVesselClassCapacity"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrVesselClassFillCapacity"/>
-      <genOperations ecoreOperation="fleet.ecore#//Vessel/getShortName"/>
+      <genOperations ecoreOperation="fleet.ecore#//Vessel/getShortenedName"/>
     </genClasses>
     <genClasses ecoreClass="fleet.ecore#//VesselClass">
       <genFeatures notify="false" createChild="false" propertyDescription="A list of ports where vessels of this class cannot go"
@@ -57,6 +61,9 @@
           ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClass/pilotLightRate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClass/minBaseFuelConsumption"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClass/hasReliqCapability"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClass/inaccessibleRoutes"/>
+      <genFeatures createChild="false" propertyDescription="Suez Canal Net Tonnage"
+          ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClass/scnt"/>
     </genClasses>
     <genClasses ecoreClass="fleet.ecore#//VesselGroup">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference fleet.ecore#//VesselGroup/vessels"/>

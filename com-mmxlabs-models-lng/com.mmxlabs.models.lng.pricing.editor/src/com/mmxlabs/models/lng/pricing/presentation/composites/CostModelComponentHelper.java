@@ -75,6 +75,7 @@ public class CostModelComponentHelper extends BaseComponentHelper {
 		add_cooldownCostsEditor(detailComposite, topClass);
 		add_baseFuelCostsEditor(detailComposite, topClass);
 		add_panamaCanalTariffEditor(detailComposite, topClass);
+		add_suezCanalTariffEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the routeCosts feature on CostModel
@@ -116,5 +117,14 @@ public class CostModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_panamaCanalTariffEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.COST_MODEL__PANAMA_CANAL_TARIFF));
+	}
+
+	/**
+	 * Create the editor for the suezCanalTariff feature on CostModel
+	 *
+	 * @generated
+	 */
+	protected void add_suezCanalTariffEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.COST_MODEL__SUEZ_CANAL_TARIFF));
 	}
 }

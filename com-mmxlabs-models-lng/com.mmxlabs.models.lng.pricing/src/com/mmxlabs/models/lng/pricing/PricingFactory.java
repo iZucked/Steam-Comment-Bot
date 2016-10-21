@@ -213,6 +213,33 @@ public interface PricingFactory extends EFactory {
 	PanamaCanalTariffBand createPanamaCanalTariffBand();
 
 	/**
+	 * Returns a new object of class '<em>Suez Canal Tug Band</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Suez Canal Tug Band</em>'.
+	 * @generated
+	 */
+	SuezCanalTugBand createSuezCanalTugBand();
+
+	/**
+	 * Returns a new object of class '<em>Suez Canal Tariff</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Suez Canal Tariff</em>'.
+	 * @generated
+	 */
+	SuezCanalTariff createSuezCanalTariff();
+
+	/**
+	 * Returns a new object of class '<em>Suez Canal Tariff Band</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Suez Canal Tariff Band</em>'.
+	 * @generated
+	 */
+	SuezCanalTariffBand createSuezCanalTariffBand();
+
+	/**
 	 * Returns a new object of class '<em>Unit Conversion</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

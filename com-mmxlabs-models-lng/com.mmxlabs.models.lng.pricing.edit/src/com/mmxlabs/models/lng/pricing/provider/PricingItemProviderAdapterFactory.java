@@ -571,6 +571,75 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.SuezCanalTugBand} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SuezCanalTugBandItemProvider suezCanalTugBandItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.SuezCanalTugBand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSuezCanalTugBandAdapter() {
+		if (suezCanalTugBandItemProvider == null) {
+			suezCanalTugBandItemProvider = new SuezCanalTugBandItemProvider(this);
+		}
+
+		return suezCanalTugBandItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.SuezCanalTariff} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SuezCanalTariffItemProvider suezCanalTariffItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.SuezCanalTariff}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSuezCanalTariffAdapter() {
+		if (suezCanalTariffItemProvider == null) {
+			suezCanalTariffItemProvider = new SuezCanalTariffItemProvider(this);
+		}
+
+		return suezCanalTariffItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.SuezCanalTariffBand} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SuezCanalTariffBandItemProvider suezCanalTariffBandItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.SuezCanalTariffBand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSuezCanalTariffBandAdapter() {
+		if (suezCanalTariffBandItemProvider == null) {
+			suezCanalTariffBandItemProvider = new SuezCanalTariffBandItemProvider(this);
+		}
+
+		return suezCanalTariffBandItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.UnitConversion} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -740,6 +809,9 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (portsSplitExpressionMapItemProvider != null) portsSplitExpressionMapItemProvider.dispose();
 		if (panamaCanalTariffItemProvider != null) panamaCanalTariffItemProvider.dispose();
 		if (panamaCanalTariffBandItemProvider != null) panamaCanalTariffBandItemProvider.dispose();
+		if (suezCanalTugBandItemProvider != null) suezCanalTugBandItemProvider.dispose();
+		if (suezCanalTariffItemProvider != null) suezCanalTariffItemProvider.dispose();
+		if (suezCanalTariffBandItemProvider != null) suezCanalTariffBandItemProvider.dispose();
 		if (unitConversionItemProvider != null) unitConversionItemProvider.dispose();
 	}
 

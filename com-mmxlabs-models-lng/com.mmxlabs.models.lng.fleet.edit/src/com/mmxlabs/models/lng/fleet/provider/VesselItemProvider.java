@@ -53,6 +53,7 @@ public class VesselItemProvider
 			addInaccessiblePortsPropertyDescriptor(object);
 			addCapacityPropertyDescriptor(object);
 			addFillCapacityPropertyDescriptor(object);
+			addScntPropertyDescriptor(object);
 			addOverrideInaccessibleRoutesPropertyDescriptor(object);
 			addInaccessibleRoutesPropertyDescriptor(object);
 		}
@@ -170,6 +171,28 @@ public class VesselItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Scnt feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addScntPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_scnt_feature"),
+				 getString("_UI_Vessel_scnt_description"),
+				 FleetPackage.Literals.VESSEL__SCNT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Override Inaccessible Routes feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -253,6 +276,7 @@ public class VesselItemProvider
 			case FleetPackage.VESSEL__SHORT_NAME:
 			case FleetPackage.VESSEL__CAPACITY:
 			case FleetPackage.VESSEL__FILL_CAPACITY:
+			case FleetPackage.VESSEL__SCNT:
 			case FleetPackage.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES:
 			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
