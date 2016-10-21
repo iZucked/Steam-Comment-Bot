@@ -4,11 +4,11 @@
 	<parent>
 		<artifactId>com.mmxlabs.scheduler.parent</artifactId>
 		<groupId>com.mmxlabs.scheduler</groupId>
-		<version>4.0.1-SNAPSHOT</version>
+		<version>4.0.2-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>com.mmxlabs.scheduler.p2</artifactId>
-	<version>4.0.1-SNAPSHOT</version>
+	<version>4.0.2-SNAPSHOT</version>
 	<packaging>eclipse-repository</packaging>
 	<name>LNG Scheduler Optimiser Repository</name>
 </project>
