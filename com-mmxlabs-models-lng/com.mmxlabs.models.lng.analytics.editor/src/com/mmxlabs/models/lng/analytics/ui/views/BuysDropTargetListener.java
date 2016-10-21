@@ -1,5 +1,7 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
+import java.util.Iterator;
+
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.util.LocalSelectionTransfer;
@@ -60,22 +62,23 @@ public class BuysDropTargetListener implements DropTargetListener {
 		}
 		if (LocalSelectionTransfer.getTransfer().isSupportedType(event.currentDataType)) {
 			final IStructuredSelection selection = (IStructuredSelection) LocalSelectionTransfer.getTransfer().nativeToJava(event.currentDataType);
-			if (selection.size() == 1) {
-				final Object o = selection.getFirstElement();
+			if (!selection.isEmpty()) {
+				final CompoundCommand cmd = new CompoundCommand();
+				final Iterator<?> itr = selection.iterator();
+				while (itr.hasNext()) {
+					final Object o = itr.next();
+					if (o instanceof CargoModelRowTransformer.RowData) {
+						final CargoModelRowTransformer.RowData rowData = (CargoModelRowTransformer.RowData) o;
 
-				if (o instanceof CargoModelRowTransformer.RowData) {
-					final CargoModelRowTransformer.RowData rowData = (CargoModelRowTransformer.RowData) o;
-					final CompoundCommand cmd = new CompoundCommand();
-
-					final LoadSlot loadSlot = rowData.getLoadSlot();
-					final BuyOption buyRef = AnalyticsBuilder.getOrCreateBuyOption(loadSlot, optionAnalysisModel, scenarioEditingLocation, cmd);
-
-					if (!cmd.isEmpty()) {
-						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, null, null);
+						final LoadSlot loadSlot = rowData.getLoadSlot();
+						final BuyOption buyRef = AnalyticsBuilder.getOrCreateBuyOption(loadSlot, optionAnalysisModel, scenarioEditingLocation, cmd);
 					}
-
-					return;
 				}
+				if (!cmd.isEmpty()) {
+					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, null, null);
+				}
+
+				return;
 			}
 		}
 	}
@@ -84,12 +87,15 @@ public class BuysDropTargetListener implements DropTargetListener {
 	public void dragOver(final DropTargetEvent event) {
 		if (LocalSelectionTransfer.getTransfer().isSupportedType(event.currentDataType)) {
 			final IStructuredSelection selection = (IStructuredSelection) LocalSelectionTransfer.getTransfer().nativeToJava(event.currentDataType);
-			if (selection.size() == 1) {
-				final Object o = selection.getFirstElement();
-
-				if (o instanceof CargoModelRowTransformer.RowData) {
-					event.operations = DND.DROP_MOVE;
-					return;
+			if (!selection.isEmpty()) {
+				final Iterator<?> itr = selection.iterator();
+				while (itr.hasNext()) {
+					final Object o = itr.next();
+					if (o instanceof CargoModelRowTransformer.RowData) {
+						// Found a valid source in the selection.
+						event.operations = DND.DROP_MOVE;
+						return;
+					}
 				}
 			}
 		}
