@@ -8,7 +8,13 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.Grid;
+import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
+import org.eclipse.nebula.widgets.grid.GridItem;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.models.ui.tabular.renderers.CellRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
@@ -46,5 +52,23 @@ public final class GridViewerHelper {
 	public static void configureLookAndFeel(final @NonNull GridColumnGroup group) {
 		group.setHeaderRenderer(new ColumnGroupHeaderRenderer());
 
+	}
+
+	public static void recalculateRowHeights(Grid grid) {
+		GC gc = new GC(Display.getDefault());
+		for (GridItem item : grid.getItems()) {
+			int height = 1;
+			for (GridColumn column : grid.getColumns()) {
+				// GridColumn column = (GridColumn) columnsIterator.next();
+				// column.getCellRenderer().setColumn(indexOf(column));
+				height = Math.max(height, column.getCellRenderer().computeSize(gc, SWT.DEFAULT, SWT.DEFAULT, item).y);
+			}
+
+			if (grid.isRowHeaderVisible() && grid.getRowHeaderRenderer() != null) {
+				height = Math.max(height, grid.getRowHeaderRenderer().computeSize(gc, SWT.DEFAULT, SWT.DEFAULT, item).y);
+			}
+			item.setHeight(height <= 0 ? 16 : height);
+		}
+		gc.dispose();
 	}
 }
