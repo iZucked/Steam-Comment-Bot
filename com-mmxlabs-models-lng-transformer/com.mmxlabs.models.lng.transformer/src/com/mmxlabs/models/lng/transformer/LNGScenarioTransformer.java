@@ -105,6 +105,9 @@ import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.pricing.SuezCanalTariff;
+import com.mmxlabs.models.lng.pricing.SuezCanalTariffBand;
+import com.mmxlabs.models.lng.pricing.SuezCanalTugBand;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -177,7 +180,6 @@ import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IMiscCostsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMiscCostsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProviderEditor;
@@ -344,7 +346,7 @@ public class LNGScenarioTransformer {
 	@Inject
 	@NonNull
 	private IHedgesProviderEditor hedgesProviderEditor;
-	
+
 	@Inject
 	@NonNull
 	private IMiscCostsProviderEditor miscCostsProviderEditor;
@@ -2374,7 +2376,7 @@ public class LNGScenarioTransformer {
 		if (LicenseFeatures.isPermitted("features:panama-canal")) {
 			orderedKeys.add(RouteOption.PANAMA);
 		}
-		
+
 		// set canal route consumptions and toll info
 		final PortModel portModel = ScenarioModelUtil.getPortModel(rootObject);
 		final CostModel costModel = ScenarioModelUtil.getCostModel(rootObject);
@@ -2533,7 +2535,92 @@ public class LNGScenarioTransformer {
 					new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastRoundTripCost))));
 		}
 	}
- 
+
+	public static void buildSuezCosts(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation,
+			@NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation, final Collection<IVessel> vesselAvailabilities, @NonNull final SuezCanalTariff suezCanalTariff,
+			final @NonNull SeriesParser currencyIndices, final @NonNull DateAndCurveHelper dateHelper) {
+
+		// Extract band information into a sorted list
+		final List<Pair<Integer, SuezCanalTariffBand>> bands = new LinkedList<>();
+		for (final SuezCanalTariffBand band : suezCanalTariff.getBands()) {
+			int upperBound = Integer.MAX_VALUE;
+			if (band.isSetBandEnd()) {
+				upperBound = band.getBandEnd();
+			}
+			bands.add(new Pair<>(upperBound, band));
+		}
+		// Sort the bands smallest to largest
+		Collections.sort(bands, (b1, b2) -> b1.getFirst().compareTo(b2.getFirst()));
+
+		for (final IVessel vessel : vesselAvailabilities) {
+			final int scnt;
+			assert vessel != null;
+			final Vessel eVessel = vesselAssociation.reverseLookup(vessel);
+			if (eVessel == null) {
+				// spot charter
+				final VesselClass eVesselClass = vesselClassAssociation.reverseLookupNullChecked(vessel.getVesselClass());
+				scnt = eVesselClass.getScnt();
+			} else {
+				scnt = eVessel.isSetScnt() ? eVessel.getScnt() : eVessel.getVesselClass().getScnt();
+			}
+			double ladenCostInSDR = 0.0;
+			double ballastCostInSDR = 0.0;
+			for (final Pair<Integer, SuezCanalTariffBand> p : bands) {
+				final SuezCanalTariffBand band = p.getSecond();
+				//// How much vessel capacity is used for this band calculation?
+				// First, find the largest value valid in this band
+				int contributingLevel = Math.min(scnt, p.getFirst());
+
+				// Next, subtract band lower bound to find the capacity contribution
+				contributingLevel = Math.max(0, contributingLevel - (band.isSetBandStart() ? band.getBandStart() : 0));
+
+				if (contributingLevel > 0) {
+					ladenCostInSDR += contributingLevel * band.getLadenTariff();
+					ballastCostInSDR += contributingLevel * band.getBallastTariff();
+				}
+			}
+
+			// If there is a markup %, apply it
+			if (suezCanalTariff.getDiscountFactor() != 0.0) {
+				final double multiplier = 1.0 - suezCanalTariff.getDiscountFactor();
+				ladenCostInSDR *= multiplier;
+				ballastCostInSDR *= multiplier;
+			}
+
+			int tugCount = 0;
+			for (final SuezCanalTugBand band : suezCanalTariff.getTugBands()) {
+				if (!band.isSetBandEnd() && scnt >= band.getBandStart()) {
+					tugCount = band.getTugs();
+					break;
+				} else if (!band.isSetBandStart() && scnt < band.getBandEnd()) {
+					tugCount = band.getTugs();
+					break;
+				} else if (scnt >= band.getBandStart() && scnt < band.getBandEnd()) {
+					tugCount = band.getTugs();
+					break;
+				}
+			}
+
+			final double extraCosts = (double) tugCount * suezCanalTariff.getTugCost() //
+					+ suezCanalTariff.getPilotageCost() //
+					+ suezCanalTariff.getMooringCost() //
+					+ suezCanalTariff.getDisbursements();
+
+			final String ladenExpression = String.format("(%.3f*%s)+%.3f", ladenCostInSDR, suezCanalTariff.getSdrToUSD(), extraCosts);
+			final String ballastExpression = String.format("(%.3f*%s)+%.3f", ballastCostInSDR, suezCanalTariff.getSdrToUSD(), extraCosts);
+
+			@Nullable
+			final ILongCurve ladenCostCurve = dateHelper.generateLongExpressionCurve(ladenExpression, currencyIndices);
+			assert ladenCostCurve != null;
+			builder.setVesselRouteCost(ERouteOption.SUEZ, vessel, CostType.Laden, ladenCostCurve);
+
+			final ILongCurve ballastCostCurve = dateHelper.generateLongExpressionCurve(ballastExpression, currencyIndices);
+			assert ballastCostCurve != null;
+			builder.setVesselRouteCost(ERouteOption.SUEZ, vessel, CostType.Ballast, ballastCostCurve);
+			builder.setVesselRouteCost(ERouteOption.SUEZ, vessel, CostType.RoundTripBallast, ballastCostCurve);
+		}
+	}
+
 	/**
 	 * Construct the fleet model for the scenario
 	 * 
@@ -2695,7 +2782,8 @@ public class LNGScenarioTransformer {
 			final IVessel vessel = vesselAssociation.lookupNullChecked(eVessel);
 
 			final IVesselAvailability vesselAvailability = builder.createVesselAvailability(vessel, dailyCharterInCurve,
-					eVesselAvailability.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, repositioningFeeCurve, ballastBonusCurve, eVesselAvailability.isOptional());
+					eVesselAvailability.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, repositioningFeeCurve, ballastBonusCurve,
+					eVesselAvailability.isOptional());
 			vesselAvailabilityAssociation.add(eVesselAvailability, vesselAvailability);
 
 			modelEntityMap.addModelObject(eVesselAvailability, vesselAvailability);
