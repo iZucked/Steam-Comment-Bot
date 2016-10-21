@@ -13,10 +13,13 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -51,7 +54,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -65,6 +67,8 @@ import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
@@ -89,7 +93,6 @@ import com.mmxlabs.models.lng.analytics.ui.views.evaluators.WhatIfEvaluator;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.OptionTreeViewerFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ResultDetailsDescriptionFormatter;
-import com.mmxlabs.models.lng.analytics.ui.views.formatters.RuleDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.SellOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.VesselDescriptionFormatter;
@@ -100,19 +103,22 @@ import com.mmxlabs.models.lng.analytics.ui.views.providers.OptionsViewerContentP
 import com.mmxlabs.models.lng.analytics.ui.views.providers.PartialCaseContentProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.ResultsFormatterLabelProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.ResultsViewerContentProvider;
-import com.mmxlabs.models.lng.analytics.ui.views.providers.RulesViewerContentProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.ShippingOptionsContentProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.VesselClassContentProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.VesselContentProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
+import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
+import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
@@ -188,7 +194,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					final BuysDropTargetListener listener = new BuysDropTargetListener(OptionModellerView.this, buyOptionsViewer);
 					inputWants.add(model -> listener.setOptionAnalysisModel(model));
 					// Control control = getControl();
-					DropTarget dropTarget = new DropTarget(expandableComposite, DND.DROP_MOVE);
+					final DropTarget dropTarget = new DropTarget(expandableComposite, DND.DROP_MOVE);
 					dropTarget.setTransfer(types);
 					dropTarget.addDropListener(listener);
 					// expandableComposite.addDropSupport(DND.DROP_MOVE, types, listener);
@@ -246,18 +252,17 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 				final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 				final OptionsTreeViewerDropTargetListener listener = new OptionsTreeViewerDropTargetListener(OptionModellerView.this, optionsTreeViewer);
-				DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE);
+				final DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE);
 				dropTarget.setTransfer(types);
 				dropTarget.addDropListener(listener);
 			});
 			optionsTreeViewer.getGrid().setCellSelectionEnabled(true);
-			
-			{
-			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
-			final OptionsTreeViewerDropTargetListener listener = new OptionsTreeViewerDropTargetListener(OptionModellerView.this, optionsTreeViewer);
-			optionsTreeViewer.addDropSupport(DND.DROP_MOVE, types, listener);
-			}
 
+			{
+				final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
+				final OptionsTreeViewerDropTargetListener listener = new OptionsTreeViewerDropTargetListener(OptionModellerView.this, optionsTreeViewer);
+				optionsTreeViewer.addDropSupport(DND.DROP_MOVE, types, listener);
+			}
 
 			// GridDataFactory.generate(addBuy, 1, 1);
 			hookDragSource(buyOptionsViewer);
@@ -301,7 +306,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				final BaseCaseDropTargetListener listener = new BaseCaseDropTargetListener(OptionModellerView.this, baseCaseViewer);
 				inputWants.add(model -> listener.setOptionAnalysisModel(model));
 				// Control control = getControl();
-				DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE);
+				final DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE);
 				dropTarget.setTransfer(types);
 				dropTarget.addDropListener(listener);
 			});
@@ -349,7 +354,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				final PartialCaseDropTargetListener listener = new PartialCaseDropTargetListener(OptionModellerView.this, partialCaseViewer);
 				inputWants.add(model -> listener.setOptionAnalysisModel(model));
 				// Control control = getControl();
-				DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE);
+				final DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE);
 				dropTarget.setTransfer(types);
 				dropTarget.addDropListener(listener);
 			});
@@ -371,7 +376,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		// createRulesViewer(centralComposite);
 		// GridDataFactory.generate(rulesViewer.getGrid(), 2, 1);
 		{
-			Composite generateComposite = new Composite(centralComposite, SWT.NONE);
+			final Composite generateComposite = new Composite(centralComposite, SWT.NONE);
 			GridDataFactory.generate(generateComposite, 2, 1);
 
 			generateComposite.setLayout(new GridLayout(1, true));
@@ -382,7 +387,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			generateButton.addMouseListener(new MouseListener() {
 
 				@Override
-				public void mouseDown(MouseEvent e) {
+				public void mouseDown(final MouseEvent e) {
 
 					if (getModel() != null) {
 						BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> WhatIfEvaluator.evaluate(OptionModellerView.this, getModel()));
@@ -390,12 +395,12 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				}
 
 				@Override
-				public void mouseDoubleClick(MouseEvent e) {
+				public void mouseDoubleClick(final MouseEvent e) {
 
 				}
 
 				@Override
-				public void mouseUp(MouseEvent e) {
+				public void mouseUp(final MouseEvent e) {
 
 				}
 
@@ -485,7 +490,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 						final ShippingOptionsDropTargetListener listener = new ShippingOptionsDropTargetListener(OptionModellerView.this, shippingOptionsViewer);
 						inputWants.add(model -> listener.setOptionAnalysisModel(model));
 						// Control control = getControl();
-						DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE);
+						final DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE);
 						dropTarget.setTransfer(types);
 						dropTarget.addDropListener(listener);
 					}
@@ -708,62 +713,87 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		}
 	};
 
-	private final EContentAdapter refreshAdapter = new EContentAdapter() {
-		public void notifyChanged(final Notification notification) {
-			super.notifyChanged(notification);
+	private final MMXContentAdapter refreshAdapter = new MMXContentAdapter() {
+
+		@Override
+		public void reallyNotifyChanged(final Notification notification) {
+			doValidate();
+			final Pair<Boolean, EnumSet<SectionType>> p = processNotification(notification);
+			if (p != null) {
+				refreshSections(p.getFirst(), p.getSecond());
+			}
+		}
+
+		/**
+		 * @since 2.2
+		 */
+		protected void missedNotifications(final List<Notification> missed) {
+			doValidate();
+
+			boolean refreshSections = false;
+			final EnumSet<SectionType> sections = EnumSet.noneOf(SectionType.class);
+			for (final Notification n : missed) {
+				final Pair<Boolean, EnumSet<SectionType>> p = processNotification(n);
+				if (p != null) {
+					refreshSections |= p.getFirst();
+					sections.addAll(p.getSecond());
+				}
+			}
+			if (!sections.isEmpty()) {
+				refreshSections(refreshSections, sections);
+			}
+		}
+
+		//
+		private @Nullable Pair<Boolean, EnumSet<SectionType>> processNotification(final Notification notification) {
 			if (notification.getEventType() == Notification.REMOVING_ADAPTER) {
-				return;
+				return null;
 			}
 
 			if (notification.getNotifier() == getModel() && notification.getFeature() == MMXCorePackage.Literals.NAMED_OBJECT__NAME) {
 				setPartName("Sandbox " + getModel().getName());
-				return;
+				return null;
 			}
-
-			doValidate();
 
 			if (notification.getFeature() == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS) {
-				refreshSections(true, EnumSet.of(SectionType.BUYS));
+				return new Pair<>(true, EnumSet.of(SectionType.BUYS));
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS) {
-				refreshSections(true, EnumSet.of(SectionType.SELLS));
+				return new Pair<>(true, EnumSet.of(SectionType.SELLS));
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES) {
-				refreshSections(true, EnumSet.of(SectionType.VESSEL));
+				return new Pair<>(true, EnumSet.of(SectionType.VESSEL));
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS) {
-				refreshSections(true, EnumSet.of(SectionType.MIDDLE));
+				return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.BASE_CASE__BASE_CASE) {
-				refreshSections(true, EnumSet.of(SectionType.MIDDLE));
+				return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS) {
-				refreshSections(true, EnumSet.of(SectionType.MIDDLE));
+				return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS) {
-				refreshSections(true, EnumSet.of(SectionType.MIDDLE));
+				return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.BASE_CASE__PROFIT_AND_LOSS) {
-				refreshSections(true, EnumSet.of(SectionType.MIDDLE));
+				return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE) {
-				refreshSections(true, EnumSet.of(SectionType.MIDDLE));
+				return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
 			} else if (notification.getNotifier() instanceof BaseCaseRow) {
-				refreshSections(false, EnumSet.of(SectionType.MIDDLE));
+				return new Pair<>(false, EnumSet.of(SectionType.MIDDLE));
 			} else if (notification.getNotifier() instanceof PartialCaseRow) {
-				refreshSections(false, EnumSet.of(SectionType.MIDDLE));
+				return new Pair<>(false, EnumSet.of(SectionType.MIDDLE));
 			} else if (notification.getNotifier() instanceof BuyOption) {
-				refreshSections(false, EnumSet.of(SectionType.BUYS, SectionType.MIDDLE));
+				return new Pair<>(false, EnumSet.of(SectionType.BUYS, SectionType.MIDDLE));
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__CHILDREN) {
-				refreshSections(true, EnumSet.of(SectionType.BUYS));
+				return new Pair<>(true, EnumSet.of(SectionType.BUYS));
 			} else if (notification.getFeature() == MMXCorePackage.Literals.NAMED_OBJECT__NAME && notification.getNotifier() instanceof OptionAnalysisModel) {
-				refreshSections(false, EnumSet.of(SectionType.BUYS));
+				return new Pair<>(false, EnumSet.of(SectionType.BUYS));
 			} else if (notification.getNotifier() instanceof SellOption) {
-				refreshSections(false, EnumSet.of(SectionType.SELLS, SectionType.MIDDLE));
+				return new Pair<>(false, EnumSet.of(SectionType.SELLS, SectionType.MIDDLE));
 			} else if (notification.getNotifier() instanceof ShippingOption) {
-				refreshSections(false, EnumSet.of(SectionType.VESSEL, SectionType.MIDDLE));
+				return new Pair<>(false, EnumSet.of(SectionType.VESSEL, SectionType.MIDDLE));
 			} else if (notification.getNotifier() instanceof ResultSet) {
-				refreshSections(true, EnumSet.of(SectionType.MIDDLE));
+				return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
 			} else if (notification.getNotifier() instanceof AnalysisResultRow) {
-				refreshSections(false, EnumSet.of(SectionType.MIDDLE));
+				return new Pair<>(false, EnumSet.of(SectionType.MIDDLE));
 			}
-			// noti
-			// if (.etFeature) {
-			// // Coarse grained refresh method..
-			// refreshAll();
-			// }
+
+			return null;
 		}
 	};
 	private Label baseCaseProftLabel;
@@ -829,7 +859,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	}
 
-	private OptionAnalysisModel getRootOptionsModel(@Nullable OptionAnalysisModel optionModel) {
+	private OptionAnalysisModel getRootOptionsModel(@Nullable final OptionAnalysisModel optionModel) {
 		OptionAnalysisModel optionAnalysisModel = optionModel;
 		while (optionAnalysisModel != null && optionAnalysisModel.eContainer() != null && optionAnalysisModel.eContainer() instanceof OptionAnalysisModel) {
 			optionAnalysisModel = (OptionAnalysisModel) optionAnalysisModel.eContainer();
@@ -1025,7 +1055,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		GridViewerHelper.configureLookAndFeel(partialCaseViewer);
 		partialCaseViewer.getGrid().setHeaderVisible(true);
-		partialCaseViewer.getGrid().setAutoHeight(true);
 		partialCaseViewer.getGrid().setCellSelectionEnabled(true);
 
 		partialCaseViewer.getGrid().setRowHeaderVisible(true);
@@ -1118,7 +1147,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		updateActions(getEditingDomain());
 	}
 
-	private GridViewerColumn createColumn(final GridTreeViewer viewer, final String name, final ICellRenderer renderer, boolean isTree, final ETypedElement... pathObjects) {
+	private GridViewerColumn createColumn(final GridTreeViewer viewer, final String name, final ICellRenderer renderer, final boolean isTree, final ETypedElement... pathObjects) {
 
 		final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER | SWT.WRAP);
 		gvc.getColumn().setTree(isTree);
@@ -1244,7 +1273,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		return gvc;
 	}
 
-	private GridViewerColumn createColumn(final GridTreeViewer viewer, final String name, final CellLabelProvider labelProvider, boolean isTree, final ETypedElement... pathObjects) {
+	private GridViewerColumn createColumn(final GridTreeViewer viewer, final String name, final CellLabelProvider labelProvider, final boolean isTree, final ETypedElement... pathObjects) {
 
 		final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER | SWT.WRAP);
 		gvc.getColumn().setTree(isTree);
@@ -1287,7 +1316,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					baseCaseProftLabel.setText(String.format("Base P&&L: $---,---,---.--"));
 				}
 				partialCaseViewer.refresh();
-				// rulesViewer.refresh();
+//				 rulesViewer.corefresh();
 				resultsViewer.refresh();
 				resultsViewer.expandAll();
 				if (layout) {
@@ -1314,6 +1343,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	public void packAll(final Control c) {
 		if ((c instanceof Composite)) {
 			final Composite composite = (Composite) c;
+			((Composite) c).layout(true);
 			for (final Control child : composite.getChildren()) {
 				packAll(child);
 			}
@@ -1421,7 +1451,52 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		return model;
 	}
 
-	public void setModel(OptionAnalysisModel model) {
+	public void setModel(final OptionAnalysisModel model) {
 		this.model = model;
+	}
+
+	private ICommandHandler commandHandler;
+
+	@Override
+	public synchronized ICommandHandler getDefaultCommandHandler() {
+
+		if (commandHandler == null) {
+			ICommandHandler superHandler = super.getDefaultCommandHandler();
+
+			EditingDomain domain = super.getEditingDomain();
+
+			commandHandler = new ICommandHandler() {
+
+				@Override
+				public void handleCommand(Command command, EObject target, EStructuralFeature feature) {
+
+					if (domain instanceof CommandProviderAwareEditingDomain) {
+						CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) domain;
+						commandProviderAwareEditingDomain.disableAdapters(model);
+					}
+					superHandler.handleCommand(command, target, feature);
+					if (domain instanceof CommandProviderAwareEditingDomain) {
+						CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) domain;
+						commandProviderAwareEditingDomain.enableAdapters(model, false);
+					}
+
+				}
+
+				@Override
+				public IReferenceValueProviderProvider getReferenceValueProviderProvider() {
+					// TODO Auto-generated method stub
+					return superHandler.getReferenceValueProviderProvider();
+				}
+
+				@Override
+				public EditingDomain getEditingDomain() {
+					// TODO Auto-generated method stub
+					return superHandler.getEditingDomain();
+				}
+			};
+		}
+
+		return commandHandler;
+
 	}
 }
