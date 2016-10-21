@@ -421,7 +421,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			sellComposite.setLayout(new GridLayout(1, true));
 
 			wrapInExpandable(sellComposite, "Sells", p -> createSellOptionsViewer(p), expandableComposite -> {
-				
+
 				{
 					final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 					final SellsDropTargetListener listener = new SellsDropTargetListener(OptionModellerView.this, sellOptionsViewer);
@@ -432,7 +432,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					dropTarget.addDropListener(listener);
 					// expandableComposite.addDropSupport(DND.DROP_MOVE, types, listener);
 				}
-				
+
 				final Label addSellButton = new Label(expandableComposite, SWT.NONE);
 				addSellButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 				expandableComposite.setTextClient(addSellButton);
@@ -1328,7 +1328,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					baseCaseProftLabel.setText(String.format("Base P&&L: $---,---,---.--"));
 				}
 				partialCaseViewer.refresh();
-//				 rulesViewer.corefresh();
 				resultsViewer.refresh();
 				resultsViewer.expandAll();
 				if (layout) {

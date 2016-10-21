@@ -131,8 +131,8 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 					final LoadSlot loadSlot = rowData.getLoadSlot();
 					final DischargeSlot dischargeSlot = rowData.getDischargeSlot();
 
-					final ShippingOption shippingOption = AnalyticsBuilder.getOrCreateShippingOption(rowData.getCargo(), loadSlot, dischargeSlot, optionAnalysisModel, scenarioEditingLocation, cmd);
-					if (shippingOption != null) {
+					final ShippingOption shippingOption = AnalyticsBuilder.getOrCreateShippingOption(rowData.getCargo(), loadSlot, dischargeSlot, optionAnalysisModel);
+					if (shippingOption != null && shippingOption.eContainer() == null) {
 						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
 								shippingOption));
 					}

@@ -1,12 +1,17 @@
 package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
@@ -27,6 +32,7 @@ import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.SellOptionDescriptionFormatter;
+import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoType;
@@ -38,6 +44,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -49,6 +56,9 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
+import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 
 public class AnalyticsBuilder {
 	private static BuyOptionDescriptionFormatter buyOptionDescriptionFormatter = new BuyOptionDescriptionFormatter();
@@ -56,7 +66,7 @@ public class AnalyticsBuilder {
 
 	public static @Nullable LoadSlot makeLoadSlot(final @Nullable BuyOption buy, final @NonNull LNGScenarioModel lngScenarioModel) {
 
-		String baseName = buyOptionDescriptionFormatter.render(buy);
+		final String baseName = buyOptionDescriptionFormatter.render(buy);
 
 		// Get existing names
 		final Set<String> usedIDStrings = new HashSet<>();
@@ -64,7 +74,7 @@ public class AnalyticsBuilder {
 			usedIDStrings.add(lSlot.getName());
 		}
 
-		String id = getUniqueID(baseName, usedIDStrings);
+		final String id = getUniqueID(baseName, usedIDStrings);
 
 		if (buy instanceof BuyReference) {
 			return ((BuyReference) buy).getSlot();
@@ -114,7 +124,7 @@ public class AnalyticsBuilder {
 		return null;
 	}
 
-	public static String getUniqueID(String baseName, final Set<String> usedIDStrings) {
+	public static String getUniqueID(final String baseName, final Set<String> usedIDStrings) {
 		String id;
 		if (usedIDStrings.contains(baseName)) {
 			int i = 1;
@@ -128,7 +138,7 @@ public class AnalyticsBuilder {
 		return id;
 	}
 
-	public static String createIncrementedName(final String base, int increment) {
+	public static String createIncrementedName(final String base, final int increment) {
 		if (increment == 0) {
 			return base;
 		} else {
@@ -137,7 +147,7 @@ public class AnalyticsBuilder {
 	}
 
 	public static @Nullable DischargeSlot makeDischargeSlot(final @Nullable SellOption sell, final @NonNull LNGScenarioModel lngScenarioModel) {
-		String baseName = sellOptionDescriptionFormatter.render(sell);
+		final String baseName = sellOptionDescriptionFormatter.render(sell);
 
 		// Get existing names
 		final Set<String> usedIDStrings = new HashSet<>();
@@ -145,7 +155,7 @@ public class AnalyticsBuilder {
 			usedIDStrings.add(dSlot.getName());
 		}
 
-		String id = getUniqueID(baseName, usedIDStrings);
+		final String id = getUniqueID(baseName, usedIDStrings);
 
 		if (sell instanceof SellReference) {
 			return ((SellReference) sell).getSlot();
@@ -421,14 +431,54 @@ public class AnalyticsBuilder {
 		return buyRef;
 	}
 
-	public static ShippingOption getOrCreateShippingOption(final Cargo cargo, final LoadSlot load, final DischargeSlot dischargeSlot, final OptionAnalysisModel optionAnalysisModel,
-			final IScenarioEditingLocation scenarioEditingLocation, final CompoundCommand cmd) {
+	public static void applyShipping(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, final PartialCaseRow row, final Cargo cargo,
+			final LoadSlot load, final DischargeSlot dischargeSlot, CompoundCommand cmd) {
+
+		final ShippingOption opt = AnalyticsBuilder.getOrCreateShippingOption(cargo, load, dischargeSlot, optionAnalysisModel);
+		if (opt.eContainer() == null) {
+			cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt));
+		}
+		cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, Collections.singletonList(opt)));
+
+	}
+
+	public static void applyShipping(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, final BaseCaseRow row, final Cargo cargo,
+			final LoadSlot load, final DischargeSlot dischargeSlot, CompoundCommand cmd) {
+
+		final ShippingOption opt = AnalyticsBuilder.getOrCreateShippingOption(cargo, load, dischargeSlot, optionAnalysisModel);
+		if (opt.eContainer() == null) {
+			cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt));
+		}
+		cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt));
+
+	}
+
+	public static ShippingOption getOrCreateShippingOption(final Cargo cargo, final LoadSlot load, final DischargeSlot dischargeSlot, final OptionAnalysisModel optionAnalysisModel) {
 
 		if (cargo != null) {
 			if (cargo.getCargoType() == CargoType.FLEET) {
 				final VesselAssignmentType vat = cargo.getVesselAssignmentType();
 				if (vat instanceof VesselAvailability) {
 					final VesselAvailability vesselAvailability = (VesselAvailability) vat;
+
+					for (ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
+						if (shipOpt instanceof FleetShippingOption) {
+							FleetShippingOption opt = (FleetShippingOption) shipOpt;
+							if (opt.getVessel() != vesselAvailability.getVessel()) {
+								continue;
+							}
+							if (opt.getEntity() != vesselAvailability.getEntity()) {
+								continue;
+							}
+							if (opt.getHireCost().equals(vesselAvailability.getTimeCharterRate())) {
+								continue;
+							}
+
+							// TODO: Check other fields
+
+							return opt;
+						}
+					}
 
 					final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
 					opt.setEntity(vesselAvailability.getEntity());
@@ -438,6 +488,23 @@ public class AnalyticsBuilder {
 					return opt;
 				} else if (vat instanceof CharterInMarket) {
 					final CharterInMarket charterInMarket = (CharterInMarket) vat;
+
+					for (ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
+						if (shipOpt instanceof RoundTripShippingOption) {
+							RoundTripShippingOption opt = (RoundTripShippingOption) shipOpt;
+							if (opt.getVesselClass() != charterInMarket.getVesselClass()) {
+								continue;
+							}
+
+							if (!opt.getHireCost().equals(charterInMarket.getCharterInRate())) {
+								continue;
+							}
+
+							// TODO: Check other fields
+
+							return opt;
+						}
+					}
 
 					final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
 					opt.setHireCost(charterInMarket.getCharterInRate());
@@ -450,6 +517,18 @@ public class AnalyticsBuilder {
 		} else if (load != null) {
 			if (load.isDESPurchase()) {
 				if (load.getNominatedVessel() != null) {
+
+					for (ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
+						if (shipOpt instanceof NominatedShippingOption) {
+							NominatedShippingOption opt = (NominatedShippingOption) shipOpt;
+							if (opt.getNominatedVessel() != load.getNominatedVessel()) {
+								continue;
+							}
+
+							return opt;
+						}
+					}
+
 					final NominatedShippingOption opt = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
 					opt.setNominatedVessel(load.getNominatedVessel());
 
@@ -459,6 +538,18 @@ public class AnalyticsBuilder {
 		} else if (dischargeSlot != null) {
 			if (dischargeSlot.isFOBSale()) {
 				if (dischargeSlot.getNominatedVessel() != null) {
+
+					for (ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
+						if (shipOpt instanceof NominatedShippingOption) {
+							NominatedShippingOption opt = (NominatedShippingOption) shipOpt;
+							if (opt.getNominatedVessel() != dischargeSlot.getNominatedVessel()) {
+								continue;
+							}
+
+							return opt;
+						}
+					}
+
 					final NominatedShippingOption opt = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
 					opt.setNominatedVessel(dischargeSlot.getNominatedVessel());
 
@@ -492,10 +583,10 @@ public class AnalyticsBuilder {
 		return sellRef;
 	}
 
-	public static NominatedShippingOption getOrCreatNominatedShippingOption(OptionAnalysisModel optionAnalysisModel, Vessel vessel) {
-		for (ShippingOption opt : optionAnalysisModel.getShippingTemplates()) {
+	public static NominatedShippingOption getOrCreateNominatedShippingOption(final OptionAnalysisModel optionAnalysisModel, final Vessel vessel) {
+		for (final ShippingOption opt : optionAnalysisModel.getShippingTemplates()) {
 			if (opt instanceof NominatedShippingOption) {
-				NominatedShippingOption nominatedShippingOption = (NominatedShippingOption) opt;
+				final NominatedShippingOption nominatedShippingOption = (NominatedShippingOption) opt;
 				if (nominatedShippingOption.getNominatedVessel() == vessel) {
 					return nominatedShippingOption;
 				}
@@ -505,6 +596,93 @@ public class AnalyticsBuilder {
 		opt.setNominatedVessel(vessel);
 
 		return opt;
+	}
 
+	public static void applyShipping(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, final BaseCaseRow row, final Vessel vessel) {
+		if (row == null) {
+			return;
+		}
+		if (AnalyticsBuilder.isNonShipped(row) == ShippingType.NonShipped) {
+			applyShipping(scenarioEditingLocation, optionAnalysisModel, row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, vessel);
+		}
+	}
+
+	public static void applyShipping(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, final PartialCaseRow row, final Vessel vessel,
+			final LocalMenuHelper menuHelper) {
+		if (row == null) {
+			return;
+		}
+		if (AnalyticsBuilder.isNonShipped(row) == ShippingType.NonShipped) {
+			applyShipping(scenarioEditingLocation, optionAnalysisModel, row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, vessel);
+		}
+	}
+
+	private static void applyShipping(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, final EObject row, final EStructuralFeature feature,
+			final Vessel vessel) {
+		final NominatedShippingOption opt = AnalyticsBuilder.getOrCreateNominatedShippingOption(optionAnalysisModel, vessel);
+		final CompoundCommand cmd = new CompoundCommand();
+		if (opt.eContainer() == null) {
+			cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt));
+		}
+		Object target = feature.isMany() ? Collections.singletonList(opt) : opt;
+
+		cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, feature, target));
+		scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, optionAnalysisModel, null);
+	}
+
+	public static void applyShipping(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, final BaseCaseRow row, final VesselClass vesselClass,
+			final LocalMenuHelper menuHelper) {
+		if (row == null) {
+			return;
+		}
+		if (AnalyticsBuilder.isNonShipped(row) == ShippingType.Shipped) {
+			applyShipping(scenarioEditingLocation, optionAnalysisModel, row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, vesselClass, menuHelper);
+		}
+	}
+
+	public static void applyShipping(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, final PartialCaseRow row, final VesselClass vesselClass,
+			final LocalMenuHelper menuHelper) {
+		if (row == null) {
+			return;
+		}
+		if (AnalyticsBuilder.isNonShipped(row) == ShippingType.Shipped) {
+			applyShipping(scenarioEditingLocation, optionAnalysisModel, row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, vesselClass, menuHelper);
+		}
+	}
+
+	private static void applyShipping(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, final EObject row, final EStructuralFeature feature,
+			final VesselClass vesselClass, final LocalMenuHelper menuHelper) {
+
+		menuHelper.clearActions();
+		final ShippingOptionDescriptionFormatter f = new ShippingOptionDescriptionFormatter();
+		for (final ShippingOption option : optionAnalysisModel.getShippingTemplates()) {
+			if (option instanceof RoundTripShippingOption) {
+				final RoundTripShippingOption roundTripShippingOption = (RoundTripShippingOption) option;
+				if (roundTripShippingOption.getVesselClass() == vesselClass) {
+					menuHelper.addAction(new RunnableAction(f.render(option), () -> {
+						final CompoundCommand cmd = new CompoundCommand();
+						Object target = feature.isMany() ? Collections.singletonList(option) : option;
+						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, feature, target));
+
+						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, optionAnalysisModel, null);
+
+					}));
+				}
+			}
+		}
+		menuHelper.addAction(new RunnableAction("New", () -> {
+			final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
+			opt.setVesselClass(vesselClass);
+
+			final CompoundCommand cmd = new CompoundCommand();
+			cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt));
+			Object target = feature.isMany() ? Collections.singletonList(opt) : opt;
+			cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, feature, target));
+			scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, optionAnalysisModel, null);
+
+			DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
+		}));
+
+		menuHelper.open();
 	}
 }

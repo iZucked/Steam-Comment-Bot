@@ -126,43 +126,45 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 				} else if (o instanceof Vessel) {
 					final Vessel vessel = (Vessel) o;
 
-					if (existing != null) {
-						if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.NonShipped) {
-							NominatedShippingOption opt = AnalyticsBuilder.getOrCreatNominatedShippingOption(optionAnalysisModel, vessel);
-							if (opt.eContainer() == null) {
-								scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-										AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
-										optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
-							}
-
-							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-									SetCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), existing,
-									AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-						} else if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.Shipped) {
-							// final BaseCaseRow pExisting = existing;
-							// menuHelper.clearActions();
-							// menuHelper.addAction(new RunnableAction("Create RT", () -> {
-							// final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
-							// opt.setVesselClass(vessel.getVesselClass());
-							// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-							// SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), pExisting,
-							// AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-							// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-							// }));
-							// menuHelper.addAction(new RunnableAction("Create fleet", () -> {
-							// final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
-							// opt.setVessel(vessel);
-							// AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
-							// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-							// SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), pExisting,
-							// AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-							// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-							// }));
-							//
-							// menuHelper.open();
-						}
-					}
+					// if (existing != null) {
+					AnalyticsBuilder.applyShipping(scenarioEditingLocation, optionAnalysisModel, existing, vessel);
+					// if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.NonShipped) {
+					// final NominatedShippingOption opt = AnalyticsBuilder.getOrCreatNominatedShippingOption(optionAnalysisModel, vessel);
+					// final CompoundCommand cmd = new CompoundCommand();
+					// if (opt.eContainer() == null) {
+					// cmd.append(
+					// AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt));
+					// }
+					// cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt));
+					// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, optionAnalysisModel, null);
+					// } else if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.Shipped) {
+					// // final BaseCaseRow pExisting = existing;
+					// // menuHelper.clearActions();
+					// // menuHelper.addAction(new RunnableAction("Create RT", () -> {
+					// // final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
+					// // opt.setVesselClass(vessel.getVesselClass());
+					// // scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+					// // SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), pExisting,
+					// // AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+					// // DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
+					// // }));
+					// // menuHelper.addAction(new RunnableAction("Create fleet", () -> {
+					// // final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
+					// // opt.setVessel(vessel);
+					// // AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
+					// // scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+					// // SetCommand.create(scenarioEditingLocation.getEditingDomain(), pExisting, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), pExisting,
+					// // AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+					// // DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
+					// // }));
+					// //
+					// // menuHelper.open();
+					// }
+					// }
 				} else if (o instanceof VesselClass) {
+					VesselClass vesselClass = (VesselClass) o;
+					AnalyticsBuilder.applyShipping(scenarioEditingLocation, optionAnalysisModel, existing, vesselClass, menuHelper);
+
 					//
 					// final BaseCaseRow pExisting = existing;
 					//
@@ -179,12 +181,12 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 						ShippingOption opt = null;
 						if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.NonShipped) {
 							if (o instanceof NominatedShippingOption) {
-								opt = (ShippingOption)o;
+								opt = (ShippingOption) o;
 							}
 						} else if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.Shipped) {
 
 							if (o instanceof RoundTripShippingOption || o instanceof FleetShippingOption) {
-								opt = (ShippingOption)o;
+								opt = (ShippingOption) o;
 							}
 						}
 						if (opt != null) {
@@ -207,8 +209,7 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 					row.setBuyOption(buyRef);
 					row.setSellOption(sellRef);
 
-					final ShippingOption shippingOption = AnalyticsBuilder.getOrCreateShippingOption(rowData.getCargo(), loadSlot, dischargeSlot, optionAnalysisModel, scenarioEditingLocation, cmd);
-					row.setShipping(shippingOption);
+					AnalyticsBuilder.applyShipping(scenarioEditingLocation, optionAnalysisModel, row, rowData.getCargo(), loadSlot, dischargeSlot, cmd);
 
 					cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getBaseCase(), AnalyticsPackage.Literals.BASE_CASE__BASE_CASE, row));
 
