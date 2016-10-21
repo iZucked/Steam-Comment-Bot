@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
+import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseEvaluator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
@@ -87,41 +88,15 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 			}
 			mgr.add(new RunnableAction("Create fork", () -> {
 				if (resultSet != null) {
-					BaseCase bc = createBaseCaseFromRS(resultSet, true, null);
 					String newForkName = ScenarioServiceModelUtils.getNewForkName(scenarioEditingLocation.getScenarioInstance(), false);
-					OptionAnalysisModel optionAnalysisModel2 = AnalyticsFactory.eINSTANCE.createOptionAnalysisModel();
-					optionAnalysisModel2.setBaseCase(bc);
-					optionAnalysisModel2.getBuys().addAll(bc.getBaseCase().stream().map(b -> b.getBuyOption()).collect(Collectors.toList()));
-					optionAnalysisModel2.getSells().addAll(bc.getBaseCase().stream().map(b -> b.getSellOption()).collect(Collectors.toList()));
-					BaseCaseEvaluator.evaluate(scenarioEditingLocation, optionAnalysisModel2, bc, true, newForkName);
+					OptionAnalysisModel newModel = createNewBaseCase(resultSet);
+					BaseCaseEvaluator.evaluate(scenarioEditingLocation, newModel, newModel.getBaseCase(), true, newForkName);
 				}
 			}));
 			
 			mgr.add(new RunnableAction("Convert to base case", () -> {
 				if (resultSet != null) {
-					OptionAnalysisModel newModel = AnalyticsFactory.eINSTANCE.createOptionAnalysisModel();
-
-					Copier copier = new Copier();
-					// create a new model copy
-					newModel.getBuys().addAll(copier.copyAll(optionAnalysisModel.getBuys()));
-					newModel.getSells().addAll(copier.copyAll(optionAnalysisModel.getSells()));
-					newModel.getShippingTemplates().addAll(copier.copyAll(optionAnalysisModel.getShippingTemplates()));
-					newModel.setPartialCase(AnalyticsFactory.eINSTANCE.createPartialCase());
-//					newModel.setPartialCase((PartialCase) copier.copy(optionAnalysisModel.getPartialCase()));
-//					newModel.getResultSets().addAll(copier.copyAll(optionAnalysisModel.getResultSets()));
-					newModel.getRules().addAll(copier.copyAll(optionAnalysisModel.getRules()));
-					newModel.setUseTargetPNL(optionAnalysisModel.isUseTargetPNL());
-					copier.copyReferences();
-					newModel.setBaseCase(createBaseCaseFromRS(resultSet, false, copier));
-					
-					// create a name from description
-					String name = createNameFromRow(resultSet);
-					newModel.setName(name);
-					
-
-					// add new slots
-					newModel.getBuys().addAll(newModel.getBaseCase().getBaseCase().stream().filter(b -> !newModel.getBuys().contains(b.getBuyOption())).filter(b-> b.getBuyOption() !=null).map(b -> b.getBuyOption()).collect(Collectors.toList()));
-					newModel.getSells().addAll(newModel.getBaseCase().getBaseCase().stream().filter(b -> !newModel.getSells().contains(b.getSellOption())).filter(b-> b.getSellOption() !=null).map(b -> b.getSellOption()).collect(Collectors.toList()));
+					OptionAnalysisModel newModel = createNewBaseCase(resultSet);
 					optionAnalysisModel.getChildren().add(newModel);
 					optionModellerView.setInput(newModel);
 				}
@@ -130,6 +105,33 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 
 		}
 		menu.setVisible(true);
+	}
+
+	private OptionAnalysisModel createNewBaseCase(ResultSet resultSet) {
+		OptionAnalysisModel newModel = AnalyticsFactory.eINSTANCE.createOptionAnalysisModel();
+
+		Copier copier = new Copier();
+		// create a new model copy
+		newModel.getBuys().addAll(copier.copyAll(optionAnalysisModel.getBuys()));
+		newModel.getSells().addAll(copier.copyAll(optionAnalysisModel.getSells()));
+		newModel.getShippingTemplates().addAll(copier.copyAll(optionAnalysisModel.getShippingTemplates()));
+		newModel.setPartialCase(AnalyticsFactory.eINSTANCE.createPartialCase());
+//					newModel.setPartialCase((PartialCase) copier.copy(optionAnalysisModel.getPartialCase()));
+//					newModel.getResultSets().addAll(copier.copyAll(optionAnalysisModel.getResultSets()));
+		newModel.getRules().addAll(copier.copyAll(optionAnalysisModel.getRules()));
+		newModel.setUseTargetPNL(optionAnalysisModel.isUseTargetPNL());
+		copier.copyReferences();
+		newModel.setBaseCase(createBaseCaseFromRS(resultSet, false, copier));
+		
+		// create a name from description
+		String name = createNameFromRow(resultSet);
+		newModel.setName(name);
+		
+
+		// add new slots
+//					newModel.getBuys().addAll(newModel.getBaseCase().getBaseCase().stream().filter(b -> !newModel.getBuys().contains(b.getBuyOption())).filter(b-> b.getBuyOption() !=null).map(b -> b.getBuyOption()).collect(Collectors.toList()));
+//					newModel.getSells().addAll(newModel.getBaseCase().getBaseCase().stream().filter(b -> !newModel.getSells().contains(b.getSellOption())).filter(b-> b.getSellOption() !=null).map(b -> b.getSellOption()).collect(Collectors.toList()));
+		return newModel;
 	}
 
 	private String createNameFromRow(ResultSet resultSet) {
@@ -161,7 +163,7 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 			BaseCaseRow bcr = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
 			bcr.setBuyOption(getFixedBuyOption(analysisResultRow, copy, copier));
 			bcr.setSellOption(getFixedSellOption(analysisResultRow, copy, copier));
-			bcr.setShipping(EcoreUtil.copy(analysisResultRow.getShipping()));
+			bcr.setShipping(copier == null ? analysisResultRow.getShipping() : (ShippingOption) copier.get(analysisResultRow.getShipping()));
 			baseCaseRows.add(bcr);
 		}
 		return newBaseCase;
