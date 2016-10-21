@@ -733,6 +733,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			final Pair<Boolean, EnumSet<SectionType>> p = processNotification(notification);
 			if (p != null) {
 				refreshSections(p.getFirst(), p.getSecond());
+				if (p.getFirst()) {
+					refreshSections(p.getFirst(), p.getSecond());
+				}
 			}
 		}
 
@@ -753,6 +756,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 			if (!sections.isEmpty()) {
 				refreshSections(refreshSections, sections);
+				if (refreshSections) {
+					refreshSections(refreshSections, sections);
+				}
 			}
 		}
 
@@ -780,6 +786,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS) {
 				return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS) {
+				return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
+			} else if (notification.getFeature() == AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING) {
 				return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.BASE_CASE__PROFIT_AND_LOSS) {
 				return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
@@ -1069,6 +1077,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		partialCaseViewer.getGrid().setHeaderVisible(true);
 		partialCaseViewer.getGrid().setCellSelectionEnabled(true);
 
+		partialCaseViewer.getGrid().setAutoHeight(true);
 		partialCaseViewer.getGrid().setRowHeaderVisible(true);
 
 		createColumn(partialCaseViewer, "Buy", new BuyOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS).getColumn().setWordWrap(true);
