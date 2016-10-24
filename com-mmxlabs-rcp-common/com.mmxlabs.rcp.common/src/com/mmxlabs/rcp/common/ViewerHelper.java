@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.rcp.common;
 
+import java.util.function.Consumer;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelection;
@@ -27,6 +29,22 @@ public final class ViewerHelper {
 
 		@Nullable
 		Object getInput();
+	}
+	
+	public static <T extends Viewer> void runIfViewerValid(@Nullable final T viewer, final boolean syncExec, @NonNull final Consumer<T> consumer) {
+		if (viewer == null) {
+			return;
+		}
+		final Runnable runnable = new Runnable() {
+			@Override
+			public void run() {
+				final Control control = viewer.getControl();
+				if (control != null && !control.isDisposed()) {
+					consumer.accept(viewer);
+				}
+			}
+		};
+		RunnerHelper.exec(runnable, syncExec);
 	}
 
 	public static void setInput(@Nullable final Viewer viewer, final boolean syncExec, @NonNull final InputProvider inputProvider) {
