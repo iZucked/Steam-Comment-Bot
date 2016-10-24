@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotAllocationType;
 
 public class RelatedSlotAllocationsTest {
 
@@ -422,7 +423,10 @@ public class RelatedSlotAllocationsTest {
 		final CargoAllocation cargoAllocation = ScheduleFactory.eINSTANCE.createCargoAllocation();
 
 		final SlotAllocation loadAllocation = ScheduleFactory.eINSTANCE.createSlotAllocation();
+		loadAllocation.setSlotAllocationType(SlotAllocationType.PURCHASE);
+		
 		final SlotAllocation dischargeAllocation = ScheduleFactory.eINSTANCE.createSlotAllocation();
+		loadAllocation.setSlotAllocationType(SlotAllocationType.SALE);
 
 		cargoAllocation.getSlotAllocations().add(loadAllocation);
 		cargoAllocation.getSlotAllocations().add(dischargeAllocation);

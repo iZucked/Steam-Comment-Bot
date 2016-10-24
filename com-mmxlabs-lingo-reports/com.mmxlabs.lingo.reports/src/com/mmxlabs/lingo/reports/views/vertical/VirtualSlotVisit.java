@@ -4,9 +4,11 @@
  */
 package com.mmxlabs.lingo.reports.views.vertical;
 
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotAllocationType;
 import com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl;
 
 /**
@@ -20,6 +22,7 @@ public class VirtualSlotVisit extends SlotVisitImpl {
 		this.setEnd(slot.getWindowEndWithSlotOrPortTime());
 		this.setPort(slot.getPort());
 		final SlotAllocation sa = ScheduleFactory.eINSTANCE.createSlotAllocation();
+		sa.setSlotAllocationType(slot instanceof LoadSlot ? SlotAllocationType.PURCHASE : SlotAllocationType.SALE);
 		sa.setSlot(slot);
 		sa.setSlotVisit(this);
 		this.setSlotAllocation(sa);

@@ -63,6 +63,7 @@ import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotAllocationType;
 import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
@@ -256,12 +257,12 @@ public class CargoEconsReport extends ViewPart {
 			this.name = name;
 			this.df = df;
 		}
-		
+
 		public static FieldType[] getFilteredValues() {
 			Set<FieldType> restrictedValues = restrictedValues();
 			return Arrays.stream(values()).filter(e -> (!restrictedValues.contains(e))).toArray(size -> new FieldType[size]);
 		}
-		
+
 		public static Set<FieldType> restrictedValues() {
 			Set<FieldType> restricted = new HashSet<>();
 			if (!SecurityUtils.getSubject().isPermitted("features:report-equity-book")) {
@@ -314,7 +315,7 @@ public class CargoEconsReport extends ViewPart {
 			case BUY_PRICE: {
 				// Returns first purchase price
 				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-					if (allocation.getSlot() instanceof LoadSlot) {
+					if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE || allocation.getSlot() instanceof LoadSlot) {
 						return allocation.getPrice();
 					}
 				}
@@ -323,7 +324,7 @@ public class CargoEconsReport extends ViewPart {
 			case SELL_PRICE: {
 				// Returns first sales price
 				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-					if (allocation.getSlot() instanceof DischargeSlot) {
+					if (allocation.getSlotAllocationType() == SlotAllocationType.SALE || allocation.getSlot() instanceof DischargeSlot) {
 						return allocation.getPrice();
 					}
 				}
@@ -333,9 +334,8 @@ public class CargoEconsReport extends ViewPart {
 
 				long cost = 0;
 				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-					if (allocation.getSlot() instanceof LoadSlot) {
-						final int volumeInMMBTu = allocation.getEnergyTransferred();
-						cost += (double) volumeInMMBTu * allocation.getPrice();
+					if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE || allocation.getSlot() instanceof LoadSlot) {
+						cost += allocation.getVolumeValue();
 					}
 				}
 				return cost;
@@ -344,9 +344,8 @@ public class CargoEconsReport extends ViewPart {
 			case BUY_VOLUME_IN_MMBTU: {
 				long cost = 0;
 				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-					if (allocation.getSlot() instanceof LoadSlot) {
-						final int volumeInMMBTu = allocation.getEnergyTransferred();
-						cost += volumeInMMBTu;
+					if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE || allocation.getSlot() instanceof LoadSlot) {
+						cost += allocation.getEnergyTransferred();
 					}
 				}
 				return cost;
@@ -371,9 +370,8 @@ public class CargoEconsReport extends ViewPart {
 			case SELL_REVENUE_TOTAL: {
 				long revenue = 0;
 				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-					if (allocation.getSlot() instanceof DischargeSlot) {
-						final int volumeInMMBTu = allocation.getEnergyTransferred();
-						revenue += (double) volumeInMMBTu * allocation.getPrice();
+					if (allocation.getSlotAllocationType() == SlotAllocationType.SALE || allocation.getSlot() instanceof DischargeSlot) {
+						revenue += allocation.getVolumeValue();
 					}
 				}
 				return revenue;
@@ -381,9 +379,8 @@ public class CargoEconsReport extends ViewPart {
 			case SELL_VOLUME_IN_MMBTU: {
 				long dischargeVolume = 0;
 				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-					if (allocation.getSlot() instanceof DischargeSlot) {
-						final int volumeInMMBTu = allocation.getEnergyTransferred();
-						dischargeVolume += volumeInMMBTu;
+					if (allocation.getSlotAllocationType() == SlotAllocationType.SALE || allocation.getSlot() instanceof DischargeSlot) {
+						dischargeVolume += allocation.getEnergyTransferred();
 					}
 				}
 				return dischargeVolume;
@@ -850,7 +847,7 @@ public class CargoEconsReport extends ViewPart {
 						equityPNL += entityProfitAndLoss.getProfitAndLoss();
 					}
 				}
-				
+
 			}
 		}
 
