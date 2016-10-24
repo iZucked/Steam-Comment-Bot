@@ -1702,7 +1702,14 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			currentCommandStack = null;
 		}
 
-		ContextInjectionFactory.invoke(econsReport, PreDestroy.class, econsReportContext);
+		if (econsReport != null) {
+			ContextInjectionFactory.invoke(econsReport, PreDestroy.class, econsReportContext);
+			econsReport = null;
+		}
+		if (econsReportContext != null) {
+			econsReportContext.dispose();
+			econsReportContext = null;
+		}
 
 		super.dispose();
 	}
