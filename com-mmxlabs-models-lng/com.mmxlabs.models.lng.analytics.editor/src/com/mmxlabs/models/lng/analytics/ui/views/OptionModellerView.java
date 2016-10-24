@@ -742,6 +742,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			econsReportContext.set(Composite.class, econsComposite);
 
 			// FIXME: Circular dep!
+			// TODO: Create OSGi service and put view filter on it.
+			// TODO: Create interfaces to "listenToSelectionsFrom".
+			// TODO: Create interfaces to exposse viewer
 			econsReport = ContextInjectionFactory.make(CargoEconsReportComponent.class, econsReportContext);
 			econsReport.listenToSelectionsFrom(getViewSite().getId());
 
