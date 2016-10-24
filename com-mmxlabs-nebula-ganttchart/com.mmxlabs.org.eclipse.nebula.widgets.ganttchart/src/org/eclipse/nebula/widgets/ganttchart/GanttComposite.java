@@ -6,6 +6,7 @@ package org.eclipse.nebula.widgets.ganttchart;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -16,7 +17,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.IntConsumer;
+import java.util.function.IntFunction;
 
+import javax.swing.text.DefaultEditorKit.CutAction;
+
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.nebula.widgets.ganttchart.dnd.VerticalDragDropManager;
 import org.eclipse.nebula.widgets.ganttchart.undoredo.GanttUndoRedoManager;
 import org.eclipse.nebula.widgets.ganttchart.undoredo.commands.ClusteredCommand;
@@ -444,7 +450,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 					if (getDisplay() != null && !getDisplay().isDisposed()) {
 						getDisplay().timerExec(60000, this);
 					}
-				} catch (Exception err) {
+				} catch (final Exception err) {
 					SWT.error(SWT.ERROR_UNSPECIFIED, err);
 				}
 			}
@@ -1040,7 +1046,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			originalBounds = boundsOverride;
 		}
 
-		int vScroll = (_vScrollBar.isVisible() && boundsOverride == null) ? _vScrollBar.getSelection() : 0;
+		final int vScroll = (_vScrollBar.isVisible() && boundsOverride == null) ? _vScrollBar.getSelection() : 0;
 		Rectangle bounds = new Rectangle(originalBounds.x, originalBounds.y - vScroll, originalBounds.width, originalBounds.height);
 
 		// the actual visible bounds counting any vertical scroll offset (includes header height)
@@ -1059,7 +1065,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		_lockedHeaderY = originalBounds.y;
 		// _mainBounds.y -= _vScrollPos;
 
-		boolean calcHeaderOnly = ((_settings.drawHeader() && _settings.lockHeaderOnVerticalScroll()) || !_settings.drawHeader());
+		final boolean calcHeaderOnly = ((_settings.drawHeader() && _settings.lockHeaderOnVerticalScroll()) || !_settings.drawHeader());
 
 		drawHeader(gc, calcHeaderOnly);
 
@@ -1129,10 +1135,6 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				drawEvents(gc, gsBounds, section);
 			}
 
-			// before we drew connections inside the loop below, which was totally pointless. We only need to draw connections once for the visible area,
-			// not once per section. This is way faster, connection drawing is not 0ms
-			drawConnections(gc);
-
 			// just because I have the feeling some user will want cross-section connections, we allow it by
 			// drawing the connecting lines _last_. Why? because the event bounds are not calculated until the event is drawn, and if we have
 			// a connection to a group/event that hasn't been drawn yet, it would draw an arrow into space..
@@ -1190,6 +1192,16 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			drawSectionColumn(gc, bounds, true, false, true, false);
 		}
 
+		// before we drew connections inside the loop below, which was totally pointless. We only need to draw connections once for the visible area,
+		// not once per section. This is way faster, connection drawing is not 0ms
+		{
+			// Use clipping to avoid drawing over headers
+			final Rectangle clipping = gc.getClipping();
+			final Rectangle bounds2 = new Rectangle(bounds.x, getHeaderHeight(), bounds.width, bounds.height - getHeaderHeight());
+			gc.setClipping(bounds2);
+			drawConnections(gc);
+			gc.setClipping(clipping);
+		}
 		// zoom
 		if (_showZoomHelper && _settings.showZoomLevelBox()) {
 			drawZoomLevel(gc);
@@ -1304,7 +1316,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	/**
 	 * Draws the header but if calculateOnly is set it doesn't actually draw, it only calculates locations of things
 	 */
-	private void drawHeader(final GC gc, boolean calculateOnly) {
+	private void drawHeader(final GC gc, final boolean calculateOnly) {
 		_verticalLineLocations.clear();
 		_verticalWeekDividerLineLocations.clear();
 
@@ -1543,7 +1555,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		if (_settings.lockHeaderOnVerticalScroll()) {
 			vScrollToY(ge.getY() + yOffset, false);
 		} else {
-			int takeOff = getHeaderHeight();
+			final int takeOff = getHeaderHeight();
 			vScrollToY(ge.getY() + yOffset - takeOff, false);
 		}
 
@@ -1607,7 +1619,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 		// we need to take the "previous" scroll location into account
 
-		int vScroll = _vScrollBar.isVisible() ? _vScrollBar.getSelection() : 0;
+		final int vScroll = _vScrollBar.isVisible() ? _vScrollBar.getSelection() : 0;
 		y += vScroll;
 
 		final int max = _vScrollBar.getMaximum() - _vScrollBar.getThumb();
@@ -1717,11 +1729,11 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		int startX = bounds.x;
 
 		boolean toggle = false;
-		boolean gradient = false;// gs == null || _settings.drawSectionsWithGradients();
+		final boolean gradient = false;// gs == null || _settings.drawSectionsWithGradients();
 
 		if (!gradient && gs != null) {
 			// Use the index of the section to determine which fill to use
-			int idx = _ganttSections.indexOf(gs);
+			final int idx = _ganttSections.indexOf(gs);
 			toggle = (idx & 1) == 1;
 		}
 
@@ -1783,7 +1795,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 	}
 
-	private void fillRectangle(final GC gc, int x, int y, int width, int height, Color fore, Color back, boolean gradient, boolean toggle) {
+	private void fillRectangle(final GC gc, final int x, final int y, final int width, final int height, final Color fore, final Color back, final boolean gradient, final boolean toggle) {
 
 		if (gradient) {
 			gc.setForeground(fore);
@@ -1872,7 +1884,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			}
 			int imgWidth = 0;
 			if (gs.hasImage()) {
-				Image img = gs.getImage();
+				final Image img = gs.getImage();
 				imgWidth = img.getBounds().width + 2;
 			}
 			bottomSection = gs;
@@ -1946,7 +1958,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				}
 
 				int imgWidth = 0;
-				
+
 				final int gsHeight = gs.getBounds().height;
 
 				gc.setForeground(_colorManager.getActiveSessionBarColorLeft());
@@ -1954,7 +1966,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				gc.fillGradientRectangle(x, yStart, xMax, gsHeight, false);
 
 				if (gs.hasImage()) {
-					Image img = gs.getImage();
+					final Image img = gs.getImage();
 					// FIXME: This assume image height is less than default section height
 					gc.drawImage(img, horiSpacer, yStart + (gsHeight / 2) - (img.getBounds().height / 2));
 					imgWidth = img.getBounds().width + 2;
@@ -1984,8 +1996,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 						if (extent.x == 0) {
 							extent.x = 1;
 						}
-						Image textImage = new Image(getDisplay(), extent.x, xMax - 2);
-						GC gcTemp = new GC(textImage);
+						final Image textImage = new Image(getDisplay(), extent.x, xMax - 2);
+						final GC gcTemp = new GC(textImage);
 
 						if (rightSide) {
 							gcTemp.setForeground(_colorManager.getActiveSessionBarColorRight());
@@ -2149,7 +2161,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	}
 
 	// year
-	private void drawYearBottomBoxes(final GC gc, final Rectangle bounds, boolean calculateOnly) {
+	private void drawYearBottomBoxes(final GC gc, final Rectangle bounds, final boolean calculateOnly) {
 		final int xMax = bounds.width + bounds.x;
 		int current = bounds.x;
 		final int topY = bounds.y + _settings.getHeaderMonthHeight();
@@ -2230,7 +2242,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	}
 
 	// month
-	private void drawMonthBottomBoxes(final GC gc, final Rectangle bounds, boolean calculateOnly) {
+	private void drawMonthBottomBoxes(final GC gc, final Rectangle bounds, final boolean calculateOnly) {
 		final int xMax = bounds.width + bounds.x;
 		int current = bounds.x;
 		final int topY = bounds.y + _settings.getHeaderMonthHeight();
@@ -2386,7 +2398,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	}
 
 	// days
-	private void drawWeekBottomBoxes(final GC gc, final Rectangle bounds, boolean calculateOnly) {
+	private void drawWeekBottomBoxes(final GC gc, final Rectangle bounds, final boolean calculateOnly) {
 		final int xMax = bounds.width + bounds.x;
 		int current = bounds.x;
 		final int topY = bounds.y + _settings.getHeaderMonthHeight();
@@ -2535,7 +2547,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			gc.drawLine(current, topY + _settings.getVerticalTickMarkOffset(), current, topY + _settings.getHeaderDayHeight());
 
 			gc.setForeground(_textColor);
-			StringBuffer buf = new StringBuffer();
+			final StringBuffer buf = new StringBuffer();
 			buf.append(letter);
 			gc.drawString(buf.toString(), current + 4, topY + 3, true);
 			letter += splitEvery;
@@ -2551,7 +2563,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	}
 
 	// days
-	private void drawDDayBottomBoxes(final GC gc, final Rectangle bounds, boolean calculateOnly) {
+	private void drawDDayBottomBoxes(final GC gc, final Rectangle bounds, final boolean calculateOnly) {
 		final int xMax = bounds.width + bounds.x;
 		int current = bounds.x;
 
@@ -2722,7 +2734,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	}
 
 	// days
-	private void drawHourBottomBoxes(final GC gc, final Rectangle bounds, boolean calculateOnly) {
+	private void drawHourBottomBoxes(final GC gc, final Rectangle bounds, final boolean calculateOnly) {
 		final int xMax = bounds.width + bounds.x;
 		int current = bounds.x;
 		final int topY = bounds.y + _settings.getHeaderMonthHeight();
@@ -2839,7 +2851,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			}
 
 			final int yStart = bounds.y;
-			int yHeight = bounds.height;
+			final int yHeight = bounds.height;
 
 			int extra = 0;
 			if (!_ganttSections.isEmpty() && _settings.getSectionSide() == SWT.LEFT) {
@@ -2884,7 +2896,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 		// first of all, fill a full background of the header
 		if (header) {
-			int yLoc = pHeight;
+			final int yLoc = pHeight;
 
 			gc.setBackground(_phaseHeaderBGColorBottom);
 			gc.setForeground(_phaseHeaderBGColorTop);
@@ -2915,7 +2927,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			xEnd += extra;
 
 			int yStart = bounds.y;
-			int yHeight = bounds.height;
+			final int yHeight = bounds.height;
 
 			// alpha
 			if (phase.getAlpha() == 255) {
@@ -3675,10 +3687,11 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 	// draws the lines and arrows between events
 	private void drawConnections(final GC gc) {
-
+		IntConsumer arrowHeadConsumer = null;
 		final int dw = getDayWidth();
 
 		for (int i = 0; i < _ganttConnections.size(); i++) {
+			final List<Integer> points = new ArrayList<>(6);
 			final GanttConnection connection = (GanttConnection) _ganttConnections.get(i);
 
 			final GanttEvent ge1 = connection.getSource();
@@ -3794,9 +3807,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 					if (_settings.showArrows()) {
 						if (goingUp) {
-							_paintManager.drawArrowHead(rGe2.x, rGe2.y + _eventHeight / 2 + 4, SWT.UP, gc);
+							arrowHeadConsumer = (sz -> _paintManager.drawArrowHead(rGe2.x, rGe2.y + _eventHeight / 2 + 4, SWT.UP, gc, sz));
 						} else {
-							_paintManager.drawArrowHead(rGe2.x, rGe2.y - _eventHeight / 2 - 1, SWT.DOWN, gc);
+							arrowHeadConsumer = (sz -> _paintManager.drawArrowHead(rGe2.x, rGe2.y - _eventHeight / 2 - 1, SWT.DOWN, gc, sz));
 						}
 					}
 
@@ -3814,9 +3827,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 					if (_settings.showArrows()) {
 						if (goingUp) {
-							_paintManager.drawArrowHead(rGe2.x - 7, rGe2.y + _eventHeight / 2, SWT.LEFT, gc);
+							arrowHeadConsumer = (sz -> _paintManager.drawArrowHead(rGe2.x - 7, rGe2.y + _eventHeight / 2, SWT.LEFT, gc, sz));
 						} else {
-							_paintManager.drawArrowHead(rGe2.x - 7, rGe2.y + _eventHeight / 2, SWT.RIGHT, gc);
+							arrowHeadConsumer = (sz -> _paintManager.drawArrowHead(rGe2.x - 7, rGe2.y + _eventHeight / 2, SWT.RIGHT, gc, sz));
 						}
 					}
 				}
@@ -3836,58 +3849,79 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				final boolean aboveUs = ge2.getY() < ge1.getY();
 				final boolean belowUs = ge2.getY() > ge1.getY();
 				final boolean sameRow = ge2.getY() == ge1.getY();
-				final boolean targetIsOnLeft = ge2.getXEnd() < ge1.getX();
-				final boolean targetIsOnRight = ge2.getX() > ge1.getXEnd();
+				final boolean targetIsOnLeft = ge2.getXEnd() + 5 < ge1.getX();
+				final boolean targetIsOnRight = ge2.getX() > ge1.getXEnd() + 5;
 
 				final Rectangle bounds1 = ge1.getBounds();
 				final Rectangle bounds2 = ge2.getBounds();
 				// fake same line
 				bounds1.y = bounds2.y;
 				final boolean eventsOverlap = bounds1.intersects(bounds2);
-				final boolean targetIsOnLeftBorder = ge2.getXEnd() == ge1.getX();
-				final boolean targetIsOnRightBorder = ge2.getX() == ge1.getXEnd();
+				final boolean targetIsOnLeftBorder = Math.abs(ge2.getXEnd() - ge1.getX()) < 5;
+				final boolean targetIsOnRightBorder = Math.abs(ge2.getX() - ge1.getXEnd()) < 5;
 
 				final int neg = 8;
 
 				Point xy = null;
 				final boolean isLinux = (_osType == Constants.OS_LINUX);
 
+				int colour = SWT.COLOR_BLACK;
 				if (belowUs) {
 					gc.setForeground(connection.getColor() == null ? _arrowColor : connection.getColor());
 
 					// draw first stub
-					gc.drawLine(x, y, x + rect.width, y);
-					x += rect.width;
+					// gc.drawLine(x, y, x + rect.width, y);
 
-					xy = drawBend(gc, Constants.BEND_RIGHT_DOWN, x - (isLinux ? 1 : 0), y, true);
+					points.add(x);
+					points.add(y);
+
+					x += rect.width;
+					points.add(x);
+					points.add(y);
+
+					xy = drawBend(gc, Constants.BEND_RIGHT_DOWN, x - (isLinux ? 1 : 0), y, true, points);
 					x = xy.x;
 					y = xy.y;
 
 					if (targetIsOnRight) {
 						// #1 vert line
 						final int yTarget = ge2.getY() + (ge2.getHeight() / 2);
-						gc.drawLine(x, y, x, yTarget - (isLinux ? 1 : 2)); // minus 2 as we need another bend
+						// gc.drawLine(x, y, x, yTarget - (isLinux ? 1 : 2)); // minus 2 as we need another bend
+
+						points.add(x);
+						points.add(yTarget - (isLinux ? 1 : 2));
+
 						y = yTarget - 2;
 
 						// #2 bend
-						xy = drawBend(gc, Constants.BEND_RIGHT_DOWN, x, y, true);
+						xy = drawBend(gc, Constants.BEND_RIGHT_DOWN, x, y, true, points);
 						x = xy.x;
 						y = xy.y;
 
 						// #3 line
-						gc.drawLine(x, y, ge2.getX(), y);
+						// gc.drawLine(x, y, ge2.getX(), y);
+
+						points.add(ge2.getX());
+						points.add(y);
 
 						// #4 arrow
 						if (_settings.showArrows()) {
 							x = ge2.getX() - 8;
-							_paintManager.drawArrowHead(x, y, SWT.RIGHT, gc);
+							final int xx = x;
+							final int yy = y;
+							arrowHeadConsumer = (sz -> _paintManager.drawArrowHead(xx, yy, SWT.RIGHT, gc, sz));
+							colour = SWT.COLOR_BLUE;
 						}
 					} else if (targetIsOnLeft || eventsOverlap || targetIsOnLeftBorder || targetIsOnRightBorder) {
 						// for left side we draw the vertical line down to the middle between the events
 						// int yDiff = (ge2.getY() - (ge1.getY() + ge1.getHeight())) / 2;
 						// gc.drawLine(x, y, x, ge1.getY() + ge1.getHeight() + yDiff - 2);
 						final int yDest = ge1.getBottomY() + (_eventSpacer / 2);
-						gc.drawLine(x, y, x, yDest);
+						// gc.drawLine(x, y, x, yDest);
+
+						points.add(x);
+						points.add(yDest);
+
 						y = yDest;// ge1.getY() + ge1.getHeight() + yDiff - 2;
 
 						if (isLinux) {
@@ -3895,36 +3929,49 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 						}
 
 						// #2 bend
-						xy = drawBend(gc, Constants.BEND_LEFT_DOWN, x, y, true);
+						xy = drawBend(gc, Constants.BEND_LEFT_DOWN, x, y, true, points);
 						x = xy.x;
 						y = xy.y;
 
 						// #3 line
-						gc.drawLine(x, y, ge2.getX() - neg, y);
+						// gc.drawLine(x, y, ge2.getX() - neg, y);
+
+						points.add(ge2.getX() - neg);
+						points.add(y);
+
 						x = ge2.getX() - neg;
 
 						// #4 bend
-						xy = drawBend(gc, Constants.BEND_LEFT_DOWN, x, y, true);
+						xy = drawBend(gc, Constants.BEND_LEFT_DOWN, x, y, true, points);
 						x = xy.x;
 						y = xy.y;
 
 						// #5 vert line
 						final int yTarget = ge2.getY() + (ge2.getHeight() / 2);
-						gc.drawLine(x, y, x, yTarget - (isLinux ? 1 : 2)); // minus 2 as we need another bend
+						// gc.drawLine(x, y, x, yTarget - (isLinux ? 1 : 2)); // minus 2 as we need another bend
+
+						points.add(x);
+						points.add(yTarget - (isLinux ? 1 : 2));
+
 						y = yTarget - 2;
 
-						// #6 bend
-						xy = drawBend(gc, Constants.BEND_RIGHT_DOWN, x, y, true);
+						// // #6 bend
+						xy = drawBend(gc, Constants.BEND_RIGHT_DOWN, x, y, true, points);
 						x = xy.x;
 						y = xy.y;
 
 						// #7 line
-						gc.drawLine(x, y, ge2.getX(), y);
+						// gc.drawLine(x, y, ge2.getX(), y);
+						points.add(ge2.getX());
+						points.add(y);
 
 						// #8 arrow
 						if (_settings.showArrows()) {
 							x = ge2.getX() - 8;
-							_paintManager.drawArrowHead(x, y, SWT.RIGHT, gc);
+							final int xx = x;
+							final int yy = y;
+							arrowHeadConsumer = (sz -> _paintManager.drawArrowHead(xx, yy, SWT.RIGHT, gc, sz));
+							colour = SWT.COLOR_CYAN;
 						}
 
 					}
@@ -3932,83 +3979,113 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 					gc.setForeground(connection.getColor() == null ? _reverseArrowColor : connection.getColor());
 
 					// draw first stub
-					gc.drawLine(x, y, x + rect.width, y);
+					// gc.drawLine(x, y, x + rect.width, y);
+
+					points.add(x);
+					points.add(y);
+
+					points.add(x + rect.width);
+					points.add(y);
 					x += rect.width;
 
 					if (targetIsOnLeft || eventsOverlap || targetIsOnRightBorder || targetIsOnLeftBorder) {
 						// #0 bend
-						xy = drawBend(gc, Constants.BEND_RIGHT_DOWN, x, y, true);
+						xy = drawBend(gc, Constants.BEND_RIGHT_DOWN, x, y, true, points);
 						x = xy.x;
 						y = xy.y;
 
 						// #1 vertical
 						final int yDest = ge1.getBottomY() + (_eventSpacer / 2);
-						gc.drawLine(x, y, x, yDest);
+						// gc.drawLine(x, y, x, yDest);
+						points.add(x);
+						points.add(yDest);
+
 						y = yDest;
 
 						// #2 bend
-						xy = drawBend(gc, Constants.BEND_LEFT_DOWN, x, y, true);
+						xy = drawBend(gc, Constants.BEND_LEFT_DOWN, x, y, true, points);
 						x = xy.x;
 						y = xy.y;
 
 						// #3 line (not -8 as we don't want line overlap for events that draw down and use -8)
-						gc.drawLine(x, y, ge2.getX() - neg - _settings.getReverseDependencyLineHorizontalSpacer(), y);
+						// gc.drawLine(x, y, ge2.getX() - neg - _settings.getReverseDependencyLineHorizontalSpacer(), y);
+						points.add(ge2.getX() - neg - _settings.getReverseDependencyLineHorizontalSpacer());
+						points.add(y);
+
 						x = ge2.getX() - neg - _settings.getReverseDependencyLineHorizontalSpacer();
 
 						// #4 bend
-						xy = drawBend(gc, Constants.BEND_LEFT_UP, x, y, true);
+						xy = drawBend(gc, Constants.BEND_LEFT_UP, x, y, true, points);
 						x = xy.x;
 						y = xy.y;
 
 						// #5 vert up
 						if (_settings.useSplitArrowConnections()) {
-							gc.drawLine(x, y, x, ge2.getY() + ge2.getHeight());
+							// gc.drawLine(x, y, x, ge2.getY() + ge2.getHeight());
+							points.add(x);
 							y = ge2.getY() + ge2.getHeight();
+							points.add(y);
 						} else {
-							gc.drawLine(x, y, x, ge2.getY() + (ge2.getHeight() / 2) + 2);
+							// gc.drawLine(x, y, x, ge2.getY() + (ge2.getHeight() / 2) + 2);
+							points.add(x);
 							y = ge2.getY() + (ge2.getHeight() / 2) + 2;
+							points.add(y);
 						}
 
 						// #6 bend
-						xy = drawBend(gc, Constants.BEND_RIGHT_UP, x, y, true);
+						xy = drawBend(gc, Constants.BEND_RIGHT_UP, x, y, true, points);
 						x = xy.x;
 						y = xy.y;
 
 						// #7 horizontal
-						gc.drawLine(x, y, ge2.getX(), y);
+						// gc.drawLine(x, y, ge2.getX(), y);
+						points.add(ge2.getX());
+						points.add(y);
 
 						// #8 arrow
 						if (_settings.showArrows()) {
 							x = ge2.getX() - 8;
-							_paintManager.drawArrowHead(x, y, SWT.RIGHT, gc);
+							final int xx = x;
+							final int yy = y;
+							arrowHeadConsumer = (sz -> _paintManager.drawArrowHead(xx, yy, SWT.RIGHT, gc, sz));
+							colour = SWT.COLOR_GREEN;
 						}
 					} else if (targetIsOnRight) {
 						// #1 bend
-						xy = drawBend(gc, Constants.BEND_RIGHT_UP, x, y, true);
+						xy = drawBend(gc, Constants.BEND_RIGHT_UP, x, y, true, points);
 						x = xy.x;
 						y = xy.y;
 
 						// #2 vert up
 						if (_settings.useSplitArrowConnections()) {
-							gc.drawLine(x, y, x, ge2.getY() + ge2.getHeight());
+							// gc.drawLine(x, y, x, );
+							points.add(x);
 							y = ge2.getY() + ge2.getHeight();
+							points.add(y);
 						} else {
-							gc.drawLine(x, y, x, ge2.getY() + (ge2.getHeight() / 2) + 2);
+							// gc.drawLine(x, y, x, ge2.getY() + (ge2.getHeight() / 2) + 2);
+							points.add(x);
 							y = ge2.getY() + (ge2.getHeight() / 2) + 2;
+							points.add(y);
 						}
 
 						// #3 bend
-						xy = drawBend(gc, Constants.BEND_RIGHT_UP, x, y, true);
+						xy = drawBend(gc, Constants.BEND_RIGHT_UP, x, y, true, points);
 						x = xy.x;
 						y = xy.y;
 
 						// #4 horizontal
-						gc.drawLine(x, y, ge2.getX(), y);
+						// gc.drawLine(x, y, ge2.getX(), y);
+						points.add(ge2.getX());
+						points.add(y);
 
 						// #5 arrow
 						if (_settings.showArrows()) {
 							x = ge2.getX() - 8;
-							_paintManager.drawArrowHead(x, y, SWT.RIGHT, gc);
+							final int xx = x;
+							final int yy = y;
+							arrowHeadConsumer = (sz -> _paintManager.drawArrowHead(xx, yy, SWT.RIGHT, gc, sz));
+							colour = SWT.COLOR_RED;
 						}
 					}
 				} else if (sameRow) {
@@ -4016,129 +4093,186 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 						gc.setForeground(connection.getColor() == null ? _reverseArrowColor : connection.getColor());
 
 						// draw first stub
-						gc.drawLine(x, y, x + rect.width, y);
+						// gc.drawLine(x, y, x + rect.width, y);
+						points.add(x + rect.width);
+						points.add(y);
 						x += rect.width;
 
 						// #1 bend
-						xy = drawBend(gc, Constants.BEND_RIGHT_DOWN, x, y, true);
+						xy = drawBend(gc, Constants.BEND_RIGHT_DOWN, x, y, true, points);
 						x = xy.x;
 						y = xy.y;
 
 						// #2 vert down
 						if (_settings.useSplitArrowConnections()) {
-							gc.drawLine(x, y, x, ge2.getY() + ge2.getHeight() + (_eventSpacer / 2));
+							// gc.drawLine(x, y, x, ge2.getY() + ge2.getHeight() + (_eventSpacer / 2));
+							points.add(x);
+							points.add(ge2.getY() + ge2.getHeight() + (_eventSpacer / 2));
 							y = ge2.getY() + ge2.getHeight();
 						} else {
-							gc.drawLine(x, y, x, ge2.getY() + (ge2.getHeight() / 2) + 2 + (_eventSpacer / 2));
+							// gc.drawLine(x, y, x, ge2.getY() + (ge2.getHeight() / 2) + 2 + (_eventSpacer / 2));
+							points.add(x);
+							points.add(ge2.getY() + (ge2.getHeight() / 2) + 2 + (_eventSpacer / 2));
 							y = ge2.getY() + (ge2.getHeight() / 2) + 2;
 						}
 						y += (_eventSpacer / 2);
 
 						// #1 bend
-						xy = drawBend(gc, Constants.BEND_LEFT_DOWN, x, y, true);
+						xy = drawBend(gc, Constants.BEND_LEFT_DOWN, x, y, true, points);
 						x = xy.x;
 						y = xy.y;
 
 						// #4 horizontal
-						gc.drawLine(x, y, ge2.getX() - neg - (neg / 2), y);
+						// gc.drawLine(x, y, ge2.getX() - neg - (neg / 2), y);
+						points.add(ge2.getX() - neg - (neg / 2));
+						points.add(y);
 						x = ge2.getX() - neg - (neg / 2);
 
 						// #5 bend
-						xy = drawBend(gc, Constants.BEND_LEFT_UP, x, y, true);
+						xy = drawBend(gc, Constants.BEND_LEFT_UP, x, y, true, points);
 						x = xy.x;
 						y = xy.y;
 
 						// #6 vert up
 						if (_settings.useSplitArrowConnections()) {
-							gc.drawLine(x, y, x, ge2.getY() + (ge2.getHeight() / 2) + neg - _settings.getReverseDependencyLineHorizontalSpacer());
+							// gc.drawLine(x, y, x, ge2.getY() + (ge2.getHeight() / 2) + neg - _settings.getReverseDependencyLineHorizontalSpacer());
+							points.add(x);
+							points.add(ge2.getY() + (ge2.getHeight() / 2) + neg - _settings.getReverseDependencyLineHorizontalSpacer());
 							y = ge2.getY() + (ge2.getHeight() / 2) + neg - _settings.getReverseDependencyLineHorizontalSpacer();
 						} else {
-							gc.drawLine(x, y, x, ge2.getY() + (ge2.getHeight() / 2) + neg - _settings.getReverseDependencyLineHorizontalSpacer());
+							// gc.drawLine(x, y, x, ge2.getY() + (ge2.getHeight() / 2) + neg - _settings.getReverseDependencyLineHorizontalSpacer());
+							points.add(x);
+							points.add(ge2.getY() + (ge2.getHeight() / 2) + neg - _settings.getReverseDependencyLineHorizontalSpacer());
 							y = ge2.getY() + (ge2.getHeight() / 2) + neg - _settings.getReverseDependencyLineHorizontalSpacer();
 						}
 
 						// #7 bend
-						xy = drawBend(gc, Constants.BEND_RIGHT_UP, x, y, true);
+						xy = drawBend(gc, Constants.BEND_RIGHT_UP, x, y, true, points);
 						x = xy.x;
 						y = xy.y;
 
 						// #8 last straight
 						gc.drawLine(x, y, ge2.getX(), y);
+						points.add(ge2.getX());
+						points.add(y);
 
 						if (_settings.showArrows()) {
 							x = ge2.getX() - 8;
-							_paintManager.drawArrowHead(x, y, SWT.RIGHT, gc);
+							final int xx = x;
+							final int yy = y;
+							arrowHeadConsumer = (sz -> _paintManager.drawArrowHead(xx, yy, SWT.RIGHT, gc, sz));
+							colour = SWT.COLOR_WHITE;
+
 						}
 					} else if (targetIsOnRight) {
 						gc.setForeground(connection.getColor() == null ? _arrowColor : connection.getColor());
 
 						// if distance between left and right is smaller than the width of a day small, we draw it differently or we'll get a funny bend
 						if ((ge2.getX() - ge1.getXEnd()) <= dw) {
-							gc.drawLine(ge1.getXEnd(), y, ge2.getX(), y);
+							// gc.drawLine(ge1.getXEnd(), y, ge2.getX(), y);
+							// FIXME ! SEE ABOVE COMMENT
+							points.add(ge2.getX());
+							points.add(y);
 
 							if (_settings.showArrows()) {
 								x = ge2.getX() - 8;
-								_paintManager.drawArrowHead(x, y, SWT.RIGHT, gc);
+								final int xx = x;
+								final int yy = y;
+								arrowHeadConsumer = (sz -> _paintManager.drawArrowHead(xx, yy, SWT.RIGHT, gc, sz));
+								colour = SWT.COLOR_MAGENTA;
 							}
 							continue;
 						}
 
 						// draw first stub
 						gc.drawLine(x, y, x + rect.width, y);
+						points.add(x + rect.width);
+						points.add(y);
 						x += rect.width;
 
 						// #1 bend
-						xy = drawBend(gc, Constants.BEND_RIGHT_DOWN, x, y, true);
+						xy = drawBend(gc, Constants.BEND_RIGHT_DOWN, x, y, true, points);
 						x = xy.x;
 						y = xy.y;
 
 						// #2 vert down
 						if (_settings.useSplitArrowConnections()) {
 							gc.drawLine(x, y, x, ge2.getY() + ge2.getHeight() + (_eventSpacer / 2));
+							points.add(x);
+							points.add(ge2.getY() + ge2.getHeight() + (_eventSpacer / 2));
 							y = ge2.getY() + ge2.getHeight();
 						} else {
-							gc.drawLine(x, y, x, ge2.getY() + (ge2.getHeight() / 2) + 2 + (_eventSpacer / 2));
+							// gc.drawLine(x, y, x, ge2.getY() + (ge2.getHeight() / 2) + 2 + (_eventSpacer / 2));
+							points.add(x);
+							points.add(ge2.getY() + (ge2.getHeight() / 2) + 2 + (_eventSpacer / 2));
 							y = ge2.getY() + (ge2.getHeight() / 2) + 2;
 						}
 						y += (_eventSpacer / 2);
 
 						// #3 bend
-						xy = drawBend(gc, Constants.BEND_RIGHT_DOWN, x, y, true);
+						xy = drawBend(gc, Constants.BEND_RIGHT_DOWN, x, y, true, points);
 						x = xy.x;
 						y = xy.y;
 
 						// #4 horizontal
-						gc.drawLine(x, y, ge2.getX() - neg - (neg / 2), y);
+						// gc.drawLine(x, y, ge2.getX() - neg - (neg / 2), y);
+						points.add(ge2.getX() - neg - (neg / 2));
+						points.add(y);
 						x = ge2.getX() - neg - (neg / 2);
 
 						// #5 bend
-						xy = drawBend(gc, Constants.BEND_RIGHT_UP, x, y, true);
+						xy = drawBend(gc, Constants.BEND_RIGHT_UP, x, y, true, points);
 						x = xy.x;
 						y = xy.y;
 
 						// #6 vert down
 						if (_settings.useSplitArrowConnections()) {
-							gc.drawLine(x, y, x, ge2.getY() + (ge2.getHeight() / 2) + 2);
+							// gc.drawLine(x, y, x, ge2.getY() + (ge2.getHeight() / 2) + 2);
+							points.add(x);
+							points.add(ge2.getY() + (ge2.getHeight() / 2) + 2);
 							y = ge2.getY() + (ge2.getHeight() / 2) + 2;
 						} else {
-							gc.drawLine(x, y, x, ge2.getY() + (ge2.getHeight() / 2) + 2);
+							// gc.drawLine(x, y, x, ge2.getY() + (ge2.getHeight() / 2) + 2);
+							points.add(x);
+							points.add(ge2.getY() + (ge2.getHeight() / 2) + 2);
 							y = ge2.getY() + (ge2.getHeight() / 2) + 2;
 						}
 
 						// #7 bend
-						xy = drawBend(gc, Constants.BEND_RIGHT_UP, x, y, true);
+						xy = drawBend(gc, Constants.BEND_RIGHT_UP, x, y, true, points);
 						x = xy.x;
 						y = xy.y;
 
 						// #8 last straight
-						gc.drawLine(x, y, ge2.getX(), y);
+						// gc.drawLine(x, y, ge2.getX(), y);
+						points.add(ge2.getX());
+						points.add(y);
 
 						if (_settings.showArrows()) {
 							x = ge2.getX() - 8;
-							_paintManager.drawArrowHead(x, y, SWT.RIGHT, gc);
+							final int xx = x;
+							final int yy = y;
+							arrowHeadConsumer = (sz -> _paintManager.drawArrowHead(xx, yy, SWT.RIGHT, gc, sz));
+							colour = SWT.COLOR_YELLOW;
 						}
 					}
 				}
+
+				gc.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+				gc.setLineWidth(3);
+				gc.drawPolyline(integersToIntArray(points));
+				gc.setLineWidth(1);
+				gc.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
+				gc.drawPolyline(integersToIntArray(points));
+
+				gc.setLineWidth(1);
+				if (arrowHeadConsumer != null) {
+					gc.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+					arrowHeadConsumer.accept(7);
+					gc.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
+					arrowHeadConsumer.accept(5);
+				}
+
 			}
 		}
 
@@ -4146,32 +4280,57 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		gc.setLineWidth(1);
 	}
 
-	private Point drawBend(final GC gc, final int style, final int x, final int y, final boolean rounded) {
+	public static int @NonNull [] integersToIntArray(@NonNull final Collection<@NonNull Integer> integers) {
+		final int @NonNull [] result = new int[integers.size()];
+		int ix = 0;
+		for (final int x : integers) {
+			result[ix++] = x;
+		}
+		return result;
+	}
+
+	private Point drawBend(final GC gc, final int style, final int x, final int y, final boolean rounded, final List<Integer> points) {
 		final Point xy = new Point(0, 0);
 		final int bonus = (_osType == Constants.OS_LINUX ? 1 : 0);
 		if (rounded) {
 			switch (style) {
 			case Constants.BEND_RIGHT_UP:
-				gc.drawLine(x + 1, y - 1, x + 1 + bonus, y - 1 - bonus);
-				gc.drawLine(x + 2, y - 2, x + 2 + bonus, y - 2 - bonus);
+				points.add(x + 1);
+				points.add(y - 1);
+				points.add(x + 2);
+				points.add(y - 2);
+				// gc.drawLine(x + 1, y - 1, x + 1 + bonus, y - 1 - bonus);
+				// gc.drawLine(x + 2, y - 2, x + 2 + bonus, y - 2 - bonus);
 				xy.x = x + 2;
 				xy.y = y - 2;
 				break;
 			case Constants.BEND_RIGHT_DOWN:
-				gc.drawLine(x + 1, y + 1, x + 1 + bonus, y + 1 + bonus);
-				gc.drawLine(x + 2, y + 2, x + 2 + bonus, y + 2 + bonus);
+				points.add(x + 1);
+				points.add(y + 1);
+				points.add(x + 2);
+				points.add(y + 2);
+				// gc.drawLine(x + 1, y + 1, x + 1 + bonus, y + 1 + bonus);
+				// gc.drawLine(x + 2, y + 2, x + 2 + bonus, y + 2 + bonus);
 				xy.x = x + 2;
 				xy.y = y + 2;
 				break;
 			case Constants.BEND_LEFT_DOWN:
-				gc.drawLine(x - 1, y + 1, x - 1 + bonus, y + 1 + bonus);
-				gc.drawLine(x - 2, y + 2, x - 2 + bonus, y + 2 + bonus);
+				points.add(x - 1);
+				points.add(y + 1);
+				points.add(x - 2);
+				points.add(y + 2);
+				// gc.drawLine(x - 1, y + 1, x - 1 + bonus, y + 1 + bonus);
+				// gc.drawLine(x - 2, y + 2, x - 2 + bonus, y + 2 + bonus);
 				xy.x = x - 2;
 				xy.y = y + 2;
 				break;
 			case Constants.BEND_LEFT_UP:
-				gc.drawLine(x - 1, y - 1, x - 1 + bonus, y - 1 - bonus);
-				gc.drawLine(x - 2, y - 2, x - 2 + bonus, y - 2 - bonus);
+				points.add(x - 1);
+				points.add(y - 1);
+				points.add(x - 2);
+				points.add(y - 2);
+				// gc.drawLine(x - 1, y - 1, x - 1 + bonus, y - 1 - bonus);
+				// gc.drawLine(x - 2, y - 2, x - 2 + bonus, y - 2 - bonus);
 				xy.x = x - 2;
 				xy.y = y - 2;
 				break;
@@ -4817,7 +4976,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 *            GanttEvent to remove
 	 * @return true if removed
 	 */
-	public boolean removeEvent(GanttEvent event) {
+	public boolean removeEvent(final GanttEvent event) {
 		if (event == null) {
 			return false;
 		}
@@ -4849,7 +5008,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		if (event.getGanttGroup() != null) {
 			event.getGanttGroup().removeEvent(event);
 		}
-		boolean ret = _ganttEvents.remove(event);
+		final boolean ret = _ganttEvents.remove(event);
 
 		redrawEventsArea();
 
@@ -5492,7 +5651,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * @param dates
 	 *            List of Calendar objects representing selected header dates.
 	 */
-	public void setSelectedHeaderDates(List dates) {
+	public void setSelectedHeaderDates(final List dates) {
 		_selHeaderDates = dates;
 		redraw();
 	}
@@ -5626,7 +5785,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			}
 
 			if (isInside(me.x, me.y, new Rectangle(event.getX(), event.getY(), event.getWidth(), event.getHeight()))) {
-				GC gc = new GC(this);
+				final GC gc = new GC(this);
 
 				// if it's a scope and menu is allowed, we can finish right here
 				if (me.button == 3 && event.isScope()) {
@@ -5809,7 +5968,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			for (int i = 0; i < _specDateRanges.size(); i++) {
 				final GanttSpecialDateRange range = (GanttSpecialDateRange) _specDateRanges.get(i);
 
-				ArrayList failedMoves = new ArrayList();
+				final ArrayList failedMoves = new ArrayList();
 
 				// check if any of the moved/resized events overlap any of our date ranges
 				for (int x = 0; x < _dragEvents.size(); x++) {
@@ -6580,7 +6739,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				int yDiff = me.y - _mouseDragStartLocation.y;
 
 				boolean left = xDiff < 0;
-				boolean up = yDiff < 0;
+				final boolean up = yDiff < 0;
 
 				if (_settings.flipBlankAreaDragDirection()) {
 					left = !left;
@@ -6685,7 +6844,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				}
 
 			}
-		} catch (Exception error) {
+		} catch (final Exception error) {
 			SWT.error(SWT.ERROR_UNSPECIFIED, error);
 		}
 	}
@@ -6700,7 +6859,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			return "+" + days;
 		}
 
-		StringBuffer buf = new StringBuffer();
+		final StringBuffer buf = new StringBuffer();
 		buf.append(days);
 
 		return buf.toString();
@@ -6890,10 +7049,10 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 			// total minutes from left side
 			xPosition -= _mainBounds.x;
-			int totalMinutes = (int) (xPosition * ppm);
+			final int totalMinutes = (int) (xPosition * ppm);
 
 			// set our temporary end calendar to the start date of the calendar
-			Calendar fakeEnd = Calendar.getInstance(_defaultLocale);
+			final Calendar fakeEnd = Calendar.getInstance(_defaultLocale);
 			fakeEnd.setTime(temp.getTime());
 
 			for (int i = 0; i < totalMinutes; i++) {
@@ -6963,13 +7122,13 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		final Calendar cal = Calendar.getInstance(_defaultLocale);
 		cal.setTime(date);
 
-		int x = getXForDate(cal);
+		final int x = getXForDate(cal);
 
 		if (x == -1) {
 			return;
 		}
 
-		GC gc = new GC(this);
+		final GC gc = new GC(this);
 		gc.setLineStyle(SWT.LINE_DOT);
 		gc.drawRectangle(x, 0, x, _mainBounds.height);
 		gc.setLineStyle(SWT.LINE_SOLID);
@@ -7064,7 +7223,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				} else {
 					if (!_settings.allowPhaseOverlap()) {
 						for (int i = 0; i < _ganttPhases.size(); i++) {
-							GanttPhase other = (GanttPhase) _ganttPhases.get(i);
+							final GanttPhase other = (GanttPhase) _ganttPhases.get(i);
 							if (other.equals(_dragPhase)) {
 								continue;
 							}
@@ -7093,7 +7252,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				if (ok) {
 					// fire listeners
 					for (int x = 0; x < _eventListeners.size(); x++) {
-						IGanttEventListener listener = (IGanttEventListener) _eventListeners.get(x);
+						final IGanttEventListener listener = (IGanttEventListener) _eventListeners.get(x);
 						if (type == Constants.TYPE_MOVE) {
 							listener.phaseMoved(_dragPhase, me);
 						} else {
@@ -7103,18 +7262,18 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				}
 
 				if (_settings.showDateTips() && (_dragging || _resizing) && showToolTip) {
-					Rectangle eBounds = _dragPhase.getBounds();
-					Point eventOnDisplay = toDisplay(me.x, eBounds.y);
+					final Rectangle eBounds = _dragPhase.getBounds();
+					final Point eventOnDisplay = toDisplay(me.x, eBounds.y);
 
 					if (_currentView == ISettings.VIEW_D_DAY) {
-						StringBuffer buf = new StringBuffer();
+						final StringBuffer buf = new StringBuffer();
 						buf.append(_dragPhase.getDDayStart());
 						buf.append(Constants.STR_DASH);
 						buf.append(_dragPhase.getDDayEnd());
 						buf.append("       ");
 						GanttDateTip.makeDialog(_colorManager, buf.toString(), eventOnDisplay, _mainBounds.y);
 					} else {
-						StringBuffer buf = new StringBuffer();
+						final StringBuffer buf = new StringBuffer();
 						buf.append(DateHelper.getDate(_dragPhase.getStartDate(), dateFormat));
 						buf.append(Constants.STR_DASH);
 						buf.append(DateHelper.getDate(_dragPhase.getEndDate(), dateFormat));
@@ -7140,17 +7299,17 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		}
 
 		// first drag event
-		GanttEvent ge = (GanttEvent) _dragEvents.get(0);
+		final GanttEvent ge = (GanttEvent) _dragEvents.get(0);
 
-		GanttSection dragOverSection = getSectionForVerticalDND(ge, true);
+		final GanttSection dragOverSection = getSectionForVerticalDND(ge, true);
 
 		// System.err.println(dragOverSection);
 
 		// get surrounding events of that event
-		List surrounding = getSurroundingVerticalEvents(ge, dragOverSection);
+		final List surrounding = getSurroundingVerticalEvents(ge, dragOverSection);
 
-		GanttEvent top = (GanttEvent) surrounding.get(0);
-		GanttEvent bottom = (GanttEvent) surrounding.get(1);
+		final GanttEvent top = (GanttEvent) surrounding.get(0);
+		final GanttEvent bottom = (GanttEvent) surrounding.get(1);
 
 		_vDNDManager.setTopEvent(top);
 		_vDNDManager.setBottomEvent(bottom);
@@ -7158,7 +7317,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		_vDNDManager.setSurroundingEvents(surrounding);
 	}
 
-	private void drawVerticalInsertMarkers(GC gc) {
+	private void drawVerticalInsertMarkers(final GC gc) {
 		if (!_freeDragging) {
 			return;
 		}
@@ -7172,10 +7331,10 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		gc.setAdvanced(false);
 
 		// first drag event
-		GanttEvent ge = (GanttEvent) _dragEvents.get(0);
+		final GanttEvent ge = (GanttEvent) _dragEvents.get(0);
 
-		GanttEvent top = _vDNDManager.getTopEvent();// (GanttEvent) surrounding.get(0);
-		GanttEvent bottom = _vDNDManager.getBottomEvent();// (GanttEvent) surrounding.get(1);
+		final GanttEvent top = _vDNDManager.getTopEvent();// (GanttEvent) surrounding.get(0);
+		final GanttEvent bottom = _vDNDManager.getBottomEvent();// (GanttEvent) surrounding.get(1);
 
 		// System.err.println("Top: " + top + ", Bottom: " + bottom);//, Over section " + dragOverSection);
 
@@ -7191,7 +7350,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		if (ge.hasMovedVertically()) {
 			if (top != null) {
 				if (bottom != null) {
-					int midDiff = (bottom.getY() - top.getBottomY()) / 2;
+					final int midDiff = (bottom.getY() - top.getBottomY()) / 2;
 					gc.drawLine(xDrawStart, top.getBottomY() + midDiff, xDrawEnd, top.getBottomY() + midDiff);
 				} else {
 					// draw line at bottom
@@ -7210,7 +7369,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 		gc.setLineStyle(SWT.LINE_DASH);
 		for (int i = 0; i < _dragEvents.size(); i++) {
-			GanttEvent e = (GanttEvent) _dragEvents.get(i);
+			final GanttEvent e = (GanttEvent) _dragEvents.get(i);
 			if (e.getPreVerticalDragBounds() != null) {
 				gc.drawRectangle(e.getPreVerticalDragBounds());
 			}
@@ -7221,7 +7380,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	/**
 	 * Handles the actual moving of an event.
 	 */
-	private void handleMove(MouseEvent me, GanttEvent event, int type, boolean showToolTip) {
+	private void handleMove(final MouseEvent me, final GanttEvent event, final int type, final boolean showToolTip) {
 		if (event == null) {
 			return;
 		}
@@ -7250,9 +7409,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			return;
 		}
 
-		String dateFormat = (_currentView == ISettings.VIEW_DAY ? _settings.getHourDateFormat() : _settings.getDateFormat());
+		final String dateFormat = (_currentView == ISettings.VIEW_DAY ? _settings.getHourDateFormat() : _settings.getDateFormat());
 
-		Calendar mouseDateCal = getDateAt(me.x);
+		final Calendar mouseDateCal = getDateAt(me.x);
 
 		// drag start event, show cross hair arrow cursor and keep going
 		if ((me.stateMask & SWT.BUTTON1) != 0 && !_dragging && !_resizing) {
@@ -7281,7 +7440,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 		// vertical drag
 		if (_settings.getVerticalEventDragging() != VerticalDragModes.NO_VERTICAL_DRAG && _dragStartLoc != null) {
-			int diff = _dragStartLoc.y - me.y;
+			final int diff = _dragStartLoc.y - me.y;
 			if (Math.abs(diff) > _settings.getVerticalDragResistance()) {
 				if (!_freeDragging) {
 					_freeDragging = true;
@@ -7396,8 +7555,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 		// TODO: On multi-drag events, one tooltip is a bit lame, can we do something cooler/nicer/more useful? (20 tooltips != useful, and it's slow)
 		if (_settings.showDateTips() && (_dragging || _resizing) && showToolTip) {
-			Rectangle eBounds = new Rectangle(event.getX(), event.getY() - 25, event.getWidth(), event.getHeight());
-			Point eventOnDisplay = toDisplay(me.x, eBounds.y);
+			final Rectangle eBounds = new Rectangle(event.getX(), event.getY() - 25, event.getWidth(), event.getHeight());
+			final Point eventOnDisplay = toDisplay(me.x, eBounds.y);
 			if (event.isCheckpoint()) {
 				long days = DateHelper.daysBetween(event.getActualStartDate(), event.getActualEndDate());
 				days++;
@@ -7405,7 +7564,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				if (days == 1) {
 					GanttDateTip.makeDialog(_colorManager, DateHelper.getDate(event.getActualStartDate(), dateFormat), eventOnDisplay, _mainBounds.y);
 				} else {
-					StringBuffer buf = new StringBuffer();
+					final StringBuffer buf = new StringBuffer();
 					if (_currentView == ISettings.VIEW_D_DAY) {
 						buf.append(event.getActualDDayStart());
 						buf.append(Constants.STR_DASH);
@@ -7420,14 +7579,14 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				}
 			} else {
 				if (_currentView == ISettings.VIEW_D_DAY) {
-					StringBuffer buf = new StringBuffer();
+					final StringBuffer buf = new StringBuffer();
 					buf.append(event.getActualDDayStart());
 					buf.append(Constants.STR_DASH);
 					buf.append(event.getActualDDayEnd());
 					buf.append("       ");
 					GanttDateTip.makeDialog(_colorManager, buf.toString(), eventOnDisplay, _mainBounds.y);
 				} else {
-					StringBuffer buf = new StringBuffer();
+					final StringBuffer buf = new StringBuffer();
 					buf.append(DateHelper.getDate(event.getActualStartDate(), dateFormat));
 					buf.append(Constants.STR_DASH);
 					buf.append(DateHelper.getDate(event.getActualEndDate(), dateFormat));
@@ -7438,14 +7597,14 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	}
 
 	// updates a scope's x/y position (literal scope event)
-	private void updateScopeXY(GanttEvent ge) {
+	private void updateScopeXY(final GanttEvent ge) {
 		// if the event is part of a scope, force the parent to recalculate it's size etc, thus we don't have to recalculate everything
 		if (ge != null) {
 			// System.err.println(ge.getParentScopeChain());
 
 			ge.calculateScope();
-			int newStartX = getXForDate(ge.getEarliestScopeEvent().getActualStartDate());
-			int newWidth = getXLengthForEvent(ge);
+			final int newStartX = getXForDate(ge.getEarliestScopeEvent().getActualStartDate());
+			final int newWidth = getXLengthForEvent(ge);
 			ge.updateX(newStartX);
 			ge.updateWidth(newWidth);
 		}
@@ -7457,7 +7616,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 	// moves one event on the canvas. If SHIFT is held and linked events is true,
 	// it moves all events linked to the moved event.
-	private void moveEvent(GanttEvent ge, int diff, int stateMask, MouseEvent me, int type) {
+	private void moveEvent(final GanttEvent ge, final int diff, final int stateMask, final MouseEvent me, final int type) {
 
 		// diff only applies to horizontal drags, if user is dragging vertically we can't say "return" here, we must assume it's being moved
 		if (diff == 0 && !_freeDragging) {
@@ -7468,7 +7627,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			return;
 		}
 
-		ArrayList eventsMoved = new ArrayList();
+		final ArrayList eventsMoved = new ArrayList();
 
 		int calMark = Calendar.DATE;
 
@@ -7476,15 +7635,15 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			calMark = Calendar.MINUTE;
 		}
 
-		List toMove = new ArrayList();
+		final List toMove = new ArrayList();
 
 		// multi move
 		if ((stateMask & _settings.getDragAllModifierKey()) != 0 && _settings.moveLinkedEventsWhenEventsAreMoved()) {
-			List conns = getEventsDependingOn(ge);
+			final List conns = getEventsDependingOn(ge);
 
-			List translated = new ArrayList();
+			final List translated = new ArrayList();
 			for (int x = 0; x < conns.size(); x++) {
-				GanttEvent md = (GanttEvent) conns.get(x);
+				final GanttEvent md = (GanttEvent) conns.get(x);
 
 				if (md.isLocked()) {
 					continue;
@@ -7501,7 +7660,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			// add all multiselected events too, if any
 			if (_multiSelect) {
 				for (int x = 0; x < _selectedEvents.size(); x++) {
-					GanttEvent selEvent = (GanttEvent) _selectedEvents.get(x);
+					final GanttEvent selEvent = (GanttEvent) _selectedEvents.get(x);
 					if (selEvent.isScope()) {
 						continue;
 					}
@@ -7521,9 +7680,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 		// check if we only move events that are "later" than the source drag event
 		if (_settings.moveAndResizeOnlyDependentEventsThatAreLaterThanLinkedMoveEvent()) {
-			List toRemove = new ArrayList();
+			final List toRemove = new ArrayList();
 			for (int x = 0; x < toMove.size(); x++) {
-				GanttEvent moveEvent = (GanttEvent) toMove.get(x);
+				final GanttEvent moveEvent = (GanttEvent) toMove.get(x);
 				// skip ourselves
 				if (moveEvent.equals(ge)) {
 					continue;
@@ -7542,10 +7701,10 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		_dragEvents = new ArrayList(toMove);
 
 		for (int x = 0; x < toMove.size(); x++) {
-			GanttEvent event = (GanttEvent) toMove.get(x);
+			final GanttEvent event = (GanttEvent) toMove.get(x);
 
-			Calendar cal1 = Calendar.getInstance(_defaultLocale);
-			Calendar cal2 = Calendar.getInstance(_defaultLocale);
+			final Calendar cal1 = Calendar.getInstance(_defaultLocale);
+			final Calendar cal2 = Calendar.getInstance(_defaultLocale);
 			cal1.setTime(event.getActualStartDate().getTime());
 			cal2.setTime(event.getActualEndDate().getTime());
 
@@ -7561,12 +7720,12 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 					// if we didn't have this code, a fast move would never move the event to the end date as it would be beyond already
 					if (cal1.before(event.getNoMoveBeforeDate())) {
 
-						long millis = event.getNoMoveBeforeDate().getTimeInMillis();
-						long milliDiff = Math.abs(event.getActualStartDate().getTimeInMillis() - millis);
+						final long millis = event.getNoMoveBeforeDate().getTimeInMillis();
+						final long milliDiff = Math.abs(event.getActualStartDate().getTimeInMillis() - millis);
 						event.setRevisedStart(DateHelper.getNewCalendar(event.getNoMoveBeforeDate()), false);
 
 						// we also move the end date the same amount of time in difference between the no move date and the start date
-						Calendar end = DateHelper.getNewCalendar(event.getActualEndDate());
+						final Calendar end = DateHelper.getNewCalendar(event.getActualEndDate());
 						end.add(Calendar.MILLISECOND, (int) -milliDiff);
 						event.setRevisedEnd(end, false);
 						event.updateX(getStartingXFor(event.getRevisedStart()));
@@ -7579,12 +7738,12 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 					if (cal2.after(event.getNoMoveAfterDate())) {
 
 						// same deal for end date as for start date
-						long millis = event.getNoMoveAfterDate().getTimeInMillis();
-						long milliDiff = Math.abs(event.getActualEndDate().getTimeInMillis() - millis);
+						final long millis = event.getNoMoveAfterDate().getTimeInMillis();
+						final long milliDiff = Math.abs(event.getActualEndDate().getTimeInMillis() - millis);
 						event.setRevisedEnd(DateHelper.getNewCalendar(event.getNoMoveAfterDate()), false);
 
 						// we also move the end date the same amount of time in difference between the no move date and the start date
-						Calendar start = DateHelper.getNewCalendar(event.getActualStartDate());
+						final Calendar start = DateHelper.getNewCalendar(event.getActualStartDate());
 						start.add(Calendar.MILLISECOND, (int) milliDiff);
 						event.setRevisedStart(start, false);
 						event.updateX(getStartingXFor(event.getRevisedStart()));
@@ -7653,7 +7812,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			eventsMoved.add(ge);
 
 		for (int x = 0; x < _eventListeners.size(); x++) {
-			IGanttEventListener listener = (IGanttEventListener) _eventListeners.get(x);
+			final IGanttEventListener listener = (IGanttEventListener) _eventListeners.get(x);
 			if (type == Constants.TYPE_MOVE) {
 				listener.eventsMoved(eventsMoved, me);
 			} else {
@@ -7665,13 +7824,13 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		redrawEventsArea();
 	}
 
-	public void mouseEnter(MouseEvent event) {
+	public void mouseEnter(final MouseEvent event) {
 	}
 
-	public void mouseExit(MouseEvent event) {
+	public void mouseExit(final MouseEvent event) {
 	}
 
-	public void mouseHover(MouseEvent me) {
+	public void mouseHover(final MouseEvent me) {
 		if (_dragging || _resizing) {
 			return;
 		}
@@ -7688,7 +7847,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			return;
 
 		for (int i = 0; i < _ganttEvents.size(); i++) {
-			GanttEvent event = (GanttEvent) _ganttEvents.get(i);
+			final GanttEvent event = (GanttEvent) _ganttEvents.get(i);
 
 			if (event.isHidden()) {
 				continue;
@@ -7703,7 +7862,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		}
 	}
 
-	private void showTooltip(GanttEvent event, MouseEvent me) {
+	private void showTooltip(final GanttEvent event, final MouseEvent me) {
 		if (!_settings.showToolTips()) {
 			return;
 		}
@@ -7712,7 +7871,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		days++;
 		long revisedDays = 0;
 
-		boolean dDay = _currentView == ISettings.VIEW_D_DAY;
+		final boolean dDay = _currentView == ISettings.VIEW_D_DAY;
 		if (dDay) {
 			days = event.getDDateRange();
 		}
@@ -7723,16 +7882,16 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		if (isUseAdvancedTooltips() || event.getAdvancedTooltip() != null)
 			xPlus = _settings.getAdvancedTooltipXOffset();
 
-		Point displayLocation = super.toDisplay(new Point(me.x + xPlus, me.y));
+		final Point displayLocation = super.toDisplay(new Point(me.x + xPlus, me.y));
 
-		String dateFormat = (_currentView == ISettings.VIEW_DAY ? _settings.getHourDateFormat() : _settings.getDateFormat());
+		final String dateFormat = (_currentView == ISettings.VIEW_DAY ? _settings.getHourDateFormat() : _settings.getDateFormat());
 
 		String startDate = DateHelper.getDate(event.getStartDate(), dateFormat);
 		String endDate = DateHelper.getDate(event.getEndDate(), dateFormat);
 
 		Calendar revisedStart = event.getRevisedStart();
 		Calendar revisedEnd = event.getRevisedEnd();
-		StringBuffer extra = new StringBuffer();
+		final StringBuffer extra = new StringBuffer();
 
 		String revisedStartText = null;
 		String revisedEndText = null;
@@ -7798,14 +7957,14 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		}
 
 		if (at != null) {
-			String title = fixTooltipString(at.getTitle(), event.getName(), startDate, endDate, revisedStartText, revisedEndText, days, revisedDays, event.getPercentComplete());
-			String content = fixTooltipString(at.getContent(), event.getName(), startDate, endDate, revisedStartText, revisedEndText, days, revisedDays, event.getPercentComplete());
-			String help = fixTooltipString(at.getHelpText(), event.getName(), startDate, endDate, revisedStartText, revisedEndText, days, revisedDays, event.getPercentComplete());
+			final String title = fixTooltipString(at.getTitle(), event.getName(), startDate, endDate, revisedStartText, revisedEndText, days, revisedDays, event.getPercentComplete());
+			final String content = fixTooltipString(at.getContent(), event.getName(), startDate, endDate, revisedStartText, revisedEndText, days, revisedDays, event.getPercentComplete());
+			final String help = fixTooltipString(at.getHelpText(), event.getName(), startDate, endDate, revisedStartText, revisedEndText, days, revisedDays, event.getPercentComplete());
 
 			AdvancedTooltipDialog.makeDialog(at, _colorManager, displayLocation, title, content, help);
 		} else {
 			if (extra.length() > 0) {
-				StringBuffer buf = new StringBuffer();
+				final StringBuffer buf = new StringBuffer();
 				buf.append(_languageManager.getPlannedText());
 				buf.append(": ");
 				if (dDay) {
@@ -7827,7 +7986,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 				GanttToolTip.makeDialog(_colorManager, event.getName(), extra.toString(), buf.toString(), event.getPercentComplete() + _languageManager.getPercentCompleteText(), displayLocation);
 			} else {
-				StringBuffer buf = new StringBuffer();
+				final StringBuffer buf = new StringBuffer();
 				if (dDay) {
 					buf.append(dDayStart);
 				} else {
@@ -7850,7 +8009,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		}
 	}
 
-	private String fixTooltipString(final String input, String name, String startDate, String endDate, String plannedStart, String plannedEnd, long days, long plannedDays, int percentageComplete) {
+	private String fixTooltipString(final String input, final String name, final String startDate, final String endDate, final String plannedStart, final String plannedEnd, final long days, final long plannedDays, final int percentageComplete) {
 		String str = input;
 		if (str != null) {
 			str = str.replaceAll("#name#", name);
@@ -7891,7 +8050,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * @param view
 	 *            View
 	 */
-	public void setView(int view) {
+	public void setView(final int view) {
 		_currentView = view;
 		// do stuff here
 		redraw();
@@ -7932,15 +8091,15 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		// int oldVscroll = _vScrollPos;
 		// _vScrollPos = 0;
 		// moveYBounds(-oldVscroll);
-		Rectangle oldBounds = _mainBounds;
-		Calendar currentCalendar = DateHelper.getNewCalendar(_mainCalendar);
+		final Rectangle oldBounds = _mainBounds;
+		final Calendar currentCalendar = DateHelper.getNewCalendar(_mainCalendar);
 		try {
 			// as we may accidentally move the current chart when saving, don't show the user, we'll be drawing on a different canvas anyway
 			setRedraw(false);
 
-			GanttEvent geLeft = getEvent(true, true);
-			Rectangle fullBounds = new Rectangle(0, 0, 0, 0);
-			GanttEvent geRight = getEvent(false, true);
+			final GanttEvent geLeft = getEvent(true, true);
+			final Rectangle fullBounds = new Rectangle(0, 0, 0, 0);
+			final GanttEvent geRight = getEvent(false, true);
 
 			if (geRight == null || geLeft == null) {
 				return getImage();
@@ -7958,7 +8117,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			if (drawSections) {
 
 				// Take into account last calculated witdh. We could do it again here in case things have changed, but we need a GC
-				int xMax = Math.max(_lastSectionColumnWidth, _settings.getSectionBarWidth());
+				final int xMax = Math.max(_lastSectionColumnWidth, _settings.getSectionBarWidth());
 
 				if (_settings.getSectionSide() == SWT.LEFT) {
 					extraX = -xMax;
@@ -7975,7 +8134,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			// System.err.println(" ---- " + geLeft.getEarliestStartX() + " " + geLeft.getActualBounds().x);
 
 			// fullBounds.x = geLeft.getActualBounds().x;
-			Rectangle rBounds = geRight.getActualBounds();
+			final Rectangle rBounds = geRight.getActualBounds();
 
 			// System.err.println(rBounds);
 
@@ -7996,9 +8155,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			// forcing a full update or event visibilities will not change
 			flagForceFullUpdate();
 
-			Image buffer = new Image(getDisplay(), fullBounds);
+			final Image buffer = new Image(getDisplay(), fullBounds);
 
-			GC gc2 = new GC(buffer);
+			final GC gc2 = new GC(buffer);
 			drawChartOntoGC(gc2, fullBounds);
 			drawHeader(gc2, false);
 
@@ -8012,7 +8171,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			gc2.dispose();
 
 			return buffer;
-		} catch (Exception err) {
+		} catch (final Exception err) {
 			SWT.error(SWT.ERROR_UNSPECIFIED, err);
 		} finally {
 			// reset everything, including forcing a redraw and reset
@@ -8048,7 +8207,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 *            Rectangle bounds
 	 * @return Image of chart
 	 */
-	public Image getImage(Rectangle bounds) {
+	public Image getImage(final Rectangle bounds) {
 		/*
 		 * if (true) { Image full = getFullImage();
 		 * 
@@ -8060,9 +8219,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 		_savingChartImage = true;
 		try {
-			Image buffer = new Image(getDisplay(), bounds);
+			final Image buffer = new Image(getDisplay(), bounds);
 
-			GC gc2 = new GC(buffer);
+			final GC gc2 = new GC(buffer);
 			drawChartOntoGC(gc2, bounds);
 
 			// we don't draw this when saving an image until the very end as we push
@@ -8074,7 +8233,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 			gc2.dispose();
 			return buffer;
-		} catch (Exception err) {
+		} catch (final Exception err) {
 			SWT.error(SWT.ERROR_UNSPECIFIED, err);
 		} finally {
 			_savingChartImage = false;
@@ -8086,26 +8245,26 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		return null;
 	}
 
-	private List getEventsDependingOn(GanttEvent ge) {
+	private List getEventsDependingOn(final GanttEvent ge) {
 		if (_ganttConnections.isEmpty()) {
 			return new ArrayList();
 		}
 
-		GanttMap gm = new GanttMap();
+		final GanttMap gm = new GanttMap();
 
 		for (int i = 0; i < _ganttConnections.size(); i++) {
-			GanttConnection conn = (GanttConnection) _ganttConnections.get(i);
+			final GanttConnection conn = (GanttConnection) _ganttConnections.get(i);
 			gm.put(conn.getSource(), conn.getTarget());
 			gm.put(conn.getTarget(), conn.getSource());
 		}
 
-		Set ret = recursiveGetEventsDependingOn(ge, gm, new HashSet());
+		final Set ret = recursiveGetEventsDependingOn(ge, gm, new HashSet());
 		if (!ret.contains(ge)) {
 			ret.add(ge);
 		}
 
-		List retList = new ArrayList();
-		Iterator ite = ret.iterator();
+		final List retList = new ArrayList();
+		final Iterator ite = ret.iterator();
 		while (ite.hasNext()) {
 			retList.add(ite.next());
 		}
@@ -8114,21 +8273,21 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	}
 
 	// get all chained events
-	private Set recursiveGetEventsDependingOn(GanttEvent ge, GanttMap gm, Set ret) {
-		List conns = gm.get(ge);
+	private Set recursiveGetEventsDependingOn(final GanttEvent ge, final GanttMap gm, final Set ret) {
+		final List conns = gm.get(ge);
 		if (conns != null && conns.size() > 0) {
 			for (int i = 0; i < conns.size(); i++) {
-				GanttEvent event = (GanttEvent) conns.get(i);
+				final GanttEvent event = (GanttEvent) conns.get(i);
 				if (ret.contains(event))
 					continue;
 				else
 					ret.add(event);
 
-				Set more = recursiveGetEventsDependingOn(event, gm, ret);
+				final Set more = recursiveGetEventsDependingOn(event, gm, ret);
 				if (more.size() > 0) {
-					Iterator ite = more.iterator();
+					final Iterator ite = more.iterator();
 					while (ite.hasNext()) {
-						Object obj = ite.next();
+						final Object obj = ite.next();
 						if (!ret.contains(obj)) {
 							ret.add(obj);
 						}
@@ -8141,9 +8300,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	}
 
 	private void updateZoomLevel() {
-		int originalDayWidth = _settings.getDayWidth();
-		int originalMonthWeekWidth = _settings.getMonthDayWidth();
-		int originalYearMonthDayWidth = _settings.getYearMonthDayWidth();
+		final int originalDayWidth = _settings.getDayWidth();
+		final int originalMonthWeekWidth = _settings.getMonthDayWidth();
+		final int originalYearMonthDayWidth = _settings.getYearMonthDayWidth();
 
 		boolean dDay = false;
 		if (_currentView == ISettings.VIEW_D_DAY) {
@@ -8275,19 +8434,19 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		return getPixel(false);
 	}
 
-	private int getPixel(boolean left) {
+	private int getPixel(final boolean left) {
 		int max = left ? Integer.MAX_VALUE : Integer.MIN_VALUE;
 
 		for (int i = 0; i < _ganttEvents.size(); i++) {
-			GanttEvent ge = (GanttEvent) _ganttEvents.get(i);
-			Rectangle actualBounds = ge.getActualBounds();
+			final GanttEvent ge = (GanttEvent) _ganttEvents.get(i);
+			final Rectangle actualBounds = ge.getActualBounds();
 
 			if (left) {
 				if (actualBounds.x < max) {
 					max = actualBounds.x;
 				}
 			} else {
-				int w = actualBounds.x + actualBounds.width;
+				final int w = actualBounds.x + actualBounds.width;
 				if (w > max) {
 					max = w;
 				}
@@ -8303,7 +8462,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * @param level
 	 *            Level to set
 	 */
-	public void setZoomLevel(int level) {
+	public void setZoomLevel(final int level) {
 		if (level == _zoomLevel)
 			return;
 
@@ -8314,7 +8473,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		if (toSet > ISettings.MAX_ZOOM_LEVEL)
 			toSet = ISettings.MAX_ZOOM_LEVEL;
 
-		int oldZoomLevel = _zoomLevel;
+		final int oldZoomLevel = _zoomLevel;
 		_zoomLevel = toSet;
 
 		updateZoomLevel();
@@ -8323,7 +8482,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		forceFullUpdate();
 
 		for (int i = 0; i < _eventListeners.size(); i++) {
-			IGanttEventListener listener = (IGanttEventListener) _eventListeners.get(i);
+			final IGanttEventListener listener = (IGanttEventListener) _eventListeners.get(i);
 			if (toSet < oldZoomLevel) {
 				listener.zoomedOut(_zoomLevel);
 			} else {
@@ -8339,7 +8498,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		zoomIn(false, null);
 	}
 
-	private void zoomIn(boolean fromMouseWheel, Point mouseLoc) {
+	private void zoomIn(final boolean fromMouseWheel, final Point mouseLoc) {
 		checkWidget();
 		if (!_settings.enableZooming())
 			return;
@@ -8367,7 +8526,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		forceFullUpdate();
 
 		for (int i = 0; i < _eventListeners.size(); i++) {
-			IGanttEventListener listener = (IGanttEventListener) _eventListeners.get(i);
+			final IGanttEventListener listener = (IGanttEventListener) _eventListeners.get(i);
 			listener.zoomedIn(_zoomLevel);
 		}
 
@@ -8380,7 +8539,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		zoomOut(false, null);
 	}
 
-	private void zoomOut(boolean fromMouseWheel, Point mouseLoc) {
+	private void zoomOut(final boolean fromMouseWheel, final Point mouseLoc) {
 		checkWidget();
 		if (!_settings.enableZooming())
 			return;
@@ -8413,7 +8572,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		forceFullUpdate();
 
 		for (int i = 0; i < _eventListeners.size(); i++) {
-			IGanttEventListener listener = (IGanttEventListener) _eventListeners.get(i);
+			final IGanttEventListener listener = (IGanttEventListener) _eventListeners.get(i);
 			listener.zoomedOut(_zoomLevel);
 		}
 	}
@@ -8434,7 +8593,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		forceFullUpdate();
 
 		for (int i = 0; i < _eventListeners.size(); i++) {
-			IGanttEventListener listener = (IGanttEventListener) _eventListeners.get(i);
+			final IGanttEventListener listener = (IGanttEventListener) _eventListeners.get(i);
 			listener.zoomReset();
 		}
 	}
@@ -8451,7 +8610,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * @param listener
 	 *            Listener
 	 */
-	public void addGanttEventListener(IGanttEventListener listener) {
+	public void addGanttEventListener(final IGanttEventListener listener) {
 		checkWidget();
 		if (_eventListeners.contains(listener))
 			return;
@@ -8465,7 +8624,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * @param listener
 	 *            Listener
 	 */
-	public void removeGanttEventListener(IGanttEventListener listener) {
+	public void removeGanttEventListener(final IGanttEventListener listener) {
 		checkWidget();
 		_eventListeners.remove(listener);
 	}
@@ -8480,7 +8639,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * @param useAdvancedTooltips
 	 *            true whether to use advanced tooltips.
 	 */
-	public void setUseAdvancedTooltips(boolean useAdvancedTooltips) {
+	public void setUseAdvancedTooltips(final boolean useAdvancedTooltips) {
 		_useAdvTooltips = useAdvancedTooltips;
 	}
 
@@ -8516,7 +8675,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 */
 	public void selectAll() {
 		_selectedEvents.clear();
-		Object[] all = _allEventsCombined.toArray();
+		final Object[] all = _allEventsCombined.toArray();
 		for (int i = 0; i < all.length; i++) {
 			_selectedEvents.add(all[i]);
 		}
@@ -8534,10 +8693,10 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 	// as from:
 	// http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.swt.snippets/src/org/eclipse/swt/snippets/Snippet139.java?view=co
-	static ImageData rotate(ImageData srcData, int direction) {
-		int bytesPerPixel = srcData.bytesPerLine / srcData.width;
-		int destBytesPerLine = (direction == SWT.DOWN) ? srcData.width * bytesPerPixel : srcData.height * bytesPerPixel;
-		byte[] newData = new byte[srcData.data.length];
+	static ImageData rotate(final ImageData srcData, final int direction) {
+		final int bytesPerPixel = srcData.bytesPerLine / srcData.width;
+		final int destBytesPerLine = (direction == SWT.DOWN) ? srcData.width * bytesPerPixel : srcData.height * bytesPerPixel;
+		final byte[] newData = new byte[srcData.data.length];
 		int width = 0, height = 0;
 		for (int srcY = 0; srcY < srcData.height; srcY++) {
 			for (int srcX = 0; srcX < srcData.width; srcX++) {
@@ -8574,10 +8733,10 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		return new ImageData(width, height, srcData.depth, srcData.palette, destBytesPerLine, newData);
 	}
 
-	static ImageData flip(ImageData srcData, boolean vertical) {
-		int bytesPerPixel = srcData.bytesPerLine / srcData.width;
-		int destBytesPerLine = srcData.width * bytesPerPixel;
-		byte[] newData = new byte[srcData.data.length];
+	static ImageData flip(final ImageData srcData, final boolean vertical) {
+		final int bytesPerPixel = srcData.bytesPerLine / srcData.width;
+		final int destBytesPerLine = srcData.width * bytesPerPixel;
+		final byte[] newData = new byte[srcData.data.length];
 		for (int srcY = 0; srcY < srcData.height; srcY++) {
 			for (int srcX = 0; srcX < srcData.width; srcX++) {
 				int destX = 0, destY = 0, destIndex = 0, srcIndex = 0;

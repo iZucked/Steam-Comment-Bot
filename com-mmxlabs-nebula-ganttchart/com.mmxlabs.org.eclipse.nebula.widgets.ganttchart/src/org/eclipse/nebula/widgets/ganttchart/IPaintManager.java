@@ -158,5 +158,5 @@ public interface IPaintManager {
 	 * @param face What direction the arrows is in (one of SWT.LEFT, SWT.RIGHT, SWT.UP, SWT.DOWN)
 	 * @param gc GC
 	 */
-	void drawArrowHead(int x, int y, int face, GC gc);		
+	void drawArrowHead(int x, int y, int face, GC gc, int size);		
 }

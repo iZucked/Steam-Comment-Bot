@@ -41,30 +41,30 @@ public abstract class AbstractPaintManager implements IPaintManager {
 			gc.setLineStyle(settings.getSelectionLineStyle());
 			gc.setLineWidth(settings.getSelectionLineWidth());
 
-//			// this is _extremely_ slow to draw, so we need to check bounds here, which is probably a good idea anyway
-//			final boolean oobLeft = (xLoc < bounds.x);
-//			final boolean oobRight = (xLoc + eventWidth > bounds.width);
-//			if (oobLeft || oobRight) {
-//				if (!oobLeft || !oobRight) { // NOPMD
-//					if (oobLeft) {
-//						// left side out of bounds
-//						gc.drawLine(xLoc, y, xLoc + eventWidth, y);
-//						gc.drawLine(xLoc + eventWidth, y, xLoc + eventWidth, y + event.getHeight());
-//						gc.drawLine(xLoc, y + event.getHeight(), xLoc + eventWidth, y + event.getHeight());
-//					} else {
-//						// right side out of bounds
-//						gc.drawLine(xLoc, y, bounds.width, y);
-//						gc.drawLine(xLoc, y, xLoc, y + event.getHeight());
-//						gc.drawLine(xLoc, y + event.getHeight(), bounds.width, y + event.getHeight());
-//					}
-//				} else {
-//					// double out of bounds
-//					gc.drawLine(bounds.x, y, bounds.x + bounds.width, y);
-//					gc.drawLine(bounds.x, y + event.getHeight(), bounds.x + bounds.width, y + event.getHeight());
-//				}
-//			} else {
-//				gc.drawRectangle(xLoc, y, eventWidth, settings.getEventHeight());
-//			}
+			// // this is _extremely_ slow to draw, so we need to check bounds here, which is probably a good idea anyway
+			// final boolean oobLeft = (xLoc < bounds.x);
+			// final boolean oobRight = (xLoc + eventWidth > bounds.width);
+			// if (oobLeft || oobRight) {
+			// if (!oobLeft || !oobRight) { // NOPMD
+			// if (oobLeft) {
+			// // left side out of bounds
+			// gc.drawLine(xLoc, y, xLoc + eventWidth, y);
+			// gc.drawLine(xLoc + eventWidth, y, xLoc + eventWidth, y + event.getHeight());
+			// gc.drawLine(xLoc, y + event.getHeight(), xLoc + eventWidth, y + event.getHeight());
+			// } else {
+			// // right side out of bounds
+			// gc.drawLine(xLoc, y, bounds.width, y);
+			// gc.drawLine(xLoc, y, xLoc, y + event.getHeight());
+			// gc.drawLine(xLoc, y + event.getHeight(), bounds.width, y + event.getHeight());
+			// }
+			// } else {
+			// // double out of bounds
+			// gc.drawLine(bounds.x, y, bounds.x + bounds.width, y);
+			// gc.drawLine(bounds.x, y + event.getHeight(), bounds.x + bounds.width, y + event.getHeight());
+			// }
+			// } else {
+			// gc.drawRectangle(xLoc, y, eventWidth, settings.getEventHeight());
+			// }
 			// Skip above, the bounds.width is incorrect leading to short drawing on RHS for events at end of the view
 			gc.drawRectangle(xLoc, y, eventWidth, settings.getEventHeight());
 
@@ -581,35 +581,35 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		gc.drawImage(image, x, y);
 	}
 
-	public void drawArrowHead(final int x, final int y, final int face, final GC gc) {
+	public void drawArrowHead(final int x, final int y, final int face, final GC gc, int size) {
 		switch (face) {
 		case SWT.UP:
-			gc.drawLine(x, y + 3, x, y + 3);
-			gc.drawLine(x - 1, y + 4, x + 1, y + 4);
-			gc.drawLine(x - 2, y + 5, x + 2, y + 5);
-			gc.drawLine(x - 3, y + 6, x + 3, y + 6);
-			gc.drawLine(x - 4, y + 7, x + 4, y + 7);
+			for (int i = 0; i < size; ++i) {
+				gc.drawLine(x + i, y, x + i, y - (size - i));
+				gc.drawLine(x - i, y, x - i, y - (size - i));
+			}
+
 			break;
 		case SWT.DOWN:
-			gc.drawLine(x, y + 7, x, y + 7);
-			gc.drawLine(x - 1, y + 6, x + 1, y + 6);
-			gc.drawLine(x - 2, y + 5, x + 2, y + 5);
-			gc.drawLine(x - 3, y + 4, x + 3, y + 4);
-			gc.drawLine(x - 4, y + 3, x + 4, y + 3);
+			for (int i = 0; i < size; ++i) {
+				gc.drawLine(x + i, y, x + i, y + (size - i));
+				gc.drawLine(x - i, y, x - i, y + (size - i));
+			}
+
 			break;
 		case SWT.RIGHT:
-			// don't need 1 as a line will be on it
-			gc.drawLine(x + 3, y - 4, x + 3, y + 4);
-			gc.drawLine(x + 4, y - 3, x + 4, y + 3);
-			gc.drawLine(x + 5, y - 2, x + 5, y + 2);
-			gc.drawLine(x + 6, y - 1, x + 6, y + 1);
+
+			for (int i = 0; i < size; ++i) {
+				gc.drawLine(x, y + i, x + (size - i), y + i);
+				gc.drawLine(x, y - i, x + (size - i), y - i);
+			}
 			break;
 		case SWT.LEFT:
 			// don't need 1 as a line will be on it
-			gc.drawLine(x - 3, y - 4, x - 3, y + 4);
-			gc.drawLine(x - 4, y - 3, x - 4, y + 3);
-			gc.drawLine(x - 5, y - 2, x - 5, y + 2);
-			gc.drawLine(x - 6, y - 1, x - 6, y + 1);
+			for (int i = 0; i < size; ++i) {
+				gc.drawLine(x, y + i, x - (size - i), y + i);
+				gc.drawLine(x, y - i, x - (size - i), y - i);
+			}
 			break;
 		default:
 			break;
