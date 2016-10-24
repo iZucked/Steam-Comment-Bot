@@ -175,8 +175,7 @@ public class WhatIfEvaluator {
 				}
 				res.setResultDetails(container);
 				// Clear old references
-				if (container.getCargoAllocation() !=null) {
-					container.getCargoAllocation().unsetInputCargo();
+				if (container.getCargoAllocation() != null) {
 					container.getCargoAllocation().unsetInputCargo();
 				}
 				for (SlotAllocation slotAllocation : container.getSlotAllocations()) {
