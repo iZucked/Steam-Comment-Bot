@@ -58,6 +58,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
@@ -188,12 +189,15 @@ public class AnnotatedSolutionExporter {
 				eSequence.setSequenceType(SequenceType.VESSEL);
 				eSequence.setVesselAvailability(modelEntityMap.getModelObjectNullChecked(vesselAvailability, VesselAvailability.class));
 				eSequence.unsetCharterInMarket();
+				if (vesselAvailability.isOptional() && SequenceEvaluationUtils.shouldIgnoreSequence(sequence)) {
+					continue;
+				}
 				break;
 			case FOB_SALE:
 				fobSequence.setSequenceType(SequenceType.FOB_SALE);
 				isFOBSequence = true;
 				// Skip and process differently
-				if (sequence.size() < 2) {
+				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence)) {
 					continue;
 				}
 				break;
@@ -201,14 +205,14 @@ public class AnnotatedSolutionExporter {
 				desSequence.setSequenceType(SequenceType.DES_PURCHASE);
 				isDESSequence = true;
 				// Skip and process differently
-				if (sequence.size() < 2) {
+				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence)) {
 					continue;
 				}
 				break;
 			case SPOT_CHARTER:
 				eSequence.setSequenceType(SequenceType.SPOT_VESSEL);
-				if (sequence.size() < 2) {
-					continue;
+				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence)) {
+					continue; // DO NOT COMMIT - marker
                                 }
 
 				eSequence.setCharterInMarket(modelEntityMap.getModelObjectNullChecked(vesselAvailability.getSpotCharterInMarket(), CharterInMarket.class));
@@ -217,7 +221,7 @@ public class AnnotatedSolutionExporter {
 				break;
 			case ROUND_TRIP:
 				eSequence.setSequenceType(SequenceType.ROUND_TRIP);
-				if (sequence.size() < 2) {
+				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence)) {
 					continue;
 				}
 

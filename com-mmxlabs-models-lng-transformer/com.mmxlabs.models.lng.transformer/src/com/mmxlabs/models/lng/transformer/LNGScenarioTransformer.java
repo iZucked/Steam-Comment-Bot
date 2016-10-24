@@ -2660,7 +2660,7 @@ public class LNGScenarioTransformer {
 			final IVessel vessel = vesselAssociation.lookupNullChecked(eVessel);
 
 			final IVesselAvailability vesselAvailability = builder.createVesselAvailability(vessel, dailyCharterInCurve,
-					eVesselAvailability.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement);
+					eVesselAvailability.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, eVesselAvailability.isOptional());
 			vesselAvailabilityAssociation.add(eVesselAvailability, vesselAvailability);
 
 			modelEntityMap.addModelObject(eVesselAvailability, vesselAvailability);
