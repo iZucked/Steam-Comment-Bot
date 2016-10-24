@@ -126,6 +126,7 @@ import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
@@ -929,6 +930,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	// private Composite vesselComposite;
 	// private Composite sellComposite;
 	private OptionAnalysisModel rootModel;
+	private BaseCaseWiringDiagram baseCaseDiagram;
+	private PartialCaseWiringDiagram partialCaseDiagram;
+	private ResultsSetWiringDiagram resultsDiagram;
 
 	public void setInput(final @Nullable OptionAnalysisModel model) {
 		if (this.getModel() != null) {
@@ -949,11 +953,26 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		doValidate();
 
 		baseCaseViewer.setInput(model);
+		if (model != null) {
+			baseCaseDiagram.setBaseCase(model.getBaseCase());
+		} else {
+			baseCaseDiagram.setBaseCase(null);
+		}
 		partialCaseViewer.setInput(model);
+		if (model != null) {
+			partialCaseDiagram.setRoot(model);
+		} else {
+			partialCaseDiagram.setRoot(null);
+		}
 		buyOptionsViewer.setInput(model);
 		sellOptionsViewer.setInput(model);
 		// rulesViewer.setInput(model);
 		resultsViewer.setInput(model);
+		if (model != null) {
+			resultsDiagram.setRoot(model);
+		} else {
+			resultsDiagram.setRoot(null);
+		}
 		vesselViewer.setInput(this);
 		vesselClassViewer.setInput(this);
 		vesselViewer.expandAll();
@@ -1160,6 +1179,24 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		baseCaseViewer.getGrid().setRowHeaderVisible(true);
 
 		createColumn(baseCaseViewer, "Buy", new BuyOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION);
+		{
+			final GridViewerColumn gvc = new GridViewerColumn(baseCaseViewer, SWT.CENTER);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+			gvc.getColumn().setText("Wiring");
+			gvc.getColumn().setResizeable(false);
+			gvc.getColumn().setWidth(100);
+			gvc.setLabelProvider(new CellLabelProvider() {
+
+				@Override
+				public void update(ViewerCell cell) {
+					// TODO Auto-generated method stub
+
+				}
+			});
+			this.baseCaseDiagram = new BaseCaseWiringDiagram(baseCaseViewer.getGrid(), gvc);
+			// gvc.getColumn().setCellRenderer(createCellRenderer());
+		}
+
 		createColumn(baseCaseViewer, "Sell", new SellOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
 		createColumn(baseCaseViewer, "Shipping", new ShippingOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 
@@ -1188,6 +1225,25 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		partialCaseViewer.getGrid().setRowHeaderVisible(true);
 
 		createColumn(partialCaseViewer, "Buy", new BuyOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS).getColumn().setWordWrap(true);
+		
+		{
+			final GridViewerColumn gvc = new GridViewerColumn(partialCaseViewer, SWT.CENTER);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+			gvc.getColumn().setText("Wiring");
+			gvc.getColumn().setResizeable(false);
+			gvc.getColumn().setWidth(100);
+			gvc.setLabelProvider(new CellLabelProvider() {
+
+				@Override
+				public void update(ViewerCell cell) {
+					// TODO Auto-generated method stub
+
+				}
+			});
+			this.partialCaseDiagram = new PartialCaseWiringDiagram(partialCaseViewer.getGrid(), gvc);
+			// gvc.getColumn().setCellRenderer(createCellRenderer());
+		}
+		
 		createColumn(partialCaseViewer, "Sell", new SellOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS).getColumn().setWordWrap(true);
 		createColumn(partialCaseViewer, "Shipping", new ShippingOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING).getColumn().setWordWrap(true);
 
@@ -1213,6 +1269,24 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		createColumn(resultsViewer, "Buy", new ResultsFormatterLabelProvider(new BuyOptionDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__BUY_OPTION), false,
 				AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__BUY_OPTION);
+		{
+			final GridViewerColumn gvc = new GridViewerColumn(resultsViewer, SWT.CENTER);
+			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+			gvc.getColumn().setText("Wiring");
+			gvc.getColumn().setResizeable(false);
+			gvc.getColumn().setWidth(100);
+			gvc.setLabelProvider(new CellLabelProvider() {
+
+				@Override
+				public void update(ViewerCell cell) {
+					// TODO Auto-generated method stub
+
+				}
+			});
+			this.resultsDiagram = new ResultsSetWiringDiagram(resultsViewer.getGrid(), gvc);
+			// gvc.getColumn().setCellRenderer(createCellRenderer());
+		}
+		
 		createColumn(resultsViewer, "Sell", new ResultsFormatterLabelProvider(new SellOptionDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SELL_OPTION), false,
 				AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SELL_OPTION);
 		createColumn(resultsViewer, "Shipping", new ResultsFormatterLabelProvider(new ShippingOptionDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SHIPPING), false,
