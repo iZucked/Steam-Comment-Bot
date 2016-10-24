@@ -35,6 +35,8 @@ public class MarkToMarketVesselAvailability implements IVesselAvailability {
 
 	@NonNull
 	private ILongCurve curve;
+	
+	private boolean optional;
 
 	public MarkToMarketVesselAvailability(@NonNull final IMarkToMarket markToMarket, @NonNull final IDischargeOption dischargeOption) {
 		this.markToMarket = markToMarket;
@@ -94,5 +96,14 @@ public class MarkToMarketVesselAvailability implements IVesselAvailability {
 	@Override
 	public int getSpotIndex() {
 		return -1;
+	}
+
+	@Override
+	public boolean isOptional() {
+		return this.optional;
+	}
+
+	public void setOptional(boolean optional) {
+		this.optional = optional;
 	}
 }

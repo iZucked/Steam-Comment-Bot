@@ -47,5 +47,13 @@ public interface IVesselAvailability {
 	 * @return daily charter in price
 	 */
 	ILongCurve getDailyCharterInRate();
+	
+	/**
+	 * A flag determining whether the charter is optional or not
+	 * 
+	 * @return
+	 */
+	boolean isOptional();
+
 
 }

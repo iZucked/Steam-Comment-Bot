@@ -36,6 +36,8 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 	private ISpotCharterInMarket spotCharterInMarket;
 
 	private int spotIndex;
+	
+	private boolean optional;
 
 	public DefaultVesselAvailability(@NonNull final IVessel vessel, @NonNull final VesselInstanceType vesselInstanceType) {
 		this.vessel = vessel;
@@ -104,5 +106,14 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 	public void setSpotIndex(final int spotIndex) {
 		this.spotIndex = spotIndex;
 
+	}
+
+	@Override
+	public boolean isOptional() {
+		return this.optional;
+	}
+
+	public void setOptional(boolean optional) {
+		this.optional = optional;
 	}
 }

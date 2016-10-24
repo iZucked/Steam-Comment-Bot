@@ -12,5 +12,6 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 public interface IVesselProviderEditor extends IVesselProvider {
 
 	void setVesselAvailabilityResource(@NonNull IResource resource, @NonNull IVesselAvailability vesselAvailability);
+	void setResourceOptional(@NonNull IResource resource, boolean optional);
 
 }

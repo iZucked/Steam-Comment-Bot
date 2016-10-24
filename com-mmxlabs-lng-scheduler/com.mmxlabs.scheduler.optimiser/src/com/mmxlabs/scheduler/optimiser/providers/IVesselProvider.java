@@ -17,6 +17,8 @@ public interface IVesselProvider extends IDataComponentProvider {
 	@NonNull
 	IVesselAvailability getVesselAvailability(@NonNull IResource resource);
 
+	boolean isResourceOptional(@NonNull IResource resource);
+
 	@NonNull
 	IResource getResource(@NonNull IVesselAvailability vessel);
 	

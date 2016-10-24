@@ -31,6 +31,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.RoundTripCargoEnd;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractLoggingSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
@@ -433,7 +434,8 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 		}
 
 		final int size = sequence.size();
-		if (size < 2) {
+		// filters out solutions with less than 2 elements (i.e. spot charters, etc.)
+		if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence)) {
 			return;
 		}
 

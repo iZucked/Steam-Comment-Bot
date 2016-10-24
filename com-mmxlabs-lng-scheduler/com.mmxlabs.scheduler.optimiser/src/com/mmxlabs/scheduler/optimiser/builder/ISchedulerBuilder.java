@@ -221,11 +221,12 @@ public interface ISchedulerBuilder {
 	 * @param vesselInstanceType
 	 * @param start
 	 * @param end
+	 * @param isOptional TODO
 	 * @return
 	 */
 	@NonNull
 	IVesselAvailability createVesselAvailability(@NonNull IVessel vessel, @NonNull ILongCurve dailyCharterInPrice, @NonNull VesselInstanceType vesselInstanceType, @NonNull IStartRequirement start,
-			@NonNull IEndRequirement end);
+			@NonNull IEndRequirement end, boolean isOptional);
 
 	@NonNull
 	public IStartRequirement createStartRequirement(@Nullable IPort fixedPort, @Nullable ITimeWindow timeWindow, @Nullable IHeelOptions heelOptions);
