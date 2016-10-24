@@ -1309,7 +1309,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(resultsViewer, SWT.CENTER);
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("Wiring");
+			gvc.getColumn().setText("");
 			gvc.getColumn().setResizeable(false);
 			gvc.getColumn().setWidth(100);
 			gvc.setLabelProvider(new CellLabelProvider() {
