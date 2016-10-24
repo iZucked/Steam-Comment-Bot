@@ -1182,7 +1182,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(baseCaseViewer, SWT.CENTER);
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("Wiring");
+			gvc.getColumn().setText("");
 			gvc.getColumn().setResizeable(false);
 			gvc.getColumn().setWidth(100);
 			gvc.setLabelProvider(new CellLabelProvider() {
@@ -1225,25 +1225,24 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		partialCaseViewer.getGrid().setRowHeaderVisible(true);
 
 		createColumn(partialCaseViewer, "Buy", new BuyOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS).getColumn().setWordWrap(true);
-		
+
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(partialCaseViewer, SWT.CENTER);
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
-			gvc.getColumn().setText("Wiring");
+			gvc.getColumn().setText("");
 			gvc.getColumn().setResizeable(false);
 			gvc.getColumn().setWidth(100);
 			gvc.setLabelProvider(new CellLabelProvider() {
 
 				@Override
 				public void update(ViewerCell cell) {
-					// TODO Auto-generated method stub
 
 				}
 			});
 			this.partialCaseDiagram = new PartialCaseWiringDiagram(partialCaseViewer.getGrid(), gvc);
 			// gvc.getColumn().setCellRenderer(createCellRenderer());
 		}
-		
+
 		createColumn(partialCaseViewer, "Sell", new SellOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS).getColumn().setWordWrap(true);
 		createColumn(partialCaseViewer, "Shipping", new ShippingOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING).getColumn().setWordWrap(true);
 
@@ -1286,7 +1285,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			this.resultsDiagram = new ResultsSetWiringDiagram(resultsViewer.getGrid(), gvc);
 			// gvc.getColumn().setCellRenderer(createCellRenderer());
 		}
-		
+
 		createColumn(resultsViewer, "Sell", new ResultsFormatterLabelProvider(new SellOptionDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SELL_OPTION), false,
 				AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SELL_OPTION);
 		createColumn(resultsViewer, "Shipping", new ResultsFormatterLabelProvider(new ShippingOptionDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SHIPPING), false,
