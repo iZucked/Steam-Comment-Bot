@@ -1,5 +1,6 @@
 package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -45,6 +46,7 @@ import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -684,5 +686,88 @@ public class AnalyticsBuilder {
 		}));
 
 		menuHelper.open();
+	}
+
+	public static Port getPort(SellOption option) {
+		if (option instanceof SellOpportunity) {
+			SellOpportunity sellOpportunity = (SellOpportunity) option;
+			return sellOpportunity.getPort();
+		} else if (option instanceof SellReference) {
+			SellReference sellReference = (SellReference) option;
+			DischargeSlot slot = sellReference.getSlot();
+			if (slot != null) {
+				return slot.getPort();
+			}
+		}
+		return null;
+	}
+
+	public static LocalDate getDate(SellOption option) {
+		if (option instanceof SellOpportunity) {
+			SellOpportunity sellOpportunity = (SellOpportunity) option;
+			return sellOpportunity.getDate();
+		} else if (option instanceof SellReference) {
+			SellReference sellReference = (SellReference) option;
+			DischargeSlot slot = sellReference.getSlot();
+			if (slot != null) {
+				return slot.getWindowStart();
+			}
+		}
+		return null;
+	}
+
+	public static boolean isShipped(BuyOption option) {
+		if (option instanceof BuyOpportunity) {
+			BuyOpportunity buyOpportunity = (BuyOpportunity) option;
+			return !buyOpportunity.isDesPurchase();
+		} else if (option instanceof BuyReference) {
+			BuyReference buyReference = (BuyReference) option;
+			LoadSlot slot = buyReference.getSlot();
+			if (slot != null) {
+				return !slot.isDESPurchase();
+			}
+		}
+		return true;
+	}
+	public static Port getPort(BuyOption option) {
+		if (option instanceof BuyOpportunity) {
+			BuyOpportunity buyOpportunity = (BuyOpportunity) option;
+			return buyOpportunity.getPort();
+		} else if (option instanceof BuyReference) {
+			BuyReference buyReference = (BuyReference) option;
+			LoadSlot slot = buyReference.getSlot();
+			if (slot != null) {
+				return slot.getPort();
+			}
+		}
+		return null;
+	}
+	
+	public static LocalDate getDate(BuyOption option) {
+		if (option instanceof BuyOpportunity) {
+			BuyOpportunity buyOpportunity = (BuyOpportunity) option;
+			return buyOpportunity.getDate();
+		} else if (option instanceof BuyReference) {
+			BuyReference buyReference = (BuyReference) option;
+			LoadSlot slot = buyReference.getSlot();
+			if (slot != null) {
+				return slot.getWindowStart();
+			}
+		}
+		return null;
+	}
+	
+	public static boolean isShipped(SellOption option) {
+		if (option instanceof SellOpportunity) {
+			SellOpportunity sellOpportunity = (SellOpportunity) option;
+			return !sellOpportunity.isFobSale();
+		} else if (option instanceof SellReference) {
+			SellReference sellReference = (SellReference) option;
+			DischargeSlot slot = sellReference.getSlot();
+			if (slot != null) {
+				return !slot.isFOBSale();
+			}
+		}
+		return true;
 	}
 }

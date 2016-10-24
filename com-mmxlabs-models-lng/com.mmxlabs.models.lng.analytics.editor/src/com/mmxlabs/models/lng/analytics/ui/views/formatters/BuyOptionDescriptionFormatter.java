@@ -1,6 +1,8 @@
 package com.mmxlabs.models.lng.analytics.ui.views.formatters;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Collection;
 
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
@@ -11,6 +13,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 
 public class BuyOptionDescriptionFormatter extends BaseFormatter {
+
 	@Override
 	public String render(final Object object) {
 
@@ -19,7 +22,7 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 		}
 
 		if (object instanceof Collection<?>) {
-			Collection<?> collection = (Collection<?>) object;
+			final Collection<?> collection = (Collection<?>) object;
 
 			if (collection.isEmpty()) {
 				return "<open>";
@@ -36,7 +39,7 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 			}
 			return sb.toString();
 		} else if (object instanceof Object[]) {
-			Object[] objects = (Object[]) object;
+			final Object[] objects = (Object[]) object;
 
 			if (objects.length == 0) {
 				return "<open>";
@@ -53,18 +56,24 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 			return sb.toString();
 		} else if (object instanceof BuyOpportunity) {
 			final BuyOpportunity buyOpportunity = (BuyOpportunity) object;
-			if (buyOpportunity.getPort() != null && buyOpportunity.getDate() != null && buyOpportunity.getPriceExpression() != null) {
-
-				return String.format("%s on %04d-%02d - %s", buyOpportunity.getPort().getName(), buyOpportunity.getDate().getYear(), buyOpportunity.getDate().getMonthValue(),
-						buyOpportunity.getPriceExpression());
+			final LocalDate date = buyOpportunity.getDate();
+			String priceExpression = buyOpportunity.getPriceExpression();
+			if (priceExpression != null && priceExpression.length() > 5) {
+				priceExpression = priceExpression.substring(0, 4) + "...";
+			}
+			if (buyOpportunity.getPort() != null && date != null && priceExpression != null) {
+				final String str = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
+				return String.format("%s | %s | %s", buyOpportunity.getPort().getName(), str, priceExpression);
 			}
 			return String.format("Opp <not set>");
 		} else if (object instanceof BuyReference) {
 			final BuyReference buyReference = (BuyReference) object;
 			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
-				LocalDate windowStart = slot.getWindowStart();
-				return String.format("%s (%04d-%02d)", slot.getName(), windowStart.getYear(), windowStart.getMonthValue());
+				final LocalDate windowStart = slot.getWindowStart();
+				final String str = windowStart.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
+
+				return String.format("%s (%s)", slot.getName(), str);
 			}
 			return String.format("ID <not set>");
 		} else if (object instanceof BuyMarket) {

@@ -1,5 +1,6 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -7,13 +8,11 @@ import java.util.LinkedList;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.dnd.DND;
@@ -24,24 +23,22 @@ import org.eclipse.swt.events.DisposeListener;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
-import com.mmxlabs.models.lng.analytics.FleetShippingOption;
-import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
-import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
+import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
-import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder.ShippingType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
-import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 
 public class PartialCaseDropTargetListener implements DropTargetListener {
@@ -144,6 +141,59 @@ public class PartialCaseDropTargetListener implements DropTargetListener {
 						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS, collection));
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, optionAnalysisModel, null);
 					}
+				} else if (o instanceof PartialCaseRow) {
+					if (o == existing) {
+						event.operations = DND.DROP_LINK;
+						if (existing.getBuyOptions().isEmpty() && existing.getSellOptions().size() == 1) {
+
+							final SellOption option = existing.getSellOptions().get(0);
+							final Port port = AnalyticsBuilder.getPort(option);
+							final LocalDate date = AnalyticsBuilder.getDate(option);
+							final boolean isShipped = AnalyticsBuilder.isShipped(option);
+
+							final BuyOpportunity row = AnalyticsFactory.eINSTANCE.createBuyOpportunity();
+							row.setDesPurchase(isShipped);
+							row.setDate(date);
+							row.setPort(port);
+							row.setPriceExpression("?");
+
+							AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, row);
+
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+									AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS, row), optionAnalysisModel,
+									AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS);
+
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+									AddCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS, Collections.singletonList(row)),
+									existing, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS);
+
+							DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, row);
+						} else if (existing.getBuyOptions().size() == 1 && existing.getSellOptions().isEmpty()) {
+
+							final BuyOption option = existing.getBuyOptions().get(0);
+							final Port port = AnalyticsBuilder.getPort(option);
+							final LocalDate date = AnalyticsBuilder.getDate(option);
+							final boolean isShipped = AnalyticsBuilder.isShipped(option);
+
+							final SellOpportunity row = AnalyticsFactory.eINSTANCE.createSellOpportunity();
+							row.setFobSale(isShipped);
+							row.setDate(date);
+							row.setPort(port);
+							row.setPriceExpression("?");
+
+							AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, row);
+
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+									AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), optionAnalysisModel,
+									AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
+
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+									AddCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS, Collections.singletonList(row)),
+									existing, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS);
+
+							DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, row);
+						}
+					}
 				} else if (o instanceof Vessel) {
 					final Vessel vessel = (Vessel) o;
 
@@ -186,7 +236,7 @@ public class PartialCaseDropTargetListener implements DropTargetListener {
 						// }
 					}
 				} else if (o instanceof VesselClass) {
-					VesselClass vesselClass = (VesselClass) o;
+					final VesselClass vesselClass = (VesselClass) o;
 					AnalyticsBuilder.applyShipping(scenarioEditingLocation, optionAnalysisModel, existing, vesselClass, menuHelper);
 
 					// final PartialCaseRow pExisting = existing;
@@ -263,6 +313,10 @@ public class PartialCaseDropTargetListener implements DropTargetListener {
 				}
 				if (o instanceof Vessel || o instanceof VesselClass) {
 					event.operations = DND.DROP_MOVE;
+					return;
+				}
+				if (o instanceof PartialCaseRow) {
+					event.operations = DND.DROP_LINK;
 					return;
 				}
 				if (o instanceof ShippingOption) {

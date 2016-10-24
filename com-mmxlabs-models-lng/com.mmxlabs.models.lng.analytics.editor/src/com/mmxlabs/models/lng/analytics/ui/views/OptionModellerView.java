@@ -5,7 +5,6 @@ import java.util.EnumSet;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +40,6 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
-import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
@@ -49,18 +47,18 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
@@ -113,7 +111,6 @@ import com.mmxlabs.models.lng.analytics.ui.views.providers.VesselContentProvider
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
@@ -121,6 +118,9 @@ import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.TableColourPalette;
+import com.mmxlabs.models.ui.tabular.TableColourPalette.ColourElements;
+import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
@@ -179,7 +179,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				.create());
 		mainComposite.setLayout(GridLayoutFactory.fillDefaults()//
 				.equalWidth(false) //
-				.numColumns(6) //
+				.numColumns(5) //
 				.spacing(0, 0) //
 				.margins(0, 0)//
 				.create());
@@ -188,8 +188,30 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			buyComposite = new Composite(mainComposite, SWT.NONE);
 			buyComposite.setLayoutData(GridDataFactory.swtDefaults()//
 					.grab(false, true)//
+					.span(2, 1) //
 					.align(SWT.FILL, SWT.FILL).create());
 			buyComposite.setLayout(new GridLayout(1, true));
+
+			{
+
+				wrapInExpandable(buyComposite, "Options history", p -> createOptionsTreeViewer(p), expandableCompo -> {
+
+					final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
+					final OptionsTreeViewerDropTargetListener listener = new OptionsTreeViewerDropTargetListener(OptionModellerView.this, optionsTreeViewer);
+					final DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE);
+					dropTarget.setTransfer(types);
+					dropTarget.addDropListener(listener);
+				});
+
+				optionsTreeViewer.getGrid().setCellSelectionEnabled(true);
+
+				{
+					final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
+					final OptionsTreeViewerDropTargetListener listener = new OptionsTreeViewerDropTargetListener(OptionModellerView.this, optionsTreeViewer);
+					optionsTreeViewer.addDropSupport(DND.DROP_MOVE, types, listener);
+				}
+
+			}
 
 			wrapInExpandable(buyComposite, "Buys", p -> createBuyOptionsViewer(p), expandableComposite -> {
 
@@ -251,23 +273,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				});
 
 			});
-			buyOptionsViewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).hint(SWT.DEFAULT, 400).create());
-			wrapInExpandable(buyComposite, "Options history", p -> createOptionsTreeViewer(p), expandableCompo -> {
-
-				final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
-				final OptionsTreeViewerDropTargetListener listener = new OptionsTreeViewerDropTargetListener(OptionModellerView.this, optionsTreeViewer);
-				final DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE);
-				dropTarget.setTransfer(types);
-				dropTarget.addDropListener(listener);
-			});
-			optionsTreeViewer.getGrid().setCellSelectionEnabled(true);
-
-			{
-				final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
-				final OptionsTreeViewerDropTargetListener listener = new OptionsTreeViewerDropTargetListener(OptionModellerView.this, optionsTreeViewer);
-				optionsTreeViewer.addDropSupport(DND.DROP_MOVE, types, listener);
-			}
-
+			buyOptionsViewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(false, true).hint(SWT.DEFAULT, 400).create());
 			// GridDataFactory.generate(addBuy, 1, 1);
 			hookDragSource(buyOptionsViewer);
 
@@ -304,7 +310,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		centralComposite.setLayout(new GridLayout(1, true));
 		{
 			// createBaseCaseViewer(centralComposite);
-			wrapInExpandable(centralComposite, "Base Case", p -> createBaseCaseViewer(p), expandableCompo -> {
+			wrapInExpandable(centralComposite, "Target", p -> createBaseCaseViewer(p), expandableCompo -> {
 
 				final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 				final BaseCaseDropTargetListener listener = new BaseCaseDropTargetListener(OptionModellerView.this, baseCaseViewer);
@@ -317,31 +323,49 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 			final Composite c = new Composite(centralComposite, SWT.NONE);
 			GridDataFactory.generate(c, 1, 1);
-			c.setLayout(new GridLayout(2, false));
+			c.setLayout(new GridLayout(3, false));
 			baseCaseProftLabel = new Label(c, SWT.NONE);
 			GridDataFactory.generate(baseCaseProftLabel, 1, 1);
 			baseCaseProftLabel.setText("Base P&&L: <not calculated>");
 
-			final Button baseCaseCalculator = new Button(c, SWT.FLAT);
+			final Label baseCaseCalculator = new Label(c, SWT.NONE);
 			// baseCaseCalculator.setText("Calc."); --cogs
 			baseCaseCalculator.setImage(image_calculate);
 			GridDataFactory.generate(baseCaseCalculator, 1, 1);
 
-			baseCaseCalculator.addSelectionListener(new SelectionListener() {
+			baseCaseCalculator.addMouseListener(new MouseAdapter() {
 
 				@Override
-				public void widgetSelected(final SelectionEvent e) {
+				public void mouseDown(MouseEvent e) {
+
 					if (getModel() != null) {
 						BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(),
 								() -> BaseCaseEvaluator.evaluate(OptionModellerView.this, getModel(), getModel().getBaseCase(), true, "Base Case"));
 					}
 				}
 
-				@Override
-				public void widgetDefaultSelected(final SelectionEvent e) {
+			});
+			baseCaseCalculator.addMouseTrackListener(new MouseTrackListener() {
 
+				@Override
+				public void mouseHover(MouseEvent e) {
+				}
+
+				@Override
+				public void mouseExit(MouseEvent e) {
+					baseCaseCalculator.setBackground(null);
+				}
+
+				@Override
+				public void mouseEnter(MouseEvent e) {
+					baseCaseCalculator.setBackground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Background));
 				}
 			});
+			/*
+			 * toggle for target pnl
+			 */
+			final Composite targetPNLToggle = createUseTargetPNLToggleComposite(c);
+			GridDataFactory.generate(targetPNLToggle, 1, 1);
 
 			hookOpenEditor(baseCaseViewer);
 
@@ -358,7 +382,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				final PartialCaseDropTargetListener listener = new PartialCaseDropTargetListener(OptionModellerView.this, partialCaseViewer);
 				inputWants.add(model -> listener.setOptionAnalysisModel(model));
 				// Control control = getControl();
-				final DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE);
+				final DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE | DND.DROP_LINK);
 				dropTarget.setTransfer(types);
 				dropTarget.addDropListener(listener);
 			});
@@ -368,14 +392,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 			final PartialCaseDropTargetListener listener = new PartialCaseDropTargetListener(OptionModellerView.this, partialCaseViewer);
 			inputWants.add(model -> listener.setOptionAnalysisModel(model));
-			partialCaseViewer.addDropSupport(DND.DROP_MOVE, types, listener);
+			partialCaseViewer.addDropSupport(DND.DROP_MOVE | DND.DROP_LINK, types, listener);
 		}
-
-		/*
-		 * toggle for target pnl
-		 */
-		final Composite targetPNLToggle = createUseTargetPNLToggleComposite(centralComposite);
-		GridDataFactory.generate(targetPNLToggle, 2, 1);
 
 		// createRulesViewer(centralComposite);
 		// GridDataFactory.generate(rulesViewer.getGrid(), 2, 1);
@@ -413,18 +431,34 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				//
 				// }
 			});
+			generateButton.addMouseTrackListener(new MouseTrackListener() {
+
+				@Override
+				public void mouseHover(MouseEvent e) {
+				}
+
+				@Override
+				public void mouseExit(MouseEvent e) {
+					generateButton.setBackground(null);
+				}
+
+				@Override
+				public void mouseEnter(MouseEvent e) {
+					generateButton.setBackground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Background));
+				}
+			});
 		}
 
 		wrapInExpandable(centralComposite, "Results", p -> createResultsViewer(p));
 
 		{
-			sellComposite = new Composite(mainComposite, SWT.NONE);
-			sellComposite.setLayoutData(GridDataFactory.swtDefaults()//
-					.grab(false, true)//
-					.align(SWT.FILL, SWT.FILL).create());
-			sellComposite.setLayout(new GridLayout(1, true));
+			// sellComposite = new Composite(mainComposite, SWT.NONE);
+			// sellComposite.setLayoutData(GridDataFactory.swtDefaults()//
+			// .grab(false, true)//
+			// .align(SWT.FILL, SWT.FILL).create());
+			// sellComposite.setLayout(new GridLayout(1, true));
 
-			wrapInExpandable(sellComposite, "Sells", p -> createSellOptionsViewer(p), expandableComposite -> {
+			wrapInExpandable(buyComposite, "Sells", p -> createSellOptionsViewer(p), expandableComposite -> {
 
 				{
 					final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
@@ -491,15 +525,15 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		{
 			{
-				vesselComposite = new Composite(mainComposite, SWT.NONE);
-				vesselComposite.setLayoutData(GridDataFactory.swtDefaults()//
-						.grab(true, true)//
-						.align(SWT.FILL, SWT.FILL).create());
-				vesselComposite.setLayout(new GridLayout(1, true));
+				// vesselComposite = new Composite(mainComposite, SWT.NONE);
+				// vesselComposite.setLayoutData(GridDataFactory.swtDefaults()//
+				// .grab(true, true)//
+				// .align(SWT.FILL, SWT.FILL).create());
+				// vesselComposite.setLayout(new GridLayout(1, true));
 				// vesselComposite.setExpanded(true);
 				// final Composite c = new Composite(vesselComposite, SWT.NONE);
 
-				wrapInExpandable(vesselComposite, "Shipping Templates", p -> createShippingOptionsViewer(p).getGrid(), expandableCompo -> {
+				wrapInExpandable(buyComposite, "Shipping", p -> createShippingOptionsViewer(p).getGrid(), expandableCompo -> {
 
 					{
 						final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
@@ -569,8 +603,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				// Failed attempt to set a minimum size on the table
 				shippingOptionsViewer.getGrid().setLayoutData(GridDataFactory.swtDefaults().hint(SWT.DEFAULT, 150).create());
 
-				wrapInExpandable(vesselComposite, "Vessels", p -> createVesselOptionsViewer(p).getGrid());
-				wrapInExpandable(vesselComposite, "Vessel Classes", p -> createVesselClassOptionsViewer(p).getGrid());
+				wrapInExpandable(buyComposite, "Vessels", p -> createVesselOptionsViewer(p).getGrid()).setExpanded(false);
+				wrapInExpandable(buyComposite, "Vessel Classes", p -> createVesselClassOptionsViewer(p).getGrid()).setExpanded(false);
 				//
 				// shippingOptionsViewer = createShippingOptionsViewer(c);
 				// c.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
@@ -824,8 +858,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private Composite mainComposite;
 	private Composite buyComposite;
 	private Composite centralComposite;
-	private Composite vesselComposite;
-	private Composite sellComposite;
+	// private Composite vesselComposite;
+	// private Composite sellComposite;
 	private OptionAnalysisModel rootModel;
 
 	public void setInput(final @Nullable OptionAnalysisModel model) {
@@ -1016,11 +1050,11 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	// hookOpenEditor(rulesViewer);
 	// }
 
-	private void wrapInExpandable(final Composite composite, final String name, final Function<Composite, Control> s) {
-		wrapInExpandable(composite, name, s, null);
+	private ExpandableComposite wrapInExpandable(final Composite composite, final String name, final Function<Composite, Control> s) {
+		return wrapInExpandable(composite, name, s, null);
 	}
 
-	private void wrapInExpandable(final Composite composite, final String name, final Function<Composite, Control> s, @Nullable final Consumer<ExpandableComposite> customiser) {
+	private ExpandableComposite wrapInExpandable(final Composite composite, final String name, final Function<Composite, Control> s, @Nullable final Consumer<ExpandableComposite> customiser) {
 		final ExpandableComposite expandableCompo = new ExpandableComposite(composite, SWT.NONE);
 		expandableCompo.setExpanded(true);
 		expandableCompo.setText(name);
@@ -1046,6 +1080,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		if (customiser != null) {
 			customiser.accept(expandableCompo);
 		}
+		return expandableCompo;
 	}
 
 	private Control createBaseCaseViewer(final Composite parent) {
@@ -1096,6 +1131,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		partialCaseViewer.getGrid().addMenuDetectListener(listener);
 		inputWants.add(model -> listener.setOptionAnalysisModel(model));
 
+		hookDragSource(partialCaseViewer);
 		return partialCaseViewer.getGrid();
 	}
 
@@ -1131,7 +1167,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		optionsTreeViewer = new GridTreeViewer(parent, SWT.NONE);
 		ColumnViewerToolTipSupport.enableFor(optionsTreeViewer);
 		GridViewerHelper.configureLookAndFeel(optionsTreeViewer);
-		optionsTreeViewer.getGrid().setHeaderVisible(true);
+		// optionsTreeViewer.getGrid().setHeaderVisible(true);
 		optionsTreeViewer.setAutoExpandLevel(TreeViewer.ALL_LEVELS);
 
 		createColumn(optionsTreeViewer, "Option Models", new OptionTreeViewerFormatter(this), true);
@@ -1325,11 +1361,16 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		RunnerHelper.syncExec(() -> {
 
 			// Coarse grained refresh method..
-			if (sections.contains(SectionType.BUYS)) {
+			if (sections.contains(SectionType.BUYS) || sections.contains(SectionType.SELLS) || sections.contains(SectionType.VESSEL)) {
 				buyOptionsViewer.refresh();
+				sellOptionsViewer.refresh();
 				optionsTreeViewer.refresh();
 				optionsTreeViewer.expandAll();
+				shippingOptionsViewer.refresh();
+				vesselViewer.refresh();
+				vesselClassViewer.refresh();
 				if (layout) {
+					// packAll(vesselComposite);
 					packAll(buyComposite);
 				}
 			}
@@ -1348,20 +1389,15 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					packAll(centralComposite);
 				}
 			}
-			if (sections.contains(SectionType.SELLS)) {
-				sellOptionsViewer.refresh();
-				if (layout) {
-					packAll(sellComposite);
-				}
-			}
-			if (sections.contains(SectionType.VESSEL)) {
-				shippingOptionsViewer.refresh();
-				vesselViewer.refresh();
-				vesselClassViewer.refresh();
-				if (layout) {
-					packAll(vesselComposite);
-				}
-			}
+			// if (sections.contains(SectionType.SELLS)) {
+			// sellOptionsViewer.refresh();
+			// if (layout) {
+			// packAll(sellComposite);
+			// }
+			// }
+			// if () {
+			//
+			// }
 		});
 	}
 

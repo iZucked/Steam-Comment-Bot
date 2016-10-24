@@ -61,7 +61,7 @@ public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 			if (s != null && !s.trim().isEmpty()) {
 				hireCost = s;
 			}
-			return String.format("RT: %s @ %s", vesselName, hireCost);
+			return String.format("%s @ %s ∞", vesselName, hireCost);
 		} else if (object instanceof FleetShippingOption) {
 			FleetShippingOption option = (FleetShippingOption) object;
 			Vessel nominatedVessel = option.getVessel();
@@ -77,7 +77,7 @@ public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 			if (s != null && !s.trim().isEmpty()) {
 				hireCost = s;
 			}
-			return String.format("Fleet: %s @ %s", vesselName, hireCost);
+			return String.format("%s @ %s (fleet)", vesselName, hireCost);
 		} else if (object instanceof NominatedShippingOption) {
 			NominatedShippingOption option = (NominatedShippingOption) object;
 			Vessel nominatedVessel = option.getNominatedVessel();
@@ -88,7 +88,7 @@ public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 					vesselName = s;
 				}
 			}
-			return String.format("Nominated %s", vesselName);
+			return String.format("%s (nominated)", vesselName);
 		}
 
 		if (object == null) {

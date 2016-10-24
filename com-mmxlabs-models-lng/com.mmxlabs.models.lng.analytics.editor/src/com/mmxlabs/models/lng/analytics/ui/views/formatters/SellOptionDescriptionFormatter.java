@@ -1,5 +1,8 @@
 package com.mmxlabs.models.lng.analytics.ui.views.formatters;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Collection;
 
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
@@ -52,9 +55,17 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 			return sb.toString();
 		} else if (object instanceof SellOpportunity) {
 			final SellOpportunity sellOpportunity = (SellOpportunity) object;
+
+			LocalDate date = sellOpportunity.getDate();
+			String priceExpression = sellOpportunity.getPriceExpression();
+			if (priceExpression != null && priceExpression.length() > 5) {
+				priceExpression = priceExpression.substring(0, 4) + "...";
+			}
 			if (sellOpportunity.getPort() != null && sellOpportunity.getDate() != null && sellOpportunity.getPriceExpression() != null) {
-				return String.format("%s on %04d-%02d - %s", sellOpportunity.getPort().getName(), sellOpportunity.getDate().getYear(), sellOpportunity.getDate().getMonthValue(),
-						sellOpportunity.getPriceExpression());
+
+				String str = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
+
+				return String.format("%s | %s | %s", sellOpportunity.getPort().getName(), str, sellOpportunity.getPriceExpression());
 			}
 			return String.format("Opp <not set>");
 
@@ -62,7 +73,9 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 			final SellReference sellReference = (SellReference) object;
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
-				return String.format("ID %s", slot.getName());
+				LocalDate windowStart = slot.getWindowStart();
+				String str = windowStart.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
+				return String.format("%s (%s)", slot.getName(), str);
 			}
 			return String.format("ID %s", "<not set>");
 		} else if (object instanceof SellMarket) {
