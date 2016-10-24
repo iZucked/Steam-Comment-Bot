@@ -81,8 +81,8 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lingo.reports.views.standard.CargoEconsReport;
 import com.mmxlabs.lingo.reports.views.standard.CargoEconsReportComponent;
+import com.mmxlabs.lingo.reports.views.standard.PNLDetailsReportComponent;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
@@ -130,6 +130,7 @@ import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
+import com.mmxlabs.models.ui.properties.views.Options;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
@@ -174,6 +175,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private Image image_generate;
 	private Image image_grey_generate;
 	private Image image_grey_add;
+	private IEclipseContext pnlReportContext;
+	private PNLDetailsReportComponent pnlReport;
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -738,11 +741,30 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			econsReportContext = ctx.createChild();
 			econsReportContext.set(Composite.class, econsComposite);
 
+			// FIXME: Circular dep!
 			econsReport = ContextInjectionFactory.make(CargoEconsReportComponent.class, econsReportContext);
-
 			econsReport.listenToSelectionsFrom(getViewSite().getId());
 
 			return econsComposite;
+		});
+		wrapInExpandable(rhsComposite, "P&&L", (p) -> {
+			Composite pnlComposite = new Composite(p, SWT.NONE);
+			pnlComposite.setLayout(new GridLayout(1, true));
+			pnlComposite.setLayoutData(GridDataFactory.fillDefaults()//
+					.grab(true, true)//
+					.hint(200, SWT.DEFAULT) //
+					// .span(1, 1) //
+					.align(SWT.FILL, SWT.FILL).create());
+
+			pnlReportContext = ctx.createChild();
+			pnlReportContext.set(Composite.class, pnlComposite);
+			Options options = new Options("pnl", null, false);
+			pnlReportContext.set(Options.class, options);
+			// FIXME: Circular dep!
+			pnlReport = ContextInjectionFactory.make(PNLDetailsReportComponent.class, pnlReportContext);
+			pnlReport.listenToSelectionsFrom(getViewSite().getId());
+
+			return pnlComposite;
 		});
 		listenToScenarioSelection();
 		packAll(mainComposite);
@@ -1709,6 +1731,14 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		if (econsReportContext != null) {
 			econsReportContext.dispose();
 			econsReportContext = null;
+		}
+		if (pnlReport != null) {
+			ContextInjectionFactory.invoke(pnlReport, PreDestroy.class, pnlReportContext);
+			pnlReport = null;
+		}
+		if (pnlReportContext != null) {
+			pnlReportContext.dispose();
+			pnlReportContext = null;
 		}
 
 		super.dispose();
