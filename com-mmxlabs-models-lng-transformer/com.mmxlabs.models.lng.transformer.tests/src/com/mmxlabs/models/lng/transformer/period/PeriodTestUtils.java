@@ -54,6 +54,7 @@ import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotAllocationType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -142,6 +143,8 @@ public class PeriodTestUtils {
 	public static SlotAllocation createSlotAllocation(final LNGScenarioModel scenarioModel, final Slot slot) {
 		final SlotAllocation slotAllocation = ScheduleFactory.eINSTANCE.createSlotAllocation();
 		scenarioModel.getScheduleModel().getSchedule().getSlotAllocations().add(slotAllocation);
+
+		slotAllocation.setSlotAllocationType(slot instanceof LoadSlot ? SlotAllocationType.PURCHASE : SlotAllocationType.SALE);
 
 		slotAllocation.setSlot(slot);
 

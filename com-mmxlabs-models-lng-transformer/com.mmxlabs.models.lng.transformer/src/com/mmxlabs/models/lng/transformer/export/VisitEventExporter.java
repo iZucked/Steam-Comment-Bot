@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.PortVisitLatenessType;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotAllocationType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -99,7 +100,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			final SlotVisit sv = factory.createSlotVisit();
 			final SlotAllocation slotAllocation = factory.createSlotAllocation();
 			sv.setSlotAllocation(slotAllocation);
-
+			slotAllocation.setSlotAllocationType(slot instanceof ILoadOption ? SlotAllocationType.PURCHASE : SlotAllocationType.SALE);
 			output.getSlotAllocations().add(slotAllocation);
 			// TODO this will have to look at market-generated slots.
 			final Slot optSlot = modelEntityMap.getModelObject(slot, Slot.class);
@@ -144,7 +145,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 		} else if (slot instanceof IVesselEventPortSlot) {
 			if (slot instanceof IGeneratedCharterOutVesselEventPortSlot) {
-				//GCO logic
+				// GCO logic
 				GeneratedCharterOut generatedCharterOutEvent = factory.createGeneratedCharterOut();
 				IGeneratedCharterOutVesselEvent event = ((IGeneratedCharterOutVesselEventPortSlot) slot).getVesselEvent();
 				generatedCharterOutEvent.setRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(event.getHireOutRevenue()));
@@ -252,14 +253,14 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			PortVisitLateness portVisitLateness = ScheduleFactory.eINSTANCE.createPortVisitLateness();
 			PortVisitLatenessType type = null;
 			Interval interval = latenessAnnotation.getIntervalWithoutFlex();
-			switch(interval) {
-			case PROMPT :
+			switch (interval) {
+			case PROMPT:
 				type = PortVisitLatenessType.PROMPT;
 				break;
-			case MID_TERM :
+			case MID_TERM:
 				type = PortVisitLatenessType.MID_TERM;
 				break;
-			case BEYOND :
+			case BEYOND:
 				type = PortVisitLatenessType.BEYOND;
 				break;
 			}
