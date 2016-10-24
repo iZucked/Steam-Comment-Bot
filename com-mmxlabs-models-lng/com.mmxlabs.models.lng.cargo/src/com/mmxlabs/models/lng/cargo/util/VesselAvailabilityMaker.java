@@ -87,6 +87,11 @@ public class VesselAvailabilityMaker {
 		}
 		return this;
 	}
+	
+	public VesselAvailabilityMaker withOptionality(final boolean isOptional) {
+		vesselAvailability.setOptional(isOptional);
+		return this;
+	}
 
 	public VesselAvailabilityMaker withStartHeel(@Nullable final Double startingHeelInM3, final double cv, final double pricePerMMBTu) {
 

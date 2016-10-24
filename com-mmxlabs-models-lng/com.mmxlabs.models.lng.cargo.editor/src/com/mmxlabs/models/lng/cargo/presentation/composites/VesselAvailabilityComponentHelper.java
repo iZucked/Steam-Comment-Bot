@@ -80,6 +80,7 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 		add_startHeelEditor(detailComposite, topClass);
 		add_endHeelEditor(detailComposite, topClass);
 		add_forceHireCostOnlyEndRuleEditor(detailComposite, topClass);
+		add_optionalEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the vessel feature on VesselAvailability
@@ -169,6 +170,15 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_forceHireCostOnlyEndRuleEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 //		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE));
+	}
+
+	/**
+	 * Create the editor for the optional feature on VesselAvailability
+	 *
+	 * @generated
+	 */
+	protected void add_optionalEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__OPTIONAL));
 	}
 
 	/**
