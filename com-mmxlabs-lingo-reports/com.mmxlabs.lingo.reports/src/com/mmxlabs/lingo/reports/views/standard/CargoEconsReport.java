@@ -59,6 +59,7 @@ public class CargoEconsReport extends ViewPart {
 	@PreDestroy
 	public void dispose() {
 		ContextInjectionFactory.invoke(component, PreDestroy.class, componentContext);
+		componentContext.dispose();
 	}
 
 	@Focus
