@@ -32,6 +32,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -158,13 +159,24 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private Label errorLabel;
 
 	private Image image_calculate;
+	private Image image_grey_calculate;
 	private Image image_generate;
+	private Image image_grey_generate;
+	private Image image_grey_add;
 
 	@Override
 	public void createPartControl(final Composite parent) {
 
-		image_calculate = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_calc.gif").createImage();
-		image_generate = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_generate.gif").createImage();
+		ImageDescriptor calc_desc = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_calc.gif");
+		image_calculate = calc_desc.createImage();
+		image_grey_calculate = ImageDescriptor.createWithFlags(calc_desc, SWT.IMAGE_GRAY).createImage();
+		
+		ImageDescriptor generate_desc = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_generate.gif");
+		image_generate = generate_desc.createImage();
+		image_grey_generate = ImageDescriptor.createWithFlags(generate_desc, SWT.IMAGE_GRAY).createImage();
+
+		ImageDescriptor baseAdd = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD);
+		image_grey_add = ImageDescriptor.createWithFlags(baseAdd, SWT.IMAGE_GRAY).createImage();
 
 		validationSupport = new DialogValidationSupport(new DefaultExtraValidationContext(getRootObject(), false));
 		validationSupport.setValidationTargets(Collections.singleton(getModel()));
@@ -228,8 +240,25 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 				final Label c = new Label(expandableComposite, SWT.NONE);
 				expandableComposite.setTextClient(c);
-				c.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+				c.setImage(image_grey_add);
 				c.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).hint(16, 16).grab(true, false).create());
+				c.addMouseTrackListener(new MouseTrackListener() {
+
+					@Override
+					public void mouseHover(MouseEvent e) {
+
+					}
+
+					@Override
+					public void mouseExit(MouseEvent e) {
+						c.setImage(image_grey_add);
+					}
+
+					@Override
+					public void mouseEnter(MouseEvent e) {
+						c.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+					}
+				});
 				c.addMouseListener(new MouseListener() {
 					LocalMenuHelper helper = new LocalMenuHelper(c.getParent());
 					{
@@ -330,8 +359,24 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 			final Label baseCaseCalculator = new Label(c, SWT.NONE);
 			// baseCaseCalculator.setText("Calc."); --cogs
-			baseCaseCalculator.setImage(image_calculate);
+			baseCaseCalculator.setImage(image_grey_calculate);
 			GridDataFactory.generate(baseCaseCalculator, 1, 1);
+			baseCaseCalculator.addMouseTrackListener(new MouseTrackListener() {
+
+				@Override
+				public void mouseHover(MouseEvent e) {
+				}
+
+				@Override
+				public void mouseExit(MouseEvent e) {
+					baseCaseCalculator.setImage(image_grey_calculate);
+				}
+
+				@Override
+				public void mouseEnter(MouseEvent e) {
+					baseCaseCalculator.setImage(image_calculate);
+				}
+			});
 
 			baseCaseCalculator.addMouseListener(new MouseAdapter() {
 
@@ -344,22 +389,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					}
 				}
 
-			});
-			baseCaseCalculator.addMouseTrackListener(new MouseTrackListener() {
-
-				@Override
-				public void mouseHover(MouseEvent e) {
-				}
-
-				@Override
-				public void mouseExit(MouseEvent e) {
-					baseCaseCalculator.setBackground(null);
-				}
-
-				@Override
-				public void mouseEnter(MouseEvent e) {
-					baseCaseCalculator.setBackground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Background));
-				}
 			});
 			/*
 			 * toggle for target pnl
@@ -405,7 +434,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 			final Label generateButton = new Label(generateComposite, SWT.NONE);
 			generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(true, false).create());
-			generateButton.setImage(image_generate);
+			generateButton.setImage(image_grey_generate);
 			generateButton.addMouseListener(new MouseListener() {
 
 				@Override
@@ -439,12 +468,12 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 				@Override
 				public void mouseExit(MouseEvent e) {
-					generateButton.setBackground(null);
+					generateButton.setImage(image_grey_generate);
 				}
 
 				@Override
 				public void mouseEnter(MouseEvent e) {
-					generateButton.setBackground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Background));
+					generateButton.setImage(image_generate);
 				}
 			});
 		}
@@ -472,9 +501,26 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				}
 
 				final Label addSellButton = new Label(expandableComposite, SWT.NONE);
-				addSellButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+				addSellButton.setImage(image_grey_add);
 				expandableComposite.setTextClient(addSellButton);
 				addSellButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).grab(true, false).create());
+				addSellButton.addMouseTrackListener(new MouseTrackListener() {
+
+					@Override
+					public void mouseHover(MouseEvent e) {
+
+					}
+
+					@Override
+					public void mouseExit(MouseEvent e) {
+						addSellButton.setImage(image_grey_add);
+					}
+
+					@Override
+					public void mouseEnter(MouseEvent e) {
+						addSellButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+					}
+				});
 				addSellButton.addMouseListener(new MouseListener() {
 
 					LocalMenuHelper helper = new LocalMenuHelper(addSellButton.getParent());
@@ -547,9 +593,27 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 					final Label addShipping = new Label(expandableCompo, SWT.NONE);
 					expandableCompo.setTextClient(addShipping);
-					addShipping.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+					addShipping.setImage(image_grey_add);
 
 					addShipping.setLayoutData(GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.BOTTOM).grab(true, false).create());
+					addShipping.addMouseTrackListener(new MouseTrackListener() {
+
+						@Override
+						public void mouseHover(MouseEvent e) {
+
+						}
+
+						@Override
+						public void mouseExit(MouseEvent e) {
+							addShipping.setImage(image_grey_add);
+						}
+
+						@Override
+						public void mouseEnter(MouseEvent e) {
+							addShipping.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+						}
+					});
+
 					addShipping.addMouseListener(new MouseListener() {
 
 						LocalMenuHelper helper = new LocalMenuHelper(addShipping.getParent());
@@ -1463,11 +1527,20 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	@Override
 	public void dispose() {
+		if (image_grey_add != null) {
+			image_grey_add.dispose();
+		}
 		if (image_calculate != null) {
 			image_calculate.dispose();
 		}
 		if (image_generate != null) {
 			image_generate.dispose();
+		}
+		if (image_grey_calculate != null) {
+			image_grey_calculate.dispose();
+		}
+		if (image_grey_generate != null) {
+			image_grey_generate.dispose();
 		}
 
 		if (getModel() != null) {
