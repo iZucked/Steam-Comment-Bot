@@ -663,6 +663,29 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ResultContainer} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ResultContainerItemProvider resultContainerItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ResultContainer}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createResultContainerAdapter() {
+		if (resultContainerItemProvider == null) {
+			resultContainerItemProvider = new ResultContainerItemProvider(this);
+		}
+
+		return resultContainerItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.AnalysisResultDetail} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1005,6 +1028,7 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (roundTripShippingOptionItemProvider != null) roundTripShippingOptionItemProvider.dispose();
 		if (nominatedShippingOptionItemProvider != null) nominatedShippingOptionItemProvider.dispose();
 		if (analysisResultRowItemProvider != null) analysisResultRowItemProvider.dispose();
+		if (resultContainerItemProvider != null) resultContainerItemProvider.dispose();
 		if (analysisResultDetailItemProvider != null) analysisResultDetailItemProvider.dispose();
 		if (profitAndLossResultItemProvider != null) profitAndLossResultItemProvider.dispose();
 		if (breakEvenResultItemProvider != null) breakEvenResultItemProvider.dispose();

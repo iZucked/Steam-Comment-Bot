@@ -1677,13 +1677,68 @@ s	 * <!-- end-user-doc -->
 	int ANALYSIS_RESULT_ROW__SHIPPING = 3;
 
 	/**
+	 * The feature id for the '<em><b>Result Details</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYSIS_RESULT_ROW__RESULT_DETAILS = 4;
+
+	/**
 	 * The number of structural features of the '<em>Analysis Result Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYSIS_RESULT_ROW_FEATURE_COUNT = 4;
+	int ANALYSIS_RESULT_ROW_FEATURE_COUNT = 5;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ResultContainerImpl <em>Result Container</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.ResultContainerImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getResultContainer()
+	 * @generated
+	 */
+	int RESULT_CONTAINER = 27;
+
+	/**
+	 * The feature id for the '<em><b>Cargo Allocation</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESULT_CONTAINER__CARGO_ALLOCATION = 0;
+
+	/**
+	 * The feature id for the '<em><b>Open Slot Allocations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESULT_CONTAINER__OPEN_SLOT_ALLOCATIONS = 1;
+
+	/**
+	 * The feature id for the '<em><b>Slot Allocations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESULT_CONTAINER__SLOT_ALLOCATIONS = 2;
+
+	/**
+	 * The number of structural features of the '<em>Result Container</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESULT_CONTAINER_FEATURE_COUNT = 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.OptionRule <em>Option Rule</em>}' class.
@@ -1693,7 +1748,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionRule()
 	 * @generated
 	 */
-	int OPTION_RULE = 27;
+	int OPTION_RULE = 28;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1721,7 +1776,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAnalysisResultDetail()
 	 * @generated
 	 */
-	int ANALYSIS_RESULT_DETAIL = 28;
+	int ANALYSIS_RESULT_DETAIL = 29;
 
 	/**
 	 * The number of structural features of the '<em>Analysis Result Detail</em>' class.
@@ -1740,7 +1795,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getProfitAndLossResult()
 	 * @generated
 	 */
-	int PROFIT_AND_LOSS_RESULT = 29;
+	int PROFIT_AND_LOSS_RESULT = 30;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -1768,7 +1823,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenResult()
 	 * @generated
 	 */
-	int BREAK_EVEN_RESULT = 30;
+	int BREAK_EVEN_RESULT = 31;
 
 	/**
 	 * The feature id for the '<em><b>Price</b></em>' attribute.
@@ -1796,7 +1851,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getModeOptionRule()
 	 * @generated
 	 */
-	int MODE_OPTION_RULE = 31;
+	int MODE_OPTION_RULE = 32;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1824,7 +1879,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionAnalysisModel()
 	 * @generated
 	 */
-	int OPTION_ANALYSIS_MODEL = 32;
+	int OPTION_ANALYSIS_MODEL = 33;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1942,7 +1997,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getResultSet()
 	 * @generated
 	 */
-	int RESULT_SET = 33;
+	int RESULT_SET = 34;
 
 	/**
 	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
@@ -1979,7 +2034,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBaseCase()
 	 * @generated
 	 */
-	int BASE_CASE = 34;
+	int BASE_CASE = 35;
 
 	/**
 	 * The feature id for the '<em><b>Base Case</b></em>' containment reference list.
@@ -2016,7 +2071,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPartialCase()
 	 * @generated
 	 */
-	int PARTIAL_CASE = 35;
+	int PARTIAL_CASE = 36;
 
 	/**
 	 * The feature id for the '<em><b>Partial Case</b></em>' containment reference list.
@@ -2044,7 +2099,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getDestinationType()
 	 * @generated
 	 */
-	int DESTINATION_TYPE = 36;
+	int DESTINATION_TYPE = 37;
 
 
 	/**
@@ -3453,6 +3508,60 @@ s	 * <!-- end-user-doc -->
 	EReference getAnalysisResultRow_Shipping();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.AnalysisResultRow#getResultDetails <em>Result Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Result Details</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AnalysisResultRow#getResultDetails()
+	 * @see #getAnalysisResultRow()
+	 * @generated
+	 */
+	EReference getAnalysisResultRow_ResultDetails();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ResultContainer <em>Result Container</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Result Container</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ResultContainer
+	 * @generated
+	 */
+	EClass getResultContainer();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.ResultContainer#getCargoAllocation <em>Cargo Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Cargo Allocation</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ResultContainer#getCargoAllocation()
+	 * @see #getResultContainer()
+	 * @generated
+	 */
+	EReference getResultContainer_CargoAllocation();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.ResultContainer#getOpenSlotAllocations <em>Open Slot Allocations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Open Slot Allocations</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ResultContainer#getOpenSlotAllocations()
+	 * @see #getResultContainer()
+	 * @generated
+	 */
+	EReference getResultContainer_OpenSlotAllocations();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.ResultContainer#getSlotAllocations <em>Slot Allocations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Slot Allocations</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ResultContainer#getSlotAllocations()
+	 * @see #getResultContainer()
+	 * @generated
+	 */
+	EReference getResultContainer_SlotAllocations();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.OptionRule <em>Option Rule</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4856,6 +4965,48 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference ANALYSIS_RESULT_ROW__SHIPPING = eINSTANCE.getAnalysisResultRow_Shipping();
+
+		/**
+		 * The meta object literal for the '<em><b>Result Details</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ANALYSIS_RESULT_ROW__RESULT_DETAILS = eINSTANCE.getAnalysisResultRow_ResultDetails();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ResultContainerImpl <em>Result Container</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.ResultContainerImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getResultContainer()
+		 * @generated
+		 */
+		EClass RESULT_CONTAINER = eINSTANCE.getResultContainer();
+
+		/**
+		 * The meta object literal for the '<em><b>Cargo Allocation</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference RESULT_CONTAINER__CARGO_ALLOCATION = eINSTANCE.getResultContainer_CargoAllocation();
+
+		/**
+		 * The meta object literal for the '<em><b>Open Slot Allocations</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference RESULT_CONTAINER__OPEN_SLOT_ALLOCATIONS = eINSTANCE.getResultContainer_OpenSlotAllocations();
+
+		/**
+		 * The meta object literal for the '<em><b>Slot Allocations</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference RESULT_CONTAINER__SLOT_ALLOCATIONS = eINSTANCE.getResultContainer_SlotAllocations();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.OptionRule <em>Option Rule</em>}' class.

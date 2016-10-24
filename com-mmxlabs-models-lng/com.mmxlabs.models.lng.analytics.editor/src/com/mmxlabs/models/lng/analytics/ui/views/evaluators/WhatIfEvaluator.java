@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.ProfitAndLossResult;
+import com.mmxlabs.models.lng.analytics.ResultContainer;
 import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
@@ -114,6 +115,18 @@ public class WhatIfEvaluator {
 				final SlotAllocation dischargeAllocation = t.getSecond();
 				final CargoAllocation cargoAllocation = t.getThird();
 
+				ResultContainer container = AnalyticsFactory.eINSTANCE.createResultContainer();
+				container.setCargoAllocation(cargoAllocation);
+				if (loadAllocation != null) {
+					container.getSlotAllocations().add(loadAllocation);
+				}
+				if (dischargeAllocation != null) {
+					container.getSlotAllocations().add(dischargeAllocation);
+				}
+				if (cargoAllocation != null) {
+					container.getSlotAllocations().add(dischargeAllocation);
+				}
+
 				if (isBreakEvenRow(loadAllocation)) {
 					final BreakEvenResult r = AnalyticsFactory.eINSTANCE.createBreakEvenResult();
 					r.setPrice(loadAllocation.getPrice());
@@ -133,9 +146,10 @@ public class WhatIfEvaluator {
 					final Pair<OpenSlotAllocation, OpenSlotAllocation> p = finder2(lngScenarioModel, row, mapper);
 					if (p.getFirst() != null) {
 						assert loadAllocation == null;
-						
-						final double value = (double)p.getFirst().getGroupProfitAndLoss().getProfitAndLoss();
-						if (res.getResultDetail()  != null && res.getResultDetail()  instanceof ProfitAndLossResult) {
+						container.getOpenSlotAllocations().add(p.getFirst());
+
+						final double value = (double) p.getFirst().getGroupProfitAndLoss().getProfitAndLoss();
+						if (res.getResultDetail() != null && res.getResultDetail() instanceof ProfitAndLossResult) {
 							final ProfitAndLossResult profitAndLossResult = (ProfitAndLossResult) res.getResultDetail();
 							profitAndLossResult.setValue(profitAndLossResult.getValue() + value);
 						} else {
@@ -146,9 +160,10 @@ public class WhatIfEvaluator {
 					}
 					if (p.getSecond() != null) {
 						assert dischargeAllocation == null;
-						
-						final double value = (double)p.getSecond().getGroupProfitAndLoss().getProfitAndLoss();
-						if (res.getResultDetail()  != null && res.getResultDetail()  instanceof ProfitAndLossResult) {
+						container.getOpenSlotAllocations().add(p.getSecond());
+
+						final double value = (double) p.getSecond().getGroupProfitAndLoss().getProfitAndLoss();
+						if (res.getResultDetail() != null && res.getResultDetail() instanceof ProfitAndLossResult) {
 							final ProfitAndLossResult profitAndLossResult = (ProfitAndLossResult) res.getResultDetail();
 							profitAndLossResult.setValue(profitAndLossResult.getValue() + value);
 						} else {
@@ -157,6 +172,19 @@ public class WhatIfEvaluator {
 							res.setResultDetail(r);
 						}
 					}
+				}
+				res.setResultDetails(container);
+				// Clear old references
+				if (container.getCargoAllocation() !=null) {
+					container.getCargoAllocation().unsetInputCargo();
+					container.getCargoAllocation().unsetInputCargo();
+				}
+				for (SlotAllocation slotAllocation : container.getSlotAllocations()) {
+					slotAllocation.unsetSlot();
+					slotAllocation.unsetSpotMarket();
+				}
+				for (OpenSlotAllocation openSlotAllocation : container.getOpenSlotAllocations()) {
+					openSlotAllocation.unsetSlot();
 				}
 
 				resultSet.getRows().add(res);
@@ -232,8 +260,8 @@ public class WhatIfEvaluator {
 		return false;
 	}
 
-	private static void recursiveEval(final int listIdx, final List<List<Runnable>> combinations, final IScenarioEditingLocation scenarioEditingLocation, final long targetPNL, final OptionAnalysisModel model,
-			final BaseCase baseCase) {
+	private static void recursiveEval(final int listIdx, final List<List<Runnable>> combinations, final IScenarioEditingLocation scenarioEditingLocation, final long targetPNL,
+			final OptionAnalysisModel model, final BaseCase baseCase) {
 		if (listIdx == combinations.size()) {
 			singleEval(scenarioEditingLocation, targetPNL, model, baseCase);
 			return;

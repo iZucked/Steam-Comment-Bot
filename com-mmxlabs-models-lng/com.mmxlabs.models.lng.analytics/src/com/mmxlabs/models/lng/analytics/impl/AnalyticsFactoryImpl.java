@@ -99,6 +99,7 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.ROUND_TRIP_SHIPPING_OPTION: return createRoundTripShippingOption();
 			case AnalyticsPackage.NOMINATED_SHIPPING_OPTION: return createNominatedShippingOption();
 			case AnalyticsPackage.ANALYSIS_RESULT_ROW: return createAnalysisResultRow();
+			case AnalyticsPackage.RESULT_CONTAINER: return createResultContainer();
 			case AnalyticsPackage.ANALYSIS_RESULT_DETAIL: return createAnalysisResultDetail();
 			case AnalyticsPackage.PROFIT_AND_LOSS_RESULT: return createProfitAndLossResult();
 			case AnalyticsPackage.BREAK_EVEN_RESULT: return createBreakEvenResult();
@@ -404,6 +405,16 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public AnalysisResultRow createAnalysisResultRow() {
 		AnalysisResultRowImpl analysisResultRow = new AnalysisResultRowImpl();
 		return analysisResultRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ResultContainer createResultContainer() {
+		ResultContainerImpl resultContainer = new ResultContainerImpl();
+		return resultContainer;
 	}
 
 	/**

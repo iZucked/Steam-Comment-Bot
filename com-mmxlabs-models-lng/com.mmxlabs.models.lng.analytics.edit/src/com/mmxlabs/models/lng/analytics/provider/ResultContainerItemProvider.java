@@ -3,9 +3,10 @@
 package com.mmxlabs.models.lng.analytics.provider;
 
 
-import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.ResultContainer;
+
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,7 +18,6 @@ import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IChildCreationExtender;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -29,12 +29,12 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.analytics.BaseCaseRow} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.analytics.ResultContainer} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class BaseCaseRowItemProvider 
+public class ResultContainerItemProvider 
 	extends ItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
@@ -48,7 +48,7 @@ public class BaseCaseRowItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public BaseCaseRowItemProvider(AdapterFactory adapterFactory) {
+	public ResultContainerItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -63,88 +63,51 @@ public class BaseCaseRowItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addBuyOptionPropertyDescriptor(object);
-			addSellOptionPropertyDescriptor(object);
-			addShippingPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Buy Option feature.
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addBuyOptionPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_BaseCaseRow_buyOption_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_BaseCaseRow_buyOption_feature", "_UI_BaseCaseRow_type"),
-				 AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
+	@Override
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(AnalyticsPackage.Literals.RESULT_CONTAINER__CARGO_ALLOCATION);
+			childrenFeatures.add(AnalyticsPackage.Literals.RESULT_CONTAINER__OPEN_SLOT_ALLOCATIONS);
+			childrenFeatures.add(AnalyticsPackage.Literals.RESULT_CONTAINER__SLOT_ALLOCATIONS);
+		}
+		return childrenFeatures;
 	}
 
 	/**
-	 * This adds a property descriptor for the Sell Option feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addSellOptionPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_BaseCaseRow_sellOption_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_BaseCaseRow_sellOption_feature", "_UI_BaseCaseRow_type"),
-				 AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
+	@Override
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
+		// Check the type of the specified child object and return the proper feature to use for
+		// adding (see {@link AddCommand}) it as a child.
+
+		return super.getChildFeature(object, child);
 	}
 
 	/**
-	 * This adds a property descriptor for the Shipping feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addShippingPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_BaseCaseRow_shipping_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_BaseCaseRow_shipping_feature", "_UI_BaseCaseRow_type"),
-				 AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This returns BaseCaseRow.gif.
+	 * This returns ResultContainer.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/BaseCaseRow"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ResultContainer"));
 	}
 
 	/**
@@ -155,7 +118,7 @@ public class BaseCaseRowItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_BaseCaseRow_type");
+		return getString("_UI_ResultContainer_type");
 	}
 	
 
@@ -169,6 +132,14 @@ public class BaseCaseRowItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(ResultContainer.class)) {
+			case AnalyticsPackage.RESULT_CONTAINER__CARGO_ALLOCATION:
+			case AnalyticsPackage.RESULT_CONTAINER__OPEN_SLOT_ALLOCATIONS:
+			case AnalyticsPackage.RESULT_CONTAINER__SLOT_ALLOCATIONS:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 
@@ -182,6 +153,21 @@ public class BaseCaseRowItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.RESULT_CONTAINER__CARGO_ALLOCATION,
+				 ScheduleFactory.eINSTANCE.createCargoAllocation()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.RESULT_CONTAINER__OPEN_SLOT_ALLOCATIONS,
+				 ScheduleFactory.eINSTANCE.createOpenSlotAllocation()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.RESULT_CONTAINER__SLOT_ALLOCATIONS,
+				 ScheduleFactory.eINSTANCE.createSlotAllocation()));
 	}
 
 	/**

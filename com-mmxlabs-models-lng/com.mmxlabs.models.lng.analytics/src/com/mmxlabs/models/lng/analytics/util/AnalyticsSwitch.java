@@ -273,6 +273,12 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case AnalyticsPackage.RESULT_CONTAINER: {
+				ResultContainer resultContainer = (ResultContainer)theEObject;
+				T result = caseResultContainer(resultContainer);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case AnalyticsPackage.OPTION_RULE: {
 				OptionRule optionRule = (OptionRule)theEObject;
 				T result = caseOptionRule(optionRule);
@@ -738,6 +744,21 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAnalysisResultRow(AnalysisResultRow object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Result Container</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Result Container</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseResultContainer(ResultContainer object) {
 		return null;
 	}
 

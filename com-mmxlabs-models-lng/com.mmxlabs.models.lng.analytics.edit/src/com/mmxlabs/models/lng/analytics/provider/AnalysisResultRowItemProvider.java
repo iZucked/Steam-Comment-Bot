@@ -17,6 +17,7 @@ import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IChildCreationExtender;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -62,8 +63,31 @@ public class AnalysisResultRowItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addShippingPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Shipping feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addShippingPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AnalysisResultRow_shipping_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AnalysisResultRow_shipping_feature", "_UI_AnalysisResultRow_type"),
+				 AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SHIPPING,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -81,7 +105,7 @@ public class AnalysisResultRowItemProvider
 			childrenFeatures.add(AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__BUY_OPTION);
 			childrenFeatures.add(AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SELL_OPTION);
 			childrenFeatures.add(AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAIL);
-			childrenFeatures.add(AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SHIPPING);
+			childrenFeatures.add(AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAILS);
 		}
 		return childrenFeatures;
 	}
@@ -137,7 +161,7 @@ public class AnalysisResultRowItemProvider
 			case AnalyticsPackage.ANALYSIS_RESULT_ROW__BUY_OPTION:
 			case AnalyticsPackage.ANALYSIS_RESULT_ROW__SELL_OPTION:
 			case AnalyticsPackage.ANALYSIS_RESULT_ROW__RESULT_DETAIL:
-			case AnalyticsPackage.ANALYSIS_RESULT_ROW__SHIPPING:
+			case AnalyticsPackage.ANALYSIS_RESULT_ROW__RESULT_DETAILS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -202,23 +226,8 @@ public class AnalysisResultRowItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SHIPPING,
-				 AnalyticsFactory.eINSTANCE.createShippingOption()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SHIPPING,
-				 AnalyticsFactory.eINSTANCE.createFleetShippingOption()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SHIPPING,
-				 AnalyticsFactory.eINSTANCE.createRoundTripShippingOption()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SHIPPING,
-				 AnalyticsFactory.eINSTANCE.createNominatedShippingOption()));
+				(AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAILS,
+				 AnalyticsFactory.eINSTANCE.createResultContainer()));
 	}
 
 	/**

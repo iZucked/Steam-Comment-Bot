@@ -249,6 +249,15 @@ public interface AnalyticsFactory extends EFactory {
 	AnalysisResultRow createAnalysisResultRow();
 
 	/**
+	 * Returns a new object of class '<em>Result Container</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Result Container</em>'.
+	 * @generated
+	 */
+	ResultContainer createResultContainer();
+
+	/**
 	 * Returns a new object of class '<em>Analysis Result Detail</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

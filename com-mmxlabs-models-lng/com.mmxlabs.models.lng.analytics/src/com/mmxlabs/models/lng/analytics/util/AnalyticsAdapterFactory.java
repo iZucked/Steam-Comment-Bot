@@ -195,6 +195,10 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createAnalysisResultRowAdapter();
 			}
 			@Override
+			public Adapter caseResultContainer(ResultContainer object) {
+				return createResultContainerAdapter();
+			}
+			@Override
 			public Adapter caseOptionRule(OptionRule object) {
 				return createOptionRuleAdapter();
 			}
@@ -637,6 +641,20 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAnalysisResultRowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.ResultContainer <em>Result Container</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.ResultContainer
+	 * @generated
+	 */
+	public Adapter createResultContainerAdapter() {
 		return null;
 	}
 

@@ -75,6 +75,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="exposures" upperBound="-1"
         eType="#//ExposureDetail" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="slotAllocationType" eType="#//SlotAllocationType"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Sequence" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -279,5 +280,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="nativeValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeUnit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="currencyUnit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SlotAllocationType">
+    <eLiterals name="PURCHASE"/>
+    <eLiterals name="SALE" value="1"/>
   </eClassifiers>
 </ecore:EPackage>

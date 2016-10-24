@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
@@ -36,6 +38,10 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerCell;
@@ -85,6 +91,7 @@ import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.OptionRule;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.ResultContainer;
 import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
@@ -119,9 +126,6 @@ import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
-import com.mmxlabs.models.ui.tabular.TableColourPalette;
-import com.mmxlabs.models.ui.tabular.TableColourPalette.ColourElements;
-import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
@@ -170,7 +174,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		ImageDescriptor calc_desc = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_calc.gif");
 		image_calculate = calc_desc.createImage();
 		image_grey_calculate = ImageDescriptor.createWithFlags(calc_desc, SWT.IMAGE_GRAY).createImage();
-		
+
 		ImageDescriptor generate_desc = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_generate.gif");
 		image_generate = generate_desc.createImage();
 		image_grey_generate = ImageDescriptor.createWithFlags(generate_desc, SWT.IMAGE_GRAY).createImage();
@@ -1223,6 +1227,37 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		resultsViewer.getGrid().addMenuDetectListener(listener);
 
 		resultsViewer.setContentProvider(new ResultsViewerContentProvider());
+		ESelectionService selectionService = getSite().getService(ESelectionService.class);
+		resultsViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				List<Object> selection = new LinkedList<>();
+				ISelection s = resultsViewer.getSelection();
+				if (s instanceof IStructuredSelection) {
+					IStructuredSelection structuredSelection = (IStructuredSelection) s;
+					Iterator<?> itr = structuredSelection.iterator();
+					while (itr.hasNext()) {
+						Object o = itr.next();
+						if (o instanceof AnalysisResultRow) {
+							AnalysisResultRow analysisResultRow = (AnalysisResultRow) o;
+							ResultContainer t = analysisResultRow.getResultDetails();
+							if (t != null) {
+								if (t.getCargoAllocation() != null) {
+									selection.add(t.getCargoAllocation());
+								}
+								selection.addAll(t.getSlotAllocations());
+								selection.addAll(t.getOpenSlotAllocations());
+							}
+						}
+					}
+				}
+				if (selection != null) {
+					selectionService.setPostSelection(new StructuredSelection(selection));
+				}
+			}
+		});
+
 		return resultsViewer.getControl();
 	}
 

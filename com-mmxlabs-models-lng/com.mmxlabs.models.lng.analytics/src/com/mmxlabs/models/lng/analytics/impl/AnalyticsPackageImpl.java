@@ -39,6 +39,7 @@ import com.mmxlabs.models.lng.analytics.PartialCase;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.ProfitAndLossResult;
 import com.mmxlabs.models.lng.analytics.ProvisionalCargo;
+import com.mmxlabs.models.lng.analytics.ResultContainer;
 import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellMarket;
@@ -56,6 +57,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -261,6 +263,13 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass resultContainerEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass optionRuleEClass = null;
 
 	/**
@@ -373,7 +382,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		isInited = true;
 
 		// Initialize simple dependencies
-		CargoPackage.eINSTANCE.eClass();
+		SchedulePackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theAnalyticsPackage.createPackageContents();
@@ -1657,6 +1666,51 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getAnalysisResultRow_ResultDetails() {
+		return (EReference)analysisResultRowEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getResultContainer() {
+		return resultContainerEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getResultContainer_CargoAllocation() {
+		return (EReference)resultContainerEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getResultContainer_OpenSlotAllocations() {
+		return (EReference)resultContainerEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getResultContainer_SlotAllocations() {
+		return (EReference)resultContainerEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getOptionRule() {
 		return optionRuleEClass;
 	}
@@ -2081,6 +2135,12 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(analysisResultRowEClass, ANALYSIS_RESULT_ROW__SELL_OPTION);
 		createEReference(analysisResultRowEClass, ANALYSIS_RESULT_ROW__RESULT_DETAIL);
 		createEReference(analysisResultRowEClass, ANALYSIS_RESULT_ROW__SHIPPING);
+		createEReference(analysisResultRowEClass, ANALYSIS_RESULT_ROW__RESULT_DETAILS);
+
+		resultContainerEClass = createEClass(RESULT_CONTAINER);
+		createEReference(resultContainerEClass, RESULT_CONTAINER__CARGO_ALLOCATION);
+		createEReference(resultContainerEClass, RESULT_CONTAINER__OPEN_SLOT_ALLOCATIONS);
+		createEReference(resultContainerEClass, RESULT_CONTAINER__SLOT_ALLOCATIONS);
 
 		optionRuleEClass = createEClass(OPTION_RULE);
 		createEAttribute(optionRuleEClass, OPTION_RULE__NAME);
@@ -2153,6 +2213,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
 		SpotMarketsPackage theSpotMarketsPackage = (SpotMarketsPackage)EPackage.Registry.INSTANCE.getEPackage(SpotMarketsPackage.eNS_URI);
 		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
+		SchedulePackage theSchedulePackage = (SchedulePackage)EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI);
 
 		// Create type parameters
 
@@ -2352,6 +2413,12 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getAnalysisResultRow_SellOption(), this.getSellOption(), null, "sellOption", null, 0, 1, AnalysisResultRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAnalysisResultRow_ResultDetail(), this.getAnalysisResultDetail(), null, "resultDetail", null, 0, 1, AnalysisResultRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAnalysisResultRow_Shipping(), this.getShippingOption(), null, "shipping", null, 0, 1, AnalysisResultRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAnalysisResultRow_ResultDetails(), this.getResultContainer(), null, "resultDetails", null, 0, 1, AnalysisResultRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(resultContainerEClass, ResultContainer.class, "ResultContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getResultContainer_CargoAllocation(), theSchedulePackage.getCargoAllocation(), null, "cargoAllocation", null, 0, 1, ResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getResultContainer_OpenSlotAllocations(), theSchedulePackage.getOpenSlotAllocation(), null, "openSlotAllocations", null, 0, -1, ResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getResultContainer_SlotAllocations(), theSchedulePackage.getSlotAllocation(), null, "slotAllocations", null, 0, -1, ResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(optionRuleEClass, OptionRule.class, "OptionRule", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getOptionRule_Name(), ecorePackage.getEString(), "name", null, 0, 1, OptionRule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -14,6 +14,7 @@ import com.mmxlabs.models.lng.commercial.provider.CommercialEditPlugin;
 import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
 import com.mmxlabs.models.lng.port.provider.PortEditPlugin;
 import com.mmxlabs.models.lng.pricing.provider.PricingEditPlugin;
+import com.mmxlabs.models.lng.schedule.provider.ScheduleEditPlugin;
 import com.mmxlabs.models.lng.spotmarkets.provider.SpotMarketsEditPlugin;
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
@@ -53,6 +54,7 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 				MmxcoreEditPlugin.INSTANCE,
 				PortEditPlugin.INSTANCE,
 				PricingEditPlugin.INSTANCE,
+				ScheduleEditPlugin.INSTANCE,
 				SpotMarketsEditPlugin.INSTANCE,
 			});
 	}

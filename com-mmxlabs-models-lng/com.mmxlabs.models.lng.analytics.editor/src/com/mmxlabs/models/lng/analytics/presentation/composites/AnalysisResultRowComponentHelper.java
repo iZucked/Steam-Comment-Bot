@@ -71,6 +71,7 @@ public class AnalysisResultRowComponentHelper extends BaseComponentHelper {
 		add_sellOptionEditor(detailComposite, topClass);
 		add_resultDetailEditor(detailComposite, topClass);
 		add_shippingEditor(detailComposite, topClass);
+		add_resultDetailsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the buyOption feature on AnalysisResultRow
@@ -104,5 +105,14 @@ public class AnalysisResultRowComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_shippingEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SHIPPING));
+	}
+
+	/**
+	 * Create the editor for the resultDetails feature on AnalysisResultRow
+	 *
+	 * @generated
+	 */
+	protected void add_resultDetailsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAILS));
 	}
 }
