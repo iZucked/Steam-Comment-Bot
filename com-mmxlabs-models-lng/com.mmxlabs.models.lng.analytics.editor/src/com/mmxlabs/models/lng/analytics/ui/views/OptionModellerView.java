@@ -70,6 +70,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
@@ -78,8 +79,10 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.csv.IExportContext;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
@@ -125,10 +128,14 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogController;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
+import com.mmxlabs.models.ui.editors.impl.NumberInlineEditor;
 import com.mmxlabs.models.ui.properties.views.Options;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -182,6 +189,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private Object pnlReport;
 	private IEclipseContext econsReportContext;
 	private Object econsReport;
+	private NumberInlineEditor numberInlineEditor;
+	private Control inputPNL;
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -372,10 +381,12 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 				final Composite c = new Composite(centralComposite, SWT.NONE);
 				GridDataFactory.generate(c, 1, 1);
-				c.setLayout(new GridLayout(3, false));
+				c.setLayout(new GridLayout(5, false));
 				baseCaseProftLabel = new Label(c, SWT.NONE);
 				GridDataFactory.generate(baseCaseProftLabel, 1, 1);
-				baseCaseProftLabel.setText("Base P&&L: <not calculated>");
+				baseCaseProftLabel.setText("Base P&&L: $");
+				inputPNL = createInputTargetPNL(c);
+				GridDataFactory.generate(inputPNL, 1, 1);
 
 				final Label baseCaseCalculator = new Label(c, SWT.NONE);
 				// baseCaseCalculator.setText("Calc."); --cogs
@@ -769,6 +780,13 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	}
 
+	private Control createInputTargetPNL(final Composite composite) {
+		numberInlineEditor = new NumberInlineEditor(AnalyticsPackage.Literals.BASE_CASE__PROFIT_AND_LOSS);
+		numberInlineEditor.setCommandHandler(getDefaultCommandHandler());
+		Control control = numberInlineEditor.createControl(composite, null, new FormToolkit(Display.getDefault()));
+
+		return control;
+	}
 	private Composite createUseTargetPNLToggleComposite(final Composite composite) {
 		final Composite matching = new Composite(composite, SWT.ALL);
 		final GridLayout gridLayoutRadiosMatching = new GridLayout(3, false);
@@ -776,10 +794,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		final GridData gdM = new GridData(SWT.LEFT, SWT.BEGINNING, false, false);
 		gdM.horizontalSpan = 2;
 		matching.setLayoutData(gdM);
-		new Label(matching, SWT.NONE).setText("Target base case P&&L");
+		new Label(matching, SWT.NONE).setText("B/E with target P&&L");
 		final Button matchingButton = new Button(matching, SWT.CHECK | SWT.LEFT);
 		matchingButton.setSelection(false);
-		// matchingButton.setText("No");
 		matchingButton.addSelectionListener(new SelectionListener() {
 
 			@Override
@@ -997,6 +1014,45 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		doValidate();
 
+		// control
+		numberInlineEditor.display(new IDialogEditingContext() {
+			
+			@Override
+			public void registerEditorControl(EObject target, EStructuralFeature feature, Control control) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public boolean isNewEdit() {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public boolean isMultiEdit() {
+				return false;
+			}
+			// TODO Auto-generated method stub
+			
+			@Override
+			public IScenarioEditingLocation getScenarioEditingLocation() {
+				return OptionModellerView.this;
+			}
+			
+			@Override
+			public List<Control> getEditorControls(EObject target, EStructuralFeature feature) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public IDialogController getDialogController() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		}, this.getRootObject(), model != null ? model.getBaseCase() : null, model != null ? Lists.newArrayList(model.getBaseCase()) : Lists.newArrayList());
+		inputPNL.redraw();
 		baseCaseViewer.setInput(model);
 		if (model != null) {
 			baseCaseDiagram.setBaseCase(model.getBaseCase());
@@ -1596,7 +1652,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			if (sections.contains(SectionType.MIDDLE)) {
 				baseCaseViewer.refresh();
 				if (getModel() != null) {
-					baseCaseProftLabel.setText(String.format("Base P&&L: $%,d", getModel().getBaseCase().getProfitAndLoss()));
+					baseCaseProftLabel.setText("Base P&&L: $");
 				} else {
 					baseCaseProftLabel.setText(String.format("Base P&&L: $---,---,---.--"));
 				}

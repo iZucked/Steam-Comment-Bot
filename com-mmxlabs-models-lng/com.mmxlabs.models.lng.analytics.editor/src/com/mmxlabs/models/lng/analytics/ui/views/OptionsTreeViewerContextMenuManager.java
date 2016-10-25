@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Menu;
 
 import com.google.common.collect.Sets;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.ui.utils.OptionsModellerUtils;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
@@ -58,9 +59,13 @@ public class OptionsTreeViewerContextMenuManager implements MenuDetectListener {
 				}
 				
 			}));
-			
-
-
+			if (OptionsModellerUtils.getRootOptionsModel(optionAnalysisModel) != optionAnalysisModel) {
+				mgr.add(new RunnableAction("Delete", () -> {
+					OptionAnalysisModel container = (OptionAnalysisModel) optionAnalysisModel.eContainer();
+					container.getChildren().remove(optionAnalysisModel);
+					optionModellerView.setInput(container);
+				}));
+			}
 		}
 		menu.setVisible(true);
 	}
