@@ -66,6 +66,12 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 					}
 				}
 			}
+			if (slot.getDate() == null) {
+				final String message = String.format("Buy has no date");
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+				dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE);
+				failures.add(dsd);
+			}
 			if (slot.getEntity() == null && slot.getContract() == null) {
 				final String message = String.format("Buy has no entity");
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
@@ -110,6 +116,12 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 						failures.add(dsd);
 					}
 				}
+			}
+			if (slot.getDate() == null) {
+				final String message = String.format("Sell has no date");
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+				dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE);
+				failures.add(dsd);
 			}
 			if (slot.getEntity() == null && slot.getContract() == null) {
 				final String message = String.format("Sell has no entity");
