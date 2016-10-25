@@ -1,8 +1,8 @@
 package com.mmxlabs.models.lng.analytics.ui.views.formatters;
 
-import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.models.lng.analytics.BreakEvenResult;
 import com.mmxlabs.models.lng.analytics.ProfitAndLossResult;
+import com.mmxlabs.models.ui.tabular.BaseFormatter;
 
 public class ResultDetailsDescriptionFormatter extends BaseFormatter {
 	@Override

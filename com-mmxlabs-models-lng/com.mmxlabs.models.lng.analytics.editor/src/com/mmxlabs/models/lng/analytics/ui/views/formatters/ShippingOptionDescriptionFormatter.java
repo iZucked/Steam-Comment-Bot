@@ -2,12 +2,12 @@ package com.mmxlabs.models.lng.analytics.ui.views.formatters;
 
 import java.util.Collection;
 
-import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.ui.tabular.BaseFormatter;
 
 public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 	@Override

@@ -5,12 +5,12 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Collection;
 
-import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.ui.tabular.BaseFormatter;
 
 public class BuyOptionDescriptionFormatter extends BaseFormatter {
 

@@ -235,7 +235,7 @@ public class Exposures {
 			} else {
 				// Delegate to services registry to see if we have a provider to help us.
 				final String[] result = new String[1];
-				ServiceHelper.withAllServices(IExposuredExpressionProvider.class, provider -> {
+				ServiceHelper.withAllServices(IExposuredExpressionProvider.class, null, provider -> {
 					final String exp = provider.provideExposedPriceExpression(slot, slotAllocation);
 					if (exp != null) {
 						result[0] = exp;

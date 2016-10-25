@@ -81,8 +81,6 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lingo.reports.views.standard.CargoEconsReportComponent;
-import com.mmxlabs.lingo.reports.views.standard.PNLDetailsReportComponent;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
@@ -137,8 +135,11 @@ import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.rcp.common.application.BindSelectionListener;
+import com.mmxlabs.rcp.common.application.IInjectableE4ComponentFactory;
 import com.mmxlabs.rcp.common.dnd.BasicDragSource;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -175,8 +176,11 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private Image image_generate;
 	private Image image_grey_generate;
 	private Image image_grey_add;
+
 	private IEclipseContext pnlReportContext;
-	private PNLDetailsReportComponent pnlReport;
+	private Object pnlReport;
+	private IEclipseContext econsReportContext;
+	private Object econsReport;
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -717,6 +721,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 
 		}
+
 		IEclipseContext ctx = getSite().getService(IEclipseContext.class);
 		// ctx.in
 		// ctx.
@@ -729,47 +734,69 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				// .span(1, 1) //
 				.align(SWT.FILL, SWT.FILL).create());
 
-		wrapInExpandable(rhsComposite, "Econs", (p) -> {
-			Composite econsComposite = new Composite(p, SWT.NONE);
-			econsComposite.setLayout(new GridLayout(1, true));
-			econsComposite.setLayoutData(GridDataFactory.fillDefaults()//
-					.grab(true, true)//
-					.hint(200, SWT.DEFAULT) //
-					// .span(1, 1) //
-					.align(SWT.FILL, SWT.FILL).create());
+		// ServiceHelper.withAllServices(cls, withFunc);
 
-			econsReportContext = ctx.createChild();
-			econsReportContext.set(Composite.class, econsComposite);
+		ServiceHelper.withAllServices(IInjectableE4ComponentFactory.class, "(partId=com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport)", service -> {
+			if (service != null) {
+				wrapInExpandable(rhsComposite, "Econs", (p) -> {
+					Composite econsComposite = new Composite(p, SWT.NONE);
+					econsComposite.setLayout(new GridLayout(1, true));
+					econsComposite.setLayoutData(GridDataFactory.fillDefaults()//
+							.grab(true, true)//
+							.hint(200, SWT.DEFAULT) //
+							// .span(1, 1) //
+							.align(SWT.FILL, SWT.FILL).create());
 
-			// FIXME: Circular dep!
-			// TODO: Create OSGi service and put view filter on it.
-			// TODO: Create interfaces to "listenToSelectionsFrom".
-			// TODO: Create interfaces to exposse viewer
-			econsReport = ContextInjectionFactory.make(CargoEconsReportComponent.class, econsReportContext);
-			econsReport.listenToSelectionsFrom(getViewSite().getId());
+					econsReportContext = ctx.createChild();
+					econsReportContext.set(Composite.class, econsComposite);
 
-			return econsComposite;
+					// FIXME: Circular dep!
+					// TODO: Create OSGi service and put view filter on it.
+					// TODO: Create interfaces to "listenToSelectionsFrom".
+					// TODO: Create interfaces to exposse viewer
+					econsReport = ContextInjectionFactory.make(service.getComponentClass(), econsReportContext);
+
+					econsReportContext.set(String.class, getViewSite().getId());
+					ContextInjectionFactory.invoke(econsReport, BindSelectionListener.class, econsReportContext);
+
+					return econsComposite;
+				});
+				return false;
+			}
+			return true;
 		});
-		wrapInExpandable(rhsComposite, "P&&L", (p) -> {
-			Composite pnlComposite = new Composite(p, SWT.NONE);
-			pnlComposite.setLayout(new GridLayout(1, true));
-			pnlComposite.setLayoutData(GridDataFactory.fillDefaults()//
-					.grab(true, true)//
-					.hint(200, SWT.DEFAULT) //
-					// .span(1, 1) //
-					.align(SWT.FILL, SWT.FILL).create());
 
-			pnlReportContext = ctx.createChild();
-			pnlReportContext.set(Composite.class, pnlComposite);
-			Options options = new Options("pnl", null, false);
-			pnlReportContext.set(Options.class, options);
-			// FIXME: Circular dep!
-			pnlReport = ContextInjectionFactory.make(PNLDetailsReportComponent.class, pnlReportContext);
-			pnlReport.listenToSelectionsFrom(getViewSite().getId());
+		ServiceHelper.withAllServices(IInjectableE4ComponentFactory.class, "(partId=com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport)", service -> {
+			if (service != null) {
 
-			return pnlComposite;
+				wrapInExpandable(rhsComposite, "P&&L", (p) -> {
+					Composite pnlComposite = new Composite(p, SWT.NONE);
+					pnlComposite.setLayout(new GridLayout(1, true));
+					pnlComposite.setLayoutData(GridDataFactory.fillDefaults()//
+							.grab(true, true)//
+							.hint(200, SWT.DEFAULT) //
+							// .span(1, 1) //
+							.align(SWT.FILL, SWT.FILL).create());
+
+					pnlReportContext = ctx.createChild();
+					pnlReportContext.set(Composite.class, pnlComposite);
+					Options options = new Options("pnl", null, false);
+					pnlReportContext.set(Options.class, options);
+					// FIXME: Circular dep!
+					pnlReport = ContextInjectionFactory.make(service.getComponentClass(), pnlReportContext);
+
+					pnlReportContext.set(String.class, getViewSite().getId());
+					ContextInjectionFactory.invoke(pnlReport, BindSelectionListener.class, pnlReportContext);
+
+					return pnlComposite;
+				});
+				return false;
+			}
+			return true;
 		});
+
 		listenToScenarioSelection();
+
 		packAll(mainComposite);
 
 		final IActionBars actionBars = getViewSite().getActionBars();
@@ -1393,6 +1420,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					packAll(rhsComposite);
 				}
 			}
+
 		});
 
 		return resultsViewer.getControl();
@@ -1780,9 +1808,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	}
 
 	private ICommandHandler commandHandler;
-	private CargoEconsReportComponent econsReport;
+
 	private Composite rhsComposite;
-	private IEclipseContext econsReportContext;
 
 	@Override
 	public synchronized ICommandHandler getDefaultCommandHandler() {

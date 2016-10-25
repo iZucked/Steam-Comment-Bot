@@ -1,9 +1,9 @@
 package com.mmxlabs.models.lng.analytics.ui.views.formatters;
 
-import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.ui.tabular.BaseFormatter;
 
 public class OptionTreeViewerFormatter extends BaseFormatter {
 	private OptionModellerView optionModellerView;

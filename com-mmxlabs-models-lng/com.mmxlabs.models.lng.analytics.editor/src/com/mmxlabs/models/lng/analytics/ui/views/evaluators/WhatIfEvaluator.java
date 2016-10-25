@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
@@ -84,6 +83,7 @@ public class WhatIfEvaluator {
 			}
 			baseCase.getBaseCase().add(bcr);
 		}
+
 		// TODO:Command
 		model.getResultSets().clear();
 		if (combinations.isEmpty()) {
