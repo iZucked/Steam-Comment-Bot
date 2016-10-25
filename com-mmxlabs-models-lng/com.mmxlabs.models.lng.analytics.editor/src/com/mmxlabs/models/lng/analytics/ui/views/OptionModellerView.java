@@ -386,7 +386,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				GridDataFactory.generate(baseCaseProftLabel, 1, 1);
 				baseCaseProftLabel.setText("Base P&&L: $");
 				inputPNL = createInputTargetPNL(c);
-				GridDataFactory.generate(inputPNL, 1, 1);
+				inputPNL.setLayoutData(new GridData(100, SWT.DEFAULT));
 
 				final Label baseCaseCalculator = new Label(c, SWT.NONE);
 				// baseCaseCalculator.setText("Calc."); --cogs
