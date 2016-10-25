@@ -291,7 +291,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 					Object e = ss.getFirstElement();
 					if (e instanceof ScenarioFragment) {
 						ScenarioFragment scenarioFragment = (ScenarioFragment) e;
-						ServiceHelper.withAllServices(IScenarioFragmentCopyHandler.class, handler -> {
+						ServiceHelper.withAllServices(IScenarioFragmentCopyHandler.class, null, handler -> {
 							boolean handled = handler.copy(scenarioFragment, scenarioInstance);
 							return !handled;
 						});
