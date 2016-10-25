@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
@@ -36,6 +37,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class WhatIfEvaluator {
 
@@ -96,7 +98,9 @@ public class WhatIfEvaluator {
 	private static void singleEval(final IScenarioEditingLocation scenarioEditingLocation, final long targetPNL, final OptionAnalysisModel model, final BaseCase baseCase) {
 		BaseCaseEvaluator.generateScenario(scenarioEditingLocation, model, baseCase, (lngScenarioModel, mapper) -> {
 
-			evaluateScenario(lngScenarioModel, model.isUseTargetPNL(), targetPNL);
+			// DEBUG: Pass in the scenario instance
+			ScenarioInstance parentForFork = null;// scenarioEditingLocation.getScenarioInstance()
+			evaluateScenario(lngScenarioModel, parentForFork, model.isUseTargetPNL(), targetPNL);
 
 			if (lngScenarioModel.getScheduleModel().getSchedule() == null) {
 				return;
@@ -272,7 +276,7 @@ public class WhatIfEvaluator {
 		}
 	}
 
-	private static void evaluateScenario(final LNGScenarioModel lngScenarioModel, final boolean useTargetPNL, final long targetPNL) {
+	private static void evaluateScenario(final LNGScenarioModel lngScenarioModel, @Nullable ScenarioInstance parentForFork, final boolean useTargetPNL, final long targetPNL) {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
@@ -280,6 +284,6 @@ public class WhatIfEvaluator {
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
 		ServiceHelper.<IAnalyticsScenarioEvaluator> withService(IAnalyticsScenarioEvaluator.class,
-				evaluator -> evaluator.breakEvenEvaluate(lngScenarioModel, userSettings, null, targetPNL, useTargetPNL ? BreakEvenMode.PORTFOLIO : BreakEvenMode.POINT_TO_POINT));
+				evaluator -> evaluator.breakEvenEvaluate(lngScenarioModel, userSettings, parentForFork, targetPNL, useTargetPNL ? BreakEvenMode.PORTFOLIO : BreakEvenMode.POINT_TO_POINT));
 	}
 }
