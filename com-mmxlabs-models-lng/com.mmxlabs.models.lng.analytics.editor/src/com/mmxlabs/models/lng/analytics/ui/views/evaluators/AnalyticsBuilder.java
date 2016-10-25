@@ -472,7 +472,7 @@ public class AnalyticsBuilder {
 							if (opt.getEntity() != vesselAvailability.getEntity()) {
 								continue;
 							}
-							if (opt.getHireCost().equals(vesselAvailability.getTimeCharterRate())) {
+							if (!opt.getHireCost().equals(vesselAvailability.getTimeCharterRate())) {
 								continue;
 							}
 
