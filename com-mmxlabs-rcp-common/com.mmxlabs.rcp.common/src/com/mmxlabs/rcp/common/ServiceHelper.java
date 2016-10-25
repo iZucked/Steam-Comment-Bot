@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
@@ -145,11 +146,11 @@ public final class ServiceHelper {
 	 * @param cls
 	 * @param withFunc
 	 */
-	public static <T> void withAllServices(final Class<T> cls, final Function<T, @NonNull Boolean> withFunc) {
+	public static <T> void withAllServices(final Class<T> cls, @Nullable String filter, final Function<T, @NonNull Boolean> withFunc) {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(ServiceHelper.class).getBundleContext();
 		Collection<ServiceReference<T>> serviceReferences;
 		try {
-			serviceReferences = bundleContext.getServiceReferences(cls, null);
+			serviceReferences = bundleContext.getServiceReferences(cls, filter);
 
 			for (final ServiceReference<T> serviceReference : serviceReferences) {
 				final T service = bundleContext.getService(serviceReference);
