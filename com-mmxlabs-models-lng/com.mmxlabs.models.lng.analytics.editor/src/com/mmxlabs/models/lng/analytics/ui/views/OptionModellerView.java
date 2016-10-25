@@ -81,6 +81,7 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.csv.IExportContext;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
@@ -185,15 +186,15 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	@Override
 	public void createPartControl(final Composite parent) {
 
-		ImageDescriptor calc_desc = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_calc.gif");
+		final ImageDescriptor calc_desc = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_calc.gif");
 		image_calculate = calc_desc.createImage();
 		image_grey_calculate = ImageDescriptor.createWithFlags(calc_desc, SWT.IMAGE_GRAY).createImage();
 
-		ImageDescriptor generate_desc = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_generate.gif");
+		final ImageDescriptor generate_desc = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_generate.gif");
 		image_generate = generate_desc.createImage();
 		image_grey_generate = ImageDescriptor.createWithFlags(generate_desc, SWT.IMAGE_GRAY).createImage();
 
-		ImageDescriptor baseAdd = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD);
+		final ImageDescriptor baseAdd = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD);
 		image_grey_add = ImageDescriptor.createWithFlags(baseAdd, SWT.IMAGE_GRAY).createImage();
 
 		validationSupport = new DialogValidationSupport(new DefaultExtraValidationContext(getRootObject(), false));
@@ -263,17 +264,17 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				c.addMouseTrackListener(new MouseTrackListener() {
 
 					@Override
-					public void mouseHover(MouseEvent e) {
+					public void mouseHover(final MouseEvent e) {
 
 					}
 
 					@Override
-					public void mouseExit(MouseEvent e) {
+					public void mouseExit(final MouseEvent e) {
 						c.setImage(image_grey_add);
 					}
 
 					@Override
-					public void mouseEnter(MouseEvent e) {
+					public void mouseEnter(final MouseEvent e) {
 						c.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 					}
 				});
@@ -383,16 +384,16 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				baseCaseCalculator.addMouseTrackListener(new MouseTrackListener() {
 
 					@Override
-					public void mouseHover(MouseEvent e) {
+					public void mouseHover(final MouseEvent e) {
 					}
 
 					@Override
-					public void mouseExit(MouseEvent e) {
+					public void mouseExit(final MouseEvent e) {
 						baseCaseCalculator.setImage(image_grey_calculate);
 					}
 
 					@Override
-					public void mouseEnter(MouseEvent e) {
+					public void mouseEnter(final MouseEvent e) {
 						baseCaseCalculator.setImage(image_calculate);
 					}
 				});
@@ -400,7 +401,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				baseCaseCalculator.addMouseListener(new MouseAdapter() {
 
 					@Override
-					public void mouseDown(MouseEvent e) {
+					public void mouseDown(final MouseEvent e) {
 
 						if (getModel() != null) {
 							BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(),
@@ -482,16 +483,16 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				generateButton.addMouseTrackListener(new MouseTrackListener() {
 
 					@Override
-					public void mouseHover(MouseEvent e) {
+					public void mouseHover(final MouseEvent e) {
 					}
 
 					@Override
-					public void mouseExit(MouseEvent e) {
+					public void mouseExit(final MouseEvent e) {
 						generateButton.setImage(image_grey_generate);
 					}
 
 					@Override
-					public void mouseEnter(MouseEvent e) {
+					public void mouseEnter(final MouseEvent e) {
 						generateButton.setImage(image_generate);
 					}
 				});
@@ -526,17 +527,17 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					addSellButton.addMouseTrackListener(new MouseTrackListener() {
 
 						@Override
-						public void mouseHover(MouseEvent e) {
+						public void mouseHover(final MouseEvent e) {
 
 						}
 
 						@Override
-						public void mouseExit(MouseEvent e) {
+						public void mouseExit(final MouseEvent e) {
 							addSellButton.setImage(image_grey_add);
 						}
 
 						@Override
-						public void mouseEnter(MouseEvent e) {
+						public void mouseEnter(final MouseEvent e) {
 							addSellButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 						}
 					});
@@ -618,17 +619,17 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 						addShipping.addMouseTrackListener(new MouseTrackListener() {
 
 							@Override
-							public void mouseHover(MouseEvent e) {
+							public void mouseHover(final MouseEvent e) {
 
 							}
 
 							@Override
-							public void mouseExit(MouseEvent e) {
+							public void mouseExit(final MouseEvent e) {
 								addShipping.setImage(image_grey_add);
 							}
 
 							@Override
-							public void mouseEnter(MouseEvent e) {
+							public void mouseEnter(final MouseEvent e) {
 								addShipping.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 							}
 						});
@@ -722,7 +723,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		}
 
-		IEclipseContext ctx = getSite().getService(IEclipseContext.class);
+		final IEclipseContext ctx = getSite().getService(IEclipseContext.class);
 		// ctx.in
 		// ctx.
 
@@ -734,66 +735,20 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				// .span(1, 1) //
 				.align(SWT.FILL, SWT.FILL).create());
 
-		// ServiceHelper.withAllServices(cls, withFunc);
-
-		ServiceHelper.withAllServices(IInjectableE4ComponentFactory.class, "(partId=com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport)", service -> {
-			if (service != null) {
-				wrapInExpandable(rhsComposite, "Econs", (p) -> {
-					Composite econsComposite = new Composite(p, SWT.NONE);
-					econsComposite.setLayout(new GridLayout(1, true));
-					econsComposite.setLayoutData(GridDataFactory.fillDefaults()//
-							.grab(true, true)//
-							.hint(200, SWT.DEFAULT) //
-							// .span(1, 1) //
-							.align(SWT.FILL, SWT.FILL).create());
-
-					econsReportContext = ctx.createChild();
-					econsReportContext.set(Composite.class, econsComposite);
-
-					// FIXME: Circular dep!
-					// TODO: Create OSGi service and put view filter on it.
-					// TODO: Create interfaces to "listenToSelectionsFrom".
-					// TODO: Create interfaces to exposse viewer
-					econsReport = ContextInjectionFactory.make(service.getComponentClass(), econsReportContext);
-
-					econsReportContext.set(String.class, getViewSite().getId());
-					ContextInjectionFactory.invoke(econsReport, BindSelectionListener.class, econsReportContext);
-
-					return econsComposite;
-				});
-				return false;
-			}
-			return true;
-		});
-
-		ServiceHelper.withAllServices(IInjectableE4ComponentFactory.class, "(partId=com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport)", service -> {
-			if (service != null) {
-
-				wrapInExpandable(rhsComposite, "P&&L", (p) -> {
-					Composite pnlComposite = new Composite(p, SWT.NONE);
-					pnlComposite.setLayout(new GridLayout(1, true));
-					pnlComposite.setLayoutData(GridDataFactory.fillDefaults()//
-							.grab(true, true)//
-							.hint(200, SWT.DEFAULT) //
-							// .span(1, 1) //
-							.align(SWT.FILL, SWT.FILL).create());
-
-					pnlReportContext = ctx.createChild();
-					pnlReportContext.set(Composite.class, pnlComposite);
-					Options options = new Options("pnl", null, false);
-					pnlReportContext.set(Options.class, options);
-					// FIXME: Circular dep!
-					pnlReport = ContextInjectionFactory.make(service.getComponentClass(), pnlReportContext);
-
-					pnlReportContext.set(String.class, getViewSite().getId());
-					ContextInjectionFactory.invoke(pnlReport, BindSelectionListener.class, pnlReportContext);
-
-					return pnlComposite;
-				});
-				return false;
-			}
-			return true;
-		});
+		{
+			Pair<Object, IEclipseContext> p = createReportControl("com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport", "Econs", rhsComposite, childContext -> {
+			});
+			this.econsReport = p.getFirst();
+			this.econsReportContext = p.getSecond();
+		}
+		{
+			Pair<Object, IEclipseContext> p = createReportControl("com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport", "P&&L", rhsComposite, childContext -> {
+				final Options options = new Options("pnl", null, false);
+				childContext.set(Options.class, options);
+			});
+			this.pnlReport = p.getFirst();
+			this.pnlReportContext = p.getSecond();
+		}
 
 		listenToScenarioSelection();
 
@@ -1278,7 +1233,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			gvc.setLabelProvider(new CellLabelProvider() {
 
 				@Override
-				public void update(ViewerCell cell) {
+				public void update(final ViewerCell cell) {
 					// TODO Auto-generated method stub
 
 				}
@@ -1325,7 +1280,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			gvc.setLabelProvider(new CellLabelProvider() {
 
 				@Override
-				public void update(ViewerCell cell) {
+				public void update(final ViewerCell cell) {
 
 				}
 			});
@@ -1367,7 +1322,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			gvc.setLabelProvider(new CellLabelProvider() {
 
 				@Override
-				public void update(ViewerCell cell) {
+				public void update(final ViewerCell cell) {
 					// TODO Auto-generated method stub
 
 				}
@@ -1390,21 +1345,21 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		resultsViewer.getGrid().addMenuDetectListener(listener);
 
 		resultsViewer.setContentProvider(new ResultsViewerContentProvider());
-		ESelectionService selectionService = getSite().getService(ESelectionService.class);
+		final ESelectionService selectionService = getSite().getService(ESelectionService.class);
 		resultsViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				List<Object> selection = new LinkedList<>();
-				ISelection s = resultsViewer.getSelection();
+			public void selectionChanged(final SelectionChangedEvent event) {
+				final List<Object> selection = new LinkedList<>();
+				final ISelection s = resultsViewer.getSelection();
 				if (s instanceof IStructuredSelection) {
-					IStructuredSelection structuredSelection = (IStructuredSelection) s;
-					Iterator<?> itr = structuredSelection.iterator();
+					final IStructuredSelection structuredSelection = (IStructuredSelection) s;
+					final Iterator<?> itr = structuredSelection.iterator();
 					while (itr.hasNext()) {
-						Object o = itr.next();
+						final Object o = itr.next();
 						if (o instanceof AnalysisResultRow) {
-							AnalysisResultRow analysisResultRow = (AnalysisResultRow) o;
-							ResultContainer t = analysisResultRow.getResultDetails();
+							final AnalysisResultRow analysisResultRow = (AnalysisResultRow) o;
+							final ResultContainer t = analysisResultRow.getResultDetails();
 							if (t != null) {
 								if (t.getCargoAllocation() != null) {
 									selection.add(t.getCargoAllocation());
@@ -1815,22 +1770,22 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	public synchronized ICommandHandler getDefaultCommandHandler() {
 
 		if (commandHandler == null) {
-			ICommandHandler superHandler = super.getDefaultCommandHandler();
+			final ICommandHandler superHandler = super.getDefaultCommandHandler();
 
-			EditingDomain domain = super.getEditingDomain();
+			final EditingDomain domain = super.getEditingDomain();
 
 			commandHandler = new ICommandHandler() {
 
 				@Override
-				public void handleCommand(Command command, EObject target, EStructuralFeature feature) {
+				public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
 
 					if (domain instanceof CommandProviderAwareEditingDomain) {
-						CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) domain;
+						final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) domain;
 						commandProviderAwareEditingDomain.disableAdapters(model);
 					}
 					superHandler.handleCommand(command, target, feature);
 					if (domain instanceof CommandProviderAwareEditingDomain) {
-						CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) domain;
+						final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) domain;
 						commandProviderAwareEditingDomain.enableAdapters(model, false);
 					}
 
@@ -1852,5 +1807,49 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		return commandHandler;
 
+	}
+
+	private Pair<Object, IEclipseContext> createReportControl(final String componentId, final String title, final Composite parent, final Consumer<IEclipseContext> contextConsumer) {
+
+		final Pair<Object, IEclipseContext> result = new Pair<>();
+
+		final String filter = String.format("(partId=%s)", componentId);
+		ServiceHelper.withAllServices(IInjectableE4ComponentFactory.class, filter, service -> {
+			if (service != null) {
+				final IEclipseContext ctx = getSite().getService(IEclipseContext.class);
+
+				final ExpandableComposite expandable = wrapInExpandable(parent, title, (p) -> {
+					final Composite componentComposite = new Composite(p, SWT.NONE);
+					componentComposite.setLayout(new GridLayout(1, true));
+					componentComposite.setLayoutData(GridDataFactory.fillDefaults()//
+							.grab(true, true)//
+							.hint(200, SWT.DEFAULT) //
+							// .span(1, 1) //
+							.align(SWT.FILL, SWT.FILL).create());
+
+					final IEclipseContext componentContext = ctx.createChild();
+					componentContext.set(Composite.class, componentComposite);
+
+					contextConsumer.accept(componentContext);
+
+					final Object component = ContextInjectionFactory.make(service.getComponentClass(), componentContext);
+
+					componentContext.set(String.class, getViewSite().getId());
+					ContextInjectionFactory.invoke(component, BindSelectionListener.class, componentContext);
+
+					result.setBoth(component, componentContext);
+
+					return componentComposite;
+				});
+				expandable.setExpanded(false);
+				return false;
+			}
+			return true;
+		});
+
+		if (result.getFirst() != null) {
+			return result;
+		}
+		return null;
 	}
 }
