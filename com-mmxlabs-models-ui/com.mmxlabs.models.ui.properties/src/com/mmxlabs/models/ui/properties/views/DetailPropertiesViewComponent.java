@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
@@ -35,6 +36,7 @@ import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.common.application.BindSelectionListener;
 
 public abstract class DetailPropertiesViewComponent {
 
@@ -108,7 +110,8 @@ public abstract class DetailPropertiesViewComponent {
 	/**
 	 * Adds a selection listener for the given partID. Listens to everything if null
 	 */
-	public void listenToSelectionsFrom(@Nullable String partId) {
+	@BindSelectionListener
+	public void listenToSelectionsFrom(@Optional @Nullable String partId) {
 		// Hook up selection listener
 		selectionListener = createSelectionChangedListener();
 		if (partId == null) {
