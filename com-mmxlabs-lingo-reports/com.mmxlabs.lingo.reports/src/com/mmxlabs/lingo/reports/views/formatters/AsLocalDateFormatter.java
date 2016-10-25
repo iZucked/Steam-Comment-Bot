@@ -10,6 +10,8 @@ import java.time.Year;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+import com.mmxlabs.models.ui.tabular.BaseFormatter;
+
 public class AsLocalDateFormatter extends BaseFormatter {
 	final DateTimeFormatter dateFormat;
 

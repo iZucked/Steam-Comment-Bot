@@ -9,6 +9,7 @@ import java.time.format.FormatStyle;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
 public final class Formatters {

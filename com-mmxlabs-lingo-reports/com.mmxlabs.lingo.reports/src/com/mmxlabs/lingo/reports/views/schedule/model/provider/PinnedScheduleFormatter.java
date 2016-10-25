@@ -6,8 +6,8 @@ package com.mmxlabs.lingo.reports.views.schedule.model.provider;
 
 import org.eclipse.swt.graphics.Image;
 
-import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
+import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.IImageProvider;
 
 public class PinnedScheduleFormatter extends BaseFormatter implements IImageProvider {

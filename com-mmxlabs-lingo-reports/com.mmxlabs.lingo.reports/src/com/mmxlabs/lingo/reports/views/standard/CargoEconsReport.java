@@ -17,6 +17,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
+import com.mmxlabs.rcp.common.application.BindSelectionListener;
 
 /**
  * The {@link CargoEconsReport} is a vertical report similar in concept to the Properties View. This table is the transpose of most other tables. Columns represent the input data and rows are
@@ -43,8 +44,11 @@ public class CargoEconsReport extends ViewPart {
 		componentContext.set(Composite.class, parent);
 
 		component = ContextInjectionFactory.make(CargoEconsReportComponent.class, componentContext);
+		
+//		componentContext.set(String.class, (String) null);
+		ContextInjectionFactory.invoke(component, BindSelectionListener.class, componentContext);
 
-		component.listenToSelectionsFrom(null);
+//		component.listenToSelectionsFrom(null);
 
 		GridTableViewer viewer = component.getViewer();
 

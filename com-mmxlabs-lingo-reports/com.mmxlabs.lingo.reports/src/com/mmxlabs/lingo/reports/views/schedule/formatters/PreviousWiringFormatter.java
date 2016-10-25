@@ -5,8 +5,8 @@
 package com.mmxlabs.lingo.reports.views.schedule.formatters;
 
 import com.mmxlabs.lingo.reports.diff.utils.ChangeDescriptionUtil;
-import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
+import com.mmxlabs.models.ui.tabular.BaseFormatter;
 
 /**
  * Generate a new formatter for the previous-wiring column

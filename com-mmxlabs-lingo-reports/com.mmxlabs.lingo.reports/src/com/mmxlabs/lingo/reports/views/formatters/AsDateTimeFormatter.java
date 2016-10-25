@@ -12,6 +12,8 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
 
+import com.mmxlabs.models.ui.tabular.BaseFormatter;
+
 public class AsDateTimeFormatter extends BaseFormatter {
 	final DateTimeFormatter dateFormat;
 	final boolean showZone;

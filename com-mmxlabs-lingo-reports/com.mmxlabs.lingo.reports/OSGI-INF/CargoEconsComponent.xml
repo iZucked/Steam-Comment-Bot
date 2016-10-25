@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2016
+    All rights reserved.
+
+-->
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="com.mmxlabs.lingo.reports.views.standard.CargoEconsReportComponentFactory">
+   <implementation class="com.mmxlabs.lingo.reports.views.standard.CargoEconsReportComponentFactory"/>
+   <service>
+      <provide interface="com.mmxlabs.rcp.common.application.IInjectableE4ComponentFactory"/>
+   </service>
+   <property name="partId" type="String" value="com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport"/>
+</scr:component>

@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.formatters;
 
-import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -18,6 +17,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
+import com.mmxlabs.models.ui.tabular.BaseFormatter;
 
 public class VesselAssignmentFormatter extends BaseFormatter {
 	@Override

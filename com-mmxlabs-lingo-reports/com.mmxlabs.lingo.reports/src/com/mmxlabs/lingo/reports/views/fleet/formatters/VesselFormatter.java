@@ -4,9 +4,9 @@
  */
 package com.mmxlabs.lingo.reports.views.fleet.formatters;
 
-import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.ui.tabular.BaseFormatter;
 
 public class VesselFormatter extends BaseFormatter {
 

@@ -4,9 +4,9 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.formatters;
 
-import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
+import com.mmxlabs.models.ui.tabular.BaseFormatter;
 
 public class PermutationDescriptionFormatter extends BaseFormatter {
 
