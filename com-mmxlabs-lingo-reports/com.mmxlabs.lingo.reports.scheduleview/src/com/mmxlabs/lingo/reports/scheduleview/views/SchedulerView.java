@@ -236,6 +236,11 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			}
 
 			@Override
+			public boolean useSplitArrowConnections() {
+				return false;
+			}
+
+			@Override
 			public Color getDefaultEventColor() {
 				return ColorCache.getColor(221, 220, 221);
 			}
@@ -465,7 +470,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			@Override
 			protected void setSelectionToWidget(@SuppressWarnings("rawtypes") final List l, final boolean reveal) {
 
-				if (showConnections) {
+				if (true || showConnections) {
 
 					ganttChart.getGanttComposite().getGanttConnections().clear();
 
