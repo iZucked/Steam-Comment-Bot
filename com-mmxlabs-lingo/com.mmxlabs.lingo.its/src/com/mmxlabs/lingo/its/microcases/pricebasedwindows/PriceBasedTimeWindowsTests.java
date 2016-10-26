@@ -153,6 +153,7 @@ public class PriceBasedTimeWindowsTests extends AbstractMicroTestCase {
 	private VesselAvailability createTestVesselAvailability(LocalDateTime startStart, LocalDateTime startEnd, LocalDateTime endStart) {
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 
+
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
 
 		final Vessel vessel = fleetModelBuilder.createVessel("vesselName", vesselClass);
