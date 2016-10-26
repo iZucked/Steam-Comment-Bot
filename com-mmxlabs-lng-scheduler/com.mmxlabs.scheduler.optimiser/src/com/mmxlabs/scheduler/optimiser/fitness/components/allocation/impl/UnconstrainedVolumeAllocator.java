@@ -271,7 +271,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				final long volume = Math.min(allocationRecord.maxVolumesInM3.get(index) - allocationRecord.minVolumesInM3.get(index), unusedVolume);
 				// reduce the remaining available volume
 				unusedVolume -= volume;
-				final long currentVolumeInM3 = annotation.getSlotVolumeInM3(slot);
+				final long currentVolumeInM3 = annotation.getCommercialSlotVolumeInM3(slot);
 				annotation.setSlotVolumeInM3(slot, currentVolumeInM3 + volume);
 			}
 
@@ -309,7 +309,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		for (int i = 0; i < slots.size(); i++) {
 			final IPortSlot slot = allocationRecord.slots.get(i);
 
-			annotation.setSlotVolumeInMMBTu(slot, Calculator.convertM3ToMMBTu(annotation.getSlotVolumeInM3(slot), annotation.getSlotCargoCV(slot)));
+			annotation.setSlotVolumeInMMBTu(slot, Calculator.convertM3ToMMBTu(annotation.getCommercialSlotVolumeInM3(slot), annotation.getSlotCargoCV(slot)));
 		}
 
 		return annotation;

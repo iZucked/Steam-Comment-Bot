@@ -170,7 +170,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 
 							if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
 								final IPortSlot portSlot = details.getOptions().getPortSlot();
-								loadVolumeInM3 += currentAllocation.getSlotVolumeInM3(portSlot);
+								loadVolumeInM3 += currentAllocation.getCommercialSlotVolumeInM3(portSlot);
 								// TODO: Average?
 							} else if (details.getOptions().getPortSlot().getPortType() == PortType.Discharge) {
 								final IPortSlot portSlot = details.getOptions().getPortSlot();

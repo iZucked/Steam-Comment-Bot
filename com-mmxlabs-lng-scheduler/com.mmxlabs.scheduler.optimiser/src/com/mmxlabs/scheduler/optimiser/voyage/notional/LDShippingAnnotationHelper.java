@@ -26,7 +26,7 @@ public class LDShippingAnnotationHelper {
 		// Load Details
 		shippingAnnotation.loadPort = loadDetails.getOptions().getPortSlot().getPort();
 		for (final FuelComponent fc : FuelComponent.getBaseFuelComponents()) {
-			shippingAnnotation.loadBunkersInMT += loadDetails.getFuelConsumption(fc);
+			shippingAnnotation.loadBunkersInMT += loadDetails.getFuelConsumption(fc, FuelUnit.MT);
 		}
 		shippingAnnotation.loadHireHours = loadDetails.getOptions().getVisitDuration();
 		shippingAnnotation.loadPortCosts = loadDetails.getPortCosts();
@@ -40,7 +40,7 @@ public class LDShippingAnnotationHelper {
 		// Load Details
 		shippingAnnotation.loadPort = loadDetails.getOptions().getPortSlot().getPort();
 		for (final FuelComponent fc : FuelComponent.getBaseFuelComponents()) {
-			shippingAnnotation.loadBunkersInMT += loadDetails.getFuelConsumption(fc);
+			shippingAnnotation.loadBunkersInMT += loadDetails.getFuelConsumption(fc, FuelUnit.MT);
 		}
 		shippingAnnotation.loadHireHours = loadDetails.getOptions().getVisitDuration();
 		shippingAnnotation.loadPortCosts = loadDetails.getPortCosts();
@@ -78,7 +78,7 @@ public class LDShippingAnnotationHelper {
 		shippingAnnotation.dischargePort = dischargeDetails.getOptions().getPortSlot().getPort();
 
 		for (final FuelComponent fc : FuelComponent.getBaseFuelComponents()) {
-			shippingAnnotation.dischargeBunkersInMT += dischargeDetails.getFuelConsumption(fc);
+			shippingAnnotation.dischargeBunkersInMT += dischargeDetails.getFuelConsumption(fc, FuelUnit.MT);
 		}
 		shippingAnnotation.dischargeHireHours = dischargeDetails.getOptions().getVisitDuration();
 		shippingAnnotation.dischargePortCosts = dischargeDetails.getPortCosts();
@@ -93,7 +93,7 @@ public class LDShippingAnnotationHelper {
 		shippingAnnotation.dischargePort = dischargeDetails.getOptions().getPortSlot().getPort();
 
 		for (final FuelComponent fc : FuelComponent.getBaseFuelComponents()) {
-			shippingAnnotation.dischargeBunkersInMT += dischargeDetails.getFuelConsumption(fc);
+			shippingAnnotation.dischargeBunkersInMT += dischargeDetails.getFuelConsumption(fc, FuelUnit.MT);
 		}
 		shippingAnnotation.dischargeHireHours = dischargeDetails.getOptions().getVisitDuration();
 		shippingAnnotation.dischargePortCosts = dischargeDetails.getPortCosts();

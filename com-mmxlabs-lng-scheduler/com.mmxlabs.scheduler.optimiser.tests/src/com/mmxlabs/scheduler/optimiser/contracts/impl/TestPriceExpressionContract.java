@@ -132,9 +132,9 @@ public class TestPriceExpressionContract {
 		when(allocationAnnotation.getSlotTime(loadSlotWithPricingDate)).thenReturn(loadTime);
 		when(allocationAnnotation.getSlotTime(dischargeSlot)).thenReturn(dischargeTime);
 
-		when(allocationAnnotation.getSlotVolumeInM3(loadSlotNoPricingDate)).thenReturn(loadVolumeInM3);
-		when(allocationAnnotation.getSlotVolumeInM3(loadSlotWithPricingDate)).thenReturn(loadVolumeInM3);
-		when(allocationAnnotation.getSlotVolumeInM3(dischargeSlot)).thenReturn(dischargeVolumeInM3);
+		when(allocationAnnotation.getCommercialSlotVolumeInM3(loadSlotNoPricingDate)).thenReturn(loadVolumeInM3);
+		when(allocationAnnotation.getCommercialSlotVolumeInM3(loadSlotWithPricingDate)).thenReturn(loadVolumeInM3);
+		when(allocationAnnotation.getCommercialSlotVolumeInM3(dischargeSlot)).thenReturn(dischargeVolumeInM3);
 
 		final int loadPriceWithPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotWithPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vesselAvailability,
 				vesselStartTime, plan, volumeAllocatedSequences, annotations);

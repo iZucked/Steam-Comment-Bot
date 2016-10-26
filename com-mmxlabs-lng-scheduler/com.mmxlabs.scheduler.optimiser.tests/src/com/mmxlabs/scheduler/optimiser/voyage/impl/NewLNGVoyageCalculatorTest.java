@@ -34,6 +34,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 public class NewLNGVoyageCalculatorTest {
@@ -859,7 +860,7 @@ public class NewLNGVoyageCalculatorTest {
 		// Check results
 		Assert.assertSame(options, details.getOptions());
 
-		Assert.assertEquals(target, details.getFuelConsumption(FuelComponent.Base));
+		Assert.assertEquals(target, details.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
 	}
 
 	@Test
@@ -890,15 +891,15 @@ public class NewLNGVoyageCalculatorTest {
 		calc.setPortCVProvider(mockPortCVProvider);
 
 		// Set fuel consumptions with a special pattern - each subsequent details object has a x10 multiplier to the previous value -= this makes it easy to add up for the expectations
-		loadDetails.setFuelConsumption(FuelComponent.Base, 1);
-		loadDetails.setFuelConsumption(FuelComponent.NBO, 2);
-		loadDetails.setFuelConsumption(FuelComponent.FBO, 3);
-		loadDetails.setFuelConsumption(FuelComponent.Base_Supplemental, 4);
-		loadDetails.setFuelConsumption(FuelComponent.IdleNBO, 5);
-		loadDetails.setFuelConsumption(FuelComponent.IdleBase, 6);
-		loadDetails.setFuelConsumption(FuelComponent.PilotLight, 7);
-		loadDetails.setFuelConsumption(FuelComponent.IdlePilotLight, 8);
-		loadDetails.setFuelConsumption(FuelComponent.Cooldown, 9);
+		loadDetails.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, 1);
+		loadDetails.setFuelConsumption(FuelComponent.NBO,FuelUnit.MT, 2);
+		loadDetails.setFuelConsumption(FuelComponent.FBO,FuelUnit.MT, 3);
+		loadDetails.setFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT, 4);
+		loadDetails.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT, 5);
+		loadDetails.setFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT, 6);
+		loadDetails.setFuelConsumption(FuelComponent.PilotLight, FuelUnit.MT, 7);
+		loadDetails.setFuelConsumption(FuelComponent.IdlePilotLight, FuelUnit.MT, 8);
+		loadDetails.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.MT, 9);
 
 		details.setFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit(), 10);
 		details.setFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit(), 20);
@@ -910,15 +911,15 @@ public class NewLNGVoyageCalculatorTest {
 		details.setFuelConsumption(FuelComponent.IdlePilotLight, FuelComponent.IdlePilotLight.getDefaultFuelUnit(), 80);
 		details.setFuelConsumption(FuelComponent.Cooldown, FuelComponent.Cooldown.getDefaultFuelUnit(), 90);
 
-		dischargeDetails.setFuelConsumption(FuelComponent.Base, 100);
-		dischargeDetails.setFuelConsumption(FuelComponent.NBO, 200);
-		dischargeDetails.setFuelConsumption(FuelComponent.FBO, 300);
-		dischargeDetails.setFuelConsumption(FuelComponent.Base_Supplemental, 400);
-		dischargeDetails.setFuelConsumption(FuelComponent.IdleNBO, 500);
-		dischargeDetails.setFuelConsumption(FuelComponent.IdleBase, 600);
-		dischargeDetails.setFuelConsumption(FuelComponent.PilotLight, 700);
-		dischargeDetails.setFuelConsumption(FuelComponent.IdlePilotLight, 800);
-		dischargeDetails.setFuelConsumption(FuelComponent.Cooldown, 900);
+		dischargeDetails.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, 100);
+		dischargeDetails.setFuelConsumption(FuelComponent.NBO, FuelUnit.MT, 200);
+		dischargeDetails.setFuelConsumption(FuelComponent.FBO, FuelUnit.MT, 300);
+		dischargeDetails.setFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT, 400);
+		dischargeDetails.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT, 500);
+		dischargeDetails.setFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT, 600);
+		dischargeDetails.setFuelConsumption(FuelComponent.PilotLight, FuelUnit.MT, 700);
+		dischargeDetails.setFuelConsumption(FuelComponent.IdlePilotLight, FuelUnit.MT, 800);
+		dischargeDetails.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.MT, 900);
 
 		final long[] result = calc.calculateVoyagePlanFuelConsumptions(vessel, loadDetails, details, dischargeDetails);
 
@@ -965,11 +966,11 @@ public class NewLNGVoyageCalculatorTest {
 		calc.setPortCVProvider(mockPortCVProvider);
 
 		// Set fuel consumptions with a special pattern - each subsequent details object has a x10 multiplier to the previous value -= this makes it easy to add up for the expectations
-		fromPortDetails.setFuelConsumption(FuelComponent.Cooldown, 9);
+		fromPortDetails.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.MT, 9);
 
 		voyageDetails.setFuelConsumption(FuelComponent.Cooldown, FuelComponent.Cooldown.getDefaultFuelUnit(), 90);
 
-		toPortDetails.setFuelConsumption(FuelComponent.Cooldown, 900);
+		toPortDetails.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.MT, 900);
 
 		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
 		Mockito.when(portTimesRecord.getSlotTime(fromPortSlot)).thenReturn(1);
@@ -1026,11 +1027,11 @@ public class NewLNGVoyageCalculatorTest {
 		calc.setPortCVProvider(mockPortCVProvider);
 
 		// Set fuel consumptions with a special pattern - each subsequent details object has a x10 multiplier to the previous value -= this makes it easy to add up for the expectations
-		fromPortDetails.setFuelConsumption(FuelComponent.Cooldown, 9);
+		fromPortDetails.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.MT, 9);
 
 		voyageDetails.setFuelConsumption(FuelComponent.Cooldown, FuelComponent.Cooldown.getDefaultFuelUnit(), 90);
 
-		toPortDetails.setFuelConsumption(FuelComponent.Cooldown, 900);
+		toPortDetails.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.MT, 900);
 
 		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
 		Mockito.when(portTimesRecord.getSlotTime(fromPortSlot)).thenReturn(1);
@@ -1086,11 +1087,11 @@ public class NewLNGVoyageCalculatorTest {
 		calc.setPortCVProvider(mockPortCVProvider);
 
 		// Set fuel consumptions with a special pattern - each subsequent details object has a x10 multiplier to the previous value -= this makes it easy to add up for the expectations
-		fromPortDetails.setFuelConsumption(FuelComponent.Cooldown, 9);
+		fromPortDetails.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.MT, 9);
 
 		voyageDetails.setFuelConsumption(FuelComponent.Cooldown, FuelComponent.Cooldown.getDefaultFuelUnit(), 90);
 
-		toPortDetails.setFuelConsumption(FuelComponent.Cooldown, 900);
+		toPortDetails.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.MT, 900);
 
 		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
 		Mockito.when(portTimesRecord.getSlotTime(fromPortSlot)).thenReturn(1);

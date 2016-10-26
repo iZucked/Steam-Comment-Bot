@@ -49,6 +49,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.schedule.VoyagePlanAnnotator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 @SuppressWarnings("null")
@@ -325,7 +326,7 @@ public class VoyagePlanAnnotatorTest {
 		final PortDetails result = new PortDetails(options);
 
 		result.setFuelUnitPrice(FuelComponent.Base, OptimiserUnitConvertor.convertToInternalPrice(fuelPrice));
-		result.setFuelConsumption(FuelComponent.Base, fuelConsumption);
+		result.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, fuelConsumption);
 
 		return result;
 	}

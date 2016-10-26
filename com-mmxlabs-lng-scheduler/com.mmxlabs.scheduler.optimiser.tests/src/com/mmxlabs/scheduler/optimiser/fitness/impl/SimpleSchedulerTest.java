@@ -111,9 +111,9 @@ public class SimpleSchedulerTest {
 		baseFuelCurveProvider.setBaseFuelCurve(baseFuel, baseFuelCurve);
 
 		builder.setVesselClassStateParameters(vesselClass1, VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
-				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 0);
+				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 0, OptimiserUnitConvertor.convertToInternalDailyRate(100));
 		builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
-				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 0);
+				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 0, OptimiserUnitConvertor.convertToInternalDailyRate(100));
 
 		// TODO: Setup start/end ports correctly
 		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, 150000000);

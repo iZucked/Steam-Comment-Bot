@@ -103,7 +103,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 			}
 
 			final String action = (slot instanceof IDischargeOption) ? "discharged" : (slot instanceof ILoadOption ? "loaded" : "???");
-			final long volume = getSlotVolumeInM3(slot);
+			final long volume = getCommercialSlotVolumeInM3(slot);
 			// long volume = (slot instanceof IDischargeOption) ? getDischargeVolumeInM3() : (slot instanceof ILoadOption ? getLoadVolumeInM3() : -1);
 			builder.append(String.format(slotFormat, slot.getId(), slotAllocation.startTime, action, volume));
 		}
@@ -176,7 +176,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	@Override
-	public long getSlotVolumeInM3(final @NonNull IPortSlot slot) {
+	public long getCommercialSlotVolumeInM3(final @NonNull IPortSlot slot) {
 
 		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
 		if (allocation != null) {

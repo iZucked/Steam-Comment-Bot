@@ -135,4 +135,9 @@ class ClampedSpeedVesselClass implements IVesselClass {
 		return vesselClass.hasReliqCapability();
 	}
 
+	@Override
+	public long getInPortNBORate(VesselState vesselState) {
+		return vesselClass.getInPortNBORate(vesselState);
+	}
+
 }

@@ -146,8 +146,9 @@ public class TestCalculations {
 			final int laden_nboRateInM3PerDay = OptimiserUnitConvertor.convertToInternalDailyRate(1.2);
 			final int laden_idleNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(1.0);
 			final int laden_idleConsumptionRateInMTPerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.5);
+			final int laden_inPortNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(1.0);
 			builder.setVesselClassStateParameters(vesselClass1, VesselState.Laden, laden_nboRateInM3PerDay, laden_idleNBORateInM3PerHour, laden_idleConsumptionRateInMTPerHour,
-					ladenConsumptionCalculator, 0);
+					ladenConsumptionCalculator, 0, laden_inPortNBORateInM3PerHour);
 			final TreeMap<Integer, Long> ballastKeypoints = new TreeMap<Integer, Long>();
 			ballastKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.5));
 			ballastKeypoints.put(20000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(1.3));
@@ -156,8 +157,9 @@ public class TestCalculations {
 			final int ballast_nboRateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(1.0);
 			final int ballast_idleNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.8);
 			final int ballast_idleConsumptionRateInMTPerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.4);
+			final int ballast_inPortNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.8);
 			builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, ballast_nboRateInM3PerHour, ballast_idleNBORateInM3PerHour, ballast_idleConsumptionRateInMTPerHour,
-					ballastConsumptionCalculator, 0);
+					ballastConsumptionCalculator, 0, ballast_inPortNBORateInM3PerHour);
 			final IStartRequirement startRequirement = builder.createStartRequirement(port1, TimeWindowMaker.createInclusiveInclusive(0, 0), null);
 			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), TimeWindowMaker.createInclusiveInclusive(75, 75), false, 0, false);
 
@@ -223,8 +225,8 @@ public class TestCalculations {
 
 			Mockito.when(allocationAnnotation.getRemainingHeelVolumeInM3()).thenReturn(0L);
 			// Load enough to cover boil-off
-			Mockito.when(allocationAnnotation.getSlotVolumeInM3(loadSlot)).thenReturn(2200L);
-			Mockito.when(allocationAnnotation.getSlotVolumeInM3(dischargeSlot)).thenReturn(0L);
+			Mockito.when(allocationAnnotation.getCommercialSlotVolumeInM3(loadSlot)).thenReturn(2200L);
+			Mockito.when(allocationAnnotation.getCommercialSlotVolumeInM3(dischargeSlot)).thenReturn(0L);
 
 			// Schedule sequence
 			final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
@@ -589,9 +591,10 @@ public class TestCalculations {
 			final int laden_nboRateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(1.2);
 			final int laden_idleNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(1.0);
 			final int laden_idleConsumptionRateInMTPerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.5);
+			final int laden_inPortNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(1.0);
 
 			builder.setVesselClassStateParameters(vesselClass1, VesselState.Laden, laden_nboRateInM3PerHour, laden_idleNBORateInM3PerHour, laden_idleConsumptionRateInMTPerHour,
-					ladenConsumptionCalculator, 0);
+					ladenConsumptionCalculator, 0, laden_inPortNBORateInM3PerHour);
 
 			final TreeMap<Integer, Long> ballastKeypoints = new TreeMap<Integer, Long>();
 			ballastKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.5));
@@ -601,9 +604,10 @@ public class TestCalculations {
 			final int ballast_nboRateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(1.0);
 			final int ballast_idleNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.8);
 			final int ballast_idleConsumptionRateInMTPerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.4);
+			final int ballast_inPortNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.8);
 
 			builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, ballast_nboRateInM3PerHour, ballast_idleNBORateInM3PerHour, ballast_idleConsumptionRateInMTPerHour,
-					ballastConsumptionCalculator, 0);
+					ballastConsumptionCalculator, 0, ballast_inPortNBORateInM3PerHour);
 
 			final IStartRequirement startRequirement = builder.createStartRequirement(port1, TimeWindowMaker.createInclusiveInclusive(0, 0, 0, false), null);
 			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), TimeWindowMaker.createInclusiveInclusive(75, 75, 0, false), false, 0, false);
@@ -670,8 +674,8 @@ public class TestCalculations {
 
 			Mockito.when(allocationAnnotation.getRemainingHeelVolumeInM3()).thenReturn(0L);
 			// Load enough to cover boil-off
-			Mockito.when(allocationAnnotation.getSlotVolumeInM3(loadSlot)).thenReturn(3300L);
-			Mockito.when(allocationAnnotation.getSlotVolumeInM3(dischargeSlot)).thenReturn(0L);
+			Mockito.when(allocationAnnotation.getCommercialSlotVolumeInM3(loadSlot)).thenReturn(3300L);
+			Mockito.when(allocationAnnotation.getCommercialSlotVolumeInM3(dischargeSlot)).thenReturn(0L);
 			Mockito.when(allocationAnnotation.getSlotCargoCV(Matchers.<IPortSlot> any())).thenReturn(cargoCVValue);
 
 			// Schedule sequence
@@ -1031,9 +1035,10 @@ public class TestCalculations {
 			final int laden_nboRateInM3PerDay = OptimiserUnitConvertor.convertToInternalDailyRate(1.2);
 			final int laden_idleNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(1.0);
 			final int laden_idleConsumptionRateInMTPerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.5);
+			final int laden_inPortNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(1.0);
 
 			builder.setVesselClassStateParameters(vesselClass1, VesselState.Laden, laden_nboRateInM3PerDay, laden_idleNBORateInM3PerHour, laden_idleConsumptionRateInMTPerHour,
-					ladenConsumptionCalculator, 0);
+					ladenConsumptionCalculator, 0, laden_inPortNBORateInM3PerHour);
 
 			final TreeMap<Integer, Long> ballastKeypoints = new TreeMap<Integer, Long>();
 			ballastKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.5));
@@ -1043,8 +1048,9 @@ public class TestCalculations {
 			final int ballast_nboRateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(1.0);
 			final int ballast_idleNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.8);
 			final int ballast_idleConsumptionRateInMTPerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.4);
+			final int ballast_inPortNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.8);
 			builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, ballast_nboRateInM3PerHour, ballast_idleNBORateInM3PerHour, ballast_idleConsumptionRateInMTPerHour,
-					ballastConsumptionCalculator, 0);
+					ballastConsumptionCalculator, 0, ballast_inPortNBORateInM3PerHour);
 
 			final IStartRequirement startRequirement = builder.createStartRequirement(port1, TimeWindowMaker.createInclusiveInclusive(0, 0), null);
 			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), TimeWindowMaker.createInclusiveInclusive(75, 75), false, 0, false);
@@ -1109,8 +1115,8 @@ public class TestCalculations {
 
 			Mockito.when(allocationAnnotation.getRemainingHeelVolumeInM3()).thenReturn(0L);
 			// Load enough to cover boil-off
-			Mockito.when(allocationAnnotation.getSlotVolumeInM3(loadSlot)).thenReturn(1150L);
-			Mockito.when(allocationAnnotation.getSlotVolumeInM3(dischargeSlot)).thenReturn(0L);
+			Mockito.when(allocationAnnotation.getCommercialSlotVolumeInM3(loadSlot)).thenReturn(1150L);
+			Mockito.when(allocationAnnotation.getCommercialSlotVolumeInM3(dischargeSlot)).thenReturn(0L);
 
 			// Schedule sequence
 			final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };

@@ -375,10 +375,29 @@ public class VoyagePlanner {
 				if (thisPortSlot == returnSlot) {
 					portOptions.setVisitDuration(0);
 				} else {
-					final int visitDuration = portTimesRecord.getSlotDuration(thisPortSlot);
+					final int visitDuration = portTimesRecord.getSlotDuration(thisPortSlot);	
 					portOptions.setVisitDuration(visitDuration);
 					assert actualsDataProvider.hasActuals(thisPortSlot) == false || actualsDataProvider.getVisitDuration(thisPortSlot) == visitDuration;
 				}
+				
+				final int cargoCV;
+			 	if (actualsDataProvider.hasActuals(thisPortSlot)) {
+			 		cargoCV = actualsDataProvider.getCVValue(thisPortSlot);
+			 	} else if (thisPortSlot instanceof IHeelOptionsPortSlot) {
+			 		final IHeelOptionsPortSlot heelOptionsSlot = (IHeelOptionsPortSlot) thisPortSlot;
+			 		cargoCV = heelOptionsSlot.getHeelOptions().getHeelCVValue();
+			 	} else if (thisPortSlot instanceof ILoadOption) {
+			 		final ILoadOption loadOption = (ILoadOption) thisPortSlot;
+			 		cargoCV = loadOption.getCargoCVValue();
+			 	} else {
+			 		if (previousOptions != null) {
+			 		 	cargoCV = previousOptions.getCargoCVValue();
+			 		 	} else {
+			 		 	cargoCV = 0;
+			 		 	}
+			 	}
+			 	
+			 	portOptions.setCargoCVValue(cargoCV);
 
 				voyageOrPortOptions.add(portOptions);
 
@@ -511,7 +530,7 @@ public class VoyagePlanner {
 						final long baseFuelConsumptionInMt = actualsDataProvider.getPortBaseFuelConsumptionInMT(portOptions.getPortSlot());
 						fuelConsumptions[FuelComponent.Base.ordinal()] += baseFuelConsumptionInMt;
 						fuelCosts[FuelComponent.Base.ordinal()] += Calculator.costFromConsumption(baseFuelConsumptionInMt, baseFuelPricePerMT);
-						portDetails.setFuelConsumption(FuelComponent.Base, baseFuelConsumptionInMt);
+						portDetails.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, baseFuelConsumptionInMt);
 					}
 					detailedSequence[idx] = portDetails;
 				} else if (element instanceof VoyageOptions) {
@@ -1072,14 +1091,19 @@ public class VoyagePlanner {
 				if (e instanceof PortDetails) {
 					final PortDetails portDetails = (PortDetails) e;
 					final IPortSlot portSlot = portDetails.getOptions().getPortSlot();
+					
 					final long start = currentHeelInM3;
+//					System.out.println("X-"+ portDetails.getFuelConsumption(FuelComponent.InPortNBO));
+//					System.out.println("Y-"+portDetails.getFuelUnitPrice(FuelComponent.InPortNBO));
 					if (portSlot.getPortType() != PortType.End) {
+						totalVoyageBOG += portDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3);
+						currentHeelInM3 -= portDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3);
 						optionalHeelUsePortSlot = null;
 						if (planData.getAllocation() != null) {
 							if (portSlot.getPortType() == PortType.Load) {
-								currentHeelInM3 += planData.getAllocation().getSlotVolumeInM3(portSlot);
+								currentHeelInM3 += planData.getAllocation().getCommercialSlotVolumeInM3(portSlot);							
 							} else if (portSlot.getPortType() == PortType.Discharge) {
-								currentHeelInM3 -= planData.getAllocation().getSlotVolumeInM3(portSlot);
+								currentHeelInM3 -= planData.getAllocation().getCommercialSlotVolumeInM3(portSlot);
 							}
 						}
 						assert currentHeelInM3 + ROUNDING_EPSILON >= 0;
@@ -1121,8 +1145,14 @@ public class VoyagePlanner {
 			assert currentHeelInM3 + ROUNDING_EPSILON >= 0;
 
 			// Sanity check these calculations match expected values
+//			System.out.println("--------------");
+//			System.out.println(totalVoyageBOG);
+//			System.out.println(planData.getPlan().getLNGFuelVolume());
 			assert totalVoyageBOG == planData.getPlan().getLNGFuelVolume();
 			// Note: there may be some rounding errors when using MMBTU, so keep an eye on epsilon
+//			System.out.println("M3");
+//			System.out.println(planData.getEndHeelVolumeInM3());
+//			System.out.println(currentHeelInM3);
 			assert (Math.abs(planData.getEndHeelVolumeInM3() - currentHeelInM3) <= ROUNDING_EPSILON);
 		}
 

@@ -46,7 +46,7 @@ public interface IAllocationAnnotation extends IPortTimesRecord {
 	 * 
 	 * @return
 	 */
-	long getSlotVolumeInM3(@NonNull IPortSlot slot);
+	long getCommercialSlotVolumeInM3(@NonNull IPortSlot slot);
 
 	/**
 	 * Returns the time a load or discharge began

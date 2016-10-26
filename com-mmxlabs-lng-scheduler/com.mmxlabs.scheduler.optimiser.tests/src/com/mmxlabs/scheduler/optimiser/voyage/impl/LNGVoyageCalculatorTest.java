@@ -49,6 +49,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 public class LNGVoyageCalculatorTest {
@@ -936,13 +937,13 @@ public class LNGVoyageCalculatorTest {
 		final PortDetails otherDetails = new PortDetails(new PortOptions(otherSlot));
 		final PortDetails loadDetails = new PortDetails(new PortOptions(loadSlot));
 		loadDetails.getOptions().setVisitDuration(48);
-		loadDetails.setFuelConsumption(FuelComponent.Base, 13000);
+		loadDetails.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, 13000);
 
 		// NOTE: this discharge slot is the tail of the sequence, and
 		// should not be evaluated in the VoyagePlan (to avoid double-counting
 		// when it occurs as the head of the next sequence)
 		final PortDetails dischargeDetails = new PortDetails(new PortOptions(dischargeSlot));
-		dischargeDetails.setFuelConsumption(FuelComponent.Base, 5000);
+		dischargeDetails.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, 5000);
 
 		loadSlot.setVolumeLimits(true, 0, 150L);
 		dischargeSlot.setVolumeLimits(true, 0, 30L);
@@ -1031,7 +1032,7 @@ public class LNGVoyageCalculatorTest {
 		// Check results
 		Assert.assertSame(options, details.getOptions());
 
-		Assert.assertEquals(target, details.getFuelConsumption(FuelComponent.Base));
+		Assert.assertEquals(target, details.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
 	}
 
 	public VesselClass createSampleVesselClass() {

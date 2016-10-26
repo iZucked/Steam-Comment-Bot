@@ -124,7 +124,7 @@ public interface ISchedulerBuilder {
 	 *            Scaled speed in knots indicating the speed at which the vessel can travel to use up all NBO when travelling. * @param serviceSpeed Service speed of vessel in scaled knots
 	 */
 	void setVesselClassStateParameters(@NonNull IVesselClass vc, @NonNull VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
-			@NonNull IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, int serviceSpeed);
+			@NonNull IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, int serviceSpeed, int inPortNBORateInM3PerHour);
 
 	/**
 	 * Set {@link IVesselClass} parameters that depend upon the {@link PortType}.
