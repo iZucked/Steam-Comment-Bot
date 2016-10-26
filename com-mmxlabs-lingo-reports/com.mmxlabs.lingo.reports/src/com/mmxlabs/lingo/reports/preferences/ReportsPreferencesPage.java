@@ -43,7 +43,7 @@ public class ReportsPreferencesPage extends FieldEditorPreferencePage implements
 		addField(new IntegerFieldEditor(PreferenceConstants.P_LEEWAY_DAYS, "&Leeway in days:", getFieldEditorParent()));
 
 		String[][] durationValues = new String[][] { //
-			{ "Days and Hours", Formatters.DurationMode.DAYS_HOURS.name() }, //
+			{ "Days and hours", Formatters.DurationMode.DAYS_HOURS.name() }, //
 			{ "Days to 1 d.p.", Formatters.DurationMode.DECIMAL.name() } 
 		};
 		addField(new ComboFieldEditor(PreferenceConstants.P_REPORT_DURATION_FORMAT, "&Duration format:", durationValues, getFieldEditorParent()));
