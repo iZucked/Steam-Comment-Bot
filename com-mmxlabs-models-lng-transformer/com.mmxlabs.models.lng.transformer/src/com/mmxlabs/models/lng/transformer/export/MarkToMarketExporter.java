@@ -106,12 +106,12 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 			if (slot instanceof ILoadOption) {
 				final int pricePerMMBTu = cargoValueAnnotation.getSlotPricePerMMBTu(slot);
 				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
-				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(cargoValueAnnotation.getSlotVolumeInM3(slot)));
+				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(cargoValueAnnotation.getCommercialSlotVolumeInM3(slot)));
 				slotAllocation.setVolumeValue(OptimiserUnitConvertor.convertToExternalFixedCost(cargoValueAnnotation.getSlotValue(slot)));
 			} else {
 				final int pricePerMMBTu = cargoValueAnnotation.getSlotPricePerMMBTu(slot);
 				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
-				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(cargoValueAnnotation.getSlotVolumeInM3(slot)));
+				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(cargoValueAnnotation.getCommercialSlotVolumeInM3(slot)));
 				slotAllocation.setVolumeValue(OptimiserUnitConvertor.convertToExternalFixedCost(cargoValueAnnotation.getSlotValue(slot)));
 			}
 

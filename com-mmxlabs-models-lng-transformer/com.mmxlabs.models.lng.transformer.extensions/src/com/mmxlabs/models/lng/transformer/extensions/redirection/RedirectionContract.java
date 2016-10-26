@@ -365,7 +365,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 	public int calculateDESPurchasePricePerMMBTu(final ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
 			@Nullable VolumeAllocatedSequences volumeAllocatedSequences, final IDetailTree annotations) {
 		final int transferTime = allocationAnnotation.getSlotTime(dischargeSlot);
-		final long transferVolumeInM3 = allocationAnnotation.getSlotVolumeInM3(dischargeSlot);
+		final long transferVolumeInM3 = allocationAnnotation.getCommercialSlotVolumeInM3(dischargeSlot);
 		return calculateLoadPricePerMMBTu(loadOption, dischargeSlot, transferTime, dischargeSlot.getPort(), dischargePricePerMMBTu, transferVolumeInM3, annotations);
 	}
 
@@ -373,7 +373,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 	public int calculatePriceForFOBSalePerMMBTu(final ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
 			@Nullable VolumeAllocatedSequences volumeAllocatedSequences, final IDetailTree annotations) {
 		final int transferTime = allocationAnnotation.getSlotTime(loadSlot);
-		final long transferVolumeInM3 = allocationAnnotation.getSlotVolumeInM3(loadSlot);
+		final long transferVolumeInM3 = allocationAnnotation.getCommercialSlotVolumeInM3(loadSlot);
 		return calculateLoadPricePerMMBTu(loadSlot, dischargeOption, transferTime, loadSlot.getPort(), dischargePricePerMMBTu, transferVolumeInM3, annotations);
 	}
 

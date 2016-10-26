@@ -87,6 +87,6 @@ public class TransformerHelper {
 
 		builder.setVesselClassStateParameters(vc, state, OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getNboRate()),
 				OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getIdleNBORate()), OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getIdleBaseRate()), cc,
-				OptimiserUnitConvertor.convertToInternalSpeed(attrs.getServiceSpeed()));
+				OptimiserUnitConvertor.convertToInternalSpeed(attrs.getServiceSpeed()), OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getInPortNBORate()) );
 	}
 }

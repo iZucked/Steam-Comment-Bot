@@ -217,7 +217,7 @@ public class ContractNotionalVoyageUtils {
 
 				portDuration[arrayIdx] += portDetails.getOptions().getVisitDuration();
 				portCosts[arrayIdx] += portDetails.getPortCosts();
-				portBaseFuelInMT[arrayIdx] += portDetails.getFuelConsumption(FuelComponent.Base);
+				portBaseFuelInMT[arrayIdx] += portDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.MT);
 			} else if (obj instanceof VoyageDetails) {
 				final int arrayIdx;
 				final VoyageDetails voyageDetails = (VoyageDetails) obj;
