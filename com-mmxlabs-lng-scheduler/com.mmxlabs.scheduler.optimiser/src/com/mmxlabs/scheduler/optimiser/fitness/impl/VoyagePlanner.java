@@ -267,9 +267,9 @@ public class VoyagePlanner {
 				costType = CostType.Ballast;
 			}
 
-			options.setRoute(d.getFirst(), d.getSecond(), routeCostProvider.getRouteCost(d.getFirst(), vessel, costType));
+			options.setRoute(d.getFirst(), d.getSecond(), routeCostProvider.getRouteCost(d.getFirst(), vessel, voyageStartTime, costType));
 		} else {
-			vpoChoices.add(new RouteVoyagePlanChoice(previousOptions, options, distances, vessel, routeCostProvider));
+			vpoChoices.add(new RouteVoyagePlanChoice(previousOptions, options, distances, vessel,voyageStartTime, routeCostProvider));
 		}
 
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER && thisPortSlot.getPortType() == PortType.End)
