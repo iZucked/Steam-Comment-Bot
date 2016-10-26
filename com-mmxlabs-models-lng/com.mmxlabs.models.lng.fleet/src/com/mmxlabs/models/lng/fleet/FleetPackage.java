@@ -692,13 +692,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>In Port NBO Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_STATE_ATTRIBUTES__IN_PORT_NBO_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Vessel State Attributes</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_STATE_ATTRIBUTES_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int VESSEL_STATE_ATTRIBUTES_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Speed</b></em>' attribute.
@@ -1267,6 +1276,17 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVesselStateAttributes_ServiceSpeed();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getInPortNBORate <em>In Port NBO Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>In Port NBO Rate</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselStateAttributes#getInPortNBORate()
+	 * @see #getVesselStateAttributes()
+	 * @generated
+	 */
+	EAttribute getVesselStateAttributes_InPortNBORate();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.FuelConsumption <em>Fuel Consumption</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1772,6 +1792,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED = eINSTANCE.getVesselStateAttributes_ServiceSpeed();
+
+		/**
+		 * The meta object literal for the '<em><b>In Port NBO Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_STATE_ATTRIBUTES__IN_PORT_NBO_RATE = eINSTANCE.getVesselStateAttributes_InPortNBORate();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.FuelConsumptionImpl <em>Fuel Consumption</em>}' class.

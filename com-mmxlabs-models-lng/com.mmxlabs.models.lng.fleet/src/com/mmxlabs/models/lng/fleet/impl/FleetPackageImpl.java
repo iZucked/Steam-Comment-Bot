@@ -552,6 +552,15 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getVesselStateAttributes_InPortNBORate() {
+		return (EAttribute)vesselStateAttributesEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getFuelConsumption() {
 		return fuelConsumptionEClass;
 	}
@@ -734,6 +743,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEAttribute(vesselStateAttributesEClass, VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE);
 		createEReference(vesselStateAttributesEClass, VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION);
 		createEAttribute(vesselStateAttributesEClass, VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED);
+		createEAttribute(vesselStateAttributesEClass, VESSEL_STATE_ATTRIBUTES__IN_PORT_NBO_RATE);
 
 		fuelConsumptionEClass = createEClass(FUEL_CONSUMPTION);
 		createEAttribute(fuelConsumptionEClass, FUEL_CONSUMPTION__SPEED);
@@ -864,6 +874,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEAttribute(getVesselStateAttributes_InPortBaseRate(), ecorePackage.getEDouble(), "inPortBaseRate", null, 1, 1, VesselStateAttributes.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselStateAttributes_FuelConsumption(), this.getFuelConsumption(), null, "fuelConsumption", null, 0, -1, VesselStateAttributes.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselStateAttributes_ServiceSpeed(), ecorePackage.getEDouble(), "serviceSpeed", null, 1, 1, VesselStateAttributes.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselStateAttributes_InPortNBORate(), ecorePackage.getEDouble(), "inPortNBORate", null, 1, 1, VesselStateAttributes.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fuelConsumptionEClass, FuelConsumption.class, "FuelConsumption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getFuelConsumption_Speed(), ecorePackage.getEDouble(), "speed", null, 1, 1, FuelConsumption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1038,6 +1049,13 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		   new String[] {
 			 "unit", "kts",
 			 "formatString", "#0.###"
+		   });	
+		addAnnotation
+		  (getVesselStateAttributes_InPortNBORate(), 
+		   source, 
+		   new String[] {
+			 "unit", "m\u00b3/day",
+			 "formatString", "##0.###"
 		   });	
 		addAnnotation
 		  (getFuelConsumption_Speed(), 

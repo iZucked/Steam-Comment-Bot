@@ -33,6 +33,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl#getInPortBaseRate <em>In Port Base Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl#getFuelConsumption <em>Fuel Consumption</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl#getServiceSpeed <em>Service Speed</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl#getInPortNBORate <em>In Port NBO Rate</em>}</li>
  * </ul>
  *
  * @generated
@@ -147,6 +148,26 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * @ordered
 	 */
 	protected double serviceSpeed = SERVICE_SPEED_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getInPortNBORate() <em>In Port NBO Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInPortNBORate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double IN_PORT_NBO_RATE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getInPortNBORate() <em>In Port NBO Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInPortNBORate()
+	 * @generated
+	 * @ordered
+	 */
+	protected double inPortNBORate = IN_PORT_NBO_RATE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -289,6 +310,27 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public double getInPortNBORate() {
+		return inPortNBORate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setInPortNBORate(double newInPortNBORate) {
+		double oldInPortNBORate = inPortNBORate;
+		inPortNBORate = newInPortNBORate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_STATE_ATTRIBUTES__IN_PORT_NBO_RATE, oldInPortNBORate, inPortNBORate));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -318,6 +360,8 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 				return getFuelConsumption();
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED:
 				return getServiceSpeed();
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IN_PORT_NBO_RATE:
+				return getInPortNBORate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -350,6 +394,9 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED:
 				setServiceSpeed((Double)newValue);
 				return;
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IN_PORT_NBO_RATE:
+				setInPortNBORate((Double)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -380,6 +427,9 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED:
 				setServiceSpeed(SERVICE_SPEED_EDEFAULT);
 				return;
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IN_PORT_NBO_RATE:
+				setInPortNBORate(IN_PORT_NBO_RATE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -404,6 +454,8 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 				return fuelConsumption != null && !fuelConsumption.isEmpty();
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED:
 				return serviceSpeed != SERVICE_SPEED_EDEFAULT;
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IN_PORT_NBO_RATE:
+				return inPortNBORate != IN_PORT_NBO_RATE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -428,6 +480,8 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 		result.append(inPortBaseRate);
 		result.append(", serviceSpeed: ");
 		result.append(serviceSpeed);
+		result.append(", inPortNBORate: ");
+		result.append(inPortNBORate);
 		result.append(')');
 		return result.toString();
 	}
