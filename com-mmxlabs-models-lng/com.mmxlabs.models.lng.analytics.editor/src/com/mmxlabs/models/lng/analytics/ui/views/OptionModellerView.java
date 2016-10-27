@@ -1338,6 +1338,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			Image imgError = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/error.gif").createImage();
 			Image imgWarn = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/warning.gif").createImage();
 			Image imgInfo = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/information.gif").createImage();
+			Image imgShippingRoundTrip = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/roundtrip.png").createImage();
 
 			@Override
 			protected @Nullable Image getImage(@NonNull final ViewerCell cell, @Nullable final Object element) {
@@ -1356,7 +1357,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 						}
 					}
 				} else {
-
+					if (element instanceof RoundTripShippingOption) {
+						return imgShippingRoundTrip;
+					}
 				}
 				return null;
 			}
@@ -1443,6 +1446,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				imgError.dispose();
 				imgWarn.dispose();
 				imgInfo.dispose();
+				imgShippingRoundTrip.dispose();
 				super.dispose();
 			}
 
