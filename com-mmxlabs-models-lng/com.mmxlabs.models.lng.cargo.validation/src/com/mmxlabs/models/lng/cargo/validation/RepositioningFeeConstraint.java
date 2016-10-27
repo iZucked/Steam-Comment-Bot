@@ -9,6 +9,7 @@ import java.util.List;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
@@ -29,7 +30,7 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  * @author Simon Goodall
  * 
  */
-public class TimeCharterCostConstraint extends AbstractModelMultiConstraint {
+public class RepositioningFeeConstraint extends AbstractModelMultiConstraint {
 
 	@Override
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
@@ -57,19 +58,18 @@ public class TimeCharterCostConstraint extends AbstractModelMultiConstraint {
 		if (feature == null) {
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
 						(IConstraintStatus) ctx.createFailureStatus(String.format("Missing %s expression for vessel %s", msg, vesselAvailability.getVessel())));
-				dsd.addEObjectAndFeature(vesselAvailability, attribute);
+				dsd.addEObjectAndFeature(vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_TimeCharterRate());
 				failures.add(dsd);
 			} else {
 				final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, vesselAvailability, attribute,
-						(String) feature, PriceIndexType.CHARTER);
+						vesselAvailability.getTimeCharterRate(), PriceIndexType.CHARTER);
 				if (!result.isOk()) {
-					final String message = String.format("[Vessel|'%s']%s", vesselAvailability.getVessel().getName(), result.getErrorDetails());
+					final String message = String.format("[Vessel|'%s']%s", failures, result.getErrorDetails());
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 					dsd.addEObjectAndFeature(vesselAvailability, attribute);
 					failures.add(dsd);
 				}
 			}
 	}
-
 
 }

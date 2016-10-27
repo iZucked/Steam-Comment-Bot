@@ -28,6 +28,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isFleet <em>Fleet</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getTimeCharterRate <em>Time Charter Rate</em>}</li>
@@ -41,6 +42,8 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEndHeel <em>End Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isForceHireCostOnlyEndRule <em>Force Hire Cost Only End Rule</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isOptional <em>Optional</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getRepositioningFee <em>Repositioning Fee</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonus <em>Ballast Bonus</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability()
@@ -48,6 +51,32 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @generated
  */
 public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
+	/**
+	 * Returns the value of the '<em><b>Fleet</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Fleet</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Fleet</em>' attribute.
+	 * @see #setFleet(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_Fleet()
+	 * @model
+	 * @generated
+	 */
+	boolean isFleet();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isFleet <em>Fleet</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Fleet</em>' attribute.
+	 * @see #isFleet()
+	 * @generated
+	 */
+	void setFleet(boolean value);
+
 	/**
 	 * Returns the value of the '<em><b>Vessel</b></em>' reference.
 	 * <!-- begin-user-doc -->
@@ -476,6 +505,116 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @generated
 	 */
 	void setOptional(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Repositioning Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Repositioning Fee</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Repositioning Fee</em>' attribute.
+	 * @see #isSetRepositioningFee()
+	 * @see #unsetRepositioningFee()
+	 * @see #setRepositioningFee(String)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_RepositioningFee()
+	 * @model unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$/day'"
+	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='charter'"
+	 * @generated
+	 */
+	String getRepositioningFee();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getRepositioningFee <em>Repositioning Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Repositioning Fee</em>' attribute.
+	 * @see #isSetRepositioningFee()
+	 * @see #unsetRepositioningFee()
+	 * @see #getRepositioningFee()
+	 * @generated
+	 */
+	void setRepositioningFee(String value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getRepositioningFee <em>Repositioning Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetRepositioningFee()
+	 * @see #getRepositioningFee()
+	 * @see #setRepositioningFee(String)
+	 * @generated
+	 */
+	void unsetRepositioningFee();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getRepositioningFee <em>Repositioning Fee</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Repositioning Fee</em>' attribute is set.
+	 * @see #unsetRepositioningFee()
+	 * @see #getRepositioningFee()
+	 * @see #setRepositioningFee(String)
+	 * @generated
+	 */
+	boolean isSetRepositioningFee();
+
+	/**
+	 * Returns the value of the '<em><b>Ballast Bonus</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Ballast Bonus</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Ballast Bonus</em>' attribute.
+	 * @see #isSetBallastBonus()
+	 * @see #unsetBallastBonus()
+	 * @see #setBallastBonus(String)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_BallastBonus()
+	 * @model unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$/day'"
+	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='charter'"
+	 * @generated
+	 */
+	String getBallastBonus();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonus <em>Ballast Bonus</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Ballast Bonus</em>' attribute.
+	 * @see #isSetBallastBonus()
+	 * @see #unsetBallastBonus()
+	 * @see #getBallastBonus()
+	 * @generated
+	 */
+	void setBallastBonus(String value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonus <em>Ballast Bonus</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetBallastBonus()
+	 * @see #getBallastBonus()
+	 * @see #setBallastBonus(String)
+	 * @generated
+	 */
+	void unsetBallastBonus();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonus <em>Ballast Bonus</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Ballast Bonus</em>' attribute is set.
+	 * @see #unsetBallastBonus()
+	 * @see #getBallastBonus()
+	 * @see #setBallastBonus(String)
+	 * @generated
+	 */
+	boolean isSetBallastBonus();
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -93,6 +93,24 @@ public class VesselAvailabilityMaker {
 		return this;
 	}
 
+	public VesselAvailabilityMaker withRepositioning(final String fee) {
+		if (fee != null) {
+			vesselAvailability.setRepositioningFee(fee);
+		} else {
+			vesselAvailability.unsetRepositioningFee();
+		}
+		return this;
+	}
+
+	public VesselAvailabilityMaker withBallastBonus(final String fee) {
+		if (fee != null) {
+			vesselAvailability.setBallastBonus(fee);
+		} else {
+			vesselAvailability.unsetBallastBonus();
+		}
+		return this;
+	}
+
 	public VesselAvailabilityMaker withStartHeel(@Nullable final Double startingHeelInM3, final double cv, final double pricePerMMBTu) {
 
 		final HeelOptions heelOptions = vesselAvailability.getStartHeel();

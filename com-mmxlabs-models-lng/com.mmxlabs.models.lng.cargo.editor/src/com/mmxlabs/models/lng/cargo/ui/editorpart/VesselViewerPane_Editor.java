@@ -57,10 +57,38 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 		addTypicalColumn("Class", new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_VesselClass(), jointModelEditor.getReferenceValueProviderCache(), editingDomain),
 				CargoPackage.eINSTANCE.getVesselAvailability_Vessel());
 
+		addTypicalColumn("Fleet", new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_Fleet(), editingDomain));
+		
 		addTypicalColumn("Optional", new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_Optional(), editingDomain));
 
 		addTypicalColumn("Charter", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_TimeCharterRate(), jointModelEditor.getEditingDomain()));
 
+		addTypicalColumn("Repositioning Fee", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_RepositioningFee(), jointModelEditor.getEditingDomain()) {@Override
+		public boolean canEdit(Object object) {
+			if (object instanceof VesselAvailability) {
+				if (((VesselAvailability) object).isOptional()) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return super.canEdit(object);
+			}
+		}});
+
+		addTypicalColumn("Ballast Bonus", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_BallastBonus(), jointModelEditor.getEditingDomain()) {@Override
+			public boolean canEdit(Object object) {
+			if (object instanceof VesselAvailability) {
+				if (((VesselAvailability) object).isOptional()) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return super.canEdit(object);
+			}
+		}});
+		
 		addTypicalColumn("Start Port",
 				new MultiplePortReferenceManipulator(CargoPackage.eINSTANCE.getVesselAvailability_StartAt(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(),
 						MMXCorePackage.eINSTANCE.getNamedObject_Name()));

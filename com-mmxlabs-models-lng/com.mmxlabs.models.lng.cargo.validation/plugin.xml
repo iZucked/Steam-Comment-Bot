@@ -646,7 +646,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  Vessel {0} has time charter set, but no cost set.
+                  {0}
                </message>
                <description>
                   A time charter vessel should have a daily hire rate
