@@ -22,4 +22,16 @@ public final class ConstantValueLongCurve implements ILongCurve {
 	public final long getValueAtPoint(final int point) {
 		return value;
 	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (obj instanceof ConstantValueLongCurve) {
+			final ConstantValueLongCurve other = (ConstantValueLongCurve) obj;
+			return value == other.value;
+		}
+		return false;
+	}
 }
