@@ -274,11 +274,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Inject
 	@NonNull
 	private IPortExclusionProviderEditor portExclusionProvider;
-	
+
 	@Inject
 	@NonNull
 	private IRouteExclusionProviderEditor routeExclusionProvider;
-	
+
 	@Inject
 	@NonNull
 	private IReturnElementProviderEditor returnElementProvider;
@@ -1059,14 +1059,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 */
 	@Override
-	public void setVesselRouteCost(final @NonNull ERouteOption route, @NonNull final IVessel vessel, final IRouteCostProvider.@NonNull CostType costType, final long tollPrice) {
+	public void setVesselRouteCost(final @NonNull ERouteOption route, @NonNull final IVessel vessel, final IRouteCostProvider.@NonNull CostType costType, final @NonNull ILongCurve tollPrice) {
 		routeCostProvider.setRouteCost(route, vessel, costType, tollPrice);
 	}
 
 	/**
 	 */
 	@Override
-	public void setDefaultRouteCost(final ERouteOption route, final long defaultPrice) {
+	public void setDefaultRouteCost(final ERouteOption route, final @NonNull ILongCurve defaultPrice) {
 		routeCostProvider.setDefaultRouteCost(route, defaultPrice);
 	}
 
@@ -1251,7 +1251,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * Generate a new return option for each load port in the solution.
 	 */
 	private void createRoundtripCargoReturnElements() {
-//		for (final IPortSlot portSlot : permittedRoundTripVesselSlots) {
+		// for (final IPortSlot portSlot : permittedRoundTripVesselSlots) {
 		for (final IPortSlot portSlot : loadSlots) {
 			if (portSlot instanceof ILoadOption) {
 				final ILoadOption loadOption = (ILoadOption) portSlot;

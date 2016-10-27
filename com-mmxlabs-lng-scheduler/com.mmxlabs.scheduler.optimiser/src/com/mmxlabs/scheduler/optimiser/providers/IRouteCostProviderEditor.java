@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.providers;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 
@@ -24,7 +25,7 @@ public interface IRouteCostProviderEditor extends IRouteCostProvider {
 	 * @param costType
 	 * @param price
 	 */
-	public void setRouteCost(@NonNull ERouteOption route, @NonNull IVessel vessel, @NonNull CostType costType, long price);
+	public void setRouteCost(@NonNull ERouteOption route, @NonNull IVessel vessel, @NonNull CostType costType, @NonNull ILongCurve price);
 
 	/**
 	 * Sets the default cost incurred when travelling via the route named {@code route} to {@code price}. This price is overridden for particular vessel classes by
@@ -35,7 +36,7 @@ public interface IRouteCostProviderEditor extends IRouteCostProvider {
 	 * @param price
 	 *            price in dollars
 	 */
-	public void setDefaultRouteCost(@NonNull ERouteOption route, long price);
+	public void setDefaultRouteCost(@NonNull ERouteOption route, @NonNull ILongCurve price);
 
 	/**
 	 * 
