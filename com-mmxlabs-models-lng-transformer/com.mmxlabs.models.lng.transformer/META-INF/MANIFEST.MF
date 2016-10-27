@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Models: LNG Transformer
 Bundle-SymbolicName: com.mmxlabs.models.lng.transformer;singleton:=true
-Bundle-Version: 4.0.1.qualifier
+Bundle-Version: 4.0.2.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
@@ -10,17 +10,17 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.ops4j.peaberry;bundle-version="1.2.0",
  org.ops4j.peaberry.eclipse;bundle-version="1.1.1",
  org.ops4j.peaberry.activation;bundle-version="1.2.0",
- com.mmxlabs.common.common-util;bundle-version="[4.0.1,5.0.0)",
- com.mmxlabs.optimiser.optimiser-common;bundle-version="[4.0.1,5.0.0)",
- com.mmxlabs.optimiser.optimiser-core;bundle-version="[4.0.1,5.0.0)",
- com.mmxlabs.optimiser.optimiser-lso;bundle-version="[4.0.1,5.0.0)",
- com.mmxlabs.models.lng.cargo.editor;bundle-version="[4.0.1,5.0.0)",
- com.mmxlabs.scheduler.optimiser;bundle-version="[4.0.1,5.0.0)",
- com.mmxlabs.models.common;bundle-version="[4.0.1,5.0.0)",
- com.mmxlabs.scenario.service.util;bundle-version="[4.0.1,5.0.0)",
- com.mmxlabs.models.lng.scenario.model;bundle-version="[4.0.1,5.0.0)",
+ com.mmxlabs.common.common-util;bundle-version="[4.0.2,5.0.0)",
+ com.mmxlabs.optimiser.optimiser-common;bundle-version="[4.0.2,5.0.0)",
+ com.mmxlabs.optimiser.optimiser-core;bundle-version="[4.0.2,5.0.0)",
+ com.mmxlabs.optimiser.optimiser-lso;bundle-version="[4.0.2,5.0.0)",
+ com.mmxlabs.models.lng.cargo.editor;bundle-version="[4.0.2,5.0.0)",
+ com.mmxlabs.scheduler.optimiser;bundle-version="[4.0.2,5.0.0)",
+ com.mmxlabs.models.common;bundle-version="[4.0.2,5.0.0)",
+ com.mmxlabs.scenario.service.util;bundle-version="[4.0.2,5.0.0)",
+ com.mmxlabs.models.lng.scenario.model;bundle-version="[4.0.2,5.0.0)",
  com.google.guava,
- com.mmxlabs.models.lng.types;bundle-version="[4.0.1,5.0.0)",
+ com.mmxlabs.models.lng.types;bundle-version="[4.0.2,5.0.0)",
  com.mmxlabs.scenario.service.model,
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.license.features
