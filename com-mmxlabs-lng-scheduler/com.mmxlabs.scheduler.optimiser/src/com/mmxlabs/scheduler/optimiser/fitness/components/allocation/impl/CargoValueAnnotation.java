@@ -211,8 +211,8 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	@Override
-	public long getSlotVolumeInMMBTu(final IPortSlot slot) {
-		return allocationAnnotation.getSlotVolumeInMMBTu(slot);
+	public long getCommercialSlotVolumeInMMBTu(final IPortSlot slot) {
+		return allocationAnnotation.getCommercialSlotVolumeInMMBTu(slot);
 	}
 
 	@Override

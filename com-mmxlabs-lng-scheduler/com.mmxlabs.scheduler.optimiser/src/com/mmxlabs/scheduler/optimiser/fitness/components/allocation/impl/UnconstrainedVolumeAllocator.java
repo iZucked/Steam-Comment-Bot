@@ -15,11 +15,14 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil;
 import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil.DetailedCargoType;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord.AllocationMode;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.InPortCalculationUtils;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * A cargo allocator which presumes that there are no total volume constraints, and so the total remaining capacity should be allocated
@@ -62,6 +65,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		final @NonNull List<@NonNull IPortSlot> slots = allocationRecord.slots;
 
 		final IVessel vessel = allocationRecord.nominatedVessel != null ? allocationRecord.nominatedVessel : allocationRecord.vesselAvailability.getVessel();
+		System.out.println("break");
 		if (allocationRecord.allocationMode == AllocationMode.Actuals_Transfer) {
 			return calculateActualsTransferMode(allocationRecord, slots);
 		} else if (allocationRecord.allocationMode == AllocationMode.Actuals) {
@@ -94,9 +98,14 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			// Actuals mode, take values directly from sale
 			annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(salesSlot));
 			annotation.setSlotDuration(slot, 0);
-
-			annotation.setSlotVolumeInM3(slot, allocationRecord.maxVolumesInM3.get(i));
-			annotation.setSlotVolumeInMMBTu(slot, allocationRecord.maxVolumesInMMBtu.get(i));
+			
+			Long maxVolumeInM3 = allocationRecord.maxVolumesInM3.get(i);
+			annotation.setCommercialSlotVolumeInM3(slot, maxVolumeInM3 );
+			long maxVolumeMinusBoilOffInM3 = InPortCalculationUtils.calculatePhysicalVolumeInM3(slot, allocationRecord, maxVolumeInM3);
+			annotation.setPhysicalSlotVolumeInM3(slot, maxVolumeMinusBoilOffInM3);
+			annotation.setCommericialSlotVolumeInMMBTu(slot, allocationRecord.maxVolumesInMMBtu.get(i));
+			final int slotCV = allocationRecord.slotCV.get(i);
+			annotation.setPhysicalSlotVolumeInMMBTu(slot, Calculator.convertM3ToMMBTu(maxVolumeMinusBoilOffInM3, slotCV));
 			annotation.setSlotCargoCV(slot, allocationRecord.slotCV.get(i));
 		}
 		// Copy over the return slot time if present
@@ -140,11 +149,19 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			assert allocationRecord.portTimesRecord.getSlotDuration(slot) == (isFOBOrDES ? 0 : actualsDataProvider.getVisitDuration(slot));
 			annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
 			annotation.setSlotDuration(slot, allocationRecord.portTimesRecord.getSlotDuration(slot));
-
+			
+		
 			// Actuals mode, take values directly
-			annotation.setSlotVolumeInM3(slot, allocationRecord.maxVolumesInM3.get(i));
-			annotation.setSlotVolumeInMMBTu(slot, allocationRecord.maxVolumesInMMBtu.get(i));
+			long maxVolumeInM3 = allocationRecord.maxVolumesInM3.get(i);
+			annotation.setCommercialSlotVolumeInM3(slot, maxVolumeInM3);
+			annotation.setCommericialSlotVolumeInMMBTu(slot, allocationRecord.maxVolumesInMMBtu.get(i));
 			annotation.setSlotCargoCV(slot, allocationRecord.slotCV.get(i));
+			
+			final int slotCV = allocationRecord.slotCV.get(i);
+			long maxVolumeInM3MinusBoilOff  = InPortCalculationUtils.calculatePhysicalVolumeInM3(slot, allocationRecord,maxVolumeInM3); 
+			annotation.setPhysicalSlotVolumeInM3(slot, maxVolumeInM3MinusBoilOff);
+			annotation.setPhysicalSlotVolumeInMMBTu(slot, Calculator.convertM3ToMMBTu(maxVolumeInM3MinusBoilOff,slotCV));
+			
 
 			// First slot
 			if (i == 0) {
@@ -224,7 +241,17 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
 			// greedy assumption: always discharge as much as possible
 			final long dischargeVolume = capValueWithZeroDefault(allocationRecord.maxVolumesInM3.get(1), unusedVolume);
-			annotation.setSlotVolumeInM3(dischargeSlot, dischargeVolume);
+			
+		
+			annotation.setCommercialSlotVolumeInM3(dischargeSlot, dischargeVolume);
+			long dischargeVolumeMinusBoilOffInM3 = InPortCalculationUtils.calculatePhysicalVolumeInM3(dischargeSlot, allocationRecord,dischargeVolume);
+			annotation.setPhysicalSlotVolumeInM3(dischargeSlot, dischargeVolumeMinusBoilOffInM3);
+//			annotation.setCommericialSlotVolumeInMMBTu(dischargeSlot, allocationRecord.maxVolumesInMMBtu.get(1));
+//			final int slotCV = allocationRecord.slotCV.get(1);
+//			annotation.setPhysicalSlotVolumeInMMBTu(dischargeSlot, Calculator.convertM3ToMMBTu(maxVolumeMinusBoilOffInM3, slotCV));
+			
+			
+//			annotation.setCommercialSlotVolumeInM3(dischargeSlot, dischargeVolume);
 			unusedVolume -= dischargeVolume;
 
 		}
@@ -248,7 +275,9 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				} else {
 					dischargeVolume = unusedVolume;
 				}
-				annotation.setSlotVolumeInM3(dischargeSlot, dischargeVolume);
+				annotation.setCommercialSlotVolumeInM3(dischargeSlot, dischargeVolume);
+				long maxVolumeMinusBoilOffInM3 = InPortCalculationUtils.calculatePhysicalVolumeInM3(dischargeSlot, allocationRecord, dischargeVolume);
+				annotation.setPhysicalSlotVolumeInM3(dischargeSlot, maxVolumeMinusBoilOffInM3);
 				unusedVolume -= dischargeVolume;
 
 				// more profitable ?
@@ -272,7 +301,9 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				// reduce the remaining available volume
 				unusedVolume -= volume;
 				final long currentVolumeInM3 = annotation.getCommercialSlotVolumeInM3(slot);
-				annotation.setSlotVolumeInM3(slot, currentVolumeInM3 + volume);
+				annotation.setCommercialSlotVolumeInM3(slot, currentVolumeInM3 + volume);
+				long maxVolumeMinusBoilOffInM3 = InPortCalculationUtils.calculatePhysicalVolumeInM3(slot, allocationRecord, (currentVolumeInM3 + volume));
+				annotation.setPhysicalSlotVolumeInM3(slot, maxVolumeMinusBoilOffInM3);
 			}
 
 			// Note this currently does nothing as the next() method in the allocator iterator (BaseCargoAllocator) ignores this data and looks directly on the discharge slot.
@@ -300,16 +331,23 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		}
 
 		final ILoadOption loadSlot = (ILoadOption) slots.get(0);
-		annotation.setSlotVolumeInM3(loadSlot, loadVolume);
+		annotation.setCommercialSlotVolumeInM3(loadSlot, loadVolume);
 		annotation.setStartHeelVolumeInM3(allocationRecord.startVolumeInM3);
 		annotation.setRemainingHeelVolumeInM3(allocationRecord.minEndVolumeInM3 + unusedVolume);
 		annotation.setFuelVolumeInM3(allocationRecord.requiredFuelVolumeInM3);
+		
+		long maxVolumeMinusBoilOffInM3 = InPortCalculationUtils.calculatePhysicalVolumeInM3(loadSlot, allocationRecord, loadVolume);
+		annotation.setPhysicalSlotVolumeInM3(loadSlot, maxVolumeMinusBoilOffInM3);
+		
+		
+		
 
 		// Copy across slot time information
 		for (int i = 0; i < slots.size(); i++) {
 			final IPortSlot slot = allocationRecord.slots.get(i);
-
-			annotation.setSlotVolumeInMMBTu(slot, Calculator.convertM3ToMMBTu(annotation.getCommercialSlotVolumeInM3(slot), annotation.getSlotCargoCV(slot)));
+			
+			annotation.setCommericialSlotVolumeInMMBTu(slot, Calculator.convertM3ToMMBTu(annotation.getCommercialSlotVolumeInM3(slot), annotation.getSlotCargoCV(slot)));
+			annotation.setPhysicalSlotVolumeInMMBTu(slot, Calculator.convertM3ToMMBTu(annotation.getPhysicalSlotVolumeInM3(slot), annotation.getSlotCargoCV(slot)));
 		}
 
 		return annotation;
@@ -410,15 +448,25 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			final long transferVolumeMMBTU, final long transferVolumeM3) {
 		for (int i = 0; i < slots.size(); ++i) {
 			final IPortSlot slot = slots.get(i);
-			annotation.setSlotVolumeInMMBTu(slot, transferVolumeMMBTU);
-			if (transferVolumeM3 != -1) {
-				annotation.setSlotVolumeInM3(slot, transferVolumeM3);
+			final int slotCV = allocationRecord.slotCV.get(i);
+			final long transferVolumeMinusBoilOffInM3 = Calculator.convertM3ToMMBTu(InPortCalculationUtils.calculatePhysicalVolumeInM3(slot, allocationRecord, transferVolumeM3),slotCV);
+			final long transferVolumeMinusBoilOffInMMBTu = Calculator.convertM3ToMMBTu(transferVolumeMinusBoilOffInM3,slotCV);
+			
+			annotation.setCommericialSlotVolumeInMMBTu(slot, transferVolumeMMBTU);
+			annotation.setPhysicalSlotVolumeInMMBTu(slot,transferVolumeMinusBoilOffInMMBTu);
+			
+			if (transferVolumeM3 != -1) {			
+//				long transferVolumeMinusBoilOffInM3 = transferVolumeM3 - InPortCalculationUtils.calculatePhysicalVolumeInM3(slot, allocationRecord);
+				annotation.setCommercialSlotVolumeInM3(slot, transferVolumeM3);	
+				annotation.setPhysicalSlotVolumeInM3(slot, transferVolumeMinusBoilOffInM3);
 			} else {
-				final int slotCV = allocationRecord.slotCV.get(i);
+				
 				if (slotCV > 0) {
-					annotation.setSlotVolumeInM3(slot, Calculator.convertMMBTuToM3(transferVolumeMMBTU, slotCV));
+					annotation.setCommercialSlotVolumeInM3(slot,transferVolumeM3);
+					annotation.setPhysicalSlotVolumeInM3(slot,transferVolumeMinusBoilOffInM3);
 				} else {
-					annotation.setSlotVolumeInM3(slot, 0);
+					annotation.setCommercialSlotVolumeInM3(slot, 0);
+					annotation.setPhysicalSlotVolumeInM3(slot, 0);
 				}
 			}
 		}
@@ -465,15 +513,19 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 	 */
 	protected void setTransferVolume(final @NonNull AllocationRecord allocationRecord, @NonNull IPortSlot slot, final @NonNull AllocationAnnotation annotation, final long transferVolumeMMBTU,
 			final long transferVolumeM3) {
-		annotation.setSlotVolumeInMMBTu(slot, transferVolumeMMBTU);
+		annotation.setCommericialSlotVolumeInMMBTu(slot, transferVolumeMMBTU);
 		if (transferVolumeM3 != -1) {
-			annotation.setSlotVolumeInM3(slot, transferVolumeM3);
+			long transferVolumeMinusBoilOffInM3 = InPortCalculationUtils.calculatePhysicalVolumeInM3(slot, allocationRecord,transferVolumeM3);
+			annotation.setCommercialSlotVolumeInM3(slot, transferVolumeM3);	
+			annotation.setPhysicalSlotVolumeInM3(slot, transferVolumeMinusBoilOffInM3);
 		} else {
 			final int slotCV = annotation.getSlotCargoCV(slot);
 			if (slotCV > 0) {
-				annotation.setSlotVolumeInM3(slot, Calculator.convertMMBTuToM3(transferVolumeMMBTU, slotCV));
+				annotation.setCommercialSlotVolumeInM3(slot, Calculator.convertMMBTuToM3(transferVolumeMMBTU, slotCV));
+				annotation.setPhysicalSlotVolumeInM3(slot, InPortCalculationUtils.calculatePhysicalVolumeInM3(slot, allocationRecord,transferVolumeM3));
 			} else {
-				annotation.setSlotVolumeInM3(slot, 0);
+				annotation.setCommercialSlotVolumeInM3(slot, 0);
+				annotation.setPhysicalSlotVolumeInM3(slot, 0);
 			}
 		}
 	}

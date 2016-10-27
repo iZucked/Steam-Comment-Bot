@@ -59,7 +59,7 @@ public interface IAllocationAnnotation extends IPortTimesRecord {
 	@Override
 	int getSlotDuration(@NonNull IPortSlot slot);
 
-	long getSlotVolumeInMMBTu(@NonNull IPortSlot slot);
+	long getCommercialSlotVolumeInMMBTu(@NonNull IPortSlot slot);
 
 	/**
 	 * Returns the CV valid for this slot. Typically this will be the load CV, but for actualised cargoes discharge CV may be different to load CV
@@ -68,4 +68,6 @@ public interface IAllocationAnnotation extends IPortTimesRecord {
 	 * @return
 	 */
 	int getSlotCargoCV(@NonNull IPortSlot slot);
+	
+	
 }

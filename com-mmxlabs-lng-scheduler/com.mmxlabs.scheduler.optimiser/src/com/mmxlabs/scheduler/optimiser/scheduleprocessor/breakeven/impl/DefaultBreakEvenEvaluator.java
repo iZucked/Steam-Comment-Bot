@@ -174,7 +174,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 								// TODO: Average?
 							} else if (details.getOptions().getPortSlot().getPortType() == PortType.Discharge) {
 								final IPortSlot portSlot = details.getOptions().getPortSlot();
-								final long dischargeVolumeInMMBTu = currentAllocation.getSlotVolumeInMMBTu(portSlot);
+								final long dischargeVolumeInMMBTu = currentAllocation.getCommercialSlotVolumeInMMBTu(portSlot);
 
 								final IDischargeOption dischargeOption = ((IDischargeOption) portSlot);
 								final int dischargePricePerMMBTu = dischargeOption.getDischargePriceCalculator().estimateSalesUnitPrice(dischargeOption, portTimesRecord, null);

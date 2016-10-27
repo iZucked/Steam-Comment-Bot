@@ -25,8 +25,10 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 public final class AllocationAnnotation implements IAllocationAnnotation {
 
 	public class SlotAllocationAnnotation {
-		public long volumeInM3;
-		public long volumeInMMBTu;
+		public long commercialVolumeInM3;
+		public long commercialVolumeInMMBTu;
+		public long physicalVolumeInM3;
+		public long physicalVolumeInMMBTu;
 		public int cargoCV;
 		public int startTime;
 		public int duration;
@@ -39,8 +41,8 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 			}
 			if (obj instanceof SlotAllocationAnnotation) {
 				final SlotAllocationAnnotation other = (SlotAllocationAnnotation) obj;
-				return volumeInM3 == other.volumeInM3 //
-						&& volumeInMMBTu == other.volumeInMMBTu //
+				return commercialVolumeInM3 == other.commercialVolumeInM3 //
+						&& commercialVolumeInMMBTu == other.commercialVolumeInMMBTu //
 						&& cargoCV == other.cargoCV //
 						&& startTime == other.startTime //
 						&& duration == other.duration;
@@ -180,29 +182,59 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 
 		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
 		if (allocation != null) {
-			return allocation.volumeInM3;
+			return allocation.commercialVolumeInM3;
 		}
 
 		return 0;
 	}
 
-	public void setSlotVolumeInM3(final @NonNull IPortSlot slot, final long volumeInM3) {
-		getOrCreateSlotAllocation(slot).volumeInM3 = volumeInM3;
+	public void setCommercialSlotVolumeInM3(final @NonNull IPortSlot slot, final long volumeInM3) {
+		getOrCreateSlotAllocation(slot).commercialVolumeInM3 = volumeInM3;
 	}
 
 	@Override
-	public long getSlotVolumeInMMBTu(final @NonNull IPortSlot slot) {
+	public long getCommercialSlotVolumeInMMBTu(final @NonNull IPortSlot slot) {
 
 		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
 		if (allocation != null) {
-			return allocation.volumeInMMBTu;
+			return allocation.commercialVolumeInMMBTu;
 		}
 
 		return 0;
 	}
 
-	public void setSlotVolumeInMMBTu(final @NonNull IPortSlot slot, final long volumeInMMBTu) {
-		getOrCreateSlotAllocation(slot).volumeInMMBTu = volumeInMMBTu;
+	public void setPhysicalSlotVolumeInMMBTu(final @NonNull IPortSlot slot, final long volumeInMMBTu) {
+		getOrCreateSlotAllocation(slot).physicalVolumeInMMBTu = volumeInMMBTu;
+	}
+	
+//	@Override
+	public long getPhysicalSlotVolumeInM3(final @NonNull IPortSlot slot) {
+
+		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
+		if (allocation != null) {
+			return allocation.physicalVolumeInM3;
+		}
+
+		return 0;
+	}
+
+	public void setPhysicalSlotVolumeInM3(final @NonNull IPortSlot slot, final long volumeInM3) {
+		getOrCreateSlotAllocation(slot).physicalVolumeInM3 = volumeInM3;
+	}
+
+//	@Override
+	public long getPhysicalSlotVolumeInMMBTu(final @NonNull IPortSlot slot) {
+
+		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
+		if (allocation != null) {
+			return allocation.physicalVolumeInMMBTu;
+		}
+
+		return 0;
+	}
+
+	public void setCommericialSlotVolumeInMMBTu(final @NonNull IPortSlot slot, final long volumeInMMBTu) {
+		getOrCreateSlotAllocation(slot).commercialVolumeInMMBTu = volumeInMMBTu;
 	}
 
 	@Override

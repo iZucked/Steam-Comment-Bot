@@ -115,7 +115,7 @@ public class CapacityViolationChecker {
 					final IPortSlot portSlot = portDetails.getOptions().getPortSlot();
 					// If this is a cargo, get the load or discharge volume
 					final long volumeInM3 = allocationAnnotation == null ? 0 : allocationAnnotation.getCommercialSlotVolumeInM3(portSlot);
-					final long volumeInMMBTu = allocationAnnotation == null ? 0 : allocationAnnotation.getSlotVolumeInMMBTu(portSlot);
+					final long volumeInMMBTu = allocationAnnotation == null ? 0 : allocationAnnotation.getCommercialSlotVolumeInMMBTu(portSlot);
 
 					if (portSlot instanceof ILoadOption) {
 						final ILoadOption loadOption = (ILoadOption) portSlot;
