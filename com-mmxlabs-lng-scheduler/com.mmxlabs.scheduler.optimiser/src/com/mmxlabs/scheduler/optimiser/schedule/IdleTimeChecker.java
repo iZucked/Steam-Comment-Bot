@@ -36,6 +36,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.util.LDCargoDetailsWrapper;
 public class IdleTimeChecker {
 	public final static String GA_IDLE_TIME_HOURS_LOW = "info-idle-time-hours-low";
 	public final static String GA_IDLE_TIME_HOURS_HIGH = "info-idle-time-hours-high";
+	public final static String GA_IDLE_TIME_HOURS_END = "info-idle-time-hours-end";
 	@Inject
 	private IExcessIdleTimeComponentParameters idleTimeComponentParameters;
 
@@ -104,13 +105,21 @@ public class IdleTimeChecker {
 					if (gaHigh == null) {
 						gaHigh = 0;
 					}
-					gaHigh += lowHours;
+					gaLow += lowHours;
 					gaHigh += highHours;
 					annotatedSolution.setGeneralAnnotation(GA_IDLE_TIME_HOURS_LOW, gaLow);
 					annotatedSolution.setGeneralAnnotation(GA_IDLE_TIME_HOURS_HIGH, gaHigh);
 				}
 				return penaltyLow + penaltyHigh;
 			} else {
+				if (annotatedSolution != null) {
+					Integer gaEnd = annotatedSolution.getGeneralAnnotation(GA_IDLE_TIME_HOURS_LOW, Integer.class);
+					if (gaEnd == null) {
+						gaEnd = 0;
+					}
+					gaEnd += violatingHours;
+					annotatedSolution.setGeneralAnnotation(GA_IDLE_TIME_HOURS_END, gaEnd);
+				}
 				return violatingHours * idleTimeComponentParameters.getEndWeight();
 			}
 		} else {

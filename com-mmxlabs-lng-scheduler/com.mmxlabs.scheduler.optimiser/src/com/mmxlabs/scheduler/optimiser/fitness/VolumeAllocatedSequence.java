@@ -25,10 +25,11 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentPara
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
-public final class VolumeAllocatedSequence {
+public class VolumeAllocatedSequence{
 	private final @NonNull IResource resource;
 	private final @NonNull ISequence sequence;
 	private final int startTime;
@@ -53,6 +54,11 @@ public final class VolumeAllocatedSequence {
 		public long weightedLatenessSum;
 		public long capacityViolationSum;
 		public Pair<Interval, Long> latenessSum;
+		public List<@NonNull CapacityViolationType> capacityViolations = new ArrayList<>();
+		public List<CapacityViolationType> getCapacityViolations() {
+			return capacityViolations;
+		}
+	
 	}
 
 	private final Map<IPortSlot, SlotRecord> slotRecords;
@@ -119,12 +125,14 @@ public final class VolumeAllocatedSequence {
 	public IHeelLevelAnnotation getHeelLevelAnnotation(final @NonNull IPortSlot portSlot) {
 		return getOrExceptionSlotRecord(portSlot).heelLevelAnnotation;
 	}
+	
 
-	public void addCapacityViolation(final @NonNull IPortSlot portSlot) {
+	public void addCapacityViolation(final @NonNull IPortSlot portSlot, @NonNull CapacityViolationType cvt) {
 
 		@NonNull
 		final SlotRecord record = getOrExceptionSlotRecord(portSlot);
 		record.capacityViolationSum += 1;
+		record.capacityViolations.add(cvt);
 	}
 
 	public long getCapacityViolationCount(final @NonNull IPortSlot portSlot) {
@@ -166,6 +174,10 @@ public final class VolumeAllocatedSequence {
 
 	public long getIdleWeightedCost(final @NonNull IPortSlot portSlot) {
 		return getOrExceptionSlotRecord(portSlot).weightedIdleCost;
+	}
+	
+	public List<@NonNull CapacityViolationType> getCapacityViolations(final @NonNull IPortSlot portSlot){
+		return getOrExceptionSlotRecord(portSlot).capacityViolations;
 	}
 
 	public boolean isLateSlot(final @NonNull IPortSlot slot) {

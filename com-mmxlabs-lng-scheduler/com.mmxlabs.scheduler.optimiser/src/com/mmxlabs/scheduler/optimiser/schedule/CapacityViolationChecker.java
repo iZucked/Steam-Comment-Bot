@@ -304,7 +304,7 @@ public class CapacityViolationChecker {
 	private void addEntryToCapacityViolationAnnotation(@Nullable final IAnnotatedSolution annotatedSolution, final @NonNull PortDetails portDetails, final @NonNull CapacityViolationType cvt,
 			final long volume, final @NonNull VolumeAllocatedSequence volumeAllocatedSequence) {
 		// Set port details entry
-		volumeAllocatedSequence.addCapacityViolation(portDetails.getOptions().getPortSlot());
+		volumeAllocatedSequence.addCapacityViolation(portDetails.getOptions().getPortSlot(),cvt);
 
 		if (annotatedSolution != null) {
 
