@@ -73,6 +73,7 @@ public class MicroCaseUtils {
 		metadata.setContentType("com.mmxlabs.shiplingo.platform.models.manifest.scnfile");
 
 		instance.setMetadata(metadata);
+		instance.setInstance(lngScenarioModel);
 
 		ScenarioStorageUtil.storeToFile(instance, output);
 	}
