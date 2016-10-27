@@ -33,7 +33,6 @@ public final class GridViewerHelper {
 		viewer.getGrid().setEmptyColumnHeaderRenderer(new EmptyColumnHeaderRenderer());
 		viewer.getGrid().setEmptyRowHeaderRenderer(new EmptyRowHeaderRenderer());
 		viewer.getGrid().setEmptyCellRenderer(new EmptyCellRenderer());
-
 	}
 
 	public static void configureLookAndFeel(final @NonNull GridTreeViewer viewer) {
@@ -51,7 +50,6 @@ public final class GridViewerHelper {
 
 	public static void configureLookAndFeel(final @NonNull GridColumnGroup group) {
 		group.setHeaderRenderer(new ColumnGroupHeaderRenderer());
-
 	}
 
 	public static void recalculateRowHeights(Grid grid) {

@@ -36,7 +36,7 @@ public class EmptyRowHeaderRenderer extends AbstractRenderer
         
         if (!grid.getCellSelectionEnabled())
         {
-        
+
             gc.drawLine(getBounds().x, getBounds().y, getBounds().x + getBounds().width - 1,
                         getBounds().y);
             gc.drawLine(getBounds().x, getBounds().y, getBounds().x, getBounds().y + getBounds().height
