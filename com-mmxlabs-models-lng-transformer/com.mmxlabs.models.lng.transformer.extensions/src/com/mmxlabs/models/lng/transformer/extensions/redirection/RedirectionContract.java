@@ -224,7 +224,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 			// Clamp to [0, infinity)
 			final long diff = incrementalShipping;
 			if (diff > 0) {
-				profitSharePerMMBTu = Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(diff, allocationAnnotation.getSlotVolumeInMMBTu(dischargeSlot));
+				profitSharePerMMBTu = Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(diff, allocationAnnotation.getCommercialSlotVolumeInMMBTu(dischargeSlot));
 			}
 
 			if (annotation != null) {
