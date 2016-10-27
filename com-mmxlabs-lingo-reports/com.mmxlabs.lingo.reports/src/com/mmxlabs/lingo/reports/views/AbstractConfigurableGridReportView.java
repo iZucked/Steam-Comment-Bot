@@ -21,6 +21,8 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.IElementComparer;
@@ -56,9 +58,11 @@ import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
 import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.GridTableViewerColumnFactory;
 import com.mmxlabs.lingo.reports.internal.Activator;
+import com.mmxlabs.lingo.reports.preferences.PreferenceConstants;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnInfoProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
+import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
@@ -97,6 +101,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	private FilterField filterField;
 	protected EObjectTableViewerFilterSupport filterSupport;
+	private IPropertyChangeListener propertyChangeListener;
 
 	private void setColumnsImmovable() {
 		if (viewer != null) {
@@ -131,6 +136,17 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	@Override
 	public final void createPartControl(final Composite parent) {
 		initPartControl(parent);
+
+		propertyChangeListener = new IPropertyChangeListener() {
+			@Override
+			public void propertyChange(final PropertyChangeEvent event) {
+				final String property = event.getProperty();
+				if (PreferenceConstants.P_REPORT_DURATION_FORMAT.equals(property)) {
+					ViewerHelper.refresh(viewer, false);
+				}
+			}
+		};
+		Activator.getPlugin().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
 	}
 
 	public void initPartControl(final Composite parent) {
@@ -616,6 +632,8 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	@Override
 	public void dispose() {
+
+		Activator.getPlugin().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
 
 		if (handleSelections()) {
 			final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);

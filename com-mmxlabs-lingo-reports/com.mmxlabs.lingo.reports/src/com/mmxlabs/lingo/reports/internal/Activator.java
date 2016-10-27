@@ -12,6 +12,8 @@ import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
 import org.eclipse.swt.widgets.Display;
@@ -21,6 +23,8 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
+import com.mmxlabs.lingo.reports.preferences.PreferenceConstants;
+import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.models.lng.cargo.provider.CargoEditPlugin;
 import com.mmxlabs.models.lng.commercial.provider.CommercialEditPlugin;
 import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
@@ -38,6 +42,7 @@ import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
  * @generated
  */
 public final class Activator extends EMFPlugin {
+
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.mmxlabs.lingo.reports"; //$NON-NLS-1$
 
@@ -112,6 +117,8 @@ public final class Activator extends EMFPlugin {
 		private ScopedPreferenceStore preferenceStore;
 		private ImageRegistry imageRegistry = null;
 
+		private IPropertyChangeListener propertyChangeListener;
+
 		/**
 		 * Creates an instance. <!-- begin-user-doc --> <!-- end-user-doc -->
 		 * 
@@ -164,6 +171,8 @@ public final class Activator extends EMFPlugin {
 		@Override
 		public void stop(final BundleContext context) throws Exception {
 
+			getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
+			
 			// close the service tracker
 			scenarioServiceSelectionProviderTracker.close();
 			scenarioServiceSelectionProviderTracker = null;
@@ -182,6 +191,30 @@ public final class Activator extends EMFPlugin {
 			scenarioServiceSelectionProviderTracker.open();
 
 			super.start(context);
+
+			propertyChangeListener = new IPropertyChangeListener() {
+				@Override
+				public void propertyChange(final PropertyChangeEvent event) {
+					final String property = event.getProperty();
+					if (PreferenceConstants.P_REPORT_DURATION_FORMAT.equals(property)) {
+						final String value = getPreferenceStore().getString(property);
+						if (value != null) {
+							Formatters.DurationMode m = Formatters.DurationMode.valueOf(value);
+							if (m != null) {
+								Formatters.setDurationMode(m);
+							}
+						}
+					}
+				}
+			};
+			getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
+			final String value = getPreferenceStore().getString(PreferenceConstants.P_REPORT_DURATION_FORMAT);
+			if (value != null) {
+				Formatters.DurationMode m = Formatters.DurationMode.valueOf(value);
+				if (m != null) {
+					Formatters.setDurationMode(m);
+				}
+			}
 		}
 
 		/**

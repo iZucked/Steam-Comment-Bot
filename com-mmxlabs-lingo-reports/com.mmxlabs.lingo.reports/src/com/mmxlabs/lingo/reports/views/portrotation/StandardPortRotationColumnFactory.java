@@ -174,12 +174,12 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "End Date", null, ColumnType.NORMAL, Formatters.asDateTimeFormatterWithTZ, sp.getEvent_End());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.duration":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Duration (DD:HH)", null, ColumnType.NORMAL, new BaseFormatter() {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Duration", "Duration in days (or days:hours)", ColumnType.NORMAL, new BaseFormatter() {
 				@Override
 				public String render(final Object object) {
 					final Event se = (Event) object;
 					final int duration = se.getDuration();
-					return String.format("%02d:%02d", duration / 24, duration % 24);
+					return Formatters.formatAsDays(duration);
 				}
 
 				@Override
