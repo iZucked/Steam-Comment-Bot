@@ -75,6 +75,8 @@ public class CargoTravelTimeUtils {
 		return minDuration;
 	}
 
+	
+
 	private static List<Route> getAllowedRoutes(final VesselAssignmentType vesselAssignmentType, final LocalDate date, final PortModel portModel, final CostModel costModel) {
 		if (vesselAssignmentType == null) {
 			// allow all routes if not on a vessel

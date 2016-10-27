@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.analytics.validation;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
@@ -71,6 +72,14 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE);
 				failures.add(dsd);
+			} else {
+				LocalDate date = slot.getDate();
+				if (date.getYear() < 1900) {
+					final String message = String.format("Buy has invalid year");
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+					dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE);
+					failures.add(dsd);
+				}
 			}
 			if (slot.getEntity() == null && slot.getContract() == null) {
 				final String message = String.format("Buy has no entity");
@@ -122,6 +131,14 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE);
 				failures.add(dsd);
+			} else {
+				LocalDate date = slot.getDate();
+				if (date.getYear() < 1900) {
+					final String message = String.format("Sell has invalid year");
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+					dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE);
+					failures.add(dsd);
+				}
 			}
 			if (slot.getEntity() == null && slot.getContract() == null) {
 				final String message = String.format("Sell has no entity");

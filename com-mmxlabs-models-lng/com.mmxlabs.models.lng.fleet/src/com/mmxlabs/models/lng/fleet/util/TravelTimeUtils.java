@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.fleet.util;
 
+import java.util.Collection;
+
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -15,6 +17,20 @@ import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.util.RouteDistanceLineCache;
 
 public class TravelTimeUtils {
+
+	public static int getMinTimeFromAllowedRoutes(final Port fromPort, final Port toPort, final VesselClass vesselClass, final double referenceSpeed, final Collection<Route> allowedRoutes) {
+		int minDuration = Integer.MAX_VALUE;
+		if (fromPort != null && toPort != null) {
+			for (final Route route : allowedRoutes) {
+				assert route != null;
+				final int totalTime = TravelTimeUtils.getTimeForRoute(vesselClass, referenceSpeed, route, fromPort, toPort);
+				if (totalTime < minDuration) {
+					minDuration = totalTime;
+				}
+			}
+		}
+		return minDuration;
+	}
 
 	public static int getTimeForRoute(final @Nullable VesselClass vesselClass, final double referenceSpeed, final @NonNull Route route, final @NonNull Port fromPort, final @NonNull Port toPort) {
 		final int distance = getDistance(route, fromPort, toPort);

@@ -54,8 +54,10 @@ public class EditObjectMouseListener implements MouseListener {
 				if (cell.getColumnIndex() == 0) {
 					target = row.getBuyOption();
 				} else if (cell.getColumnIndex() == 1) {
-					target = row.getSellOption();
+					// Wiring
 				} else if (cell.getColumnIndex() == 2) {
+					target = row.getSellOption();
+				} else if (cell.getColumnIndex() == 3) {
 					target = row.getShipping();
 				}
 				if (target != null) {
@@ -66,8 +68,10 @@ public class EditObjectMouseListener implements MouseListener {
 				if (cell.getColumnIndex() == 0) {
 					DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(row.getBuyOptions()));
 				} else if (cell.getColumnIndex() == 1) {
-					DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(row.getSellOptions()));
+					// Wiring
 				} else if (cell.getColumnIndex() == 2) {
+					DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(row.getSellOptions()));
+				} else if (cell.getColumnIndex() == 3) {
 					DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(row.getShipping()));
 				}
 			} else if (element instanceof EObject) {
