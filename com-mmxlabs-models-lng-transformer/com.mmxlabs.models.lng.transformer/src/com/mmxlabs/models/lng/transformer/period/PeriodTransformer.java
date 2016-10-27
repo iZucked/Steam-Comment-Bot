@@ -428,6 +428,7 @@ public class PeriodTransformer {
 				inclusionChecker.getObjectInclusionType(vesselAvailability, objectToPortVisitMap, periodRecord);
 				vesselsToRemove.add(vesselAvailability);
 				@Nullable
+				final
 				VesselAvailability originalFromCopy = mapping.getOriginalFromCopy(vesselAvailability);
 				assert originalFromCopy != null; // We should not be null in the transformer
 				mapping.registerRemovedOriginal(originalFromCopy);
@@ -452,6 +453,7 @@ public class PeriodTransformer {
 		}
 		for (final VesselEvent event : eventsToRemove) {
 			@Nullable
+			final
 			VesselEvent originalFromCopy = mapping.getOriginalFromCopy(event);
 			assert originalFromCopy != null; // We should not be null in the transformer
 			mapping.registerRemovedOriginal(originalFromCopy);
@@ -624,6 +626,7 @@ public class PeriodTransformer {
 		// Delete slots and cargoes outside of range.
 		for (final Slot slot : slotsToRemove) {
 			@Nullable
+			final
 			Slot originalFromCopy = mapping.getOriginalFromCopy(slot);
 			assert originalFromCopy != null; // We should not be null in the transformer
 			mapping.registerRemovedOriginal(originalFromCopy);
@@ -639,6 +642,7 @@ public class PeriodTransformer {
 		for (final Cargo cargo : cargoesToRemove) {
 			// cargoModel.getCargoes().remove(cargo);
 			@Nullable
+			final
 			Cargo originalFromCopy = mapping.getOriginalFromCopy(cargo);
 			assert originalFromCopy != null; // We should not be null in the transformer
 			mapping.registerRemovedOriginal(originalFromCopy);
@@ -731,7 +735,7 @@ public class PeriodTransformer {
 	}
 
 	public void updateVesselAvailabilities(@NonNull final PeriodRecord periodRecord, @NonNull final CargoModel cargoModel, @NonNull final SpotMarketsModel spotMarketsModel,
-			@NonNull PortModel portModel, @NonNull final Map<AssignableElement, PortVisit> startConditionMap, @NonNull final Map<AssignableElement, PortVisit> endConditionMap,
+			@NonNull final PortModel portModel, @NonNull final Map<AssignableElement, PortVisit> startConditionMap, @NonNull final Map<AssignableElement, PortVisit> endConditionMap,
 			@NonNull final Set<Cargo> cargoesToKeep, @NonNull final Set<Event> eventsToKeep, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap) {
 
 		final List<CollectedAssignment> collectedAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel);
@@ -1153,7 +1157,12 @@ public class PeriodTransformer {
 
 				// Create lookup of curve dates and remove those outside optimisation range.
 				final Set<YearMonth> seenDates = new HashSet<>();
-				final DataIndex<Integer> curve = availability.getCurve();
+				// Create a curve if necessary
+				DataIndex<Integer> curve = availability.getCurve();
+				if (curve == null) {
+					curve = PricingFactory.eINSTANCE.createDataIndex();
+					availability.setCurve(curve);
+				}
 				final List<IndexPoint<Integer>> pointsToRemove = new LinkedList<>();
 				for (final IndexPoint<Integer> value : curve.getPoints()) {
 					final YearMonth date = value.getDate();
