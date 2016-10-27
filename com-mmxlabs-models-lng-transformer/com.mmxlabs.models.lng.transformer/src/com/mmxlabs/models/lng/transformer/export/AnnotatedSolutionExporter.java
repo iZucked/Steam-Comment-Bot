@@ -212,8 +212,8 @@ public class AnnotatedSolutionExporter {
 			case SPOT_CHARTER:
 				eSequence.setSequenceType(SequenceType.SPOT_VESSEL);
 				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence)) {
-					continue; // DO NOT COMMIT - marker
-                                }
+					continue;
+                }
 
 				eSequence.setCharterInMarket(modelEntityMap.getModelObjectNullChecked(vesselAvailability.getSpotCharterInMarket(), CharterInMarket.class));
 				eSequence.unsetVesselAvailability();

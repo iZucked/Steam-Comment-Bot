@@ -2657,10 +2657,26 @@ public class LNGScenarioTransformer {
 			}
 			assert dailyCharterInCurve != null;
 
+			final ILongCurve repositioningFeeCurve;
+			if (eVesselAvailability.isSetRepositioningFee()) {
+				repositioningFeeCurve = dateHelper.generateLongExpressionCurve(eVesselAvailability.getRepositioningFee(), charterIndices);
+			} else {
+				repositioningFeeCurve = new ConstantValueLongCurve(0);
+			}
+			assert repositioningFeeCurve != null;
+
+			final ILongCurve ballastBonusCurve;
+			if (eVesselAvailability.isSetBallastBonus()) {
+				ballastBonusCurve = dateHelper.generateLongExpressionCurve(eVesselAvailability.getBallastBonus(), charterIndices);
+			} else {
+				ballastBonusCurve = new ConstantValueLongCurve(0);
+			}
+			assert ballastBonusCurve != null;
+
 			final IVessel vessel = vesselAssociation.lookupNullChecked(eVessel);
 
 			final IVesselAvailability vesselAvailability = builder.createVesselAvailability(vessel, dailyCharterInCurve,
-					eVesselAvailability.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, eVesselAvailability.isOptional());
+					eVesselAvailability.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, repositioningFeeCurve, ballastBonusCurve, eVesselAvailability.isOptional());
 			vesselAvailabilityAssociation.add(eVesselAvailability, vesselAvailability);
 
 			modelEntityMap.addModelObject(eVesselAvailability, vesselAvailability);
