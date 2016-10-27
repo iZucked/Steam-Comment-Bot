@@ -8,10 +8,13 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Association;
+import com.mmxlabs.common.curves.ConstantValueLongCurve;
+import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -189,77 +192,77 @@ public class LNGScenarioTransformerTest {
 
 		LNGScenarioTransformer.buildPanamaCosts(builder, vesselAssociation, vesselClassAssociation, vesselAvailabilities, panamaCanalTariff);
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel1, IRouteCostProvider.CostType.Laden,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Laden, 30_000, 0, 0, 0));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel1), Matchers.eq(IRouteCostProvider.CostType.Laden),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Laden, 30_000, 0, 0, 0)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel1, IRouteCostProvider.CostType.Ballast,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Ballast, 30_000, 0, 0, 0));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel1), Matchers.eq(IRouteCostProvider.CostType.Ballast),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Ballast, 30_000, 0, 0, 0)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel1, IRouteCostProvider.CostType.RoundTripBallast,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.RoundTripBallast, 30_000, 0, 0, 0));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel1), Matchers.eq(IRouteCostProvider.CostType.RoundTripBallast),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.RoundTripBallast, 30_000, 0, 0, 0)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel2, IRouteCostProvider.CostType.Laden,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Laden, 60_000, 0, 0, 0));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel2), Matchers.eq(IRouteCostProvider.CostType.Laden),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Laden, 60_000, 0, 0, 0)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel2, IRouteCostProvider.CostType.Ballast,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Ballast, 60_000, 0, 0, 0));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel2), Matchers.eq(IRouteCostProvider.CostType.Ballast),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Ballast, 60_000, 0, 0, 0)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel2, IRouteCostProvider.CostType.RoundTripBallast,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.RoundTripBallast, 60_000, 0, 0, 0));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel2), Matchers.eq(IRouteCostProvider.CostType.RoundTripBallast),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.RoundTripBallast, 60_000, 0, 0, 0)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel3, IRouteCostProvider.CostType.Laden,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Laden, 60_000, 1, 0, 0));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel3), Matchers.eq(IRouteCostProvider.CostType.Laden),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Laden, 60_000, 1, 0, 0)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel3, IRouteCostProvider.CostType.Ballast,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Ballast, 60_000, 1, 0, 0));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel3), Matchers.eq(IRouteCostProvider.CostType.Ballast),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Ballast, 60_000, 1, 0, 0)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel3, IRouteCostProvider.CostType.RoundTripBallast,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.RoundTripBallast, 60_000, 1, 0, 0));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel3), Matchers.eq(IRouteCostProvider.CostType.RoundTripBallast),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.RoundTripBallast, 60_000, 1, 0, 0)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel4, IRouteCostProvider.CostType.Laden,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Laden, 60_000, 30_000, 0, 0));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel4), Matchers.eq(IRouteCostProvider.CostType.Laden),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Laden, 60_000, 30_000, 0, 0)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel4, IRouteCostProvider.CostType.Ballast,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Ballast, 60_000, 30_000, 0, 0));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel4), Matchers.eq(IRouteCostProvider.CostType.Ballast),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Ballast, 60_000, 30_000, 0, 0)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel4, IRouteCostProvider.CostType.RoundTripBallast,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.RoundTripBallast, 60_000, 30_000, 0, 0));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel4), Matchers.eq(IRouteCostProvider.CostType.RoundTripBallast),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.RoundTripBallast, 60_000, 30_000, 0, 0)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel5, IRouteCostProvider.CostType.Laden,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Laden, 60_000, 30_000, 1, 0));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel5), Matchers.eq(IRouteCostProvider.CostType.Laden),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Laden, 60_000, 30_000, 1, 0)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel5, IRouteCostProvider.CostType.Ballast,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Ballast, 60_000, 30_000, 1, 0));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel5), Matchers.eq(IRouteCostProvider.CostType.Ballast),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Ballast, 60_000, 30_000, 1, 0)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel5, IRouteCostProvider.CostType.RoundTripBallast,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.RoundTripBallast, 60_000, 30_000, 1, 0));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel5), Matchers.eq(IRouteCostProvider.CostType.RoundTripBallast),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.RoundTripBallast, 60_000, 30_000, 1, 0)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel6, IRouteCostProvider.CostType.Laden,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Laden, 60_000, 30_000, 30_000, 0));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel6), Matchers.eq(IRouteCostProvider.CostType.Laden),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Laden, 60_000, 30_000, 30_000, 0)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel6, IRouteCostProvider.CostType.Ballast,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Ballast, 60_000, 30_000, 30_000, 0));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel6), Matchers.eq(IRouteCostProvider.CostType.Ballast),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Ballast, 60_000, 30_000, 30_000, 0)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel6, IRouteCostProvider.CostType.RoundTripBallast,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.RoundTripBallast, 60_000, 30_000, 30_000, 0));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel6), Matchers.eq(IRouteCostProvider.CostType.RoundTripBallast),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.RoundTripBallast, 60_000, 30_000, 30_000, 0)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel7, IRouteCostProvider.CostType.Laden,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Laden, 60_000, 30_000, 30_000, 1));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel7), Matchers.eq(IRouteCostProvider.CostType.Laden),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Laden, 60_000, 30_000, 30_000, 1)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel7, IRouteCostProvider.CostType.Ballast,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Ballast, 60_000, 30_000, 30_000, 1));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel7), Matchers.eq(IRouteCostProvider.CostType.Ballast),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Ballast, 60_000, 30_000, 30_000, 1)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel7, IRouteCostProvider.CostType.RoundTripBallast,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.RoundTripBallast, 60_000, 30_000, 30_000, 1));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel7), Matchers.eq(IRouteCostProvider.CostType.RoundTripBallast),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.RoundTripBallast, 60_000, 30_000, 30_000, 1)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel8, IRouteCostProvider.CostType.Laden,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Laden, 60_000, 30_000, 30_000, 50_000));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel8), Matchers.eq(IRouteCostProvider.CostType.Laden),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Laden, 60_000, 30_000, 30_000, 50_000)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel8, IRouteCostProvider.CostType.Ballast,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Ballast, 60_000, 30_000, 30_000, 50_000));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel8), Matchers.eq(IRouteCostProvider.CostType.Ballast),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.Ballast, 60_000, 30_000, 30_000, 50_000)));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel8, IRouteCostProvider.CostType.RoundTripBallast,
-				expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.RoundTripBallast, 60_000, 30_000, 30_000, 50_000));
+		Mockito.verify(builder).setVesselRouteCost(Matchers.eq(ERouteOption.PANAMA), Matchers.eq(oVessel8), Matchers.eq(IRouteCostProvider.CostType.RoundTripBallast),
+				Matchers.eq(expectedPanamaCost(panamaCanalTariff, IRouteCostProvider.CostType.RoundTripBallast, 60_000, 30_000, 30_000, 50_000)));
 
 		Mockito.verifyNoMoreInteractions(builder);
 	}
@@ -556,17 +559,17 @@ public class LNGScenarioTransformerTest {
 
 		LNGScenarioTransformer.buildPanamaCosts(builder, vesselAssociation, vesselClassAssociation, vesselAvailabilities, panamaCanalTariff);
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel1, IRouteCostProvider.CostType.Laden, 311_880_000L);
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel1, IRouteCostProvider.CostType.Ballast, 274_980_000L);
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel1, IRouteCostProvider.CostType.RoundTripBallast, 247_500_000L);
+		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel1, IRouteCostProvider.CostType.Laden, new ConstantValueLongCurve(311_880_000L));
+		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel1, IRouteCostProvider.CostType.Ballast, new ConstantValueLongCurve(274_980_000L));
+		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel1, IRouteCostProvider.CostType.RoundTripBallast, new ConstantValueLongCurve(247_500_000L));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel2, IRouteCostProvider.CostType.Laden, 345_200_000L);
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel2, IRouteCostProvider.CostType.Ballast, 304_050_000L);
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel2, IRouteCostProvider.CostType.RoundTripBallast, 273_000_000L);
+		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel2, IRouteCostProvider.CostType.Laden, new ConstantValueLongCurve(345_200_000L));
+		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel2, IRouteCostProvider.CostType.Ballast, new ConstantValueLongCurve(304_050_000L));
+		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel2, IRouteCostProvider.CostType.RoundTripBallast, new ConstantValueLongCurve(273_000_000L));
 
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel3, IRouteCostProvider.CostType.Laden, 388_320_000L);
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel3, IRouteCostProvider.CostType.Ballast, 341_670_000L);
-		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel3, IRouteCostProvider.CostType.RoundTripBallast, 306_000_000L);
+		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel3, IRouteCostProvider.CostType.Laden, new ConstantValueLongCurve(388_320_000L));
+		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel3, IRouteCostProvider.CostType.Ballast, new ConstantValueLongCurve(341_670_000L));
+		Mockito.verify(builder).setVesselRouteCost(ERouteOption.PANAMA, oVessel3, IRouteCostProvider.CostType.RoundTripBallast, new ConstantValueLongCurve(306_000_000L));
 
 		Mockito.verifyNoMoreInteractions(builder);
 	}
@@ -582,7 +585,7 @@ public class LNGScenarioTransformerTest {
 	 * @param band4
 	 * @return
 	 */
-	long expectedPanamaCost(final PanamaCanalTariff panamaCanalTariff, final IRouteCostProvider.CostType costType, final int band1, final int band2, final int band3, final int band4) {
+	private ILongCurve expectedPanamaCost(final PanamaCanalTariff panamaCanalTariff, final IRouteCostProvider.CostType costType, final int band1, final int band2, final int band3, final int band4) {
 		double total = 0.0;
 
 		total += getBandPrice(panamaCanalTariff, costType, 0) * (double) band1;
@@ -592,7 +595,7 @@ public class LNGScenarioTransformerTest {
 
 		total *= 1.0 + panamaCanalTariff.getMarkupRate();
 
-		return 1000L * (long) Math.round(total);
+		return new ConstantValueLongCurve(1000L * (long) Math.round(total));
 	}
 
 	double getBandPrice(final PanamaCanalTariff panamaCanalTariff, final IRouteCostProvider.CostType costType, final int band) {
