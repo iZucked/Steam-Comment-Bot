@@ -30,6 +30,10 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 
 	private ILongCurve dailyCharterInRate;
 
+	private ILongCurve repositioningFee;
+	
+	private ILongCurve ballastBonus;
+
 	private IStartEndRequirement startRequirement;
 	private IStartEndRequirement endRequirement;
 
@@ -115,5 +119,23 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 
 	public void setOptional(boolean optional) {
 		this.optional = optional;
+	}
+
+	@Override
+	public ILongCurve getRepositioningFee() {
+		return this.repositioningFee;
+	}
+
+	@Override
+	public ILongCurve getBallastBonus() {
+		return this.ballastBonus;
+	}
+
+	public void setRepositioningFee(ILongCurve repositioningFee) {
+		this.repositioningFee = repositioningFee;
+	}
+
+	public void setBallastBonus(ILongCurve ballastBonus) {
+		this.ballastBonus = ballastBonus;
 	}
 }

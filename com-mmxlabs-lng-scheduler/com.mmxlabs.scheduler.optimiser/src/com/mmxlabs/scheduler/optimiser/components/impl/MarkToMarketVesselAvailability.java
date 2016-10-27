@@ -36,6 +36,10 @@ public class MarkToMarketVesselAvailability implements IVesselAvailability {
 	@NonNull
 	private ILongCurve curve;
 	
+	private ILongCurve repositioningFee;
+	
+	private ILongCurve ballastBonus;
+
 	private boolean optional;
 
 	public MarkToMarketVesselAvailability(@NonNull final IMarkToMarket markToMarket, @NonNull final IDischargeOption dischargeOption) {
@@ -106,4 +110,23 @@ public class MarkToMarketVesselAvailability implements IVesselAvailability {
 	public void setOptional(boolean optional) {
 		this.optional = optional;
 	}
+	
+	@Override
+	public ILongCurve getRepositioningFee() {
+		return this.repositioningFee;
+	}
+
+	@Override
+	public ILongCurve getBallastBonus() {
+		return this.ballastBonus;
+	}
+
+	public void setRepositioningFee(ILongCurve repositioningFee) {
+		this.repositioningFee = repositioningFee;
+	}
+
+	public void setBallastBonus(ILongCurve ballastBonus) {
+		this.ballastBonus = ballastBonus;
+	}
+
 }

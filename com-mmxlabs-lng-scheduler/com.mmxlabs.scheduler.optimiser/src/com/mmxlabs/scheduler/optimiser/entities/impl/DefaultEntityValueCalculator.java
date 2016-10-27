@@ -428,23 +428,32 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		final long value;
 		final long revenue;
+		long additionalCost = 0;
+		int vesselEndTime = Integer.MAX_VALUE;
 		final boolean isGeneratedCharterOutPlan;
 		{
-			final PortDetails portDetails = (PortDetails) plan.getSequence()[0];
-			final IPortSlot portSlot = portDetails.getOptions().getPortSlot();
-			isGeneratedCharterOutPlan = portSlot.getPortType() == PortType.GeneratedCharterOut;
+			final PortDetails firstPortDetails = (PortDetails) plan.getSequence()[0];
+			final IPortSlot firstPortSlot = firstPortDetails.getOptions().getPortSlot();
+			isGeneratedCharterOutPlan = firstPortSlot.getPortType() == PortType.GeneratedCharterOut;
 			final long shippingCost = shippingCostHelper.getShippingCosts(plan, vesselAvailability, true, includeTimeCharterInFitness);
-			if (portSlot.getPortType() == PortType.CharterOut || isGeneratedCharterOutPlan) {
-				final IVesselEventPortSlot vesselEventPortSlot = (IVesselEventPortSlot) portSlot;
+			if (firstPortSlot.getPortType() == PortType.CharterOut || isGeneratedCharterOutPlan) {
+				final IVesselEventPortSlot vesselEventPortSlot = (IVesselEventPortSlot) firstPortSlot;
 				revenue = vesselEventPortSlot.getVesselEvent().getHireOutRevenue() + vesselEventPortSlot.getVesselEvent().getRepositioning();
 			} else {
 				revenue = 0;
 			}
+			if (firstPortSlot.getPortType() == PortType.Start) {
+				additionalCost += shippingCostHelper.getShippingRepositioningCost(firstPortSlot, vesselAvailability, vesselStartTime);
+			}
+			if (firstPortSlot.getPortType() == PortType.End) {
+				vesselEndTime = utcOffsetProvider.UTC(volumeAllocatedSequences.getVesselEndTime(firstPortSlot), firstPortSlot);
+				additionalCost += shippingCostHelper.getShippingBallastBonusCost(firstPortSlot, vesselAvailability, vesselEndTime);
+			}
 
 			// Calculate the value for the fitness function
 			final IEntityBook shippingBook = shippingEntity.getShippingBook();
-			final int utcEquivTaxTime = utcOffsetProvider.UTC(planStartTime, portDetails.getOptions().getPortSlot().getPort());
-			value = shippingBook.getTaxedProfit(revenue - shippingCost, utcEquivTaxTime);
+			final int utcEquivTaxTime = utcOffsetProvider.UTC(planStartTime, firstPortDetails.getOptions().getPortSlot().getPort());
+			value = shippingBook.getTaxedProfit(revenue - shippingCost - additionalCost, utcEquivTaxTime);
 		}
 		// Solution Export branch - should called infrequently
 		if (annotatedSolution != null) {
@@ -455,7 +464,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			// We include LNG costs here, but this may not be desirable - this depends on whether or not we consider the LNG a sunk cost...
 			// Cost is zero as shipping cost is recalculated to obtain annotation
 
-			generateShippingAnnotations(evaluationMode, plan, vesselAvailability, vesselStartTime, annotatedSolution, shippingEntity, revenue, 0, planStartTime, exportElement, true);
+			generateShippingAnnotations(evaluationMode, plan, vesselAvailability, vesselStartTime, annotatedSolution, shippingEntity, revenue, 0, additionalCost, planStartTime, exportElement, true);
 
 		}
 
@@ -463,11 +472,11 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	}
 
 	private void generateShippingAnnotations(@NonNull EvaluationMode evaluationMode, final VoyagePlan plan, final IVesselAvailability vesselAvailability, final int vesselStartTime,
-			final IAnnotatedSolution annotatedSolution, final IEntity shippingEntity, final long revenue, final long cost, final int utcEquivTaxTime, final ISequenceElement exportElement,
-			final boolean includeLNG) {
+			final IAnnotatedSolution annotatedSolution, final IEntity shippingEntity, final long revenue, final long cost, long additionalCost, final int utcEquivTaxTime,
+			final ISequenceElement exportElement, final boolean includeLNG) {
 		{
 			final long shippingCosts = shippingCostHelper.getShippingCosts(plan, vesselAvailability, includeLNG, true);
-			final long shippingTotalPretaxProfit = revenue /* +additionProfitAndLoss */ - cost - shippingCosts;
+			final long shippingTotalPretaxProfit = revenue /* +additionProfitAndLoss */ - cost - shippingCosts - additionalCost;
 			final long shippingProfit = shippingEntity.getShippingBook().getTaxedProfit(shippingTotalPretaxProfit, utcEquivTaxTime);
 
 			final DetailTree shippingDetails = new DetailTree();

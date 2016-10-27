@@ -4,12 +4,16 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
+import javax.inject.Inject;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -185,6 +189,20 @@ public class ShippingCostHelper {
 		final long hireCosts = includeCharterInCosts ? getHireCosts(plan) : 0L;
 
 		return shippingCosts + portCosts + hireCosts;
+	}
+
+	public long getShippingRepositioningCost(final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime ) {
+		if (portSlot.getPortType() == PortType.Start) {
+			return vesselAvailability.getRepositioningFee().getValueAtPoint(vesselStartTime);
+		}
+		return 0L;
+	}
+	
+	public long getShippingBallastBonusCost(final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselEndTime ) {
+		if (portSlot.getPortType() == PortType.End) {
+			return vesselAvailability.getBallastBonus().getValueAtPoint(vesselEndTime);
+		}
+		return 0L;
 	}
 
 	public long @NonNull [] getSeperatedShippingCosts(final @NonNull VoyagePlan plan, final @NonNull IVesselAvailability vesselAvailability, final boolean includeLNG,

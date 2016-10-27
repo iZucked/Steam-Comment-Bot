@@ -6,15 +6,19 @@ package com.mmxlabs.scheduler.optimiser.fitness;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -100,6 +104,22 @@ public class VolumeAllocatedSequences extends ArrayList<@NonNull VolumeAllocated
 		}
 		return null;
 	}
+	
+	@Nullable
+	public Integer getVesselEndTime(final @NonNull IPortSlot portSlot) {
+		final VolumeAllocatedSequence sequence = getScheduledSequence(portSlot);
+		if (sequence != null) {
+			List<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans = sequence.getVoyagePlans();
+			@NonNull
+			Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord> triple = voyagePlans.get(voyagePlans.size() - 1);
+			IPortTimesRecord third = triple.getThird();
+			int endTime = third.getSlotTime(third.getSlots().get(0));
+			int endDuration = third.getSlotDuration(third.getSlots().get(0));
+			return endTime + endDuration;
+		}
+		return null;
+	}
+
 
 	@Nullable
 	public IAllocationAnnotation getAllocationAnnotation(final @NonNull IPortSlot portSlot) {
