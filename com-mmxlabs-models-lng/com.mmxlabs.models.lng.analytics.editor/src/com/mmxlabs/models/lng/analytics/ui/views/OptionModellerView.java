@@ -14,6 +14,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javax.annotation.PreDestroy;
+import javax.net.ssl.SSLEngineResult.Status;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
@@ -64,7 +65,9 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -1340,6 +1343,10 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			Image imgInfo = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/information.gif").createImage();
 			Image imgShippingRoundTrip = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/roundtrip.png").createImage();
 
+			Color colour_error = new Color(Display.getDefault(), new RGB(240, 0, 0));
+			Color colour_warn = new Color(Display.getDefault(), new RGB(0, 100, 100));
+			Color colour_info = new Color(Display.getDefault(), new RGB(240, 240, 240));
+
 			@Override
 			protected @Nullable Image getImage(@NonNull final ViewerCell cell, @Nullable final Object element) {
 
@@ -1367,34 +1374,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			@Override
 			public String getToolTipText(final Object element) {
 
-				final Set<Object> targetElements = new HashSet<>();
-				targetElements.add(element);
-				// FIXME: Hacky!
-				if (element instanceof BaseCaseRow) {
-					final BaseCaseRow baseCaseRow = (BaseCaseRow) element;
-					if ("Buy".equals(name)) {
-						targetElements.add(baseCaseRow.getBuyOption());
-					}
-					if ("Sell".equals(name)) {
-						targetElements.add(baseCaseRow.getSellOption());
-					}
-					if ("Shipping".equals(name)) {
-						targetElements.add(baseCaseRow.getShipping());
-					}
-				}
-				if (element instanceof PartialCaseRow) {
-					final PartialCaseRow row = (PartialCaseRow) element;
-					if ("Buy".equals(name)) {
-						targetElements.addAll(row.getBuyOptions());
-					}
-					if ("Sell".equals(name)) {
-						targetElements.addAll(row.getSellOptions());
-					}
-					if ("Shipping".equals(name)) {
-						targetElements.add(row.getShipping());
-					}
-				}
-				targetElements.remove(null);
+				final Set<Object> targetElements = getTargetElements(name, element);
 
 				final StringBuilder sb = new StringBuilder();
 				for (final Object target : targetElements) {
@@ -1414,6 +1394,38 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				return super.getToolTipText(element);
 			}
 
+			private Set<Object> getTargetElements(final String name, final Object element) {
+				final Set<Object> targetElements = new HashSet<>();
+				targetElements.add(element);
+				// FIXME: Hacky!
+				if (element instanceof BaseCaseRow) {
+					final BaseCaseRow baseCaseRow = (BaseCaseRow) element;
+					if (name == null || "Buy".equals(name)) {
+						targetElements.add(baseCaseRow.getBuyOption());
+					}
+					if (name == null || "Sell".equals(name)) {
+						targetElements.add(baseCaseRow.getSellOption());
+					}
+					if (name == null || "Shipping".equals(name)) {
+						targetElements.add(baseCaseRow.getShipping());
+					}
+				}
+				if (element instanceof PartialCaseRow) {
+					final PartialCaseRow row = (PartialCaseRow) element;
+					if (name == null || "Buy".equals(name)) {
+						targetElements.addAll(row.getBuyOptions());
+					}
+					if (name == null || "Sell".equals(name)) {
+						targetElements.addAll(row.getSellOptions());
+					}
+					if (name == null || "Shipping".equals(name)) {
+						targetElements.add(row.getShipping());
+					}
+				}
+				targetElements.remove(null);
+				return targetElements;
+			}
+
 			@Override
 			public void update(final ViewerCell cell) {
 				super.update(cell);
@@ -1421,20 +1433,44 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				final GridItem item = (GridItem) cell.getItem();
 				item.setHeaderText("");
 				item.setHeaderImage(null);
-
+				cell.setBackground(null);
 				final Object element = cell.getElement();
+
+				final Set<Object> targetElements = getTargetElements(null, element);
+				IStatus s = org.eclipse.core.runtime.Status.OK_STATUS;
+				for (Object e : targetElements) {
+					if (validationErrors.containsKey(e)) {
+						final IStatus status = validationErrors.get(e);
+						if (!status.isOK()) {
+							if (status.getSeverity() > s.getSeverity()) {
+								s = status;
+							}
+						}
+					}
+				}
+				if (!s.isOK()) {
+					if (s.matches(IStatus.ERROR)) {
+						cell.setBackground(colour_error);
+						item.setBackground(colour_error);
+					} else if (s.matches(IStatus.WARNING)) {
+						cell.setBackground(colour_warn);
+						item.setBackground(colour_warn);
+					} else if (s.matches(IStatus.INFO)) {
+						cell.setBackground(colour_info);
+						item.setBackground(colour_info);
+					}
+				}
+
 				if (element instanceof BaseCaseRow || element instanceof PartialCaseRow) {
 					if (validationErrors.containsKey(element)) {
 						final IStatus status = validationErrors.get(element);
 						if (!status.isOK()) {
 							if (status.matches(IStatus.ERROR)) {
 								item.setHeaderImage(imgError);
-							}
-							if (status.matches(IStatus.WARNING)) {
+							} else if (status.matches(IStatus.WARNING)) {
 								item.setHeaderImage(imgWarn);
-							}
-							if (status.matches(IStatus.INFO)) {
-								item.setHeaderImage(imgWarn);
+							} else if (status.matches(IStatus.INFO)) {
+								item.setHeaderImage(imgInfo);
 							}
 						}
 					}
@@ -1447,6 +1483,10 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				imgWarn.dispose();
 				imgInfo.dispose();
 				imgShippingRoundTrip.dispose();
+
+				colour_error.dispose();
+				colour_info.dispose();
+				colour_warn.dispose();
 				super.dispose();
 			}
 
