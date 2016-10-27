@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder.ShippingType;
 import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.Port;
@@ -38,13 +39,13 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 			final BaseCaseRow baseCaseRow = (BaseCaseRow) target;
 
 			PortModel portModel = null;
-			MMXRootObject rootObject = extraContext.getRootObject();
+			final MMXRootObject rootObject = extraContext.getRootObject();
 			if (rootObject instanceof LNGScenarioModel) {
-				LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
 			}
 
-			ShippingType nonShipped = AnalyticsBuilder.isNonShipped(baseCaseRow);
+			final ShippingType nonShipped = AnalyticsBuilder.isNonShipped(baseCaseRow);
 			if (nonShipped == ShippingType.Shipped) {
 				if (baseCaseRow.getBuyOption() != null && baseCaseRow.getSellOption() != null) {
 					if (baseCaseRow.getShipping() == null) {
@@ -59,32 +60,16 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 						statuses.add(deco);
 					}
 					if (baseCaseRow.getShipping() instanceof RoundTripShippingOption) {
-						RoundTripShippingOption roundTripShippingOption = (RoundTripShippingOption) baseCaseRow.getShipping();
-						VesselClass vesselClass = roundTripShippingOption.getVesselClass();
+						final RoundTripShippingOption roundTripShippingOption = (RoundTripShippingOption) baseCaseRow.getShipping();
+						final VesselClass vesselClass = roundTripShippingOption.getVesselClass();
 
-						Port fromPort = AnalyticsBuilder.getPort(baseCaseRow.getBuyOption());
-						Port toPort = AnalyticsBuilder.getPort(baseCaseRow.getSellOption());
-						if (fromPort != null && toPort != null && vesselClass != null) {
-
-							ZonedDateTime windowStartDate = AnalyticsBuilder.getWindowStartDate(baseCaseRow.getBuyOption());
-							ZonedDateTime windowEndDate = AnalyticsBuilder.getWindowEndDate(baseCaseRow.getSellOption());
-
-							double speed = vesselClass.getMaxSpeed();
-
-							int travelTime = TravelTimeUtils.getMinTimeFromAllowedRoutes(fromPort, toPort, vesselClass, speed, portModel.getRoutes());
-
-							if (windowStartDate != null && windowEndDate != null) {
-								int optionDuration = AnalyticsBuilder.getDuration(baseCaseRow.getBuyOption());
-								final int availableTime = Hours.between(windowStartDate, windowEndDate) - optionDuration;
-
-								if (travelTime > availableTime) {
-									final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
-											(IConstraintStatus) ctx.createFailureStatus("Base case - not enough travel time."));
-									deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION);
-									deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
-									statuses.add(deco);
-								}
-							}
+						validateTravelTime(ctx, statuses, baseCaseRow, portModel, vesselClass);
+					} else if (baseCaseRow.getShipping() instanceof FleetShippingOption) {
+						final FleetShippingOption roundTripShippingOption = (FleetShippingOption) baseCaseRow.getShipping();
+						final Vessel vessel = roundTripShippingOption.getVessel();
+						if (vessel != null) {
+							final VesselClass vesselClass = vessel.getVesselClass();
+							validateTravelTime(ctx, statuses, baseCaseRow, portModel, vesselClass);
 						}
 					}
 
@@ -104,6 +89,32 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 		}
 
 		return Activator.PLUGIN_ID;
+	}
+
+	private void validateTravelTime(final IValidationContext ctx, final List<IStatus> statuses, final BaseCaseRow baseCaseRow, final PortModel portModel, final VesselClass vesselClass) {
+		final Port fromPort = AnalyticsBuilder.getPort(baseCaseRow.getBuyOption());
+		final Port toPort = AnalyticsBuilder.getPort(baseCaseRow.getSellOption());
+		if (fromPort != null && toPort != null && vesselClass != null) {
+
+			final ZonedDateTime windowStartDate = AnalyticsBuilder.getWindowStartDate(baseCaseRow.getBuyOption());
+			final ZonedDateTime windowEndDate = AnalyticsBuilder.getWindowEndDate(baseCaseRow.getSellOption());
+
+			final double speed = vesselClass.getMaxSpeed();
+
+			final int travelTime = TravelTimeUtils.getMinTimeFromAllowedRoutes(fromPort, toPort, vesselClass, speed, portModel.getRoutes());
+
+			if (windowStartDate != null && windowEndDate != null) {
+				final int optionDuration = AnalyticsBuilder.getDuration(baseCaseRow.getBuyOption());
+				final int availableTime = Hours.between(windowStartDate, windowEndDate) - optionDuration;
+
+				if (travelTime > availableTime) {
+					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Base case - not enough travel time."));
+					deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION);
+					deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
+					statuses.add(deco);
+				}
+			}
+		}
 	}
 
 }
