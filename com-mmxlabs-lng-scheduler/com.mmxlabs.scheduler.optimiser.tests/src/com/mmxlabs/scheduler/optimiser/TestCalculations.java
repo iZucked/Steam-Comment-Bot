@@ -162,7 +162,7 @@ public class TestCalculations {
 			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), TimeWindowMaker.createInclusiveInclusive(75, 75), false, 0, false);
 
 			final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
-			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, false);
+			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, new ConstantValueLongCurve(0), new ConstantValueLongCurve(0), false);
 
 			final ITimeWindow loadWindow = TimeWindowMaker.createInclusiveInclusive(25, 25, 0, false);
 			final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1,
@@ -609,7 +609,7 @@ public class TestCalculations {
 			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), TimeWindowMaker.createInclusiveInclusive(75, 75, 0, false), false, 0, false);
 
 			final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
-			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, false);
+			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, new ConstantValueLongCurve(0), new ConstantValueLongCurve(0), false);
 
 			final ITimeWindow loadWindow = TimeWindowMaker.createInclusiveInclusive(25, 25, 0, false);
 			final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1,
@@ -1062,7 +1062,7 @@ public class TestCalculations {
 			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), TimeWindowMaker.createInclusiveInclusive(75, 75), false, 0, false);
 
 			final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
-			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, isOptional);
+			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, new ConstantValueLongCurve(0), new ConstantValueLongCurve(0), isOptional);
 
 			final ITimeWindow loadWindow = TimeWindowMaker.createInclusiveInclusive(25, 25);
 			final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1,
