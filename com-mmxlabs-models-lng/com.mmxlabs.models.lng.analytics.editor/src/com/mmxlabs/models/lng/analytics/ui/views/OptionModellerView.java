@@ -97,6 +97,7 @@ import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.OptionRule;
+import com.mmxlabs.models.lng.analytics.PartialCase;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.ResultContainer;
 import com.mmxlabs.models.lng.analytics.ResultSet;
@@ -190,6 +191,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private NumberInlineEditor numberInlineEditor;
 	private Control inputPNL;
 
+	private boolean baseCaseValid = true;
+	private boolean partialCaseValid = true;
+
 	@Override
 	public void createPartControl(final Composite parent) {
 
@@ -229,7 +233,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			buyComposite.setLayout(new GridLayout(1, true));
 
 			{
-
 				wrapInExpandable(buyComposite, "Options history", p -> createOptionsTreeViewer(p), expandableCompo -> {
 
 					final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
@@ -322,7 +325,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				inputPNL = createInputTargetPNL(c);
 				inputPNL.setLayoutData(new GridData(100, SWT.DEFAULT));
 
-				final Label baseCaseCalculator = new Label(c, SWT.NONE);
+				baseCaseCalculator = new Label(c, SWT.NONE);
 				// baseCaseCalculator.setText("Calc."); --cogs
 				baseCaseCalculator.setImage(image_grey_calculate);
 				GridDataFactory.generate(baseCaseCalculator, 1, 1);
@@ -348,7 +351,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					@Override
 					public void mouseDown(final MouseEvent e) {
 
-						if (getModel() != null) {
+						if (baseCaseValid && getModel() != null) {
 							BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(),
 									() -> BaseCaseEvaluator.evaluate(OptionModellerView.this, getModel(), getModel().getBaseCase(), true, "Base Case"));
 						}
@@ -395,7 +398,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 				generateComposite.setLayout(new GridLayout(1, true));
 
-				final Label generateButton = new Label(generateComposite, SWT.NONE);
+				generateButton = new Label(generateComposite, SWT.NONE);
 				generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(true, false).create());
 				generateButton.setImage(image_grey_generate);
 				generateButton.addMouseListener(new MouseListener() {
@@ -403,7 +406,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					@Override
 					public void mouseDown(final MouseEvent e) {
 
-						if (getModel() != null) {
+						if (partialCaseValid && getModel() != null) {
 							BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> WhatIfEvaluator.evaluate(OptionModellerView.this, getModel()));
 						}
 					}
@@ -589,6 +592,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				.align(SWT.FILL, SWT.FILL).create());
 
 		{
+
 			final Pair<Object, IEclipseContext> p = createReportControl("com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport", "Econs", rhsComposite, childContext -> {
 			});
 			this.econsReport = p.getFirst();
@@ -1583,7 +1587,85 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			final IStatus status = validationSupport.validate();
 
 			validationErrors.clear();
+			baseCaseValid = true;
+			partialCaseValid = true;
 			validationSupport.processStatus(status, validationErrors);
+
+			final Function<EObject, Boolean> checker = o -> {
+				if (o == null) {
+					return true;
+				}
+				if (validationErrors.containsKey(o)) {
+					final IStatus s = validationErrors.get(o);
+					if (s != null && s.getSeverity() >= IStatus.ERROR) {
+						return false;
+					}
+				}
+				return true;
+			};
+			if (model != null) {
+				{
+					final BaseCase baseCase = model.getBaseCase();
+					if (!checker.apply(baseCase)) {
+						baseCaseValid = false;
+					} else {
+						for (final BaseCaseRow row : baseCase.getBaseCase()) {
+							if (!checker.apply(row)) {
+								baseCaseValid = false;
+							} else {
+								baseCaseValid &= checker.apply(row.getBuyOption());
+								baseCaseValid &= checker.apply(row.getSellOption());
+								baseCaseValid &= checker.apply(row.getShipping());
+							}
+							if (!baseCaseValid) {
+								break;
+							}
+						}
+					}
+				}
+				{
+					final PartialCase partialCase = model.getPartialCase();
+					if (!checker.apply(partialCase)) {
+						partialCaseValid = false;
+					} else {
+						for (final PartialCaseRow row : partialCase.getPartialCase()) {
+							if (!checker.apply(row)) {
+								partialCaseValid = false;
+							} else {
+								for (BuyOption b : row.getBuyOptions()) {
+									partialCaseValid &= checker.apply(b);
+								}
+
+								for (SellOption s : row.getSellOptions()) {
+									partialCaseValid &= checker.apply(s);
+								}
+
+								for (ShippingOption s : row.getShipping()) {
+									partialCaseValid &= checker.apply(s);
+								}
+							}
+							if (!partialCaseValid) {
+								break;
+							}
+						}
+					}
+				}
+			}
+
+			if (!generateButton.isDisposed()) {
+				if (partialCaseValid) {
+					generateButton.setBackground(null);
+				} else {
+					generateButton.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
+				}
+			}
+			if (!baseCaseCalculator.isDisposed()) {
+				if (baseCaseValid) {
+					baseCaseCalculator.setBackground(null);
+				} else {
+					baseCaseCalculator.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
+				}
+			}
 
 		} finally {
 
@@ -1710,6 +1792,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private ICommandHandler commandHandler;
 
 	private Composite rhsComposite;
+	private Label baseCaseCalculator;
+	private Label generateButton;
 
 	@Override
 	public synchronized ICommandHandler getDefaultCommandHandler() {
@@ -1738,13 +1822,11 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 				@Override
 				public IReferenceValueProviderProvider getReferenceValueProviderProvider() {
-					// TODO Auto-generated method stub
 					return superHandler.getReferenceValueProviderProvider();
 				}
 
 				@Override
 				public EditingDomain getEditingDomain() {
-					// TODO Auto-generated method stub
 					return superHandler.getEditingDomain();
 				}
 			};
