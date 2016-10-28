@@ -34,11 +34,11 @@ public class PartialCaseConstraint extends AbstractModelMultiConstraint {
 		if (target instanceof PartialCase) {
 			final PartialCase partialCase = (PartialCase) target;
 
-			final Set<LoadSlot> loadSlots = new HashSet<>();
-			final Set<DischargeSlot> dischargeSlots = new HashSet<>();
+			final Set<BuyOption> loadSlots = new HashSet<>();
+			final Set<SellOption> dischargeSlots = new HashSet<>();
 
-			final Set<LoadSlot> duplicatedLoadSlots = new HashSet<>();
-			final Set<DischargeSlot> duplicatdDischargeSlots = new HashSet<>();
+			final Set<BuyOption> duplicatedLoadSlots = new HashSet<>();
+			final Set<SellOption> duplicatdDischargeSlots = new HashSet<>();
 
 			// First pass, find problem slots
 			processPartialCase(partialCase, (row, slot) -> {
@@ -69,27 +69,19 @@ public class PartialCaseConstraint extends AbstractModelMultiConstraint {
 		return Activator.PLUGIN_ID;
 	}
 
-	public void processPartialCase(final PartialCase partialCase, final BiConsumer<PartialCaseRow, LoadSlot> visitLoadSlot, final BiConsumer<PartialCaseRow, DischargeSlot> visitDischargeSlot) {
+	public void processPartialCase(final PartialCase partialCase, final BiConsumer<PartialCaseRow, BuyOption> visitLoadSlot, final BiConsumer<PartialCaseRow, SellOption> visitDischargeSlot) {
 		for (final PartialCaseRow row : partialCase.getPartialCase()) {
 			{
 				for (final BuyOption buy : row.getBuyOptions()) {
 					if (buy instanceof BuyReference) {
-						final BuyReference buyReference = (BuyReference) buy;
-						final LoadSlot slot = buyReference.getSlot();
-						if (slot != null) {
-							visitLoadSlot.accept(row, slot);
-						}
+						visitLoadSlot.accept(row, buy);
 					}
 				}
 			}
 			{
 				for (final SellOption sell : row.getSellOptions()) {
 					if (sell instanceof SellReference) {
-						final SellReference sellReference = (SellReference) sell;
-						final DischargeSlot slot = sellReference.getSlot();
-						if (slot != null) {
-							visitDischargeSlot.accept(row, slot);
-						}
+						visitDischargeSlot.accept(row, sell);
 					}
 				}
 			}

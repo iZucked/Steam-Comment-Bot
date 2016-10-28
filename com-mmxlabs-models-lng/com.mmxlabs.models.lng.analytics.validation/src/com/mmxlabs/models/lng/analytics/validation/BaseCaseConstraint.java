@@ -34,63 +34,55 @@ public class BaseCaseConstraint extends AbstractModelMultiConstraint {
 		if (target instanceof BaseCase) {
 			final BaseCase baseCase = (BaseCase) target;
 
-			final Set<LoadSlot> loadSlots = new HashSet<>();
-			final Set<DischargeSlot> dischargeSlots = new HashSet<>();
+			// Check for duplicated existing slots.
+			{
+				final Set<BuyOption> loadSlots = new HashSet<>();
+				final Set<SellOption> dischargeSlots = new HashSet<>();
 
-			final Set<LoadSlot> duplicatedLoadSlots = new HashSet<>();
-			final Set<DischargeSlot> duplicatdDischargeSlots = new HashSet<>();
+				final Set<BuyOption> duplicatedLoadSlots = new HashSet<>();
+				final Set<SellOption> duplicatdDischargeSlots = new HashSet<>();
 
-			// First pass, find problem slots
-			processBaseCase(baseCase, (row, slot) -> {
-				if (!loadSlots.add(slot)) {
-					duplicatedLoadSlots.add(slot);
-				}
-			}, (row, slot) -> {
-				if (!dischargeSlots.add(slot)) {
-					duplicatdDischargeSlots.add(slot);
-				}
-			});
-			// Second pass, report problem slots
-			processBaseCase(baseCase, (row, slot) -> {
-				if (duplicatedLoadSlots.contains(slot)) {
-					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Base case - existing slot used multiple times."));
-					deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION);
-					statuses.add(deco);
-				}
-			}, (row, slot) -> {
-				if (duplicatdDischargeSlots.contains(slot)) {
-					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Base case -existing slot used multiple times."));
-					deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
-					statuses.add(deco);
-				}
-			});
+				// First pass, find problem slots
+				processBaseCase(baseCase, (row, slot) -> {
+					if (!loadSlots.add(slot)) {
+						duplicatedLoadSlots.add(slot);
+					}
+				}, (row, slot) -> {
+					if (!dischargeSlots.add(slot)) {
+						duplicatdDischargeSlots.add(slot);
+					}
+				});
+				// Second pass, report problem slots
+				processBaseCase(baseCase, (row, slot) -> {
+					if (duplicatedLoadSlots.contains(slot)) {
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Base case - existing slot used multiple times."));
+						deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION);
+						statuses.add(deco);
+					}
+				}, (row, slot) -> {
+					if (duplicatdDischargeSlots.contains(slot)) {
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Base case -existing slot used multiple times."));
+						deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
+						statuses.add(deco);
+					}
+				});
 
+			}
 		}
 
 		return Activator.PLUGIN_ID;
 	}
 
-	public void processBaseCase(final BaseCase baseCase, final BiConsumer<BaseCaseRow, LoadSlot> visitLoadSlot, final BiConsumer<BaseCaseRow, DischargeSlot> visitDischargeSlot) {
+	public void processBaseCase(final BaseCase baseCase, final BiConsumer<BaseCaseRow, BuyOption> visitLoadSlot, final BiConsumer<BaseCaseRow, SellOption> visitDischargeSlot) {
 		for (final BaseCaseRow row : baseCase.getBaseCase()) {
-			{
-				final BuyOption buy = row.getBuyOption();
-				if (buy instanceof BuyReference) {
-					final BuyReference buyReference = (BuyReference) buy;
-					final LoadSlot slot = buyReference.getSlot();
-					if (slot != null) {
-						visitLoadSlot.accept(row, slot);
-					}
-				}
+			final BuyOption buy = row.getBuyOption();
+			if (buy != null) {
+				visitLoadSlot.accept(row, buy);
 			}
-			{
-				final SellOption sell = row.getSellOption();
-				if (sell instanceof SellReference) {
-					final SellReference sellReference = (SellReference) sell;
-					final DischargeSlot slot = sellReference.getSlot();
-					if (slot != null) {
-						visitDischargeSlot.accept(row, slot);
-					}
-				}
+			final SellOption sell = row.getSellOption();
+
+			if (sell != null) {
+				visitDischargeSlot.accept(row, sell);
 			}
 		}
 	}

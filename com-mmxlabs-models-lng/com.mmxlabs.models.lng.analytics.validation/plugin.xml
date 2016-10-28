@@ -315,6 +315,9 @@
                <message>
                   {0}
                </message>
+               <target
+                     class="BaseCase">
+               </target>
             </constraint>
             <constraint
                   class="com.mmxlabs.models.lng.analytics.validation.PartialCaseConstraint"
@@ -330,6 +333,22 @@
                </message>
                <target
                      class="PartialCase">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.OptionAnalysisModelConstraint"
+                  id="com.mmxlabs.models.lng.analytics.validation.OptionAnalysisModelConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="OptionAnalysisModelConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="OptionAnalysisModel">
                </target>
             </constraint>
          </constraints>
