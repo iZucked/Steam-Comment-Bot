@@ -432,7 +432,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 		charterOutOption.setPortOptions(generatedCharterPortOptions);
 		// (3) ballast to return port
-		int startOfPostCharterVoyage = portTimesRecord.getSlotTime(charterOutPortSlot) + portTimesRecord.getSlotDuration(charterOutPortSlot);
+		int startOfPostCharterVoyage = charterOutOption.getCharterStartTime() + charterOutOption.getCharterDuration();
 		final long charterToReturnPortRouteCosts = routeCostProvider.getRouteCost(charterOutOption.getFromCharterPort().getSecond(), vessel, startOfPostCharterVoyage, CostType.Ballast);
 
 		final VoyageOptions charterToReturnPortVoyageOptions = new VoyageOptions(charterOutPortSlot, originalBallast.getOptions().getToPortSlot());
