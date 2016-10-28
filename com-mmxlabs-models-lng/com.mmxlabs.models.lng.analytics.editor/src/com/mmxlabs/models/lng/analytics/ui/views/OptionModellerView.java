@@ -1343,9 +1343,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			Image imgInfo = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/information.gif").createImage();
 			Image imgShippingRoundTrip = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/roundtrip.png").createImage();
 
-			Color colour_error = new Color(Display.getDefault(), new RGB(240, 0, 0));
-			Color colour_warn = new Color(Display.getDefault(), new RGB(0, 100, 100));
-			Color colour_info = new Color(Display.getDefault(), new RGB(240, 240, 240));
+			Color colour_error = new Color(Display.getDefault(), new RGB(255, 100, 100));
+			Color colour_warn = new Color(Display.getDefault(), new RGB(255, 255, 200));
+			Color colour_info = new Color(Display.getDefault(), new RGB(200, 240, 240));
 
 			@Override
 			protected @Nullable Image getImage(@NonNull final ViewerCell cell, @Nullable final Object element) {
@@ -1438,7 +1438,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 				final Set<Object> targetElements = getTargetElements(null, element);
 				IStatus s = org.eclipse.core.runtime.Status.OK_STATUS;
-				for (Object e : targetElements) {
+				for (final Object e : targetElements) {
 					if (validationErrors.containsKey(e)) {
 						final IStatus status = validationErrors.get(e);
 						if (!status.isOK()) {
