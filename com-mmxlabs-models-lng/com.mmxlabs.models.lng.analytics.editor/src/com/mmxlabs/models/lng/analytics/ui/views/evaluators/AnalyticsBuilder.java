@@ -48,7 +48,9 @@ import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -209,20 +211,57 @@ public class AnalyticsBuilder {
 		return null;
 	}
 
-	public static int calculateTravelDaysForLoad(final LoadSlot loadSlot, final DischargeSlot dischargeSlot, final ShippingOption shippingOption) {
+	public static int calculateTravelHoursForLoad(PortModel portModel, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, final ShippingOption shippingOption) {
 
-		// TODO: Get speed from shipping option.
-		// double speed = 17.0;
-		// TODO: Get vessel class from shipping option.
-		// VesselClass vesselClass;
-		// TODO: Single route or closed route?
-		// TravelTimeUtils.getTimeForRoute(, referenceSpeed, route, fromPort, toPort);
+		final Port fromPort = loadSlot.getPort();
+		final Port toPort = dischargeSlot.getPort();
 
-		return 20;
+		VesselClass vesselClass = null;
+		if (shippingOption instanceof RoundTripShippingOption) {
+			final RoundTripShippingOption roundTripShippingOption = (RoundTripShippingOption) shippingOption;
+			vesselClass = roundTripShippingOption.getVesselClass();
+
+		} else if (shippingOption instanceof FleetShippingOption) {
+			final FleetShippingOption roundTripShippingOption = (FleetShippingOption) shippingOption;
+			final Vessel vessel = roundTripShippingOption.getVessel();
+			if (vessel != null) {
+				vesselClass = vessel.getVesselClass();
+			}
+		}
+		if (fromPort != null && toPort != null && vesselClass != null) {
+			// TODO: Get from input
+			final double speed = vesselClass.getMaxSpeed();
+			final int travelTime = TravelTimeUtils.getMinTimeFromAllowedRoutes(fromPort, toPort, vesselClass, speed, portModel.getRoutes());
+			return travelTime;
+		}
+
+		return 0;
 	}
 
-	public static int calculateTravelDaysForDischarge(final LoadSlot loadSlot, final DischargeSlot dischargeSlot, final ShippingOption shippingOption) {
-		return 20;
+	public static int calculateTravelHoursForDischarge(PortModel portModel, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, final ShippingOption shippingOption) {
+		final Port fromPort = loadSlot.getPort();
+		final Port toPort = dischargeSlot.getPort();
+
+		VesselClass vesselClass = null;
+		if (shippingOption instanceof RoundTripShippingOption) {
+			final RoundTripShippingOption roundTripShippingOption = (RoundTripShippingOption) shippingOption;
+			vesselClass = roundTripShippingOption.getVesselClass();
+
+		} else if (shippingOption instanceof FleetShippingOption) {
+			final FleetShippingOption roundTripShippingOption = (FleetShippingOption) shippingOption;
+			final Vessel vessel = roundTripShippingOption.getVessel();
+			if (vessel != null) {
+				vesselClass = vessel.getVesselClass();
+			}
+		}
+		if (fromPort != null && toPort != null && vesselClass != null) {
+			// TODO: Get from input
+			final double speed = vesselClass.getMaxSpeed();
+			final int travelTime = TravelTimeUtils.getMinTimeFromAllowedRoutes(fromPort, toPort, vesselClass, speed, portModel.getRoutes());
+			return travelTime;
+		}
+
+		return 0;
 	}
 
 	public enum ShippingType {

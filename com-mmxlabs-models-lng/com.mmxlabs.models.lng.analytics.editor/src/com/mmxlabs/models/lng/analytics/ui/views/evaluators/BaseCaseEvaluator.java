@@ -2,7 +2,6 @@ package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -33,15 +32,18 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.ServiceHelper;
@@ -62,6 +64,7 @@ public class BaseCaseEvaluator {
 	}
 
 	private static final ShippingOptionDescriptionFormatter SHIPPING_OPTION_DESCRIPTION_FORMATTER = new ShippingOptionDescriptionFormatter();
+
 	static class Mapper implements IMapperClass {
 		private final EcoreUtil.Copier copier;
 
@@ -210,6 +213,8 @@ public class BaseCaseEvaluator {
 
 	protected static void setShipping(final @Nullable LoadSlot loadSlot, final @Nullable DischargeSlot dischargeSlot, final @Nullable Cargo cargo, final @Nullable ShippingOption shipping,
 			final @NonNull LNGScenarioModel lngScenarioModel) {
+		PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+
 		if (shipping instanceof NominatedShippingOption) {
 			final NominatedShippingOption nominatedShippingOption = (NominatedShippingOption) shipping;
 			if (loadSlot != null && loadSlot.isDESPurchase()) {
@@ -237,11 +242,27 @@ public class BaseCaseEvaluator {
 
 				// TODO: Calculate time.
 				if (loadSlot.getWindowStart() != null && dischargeSlot.getWindowStart() == null) {
-					int travelDays = AnalyticsBuilder.calculateTravelDaysForDischarge(loadSlot, dischargeSlot, shipping);
+					int travelHours = AnalyticsBuilder.calculateTravelHoursForDischarge(portModel, loadSlot, dischargeSlot, shipping);
+					int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 					dischargeSlot.setWindowStart(loadSlot.getWindowStart().plusDays(travelDays));
+					if (dischargeSlot instanceof SpotSlot) {
+						dischargeSlot.setWindowStart(dischargeSlot.getWindowStart().withDayOfMonth(1));
+						// Ensure other values correctly set
+						dischargeSlot.setWindowSize(1);
+						dischargeSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+						dischargeSlot.setWindowStartTime(0);
+					}
 				} else if (loadSlot.getWindowStart() == null && dischargeSlot.getWindowStart() != null) {
-					int travelDays = AnalyticsBuilder.calculateTravelDaysForLoad(loadSlot, dischargeSlot, shipping);
+					int travelHours = AnalyticsBuilder.calculateTravelHoursForLoad(portModel, loadSlot, dischargeSlot, shipping);
+					int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 					loadSlot.setWindowStart(dischargeSlot.getWindowStart().minusDays(travelDays));
+					if (loadSlot instanceof SpotSlot) {
+						loadSlot.setWindowStart(loadSlot.getWindowStart().withDayOfMonth(1));
+						// Ensure other values correctly set
+						loadSlot.setWindowSize(1);
+						loadSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+						loadSlot.setWindowStartTime(0);
+					}
 				}
 			}
 		} else if (shipping instanceof RoundTripShippingOption) {
@@ -250,8 +271,7 @@ public class BaseCaseEvaluator {
 				final CharterInMarket market = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 				String baseName = SHIPPING_OPTION_DESCRIPTION_FORMATTER.render(roundTripShippingOption);
 				@NonNull
-				Set<String> usedIDStrings = lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets()
-					.stream().map(c -> c.getName()).collect(Collectors.toSet());
+				Set<String> usedIDStrings = lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().stream().map(c -> c.getName()).collect(Collectors.toSet());
 				String id = AnalyticsBuilder.getUniqueID(baseName, usedIDStrings);
 				market.setName(id);
 				market.setCharterInRate(roundTripShippingOption.getHireCost());
@@ -260,20 +280,36 @@ public class BaseCaseEvaluator {
 				cargo.setSpotIndex(-1);
 				lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().add(market);
 
-				// TODO: Calculate time.
 				if (loadSlot.getWindowStart() != null && dischargeSlot.getWindowStart() == null) {
-					int travelDays = AnalyticsBuilder.calculateTravelDaysForDischarge(loadSlot, dischargeSlot, shipping);
+					int travelHours = AnalyticsBuilder.calculateTravelHoursForDischarge(portModel, loadSlot, dischargeSlot, shipping);
+					int travelDays = (int) Math.ceil((double) travelHours / 24.0);
+
 					dischargeSlot.setWindowStart(loadSlot.getWindowStart().plusDays(travelDays));
+					if (dischargeSlot instanceof SpotSlot) {
+						dischargeSlot.setWindowStart(dischargeSlot.getWindowStart().withDayOfMonth(1));
+						// Ensure other values correctly set
+						dischargeSlot.setWindowSize(1);
+						dischargeSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+						dischargeSlot.setWindowStartTime(0);
+					}
 				} else if (loadSlot.getWindowStart() == null && dischargeSlot.getWindowStart() != null) {
-					int travelDays = AnalyticsBuilder.calculateTravelDaysForLoad(loadSlot, dischargeSlot, shipping);
+					int travelHours = AnalyticsBuilder.calculateTravelHoursForLoad(portModel, loadSlot, dischargeSlot, shipping);
+
+					int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 					loadSlot.setWindowStart(dischargeSlot.getWindowStart().minusDays(travelDays));
+					if (loadSlot instanceof SpotSlot) {
+						loadSlot.setWindowStart(loadSlot.getWindowStart().withDayOfMonth(1));
+						// Ensure other values correctly set
+						loadSlot.setWindowSize(1);
+						loadSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+						loadSlot.setWindowStartTime(0);
+					}
 				}
 			}
 		}
 	}
 
 	protected static void createShipping(final LNGScenarioModel clone, final BaseCase clonedBaseCase) {
-		// TODO Auto-generated method stub
 
 	}
 
