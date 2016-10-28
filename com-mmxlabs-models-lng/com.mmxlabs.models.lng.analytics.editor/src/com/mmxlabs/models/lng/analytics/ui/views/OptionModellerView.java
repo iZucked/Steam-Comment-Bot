@@ -1272,8 +1272,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				}
 				if (selection != null) {
 					selectionService.setPostSelection(new StructuredSelection(selection));
-					packAll(rhsComposite);
 				}
+				// Run as async as post selection may well trigger async refreshes
+				RunnerHelper.asyncExec(() -> packAll(rhsComposite));
 			}
 
 		});
@@ -1558,6 +1559,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			// if () {
 			//
 			// }
+			packAll(rhsComposite);
 		});
 	}
 
