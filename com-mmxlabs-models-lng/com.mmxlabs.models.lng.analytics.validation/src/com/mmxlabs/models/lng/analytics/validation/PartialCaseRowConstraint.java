@@ -48,7 +48,7 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 			}
 			ShippingType nonShipped = AnalyticsBuilder.isNonShipped(partialCaseRow);
 			if (nonShipped == ShippingType.Shipped) {
-				if (partialCaseRow.getShipping() == null) {
+				if (partialCaseRow.getShipping().isEmpty()) {
 					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Partial case - no shipping option defined."));
 					deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
 					statuses.add(deco);
