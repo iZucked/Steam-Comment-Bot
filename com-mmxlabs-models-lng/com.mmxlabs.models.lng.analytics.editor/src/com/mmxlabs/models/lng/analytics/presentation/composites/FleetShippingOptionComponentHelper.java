@@ -71,6 +71,7 @@ public class FleetShippingOptionComponentHelper extends BaseComponentHelper {
 		add_vesselEditor(detailComposite, topClass);
 		add_hireCostEditor(detailComposite, topClass);
 		add_entityEditor(detailComposite, topClass);
+		add_useSafetyHeelEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the vessel feature on FleetShippingOption
@@ -96,5 +97,14 @@ public class FleetShippingOptionComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_entityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.FLEET_SHIPPING_OPTION__ENTITY));
+	}
+
+	/**
+	 * Create the editor for the useSafetyHeel feature on FleetShippingOption
+	 *
+	 * @generated
+	 */
+	protected void add_useSafetyHeelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.FLEET_SHIPPING_OPTION__USE_SAFETY_HEEL));
 	}
 }

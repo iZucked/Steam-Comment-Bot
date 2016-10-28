@@ -1576,6 +1576,15 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getFleetShippingOption_UseSafetyHeel() {
+		return (EAttribute)fleetShippingOptionEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getRoundTripShippingOption() {
 		return roundTripShippingOptionEClass;
 	}
@@ -2122,6 +2131,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(fleetShippingOptionEClass, FLEET_SHIPPING_OPTION__VESSEL);
 		createEAttribute(fleetShippingOptionEClass, FLEET_SHIPPING_OPTION__HIRE_COST);
 		createEReference(fleetShippingOptionEClass, FLEET_SHIPPING_OPTION__ENTITY);
+		createEAttribute(fleetShippingOptionEClass, FLEET_SHIPPING_OPTION__USE_SAFETY_HEEL);
 
 		roundTripShippingOptionEClass = createEClass(ROUND_TRIP_SHIPPING_OPTION);
 		createEReference(roundTripShippingOptionEClass, ROUND_TRIP_SHIPPING_OPTION__VESSEL_CLASS);
@@ -2400,6 +2410,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getFleetShippingOption_Vessel(), theFleetPackage.getVessel(), null, "vessel", null, 0, 1, FleetShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getFleetShippingOption_HireCost(), ecorePackage.getEString(), "hireCost", null, 0, 1, FleetShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getFleetShippingOption_Entity(), theCommercialPackage.getBaseLegalEntity(), null, "entity", null, 0, 1, FleetShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getFleetShippingOption_UseSafetyHeel(), ecorePackage.getEBoolean(), "useSafetyHeel", null, 0, 1, FleetShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(roundTripShippingOptionEClass, RoundTripShippingOption.class, "RoundTripShippingOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRoundTripShippingOption_VesselClass(), theFleetPackage.getVesselClass(), null, "vesselClass", null, 0, 1, RoundTripShippingOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

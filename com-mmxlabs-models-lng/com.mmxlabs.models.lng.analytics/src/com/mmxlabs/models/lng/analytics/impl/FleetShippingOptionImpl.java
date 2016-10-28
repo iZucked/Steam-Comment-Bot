@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.FleetShippingOptionImpl#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.FleetShippingOptionImpl#getHireCost <em>Hire Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.FleetShippingOptionImpl#getEntity <em>Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.FleetShippingOptionImpl#isUseSafetyHeel <em>Use Safety Heel</em>}</li>
  * </ul>
  *
  * @generated
@@ -70,6 +71,26 @@ public class FleetShippingOptionImpl extends ShippingOptionImpl implements Fleet
 	 * @ordered
 	 */
 	protected BaseLegalEntity entity;
+
+	/**
+	 * The default value of the '{@link #isUseSafetyHeel() <em>Use Safety Heel</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isUseSafetyHeel()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean USE_SAFETY_HEEL_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isUseSafetyHeel() <em>Use Safety Heel</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isUseSafetyHeel()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean useSafetyHeel = USE_SAFETY_HEEL_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -192,6 +213,27 @@ public class FleetShippingOptionImpl extends ShippingOptionImpl implements Fleet
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isUseSafetyHeel() {
+		return useSafetyHeel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setUseSafetyHeel(boolean newUseSafetyHeel) {
+		boolean oldUseSafetyHeel = useSafetyHeel;
+		useSafetyHeel = newUseSafetyHeel;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.FLEET_SHIPPING_OPTION__USE_SAFETY_HEEL, oldUseSafetyHeel, useSafetyHeel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -203,6 +245,8 @@ public class FleetShippingOptionImpl extends ShippingOptionImpl implements Fleet
 			case AnalyticsPackage.FLEET_SHIPPING_OPTION__ENTITY:
 				if (resolve) return getEntity();
 				return basicGetEntity();
+			case AnalyticsPackage.FLEET_SHIPPING_OPTION__USE_SAFETY_HEEL:
+				return isUseSafetyHeel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -223,6 +267,9 @@ public class FleetShippingOptionImpl extends ShippingOptionImpl implements Fleet
 				return;
 			case AnalyticsPackage.FLEET_SHIPPING_OPTION__ENTITY:
 				setEntity((BaseLegalEntity)newValue);
+				return;
+			case AnalyticsPackage.FLEET_SHIPPING_OPTION__USE_SAFETY_HEEL:
+				setUseSafetyHeel((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -245,6 +292,9 @@ public class FleetShippingOptionImpl extends ShippingOptionImpl implements Fleet
 			case AnalyticsPackage.FLEET_SHIPPING_OPTION__ENTITY:
 				setEntity((BaseLegalEntity)null);
 				return;
+			case AnalyticsPackage.FLEET_SHIPPING_OPTION__USE_SAFETY_HEEL:
+				setUseSafetyHeel(USE_SAFETY_HEEL_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -263,6 +313,8 @@ public class FleetShippingOptionImpl extends ShippingOptionImpl implements Fleet
 				return HIRE_COST_EDEFAULT == null ? hireCost != null : !HIRE_COST_EDEFAULT.equals(hireCost);
 			case AnalyticsPackage.FLEET_SHIPPING_OPTION__ENTITY:
 				return entity != null;
+			case AnalyticsPackage.FLEET_SHIPPING_OPTION__USE_SAFETY_HEEL:
+				return useSafetyHeel != USE_SAFETY_HEEL_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -279,6 +331,8 @@ public class FleetShippingOptionImpl extends ShippingOptionImpl implements Fleet
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (hireCost: ");
 		result.append(hireCost);
+		result.append(", useSafetyHeel: ");
+		result.append(useSafetyHeel);
 		result.append(')');
 		return result.toString();
 	}

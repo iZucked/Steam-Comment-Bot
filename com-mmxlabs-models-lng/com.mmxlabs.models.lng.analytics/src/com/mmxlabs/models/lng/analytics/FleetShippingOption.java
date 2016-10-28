@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
  *   <li>{@link com.mmxlabs.models.lng.analytics.FleetShippingOption#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.FleetShippingOption#getHireCost <em>Hire Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.FleetShippingOption#getEntity <em>Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.FleetShippingOption#isUseSafetyHeel <em>Use Safety Heel</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getFleetShippingOption()
@@ -101,5 +102,31 @@ public interface FleetShippingOption extends ShippingOption {
 	 * @generated
 	 */
 	void setEntity(BaseLegalEntity value);
+
+	/**
+	 * Returns the value of the '<em><b>Use Safety Heel</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Use Safety Heel</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Use Safety Heel</em>' attribute.
+	 * @see #setUseSafetyHeel(boolean)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getFleetShippingOption_UseSafetyHeel()
+	 * @model
+	 * @generated
+	 */
+	boolean isUseSafetyHeel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.FleetShippingOption#isUseSafetyHeel <em>Use Safety Heel</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Use Safety Heel</em>' attribute.
+	 * @see #isUseSafetyHeel()
+	 * @generated
+	 */
+	void setUseSafetyHeel(boolean value);
 
 } // FleetShippingOption

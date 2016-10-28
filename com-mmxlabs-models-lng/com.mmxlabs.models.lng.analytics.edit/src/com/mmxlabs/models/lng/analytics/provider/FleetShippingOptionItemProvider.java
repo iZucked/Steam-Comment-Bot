@@ -48,6 +48,7 @@ public class FleetShippingOptionItemProvider extends ShippingOptionItemProvider 
 			addVesselPropertyDescriptor(object);
 			addHireCostPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
+			addUseSafetyHeelPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -119,6 +120,28 @@ public class FleetShippingOptionItemProvider extends ShippingOptionItemProvider 
 	}
 
 	/**
+	 * This adds a property descriptor for the Use Safety Heel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addUseSafetyHeelPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_FleetShippingOption_useSafetyHeel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_FleetShippingOption_useSafetyHeel_feature", "_UI_FleetShippingOption_type"),
+				 AnalyticsPackage.Literals.FLEET_SHIPPING_OPTION__USE_SAFETY_HEEL,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns FleetShippingOption.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -157,6 +180,7 @@ public class FleetShippingOptionItemProvider extends ShippingOptionItemProvider 
 
 		switch (notification.getFeatureID(FleetShippingOption.class)) {
 			case AnalyticsPackage.FLEET_SHIPPING_OPTION__HIRE_COST:
+			case AnalyticsPackage.FLEET_SHIPPING_OPTION__USE_SAFETY_HEEL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

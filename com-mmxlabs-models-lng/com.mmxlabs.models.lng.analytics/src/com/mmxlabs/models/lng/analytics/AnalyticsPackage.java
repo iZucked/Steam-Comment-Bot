@@ -1557,13 +1557,22 @@ s	 * <!-- end-user-doc -->
 	int FLEET_SHIPPING_OPTION__ENTITY = SHIPPING_OPTION_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Use Safety Heel</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_SHIPPING_OPTION__USE_SAFETY_HEEL = SHIPPING_OPTION_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Fleet Shipping Option</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_SHIPPING_OPTION_FEATURE_COUNT = SHIPPING_OPTION_FEATURE_COUNT + 3;
+	int FLEET_SHIPPING_OPTION_FEATURE_COUNT = SHIPPING_OPTION_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.RoundTripShippingOptionImpl <em>Round Trip Shipping Option</em>}' class.
@@ -3401,6 +3410,17 @@ s	 * <!-- end-user-doc -->
 	EReference getFleetShippingOption_Entity();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.FleetShippingOption#isUseSafetyHeel <em>Use Safety Heel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Use Safety Heel</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.FleetShippingOption#isUseSafetyHeel()
+	 * @see #getFleetShippingOption()
+	 * @generated
+	 */
+	EAttribute getFleetShippingOption_UseSafetyHeel();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.RoundTripShippingOption <em>Round Trip Shipping Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4879,6 +4899,14 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference FLEET_SHIPPING_OPTION__ENTITY = eINSTANCE.getFleetShippingOption_Entity();
+
+		/**
+		 * The meta object literal for the '<em><b>Use Safety Heel</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FLEET_SHIPPING_OPTION__USE_SAFETY_HEEL = eINSTANCE.getFleetShippingOption_UseSafetyHeel();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.RoundTripShippingOptionImpl <em>Round Trip Shipping Option</em>}' class.

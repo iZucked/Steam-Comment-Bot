@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
+import com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -34,6 +35,8 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.fleet.FleetFactory;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -177,7 +180,7 @@ public class BaseCaseEvaluator {
 
 	protected static void buildScenario(final LNGScenarioModel clone, final OptionAnalysisModel clonedModel, final BaseCase clonedBaseCase, final IMapperClass mapper) {
 
-		createShipping(clone, clonedBaseCase);
+		Map<FleetShippingOption, VesselAvailability> shippingMap = createShipping(clone, clonedBaseCase);
 
 		for (final BaseCaseRow row : clonedBaseCase.getBaseCase()) {
 			final BuyOption buy = row.getBuyOption();
@@ -196,7 +199,7 @@ public class BaseCaseEvaluator {
 				cargo.getSlots().add(dischargeSlot);
 			}
 
-			setShipping(loadSlot, dischargeSlot, cargo, row.getShipping(), clone);
+			setShipping(loadSlot, dischargeSlot, cargo, row.getShipping(), clone, shippingMap);
 
 			if (loadSlot != null && !clone.getCargoModel().getLoadSlots().contains(loadSlot)) {
 				clone.getCargoModel().getLoadSlots().add(loadSlot);
@@ -212,8 +215,8 @@ public class BaseCaseEvaluator {
 	}
 
 	protected static void setShipping(final @Nullable LoadSlot loadSlot, final @Nullable DischargeSlot dischargeSlot, final @Nullable Cargo cargo, final @Nullable ShippingOption shipping,
-			final @NonNull LNGScenarioModel lngScenarioModel) {
-		PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+			final @NonNull LNGScenarioModel lngScenarioModel, Map<FleetShippingOption, VesselAvailability> shippingMap) {
+		final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
 
 		if (shipping instanceof NominatedShippingOption) {
 			final NominatedShippingOption nominatedShippingOption = (NominatedShippingOption) shipping;
@@ -233,17 +236,16 @@ public class BaseCaseEvaluator {
 		} else if (shipping instanceof FleetShippingOption) {
 			final FleetShippingOption fleetShippingOption = (FleetShippingOption) shipping;
 			if (cargo != null) {
-				final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-				vesselAvailability.setTimeCharterRate(fleetShippingOption.getHireCost());
-				vesselAvailability.setVessel(fleetShippingOption.getVessel());
-				vesselAvailability.setEntity(fleetShippingOption.getEntity());
+
+				final VesselAvailability vesselAvailability = shippingMap.get(fleetShippingOption);
+				assert vesselAvailability != null;
+
 				cargo.setVesselAssignmentType(vesselAvailability);
-				lngScenarioModel.getCargoModel().getVesselAvailabilities().add(vesselAvailability);
 
 				// TODO: Calculate time.
 				if (loadSlot.getWindowStart() != null && dischargeSlot.getWindowStart() == null) {
-					int travelHours = AnalyticsBuilder.calculateTravelHoursForDischarge(portModel, loadSlot, dischargeSlot, shipping);
-					int travelDays = (int) Math.ceil((double) travelHours / 24.0);
+					final int travelHours = AnalyticsBuilder.calculateTravelHoursForDischarge(portModel, loadSlot, dischargeSlot, shipping);
+					final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 					dischargeSlot.setWindowStart(loadSlot.getWindowStart().plusDays(travelDays));
 					if (dischargeSlot instanceof SpotSlot) {
 						dischargeSlot.setWindowStart(dischargeSlot.getWindowStart().withDayOfMonth(1));
@@ -253,8 +255,8 @@ public class BaseCaseEvaluator {
 						dischargeSlot.setWindowStartTime(0);
 					}
 				} else if (loadSlot.getWindowStart() == null && dischargeSlot.getWindowStart() != null) {
-					int travelHours = AnalyticsBuilder.calculateTravelHoursForLoad(portModel, loadSlot, dischargeSlot, shipping);
-					int travelDays = (int) Math.ceil((double) travelHours / 24.0);
+					final int travelHours = AnalyticsBuilder.calculateTravelHoursForLoad(portModel, loadSlot, dischargeSlot, shipping);
+					final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 					loadSlot.setWindowStart(dischargeSlot.getWindowStart().minusDays(travelDays));
 					if (loadSlot instanceof SpotSlot) {
 						loadSlot.setWindowStart(loadSlot.getWindowStart().withDayOfMonth(1));
@@ -269,10 +271,10 @@ public class BaseCaseEvaluator {
 			final RoundTripShippingOption roundTripShippingOption = (RoundTripShippingOption) shipping;
 			if (cargo != null) {
 				final CharterInMarket market = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
-				String baseName = SHIPPING_OPTION_DESCRIPTION_FORMATTER.render(roundTripShippingOption);
+				final String baseName = SHIPPING_OPTION_DESCRIPTION_FORMATTER.render(roundTripShippingOption);
 				@NonNull
-				Set<String> usedIDStrings = lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().stream().map(c -> c.getName()).collect(Collectors.toSet());
-				String id = AnalyticsBuilder.getUniqueID(baseName, usedIDStrings);
+				final Set<String> usedIDStrings = lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().stream().map(c -> c.getName()).collect(Collectors.toSet());
+				final String id = AnalyticsBuilder.getUniqueID(baseName, usedIDStrings);
 				market.setName(id);
 				market.setCharterInRate(roundTripShippingOption.getHireCost());
 				market.setVesselClass(roundTripShippingOption.getVesselClass());
@@ -281,8 +283,8 @@ public class BaseCaseEvaluator {
 				lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().add(market);
 
 				if (loadSlot.getWindowStart() != null && dischargeSlot.getWindowStart() == null) {
-					int travelHours = AnalyticsBuilder.calculateTravelHoursForDischarge(portModel, loadSlot, dischargeSlot, shipping);
-					int travelDays = (int) Math.ceil((double) travelHours / 24.0);
+					final int travelHours = AnalyticsBuilder.calculateTravelHoursForDischarge(portModel, loadSlot, dischargeSlot, shipping);
+					final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 
 					dischargeSlot.setWindowStart(loadSlot.getWindowStart().plusDays(travelDays));
 					if (dischargeSlot instanceof SpotSlot) {
@@ -293,9 +295,9 @@ public class BaseCaseEvaluator {
 						dischargeSlot.setWindowStartTime(0);
 					}
 				} else if (loadSlot.getWindowStart() == null && dischargeSlot.getWindowStart() != null) {
-					int travelHours = AnalyticsBuilder.calculateTravelHoursForLoad(portModel, loadSlot, dischargeSlot, shipping);
+					final int travelHours = AnalyticsBuilder.calculateTravelHoursForLoad(portModel, loadSlot, dischargeSlot, shipping);
 
-					int travelDays = (int) Math.ceil((double) travelHours / 24.0);
+					final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 					loadSlot.setWindowStart(dischargeSlot.getWindowStart().minusDays(travelDays));
 					if (loadSlot instanceof SpotSlot) {
 						loadSlot.setWindowStart(loadSlot.getWindowStart().withDayOfMonth(1));
@@ -309,8 +311,39 @@ public class BaseCaseEvaluator {
 		}
 	}
 
-	protected static void createShipping(final LNGScenarioModel clone, final BaseCase clonedBaseCase) {
+	protected static Map<FleetShippingOption, VesselAvailability> createShipping(final LNGScenarioModel clone, final BaseCase clonedBaseCase) {
+		Map<FleetShippingOption, VesselAvailability> availabilitiesMap = new HashMap<>();
+		for (final BaseCaseRow row : clonedBaseCase.getBaseCase()) {
 
+			final ShippingOption shipping = row.getShipping();
+			if (shipping instanceof FleetShippingOption) {
+				// Do not re-add
+				if (availabilitiesMap.containsKey(shipping)) {
+					continue;
+				}
+				final FleetShippingOption fleetShippingOption = (FleetShippingOption) shipping;
+				final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+				vesselAvailability.setTimeCharterRate(fleetShippingOption.getHireCost());
+				final Vessel vessel = fleetShippingOption.getVessel();
+				vesselAvailability.setVessel(vessel);
+				vesselAvailability.setEntity(fleetShippingOption.getEntity());
+
+				if (fleetShippingOption.isUseSafetyHeel()) {
+					vesselAvailability.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
+					vesselAvailability.getStartHeel().setVolumeAvailable(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getStartHeel().setCvValue(22.8);
+					vesselAvailability.getStartHeel().setPricePerMMBTU(0.1);
+
+					vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+					vesselAvailability.getEndHeel().setTargetEndHeel(vessel.getVesselClass().getMinHeel());
+				}
+
+				clone.getCargoModel().getVesselAvailabilities().add(vesselAvailability);
+				availabilitiesMap.put(fleetShippingOption, vesselAvailability);
+
+			}
+		}
+		return availabilitiesMap;
 	}
 
 	protected static void clearData(final LNGScenarioModel clone, final OptionAnalysisModel model, final BaseCase bc) {
