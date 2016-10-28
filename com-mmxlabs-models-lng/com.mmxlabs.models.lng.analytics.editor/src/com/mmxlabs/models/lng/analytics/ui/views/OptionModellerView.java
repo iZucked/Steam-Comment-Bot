@@ -14,7 +14,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javax.annotation.PreDestroy;
-import javax.net.ssl.SSLEngineResult.Status;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
@@ -1343,6 +1342,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			Image imgWarn = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/warning.gif").createImage();
 			Image imgInfo = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/information.gif").createImage();
 			Image imgShippingRoundTrip = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/roundtrip.png").createImage();
+			Image imgShippingFleet = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/fleet.png").createImage();
 
 			Color colour_error = new Color(Display.getDefault(), new RGB(255, 100, 100));
 			Color colour_warn = new Color(Display.getDefault(), new RGB(255, 255, 200));
@@ -1367,6 +1367,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				} else {
 					if (element instanceof RoundTripShippingOption) {
 						return imgShippingRoundTrip;
+					} else if (element instanceof FleetShippingOption) {
+						return imgShippingFleet;
 					}
 				}
 				return null;
