@@ -1,7 +1,3 @@
-/**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2016
- * All rights reserved.
- */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
 import java.util.List;
@@ -248,7 +244,6 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 			final IPortSlot slot = allocationRecord.slots.get(i);
 			// annotation.setSlotVolumeInMMBTu(slot, Calculator.convertM3ToMMBTu(annotation.getSlotVolumeInM3(slot), annotation.getSlotCargoCV(slot)));
 			annotation.setCommercialSlotVolumeInM3(slot, Calculator.convertMMBTuToM3(annotation.getCommercialSlotVolumeInMMBTu(slot), annotation.getSlotCargoCV(slot)));
-			annotation.setPhysicalSlotVolumeInM3(slot, Calculator.convertMMBTuToM3(annotation.getPhysicalSlotVolumeInMMBTu(slot), annotation.getSlotCargoCV(slot)));
 
 		}
 		return annotation;
@@ -349,7 +344,6 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 			final IPortSlot slot = allocationRecord.slots.get(i);
 			// annotation.setSlotVolumeInMMBTu(slot, Calculator.convertM3ToMMBTu(annotation.getSlotVolumeInM3(slot), annotation.getSlotCargoCV(slot)));
 			annotation.setCommercialSlotVolumeInM3(slot, Calculator.convertMMBTuToM3(annotation.getCommercialSlotVolumeInMMBTu(slot), annotation.getSlotCargoCV(slot)));
-			annotation.setPhysicalSlotVolumeInM3(slot, Calculator.convertMMBTuToM3(annotation.getPhysicalSlotVolumeInMMBTu(slot), annotation.getSlotCargoCV(slot)));
 		}
 		return annotation;
 	}
