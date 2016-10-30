@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil;
 import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil.DetailedCargoType;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord.AllocationMode;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.InPortCalculationUtils;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 
 /**
@@ -98,6 +99,11 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			annotation.setCommercialSlotVolumeInM3(slot, allocationRecord.maxVolumesInM3.get(i));
 			annotation.setCommericialSlotVolumeInMMBTu(slot, allocationRecord.maxVolumesInMMBtu.get(i));
 			annotation.setSlotCargoCV(slot, allocationRecord.slotCV.get(i));
+			
+			long physicalInM3 = InPortCalculationUtils.calculatePhysicalVolumeInM3(slot, allocationRecord, allocationRecord.maxVolumesInM3.get(i));
+			long physicalInMMBTu = InPortCalculationUtils.calculatePhysicalVolumeInMMBTu(slot, allocationRecord, allocationRecord.maxVolumesInMMBtu.get(i));
+			annotation.setPhysicalSlotVolumeInM3(slot, physicalInM3);
+			annotation.setPhysicalSlotVolumeInMMBTu(slot, physicalInMMBTu);
 		}
 		// Copy over the return slot time if present
 		{
@@ -145,7 +151,12 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			annotation.setCommercialSlotVolumeInM3(slot, allocationRecord.maxVolumesInM3.get(i));
 			annotation.setCommericialSlotVolumeInMMBTu(slot, allocationRecord.maxVolumesInMMBtu.get(i));
 			annotation.setSlotCargoCV(slot, allocationRecord.slotCV.get(i));
-
+			
+			long physicalInM3 = InPortCalculationUtils.calculatePhysicalVolumeInM3(slot, allocationRecord, allocationRecord.maxVolumesInM3.get(i));
+			long physicalInMMBTu = InPortCalculationUtils.calculatePhysicalVolumeInMMBTu(slot, allocationRecord, allocationRecord.maxVolumesInMMBtu.get(i));
+			annotation.setPhysicalSlotVolumeInM3(slot, physicalInM3);
+			annotation.setPhysicalSlotVolumeInMMBTu(slot, physicalInMMBTu);
+			
 			// First slot
 			if (i == 0) {
 				// The Volume Planner should have correctly set this value
@@ -225,6 +236,10 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			// greedy assumption: always discharge as much as possible
 			final long dischargeVolume = capValueWithZeroDefault(allocationRecord.maxVolumesInM3.get(1), unusedVolume);
 			annotation.setCommercialSlotVolumeInM3(dischargeSlot, dischargeVolume);
+			
+			long physicalInM3 = InPortCalculationUtils.calculatePhysicalVolumeInM3(dischargeSlot, allocationRecord, allocationRecord.maxVolumesInM3.get(1));
+			annotation.setPhysicalSlotVolumeInM3(dischargeSlot, physicalInM3);
+	
 			unusedVolume -= dischargeVolume;
 
 		}
@@ -249,6 +264,10 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 					dischargeVolume = unusedVolume;
 				}
 				annotation.setCommercialSlotVolumeInM3(dischargeSlot, dischargeVolume);
+				
+				long physicalInM3 = InPortCalculationUtils.calculatePhysicalVolumeInM3(dischargeSlot, allocationRecord, dischargeVolume);
+				annotation.setPhysicalSlotVolumeInM3(dischargeSlot, physicalInM3);
+				
 				unusedVolume -= dischargeVolume;
 
 				// more profitable ?
@@ -273,6 +292,10 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				unusedVolume -= volume;
 				final long currentVolumeInM3 = annotation.getCommercialSlotVolumeInM3(slot);
 				annotation.setCommercialSlotVolumeInM3(slot, currentVolumeInM3 + volume);
+				
+				long physicalInM3 = InPortCalculationUtils.calculatePhysicalVolumeInM3(slot, allocationRecord, currentVolumeInM3 + volume);
+				annotation.setPhysicalSlotVolumeInM3(slot, physicalInM3);
+				
 			}
 
 			// Note this currently does nothing as the next() method in the allocator iterator (BaseCargoAllocator) ignores this data and looks directly on the discharge slot.
@@ -304,12 +327,16 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		annotation.setStartHeelVolumeInM3(allocationRecord.startVolumeInM3);
 		annotation.setRemainingHeelVolumeInM3(allocationRecord.minEndVolumeInM3 + unusedVolume);
 		annotation.setFuelVolumeInM3(allocationRecord.requiredFuelVolumeInM3);
+		
+		long physicalInM3 = InPortCalculationUtils.calculatePhysicalVolumeInM3(loadSlot, allocationRecord, loadVolume);
+		annotation.setPhysicalSlotVolumeInM3(loadSlot, physicalInM3);
 
 		// Copy across slot time information
 		for (int i = 0; i < slots.size(); i++) {
 			final IPortSlot slot = allocationRecord.slots.get(i);
 
 			annotation.setCommericialSlotVolumeInMMBTu(slot, Calculator.convertM3ToMMBTu(annotation.getCommercialSlotVolumeInM3(slot), annotation.getSlotCargoCV(slot)));
+			annotation.setPhysicalSlotVolumeInMMBTu(slot, Calculator.convertM3ToMMBTu(annotation.getPhysicalSlotVolumeInM3(slot), annotation.getSlotCargoCV(slot)));
 		}
 
 		return annotation;
@@ -411,14 +438,21 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		for (int i = 0; i < slots.size(); ++i) {
 			final IPortSlot slot = slots.get(i);
 			annotation.setCommericialSlotVolumeInMMBTu(slot, transferVolumeMMBTU);
+			long physicalInMMBTu = InPortCalculationUtils.calculatePhysicalVolumeInMMBTu(slot, allocationRecord, transferVolumeMMBTU);
+			long physicalInM3 = InPortCalculationUtils.calculatePhysicalVolumeInMMBTu(slot, allocationRecord, transferVolumeM3);
+			annotation.setPhysicalSlotVolumeInMMBTu(slot, physicalInMMBTu);
+			
 			if (transferVolumeM3 != -1) {
-				annotation.setCommercialSlotVolumeInM3(slot, transferVolumeM3);
+				annotation.setCommercialSlotVolumeInM3(slot, transferVolumeM3);	
+				annotation.setPhysicalSlotVolumeInM3(slot, physicalInM3);
 			} else {
 				final int slotCV = allocationRecord.slotCV.get(i);
 				if (slotCV > 0) {
 					annotation.setCommercialSlotVolumeInM3(slot, Calculator.convertMMBTuToM3(transferVolumeMMBTU, slotCV));
+					annotation.setPhysicalSlotVolumeInM3(slot, physicalInM3);
 				} else {
 					annotation.setCommercialSlotVolumeInM3(slot, 0);
+					annotation.setPhysicalSlotVolumeInM3(slot, 0);
 				}
 			}
 		}
@@ -466,14 +500,20 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 	protected void setTransferVolume(final @NonNull AllocationRecord allocationRecord, @NonNull IPortSlot slot, final @NonNull AllocationAnnotation annotation, final long transferVolumeMMBTU,
 			final long transferVolumeM3) {
 		annotation.setCommericialSlotVolumeInMMBTu(slot, transferVolumeMMBTU);
+		long physicalInMMBTu = InPortCalculationUtils.calculatePhysicalVolumeInMMBTu(slot, allocationRecord, transferVolumeMMBTU);
+		long physicalInM3 = InPortCalculationUtils.calculatePhysicalVolumeInMMBTu(slot, allocationRecord, transferVolumeM3);
+		annotation.setPhysicalSlotVolumeInMMBTu(slot, physicalInMMBTu);
 		if (transferVolumeM3 != -1) {
 			annotation.setCommercialSlotVolumeInM3(slot, transferVolumeM3);
+			annotation.setPhysicalSlotVolumeInM3(slot, physicalInM3);
 		} else {
 			final int slotCV = annotation.getSlotCargoCV(slot);
 			if (slotCV > 0) {
 				annotation.setCommercialSlotVolumeInM3(slot, Calculator.convertMMBTuToM3(transferVolumeMMBTU, slotCV));
+				annotation.setPhysicalSlotVolumeInM3(slot, physicalInM3);
 			} else {
 				annotation.setCommercialSlotVolumeInM3(slot, 0);
+				annotation.setPhysicalSlotVolumeInM3(slot, physicalInM3);
 			}
 		}
 	}
