@@ -30,6 +30,7 @@ import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossSlotDetailsAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.CancellationAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.HedgingAnnotation;
+import com.mmxlabs.scheduler.optimiser.annotations.impl.MiscCostsAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.ProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.ProfitAndLossEntry;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.ProfitAndLossSlotDetailsAnnotation;
@@ -46,7 +47,6 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
-import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator.EvaluationMode;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
@@ -54,6 +54,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICargo
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IMiscCostsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -85,6 +86,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 	@Inject
 	private IHedgesProvider hedgesProvider;
+
+	@Inject
+	private IMiscCostsProvider miscCostsProvider;
 
 	@Inject
 	private ICancellationFeeProvider cancellationFeeProvider;
@@ -383,9 +387,14 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			assert entity != null;
 
 			final long hedgeValue = hedgesProvider.getHedgeValue(slot);
+			final long miscCostsValue = miscCostsProvider.getCostsValue(slot);
 			addEntityBookProfit(entityPreTaxProfit, entity.getTradingBook(), hedgeValue);
+			addEntityBookProfit(entityPreTaxProfit, entity.getTradingBook(), miscCostsValue);
 			if (hedgeValue != 0 && annotatedSolution != null) {
 				annotatedSolution.getElementAnnotations().setAnnotation(slotProvider.getElement(slot), SchedulerConstants.AI_hedgingValue, new HedgingAnnotation(hedgeValue));
+			}
+			if (miscCostsValue != 0 && annotatedSolution != null) {
+				annotatedSolution.getElementAnnotations().setAnnotation(slotProvider.getElement(slot), SchedulerConstants.AI_miscCostsValue, new MiscCostsAnnotation(miscCostsValue));
 			}
 
 			final long value = cargoPNLData.getSlotValue(slot);
@@ -570,11 +579,13 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		long result = 0;
 		{
 			final long hedgeValue = hedgesProvider.getHedgeValue(portSlot);
+			final long miscCostsValue = miscCostsProvider.getCostsValue(portSlot);
 			final ILongCurve cancellationCurve = cancellationFeeProvider.getCancellationExpression(portSlot);
 			final long cancellationCost = cancellationCurve.getValueAtPoint(portSlot.getTimeWindow().getInclusiveStart());
 
 			// Taxed P&L - use time window start as tax date
-			final long preTaxValue = hedgeValue - cancellationCost;
+			final long preTaxValue = hedgeValue + miscCostsValue // note: misc costs -ve
+					- cancellationCost; // note: cancellation cost positive
 			final int utcEquivTaxTime = utcOffsetProvider.UTC(portSlot.getTimeWindow().getInclusiveStart(), portSlot);
 			final long postTaxValue = entity.getTradingBook().getTaxedProfit(preTaxValue, utcEquivTaxTime);
 			result = postTaxValue;
@@ -597,7 +608,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				if (hedgeValue != 0) {
 					annotatedSolution.getElementAnnotations().setAnnotation(exportElement, SchedulerConstants.AI_hedgingValue, new HedgingAnnotation(hedgeValue));
 				}
-
+				if (miscCostsValue != 0) {
+					annotatedSolution.getElementAnnotations().setAnnotation(exportElement, SchedulerConstants.AI_miscCostsValue, new MiscCostsAnnotation(miscCostsValue));
+				}
 			}
 		}
 

@@ -71,6 +71,8 @@ import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IMiscCostsProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IMiscCostsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.INextLoadDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INextLoadDateProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
@@ -139,6 +141,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEdito
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapLoadPriceCalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapMarkToMarketProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapMiscCostsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapNominatedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortCVProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
@@ -152,6 +155,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteExclusionProvi
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapShipToShipBindingProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapShippingHoursRestrictionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapShortCargoReturnElementProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.AHashMapSimpleCostsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapSlotGroupCountProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapSpotMarketSlotsEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapStartEndRequirementEditor;
@@ -377,6 +381,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashMapHedgesProviderEditor hedgesProviderEditor = new HashMapHedgesProviderEditor();
 		bind(IHedgesProvider.class).toInstance(hedgesProviderEditor);
 		bind(IHedgesProviderEditor.class).toInstance(hedgesProviderEditor);
+
+		final HashMapMiscCostsProviderEditor miscCostsProviderEditor = new HashMapMiscCostsProviderEditor();
+		bind(IMiscCostsProvider.class).toInstance(miscCostsProviderEditor);
+		bind(IMiscCostsProviderEditor.class).toInstance(miscCostsProviderEditor);
 
 		final HashMapCancellationFeeProviderEditor cancellationFeeProviderEditor = new HashMapCancellationFeeProviderEditor();
 		bind(ICancellationFeeProvider.class).toInstance(cancellationFeeProviderEditor);

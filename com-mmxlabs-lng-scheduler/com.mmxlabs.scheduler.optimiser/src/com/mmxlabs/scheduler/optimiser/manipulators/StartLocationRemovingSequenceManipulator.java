@@ -66,7 +66,8 @@ public class StartLocationRemovingSequenceManipulator implements ISequencesManip
 	}
 	
 	public boolean getShouldConditionedRemoveStartLocation(final IResource resource, final IModifiableSequence sequence) {
-		if (vesselProvider.getVesselAvailability(resource).isOptional() && sequence.size() == 2) {
+		final VesselInstanceType vesselInstanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
+		if ((vesselInstanceType != VesselInstanceType.DES_PURCHASE && vesselInstanceType != VesselInstanceType.FOB_SALE) && vesselProvider.getVesselAvailability(resource).isOptional()  && sequence.size() == 2) {
 			return true;
 		} else {
 			return false;

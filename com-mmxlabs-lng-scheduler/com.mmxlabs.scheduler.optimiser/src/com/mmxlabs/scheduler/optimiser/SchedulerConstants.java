@@ -31,6 +31,7 @@ public final class SchedulerConstants {
 	public static final String AI_capacityViolationInfo = "info-capacity-violation";
 	public static final String AI_portCostInfo = "info-port-cost";
 	public static final String AI_hedgingValue = "element-hedging-value";
+	public static final String AI_miscCostsValue = "element-misc-costs-value";
 	public static final String AI_cancellationFees = "element-cancellation-fees";
 	public static final String AI_charterOutProfitAndLoss = "generated-charter-out-profit-and-loss";
 	public static final String AI_profitAndLoss = "element-profit-and-loss";
