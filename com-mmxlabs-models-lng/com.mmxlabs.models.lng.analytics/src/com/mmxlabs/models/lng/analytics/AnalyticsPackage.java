@@ -1575,6 +1575,115 @@ s	 * <!-- end-user-doc -->
 	int FLEET_SHIPPING_OPTION_FEATURE_COUNT = SHIPPING_OPTION_FEATURE_COUNT + 4;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OptionalAvailabilityShippingOptionImpl <em>Optional Availability Shipping Option</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.OptionalAvailabilityShippingOptionImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionalAvailabilityShippingOption()
+	 * @generated
+	 */
+	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION = 24;
+
+	/**
+	 * The feature id for the '<em><b>Vessel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION__VESSEL = FLEET_SHIPPING_OPTION__VESSEL;
+
+	/**
+	 * The feature id for the '<em><b>Hire Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION__HIRE_COST = FLEET_SHIPPING_OPTION__HIRE_COST;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION__ENTITY = FLEET_SHIPPING_OPTION__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Use Safety Heel</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION__USE_SAFETY_HEEL = FLEET_SHIPPING_OPTION__USE_SAFETY_HEEL;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Bonus</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION__BALLAST_BONUS = FLEET_SHIPPING_OPTION_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Repositioning Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION__REPOSITIONING_FEE = FLEET_SHIPPING_OPTION_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION__START = FLEET_SHIPPING_OPTION_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION__END = FLEET_SHIPPING_OPTION_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Start Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION__START_PORT = FLEET_SHIPPING_OPTION_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>End Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION__END_PORT = FLEET_SHIPPING_OPTION_FEATURE_COUNT + 5;
+
+	/**
+	 * The number of structural features of the '<em>Optional Availability Shipping Option</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIONAL_AVAILABILITY_SHIPPING_OPTION_FEATURE_COUNT = FLEET_SHIPPING_OPTION_FEATURE_COUNT + 6;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.RoundTripShippingOptionImpl <em>Round Trip Shipping Option</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1582,7 +1691,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getRoundTripShippingOption()
 	 * @generated
 	 */
-	int ROUND_TRIP_SHIPPING_OPTION = 24;
+	int ROUND_TRIP_SHIPPING_OPTION = 25;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Class</b></em>' reference.
@@ -1619,7 +1728,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getNominatedShippingOption()
 	 * @generated
 	 */
-	int NOMINATED_SHIPPING_OPTION = 25;
+	int NOMINATED_SHIPPING_OPTION = 26;
 
 	/**
 	 * The feature id for the '<em><b>Nominated Vessel</b></em>' reference.
@@ -1647,7 +1756,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAnalysisResultRow()
 	 * @generated
 	 */
-	int ANALYSIS_RESULT_ROW = 26;
+	int ANALYSIS_RESULT_ROW = 27;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -1711,7 +1820,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getResultContainer()
 	 * @generated
 	 */
-	int RESULT_CONTAINER = 27;
+	int RESULT_CONTAINER = 28;
 
 	/**
 	 * The feature id for the '<em><b>Cargo Allocation</b></em>' containment reference.
@@ -1757,7 +1866,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionRule()
 	 * @generated
 	 */
-	int OPTION_RULE = 28;
+	int OPTION_RULE = 29;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1785,7 +1894,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAnalysisResultDetail()
 	 * @generated
 	 */
-	int ANALYSIS_RESULT_DETAIL = 29;
+	int ANALYSIS_RESULT_DETAIL = 30;
 
 	/**
 	 * The number of structural features of the '<em>Analysis Result Detail</em>' class.
@@ -1804,7 +1913,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getProfitAndLossResult()
 	 * @generated
 	 */
-	int PROFIT_AND_LOSS_RESULT = 30;
+	int PROFIT_AND_LOSS_RESULT = 31;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -1832,7 +1941,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenResult()
 	 * @generated
 	 */
-	int BREAK_EVEN_RESULT = 31;
+	int BREAK_EVEN_RESULT = 32;
 
 	/**
 	 * The feature id for the '<em><b>Price</b></em>' attribute.
@@ -1860,7 +1969,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getModeOptionRule()
 	 * @generated
 	 */
-	int MODE_OPTION_RULE = 32;
+	int MODE_OPTION_RULE = 33;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1888,7 +1997,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionAnalysisModel()
 	 * @generated
 	 */
-	int OPTION_ANALYSIS_MODEL = 33;
+	int OPTION_ANALYSIS_MODEL = 34;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2006,7 +2115,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getResultSet()
 	 * @generated
 	 */
-	int RESULT_SET = 34;
+	int RESULT_SET = 35;
 
 	/**
 	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
@@ -2043,7 +2152,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBaseCase()
 	 * @generated
 	 */
-	int BASE_CASE = 35;
+	int BASE_CASE = 36;
 
 	/**
 	 * The feature id for the '<em><b>Base Case</b></em>' containment reference list.
@@ -2080,7 +2189,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPartialCase()
 	 * @generated
 	 */
-	int PARTIAL_CASE = 36;
+	int PARTIAL_CASE = 37;
 
 	/**
 	 * The feature id for the '<em><b>Partial Case</b></em>' containment reference list.
@@ -2108,7 +2217,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getDestinationType()
 	 * @generated
 	 */
-	int DESTINATION_TYPE = 37;
+	int DESTINATION_TYPE = 38;
 
 
 	/**
@@ -3419,6 +3528,82 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EAttribute getFleetShippingOption_UseSafetyHeel();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption <em>Optional Availability Shipping Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Optional Availability Shipping Option</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption
+	 * @generated
+	 */
+	EClass getOptionalAvailabilityShippingOption();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getBallastBonus <em>Ballast Bonus</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ballast Bonus</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getBallastBonus()
+	 * @see #getOptionalAvailabilityShippingOption()
+	 * @generated
+	 */
+	EAttribute getOptionalAvailabilityShippingOption_BallastBonus();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getRepositioningFee <em>Repositioning Fee</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Repositioning Fee</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getRepositioningFee()
+	 * @see #getOptionalAvailabilityShippingOption()
+	 * @generated
+	 */
+	EAttribute getOptionalAvailabilityShippingOption_RepositioningFee();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getStart <em>Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getStart()
+	 * @see #getOptionalAvailabilityShippingOption()
+	 * @generated
+	 */
+	EAttribute getOptionalAvailabilityShippingOption_Start();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getEnd <em>End</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>End</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getEnd()
+	 * @see #getOptionalAvailabilityShippingOption()
+	 * @generated
+	 */
+	EAttribute getOptionalAvailabilityShippingOption_End();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getStartPort <em>Start Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Start Port</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getStartPort()
+	 * @see #getOptionalAvailabilityShippingOption()
+	 * @generated
+	 */
+	EReference getOptionalAvailabilityShippingOption_StartPort();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getEndPort <em>End Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>End Port</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption#getEndPort()
+	 * @see #getOptionalAvailabilityShippingOption()
+	 * @generated
+	 */
+	EReference getOptionalAvailabilityShippingOption_EndPort();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.RoundTripShippingOption <em>Round Trip Shipping Option</em>}'.
@@ -4907,6 +5092,64 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute FLEET_SHIPPING_OPTION__USE_SAFETY_HEEL = eINSTANCE.getFleetShippingOption_UseSafetyHeel();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.OptionalAvailabilityShippingOptionImpl <em>Optional Availability Shipping Option</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.OptionalAvailabilityShippingOptionImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionalAvailabilityShippingOption()
+		 * @generated
+		 */
+		EClass OPTIONAL_AVAILABILITY_SHIPPING_OPTION = eINSTANCE.getOptionalAvailabilityShippingOption();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Bonus</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OPTIONAL_AVAILABILITY_SHIPPING_OPTION__BALLAST_BONUS = eINSTANCE.getOptionalAvailabilityShippingOption_BallastBonus();
+
+		/**
+		 * The meta object literal for the '<em><b>Repositioning Fee</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OPTIONAL_AVAILABILITY_SHIPPING_OPTION__REPOSITIONING_FEE = eINSTANCE.getOptionalAvailabilityShippingOption_RepositioningFee();
+
+		/**
+		 * The meta object literal for the '<em><b>Start</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OPTIONAL_AVAILABILITY_SHIPPING_OPTION__START = eINSTANCE.getOptionalAvailabilityShippingOption_Start();
+
+		/**
+		 * The meta object literal for the '<em><b>End</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OPTIONAL_AVAILABILITY_SHIPPING_OPTION__END = eINSTANCE.getOptionalAvailabilityShippingOption_End();
+
+		/**
+		 * The meta object literal for the '<em><b>Start Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference OPTIONAL_AVAILABILITY_SHIPPING_OPTION__START_PORT = eINSTANCE.getOptionalAvailabilityShippingOption_StartPort();
+
+		/**
+		 * The meta object literal for the '<em><b>End Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference OPTIONAL_AVAILABILITY_SHIPPING_OPTION__END_PORT = eINSTANCE.getOptionalAvailabilityShippingOption_EndPort();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.RoundTripShippingOptionImpl <em>Round Trip Shipping Option</em>}' class.

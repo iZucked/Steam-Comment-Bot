@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
+import com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -77,7 +78,7 @@ public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 			if (s != null && !s.trim().isEmpty()) {
 				hireCost = s;
 			}
-			return String.format("%s @ %s (fleet)", vesselName, hireCost);
+			return String.format("%s%s @ %s (fleet)", object instanceof OptionalAvailabilityShippingOption ? "~" : "", vesselName, hireCost);
 		} else if (object instanceof NominatedShippingOption) {
 			NominatedShippingOption option = (NominatedShippingOption) object;
 			Vessel nominatedVessel = option.getNominatedVessel();

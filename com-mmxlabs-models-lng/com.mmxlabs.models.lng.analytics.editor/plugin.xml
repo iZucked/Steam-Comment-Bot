@@ -177,6 +177,12 @@
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.analytics.FleetShippingOption">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.OptionalAvailabilityShippingOptionComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.OptionalAvailabilityShippingOptionComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption">
+  </componentHelper>
 		
 	</extension>
  <extension

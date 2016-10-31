@@ -237,6 +237,11 @@ public class OptionAnalysisModelItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
+				 AnalyticsFactory.eINSTANCE.createOptionalAvailabilityShippingOption()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
 				 AnalyticsFactory.eINSTANCE.createRoundTripShippingOption()));
 
 		newChildDescriptors.add

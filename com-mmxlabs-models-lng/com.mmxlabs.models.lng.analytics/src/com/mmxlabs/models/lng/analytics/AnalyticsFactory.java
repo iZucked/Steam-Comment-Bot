@@ -222,6 +222,15 @@ public interface AnalyticsFactory extends EFactory {
 	FleetShippingOption createFleetShippingOption();
 
 	/**
+	 * Returns a new object of class '<em>Optional Availability Shipping Option</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Optional Availability Shipping Option</em>'.
+	 * @generated
+	 */
+	OptionalAvailabilityShippingOption createOptionalAvailabilityShippingOption();
+
+	/**
 	 * Returns a new object of class '<em>Round Trip Shipping Option</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellMarket;
@@ -434,6 +435,13 @@ public class AnalyticsBuilder {
 	}
 
 	public static void setDefaultEntity(final IScenarioEditingLocation scenarioEditingLocation, final FleetShippingOption option) {
+		final BaseLegalEntity entity = getDefaultEntity(scenarioEditingLocation);
+		if (entity != null) {
+			option.setEntity(entity);
+		}
+	}
+
+	public static void setDefaultEntity(final IScenarioEditingLocation scenarioEditingLocation, final OptionalAvailabilityShippingOption option) {
 		final BaseLegalEntity entity = getDefaultEntity(scenarioEditingLocation);
 		if (entity != null) {
 			option.setEntity(entity);

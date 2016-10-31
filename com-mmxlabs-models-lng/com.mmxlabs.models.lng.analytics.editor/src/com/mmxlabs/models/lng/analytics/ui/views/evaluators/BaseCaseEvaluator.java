@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
@@ -22,6 +23,7 @@ import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
@@ -40,12 +42,14 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
+import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -316,7 +320,49 @@ public class BaseCaseEvaluator {
 		for (final BaseCaseRow row : clonedBaseCase.getBaseCase()) {
 
 			final ShippingOption shipping = row.getShipping();
-			if (shipping instanceof FleetShippingOption) {
+			if (shipping instanceof OptionalAvailabilityShippingOption) {
+				// Do not re-add
+				if (availabilitiesMap.containsKey(shipping)) {
+					continue;
+				}
+				final OptionalAvailabilityShippingOption optionalAvailabilityShippingOption = (OptionalAvailabilityShippingOption) shipping;
+				final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+				vesselAvailability.setTimeCharterRate(optionalAvailabilityShippingOption.getHireCost());
+				final Vessel vessel = optionalAvailabilityShippingOption.getVessel();
+				vesselAvailability.setVessel(vessel);
+				vesselAvailability.setEntity(optionalAvailabilityShippingOption.getEntity());
+
+				if (optionalAvailabilityShippingOption.isUseSafetyHeel()) {
+					vesselAvailability.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
+					vesselAvailability.getStartHeel().setVolumeAvailable(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getStartHeel().setCvValue(22.8);
+					vesselAvailability.getStartHeel().setPricePerMMBTU(0.1);
+
+					vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+					vesselAvailability.getEndHeel().setTargetEndHeel(vessel.getVesselClass().getMinHeel());
+				}
+				
+				vesselAvailability.setStartAfter(optionalAvailabilityShippingOption.getStart().atStartOfDay());
+				vesselAvailability.setStartBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
+				vesselAvailability.setEndAfter(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
+				vesselAvailability.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
+//				vesselAvailability.setOptional(true);
+//				vesselAvailability.setBallastBonus(fleetShippingOption.getBallastBonus());
+//				vesselAvailability.setRepositioningFee(fleetShippingOption.getRepositioningFee);
+				if (optionalAvailabilityShippingOption.getStartPort() != null) {
+					EList<APortSet<Port>> startAt = vesselAvailability.getStartAt();
+					startAt.clear();
+					startAt.add(optionalAvailabilityShippingOption.getStartPort());
+				}
+				if (optionalAvailabilityShippingOption.getEndPort() != null) {
+					EList<APortSet<Port>> endAt = vesselAvailability.getEndAt();
+					endAt.clear();
+					endAt.add(optionalAvailabilityShippingOption.getEndPort());
+				}
+				clone.getCargoModel().getVesselAvailabilities().add(vesselAvailability);
+				availabilitiesMap.put(optionalAvailabilityShippingOption, vesselAvailability);
+
+			} else if (shipping instanceof FleetShippingOption) {
 				// Do not re-add
 				if (availabilitiesMap.containsKey(shipping)) {
 					continue;

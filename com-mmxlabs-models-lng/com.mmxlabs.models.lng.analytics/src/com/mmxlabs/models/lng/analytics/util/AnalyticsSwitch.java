@@ -253,6 +253,14 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case AnalyticsPackage.OPTIONAL_AVAILABILITY_SHIPPING_OPTION: {
+				OptionalAvailabilityShippingOption optionalAvailabilityShippingOption = (OptionalAvailabilityShippingOption)theEObject;
+				T result = caseOptionalAvailabilityShippingOption(optionalAvailabilityShippingOption);
+				if (result == null) result = caseFleetShippingOption(optionalAvailabilityShippingOption);
+				if (result == null) result = caseShippingOption(optionalAvailabilityShippingOption);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case AnalyticsPackage.ROUND_TRIP_SHIPPING_OPTION: {
 				RoundTripShippingOption roundTripShippingOption = (RoundTripShippingOption)theEObject;
 				T result = caseRoundTripShippingOption(roundTripShippingOption);
@@ -699,6 +707,21 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseFleetShippingOption(FleetShippingOption object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Optional Availability Shipping Option</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Optional Availability Shipping Option</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseOptionalAvailabilityShippingOption(OptionalAvailabilityShippingOption object) {
 		return null;
 	}
 

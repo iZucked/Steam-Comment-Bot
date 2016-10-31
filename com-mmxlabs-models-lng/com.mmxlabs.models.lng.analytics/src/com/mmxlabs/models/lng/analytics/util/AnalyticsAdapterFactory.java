@@ -183,6 +183,10 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createFleetShippingOptionAdapter();
 			}
 			@Override
+			public Adapter caseOptionalAvailabilityShippingOption(OptionalAvailabilityShippingOption object) {
+				return createOptionalAvailabilityShippingOptionAdapter();
+			}
+			@Override
 			public Adapter caseRoundTripShippingOption(RoundTripShippingOption object) {
 				return createRoundTripShippingOptionAdapter();
 			}
@@ -599,6 +603,20 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createFleetShippingOptionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption <em>Optional Availability Shipping Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption
+	 * @generated
+	 */
+	public Adapter createOptionalAvailabilityShippingOptionAdapter() {
 		return null;
 	}
 

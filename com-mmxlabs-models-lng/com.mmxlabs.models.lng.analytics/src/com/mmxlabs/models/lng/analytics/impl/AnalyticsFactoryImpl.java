@@ -96,6 +96,7 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.PARTIAL_CASE_ROW: return createPartialCaseRow();
 			case AnalyticsPackage.SHIPPING_OPTION: return createShippingOption();
 			case AnalyticsPackage.FLEET_SHIPPING_OPTION: return createFleetShippingOption();
+			case AnalyticsPackage.OPTIONAL_AVAILABILITY_SHIPPING_OPTION: return createOptionalAvailabilityShippingOption();
 			case AnalyticsPackage.ROUND_TRIP_SHIPPING_OPTION: return createRoundTripShippingOption();
 			case AnalyticsPackage.NOMINATED_SHIPPING_OPTION: return createNominatedShippingOption();
 			case AnalyticsPackage.ANALYSIS_RESULT_ROW: return createAnalysisResultRow();
@@ -375,6 +376,16 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public FleetShippingOption createFleetShippingOption() {
 		FleetShippingOptionImpl fleetShippingOption = new FleetShippingOptionImpl();
 		return fleetShippingOption;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public OptionalAvailabilityShippingOption createOptionalAvailabilityShippingOption() {
+		OptionalAvailabilityShippingOptionImpl optionalAvailabilityShippingOption = new OptionalAvailabilityShippingOptionImpl();
+		return optionalAvailabilityShippingOption;
 	}
 
 	/**

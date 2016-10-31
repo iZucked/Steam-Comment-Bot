@@ -594,6 +594,29 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected OptionalAvailabilityShippingOptionItemProvider optionalAvailabilityShippingOptionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createOptionalAvailabilityShippingOptionAdapter() {
+		if (optionalAvailabilityShippingOptionItemProvider == null) {
+			optionalAvailabilityShippingOptionItemProvider = new OptionalAvailabilityShippingOptionItemProvider(this);
+		}
+
+		return optionalAvailabilityShippingOptionItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.RoundTripShippingOption} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1025,6 +1048,7 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (partialCaseRowItemProvider != null) partialCaseRowItemProvider.dispose();
 		if (shippingOptionItemProvider != null) shippingOptionItemProvider.dispose();
 		if (fleetShippingOptionItemProvider != null) fleetShippingOptionItemProvider.dispose();
+		if (optionalAvailabilityShippingOptionItemProvider != null) optionalAvailabilityShippingOptionItemProvider.dispose();
 		if (roundTripShippingOptionItemProvider != null) roundTripShippingOptionItemProvider.dispose();
 		if (nominatedShippingOptionItemProvider != null) nominatedShippingOptionItemProvider.dispose();
 		if (analysisResultRowItemProvider != null) analysisResultRowItemProvider.dispose();
