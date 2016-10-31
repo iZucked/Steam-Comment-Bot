@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.vertical;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,13 +37,31 @@ public class DefaultVerticalReportView extends AbstractVerticalCalendarReportVie
 				new EventLabelProvider(verticalReportVisualiser), "FOB/DES", null);
 		result.add(fobDesColumn);
 
-		List<CombinedSequence> combinedSequences = CombinedSequence.createCombinedSequences(Lists.newArrayList(data.vessels));
-		// add a column for each vessel in the scenario
-		if (!combinedSequences.isEmpty()) {
-			for (final CombinedSequence seq : combinedSequences) {
-				final CalendarColumn column = new CalendarColumn(verticalReportVisualiser.createDateFormat(), new SequenceEventProvider(seq.getSequences().toArray(new Sequence[seq.getSequences().size()]), null, verticalReportVisualiser),
-						new EventLabelProvider(verticalReportVisualiser), seq.getVessel().getName(), null);
-				result.add(column);
+		if (data.vessels != null) {
+			 List<CombinedSequence> combinedSequences =
+			 CombinedSequence.createCombinedSequences(Lists.newArrayList(data.vessels));
+
+			// add a column for each vessel in the scenario
+			if (!combinedSequences.isEmpty()) {
+				for (final CombinedSequence seq : combinedSequences) {
+//					CombinedSequence seq = combinedSequences.stream().filter(c -> c.getVessel().equals(sequence.getVesselAvailability().getVessel())).findFirst().get();
+					if (seq != null) {
+						final CalendarColumn column = new CalendarColumn(verticalReportVisualiser.createDateFormat(),
+								new SequenceEventProvider(seq.getSequences().toArray(new Sequence[seq.getSequences().size()]), null, verticalReportVisualiser),
+								new EventLabelProvider(verticalReportVisualiser), seq.getVessel().getName(), null);
+						result.add(column);
+					}
+				}
+				// for (final CombinedSequence seq : combinedSequences) {
+				// final CalendarColumn column = new
+				// CalendarColumn(verticalReportVisualiser.createDateFormat(),
+				// new SequenceEventProvider(seq.getSequences().toArray(new
+				// Sequence[seq.getSequences().size()]), null,
+				// verticalReportVisualiser),
+				// new EventLabelProvider(verticalReportVisualiser),
+				// seq.getVessel().getName(), null);
+				// result.add(column);
+				// }
 			}
 		}
 		return result;
