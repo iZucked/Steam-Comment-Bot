@@ -1066,6 +1066,8 @@ public class VoyagePlanner {
 
 		throw new IllegalArgumentException("Unknown from port slot");
 	}
+	
+	private boolean physicalToggle = false;
 
 	/**
 	 * Here, a single a voyage plan is evaluated, which may be part of what used to be a single voyage plan, e.g. if a charter out event was generated.
@@ -1101,9 +1103,17 @@ public class VoyagePlanner {
 						optionalHeelUsePortSlot = null;
 						if (planData.getAllocation() != null) {
 							if (portSlot.getPortType() == PortType.Load) {
-								currentHeelInM3 += planData.getAllocation().getCommercialSlotVolumeInM3(portSlot);							
+								if(physicalToggle){
+									currentHeelInM3 += planData.getAllocation().getPhysicalSlotVolumeInM3(portSlot);
+								} else{
+								currentHeelInM3 += planData.getAllocation().getCommercialSlotVolumeInM3(portSlot);		
+								}
 							} else if (portSlot.getPortType() == PortType.Discharge) {
-								currentHeelInM3 -= planData.getAllocation().getCommercialSlotVolumeInM3(portSlot);
+								if(physicalToggle){
+									currentHeelInM3 -= planData.getAllocation().getPhysicalSlotVolumeInM3(portSlot);
+								} else{
+								currentHeelInM3 -= planData.getAllocation().getCommercialSlotVolumeInM3(portSlot);		
+								}
 							}
 						}
 						assert currentHeelInM3 + ROUNDING_EPSILON >= 0;

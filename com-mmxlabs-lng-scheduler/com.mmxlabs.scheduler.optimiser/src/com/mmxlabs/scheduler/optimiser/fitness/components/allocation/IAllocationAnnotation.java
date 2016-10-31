@@ -47,6 +47,7 @@ public interface IAllocationAnnotation extends IPortTimesRecord {
 	 * @return
 	 */
 	long getCommercialSlotVolumeInM3(@NonNull IPortSlot slot);
+	long getPhysicalSlotVolumeInM3(@NonNull IPortSlot slot);
 
 	/**
 	 * Returns the time a load or discharge began
@@ -60,6 +61,7 @@ public interface IAllocationAnnotation extends IPortTimesRecord {
 	int getSlotDuration(@NonNull IPortSlot slot);
 
 	long getCommercialSlotVolumeInMMBTu(@NonNull IPortSlot slot);
+	long getPhysicalSlotVolumeInMMBTu(@NonNull IPortSlot slot);
 
 	/**
 	 * Returns the CV valid for this slot. Typically this will be the load CV, but for actualised cargoes discharge CV may be different to load CV

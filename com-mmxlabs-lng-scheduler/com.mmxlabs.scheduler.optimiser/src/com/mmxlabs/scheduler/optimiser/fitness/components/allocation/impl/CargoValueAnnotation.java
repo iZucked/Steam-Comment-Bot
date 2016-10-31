@@ -261,4 +261,16 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 
 		return false;
 	}
+
+	@Override
+	public long getPhysicalSlotVolumeInM3(@NonNull IPortSlot slot) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public long getPhysicalSlotVolumeInMMBTu(@NonNull IPortSlot slot) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

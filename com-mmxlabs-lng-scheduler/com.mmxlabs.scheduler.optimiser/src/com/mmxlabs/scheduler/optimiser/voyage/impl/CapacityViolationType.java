@@ -42,7 +42,13 @@ public enum CapacityViolationType {
 	/**
 	 * Heel lost at the end of the {@link VoyagePlan}. Typically the safety heel. This is the heel which cannot be rolled over to the next voyage plan (once heel tracking is merged in)
 	 */
-	LOST_HEEL("Lost Heel");
+	LOST_HEEL("Lost Heel"),
+	
+	PHYSICAL_MIN_LOAD("Physical Minimmum Load Breach"),
+	PHYSICAL_MAX_LOAD("Physical Maximum Load Breach"),
+	PHYSICAL_VESSEL_CAPACITY("Physical Minimmum Load Breach"),
+	PHYSICAL_MAX_DISCHARGE("Physical Maximum Discharge Breach"),
+	PHYSICAL_MIN_DISCHARGE("Physical Minimum Discharge Breach");
 
 	private final String displayName;
 

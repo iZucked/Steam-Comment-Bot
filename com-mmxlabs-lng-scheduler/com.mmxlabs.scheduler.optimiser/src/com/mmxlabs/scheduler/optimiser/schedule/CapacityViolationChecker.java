@@ -114,8 +114,11 @@ public class CapacityViolationChecker {
 
 					final IPortSlot portSlot = portDetails.getOptions().getPortSlot();
 					// If this is a cargo, get the load or discharge volume
-					final long volumeInM3 = allocationAnnotation == null ? 0 : allocationAnnotation.getCommercialSlotVolumeInM3(portSlot);
-					final long volumeInMMBTu = allocationAnnotation == null ? 0 : allocationAnnotation.getCommercialSlotVolumeInMMBTu(portSlot);
+					final long commercialVolumeInM3 = allocationAnnotation == null ? 0 : allocationAnnotation.getCommercialSlotVolumeInM3(portSlot);
+					final long commercialVolumeInMMBTu = allocationAnnotation == null ? 0 : allocationAnnotation.getCommercialSlotVolumeInMMBTu(portSlot);
+					
+					final long physicalVolumeInM3 = allocationAnnotation == null ? 0 : allocationAnnotation.getPhysicalSlotVolumeInM3(portSlot);
+					final long physicalVolumeInMMBTu = allocationAnnotation == null ? 0 : allocationAnnotation.getPhysicalSlotVolumeInMMBTu(portSlot);
 
 					if (portSlot instanceof ILoadOption) {
 						final ILoadOption loadOption = (ILoadOption) portSlot;
@@ -123,37 +126,38 @@ public class CapacityViolationChecker {
 						buy = loadOption;
 
 						if (loadOption.isVolumeSetInM3()) {
-							if (volumeInM3 > loadOption.getMaxLoadVolume()) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_LOAD, volumeInM3 - loadOption.getMaxLoadVolume(),
+							if (commercialVolumeInM3 > loadOption.getMaxLoadVolume()) {
+								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_LOAD, commercialVolumeInM3 - loadOption.getMaxLoadVolume(),
 										volumeAllocatedSequence);
-							} else if (volumeInM3 < loadOption.getMinLoadVolume()) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_LOAD, loadOption.getMinLoadVolume() - volumeInM3,
+							} else if (commercialVolumeInM3 < loadOption.getMinLoadVolume()) {
+								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_LOAD, loadOption.getMinLoadVolume() - commercialVolumeInM3,
 										volumeAllocatedSequence);
 							}
 
-							if (remainingHeelInM3 + volumeInM3 > vesselCapacityInM3) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, remainingHeelInM3 + volumeInM3 - vesselCapacityInM3,
+							if (remainingHeelInM3 + physicalVolumeInM3 > vesselCapacityInM3) {
+								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, remainingHeelInM3 + physicalVolumeInM3 - vesselCapacityInM3,
 										volumeAllocatedSequence);
 							}
+						
 						} else {
 							// input is set in MMBTu
 							assert allocationAnnotation != null;
 							int cargoCV = allocationAnnotation.getSlotCargoCV(portSlot);
-							if (volumeInMMBTu > loadOption.getMaxLoadVolumeMMBTU()) {
-								long violationInMMBTu = volumeInMMBTu - loadOption.getMaxLoadVolumeMMBTU();
+							if (commercialVolumeInMMBTu > loadOption.getMaxLoadVolumeMMBTU()) {
+								long violationInMMBTu = commercialVolumeInMMBTu - loadOption.getMaxLoadVolumeMMBTU();
 								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_LOAD, getViolationInM3(violationInMMBTu, cargoCV),
 										volumeAllocatedSequence);
-							} else if (volumeInMMBTu < loadOption.getMinLoadVolumeMMBTU()) {
-								long violationInMMBTu = loadOption.getMinLoadVolumeMMBTU() - volumeInMMBTu;
+							} else if (commercialVolumeInMMBTu < loadOption.getMinLoadVolumeMMBTU()) {
+								long violationInMMBTu = loadOption.getMinLoadVolumeMMBTU() - commercialVolumeInMMBTu;
 								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_LOAD, getViolationInM3(violationInMMBTu, cargoCV),
 										volumeAllocatedSequence);
 							}
 							if (cargoCV > 0) {
-								if (volumeInM3 > vesselCapacityInM3) {
-									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, volumeInM3 - vesselCapacityInM3,
+								if (physicalVolumeInM3 > vesselCapacityInM3) {
+									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, physicalVolumeInM3 - vesselCapacityInM3,
 											volumeAllocatedSequence);
 								}
-							}
+							}	
 						}
 						// Reset heel as we have now taken it into account
 						remainingHeelInM3 = 0;
@@ -165,38 +169,38 @@ public class CapacityViolationChecker {
 						// We use -1 for the CV as it does not matter - CV is used to convert between m3 and mmbtu, but here we are checking type first so we know conversion will not happen.
 
 						if (dischargeOption.isVolumeSetInM3()) {
-							if (volumeInM3 > dischargeOption.getMaxDischargeVolume(-1)) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_DISCHARGE, volumeInM3 - dischargeOption.getMaxDischargeVolume(-1),
+							if (commercialVolumeInM3 > dischargeOption.getMaxDischargeVolume(-1)) {
+								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_DISCHARGE, commercialVolumeInM3 - dischargeOption.getMaxDischargeVolume(-1),
 										volumeAllocatedSequence);
-							} else if (volumeInM3 < dischargeOption.getMinDischargeVolume(-1)) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_DISCHARGE, dischargeOption.getMinDischargeVolume(-1) - volumeInM3,
+							} else if (commercialVolumeInM3 < dischargeOption.getMinDischargeVolume(-1)) {
+								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_DISCHARGE, dischargeOption.getMinDischargeVolume(-1) - commercialVolumeInM3,
 										volumeAllocatedSequence);
 							}
 
-							if (volumeInM3 > vesselCapacityInM3) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, volumeInM3 - vesselCapacityInM3, volumeAllocatedSequence);
+							if (physicalVolumeInM3 > vesselCapacityInM3) {
+								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, physicalVolumeInM3 - vesselCapacityInM3, volumeAllocatedSequence);
 							}
+
 						} else {
 							// volumes set in MMBTu
 							assert allocationAnnotation != null;
 							int cargoCV = allocationAnnotation.getSlotCargoCV(portSlot);
-							if (volumeInMMBTu > dischargeOption.getMaxDischargeVolumeMMBTU(-1)) {
-								long violationInMMBTu = volumeInMMBTu - dischargeOption.getMaxDischargeVolumeMMBTU(-1);
+							if (commercialVolumeInMMBTu > dischargeOption.getMaxDischargeVolumeMMBTU(-1)) {
+								long violationInMMBTu = commercialVolumeInMMBTu - dischargeOption.getMaxDischargeVolumeMMBTU(-1);
 								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_DISCHARGE, getViolationInM3(violationInMMBTu, cargoCV),
 										volumeAllocatedSequence);
-							} else if (volumeInMMBTu < dischargeOption.getMinDischargeVolumeMMBTU(-1)) {
-								long violationInMMBTu = dischargeOption.getMinDischargeVolumeMMBTU(-1) - volumeInMMBTu;
+							} else if (commercialVolumeInMMBTu < dischargeOption.getMinDischargeVolumeMMBTU(-1)) {
+								long violationInMMBTu = dischargeOption.getMinDischargeVolumeMMBTU(-1) - commercialVolumeInMMBTu;
 								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_DISCHARGE, getViolationInM3(violationInMMBTu, cargoCV),
 										volumeAllocatedSequence);
 							}
 
 							if (cargoCV > 0) {
-								if (volumeInM3 > vesselCapacityInM3) {
-									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, volumeInM3 - vesselCapacityInM3,
+								if (physicalVolumeInM3 > vesselCapacityInM3) {
+									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, physicalVolumeInM3 - vesselCapacityInM3,
 											volumeAllocatedSequence);
 								}
 							}
-
 						}
 
 					} else {
