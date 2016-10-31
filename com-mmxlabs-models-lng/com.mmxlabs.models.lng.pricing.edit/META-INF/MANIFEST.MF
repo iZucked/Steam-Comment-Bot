@@ -10,16 +10,16 @@ Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: com.mmxlabs.models.lng.pricing.provider
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
- com.mmxlabs.models.lng.pricing;bundle-version="[4.0.2,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.pricing;bundle-version="[4.0.3,5.0.0)";visibility:=reexport,
  org.eclipse.emf.edit;bundle-version="2.7.2";visibility:=reexport,
  com.mmxlabs.models.datetime;visibility:=reexport,
- com.mmxlabs.models.lng.fleet;bundle-version="[4.0.2,5.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.types.edit;bundle-version="[4.0.2,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.fleet;bundle-version="[4.0.3,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.types.edit;bundle-version="[4.0.3,5.0.0)";visibility:=reexport,
  com.mmxlabs.models.mmxcore;visibility:=reexport,
  com.mmxlabs.models.mmxcore.edit;visibility:=reexport,
- com.mmxlabs.models.lng.port;bundle-version="[4.0.2,5.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.port.edit;bundle-version="[4.0.2,5.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.fleet.edit;bundle-version="[4.0.2,5.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.types;bundle-version="[4.0.2,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.port;bundle-version="[4.0.3,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.port.edit;bundle-version="[4.0.3,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.fleet.edit;bundle-version="[4.0.3,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.types;bundle-version="[4.0.3,5.0.0)";visibility:=reexport,
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
 Bundle-ActivationPolicy: lazy
