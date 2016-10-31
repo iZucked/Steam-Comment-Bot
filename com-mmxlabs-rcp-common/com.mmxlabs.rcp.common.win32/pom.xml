@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>com.mmxlabs.rcp.common.win32</artifactId>
-	<version>4.0.2-SNAPSHOT</version>
+	<version>4.0.2.RELEASE</version>
 	<packaging>eclipse-plugin</packaging>
 
 	<parent>
 		<groupId>com.mmxlabs.rcp.common</groupId>
 		<artifactId>com.mmxlabs.rcp.common.parent</artifactId>
-		<version>4.0.2-SNAPSHOT</version>
+		<version>4.0.2.RELEASE</version>
 	</parent>
 
 	<build>
