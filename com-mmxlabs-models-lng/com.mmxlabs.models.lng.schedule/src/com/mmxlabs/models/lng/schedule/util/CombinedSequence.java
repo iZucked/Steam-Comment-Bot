@@ -52,17 +52,7 @@ public class CombinedSequence {
 			availabilityMap.put(thisSequence.getVesselAvailability().getVessel(), matches);
 			unassigned.removeAll(matches);
 		}
-//		// find 
-//		for (final Sequence seq : sequences) {
-//			// Skip nominal cargoes
-//			if (seq.getSequenceType() == SequenceType.ROUND_TRIP || seq.getSequenceType() == SequenceType.VESSEL) {
-//				continue;
-//			}
-//			CombinedSequence cs = new CombinedSequence(seq.getVesselAvailability().getVessel());
-//			cs.sequences.add(seq);
-//			combinedSequences.add(cs);
-//		}
-		for (Vessel vessel : availabilityMap.keySet()) {
+		for (Vessel vessel : sequences.stream().map(s->s.getVesselAvailability().getVessel()).distinct().collect(Collectors.toList())) {
 			List<Sequence> linkedSequences = availabilityMap.get(vessel);
 				CombinedSequence cs = new CombinedSequence(vessel);
 				cs.setSequences(linkedSequences);

@@ -4026,13 +4026,22 @@ public interface SchedulePackage extends EPackage {
 	int BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Misc Costs Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_SLOT_PNL_DETAILS__MISC_COSTS_VALUE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 4;
+
+	/**
 	 * The feature id for the '<em><b>Extra Upside PNL</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL = GENERAL_PNL_DETAILS_FEATURE_COUNT + 4;
+	int BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL = GENERAL_PNL_DETAILS_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Basic Slot PNL Details</em>' class.
@@ -4041,7 +4050,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_SLOT_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 5;
+	int BASIC_SLOT_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of operations of the '<em>Basic Slot PNL Details</em>' class.
@@ -5742,6 +5751,17 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getBasicSlotPNLDetails_HedgingValue();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getMiscCostsValue <em>Misc Costs Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Misc Costs Value</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getMiscCostsValue()
+	 * @see #getBasicSlotPNLDetails()
+	 * @generated
+	 */
+	EAttribute getBasicSlotPNLDetails_MiscCostsValue();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getExtraUpsidePNL <em>Extra Upside PNL</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7133,6 +7153,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE = eINSTANCE.getBasicSlotPNLDetails_HedgingValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Misc Costs Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BASIC_SLOT_PNL_DETAILS__MISC_COSTS_VALUE = eINSTANCE.getBasicSlotPNLDetails_MiscCostsValue();
 
 		/**
 		 * The meta object literal for the '<em><b>Extra Upside PNL</b></em>' attribute feature.

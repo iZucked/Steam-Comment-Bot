@@ -539,8 +539,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSlot_CancellationExpression() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(26);
+	public EAttribute getSlot_MiscCosts() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(25);
 	}
 
 	/**
@@ -548,7 +548,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSlot_OverrideRestrictions() {
+	public EAttribute getSlot_CancellationExpression() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(27);
 	}
 
@@ -557,8 +557,17 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getSlot_OverrideRestrictions() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(28);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getSlot_NominatedVessel() {
-		return (EReference)slotEClass.getEStructuralFeatures().get(28);
+		return (EReference)slotEClass.getEStructuralFeatures().get(29);
 	}
 
 	/**
@@ -567,7 +576,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getSlot_Locked() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(29);
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(30);
 	}
 
 	/**
@@ -576,7 +585,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EReference getSlot_AllowedVessels() {
-		return (EReference)slotEClass.getEStructuralFeatures().get(25);
+		return (EReference)slotEClass.getEStructuralFeatures().get(26);
 	}	
 	
 	/**
@@ -1531,6 +1540,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(slotEClass, SLOT__RESTRICTED_PORTS);
 		createEAttribute(slotEClass, SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE);
 		createEAttribute(slotEClass, SLOT__HEDGES);
+		createEAttribute(slotEClass, SLOT__MISC_COSTS);
 		createEReference(slotEClass, SLOT__ALLOWED_VESSELS);
 		createEAttribute(slotEClass, SLOT__CANCELLATION_EXPRESSION);
 		createEAttribute(slotEClass, SLOT__OVERRIDE_RESTRICTIONS);
@@ -1755,6 +1765,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getSlot_RestrictedPorts(), thePortPackage.getPort(), null, "restrictedPorts", null, 0, -1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_RestrictedListsArePermissive(), ecorePackage.getEBoolean(), "restrictedListsArePermissive", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_Hedges(), ecorePackage.getEInt(), "hedges", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_MiscCosts(), ecorePackage.getEInt(), "miscCosts", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(theTypesPackage.getAVesselSet());
 		g2 = createEGenericType(theFleetPackage.getVessel());
 		g1.getETypeArguments().add(g2);
@@ -1985,6 +1996,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   });	
 		addAnnotation
 		  (getSlot_Hedges(), 
+		   source, 
+		   new String[] {
+			 "unitPrefix", "$",
+			 "formatString", "-###,###,##0"
+		   });	
+		addAnnotation
+		  (getSlot_MiscCosts(), 
 		   source, 
 		   new String[] {
 			 "unitPrefix", "$",

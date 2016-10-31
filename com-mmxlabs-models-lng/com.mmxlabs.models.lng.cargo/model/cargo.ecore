@@ -137,6 +137,12 @@
         <details key="formatString" value="-###,###,##0"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="miscCosts" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unitPrefix" value="$"/>
+        <details key="formatString" value="-###,###,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="allowedVessels" upperBound="-1">
       <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
         <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>

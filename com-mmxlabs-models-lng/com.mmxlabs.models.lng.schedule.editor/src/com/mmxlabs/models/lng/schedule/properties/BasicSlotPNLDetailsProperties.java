@@ -55,6 +55,11 @@ public class BasicSlotPNLDetailsProperties extends AbstractDetailPropertyFactory
 			addDetailProperty("Hedging Value", "", "$", "", hedgingValue, new StringFormatLabelProvider("%,d"), details);
 			hasDetails = true;
 		}
+		if (slotPNLDetails.isSetMiscCostsValue()) {
+			final int miscCostsValue = slotPNLDetails.getMiscCostsValue();
+			addDetailProperty("Misc Costs Value", "", "$", "", miscCostsValue, new StringFormatLabelProvider("%,d"), details);
+			hasDetails = true;
+		}
 
 		if (hasDetails) {
 			return details;

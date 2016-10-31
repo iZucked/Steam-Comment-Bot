@@ -134,6 +134,11 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 		return (T) this;
 	}
 
+	public @NonNull T withMiscCosts(final int costs) {
+		slot.setMiscCosts(costs);
+		return (T) this;
+	}
+
 	@NonNull
 	public T withVisitDuration(@Nullable final Integer visitDurationInHours) {
 		if (visitDurationInHours != null) {

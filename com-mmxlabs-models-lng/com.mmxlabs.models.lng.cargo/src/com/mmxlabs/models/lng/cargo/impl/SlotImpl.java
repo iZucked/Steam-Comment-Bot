@@ -75,6 +75,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getRestrictedPorts <em>Restricted Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getHedges <em>Hedges</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMiscCosts <em>Misc Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCancellationExpression <em>Cancellation Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isOverrideRestrictions <em>Override Restrictions</em>}</li>
@@ -634,6 +635,26 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected int hedges = HEDGES_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getMiscCosts() <em>Misc Costs</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMiscCosts()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int MISC_COSTS_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getMiscCosts() <em>Misc Costs</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMiscCosts()
+	 * @generated
+	 * @ordered
+	 */
+	protected int miscCosts = MISC_COSTS_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getAllowedVessels() <em>Allowed Vessels</em>}' reference list.
@@ -1631,7 +1652,28 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__HEDGES, oldHedges, hedges));
 	}
-//
+/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getMiscCosts() {
+		return miscCosts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMiscCosts(int newMiscCosts) {
+		int oldMiscCosts = miscCosts;
+		miscCosts = newMiscCosts;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__MISC_COSTS, oldMiscCosts, miscCosts));
+	}
+
+	//
 //	/**
 //	 * <!-- begin-user-doc -->
 //	 * <!-- end-user-doc -->
@@ -2163,6 +2205,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return isRestrictedListsArePermissive();
 			case CargoPackage.SLOT__HEDGES:
 				return getHedges();
+			case CargoPackage.SLOT__MISC_COSTS:
+				return getMiscCosts();
 			case CargoPackage.SLOT__ALLOWED_VESSELS:
 				return getAllowedVessels();
 			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
@@ -2265,6 +2309,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return;
 			case CargoPackage.SLOT__HEDGES:
 				setHedges((Integer)newValue);
+				return;
+			case CargoPackage.SLOT__MISC_COSTS:
+				setMiscCosts((Integer)newValue);
 				return;
 			case CargoPackage.SLOT__ALLOWED_VESSELS:
 				getAllowedVessels().clear();
@@ -2371,6 +2418,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__HEDGES:
 				setHedges(HEDGES_EDEFAULT);
 				return;
+			case CargoPackage.SLOT__MISC_COSTS:
+				setMiscCosts(MISC_COSTS_EDEFAULT);
+				return;
 			case CargoPackage.SLOT__ALLOWED_VESSELS:
 				getAllowedVessels().clear();
 				return;
@@ -2449,6 +2499,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return restrictedListsArePermissive != RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT;
 			case CargoPackage.SLOT__HEDGES:
 				return hedges != HEDGES_EDEFAULT;
+			case CargoPackage.SLOT__MISC_COSTS:
+				return miscCosts != MISC_COSTS_EDEFAULT;
 			case CargoPackage.SLOT__ALLOWED_VESSELS:
 				return allowedVessels != null && !allowedVessels.isEmpty();
 			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
@@ -2627,6 +2679,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		result.append(restrictedListsArePermissive);
 		result.append(", hedges: ");
 		result.append(hedges);
+		result.append(", miscCosts: ");
+		result.append(miscCosts);
 		result.append(", cancellationExpression: ");
 		if (cancellationExpressionESet) result.append(cancellationExpression); else result.append("<unset>");
 		result.append(", overrideRestrictions: ");

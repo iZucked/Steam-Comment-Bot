@@ -75,6 +75,7 @@ public class SlotItemProvider
 			addRestrictedPortsPropertyDescriptor(object);
 			addRestrictedListsArePermissivePropertyDescriptor(object);
 			addHedgesPropertyDescriptor(object);
+			addMiscCostsPropertyDescriptor(object);
 			addAllowedVesselsPropertyDescriptor(object);
 			addCancellationExpressionPropertyDescriptor(object);
 			addOverrideRestrictionsPropertyDescriptor(object);
@@ -657,6 +658,28 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Misc Costs feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMiscCostsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_miscCosts_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_miscCosts_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__MISC_COSTS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Allowed Vessels feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -823,6 +846,7 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
 			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 			case CargoPackage.SLOT__HEDGES:
+			case CargoPackage.SLOT__MISC_COSTS:
 			case CargoPackage.SLOT__CANCELLATION_EXPRESSION:
 			case CargoPackage.SLOT__OVERRIDE_RESTRICTIONS:
 			case CargoPackage.SLOT__LOCKED:

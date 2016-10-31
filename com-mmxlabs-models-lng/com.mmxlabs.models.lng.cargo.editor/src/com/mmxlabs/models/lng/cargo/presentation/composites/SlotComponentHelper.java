@@ -105,6 +105,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_restrictedPortsEditor(detailComposite, topClass);
 		add_restrictedListsArePermissiveEditor(detailComposite, topClass);
 		add_hedgesEditor(detailComposite, topClass);
+		add_miscCostsEditor(detailComposite, topClass);
 		add_allowedVesselsEditor(detailComposite, topClass);
 		add_cancellationExpressionEditor(detailComposite, topClass);
 		add_overrideRestrictionsEditor(detailComposite, topClass);
@@ -201,6 +202,15 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_hedgesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__HEDGES));
+	}
+
+	/**
+	 * Create the editor for the miscCosts feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_miscCostsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__MISC_COSTS));
 	}
 
 	/**
