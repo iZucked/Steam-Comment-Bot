@@ -20,6 +20,7 @@ import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.annotations.ICancellationAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.IHedgingAnnotation;
+import com.mmxlabs.scheduler.optimiser.annotations.IMiscCostsAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -64,9 +65,10 @@ public class BasicSlotPNLExporterExtension implements IExporterExtension {
 							ICargoValueAnnotation.class);
 
 					final IHedgingAnnotation hedgingAnnotation = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_hedgingValue, IHedgingAnnotation.class);
+					final IMiscCostsAnnotation miscCostsAnnotation = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_miscCostsValue, IMiscCostsAnnotation.class);
 					final ICancellationAnnotation cancellationAnnotation = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_cancellationFees,
 							ICancellationAnnotation.class);
-					if (hedgingAnnotation != null || cancellationAnnotation != null || cargoValueAnnotation != null) {
+					if (hedgingAnnotation != null || cancellationAnnotation != null || cargoValueAnnotation != null || miscCostsAnnotation != null) {
 						final BasicSlotPNLDetails details = ScheduleFactory.eINSTANCE.createBasicSlotPNLDetails();
 
 						if (cargoValueAnnotation != null) {
@@ -76,6 +78,9 @@ public class BasicSlotPNLExporterExtension implements IExporterExtension {
 						}
 						if (hedgingAnnotation != null) {
 							details.setHedgingValue(OptimiserUnitConvertor.convertToExternalFixedCost(hedgingAnnotation.getHedgingValue()));
+						}
+						if (miscCostsAnnotation != null) {
+							details.setMiscCostsValue(OptimiserUnitConvertor.convertToExternalFixedCost(miscCostsAnnotation.getMiscCostsValue()));
 						}
 						if (cancellationAnnotation != null) {
 							details.setCancellationFees(OptimiserUnitConvertor.convertToExternalFixedCost(cancellationAnnotation.getCancellationFees()));

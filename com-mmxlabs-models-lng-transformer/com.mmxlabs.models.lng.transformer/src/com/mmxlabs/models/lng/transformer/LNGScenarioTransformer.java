@@ -177,6 +177,8 @@ import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IMiscCostsProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IMiscCostsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
@@ -337,6 +339,10 @@ public class LNGScenarioTransformer {
 	@Inject
 	@NonNull
 	private IHedgesProviderEditor hedgesProviderEditor;
+	
+	@Inject
+	@NonNull
+	private IMiscCostsProviderEditor miscCostsProviderEditor;
 
 	@Inject
 	@NonNull
@@ -1401,10 +1407,11 @@ public class LNGScenarioTransformer {
 			contractTransformer.slotTransformed(dischargeSlot, discharge);
 		}
 
-		final long hedgeValue = OptimiserUnitConvertor.convertToInternalFixedCost(dischargeSlot.getHedges());
-		if (hedgeValue != 0) {
-			hedgesProviderEditor.setHedgeValue(discharge, hedgeValue);
-		}
+		// set hedging costs in provider
+		setHedgingCosts(dischargeSlot, discharge);
+		
+		// set additional misc costs in provider
+		setMiscCosts(dischargeSlot, discharge);
 
 		final ILongCurve cancellationCurve = dateHelper.generateLongExpressionCurve(dischargeSlot.getCancellationExpression(), commodityIndices);
 		if (cancellationCurve != null) {
@@ -1546,10 +1553,11 @@ public class LNGScenarioTransformer {
 			addSpotSlotToCount((SpotSlot) loadSlot);
 		}
 
-		final long hedgeCost = OptimiserUnitConvertor.convertToInternalFixedCost(loadSlot.getHedges());
-		if (hedgeCost != 0) {
-			hedgesProviderEditor.setHedgeValue(load, hedgeCost);
-		}
+		// set hedging costs in provider
+		setHedgingCosts(loadSlot, load);
+		
+		// set additional misc costs in provider
+		setMiscCosts(loadSlot, load);
 
 		final ILongCurve cancellationCurve = dateHelper.generateLongExpressionCurve(loadSlot.getCancellationExpression(), commodityIndices);
 		if (cancellationCurve != null) {
@@ -3004,6 +3012,20 @@ public class LNGScenarioTransformer {
 			return ERouteOption.SUEZ;
 		}
 		throw new IllegalStateException();
+	}
+
+	private void setHedgingCosts(final Slot slot, final IPortSlot portSlot) {
+		final long hedgingCosts = OptimiserUnitConvertor.convertToInternalFixedCost(slot.getHedges());
+		if (hedgingCosts != 0) {
+			hedgesProviderEditor.setHedgeValue(portSlot, hedgingCosts);
+		}
+	}
+
+	private void setMiscCosts(final Slot slot, final IPortSlot portSlot) {
+		final long miscCosts = OptimiserUnitConvertor.convertToInternalFixedCost(slot.getMiscCosts()) * -1L; // make negative as cost
+		if (miscCosts != 0) {
+			miscCostsProviderEditor.setCostsValue(portSlot, miscCosts);
+		}
 	}
 
 }
