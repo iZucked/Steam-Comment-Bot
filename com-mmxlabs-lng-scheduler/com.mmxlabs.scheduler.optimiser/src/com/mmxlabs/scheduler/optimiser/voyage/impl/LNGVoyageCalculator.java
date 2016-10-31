@@ -39,6 +39,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
  * 
  */
 public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
+	
+	private boolean boilOffCompensation = false;
 
 	@Inject
 	private IRouteCostProvider routeCostProvider;
@@ -1013,19 +1015,21 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		 * The number of MT of base fuel or MT-equivalent of LNG required per hour during this port visit
 		 */
 		final long consumptionRateInMTPerDay;
-		final long inPortNBORateInM3PerDay;
+		long inPortNBORateInM3PerDay = 0;
 		
 		final PortType portType = options.getPortSlot().getPortType();
 
 		// temporary kludge: ignore non-load non-discharge ports for port consumption
 		if (portType == PortType.Load || portType == PortType.Discharge) {
 			consumptionRateInMTPerDay = vesselClass.getInPortConsumptionRateInMTPerDay(portType);
-			if(portType == PortType.Load){
-				inPortNBORateInM3PerDay = vesselClass.getInPortNBORate(VesselState.Laden);
-//				System.out.println("LOAD: "+ inPortNBORateInM3PerDay);
-			}else{
-				inPortNBORateInM3PerDay = vesselClass.getInPortNBORate(VesselState.Ballast);
-//				System.out.println("DIS: "+ inPortNBORateInM3PerDay);
+			
+			if(boilOffCompensation){
+				if(portType == PortType.Load){
+					inPortNBORateInM3PerDay = vesselClass.getInPortNBORate(VesselState.Laden);
+	
+				}else{
+					inPortNBORateInM3PerDay = vesselClass.getInPortNBORate(VesselState.Ballast);
+				}
 			}
 			
 		} else if (portType == PortType.End) {

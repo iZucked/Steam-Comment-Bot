@@ -114,7 +114,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 						final long consumption = details.getFuelConsumption(fuel, unit);
 
 						visit.setFuelConsumption(fuel, unit, consumption);
-						//if (unit == fuel.getPricingFuelUnit()) {
+						if (unit == fuel.getPricingFuelUnit()) {
 							
 							final int fuelUnitPrice = details.getFuelUnitPrice(fuel);
 							final long cost = Calculator.costFromConsumption(consumption, fuelUnitPrice);
@@ -122,7 +122,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 							visit.setFuelCost(fuel, cost);
 							visit.setFuelPriceUnit(fuel, unit);
 							visit.setFuelUnitPrice(fuel, fuelUnitPrice);
-						//}
+						}
 					}
 				}
 //				final long consumption = details.getFuelConsumption(FuelComponent.Base, FuelUnit.MT);

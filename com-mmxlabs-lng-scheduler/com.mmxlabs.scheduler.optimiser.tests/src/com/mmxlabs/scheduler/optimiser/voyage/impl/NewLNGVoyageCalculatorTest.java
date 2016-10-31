@@ -891,15 +891,15 @@ public class NewLNGVoyageCalculatorTest {
 		calc.setPortCVProvider(mockPortCVProvider);
 
 		// Set fuel consumptions with a special pattern - each subsequent details object has a x10 multiplier to the previous value -= this makes it easy to add up for the expectations
-		loadDetails.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, 1);
-		loadDetails.setFuelConsumption(FuelComponent.NBO,FuelUnit.MT, 2);
-		loadDetails.setFuelConsumption(FuelComponent.FBO,FuelUnit.MT, 3);
-		loadDetails.setFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT, 4);
-		loadDetails.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT, 5);
-		loadDetails.setFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT, 6);
-		loadDetails.setFuelConsumption(FuelComponent.PilotLight, FuelUnit.MT, 7);
-		loadDetails.setFuelConsumption(FuelComponent.IdlePilotLight, FuelUnit.MT, 8);
-		loadDetails.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.MT, 9);
+		loadDetails.setFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit(), 1);
+		loadDetails.setFuelConsumption(FuelComponent.NBO,FuelComponent.NBO.getDefaultFuelUnit(), 2);
+		loadDetails.setFuelConsumption(FuelComponent.FBO,FuelComponent.FBO.getDefaultFuelUnit(), 3);
+		loadDetails.setFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit(), 4);
+		loadDetails.setFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit(), 5);
+		loadDetails.setFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit(), 6);
+		loadDetails.setFuelConsumption(FuelComponent.PilotLight, FuelComponent.PilotLight.getDefaultFuelUnit(), 7);
+		loadDetails.setFuelConsumption(FuelComponent.IdlePilotLight, FuelComponent.IdlePilotLight.getDefaultFuelUnit(), 8);
+		loadDetails.setFuelConsumption(FuelComponent.Cooldown, FuelComponent.Cooldown.getDefaultFuelUnit(), 9);
 
 		details.setFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit(), 10);
 		details.setFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit(), 20);
@@ -911,15 +911,15 @@ public class NewLNGVoyageCalculatorTest {
 		details.setFuelConsumption(FuelComponent.IdlePilotLight, FuelComponent.IdlePilotLight.getDefaultFuelUnit(), 80);
 		details.setFuelConsumption(FuelComponent.Cooldown, FuelComponent.Cooldown.getDefaultFuelUnit(), 90);
 
-		dischargeDetails.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, 100);
-		dischargeDetails.setFuelConsumption(FuelComponent.NBO, FuelUnit.MT, 200);
-		dischargeDetails.setFuelConsumption(FuelComponent.FBO, FuelUnit.MT, 300);
-		dischargeDetails.setFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT, 400);
-		dischargeDetails.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT, 500);
-		dischargeDetails.setFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT, 600);
-		dischargeDetails.setFuelConsumption(FuelComponent.PilotLight, FuelUnit.MT, 700);
-		dischargeDetails.setFuelConsumption(FuelComponent.IdlePilotLight, FuelUnit.MT, 800);
-		dischargeDetails.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.MT, 900);
+		dischargeDetails.setFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit(), 100);
+		dischargeDetails.setFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit(), 200);
+		dischargeDetails.setFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit(), 300);
+		dischargeDetails.setFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit(), 400);
+		dischargeDetails.setFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit(), 500);
+		dischargeDetails.setFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit(), 600);
+		dischargeDetails.setFuelConsumption(FuelComponent.PilotLight, FuelComponent.PilotLight.getDefaultFuelUnit(), 700);
+		dischargeDetails.setFuelConsumption(FuelComponent.IdlePilotLight, FuelComponent.IdlePilotLight.getDefaultFuelUnit(), 800);
+		dischargeDetails.setFuelConsumption(FuelComponent.Cooldown, FuelComponent.Cooldown.getDefaultFuelUnit(), 900);
 
 		final long[] result = calc.calculateVoyagePlanFuelConsumptions(vessel, loadDetails, details, dischargeDetails);
 

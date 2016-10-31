@@ -1067,7 +1067,7 @@ public class VoyagePlanner {
 		throw new IllegalArgumentException("Unknown from port slot");
 	}
 	
-	private boolean physicalToggle = false;
+	private boolean boilOffCompensation = false;
 
 	/**
 	 * Here, a single a voyage plan is evaluated, which may be part of what used to be a single voyage plan, e.g. if a charter out event was generated.
@@ -1084,6 +1084,7 @@ public class VoyagePlanner {
 		{
 			final IDetailsSequenceElement[] sequence = planData.getPlan().getSequence();
 			long currentHeelInM3 = planData.getPlan().getStartingHeelInM3();
+			System.out.println("currentHeelInM3: " + currentHeelInM3);
 			long totalVoyageBOG = 0;
 			int voyageTime = 0;
 			IPortSlot optionalHeelUsePortSlot = null;
@@ -1098,24 +1099,28 @@ public class VoyagePlanner {
 //					System.out.println("X-"+ portDetails.getFuelConsumption(FuelComponent.InPortNBO));
 //					System.out.println("Y-"+portDetails.getFuelUnitPrice(FuelComponent.InPortNBO));
 					if (portSlot.getPortType() != PortType.End) {
-						totalVoyageBOG += portDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3);
-						currentHeelInM3 -= portDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3);
+						if(boilOffCompensation){
+							totalVoyageBOG += portDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3);					
+							currentHeelInM3 -= portDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3);
+						}
+						System.out.println("FC: " +portDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
 						optionalHeelUsePortSlot = null;
 						if (planData.getAllocation() != null) {
 							if (portSlot.getPortType() == PortType.Load) {
-								if(physicalToggle){
+								if(boilOffCompensation){
 									currentHeelInM3 += planData.getAllocation().getPhysicalSlotVolumeInM3(portSlot);
 								} else{
 								currentHeelInM3 += planData.getAllocation().getCommercialSlotVolumeInM3(portSlot);		
 								}
 							} else if (portSlot.getPortType() == PortType.Discharge) {
-								if(physicalToggle){
+								if(boilOffCompensation){
 									currentHeelInM3 -= planData.getAllocation().getPhysicalSlotVolumeInM3(portSlot);
 								} else{
 								currentHeelInM3 -= planData.getAllocation().getCommercialSlotVolumeInM3(portSlot);		
 								}
 							}
 						}
+						System.out.println("PORT HEEL: " + currentHeelInM3);
 						assert currentHeelInM3 + ROUNDING_EPSILON >= 0;
 					} else {
 						if (portSlot instanceof EndPortSlot) {
@@ -1137,6 +1142,7 @@ public class VoyagePlanner {
 					}
 					totalVoyageBOG += voyageBOGInM3;
 					currentHeelInM3 -= voyageBOGInM3;
+					System.out.println("VOY HEEL: " + currentHeelInM3);
 					assert currentHeelInM3 + ROUNDING_EPSILON >= 0;
 					voyageTime += voyageDetails.getTravelTime();
 					voyageTime += voyageDetails.getIdleTime();
@@ -1163,6 +1169,10 @@ public class VoyagePlanner {
 //			System.out.println("M3");
 //			System.out.println(planData.getEndHeelVolumeInM3());
 //			System.out.println(currentHeelInM3);
+			System.out.println(planData.getEndHeelVolumeInM3());
+			long y = Math.abs(planData.getEndHeelVolumeInM3() - currentHeelInM3);
+			
+			
 			assert (Math.abs(planData.getEndHeelVolumeInM3() - currentHeelInM3) <= ROUNDING_EPSILON);
 		}
 
