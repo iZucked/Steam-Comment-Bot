@@ -25,7 +25,6 @@ import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.FBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
@@ -190,8 +189,8 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 
 		// Calculate new voyage requirements
 		{
-			final long ladenRouteCosts = routeCostProvider.getRouteCost(route, vessel, CostType.Laden);
-			final long ballastRouteCosts = routeCostProvider.getRouteCost(route, vessel, CostType.RoundTripBallast);
+			final long ladenRouteCosts = routeCostProvider.getRouteCost(route, vessel, loadTime + loadDuration, CostType.Laden);
+			final long ballastRouteCosts = routeCostProvider.getRouteCost(route, vessel, dischargeTime + dischargeDuration, CostType.RoundTripBallast);
 
 			final VoyageOptions ladenOptions = createVoyageOptions(VesselState.Laden, vessel, route, loadDistance, ladenRouteCosts, dischargeTime - loadDuration - loadTime, notionalLoadSlot,
 					notionalDischargeSlot, cargoCVValue);

@@ -76,8 +76,8 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 		// Calculate new voyage requirements
 		{
-			final long ladenRouteCosts = routeCostProvider.getRouteCost(route, vessel, CostType.Laden);
-			final long ballastRouteCosts = routeCostProvider.getRouteCost(route, vessel, CostType.RoundTripBallast);
+			final long ladenRouteCosts = routeCostProvider.getRouteCost(route, vessel, loadTime + loadDuration, CostType.Laden);
+			final long ballastRouteCosts = routeCostProvider.getRouteCost(route, vessel, dischargeTime + dischargeDuration, CostType.RoundTripBallast);
 
 			final VoyageDetails ladenDetails = calculateVoyageDetails(VesselState.Laden, vessel, route, distance, ladenRouteCosts, dischargeTime - loadDuration - loadTime, notionalLoadSlot,
 					notionalDischargeSlot, cargoCVValue);
@@ -143,8 +143,8 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 		// Calculate new voyage requirements
 		{
-			final long ladenRouteCosts = routeCostProvider.getRouteCost(route, vessel, CostType.Laden);
-			final long ballastRouteCosts = routeCostProvider.getRouteCost(route, vessel, CostType.RoundTripBallast);
+			final long ladenRouteCosts = routeCostProvider.getRouteCost(route, vessel, loadTime + loadDuration, CostType.Laden);
+			final long ballastRouteCosts = routeCostProvider.getRouteCost(route, vessel, dischargeTime + dischargeDuration, CostType.RoundTripBallast);
 
 			final VoyageDetails ladenDetails = calculateVoyageDetails(VesselState.Laden, vessel, route, loadDistance, ladenRouteCosts, dischargeTime - loadDuration - loadTime, notionalLoadSlot,
 					notionalDischargeSlot, cargoCVValue);
