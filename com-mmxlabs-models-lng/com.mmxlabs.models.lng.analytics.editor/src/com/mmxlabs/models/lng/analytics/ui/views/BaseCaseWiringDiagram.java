@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOption;
+import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
@@ -80,9 +81,9 @@ public class BaseCaseWiringDiagram implements PaintListener {
 	 */
 	private final GridViewerColumn wiringColumn;
 	/**
-	 * The {@link ChangeSetRoot} data structure containing all the required data
+	 * The {@link OptionAnalysisModel} data structure containing all the required data
 	 */
-	private BaseCase table;
+	private OptionAnalysisModel table;
 
 	/**
 	 * Create a new wiring diagram
@@ -145,7 +146,7 @@ public class BaseCaseWiringDiagram implements PaintListener {
 		}
 
 		// Copy ref in case of concurrent change during paint
-		final BaseCase root = table;
+		final BaseCase root = table.getBaseCase();
 		// Get a list of terminal positions from subclass
 		Map<BaseCaseRow, Integer> rowIndices = new HashMap<>();
 		Map<Integer, BaseCaseRow> indexToRow = new HashMap<>();
@@ -360,7 +361,7 @@ public class BaseCaseWiringDiagram implements PaintListener {
 		return new Rectangle(area.x + offset, area.y + grid.getHeaderHeight(), wiringColumn.getColumn().getWidth(), area.height);
 	}
 
-	public void setBaseCase(BaseCase root) {
+	public void setRoot(OptionAnalysisModel root) {
 		this.table = root;
 	}
 }

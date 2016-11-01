@@ -194,6 +194,39 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private boolean baseCaseValid = true;
 	private boolean partialCaseValid = true;
 
+	private final IDialogEditingContext dialogContext = new IDialogEditingContext() {
+
+		@Override
+		public void registerEditorControl(final EObject target, final EStructuralFeature feature, final Control control) {
+
+		}
+
+		@Override
+		public boolean isNewEdit() {
+			return false;
+		}
+
+		@Override
+		public boolean isMultiEdit() {
+			return false;
+		}
+
+		@Override
+		public IScenarioEditingLocation getScenarioEditingLocation() {
+			return OptionModellerView.this;
+		}
+
+		@Override
+		public List<Control> getEditorControls(final EObject target, final EStructuralFeature feature) {
+			return null;
+		}
+
+		@Override
+		public IDialogController getDialogController() {
+			return null;
+		}
+	};
+
 	@Override
 	public void createPartControl(final Composite parent) {
 
@@ -325,6 +358,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				inputPNL = createInputTargetPNL(c);
 				inputPNL.setLayoutData(new GridData(100, SWT.DEFAULT));
 				inputWants.add(m -> inputPNL.setEnabled(m != null));
+				inputWants.add(m -> inputPNL.redraw());
 
 				baseCaseCalculator = new Label(c, SWT.NONE);
 				// baseCaseCalculator.setText("Calc."); --cogs
@@ -634,6 +668,11 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		numberInlineEditor.setCommandHandler(getDefaultCommandHandler());
 		final Control control = numberInlineEditor.createControl(composite, null, new FormToolkit(Display.getDefault()));
 
+		inputWants.add(model -> {
+			numberInlineEditor.display(dialogContext, this.getRootObject(), model != null ? model.getBaseCase() : null, model != null ? Lists.newArrayList(model.getBaseCase()) : Lists.newArrayList());
+
+		});
+
 		return control;
 	}
 
@@ -868,73 +907,17 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		doValidate();
 
-		// control
-		numberInlineEditor.display(new IDialogEditingContext() {
+		inputWants.forEach(want -> want.accept(model));
 
-			@Override
-			public void registerEditorControl(final EObject target, final EStructuralFeature feature, final Control control) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public boolean isNewEdit() {
-				// TODO Auto-generated method stub
-				return false;
-			}
-
-			@Override
-			public boolean isMultiEdit() {
-				return false;
-			}
-			// TODO Auto-generated method stub
-
-			@Override
-			public IScenarioEditingLocation getScenarioEditingLocation() {
-				return OptionModellerView.this;
-			}
-
-			@Override
-			public List<Control> getEditorControls(final EObject target, final EStructuralFeature feature) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public IDialogController getDialogController() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		}, this.getRootObject(), model != null ? model.getBaseCase() : null, model != null ? Lists.newArrayList(model.getBaseCase()) : Lists.newArrayList());
-		inputPNL.redraw();
-		baseCaseViewer.setInput(model);
-		if (model != null) {
-			baseCaseDiagram.setBaseCase(model.getBaseCase());
-		} else {
-			baseCaseDiagram.setBaseCase(null);
-		}
-		partialCaseViewer.setInput(model);
-		if (model != null) {
-			partialCaseDiagram.setRoot(model);
-		} else {
-			partialCaseDiagram.setRoot(null);
-		}
-		buyOptionsViewer.setInput(model);
-		sellOptionsViewer.setInput(model);
 		// rulesViewer.setInput(model);
-		resultsViewer.setInput(model);
-		if (model != null) {
-			resultsDiagram.setRoot(model);
-		} else {
-			resultsDiagram.setRoot(null);
-		}
+
 		vesselViewer.setInput(this);
 		vesselClassViewer.setInput(this);
 		vesselViewer.expandAll();
-		shippingOptionsViewer.setInput(model);
 
 		if (rootModel != null) {
 			rootModel.eAdapters().remove(historyRenameAdaptor);
+			optionsTreeViewer.setInput(Collections.emptySet());
 		}
 		rootModel = getRootOptionsModel(model);
 		if (rootModel != null) {
@@ -950,9 +933,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 		} else {
 			setPartName("Sandbox");
-		}
-		for (final Consumer<OptionAnalysisModel> want : inputWants) {
-			want.accept(model);
 		}
 
 		refreshSections(true, EnumSet.allOf(SectionType.class));
@@ -994,6 +974,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			inputWants.add(model -> listener.setOptionAnalysisModel(model));
 			buyOptionsViewer.addDropSupport(DND.DROP_MOVE, types, listener);
 		}
+		inputWants.add(model -> buyOptionsViewer.setInput(model));
 
 		return buyOptionsViewer.getControl();
 	}
@@ -1022,6 +1003,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			inputWants.add(model -> listener.setOptionAnalysisModel(model));
 			sellOptionsViewer.addDropSupport(DND.DROP_MOVE, types, listener);
 		}
+		inputWants.add(model -> sellOptionsViewer.setInput(model));
 		return sellOptionsViewer.getControl();
 	}
 
@@ -1049,6 +1031,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		shippingOptionsViewer.getGrid().addMenuDetectListener(listener);
 
 		hookDragSource(shippingOptionsViewer);
+
+		inputWants.add(model -> shippingOptionsViewer.setInput(model));
 
 		return shippingOptionsViewer;
 	}
@@ -1165,6 +1149,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		inputWants.add(model -> listener.setOptionAnalysisModel(model));
 		baseCaseViewer.getGrid().addMenuDetectListener(listener);
 
+		inputWants.add(model -> baseCaseViewer.setInput(model));
+		inputWants.add(model -> baseCaseDiagram.setRoot(model));
+
 		return baseCaseViewer.getGrid();
 	}
 
@@ -1208,6 +1195,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		final PartialCaseContextMenuManager listener = new PartialCaseContextMenuManager(partialCaseViewer, OptionModellerView.this, mgr);
 		partialCaseViewer.getGrid().addMenuDetectListener(listener);
 		inputWants.add(model -> listener.setOptionAnalysisModel(model));
+
+		inputWants.add(model -> partialCaseViewer.setInput(model));
+		inputWants.add(model -> partialCaseDiagram.setRoot(model));
 
 		hookDragSource(partialCaseViewer);
 		return partialCaseViewer.getGrid();
@@ -1288,6 +1278,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 
 		});
+		inputWants.add(model -> resultsViewer.setInput(model));
+		inputWants.add(model -> resultsDiagram.setRoot(model));
 
 		return resultsViewer.getControl();
 	}
