@@ -36,9 +36,6 @@ import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 
 public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 
-	// TODO: Make these colours a preference so they can be consistently used across various UI parts
-	private final Color tcVessel = new Color(Display.getDefault(), 150, 210, 230);
-
 	private final IScenarioEditingLocation jointModelEditor;
 
 	public VesselViewerPane_Editor(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
@@ -106,40 +103,5 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 		addTypicalColumn("End By", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_EndBy(), jointModelEditor.getEditingDomain()));
 
 		setTitle("Vessels", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
-	}
-
-	protected ScenarioTableViewer constructViewer(final Composite parent) {
-		final ScenarioTableViewer scenarioTableViewer = super.constructViewer(parent);
-		scenarioTableViewer.setColourProvider(new IColorProvider() {
-
-			@Override
-			public Color getForeground(final Object element) {
-				return null;
-			}
-
-			@Override
-			public Color getBackground(final Object element) {
-
-				if (element instanceof VesselAvailability) {
-
-					final VesselAvailability vesselAvailability = (VesselAvailability) element;
-					if (vesselAvailability.isSetTimeCharterRate()) {
-						return tcVessel;
-					}
-				}
-				return null;
-			}
-
-		});
-		return scenarioTableViewer;
-
-	}
-
-	@Override
-	public void dispose() {
-
-		tcVessel.dispose();
-
-		super.dispose();
 	}
 }
