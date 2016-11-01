@@ -324,6 +324,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				baseCaseProftLabel.setText("Base P&&L: $");
 				inputPNL = createInputTargetPNL(c);
 				inputPNL.setLayoutData(new GridData(100, SWT.DEFAULT));
+				inputWants.add(m -> inputPNL.setEnabled(m != null));
 
 				baseCaseCalculator = new Label(c, SWT.NONE);
 				// baseCaseCalculator.setText("Calc."); --cogs
@@ -563,7 +564,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 							@Override
 							public void mouseDown(final MouseEvent e) {
-								helper.open();
+								if (getModel() != null) {
+									helper.open();
+								}
 
 							}
 
@@ -648,15 +651,20 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				getDefaultCommandHandler().handleCommand(
-						SetCommand.create(getEditingDomain(), getModel(), AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL, matchingButton.getSelection()), getModel(),
-						AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL);
+				OptionAnalysisModel m = getModel();
+				if (m != null) {
+					getDefaultCommandHandler().handleCommand(
+							SetCommand.create(getEditingDomain(), getModel(), AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL, matchingButton.getSelection()), m,
+							AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL);
+				}
 			}
 
 			@Override
 			public void widgetDefaultSelected(final SelectionEvent e) {
 			}
 		});
+
+		inputWants.add(m -> matching.setEnabled(m != null));
 
 		// final Button matchingYesButton = new Button(matching, SWT.RADIO | SWT.LEFT);
 		// matchingYesButton.setText("Yes");
@@ -721,8 +729,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			if (rootObject instanceof LNGScenarioModel) {
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				if (lngScenarioModel.getOptionModels().isEmpty()) {
-					setModel(createDemoModel1());
-					lngScenarioModel.getOptionModels().add(getModel());
+					setModel(null);
 				} else {
 					setModel(lngScenarioModel.getOptionModels().get(0));
 				}
@@ -1306,24 +1313,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		return optionsTreeViewer.getControl();
 	}
 
-	private OptionAnalysisModel createDemoModel1() {
-
-		final OptionAnalysisModel model = AnalyticsFactory.eINSTANCE.createOptionAnalysisModel();
-
-		model.setName("Demo1");
-
-		model.setBaseCase(AnalyticsFactory.eINSTANCE.createBaseCase());
-		model.setPartialCase(AnalyticsFactory.eINSTANCE.createPartialCase());
-
-		{
-			final OptionRule rule = AnalyticsFactory.eINSTANCE.createModeOptionRule();
-			rule.setName("Mode: Break-evens");
-			model.getRules().add(rule);
-		}
-
-		return model;
-	}
-
 	@Override
 	public void setFocus() {
 		ViewerHelper.setFocus(resultsViewer);
@@ -1543,11 +1532,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 			if (sections.contains(SectionType.MIDDLE)) {
 				baseCaseViewer.refresh();
-				if (getModel() != null) {
-					baseCaseProftLabel.setText("Base P&&L: $");
-				} else {
-					baseCaseProftLabel.setText(String.format("Base P&&L: $---,---,---.--"));
-				}
 				partialCaseViewer.refresh();
 				GridViewerHelper.recalculateRowHeights(partialCaseViewer.getGrid());
 				resultsViewer.refresh();

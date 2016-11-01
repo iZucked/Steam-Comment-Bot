@@ -326,5 +326,86 @@
             plugin.xml="sandbox.plugin.xml">
       </PluginXMLEnablement>
    </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=exporters">
+         <command
+               commandId="com.mmxlabs.models.lng.analytics.editor.createSandbox"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <and>
+                  <test
+                        args="features:sandbox"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        </instanceof>
+                     </iterate>
+                  </with>
+                  <count
+                        value="1">
+                  </count>
+               </and>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="com.mmxlabs.models.lng.analytics.editor.createSandbox"
+            name="Create sandbox">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="com.mmxlabs.models.lng.analytics.ui.views.CreateSandboxHandler"
+            commandId="com.mmxlabs.models.lng.analytics.editor.createSandbox">
+         <enabledWhen>
+                  <and>
+                  <with
+                        variable="selection">
+               <iterate
+                     ifEmpty="false">
+               
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                  </instanceof>
+               </iterate>
+                  </with>
+                      <count
+                              value="1">
+                        </count>
+                          </and>
+            </enabledWhen>
+            <activeWhen>
+                   <and>
+                  <with
+                        variable="selection">
+               <iterate
+                     ifEmpty="false">
+               
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                  </instanceof>
+               </iterate>
+                  </with>
+                      <count
+                              value="1">
+                        </count>
+                          </and>
+            </activeWhen>
+      </handler>
+   </extension>
 
 </plugin>
