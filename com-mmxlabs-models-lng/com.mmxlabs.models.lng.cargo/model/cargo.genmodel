@@ -84,6 +84,7 @@
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/restrictedListsArePermissive"/>
       <genFeatures createChild="false" propertyDescription="Postive or negative hedge value"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/hedges"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/miscCosts"/>
       <genFeatures notify="false" createChild="false" propertyDescription="If specified, the list of vessel and/or classes that may or may not serve this trade"
           propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/allowedVessels"/>
       <genFeatures createChild="false" propertyDescription="Price expression defining cancellation cost"
@@ -142,6 +143,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoGroup/cargoes"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//VesselAvailability">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/fleet"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/vessel"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/entity"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/timeCharterRate"/>
@@ -159,6 +161,12 @@
           ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/endBy"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/startHeel"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/endHeel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/forceHireCostOnlyEndRule"/>
+      <genFeatures createChild="false" propertyDescription="Is this availability optional?"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/optional"/>
+      <genFeatures createChild="false" propertyDescription="A fleet (owned) vessel"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/repositioningFee"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/ballastBonus"/>
       <genOperations ecoreOperation="cargo.ecore#//VesselAvailability/getStartByAsDateTime"/>
       <genOperations ecoreOperation="cargo.ecore#//VesselAvailability/getStartAfterAsDateTime"/>
       <genOperations ecoreOperation="cargo.ecore#//VesselAvailability/getEndByAsDateTime"/>
