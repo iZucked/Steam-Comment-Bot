@@ -99,15 +99,15 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 								optionAnalysisModel, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 					}));
-					menuHelper.addAction(new RunnableAction("Create fleet", () -> {
-						final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
-						AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
-						opt.setVessel(vessel);
-						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-								AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
-								optionAnalysisModel, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
-					}));
+//					menuHelper.addAction(new RunnableAction("Create fleet", () -> {
+//						final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
+//						AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
+//						opt.setVessel(vessel);
+//						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+//								AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
+//								optionAnalysisModel, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+//						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
+//					}));
 					menuHelper.addAction(new RunnableAction("Create availability", () -> {
 						final OptionalAvailabilityShippingOption opt = AnalyticsFactory.eINSTANCE.createOptionalAvailabilityShippingOption();
 						AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);

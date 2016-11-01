@@ -71,6 +71,7 @@ import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 public class AnalyticsBuilder {
 	private static BuyOptionDescriptionFormatter buyOptionDescriptionFormatter = new BuyOptionDescriptionFormatter();
 	private static SellOptionDescriptionFormatter sellOptionDescriptionFormatter = new SellOptionDescriptionFormatter();
+	private static final boolean DISABLE_FLEET = true;
 
 	public static @Nullable LoadSlot makeLoadSlot(final @Nullable BuyOption buy, final @NonNull LNGScenarioModel lngScenarioModel) {
 
@@ -514,32 +515,58 @@ public class AnalyticsBuilder {
 				final VesselAssignmentType vat = cargo.getVesselAssignmentType();
 				if (vat instanceof VesselAvailability) {
 					final VesselAvailability vesselAvailability = (VesselAvailability) vat;
+					if (!DISABLE_FLEET) {
 
-					for (final ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
-						if (shipOpt instanceof FleetShippingOption) {
-							final FleetShippingOption opt = (FleetShippingOption) shipOpt;
-							if (opt.getVessel() != vesselAvailability.getVessel()) {
-								continue;
-							}
-							if (opt.getEntity() != vesselAvailability.getEntity()) {
-								continue;
-							}
-							if (!opt.getHireCost().equals(vesselAvailability.getTimeCharterRate())) {
-								continue;
-							}
+						for (final ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
+							if (shipOpt instanceof FleetShippingOption) {
+								final FleetShippingOption opt = (FleetShippingOption) shipOpt;
+								if (opt.getVessel() != vesselAvailability.getVessel()) {
+									continue;
+								}
+								if (opt.getEntity() != vesselAvailability.getEntity()) {
+									continue;
+								}
+								if (!opt.getHireCost().equals(vesselAvailability.getTimeCharterRate())) {
+									continue;
+								}
 
-							// TODO: Check other fields
+								// TODO: Check other fields
 
-							return opt;
+								return opt;
+							}
 						}
+
+						final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
+						opt.setEntity(vesselAvailability.getEntity());
+						opt.setHireCost(vesselAvailability.getTimeCharterRate());
+						opt.setVessel(vesselAvailability.getVessel());
+
+						return opt;
+					} else {
+						// create RT
+						for (final ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
+							if (shipOpt instanceof RoundTripShippingOption) {
+								final RoundTripShippingOption opt = (RoundTripShippingOption) shipOpt;
+								if (opt.getVesselClass() != vesselAvailability.getVessel().getVesselClass()) {
+									continue;
+								}
+
+								if (!opt.getHireCost().equals(vesselAvailability.getTimeCharterRate())) {
+									continue;
+								}
+
+								// TODO: Check other fields
+
+								return opt;
+							}
+						}
+						final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
+						opt.setHireCost(vesselAvailability.getTimeCharterRate());
+						opt.setVesselClass(vesselAvailability.getVessel().getVesselClass());
+
+						return opt;
+
 					}
-
-					final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
-					opt.setEntity(vesselAvailability.getEntity());
-					opt.setHireCost(vesselAvailability.getTimeCharterRate());
-					opt.setVessel(vesselAvailability.getVessel());
-
-					return opt;
 				} else if (vat instanceof CharterInMarket) {
 					final CharterInMarket charterInMarket = (CharterInMarket) vat;
 
