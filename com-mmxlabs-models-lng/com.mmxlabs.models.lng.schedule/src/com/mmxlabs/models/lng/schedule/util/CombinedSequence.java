@@ -52,7 +52,7 @@ public class CombinedSequence {
 			availabilityMap.put(thisSequence.getVesselAvailability().getVessel(), matches);
 			unassigned.removeAll(matches);
 		}
-		for (Vessel vessel : sequences.stream().map(s->s.getVesselAvailability().getVessel()).distinct().collect(Collectors.toList())) {
+		for (Vessel vessel : sequences.stream().map(s->s.getVesselAvailability() == null ? null : s.getVesselAvailability().getVessel()).filter(v -> v != null).distinct().collect(Collectors.toList())) {
 			List<Sequence> linkedSequences = availabilityMap.get(vessel);
 				CombinedSequence cs = new CombinedSequence(vessel);
 				cs.setSequences(linkedSequences);
