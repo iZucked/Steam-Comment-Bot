@@ -17,7 +17,7 @@ import com.mmxlabs.common.Pair;
 
 public final class TableColourPalette {
 
-	public final boolean SANDBOX_WHITER_THEME = true;
+	public final boolean SANDBOX_WHITER_THEME = false;
 
 	private static final RGB FontColour = new RGB(0, 0, 0);
 	private final RGB HeaderColour = SANDBOX_WHITER_THEME ? new RGB(255, 255, 255) : new RGB(230, 239, 249);
