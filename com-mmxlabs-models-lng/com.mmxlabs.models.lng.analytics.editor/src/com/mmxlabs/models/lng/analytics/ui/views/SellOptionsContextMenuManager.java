@@ -90,6 +90,7 @@ public class SellOptionsContextMenuManager implements MenuDetectListener {
 							newSell.setPriceExpression(slot.getPriceExpression());
 						}
 						newSell.setMiscCosts(slot.getMiscCosts());
+						newSell.setCancellationExpression(slot.getCancellationExpression());
 
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 

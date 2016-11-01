@@ -94,6 +94,7 @@ public class BuyOptionsContextMenuManager implements MenuDetectListener {
 							newBuy.setPriceExpression(slot.getPriceExpression());
 						}
 						newBuy.setMiscCosts(slot.getMiscCosts());
+						newBuy.setCancellationExpression(slot.getCancellationExpression());
 
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 
