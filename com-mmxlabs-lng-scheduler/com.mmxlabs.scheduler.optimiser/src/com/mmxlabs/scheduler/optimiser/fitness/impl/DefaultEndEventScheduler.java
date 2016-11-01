@@ -253,7 +253,7 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 				final int distance = distanceOption.getSecond();
 
 				// Here we cannot determine whether or not we are round trip (it *may* be possible to determine this in some cases based on travel time).
-				final long routeCost = routeCostProvider.getRouteCost(route, vessel, CostType.Ballast);
+				final long routeCost = routeCostProvider.getRouteCost(route, vessel, departureTime, CostType.Ballast);
 				finalOptions.setRoute(route, distance, routeCost);
 
 				for (final boolean useNBO : new boolean[] { true, false }) {

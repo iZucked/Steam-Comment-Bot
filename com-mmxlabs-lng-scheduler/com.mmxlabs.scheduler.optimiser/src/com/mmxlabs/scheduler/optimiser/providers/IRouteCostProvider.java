@@ -35,7 +35,7 @@ public interface IRouteCostProvider extends IDataComponentProvider {
 	 *            the type of cost required
 	 * @return toll in dollars
 	 */
-	public long getRouteCost(final @NonNull ERouteOption route, @NonNull final IVessel vessel, @NonNull final CostType costType);
+	public long getRouteCost(final @NonNull ERouteOption route, @NonNull final IVessel vessel, int voyageStartTime, @NonNull final CostType costType);
 
 	/**
 	 * Gets the extra fuel usage, in base-fuel-equivalent scaled MT per hour (see {@link Calculator#ScaleFactor}), required for vessels of class {@code vesselClass} to travel via {@code route} for the
