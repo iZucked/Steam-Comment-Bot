@@ -320,14 +320,11 @@
       </editor>
    </extension>
    <extension
-         point="org.eclipse.ui.views">
-      <view
-            class="com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView"
-            icon="icons/sandbox.gif"
-            id="com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView"
-            name="Sandbox"
-            restorable="true">
-      </view>
+         point="com.mmxlabs.license.features.PluginXMLEnablement">
+      <PluginXMLEnablement
+            feature="sandbox"
+            plugin.xml="sandbox.plugin.xml">
+      </PluginXMLEnablement>
    </extension>
 
 </plugin>
