@@ -113,6 +113,16 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 					// bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
 				}
 			};
+		} else if (moduleType == ModuleType.Module_InitialSolution) {
+			return new AbstractModule() {
+
+				@Override
+				protected void configure() {
+					if (!Platform.isRunning()) {
+						bind(IFitnessFunctionRegistry.class).toInstance(createFitnessFunctionRegistry());
+					}
+				}
+			};
 		} else if (moduleType == ModuleType.Module_Optimisation) {
 			return new AbstractModule() {
 
@@ -201,7 +211,7 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new PortCvCompatibilityConstraintCheckerFactory());
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new SpotToSpotConstraintCheckerFactory());
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new ShippingTypeRequirementConstraintCheckerFactory());
-		
+
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new RoundTripVesselPermissionConstraintCheckerFactory());
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new AllowedVesselPermissionConstraintCheckerFactory());
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new FOBDESCompatibilityConstraintCheckerFactory());
