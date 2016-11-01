@@ -8,6 +8,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -46,6 +47,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.google.common.collect.Sets;
+import com.mmxlabs.lingo.reports.views.standard.StandardEconsRowFactory.EconsOptions;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -77,6 +79,7 @@ import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.application.BindSelectionListener;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -99,12 +102,13 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 	 */
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport";
 	private GridTableViewer viewer;
-	private Collection<org.eclipse.e4.ui.workbench.modeling.ISelectionListener> selectionListeners = new ConcurrentLinkedQueue();
+	private Collection<org.eclipse.e4.ui.workbench.modeling.ISelectionListener> selectionListeners = new ConcurrentLinkedQueue<>();
 
 	/**
 	 * List of dynamically generated columns to be disposed on selection changes
 	 */
 	private final List<GridViewerColumn> dataColumns = new LinkedList<GridViewerColumn>();
+	private EconsOptions options = new EconsOptions();
 
 	@PostConstruct
 	public void createPartControl(final Composite parent) {
@@ -125,7 +129,15 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 		// Array content provider as we pass in an array of enums
 		viewer.setContentProvider(new ArrayContentProvider());
 		// Our input!
-		viewer.setInput(FieldType.getFilteredValues());
+
+		List<CargoEconsReportRow> rows = new LinkedList<CargoEconsReportRow>();
+		ServiceHelper.withAllServices(IEconsRowFactory.class, null, factory -> {
+			rows.addAll(factory.createRows(options));
+			return true;
+		});
+		Collections.sort(rows, (a, b) -> a.order - b.order);
+
+		viewer.setInput(rows);
 		viewer.getGrid().setHeaderVisible(true);
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_CargoEcons");
@@ -145,347 +157,10 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 		ViewerHelper.setFocus(viewer);
 	}
 
-	static final DecimalFormat DollarsFormat = new DecimalFormat("$##,###,###,###");
-	static final DecimalFormat VolumeMMBtuFormat = new DecimalFormat("##,###,###,###mmBtu");
-	static final DecimalFormat DollarsPerMMBtuFormat = new DecimalFormat("$###.###/mmBtu");
-
 	/**
 	 * The {@link FieldType} is the row data. Each enum is a different row. Currently there is no table sorter so enum order is display order
 	 * 
 	 */
-	private static enum FieldType {
-
-		// @formatter:off
-		BUY_COST_TOTAL("Purchase Cost", "$", DollarsFormat), 
-		BUY_PRICE("> Purchase Price", "$/mmBTu", DollarsPerMMBtuFormat), 
-		BUY_VOLUME_IN_MMBTU("> Volume", "mmBTu", VolumeMMBtuFormat),
-		SHIPPING_COST_TOTAL("Shipping Cost", "$", DollarsFormat),
-		SHIPPING_BUNKERS_COST_TOTAL("> Bunkers", "$", DollarsFormat), 
-		SHIPPING_PORT_COST_TOTAL("> Port", "$", DollarsFormat), 
-		SHIPPING_CANAL_COST_TOTAL("> Canal", "$", DollarsFormat), 
-		SHIPPING_BOIL_OFF_COST_TOTAL("> Boil-off", "$", DollarsFormat), 
-		SHIPPING_CHARTER_COST_TOTAL("> Charter fees", "$", DollarsFormat), 
-		SELL_REVENUE_TOTAL("Sale Revenue", "$", DollarsFormat),
-		SELL_PRICE("> Sales Price", "$/mmBTu", DollarsPerMMBtuFormat), 
-		SELL_VOLUME_IN_MMBTU("> Volume", "mmBtu", VolumeMMBtuFormat),
-		EQUITY_PNL("Equity P&L", "$", DollarsFormat),
-		ADDITIONAL_PNL("Addn. P&L", "$", DollarsFormat),
-		PNL_TOTAL("P&L", "$", DollarsFormat),
-		PNL_PER_MMBTU("Margin", "$/mmBTu", DollarsPerMMBtuFormat);
-		// @formatter:on
-
-		private final String name;
-
-		private final DecimalFormat df;
-
-		public String getName() {
-			return name;
-		}
-
-		public DecimalFormat getDf() {
-			return df;
-		}
-
-		private FieldType(final String name, final String unit, final DecimalFormat df) {
-			this.name = name;
-			this.df = df;
-		}
-
-		public static FieldType[] getFilteredValues() {
-			Set<FieldType> restrictedValues = restrictedValues();
-			return Arrays.stream(values()).filter(e -> (!restrictedValues.contains(e))).toArray(size -> new FieldType[size]);
-		}
-
-		public static Set<FieldType> restrictedValues() {
-			Set<FieldType> restricted = new HashSet<>();
-			if (!SecurityUtils.getSubject().isPermitted("features:report-equity-book")) {
-				restricted.add(EQUITY_PNL);
-			}
-			return restricted;
-		}
-	}
-
-	/**
-	 * Interface to provide table data for a given {@link FieldType} enum on some kind of wrapped data.
-	 * 
-	 */
-	private static interface IFieldTypeMapper {
-
-		/**
-		 * Return the raw object data for the field type
-		 * 
-		 * @param fieldType
-		 * @return
-		 */
-		Object getObject(FieldType fieldType);
-
-		/**
-		 * Return the string representation (to display) for the field type
-		 * 
-		 * @param fieldType
-		 * @return
-		 */
-		String getText(FieldType fieldType);
-
-		public abstract boolean isFleet();
-	}
-
-	/**
-	 * A {@link IFieldTypeMapper} implementation for {@link CargoAllocation} objects
-	 */
-	private static class CargoAllocationFieldTypeMapper implements IFieldTypeMapper {
-
-		private final CargoAllocation cargoAllocation;
-
-		CargoAllocationFieldTypeMapper(final CargoAllocation cargoAllocation) {
-			this.cargoAllocation = cargoAllocation;
-		}
-
-		@Override
-		public Object getObject(final FieldType fieldType) {
-
-			switch (fieldType) {
-			case BUY_PRICE: {
-				// Returns first purchase price
-				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-					if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE || allocation.getSlot() instanceof LoadSlot) {
-						return allocation.getPrice();
-					}
-				}
-				return 0.0;
-			}
-			case SELL_PRICE: {
-				// Returns first sales price
-				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-					if (allocation.getSlotAllocationType() == SlotAllocationType.SALE || allocation.getSlot() instanceof DischargeSlot) {
-						return allocation.getPrice();
-					}
-				}
-				return 0.0;
-			}
-			case BUY_COST_TOTAL: {
-
-				long cost = 0;
-				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-					if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE || allocation.getSlot() instanceof LoadSlot) {
-						cost += allocation.getVolumeValue();
-					}
-				}
-				return cost;
-
-			}
-			case BUY_VOLUME_IN_MMBTU: {
-				long cost = 0;
-				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-					if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE || allocation.getSlot() instanceof LoadSlot) {
-						cost += allocation.getEnergyTransferred();
-					}
-				}
-				return cost;
-			}
-			case PNL_PER_MMBTU: {
-				final Integer pnl = CargoEconsReportComponent.getPNLValue(cargoAllocation);
-				if (pnl != null) {
-					final double dischargeVolumeInMMBTu = ((Number) getObject(FieldType.SELL_VOLUME_IN_MMBTU)).doubleValue();
-					return (double) pnl / dischargeVolumeInMMBTu;
-				}
-				break;
-			}
-			case EQUITY_PNL: {
-				return CargoEconsReportComponent.getEquityPNLValue(cargoAllocation);
-			}
-			case ADDITIONAL_PNL: {
-				return CargoEconsReportComponent.getAdditionalPNLValue(cargoAllocation);
-			}
-			case PNL_TOTAL: {
-				return CargoEconsReportComponent.getPNLValue(cargoAllocation);
-			}
-			case SELL_REVENUE_TOTAL: {
-				long revenue = 0;
-				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-					if (allocation.getSlotAllocationType() == SlotAllocationType.SALE || allocation.getSlot() instanceof DischargeSlot) {
-						revenue += allocation.getVolumeValue();
-					}
-				}
-				return revenue;
-			}
-			case SELL_VOLUME_IN_MMBTU: {
-				long dischargeVolume = 0;
-				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-					if (allocation.getSlotAllocationType() == SlotAllocationType.SALE || allocation.getSlot() instanceof DischargeSlot) {
-						dischargeVolume += allocation.getEnergyTransferred();
-					}
-				}
-				return dischargeVolume;
-			}
-			case SHIPPING_BOIL_OFF_COST_TOTAL: {
-				int cost = 0;
-				for (final Event event : cargoAllocation.getEvents()) {
-					if (event instanceof FuelUsage) {
-						final FuelUsage fuelUsage = (FuelUsage) event;
-						cost += getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
-					}
-				}
-				return cost;
-			}
-			case SHIPPING_BUNKERS_COST_TOTAL: {
-				int cost = 0;
-
-				for (final Event event : cargoAllocation.getEvents()) {
-					if (event instanceof FuelUsage) {
-						final FuelUsage fuelUsage = (FuelUsage) event;
-						cost += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
-					}
-				}
-
-				return cost;
-			}
-			case SHIPPING_PORT_COST_TOTAL: {
-				int cost = 0;
-				for (final Event event : cargoAllocation.getEvents()) {
-					if (event instanceof PortVisit) {
-						final PortVisit portVisit = (PortVisit) event;
-						cost += portVisit.getPortCost();
-					}
-				}
-
-				return cost;
-			}
-			case SHIPPING_CANAL_COST_TOTAL: {
-				int cost = 0;
-				for (final Event event : cargoAllocation.getEvents()) {
-					if (event instanceof Journey) {
-						final Journey journey = (Journey) event;
-						cost += journey.getToll();
-					}
-				}
-
-				return cost;
-			}
-			case SHIPPING_CHARTER_COST_TOTAL:
-				int charterCost = 0;
-				for (final Event event : cargoAllocation.getEvents()) {
-					charterCost += event.getCharterCost();
-				}
-				return charterCost;
-			case SHIPPING_COST_TOTAL:
-				return CargoEconsReportComponent.getShippingCost(cargoAllocation);
-			default:
-				break;
-
-			}
-			return null;
-		}
-
-		@Override
-		public boolean isFleet() {
-
-			return !(cargoAllocation.getSequence().isSpotVessel() || cargoAllocation.getSequence().isTimeCharterVessel());
-		}
-
-		@Override
-		public String getText(final FieldType fieldType) {
-
-			final Object obj = getObject(fieldType);
-			if (obj != null) {
-				// TODO: Format appropriately, maybe have a format specifier on the enum?
-				return fieldType.getDf().format(obj);
-			}
-
-			return null;
-		}
-	}
-
-	/**
-	 * A {@link IFieldTypeMapper} implementation for {@link MarketAllocation} objects
-	 */
-	private static class MarketAllocationFieldTypeMapper implements IFieldTypeMapper {
-
-		private final MarketAllocation marketAllocation;
-
-		MarketAllocationFieldTypeMapper(final MarketAllocation marketAllocation) {
-			this.marketAllocation = marketAllocation;
-		}
-
-		@Override
-		public Object getObject(final FieldType fieldType) {
-
-			switch (fieldType) {
-			case BUY_COST_TOTAL: {
-				final SlotAllocation allocation = marketAllocation.getSlotAllocation();
-				return allocation.getVolumeValue();
-			}
-			case BUY_VOLUME_IN_MMBTU: {
-				final SlotAllocation allocation = marketAllocation.getSlotAllocation();
-				return allocation.getEnergyTransferred();
-			}
-			case PNL_PER_MMBTU: {
-				final Integer pnl = CargoEconsReportComponent.getPNLValue(marketAllocation);
-				if (pnl != null) {
-					final Number number = (Number) getObject(FieldType.SELL_VOLUME_IN_MMBTU);
-					if (number != null) {
-						final double dischargeVolumeInMMBTu = number.doubleValue();
-						return (double) pnl / dischargeVolumeInMMBTu;
-					}
-				}
-				break;
-
-			}
-			case ADDITIONAL_PNL: {
-				return CargoEconsReportComponent.getAdditionalPNLValue(marketAllocation);
-			}
-			case PNL_TOTAL: {
-				return CargoEconsReportComponent.getPNLValue(marketAllocation);
-			}
-			case SELL_REVENUE_TOTAL: {
-				final SlotAllocation allocation = marketAllocation.getSlotAllocation();
-				return allocation.getVolumeValue();
-			}
-			case SELL_VOLUME_IN_MMBTU: {
-				final SlotAllocation allocation = marketAllocation.getSlotAllocation();
-				return allocation.getEnergyTransferred();
-			}
-			case SHIPPING_BOIL_OFF_COST_TOTAL:
-			case SHIPPING_BUNKERS_COST_TOTAL:
-			case SHIPPING_PORT_COST_TOTAL:
-			case SHIPPING_CANAL_COST_TOTAL:
-			case SHIPPING_CHARTER_COST_TOTAL:
-			case SHIPPING_COST_TOTAL:
-			default:
-				break;
-
-			}
-			return null;
-		}
-
-		@Override
-		public boolean isFleet() {
-			return false;
-		}
-
-		@Override
-		public String getText(final FieldType fieldType) {
-
-			final Object obj = getObject(fieldType);
-			if (obj != null) {
-				// TODO: Format appropriately, maybe have a format specifier on the enum?
-				return fieldType.getDf().format(obj);
-			}
-
-			return null;
-		}
-
-		private double getMarketCV(final SpotMarket market) {
-			if (market instanceof DESPurchaseMarket) {
-				return ((DESPurchaseMarket) market).getCv();
-			}
-			if (market instanceof FOBPurchasesMarket) {
-				return ((FOBPurchasesMarket) market).getCv();
-			}
-			return 0.0;
-
-		}
-	}
 
 	/**
 	 * A label provider for the "Name" column
@@ -500,9 +175,9 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 
 		@Override
 		public String getText(final Object element) {
-			if (element instanceof FieldType) {
-				final FieldType fieldType = (FieldType) element;
-				return fieldType.getName(); // + " (" + fieldType.getUnit() + ")";
+			if (element instanceof CargoEconsReportRow) {
+				final CargoEconsReportRow fieldType = (CargoEconsReportRow) element;
+				return fieldType.name; // + " (" + fieldType.getUnit() + ")";
 			}
 			return null;
 		}
@@ -516,15 +191,15 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 	}
 
 	/**
-	 * Label Provider created for each column. Returns text for the given {@link FieldType} enum (as the input element) for the {@link IFieldTypeMapper} object passed in during creation.
+	 * Label Provider created for each column. Returns text for the given {@link CargoEconsReportRow} enum (as the input element) for the {@link IFieldTypeMapper} object passed in during creation.
 	 * 
 	 */
 	private static class FieldTypeMapperLabelProvider extends ColumnLabelProvider {
 
-		private final IFieldTypeMapper fieldTypeMapper;
+		private final Object columnElement;
 
-		public FieldTypeMapperLabelProvider(final IFieldTypeMapper fieldTypeMapper) {
-			this.fieldTypeMapper = fieldTypeMapper;
+		public FieldTypeMapperLabelProvider(final Object columnElement) {
+			this.columnElement = columnElement;
 		}
 
 		@Override
@@ -534,18 +209,19 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 
 		@Override
 		public String getText(final Object element) {
-			if (element instanceof FieldType) {
-				return fieldTypeMapper.getText((FieldType) element);
+			if (element instanceof CargoEconsReportRow) {
+				CargoEconsReportRow row = (CargoEconsReportRow) element;
+				return row.formatter.render(columnElement);
 			}
 			return null;
 		}
 
 		@Override
 		public Color getForeground(final Object element) {
-			if (element instanceof FieldType) {
-				final FieldType ft = ((FieldType) element);
-				if (ft == FieldType.SHIPPING_BOIL_OFF_COST_TOTAL || (ft == FieldType.SHIPPING_CHARTER_COST_TOTAL && fieldTypeMapper.isFleet())) {
-					return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
+			if (element instanceof CargoEconsReportRow) {
+				final CargoEconsReportRow row = ((CargoEconsReportRow) element);
+				if (row.colourProvider != null) {
+					return row.colourProvider.getForeground(columnElement);
 				}
 			}
 			return null;
@@ -664,132 +340,6 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 		return validObjects;
 	}
 
-	/**
-	 * Get total cargo PNL value
-	 * 
-	 * @param container
-	 * @param entity
-	 * @return
-	 */
-	protected static Integer getPNLValue(final ProfitAndLossContainer container) {
-		if (container == null) {
-			return null;
-		}
-
-		final GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLoss();
-		if (groupProfitAndLoss == null) {
-			return null;
-		}
-		// Rounding!
-		return (int) groupProfitAndLoss.getProfitAndLoss();
-	}
-
-	protected static Integer getAdditionalPNLValue(final ProfitAndLossContainer container) {
-
-		int addnPNL = 0;
-
-		if (container != null) {
-
-			final GroupProfitAndLoss dataWithKey = container.getGroupProfitAndLoss();
-			if (dataWithKey != null) {
-				for (final GeneralPNLDetails generalPNLDetails : container.getGeneralPNLDetails()) {
-					if (generalPNLDetails instanceof SlotPNLDetails) {
-						final SlotPNLDetails slotPNLDetails = (SlotPNLDetails) generalPNLDetails;
-						for (final GeneralPNLDetails details : slotPNLDetails.getGeneralPNLDetails()) {
-							if (details instanceof BasicSlotPNLDetails) {
-								addnPNL += ((BasicSlotPNLDetails) details).getAdditionalPNL();
-								addnPNL += ((BasicSlotPNLDetails) details).getExtraShippingPNL();
-								addnPNL += ((BasicSlotPNLDetails) details).getExtraUpsidePNL();
-							}
-						}
-					}
-				}
-			}
-		}
-
-		return addnPNL;
-	}
-
-	public static Integer getEquityPNLValue(final ProfitAndLossContainer container) {
-
-		int equityPNL = 0;
-
-		if (container != null) {
-
-			final GroupProfitAndLoss dataWithKey = container.getGroupProfitAndLoss();
-			if (dataWithKey != null) {
-				EList<EntityProfitAndLoss> entityProfitAndLosses = dataWithKey.getEntityProfitAndLosses();
-				for (EntityProfitAndLoss entityProfitAndLoss : entityProfitAndLosses) {
-					if (entityProfitAndLoss.getEntityBook().equals(entityProfitAndLoss.getEntity().getUpstreamBook())) {
-						equityPNL += entityProfitAndLoss.getProfitAndLoss();
-					}
-				}
-
-			}
-		}
-
-		return equityPNL;
-	}
-
-	protected static Integer getShippingCost(final CargoAllocation cargoAllocation) {
-
-		if (cargoAllocation == null) {
-			return null;
-		}
-
-		// Bit of a double count here, but need to decide what to add to the model
-		int shippingCost = 0;
-		int charterCost = 0;
-		for (final Event event : cargoAllocation.getEvents()) {
-
-			charterCost += event.getCharterCost();
-
-			if (event instanceof SlotVisit) {
-				final SlotVisit slotVisit = (SlotVisit) event;
-				// Port Costs
-				shippingCost += slotVisit.getPortCost();
-			}
-
-			if (event instanceof Journey) {
-				final Journey journey = (Journey) event;
-				// Canal Costs
-				shippingCost += journey.getToll();
-			}
-
-			if (event instanceof FuelUsage) {
-				final FuelUsage fuelUsage = (FuelUsage) event;
-				// Base fuel costs
-				shippingCost += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
-			}
-
-			if (event instanceof Cooldown) {
-				final Cooldown cooldown = (Cooldown) event;
-				shippingCost += cooldown.getCost();
-			}
-		}
-
-		// Add on chartering costs
-		if (cargoAllocation.getSequence().isSpotVessel() || cargoAllocation.getSequence().isTimeCharterVessel()) {
-			shippingCost += charterCost;
-		}
-		return shippingCost;
-
-	}
-
-	protected static int getFuelCost(final FuelUsage fuelUser, final Fuel... fuels) {
-		final Set<Fuel> fuelsOfInterest = Sets.newHashSet(fuels);
-		int sum = 0;
-		if (fuelUser != null) {
-			final EList<FuelQuantity> fuelQuantities = fuelUser.getFuels();
-			for (final FuelQuantity fq : fuelQuantities) {
-				if (fuelsOfInterest.contains(fq.getFuel())) {
-					sum += fq.getCost();
-				}
-			}
-		}
-		return sum;
-	}
-
 	public GridTableViewer getViewer() {
 		return viewer;
 	}
@@ -839,7 +389,7 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 						// Mark column for disposal on selection change
 						dataColumns.add(gvc);
 						gvc.getColumn().setText(cargoAllocation.getName());
-						gvc.setLabelProvider(new FieldTypeMapperLabelProvider(new CargoAllocationFieldTypeMapper(cargoAllocation)));
+						gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
 
 						gvc.getColumn().setWidth(100);
 					} else if (selectedObject instanceof MarketAllocation) {
@@ -851,14 +401,15 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 						// Mark column for disposal on selection change
 						dataColumns.add(gvc);
 						gvc.getColumn().setText(cargoAllocation.getSlot().getName());
-						gvc.setLabelProvider(new FieldTypeMapperLabelProvider(new MarketAllocationFieldTypeMapper(cargoAllocation)));
+						gvc.setLabelProvider(new FieldTypeMapperLabelProvider(cargoAllocation));
 
 						gvc.getColumn().setWidth(100);
 					}
 				}
 
 				// Trigger view refresh
-				ViewerHelper.setInput(viewer, true, FieldType.getFilteredValues());
+				ViewerHelper.refresh(viewer, true);
+				// ViewerHelper.setInput(viewer, true, CargoEconsReportRow.getFilteredValues());
 
 			}
 		};

@@ -139,6 +139,14 @@
             class="com.mmxlabs.lingo.reports.views.standard.PNLDetailsReport"
             id="com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport">
       </view>
+      <view
+            category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.views.standard.CargoEconsReport"
+            icon="icons/cview16/exec_statistic_view.gif"
+            id="com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport"
+            name="Cargo Econs"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.ops4j.peaberry.eclipse.modules">
@@ -644,13 +652,6 @@
             icon="icons/cview16/VerticalReport.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.vertical.DefaultVerticalReportView">
-      </ReplaceableView>
-      <ReplaceableView
-            viewId="com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport"
-            name="Cargo Econs"
-            icon="icons/cview16/exec_statistic_view.gif"
-            category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.views.standard.CargoEconsReport">
       </ReplaceableView>
    </extension>
    <extension
