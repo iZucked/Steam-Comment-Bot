@@ -74,7 +74,21 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		}
 		rows.add(createRow(140, "Addn. P&L", "$", createPNLAdditional(options)));
 		rows.add(createRow(150, "P&L", "$", createPNLTotal(options)));
-		rows.add(createRow(160, "Margin", "$/mmBTu", createPNLPerMMBTU(options)));
+		{
+			CargoEconsReportRow row = createRow(160, "Margin", "$/mmBTu", createPNLPerMMBTU(options));
+			row.tooltip = () -> {
+				switch (options.marginBy) {
+				case PURCHASE_VOLUME:
+					return "Margin by purchase volume";
+				case SALE_VOLUME:
+					return "Margin by sales volume";
+				default:
+					return null;
+
+				}
+			};
+			rows.add(row);
+		}
 
 		return rows;
 	}

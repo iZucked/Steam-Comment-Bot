@@ -4,33 +4,29 @@
  */
 package com.mmxlabs.lingo.reports.views.standard;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Supplier;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
@@ -39,44 +35,27 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.PropertySheet;
 
-import com.google.common.collect.Sets;
 import com.mmxlabs.lingo.reports.views.standard.StandardEconsRowFactory.EconsOptions;
+import com.mmxlabs.lingo.reports.views.standard.StandardEconsRowFactory.EconsOptions.MarginBy;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.Cooldown;
-import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.Fuel;
-import com.mmxlabs.models.lng.schedule.FuelQuantity;
-import com.mmxlabs.models.lng.schedule.FuelUsage;
-import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
-import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
-import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
-import com.mmxlabs.models.lng.schedule.PortVisit;
-import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.schedule.SlotAllocationType;
-import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
-import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
-import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
@@ -114,6 +93,7 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 	public void createPartControl(final Composite parent) {
 		viewer = new GridTableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 		GridViewerHelper.configureLookAndFeel(viewer);
+		ColumnViewerToolTipSupport.enableFor(viewer);
 
 		// Add the name column
 		{
@@ -212,6 +192,18 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 			if (element instanceof CargoEconsReportRow) {
 				CargoEconsReportRow row = (CargoEconsReportRow) element;
 				return row.formatter.render(columnElement);
+			}
+			return null;
+		}
+
+		@Override
+		public String getToolTipText(Object element) {
+			if (element instanceof CargoEconsReportRow) {
+				CargoEconsReportRow row = (CargoEconsReportRow) element;
+				Supplier<String> tooltip = row.tooltip;
+				if (tooltip != null) {
+					return tooltip.get();
+				}
 			}
 			return null;
 		}
@@ -420,4 +412,14 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 		}
 		selectionListeners.add(selectionListener);
 	}
+
+	/**
+	 * Adds a selection listener for the given partID. Listens to everything if null
+	 */
+	@SetEconsMarginMode
+	public void setMarginMode(MarginBy mode) {
+		options.marginBy = mode;
+		ViewerHelper.refresh(getViewer(), false);
+	}
+
 }

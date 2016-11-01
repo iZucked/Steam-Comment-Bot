@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.reports.views.standard;
 import javax.annotation.PreDestroy;
 
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
+import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.action.Action;
@@ -14,9 +15,13 @@ import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.progress.IElementCollector;
 
+import com.mmxlabs.common.options.Options;
+import com.mmxlabs.lingo.reports.views.standard.StandardEconsRowFactory.EconsOptions.MarginBy;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
+import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.application.BindSelectionListener;
 
 /**
@@ -44,13 +49,29 @@ public class CargoEconsReport extends ViewPart {
 		componentContext.set(Composite.class, parent);
 
 		component = ContextInjectionFactory.make(CargoEconsReportComponent.class, componentContext);
-		
-//		componentContext.set(String.class, (String) null);
+
+		// componentContext.set(String.class, (String) null);
 		ContextInjectionFactory.invoke(component, BindSelectionListener.class, componentContext);
 
-//		component.listenToSelectionsFrom(null);
+		// component.listenToSelectionsFrom(null);
 
 		GridTableViewer viewer = component.getViewer();
+
+		{
+			final Action volumeByPurchase = new RunnableAction("Margin by purchase volume", () -> {
+				IEclipseContext actionCtx = EclipseContextFactory.create();
+				actionCtx.set(MarginBy.class, MarginBy.PURCHASE_VOLUME);
+				ContextInjectionFactory.invoke(component, SetEconsMarginMode.class, componentContext, actionCtx, null);
+			});
+			getViewSite().getActionBars().getMenuManager().add(volumeByPurchase);
+
+			final Action volumeBySell = new RunnableAction("Margin by sales volume", () -> {
+				IEclipseContext actionCtx = EclipseContextFactory.create();
+				actionCtx.set(MarginBy.class, MarginBy.SALE_VOLUME);
+				ContextInjectionFactory.invoke(component, SetEconsMarginMode.class, componentContext, actionCtx, null);
+			});
+			getViewSite().getActionBars().getMenuManager().add(volumeBySell);
+		}
 
 		final Action packAction = PackActionFactory.createPackColumnsAction(viewer);
 		final Action copyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(viewer);
