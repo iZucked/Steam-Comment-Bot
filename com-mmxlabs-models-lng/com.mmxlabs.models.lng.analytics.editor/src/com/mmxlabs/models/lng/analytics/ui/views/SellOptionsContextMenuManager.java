@@ -89,6 +89,7 @@ public class SellOptionsContextMenuManager implements MenuDetectListener {
 						if (slot.isSetPriceExpression()) {
 							newSell.setPriceExpression(slot.getPriceExpression());
 						}
+						newSell.setMiscCosts(slot.getMiscCosts());
 
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 
