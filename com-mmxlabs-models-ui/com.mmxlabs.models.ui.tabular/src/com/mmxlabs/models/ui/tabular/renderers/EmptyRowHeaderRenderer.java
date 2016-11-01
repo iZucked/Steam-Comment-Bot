@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * All rights reserved.
+ */
 package com.mmxlabs.models.ui.tabular.renderers;
 
 import org.eclipse.nebula.widgets.grid.AbstractRenderer;
@@ -42,13 +46,13 @@ public class EmptyRowHeaderRenderer extends AbstractRenderer
             gc.drawLine(getBounds().x, getBounds().y, getBounds().x, getBounds().y + getBounds().height
                                                                      - 1);
     
-            gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
+            gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
             gc.drawLine(getBounds().x + 1, getBounds().y + 1,
                         getBounds().x + getBounds().width - 2, getBounds().y + 1);
             gc.drawLine(getBounds().x + 1, getBounds().y + 1, getBounds().x + 1,
                         getBounds().y + getBounds().height - 2);
     
-            gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_DARK_SHADOW));
+            gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
             gc.drawLine(getBounds().x + getBounds().width - 1, getBounds().y, getBounds().x
                                                                               + getBounds().width - 1,
                         getBounds().y + getBounds().height - 1);
@@ -56,7 +60,8 @@ public class EmptyRowHeaderRenderer extends AbstractRenderer
                                                                                + getBounds().width - 1,
                         getBounds().y + getBounds().height - 1);
     
-            gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW));
+                        gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
+
             gc.drawLine(getBounds().x + getBounds().width - 2, getBounds().y + 1,
                         getBounds().x + getBounds().width - 2, getBounds().y + getBounds().height
                                                                - 2);
@@ -66,17 +71,18 @@ public class EmptyRowHeaderRenderer extends AbstractRenderer
         }
         else
         {
-//            gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
-//
-//
-//            gc.drawLine(getBounds().x + getBounds().width - 1, getBounds().y, getBounds().x
-//                                                                              + getBounds().width - 1,
-//                        getBounds().y + getBounds().height - 1);
-//            gc.drawLine(getBounds().x, getBounds().y + getBounds().height - 1, getBounds().x
-//                                                                               + getBounds().width - 1,
-//                        getBounds().y + getBounds().height - 1);
+        	if (!TableColourPalette.getInstance().SANDBOX_WHITER_THEME) {
+	            gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
+	
+	
+	            gc.drawLine(getBounds().x + getBounds().width - 1, getBounds().y, getBounds().x
+	                                                                              + getBounds().width - 1,
+	                        getBounds().y + getBounds().height - 1);
+	            gc.drawLine(getBounds().x, getBounds().y + getBounds().height - 1, getBounds().x
+	                                                                               + getBounds().width - 1,
+	                        getBounds().y + getBounds().height - 1);
+        	}
         }
-
     }
 
     /** 

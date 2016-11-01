@@ -36,12 +36,14 @@ public class TopLeftRenderer extends AbstractRenderer {
 
 		gc.fillRectangle(getBounds().x, getBounds().y, getBounds().width - 1, getBounds().height + 1);
 
-//		gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
-//
-//		gc.drawLine(getBounds().x + getBounds().width - 1, getBounds().y, getBounds().x + getBounds().width - 1, getBounds().y + getBounds().height);
-//
-//		gc.drawLine(getBounds().x, getBounds().y + getBounds().height - 1, getBounds().x + getBounds().width, getBounds().y + getBounds().height - 1);
+		if (!TableColourPalette.getInstance().SANDBOX_WHITER_THEME) {
 
+			gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
+
+			gc.drawLine(getBounds().x + getBounds().width - 1, getBounds().y, getBounds().x + getBounds().width - 1, getBounds().y + getBounds().height);
+
+			gc.drawLine(getBounds().x, getBounds().y + getBounds().height - 1, getBounds().x + getBounds().width, getBounds().y + getBounds().height - 1);
+		}
 	}
 
 }
