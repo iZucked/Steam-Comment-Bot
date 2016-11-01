@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.lingo.reports</groupId>
 	<artifactId>com.mmxlabs.lingo.reports.parent</artifactId>
-	<version>4.0.2-SNAPSHOT</version>
+	<version>4.0.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
