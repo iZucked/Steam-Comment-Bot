@@ -110,6 +110,7 @@ public class AnalyticsBuilder {
 			if (buyOpportunity.getCancellationExpression() != null && !buyOpportunity.getCancellationExpression().isEmpty()) {
 				slot.setCancellationExpression(buyOpportunity.getCancellationExpression());
 			}
+			slot.setMiscCosts(buyOpportunity.getMiscCosts());
 			return slot;
 		} else if (buy instanceof BuyMarket) {
 			final BuyMarket buyMarket = (BuyMarket) buy;
@@ -191,6 +192,7 @@ public class AnalyticsBuilder {
 			if (sellOpportunity.getCancellationExpression() != null && !sellOpportunity.getCancellationExpression().isEmpty()) {
 				slot.setCancellationExpression(sellOpportunity.getCancellationExpression());
 			}
+			slot.setMiscCosts(sellOpportunity.getMiscCosts());
 			return slot;
 		} else if (sell instanceof SellMarket) {
 			final SellMarket sellMarket = (SellMarket) sell;

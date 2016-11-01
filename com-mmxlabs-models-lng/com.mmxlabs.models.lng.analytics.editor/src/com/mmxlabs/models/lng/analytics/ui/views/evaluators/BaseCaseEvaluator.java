@@ -346,9 +346,10 @@ public class BaseCaseEvaluator {
 				vesselAvailability.setStartBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
 				vesselAvailability.setEndAfter(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
 				vesselAvailability.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
-//				vesselAvailability.setOptional(true);
-//				vesselAvailability.setBallastBonus(fleetShippingOption.getBallastBonus());
-//				vesselAvailability.setRepositioningFee(fleetShippingOption.getRepositioningFee);
+				vesselAvailability.setOptional(true);
+				vesselAvailability.setFleet(false);
+				vesselAvailability.setBallastBonus(optionalAvailabilityShippingOption.getBallastBonus());
+				vesselAvailability.setRepositioningFee(optionalAvailabilityShippingOption.getRepositioningFee());
 				if (optionalAvailabilityShippingOption.getStartPort() != null) {
 					EList<APortSet<Port>> startAt = vesselAvailability.getStartAt();
 					startAt.clear();
@@ -383,7 +384,8 @@ public class BaseCaseEvaluator {
 					vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 					vesselAvailability.getEndHeel().setTargetEndHeel(vessel.getVesselClass().getMinHeel());
 				}
-
+				vesselAvailability.setOptional(false);
+				vesselAvailability.setFleet(true);
 				clone.getCargoModel().getVesselAvailabilities().add(vesselAvailability);
 				availabilitiesMap.put(fleetShippingOption, vesselAvailability);
 

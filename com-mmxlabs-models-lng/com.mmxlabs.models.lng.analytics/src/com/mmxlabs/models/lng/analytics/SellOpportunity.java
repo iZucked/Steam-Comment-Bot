@@ -26,6 +26,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getPriceExpression <em>Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getCancellationExpression <em>Cancellation Expression</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getMiscCosts <em>Misc Costs</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSellOpportunity()
@@ -214,6 +215,32 @@ public interface SellOpportunity extends MMXObject, SellOption {
 	 * @generated
 	 */
 	void setCancellationExpression(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Misc Costs</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Misc Costs</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Misc Costs</em>' attribute.
+	 * @see #setMiscCosts(int)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSellOpportunity_MiscCosts()
+	 * @model annotation="http://www.mmxlabs.com/models/pricing/expressionType type='commodity'"
+	 * @generated
+	 */
+	int getMiscCosts();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getMiscCosts <em>Misc Costs</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Misc Costs</em>' attribute.
+	 * @see #getMiscCosts()
+	 * @generated
+	 */
+	void setMiscCosts(int value);
 
 } // end of  SellOpportunity
 

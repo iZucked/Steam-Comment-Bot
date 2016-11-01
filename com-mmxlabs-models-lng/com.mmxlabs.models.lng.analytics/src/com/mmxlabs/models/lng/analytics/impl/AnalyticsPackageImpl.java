@@ -1318,6 +1318,15 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getBuyOpportunity_MiscCosts() {
+		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EClass getSellOpportunity() {
 		return sellOpportunityEClass;
@@ -1388,6 +1397,15 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	public EAttribute getSellOpportunity_CancellationExpression() {
 		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSellOpportunity_MiscCosts() {
+		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -2164,6 +2182,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(buyOpportunityEClass, BUY_OPPORTUNITY__ENTITY);
 		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__CV);
 		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__CANCELLATION_EXPRESSION);
+		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__MISC_COSTS);
 
 		sellOpportunityEClass = createEClass(SELL_OPPORTUNITY);
 		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__FOB_SALE);
@@ -2173,6 +2192,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__PRICE_EXPRESSION);
 		createEReference(sellOpportunityEClass, SELL_OPPORTUNITY__ENTITY);
 		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__CANCELLATION_EXPRESSION);
+		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__MISC_COSTS);
 
 		buyMarketEClass = createEClass(BUY_MARKET);
 		createEReference(buyMarketEClass, BUY_MARKET__MARKET);
@@ -2452,6 +2472,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getBuyOpportunity_Entity(), theCommercialPackage.getBaseLegalEntity(), null, "entity", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBuyOpportunity_Cv(), ecorePackage.getEDouble(), "cv", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBuyOpportunity_CancellationExpression(), ecorePackage.getEString(), "cancellationExpression", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBuyOpportunity_MiscCosts(), ecorePackage.getEInt(), "miscCosts", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(sellOpportunityEClass, SellOpportunity.class, "SellOpportunity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSellOpportunity_FobSale(), ecorePackage.getEBoolean(), "fobSale", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2461,6 +2482,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getSellOpportunity_PriceExpression(), ecorePackage.getEString(), "priceExpression", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSellOpportunity_Entity(), theCommercialPackage.getBaseLegalEntity(), null, "entity", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSellOpportunity_CancellationExpression(), ecorePackage.getEString(), "cancellationExpression", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSellOpportunity_MiscCosts(), ecorePackage.getEInt(), "miscCosts", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(buyMarketEClass, BuyMarket.class, "BuyMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getBuyMarket_Market(), theSpotMarketsPackage.getSpotMarket(), null, "market", null, 0, 1, BuyMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2699,6 +2721,12 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 			 "type", "commodity"
 		   });	
 		addAnnotation
+		  (getBuyOpportunity_MiscCosts(), 
+		   source, 
+		   new String[] {
+			 "type", "commodity"
+		   });	
+		addAnnotation
 		  (getSellOpportunity_PriceExpression(), 
 		   source, 
 		   new String[] {
@@ -2706,6 +2734,12 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		   });	
 		addAnnotation
 		  (getSellOpportunity_CancellationExpression(), 
+		   source, 
+		   new String[] {
+			 "type", "commodity"
+		   });	
+		addAnnotation
+		  (getSellOpportunity_MiscCosts(), 
 		   source, 
 		   new String[] {
 			 "type", "commodity"

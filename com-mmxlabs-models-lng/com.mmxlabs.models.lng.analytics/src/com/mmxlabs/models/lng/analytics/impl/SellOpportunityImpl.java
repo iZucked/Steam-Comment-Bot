@@ -40,6 +40,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getPriceExpression <em>Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getCancellationExpression <em>Cancellation Expression</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getMiscCosts <em>Misc Costs</em>}</li>
  * </ul>
  *
  * @generated
@@ -154,6 +155,26 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 	 * @ordered
 	 */
 	protected String cancellationExpression = CANCELLATION_EXPRESSION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getMiscCosts() <em>Misc Costs</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMiscCosts()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int MISC_COSTS_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getMiscCosts() <em>Misc Costs</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMiscCosts()
+	 * @generated
+	 * @ordered
+	 */
+	protected int miscCosts = MISC_COSTS_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -385,6 +406,27 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getMiscCosts() {
+		return miscCosts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMiscCosts(int newMiscCosts) {
+		int oldMiscCosts = miscCosts;
+		miscCosts = newMiscCosts;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SELL_OPPORTUNITY__MISC_COSTS, oldMiscCosts, miscCosts));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -405,6 +447,8 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 				return basicGetEntity();
 			case AnalyticsPackage.SELL_OPPORTUNITY__CANCELLATION_EXPRESSION:
 				return getCancellationExpression();
+			case AnalyticsPackage.SELL_OPPORTUNITY__MISC_COSTS:
+				return getMiscCosts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -439,6 +483,9 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 			case AnalyticsPackage.SELL_OPPORTUNITY__CANCELLATION_EXPRESSION:
 				setCancellationExpression((String)newValue);
 				return;
+			case AnalyticsPackage.SELL_OPPORTUNITY__MISC_COSTS:
+				setMiscCosts((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -472,6 +519,9 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 			case AnalyticsPackage.SELL_OPPORTUNITY__CANCELLATION_EXPRESSION:
 				setCancellationExpression(CANCELLATION_EXPRESSION_EDEFAULT);
 				return;
+			case AnalyticsPackage.SELL_OPPORTUNITY__MISC_COSTS:
+				setMiscCosts(MISC_COSTS_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -498,6 +548,8 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 				return entity != null;
 			case AnalyticsPackage.SELL_OPPORTUNITY__CANCELLATION_EXPRESSION:
 				return CANCELLATION_EXPRESSION_EDEFAULT == null ? cancellationExpression != null : !CANCELLATION_EXPRESSION_EDEFAULT.equals(cancellationExpression);
+			case AnalyticsPackage.SELL_OPPORTUNITY__MISC_COSTS:
+				return miscCosts != MISC_COSTS_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -520,6 +572,8 @@ public class SellOpportunityImpl extends MMXObjectImpl implements SellOpportunit
 		result.append(priceExpression);
 		result.append(", cancellationExpression: ");
 		result.append(cancellationExpression);
+		result.append(", miscCosts: ");
+		result.append(miscCosts);
 		result.append(')');
 		return result.toString();
 	}

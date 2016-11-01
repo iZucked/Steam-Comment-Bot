@@ -41,6 +41,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getCv <em>Cv</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getCancellationExpression <em>Cancellation Expression</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getMiscCosts <em>Misc Costs</em>}</li>
  * </ul>
  *
  * @generated
@@ -175,6 +176,26 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * @ordered
 	 */
 	protected String cancellationExpression = CANCELLATION_EXPRESSION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getMiscCosts() <em>Misc Costs</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMiscCosts()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int MISC_COSTS_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getMiscCosts() <em>Misc Costs</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMiscCosts()
+	 * @generated
+	 * @ordered
+	 */
+	protected int miscCosts = MISC_COSTS_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -427,6 +448,27 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getMiscCosts() {
+		return miscCosts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMiscCosts(int newMiscCosts) {
+		int oldMiscCosts = miscCosts;
+		miscCosts = newMiscCosts;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.BUY_OPPORTUNITY__MISC_COSTS, oldMiscCosts, miscCosts));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -449,6 +491,8 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 				return getCv();
 			case AnalyticsPackage.BUY_OPPORTUNITY__CANCELLATION_EXPRESSION:
 				return getCancellationExpression();
+			case AnalyticsPackage.BUY_OPPORTUNITY__MISC_COSTS:
+				return getMiscCosts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -486,6 +530,9 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 			case AnalyticsPackage.BUY_OPPORTUNITY__CANCELLATION_EXPRESSION:
 				setCancellationExpression((String)newValue);
 				return;
+			case AnalyticsPackage.BUY_OPPORTUNITY__MISC_COSTS:
+				setMiscCosts((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -522,6 +569,9 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 			case AnalyticsPackage.BUY_OPPORTUNITY__CANCELLATION_EXPRESSION:
 				setCancellationExpression(CANCELLATION_EXPRESSION_EDEFAULT);
 				return;
+			case AnalyticsPackage.BUY_OPPORTUNITY__MISC_COSTS:
+				setMiscCosts(MISC_COSTS_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -550,6 +600,8 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 				return cv != CV_EDEFAULT;
 			case AnalyticsPackage.BUY_OPPORTUNITY__CANCELLATION_EXPRESSION:
 				return CANCELLATION_EXPRESSION_EDEFAULT == null ? cancellationExpression != null : !CANCELLATION_EXPRESSION_EDEFAULT.equals(cancellationExpression);
+			case AnalyticsPackage.BUY_OPPORTUNITY__MISC_COSTS:
+				return miscCosts != MISC_COSTS_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -574,6 +626,8 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 		result.append(cv);
 		result.append(", cancellationExpression: ");
 		result.append(cancellationExpression);
+		result.append(", miscCosts: ");
+		result.append(miscCosts);
 		result.append(')');
 		return result.toString();
 	}

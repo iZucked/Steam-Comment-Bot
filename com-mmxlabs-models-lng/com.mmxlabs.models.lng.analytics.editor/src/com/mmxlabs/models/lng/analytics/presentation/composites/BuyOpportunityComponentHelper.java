@@ -73,6 +73,7 @@ public class BuyOpportunityComponentHelper extends BaseComponentHelper {
 		add_entityEditor(detailComposite, topClass);
 		add_cvEditor(detailComposite, topClass);
 		add_cancellationExpressionEditor(detailComposite, topClass);
+		add_miscCostsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the desPurchase feature on BuyOpportunity
@@ -141,5 +142,14 @@ public class BuyOpportunityComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_cancellationExpressionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.BUY_OPPORTUNITY__CANCELLATION_EXPRESSION));
+	}
+
+	/**
+	 * Create the editor for the miscCosts feature on BuyOpportunity
+	 *
+	 * @generated
+	 */
+	protected void add_miscCostsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.BUY_OPPORTUNITY__MISC_COSTS));
 	}
 }

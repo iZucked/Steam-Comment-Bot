@@ -72,6 +72,7 @@ public class SellOpportunityComponentHelper extends BaseComponentHelper {
 		add_priceExpressionEditor(detailComposite, topClass);
 		add_entityEditor(detailComposite, topClass);
 		add_cancellationExpressionEditor(detailComposite, topClass);
+		add_miscCostsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the fobSale feature on SellOpportunity
@@ -131,5 +132,14 @@ public class SellOpportunityComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_cancellationExpressionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.SELL_OPPORTUNITY__CANCELLATION_EXPRESSION));
+	}
+
+	/**
+	 * Create the editor for the miscCosts feature on SellOpportunity
+	 *
+	 * @generated
+	 */
+	protected void add_miscCostsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.SELL_OPPORTUNITY__MISC_COSTS));
 	}
 }

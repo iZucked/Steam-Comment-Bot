@@ -56,6 +56,7 @@ public class SellOpportunityItemProvider
 			addPriceExpressionPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
 			addCancellationExpressionPropertyDescriptor(object);
+			addMiscCostsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -215,6 +216,28 @@ public class SellOpportunityItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Misc Costs feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMiscCostsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SellOpportunity_miscCosts_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SellOpportunity_miscCosts_feature", "_UI_SellOpportunity_type"),
+				 AnalyticsPackage.Literals.SELL_OPPORTUNITY__MISC_COSTS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns SellOpportunity.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -253,6 +276,7 @@ public class SellOpportunityItemProvider
 			case AnalyticsPackage.SELL_OPPORTUNITY__DATE:
 			case AnalyticsPackage.SELL_OPPORTUNITY__PRICE_EXPRESSION:
 			case AnalyticsPackage.SELL_OPPORTUNITY__CANCELLATION_EXPRESSION:
+			case AnalyticsPackage.SELL_OPPORTUNITY__MISC_COSTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
