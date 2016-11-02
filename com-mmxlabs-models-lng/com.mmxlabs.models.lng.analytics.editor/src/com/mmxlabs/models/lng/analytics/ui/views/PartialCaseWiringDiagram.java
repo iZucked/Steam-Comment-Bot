@@ -31,10 +31,14 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ScrollBar;
 
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BuyMarket;
+import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.SellMarket;
+import com.mmxlabs.models.lng.analytics.SellOption;
+import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 
 /**
@@ -55,6 +59,7 @@ public class PartialCaseWiringDiagram implements PaintListener {
 	// TODO: Use Colour Palette API
 	static final Color Green = new Color(Display.getCurrent(), new RGB(0, 180, 50));
 	static final Color Light_Green = new Color(Display.getCurrent(), new RGB(100, 255, 100));
+	static final Color Light_Blue = new Color(Display.getCurrent(), new RGB(100, 100, 255));
 	static final Color White = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
 	static final Color Light_Grey = new Color(Display.getCurrent(), new RGB(240, 240, 240));
 	static final Color Grey = new Color(Display.getCurrent(), new RGB(200, 200, 200));
@@ -63,6 +68,7 @@ public class PartialCaseWiringDiagram implements PaintListener {
 	private final Color InvalidWireColour = Display.getDefault().getSystemColor(SWT.COLOR_DARK_RED);
 
 	static final Color ValidTerminalColour = Light_Green;
+	static final Color MixedTerminalColour = Light_Blue;
 	private final Color RewirableColour = Grey;// Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
 	private final Color FixedWireColour = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
@@ -255,22 +261,44 @@ public class PartialCaseWiringDiagram implements PaintListener {
 			if (row == null) {
 				continue;
 			}
-//			if (!row.isWiringChange()) {
-//				continue;
-//			}
+			// if (!row.isWiringChange()) {
+			// continue;
+			// }
 			// Draw left hand terminal
-			if (!row.getBuyOptions().isEmpty() ) {
-				final LoadSlot loadSlot = null;//row.getLoadSlot();// (LoadSlot) row.getLoadAllocation().getSlot();
-				final Color terminalColour =  ValidTerminalColour ;//: InvalidTerminalColour;
-				drawTerminal(true, false, terminalColour, false, loadSlot instanceof SpotSlot, ca, graphics, midpoint);
+			if (!row.getBuyOptions().isEmpty()) {
+
+				if (row.getBuyOptions().size() == 1) {
+					BuyOption option = row.getBuyOptions().get(0);
+					boolean isSpot = option instanceof BuyMarket;
+
+					boolean isFOB = AnalyticsBuilder.isShipped(option);
+
+					final Color terminalColour = ValidTerminalColour;// : InvalidTerminalColour;
+					drawTerminal(true, !isFOB, terminalColour, false, isSpot, ca, graphics, midpoint);
+				} else {
+					final Color terminalColour = MixedTerminalColour;
+					drawTerminal(true, true, terminalColour, false, false, ca, graphics, midpoint);
+				}
+
 			}
 
 			graphics.setLineWidth(linewidth);
 			// Draw right hand terminal
-			if (!row.getSellOptions() .isEmpty()) {
-				final DischargeSlot dischargeSlot = null;//row.getDischargeSlot();// (DischargeSlot) row.getDischargeAllocation().getSlot();
-				final Color terminalColour = ValidTerminalColour ;//: InvalidTerminalColour;
-				drawTerminal(false, false, terminalColour, false, dischargeSlot instanceof SpotSlot, ca, graphics, midpoint);
+			if (!row.getSellOptions().isEmpty()) {
+
+				if (row.getSellOptions().size() == 1) {
+					SellOption option = row.getSellOptions().get(0);
+					boolean isSpot = option instanceof SellMarket;
+
+					boolean isDES = AnalyticsBuilder.isShipped(option);
+
+					final Color terminalColour = ValidTerminalColour;// : InvalidTerminalColour;
+					drawTerminal(false, isDES, terminalColour, false, isSpot, ca, graphics, midpoint);
+				} else {
+					final Color terminalColour = MixedTerminalColour;
+					drawTerminal(false, true, terminalColour, false, false, ca, graphics, midpoint);
+				}
+
 			}
 		}
 	}
