@@ -106,7 +106,7 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 	private Cargo cargo1;
 
 	private double ballastBoilOff = 100.0;
-	private double ladenBoilOff = 1.0;
+	private double ladenBoilOff = 100.0;
 	private double ladenBase = 100.0;
 	private double ballastBase = 200.0;
 
@@ -334,11 +334,11 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 				}
 			}
 
-		}, new boilOffOverride(true));
+		}, new boilOffOverride(false));
 		double ROUNDING_EPSILON = 1.0;
 		double[] expectedCosts = { (ladenBoilOff * 22.8 * 9), (ladenBase * 1000), (ballastBoilOff * 22.8 * 9), (ballastBase * 1000), 0, (ladenBase * 1000), 0, (ballastBase * 1000) };
 		// System.out.println(Arrays.toString(expectedCosts));
-		// System.out.println(Arrays.toString(costs));
+		 System.out.println(Arrays.toString(costs));
 		Assert.assertArrayEquals(expectedCosts, costs, ROUNDING_EPSILON);
 
 	}
