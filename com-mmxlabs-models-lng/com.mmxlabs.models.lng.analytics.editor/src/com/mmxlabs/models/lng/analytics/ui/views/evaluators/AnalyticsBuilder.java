@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.StructuredSelection;
 
+import com.google.common.base.Objects;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
@@ -551,7 +552,7 @@ public class AnalyticsBuilder {
 									continue;
 								}
 
-								if (!opt.getHireCost().equals(vesselAvailability.getTimeCharterRate())) {
+								if (!Objects.equal(opt.getHireCost(), vesselAvailability.getTimeCharterRate())) {
 									continue;
 								}
 
