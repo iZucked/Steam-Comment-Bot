@@ -65,8 +65,12 @@ public class SellOptionsContextMenuManager implements MenuDetectListener {
 				final Collection<EObject> c = new LinkedList<>();
 				selection.iterator().forEachRemaining(ee -> c.add((EObject) ee));
 
-				Collection<EObject> linkedResults = ResultsSetDeletionHelper.getRelatedResultSets(c, optionAnalysisModel);
-				CompoundCommand compoundCommand = new CompoundCommand(Lists.newArrayList(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), c), DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), linkedResults)));
+				final Collection<EObject> linkedResults = ResultsSetDeletionHelper.getRelatedResultSets(c, optionAnalysisModel);
+				final CompoundCommand compoundCommand = new CompoundCommand("Delete sell option");
+				compoundCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), c));
+				if (!linkedResults.isEmpty()) {
+					compoundCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), linkedResults));
+				}
 				scenarioEditingLocation.getDefaultCommandHandler().handleCommand(compoundCommand, null, null);
 			}));
 		}
@@ -104,7 +108,7 @@ public class SellOptionsContextMenuManager implements MenuDetectListener {
 			}
 			if (row instanceof SellOpportunity) {
 				mgr.add(new RunnableAction("Copy", () -> {
-					SellOption copy = EcoreUtil.copy(row);
+					final SellOption copy = EcoreUtil.copy(row);
 					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, copy), optionAnalysisModel,
 							AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
@@ -119,7 +123,7 @@ public class SellOptionsContextMenuManager implements MenuDetectListener {
 		return optionAnalysisModel;
 	}
 
-	public void setOptionAnalysisModel(OptionAnalysisModel optionAnalysisModel) {
+	public void setOptionAnalysisModel(final OptionAnalysisModel optionAnalysisModel) {
 		this.optionAnalysisModel = optionAnalysisModel;
 	}
 

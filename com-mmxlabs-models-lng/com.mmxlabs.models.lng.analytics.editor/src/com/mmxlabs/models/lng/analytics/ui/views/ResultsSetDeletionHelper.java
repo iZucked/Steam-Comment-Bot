@@ -14,24 +14,24 @@ import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 
 public class ResultsSetDeletionHelper {
-	public static Collection<EObject> getRelatedResultSets(Collection<EObject> c, OptionAnalysisModel model) {
-		Set<EObject> relatedSets = new HashSet<EObject>();
-		EList<ResultSet> resultSets = model.getResultSets();
-		for (EObject eObject : c) {
+	public static Collection<EObject> getRelatedResultSets(final Collection<EObject> c, final OptionAnalysisModel model) {
+		final Set<EObject> relatedSets = new HashSet<EObject>();
+		final EList<ResultSet> resultSets = model.getResultSets();
+		for (final EObject eObject : c) {
 			if (eObject instanceof ShippingOption) {
-				for (ResultSet resultSet : resultSets) {
+				for (final ResultSet resultSet : resultSets) {
 					if (resultSet.getRows().stream().filter(r -> r.getShipping() == eObject).count() > 0) {
 						relatedSets.add(resultSet);
 					}
 				}
 			} else if (eObject instanceof BuyOption) {
-				for (ResultSet resultSet : resultSets) {
+				for (final ResultSet resultSet : resultSets) {
 					if (resultSet.getRows().stream().filter(r -> r.getBuyOption() == eObject).count() > 0) {
 						relatedSets.add(resultSet);
 					}
 				}
 			} else if (eObject instanceof SellOption) {
-				for (ResultSet resultSet : resultSets) {
+				for (final ResultSet resultSet : resultSets) {
 					if (resultSet.getRows().stream().filter(r -> r.getSellOption() == eObject).count() > 0) {
 						relatedSets.add(resultSet);
 					}

@@ -64,8 +64,12 @@ public class BuyOptionsContextMenuManager implements MenuDetectListener {
 			mgr.add(new RunnableAction("Delete option(s)", () -> {
 				final Collection<EObject> c = new LinkedList<>();
 				selection.iterator().forEachRemaining(ee -> c.add((EObject) ee));
-				Collection<EObject> linkedResults = ResultsSetDeletionHelper.getRelatedResultSets(c, optionAnalysisModel);
-				CompoundCommand compoundCommand = new CompoundCommand(Lists.newArrayList(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), c), DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), linkedResults)));
+				final Collection<EObject> linkedResults = ResultsSetDeletionHelper.getRelatedResultSets(c, optionAnalysisModel);
+				final CompoundCommand compoundCommand = new CompoundCommand("Delete buy option");
+				compoundCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), c));
+				if (!linkedResults.isEmpty()) {
+					compoundCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), linkedResults));
+				}
 				scenarioEditingLocation.getDefaultCommandHandler().handleCommand(compoundCommand, null, null);
 			}));
 		}
