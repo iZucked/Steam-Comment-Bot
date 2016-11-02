@@ -75,7 +75,7 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 
 			}));
 
-			mgr.add(new RunnableAction("Copy to What if?", () -> {
+			mgr.add(new RunnableAction("Copy to options", () -> {
 				final Collection<EObject> c = new LinkedList<>();
 				selection.iterator().forEachRemaining(ee -> {
 					if (ee instanceof BaseCaseRow) {
