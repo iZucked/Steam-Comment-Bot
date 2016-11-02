@@ -39,8 +39,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
  * 
  */
 public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
-	
-	private boolean boilOffCompensation = false;
+
 
 	@Inject
 	private IRouteCostProvider routeCostProvider;
@@ -784,6 +783,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		// Can this be moved into the scheduler? If so, we need to ensure the
 		// same price is used in all valid voyage legs.
 		final int[] pricesPerMMBTu = getLngEffectivePrices(loadIndices, dischargeIndices, voyageRecord, sequence);
+		
 
 		// set the LNG values for the voyages
 		// final int numVoyages = sequence.length / 2;
@@ -832,6 +832,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				
 				final int cargoCVValue = details.getOptions().getCargoCVValue();
 				for (final FuelComponent fc : FuelComponent.getLNGFuelComponents()) {
+					
 					// Existing consumption data is in M3, also store the MMBtu values
 					final long consumptionInM3 = details.getFuelConsumption(fc, fc.getDefaultFuelUnit());
 					final long consumptionInMMBTu = Calculator.convertM3ToMMBTu(consumptionInM3, cargoCVValue);
@@ -844,11 +845,17 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						// Sum up the voyage costs
 						final long currentTotal = voyagePlan.getTotalFuelCost(fc);
 						voyagePlan.setTotalFuelCost(fc, currentTotal + Calculator.costFromConsumption(consumptionInMMBTu, unitPrice));
+//						if(fc == FuelComponent.NBO){
+//							System.out.println("IN LOOP UNIT PRICE: " + unitPrice);
+//							System.out.println(details.getFuelUnitPrice(fc)/22.8);
+//						}
 					}
 				}
 					
 			}
 		}
+		
+		
 
 		// Store results in plan
 		voyagePlan.setSequence(sequence);
@@ -1023,14 +1030,13 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		if (portType == PortType.Load || portType == PortType.Discharge) {
 			consumptionRateInMTPerDay = vesselClass.getInPortConsumptionRateInMTPerDay(portType);
 			
-			if(boilOffCompensation){
+			
 				if(portType == PortType.Load){
 					inPortNBORateInM3PerDay = vesselClass.getInPortNBORate(VesselState.Laden);
-	
 				}else{
 					inPortNBORateInM3PerDay = vesselClass.getInPortNBORate(VesselState.Ballast);
 				}
-			}
+			
 			
 		} else if (portType == PortType.End) {
 			// Maybe include hotel load for end events?
