@@ -52,6 +52,8 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.CachingVolu
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.CheckingVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.IBoilOffHelper;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.InPortBoilOffHelper;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.CachingVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.DefaultEndEventScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IEndEventScheduler;
@@ -140,6 +142,14 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(Boolean.FALSE);
 
+	}
+	
+	@Provides
+	private IBoilOffHelper provideInPortBoilOffHelper(@NonNull final Injector injector){
+		final InPortBoilOffHelper helper = new InPortBoilOffHelper(true );
+//		injector.injectMembers(helper);
+		
+		return helper;
 	}
 
 	@Provides
