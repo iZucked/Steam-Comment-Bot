@@ -37,6 +37,7 @@ import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseEvaluator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
+
 public class ResultsContextMenuManager implements MenuDetectListener {
 
 	private final @NonNull GridTreeViewer viewer;
@@ -48,7 +49,8 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 	private OptionAnalysisModel optionAnalysisModel;
 	private Menu menu;
 
-	public ResultsContextMenuManager(@NonNull final GridTreeViewer viewer,  @NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final OptionModellerView optionModellerView, @NonNull final MenuManager mgr) {
+	public ResultsContextMenuManager(@NonNull final GridTreeViewer viewer, @NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final OptionModellerView optionModellerView,
+			@NonNull final MenuManager mgr) {
 		this.optionModellerView = optionModellerView;
 		this.mgr = mgr;
 		this.scenarioEditingLocation = scenarioEditingLocation;
@@ -69,12 +71,12 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 		final GridItem[] items = grid.getSelection();
 		if (items.length > 0) {
 
-			Object selectedElement = selection.getFirstElement();
+			final Object selectedElement = selection.getFirstElement();
 			ResultSet resultSet;
 			if (selectedElement instanceof ResultSet) {
 				resultSet = (ResultSet) selectedElement;
 			} else if (selectedElement instanceof AnalysisResultRow) {
-				EObject eContainer = ((AnalysisResultRow) selectedElement).eContainer();
+				final EObject eContainer = ((AnalysisResultRow) selectedElement).eContainer();
 				if (eContainer instanceof ResultSet) {
 					resultSet = (ResultSet) eContainer;
 				} else {
@@ -85,61 +87,61 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 			}
 			mgr.add(new RunnableAction("Create fork", () -> {
 				if (resultSet != null) {
-					String newForkName = ScenarioServiceModelUtils.getNewForkName(scenarioEditingLocation.getScenarioInstance(), false);
-					OptionAnalysisModel newModel = createNewBaseCase(resultSet);
+					final String newForkName = ScenarioServiceModelUtils.getNewForkName(scenarioEditingLocation.getScenarioInstance(), false);
+					final OptionAnalysisModel newModel = createNewBaseCase(resultSet);
 					BaseCaseEvaluator.evaluate(scenarioEditingLocation, newModel, newModel.getBaseCase(), true, newForkName);
 				}
 			}));
-			
-			mgr.add(new RunnableAction("Convert to base case", () -> {
+
+			mgr.add(new RunnableAction("Convert to new sandbox", () -> {
 				if (resultSet != null) {
-					OptionAnalysisModel newModel = createNewBaseCase(resultSet);
+					final OptionAnalysisModel newModel = createNewBaseCase(resultSet);
 					optionAnalysisModel.getChildren().add(newModel);
 					optionModellerView.setInput(newModel);
 				}
 			}));
 
-
 		}
 		menu.setVisible(true);
 	}
 
-	private OptionAnalysisModel createNewBaseCase(ResultSet resultSet) {
-		OptionAnalysisModel newModel = AnalyticsFactory.eINSTANCE.createOptionAnalysisModel();
+	private OptionAnalysisModel createNewBaseCase(final ResultSet resultSet) {
+		final OptionAnalysisModel newModel = AnalyticsFactory.eINSTANCE.createOptionAnalysisModel();
 
-		Copier copier = new Copier();
+		final Copier copier = new Copier();
 		// create a new model copy
 		newModel.getBuys().addAll(copier.copyAll(optionAnalysisModel.getBuys()));
 		newModel.getSells().addAll(copier.copyAll(optionAnalysisModel.getSells()));
 		newModel.getShippingTemplates().addAll(copier.copyAll(optionAnalysisModel.getShippingTemplates()));
 		newModel.setPartialCase(AnalyticsFactory.eINSTANCE.createPartialCase());
-//					newModel.setPartialCase((PartialCase) copier.copy(optionAnalysisModel.getPartialCase()));
-//					newModel.getResultSets().addAll(copier.copyAll(optionAnalysisModel.getResultSets()));
+		// newModel.setPartialCase((PartialCase) copier.copy(optionAnalysisModel.getPartialCase()));
+		// newModel.getResultSets().addAll(copier.copyAll(optionAnalysisModel.getResultSets()));
 		newModel.getRules().addAll(copier.copyAll(optionAnalysisModel.getRules()));
 		newModel.setUseTargetPNL(optionAnalysisModel.isUseTargetPNL());
 		copier.copyReferences();
 		newModel.setBaseCase(createBaseCaseFromRS(resultSet, false, copier));
-		
+
 		// create a name from description
-		String name = createNameFromRow(resultSet);
+		final String name = createNameFromRow(resultSet);
 		newModel.setName(name);
-		
 
 		// add new slots
-//					newModel.getBuys().addAll(newModel.getBaseCase().getBaseCase().stream().filter(b -> !newModel.getBuys().contains(b.getBuyOption())).filter(b-> b.getBuyOption() !=null).map(b -> b.getBuyOption()).collect(Collectors.toList()));
-//					newModel.getSells().addAll(newModel.getBaseCase().getBaseCase().stream().filter(b -> !newModel.getSells().contains(b.getSellOption())).filter(b-> b.getSellOption() !=null).map(b -> b.getSellOption()).collect(Collectors.toList()));
+		// newModel.getBuys().addAll(newModel.getBaseCase().getBaseCase().stream().filter(b -> !newModel.getBuys().contains(b.getBuyOption())).filter(b-> b.getBuyOption() !=null).map(b ->
+		// b.getBuyOption()).collect(Collectors.toList()));
+		// newModel.getSells().addAll(newModel.getBaseCase().getBaseCase().stream().filter(b -> !newModel.getSells().contains(b.getSellOption())).filter(b-> b.getSellOption() !=null).map(b ->
+		// b.getSellOption()).collect(Collectors.toList()));
 		return newModel;
 	}
 
-	private String createNameFromRow(ResultSet resultSet) {
-		EList<AnalysisResultRow> rows = resultSet.getRows();
-		List<String> s = new LinkedList<>();
-		for (AnalysisResultRow analysisResultRow : rows) {
-			AnalysisResultDetail resultDetail = analysisResultRow.getResultDetail();
+	private String createNameFromRow(final ResultSet resultSet) {
+		final EList<AnalysisResultRow> rows = resultSet.getRows();
+		final List<String> s = new LinkedList<>();
+		for (final AnalysisResultRow analysisResultRow : rows) {
+			final AnalysisResultDetail resultDetail = analysisResultRow.getResultDetail();
 			if (resultDetail instanceof BreakEvenResult) {
-				s.add(String.format("b/e %.2f",((BreakEvenResult) resultDetail).getPrice()));
+				s.add(String.format("b/e %.2f", ((BreakEvenResult) resultDetail).getPrice()));
 			} else if (resultDetail instanceof ProfitAndLossResult) {
-				s.add(String.format("prof %d",(long) ((ProfitAndLossResult) resultDetail).getValue()));
+				s.add(String.format("prof %d", (long) ((ProfitAndLossResult) resultDetail).getValue()));
 			}
 		}
 		return String.join(" ", s);
@@ -149,15 +151,15 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 		return optionAnalysisModel;
 	}
 
-	public void setOptionAnalysisModel(OptionAnalysisModel optionAnalysisModel) {
+	public void setOptionAnalysisModel(final OptionAnalysisModel optionAnalysisModel) {
 		this.optionAnalysisModel = optionAnalysisModel;
 	}
-	
-	private BaseCase createBaseCaseFromRS(ResultSet rs, boolean copy, Copier copier) {
-		BaseCase newBaseCase = AnalyticsFactory.eINSTANCE.createBaseCase();
-		EList<BaseCaseRow> baseCaseRows = newBaseCase.getBaseCase();
-		for (AnalysisResultRow analysisResultRow : rs.getRows()) {
-			BaseCaseRow bcr = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+
+	private BaseCase createBaseCaseFromRS(final ResultSet rs, final boolean copy, final Copier copier) {
+		final BaseCase newBaseCase = AnalyticsFactory.eINSTANCE.createBaseCase();
+		final EList<BaseCaseRow> baseCaseRows = newBaseCase.getBaseCase();
+		for (final AnalysisResultRow analysisResultRow : rs.getRows()) {
+			final BaseCaseRow bcr = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
 			bcr.setBuyOption(getFixedBuyOption(analysisResultRow, copy, copier));
 			bcr.setSellOption(getFixedSellOption(analysisResultRow, copy, copier));
 			bcr.setShipping(copier == null ? analysisResultRow.getShipping() : (ShippingOption) copier.get(analysisResultRow.getShipping()));
@@ -165,11 +167,11 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 		}
 		return newBaseCase;
 	}
-	
-	private BuyOption getFixedBuyOption(AnalysisResultRow row, boolean createCopy, Copier copier) {
-		BuyOption buyOption = copier != null ? (BuyOption) copier.get(row.getBuyOption()) : row.getBuyOption();
+
+	private BuyOption getFixedBuyOption(final AnalysisResultRow row, final boolean createCopy, final Copier copier) {
+		final BuyOption buyOption = copier != null ? (BuyOption) copier.get(row.getBuyOption()) : row.getBuyOption();
 		if (row.getResultDetail() instanceof BreakEvenResult) {
-			BreakEvenResult result = (BreakEvenResult) row.getResultDetail();
+			final BreakEvenResult result = (BreakEvenResult) row.getResultDetail();
 			if (buyOption instanceof BuyOpportunity) {
 				if (((BuyOpportunity) buyOption).getPriceExpression().contains("?")) {
 					BuyOpportunity buyOpportunity;
@@ -178,16 +180,16 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 					} else {
 						buyOpportunity = (BuyOpportunity) buyOption;
 					}
-					buyOpportunity.setPriceExpression(""+result.getPrice());
+					buyOpportunity.setPriceExpression("" + result.getPrice());
 					return buyOpportunity;
 				}
 			} else if (buyOption instanceof BuyReference) {
 				if (((BuyReference) buyOption).getSlot().getPriceExpression().contains("?")) {
-//					LoadSlot slotCopy = EcoreUtil.copy((LoadSlot) ((BuyReference) buyOption).getSlot());
-//					BuyReference copy = AnalyticsFactory.eINSTANCE.createBuyReference();
-//					slotCopy.setPriceExpression(""+result.getPrice());
-//					copy.setSlot(slotCopy);
-//					return copy;
+					// LoadSlot slotCopy = EcoreUtil.copy((LoadSlot) ((BuyReference) buyOption).getSlot());
+					// BuyReference copy = AnalyticsFactory.eINSTANCE.createBuyReference();
+					// slotCopy.setPriceExpression(""+result.getPrice());
+					// copy.setSlot(slotCopy);
+					// return copy;
 				}
 			}
 		}
@@ -198,10 +200,10 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 		}
 	}
 
-	private SellOption getFixedSellOption(AnalysisResultRow row, boolean createCopy, Copier copier) {
-		SellOption sellOption = copier != null ? (SellOption) copier.get(row.getSellOption()) : row.getSellOption();
+	private SellOption getFixedSellOption(final AnalysisResultRow row, final boolean createCopy, final Copier copier) {
+		final SellOption sellOption = copier != null ? (SellOption) copier.get(row.getSellOption()) : row.getSellOption();
 		if (row.getResultDetail() instanceof BreakEvenResult) {
-			BreakEvenResult result = (BreakEvenResult) row.getResultDetail();
+			final BreakEvenResult result = (BreakEvenResult) row.getResultDetail();
 			if (sellOption instanceof SellOpportunity) {
 				if (((SellOpportunity) sellOption).getPriceExpression().contains("?")) {
 					SellOpportunity opportunity;
@@ -210,16 +212,16 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 					} else {
 						opportunity = (SellOpportunity) sellOption;
 					}
-					opportunity.setPriceExpression(""+result.getPrice());
+					opportunity.setPriceExpression("" + result.getPrice());
 					return opportunity;
 				}
 			} else if (sellOption instanceof SellReference) {
 				if (((SellReference) sellOption).getSlot().getPriceExpression().contains("?")) {
-//					DischargeSlot slotCopy = EcoreUtil.copy((DischargeSlot) ((SellReference) sellOption).getSlot());
-//					SellReference copy = AnalyticsFactory.eINSTANCE.createSellReference();
-//					slotCopy.setPriceExpression(""+result.getPrice());
-//					copy.setSlot(slotCopy);
-//					return copy;
+					// DischargeSlot slotCopy = EcoreUtil.copy((DischargeSlot) ((SellReference) sellOption).getSlot());
+					// SellReference copy = AnalyticsFactory.eINSTANCE.createSellReference();
+					// slotCopy.setPriceExpression(""+result.getPrice());
+					// copy.setSlot(slotCopy);
+					// return copy;
 				}
 			}
 		}
