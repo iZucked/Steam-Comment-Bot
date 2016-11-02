@@ -1152,6 +1152,7 @@ public class VoyagePlanner {
 			// Sanity check these calculations match expected values
 			assert totalVoyageBOG == planData.getPlan().getLNGFuelVolume();
 			// Note: there may be some rounding errors when using MMBTU, so keep an eye on epsilon
+			System.out.println(planData.getEndHeelVolumeInM3() + "   " + currentHeelInM3);
 			assert (Math.abs(planData.getEndHeelVolumeInM3() - currentHeelInM3) <= ROUNDING_EPSILON);
 		}
 

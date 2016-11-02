@@ -107,6 +107,8 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			annotation.setCommercialSlotVolumeInM3(slot, inPortBoilOffHelper.compensateForBoilOff(slot, allocationRecord, volumeInM3, FuelUnit.M3));
 			annotation.setCommercialSlotVolumeInMMBTu(slot,inPortBoilOffHelper.compensateForBoilOff(slot, allocationRecord, volumeInMMBTu, FuelUnit.MMBTu));
 			
+			annotation.setPhysicalSlotVolumeInM3(slot, inPortBoilOffHelper.calculatePhysicalVolume(slot, allocationRecord, annotation.getCommercialSlotVolumeInM3(slot), FuelUnit.M3));
+			annotation.setPhysicalSlotVolumeInMMBTu(slot, inPortBoilOffHelper.calculatePhysicalVolume(slot, allocationRecord, annotation.getCommercialSlotVolumeInMMBTu(slot), FuelUnit.MMBTu));
 			
 			annotation.setSlotCargoCV(slot, allocationRecord.slotCV.get(i));
 		}
@@ -158,6 +160,9 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			annotation.setCommercialSlotVolumeInM3(slot, inPortBoilOffHelper.compensateForBoilOff(slot, allocationRecord, volumeInM3, FuelUnit.M3));
 			annotation.setCommercialSlotVolumeInMMBTu(slot, inPortBoilOffHelper.compensateForBoilOff(slot, allocationRecord, volumeInMMBTu, FuelUnit.MMBTu));
 			annotation.setSlotCargoCV(slot, allocationRecord.slotCV.get(i));
+			
+			annotation.setPhysicalSlotVolumeInM3(slot, inPortBoilOffHelper.calculatePhysicalVolume(slot, allocationRecord, annotation.getCommercialSlotVolumeInM3(slot), FuelUnit.M3));
+			annotation.setPhysicalSlotVolumeInMMBTu(slot, inPortBoilOffHelper.calculatePhysicalVolume(slot, allocationRecord, annotation.getCommercialSlotVolumeInMMBTu(slot), FuelUnit.MMBTu));
 
 			// First slot
 			if (i == 0) {
@@ -238,6 +243,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			// greedy assumption: always discharge as much as possible
 			final long dischargeVolume = capValueWithZeroDefault(allocationRecord.maxVolumesInM3.get(1), unusedVolume);
 			annotation.setCommercialSlotVolumeInM3(dischargeSlot, inPortBoilOffHelper.compensateForBoilOff(dischargeSlot, allocationRecord, dischargeVolume, FuelUnit.M3));
+			annotation.setPhysicalSlotVolumeInM3(dischargeSlot, inPortBoilOffHelper.calculatePhysicalVolume(dischargeSlot, allocationRecord, annotation.getCommercialSlotVolumeInM3(dischargeSlot), FuelUnit.M3));	
 			unusedVolume -= dischargeVolume;
 
 		}
@@ -262,6 +268,8 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 					dischargeVolume = unusedVolume;
 				}
 				annotation.setCommercialSlotVolumeInM3(dischargeSlot, inPortBoilOffHelper.compensateForBoilOff(dischargeSlot, allocationRecord, dischargeVolume, FuelUnit.M3) );
+				annotation.setPhysicalSlotVolumeInM3(dischargeSlot, inPortBoilOffHelper.calculatePhysicalVolume(dischargeSlot, allocationRecord, annotation.getCommercialSlotVolumeInM3(dischargeSlot), FuelUnit.M3));
+
 				unusedVolume -= dischargeVolume;
 
 				// more profitable ?
@@ -287,6 +295,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				final long currentVolumeInM3 = annotation.getCommercialSlotVolumeInM3(slot);
 				long volumeInM3 = currentVolumeInM3 + volume;
 				annotation.setCommercialSlotVolumeInM3(slot, inPortBoilOffHelper.compensateForBoilOff(slot, allocationRecord, volumeInM3, FuelUnit.M3));
+				annotation.setPhysicalSlotVolumeInM3(slot, inPortBoilOffHelper.calculatePhysicalVolume(slot, allocationRecord, annotation.getCommercialSlotVolumeInM3(slot), FuelUnit.M3));
 			}
 
 			// Note this currently does nothing as the next() method in the allocator iterator (BaseCargoAllocator) ignores this data and looks directly on the discharge slot.
@@ -318,12 +327,15 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		annotation.setStartHeelVolumeInM3(allocationRecord.startVolumeInM3);
 		annotation.setRemainingHeelVolumeInM3(allocationRecord.minEndVolumeInM3 + unusedVolume);
 		annotation.setFuelVolumeInM3(allocationRecord.requiredFuelVolumeInM3);
+		annotation.setPhysicalSlotVolumeInM3(loadSlot, inPortBoilOffHelper.calculatePhysicalVolume(loadSlot, allocationRecord, annotation.getCommercialSlotVolumeInM3(loadSlot), FuelUnit.M3));
+
 
 		// Copy across slot time information
 		for (int i = 0; i < slots.size(); i++) {
 			final IPortSlot slot = allocationRecord.slots.get(i);
 
 			annotation.setCommercialSlotVolumeInMMBTu(slot, Calculator.convertM3ToMMBTu(annotation.getCommercialSlotVolumeInM3(slot), annotation.getSlotCargoCV(slot)));
+			annotation.setPhysicalSlotVolumeInMMBTu(slot, inPortBoilOffHelper.calculatePhysicalVolume(slot, allocationRecord, annotation.getCommercialSlotVolumeInMMBTu(slot), FuelUnit.MMBTu));
 		}
 
 		return annotation;
@@ -425,14 +437,18 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		for (int i = 0; i < slots.size(); ++i) {
 			final IPortSlot slot = slots.get(i);
 			annotation.setCommercialSlotVolumeInMMBTu(slot, inPortBoilOffHelper.compensateForBoilOff(slot, allocationRecord, transferVolumeMMBTU, FuelUnit.MMBTu) );
+			annotation.setPhysicalSlotVolumeInMMBTu(slot, inPortBoilOffHelper.calculatePhysicalVolume(slot, allocationRecord, annotation.getCommercialSlotVolumeInMMBTu(slot), FuelUnit.MMBTu));
 			if (transferVolumeM3 != -1) {
 				annotation.setCommercialSlotVolumeInM3(slot, inPortBoilOffHelper.compensateForBoilOff(slot, allocationRecord, transferVolumeM3, FuelUnit.M3) );
+				annotation.setPhysicalSlotVolumeInM3(slot, inPortBoilOffHelper.calculatePhysicalVolume(slot, allocationRecord, annotation.getCommercialSlotVolumeInM3(slot), FuelUnit.M3));
 			} else {
 				final int slotCV = allocationRecord.slotCV.get(i);
 				if (slotCV > 0) {
 					annotation.setCommercialSlotVolumeInM3(slot, inPortBoilOffHelper.compensateForBoilOff(slot, allocationRecord, Calculator.convertMMBTuToM3(transferVolumeMMBTU, slotCV), FuelUnit.M3));
+					annotation.setPhysicalSlotVolumeInM3(slot, inPortBoilOffHelper.calculatePhysicalVolume(slot, allocationRecord, annotation.getCommercialSlotVolumeInM3(slot), FuelUnit.M3));
 				} else {
 					annotation.setCommercialSlotVolumeInM3(slot, inPortBoilOffHelper.compensateForBoilOff(slot, allocationRecord, 0, FuelUnit.M3));
+					annotation.setPhysicalSlotVolumeInM3(slot, inPortBoilOffHelper.calculatePhysicalVolume(slot, allocationRecord, annotation.getCommercialSlotVolumeInM3(slot), FuelUnit.M3));
 				}
 			}
 		}
@@ -480,14 +496,18 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 	protected void setTransferVolume(final @NonNull AllocationRecord allocationRecord, @NonNull IPortSlot slot, final @NonNull AllocationAnnotation annotation, final long transferVolumeMMBTU,
 			final long transferVolumeM3) {
 		annotation.setCommercialSlotVolumeInMMBTu(slot, inPortBoilOffHelper.compensateForBoilOff(slot, allocationRecord, transferVolumeMMBTU, FuelUnit.MMBTu) );
+		annotation.setPhysicalSlotVolumeInMMBTu(slot, inPortBoilOffHelper.calculatePhysicalVolume(slot, allocationRecord, annotation.getCommercialSlotVolumeInMMBTu(slot), FuelUnit.MMBTu));
 		if (transferVolumeM3 != -1) {
 			annotation.setCommercialSlotVolumeInM3(slot, inPortBoilOffHelper.compensateForBoilOff(slot, allocationRecord, transferVolumeM3, FuelUnit.M3) );
+			annotation.setPhysicalSlotVolumeInM3(slot, inPortBoilOffHelper.calculatePhysicalVolume(slot, allocationRecord, annotation.getCommercialSlotVolumeInM3(slot), FuelUnit.M3));
 		} else {
 			final int slotCV = annotation.getSlotCargoCV(slot);
 			if (slotCV > 0) {
 				annotation.setCommercialSlotVolumeInM3(slot, inPortBoilOffHelper.compensateForBoilOff(slot, allocationRecord, Calculator.convertMMBTuToM3(transferVolumeMMBTU, slotCV), FuelUnit.M3) );
+				annotation.setPhysicalSlotVolumeInM3(slot, inPortBoilOffHelper.calculatePhysicalVolume(slot, allocationRecord, annotation.getCommercialSlotVolumeInM3(slot), FuelUnit.M3));
 			} else {
 				annotation.setCommercialSlotVolumeInM3(slot,  inPortBoilOffHelper.compensateForBoilOff(slot, allocationRecord, 0, FuelUnit.M3));
+				annotation.setPhysicalSlotVolumeInM3(slot, inPortBoilOffHelper.calculatePhysicalVolume(slot, allocationRecord, annotation.getCommercialSlotVolumeInM3(slot), FuelUnit.M3));
 			}
 		}
 	}

@@ -82,6 +82,7 @@ public class InPortBoilOffHelper implements IBoilOffHelper {
 		int slotCV = record.slotCV.get(record.slots.indexOf(slot));
 		
 		
+		
 		long NBOBoilOff = 0;
 		if(units == FuelUnit.M3){
 			NBOBoilOff = (inPortNBORate*slotDuration);
@@ -89,6 +90,7 @@ public class InPortBoilOffHelper implements IBoilOffHelper {
 			NBOBoilOff = Calculator.convertM3ToMMBTu((slotDuration*inPortNBORate), slotCV);
 		}
 		if(boilOffCompensation){
+			System.out.println("YEP");
 			if(slot.getPortType() == PortType.Load)	
 				return volume  + NBOBoilOff ;
 			else if(slot.getPortType() == PortType.Discharge)
