@@ -1206,13 +1206,49 @@ s	 * <!-- end-user-doc -->
 	int BUY_OPPORTUNITY__MISC_COSTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
 
 	/**
+	 * The feature id for the '<em><b>Volume Mode</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_OPPORTUNITY__VOLUME_MODE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
+
+	/**
+	 * The feature id for the '<em><b>Volume Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_OPPORTUNITY__VOLUME_UNITS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
+
+	/**
+	 * The feature id for the '<em><b>Min Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_OPPORTUNITY__MIN_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
+
+	/**
+	 * The feature id for the '<em><b>Max Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_OPPORTUNITY__MAX_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 12;
+
+	/**
 	 * The number of structural features of the '<em>Buy Opportunity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
+	int BUY_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl <em>Sell Opportunity</em>}' class.
@@ -1306,13 +1342,49 @@ s	 * <!-- end-user-doc -->
 	int SELL_OPPORTUNITY__MISC_COSTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 	/**
+	 * The feature id for the '<em><b>Volume Mode</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__VOLUME_MODE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Volume Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__VOLUME_UNITS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
+
+	/**
+	 * The feature id for the '<em><b>Min Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__MIN_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
+
+	/**
+	 * The feature id for the '<em><b>Max Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__MAX_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
+
+	/**
 	 * The number of structural features of the '<em>Sell Opportunity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
+	int SELL_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.BuyMarketImpl <em>Buy Market</em>}' class.
@@ -2236,6 +2308,17 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	int DESTINATION_TYPE = 38;
+
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.VolumeMode <em>Volume Mode</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.VolumeMode
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVolumeMode()
+	 * @generated
+	 */
+	int VOLUME_MODE = 39;
 
 
 	/**
@@ -3238,6 +3321,50 @@ s	 * <!-- end-user-doc -->
 	EAttribute getBuyOpportunity_MiscCosts();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getVolumeMode <em>Volume Mode</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Mode</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BuyOpportunity#getVolumeMode()
+	 * @see #getBuyOpportunity()
+	 * @generated
+	 */
+	EAttribute getBuyOpportunity_VolumeMode();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getVolumeUnits <em>Volume Units</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Units</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BuyOpportunity#getVolumeUnits()
+	 * @see #getBuyOpportunity()
+	 * @generated
+	 */
+	EAttribute getBuyOpportunity_VolumeUnits();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getMinVolume <em>Min Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Volume</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BuyOpportunity#getMinVolume()
+	 * @see #getBuyOpportunity()
+	 * @generated
+	 */
+	EAttribute getBuyOpportunity_MinVolume();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getMaxVolume <em>Max Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Volume</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BuyOpportunity#getMaxVolume()
+	 * @see #getBuyOpportunity()
+	 * @generated
+	 */
+	EAttribute getBuyOpportunity_MaxVolume();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SellOpportunity <em>Sell Opportunity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3334,6 +3461,50 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EAttribute getSellOpportunity_MiscCosts();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getVolumeMode <em>Volume Mode</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Mode</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SellOpportunity#getVolumeMode()
+	 * @see #getSellOpportunity()
+	 * @generated
+	 */
+	EAttribute getSellOpportunity_VolumeMode();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getVolumeUnits <em>Volume Units</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Units</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SellOpportunity#getVolumeUnits()
+	 * @see #getSellOpportunity()
+	 * @generated
+	 */
+	EAttribute getSellOpportunity_VolumeUnits();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getMinVolume <em>Min Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Volume</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SellOpportunity#getMinVolume()
+	 * @see #getSellOpportunity()
+	 * @generated
+	 */
+	EAttribute getSellOpportunity_MinVolume();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getMaxVolume <em>Max Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Volume</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SellOpportunity#getMaxVolume()
+	 * @see #getSellOpportunity()
+	 * @generated
+	 */
+	EAttribute getSellOpportunity_MaxVolume();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BuyMarket <em>Buy Market</em>}'.
@@ -4092,6 +4263,16 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EEnum getDestinationType();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.analytics.VolumeMode <em>Volume Mode</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Volume Mode</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.VolumeMode
+	 * @generated
+	 */
+	EEnum getVolumeMode();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -4884,6 +5065,38 @@ s	 * <!-- end-user-doc -->
 		EAttribute BUY_OPPORTUNITY__MISC_COSTS = eINSTANCE.getBuyOpportunity_MiscCosts();
 
 		/**
+		 * The meta object literal for the '<em><b>Volume Mode</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BUY_OPPORTUNITY__VOLUME_MODE = eINSTANCE.getBuyOpportunity_VolumeMode();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume Units</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BUY_OPPORTUNITY__VOLUME_UNITS = eINSTANCE.getBuyOpportunity_VolumeUnits();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BUY_OPPORTUNITY__MIN_VOLUME = eINSTANCE.getBuyOpportunity_MinVolume();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BUY_OPPORTUNITY__MAX_VOLUME = eINSTANCE.getBuyOpportunity_MaxVolume();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl <em>Sell Opportunity</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -4956,6 +5169,38 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute SELL_OPPORTUNITY__MISC_COSTS = eINSTANCE.getSellOpportunity_MiscCosts();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume Mode</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SELL_OPPORTUNITY__VOLUME_MODE = eINSTANCE.getSellOpportunity_VolumeMode();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume Units</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SELL_OPPORTUNITY__VOLUME_UNITS = eINSTANCE.getSellOpportunity_VolumeUnits();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SELL_OPPORTUNITY__MIN_VOLUME = eINSTANCE.getSellOpportunity_MinVolume();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SELL_OPPORTUNITY__MAX_VOLUME = eINSTANCE.getSellOpportunity_MaxVolume();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.BuyMarketImpl <em>Buy Market</em>}' class.
@@ -5570,6 +5815,16 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EEnum DESTINATION_TYPE = eINSTANCE.getDestinationType();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.VolumeMode <em>Volume Mode</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.VolumeMode
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVolumeMode()
+		 * @generated
+		 */
+		EEnum VOLUME_MODE = eINSTANCE.getVolumeMode();
 
 	}
 

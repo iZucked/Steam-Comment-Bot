@@ -57,6 +57,10 @@ public class SellOpportunityItemProvider
 			addEntityPropertyDescriptor(object);
 			addCancellationExpressionPropertyDescriptor(object);
 			addMiscCostsPropertyDescriptor(object);
+			addVolumeModePropertyDescriptor(object);
+			addVolumeUnitsPropertyDescriptor(object);
+			addMinVolumePropertyDescriptor(object);
+			addMaxVolumePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -238,6 +242,94 @@ public class SellOpportunityItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Volume Mode feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumeModePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SellOpportunity_volumeMode_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SellOpportunity_volumeMode_feature", "_UI_SellOpportunity_type"),
+				 AnalyticsPackage.Literals.SELL_OPPORTUNITY__VOLUME_MODE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Volume Units feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumeUnitsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SellOpportunity_volumeUnits_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SellOpportunity_volumeUnits_feature", "_UI_SellOpportunity_type"),
+				 AnalyticsPackage.Literals.SELL_OPPORTUNITY__VOLUME_UNITS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Min Volume feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMinVolumePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SellOpportunity_minVolume_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SellOpportunity_minVolume_feature", "_UI_SellOpportunity_type"),
+				 AnalyticsPackage.Literals.SELL_OPPORTUNITY__MIN_VOLUME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Max Volume feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMaxVolumePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SellOpportunity_maxVolume_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SellOpportunity_maxVolume_feature", "_UI_SellOpportunity_type"),
+				 AnalyticsPackage.Literals.SELL_OPPORTUNITY__MAX_VOLUME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns SellOpportunity.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -277,6 +369,10 @@ public class SellOpportunityItemProvider
 			case AnalyticsPackage.SELL_OPPORTUNITY__PRICE_EXPRESSION:
 			case AnalyticsPackage.SELL_OPPORTUNITY__CANCELLATION_EXPRESSION:
 			case AnalyticsPackage.SELL_OPPORTUNITY__MISC_COSTS:
+			case AnalyticsPackage.SELL_OPPORTUNITY__VOLUME_MODE:
+			case AnalyticsPackage.SELL_OPPORTUNITY__VOLUME_UNITS:
+			case AnalyticsPackage.SELL_OPPORTUNITY__MIN_VOLUME:
+			case AnalyticsPackage.SELL_OPPORTUNITY__MAX_VOLUME:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

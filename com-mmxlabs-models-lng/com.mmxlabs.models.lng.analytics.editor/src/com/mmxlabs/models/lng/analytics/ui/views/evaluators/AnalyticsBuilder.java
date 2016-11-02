@@ -35,6 +35,7 @@ import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.analytics.VolumeMode;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.SellOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
@@ -116,6 +117,17 @@ public class AnalyticsBuilder {
 				slot.setCancellationExpression(buyOpportunity.getCancellationExpression());
 			}
 			slot.setMiscCosts(buyOpportunity.getMiscCosts());
+
+			if (buyOpportunity.getVolumeMode() == VolumeMode.FIXED) {
+				slot.setVolumeLimitsUnit(buyOpportunity.getVolumeUnits());
+				slot.setMinQuantity(buyOpportunity.getMaxVolume());
+				slot.setMaxQuantity(buyOpportunity.getMaxVolume());
+			} else if (buyOpportunity.getVolumeMode() == VolumeMode.RANGE) {
+				slot.setVolumeLimitsUnit(buyOpportunity.getVolumeUnits());
+				slot.setMinQuantity(buyOpportunity.getMinVolume());
+				slot.setMaxQuantity(buyOpportunity.getMaxVolume());
+			}
+
 			return slot;
 		} else if (buy instanceof BuyMarket) {
 			final BuyMarket buyMarket = (BuyMarket) buy;
@@ -198,6 +210,16 @@ public class AnalyticsBuilder {
 				slot.setCancellationExpression(sellOpportunity.getCancellationExpression());
 			}
 			slot.setMiscCosts(sellOpportunity.getMiscCosts());
+
+			if (sellOpportunity.getVolumeMode() == VolumeMode.FIXED) {
+				slot.setVolumeLimitsUnit(sellOpportunity.getVolumeUnits());
+				slot.setMinQuantity(sellOpportunity.getMaxVolume());
+				slot.setMaxQuantity(sellOpportunity.getMaxVolume());
+			} else if (sellOpportunity.getVolumeMode() == VolumeMode.RANGE) {
+				slot.setVolumeLimitsUnit(sellOpportunity.getVolumeUnits());
+				slot.setMinQuantity(sellOpportunity.getMinVolume());
+				slot.setMaxQuantity(sellOpportunity.getMaxVolume());
+			}
 			return slot;
 		} else if (sell instanceof SellMarket) {
 			final SellMarket sellMarket = (SellMarket) sell;

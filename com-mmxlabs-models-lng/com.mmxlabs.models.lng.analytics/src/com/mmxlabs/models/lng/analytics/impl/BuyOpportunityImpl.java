@@ -20,9 +20,11 @@ import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.VolumeMode;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
 /**
@@ -42,6 +44,10 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getCv <em>Cv</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getCancellationExpression <em>Cancellation Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getMiscCosts <em>Misc Costs</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getVolumeMode <em>Volume Mode</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getVolumeUnits <em>Volume Units</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getMinVolume <em>Min Volume</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getMaxVolume <em>Max Volume</em>}</li>
  * </ul>
  *
  * @generated
@@ -196,6 +202,86 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * @ordered
 	 */
 	protected int miscCosts = MISC_COSTS_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getVolumeMode() <em>Volume Mode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeMode()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final VolumeMode VOLUME_MODE_EDEFAULT = VolumeMode.NOT_SPECIFIED;
+
+	/**
+	 * The cached value of the '{@link #getVolumeMode() <em>Volume Mode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeMode()
+	 * @generated
+	 * @ordered
+	 */
+	protected VolumeMode volumeMode = VOLUME_MODE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getVolumeUnits() <em>Volume Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeUnits()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final VolumeUnits VOLUME_UNITS_EDEFAULT = VolumeUnits.M3;
+
+	/**
+	 * The cached value of the '{@link #getVolumeUnits() <em>Volume Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeUnits()
+	 * @generated
+	 * @ordered
+	 */
+	protected VolumeUnits volumeUnits = VOLUME_UNITS_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getMinVolume() <em>Min Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMinVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int MIN_VOLUME_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getMinVolume() <em>Min Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMinVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected int minVolume = MIN_VOLUME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getMaxVolume() <em>Max Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMaxVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int MAX_VOLUME_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getMaxVolume() <em>Max Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMaxVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected int maxVolume = MAX_VOLUME_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -469,6 +555,90 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public VolumeMode getVolumeMode() {
+		return volumeMode;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVolumeMode(VolumeMode newVolumeMode) {
+		VolumeMode oldVolumeMode = volumeMode;
+		volumeMode = newVolumeMode == null ? VOLUME_MODE_EDEFAULT : newVolumeMode;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.BUY_OPPORTUNITY__VOLUME_MODE, oldVolumeMode, volumeMode));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VolumeUnits getVolumeUnits() {
+		return volumeUnits;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVolumeUnits(VolumeUnits newVolumeUnits) {
+		VolumeUnits oldVolumeUnits = volumeUnits;
+		volumeUnits = newVolumeUnits == null ? VOLUME_UNITS_EDEFAULT : newVolumeUnits;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.BUY_OPPORTUNITY__VOLUME_UNITS, oldVolumeUnits, volumeUnits));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getMinVolume() {
+		return minVolume;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMinVolume(int newMinVolume) {
+		int oldMinVolume = minVolume;
+		minVolume = newMinVolume;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.BUY_OPPORTUNITY__MIN_VOLUME, oldMinVolume, minVolume));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getMaxVolume() {
+		return maxVolume;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMaxVolume(int newMaxVolume) {
+		int oldMaxVolume = maxVolume;
+		maxVolume = newMaxVolume;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.BUY_OPPORTUNITY__MAX_VOLUME, oldMaxVolume, maxVolume));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -493,6 +663,14 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 				return getCancellationExpression();
 			case AnalyticsPackage.BUY_OPPORTUNITY__MISC_COSTS:
 				return getMiscCosts();
+			case AnalyticsPackage.BUY_OPPORTUNITY__VOLUME_MODE:
+				return getVolumeMode();
+			case AnalyticsPackage.BUY_OPPORTUNITY__VOLUME_UNITS:
+				return getVolumeUnits();
+			case AnalyticsPackage.BUY_OPPORTUNITY__MIN_VOLUME:
+				return getMinVolume();
+			case AnalyticsPackage.BUY_OPPORTUNITY__MAX_VOLUME:
+				return getMaxVolume();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -533,6 +711,18 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 			case AnalyticsPackage.BUY_OPPORTUNITY__MISC_COSTS:
 				setMiscCosts((Integer)newValue);
 				return;
+			case AnalyticsPackage.BUY_OPPORTUNITY__VOLUME_MODE:
+				setVolumeMode((VolumeMode)newValue);
+				return;
+			case AnalyticsPackage.BUY_OPPORTUNITY__VOLUME_UNITS:
+				setVolumeUnits((VolumeUnits)newValue);
+				return;
+			case AnalyticsPackage.BUY_OPPORTUNITY__MIN_VOLUME:
+				setMinVolume((Integer)newValue);
+				return;
+			case AnalyticsPackage.BUY_OPPORTUNITY__MAX_VOLUME:
+				setMaxVolume((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -572,6 +762,18 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 			case AnalyticsPackage.BUY_OPPORTUNITY__MISC_COSTS:
 				setMiscCosts(MISC_COSTS_EDEFAULT);
 				return;
+			case AnalyticsPackage.BUY_OPPORTUNITY__VOLUME_MODE:
+				setVolumeMode(VOLUME_MODE_EDEFAULT);
+				return;
+			case AnalyticsPackage.BUY_OPPORTUNITY__VOLUME_UNITS:
+				setVolumeUnits(VOLUME_UNITS_EDEFAULT);
+				return;
+			case AnalyticsPackage.BUY_OPPORTUNITY__MIN_VOLUME:
+				setMinVolume(MIN_VOLUME_EDEFAULT);
+				return;
+			case AnalyticsPackage.BUY_OPPORTUNITY__MAX_VOLUME:
+				setMaxVolume(MAX_VOLUME_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -602,6 +804,14 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 				return CANCELLATION_EXPRESSION_EDEFAULT == null ? cancellationExpression != null : !CANCELLATION_EXPRESSION_EDEFAULT.equals(cancellationExpression);
 			case AnalyticsPackage.BUY_OPPORTUNITY__MISC_COSTS:
 				return miscCosts != MISC_COSTS_EDEFAULT;
+			case AnalyticsPackage.BUY_OPPORTUNITY__VOLUME_MODE:
+				return volumeMode != VOLUME_MODE_EDEFAULT;
+			case AnalyticsPackage.BUY_OPPORTUNITY__VOLUME_UNITS:
+				return volumeUnits != VOLUME_UNITS_EDEFAULT;
+			case AnalyticsPackage.BUY_OPPORTUNITY__MIN_VOLUME:
+				return minVolume != MIN_VOLUME_EDEFAULT;
+			case AnalyticsPackage.BUY_OPPORTUNITY__MAX_VOLUME:
+				return maxVolume != MAX_VOLUME_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -628,6 +838,14 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 		result.append(cancellationExpression);
 		result.append(", miscCosts: ");
 		result.append(miscCosts);
+		result.append(", volumeMode: ");
+		result.append(volumeMode);
+		result.append(", volumeUnits: ");
+		result.append(volumeUnits);
+		result.append(", minVolume: ");
+		result.append(minVolume);
+		result.append(", maxVolume: ");
+		result.append(maxVolume);
 		result.append(')');
 		return result.toString();
 	}

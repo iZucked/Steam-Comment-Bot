@@ -307,6 +307,16 @@
           </EDataTypeIs>
        </FeatureAnyOf>
     </editorFactory>
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.analytics.ui.editors.VolumeModeInlineEditorFactory"
+          id="com.mmxlabs.models.lng.analytics.ui.editors.VolumeModeInlineEditorFactory">
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="VolumeMode"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/analytics/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
  </extension>
    <extension point="org.eclipse.ui.editors">
       <!-- @generated analytics -->

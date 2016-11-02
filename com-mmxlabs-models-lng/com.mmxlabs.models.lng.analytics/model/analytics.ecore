@@ -261,6 +261,10 @@
         <details key="type" value="commodity"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeMode" eType="#//VolumeMode"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeUnits" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VolumeUnits"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SellOpportunity" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject #//SellOption">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="fobSale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
@@ -284,6 +288,10 @@
         <details key="type" value="commodity"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeMode" eType="#//VolumeMode"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeUnits" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VolumeUnits"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BuyMarket" eSuperTypes="#//BuyOption">
     <eStructuralFeatures xsi:type="ecore:EReference" name="market" eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"/>
@@ -411,5 +419,10 @@
   <eClassifiers xsi:type="ecore:EClass" name="PartialCase">
     <eStructuralFeatures xsi:type="ecore:EReference" name="partialCase" upperBound="-1"
         eType="#//PartialCaseRow" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="VolumeMode">
+    <eLiterals name="NOT_SPECIFIED"/>
+    <eLiterals name="FIXED" value="1"/>
+    <eLiterals name="RANGE" value="2"/>
   </eClassifiers>
 </ecore:EPackage>

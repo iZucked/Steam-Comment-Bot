@@ -15,6 +15,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
+import com.mmxlabs.models.lng.analytics.VolumeMode;
 import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
@@ -95,6 +96,16 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 				dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__ENTITY);
 				failures.add(dsd);
 			}
+
+			if (slot.getVolumeMode() == VolumeMode.RANGE) {
+				if (slot.getMaxVolume() < slot.getMinVolume()) {
+					final String message = String.format("Buy max volume is less than min volume");
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+					dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__MIN_VOLUME);
+					dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__MAX_VOLUME);
+					failures.add(dsd);
+				}
+			}
 		}
 		if (target instanceof SellOpportunity) {
 			final SellOpportunity slot = (SellOpportunity) target;
@@ -153,6 +164,16 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__ENTITY);
 				failures.add(dsd);
+			}
+
+			if (slot.getVolumeMode() == VolumeMode.RANGE) {
+				if (slot.getMaxVolume() < slot.getMinVolume()) {
+					final String message = String.format("Sell max volume is less than min volume");
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+					dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__MIN_VOLUME);
+					dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__MAX_VOLUME);
+					failures.add(dsd);
+				}
 			}
 		}
 		return Activator.PLUGIN_ID;

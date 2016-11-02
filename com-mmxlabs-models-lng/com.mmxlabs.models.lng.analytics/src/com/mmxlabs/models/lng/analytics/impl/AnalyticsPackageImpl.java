@@ -53,6 +53,7 @@ import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.lng.analytics.Visit;
+import com.mmxlabs.models.lng.analytics.VolumeMode;
 import com.mmxlabs.models.lng.analytics.Voyage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -342,6 +343,13 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	private EEnum destinationTypeEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum volumeModeEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -1327,6 +1335,42 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getBuyOpportunity_VolumeMode() {
+		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getBuyOpportunity_VolumeUnits() {
+		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getBuyOpportunity_MinVolume() {
+		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getBuyOpportunity_MaxVolume() {
+		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(12);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EClass getSellOpportunity() {
 		return sellOpportunityEClass;
@@ -1406,6 +1450,42 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	public EAttribute getSellOpportunity_MiscCosts() {
 		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSellOpportunity_VolumeMode() {
+		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSellOpportunity_VolumeUnits() {
+		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSellOpportunity_MinVolume() {
+		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSellOpportunity_MaxVolume() {
+		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -2053,6 +2133,15 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EEnum getVolumeMode() {
+		return volumeModeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public AnalyticsFactory getAnalyticsFactory() {
 		return (AnalyticsFactory)getEFactoryInstance();
@@ -2183,6 +2272,10 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__CV);
 		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__CANCELLATION_EXPRESSION);
 		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__MISC_COSTS);
+		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__VOLUME_MODE);
+		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__VOLUME_UNITS);
+		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__MIN_VOLUME);
+		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__MAX_VOLUME);
 
 		sellOpportunityEClass = createEClass(SELL_OPPORTUNITY);
 		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__FOB_SALE);
@@ -2193,6 +2286,10 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(sellOpportunityEClass, SELL_OPPORTUNITY__ENTITY);
 		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__CANCELLATION_EXPRESSION);
 		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__MISC_COSTS);
+		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__VOLUME_MODE);
+		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__VOLUME_UNITS);
+		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__MIN_VOLUME);
+		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__MAX_VOLUME);
 
 		buyMarketEClass = createEClass(BUY_MARKET);
 		createEReference(buyMarketEClass, BUY_MARKET__MARKET);
@@ -2288,6 +2385,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 		// Create enums
 		destinationTypeEEnum = createEEnum(DESTINATION_TYPE);
+		volumeModeEEnum = createEEnum(VOLUME_MODE);
 	}
 
 	/**
@@ -2473,6 +2571,10 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getBuyOpportunity_Cv(), ecorePackage.getEDouble(), "cv", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBuyOpportunity_CancellationExpression(), ecorePackage.getEString(), "cancellationExpression", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBuyOpportunity_MiscCosts(), ecorePackage.getEInt(), "miscCosts", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBuyOpportunity_VolumeMode(), this.getVolumeMode(), "volumeMode", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBuyOpportunity_VolumeUnits(), theTypesPackage.getVolumeUnits(), "volumeUnits", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBuyOpportunity_MinVolume(), ecorePackage.getEInt(), "minVolume", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBuyOpportunity_MaxVolume(), ecorePackage.getEInt(), "maxVolume", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(sellOpportunityEClass, SellOpportunity.class, "SellOpportunity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSellOpportunity_FobSale(), ecorePackage.getEBoolean(), "fobSale", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2483,6 +2585,10 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getSellOpportunity_Entity(), theCommercialPackage.getBaseLegalEntity(), null, "entity", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSellOpportunity_CancellationExpression(), ecorePackage.getEString(), "cancellationExpression", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSellOpportunity_MiscCosts(), ecorePackage.getEInt(), "miscCosts", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSellOpportunity_VolumeMode(), this.getVolumeMode(), "volumeMode", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSellOpportunity_VolumeUnits(), theTypesPackage.getVolumeUnits(), "volumeUnits", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSellOpportunity_MinVolume(), ecorePackage.getEInt(), "minVolume", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSellOpportunity_MaxVolume(), ecorePackage.getEInt(), "maxVolume", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(buyMarketEClass, BuyMarket.class, "BuyMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getBuyMarket_Market(), theSpotMarketsPackage.getSpotMarket(), null, "market", null, 0, 1, BuyMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2583,6 +2689,11 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		addEEnumLiteral(destinationTypeEEnum, DestinationType.LOAD);
 		addEEnumLiteral(destinationTypeEEnum, DestinationType.DISCHARGE);
 		addEEnumLiteral(destinationTypeEEnum, DestinationType.OTHER);
+
+		initEEnum(volumeModeEEnum, VolumeMode.class, "VolumeMode");
+		addEEnumLiteral(volumeModeEEnum, VolumeMode.NOT_SPECIFIED);
+		addEEnumLiteral(volumeModeEEnum, VolumeMode.FIXED);
+		addEEnumLiteral(volumeModeEEnum, VolumeMode.RANGE);
 
 		// Create resource
 		createResource(eNS_URI);
