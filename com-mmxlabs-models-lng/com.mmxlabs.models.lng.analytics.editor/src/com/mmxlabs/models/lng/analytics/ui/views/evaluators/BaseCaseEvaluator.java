@@ -203,6 +203,18 @@ public class BaseCaseEvaluator {
 				cargo.getSlots().add(dischargeSlot);
 			}
 
+			if (loadSlot != null && dischargeSlot != null) {
+				if (loadSlot.getPort() == null && dischargeSlot.getPort() != null) {
+					assert loadSlot.isDESPurchase();
+					assert loadSlot instanceof SpotSlot;
+					loadSlot.setPort(dischargeSlot.getPort());
+				} else if (loadSlot.getPort() != null && dischargeSlot.getPort() == null) {
+					assert dischargeSlot.isFOBSale();
+					assert dischargeSlot instanceof SpotSlot;
+					dischargeSlot.setPort(loadSlot.getPort());
+				}
+			}
+
 			setShipping(loadSlot, dischargeSlot, cargo, row.getShipping(), clone, shippingMap);
 
 			if (loadSlot != null && !clone.getCargoModel().getLoadSlots().contains(loadSlot)) {
@@ -222,7 +234,27 @@ public class BaseCaseEvaluator {
 			final @NonNull LNGScenarioModel lngScenarioModel, Map<FleetShippingOption, VesselAvailability> shippingMap) {
 		final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
 
-		if (shipping instanceof NominatedShippingOption) {
+		if (shipping == null) {
+			if (loadSlot.getWindowStart() != null && dischargeSlot.getWindowStart() == null) {
+				dischargeSlot.setWindowStart(loadSlot.getWindowStart());
+				if (dischargeSlot instanceof SpotSlot) {
+					dischargeSlot.setWindowStart(dischargeSlot.getWindowStart().withDayOfMonth(1));
+					// Ensure other values correctly set
+					dischargeSlot.setWindowSize(1);
+					dischargeSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+					dischargeSlot.setWindowStartTime(0);
+				}
+			} else if (loadSlot.getWindowStart() == null && dischargeSlot.getWindowStart() != null) {
+				loadSlot.setWindowStart(dischargeSlot.getWindowStart());
+				if (loadSlot instanceof SpotSlot) {
+					loadSlot.setWindowStart(loadSlot.getWindowStart().withDayOfMonth(1));
+					// Ensure other values correctly set
+					loadSlot.setWindowSize(1);
+					loadSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+					loadSlot.setWindowStartTime(0);
+				}
+			}
+		} else if (shipping instanceof NominatedShippingOption) {
 			final NominatedShippingOption nominatedShippingOption = (NominatedShippingOption) shipping;
 			if (loadSlot != null && loadSlot.isDESPurchase()) {
 				loadSlot.setNominatedVessel(nominatedShippingOption.getNominatedVessel());
@@ -341,7 +373,7 @@ public class BaseCaseEvaluator {
 					vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 					vesselAvailability.getEndHeel().setTargetEndHeel(vessel.getVesselClass().getMinHeel());
 				}
-				
+
 				vesselAvailability.setStartAfter(optionalAvailabilityShippingOption.getStart().atStartOfDay());
 				vesselAvailability.setStartBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
 				vesselAvailability.setEndAfter(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
