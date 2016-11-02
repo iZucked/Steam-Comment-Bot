@@ -410,6 +410,15 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					}
 				}
 			}
+			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getOptionAnalysisModel_Children()) {
+				if (notification.getEventType() == Notification.REMOVE) {
+					if (model != null && notification.getOldValue() == model) {
+						displayScenarioInstance(getScenarioInstance());
+					} else if (rootOptionsModel != null && notification.getOldValue() == rootOptionsModel) {
+						displayScenarioInstance(getScenarioInstance());
+					}
+				}
+			}
 		}
 	};
 
