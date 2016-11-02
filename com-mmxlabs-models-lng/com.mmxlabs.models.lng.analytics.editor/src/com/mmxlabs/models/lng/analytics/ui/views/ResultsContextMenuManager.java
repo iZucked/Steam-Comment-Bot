@@ -2,7 +2,6 @@ package com.mmxlabs.models.lng.analytics.ui.views;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -41,7 +40,6 @@ import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 public class ResultsContextMenuManager implements MenuDetectListener {
 
 	private final @NonNull GridTreeViewer viewer;
-	private final @NonNull GridTreeViewer baseCaseViewer;
 
 	private final @NonNull IScenarioEditingLocation scenarioEditingLocation;
 	private final @NonNull OptionModellerView optionModellerView;
@@ -50,8 +48,7 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 	private OptionAnalysisModel optionAnalysisModel;
 	private Menu menu;
 
-	public ResultsContextMenuManager(@NonNull final GridTreeViewer viewer, @NonNull final GridTreeViewer baseCaseViewer, @NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final OptionModellerView optionModellerView, @NonNull final MenuManager mgr) {
-		this.baseCaseViewer = baseCaseViewer;
+	public ResultsContextMenuManager(@NonNull final GridTreeViewer viewer,  @NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final OptionModellerView optionModellerView, @NonNull final MenuManager mgr) {
 		this.optionModellerView = optionModellerView;
 		this.mgr = mgr;
 		this.scenarioEditingLocation = scenarioEditingLocation;
