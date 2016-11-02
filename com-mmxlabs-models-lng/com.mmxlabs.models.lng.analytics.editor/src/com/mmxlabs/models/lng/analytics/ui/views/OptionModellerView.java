@@ -15,10 +15,12 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
@@ -27,6 +29,8 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -42,6 +46,7 @@ import org.eclipse.ui.forms.events.IExpansionListener;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
@@ -312,13 +317,20 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	@Override
 	protected void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject) {
+		doDisplayScenarioInstance(scenarioInstance, rootObject, null);
+	}
+
+	void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject, @Nullable OptionAnalysisModel model) {
+
+		if (errorLabel != null) {
+			errorLabel.dispose();
+			errorLabel = null;
+		}
 
 		// Some slightly hacky code to hide the editor if there is no scenario open
 		if (scenarioInstance == null) {
 
-			if (errorLabel == null) {
-				errorLabel = new Label(mainComposite.getParent(), SWT.NONE);
-			}
+			errorLabel = new Label(mainComposite.getParent(), SWT.NONE);
 			errorLabel.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 			errorLabel.setText("No scenario selected");
 
@@ -327,27 +339,44 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			setInput(null);
 		} else {
 			mainComposite.setVisible(true);
-			if (errorLabel != null) {
-				errorLabel.dispose();
-				errorLabel = null;
-			}
+
 			mainComposite.getParent().layout(true);
 
-			if (rootObject instanceof LNGScenarioModel) {
+			if (model != null) {
+				setModel(model);
+			} else if (rootObject instanceof LNGScenarioModel) {
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				if (lngScenarioModel.getOptionModels().isEmpty()) {
 					setModel(null);
-					if (errorLabel == null) {
-						errorLabel = new Label(mainComposite.getParent(), SWT.NONE);
-					}
+					errorLabel = new Label(mainComposite.getParent(), SWT.NONE);
 					errorLabel.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 					errorLabel.setText("No sandbox selected");
+					errorLabel.setToolTipText("Create new sandbox");
+					errorLabel.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+
+					errorLabel.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseDown(MouseEvent e) {
+
+							final OptionAnalysisModel model = AnalyticsFactory.eINSTANCE.createOptionAnalysisModel();
+
+							model.setName("New sandbox");
+
+							model.setBaseCase(AnalyticsFactory.eINSTANCE.createBaseCase());
+							model.setPartialCase(AnalyticsFactory.eINSTANCE.createPartialCase());
+
+							final CompoundCommand cmd = new CompoundCommand("Create sandbox");
+							cmd.append(AddCommand.create(getEditingDomain(), rootObject, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_OptionModels(), Collections.singletonList(model)));
+							getEditingDomain().getCommandStack().execute(cmd);
+
+							doDisplayScenarioInstance(getScenarioInstance(), getRootObject(), model);
+						}
+					});
 
 					mainComposite.setVisible(false);
 					mainComposite.getParent().layout(true);
 					setInput(null);
 					return;
-
 				} else {
 					setModel(lngScenarioModel.getOptionModels().get(0));
 				}
