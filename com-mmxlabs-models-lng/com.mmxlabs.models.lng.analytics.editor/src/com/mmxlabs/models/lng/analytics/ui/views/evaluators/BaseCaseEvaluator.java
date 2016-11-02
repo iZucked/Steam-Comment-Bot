@@ -265,8 +265,22 @@ public class BaseCaseEvaluator {
 
 			if (loadSlot.getWindowStart() != null && dischargeSlot.getWindowStart() == null) {
 				dischargeSlot.setWindowStart(loadSlot.getWindowStart());
+				if (dischargeSlot instanceof SpotSlot) {
+					dischargeSlot.setWindowStart(dischargeSlot.getWindowStart().withDayOfMonth(1));
+					// Ensure other values correctly set
+					dischargeSlot.setWindowSize(1);
+					dischargeSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+					dischargeSlot.setWindowStartTime(0);
+				}
 			} else if (loadSlot.getWindowStart() == null && dischargeSlot.getWindowStart() != null) {
 				loadSlot.setWindowStart(dischargeSlot.getWindowStart());
+				if (loadSlot instanceof SpotSlot) {
+					loadSlot.setWindowStart(loadSlot.getWindowStart().withDayOfMonth(1));
+					// Ensure other values correctly set
+					loadSlot.setWindowSize(1);
+					loadSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+					loadSlot.setWindowStartTime(0);
+				}
 			}
 
 		} else if (shipping instanceof FleetShippingOption) {
