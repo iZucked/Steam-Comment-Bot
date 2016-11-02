@@ -1078,7 +1078,7 @@ public class VoyagePlanner {
 	private void evaluateBrokenUpVoyagePlan(final @NonNull PlanEvaluationData planData, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime,
 			final List<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlansMap, final List<@NonNull VoyagePlan> voyagePlansList,
 			final VoyagePlan originalPlan) {
-
+		System.out.println(planData.getEndHeelVolumeInM3());
 		assert planData.getEndHeelVolumeInM3() >= 0;
 		// Generate heel level annotations
 		final Map<IPortSlot, IHeelLevelAnnotation> heelLevelAnnotations = new HashMap<IPortSlot, IHeelLevelAnnotation>();
@@ -1105,11 +1105,12 @@ public class VoyagePlanner {
 						optionalHeelUsePortSlot = null;
 						if (planData.getAllocation() != null) {
 							if (portSlot.getPortType() == PortType.Load) {
-								currentHeelInM3 += planData.getAllocation().getCommercialSlotVolumeInM3(portSlot);
+								currentHeelInM3 += planData.getAllocation().getPhysicalSlotVolumeInM3(portSlot);
 							} else if (portSlot.getPortType() == PortType.Discharge) {
-								currentHeelInM3 -= planData.getAllocation().getCommercialSlotVolumeInM3(portSlot);
+								currentHeelInM3 -= planData.getAllocation().getPhysicalSlotVolumeInM3(portSlot);
 							}
 						}
+						System.out.println(currentHeelInM3);
 						assert currentHeelInM3 + ROUNDING_EPSILON >= 0;
 					} else {
 						if (portSlot instanceof EndPortSlot) {
