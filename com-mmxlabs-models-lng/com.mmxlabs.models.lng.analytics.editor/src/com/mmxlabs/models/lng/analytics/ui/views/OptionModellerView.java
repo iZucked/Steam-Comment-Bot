@@ -1138,6 +1138,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		hookDragSource(shippingOptionsViewer);
 
 		inputWants.add(model -> shippingOptionsViewer.setInput(model));
+		inputWants.add(model -> listener.setOptionAnalysisModel(model));
 
 		return shippingOptionsViewer;
 	}

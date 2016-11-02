@@ -3,6 +3,7 @@ package com.mmxlabs.models.lng.analytics.ui.views;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -18,6 +19,7 @@ import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.widgets.Menu;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
@@ -62,9 +64,9 @@ public class BuyOptionsContextMenuManager implements MenuDetectListener {
 			mgr.add(new RunnableAction("Delete option(s)", () -> {
 				final Collection<EObject> c = new LinkedList<>();
 				selection.iterator().forEachRemaining(ee -> c.add((EObject) ee));
-
-				scenarioEditingLocation.getDefaultCommandHandler().handleCommand(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), c), null, null);
-
+				Collection<EObject> linkedResults = ResultsSetDeletionHelper.getRelatedResultSets(c, optionAnalysisModel);
+				CompoundCommand compoundCommand = new CompoundCommand(Lists.newArrayList(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), c), DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), linkedResults)));
+				scenarioEditingLocation.getDefaultCommandHandler().handleCommand(compoundCommand, null, null);
 			}));
 		}
 

@@ -57,12 +57,6 @@ public class VesselAvailabilityCommandProvider extends BaseModelCommandProvider<
 			CommandParameter parameter, Command input) {
 
 		if (parameter.getFeature() == CargoPackage.Literals.VESSEL_AVAILABILITY__OPTIONAL) {
-			int z = 0;
-//			if (!(parameter.getEValue() instanceof CharterInMarket)) {
-//				// Clear value
-//				return SetCommand.create(editingDomain, parameter.getOwner(), CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE);
-//			}
-//			CargoPackage.Literals.Vessel_
 			if ((parameter.getValue() instanceof Boolean && ((Boolean) parameter.getValue()) == false)) {
 				// Clear value
 				return new CompoundCommand(Lists.newArrayList(SetCommand.create(editingDomain, parameter.getOwner(), CargoPackage.Literals.VESSEL_AVAILABILITY__REPOSITIONING_FEE, SetCommand.UNSET_VALUE), SetCommand.create(editingDomain, parameter.getOwner(), CargoPackage.Literals.VESSEL_AVAILABILITY__BALLAST_BONUS, SetCommand.UNSET_VALUE)));
