@@ -351,6 +351,22 @@
                      class="OptionAnalysisModel">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.OptionalAvailabilityShippingOptionConstraint"
+                  id="com.mmxlabs.models.lng.analytics.validation.OptionalAvailabilityShippingOptionConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="OptionalAvailabilityShippingOptionConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="OptionalAvailabilityShippingOption">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
