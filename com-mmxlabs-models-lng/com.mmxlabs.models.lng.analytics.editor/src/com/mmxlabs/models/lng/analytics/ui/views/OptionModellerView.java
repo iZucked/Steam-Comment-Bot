@@ -53,6 +53,7 @@ import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
@@ -317,9 +318,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 			if (errorLabel == null) {
 				errorLabel = new Label(mainComposite.getParent(), SWT.NONE);
-				errorLabel.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
-				errorLabel.setText("No scenario selected");
 			}
+			errorLabel.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
+			errorLabel.setText("No scenario selected");
 
 			mainComposite.setVisible(false);
 			mainComposite.getParent().layout(true);
@@ -336,6 +337,17 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				if (lngScenarioModel.getOptionModels().isEmpty()) {
 					setModel(null);
+					if (errorLabel == null) {
+						errorLabel = new Label(mainComposite.getParent(), SWT.NONE);
+					}
+					errorLabel.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
+					errorLabel.setText("No sandbox selected");
+
+					mainComposite.setVisible(false);
+					mainComposite.getParent().layout(true);
+					setInput(null);
+					return;
+
 				} else {
 					setModel(lngScenarioModel.getOptionModels().get(0));
 				}
@@ -350,6 +362,24 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			super.notifyChanged(notification);
 			if (notification.getFeature() == MMXCorePackage.Literals.NAMED_OBJECT__NAME && notification.getNotifier() instanceof OptionAnalysisModel) {
 				refreshSections(false, EnumSet.of(SectionType.BUYS));
+			}
+		}
+	};
+
+	/**
+	 * If the current model is deleted, then clear the input
+	 */
+	private final EContentAdapter deletedOptionModelAdapter = new EContentAdapter() {
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			if (notification.getFeature() == LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_OptionModels()) {
+				if (notification.getEventType() == Notification.REMOVE) {
+					if (model != null && notification.getOldValue() == model) {
+						displayScenarioInstance(getScenarioInstance());
+					} else if (rootOptionsModel != null && notification.getOldValue() == rootOptionsModel) {
+						displayScenarioInstance(getScenarioInstance());
+					}
+				}
 			}
 		}
 	};
@@ -448,13 +478,24 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private Composite mainComposite;
 	private Composite lhsComposite;
 	private Composite centralComposite;
-	private OptionAnalysisModel rootModel;
+	private OptionAnalysisModel rootOptionsModel;
+	private MMXRootObject rootObject;
 
 	public void setInput(final @Nullable OptionAnalysisModel model) {
 		if (this.getModel() != null) {
 			if (this.getModel().eAdapters().contains(refreshAdapter)) {
 				this.getModel().eAdapters().remove(refreshAdapter);
 			}
+		}
+		if (rootOptionsModel != null) {
+			rootOptionsModel.eAdapters().remove(deletedOptionModelAdapter);
+			rootOptionsModel.eAdapters().remove(historyRenameAdaptor);
+			optionsModelComponent.setInput(Collections.emptySet());
+			rootOptionsModel = null;
+		}
+		if (rootObject != null) {
+			rootObject.eAdapters().remove(deletedOptionModelAdapter);
+			rootObject = null;
 		}
 
 		this.setModel(model);
@@ -473,14 +514,15 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		vesselsComponent.setInput(this);
 		vesselClassesComponent.setInput(this);
 
-		if (rootModel != null) {
-			rootModel.eAdapters().remove(historyRenameAdaptor);
-			optionsModelComponent.setInput(Collections.emptySet());
+		rootOptionsModel = getRootOptionsModel(model);
+		if (rootOptionsModel != null) {
+			rootOptionsModel.eAdapters().add(historyRenameAdaptor);
+			optionsModelComponent.setInput(Collections.singleton(rootOptionsModel));
 		}
-		rootModel = getRootOptionsModel(model);
-		if (rootModel != null) {
-			rootModel.eAdapters().add(historyRenameAdaptor);
-			optionsModelComponent.setInput(Collections.singleton(rootModel));
+
+		rootObject = getRootObject();
+		if (rootObject != null) {
+			rootObject.eAdapters().add(deletedOptionModelAdapter);
 		}
 
 		if (model != null) {
@@ -689,10 +731,17 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		disposables.forEach(r -> r.run());
 
-		if (getModel() != null) {
-			getModel().eAdapters().remove(refreshAdapter);
-			getModel().eAdapters().remove(historyRenameAdaptor);
-			setModel(null);
+		if (model != null) {
+			model.eAdapters().remove(refreshAdapter);
+			model = null;
+		}
+		if (rootOptionsModel != null) {
+			rootOptionsModel.eAdapters().remove(historyRenameAdaptor);
+			rootOptionsModel = null;
+		}
+		if (rootObject != null) {
+			rootObject.eAdapters().remove(deletedOptionModelAdapter);
+			rootObject = null;
 		}
 
 		final CommandStack pCurrentCommandStack = currentCommandStack;
