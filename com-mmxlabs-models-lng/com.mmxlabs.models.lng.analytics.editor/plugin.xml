@@ -333,6 +333,7 @@
             locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=exporters">
          <command
                commandId="com.mmxlabs.models.lng.analytics.editor.createSandbox"
+               icon="icons/sandbox.gif"
                style="push">
             <visibleWhen
                   checkEnabled="false">
