@@ -1,5 +1,10 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
+import java.util.Collections;
+
+import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -13,9 +18,11 @@ import org.eclipse.swt.widgets.Menu;
 import com.google.common.collect.Sets;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ui.utils.OptionsModellerUtils;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
+
 public class OptionsTreeViewerContextMenuManager implements MenuDetectListener {
 
 	private final @NonNull OptionModellerView optionModellerView;
@@ -25,7 +32,11 @@ public class OptionsTreeViewerContextMenuManager implements MenuDetectListener {
 
 	private @NonNull GridTreeViewer viewer;
 
-	public OptionsTreeViewerContextMenuManager(@NonNull final GridTreeViewer viewer, @NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final OptionModellerView optionModellerView, @NonNull final MenuManager mgr) {
+	private @NonNull IScenarioEditingLocation scenarioEditingLocation;
+
+	public OptionsTreeViewerContextMenuManager(@NonNull final GridTreeViewer viewer, @NonNull final IScenarioEditingLocation scenarioEditingLocation,
+			@NonNull final OptionModellerView optionModellerView, @NonNull final MenuManager mgr) {
+		this.scenarioEditingLocation = scenarioEditingLocation;
 		this.optionModellerView = optionModellerView;
 		this.mgr = mgr;
 		this.viewer = viewer;
@@ -54,16 +65,27 @@ public class OptionsTreeViewerContextMenuManager implements MenuDetectListener {
 			}
 			mgr.add(new RunnableAction("Rename", () -> {
 				if (optionAnalysisModel != null) {
-					String newForkName = ScenarioServiceModelUtils.openNewNameForForkPrompt(optionAnalysisModel.getName(), optionAnalysisModel.getName(), Sets.<String>newHashSet());
+					String newForkName = ScenarioServiceModelUtils.openNewNameForForkPrompt(optionAnalysisModel.getName(), optionAnalysisModel.getName(), Sets.<String> newHashSet());
 					optionAnalysisModel.setName(newForkName);
 				}
-				
+
 			}));
 			if (OptionsModellerUtils.getRootOptionsModel(optionAnalysisModel) != optionAnalysisModel) {
 				mgr.add(new RunnableAction("Delete", () -> {
 					OptionAnalysisModel container = (OptionAnalysisModel) optionAnalysisModel.eContainer();
 					container.getChildren().remove(optionAnalysisModel);
 					optionModellerView.setInput(container);
+				}));
+			}
+			if (OptionsModellerUtils.getRootOptionsModel(optionAnalysisModel) != optionAnalysisModel) {
+				mgr.add(new RunnableAction("Copy as top level sandbox", () -> {
+					OptionAnalysisModel copy = EcoreUtil.copy(optionAnalysisModel);
+					copy.getChildren().clear();
+
+					final CompoundCommand cmd = new CompoundCommand("Create sandbox");
+					cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), scenarioEditingLocation.getRootObject(), LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_OptionModels(),
+							Collections.singletonList(copy)));
+					scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 				}));
 			}
 		}
