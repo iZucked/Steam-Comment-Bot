@@ -90,7 +90,6 @@ public class InPortBoilOffHelper implements IBoilOffHelper {
 			NBOBoilOff = Calculator.convertM3ToMMBTu((slotDuration*inPortNBORate), slotCV);
 		}
 		if(boilOffCompensation){
-			System.out.println("YEP");
 			if(slot.getPortType() == PortType.Load)	
 				return volume  + NBOBoilOff ;
 			else if(slot.getPortType() == PortType.Discharge)
