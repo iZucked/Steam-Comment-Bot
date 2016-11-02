@@ -16,7 +16,9 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -157,7 +159,7 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	protected UserSettings userSettings;
 
 	/**
-	 * The cached value of the '{@link #getOptionModels() <em>Option Models</em>}' reference list.
+	 * The cached value of the '{@link #getOptionModels() <em>Option Models</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getOptionModels()
@@ -614,7 +616,7 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 */
 	public EList<OptionAnalysisModel> getOptionModels() {
 		if (optionModels == null) {
-			optionModels = new EObjectResolvingEList<OptionAnalysisModel>(OptionAnalysisModel.class, this, LNGScenarioPackage.LNG_SCENARIO_MODEL__OPTION_MODELS);
+			optionModels = new EObjectContainmentEList.Resolving<OptionAnalysisModel>(OptionAnalysisModel.class, this, LNGScenarioPackage.LNG_SCENARIO_MODEL__OPTION_MODELS);
 		}
 		return optionModels;
 	}
@@ -637,6 +639,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return basicSetReferenceModel(null, msgs);
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS:
 				return basicSetUserSettings(null, msgs);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__OPTION_MODELS:
+				return ((InternalEList<?>)getOptionModels()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}

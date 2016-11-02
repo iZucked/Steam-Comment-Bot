@@ -93,7 +93,7 @@ public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 		}
 
 		if (object == null) {
-			return "";
+			return "<unset>";
 		} else {
 			return object.toString();
 		}

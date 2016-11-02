@@ -277,7 +277,7 @@ public interface LNGScenarioModel extends MMXRootObject {
 	void setUserSettings(UserSettings value);
 
 	/**
-	 * Returns the value of the '<em><b>Option Models</b></em>' reference list.
+	 * Returns the value of the '<em><b>Option Models</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel}.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -285,9 +285,9 @@ public interface LNGScenarioModel extends MMXRootObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Option Models</em>' reference list.
+	 * @return the value of the '<em>Option Models</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_OptionModels()
-	 * @model transient="true"
+	 * @model containment="true" resolveProxies="true" transient="true"
 	 * @generated
 	 */
 	EList<OptionAnalysisModel> getOptionModels();

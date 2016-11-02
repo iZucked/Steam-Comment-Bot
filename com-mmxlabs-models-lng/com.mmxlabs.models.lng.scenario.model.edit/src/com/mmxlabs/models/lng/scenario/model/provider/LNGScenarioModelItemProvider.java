@@ -19,6 +19,7 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.actuals.ActualsFactory;
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
@@ -58,7 +59,6 @@ public class LNGScenarioModelItemProvider
 
 			addPromptPeriodStartPropertyDescriptor(object);
 			addPromptPeriodEndPropertyDescriptor(object);
-			addOptionModelsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -108,28 +108,6 @@ public class LNGScenarioModelItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Option Models feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addOptionModelsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_LNGScenarioModel_optionModels_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_LNGScenarioModel_optionModels_feature", "_UI_LNGScenarioModel_type"),
-				 LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_OptionModels(),
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -146,6 +124,7 @@ public class LNGScenarioModelItemProvider
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ActualsModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings());
+			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_OptionModels());
 		}
 		return childrenFeatures;
 	}
@@ -209,6 +188,7 @@ public class LNGScenarioModelItemProvider
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ACTUALS_MODEL:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS:
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__OPTION_MODELS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -250,6 +230,11 @@ public class LNGScenarioModelItemProvider
 			(createChildParameter
 				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings(),
 				 ParametersFactory.eINSTANCE.createUserSettings()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_OptionModels(),
+				 AnalyticsFactory.eINSTANCE.createOptionAnalysisModel()));
 	}
 
 }
