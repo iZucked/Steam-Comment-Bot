@@ -146,7 +146,7 @@ public class LNGTransformerModule extends AbstractModule {
 	
 	@Provides
 	private IBoilOffHelper provideInPortBoilOffHelper(@NonNull final Injector injector){
-		final InPortBoilOffHelper helper = new InPortBoilOffHelper(true );
+		final InPortBoilOffHelper helper = new InPortBoilOffHelper(false);
 //		injector.injectMembers(helper);
 		
 		return helper;
