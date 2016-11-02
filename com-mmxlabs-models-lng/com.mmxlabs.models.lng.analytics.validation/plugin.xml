@@ -336,6 +336,22 @@
                </target>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.ShippingExpressionConstraint"
+                  id="com.mmxlabs.models.lng.analytics.validation.ShippingExpressionConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="PartialCaseConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="ShippingOption">
+               </target>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.analytics.validation.OptionAnalysisModelConstraint"
                   id="com.mmxlabs.models.lng.analytics.validation.OptionAnalysisModelConstraint"
                   isEnabledByDefault="true"
