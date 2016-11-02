@@ -88,8 +88,10 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 			mgr.add(new RunnableAction("Create fork", () -> {
 				if (resultSet != null) {
 					final String newForkName = ScenarioServiceModelUtils.getNewForkName(scenarioEditingLocation.getScenarioInstance(), false);
-					final OptionAnalysisModel newModel = createNewBaseCase(resultSet);
-					BaseCaseEvaluator.evaluate(scenarioEditingLocation, newModel, newModel.getBaseCase(), true, newForkName);
+					if (newForkName != null) {
+						final OptionAnalysisModel newModel = createNewBaseCase(resultSet);
+						BaseCaseEvaluator.evaluate(scenarioEditingLocation, newModel, newModel.getBaseCase(), true, newForkName);
+					}
 				}
 			}));
 
