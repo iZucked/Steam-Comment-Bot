@@ -11,12 +11,16 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
@@ -45,7 +49,22 @@ public class CreateSandboxHandler extends AbstractHandler {
 						final EObject rootObject = reference.getInstance();
 						final EditingDomain domain = (EditingDomain) instance.getAdapters().get(EditingDomain.class);
 						final Display display = PlatformUI.getWorkbench().getDisplay();
-						final InputDialog dialog = new InputDialog(display.getActiveShell(), "Create sandbox", "Choose name for sandbox", "sandbox", null);
+
+						final ImageDescriptor d = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox.gif");
+						final Image img = d.createImage();
+						final InputDialog dialog = new InputDialog(display.getActiveShell(), "Create sandbox", "Choose name for sandbox", "sandbox", null) {
+							@Override
+							protected void configureShell(final Shell shell) {
+								super.configureShell(shell);
+								shell.setImage(img);
+							}
+
+							@Override
+							public boolean close() {
+								img.dispose();
+								return super.close();
+							}
+						};
 
 						if (dialog.open() == Window.OK) {
 							final String name = dialog.getValue();
