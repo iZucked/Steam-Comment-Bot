@@ -25,34 +25,6 @@ public class InPortBoilOffHelper implements IBoilOffHelper {
 		this.boilOffCompensation = boilOffCompensation;
 	}
 	
-	/**
-	 * Is boil off compensation on?
-	 */
-	@Override
-	public boolean compensateForBoilOff(){
-		return boilOffCompensation;
-	}
-	
-	/**
-	 *  Either deduct from or increase currentHeel by the physical or commercial volume dependent on the port visit type
-	 *  and whether in port boil off is being compensated for.
-	 */
-	@Override
-	public long adjustCurrentHeel(long currentHeel, PortType portStatus, IPortSlot portSlot, PlanEvaluationData planData){
-		long adjustmentVolume;
-		
-		if(boilOffCompensation)
-			adjustmentVolume = planData.getAllocation().getPhysicalSlotVolumeInM3(portSlot);
-		else
-			adjustmentVolume = planData.getAllocation().getCommercialSlotVolumeInM3(portSlot);
-		
-		if(portStatus == PortType.Load)
-			return currentHeel + adjustmentVolume;
-		else if (portStatus == PortType.Discharge)
-			return currentHeel - adjustmentVolume;
-		
-		return currentHeel;		
-	}
 	
 	/**
 	 * Returns the in port NBO rate associated with the vessel class of the vessel provided.
@@ -85,12 +57,13 @@ public class InPortBoilOffHelper implements IBoilOffHelper {
 		
 		long NBOBoilOff = 0;
 		if(units == FuelUnit.M3){
-			NBOBoilOff = (inPortNBORate*slotDuration)/24L;
+			NBOBoilOff = (inPortNBORate*slotDuration);
 		} else if(units == FuelUnit.MMBTu){
-			NBOBoilOff = Calculator.convertM3ToMMBTu((slotDuration*inPortNBORate)/24L, slotCV);
+			NBOBoilOff = Calculator.convertM3ToMMBTu((slotDuration*inPortNBORate), slotCV);
 		}
 
 		if(boilOffCompensation){
+			System.out.println("Compensate");
 			if(slot.getPortType() == PortType.Load)	
 				return volume  + NBOBoilOff ;
 			else if(slot.getPortType() == PortType.Discharge)
@@ -115,10 +88,11 @@ public class InPortBoilOffHelper implements IBoilOffHelper {
 		long NBOBoilOff = 0;
 		
 		if(boilOffCompensation){
+			System.out.println("Calculate");
 			if(units == FuelUnit.MMBTu)
-				NBOBoilOff = Calculator.convertM3ToMMBTu((slotDuration*inPortNBORate)/24L, slotCV);
+				NBOBoilOff = Calculator.convertM3ToMMBTu((slotDuration*inPortNBORate), slotCV);
 			else if(units == FuelUnit.M3)
-				NBOBoilOff = (slotDuration*inPortNBORate)/24L;
+				NBOBoilOff = (slotDuration*inPortNBORate);
 		}
 		
 		if(slot.getPortType() == PortType.Load)	
