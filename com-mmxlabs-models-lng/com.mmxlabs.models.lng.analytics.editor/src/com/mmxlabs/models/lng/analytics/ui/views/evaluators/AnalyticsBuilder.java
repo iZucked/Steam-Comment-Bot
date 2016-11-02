@@ -97,6 +97,9 @@ public class AnalyticsBuilder {
 			if (buyOpportunity.isDesPurchase()) {
 				slot.setDESPurchase(true);
 			}
+			if (buyOpportunity.getCv() != 0.0) {
+				slot.setCargoCV(buyOpportunity.getCv());
+			}
 			if (buyOpportunity.getContract() != null) {
 				slot.setContract(buyOpportunity.getContract());
 			}
