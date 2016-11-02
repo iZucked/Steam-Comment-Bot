@@ -11,13 +11,18 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -25,8 +30,10 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
+import com.mmxlabs.rcp.common.editors.IPartGotoTarget;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
 
 public class CreateSandboxHandler extends AbstractHandler {
 
@@ -79,7 +86,27 @@ public class CreateSandboxHandler extends AbstractHandler {
 							final CompoundCommand cmd = new CompoundCommand("Create sandbox");
 							cmd.append(AddCommand.create(domain, rootObject, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_OptionModels(), Collections.singletonList(model)));
 							domain.getCommandStack().execute(cmd);
+
+							final IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
+							BusyIndicator.showWhile(HandlerUtil.getActiveShellChecked(event).getDisplay(), new Runnable() {
+
+								@Override
+								public void run() {
+									final IEditorPart part = openEditor(activePage, instance);
+									if (part instanceof IPartGotoTarget) {
+										((IPartGotoTarget) part).gotoTarget(model);
+									} else {
+										final Object adapter = part.getAdapter(IPartGotoTarget.class);
+										if (adapter != null) {
+											((IPartGotoTarget) adapter).gotoTarget(model);
+										}
+									}
+								}
+							});
+
+							return null;
 						}
+
 					}
 				}
 			}
@@ -87,4 +114,12 @@ public class CreateSandboxHandler extends AbstractHandler {
 		return null;
 	}
 
+	private IEditorPart openEditor(final IWorkbenchPage activePage, final Object element) {
+		try {
+			return OpenScenarioUtils.openAndReturnEditorPart(activePage, (ScenarioInstance) element);
+		} catch (final PartInitException e) {
+			MessageDialog.openError(activePage.getWorkbenchWindow().getShell(), "Error opening editor", e.getMessage());
+		}
+		return null;
+	}
 }
