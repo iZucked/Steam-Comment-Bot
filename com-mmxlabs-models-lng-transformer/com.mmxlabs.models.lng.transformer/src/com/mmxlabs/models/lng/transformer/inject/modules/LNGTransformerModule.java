@@ -71,6 +71,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
  * 
  */
 public class LNGTransformerModule extends AbstractModule {
+	
+	public static final String COMMERCIAL_VOLUME_OVERCAPACITY = "COMMERCIAL_VOLUME_OVERCAPACITY";
+	
 	private final static int DEFAULT_VPO_CACHE_SIZE = 20_000;
 
 	public static final String EARLIEST_AND_LATEST_TIMES = "earliest-and-latest-times";
@@ -145,8 +148,14 @@ public class LNGTransformerModule extends AbstractModule {
 	}
 	
 	@Provides
-	private IBoilOffHelper provideInPortBoilOffHelper(@NonNull final Injector injector){
-		final InPortBoilOffHelper helper = new InPortBoilOffHelper(false);
+	@Named(COMMERCIAL_VOLUME_OVERCAPACITY)
+	private boolean commercialVolumeOverCapacity() {
+		return false;
+	}
+	
+	@Provides
+	private IBoilOffHelper provideInPortBoilOffHelper(@NonNull final Injector injector, @Named(COMMERCIAL_VOLUME_OVERCAPACITY) final boolean toggle){
+		final InPortBoilOffHelper helper = new InPortBoilOffHelper(toggle);
 //		injector.injectMembers(helper);
 		
 		return helper;
