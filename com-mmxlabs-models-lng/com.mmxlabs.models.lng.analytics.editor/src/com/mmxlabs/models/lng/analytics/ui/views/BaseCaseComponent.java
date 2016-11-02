@@ -51,6 +51,7 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.impl.NumberInlineEditor;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
+import com.mmxlabs.rcp.common.RunnerHelper;
 
 public class BaseCaseComponent extends AbstractSandboxComponent {
 	private boolean baseCaseValid = true;
@@ -281,12 +282,14 @@ public class BaseCaseComponent extends AbstractSandboxComponent {
 
 	public void setBaseCaseValid(boolean valid) {
 		baseCaseValid = valid;
-		if (!baseCaseCalculator.isDisposed()) {
-			if (baseCaseValid) {
-				baseCaseCalculator.setBackground(null);
-			} else {
-				baseCaseCalculator.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
+		RunnerHelper.asyncExec(() -> {
+			if (!baseCaseCalculator.isDisposed()) {
+				if (baseCaseValid) {
+					baseCaseCalculator.setBackground(null);
+				} else {
+					baseCaseCalculator.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
+				}
 			}
-		}
+		});
 	}
 }

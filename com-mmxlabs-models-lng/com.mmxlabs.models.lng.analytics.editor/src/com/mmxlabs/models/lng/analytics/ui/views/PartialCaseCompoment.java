@@ -43,6 +43,7 @@ import com.mmxlabs.models.lng.analytics.ui.views.providers.PartialCaseContentPro
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
+import com.mmxlabs.rcp.common.RunnerHelper;
 
 public class PartialCaseCompoment extends AbstractSandboxComponent {
 
@@ -203,12 +204,15 @@ public class PartialCaseCompoment extends AbstractSandboxComponent {
 
 	public void setPartialCaseValid(boolean valid) {
 		partialCaseValid = valid;
-		if (!generateButton.isDisposed()) {
-			if (partialCaseValid) {
-				generateButton.setBackground(null);
-			} else {
-				generateButton.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
+		RunnerHelper.asyncExec(() -> {
+			if (!generateButton.isDisposed()) {
+
+				if (partialCaseValid) {
+					generateButton.setBackground(null);
+				} else {
+					generateButton.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
+				}
 			}
-		}
+		});
 	}
 }
