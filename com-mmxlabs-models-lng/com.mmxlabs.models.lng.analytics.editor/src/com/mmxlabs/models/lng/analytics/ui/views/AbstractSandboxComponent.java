@@ -1,6 +1,5 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
