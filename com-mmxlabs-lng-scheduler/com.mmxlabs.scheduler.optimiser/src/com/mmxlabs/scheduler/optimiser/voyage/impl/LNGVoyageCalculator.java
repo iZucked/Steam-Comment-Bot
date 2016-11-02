@@ -845,10 +845,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						// Sum up the voyage costs
 						final long currentTotal = voyagePlan.getTotalFuelCost(fc);
 						voyagePlan.setTotalFuelCost(fc, currentTotal + Calculator.costFromConsumption(consumptionInMMBTu, unitPrice));
-//						if(fc == FuelComponent.NBO){
-//							System.out.println("IN LOOP UNIT PRICE: " + unitPrice);
-//							System.out.println(details.getFuelUnitPrice(fc)/22.8);
-//						}
+
 					}
 				}
 					

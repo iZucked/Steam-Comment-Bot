@@ -88,14 +88,14 @@ public class InPortBoilOffHelper implements IBoilOffHelper {
 		} else if(units == FuelUnit.MMBTu){
 			NBOBoilOff = Calculator.convertM3ToMMBTu((slotDuration*inPortNBORate), slotCV);
 		}
-		
-		long answer = volume - NBOBoilOff;
-		
-		System.out.println("PORT: " + slot.getPortType() + " Vol: " + volume + " NBO: " + NBOBoilOff + " Ans: " + answer);
+		if(boilOffCompensation){
+			if(slot.getPortType() == PortType.Load)	
+				return volume  + NBOBoilOff ;
+			else if(slot.getPortType() == PortType.Discharge)
+				return volume - NBOBoilOff;
+		}
 		
 		return volume;
-		
-			
 	}
 	
 	/**
@@ -116,12 +116,7 @@ public class InPortBoilOffHelper implements IBoilOffHelper {
 		else if(units == FuelUnit.M3)
 			NBOBoilOff = (slotDuration*inPortNBORate);
 		
-		if(slot.getPortType() == PortType.Load)	
-			return commercialVolume  - NBOBoilOff ;
-		else if(slot.getPortType() == PortType.Discharge)
-			return commercialVolume; //  - Calculator.convertM3ToMMBTu((slotDuration*inPortNBORate), slotCV);
-		else
-			return commercialVolume;
+		return commercialVolume - NBOBoilOff;
 	}
 
 }

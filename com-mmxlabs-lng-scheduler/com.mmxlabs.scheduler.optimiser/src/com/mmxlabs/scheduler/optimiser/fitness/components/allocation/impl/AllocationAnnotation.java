@@ -233,7 +233,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 		return 0;
 	}
 
-	public void setCommericialSlotVolumeInMMBTu(final @NonNull IPortSlot slot, final long volumeInMMBTu) {
+	public void setCommercialSlotVolumeInMMBTu(final @NonNull IPortSlot slot, final long volumeInMMBTu) {
 		getOrCreateSlotAllocation(slot).commercialVolumeInMMBTu = volumeInMMBTu;
 	}
 
