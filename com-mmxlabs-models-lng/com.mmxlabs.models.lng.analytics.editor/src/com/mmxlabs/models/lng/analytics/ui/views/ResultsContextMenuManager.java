@@ -1,12 +1,15 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
+import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -20,6 +23,7 @@ import org.eclipse.swt.widgets.Menu;
 import com.mmxlabs.models.lng.analytics.AnalysisResultDetail;
 import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BreakEvenResult;
@@ -98,7 +102,10 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 			mgr.add(new RunnableAction("Convert to new sandbox", () -> {
 				if (resultSet != null) {
 					final OptionAnalysisModel newModel = createNewBaseCase(resultSet);
-					optionAnalysisModel.getChildren().add(newModel);
+					CompoundCommand cmd = new CompoundCommand("Convert to new sandbox");
+					cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__CHILDREN,
+							Collections.singletonList(newModel)));
+					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__CHILDREN);
 					optionModellerView.setInput(newModel);
 				}
 			}));
