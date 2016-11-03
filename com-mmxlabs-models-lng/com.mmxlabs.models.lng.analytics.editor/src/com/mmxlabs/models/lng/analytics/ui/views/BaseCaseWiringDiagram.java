@@ -336,7 +336,9 @@ public class BaseCaseWiringDiagram implements PaintListener {
 		final int wiringColumnIndex = wiringColumnIndexTmp;
 
 		int offset = 0;
-		offset += grid.getRowHeaderWidth();
+		if (grid.isRowHeaderVisible()) {
+			offset += grid.getRowHeaderWidth();
+		}
 		// TODO: Get col number
 		foundColumn = false;
 		final int[] columnOrder = grid.getColumnOrder();

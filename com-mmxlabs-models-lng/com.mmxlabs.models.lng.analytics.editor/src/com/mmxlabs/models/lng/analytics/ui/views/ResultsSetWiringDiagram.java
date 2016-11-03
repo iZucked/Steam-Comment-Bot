@@ -86,7 +86,6 @@ public class ResultsSetWiringDiagram implements PaintListener {
 	 */
 	private OptionAnalysisModel table;
 
-
 	/**
 	 * Create a new wiring diagram
 	 * 
@@ -265,7 +264,8 @@ public class ResultsSetWiringDiagram implements PaintListener {
 				boolean isFOB = !AnalyticsBuilder.isShipped(sell);
 				final Color terminalColour = ValidTerminalColour;// : InvalidTerminalColour;
 				drawTerminal(false, !isFOB, terminalColour, false, sell instanceof SellMarket, ca, graphics, midpoint);
-			}		}
+			}
+		}
 	}
 
 	private void drawTerminal(final boolean isLeft, final boolean hollow, Color terminalColour, final boolean isOptional, final boolean isSpot, final Rectangle ca, final GC graphics,
@@ -391,7 +391,9 @@ public class ResultsSetWiringDiagram implements PaintListener {
 		final int wiringColumnIndex = wiringColumnIndexTmp;
 
 		int offset = 0;
-		offset += grid.getRowHeaderWidth();
+		if (grid.isRowHeaderVisible()) {
+			offset += grid.getRowHeaderWidth();
+		}
 		// TODO: Get col number
 		foundColumn = false;
 		final int[] columnOrder = grid.getColumnOrder();
@@ -416,7 +418,7 @@ public class ResultsSetWiringDiagram implements PaintListener {
 		return new Rectangle(area.x + offset, area.y + grid.getHeaderHeight(), wiringColumn.getColumn().getWidth(), area.height);
 	}
 
-	public void setRoot(final OptionAnalysisModel  root) {
+	public void setRoot(final OptionAnalysisModel root) {
 		this.table = root;
 	}
 
