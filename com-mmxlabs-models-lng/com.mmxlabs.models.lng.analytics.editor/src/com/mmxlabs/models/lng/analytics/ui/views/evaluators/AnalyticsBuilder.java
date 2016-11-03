@@ -386,6 +386,17 @@ public class AnalyticsBuilder {
 		}
 		return ShippingType.NonShipped;
 	}
+	
+	public static boolean isShipped(final ShippingOption option) {
+		if (option == null) {
+			return false;
+		} else if (option instanceof NominatedShippingOption) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 
 	public static ShippingType getBuyShippingType(@Nullable final BuyOption buy) {
 		if (buy == null) {

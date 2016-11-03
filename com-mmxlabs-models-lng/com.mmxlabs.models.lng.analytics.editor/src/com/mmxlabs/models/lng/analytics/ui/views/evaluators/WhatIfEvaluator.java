@@ -2,6 +2,7 @@ package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.Nullable;
@@ -13,13 +14,18 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BreakEvenResult;
+import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
+import com.mmxlabs.models.lng.analytics.BuyReference;
+import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.ProfitAndLossResult;
 import com.mmxlabs.models.lng.analytics.ResultContainer;
 import com.mmxlabs.models.lng.analytics.ResultSet;
+import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
+import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator.BreakEvenMode;
@@ -112,7 +118,12 @@ public class WhatIfEvaluator {
 				final AnalysisResultRow res = AnalyticsFactory.eINSTANCE.createAnalysisResultRow();
 				res.setBuyOption(row.getBuyOption());
 				res.setSellOption(row.getSellOption());
-				res.setShipping(row.getShipping());
+				if ((!AnalyticsBuilder.isShipped(row.getBuyOption()) ||
+						!AnalyticsBuilder.isShipped(row.getSellOption())) && AnalyticsBuilder.isShipped(row.getShipping())) {
+					res.setShipping(null);
+				} else {
+					res.setShipping(row.getShipping());
+				}
 
 				final Triple<SlotAllocation, SlotAllocation, CargoAllocation> t = finder(lngScenarioModel, row, mapper);
 				final SlotAllocation loadAllocation = t.getFirst();
@@ -285,5 +296,19 @@ public class WhatIfEvaluator {
 
 		ServiceHelper.<IAnalyticsScenarioEvaluator> withService(IAnalyticsScenarioEvaluator.class,
 				evaluator -> evaluator.breakEvenEvaluate(lngScenarioModel, userSettings, parentForFork, targetPNL, useTargetPNL ? BreakEvenMode.PORTFOLIO : BreakEvenMode.POINT_TO_POINT));
+	}
+	
+	public static Predicate<BuyOption> isDESPurchase() {
+		return b -> ((b instanceof BuyReference && ((BuyReference) b).getSlot() != null && ((BuyReference) b).getSlot().isDESPurchase() == true)
+				|| (b instanceof BuyOpportunity && ((BuyOpportunity) b).isDesPurchase() == true));
+	}
+	
+	public static Predicate<SellOption> isFOBSale() {
+		return s -> ((s instanceof SellReference && ((SellReference) s).getSlot() != null && ((SellReference) s).getSlot().isFOBSale() == true)
+				|| (s instanceof SellOpportunity && ((SellOpportunity) s).isFobSale() == true));
+	}
+	
+	private static Predicate<ShippingOption> isNominated() {
+		return s -> s instanceof NominatedShippingOption;
 	}
 }
