@@ -10,6 +10,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelection;
@@ -18,19 +20,30 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.BreakEvenResult;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ResultContainer;
+import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ResultDetailsDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.SellOptionDescriptionFormatter;
@@ -47,13 +60,44 @@ public class ResultsComponent extends AbstractSandboxComponent {
 	private GridTreeViewer resultsViewer;
 	private ResultsSetWiringDiagram resultsDiagram;
 
-	protected ResultsComponent(@NonNull IScenarioEditingLocation scenarioEditingLocation, Map<Object, IStatus> validationErrors, @NonNull Supplier<OptionAnalysisModel> modelProvider) {
+	private boolean filterConstantRows = false;
+
+	private Image image_filter;
+	private Image image_grey_filter;
+
+	protected ResultsComponent(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors,
+			@NonNull final Supplier<OptionAnalysisModel> modelProvider) {
 		super(scenarioEditingLocation, validationErrors, modelProvider);
+		final ImageDescriptor generate_desc = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/filter.gif");
+		image_filter = generate_desc.createImage();
+		image_grey_filter = ImageDescriptor.createWithFlags(generate_desc, SWT.IMAGE_GRAY).createImage();
 	}
 
 	@Override
-	public void createControls(Composite parent, boolean expanded, IExpansionListener expansionListener, OptionModellerView optionModellerView) {
-		ExpandableComposite expandable = wrapInExpandable(parent, "Results", p -> createResultsViewer(p, optionModellerView));
+	public void createControls(final Composite parent, final boolean expanded, final IExpansionListener expansionListener, final OptionModellerView optionModellerView) {
+		final ExpandableComposite expandable = wrapInExpandable(parent, "Results", p -> createResultsViewer(p, optionModellerView), expandableCompo -> {
+			final Label c = new Label(expandableCompo, SWT.NONE);
+			c.setToolTipText("Toggle show only B/E cargoes");
+			expandableCompo.setTextClient(c);
+			if (filterConstantRows) {
+				c.setImage(image_filter);
+			} else {
+				c.setImage(image_grey_filter);
+			}
+			c.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).hint(16, 16).grab(true, false).create());
+
+			c.addMouseListener(new MouseAdapter() {
+				public void mouseDown(final MouseEvent e) {
+					filterConstantRows = !filterConstantRows;
+					if (filterConstantRows) {
+						c.setImage(image_filter);
+					} else {
+						c.setImage(image_grey_filter);
+					}
+					refresh();
+				}
+			});
+		});
 		expandable.setExpanded(expanded);
 		expandable.addExpansionListener(expansionListener);
 	}
@@ -64,13 +108,40 @@ public class ResultsComponent extends AbstractSandboxComponent {
 		resultsViewer.expandAll();
 	}
 
-	private Control createResultsViewer(final Composite parent, OptionModellerView optionModellerView) {
+	private Control createResultsViewer(final Composite parent, final OptionModellerView optionModellerView) {
 
 		resultsViewer = new GridTreeViewer(parent, SWT.NONE);
 		ColumnViewerToolTipSupport.enableFor(resultsViewer);
 		GridViewerHelper.configureLookAndFeel(resultsViewer);
 		resultsViewer.getGrid().setHeaderVisible(true);
 		resultsViewer.setAutoExpandLevel(TreeViewer.ALL_LEVELS);
+
+		final ViewerFilter constantFilter = new ViewerFilter() {
+
+			@Override
+			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
+
+				if (filterConstantRows) {
+					if (element instanceof AnalysisResultRow) {
+						final AnalysisResultRow analysisResultRow = (AnalysisResultRow) element;
+						if (!(analysisResultRow.getResultDetail() instanceof BreakEvenResult)) {
+							final ResultSet resultSet = (ResultSet) analysisResultRow.eContainer();
+							if (resultSet.getRows().size() > 1) {
+								for (final AnalysisResultRow otherRow : resultSet.getRows()) {
+									if (otherRow.getResultDetail() instanceof BreakEvenResult) {
+										return false;
+									}
+								}
+							}
+						}
+					}
+				}
+
+				return true;
+			}
+		};
+
+		resultsViewer.setFilters(new ViewerFilter[] { constantFilter });
 
 		createColumn(resultsViewer, "Buy", new ResultsFormatterLabelProvider(new BuyOptionDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__BUY_OPTION), false,
 				AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__BUY_OPTION);
@@ -144,4 +215,17 @@ public class ResultsComponent extends AbstractSandboxComponent {
 
 		return resultsViewer.getControl();
 	}
+
+	@Override
+	public void dispose() {
+		if (image_filter != null) {
+			image_filter.dispose();
+		}
+
+		if (image_grey_filter != null) {
+			image_grey_filter.dispose();
+		}
+		super.dispose();
+	}
+
 }
