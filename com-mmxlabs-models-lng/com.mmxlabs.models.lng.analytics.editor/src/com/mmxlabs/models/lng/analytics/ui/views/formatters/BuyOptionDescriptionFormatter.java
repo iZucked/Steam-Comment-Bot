@@ -9,6 +9,7 @@ import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 
@@ -57,13 +58,27 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 		} else if (object instanceof BuyOpportunity) {
 			final BuyOpportunity buyOpportunity = (BuyOpportunity) object;
 			final LocalDate date = buyOpportunity.getDate();
+			String dateStr = "<not set>";
+			if (date != null) {
+				dateStr = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
+			}
 			String priceExpression = buyOpportunity.getPriceExpression();
 			if (priceExpression != null && priceExpression.length() > 5) {
 				priceExpression = priceExpression.substring(0, 4) + "...";
 			}
-			if (buyOpportunity.getPort() != null && date != null && priceExpression != null) {
-				final String str = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
-				return String.format("%s | %s | %s", buyOpportunity.getPort().getName(), str, priceExpression);
+			if (priceExpression == null) {
+				priceExpression = "<not set>";
+			}
+			String portName = "<not set>";
+			final Port port = buyOpportunity.getPort();
+			if (port != null) {
+				final String n = port.getName();
+				if (n != null) {
+					portName = n;
+				}
+			}
+			if (portName != null && dateStr != null && priceExpression != null) {
+				return String.format("%s | %s | %s", portName, dateStr, priceExpression);
 			}
 			return String.format("Opp <not set>");
 		} else if (object instanceof BuyReference) {
