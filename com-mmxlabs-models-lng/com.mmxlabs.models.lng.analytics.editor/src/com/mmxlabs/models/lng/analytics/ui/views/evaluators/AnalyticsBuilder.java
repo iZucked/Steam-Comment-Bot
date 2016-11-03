@@ -916,17 +916,20 @@ public class AnalyticsBuilder {
 			final SellOpportunity sellOpportunity = (SellOpportunity) option;
 			final Port port = sellOpportunity.getPort();
 			if (port != null) {
-				ZonedDateTime t = sellOpportunity.getDate().atStartOfDay(ZoneId.of(port.getTimeZone()));
-				if (port.getDefaultWindowSizeUnits() == TimePeriod.HOURS) {
-					t = t.plusHours(port.getDefaultWindowSize());
-				} else if (port.getDefaultWindowSizeUnits() == TimePeriod.DAYS) {
-					t = t.plusDays(port.getDefaultWindowSize());
-				} else if (port.getDefaultWindowSizeUnits() == TimePeriod.MONTHS) {
-					t = t.plusMonths(port.getDefaultWindowSize());
-				} else {
-					return null;
+				LocalDate date = sellOpportunity.getDate();
+				if (date != null) {
+					ZonedDateTime t = date.atStartOfDay(ZoneId.of(port.getTimeZone()));
+					if (port.getDefaultWindowSizeUnits() == TimePeriod.HOURS) {
+						t = t.plusHours(port.getDefaultWindowSize());
+					} else if (port.getDefaultWindowSizeUnits() == TimePeriod.DAYS) {
+						t = t.plusDays(port.getDefaultWindowSize());
+					} else if (port.getDefaultWindowSizeUnits() == TimePeriod.MONTHS) {
+						t = t.plusMonths(port.getDefaultWindowSize());
+					} else {
+						return null;
+					}
+					return t;
 				}
-				return t;
 			}
 		} else if (option instanceof SellReference) {
 			final SellReference sellReference = (SellReference) option;
