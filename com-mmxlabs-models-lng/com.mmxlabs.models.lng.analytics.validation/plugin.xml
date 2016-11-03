@@ -326,7 +326,6 @@
                   lang="java"
                   mode="Batch"
                   name="PartialCaseConstraint"
-                  severity="ERROR"
                   statusCode="1">
                <message>
                   {0}

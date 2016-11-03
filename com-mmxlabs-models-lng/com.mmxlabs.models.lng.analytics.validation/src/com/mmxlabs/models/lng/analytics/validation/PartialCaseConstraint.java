@@ -24,7 +24,9 @@ import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -165,11 +167,50 @@ public class PartialCaseConstraint extends AbstractModelMultiConstraint {
 					}
 				});
 			}
-
+			
+			/*
+			 * The big lateness loop!
+			 */
+			// first pass
+			Set<PartialCaseRow> lateRows = new HashSet<>();
+			processPartialCaseRow(partialCase, (row) -> {
+				int lateness = getLateness(extraContext, row);
+				if (lateness < 0) {
+					lateRows.add(row);
+				}
+			});
+			// Second pass, report problem slots
+			if (lateRows.size() > 0) {
+				// just add on distinct rows
+				processPartialCaseRow(partialCase, (row) -> {
+					if (lateRows.contains(row)) {
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row will create a late cargo", viewName), IConstraintStatus.WARNING));
+						deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
+						statuses.add(deco);
+					}
+				});
+			}
 
 		}
 
 		return Activator.PLUGIN_ID;
+	}
+
+	private int getLateness(final IExtraValidationContext extraContext, PartialCaseRow row) {
+		for (BuyOption buyOption : row.getBuyOptions()) {
+			for (SellOption sellOption : row.getSellOptions()) {
+				for (ShippingOption option : row.getShipping()) {
+					// test shipping only
+					if (isFOBPurchase().test(buyOption) && isDESSale().test(sellOption) && AnalyticsBuilder.isShipped(option)) {
+						int lateness = AnalyticsBuilder.calculateLateness(buyOption, sellOption, ((LNGScenarioModel) extraContext.getRootObject()).getReferenceModel().getPortModel(), AnalyticsBuilder.getVesselClass(option));
+						if (lateness < 0) {
+							return lateness;
+						}
+					}
+				}
+			}
+		}
+		return 0;
 	}
 
 	public static Predicate<BuyOption> isFOBPurchase() {

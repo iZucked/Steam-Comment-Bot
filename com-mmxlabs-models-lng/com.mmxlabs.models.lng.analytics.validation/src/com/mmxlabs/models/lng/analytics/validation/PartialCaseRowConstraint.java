@@ -48,41 +48,41 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 			}
 			ShippingType nonShipped = AnalyticsBuilder.isNonShipped(partialCaseRow);
 			if (nonShipped == ShippingType.Shipped) {
-				if (partialCaseRow.getShipping().isEmpty()) {
-					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Partial case - no shipping option defined."));
-					deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
-					statuses.add(deco);
-				}
-				for (ShippingOption opt : partialCaseRow.getShipping()) {
-					if (!(opt instanceof FleetShippingOption || opt instanceof RoundTripShippingOption)) {
-						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus("Partial case - incompatible shipping option defined."));
-						deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
-						statuses.add(deco);
-					}
-
-					if (opt instanceof RoundTripShippingOption) {
-						final RoundTripShippingOption roundTripShippingOption = (RoundTripShippingOption) opt;
-						final VesselClass vesselClass = roundTripShippingOption.getVesselClass();
-
-						for (BuyOption buy : partialCaseRow.getBuyOptions()) {
-							for (SellOption sell : partialCaseRow.getSellOptions()) {
-								validateTravelTime(ctx, statuses, partialCaseRow, portModel, vesselClass, buy, sell);
-							}
-						}
-					} else if (opt instanceof FleetShippingOption) {
-						final FleetShippingOption roundTripShippingOption = (FleetShippingOption) opt;
-						final Vessel vessel = roundTripShippingOption.getVessel();
-						if (vessel != null) {
-							final VesselClass vesselClass = vessel.getVesselClass();
-							for (BuyOption buy : partialCaseRow.getBuyOptions()) {
-								for (SellOption sell : partialCaseRow.getSellOptions()) {
-									validateTravelTime(ctx, statuses, partialCaseRow, portModel, vesselClass, buy, sell);
-								}
-							}
-						}
-					}
-				}
+//				if (partialCaseRow.getShipping().isEmpty()) {
+//					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Partial case - no shipping option defined."));
+//					deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
+//					statuses.add(deco);
+//				}
+//				for (ShippingOption opt : partialCaseRow.getShipping()) {
+//					if (!(opt instanceof FleetShippingOption || opt instanceof RoundTripShippingOption)) {
+//						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+//								(IConstraintStatus) ctx.createFailureStatus("Partial case - incompatible shipping option defined."));
+//						deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
+//						statuses.add(deco);
+//					}
+//
+//					if (opt instanceof RoundTripShippingOption) {
+//						final RoundTripShippingOption roundTripShippingOption = (RoundTripShippingOption) opt;
+//						final VesselClass vesselClass = roundTripShippingOption.getVesselClass();
+//
+//						for (BuyOption buy : partialCaseRow.getBuyOptions()) {
+//							for (SellOption sell : partialCaseRow.getSellOptions()) {
+//								validateTravelTime(ctx, statuses, partialCaseRow, portModel, vesselClass, buy, sell);
+//							}
+//						}
+//					} else if (opt instanceof FleetShippingOption) {
+//						final FleetShippingOption roundTripShippingOption = (FleetShippingOption) opt;
+//						final Vessel vessel = roundTripShippingOption.getVessel();
+//						if (vessel != null) {
+//							final VesselClass vesselClass = vessel.getVesselClass();
+//							for (BuyOption buy : partialCaseRow.getBuyOptions()) {
+//								for (SellOption sell : partialCaseRow.getSellOptions()) {
+//									validateTravelTime(ctx, statuses, partialCaseRow, portModel, vesselClass, buy, sell);
+//								}
+//							}
+//						}
+//					}
+//				}
 			}
 
 			for (ShippingOption opt : partialCaseRow.getShipping()) {

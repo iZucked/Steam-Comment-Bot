@@ -5,18 +5,22 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.google.common.base.Objects;
+import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
@@ -271,6 +275,30 @@ public class AnalyticsBuilder {
 			return travelTime;
 		}
 
+		return 0;
+	}
+	
+	public static int calculateLateness(final BuyOption buyOption, final SellOption sellOption, final PortModel portModel, final VesselClass vesselClass) {
+		if (buyOption == null || sellOption == null) {
+			return 0;
+		}
+		final Port fromPort = AnalyticsBuilder.getPort(buyOption);
+		final Port toPort = AnalyticsBuilder.getPort(sellOption);
+		if (fromPort != null && toPort != null && vesselClass != null) {
+
+			final ZonedDateTime windowStartDate = AnalyticsBuilder.getWindowStartDate(buyOption);
+			final ZonedDateTime windowEndDate = AnalyticsBuilder.getWindowEndDate(sellOption);
+
+			final double speed = vesselClass.getMaxSpeed();
+
+			final int travelTime = TravelTimeUtils.getMinTimeFromAllowedRoutes(fromPort, toPort, vesselClass, speed, portModel.getRoutes());
+
+			if (windowStartDate != null && windowEndDate != null) {
+				final int optionDuration = AnalyticsBuilder.getDuration(buyOption);
+				final int availableTime = Hours.between(windowStartDate, windowEndDate) - optionDuration;
+				return availableTime - travelTime;
+			}
+		}
 		return 0;
 	}
 
