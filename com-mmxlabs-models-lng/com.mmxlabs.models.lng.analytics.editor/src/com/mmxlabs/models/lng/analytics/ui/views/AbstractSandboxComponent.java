@@ -267,6 +267,7 @@ public abstract class AbstractSandboxComponent {
 				imgWarn.dispose();
 				imgInfo.dispose();
 				imgShippingRoundTrip.dispose();
+				imgShippingFleet.dispose();
 
 				colour_error.dispose();
 				colour_info.dispose();
@@ -276,6 +277,126 @@ public abstract class AbstractSandboxComponent {
 
 		});
 		return gvc;
+	}
+
+	protected CellLabelProvider createWiringColumnLabelProvider() {
+
+		return new CellLabelProvider() {
+
+			Image imgError = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/error.gif").createImage();
+			Image imgWarn = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/warning.gif").createImage();
+			Image imgInfo = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/information.gif").createImage();
+
+			Color colour_error = new Color(Display.getDefault(), new RGB(255, 100, 100));
+			Color colour_warn = new Color(Display.getDefault(), new RGB(255, 255, 200));
+			Color colour_info = new Color(Display.getDefault(), new RGB(200, 240, 240));
+
+			@Override
+			public String getToolTipText(final Object element) {
+
+				final Set<Object> targetElements = getTargetElements(element);
+
+				final StringBuilder sb = new StringBuilder();
+				for (final Object target : targetElements) {
+					if (validationErrors.containsKey(target)) {
+						final IStatus status = validationErrors.get(target);
+						if (!status.isOK()) {
+							if (sb.length() > 0) {
+								sb.append("\n");
+							}
+							sb.append(status.getMessage());
+						}
+					}
+				}
+				if (sb.length() > 0) {
+					return sb.toString();
+				}
+				return super.getToolTipText(element);
+			}
+
+			private Set<Object> getTargetElements(final Object element) {
+				final Set<Object> targetElements = new HashSet<>();
+				targetElements.add(element);
+				// FIXME: Hacky!
+				if (element instanceof BaseCaseRow) {
+					final BaseCaseRow baseCaseRow = (BaseCaseRow) element;
+					targetElements.add(baseCaseRow.getBuyOption());
+					targetElements.add(baseCaseRow.getSellOption());
+					targetElements.add(baseCaseRow.getShipping());
+				}
+				if (element instanceof PartialCaseRow) {
+					final PartialCaseRow row = (PartialCaseRow) element;
+					targetElements.addAll(row.getBuyOptions());
+					targetElements.addAll(row.getSellOptions());
+					targetElements.add(row.getShipping());
+				}
+				targetElements.remove(null);
+				return targetElements;
+			}
+
+			@Override
+			public void update(final ViewerCell cell) {
+
+				final GridItem item = (GridItem) cell.getItem();
+				item.setHeaderText("");
+				item.setHeaderImage(null);
+				cell.setBackground(null);
+				final Object element = cell.getElement();
+
+				final Set<Object> targetElements = getTargetElements(element);
+				IStatus s = org.eclipse.core.runtime.Status.OK_STATUS;
+				for (final Object e : targetElements) {
+					if (validationErrors.containsKey(e)) {
+						final IStatus status = validationErrors.get(e);
+						if (!status.isOK()) {
+							if (status.getSeverity() > s.getSeverity()) {
+								s = status;
+							}
+						}
+					}
+				}
+				if (!s.isOK()) {
+					if (s.matches(IStatus.ERROR)) {
+						cell.setBackground(colour_error);
+						item.setBackground(colour_error);
+					} else if (s.matches(IStatus.WARNING)) {
+						cell.setBackground(colour_warn);
+						item.setBackground(colour_warn);
+					} else if (s.matches(IStatus.INFO)) {
+						cell.setBackground(colour_info);
+						item.setBackground(colour_info);
+					}
+				}
+
+				if (element instanceof BaseCaseRow || element instanceof PartialCaseRow) {
+					if (validationErrors.containsKey(element)) {
+						final IStatus status = validationErrors.get(element);
+						if (!status.isOK()) {
+							if (status.matches(IStatus.ERROR)) {
+								item.setHeaderImage(imgError);
+							} else if (status.matches(IStatus.WARNING)) {
+								item.setHeaderImage(imgWarn);
+							} else if (status.matches(IStatus.INFO)) {
+								item.setHeaderImage(imgInfo);
+							}
+						}
+					}
+				}
+			}
+
+			@Override
+			public void dispose() {
+				imgError.dispose();
+				imgWarn.dispose();
+				imgInfo.dispose();
+
+				colour_error.dispose();
+				colour_info.dispose();
+				colour_warn.dispose();
+				super.dispose();
+			}
+
+		};
 	}
 
 	protected GridViewerColumn createColumn(final GridTreeViewer viewer, final String name, final CellLabelProvider labelProvider, final boolean isTree, final ETypedElement... pathObjects) {

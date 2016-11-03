@@ -162,14 +162,7 @@ public class BaseCaseComponent extends AbstractSandboxComponent {
 			gvc.getColumn().setText("");
 			gvc.getColumn().setResizeable(false);
 			gvc.getColumn().setWidth(100);
-			gvc.setLabelProvider(new CellLabelProvider() {
-
-				@Override
-				public void update(final ViewerCell cell) {
-					// TODO Auto-generated method stub
-
-				}
-			});
+			gvc.setLabelProvider(createWiringColumnLabelProvider());
 			this.baseCaseDiagram = new BaseCaseWiringDiagram(baseCaseViewer.getGrid(), gvc);
 			// gvc.getColumn().setCellRenderer(createCellRenderer());
 		}

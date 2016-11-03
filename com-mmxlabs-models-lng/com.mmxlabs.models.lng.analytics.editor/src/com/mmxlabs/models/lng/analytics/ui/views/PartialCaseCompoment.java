@@ -9,9 +9,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.LocalSelectionTransfer;
-import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
-import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
@@ -155,13 +153,7 @@ public class PartialCaseCompoment extends AbstractSandboxComponent {
 			gvc.getColumn().setText("");
 			gvc.getColumn().setResizeable(false);
 			gvc.getColumn().setWidth(100);
-			gvc.setLabelProvider(new CellLabelProvider() {
-
-				@Override
-				public void update(final ViewerCell cell) {
-
-				}
-			});
+			gvc.setLabelProvider(createWiringColumnLabelProvider());
 			this.partialCaseDiagram = new PartialCaseWiringDiagram(partialCaseViewer.getGrid(), gvc);
 			// gvc.getColumn().setCellRenderer(createCellRenderer());
 		}

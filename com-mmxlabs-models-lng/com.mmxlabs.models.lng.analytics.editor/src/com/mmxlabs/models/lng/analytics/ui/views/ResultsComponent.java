@@ -151,14 +151,7 @@ public class ResultsComponent extends AbstractSandboxComponent {
 			gvc.getColumn().setText("");
 			gvc.getColumn().setResizeable(false);
 			gvc.getColumn().setWidth(100);
-			gvc.setLabelProvider(new CellLabelProvider() {
-
-				@Override
-				public void update(final ViewerCell cell) {
-					// TODO Auto-generated method stub
-
-				}
-			});
+			gvc.setLabelProvider(createWiringColumnLabelProvider());
 			this.resultsDiagram = new ResultsSetWiringDiagram(resultsViewer.getGrid(), gvc);
 			// gvc.getColumn().setCellRenderer(createCellRenderer());
 		}
