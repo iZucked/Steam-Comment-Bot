@@ -13,7 +13,9 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.RouteDistanceLineCache;
 
 public class TravelTimeUtils {
@@ -32,7 +34,34 @@ public class TravelTimeUtils {
 		return minDuration;
 	}
 
+	public static int getTimeForRoute(final @Nullable VesselClass vesselClass, final double referenceSpeed, final @NonNull RouteOption routeOption, final @NonNull Port fromPort,
+			final @NonNull Port toPort, @NonNull final PortModel portModel) {
+		for (final Route route : portModel.getRoutes()) {
+			if (route.getRouteOption() == routeOption) {
+				final int distance = getDistance(route, fromPort, toPort);
+
+				int extraTime = 0;
+				if (vesselClass != null) {
+					for (final VesselClassRouteParameters vcrp : vesselClass.getRouteParameters()) {
+						if (vcrp.getRoute().equals(route)) {
+							extraTime = vcrp.getExtraTransitTime();
+						}
+					}
+				}
+				if (distance == Integer.MAX_VALUE) {
+					return Integer.MAX_VALUE;
+				}
+
+				final double travelTime = distance / referenceSpeed;
+				final int totalTime = (int) (Math.floor(travelTime) + extraTime);
+				return totalTime;
+			}
+		}
+		return Integer.MAX_VALUE;
+	}
+
 	public static int getTimeForRoute(final @Nullable VesselClass vesselClass, final double referenceSpeed, final @NonNull Route route, final @NonNull Port fromPort, final @NonNull Port toPort) {
+
 		final int distance = getDistance(route, fromPort, toPort);
 
 		int extraTime = 0;
