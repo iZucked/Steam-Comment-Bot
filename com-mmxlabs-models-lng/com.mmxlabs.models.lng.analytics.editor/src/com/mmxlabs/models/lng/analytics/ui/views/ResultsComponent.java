@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.MenuManager;
@@ -122,8 +123,8 @@ public class ResultsComponent extends AbstractSandboxComponent {
 
 			sorter = new GridTableViewer(clientArea, SWT.NONE);
 			sorter.getGrid().setHeaderVisible(true);
+			sorter.getGrid().setCellSelectionEnabled(true);
 			sorter.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-
 			final Label c = new Label(clientArea, SWT.NONE);
 			c.setToolTipText("Toggle show only B/E cargoes");
 			if (filterConstantRows) {
@@ -163,14 +164,23 @@ public class ResultsComponent extends AbstractSandboxComponent {
 
 		final OptionAnalysisModel model = modelProvider.get();
 		// Only show the sorter if there are multiple items to sort by
-		if (model != null && model.getResultGroups().size() > 1) {
-			for (final MultipleResultGrouper g : model.getResultGroups()) {
+		EList<MultipleResultGrouper> resultGroups = model.getResultGroups();
+		if (model != null && resultGroups.size() > 1) {
+			MultipleResultGrouper lastOne = resultGroups.get(resultGroups.size() - 1);
+			for (final MultipleResultGrouper g : resultGroups) {
 				final GridViewerColumn gvc = new GridViewerColumn(sorter, SWT.NONE);
 				sorterColumns.add(gvc);
-				gvc.getColumn().setText(g.getName());
+				gvc.getColumn().setHeaderTooltip("Drag to change group order");
+				if (g == lastOne) {
+					gvc.getColumn().setText(g.getName());
+				} else {
+					gvc.getColumn().setText(g.getName() + " >>");
+				}
 				gvc.getColumn().setMoveable(true);
+				gvc.getColumn().setResizeable(false);
 				gvc.getColumn().pack();
 				gvc.getColumn().setData(g);
+				gvc.getColumn().setHeaderRenderer(new ResultSorterColumnHeaderRenderer());
 				gvc.getColumn().addListener(SWT.Move, new Listener() {
 
 					@Override
@@ -183,23 +193,23 @@ public class ResultsComponent extends AbstractSandboxComponent {
 							newOrder.add(g2);
 						}
 						final Command command = SetCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_GROUPS, newOrder);
-						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(command, model,  AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_GROUPS);
-						
+						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(command, model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_GROUPS);
+
 						optionModellerView.refreshSections(false, EnumSet.of(SectionType.MIDDLE));
-//						resultsViewer.refresh();
-//						resultsViewer.expandAll();
+						// resultsViewer.refresh();
+						// resultsViewer.expandAll();
 					}
 				});
 			}
 
 		}
 
-//		sorter.getGrid().layout(true);
-//		clientArea.layout(true);
-//		expandable.pack();
-//		expandable.layout(true);
-//		expandable.setSize(expandable.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-//		expandable.layout();
+		// sorter.getGrid().layout(true);
+		// clientArea.layout(true);
+		// expandable.pack();
+		// expandable.layout(true);
+		// expandable.setSize(expandable.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		// expandable.layout();
 	}
 
 	private Control createResultsViewer(final Composite parent, final OptionModellerView optionModellerView) {
