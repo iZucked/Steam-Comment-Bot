@@ -1,5 +1,6 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,6 +44,7 @@ import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BreakEvenResult;
@@ -50,6 +52,7 @@ import com.mmxlabs.models.lng.analytics.MultipleResultGrouper;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ResultContainer;
 import com.mmxlabs.models.lng.analytics.ResultSet;
+import com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView.SectionType;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ResultDetailsDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.SellOptionDescriptionFormatter;
@@ -74,6 +77,7 @@ public class ResultsComponent extends AbstractSandboxComponent {
 	private GridTableViewer sorter;
 	private Composite clientArea;
 	private ExpandableComposite expandable;
+	private OptionModellerView optionModellerView;
 
 	protected ResultsComponent(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors,
 			@NonNull final Supplier<OptionAnalysisModel> modelProvider) {
@@ -89,6 +93,7 @@ public class ResultsComponent extends AbstractSandboxComponent {
 		// GridViewerColumn gvc = new GridViewerColumn(sorter, SWT.NONE);
 		// gvc.getColumn().setText("Group by:");
 
+		this.optionModellerView = optionModellerView;
 		expandable = wrapInExpandable(parent, "Results", p -> createResultsViewer(p, optionModellerView), expandableCompo -> {
 
 			clientArea = new Composite(expandableCompo, SWT.NONE) {
@@ -178,21 +183,23 @@ public class ResultsComponent extends AbstractSandboxComponent {
 							newOrder.add(g2);
 						}
 						final Command command = SetCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_GROUPS, newOrder);
-						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(command);
-						resultsViewer.refresh();
-						resultsViewer.expandAll();
+						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(command, model,  AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_GROUPS);
+						
+						optionModellerView.refreshSections(false, EnumSet.of(SectionType.MIDDLE));
+//						resultsViewer.refresh();
+//						resultsViewer.expandAll();
 					}
 				});
 			}
 
 		}
 
-		sorter.getGrid().layout(true);
-		clientArea.layout(true);
-		expandable.pack();
-		expandable.layout(true);
-		expandable.setSize(expandable.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		expandable.layout();
+//		sorter.getGrid().layout(true);
+//		clientArea.layout(true);
+//		expandable.pack();
+//		expandable.layout(true);
+//		expandable.setSize(expandable.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+//		expandable.layout();
 	}
 
 	private Control createResultsViewer(final Composite parent, final OptionModellerView optionModellerView) {
