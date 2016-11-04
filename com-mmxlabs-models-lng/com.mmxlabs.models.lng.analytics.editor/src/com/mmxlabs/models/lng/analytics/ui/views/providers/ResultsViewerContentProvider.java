@@ -51,29 +51,23 @@ public class ResultsViewerContentProvider implements ITreeContentProvider {
 			final OptionAnalysisModel model = (OptionAnalysisModel) inputElement;
 
 			if (model.getResultGroups().isEmpty()) {
-				return model.getResultSets().toArray();
+				// Convert to flat list - we only expect a single result set
+				final List<AnalysisResultRow> l = new LinkedList<>();
+				for (final ResultSet rs : model.getResultSets()) {
+					l.addAll(rs.getRows());
+				}
+
+				return l.toArray();
 			}
 
+			// Build result tree
 			final GroupNode[] nodes = buildGroups(model, null, 0);
+			// Collapse to a list of leaf nodes
 			final List<GroupNode> collapsedNodes = new LinkedList<>();
-			// final BiConsumer<GroupNode, List<GroupNode>> f = (n, l) -> {
-			// if (n.childNodes != null) {
-			// for (final GroupNode c : n.childNodes) {
-			// f.accept(c, l);
-			// }
-			// } else {
-			// l.add(n);
-			// }
-			// };
 			for (final GroupNode n : nodes) {
 				collapse(n, collapsedNodes);
 			}
 			return collapsedNodes.toArray();
-			// GroupNode[] nodes = new GroupNode[1];
-			// nodes[0] = new GroupNode();
-			// nodes[0].name = "default";
-			// nodes[0].childResults = new LinkedList<>(model.getResultSets());
-			// return nodes;
 		}
 		return new Object[0];
 	}
@@ -108,15 +102,6 @@ public class ResultsViewerContentProvider implements ITreeContentProvider {
 			n.keyA = g;
 			n.keyB = f;
 			n.parentGroup = parent;
-			// final Iterator<ResultSet> itr = l.iterator();
-			// final List<ResultSet> c = new LinkedList<>();
-			// while (itr.hasNext()) {
-			// final ResultSet r = itr.next();
-			// if (matches(r, f)) {
-			// itr.remove();
-			// c.add(r);
-			// }
-			// }
 
 			final Set<ResultSet> childResultsSet = new LinkedHashSet<>(f.getGroupResults());
 			childResultsSet.retainAll(l);
