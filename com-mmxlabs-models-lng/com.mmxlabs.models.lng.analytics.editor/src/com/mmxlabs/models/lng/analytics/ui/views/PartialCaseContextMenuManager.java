@@ -149,29 +149,31 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 										scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, row, null);
 									}
 								}));
-								dateMenu.add(new RunnableAction("service speed", () -> {
+								if (vesselClass.getLadenAttributes().getServiceSpeed() > 0.0) {
+									dateMenu.add(new RunnableAction("service speed", () -> {
 
-									final CompoundCommand cmd = new CompoundCommand("Change dates");
-									for (final BuyOption buyOption : row.getBuyOptions()) {
-										final Port fromPort = AnalyticsBuilder.getPort(buyOption);
-										if (buyOption instanceof BuyOpportunity && fromPort != null) {
-											if (AnalyticsBuilder.getShippingType(buyOption, sellOption) == ShippingType.NonShipped) {
-												cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), buyOption, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE,
-														AnalyticsBuilder.getDate(sellOption)));
-											} else if (vesselClass != null) {
-												final int travelHours = TravelTimeUtils.getTimeForRoute(vesselClass, vesselClass.getLadenAttributes().getServiceSpeed(), RouteOption.DIRECT, fromPort,
-														toPort, portModel);
+										final CompoundCommand cmd = new CompoundCommand("Change dates");
+										for (final BuyOption buyOption : row.getBuyOptions()) {
+											final Port fromPort = AnalyticsBuilder.getPort(buyOption);
+											if (buyOption instanceof BuyOpportunity && fromPort != null) {
+												if (AnalyticsBuilder.getShippingType(buyOption, sellOption) == ShippingType.NonShipped) {
+													cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), buyOption, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE,
+															AnalyticsBuilder.getDate(sellOption)));
+												} else if (vesselClass != null) {
+													final int travelHours = TravelTimeUtils.getTimeForRoute(vesselClass, vesselClass.getLadenAttributes().getServiceSpeed(), RouteOption.DIRECT,
+															fromPort, toPort, portModel);
 
-												final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
-												final LocalDate newDate = sellDate.minusDays(travelDays).toLocalDate();
-												cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), buyOption, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE, newDate));
+													final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
+													final LocalDate newDate = sellDate.minusDays(travelDays).toLocalDate();
+													cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), buyOption, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE, newDate));
+												}
 											}
 										}
-									}
-									if (!cmd.isEmpty()) {
-										scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, row, null);
-									}
-								}));
+										if (!cmd.isEmpty()) {
+											scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, row, null);
+										}
+									}));
+								}
 
 								mgr.add(dateMenu);
 							}
@@ -221,31 +223,34 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 										scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, row, null);
 									}
 								}));
-								dateMenu.add(new RunnableAction("service speed", () -> {
+								if (vesselClass.getLadenAttributes().getServiceSpeed() > 0.0) {
 
-									final CompoundCommand cmd = new CompoundCommand("Change dates");
-									for (final SellOption sellOption : row.getSellOptions()) {
-										final Port toPort = AnalyticsBuilder.getPort(buyOption);
-										if (sellOption instanceof SellOpportunity && toPort != null) {
-											if (AnalyticsBuilder.getShippingType(buyOption, sellOption) == ShippingType.NonShipped) {
-												cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), sellOption, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE,
-														AnalyticsBuilder.getDate(buyOption)));
-											} else if (vesselClass != null) {
-												final int travelHours = TravelTimeUtils.getTimeForRoute(vesselClass, vesselClass.getLadenAttributes().getServiceSpeed(), RouteOption.DIRECT, fromPort,
-														toPort, portModel);
+									dateMenu.add(new RunnableAction("service speed", () -> {
 
-												final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
-												final LocalDate newDate = buyDate.plusDays(travelDays).toLocalDate();
-												cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), sellOption, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE, newDate));
+										final CompoundCommand cmd = new CompoundCommand("Change dates");
+										for (final SellOption sellOption : row.getSellOptions()) {
+											final Port toPort = AnalyticsBuilder.getPort(sellOption);
+											if (sellOption instanceof SellOpportunity && toPort != null) {
+												if (AnalyticsBuilder.getShippingType(buyOption, sellOption) == ShippingType.NonShipped) {
+													cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), sellOption, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE,
+															AnalyticsBuilder.getDate(buyOption)));
+												} else if (vesselClass != null) {
+													final int travelHours = TravelTimeUtils.getTimeForRoute(vesselClass, vesselClass.getLadenAttributes().getServiceSpeed(), RouteOption.DIRECT,
+															fromPort, toPort, portModel);
+
+													final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
+													final LocalDate newDate = buyDate.plusDays(travelDays).toLocalDate();
+													cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), sellOption, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE, newDate));
+												}
 											}
 										}
-									}
-									if (!cmd.isEmpty()) {
-										scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, row, null);
-									}
-								}));
+										if (!cmd.isEmpty()) {
+											scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, row, null);
+										}
+									}));
 
-								mgr.add(dateMenu);
+									mgr.add(dateMenu);
+								}
 							}
 						}
 					}

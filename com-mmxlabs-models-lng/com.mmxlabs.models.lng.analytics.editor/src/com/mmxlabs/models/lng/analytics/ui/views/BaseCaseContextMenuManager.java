@@ -154,18 +154,21 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 												AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE);
 
 									}));
-									dateMenu.add(new RunnableAction("service speed", () -> {
-										final int travelHours = TravelTimeUtils.getTimeForRoute(vesselClass, vesselClass.getLadenAttributes().getServiceSpeed(), RouteOption.DIRECT, fromPort, toPort,
-												portModel);
+									if (vesselClass.getLadenAttributes().getServiceSpeed() > 0.0) {
 
-										final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
-										final LocalDate newDate = sellDate.minusDays(travelDays).toLocalDate();
+										dateMenu.add(new RunnableAction("service speed", () -> {
+											final int travelHours = TravelTimeUtils.getTimeForRoute(vesselClass, vesselClass.getLadenAttributes().getServiceSpeed(), RouteOption.DIRECT, fromPort,
+													toPort, portModel);
 
-										scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-												SetCommand.create(scenarioEditingLocation.getEditingDomain(), opportunity, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE, newDate), opportunity,
-												AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE);
+											final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
+											final LocalDate newDate = sellDate.minusDays(travelDays).toLocalDate();
 
-									}));
+											scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+													SetCommand.create(scenarioEditingLocation.getEditingDomain(), opportunity, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE, newDate), opportunity,
+													AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE);
+
+										}));
+									}
 									// dateMenu.add(new RunnableAction("NBO speed", () -> {
 									//
 									// double cv = AnalyticsBuilder.getCargoCV(row.getBuyOption());
@@ -238,18 +241,21 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 												AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE);
 
 									}));
-									dateMenu.add(new RunnableAction("service speed", () -> {
-										final int travelHours = TravelTimeUtils.getTimeForRoute(vesselClass, vesselClass.getLadenAttributes().getServiceSpeed(), RouteOption.DIRECT, fromPort, toPort,
-												portModel);
+									if (vesselClass.getLadenAttributes().getServiceSpeed() > 0.0) {
 
-										final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
-										final LocalDate newDate = buyDate.plusDays(travelDays).toLocalDate();
+										dateMenu.add(new RunnableAction("service speed", () -> {
+											final int travelHours = TravelTimeUtils.getTimeForRoute(vesselClass, vesselClass.getLadenAttributes().getServiceSpeed(), RouteOption.DIRECT, fromPort,
+													toPort, portModel);
 
-										scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-												SetCommand.create(scenarioEditingLocation.getEditingDomain(), opportunity, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE, newDate), opportunity,
-												AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE);
+											final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
+											final LocalDate newDate = buyDate.plusDays(travelDays).toLocalDate();
 
-									}));
+											scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+													SetCommand.create(scenarioEditingLocation.getEditingDomain(), opportunity, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE, newDate), opportunity,
+													AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE);
+
+										}));
+									}
 									// dateMenu.add(new RunnableAction("NBO speed", () -> {
 									//
 									// double cv = AnalyticsBuilder.getCargoCV(row.getBuyOption());
