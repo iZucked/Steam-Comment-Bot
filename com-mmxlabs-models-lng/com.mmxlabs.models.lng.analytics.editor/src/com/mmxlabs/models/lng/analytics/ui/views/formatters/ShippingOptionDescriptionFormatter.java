@@ -92,7 +92,8 @@ public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 			if (s != null && !s.trim().isEmpty()) {
 				hireCost = s;
 			}
-			return String.format("%s%s @ %s (fleet)", object instanceof OptionalAvailabilityShippingOption ? "~" : "", vesselName, hireCost);
+			return String.format("%s%s @ %s", ""//object instanceof OptionalAvailabilityShippingOption ? "~" : ""
+				, vesselName, hireCost);
 		} else if (object instanceof NominatedShippingOption) {
 			NominatedShippingOption option = (NominatedShippingOption) object;
 			Vessel nominatedVessel = option.getNominatedVessel();

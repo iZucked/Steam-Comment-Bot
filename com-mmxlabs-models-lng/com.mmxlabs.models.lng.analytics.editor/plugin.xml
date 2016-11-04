@@ -283,6 +283,24 @@
           referenceEClass="com.mmxlabs.models.lng.cargo.LoadSlot">
     </valueProvider>
     <valueProvider
+          factory="com.mmxlabs.models.lng.analytics.ui.views.providers.OpportunityContractValueProviderFactory"
+          id="com.mmxlabs.models.lng.analytics.ui.views.providers.OpportunityContractValueProviderFactory_Buy"
+          ownerEClass="com.mmxlabs.models.lng.analytics.BuyOpportunity"
+          referenceEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.analytics.ui.views.providers.OpportunityContractValueProviderFactory"
+          id="com.mmxlabs.models.lng.analytics.ui.views.providers.OpportunityContractValueProviderFactory_Sell"
+          ownerEClass="com.mmxlabs.models.lng.analytics.SellOpportunity"
+          referenceEClass="com.mmxlabs.models.lng.commercial.SalesContract">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.analytics.ui.views.providers.OptionalAvailabilityShippingOptionValueProviderFactory"
+          id="com.mmxlabs.models.lng.analytics.ui.views.providers.OptionalAvailabilityShippingOptionValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption"
+          referenceEClass="com.mmxlabs.models.lng.port.Port">
+    </valueProvider>
+    <valueProvider
           factory="com.mmxlabs.models.lng.analytics.ui.views.providers.OpportunityPortValueProviderFactory"
           id="com.mmxlabs.models.lng.analytics.ui.views.providers.OpportunityPortValueProviderFactory_Buy"
           ownerEClass="com.mmxlabs.models.lng.analytics.BuyOpportunity"

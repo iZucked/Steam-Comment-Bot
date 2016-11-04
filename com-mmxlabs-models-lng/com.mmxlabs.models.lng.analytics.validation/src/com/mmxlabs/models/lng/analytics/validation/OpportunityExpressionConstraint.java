@@ -45,6 +45,15 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 					failures.add(dsd);
 				}
 			}
+			if (slot.getContract() != null && (slot.getPriceExpression() != null || !slot.getPriceExpression().equals(""))) {
+				final String message = String.format("%s", "Either a contract or a price expression must be set but not both.");
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+
+				dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__CONTRACT);
+				dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__PRICE_EXPRESSION);
+				failures.add(dsd);
+
+			}
 			if (slot.isDesPurchase()) {
 				if (slot.getCv() == 0.0) {
 					final String message = String.format("Buy needs a non-zero CV");
@@ -121,7 +130,15 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 					failures.add(dsd);
 				}
 			}
+			if (slot.getContract() != null && (slot.getPriceExpression() != null || !slot.getPriceExpression().equals(""))) {
+				final String message = String.format("%s", "Either a contract or a price expression must be set but not both.");
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
+				dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__CONTRACT);
+				dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__PRICE_EXPRESSION);
+				failures.add(dsd);
+
+			}
 			final Port port = slot.getPort();
 			if (port == null) {
 				final String message = String.format("Sell has no port");
