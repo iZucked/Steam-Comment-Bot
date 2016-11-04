@@ -3,8 +3,11 @@ package com.mmxlabs.models.lng.analytics.ui.views.formatters;
 import java.util.Collection;
 
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
+import com.mmxlabs.models.lng.analytics.MultipleResultGrouper;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
+import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption;
+import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -14,7 +17,18 @@ public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 	@Override
 	public String render(final Object object) {
 
-		if (object instanceof Collection<?>) {
+		if (object instanceof PartialCaseRow) {
+			PartialCaseRow partialCaseRow = (PartialCaseRow) object;
+			Collection<?> shipping = partialCaseRow.getShipping();
+
+			final MultipleResultGrouper g = findGroup(partialCaseRow);
+			if (g != null) {
+				return String.format("%s %s", g.getName(), render(shipping));
+			} else {
+				return render(shipping);
+			}
+
+		} else if (object instanceof Collection<?>) {
 			Collection<?> collection = (Collection<?>) object;
 
 			if (collection.isEmpty()) {
@@ -97,5 +111,17 @@ public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 		} else {
 			return object.toString();
 		}
+	}
+
+	private MultipleResultGrouper findGroup(PartialCaseRow row) {
+		final OptionAnalysisModel model = (OptionAnalysisModel) row.eContainer().eContainer();
+		for (final MultipleResultGrouper g : model.getResultGroups()) {
+			if (g.getFeatureName() == "shipping") {
+				if (g.getReferenceRow() == row) {
+					return g;
+				}
+			}
+		}
+		return null;
 	}
 }

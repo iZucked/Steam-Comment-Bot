@@ -109,6 +109,8 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.RESULT_SET: return createResultSet();
 			case AnalyticsPackage.BASE_CASE: return createBaseCase();
 			case AnalyticsPackage.PARTIAL_CASE: return createPartialCase();
+			case AnalyticsPackage.MULTIPLE_RESULT_GROUPER: return createMultipleResultGrouper();
+			case AnalyticsPackage.MULTIPLE_RESULT_GROUPER_ROW: return createMultipleResultGrouperRow();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -510,6 +512,26 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public PartialCase createPartialCase() {
 		PartialCaseImpl partialCase = new PartialCaseImpl();
 		return partialCase;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MultipleResultGrouper createMultipleResultGrouper() {
+		MultipleResultGrouperImpl multipleResultGrouper = new MultipleResultGrouperImpl();
+		return multipleResultGrouper;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MultipleResultGrouperRow createMultipleResultGrouperRow() {
+		MultipleResultGrouperRowImpl multipleResultGrouperRow = new MultipleResultGrouperRowImpl();
+		return multipleResultGrouperRow;
 	}
 
 	/**

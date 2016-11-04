@@ -223,22 +223,22 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			};
 
 			centralComposite.setLayout(new GridLayout(1, true));
-			final Consumer<AbstractSandboxComponent> hook = (component) -> {
-				component.createControls(centralComposite, true, centralExpansionListener, OptionModellerView.this);
+			final BiConsumer<AbstractSandboxComponent, Boolean> hook = (component, expand) -> {
+				component.createControls(centralComposite, expand, centralExpansionListener, OptionModellerView.this);
 				inputWants.addAll(component.getInputWants());
 				disposables.add(() -> component.dispose());
 			};
 			{
 				baseCaseComponent = new BaseCaseComponent(OptionModellerView.this, validationErrors, () -> getModel());
-				hook.accept(baseCaseComponent);
+				hook.accept(baseCaseComponent, false);
 			}
 			{
 				partialCaseComponent = new PartialCaseCompoment(OptionModellerView.this, validationErrors, () -> getModel());
-				hook.accept(partialCaseComponent);
+				hook.accept(partialCaseComponent, true);
 			}
 			{
 				resultsComponent = new ResultsComponent(OptionModellerView.this, validationErrors, () -> getModel());
-				hook.accept(resultsComponent);
+				hook.accept(resultsComponent, true);
 			}
 		}
 		{

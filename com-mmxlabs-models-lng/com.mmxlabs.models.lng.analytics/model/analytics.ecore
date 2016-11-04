@@ -405,6 +405,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="useTargetPNL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
         eType="#//OptionAnalysisModel" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resultGroups" upperBound="-1"
+        eType="#//MultipleResultGrouper" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ResultSet">
     <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//AnalysisResultRow"
@@ -424,5 +426,17 @@
     <eLiterals name="NOT_SPECIFIED"/>
     <eLiterals name="FIXED" value="1"/>
     <eLiterals name="RANGE" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MultipleResultGrouper">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groupResults" upperBound="-1"
+        eType="#//MultipleResultGrouperRow" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referenceRow" eType="#//PartialCaseRow"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="featureName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MultipleResultGrouperRow">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groupResults" upperBound="-1"
+        eType="#//ResultSet"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="object" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
   </eClassifiers>
 </ecore:EPackage>

@@ -2,9 +2,12 @@ package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
@@ -17,6 +20,8 @@ import com.mmxlabs.models.lng.analytics.BreakEvenResult;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
+import com.mmxlabs.models.lng.analytics.MultipleResultGrouper;
+import com.mmxlabs.models.lng.analytics.MultipleResultGrouperRow;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
@@ -52,39 +57,69 @@ public class WhatIfEvaluator {
 		final long targetPNL = model.getBaseCase().getProfitAndLoss();
 
 		final BaseCase baseCase = AnalyticsFactory.eINSTANCE.createBaseCase();
-
-		final List<List<Runnable>> combinations = new LinkedList<>();
-
+		int idx = 1;
+		final List<List<Pair<EObject, Supplier<MultipleResultGrouperRow>>>> combinations = new LinkedList<>();
+		final List<MultipleResultGrouper> groups = new LinkedList<>();
 		for (final PartialCaseRow r : model.getPartialCase().getPartialCase()) {
 			final BaseCaseRow bcr = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
 			if (r.getBuyOptions().size() > 1) {
-				final List<Runnable> options = new LinkedList<>();
+				final MultipleResultGrouper g = AnalyticsFactory.eINSTANCE.createMultipleResultGrouper();
+				g.setReferenceRow(r);
+				g.setFeatureName("buy");
+				g.setName(String.format("{%d}", idx++));
+				final List<Pair<EObject, Supplier<MultipleResultGrouperRow>>> options = new LinkedList<>();
 				for (final BuyOption o : r.getBuyOptions()) {
-					options.add(() -> bcr.setBuyOption(o));
+					final MultipleResultGrouperRow row = AnalyticsFactory.eINSTANCE.createMultipleResultGrouperRow();
+					row.setObject(o);
+					g.getGroupResults().add(row);
+
+					options.add(new Pair<EObject, Supplier<MultipleResultGrouperRow>>(o, () -> {
+						bcr.setBuyOption(o);
+						return row;
+					}));
 				}
+				groups.add(g);
 				combinations.add(options);
 			} else if (r.getBuyOptions().size() == 1) {
 				bcr.setBuyOption(r.getBuyOptions().get(0));
 			}
 
 			if (r.getSellOptions().size() > 1) {
-				final List<Runnable> options = new LinkedList<>();
+				final List<Pair<EObject, Supplier<MultipleResultGrouperRow>>> options = new LinkedList<>();
+				final MultipleResultGrouper g = AnalyticsFactory.eINSTANCE.createMultipleResultGrouper();
+				g.setReferenceRow(r);
+				g.setFeatureName("sell");
+				g.setName(String.format("{%d}", idx++));
 				for (final SellOption o : r.getSellOptions()) {
-					options.add(() -> {
+					final MultipleResultGrouperRow row = AnalyticsFactory.eINSTANCE.createMultipleResultGrouperRow();
+					row.setObject(o);
+					g.getGroupResults().add(row);
+					options.add(new Pair<EObject, Supplier<MultipleResultGrouperRow>>(o, () -> {
 						bcr.setSellOption(o);
-					});
+						return row;
+					}));
 				}
+				groups.add(g);
 				combinations.add(options);
 			} else if (r.getSellOptions().size() == 1) {
 				bcr.setSellOption(r.getSellOptions().get(0));
 			}
 			if (r.getShipping().size() > 1) {
-				final List<Runnable> options = new LinkedList<>();
+				final List<Pair<EObject, Supplier<MultipleResultGrouperRow>>> options = new LinkedList<>();
+				final MultipleResultGrouper g = AnalyticsFactory.eINSTANCE.createMultipleResultGrouper();
+				g.setReferenceRow(r);
+				g.setFeatureName("shipping");
+				g.setName(String.format("{%d}", idx++));
 				for (final ShippingOption o : r.getShipping()) {
-					options.add(() -> {
+					final MultipleResultGrouperRow row = AnalyticsFactory.eINSTANCE.createMultipleResultGrouperRow();
+					row.setObject(o);
+					g.getGroupResults().add(row);
+					options.add(new Pair<EObject, Supplier<MultipleResultGrouperRow>>(o, () -> {
 						bcr.setShipping(o);
-					});
+						return row;
+					}));
 				}
+				groups.add(g);
 				combinations.add(options);
 			} else if (r.getShipping().size() == 1) {
 				bcr.setShipping(r.getShipping().get(0));
@@ -92,20 +127,24 @@ public class WhatIfEvaluator {
 			baseCase.getBaseCase().add(bcr);
 		}
 
-		// TODO:Command
+		// TODO: Command
 		model.getResultSets().clear();
+		model.getResultGroups().clear();
 		if (combinations.isEmpty()) {
 			singleEval(scenarioEditingLocation, targetPNL, model, baseCase);
 		} else {
-			recursiveEval(0, combinations, scenarioEditingLocation, targetPNL, model, baseCase);
+			recursiveEval(0, combinations, scenarioEditingLocation, targetPNL, model, baseCase, new LinkedList<>());
+			model.getResultGroups().addAll(groups);
 		}
 	}
 
-	private static void singleEval(final IScenarioEditingLocation scenarioEditingLocation, final long targetPNL, final OptionAnalysisModel model, final BaseCase baseCase) {
+	private static ResultSet singleEval(final IScenarioEditingLocation scenarioEditingLocation, final long targetPNL, final OptionAnalysisModel model, final BaseCase baseCase) {
+
+		final ResultSet[] ref = new ResultSet[1];
 		BaseCaseEvaluator.generateScenario(scenarioEditingLocation, model, baseCase, (lngScenarioModel, mapper) -> {
 
 			// DEBUG: Pass in the scenario instance
-			ScenarioInstance parentForFork = null;// scenarioEditingLocation.getScenarioInstance()
+			final ScenarioInstance parentForFork = null;// scenarioEditingLocation.getScenarioInstance()
 			evaluateScenario(lngScenarioModel, parentForFork, model.isUseTargetPNL(), targetPNL);
 
 			if (lngScenarioModel.getScheduleModel().getSchedule() == null) {
@@ -130,7 +169,7 @@ public class WhatIfEvaluator {
 				final SlotAllocation dischargeAllocation = t.getSecond();
 				final CargoAllocation cargoAllocation = t.getThird();
 
-				ResultContainer container = AnalyticsFactory.eINSTANCE.createResultContainer();
+				final ResultContainer container = AnalyticsFactory.eINSTANCE.createResultContainer();
 				container.setCargoAllocation(cargoAllocation);
 				if (loadAllocation != null) {
 					container.getSlotAllocations().add(loadAllocation);
@@ -193,11 +232,11 @@ public class WhatIfEvaluator {
 				if (container.getCargoAllocation() != null) {
 					container.getCargoAllocation().unsetInputCargo();
 				}
-				for (SlotAllocation slotAllocation : container.getSlotAllocations()) {
+				for (final SlotAllocation slotAllocation : container.getSlotAllocations()) {
 					slotAllocation.unsetSlot();
 					slotAllocation.unsetSpotMarket();
 				}
-				for (OpenSlotAllocation openSlotAllocation : container.getOpenSlotAllocations()) {
+				for (final OpenSlotAllocation openSlotAllocation : container.getOpenSlotAllocations()) {
 					openSlotAllocation.unsetSlot();
 				}
 
@@ -205,7 +244,10 @@ public class WhatIfEvaluator {
 			}
 
 			model.getResultSets().add(resultSet);
+
+			ref[0] = resultSet;
 		});
+		return ref[0];
 	}
 
 	private static Triple<SlotAllocation, SlotAllocation, CargoAllocation> finder(final LNGScenarioModel lngScenarioModel, final BaseCaseRow baseCaseRow, final IMapperClass mapper) {
@@ -274,20 +316,24 @@ public class WhatIfEvaluator {
 		return false;
 	}
 
-	private static void recursiveEval(final int listIdx, final List<List<Runnable>> combinations, final IScenarioEditingLocation scenarioEditingLocation, final long targetPNL,
-			final OptionAnalysisModel model, final BaseCase baseCase) {
+	private static void recursiveEval(final int listIdx, final List<List<Pair<EObject, Supplier<MultipleResultGrouperRow>>>> combinations, final IScenarioEditingLocation scenarioEditingLocation,
+			final long targetPNL, final OptionAnalysisModel model, final BaseCase baseCase, final List<Consumer<ResultSet>> mutliResultSetters) {
 		if (listIdx == combinations.size()) {
-			singleEval(scenarioEditingLocation, targetPNL, model, baseCase);
+			final ResultSet rs = singleEval(scenarioEditingLocation, targetPNL, model, baseCase);
+			mutliResultSetters.forEach(s -> s.accept(rs));
 			return;
 		}
-		final List<Runnable> options = combinations.get(listIdx);
-		for (final Runnable r : options) {
-			r.run();
-			recursiveEval(listIdx + 1, combinations, scenarioEditingLocation, targetPNL, model, baseCase);
+		final List<Pair<EObject, Supplier<MultipleResultGrouperRow>>> options = combinations.get(listIdx);
+		for (final Pair<EObject, Supplier<MultipleResultGrouperRow>> p : options) {
+			final Supplier<MultipleResultGrouperRow> r = p.getSecond();
+			final MultipleResultGrouperRow row = r.get();
+			final List<Consumer<ResultSet>> next = new LinkedList<>(mutliResultSetters);
+			next.add(rs -> row.getGroupResults().add(rs));
+			recursiveEval(listIdx + 1, combinations, scenarioEditingLocation, targetPNL, model, baseCase, next);
 		}
 	}
 
-	private static void evaluateScenario(final LNGScenarioModel lngScenarioModel, @Nullable ScenarioInstance parentForFork, final boolean useTargetPNL, final long targetPNL) {
+	private static void evaluateScenario(final LNGScenarioModel lngScenarioModel, @Nullable final ScenarioInstance parentForFork, final boolean useTargetPNL, final long targetPNL) {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);

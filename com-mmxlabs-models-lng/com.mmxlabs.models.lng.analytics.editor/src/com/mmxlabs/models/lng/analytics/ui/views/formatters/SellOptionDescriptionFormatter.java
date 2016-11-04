@@ -5,7 +5,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Collection;
 
-import com.mmxlabs.models.lng.analytics.BuyOpportunity;
+import com.mmxlabs.models.lng.analytics.MultipleResultGrouper;
+import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellReference;
@@ -22,7 +24,18 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 			return "<open>";
 		}
 
-		if (object instanceof Collection<?>) {
+		if (object instanceof PartialCaseRow) {
+			PartialCaseRow partialCaseRow = (PartialCaseRow) object;
+			Collection<?> sells = partialCaseRow.getSellOptions();
+
+			final MultipleResultGrouper g = findGroup(partialCaseRow);
+			if (g != null) {
+				return String.format("%s %s", g.getName(), render(sells));
+			} else {
+				return render(sells);
+			}
+
+		} else if (object instanceof Collection<?>) {
 			final Collection<?> collection = (Collection<?>) object;
 
 			if (collection.isEmpty()) {
@@ -107,5 +120,17 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 		} else {
 			return object.toString();
 		}
+	}
+
+	private MultipleResultGrouper findGroup(PartialCaseRow row) {
+		final OptionAnalysisModel model = (OptionAnalysisModel) row.eContainer().eContainer();
+		for (final MultipleResultGrouper g : model.getResultGroups()) {
+			if (g.getFeatureName() == "sell") {
+				if (g.getReferenceRow() == row) {
+					return g;
+				}
+			}
+		}
+		return null;
 	}
 }

@@ -239,6 +239,14 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createPartialCaseAdapter();
 			}
 			@Override
+			public Adapter caseMultipleResultGrouper(MultipleResultGrouper object) {
+				return createMultipleResultGrouperAdapter();
+			}
+			@Override
+			public Adapter caseMultipleResultGrouperRow(MultipleResultGrouperRow object) {
+				return createMultipleResultGrouperRowAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -799,6 +807,34 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPartialCaseAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.MultipleResultGrouper <em>Multiple Result Grouper</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.MultipleResultGrouper
+	 * @generated
+	 */
+	public Adapter createMultipleResultGrouperAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.MultipleResultGrouperRow <em>Multiple Result Grouper Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.MultipleResultGrouperRow
+	 * @generated
+	 */
+	public Adapter createMultipleResultGrouperRowAdapter() {
 		return null;
 	}
 

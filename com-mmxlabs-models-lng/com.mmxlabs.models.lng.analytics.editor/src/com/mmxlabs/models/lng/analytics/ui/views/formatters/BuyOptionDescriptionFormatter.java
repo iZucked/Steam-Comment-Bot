@@ -8,6 +8,9 @@ import java.util.Collection;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyReference;
+import com.mmxlabs.models.lng.analytics.MultipleResultGrouper;
+import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -22,7 +25,18 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 			return "<open>";
 		}
 
-		if (object instanceof Collection<?>) {
+		if (object instanceof PartialCaseRow) {
+			PartialCaseRow partialCaseRow = (PartialCaseRow) object;
+			Collection<?> buys = partialCaseRow.getBuyOptions();
+
+			final MultipleResultGrouper g = findGroup(partialCaseRow);
+			if (g != null) {
+				return String.format("%s %s", g.getName(), render(buys));
+			} else {
+				return render(buys);
+			}
+
+		} else if (object instanceof Collection<?>) {
 			final Collection<?> collection = (Collection<?>) object;
 
 			if (collection.isEmpty()) {
@@ -32,6 +46,7 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 			final StringBuilder sb = new StringBuilder();
 			boolean first = true;
 			for (final Object o : collection) {
+
 				if (!first) {
 					sb.append("\n");
 				}
@@ -105,5 +120,17 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 		} else {
 			return object.toString();
 		}
+	}
+
+	private MultipleResultGrouper findGroup(PartialCaseRow row) {
+		final OptionAnalysisModel model = (OptionAnalysisModel) row.eContainer().eContainer();
+		for (final MultipleResultGrouper g : model.getResultGroups()) {
+			if (g.getFeatureName() == "buy") {
+				if (g.getReferenceRow() == row) {
+					return g;
+				}
+			}
+		}
+		return null;
 	}
 }

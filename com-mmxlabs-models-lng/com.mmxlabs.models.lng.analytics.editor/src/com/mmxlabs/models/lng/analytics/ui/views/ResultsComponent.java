@@ -8,11 +8,12 @@ import java.util.function.Supplier;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -21,19 +22,23 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -41,6 +46,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BreakEvenResult;
+import com.mmxlabs.models.lng.analytics.MultipleResultGrouper;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ResultContainer;
 import com.mmxlabs.models.lng.analytics.ResultSet;
@@ -62,8 +68,12 @@ public class ResultsComponent extends AbstractSandboxComponent {
 
 	private boolean filterConstantRows = false;
 
-	private Image image_filter;
-	private Image image_grey_filter;
+	private final Image image_filter;
+	private final Image image_grey_filter;
+	private final List<GridViewerColumn> sorterColumns = new LinkedList<>();
+	private GridTableViewer sorter;
+	private Composite clientArea;
+	private ExpandableComposite expandable;
 
 	protected ResultsComponent(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors,
 			@NonNull final Supplier<OptionAnalysisModel> modelProvider) {
@@ -75,16 +85,50 @@ public class ResultsComponent extends AbstractSandboxComponent {
 
 	@Override
 	public void createControls(final Composite parent, final boolean expanded, final IExpansionListener expansionListener, final OptionModellerView optionModellerView) {
-		final ExpandableComposite expandable = wrapInExpandable(parent, "Results", p -> createResultsViewer(p, optionModellerView), expandableCompo -> {
-			final Label c = new Label(expandableCompo, SWT.NONE);
+
+		// GridViewerColumn gvc = new GridViewerColumn(sorter, SWT.NONE);
+		// gvc.getColumn().setText("Group by:");
+
+		expandable = wrapInExpandable(parent, "Results", p -> createResultsViewer(p, optionModellerView), expandableCompo -> {
+
+			clientArea = new Composite(expandableCompo, SWT.NONE) {
+				public Point computeSize(int wHint, int hHint) {
+					Point p = super.computeSize(wHint, hHint);
+					// p.x = Math.max(200, p.x);
+					p.y = 30;// (sorter == null || sorter.getGrid().isDisposed()) ? 16 : sorter.getGrid().getHeaderHeight();
+					return p;
+				}
+
+				public Point computeSize(int wHint, int hHint, boolean changed) {
+					Point p = super.computeSize(wHint, hHint, changed);
+					// p.x = Math.max(200, p.x);
+					p.y = 30;// (sorter == null || sorter.getGrid().isDisposed()) ? 16 : sorter.getGrid().getHeaderHeight();
+					return p;
+				}
+			};
+			// clientArea.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
+			GridLayout layout = new GridLayout(2, false);
+			layout.marginBottom = 0;
+			layout.marginHeight = 0;
+			layout.marginLeft = 0;
+			layout.marginRight = 0;
+			layout.marginTop = 0;
+			clientArea.setLayout(layout);
+
+			sorter = new GridTableViewer(clientArea, SWT.NONE);
+			sorter.getGrid().setHeaderVisible(true);
+			sorter.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+
+			final Label c = new Label(clientArea, SWT.NONE);
 			c.setToolTipText("Toggle show only B/E cargoes");
-			expandableCompo.setTextClient(c);
 			if (filterConstantRows) {
 				c.setImage(image_filter);
 			} else {
 				c.setImage(image_grey_filter);
 			}
-			c.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).hint(16, 16).grab(true, false).create());
+
+			clientArea.setLayoutData(GridDataFactory.fillDefaults().hint(200, 30).grab(true, true).create());
+			c.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).hint(16, 16).grab(false, false).create());
 
 			c.addMouseListener(new MouseAdapter() {
 				public void mouseDown(final MouseEvent e) {
@@ -96,7 +140,9 @@ public class ResultsComponent extends AbstractSandboxComponent {
 					}
 					refresh();
 				}
+
 			});
+			expandableCompo.setTextClient(clientArea);
 		});
 		expandable.setExpanded(expanded);
 		expandable.addExpansionListener(expansionListener);
@@ -106,6 +152,46 @@ public class ResultsComponent extends AbstractSandboxComponent {
 	public void refresh() {
 		resultsViewer.refresh();
 		resultsViewer.expandAll();
+
+		sorterColumns.forEach(c -> c.getColumn().dispose());
+		sorterColumns.clear();
+
+		final OptionAnalysisModel model = modelProvider.get();
+		if (model != null) {
+			for (final MultipleResultGrouper g : model.getResultGroups()) {
+				final GridViewerColumn gvc = new GridViewerColumn(sorter, SWT.NONE);
+				sorterColumns.add(gvc);
+				gvc.getColumn().setText(g.getName());
+				gvc.getColumn().setMoveable(true);
+				gvc.getColumn().pack();
+				gvc.getColumn().setData(g);
+				gvc.getColumn().addListener(SWT.Move, new Listener() {
+
+					@Override
+					public void handleEvent(final Event event) {
+						final int[] order = sorter.getGrid().getColumnOrder();
+						final List<MultipleResultGrouper> newOrder = new LinkedList<>();
+						for (int i = 0; i < sorterColumns.size(); ++i) {
+							final GridViewerColumn gvc2 = sorterColumns.get(order[i]);
+							final MultipleResultGrouper g2 = (MultipleResultGrouper) gvc2.getColumn().getData();
+							newOrder.add(g2);
+						}
+						final Command command = SetCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_GROUPS, newOrder);
+						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(command);
+						resultsViewer.refresh();
+						resultsViewer.expandAll();
+					}
+				});
+			}
+
+		}
+
+		sorter.getGrid().layout(true);
+		clientArea.layout(true);
+		expandable.pack();
+		expandable.layout(true);
+		expandable.setSize(expandable.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		expandable.layout();
 	}
 
 	private Control createResultsViewer(final Composite parent, final OptionModellerView optionModellerView) {
@@ -145,6 +231,7 @@ public class ResultsComponent extends AbstractSandboxComponent {
 
 		createColumn(resultsViewer, "Buy", new ResultsFormatterLabelProvider(new BuyOptionDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__BUY_OPTION), false,
 				AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__BUY_OPTION);
+
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(resultsViewer, SWT.CENTER);
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());

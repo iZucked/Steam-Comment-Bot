@@ -346,6 +346,18 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case AnalyticsPackage.MULTIPLE_RESULT_GROUPER: {
+				MultipleResultGrouper multipleResultGrouper = (MultipleResultGrouper)theEObject;
+				T result = caseMultipleResultGrouper(multipleResultGrouper);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.MULTIPLE_RESULT_GROUPER_ROW: {
+				MultipleResultGrouperRow multipleResultGrouperRow = (MultipleResultGrouperRow)theEObject;
+				T result = caseMultipleResultGrouperRow(multipleResultGrouperRow);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -917,6 +929,36 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePartialCase(PartialCase object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Multiple Result Grouper</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Multiple Result Grouper</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMultipleResultGrouper(MultipleResultGrouper object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Multiple Result Grouper Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Multiple Result Grouper Row</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMultipleResultGrouperRow(MultipleResultGrouperRow object) {
 		return null;
 	}
 

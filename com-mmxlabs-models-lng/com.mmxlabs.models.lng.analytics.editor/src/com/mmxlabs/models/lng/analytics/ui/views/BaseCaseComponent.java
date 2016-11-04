@@ -63,10 +63,11 @@ public class BaseCaseComponent extends AbstractSandboxComponent {
 	private Control inputPNL;
 	private NumberInlineEditor numberInlineEditor;
 	private BaseCaseWiringDiagram baseCaseDiagram;
-	private Image image_calculate;
-	private Image image_grey_calculate;
+	private final Image image_calculate;
+	private final Image image_grey_calculate;
 
-	protected BaseCaseComponent(@NonNull IScenarioEditingLocation scenarioEditingLocation, Map<Object, IStatus> validationErrors, @NonNull Supplier<OptionAnalysisModel> modelProvider) {
+	protected BaseCaseComponent(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors,
+			@NonNull final Supplier<OptionAnalysisModel> modelProvider) {
 		super(scenarioEditingLocation, validationErrors, modelProvider);
 
 		final ImageDescriptor calc_desc = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_calc.gif");
@@ -75,8 +76,57 @@ public class BaseCaseComponent extends AbstractSandboxComponent {
 	}
 
 	@Override
-	public void createControls(Composite parent, boolean expanded, IExpansionListener expansionListener, OptionModellerView optionModellerView) {
-		ExpandableComposite expandable = wrapInExpandable(parent, "Target", p -> createBaseCaseViewer(p), expandableCompo -> {
+	public void createControls(final Composite parent, final boolean expanded, final IExpansionListener expansionListener, final OptionModellerView optionModellerView) {
+		final ExpandableComposite expandable = wrapInExpandable(parent, "Target", p -> createBaseCaseViewer(p), expandableCompo -> {
+
+			final Composite c = new Composite(expandableCompo, SWT.NONE);
+			GridDataFactory.generate(c, 1, 1);
+			c.setLayout(new GridLayout(5, false));
+			baseCaseProftLabel = new Label(c, SWT.NONE);
+			GridDataFactory.generate(baseCaseProftLabel, 1, 1);
+			baseCaseProftLabel.setText("Base P&&L: $");
+			inputPNL = createInputTargetPNL(c);
+			inputPNL.setLayoutData(new GridData(100, SWT.DEFAULT));
+			inputWants.add(m -> inputPNL.setEnabled(m != null));
+			inputWants.add(m -> inputPNL.redraw());
+
+			baseCaseCalculator = new Label(c, SWT.NONE);
+			// baseCaseCalculator.setText("Calc."); --cogs
+			baseCaseCalculator.setImage(image_grey_calculate);
+			GridDataFactory.generate(baseCaseCalculator, 1, 1);
+			baseCaseCalculator.addMouseTrackListener(new MouseTrackListener() {
+
+				@Override
+				public void mouseHover(final MouseEvent e) {
+				}
+
+				@Override
+				public void mouseExit(final MouseEvent e) {
+					baseCaseCalculator.setImage(image_grey_calculate);
+				}
+
+				@Override
+				public void mouseEnter(final MouseEvent e) {
+					baseCaseCalculator.setImage(image_calculate);
+				}
+			});
+
+			baseCaseCalculator.addMouseListener(new MouseAdapter() {
+
+				@Override
+				public void mouseDown(final MouseEvent e) {
+					final OptionAnalysisModel m = modelProvider.get();
+					if (baseCaseValid && m != null) {
+						BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> BaseCaseEvaluator.evaluate(scenarioEditingLocation, m, m.getBaseCase(), false, "Base Case"));
+					}
+				}
+
+			});
+			/*
+			 * toggle for target pnl
+			 */
+			final Composite targetPNLToggle = createUseTargetPNLToggleComposite(c);
+			GridDataFactory.generate(targetPNLToggle, 1, 1);
 
 			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 			final BaseCaseDropTargetListener listener = new BaseCaseDropTargetListener(scenarioEditingLocation, baseCaseViewer);
@@ -85,56 +135,9 @@ public class BaseCaseComponent extends AbstractSandboxComponent {
 			final DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE);
 			dropTarget.setTransfer(types);
 			dropTarget.addDropListener(listener);
+
+			expandableCompo.setTextClient(c);
 		});
-
-		final Composite c = new Composite(parent, SWT.NONE);
-		GridDataFactory.generate(c, 1, 1);
-		c.setLayout(new GridLayout(5, false));
-		baseCaseProftLabel = new Label(c, SWT.NONE);
-		GridDataFactory.generate(baseCaseProftLabel, 1, 1);
-		baseCaseProftLabel.setText("Base P&&L: $");
-		inputPNL = createInputTargetPNL(c);
-		inputPNL.setLayoutData(new GridData(100, SWT.DEFAULT));
-		inputWants.add(m -> inputPNL.setEnabled(m != null));
-		inputWants.add(m -> inputPNL.redraw());
-
-		baseCaseCalculator = new Label(c, SWT.NONE);
-		// baseCaseCalculator.setText("Calc."); --cogs
-		baseCaseCalculator.setImage(image_grey_calculate);
-		GridDataFactory.generate(baseCaseCalculator, 1, 1);
-		baseCaseCalculator.addMouseTrackListener(new MouseTrackListener() {
-
-			@Override
-			public void mouseHover(final MouseEvent e) {
-			}
-
-			@Override
-			public void mouseExit(final MouseEvent e) {
-				baseCaseCalculator.setImage(image_grey_calculate);
-			}
-
-			@Override
-			public void mouseEnter(final MouseEvent e) {
-				baseCaseCalculator.setImage(image_calculate);
-			}
-		});
-
-		baseCaseCalculator.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseDown(final MouseEvent e) {
-				OptionAnalysisModel m = modelProvider.get();
-				if (baseCaseValid && m != null) {
-					BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> BaseCaseEvaluator.evaluate(scenarioEditingLocation, m, m.getBaseCase(), false, "Base Case"));
-				}
-			}
-
-		});
-		/*
-		 * toggle for target pnl
-		 */
-		final Composite targetPNLToggle = createUseTargetPNLToggleComposite(c);
-		GridDataFactory.generate(targetPNLToggle, 1, 1);
 
 		hookOpenEditor(baseCaseViewer);
 
@@ -219,7 +222,7 @@ public class BaseCaseComponent extends AbstractSandboxComponent {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				OptionAnalysisModel m = modelProvider.get();
+				final OptionAnalysisModel m = modelProvider.get();
 				if (m != null) {
 					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 							SetCommand.create(scenarioEditingLocation.getEditingDomain(), m, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__USE_TARGET_PNL, matchingButton.getSelection()), m,
@@ -273,7 +276,7 @@ public class BaseCaseComponent extends AbstractSandboxComponent {
 		super.dispose();
 	}
 
-	public void setBaseCaseValid(boolean valid) {
+	public void setBaseCaseValid(final boolean valid) {
 		baseCaseValid = valid;
 		RunnerHelper.asyncExec(() -> {
 			if (!baseCaseCalculator.isDisposed()) {

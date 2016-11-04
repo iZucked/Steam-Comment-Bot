@@ -893,6 +893,52 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.MultipleResultGrouper} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MultipleResultGrouperItemProvider multipleResultGrouperItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.MultipleResultGrouper}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMultipleResultGrouperAdapter() {
+		if (multipleResultGrouperItemProvider == null) {
+			multipleResultGrouperItemProvider = new MultipleResultGrouperItemProvider(this);
+		}
+
+		return multipleResultGrouperItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.MultipleResultGrouperRow} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MultipleResultGrouperRowItemProvider multipleResultGrouperRowItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.MultipleResultGrouperRow}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMultipleResultGrouperRowAdapter() {
+		if (multipleResultGrouperRowItemProvider == null) {
+			multipleResultGrouperRowItemProvider = new MultipleResultGrouperRowItemProvider(this);
+		}
+
+		return multipleResultGrouperRowItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1061,6 +1107,8 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (resultSetItemProvider != null) resultSetItemProvider.dispose();
 		if (baseCaseItemProvider != null) baseCaseItemProvider.dispose();
 		if (partialCaseItemProvider != null) partialCaseItemProvider.dispose();
+		if (multipleResultGrouperItemProvider != null) multipleResultGrouperItemProvider.dispose();
+		if (multipleResultGrouperRowItemProvider != null) multipleResultGrouperRowItemProvider.dispose();
 	}
 
 }

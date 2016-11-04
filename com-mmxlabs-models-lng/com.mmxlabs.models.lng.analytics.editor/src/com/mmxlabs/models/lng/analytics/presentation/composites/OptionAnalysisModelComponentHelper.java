@@ -78,6 +78,7 @@ public class OptionAnalysisModelComponentHelper extends BaseComponentHelper {
 		add_resultSetsEditor(detailComposite, topClass);
 		add_useTargetPNLEditor(detailComposite, topClass);
 		add_childrenEditor(detailComposite, topClass);
+		add_resultGroupsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the baseCase feature on OptionAnalysisModel
@@ -156,5 +157,14 @@ public class OptionAnalysisModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_childrenEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__CHILDREN));
+	}
+
+	/**
+	 * Create the editor for the resultGroups feature on OptionAnalysisModel
+	 *
+	 * @generated
+	 */
+	protected void add_resultGroupsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_GROUPS));
 	}
 }

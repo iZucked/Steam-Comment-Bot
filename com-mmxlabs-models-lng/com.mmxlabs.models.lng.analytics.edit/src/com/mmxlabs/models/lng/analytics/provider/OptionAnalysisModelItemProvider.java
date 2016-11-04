@@ -106,6 +106,7 @@ public class OptionAnalysisModelItemProvider
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS);
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__CHILDREN);
+			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_GROUPS);
 		}
 		return childrenFeatures;
 	}
@@ -172,6 +173,7 @@ public class OptionAnalysisModelItemProvider
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__PARTIAL_CASE:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULT_SETS:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__CHILDREN:
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULT_GROUPS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -268,6 +270,11 @@ public class OptionAnalysisModelItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__CHILDREN,
 				 AnalyticsFactory.eINSTANCE.createOptionAnalysisModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_GROUPS,
+				 AnalyticsFactory.eINSTANCE.createMultipleResultGrouper()));
 	}
 
 }

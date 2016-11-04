@@ -359,6 +359,16 @@ public class ProvisionalCargoItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 AnalyticsFactory.eINSTANCE.createMultipleResultGrouper()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 AnalyticsFactory.eINSTANCE.createMultipleResultGrouperRow()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
 				 CargoFactory.eINSTANCE.createCargoModel()));
 
 		newChildDescriptors.add

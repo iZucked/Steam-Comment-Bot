@@ -4,9 +4,16 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.nebula.widgets.grid.GridItem;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.ui.views.providers.ResultsViewerContentProvider.GroupNode;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocationType;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -15,17 +22,43 @@ public class ResultsFormatterLabelProvider extends CellLabelProvider {
 
 	private final ICellRenderer formatter;
 	private final EStructuralFeature feature;
+	private Font boldFont;
 
 	public ResultsFormatterLabelProvider(final ICellRenderer formatter, final EStructuralFeature feature) {
 		this.formatter = formatter;
 		this.feature = feature;
+		{
+			final Font systemFont = Display.getDefault().getSystemFont();
+			// Clone the font data
+			final FontData fd = new FontData(systemFont.getFontData()[0].toString());
+			// Set the bold bit.
+			fd.setStyle(fd.getStyle() | SWT.BOLD);
+			boldFont = new Font(Display.getDefault(), fd);
+		}
 
 	}
 
 	@Override
 	public void update(final ViewerCell cell) {
 		Object element = cell.getElement();
-		if (element instanceof AnalysisResultRow) {
+
+		cell.setText("");
+		cell.setFont(null);
+		if (feature == AnalyticsPackage.eINSTANCE.getAnalysisResultRow_BuyOption()) {
+			if (element instanceof GroupNode) {
+				GroupNode groupNode = (GroupNode) element;
+				String sb = groupNode.name;
+				GroupNode g = groupNode.parentGroup;
+				while (g != null) {
+					sb = g.name + " >> " + sb;
+					g = g.parentGroup;
+				}
+
+				cell.setText(sb);
+				cell.setFont(boldFont);
+				((GridItem) cell.getItem()).setColumnSpan(0, 4);
+			}
+		} else if (element instanceof AnalysisResultRow) {
 			AnalysisResultRow analysisResultRow = (AnalysisResultRow) element;
 			@Nullable
 			String baseLabel = formatter.render(analysisResultRow.eGet(feature));
@@ -58,7 +91,14 @@ public class ResultsFormatterLabelProvider extends CellLabelProvider {
 				cell.setText(baseLabel);
 			}
 		} else {
-			cell.setText("---");
+			// cell.setText("---");
 		}
 	}
+
+	@Override
+	public void dispose() {
+		boldFont.dispose();
+		super.dispose();
+	}
+
 }

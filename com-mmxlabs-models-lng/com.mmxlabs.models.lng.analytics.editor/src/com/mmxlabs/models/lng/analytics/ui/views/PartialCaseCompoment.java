@@ -145,7 +145,7 @@ public class PartialCaseCompoment extends AbstractSandboxComponent {
 		partialCaseViewer.getGrid().setAutoHeight(true);
 		partialCaseViewer.getGrid().setRowHeaderVisible(true);
 
-		createColumn(partialCaseViewer, "Buy", new BuyOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS).getColumn().setWordWrap(true);
+		createColumn(partialCaseViewer, "Buy", new BuyOptionDescriptionFormatter(), false).getColumn().setWordWrap(true);
 
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(partialCaseViewer, SWT.CENTER);
@@ -158,8 +158,8 @@ public class PartialCaseCompoment extends AbstractSandboxComponent {
 			// gvc.getColumn().setCellRenderer(createCellRenderer());
 		}
 
-		createColumn(partialCaseViewer, "Sell", new SellOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS).getColumn().setWordWrap(true);
-		createColumn(partialCaseViewer, "Shipping", new ShippingOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING).getColumn().setWordWrap(true);
+		createColumn(partialCaseViewer, "Sell", new SellOptionDescriptionFormatter(), false).getColumn().setWordWrap(true);
+		createColumn(partialCaseViewer, "Shipping", new ShippingOptionDescriptionFormatter(), false).getColumn().setWordWrap(true);
 
 		partialCaseViewer.setContentProvider(new PartialCaseContentProvider());
 

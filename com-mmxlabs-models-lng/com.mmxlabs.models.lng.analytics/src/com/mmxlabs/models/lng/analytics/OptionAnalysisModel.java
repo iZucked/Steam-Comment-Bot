@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getResultSets <em>Result Sets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#isUseTargetPNL <em>Use Target PNL</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getChildren <em>Children</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getResultGroups <em>Result Groups</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getOptionAnalysisModel()
@@ -205,5 +206,21 @@ public interface OptionAnalysisModel extends NamedObject {
 	 * @generated
 	 */
 	EList<OptionAnalysisModel> getChildren();
+
+	/**
+	 * Returns the value of the '<em><b>Result Groups</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.MultipleResultGrouper}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Result Groups</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Result Groups</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getOptionAnalysisModel_ResultGroups()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<MultipleResultGrouper> getResultGroups();
 
 } // OptionAnalysisModel
