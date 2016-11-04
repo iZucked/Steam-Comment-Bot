@@ -76,7 +76,13 @@ public class PriceExpressionUtils {
 
 	}
 
+	// Pattern to match invalid characters
 	private final @NonNull static Pattern pattern = Pattern.compile("([^0-9 a-zA-Z_+-/*%()])");
+
+	// Pattern to detect use of SHIFT function.
+	private final @NonNull static Pattern shiftDetectPattern = Pattern.compile(".*SHIFT\\p{Space}*\\(.*", Pattern.CASE_INSENSITIVE);
+
+	private final @NonNull static Pattern shiftUsePattern = Pattern.compile("SHIFT\\p{Space}*\\(\\p{Space}*[a-z][a-z0-9_]*\\p{Space}*,\\p{Space}*-?[0-9]+\\p{Space}*\\)", Pattern.CASE_INSENSITIVE);
 
 	@NonNull
 	public static ValidationResult validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull EObject object, final @NonNull EStructuralFeature feature,
@@ -115,12 +121,24 @@ public class PriceExpressionUtils {
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return ValidationResult.createErrorStatus("Price Expression is missing.");
 		}
-
-		final Matcher matcher = pattern.matcher(priceExpression);
-
-		if (matcher.find()) {
-			final String message = String.format("[Price expression|'%s'] Contains unexpected character '%s'.", priceExpression, matcher.group(1));
-			return ValidationResult.createErrorStatus(message);
+		// Check for illegal characters
+		{
+			final Matcher matcher = pattern.matcher(priceExpression);
+			if (matcher.find()) {
+				final String message = String.format("[Price expression|'%s'] Contains unexpected character '%s'.", priceExpression, matcher.group(1));
+				return ValidationResult.createErrorStatus(message);
+			}
+		}
+		// Test SHIFT function use
+		{
+			final Matcher matcherA = shiftDetectPattern.matcher(priceExpression);
+			if (matcherA.find()) {
+				final Matcher matcherB = shiftUsePattern.matcher(priceExpression);
+				if (!matcherB.find()) {
+					final String message = String.format("[Price expression|'%s'] Unexpected use of SHIFT function. Expect SHIFT(<index name>, <number of months>.", priceExpression);
+					return ValidationResult.createErrorStatus(message);
+				}
+			}
 		}
 
 		if (parser != null) {
@@ -271,4 +289,28 @@ public class PriceExpressionUtils {
 		}
 	}
 
+	/**
+	 * Used by unit tests
+	 * 
+	 * @param priceExpression
+	 * @return
+	 */
+	public static boolean validateBasicSyntax(String priceExpression) {
+		{
+			final Matcher matcher = pattern.matcher(priceExpression);
+			if (matcher.find()) {
+				return false;
+			}
+		}
+		{
+			final Matcher matcherA = shiftDetectPattern.matcher(priceExpression);
+			if (matcherA.find()) {
+				final Matcher matcherB = shiftUsePattern.matcher(priceExpression);
+				if (!matcherB.find()) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 }
