@@ -10,7 +10,6 @@ import java.util.function.Supplier;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.MenuManager;
@@ -33,11 +32,9 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -45,7 +42,6 @@ import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BreakEvenResult;
@@ -98,22 +94,22 @@ public class ResultsComponent extends AbstractSandboxComponent {
 		expandable = wrapInExpandable(parent, "Results", p -> createResultsViewer(p, optionModellerView), expandableCompo -> {
 
 			clientArea = new Composite(expandableCompo, SWT.NONE) {
-				public Point computeSize(int wHint, int hHint) {
-					Point p = super.computeSize(wHint, hHint);
+				public Point computeSize(final int wHint, final int hHint) {
+					final Point p = super.computeSize(wHint, hHint);
 					// p.x = Math.max(200, p.x);
 					p.y = 30;// (sorter == null || sorter.getGrid().isDisposed()) ? 16 : sorter.getGrid().getHeaderHeight();
 					return p;
 				}
 
-				public Point computeSize(int wHint, int hHint, boolean changed) {
-					Point p = super.computeSize(wHint, hHint, changed);
+				public Point computeSize(final int wHint, final int hHint, final boolean changed) {
+					final Point p = super.computeSize(wHint, hHint, changed);
 					// p.x = Math.max(200, p.x);
 					p.y = 30;// (sorter == null || sorter.getGrid().isDisposed()) ? 16 : sorter.getGrid().getHeaderHeight();
 					return p;
 				}
 			};
 			// clientArea.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
-			GridLayout layout = new GridLayout(2, false);
+			final GridLayout layout = new GridLayout(2, false);
 			layout.marginBottom = 0;
 			layout.marginHeight = 0;
 			layout.marginLeft = 0;
@@ -164,9 +160,9 @@ public class ResultsComponent extends AbstractSandboxComponent {
 
 		final OptionAnalysisModel model = modelProvider.get();
 		// Only show the sorter if there are multiple items to sort by
-		EList<MultipleResultGrouper> resultGroups = model.getResultGroups();
-		if (model != null && resultGroups.size() > 1) {
-			MultipleResultGrouper lastOne = resultGroups.get(resultGroups.size() - 1);
+		if (model != null && model.getResultGroups().size() > 1) {
+			final List<MultipleResultGrouper> resultGroups = model.getResultGroups();
+			final MultipleResultGrouper lastOne = resultGroups.get(resultGroups.size() - 1);
 			for (final MultipleResultGrouper g : resultGroups) {
 				final GridViewerColumn gvc = new GridViewerColumn(sorter, SWT.NONE);
 				sorterColumns.add(gvc);
