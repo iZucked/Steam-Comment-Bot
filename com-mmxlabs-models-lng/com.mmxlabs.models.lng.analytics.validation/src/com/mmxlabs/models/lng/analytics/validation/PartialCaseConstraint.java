@@ -59,13 +59,13 @@ public class PartialCaseConstraint extends AbstractModelMultiConstraint {
 			// Second pass, report problem slots
 			processPartialCase(partialCase, (row, slot) -> {
 				if (duplicatedLoadSlots.contains(slot)) {
-					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - existing slot used multiple times.", viewName)));
+					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - existing slot used multiple times.", viewName, IConstraintStatus.ERROR)));
 					deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS);
 					statuses.add(deco);
 				}
 			}, (row, slot) -> {
 				if (duplicatdDischargeSlots.contains(slot)) {
-					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - existing slot used multiple times.", viewName)));
+					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - existing slot used multiple times.", viewName, IConstraintStatus.ERROR)));
 					deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS);
 					statuses.add(deco);
 				}
@@ -97,99 +97,99 @@ public class PartialCaseConstraint extends AbstractModelMultiConstraint {
 				});
 			}
 			
-			/*
-			 * Mismatched shipping type
-			 */
-			Set<PartialCaseRow> mismatchedShippingTypes = new HashSet<>();
-			// First pass, find problem slots
-			processPartialCaseRow(partialCase, (row) -> {
-				if (row.getBuyOptions().stream().filter(isDESPurchase()).count() > 0
-						&& row.getSellOptions().stream().filter(isFOBSale()).count() > 0) {
-					mismatchedShippingTypes.add(row);
-				}
-			});
-			// Second pass, report problem slots
-			if (mismatchedShippingTypes.size() > 0) {
-				// just add on distinct rows
-				processPartialCaseRow(partialCase, (row) -> {
-					if (mismatchedShippingTypes.contains(row)) {
-						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - contains row(s) with a DES purchase and a FOB Sale", viewName)));
-						deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
-						statuses.add(deco);
-					}
-				});
-			}
-
-			/*
-			 * Mismatched shipping type
-			 */
-			Set<PartialCaseRow> mismatchedShippingOption = new HashSet<>();
-			// First pass, find problem slots
-			processPartialCaseRow(partialCase, (row) -> {
-				if (row.getBuyOptions().stream().filter(isFOBPurchase()).count() > 0
-						&& row.getSellOptions().stream().filter(isDESSale()).count() > 0
-						&& row.getShipping().stream().filter(isNominated()).count() > 0) {
-					mismatchedShippingOption.add(row);
-				}
-			});
-			// Second pass, report problem slots
-			if (mismatchedShippingOption.size() > 0) {
-				// just add on distinct rows
-				processPartialCaseRow(partialCase, (row) -> {
-					if (mismatchedShippingOption.contains(row)) {
-						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - contains row(s) with a FOB purchase and a DES Sale and a nominated vessel", viewName)));
-						deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
-						statuses.add(deco);
-					}
-				});
-			}
-
-			/*
-			 * Mismatched shipping type
-			 */
-			Set<PartialCaseRow> nullShippingOption = new HashSet<>();
-			// First pass, find problem slots
-			processPartialCaseRow(partialCase, (row) -> {
-				if (row.getBuyOptions().stream().filter(isFOBPurchase()).count() > 0
-						&& row.getSellOptions().stream().filter(isDESSale()).count() > 0
-						&& row.getShipping().isEmpty()) {
-					nullShippingOption.add(row);
-				}
-			});
-			// Second pass, report problem slots
-			if (nullShippingOption.size() > 0) {
-				// just add on distinct rows
-				processPartialCaseRow(partialCase, (row) -> {
-					if (nullShippingOption.contains(row)) {
-						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - contains row(s) with a FOB purchase and a DES Sale and no shipping option", viewName)));
-						deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
-						statuses.add(deco);
-					}
-				});
-			}
-			
-			/*
-			 * The big lateness loop!
-			 */
-			// first pass
-			Set<PartialCaseRow> lateRows = new HashSet<>();
-			processPartialCaseRow(partialCase, (row) -> {
-				int lateness = getLateness(extraContext, row);
-				if (lateness < 0) {
-					lateRows.add(row);
-				}
-			});
-			// Second pass, report problem slots
-			if (lateRows.size() > 0) {
-				// just add on distinct rows
-				processPartialCaseRow(partialCase, (row) -> {
-					if (lateRows.contains(row)) {
-						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row will create a late cargo", viewName), IConstraintStatus.WARNING));
-						deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
-						statuses.add(deco);
-					}
-				});
-			}
+//			/*
+//			 * Mismatched shipping type
+//			 */
+//			Set<PartialCaseRow> mismatchedShippingTypes = new HashSet<>();
+//			// First pass, find problem slots
+//			processPartialCaseRow(partialCase, (row) -> {
+//				if (row.getBuyOptions().stream().filter(isDESPurchase()).count() > 0
+//						&& row.getSellOptions().stream().filter(isFOBSale()).count() > 0) {
+//					mismatchedShippingTypes.add(row);
+//				}
+//			});
+//			// Second pass, report problem slots
+//			if (mismatchedShippingTypes.size() > 0) {
+//				// just add on distinct rows
+//				processPartialCaseRow(partialCase, (row) -> {
+//					if (mismatchedShippingTypes.contains(row)) {
+//						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - contains row(s) with a DES purchase and a FOB Sale", viewName)));
+//						deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
+//						statuses.add(deco);
+//					}
+//				});
+//			}
+//
+//			/*
+//			 * Mismatched shipping type
+//			 */
+//			Set<PartialCaseRow> mismatchedShippingOption = new HashSet<>();
+//			// First pass, find problem slots
+//			processPartialCaseRow(partialCase, (row) -> {
+//				if (row.getBuyOptions().stream().filter(isFOBPurchase()).count() > 0
+//						&& row.getSellOptions().stream().filter(isDESSale()).count() > 0
+//						&& row.getShipping().stream().filter(isNominated()).count() > 0) {
+//					mismatchedShippingOption.add(row);
+//				}
+//			});
+//			// Second pass, report problem slots
+//			if (mismatchedShippingOption.size() > 0) {
+//				// just add on distinct rows
+//				processPartialCaseRow(partialCase, (row) -> {
+//					if (mismatchedShippingOption.contains(row)) {
+//						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - contains row(s) with a FOB purchase and a DES Sale and a nominated vessel", viewName)));
+//						deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
+//						statuses.add(deco);
+//					}
+//				});
+//			}
+//
+//			/*
+//			 * Mismatched shipping type
+//			 */
+//			Set<PartialCaseRow> nullShippingOption = new HashSet<>();
+//			// First pass, find problem slots
+//			processPartialCaseRow(partialCase, (row) -> {
+//				if (row.getBuyOptions().stream().filter(isFOBPurchase()).count() > 0
+//						&& row.getSellOptions().stream().filter(isDESSale()).count() > 0
+//						&& row.getShipping().isEmpty()) {
+//					nullShippingOption.add(row);
+//				}
+//			});
+//			// Second pass, report problem slots
+//			if (nullShippingOption.size() > 0) {
+//				// just add on distinct rows
+//				processPartialCaseRow(partialCase, (row) -> {
+//					if (nullShippingOption.contains(row)) {
+//						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - contains row(s) with a FOB purchase and a DES Sale and no shipping option", viewName)));
+//						deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
+//						statuses.add(deco);
+//					}
+//				});
+//			}
+//			
+//			/*
+//			 * The big lateness loop!
+//			 */
+//			// first pass
+//			Set<PartialCaseRow> lateRows = new HashSet<>();
+//			processPartialCaseRow(partialCase, (row) -> {
+//				int lateness = getLateness(extraContext, row);
+//				if (lateness < 0) {
+//					lateRows.add(row);
+//				}
+//			});
+//			// Second pass, report problem slots
+//			if (lateRows.size() > 0) {
+//				// just add on distinct rows
+//				processPartialCaseRow(partialCase, (row) -> {
+//					if (lateRows.contains(row)) {
+//						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row will create a late cargo", viewName)), IConstraintStatus.WARNING);
+//						deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
+//						statuses.add(deco);
+//					}
+//				});
+//			}
 
 		}
 

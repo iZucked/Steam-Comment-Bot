@@ -196,26 +196,7 @@ public class BaseCaseEvaluator {
 			final DischargeSlot dischargeSlot = AnalyticsBuilder.makeDischargeSlot(sell, clone);
 			mapper.addMapping(sell, dischargeSlot);
 
-			Cargo cargo = null;
-			if (loadSlot != null && dischargeSlot != null) {
-				cargo = CargoFactory.eINSTANCE.createCargo();
-				cargo.getSlots().add(loadSlot);
-				cargo.getSlots().add(dischargeSlot);
-			}
-
-			if (loadSlot != null && dischargeSlot != null) {
-				if (loadSlot.getPort() == null && dischargeSlot.getPort() != null) {
-					assert loadSlot.isDESPurchase();
-					assert loadSlot instanceof SpotSlot;
-					loadSlot.setPort(dischargeSlot.getPort());
-				} else if (loadSlot.getPort() != null && dischargeSlot.getPort() == null) {
-					assert dischargeSlot.isFOBSale();
-					assert dischargeSlot instanceof SpotSlot;
-					dischargeSlot.setPort(loadSlot.getPort());
-				}
-			}
-
-			setShipping(loadSlot, dischargeSlot, cargo, row.getShipping(), clone, shippingMap);
+			Cargo cargo = makeCargo(clone, shippingMap, row, loadSlot, dischargeSlot);
 
 			if (loadSlot != null && !clone.getCargoModel().getLoadSlots().contains(loadSlot)) {
 				clone.getCargoModel().getLoadSlots().add(loadSlot);
@@ -228,6 +209,31 @@ public class BaseCaseEvaluator {
 			}
 		}
 
+	}
+
+	public static Cargo makeCargo(final LNGScenarioModel clone, Map<FleetShippingOption, VesselAvailability> shippingMap, final BaseCaseRow row, final LoadSlot loadSlot,
+			final DischargeSlot dischargeSlot) {
+		Cargo cargo = null;
+		if (loadSlot != null && dischargeSlot != null) {
+			cargo = CargoFactory.eINSTANCE.createCargo();
+			cargo.getSlots().add(loadSlot);
+			cargo.getSlots().add(dischargeSlot);
+		}
+
+		if (loadSlot != null && dischargeSlot != null) {
+			if (loadSlot.getPort() == null && dischargeSlot.getPort() != null) {
+				assert loadSlot.isDESPurchase();
+				assert loadSlot instanceof SpotSlot;
+				loadSlot.setPort(dischargeSlot.getPort());
+			} else if (loadSlot.getPort() != null && dischargeSlot.getPort() == null) {
+				assert dischargeSlot.isFOBSale();
+				assert dischargeSlot instanceof SpotSlot;
+				dischargeSlot.setPort(loadSlot.getPort());
+			}
+		}
+
+		setShipping(loadSlot, dischargeSlot, cargo, row.getShipping(), clone, shippingMap);
+		return cargo;
 	}
 
 	protected static void setShipping(final @Nullable LoadSlot loadSlot, final @Nullable DischargeSlot dischargeSlot, final @Nullable Cargo cargo, final @Nullable ShippingOption shipping,
@@ -333,7 +339,6 @@ public class BaseCaseEvaluator {
 				cargo.setVesselAssignmentType(market);
 				cargo.setSpotIndex(-1);
 				lngScenarioModel.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().add(market);
-
 				if (loadSlot.getWindowStart() != null && dischargeSlot.getWindowStart() == null) {
 					final int travelHours = AnalyticsBuilder.calculateTravelHoursForDischarge(portModel, loadSlot, dischargeSlot, shipping);
 					final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
