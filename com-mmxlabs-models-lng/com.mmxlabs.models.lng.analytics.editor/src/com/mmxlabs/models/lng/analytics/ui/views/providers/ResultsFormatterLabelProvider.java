@@ -57,8 +57,11 @@ public class ResultsFormatterLabelProvider extends CellLabelProvider {
 				cell.setText(sb);
 				cell.setFont(boldFont);
 				((GridItem) cell.getItem()).setColumnSpan(0, 4);
+				return;
 			}
-		} else if (element instanceof AnalysisResultRow) {
+		}
+
+		if (element instanceof AnalysisResultRow) {
 			AnalysisResultRow analysisResultRow = (AnalysisResultRow) element;
 			@Nullable
 			String baseLabel = formatter.render(analysisResultRow.eGet(feature));
