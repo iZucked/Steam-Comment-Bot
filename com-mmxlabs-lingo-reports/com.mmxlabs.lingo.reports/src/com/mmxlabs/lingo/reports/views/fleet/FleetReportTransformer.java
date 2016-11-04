@@ -74,7 +74,7 @@ public class FleetReportTransformer {
 			private final List<LNGScenarioModel> rootObjects = new LinkedList<>();
 
 			@Override
-			public void beginCollecting(boolean pinDiffMode) {
+			public void beginCollecting(final boolean pinDiffMode) {
 				super.beginCollecting(pinDiffMode);
 				numberOfSchedules = 0;
 				isPinned = false;
@@ -92,7 +92,7 @@ public class FleetReportTransformer {
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean isPinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final LNGScenarioModel scenarioModel, final Schedule schedule, final boolean isPinned) {
 				this.isPinned |= isPinned;
 
 				numberOfSchedules++;
@@ -147,9 +147,12 @@ public class FleetReportTransformer {
 		final Set<Vessel> seenVessels = new HashSet<Vessel>();
 		for (final Sequence sequence : schedule.getSequences()) {
 			if (builder.showEvent(sequence)) {
-				if (!seenVessels.contains(sequence.getVesselAvailability().getVessel())) {
-					interestingEvents.add(sequence);
-					seenVessels.add(sequence.getVesselAvailability().getVessel());
+				final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
+				if (vesselAvailability != null) {
+					if (!seenVessels.contains(vesselAvailability.getVessel())) {
+						interestingEvents.add(sequence);
+						seenVessels.add(vesselAvailability.getVessel());
+					}
 				}
 			}
 			allEvents.add(sequence);
@@ -173,9 +176,9 @@ public class FleetReportTransformer {
 				row.setTarget(sequence);
 				row.setName(sequence.getName());
 				row.setSequence(sequence);
-				EList<Sequence> linkedSequences = row.getLinkedSequences();
-				List<Sequence> foundSequences = schedule.getSequences().stream().filter(s -> (s.getVesselAvailability() != null && s.getVesselAvailability().getVessel() != null && s.getVesselAvailability().getVessel()
-						.equals(sequence.getVesselAvailability().getVessel()))).collect(Collectors.toList());
+				final EList<Sequence> linkedSequences = row.getLinkedSequences();
+				final List<Sequence> foundSequences = schedule.getSequences().stream().filter(s -> (s.getVesselAvailability() != null && s.getVesselAvailability().getVessel() != null
+						&& s.getVesselAvailability().getVessel().equals(sequence.getVesselAvailability().getVessel()))).collect(Collectors.toList());
 				linkedSequences.addAll(foundSequences);
 				rows.add(row);
 
