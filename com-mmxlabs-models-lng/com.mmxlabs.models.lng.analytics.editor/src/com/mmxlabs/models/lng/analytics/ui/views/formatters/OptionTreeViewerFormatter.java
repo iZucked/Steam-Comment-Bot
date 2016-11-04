@@ -20,7 +20,7 @@ public class OptionTreeViewerFormatter extends BaseFormatter {
 		}
 
 		if (object instanceof OptionAnalysisModel) {
-			return "" + ((NamedObject) object).getName() + (object == optionModellerView.getModel() ? "***" : "");
+			return "" + ((NamedObject) object).getName();
 		}
 		if (object == null) {
 			return "";

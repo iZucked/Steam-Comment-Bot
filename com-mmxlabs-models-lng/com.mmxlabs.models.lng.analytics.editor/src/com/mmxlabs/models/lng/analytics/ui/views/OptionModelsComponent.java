@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.util.LocalSelectionTransfer;
@@ -24,6 +25,7 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.OptionTreeViewerFormatter;
+import com.mmxlabs.models.lng.analytics.ui.views.providers.CellFormatterLabelProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.OptionsTreeViewerContentProvider;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -70,7 +72,8 @@ public class OptionModelsComponent extends AbstractSandboxComponent {
 		// optionsTreeViewer.getGrid().setHeaderVisible(true);
 		optionsTreeViewer.setAutoExpandLevel(TreeViewer.ALL_LEVELS);
 
-		createColumn(optionsTreeViewer, "Option Models", new OptionTreeViewerFormatter(optionModellerView), true);
+		CellFormatterLabelProvider labelProvider = new OptionsTreeViewerLabelProvider(new OptionTreeViewerFormatter(optionModellerView), validationErrors, "Option Models", optionModellerView);
+		createColumn(optionsTreeViewer, labelProvider, "Option Models", new OptionTreeViewerFormatter(optionModellerView), true);
 
 		mgr = new MenuManager();
 

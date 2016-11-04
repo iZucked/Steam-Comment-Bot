@@ -50,6 +50,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.google.guava;bundle-version="15.0.0",
  com.mmxlabs.models.ui.properties,
  com.mmxlabs.license.features;bundle-version="4.0.3",
- com.mmxlabs.models.lng.types
+ com.mmxlabs.models.lng.types,
+ org.eclipse.jface,
+ org.eclipse.emf.ecore
 Bundle-ActivationPolicy: lazy
 Import-Package: org.slf4j;version="1.6.4"
