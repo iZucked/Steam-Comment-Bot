@@ -157,7 +157,8 @@ public class ResultsComponent extends AbstractSandboxComponent {
 		sorterColumns.clear();
 
 		final OptionAnalysisModel model = modelProvider.get();
-		if (model != null) {
+		// Only show the sorter if there are multiple items to sort by
+		if (model != null && model.getResultGroups().size() > 1) {
 			for (final MultipleResultGrouper g : model.getResultGroups()) {
 				final GridViewerColumn gvc = new GridViewerColumn(sorter, SWT.NONE);
 				sorterColumns.add(gvc);
