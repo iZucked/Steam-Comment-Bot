@@ -29,12 +29,13 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -89,6 +90,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private final List<Consumer<OptionAnalysisModel>> inputWants = new LinkedList<>();
 	private final List<Runnable> disposables = new LinkedList<>();
 	private Label errorLabel;
+	private Link createNewLink;
 
 	private ScrolledComposite centralScrolledComposite;
 	private ScrolledComposite rhsScrolledComposite;
@@ -328,6 +330,10 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			errorLabel.dispose();
 			errorLabel = null;
 		}
+		if (createNewLink != null) {
+			createNewLink.dispose();
+			createNewLink = null;
+		}
 
 		// Some slightly hacky code to hide the editor if there is no scenario open
 		if (scenarioInstance == null) {
@@ -350,16 +356,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				if (lngScenarioModel.getOptionModels().isEmpty()) {
 					setModel(null);
-					errorLabel = new Label(mainComposite.getParent(), SWT.NONE);
-					errorLabel.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
-					errorLabel.setText("No sandbox selected");
-					errorLabel.setToolTipText("Create new sandbox");
-					errorLabel.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
-
-					errorLabel.addMouseListener(new MouseAdapter() {
-						@Override
-						public void mouseDown(MouseEvent e) {
-
+					createNewLink = new Link(mainComposite.getParent(), SWT.NONE);
+					createNewLink.addListener(SWT.Selection, new Listener() {
+					      public void handleEvent(Event event) {
 							final OptionAnalysisModel model = AnalyticsFactory.eINSTANCE.createOptionAnalysisModel();
 
 							model.setName("New sandbox");
@@ -372,8 +371,22 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 							getEditingDomain().getCommandStack().execute(cmd);
 
 							doDisplayScenarioInstance(getScenarioInstance(), getRootObject(), model);
+							
 						}
 					});
+//					createNewLink.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
+//					createNewLink.setText("No sandbox selected");
+					createNewLink.setText("<A>Create new sandbox</A>");
+					createNewLink.setToolTipText("Create new sandbox");
+//					createNewLink.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+//
+//					createNewLink.addMouseListener(new MouseAdapter() {
+//						@Override
+//						public void mouseDown(MouseEvent e) {
+//
+//						
+//						}
+//					});
 
 					mainComposite.setVisible(false);
 					mainComposite.getParent().layout(true);
