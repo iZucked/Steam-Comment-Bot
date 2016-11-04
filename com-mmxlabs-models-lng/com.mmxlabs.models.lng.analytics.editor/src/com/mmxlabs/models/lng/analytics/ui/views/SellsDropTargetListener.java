@@ -1,8 +1,10 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
+import java.time.LocalDate;
 import java.util.Iterator;
 
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -13,12 +15,18 @@ import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.AnalyticsBuilder;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 
 public class SellsDropTargetListener implements DropTargetListener {
@@ -73,6 +81,25 @@ public class SellsDropTargetListener implements DropTargetListener {
 
 						final DischargeSlot dischargeSlot = rowData.getDischargeSlot();
 						final SellOption sellRef = AnalyticsBuilder.getOrCreateSellOption(dischargeSlot, optionAnalysisModel, scenarioEditingLocation, cmd);
+					} else if (o instanceof BuyOption) {
+						// create Fob Purchase
+						BuyOption option = (BuyOption) o;
+						final Port port = AnalyticsBuilder.getPort(option);
+						final LocalDate date = AnalyticsBuilder.getDate(option);
+						final boolean isShipped = AnalyticsBuilder.isShipped(option);
+
+						final SellOpportunity row = AnalyticsFactory.eINSTANCE.createSellOpportunity();
+						row.setFobSale(isShipped);
+						row.setDate(date);
+						row.setPort(port);
+						row.setPriceExpression("?");
+
+						AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, row);
+
+						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+								AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS, row), optionAnalysisModel,
+								AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
+						DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, row);
 					}
 				}
 				if (!cmd.isEmpty()) {
