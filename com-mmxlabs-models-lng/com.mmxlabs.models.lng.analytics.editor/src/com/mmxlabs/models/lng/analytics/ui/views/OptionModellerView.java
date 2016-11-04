@@ -1,5 +1,6 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
+import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.EventObject;
@@ -7,6 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -112,7 +114,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	private EmbeddedReportComponent econsComponent;
 	private EmbeddedReportComponent pnlDetailsComponent;
-
+	private WeakHashMap<OptionAnalysisModel, WeakReference<OptionAnalysisModel>> navigationHistory = new WeakHashMap<>();
 	@Override
 	public void createPartControl(final Composite parent) {
 
@@ -393,7 +395,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					setInput(null);
 					return;
 				} else {
-					setModel(lngScenarioModel.getOptionModels().get(0));
+					OptionAnalysisModel root = lngScenarioModel.getOptionModels().get(0);
+					WeakReference<OptionAnalysisModel> modelToUse = navigationHistory.get(root);
+					setModel(modelToUse == null || (modelToUse != null && modelToUse.get() == null) ? rootOptionsModel : modelToUse.get());
 				}
 			}
 			setInput(getModel());
@@ -577,6 +581,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		if (rootOptionsModel != null) {
 			rootOptionsModel.eAdapters().add(historyRenameAdaptor);
 			optionsModelComponent.setInput(Collections.singleton(rootOptionsModel));
+			// create a weak reference to avoid memory leaks
+			WeakReference<OptionAnalysisModel> weakReferenceToModel = new WeakReference<>(model);
+			navigationHistory.put(rootOptionsModel, weakReferenceToModel);
 		}
 
 		rootObject = getRootObject();

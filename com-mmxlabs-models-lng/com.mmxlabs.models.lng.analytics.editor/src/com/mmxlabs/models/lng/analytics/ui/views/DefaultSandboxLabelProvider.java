@@ -18,6 +18,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
+import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.CellFormatterLabelProvider;
@@ -44,6 +45,7 @@ public class DefaultSandboxLabelProvider extends CellFormatterLabelProvider {
 	Image imgInfo = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/information.gif").createImage();
 	Image imgShippingRoundTrip = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/roundtrip.png").createImage();
 	Image imgShippingFleet = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/fleet.png").createImage();
+	Image imgModel = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/console_view.gif").createImage();
 
 	Color colour_error = new Color(Display.getDefault(), new RGB(255, 100, 100));
 	Color colour_warn = new Color(Display.getDefault(), new RGB(255, 255, 200));
@@ -192,7 +194,7 @@ public class DefaultSandboxLabelProvider extends CellFormatterLabelProvider {
 		imgInfo.dispose();
 		imgShippingRoundTrip.dispose();
 		imgShippingFleet.dispose();
-
+		imgModel.dispose();
 		colour_error.dispose();
 		colour_info.dispose();
 		colour_warn.dispose();
