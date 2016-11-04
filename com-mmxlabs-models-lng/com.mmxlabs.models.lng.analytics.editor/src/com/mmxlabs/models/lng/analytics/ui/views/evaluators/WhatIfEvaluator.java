@@ -1,19 +1,24 @@
 package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BreakEvenResult;
@@ -46,6 +51,7 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -128,17 +134,21 @@ public class WhatIfEvaluator {
 		}
 
 		// TODO: Command
-		model.getResultSets().clear();
-		model.getResultGroups().clear();
+		CompoundCommand cmd = new CompoundCommand("Generate results");
+		cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS, SetCommand.UNSET_VALUE));
+//		cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_GROUPS, SetCommand.UNSET_VALUE));
 		if (combinations.isEmpty()) {
-			singleEval(scenarioEditingLocation, targetPNL, model, baseCase);
+			singleEval(scenarioEditingLocation, targetPNL, model, baseCase, cmd);
 		} else {
-			recursiveEval(0, combinations, scenarioEditingLocation, targetPNL, model, baseCase, new LinkedList<>());
-			model.getResultGroups().addAll(groups);
+			recursiveEval(0, combinations, scenarioEditingLocation, targetPNL, model, baseCase, new LinkedList<>(), cmd);
+		}
+		cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_GROUPS, groups));
+		if (!cmd.isEmpty()) {
+			scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, model, null);
 		}
 	}
 
-	private static ResultSet singleEval(final IScenarioEditingLocation scenarioEditingLocation, final long targetPNL, final OptionAnalysisModel model, final BaseCase baseCase) {
+	private static ResultSet singleEval(final IScenarioEditingLocation scenarioEditingLocation, final long targetPNL, final OptionAnalysisModel model, final BaseCase baseCase, CompoundCommand cmd) {
 
 		final ResultSet[] ref = new ResultSet[1];
 		BaseCaseEvaluator.generateScenario(scenarioEditingLocation, model, baseCase, (lngScenarioModel, mapper) -> {
@@ -157,8 +167,7 @@ public class WhatIfEvaluator {
 				final AnalysisResultRow res = AnalyticsFactory.eINSTANCE.createAnalysisResultRow();
 				res.setBuyOption(row.getBuyOption());
 				res.setSellOption(row.getSellOption());
-				if ((!AnalyticsBuilder.isShipped(row.getBuyOption()) ||
-						!AnalyticsBuilder.isShipped(row.getSellOption())) && AnalyticsBuilder.isShipped(row.getShipping())) {
+				if ((!AnalyticsBuilder.isShipped(row.getBuyOption()) || !AnalyticsBuilder.isShipped(row.getSellOption())) && AnalyticsBuilder.isShipped(row.getShipping())) {
 					res.setShipping(null);
 				} else {
 					res.setShipping(row.getShipping());
@@ -243,7 +252,8 @@ public class WhatIfEvaluator {
 				resultSet.getRows().add(res);
 			}
 
-			model.getResultSets().add(resultSet);
+			cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS, Collections.singletonList(resultSet)));
+			// model.getResultSets().add(resultSet);
 
 			ref[0] = resultSet;
 		});
@@ -317,9 +327,9 @@ public class WhatIfEvaluator {
 	}
 
 	private static void recursiveEval(final int listIdx, final List<List<Pair<EObject, Supplier<MultipleResultGrouperRow>>>> combinations, final IScenarioEditingLocation scenarioEditingLocation,
-			final long targetPNL, final OptionAnalysisModel model, final BaseCase baseCase, final List<Consumer<ResultSet>> mutliResultSetters) {
+			final long targetPNL, final OptionAnalysisModel model, final BaseCase baseCase, final List<Consumer<ResultSet>> mutliResultSetters, CompoundCommand cmd) {
 		if (listIdx == combinations.size()) {
-			final ResultSet rs = singleEval(scenarioEditingLocation, targetPNL, model, baseCase);
+			final ResultSet rs = singleEval(scenarioEditingLocation, targetPNL, model, baseCase, cmd);
 			mutliResultSetters.forEach(s -> s.accept(rs));
 			return;
 		}
@@ -329,7 +339,7 @@ public class WhatIfEvaluator {
 			final MultipleResultGrouperRow row = r.get();
 			final List<Consumer<ResultSet>> next = new LinkedList<>(mutliResultSetters);
 			next.add(rs -> row.getGroupResults().add(rs));
-			recursiveEval(listIdx + 1, combinations, scenarioEditingLocation, targetPNL, model, baseCase, next);
+			recursiveEval(listIdx + 1, combinations, scenarioEditingLocation, targetPNL, model, baseCase, next, cmd);
 		}
 	}
 
@@ -343,17 +353,17 @@ public class WhatIfEvaluator {
 		ServiceHelper.<IAnalyticsScenarioEvaluator> withService(IAnalyticsScenarioEvaluator.class,
 				evaluator -> evaluator.breakEvenEvaluate(lngScenarioModel, userSettings, parentForFork, targetPNL, useTargetPNL ? BreakEvenMode.PORTFOLIO : BreakEvenMode.POINT_TO_POINT));
 	}
-	
+
 	public static Predicate<BuyOption> isDESPurchase() {
 		return b -> ((b instanceof BuyReference && ((BuyReference) b).getSlot() != null && ((BuyReference) b).getSlot().isDESPurchase() == true)
 				|| (b instanceof BuyOpportunity && ((BuyOpportunity) b).isDesPurchase() == true));
 	}
-	
+
 	public static Predicate<SellOption> isFOBSale() {
 		return s -> ((s instanceof SellReference && ((SellReference) s).getSlot() != null && ((SellReference) s).getSlot().isFOBSale() == true)
 				|| (s instanceof SellOpportunity && ((SellOpportunity) s).isFobSale() == true));
 	}
-	
+
 	private static Predicate<ShippingOption> isNominated() {
 		return s -> s instanceof NominatedShippingOption;
 	}
