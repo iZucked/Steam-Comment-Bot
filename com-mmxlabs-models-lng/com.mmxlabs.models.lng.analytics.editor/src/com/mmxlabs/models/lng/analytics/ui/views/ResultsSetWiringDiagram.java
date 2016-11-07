@@ -173,9 +173,10 @@ public class ResultsSetWiringDiagram implements PaintListener {
 			List<AnalysisResultRow> rows = resultSet.getRows();
 			for (final AnalysisResultRow row : rows) {
 
+			 
 				BaseCaseRow other = null;
 				for (BaseCaseRow bcr : root.getBaseCase().getBaseCase()) {
-					if (row.getBuyOption() == bcr.getBuyOption()) {
+					if (bcr.getBuyOption() != null  && row.getBuyOption() == bcr.getBuyOption()) {
 						other = bcr;
 						break;
 					}
@@ -183,7 +184,7 @@ public class ResultsSetWiringDiagram implements PaintListener {
 				AnalysisResultRow otherRow = null;
 				if (other != null) {
 					for (AnalysisResultRow arr : resultSet.getRows()) {
-						if (arr.getSellOption() == other.getSellOption()) {
+						if (other.getSellOption() != null && arr.getSellOption() == other.getSellOption()) {
 							otherRow = arr;
 							break;
 						}
