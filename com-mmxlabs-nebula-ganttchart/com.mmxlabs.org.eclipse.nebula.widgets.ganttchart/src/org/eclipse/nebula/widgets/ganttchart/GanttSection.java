@@ -59,6 +59,7 @@ public class GanttSection implements IFillBackgroundColors {
 	private boolean _inheritBackgroud;
 	private boolean visible = true;
 	private Image image;
+	private Object data;
 
 	private GanttSection() {
 		this._ganttEvents = new ArrayList();
@@ -464,8 +465,18 @@ public class GanttSection implements IFillBackgroundColors {
 	public Image getImage() {
 		return image;
 	}
+
 	public void setImage(Image image) {
 		this.image = image;
+	}
+
+	public void setData(Object data) {
+		this.data = data;
+
+	}
+
+	public Object getData() {
+		return this.data;
 	}
 
 }
