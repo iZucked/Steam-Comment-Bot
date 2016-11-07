@@ -909,6 +909,7 @@ public class ChangeSetView implements IAdaptable {
 			}
 
 			private void selectRow(final Set<Object> selectedElements, final ChangeSetRow changeSetRow) {
+				selectedElements.add(changeSetRow);
 				selectedElements.add(changeSetRow.getLoadSlot());
 				selectedElements.add(changeSetRow.getNewLoadAllocation());
 				selectedElements.add(changeSetRow.getOriginalLoadAllocation());

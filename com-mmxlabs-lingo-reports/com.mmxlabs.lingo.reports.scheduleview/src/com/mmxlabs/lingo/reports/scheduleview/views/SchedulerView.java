@@ -34,6 +34,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -89,12 +90,17 @@ import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider
 import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
 import com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ISchedulerViewColourSchemeExtension;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
+import com.mmxlabs.lingo.reports.services.IScenarioChangeSetListener;
 import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
+import com.mmxlabs.lingo.reports.services.ScenarioChangeSetService;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -166,12 +172,13 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 	private IEclipseContext e4Context;
 	private ScenarioComparisonService scenarioComparisonService;
 	private SelectedScenariosService selectedScenariosService;
+	private ScenarioChangeSetService scenarioChangeSetService;
 
 	// New diff stuff
 	private Table table;
 
 	// DEMO
-	private boolean showConnections = System.getProperty("schedulechart.showConnections") != null;
+	private final boolean showConnections = System.getProperty("schedulechart.showConnections") != null;
 
 	/**
 	 * The constructor.
@@ -224,6 +231,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		e4Context = (IEclipseContext) getSite().getService(IEclipseContext.class);
 		this.scenarioComparisonService = e4Context.getActive(ScenarioComparisonService.class);
 		this.selectedScenariosService = e4Context.getActive(SelectedScenariosService.class);
+		this.scenarioChangeSetService = e4Context.getActive(ScenarioChangeSetService.class);
 
 		// Inject the extension points
 		Activator.getDefault().getInjector().injectMembers(this);
@@ -474,76 +482,64 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 					ganttChart.getGanttComposite().getGanttConnections().clear();
 
-					final BiFunction<Row, Row, Boolean> differentSequenceChecker = (r1, r2) -> {
-						final Sequence s1 = r1.getSequence();
-						final Sequence s2 = r2.getSequence();
+					final BiFunction<SlotAllocation, SlotAllocation, Boolean> differentSequenceChecker = (r1, r2) -> {
+						final SlotVisit v1 = r1.getSlotVisit();
+						final SlotVisit v2 = r2.getSlotVisit();
+						if (v1 == null || v2 == null) {
+							return false;
+						}
+						final Sequence s1 = v1.getSequence();
+						final Sequence s2 = v2.getSequence();
 						if (s1 == null && s2 == null) {
 							return true;
 						}
 						return !s1.getName().equals(s2.getName());
 					};
 
-					final Set<Row> seenRows = new HashSet<>();
-					for (final Object o : l) {
-						if (o instanceof Row) {
-							final Row row = (Row) o;
-							seenRows.add(row);
+					final boolean isDiffToBase = scenarioChangeSetService.isDiffToBase();
+					final ChangeSet changeSet = scenarioChangeSetService.getChangeSet();
 
+					{
+						if (changeSet != null) {
+							final List<ChangeSetRow> csRows;
+							if (isDiffToBase) {
+								csRows = changeSet.getChangeSetRowsToBase();
+							} else {
+								csRows = changeSet.getChangeSetRowsToPrevious();
+							}
 							final Color lineColour = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 
-							final SlotAllocation loadAllocation = row.getLoadAllocation();
-							final SlotAllocation dischargeAllocation = row.getDischargeAllocation();
-							if (row.isReference()) {
-								for (final Row other : row.getReferringRows()) {
-									if (seenRows.contains(other)) {
-										continue;
-									}
-									seenRows.add(other);
-									if (loadAllocation != null) {
-										final SlotAllocation otherAllocation = other.getLoadAllocation();
-										if (otherAllocation != null) {
-											if (differentSequenceChecker.apply(row, other)) {
-												ganttChart.getGanttComposite().addConnection(internalMap.get(loadAllocation.getSlotVisit()), internalMap.get(otherAllocation.getSlotVisit()),
-														lineColour);
-											}
-										}
-									}
-									// FIXME: This needs to look up other discharge row which may not be the same as the "other" row if re-wirted
-									if (dischargeAllocation != null) {
-										final SlotAllocation otherAllocation = other.getDischargeAllocation();
-										if (otherAllocation != null) {
-											if (differentSequenceChecker.apply(row, other)) {
-												ganttChart.getGanttComposite().addConnection(internalMap.get(dischargeAllocation.getSlotVisit()), internalMap.get(otherAllocation.getSlotVisit()),
-														lineColour);
-											}
-										}
-									}
-								}
+							for (final ChangeSetRow csRow : csRows) {
+								if (csRow.isVesselChange()) {
+									{
+										final SlotAllocation oldAllocation = csRow.getOriginalLoadAllocation();
+										final SlotAllocation newAllocation = csRow.getNewLoadAllocation();
 
-							} else {
-								final Row other = row.getReferenceRow();
-								if (other != null) {
-									if (seenRows.contains(other)) {
-										continue;
-									}
-									seenRows.add(other);
-									if (loadAllocation != null) {
-										final SlotAllocation otherAllocation = other.getLoadAllocation();
-										if (otherAllocation != null) {
-											if (differentSequenceChecker.apply(row, other)) {
-												ganttChart.getGanttComposite().addConnection(internalMap.get(otherAllocation.getSlotVisit()), internalMap.get(loadAllocation.getSlotVisit()),
-														lineColour);
+										if (oldAllocation != null && newAllocation != null) {
+
+											if (differentSequenceChecker.apply(oldAllocation, newAllocation)) {
+												final GanttEvent oldEvent = internalMap.get(oldAllocation.getSlotVisit());
+												final GanttEvent newEvent = internalMap.get(newAllocation.getSlotVisit());
+
+												if (oldEvent != null && newEvent != null) {
+													ganttChart.getGanttComposite().addConnection(oldEvent, newEvent, lineColour);
+												}
 											}
 										}
 									}
-									// FIXME: This needs to look up other discharge row which may not be the same as the "other" row if re-wirted
-									if (dischargeAllocation != null) {
-										final SlotAllocation otherAllocation = other.getDischargeAllocation();
-										if (otherAllocation != null) {
-											if (differentSequenceChecker.apply(row, other)) {
+									{
+										final SlotAllocation oldAllocation = csRow.getOriginalDischargeAllocation();
+										final SlotAllocation newAllocation = csRow.getNewDischargeAllocation();
 
-												ganttChart.getGanttComposite().addConnection(internalMap.get(otherAllocation.getSlotVisit()), internalMap.get(dischargeAllocation.getSlotVisit()),
-														lineColour);
+										if (oldAllocation != null && newAllocation != null) {
+											if (differentSequenceChecker.apply(oldAllocation, newAllocation)) {
+
+												final GanttEvent oldEvent = internalMap.get(oldAllocation.getSlotVisit());
+												final GanttEvent newEvent = internalMap.get(newAllocation.getSlotVisit());
+
+												if (oldEvent != null && newEvent != null) {
+													ganttChart.getGanttComposite().addConnection(oldEvent, newEvent, lineColour);
+												}
 											}
 										}
 									}
@@ -551,6 +547,86 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 							}
 						}
 					}
+
+					// final Set<Row> seenRows = new HashSet<>();
+					// for (final Object o : l) {
+					// if (o instanceof Row) {
+					// final Row row = (Row) o;
+					// seenRows.add(row);
+					//
+					//
+					// final SlotAllocation loadAllocation = row.getLoadAllocation();
+					// final SlotAllocation dischargeAllocation = row.getDischargeAllocation();
+					// if (row.isReference()) {
+					// if (changeSet != null) {
+					// final List<ChangeSetRow> csRows;
+					// if (isDiffToBase) {
+					// csRows = changeSet.getChangeSetRowsToBase();
+					// } else {
+					// csRows = changeSet.getChangeSetRowsToPrevious();
+					// }
+					// for (ChangeSetRow csRow : csRows) {
+					// if (csRow.getOriginalDischargeAllocation()
+					// }
+					// }
+					//
+					// for (final Row other : row.getReferringRows()) {
+					// if (seenRows.contains(other)) {
+					// continue;
+					// }
+					// seenRows.add(other);
+					// if (loadAllocation != null) {
+					// final SlotAllocation otherAllocation = other.getLoadAllocation();
+					// if (otherAllocation != null) {
+					// if (differentSequenceChecker.apply(row, other)) {
+					// ganttChart.getGanttComposite().addConnection(internalMap.get(loadAllocation.getSlotVisit()), internalMap.get(otherAllocation.getSlotVisit()),
+					// lineColour);
+					// }
+					// }
+					// }
+					// // FIXME: This needs to look up other discharge row which may not be the same as the "other" row if re-wireed
+					// if (dischargeAllocation != null) {
+					// final SlotAllocation otherAllocation = other.getDischargeAllocation();
+					// if (otherAllocation != null) {
+					// if (differentSequenceChecker.apply(row, other)) {
+					// ganttChart.getGanttComposite().addConnection(internalMap.get(dischargeAllocation.getSlotVisit()), internalMap.get(otherAllocation.getSlotVisit()),
+					// lineColour);
+					// }
+					// }
+					// }
+					// }
+					//
+					// } else {
+					// final Row other = row.getReferenceRow();
+					// if (other != null) {
+					// if (seenRows.contains(other)) {
+					// continue;
+					// }
+					// seenRows.add(other);
+					// if (loadAllocation != null) {
+					// final SlotAllocation otherAllocation = other.getLoadAllocation();
+					// if (otherAllocation != null) {
+					// if (differentSequenceChecker.apply(row, other)) {
+					// ganttChart.getGanttComposite().addConnection(internalMap.get(otherAllocation.getSlotVisit()), internalMap.get(loadAllocation.getSlotVisit()),
+					// lineColour);
+					// }
+					// }
+					// }
+					// // FIXME: This needs to look up other discharge row which may not be the same as the "other" row if re-wirted
+					// if (dischargeAllocation != null) {
+					// final SlotAllocation otherAllocation = other.getDischargeAllocation();
+					// if (otherAllocation != null) {
+					// if (differentSequenceChecker.apply(row, other)) {
+					//
+					// ganttChart.getGanttComposite().addConnection(internalMap.get(otherAllocation.getSlotVisit()), internalMap.get(dischargeAllocation.getSlotVisit()),
+					// lineColour);
+					// }
+					// }
+					// }
+					// }
+					// }
+					// }
+					// }
 				}
 				final ArrayList<GanttEvent> selectedEvents;
 				if (l != null) {
@@ -778,6 +854,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 		selectedScenariosService.addListener(selectedScenariosServiceListener);
 		scenarioComparisonService.addListener(scenarioComparisonServiceListener);
+		scenarioChangeSetService.addListener(scenarioChangeSetListener);
 		// Create the help context id for the viewer's control. This is in the
 		// format of pluginid.contextId
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_ScheduleChart");
@@ -798,6 +875,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 		scenarioComparisonService.triggerListener(scenarioComparisonServiceListener);
+		scenarioChangeSetService.triggerListener(scenarioChangeSetListener);
 	}
 
 	@Override
@@ -812,6 +890,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 		scenarioComparisonService.removeListener(scenarioComparisonServiceListener);
 		selectedScenariosService.removeListener(selectedScenariosServiceListener);
+		scenarioChangeSetService.removeListener(scenarioChangeSetListener);
 
 		super.dispose();
 	}
@@ -905,19 +984,15 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 	}
 
 	public void setInput(final Object input) {
-		RunnerHelper.asyncExec(new Runnable() {
+		RunnerHelper.asyncExec(() -> {
+			if (!viewer.getControl().isDisposed()) {
 
-			@Override
-			public void run() {
-				if (!viewer.getControl().isDisposed()) {
+				final boolean needFit = viewer.getInput() == null;
 
-					final boolean needFit = viewer.getInput() == null;
+				viewer.setInput(input);
 
-					viewer.setInput(input);
-
-					if ((input != null) && needFit) {
-						packAction.run();
-					}
+				if ((input != null) && needFit) {
+					packAction.run();
 				}
 			}
 		});
@@ -1245,4 +1320,10 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		}
 	};
 
+	private final IScenarioChangeSetListener scenarioChangeSetListener = new IScenarioChangeSetListener() {
+		@Override
+		public void changeSetChanged(@Nullable ChangeSetRoot changeSetRoot, @Nullable ChangeSet changeSet, @Nullable ChangeSetRow changeSetRow, boolean diffToBase) {
+			ViewerHelper.refresh(viewer, true);
+		}
+	};
 }
