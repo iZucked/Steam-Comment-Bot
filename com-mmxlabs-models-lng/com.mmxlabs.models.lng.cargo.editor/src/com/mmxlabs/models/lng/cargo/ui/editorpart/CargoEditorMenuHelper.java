@@ -1153,9 +1153,7 @@ public class CargoEditorMenuHelper {
 						final LocalDate cal = source.getWindowStartWithSlotOrPortTime().toLocalDate().withDayOfMonth(1);
 						final String yearMonthString = getKeyForDate(cal);
 
-						loadSlot.setWindowStart(cal);
-						loadSlot.setWindowStartTime(0);
-
+						// Subtract 1 hour to limit within calendar month
 						loadSlot.setWindowSize(1);
 						loadSlot.setWindowSizeUnits(TimePeriod.MONTHS);
 
