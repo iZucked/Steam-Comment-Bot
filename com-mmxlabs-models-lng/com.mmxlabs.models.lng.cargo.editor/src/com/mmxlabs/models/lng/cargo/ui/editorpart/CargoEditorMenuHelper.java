@@ -1155,8 +1155,9 @@ public class CargoEditorMenuHelper {
 
 						loadSlot.setWindowStart(cal);
 						loadSlot.setWindowStartTime(0);
-						// Subtract 1 hour to limit within calendar month
-						loadSlot.setWindowSize(Hours.between(cal, cal.plusMonths(1)) - 1);
+
+						loadSlot.setWindowSize(1);
+						loadSlot.setWindowSizeUnits(TimePeriod.MONTHS);
 
 						// Get existing names
 						final Set<String> usedIDStrings = new HashSet<>();
