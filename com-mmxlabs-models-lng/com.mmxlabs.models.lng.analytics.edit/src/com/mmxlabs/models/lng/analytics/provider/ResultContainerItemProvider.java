@@ -82,6 +82,7 @@ public class ResultContainerItemProvider
 			childrenFeatures.add(AnalyticsPackage.Literals.RESULT_CONTAINER__CARGO_ALLOCATION);
 			childrenFeatures.add(AnalyticsPackage.Literals.RESULT_CONTAINER__OPEN_SLOT_ALLOCATIONS);
 			childrenFeatures.add(AnalyticsPackage.Literals.RESULT_CONTAINER__SLOT_ALLOCATIONS);
+			childrenFeatures.add(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS);
 		}
 		return childrenFeatures;
 	}
@@ -137,6 +138,7 @@ public class ResultContainerItemProvider
 			case AnalyticsPackage.RESULT_CONTAINER__CARGO_ALLOCATION:
 			case AnalyticsPackage.RESULT_CONTAINER__OPEN_SLOT_ALLOCATIONS:
 			case AnalyticsPackage.RESULT_CONTAINER__SLOT_ALLOCATIONS:
+			case AnalyticsPackage.RESULT_CONTAINER__EVENTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -168,6 +170,56 @@ public class ResultContainerItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.RESULT_CONTAINER__SLOT_ALLOCATIONS,
 				 ScheduleFactory.eINSTANCE.createSlotAllocation()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
+				 ScheduleFactory.eINSTANCE.createEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
+				 ScheduleFactory.eINSTANCE.createStartEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
+				 ScheduleFactory.eINSTANCE.createEndEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
+				 ScheduleFactory.eINSTANCE.createJourney()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
+				 ScheduleFactory.eINSTANCE.createIdle()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
+				 ScheduleFactory.eINSTANCE.createPortVisit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
+				 ScheduleFactory.eINSTANCE.createSlotVisit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
+				 ScheduleFactory.eINSTANCE.createVesselEventVisit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
+				 ScheduleFactory.eINSTANCE.createGeneratedCharterOut()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS,
+				 ScheduleFactory.eINSTANCE.createCooldown()));
 	}
 
 	/**

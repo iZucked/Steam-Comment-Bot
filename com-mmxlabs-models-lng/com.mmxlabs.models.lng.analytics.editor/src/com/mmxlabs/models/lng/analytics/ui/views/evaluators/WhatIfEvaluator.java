@@ -43,6 +43,7 @@ import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseEvaluator.IM
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoEditingCommands;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -136,7 +137,7 @@ public class WhatIfEvaluator {
 		// TODO: Command
 		CompoundCommand cmd = new CompoundCommand("Generate results");
 		cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS, SetCommand.UNSET_VALUE));
-//		cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_GROUPS, SetCommand.UNSET_VALUE));
+		// cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_GROUPS, SetCommand.UNSET_VALUE));
 		if (combinations.isEmpty()) {
 			singleEval(scenarioEditingLocation, targetPNL, model, baseCase, cmd);
 		} else {
@@ -178,16 +179,23 @@ public class WhatIfEvaluator {
 				final SlotAllocation dischargeAllocation = t.getSecond();
 				final CargoAllocation cargoAllocation = t.getThird();
 
+				// Move containership of schedule objects to the container.
 				final ResultContainer container = AnalyticsFactory.eINSTANCE.createResultContainer();
-				container.setCargoAllocation(cargoAllocation);
+				if (cargoAllocation != null) {
+					container.setCargoAllocation(cargoAllocation);
+					container.getEvents().addAll(cargoAllocation.getEvents());
+				}
 				if (loadAllocation != null) {
 					container.getSlotAllocations().add(loadAllocation);
+					if (!container.getEvents().contains(loadAllocation.getSlotVisit())) {
+						container.getEvents().add(loadAllocation.getSlotVisit());
+					}
 				}
 				if (dischargeAllocation != null) {
 					container.getSlotAllocations().add(dischargeAllocation);
-				}
-				if (cargoAllocation != null) {
-					container.getSlotAllocations().add(dischargeAllocation);
+					if (!container.getEvents().contains(dischargeAllocation.getSlotVisit())) {
+						container.getEvents().add(dischargeAllocation.getSlotVisit());
+					}
 				}
 
 				if (isBreakEvenRow(loadAllocation)) {

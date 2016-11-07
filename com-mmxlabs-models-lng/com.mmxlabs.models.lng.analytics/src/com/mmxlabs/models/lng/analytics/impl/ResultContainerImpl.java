@@ -6,6 +6,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.ResultContainer;
 
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 
@@ -33,6 +34,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ResultContainerImpl#getCargoAllocation <em>Cargo Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ResultContainerImpl#getOpenSlotAllocations <em>Open Slot Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ResultContainerImpl#getSlotAllocations <em>Slot Allocations</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ResultContainerImpl#getEvents <em>Events</em>}</li>
  * </ul>
  *
  * @generated
@@ -67,6 +69,16 @@ public class ResultContainerImpl extends EObjectImpl implements ResultContainer 
 	 * @ordered
 	 */
 	protected EList<SlotAllocation> slotAllocations;
+
+	/**
+	 * The cached value of the '{@link #getEvents() <em>Events</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEvents()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Event> events;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -159,6 +171,18 @@ public class ResultContainerImpl extends EObjectImpl implements ResultContainer 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<Event> getEvents() {
+		if (events == null) {
+			events = new EObjectContainmentEList<Event>(Event.class, this, AnalyticsPackage.RESULT_CONTAINER__EVENTS);
+		}
+		return events;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -168,6 +192,8 @@ public class ResultContainerImpl extends EObjectImpl implements ResultContainer 
 				return ((InternalEList<?>)getOpenSlotAllocations()).basicRemove(otherEnd, msgs);
 			case AnalyticsPackage.RESULT_CONTAINER__SLOT_ALLOCATIONS:
 				return ((InternalEList<?>)getSlotAllocations()).basicRemove(otherEnd, msgs);
+			case AnalyticsPackage.RESULT_CONTAINER__EVENTS:
+				return ((InternalEList<?>)getEvents()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -186,6 +212,8 @@ public class ResultContainerImpl extends EObjectImpl implements ResultContainer 
 				return getOpenSlotAllocations();
 			case AnalyticsPackage.RESULT_CONTAINER__SLOT_ALLOCATIONS:
 				return getSlotAllocations();
+			case AnalyticsPackage.RESULT_CONTAINER__EVENTS:
+				return getEvents();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -210,6 +238,10 @@ public class ResultContainerImpl extends EObjectImpl implements ResultContainer 
 				getSlotAllocations().clear();
 				getSlotAllocations().addAll((Collection<? extends SlotAllocation>)newValue);
 				return;
+			case AnalyticsPackage.RESULT_CONTAINER__EVENTS:
+				getEvents().clear();
+				getEvents().addAll((Collection<? extends Event>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -231,6 +263,9 @@ public class ResultContainerImpl extends EObjectImpl implements ResultContainer 
 			case AnalyticsPackage.RESULT_CONTAINER__SLOT_ALLOCATIONS:
 				getSlotAllocations().clear();
 				return;
+			case AnalyticsPackage.RESULT_CONTAINER__EVENTS:
+				getEvents().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -249,6 +284,8 @@ public class ResultContainerImpl extends EObjectImpl implements ResultContainer 
 				return openSlotAllocations != null && !openSlotAllocations.isEmpty();
 			case AnalyticsPackage.RESULT_CONTAINER__SLOT_ALLOCATIONS:
 				return slotAllocations != null && !slotAllocations.isEmpty();
+			case AnalyticsPackage.RESULT_CONTAINER__EVENTS:
+				return events != null && !events.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

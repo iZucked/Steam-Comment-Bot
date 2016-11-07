@@ -1940,13 +1940,22 @@ s	 * <!-- end-user-doc -->
 	int RESULT_CONTAINER__SLOT_ALLOCATIONS = 2;
 
 	/**
+	 * The feature id for the '<em><b>Events</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESULT_CONTAINER__EVENTS = 3;
+
+	/**
 	 * The number of structural features of the '<em>Result Container</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RESULT_CONTAINER_FEATURE_COUNT = 3;
+	int RESULT_CONTAINER_FEATURE_COUNT = 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.OptionRule <em>Option Rule</em>}' class.
@@ -4079,6 +4088,17 @@ s	 * <!-- end-user-doc -->
 	EReference getResultContainer_SlotAllocations();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.ResultContainer#getEvents <em>Events</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Events</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ResultContainer#getEvents()
+	 * @see #getResultContainer()
+	 * @generated
+	 */
+	EReference getResultContainer_Events();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.OptionRule <em>Option Rule</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5777,6 +5797,14 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference RESULT_CONTAINER__SLOT_ALLOCATIONS = eINSTANCE.getResultContainer_SlotAllocations();
+
+		/**
+		 * The meta object literal for the '<em><b>Events</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference RESULT_CONTAINER__EVENTS = eINSTANCE.getResultContainer_Events();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.OptionRule <em>Option Rule</em>}' class.

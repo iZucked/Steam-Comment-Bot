@@ -70,6 +70,7 @@ public class ResultContainerComponentHelper extends BaseComponentHelper {
 		add_cargoAllocationEditor(detailComposite, topClass);
 		add_openSlotAllocationsEditor(detailComposite, topClass);
 		add_slotAllocationsEditor(detailComposite, topClass);
+		add_eventsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the cargoAllocation feature on ResultContainer
@@ -94,5 +95,14 @@ public class ResultContainerComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_slotAllocationsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.RESULT_CONTAINER__SLOT_ALLOCATIONS));
+	}
+
+	/**
+	 * Create the editor for the events feature on ResultContainer
+	 *
+	 * @generated
+	 */
+	protected void add_eventsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.RESULT_CONTAINER__EVENTS));
 	}
 }
