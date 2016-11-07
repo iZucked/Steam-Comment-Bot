@@ -169,8 +169,6 @@ public class AnnotatedSolutionExporter {
 
 		final Sequence fobSequence = factory.createSequence();
 		final Sequence desSequence = factory.createSequence();
-		final Map<String, Long> desFitnessMap = new LinkedHashMap<String, Long>();
-		final Map<String, Long> fobFitnessMap = new LinkedHashMap<String, Long>();
 
 		for (final IResource resource : resources) {
 			assert resource != null;
@@ -213,7 +211,7 @@ public class AnnotatedSolutionExporter {
 				eSequence.setSequenceType(SequenceType.SPOT_VESSEL);
 				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence)) {
 					continue;
-                }
+				}
 
 				eSequence.setCharterInMarket(modelEntityMap.getModelObjectNullChecked(vesselAvailability.getSpotCharterInMarket(), CharterInMarket.class));
 				eSequence.unsetVesselAvailability();
@@ -241,33 +239,6 @@ public class AnnotatedSolutionExporter {
 
 			if (!(isDESSequence || isFOBSequence)) {
 				sequences.add(eSequence);
-			}
-			{
-				// set sequence fitness values
-				@SuppressWarnings("unchecked")
-				final Map<IResource, Map<String, Long>> sequenceFitnesses = annotatedSolution.getGeneralAnnotation(SchedulerConstants.G_AI_fitnessPerRoute, Map.class);
-
-				if (sequenceFitnesses != null) {
-					final EList<Fitness> eSequenceFitness = eSequence.getFitnesses();
-					final Map<String, Long> sequenceFitness = sequenceFitnesses.get(resource);
-					for (final Map.Entry<String, Long> e : sequenceFitness.entrySet()) {
-
-						if (isDESSequence || isFOBSequence) {
-							final Map<String, Long> m = isFOBSequence ? fobFitnessMap : desFitnessMap;
-							long value = e.getValue();
-							if (m.containsKey(e.getKey())) {
-								value += m.get(e.getKey()).longValue();
-							}
-							m.put(e.getKey(), value);
-						} else {
-							final Fitness sf = ScheduleFactory.eINSTANCE.createFitness();
-							sf.setName(e.getKey());
-							sf.setFitnessValue(e.getValue());
-							eSequenceFitness.add(sf);
-						}
-					}
-
-				}
 			}
 
 			final EList<Event> events;
@@ -379,26 +350,9 @@ public class AnnotatedSolutionExporter {
 
 		if (!fobSequence.getEvents().isEmpty()) {
 			sequences.add(fobSequence);
-
-			final EList<Fitness> fobSequenceFitness = fobSequence.getFitnesses();
-			for (final Map.Entry<String, Long> e : fobFitnessMap.entrySet()) {
-
-				final Fitness sf = ScheduleFactory.eINSTANCE.createFitness();
-				sf.setName(e.getKey());
-				sf.setFitnessValue(e.getValue());
-				fobSequenceFitness.add(sf);
-			}
 		}
 		if (!desSequence.getEvents().isEmpty()) {
 			sequences.add(desSequence);
-			final EList<Fitness> desSequenceFitness = desSequence.getFitnesses();
-			for (final Map.Entry<String, Long> e : desFitnessMap.entrySet()) {
-
-				final Fitness sf = ScheduleFactory.eINSTANCE.createFitness();
-				sf.setName(e.getKey());
-				sf.setFitnessValue(e.getValue());
-				desSequenceFitness.add(sf);
-			}
 		}
 
 		// Fix up start events with no port.
