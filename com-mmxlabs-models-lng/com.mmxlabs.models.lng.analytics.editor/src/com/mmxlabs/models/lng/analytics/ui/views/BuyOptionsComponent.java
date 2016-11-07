@@ -29,6 +29,7 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
+import com.mmxlabs.models.lng.analytics.ui.views.providers.CellFormatterLabelProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.OptionsViewerContentProvider;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -95,8 +96,8 @@ public class BuyOptionsComponent extends AbstractSandboxComponent {
 
 		GridViewerHelper.configureLookAndFeel(buyOptionsViewer);
 		buyOptionsViewer.getGrid().setHeaderVisible(false);
-
-		createColumn(buyOptionsViewer, "Buy", new BuyOptionDescriptionFormatter(), false);
+		CellFormatterLabelProvider labelProvider = new BuysSellsLabelProvider(new BuyOptionDescriptionFormatter(), validationErrors, "Buy");
+		createColumn(buyOptionsViewer, labelProvider, "Buy", new BuyOptionDescriptionFormatter(), false);
 
 		buyOptionsViewer.setContentProvider(new OptionsViewerContentProvider(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BUYS));
 		hookOpenEditor(buyOptionsViewer);

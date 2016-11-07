@@ -28,7 +28,9 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.SellOptionDescriptionFormatter;
+import com.mmxlabs.models.lng.analytics.ui.views.providers.CellFormatterLabelProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.OptionsViewerContentProvider;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -97,7 +99,8 @@ public class SellOptionsComponent extends AbstractSandboxComponent {
 		GridViewerHelper.configureLookAndFeel(sellOptionsViewer);
 		sellOptionsViewer.getGrid().setHeaderVisible(false);
 
-		createColumn(sellOptionsViewer, "Sell", new SellOptionDescriptionFormatter(), false);
+		CellFormatterLabelProvider labelProvider = new BuysSellsLabelProvider(new SellOptionDescriptionFormatter(), validationErrors, "Sell");
+		createColumn(sellOptionsViewer, labelProvider, "Sell", new SellOptionDescriptionFormatter(), false);
 
 		sellOptionsViewer.setContentProvider(new OptionsViewerContentProvider(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS));
 		hookOpenEditor(sellOptionsViewer);
