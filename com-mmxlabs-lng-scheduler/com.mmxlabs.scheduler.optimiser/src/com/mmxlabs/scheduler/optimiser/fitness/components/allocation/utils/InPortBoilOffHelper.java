@@ -21,6 +21,17 @@ public class InPortBoilOffHelper implements IBoilOffHelper {
 	
 	private boolean boilOffCompensation = false;
 	
+	@Override
+	public boolean isBoilOffCompensation() {
+		return boilOffCompensation;
+	}
+
+	@Override
+	public void setBoilOffCompensation(boolean boilOffCompensation) {
+		this.boilOffCompensation = boilOffCompensation;
+	}
+
+
 	public InPortBoilOffHelper(boolean boilOffCompensation){
 		this.boilOffCompensation = boilOffCompensation;
 	}
@@ -48,7 +59,7 @@ public class InPortBoilOffHelper implements IBoilOffHelper {
 	@Override
 	public long compensateForBoilOff(IPortSlot slot, AllocationRecord record, long volume, FuelUnit units){
 		
-		int slotDuration  = record.portTimesRecord.getSlotDuration(slot);
+		long slotDuration  = record.portTimesRecord.getSlotDuration(slot)/24L;
 		IVessel vessel = record.vesselAvailability.getVessel();
 		long inPortNBORate = getNBORate(vessel,slot.getPortType());
 		int slotCV = record.slotCV.get(record.slots.indexOf(slot));
@@ -63,7 +74,6 @@ public class InPortBoilOffHelper implements IBoilOffHelper {
 		}
 
 		if(boilOffCompensation){
-			System.out.println("Compensate");
 			if(slot.getPortType() == PortType.Load)	
 				return volume  + NBOBoilOff ;
 			else if(slot.getPortType() == PortType.Discharge)
@@ -80,27 +90,34 @@ public class InPortBoilOffHelper implements IBoilOffHelper {
 	@Override
 	public long calculatePhysicalVolume(IPortSlot slot, AllocationRecord record, long commercialVolume, FuelUnit units){
 		
-		int slotDuration  = record.portTimesRecord.getSlotDuration(slot);
+		long slotDuration  = record.portTimesRecord.getSlotDuration(slot)/24L;
 		IVessel vessel = record.vesselAvailability.getVessel();
 		long inPortNBORate = getNBORate(vessel,slot.getPortType());
 		int slotCV = record.slotCV.get(record.slots.indexOf(slot));
 		
 		long NBOBoilOff = 0;
 		
-		if(boilOffCompensation){
-			System.out.println("Calculate");
-			if(units == FuelUnit.MMBTu)
+//		if(boilOffCompensation){
+//			System.out.println("Calculate");
+			if(units == FuelUnit.MMBTu){
 				NBOBoilOff = Calculator.convertM3ToMMBTu((slotDuration*inPortNBORate), slotCV);
-			else if(units == FuelUnit.M3)
+			}else if(units == FuelUnit.M3){
 				NBOBoilOff = (slotDuration*inPortNBORate);
-		}
+				System.out.println(" NBOR: " + NBOBoilOff);
+			}
+				//		}
+			
+		long volume = commercialVolume - NBOBoilOff;
 		
-		if(slot.getPortType() == PortType.Load)	
-			return commercialVolume  - NBOBoilOff ;
-		else if(slot.getPortType() == PortType.Discharge)
-			return commercialVolume + NBOBoilOff;
+//		if( volume < 0)
+//			volume = 1;
+//		
+//		if(slot.getPortType() == PortType.Load)	
+//			return commercialVolume  - NBOBoilOff ;
+//		else if(slot.getPortType() == PortType.Discharge)
+//			return commercialVolume - NBOBoilOff;
 		
-		return commercialVolume - NBOBoilOff;
+		return volume;
 	}
 
 }

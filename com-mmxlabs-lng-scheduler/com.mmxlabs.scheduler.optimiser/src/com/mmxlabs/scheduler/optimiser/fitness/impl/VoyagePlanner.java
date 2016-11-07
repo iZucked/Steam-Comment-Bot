@@ -1101,16 +1101,18 @@ public class VoyagePlanner {
 						totalVoyageBOG += portDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3);
 						currentHeelInM3 -= portDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3);
 
-
 						optionalHeelUsePortSlot = null;
+						System.out.println("PRE PORT CH: " + currentHeelInM3);
 						if (planData.getAllocation() != null) {
 							if (portSlot.getPortType() == PortType.Load) {
 								currentHeelInM3 += planData.getAllocation().getPhysicalSlotVolumeInM3(portSlot);
+								System.out.println("Load Vol : " + planData.getAllocation().getPhysicalSlotVolumeInM3(portSlot));
 							} else if (portSlot.getPortType() == PortType.Discharge) {
 								currentHeelInM3 -= planData.getAllocation().getPhysicalSlotVolumeInM3(portSlot);
+								System.out.println("Dis Vol : " + planData.getAllocation().getPhysicalSlotVolumeInM3(portSlot));
 							}
 						}
-						System.out.println(currentHeelInM3);
+//						System.out.println(currentHeelInM3);
 						assert currentHeelInM3 + ROUNDING_EPSILON >= 0;
 					} else {
 						if (portSlot instanceof EndPortSlot) {
@@ -1131,8 +1133,9 @@ public class VoyagePlanner {
 						voyageBOGInM3 += voyageDetails.getRouteAdditionalConsumption(fuel, FuelUnit.M3);
 					}
 					totalVoyageBOG += voyageBOGInM3;
+					System.out.println("VBG: " + voyageBOGInM3);
 					currentHeelInM3 -= voyageBOGInM3;
-
+					System.out.println("CH: " + currentHeelInM3);
 					assert currentHeelInM3 + ROUNDING_EPSILON >= 0;
 					voyageTime += voyageDetails.getTravelTime();
 					voyageTime += voyageDetails.getIdleTime();
@@ -1153,7 +1156,7 @@ public class VoyagePlanner {
 			// Sanity check these calculations match expected values
 			assert totalVoyageBOG == planData.getPlan().getLNGFuelVolume();
 			// Note: there may be some rounding errors when using MMBTU, so keep an eye on epsilon
-			System.out.println(planData.getEndHeelVolumeInM3() + "   " + currentHeelInM3);
+			System.out.println("TARGET:  " + planData.getEndHeelVolumeInM3() + " ACTUAL:  " + currentHeelInM3);
 			assert (Math.abs(planData.getEndHeelVolumeInM3() - currentHeelInM3) <= ROUNDING_EPSILON);
 		}
 
