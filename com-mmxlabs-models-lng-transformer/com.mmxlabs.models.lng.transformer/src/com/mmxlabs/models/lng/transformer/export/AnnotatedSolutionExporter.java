@@ -61,6 +61,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * A utility class for turning an annotated solution into some EMF representation, for the presentation layer.
@@ -178,7 +179,7 @@ public class AnnotatedSolutionExporter {
 
 			boolean isFOBSequence = false;
 			boolean isDESSequence = false;
-
+			boolean isRoundTripSequence = false;
 			final ISequence sequence = annotatedSolution.getFullSequences().getSequence(resource);
 			final VolumeAllocatedSequence scheduledSequence = scheduledSequences.getScheduledSequenceForResource(resource);
 			switch (vesselAvailability.getVesselInstanceType()) {
@@ -222,7 +223,7 @@ public class AnnotatedSolutionExporter {
 				if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence)) {
 					continue;
 				}
-
+				isRoundTripSequence = true;
 				eSequence.setCharterInMarket(modelEntityMap.getModelObjectNullChecked(vesselAvailability.getSpotCharterInMarket(), CharterInMarket.class));
 				eSequence.unsetVesselAvailability();
 				eSequence.setSpotIndex(vesselAvailability.getSpotIndex());
@@ -237,15 +238,17 @@ public class AnnotatedSolutionExporter {
 				}
 			}
 
-			if (!(isDESSequence || isFOBSequence)) {
+			if (!(isDESSequence || isFOBSequence || isRoundTripSequence)) {
 				sequences.add(eSequence);
 			}
 
-			final EList<Event> events;
+			final List<Event> events;
 			if (isDESSequence) {
 				events = desSequence.getEvents();
 			} else if (isFOBSequence) {
 				events = fobSequence.getEvents();
+			} else if (isRoundTripSequence) {
+				events = new LinkedList<>();
 			} else {
 				events = eSequence.getEvents();
 			}
@@ -312,6 +315,9 @@ public class AnnotatedSolutionExporter {
 
 			final List<Event> eventsForElement = new ArrayList<Event>();
 			final List<IPortSlot> sequencePortSlots = scheduledSequence.getSequenceSlots();
+
+			// Flag for round trip cargoes. Split sequences at a discharge -> Load segment.
+			boolean lastEventWasDischarge = true;
 			for (int i = 0; i < sequencePortSlots.size(); ++i) {
 				final IPortSlot scheduledSlot = sequencePortSlots.get(i);
 				assert scheduledSlot != null;
@@ -326,14 +332,48 @@ public class AnnotatedSolutionExporter {
 					if (result != null) {
 						eventsForElement.add(result);
 					}
-
 				}
 
 				// this is messy, but we want to be sure stuff is in the right
 				// order or it won't make any sense.
 				Collections.sort(eventsForElement, eventComparator);
+
+				boolean thisEventIsload = scheduledSlot.getPortType() == PortType.Load;
+
+				if (isRoundTripSequence && lastEventWasDischarge && thisEventIsload) {
+					if (!events.isEmpty()) {
+
+						// Setup next/prev events.
+						Event prev = null;
+						for (final Event event : events) {
+
+							if (prev != null) {
+								prev.setNextEvent(event);
+								event.setPreviousEvent(prev);
+							}
+							prev = event;
+						}
+
+						// Create new sequence, copying original data
+						Sequence thisSequence = factory.createSequence();
+
+						thisSequence.setSequenceType(SequenceType.ROUND_TRIP);
+
+						thisSequence.setCharterInMarket(eSequence.getCharterInMarket());
+						thisSequence.unsetVesselAvailability();
+						thisSequence.setSpotIndex(eSequence.getSpotIndex());
+						thisSequence.getEvents().addAll(events);
+						events.clear();
+
+						sequences.add(thisSequence);
+					}
+				}
+
 				events.addAll(eventsForElement);
 				eventsForElement.clear();
+
+				lastEventWasDischarge = scheduledSlot.getPortType() == PortType.Discharge;
+
 			}
 
 			// Setup next/prev events.
@@ -345,6 +385,22 @@ public class AnnotatedSolutionExporter {
 					event.setPreviousEvent(prev);
 				}
 				prev = event;
+			}
+			if (isRoundTripSequence) {
+				if (!events.isEmpty()) {
+					// Create new sequence, copying original data
+					Sequence thisSequence = factory.createSequence();
+
+					thisSequence.setSequenceType(SequenceType.ROUND_TRIP);
+
+					thisSequence.setCharterInMarket(eSequence.getCharterInMarket());
+					thisSequence.unsetVesselAvailability();
+					thisSequence.setSpotIndex(eSequence.getSpotIndex());
+					thisSequence.getEvents().addAll(events);
+					events.clear();
+
+					sequences.add(thisSequence);
+				}
 			}
 		}
 
