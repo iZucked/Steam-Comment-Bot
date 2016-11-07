@@ -92,6 +92,10 @@ public class BuysSellsLabelProvider extends DefaultSandboxLabelProvider {
 	
 	public void dispose() {
 		super.dispose();
+		imgFOB.dispose();
+		imgDES.dispose();
+		imgSPOT_DES.dispose();
+		imgSPOT_FOB.dispose();
 	}
 
 }
