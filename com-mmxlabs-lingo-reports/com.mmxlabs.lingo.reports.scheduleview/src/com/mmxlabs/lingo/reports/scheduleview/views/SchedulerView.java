@@ -111,6 +111,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
@@ -478,7 +479,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			@Override
 			protected void setSelectionToWidget(@SuppressWarnings("rawtypes") final List l, final boolean reveal) {
 
-				if (true || showConnections) {
+				if (showConnections) {
 
 					ganttChart.getGanttComposite().getGanttConnections().clear();
 
@@ -547,88 +548,9 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 							}
 						}
 					}
-
-					// final Set<Row> seenRows = new HashSet<>();
-					// for (final Object o : l) {
-					// if (o instanceof Row) {
-					// final Row row = (Row) o;
-					// seenRows.add(row);
-					//
-					//
-					// final SlotAllocation loadAllocation = row.getLoadAllocation();
-					// final SlotAllocation dischargeAllocation = row.getDischargeAllocation();
-					// if (row.isReference()) {
-					// if (changeSet != null) {
-					// final List<ChangeSetRow> csRows;
-					// if (isDiffToBase) {
-					// csRows = changeSet.getChangeSetRowsToBase();
-					// } else {
-					// csRows = changeSet.getChangeSetRowsToPrevious();
-					// }
-					// for (ChangeSetRow csRow : csRows) {
-					// if (csRow.getOriginalDischargeAllocation()
-					// }
-					// }
-					//
-					// for (final Row other : row.getReferringRows()) {
-					// if (seenRows.contains(other)) {
-					// continue;
-					// }
-					// seenRows.add(other);
-					// if (loadAllocation != null) {
-					// final SlotAllocation otherAllocation = other.getLoadAllocation();
-					// if (otherAllocation != null) {
-					// if (differentSequenceChecker.apply(row, other)) {
-					// ganttChart.getGanttComposite().addConnection(internalMap.get(loadAllocation.getSlotVisit()), internalMap.get(otherAllocation.getSlotVisit()),
-					// lineColour);
-					// }
-					// }
-					// }
-					// // FIXME: This needs to look up other discharge row which may not be the same as the "other" row if re-wireed
-					// if (dischargeAllocation != null) {
-					// final SlotAllocation otherAllocation = other.getDischargeAllocation();
-					// if (otherAllocation != null) {
-					// if (differentSequenceChecker.apply(row, other)) {
-					// ganttChart.getGanttComposite().addConnection(internalMap.get(dischargeAllocation.getSlotVisit()), internalMap.get(otherAllocation.getSlotVisit()),
-					// lineColour);
-					// }
-					// }
-					// }
-					// }
-					//
-					// } else {
-					// final Row other = row.getReferenceRow();
-					// if (other != null) {
-					// if (seenRows.contains(other)) {
-					// continue;
-					// }
-					// seenRows.add(other);
-					// if (loadAllocation != null) {
-					// final SlotAllocation otherAllocation = other.getLoadAllocation();
-					// if (otherAllocation != null) {
-					// if (differentSequenceChecker.apply(row, other)) {
-					// ganttChart.getGanttComposite().addConnection(internalMap.get(otherAllocation.getSlotVisit()), internalMap.get(loadAllocation.getSlotVisit()),
-					// lineColour);
-					// }
-					// }
-					// }
-					// // FIXME: This needs to look up other discharge row which may not be the same as the "other" row if re-wirted
-					// if (dischargeAllocation != null) {
-					// final SlotAllocation otherAllocation = other.getDischargeAllocation();
-					// if (otherAllocation != null) {
-					// if (differentSequenceChecker.apply(row, other)) {
-					//
-					// ganttChart.getGanttComposite().addConnection(internalMap.get(otherAllocation.getSlotVisit()), internalMap.get(dischargeAllocation.getSlotVisit()),
-					// lineColour);
-					// }
-					// }
-					// }
-					// }
-					// }
-					// }
-					// }
 				}
 				final ArrayList<GanttEvent> selectedEvents;
+				final Set<GanttSection> selectedSections = new HashSet<>();
 				if (l != null) {
 					// Use the internalMap to obtain the list of events we are selecting
 					selectedEvents = new ArrayList<GanttEvent>(l.size());
@@ -651,15 +573,23 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 					for (final Object obj : l) {
 						if (obj != null) {
 							if (internalMap.containsKey(obj)) {
-								selectedEvents.add(internalMap.get(obj));
-								internalMap.get(obj).setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), obj));
+								final GanttEvent ge = internalMap.get(obj);
+								selectedEvents.add(ge);
+								if (ge.getGanttSection() != null) {
+									selectedSections.add(ge.getGanttSection());
+								}
+								ge.setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), obj));
 
 							} else if (getComparer() != null) {
 								for (final Map.Entry<Object, GanttEvent> e : internalMap.entrySet()) {
 									if (getComparer().equals(e.getKey(), obj)) {
-										selectedEvents.add(internalMap.get(e.getKey()));
+										final GanttEvent ge = internalMap.get(e.getKey());
+										selectedEvents.add(ge);
+										if (ge.getGanttSection() != null) {
+											selectedSections.add(ge.getGanttSection());
+										}
 										e.getValue().setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), e.getKey()));
-										internalMap.get(e.getKey()).setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), e.getKey()));
+										ge.setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), e.getKey()));
 									}
 								}
 							}
@@ -670,10 +600,10 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 					selectedEvents = new ArrayList<GanttEvent>(0);
 				}
 				if (scenarioComparisonService != null && scenarioComparisonService.getDiffOptions().isFilterSelectedSequences()) {
-					final Set<GanttSection> selectedSections = new HashSet<>();
-					for (final GanttEvent event : selectedEvents) {
-						selectedSections.add(event.getGanttSection());
-					}
+					// final Set<GanttSection> selectedSections = new HashSet<>();
+					// for (final GanttEvent event : selectedEvents) {
+					// selectedSections.add(event.getGanttSection());
+					// }
 					final Iterator<GanttSection> itr = new ArrayList<GanttSection>(ganttChart.getGanttComposite().getGanttSections()).iterator();// .iterator();
 					while (itr.hasNext()) {
 						final GanttSection ganttSection = itr.next();
@@ -689,14 +619,38 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 						if (events.isEmpty()) {
 							ganttSection.setVisible(false);
 						} else {
-							ganttSection.setVisible(true);
+							boolean visible = true;
+							final Object d = ganttSection.getData();
+							if (d instanceof Sequence) {
+								final Sequence sequence = (Sequence) d;
+								if (sequence.getSequenceType() == SequenceType.ROUND_TRIP) {
+									visible = false;
+									if (selectedSections.contains(ganttSection)) {
+										visible = true;
+									}
+								}
+							}
+
+							ganttSection.setVisible(visible);
 						}
 					}
 				} else {
-					final Iterator<GanttSection> itr = new ArrayList<GanttSection>(ganttChart.getGanttComposite().getGanttSections()).iterator();// .iterator();
+					final Iterator<GanttSection> itr = new ArrayList<GanttSection>(ganttChart.getGanttComposite().getGanttSections()).iterator();
 					while (itr.hasNext()) {
 						final GanttSection ganttSection = itr.next();
-						ganttSection.setVisible(true);
+						boolean visible = true;
+
+						final Object d = ganttSection.getData();
+						if (d instanceof Sequence) {
+							final Sequence sequence = (Sequence) d;
+							if (sequence.getSequenceType() == SequenceType.ROUND_TRIP) {
+								visible = false;
+								if (selectedSections.contains(ganttSection)) {
+									visible = true;
+								}
+							}
+						}
+						ganttSection.setVisible(visible);
 					}
 				}
 				ganttChart.getGanttComposite().setSelection(selectedEvents);
@@ -1322,7 +1276,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 	private final IScenarioChangeSetListener scenarioChangeSetListener = new IScenarioChangeSetListener() {
 		@Override
-		public void changeSetChanged(@Nullable ChangeSetRoot changeSetRoot, @Nullable ChangeSet changeSet, @Nullable ChangeSetRow changeSetRow, boolean diffToBase) {
+		public void changeSetChanged(@Nullable final ChangeSetRoot changeSetRoot, @Nullable final ChangeSet changeSet, @Nullable final ChangeSetRow changeSetRow, final boolean diffToBase) {
 			ViewerHelper.refresh(viewer, true);
 		}
 	};

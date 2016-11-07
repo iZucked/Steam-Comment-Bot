@@ -59,36 +59,39 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 	public Object[] getChildren(final Object parent) {
 
 		if (parent instanceof Collection<?>) {
-			Collection<?> collection = (Collection<?>) parent;
+			final Collection<?> collection = (Collection<?>) parent;
 			final List<Object> result = new ArrayList<Object>();
 			for (final Object o : collection) {
 				if (o instanceof Schedule) {
 					final EList<Sequence> sequences = ((Schedule) o).getSequences();
 					// find multiple availabilities
-					Map<Vessel, List<Sequence>> availabilityMap = new HashMap<>();
-					List<Sequence> unassigned = sequences.stream().filter(s -> s.getSequenceType() == SequenceType.VESSEL).sorted(
+					final Map<Vessel, List<Sequence>> availabilityMap = new HashMap<>();
+					final List<Sequence> unassigned = sequences.stream().filter(s -> s.getSequenceType() == SequenceType.VESSEL).sorted(
 							(a, b) -> a.getVesselAvailability().getStartBy() == null ? - 1 : b.getVesselAvailability().getStartBy() == null ? 1 : a.getVesselAvailability().getStartBy().compareTo(b.getVesselAvailability().getStartBy())).collect(Collectors.toList());
 					while (unassigned.size() > 0) {
 						@NonNull
+						final
 						Sequence thisSequence = unassigned.get(0);
-						List<Sequence> matches = unassigned.stream().filter(s -> s.getVesselAvailability().getVessel().equals(thisSequence.getVesselAvailability().getVessel())).collect(Collectors.toList());
+						final List<Sequence> matches = unassigned.stream().filter(s -> s.getVesselAvailability().getVessel().equals(thisSequence.getVesselAvailability().getVessel())).collect(Collectors.toList());
 						availabilityMap.put(thisSequence.getVesselAvailability().getVessel(), matches);
 						unassigned.removeAll(matches);
 					}
 					// find 
 					for (final Sequence seq : sequences) {
 						// Skip nominal cargoes
-						if (seq.getSequenceType() == SequenceType.ROUND_TRIP || seq.getSequenceType() == SequenceType.VESSEL) {
+						if (
+//								seq.getSequenceType() == SequenceType.ROUND_TRIP || 
+								seq.getSequenceType() == SequenceType.VESSEL) {
 							continue;
 						}
 						result.add(seq);
 					}
-					for (Vessel vessel : availabilityMap.keySet()) {
-						List<Sequence> combinedSequences = availabilityMap.get(vessel);
+					for (final Vessel vessel : availabilityMap.keySet()) {
+						final List<Sequence> combinedSequences = availabilityMap.get(vessel);
 						if (combinedSequences.size() == 1) {
 							result.add(combinedSequences.get(0));
 						} else {
-							CombinedSequence cs = new CombinedSequence(vessel);
+							final CombinedSequence cs = new CombinedSequence(vessel);
 							cs.setSequences(combinedSequences);
 							result.add(cs);
 						}
@@ -102,7 +105,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 			for (final Sequence seq : sequences) {
 				// Skip nominal cargoes
 				if (seq.getSequenceType() == SequenceType.ROUND_TRIP) {
-					continue;
+//					continue;
 				}
 				seqs.add(seq);
 			}
@@ -118,9 +121,9 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 			}
 			return events.toArray();
 		} else if (parent instanceof CombinedSequence) {
-			CombinedSequence combinedSequence = (CombinedSequence) parent;
-			List<Event> events = new LinkedList<>();
-			for (Sequence sequence : combinedSequence.getSequences()) {
+			final CombinedSequence combinedSequence = (CombinedSequence) parent;
+			final List<Event> events = new LinkedList<>();
+			for (final Sequence sequence : combinedSequence.getSequences()) {
 				events.addAll(sequence.getEvents());
 				for (final Event event : sequence.getEvents()) {
 					if (event instanceof SlotVisit) {
@@ -179,7 +182,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 			final SlotVisit visit = (SlotVisit) element;
 			final Slot slot = visit.getSlotAllocation().getSlot();
 			if (slot != null) {
-				ZonedDateTime windowStartWithSlotOrPortTime = slot.getWindowStartWithSlotOrPortTime();
+				final ZonedDateTime windowStartWithSlotOrPortTime = slot.getWindowStartWithSlotOrPortTime();
 				if (windowStartWithSlotOrPortTime != null) {
 					return GregorianCalendar.from(windowStartWithSlotOrPortTime);
 				}
@@ -195,7 +198,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 			final SlotVisit visit = (SlotVisit) element;
 			final Slot slot = visit.getSlotAllocation().getSlot();
 			if (slot != null) {
-				ZonedDateTime windowStartWithSlotOrPortTime = slot.getWindowStartWithSlotOrPortTime();
+				final ZonedDateTime windowStartWithSlotOrPortTime = slot.getWindowStartWithSlotOrPortTime();
 				if (windowStartWithSlotOrPortTime != null) {
 					return GregorianCalendar.from(windowStartWithSlotOrPortTime);
 				}
@@ -214,7 +217,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 			final Event event = (Event) element;
 			// Special case for cargo shorts - group items separately
 			if (event.getSequence().getSequenceType() == SequenceType.ROUND_TRIP) {
-				Event start = ScheduleModelUtils.getSegmentStart(event);
+				final Event start = ScheduleModelUtils.getSegmentStart(event);
 
 				if (start != null) {
 					return start.name();
