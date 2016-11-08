@@ -570,7 +570,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			resultPerMMBtu[j] = finalLngValuePerMMBTu;
 		}
 		
-//		System.out.println(Arrays.toString(resultPerMMBtu));
 		return resultPerMMBtu;
 	}
 

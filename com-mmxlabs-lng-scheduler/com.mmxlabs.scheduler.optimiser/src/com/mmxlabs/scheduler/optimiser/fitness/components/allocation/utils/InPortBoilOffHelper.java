@@ -77,7 +77,7 @@ public class InPortBoilOffHelper implements IBoilOffHelper {
 			if(slot.getPortType() == PortType.Load)	
 				return volume  + NBOBoilOff ;
 			else if(slot.getPortType() == PortType.Discharge)
-				return volume - NBOBoilOff;
+				return volume;
 		}
 		
 		return volume;
@@ -97,26 +97,16 @@ public class InPortBoilOffHelper implements IBoilOffHelper {
 		
 		long NBOBoilOff = 0;
 		
-//		if(boilOffCompensation){
-//			System.out.println("Calculate");
+
 			if(units == FuelUnit.MMBTu){
 				NBOBoilOff = Calculator.convertM3ToMMBTu((slotDuration*inPortNBORate), slotCV);
 			}else if(units == FuelUnit.M3){
 				NBOBoilOff = (slotDuration*inPortNBORate);
-				System.out.println(" NBOR: " + NBOBoilOff);
+
 			}
-				//		}
 			
 		long volume = commercialVolume - NBOBoilOff;
-		
-//		if( volume < 0)
-//			volume = 1;
-//		
-//		if(slot.getPortType() == PortType.Load)	
-//			return commercialVolume  - NBOBoilOff ;
-//		else if(slot.getPortType() == PortType.Discharge)
-//			return commercialVolume - NBOBoilOff;
-		
+
 		return volume;
 	}
 
