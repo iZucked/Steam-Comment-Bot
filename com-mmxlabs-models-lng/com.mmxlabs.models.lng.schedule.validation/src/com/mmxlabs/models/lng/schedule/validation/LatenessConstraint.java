@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -31,7 +32,7 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof Event) {
+		if (target instanceof Event && target.eContainer() instanceof Sequence) {
 			if (LatenessUtils.isLateExcludingFlex((Event) target)) {
 				EObject obj = null;
 				EStructuralFeature feature = null;

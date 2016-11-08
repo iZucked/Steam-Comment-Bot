@@ -149,7 +149,7 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 										scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, row, null);
 									}
 								}));
-								if (vesselClass.getLadenAttributes().getServiceSpeed() > 0.0) {
+								if (vesselClass != null && vesselClass.getLadenAttributes() != null && vesselClass.getLadenAttributes().getServiceSpeed() > 0.0) {
 									dateMenu.add(new RunnableAction("service speed", () -> {
 
 										final CompoundCommand cmd = new CompoundCommand("Change dates");
@@ -249,8 +249,8 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 										}
 									}));
 
-									mgr.add(dateMenu);
 								}
+								mgr.add(dateMenu);
 							}
 						}
 					}

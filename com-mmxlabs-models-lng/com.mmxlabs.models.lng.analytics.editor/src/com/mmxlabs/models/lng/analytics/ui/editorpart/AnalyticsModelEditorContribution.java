@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.editorpart;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -87,6 +88,8 @@ public class AnalyticsModelEditorContribution extends BaseJointModelEditorContri
 				if (oPart instanceof OptionModellerView) {
 					final OptionModellerView vesselViewerPane_View = (OptionModellerView) oPart;
 					vesselViewerPane_View.setInput(optionAnalysisModel);
+					WeakReference<OptionAnalysisModel> currentRoot = vesselViewerPane_View.getCurrentRoot();
+					vesselViewerPane_View.setCurrentRoot(new WeakReference<OptionAnalysisModel>(optionAnalysisModel));
 				}
 			}
 		}

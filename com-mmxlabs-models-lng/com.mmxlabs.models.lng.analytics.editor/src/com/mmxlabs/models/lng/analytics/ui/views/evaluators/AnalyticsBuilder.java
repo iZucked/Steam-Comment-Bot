@@ -85,6 +85,7 @@ public class AnalyticsBuilder {
 	private static BuyOptionDescriptionFormatter buyOptionDescriptionFormatter = new BuyOptionDescriptionFormatter();
 	private static SellOptionDescriptionFormatter sellOptionDescriptionFormatter = new SellOptionDescriptionFormatter();
 	private static final boolean DISABLE_FLEET = true;
+	private static final double DEFAULT_MAX_VOLUME = 140_000;
 
 	public static @Nullable LoadSlot makeLoadSlot(final @Nullable BuyOption buy, final @NonNull LNGScenarioModel lngScenarioModel) {
 
@@ -115,7 +116,7 @@ public class AnalyticsBuilder {
 			if (buyOpportunity.getContract() != null) {
 				slot.setContract(buyOpportunity.getContract());
 			}
-			if (buyOpportunity.getPriceExpression() != null) {
+			if (buyOpportunity.getPriceExpression() != null && !buyOpportunity.getPriceExpression().equals("")) {
 				slot.setPriceExpression(buyOpportunity.getPriceExpression());
 			}
 			if (buyOpportunity.getDate() != null) {
@@ -219,7 +220,7 @@ public class AnalyticsBuilder {
 			if (sellOpportunity.getContract() != null) {
 				slot.setContract(sellOpportunity.getContract());
 			}
-			if (sellOpportunity.getPriceExpression() != null) {
+			if (sellOpportunity.getPriceExpression() != null && !sellOpportunity.getPriceExpression().equals("")) {
 				slot.setPriceExpression(sellOpportunity.getPriceExpression());
 			}
 			if (sellOpportunity.getDate() != null) {
@@ -1146,6 +1147,8 @@ public class AnalyticsBuilder {
 			} else if (buyOpportunity.getVolumeMode() == VolumeMode.RANGE) {
 				return new int[]{buyOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? buyOpportunity.getMinVolume() : (int) ((double) buyOpportunity.getMinVolume() * cargoCV),
 						buyOpportunity.getVolumeUnits() == VolumeUnits.MMBTU ? buyOpportunity.getMaxVolume() : (int) ((double) buyOpportunity.getMaxVolume() * cargoCV)};
+			} else {
+				return new int[]{0, (int) ((double) DEFAULT_MAX_VOLUME * cargoCV)};
 			}
 		} else if (buy instanceof BuyMarket) {
 			BuyMarket market = (BuyMarket) buy;

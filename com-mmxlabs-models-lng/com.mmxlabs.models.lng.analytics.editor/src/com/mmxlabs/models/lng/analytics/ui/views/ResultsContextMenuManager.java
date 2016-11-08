@@ -193,13 +193,13 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 					return buyOpportunity;
 				}
 			} else if (buyOption instanceof BuyReference) {
-				if (((BuyReference) buyOption).getSlot().getPriceExpression().contains("?")) {
+//				if (((BuyReference) buyOption).getSlot().getPriceExpression() != null && ((BuyReference) buyOption).getSlot().getPriceExpression().contains("?")) {
 					// LoadSlot slotCopy = EcoreUtil.copy((LoadSlot) ((BuyReference) buyOption).getSlot());
 					// BuyReference copy = AnalyticsFactory.eINSTANCE.createBuyReference();
 					// slotCopy.setPriceExpression(""+result.getPrice());
 					// copy.setSlot(slotCopy);
 					// return copy;
-				}
+//				}
 			}
 		}
 		if (createCopy) {
@@ -225,13 +225,13 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 					return opportunity;
 				}
 			} else if (sellOption instanceof SellReference) {
-				if (((SellReference) sellOption).getSlot().getPriceExpression().contains("?")) {
-					// DischargeSlot slotCopy = EcoreUtil.copy((DischargeSlot) ((SellReference) sellOption).getSlot());
-					// SellReference copy = AnalyticsFactory.eINSTANCE.createSellReference();
-					// slotCopy.setPriceExpression(""+result.getPrice());
-					// copy.setSlot(slotCopy);
-					// return copy;
-				}
+//				if (((SellReference) sellOption).getSlot().getPriceExpression().contains("?")) {
+//					// DischargeSlot slotCopy = EcoreUtil.copy((DischargeSlot) ((SellReference) sellOption).getSlot());
+//					// SellReference copy = AnalyticsFactory.eINSTANCE.createSellReference();
+//					// slotCopy.setPriceExpression(""+result.getPrice());
+//					// copy.setSlot(slotCopy);
+//					// return copy;
+//				}
 			}
 		}
 		if (createCopy) {

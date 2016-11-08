@@ -30,7 +30,7 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 
 			final MultipleResultGrouper g = findGroup(partialCaseRow);
 			if (g != null) {
-				return String.format("%s %s", g.getName(), render(sells));
+				return String.format("%s      %s", g.getName(), render(sells));
 			} else {
 				return render(sells);
 			}
@@ -90,7 +90,11 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 			if (port != null) {
 				final String n = port.getName();
 				if (n != null) {
-					portName = n;
+					if (n.length() > 15) {
+						portName = n.substring(0,15) + "...";
+					} else {
+						portName = n;
+					}
 				}
 			}
 			if (portName != null && dateStr != null && priceExpression != null) {
@@ -124,6 +128,9 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 
 	private MultipleResultGrouper findGroup(PartialCaseRow row) {
 		final OptionAnalysisModel model = (OptionAnalysisModel) row.eContainer().eContainer();
+		if (model.getResultGroups().size() < 2) {
+			return null;
+		}
 		for (final MultipleResultGrouper g : model.getResultGroups()) {
 			if (g.getFeatureName() == "sell") {
 				if (g.getReferenceRow() == row) {

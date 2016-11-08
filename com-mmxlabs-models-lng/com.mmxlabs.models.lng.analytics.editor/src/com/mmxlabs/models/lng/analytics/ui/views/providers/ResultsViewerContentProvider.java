@@ -115,6 +115,9 @@ public class ResultsViewerContentProvider implements ITreeContentProvider {
 	}
 
 	private String format(final Object f) {
+		if (f == null) {
+			return "";
+		}
 		if (f instanceof BuyOption) {
 			final BuyOptionDescriptionFormatter b = new BuyOptionDescriptionFormatter();
 			return b.render(f);

@@ -48,7 +48,7 @@ public class SandboxConstraintUtils {
 		int[] buyVolumeInMMBTU = AnalyticsBuilder.getBuyVolumeInMMBTU(buy);
 		int[] sellVolumeInMMBTU = AnalyticsBuilder.getSellVolumeInMMBTU(buy, sell);
 		if (buyVolumeInMMBTU == null
-				&& sellVolumeInMMBTU == null) {
+				|| sellVolumeInMMBTU == null) {
 			return true;
 		}
 		if (buyVolumeInMMBTU[0] > sellVolumeInMMBTU[1]) {
@@ -69,7 +69,7 @@ public class SandboxConstraintUtils {
 		int[] buyVolumeInMMBTU = AnalyticsBuilder.getBuyVolumeInMMBTU(buy);
 		int[] sellVolumeInMMBTU = AnalyticsBuilder.getSellVolumeInMMBTU(buy, sell);
 		if (buyVolumeInMMBTU == null
-				&& sellVolumeInMMBTU == null) {
+				|| sellVolumeInMMBTU == null) {
 			return true;
 		}
 		int capacityInMMBTU = (int) ((double) AnalyticsBuilder.getVesselCapacityInM3(shippingOption) * cargoCV);

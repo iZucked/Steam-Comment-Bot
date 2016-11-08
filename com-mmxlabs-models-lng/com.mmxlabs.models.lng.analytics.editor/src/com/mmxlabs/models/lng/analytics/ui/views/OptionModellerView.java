@@ -115,6 +115,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private EmbeddedReportComponent econsComponent;
 	private EmbeddedReportComponent pnlDetailsComponent;
 	private WeakHashMap<OptionAnalysisModel, WeakReference<OptionAnalysisModel>> navigationHistory = new WeakHashMap<>();
+	private WeakReference<OptionAnalysisModel> currentRoot = null;
+	
 	@Override
 	public void createPartControl(final Composite parent) {
 
@@ -395,8 +397,11 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					setInput(null);
 					return;
 				} else {
-					OptionAnalysisModel root = lngScenarioModel.getOptionModels().get(0);
-					WeakReference<OptionAnalysisModel> modelToUse = navigationHistory.get(root);
+					WeakReference<OptionAnalysisModel> root = getCurrentRoot();
+					if (root == null || (root != null && root.get() == null)) {
+						setCurrentRoot(new WeakReference<OptionAnalysisModel>(lngScenarioModel.getOptionModels().get(0)));
+					}
+					WeakReference<OptionAnalysisModel> modelToUse = navigationHistory.get(getCurrentRoot().get());
 					setModel(modelToUse == null || (modelToUse != null && modelToUse.get() == null) ? rootOptionsModel : modelToUse.get());
 				}
 			}
@@ -424,8 +429,16 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				if (notification.getEventType() == Notification.REMOVE) {
 					if (model != null && notification.getOldValue() == model) {
 						displayScenarioInstance(getScenarioInstance());
+						if (getCurrentRoot() == model) {
+							setCurrentRoot(null);
+						}
+						navigationHistory.remove(model);
 					} else if (rootOptionsModel != null && notification.getOldValue() == rootOptionsModel) {
 						displayScenarioInstance(getScenarioInstance());
+						if (getCurrentRoot() == rootOptionsModel) {
+							setCurrentRoot(null);
+						}
+						navigationHistory.remove(rootOptionsModel);
 					}
 				}
 			}
@@ -880,5 +893,19 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		return commandHandler;
 
 	}
+
+	public WeakReference<OptionAnalysisModel> getCurrentRoot() {
+		return currentRoot;
+	}
+
+	public void setCurrentRoot(WeakReference<OptionAnalysisModel> currentRoot) {
+		this.currentRoot = currentRoot;
+	}
+	
+//	public WeakReference<OptionAnalysisModel> findReferenceToRoot(OptionAnalysisModel root) {
+//		for (OptionAnalysisModel optionAnalysisModel : navigationHistory.) {
+//			if (optionAnalysisModel == root) {
+//		}
+//	}
 
 }
