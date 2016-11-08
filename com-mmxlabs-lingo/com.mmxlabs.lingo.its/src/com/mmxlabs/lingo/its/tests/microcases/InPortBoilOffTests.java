@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
+import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -104,11 +106,17 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 	private Vessel vessel;
 	private VesselAvailability vesselAvailability1;
 	private Cargo cargo1;
+	private Port portA;
+	private Port portB;
+	private VesselStateAttributes attrLaden;
+	private VesselStateAttributes attrBal;
 
-	private double ballastBoilOff = 100.0;
-	private double ladenBoilOff = 50.0;
+	private double ballastBoilOff = 2000.0;
+	private double ladenBoilOff = 1000.0;
 	private double ladenBase = 0.0;
 	private double ballastBase = 0.0;
+	
+	private boolean writeScenario = true;
 
 	public class boilOffOverride implements IOptimiserInjectorService {
 
@@ -172,12 +180,12 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 		// Create the required basic elements
 		vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 
-		VesselStateAttributes attrBal = vesselClass.getBallastAttributes();
+		attrBal = vesselClass.getBallastAttributes();
 		attrBal.setInPortNBORate(ballastBoilOff);
 		attrBal.setInPortBaseRate(ballastBase);
 		vesselClass.setBallastAttributes(attrBal);
 
-		VesselStateAttributes attrLaden = vesselClass.getLadenAttributes();
+		attrLaden = vesselClass.getLadenAttributes();
 		attrLaden.setInPortNBORate(ladenBoilOff);
 		attrLaden.setInPortBaseRate(ladenBase);
 		vesselClass.setLadenAttributes(attrLaden);
@@ -185,20 +193,27 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 		vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 7, 0, 0), LocalDateTime.of(2015, 12, 4, 13, 0, 0)) //
-				.withEndWindow(LocalDateTime.of(2015, 12, 17, 0, 0, 0))
+				.withEndWindow(LocalDateTime.of(2015, 12, 30, 0, 0, 0))
 
 				.build();
 
-		@NonNull
-		Port portA = portFinder.findPort("Point Fortin");
+	
+		portA = portFinder.findPort("Point Fortin");
 		portA.setTimeZone("UTC");
 
-		@NonNull
-		Port portB = portFinder.findPort("Dominion Cove Point LNG");
+		
+		portB = portFinder.findPort("Dominion Cove Point LNG");
 		portB.setTimeZone("UTC");
 		portB.setDefaultStartTime(4);
 		portB.setDefaultWindowSize(0);
 
+		
+	}
+
+	@Test
+	@Category({ MicroTest.class })
+	public void LDBoilOffTest() throws Exception {
+		
 		// Create cargo 1
 		cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 4), portA, null, entity, "9") //
@@ -208,148 +223,127 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 				.withVesselAssignment(vesselAvailability1, 1) // -1 is nominal
 				.withAssignmentFlags(false, false) //
 				.build();
-	}
 
+		Integer[] falseStats = runScenario(false);
+		Integer[] trueStats = runScenario(true);
+		
+		double originalBallast = new Double(ballastBoilOff);
+		double originalLaden = new Double(ladenBoilOff);
+
+		Integer [] falseExpected = {140_000, (int) (136_612 - originalBallast - originalLaden)};
+		Integer [] trueExpected = {(int) (140_000+originalLaden), (int) (136_612 - originalBallast)};
+		
+		ballastBoilOff = 0;
+		ladenBoilOff = 0;
+		attrLaden.setInPortNBORate(ladenBoilOff);
+		attrBal.setInPortNBORate(ballastBoilOff);
+		vesselClass.setLadenAttributes(attrLaden);
+		vesselClass.setBallastAttributes(attrBal);
+		
+		Integer[] baseStats = runScenario(false);
+		Integer [] baseExpected = {140_000,136_612};
+
+		System.out.println(Arrays.toString(baseStats));
+		System.out.println(Arrays.toString(falseStats));
+		System.out.println(Arrays.toString(trueStats));
+		Assert.assertArrayEquals(falseExpected, falseStats);
+		Assert.assertArrayEquals(trueExpected, trueStats);
+		Assert.assertArrayEquals(baseExpected, baseStats);
+	}
+	
 	@Test
 	@Category({ MicroTest.class })
-	public void boilOffToggleTest() throws Exception {
+	public void LDDBoilOffTest() throws Exception {
+		
+		Port portC = portFinder.findPort("Petrobras Pecem LNG");
+		portC.setTimeZone("UTC");
+		
+		cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 4), portA, null, entity, "9") //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portB, null, entity, "9")
+				.withVolumeLimits(60_000, 70_000, VolumeUnits.M3)//
+				.build() //
+				.makeDESSale("D2", LocalDate.of(2015, 12, 20), portC, null, entity, "9")
+				.withVolumeLimits(60_000, 70_000, VolumeUnits.M3)
+				.build()
+				.withVesselAssignment(vesselAvailability1, 1) // -1 is nominal
+				.withAssignmentFlags(false, false) //
+				.build();	
+		
+		Integer[] falseStats = runScenario(false);
+		Integer[] trueStats = runScenario(true);
+		
+		int vesselCapacity = 140_000;
+		int voyageFuel = 5_100;
+		int maxDischarge = 70_000;
+		Integer [] baseExpected = {vesselCapacity, maxDischarge, maxDischarge-voyageFuel};
+		Integer [] falseExpected = {vesselCapacity, maxDischarge - 100,  (int) (maxDischarge- voyageFuel - (ballastBoilOff*2) - ladenBoilOff) + 100};
+		Integer [] trueExpected = {(int) (vesselCapacity + ladenBoilOff), maxDischarge, (int) (maxDischarge - voyageFuel - (ballastBoilOff*2))};
+		
+		
+		ballastBoilOff = 0;
+		ladenBoilOff = 0;
+		attrLaden.setInPortNBORate(ladenBoilOff);
+		attrBal.setInPortNBORate(ballastBoilOff);
+		vesselClass.setLadenAttributes(attrLaden);
+		vesselClass.setBallastAttributes(attrBal);
+		
+		Integer[] baseStats = runScenario(false);
+		
+		
+		
+		
+		System.out.println(Arrays.toString(baseStats));
+		System.out.println(Arrays.toString(trueStats));
+		System.out.println(Arrays.toString(falseStats));
+		Assert.assertArrayEquals(falseExpected, falseStats);
+		Assert.assertArrayEquals(trueExpected, trueStats);
+		Assert.assertArrayEquals(baseExpected, baseStats);
+		
+		
+		
+	}
 
+	
+	public Integer[] runScenario(boolean compensate){
 
-		double[] costs = new double[8];
-
+		List<Integer> stats = new ArrayList<Integer>();
 		optimiseWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
-			// Check single cargo
-			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
-			// Check correct cargoes remain and spot index has changed.
-			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
-
-			VesselAssignmentType vesselType = optCargo1.getVesselAssignmentType();
-
-			// try {
-			// MicroCaseUtils.storeToFile(optimiserScenario,"BoilOff");
-			// } catch (Exception e) {
-			// // TODO Auto-generated catch block
-			// e.printStackTrace();
-			// }
+			
+			if(writeScenario){
+				try {
+					 MicroCaseUtils.storeToFile(optimiserScenario,"Trips");
+					 } catch (Exception e) {
+						 e.printStackTrace();
+					 }
+			}
 
 			double ballastNBO = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0).getVessel().getVesselClass().getBallastAttributes().getInPortNBORate();
 			double ladenNBO = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0).getVessel().getVesselClass().getLadenAttributes().getInPortNBORate();
-
 			Assert.assertEquals(ballastBoilOff, ballastNBO, 0);
 			Assert.assertEquals(ladenBoilOff, ladenNBO, 0);
-
 			EList<CargoAllocation> cargoAllo = optimiserScenario.getScheduleModel().getSchedule().getCargoAllocations();
 
 			for (CargoAllocation ca : cargoAllo) {
 				EList<SlotAllocation> slots = ca.getSlotAllocations();
-
+				int index = 0;
 				for (SlotAllocation slot : slots) {
-					String portName = slot.getPort().getName();
-					// Load Event
-					if (portName.equals("Point Fortin")) {
-						System.out.println( "LET: " + slot.getEnergyTransferred());
-						System.out.println( "LVT: " + slot.getVolumeTransferred());
-						for (FuelQuantity fuel : slot.getSlotVisit().getFuels()) {
-							if (fuel.getFuel() == Fuel.NBO) {
-								costs[0] = fuel.getCost();
-							} else if (fuel.getFuel() == Fuel.BASE_FUEL) {
-								costs[1] = fuel.getCost();
-							}
-						}
-					} else if (portName.equals("Dominion Cove Point LNG")) {
-						System.out.println( "DET: " + slot.getEnergyTransferred());
-						System.out.println( "DVT: " + slot.getVolumeTransferred());
-						for (FuelQuantity fuel : slot.getSlotVisit().getFuels()) {
-							if (fuel.getFuel() == Fuel.NBO) {
-								costs[2] = fuel.getCost();
-							} else if (fuel.getFuel() == Fuel.BASE_FUEL) {
-								costs[3] = fuel.getCost();
-							}
-						}
-					}
-
+					String portName = slot.getPort().getName();		
+					stats.add(slot.getVolumeTransferred()); 
 				}
-				System.out.println(costs);
 			}
-		}, new boilOffOverride(true));
+		}, new boilOffOverride(compensate));
 
-//		VesselStateAttributes attrBal = vesselClass.getBallastAttributes();
-//		attrBal.setInPortNBORate(0.00);
-//		vesselClass.setBallastAttributes(attrBal);
-//
-//		VesselStateAttributes attrLaden = vesselClass.getLadenAttributes();
-//		attrLaden.setInPortNBORate(0.00);
-//		vesselClass.setLadenAttributes(attrLaden);
-//
-//		optimiseWithLSOTest(scenarioRunner -> {
-//
-//			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-//			// Check spot index has been updated
-//			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
-//			// Check single cargo
-//			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
-//			// Check correct cargoes remain and spot index has changed.
-//			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
-//
-//			VesselAssignmentType vesselType = optCargo1.getVesselAssignmentType();
-//
-//			// try {
-//			// MicroCaseUtils.storeToFile(optimiserScenario,"NoBoilOff");
-//			// } catch (Exception e) {
-//			// // TODO Auto-generated catch block
-//			// e.printStackTrace();
-//			// }
-//
-//			double ballastNBO = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0).getVessel().getVesselClass().getBallastAttributes().getInPortNBORate();
-//			double ladenNBO = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0).getVessel().getVesselClass().getLadenAttributes().getInPortNBORate();
-//
-////			Assert.assertEquals(0.00, ballastNBO, 0);
-////			Assert.assertEquals(0.00, ladenNBO, 0);
-//
-//			EList<CargoAllocation> cargoAllo = optimiserScenario.getScheduleModel().getSchedule().getCargoAllocations();
-//
-//			for (CargoAllocation ca : cargoAllo) {
-//				EList<SlotAllocation> slots = ca.getSlotAllocations();
-//
-//				for (SlotAllocation slot : slots) {
-//					String portName = slot.getPort().getName();
-//					// Load Event
-//					if (portName.equals("Point Fortin")) {
-//						System.out.println( "LET2: " + slot.getEnergyTransferred());
-//						System.out.println( "LVT2: " + slot.getVolumeTransferred());
-//						for (FuelQuantity fuel : slot.getSlotVisit().getFuels()) {
-//							if (fuel.getFuel() == Fuel.NBO) {
-//								costs[4] = fuel.getCost();
-//							} else if (fuel.getFuel() == Fuel.BASE_FUEL) {
-//								costs[5] = fuel.getCost();
-//							}
-//						}
-//					} else if (portName.equals("Dominion Cove Point LNG")) {
-//						System.out.println( "DET2: " + slot.getEnergyTransferred());
-//						System.out.println( "DVT2: " + slot.getVolumeTransferred());
-//						for (FuelQuantity fuel : slot.getSlotVisit().getFuels()) {
-//							if (fuel.getFuel() == Fuel.NBO) {
-//								costs[6] = fuel.getCost();
-//							} else if (fuel.getFuel() == Fuel.BASE_FUEL) {
-//								costs[7] = fuel.getCost();
-//							}
-//						}
-//					}
-//
-//				}
-//			}
-//
-//		}, new boilOffOverride(true));
-		double ROUNDING_EPSILON = 1.0;
-		double[] expectedCosts = { (ladenBoilOff * 22.8 * 9), (ladenBase * 1000), (ballastBoilOff * 22.8 * 9), (ballastBase * 1000), 0, (ladenBase * 1000), 0, (ballastBase * 1000) };
-		// System.out.println(Arrays.toString(expectedCosts));
-		 System.out.println(Arrays.toString(costs));
-		Assert.assertArrayEquals(expectedCosts, costs, ROUNDING_EPSILON);
-
+		Integer[] statsArray = stats.toArray(new Integer[stats.size()]);
+		return statsArray;
 	}
+	
+	
+
 
 }
