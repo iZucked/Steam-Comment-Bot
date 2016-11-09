@@ -17,53 +17,46 @@ import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.ILabelLayoutDataProvidingEditor;
 
-public class DefaultDisplayCompositeLayoutProvider implements
-		IDisplayCompositeLayoutProvider {
+public class DefaultDisplayCompositeLayoutProvider implements IDisplayCompositeLayoutProvider {
 
 	@Override
-	public boolean showLabelFor(MMXRootObject root, EObject value,
-			IInlineEditor editor) {
-		//return true;
+	public boolean showLabelFor(final MMXRootObject root, final EObject value, final IInlineEditor editor) {
 		return editor.hasLabel();
 	}
 
 	@Override
-	public Layout createTopLevelLayout(MMXRootObject root, EObject value, int numberOfDetailLayouts) {
+	public Layout createTopLevelLayout(final MMXRootObject root, final EObject value, final int numberOfDetailLayouts) {
 		return new GridLayout(numberOfDetailLayouts, true);
 	}
 
 	@Override
-	public Layout createDetailLayout(MMXRootObject root, EObject value) {
+	public Layout createDetailLayout(final MMXRootObject root, final EObject value) {
+
 		// TODO: replace this with a GridBagLayout or GroupLayout; for editors without a label,
 		// we want the editor to take up two cells rather than one.
 		return new GridLayout(2, false);
 	}
 
 	@Override
-	public Object createEditorLayoutData(MMXRootObject root, EObject value,
-			IInlineEditor editor, Control control) {
+	public Object createEditorLayoutData(final MMXRootObject root, final EObject value, final IInlineEditor editor, final Control control) {
 		final Object result = editor.createLayoutData(root, value, control);
 		if (result == null) {
 			return new GridData(SWT.FILL, SWT.CENTER, true, false);
-		}
-		else {
+		} else {
 			return result;
 		}
 	}
 
 	@Override
-	public Object createTopLayoutData(MMXRootObject root, EObject value,
-			EObject detail) {
+	public Object createTopLayoutData(final MMXRootObject root, final EObject value, final EObject detail) {
 		return new GridData(GridData.FILL_BOTH);
 	}
 
 	@Override
-	public Object createLabelLayoutData(MMXRootObject root, EObject value,
-			IInlineEditor editor, Control control, final Label label) {
+	public Object createLabelLayoutData(final MMXRootObject root, final EObject value, final IInlineEditor editor, final Control control, final Label label) {
 		if (editor instanceof ILabelLayoutDataProvidingEditor) {
 			return ((ILabelLayoutDataProvidingEditor) editor).createLabelLayoutData(root, value, control, label);
-		}
-		else {
+		} else {
 			return new GridData(SWT.LEFT, SWT.CENTER, false, false);
 		}
 	}
