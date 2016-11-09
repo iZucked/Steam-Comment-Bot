@@ -10,7 +10,6 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -19,6 +18,7 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -28,14 +28,14 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
-import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
 import org.eclipse.nebula.widgets.formattedtext.IntegerFormatter;
 import org.eclipse.nebula.widgets.formattedtext.NumberFormatter;
-import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -43,11 +43,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.swt.widgets.Table;
 
 import com.mmxlabs.models.datetime.ui.formatters.YearMonthTextFormatter;
 import com.mmxlabs.models.lng.pricing.DataIndex;
@@ -56,24 +52,17 @@ import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editors.ILabelLayoutDataProvidingEditor;
+import com.mmxlabs.models.ui.editors.AbstractTableInlineEditor;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
-import com.mmxlabs.models.ui.editors.impl.BasicAttributeInlineEditor;
-import com.mmxlabs.models.ui.tabular.GridViewerHelper;
-import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 
 /**
  */
-public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILabelLayoutDataProvidingEditor {
+public class CurveInlineEditor extends AbstractTableInlineEditor {
 
-	Control control;
-	Grid table;
-	GridTableViewer viewer;
-	Index<?> index = null;
-	EObject originalInput = null;
-	final Repacker repacker = new Repacker();
-	final EClassifier indexRawType;
-	EStructuralFeature indexPointsFeature = PricingPackage.Literals.DATA_INDEX__POINTS;
+	private Index<?> index = null;
+	private EObject originalInput = null;
+	private final EClassifier indexRawType;
+	private EStructuralFeature indexPointsFeature = PricingPackage.Literals.DATA_INDEX__POINTS;
 
 	/**
 	 * Creates a curve inline editor for Index<clazz> objects. We need to know what class it was instantiated for, and Java generics don't provide enough introspection to do so.
@@ -125,7 +114,6 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 			assert cmd.canExecute();
 			commandHandler.handleCommand(cmd, (EObject) element, feature);
 			assert ((EObject) element).eGet(feature) == value;
-			viewer.refresh();
 		}
 
 		@Override
@@ -140,32 +128,16 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 
 	}
 
-	public GridViewerColumn createColumn(final GridTableViewer viewer, final String title) {
-		final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
-		column.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+	public TableViewerColumn createColumn(final TableViewer viewer, final String title) {
+		final TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
 		column.getColumn().setText(title);
 		return column;
 	}
 
-	class Repacker {
-		boolean resizing = false;
+	protected TableViewer createTable(final Composite parent) {
+		TableViewer viewer = new TableViewer(parent, SWT.FULL_SELECTION);
 
-		public void repack() {
-			if (resizing)
-				return;
-			resizing = true;
-			for (int i = 0; i < table.getColumnCount(); i++) {
-				table.getColumn(i).pack();
-			}
-			resizing = false;
-		}
-	}
-
-	void createTable(final Composite parent) {
-		viewer = new GridTableViewer(parent, SWT.SINGLE);
-		GridViewerHelper.configureLookAndFeel(viewer);
-
-		table = viewer.getGrid();
+		Table table = viewer.getTable();
 
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
@@ -174,20 +146,29 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 		layoutData.heightHint = 200;
 		table.setLayoutData(layoutData);
 
-		final GridViewerColumn dateColumn = createColumn(viewer, "Date");
-		dateColumn.setEditingSupport(new ColumnEditingSupport(viewer, PricingPackage.Literals.INDEX_POINT__DATE) {
-			final FormattedTextCellEditor ed = new FormattedTextCellEditor(table, SWT.BORDER) {
-				@Override
-				public void activate() {
-					super.activate();
-					setFocus();
-				}
-			};
+		final TableViewerColumn dateColumn = createColumn(viewer, "Date");
+		dateColumn.setEditingSupport(new EditingSupport(viewer) {
+			protected CellEditor getCellEditor(final Object element) {
+				final FormattedTextCellEditor ed = new FormattedTextCellEditor(table, SWT.BORDER);
+				ed.setFormatter(new YearMonthTextFormatter());
+				addCellEditorListener(ed);
+				return ed;
+			}
 
 			@Override
-			protected CellEditor getCellEditor(final Object element) {
-				ed.setFormatter(new YearMonthTextFormatter());
-				return ed;
+			protected boolean canEdit(Object element) {
+				return true;
+			}
+
+			@Override
+			protected Object getValue(Object element) {
+				return ((EObject) element).eGet(PricingPackage.Literals.INDEX_POINT__DATE);
+			}
+
+			@Override
+			protected void setValue(Object element, Object value) {
+				final EditingDomain ed = commandHandler.getEditingDomain();
+				commandHandler.handleCommand(SetCommand.create(ed, element, PricingPackage.Literals.INDEX_POINT__DATE, value), (EObject) element, PricingPackage.Literals.INDEX_POINT__DATE);
 			}
 
 		});
@@ -202,32 +183,41 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 						return sdf.getDisplayString();
 					}
 				}
+
 				return "";
 			}
 		});
 
-		// layout.setColumnData(dateColumn.getColumn(), new ColumnWeightData(70, 100));
-
-		final GridViewerColumn valueColumn = createColumn(viewer, "Value");
-		valueColumn.setEditingSupport(new ColumnEditingSupport(viewer, PricingPackage.Literals.INDEX_POINT__VALUE) {
-			final FormattedTextCellEditor ed = new FormattedTextCellEditor(table) {
-				@Override
-				public void activate() {
-					super.activate();
-					setFocus();
-				}
-			};
-
+		final TableViewerColumn valueColumn = createColumn(viewer, "Value");
+		valueColumn.setEditingSupport(new EditingSupport(viewer) {
 			@Override
 			protected CellEditor getCellEditor(final Object element) {
+
+				final FormattedTextCellEditor ed = new FormattedTextCellEditor(table);
 
 				if (indexRawType.equals(EcorePackage.Literals.EINTEGER_OBJECT) || indexRawType.equals(EcorePackage.Literals.EINT)) {
 					ed.setFormatter(new IntegerFormatter());
 				} else {
 					ed.setFormatter(new NumberFormatter());
 				}
-
+				addCellEditorListener(ed);
 				return ed;
+			}
+
+			@Override
+			protected boolean canEdit(Object element) {
+				return true;
+			}
+
+			@Override
+			protected Object getValue(Object element) {
+				return ((EObject) element).eGet(PricingPackage.Literals.INDEX_POINT__VALUE);
+			}
+
+			@Override
+			protected void setValue(Object element, Object value) {
+				final EditingDomain ed = commandHandler.getEditingDomain();
+				commandHandler.handleCommand(SetCommand.create(ed, element, PricingPackage.Literals.INDEX_POINT__VALUE, value), (EObject) element, PricingPackage.Literals.INDEX_POINT__VALUE);
 			}
 
 		});
@@ -241,14 +231,6 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 						return value.toString();
 				}
 				return "";
-			}
-		});
-		// layout.setColumnData(valueColumn.getColumn(), new ColumnWeightData(30));
-
-		table.addListener(SWT.Resize, new Listener() {
-			@Override
-			public void handleEvent(final Event event) {
-				repacker.repack();
 			}
 		});
 
@@ -274,17 +256,8 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 			}
 
 		});
-	}
 
-	@Override
-	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
-		final Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(1, false));
-		createTable(composite);
-		createButtons(composite);
-
-		control = composite;
-		return super.wrapControl(control);
+		return viewer;
 	}
 
 	public SelectionAdapter createAddAdapter() {
@@ -315,12 +288,12 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 						final Command cmd = AddCommand.create(commandHandler.getEditingDomain(), index, indexPointsFeature, newPoint);
 						assert cmd.canExecute();
 						commandHandler.handleCommand(cmd, index, indexPointsFeature);
-						viewer.refresh();
+						tableViewer.refresh();
 
-						viewer.setSelection(new StructuredSelection(newPoint));
+						tableViewer.setSelection(new StructuredSelection(newPoint));
 					}
 				}
-				viewer.refresh();
+				tableViewer.refresh();
 				repacker.repack();
 			}
 		};
@@ -330,16 +303,16 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 		return new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				final ISelection sel = viewer.getSelection();
-				if (sel.isEmpty())
+				final ISelection sel = tableViewer.getSelection();
+				if (sel.isEmpty()) {
 					return;
+				}
 				if (sel instanceof IStructuredSelection) {
 					final IndexPoint<?> indexPoint = (IndexPoint<?>) ((IStructuredSelection) sel).getFirstElement();
 					final Command cmd = RemoveCommand.create(commandHandler.getEditingDomain(), indexPoint.eContainer(), indexPoint.eContainingFeature(), indexPoint);
 					assert cmd.canExecute();
 					commandHandler.handleCommand(cmd, indexPoint.eContainer(), indexPoint.eContainingFeature());
-					viewer.getControl().setFocus();
-					viewer.refresh();
+					tableViewer.refresh();
 				}
 			}
 		};
@@ -367,7 +340,7 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 		add.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 		add.addSelectionListener(createAddAdapter());
 
-		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
+		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
 			public void selectionChanged(final SelectionChangedEvent event) {
@@ -378,37 +351,14 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 	}
 
 	@Override
-	protected void updateDisplay(final Object value) {
-		viewer.setInput(value);
-		repacker.repack();
-		viewer.refresh();
-
-	}
-
-	@Override
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
 		originalInput = input;
 		super.display(dialogContext, context, input, range);
 	}
 
 	@Override
-	public Object createLabelLayoutData(final MMXRootObject root, final EObject value, final Control control, final Label label) {
-		return new GridData(SWT.RIGHT, SWT.TOP, false, false);
-	}
-
-	@Override
-	public boolean hasLabel() {
-		return false;
-	}
-
-	/**
-	 * Overrides the default layout data for the editing control, forcing it to span two columns instead of one.
-	 */
-	@Override
-	public Object createLayoutData(final MMXRootObject root, final EObject value, final Control control) {
-		final GridData result = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
-		result.heightHint = 200;
-		return result;
+	protected @Nullable String getTableLabelText() {
+		return null;
 	}
 
 }
