@@ -84,11 +84,15 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.cache.NotCaching;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptions;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.CapacityEvaluatedStateChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LatenessEvaluatedStateChecker;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.MinMaxUnconstrainedVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -111,8 +115,8 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 	private VesselStateAttributes attrLaden;
 	private VesselStateAttributes attrBal;
 
-	private double ballastBoilOff = 2000.0;
-	private double ladenBoilOff = 1000.0;
+	private double ballastBoilOff = 0.0;
+	private double ladenBoilOff = 0.0;
 	private double ladenBase = 0.0;
 	private double ballastBase = 0.0;
 	
@@ -121,9 +125,11 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 	public class boilOffOverride implements IOptimiserInjectorService {
 
 		private boolean activateOverride = false;
+		private boolean minMaxVolumeAllocator = false;
 
-		public boilOffOverride(boolean activateOverride) {
+		public boilOffOverride(boolean activateOverride, boolean minMaxVolumeAllocator) {
 			this.activateOverride = activateOverride;
+			this.minMaxVolumeAllocator = minMaxVolumeAllocator;
 		}
 
 		@Override
@@ -137,16 +143,15 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 				return Collections.<@NonNull Module> singletonList(new AbstractModule() {
 					@Override
 					protected void configure() {
-
-					}
-					
+						if(minMaxVolumeAllocator)
+							bind(IVolumeAllocator.class).annotatedWith(NotCaching.class).to(MinMaxUnconstrainedVolumeAllocator.class);
+					}	
 					@Provides
 					@Named(LNGTransformerModule.COMMERCIAL_VOLUME_OVERCAPACITY)
 					private boolean commercialVolumeOverCapacity() {
 						return activateOverride;
-					}
+					}	
 				});
-
 			}
 			return null;
 		}
@@ -180,41 +185,38 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 		// Create the required basic elements
 		vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
 
-		attrBal = vesselClass.getBallastAttributes();
-		attrBal.setInPortNBORate(ballastBoilOff);
-		attrBal.setInPortBaseRate(ballastBase);
-		vesselClass.setBallastAttributes(attrBal);
-
-		attrLaden = vesselClass.getLadenAttributes();
-		attrLaden.setInPortNBORate(ladenBoilOff);
-		attrLaden.setInPortBaseRate(ladenBase);
-		vesselClass.setLadenAttributes(attrLaden);
-
 		vessel = fleetModelBuilder.createVessel("Vessel1", vesselClass);
 		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2015, 12, 4, 7, 0, 0), LocalDateTime.of(2015, 12, 4, 13, 0, 0)) //
 				.withEndWindow(LocalDateTime.of(2015, 12, 30, 0, 0, 0))
-
 				.build();
 
-	
 		portA = portFinder.findPort("Point Fortin");
 		portA.setTimeZone("UTC");
 
-		
 		portB = portFinder.findPort("Dominion Cove Point LNG");
 		portB.setTimeZone("UTC");
 		portB.setDefaultStartTime(4);
 		portB.setDefaultWindowSize(0);
-
+	}
+	
+	public void changeBoilOffRates(double ladenRate, double ballastRate){
 		
+		attrBal = vesselClass.getBallastAttributes();
+		attrBal.setInPortNBORate(ballastRate);
+		vesselClass.setBallastAttributes(attrBal);
+		ballastBoilOff = ballastRate;
+
+		attrLaden = vesselClass.getLadenAttributes();
+		attrLaden.setInPortNBORate(ladenRate);
+		vesselClass.setLadenAttributes(attrLaden);
+		ladenBoilOff = ladenRate;
 	}
 
 	@Test
 	@Category({ MicroTest.class })
 	public void LDBoilOffTest() throws Exception {
 		
-		// Create cargo 1
 		cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 4), portA, null, entity, "9") //
 				.build() //
@@ -224,31 +226,23 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 				.withAssignmentFlags(false, false) //
 				.build();
 
-		Integer[] falseStats = runScenario(false);
-		Integer[] trueStats = runScenario(true);
+		changeBoilOffRates(0,0);
+		Integer[] baseStats = runScenario(false, false);
+		int baseLoad = baseStats[0];
+		int baseDischarge = baseStats[1];
 		
-		double originalBallast = new Double(ballastBoilOff);
-		double originalLaden = new Double(ladenBoilOff);
+		changeBoilOffRates(1000,2000);
+		Integer[] falseStats = runScenario(false, false);
+		Integer[] trueStats = runScenario(true, false);
+		
+		Integer [] falseExpected = {baseLoad, (int) (baseDischarge - ballastBoilOff - ladenBoilOff)};
+		Integer [] trueExpected = {(int) (baseLoad+ ladenBoilOff), (int) (baseDischarge - ballastBoilOff)};
 
-		Integer [] falseExpected = {140_000, (int) (136_612 - originalBallast - originalLaden)};
-		Integer [] trueExpected = {(int) (140_000+originalLaden), (int) (136_612 - originalBallast)};
-		
-		ballastBoilOff = 0;
-		ladenBoilOff = 0;
-		attrLaden.setInPortNBORate(ladenBoilOff);
-		attrBal.setInPortNBORate(ballastBoilOff);
-		vesselClass.setLadenAttributes(attrLaden);
-		vesselClass.setBallastAttributes(attrBal);
-		
-		Integer[] baseStats = runScenario(false);
-		Integer [] baseExpected = {140_000,136_612};
-
-		System.out.println(Arrays.toString(baseStats));
-		System.out.println(Arrays.toString(falseStats));
-		System.out.println(Arrays.toString(trueStats));
+//		System.out.println("BASE: " + Arrays.toString(baseStats));
+//		System.out.println("FALSE: " + Arrays.toString(falseStats));
+//		System.out.println("TRUE: " + Arrays.toString(trueStats));
 		Assert.assertArrayEquals(falseExpected, falseStats);
 		Assert.assertArrayEquals(trueExpected, trueStats);
-		Assert.assertArrayEquals(baseExpected, baseStats);
 	}
 	
 	@Test
@@ -271,42 +265,133 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 				.withAssignmentFlags(false, false) //
 				.build();	
 		
-		Integer[] falseStats = runScenario(false);
-		Integer[] trueStats = runScenario(true);
+		changeBoilOffRates(0,0);
+		Integer[] baseStats = runScenario(false, false);
+		int baseLoad = baseStats[0];
+		int baseDischargeA = baseStats[1];
+		int baseDischargeB = baseStats[2];
+
+		changeBoilOffRates(2000,1000);
+		Integer[] falseStats = runScenario(false, false);
+		Integer[] trueStats = runScenario(true, false);
+
+		Integer [] falseExpected = {baseLoad, baseDischargeA,  (int) (baseDischargeB - (ballastBoilOff*2) - ladenBoilOff)};
+		Integer [] trueExpected = {(int) (baseLoad + ladenBoilOff), baseDischargeA, (int) (baseDischargeB - (ballastBoilOff*2))};
+
+//		System.out.println("BASE: " + Arrays.toString(baseStats));
+//		System.out.println("FALSE: " + Arrays.toString(falseStats));
+//		System.out.println("TRUE: " + Arrays.toString(trueStats));
 		
-		int vesselCapacity = 140_000;
-		int voyageFuel = 5_100;
-		int maxDischarge = 70_000;
-		Integer [] baseExpected = {vesselCapacity, maxDischarge, maxDischarge-voyageFuel};
-		Integer [] falseExpected = {vesselCapacity, maxDischarge - 100,  (int) (maxDischarge- voyageFuel - (ballastBoilOff*2) - ladenBoilOff) + 100};
-		Integer [] trueExpected = {(int) (vesselCapacity + ladenBoilOff), maxDischarge, (int) (maxDischarge - voyageFuel - (ballastBoilOff*2))};
-		
-		
-		ballastBoilOff = 0;
-		ladenBoilOff = 0;
-		attrLaden.setInPortNBORate(ladenBoilOff);
-		attrBal.setInPortNBORate(ballastBoilOff);
-		vesselClass.setLadenAttributes(attrLaden);
-		vesselClass.setBallastAttributes(attrBal);
-		
-		Integer[] baseStats = runScenario(false);
-		
-		
-		
-		
-		System.out.println(Arrays.toString(baseStats));
-		System.out.println(Arrays.toString(trueStats));
-		System.out.println(Arrays.toString(falseStats));
 		Assert.assertArrayEquals(falseExpected, falseStats);
 		Assert.assertArrayEquals(trueExpected, trueStats);
-		Assert.assertArrayEquals(baseExpected, baseStats);
-		
-		
-		
 	}
-
 	
-	public Integer[] runScenario(boolean compensate){
+	@Test
+	@Category({ MicroTest.class })
+	public void maxBoilOffTest() throws Exception {
+		
+		// Create cargo 1
+		cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 4), portA, null, entity, "9") //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portB, null, entity, "9") //
+				.build() //
+				.withVesselAssignment(vesselAvailability1, 1) // -1 is nominal
+				.withAssignmentFlags(false, false) //
+				.build();
+		
+		changeBoilOffRates(0,0);
+		Integer[] baseStats = runScenario(false, true);
+		int baseLoad = baseStats[0];
+		int baseDischarge = baseStats[1];
+		
+		changeBoilOffRates(1000,2000);
+		Integer[] falseStats = runScenario(false, true);
+		Integer[] trueStats = runScenario(true, true);
+		
+		Integer [] falseExpected = {baseLoad, (int) (baseDischarge - ballastBoilOff - ladenBoilOff)};
+		Integer [] trueExpected = {(int) (baseLoad + ladenBoilOff),(int) (baseDischarge - ballastBoilOff)};
+		
+//		System.out.println("BASE: " + Arrays.toString(baseStats));
+//		System.out.println("FALSE: " + Arrays.toString(falseStats));
+//		System.out.println("TRUE: " + Arrays.toString(trueStats));
+		
+		Assert.assertArrayEquals(falseExpected, falseStats);
+		Assert.assertArrayEquals(trueExpected, trueStats);
+	}
+	
+	@Test
+	@Category({ MicroTest.class })
+	public void minBoilOffTest() throws Exception {
+		
+		// Create cargo 1
+		cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 4), portA, null, entity, "9") //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portB, null, entity, "7")
+				.withVolumeLimits(140_000, 140_000, VolumeUnits.M3) //
+				.build() //
+				.withVesselAssignment(vesselAvailability1, 1) // -1 is nominal
+				.withAssignmentFlags(false, false) //
+				.build();
+		
+		changeBoilOffRates(0,0);
+		Integer[] baseStats = runScenario(false, true);
+		int baseLoad = baseStats[0];
+		int baseDischarge = baseStats[1];
+		
+		changeBoilOffRates(1000,2000);
+		Integer[] falseStats = runScenario(false, true);
+		Integer[] trueStats = runScenario(true, true);
+		
+		Integer [] falseExpected = {baseLoad, (int) (baseDischarge - ballastBoilOff - ladenBoilOff)};
+		Integer [] trueExpected = {baseLoad,(int) (baseDischarge - ballastBoilOff - ladenBoilOff)};
+		
+//		System.out.println("BASE: " + Arrays.toString(baseStats));
+//		System.out.println("FALSE: " + Arrays.toString(falseStats));
+//		System.out.println("TRUE: " + Arrays.toString(trueStats));
+		
+		Assert.assertArrayEquals(falseExpected, falseStats);
+		Assert.assertArrayEquals(trueExpected, trueStats);
+	}
+	
+	@Test
+	@Category({ MicroTest.class })
+	public void ExtendedDischargeLDBoilOffTest() throws Exception {
+		
+		int dischargeHours = 480;
+		portB.setDischargeDuration(dischargeHours);
+		
+		cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 4), portA, null, entity, "9") //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portB, null, entity, "9") //
+				.build() //
+				.withVesselAssignment(vesselAvailability1, 1) // -1 is nominal
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		changeBoilOffRates(0,0);
+		Integer[] baseStats = runScenario(false, false);
+		int baseLoad = baseStats[0];
+		int baseDischarge = baseStats[1];
+		
+		changeBoilOffRates(1000,2000);
+		Integer[] falseStats = runScenario(false, false);
+		Integer[] trueStats = runScenario(true, false);
+		
+		Integer [] falseExpected = {baseLoad, (int) (baseDischarge - (ballastBoilOff * (dischargeHours/24)) - ladenBoilOff)};
+		Integer [] trueExpected = {(int) (baseLoad+ ladenBoilOff), (int) (baseDischarge - (ballastBoilOff * (dischargeHours/24)))};
+
+		System.out.println("BASE: " + Arrays.toString(baseStats));
+		System.out.println("FALSE: " + Arrays.toString(falseStats));
+		System.out.println("TRUE: " + Arrays.toString(trueStats));
+		Assert.assertArrayEquals(falseExpected, falseStats);
+		Assert.assertArrayEquals(trueExpected, trueStats);
+	}
+	
+	
+	public Integer[] runScenario(boolean compensate, boolean minMax){
 
 		List<Integer> stats = new ArrayList<Integer>();
 		optimiseWithLSOTest(scenarioRunner -> {
@@ -336,8 +421,9 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 					String portName = slot.getPort().getName();		
 					stats.add(slot.getVolumeTransferred()); 
 				}
+
 			}
-		}, new boilOffOverride(compensate));
+		}, new boilOffOverride(compensate, minMax));
 
 		Integer[] statsArray = stats.toArray(new Integer[stats.size()]);
 		return statsArray;
