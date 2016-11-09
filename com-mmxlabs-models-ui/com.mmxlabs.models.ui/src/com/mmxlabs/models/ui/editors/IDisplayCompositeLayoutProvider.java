@@ -5,6 +5,7 @@
 package com.mmxlabs.models.ui.editors;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
@@ -18,7 +19,8 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  *
  */
 public interface IDisplayCompositeLayoutProvider {
-	boolean showLabelFor(MMXRootObject root, EObject value, IInlineEditor editor);
+
+	boolean showLabelFor(@NonNull MMXRootObject root, EObject value, @NonNull IInlineEditor editor);
 
 	/**
 	 * Returns a "top level" editor layout which may include a number of specific "detail" layouts. These "detail" layouts correspond to data sub-components which themselves require a separate GUI
@@ -33,7 +35,7 @@ public interface IDisplayCompositeLayoutProvider {
 	 * 
 	 * @return A Swing Layout object for the top GUI level in the editor component
 	 */
-	Layout createTopLevelLayout(MMXRootObject root, final EObject object, int numDetailLayouts);
+	Layout createTopLevelLayout(@NonNull MMXRootObject root, final EObject object, int numDetailLayouts);
 
 	/**
 	 * Returns a "detail" editor layout specifying how to lay out fields added to a specific GUI sub-component
@@ -44,7 +46,7 @@ public interface IDisplayCompositeLayoutProvider {
 	 *            The data sub-component which has been marked for editing in its own GUI sub-component
 	 * @return
 	 */
-	Layout createDetailLayout(MMXRootObject root, EObject subObject);
+	Layout createDetailLayout(@NonNull MMXRootObject root, EObject subObject);
 
 	/**
 	 * Returns SWT layout data for the GUI control which edits a particular field of a particular object, in a GUI sub-component whose layout is controlled by createDetailLayout.
@@ -55,7 +57,7 @@ public interface IDisplayCompositeLayoutProvider {
 	 * @param control
 	 * @return
 	 */
-	Object createEditorLayoutData(MMXRootObject root, EObject value, IInlineEditor editor, Control control);
+	Object createEditorLayoutData(@NonNull MMXRootObject root, EObject value, IInlineEditor editor, Control control);
 
 	/**
 	 * Returns SWT layout data for the GUI label attached to a particular field editor.
@@ -67,7 +69,7 @@ public interface IDisplayCompositeLayoutProvider {
 	 * @param label
 	 * @return
 	 */
-	Object createLabelLayoutData(MMXRootObject root, EObject value, final IInlineEditor editor, Control control, Label label);
+	Object createLabelLayoutData(@NonNull MMXRootObject root, EObject value, @NonNull IInlineEditor editor, Control control, Label label);
 
 	/**
 	 * Returns SWT layout data for the editor GUI sub-component which represents an entire data sub-component, within a top-level component whose layout is controlled by createTopLevelLayout.
@@ -79,5 +81,5 @@ public interface IDisplayCompositeLayoutProvider {
 	 * @param label
 	 * @return
 	 */
-	Object createTopLayoutData(MMXRootObject root, EObject value, EObject detail);
+	Object createTopLayoutData(@NonNull MMXRootObject root, EObject value, EObject detail);
 }
