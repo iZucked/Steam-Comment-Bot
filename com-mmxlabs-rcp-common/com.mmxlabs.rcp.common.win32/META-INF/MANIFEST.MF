@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: RCP Common: Win32
 Bundle-SymbolicName: com.mmxlabs.rcp.common.win32
-Bundle-Version: 4.0.3.RELEASE
+Bundle-Version: 4.0.4.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Fragment-Host: com.mmxlabs.rcp.common;bundle-version="4.0.3"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
