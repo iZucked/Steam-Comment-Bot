@@ -7,9 +7,12 @@ package com.mmxlabs.lingo.reports.components;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -64,7 +67,8 @@ public abstract class AbstractSimpleTabularReportTransformer<T> {
 
 	abstract public List<ColumnManager<T>> getColumnManagers(@NonNull ISelectedDataProvider selectedDataProvider);
 
-	/**
-	 */
-	abstract public @NonNull List<@NonNull T> createData(@NonNull Schedule schedule, @NonNull LNGScenarioModel rootObject);
+//	abstract public @NonNull List<@NonNull T> createData(@NonNull Schedule schedule, @NonNull LNGScenarioModel rootObject);
+
+	@NonNullByDefault
+	public abstract List<@NonNull T> createData(@Nullable Pair<Schedule, LNGScenarioModel> pinnedPair, List<Pair<Schedule, LNGScenarioModel>> otherPairs) ;
 }

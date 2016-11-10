@@ -44,6 +44,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer.ColumnManager;
@@ -96,19 +97,21 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 					columnManagers.clear();
 
-					final List<Object> rowElements = new LinkedList<>();
 					int numberOfSchedules = 0;
-					List<T> pinnedData = null;
+					Pair<Schedule, LNGScenarioModel> pinnedPair = null;
+					List<Pair<Schedule, LNGScenarioModel>> otherPairs = new LinkedList<>();
+					// List<T> pinnedData = null;
 					if (pinned != null) {
 						final LNGScenarioModel pinnedScenarioModel = selectedDataProvider.getScenarioModel(pinned);
 						if (pinnedScenarioModel != null) {
 							final Schedule schedule = ScenarioModelUtil.findSchedule(pinnedScenarioModel);
-							@Nullable
-							final LNGScenarioModel scenarioModel = selectedDataProvider.getScenarioModel(schedule);
-							if (schedule != null && scenarioModel != null) {
-								pinnedData = transformer.createData(schedule, scenarioModel);
-								rowElements.addAll(pinnedData);
-								numberOfSchedules++;
+							if (schedule != null) {
+								@Nullable
+								final LNGScenarioModel scenarioModel = selectedDataProvider.getScenarioModel(schedule);
+								if (scenarioModel != null) {
+									pinnedPair = new Pair<>(schedule, scenarioModel);
+									numberOfSchedules++;
+								}
 							}
 						}
 					}
@@ -120,12 +123,13 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 								@Nullable
 								final LNGScenarioModel scenarioModel = selectedDataProvider.getScenarioModel(schedule);
 								if (scenarioModel != null) {
-									rowElements.addAll(transformer.createData(schedule, scenarioModel));
+									otherPairs.add(new Pair<>(schedule, scenarioModel));
 									numberOfSchedules++;
 								}
 							}
 						}
 					}
+					final List<T> rowElements = transformer.createData(pinnedPair, otherPairs);
 
 					columnManagers.addAll(transformer.getColumnManagers(selectedDataProvider));
 					clearColumns();

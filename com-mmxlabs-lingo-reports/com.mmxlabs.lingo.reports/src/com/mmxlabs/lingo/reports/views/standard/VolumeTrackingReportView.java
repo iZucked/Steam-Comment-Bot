@@ -5,16 +5,22 @@
 package com.mmxlabs.lingo.reports.views.standard;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.Viewer;
 
+import com.mmxlabs.common.Equality;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
@@ -132,12 +138,26 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 	protected AbstractSimpleTabularReportTransformer<VolumeData> createTransformer() {
 
 		return new AbstractSimpleTabularReportTransformer<VolumeData>() {
-
 			@Override
+			public @NonNull List<@NonNull VolumeData> createData(@Nullable Pair<@NonNull Schedule, @NonNull LNGScenarioModel> pinnedPair,
+					@NonNull List<@NonNull Pair<@NonNull Schedule, @NonNull LNGScenarioModel>> otherPairs) {
+				overallVolumes.clear();
+
+				final List<@NonNull VolumeData> output = new LinkedList<>();
+				{
+					if (pinnedPair != null) {
+						output.addAll(createData(pinnedPair.getFirst(), pinnedPair.getSecond()));
+					}
+					for (Pair<@NonNull Schedule, @NonNull LNGScenarioModel> p : otherPairs) {
+						output.addAll(createData(p.getFirst(), p.getSecond()));
+					}
+				}
+
+				return output;
+			}
+
 			public List<VolumeData> createData(final Schedule schedule, final LNGScenarioModel rootObject) {
 				final List<VolumeData> output = new ArrayList<VolumeData>();
-
-				overallVolumes.clear();
 
 				for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 					for (final SlotAllocation sa : ca.getSlotAllocations()) {

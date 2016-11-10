@@ -9,8 +9,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -26,10 +29,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.PropertySheet;
 
+import com.mmxlabs.common.Equality;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
-
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -42,6 +46,7 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.util.importer.registry.IAttributeImporterExtension.IEDataTypeMatch;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -67,7 +72,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		super.dispose();
 	}
 
-	public final Map<String, Map<YearMonth, Double>> overallExposures = new HashMap<String, Map<YearMonth, Double>>();
+	private Pair<YearMonth, YearMonth> dateRange = new Pair<>();
 
 	private Exposures.ValueMode mode = ValueMode.VOLUME_MMBTU;
 	private boolean selectionMode = false;
@@ -92,41 +97,6 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	@Override
 	protected AbstractSimpleTabularReportTransformer<IndexExposureData> createTransformer() {
 		return new AbstractSimpleTabularReportTransformer<IndexExposureData>() {
-
-			/**
-			 * Returns the list of year / month labels for the entire known exposure data range. This may conceivably include months in which no transactions occur.
-			 * 
-			 * @return
-			 */
-			private List<YearMonth> dateRange() {
-				final List<YearMonth> result = new ArrayList<>();
-				YearMonth earliest = null;
-				YearMonth latest = null;
-
-				for (final Map<YearMonth, Double> exposures : overallExposures.values()) {
-					for (final YearMonth key : exposures.keySet()) {
-						if (earliest == null || earliest.isAfter(key)) {
-							earliest = key;
-						}
-						if (latest == null || latest.isBefore(key)) {
-							latest = key;
-						}
-					}
-				}
-
-				if (earliest == null) {
-					return result;
-				}
-
-				YearMonth my = earliest;
-
-				result.add(my);
-				while (my.isBefore(latest)) {
-					my = my.plusMonths(1);
-					result.add(my);
-				}
-				return result;
-			}
 
 			@Override
 			public List<ColumnManager<IndexExposureData>> getColumnManagers(@NonNull final ISelectedDataProvider selectedDataProvider) {
@@ -205,38 +175,94 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					}
 				});
 
-				for (final YearMonth date : dateRange()) {
-					result.add(new ColumnManager<IndexExposureData>(String.format("%04d-%02d", date.getYear(), date.getMonthValue())) {
-						@Override
-						public String getColumnText(final IndexExposureData data) {
-							if (data.exposures.containsKey(date)) {
-								final double result = data.exposures.get(date);
-								return String.format("%,.01f", result);
+				if (dateRange != null && dateRange.getFirst() != null) {
+					YearMonth date = dateRange.getFirst();
+					while (!date.isAfter(dateRange.getSecond())) {
+						final YearMonth fDate = date;
+						result.add(new ColumnManager<IndexExposureData>(String.format("%04d-%02d", date.getYear(), date.getMonthValue())) {
+							@Override
+							public String getColumnText(final IndexExposureData data) {
+								if (data.exposures.containsKey(fDate)) {
+									final double result = data.exposures.get(fDate);
+									return String.format("%,.01f", result);
 
+								}
+								return "";
 							}
-							return "";
-						}
 
-						@Override
-						public int compare(final IndexExposureData o1, final IndexExposureData o2) {
-							final double result1 = o1.exposures.containsKey(date) ? o1.exposures.get(date) : 0;
-							final double result2 = o2.exposures.containsKey(date) ? o2.exposures.get(date) : 0;
-							return Double.compare(result1, result2);
-						}
-					});
+							@Override
+							public int compare(final IndexExposureData o1, final IndexExposureData o2) {
+								final double result1 = o1.exposures.containsKey(fDate) ? o1.exposures.get(fDate) : 0;
+								final double result2 = o2.exposures.containsKey(fDate) ? o2.exposures.get(fDate) : 0;
+								return Double.compare(result1, result2);
+							}
+						});
+
+						date = date.plusMonths(1);
+					}
 				}
-
 				return result;
 			}
 
 			@Override
-			public List<IndexExposureData> createData(final Schedule schedule, final LNGScenarioModel rootObject) {
-				final List<IndexExposureData> output = new ArrayList<IndexExposureData>();
+			public @NonNull List<@NonNull IndexExposureData> createData(@Nullable Pair<@NonNull Schedule, @NonNull LNGScenarioModel> pinnedPair,
+					@NonNull List<@NonNull Pair<@NonNull Schedule, @NonNull LNGScenarioModel>> otherPairs) {
+				dateRange.setBoth(null, null);
+
+				final List<@NonNull IndexExposureData> output = new LinkedList<>();
+
+				if (pinnedPair != null && otherPairs.size() == 1) {
+					// Pin/Diff mode
+					List<IndexExposureData> ref = createData(pinnedPair.getFirst(), pinnedPair.getSecond());
+
+					Pair<@NonNull Schedule, @NonNull LNGScenarioModel> p = otherPairs.get(0);
+					List<IndexExposureData> other = createData(p.getFirst(), p.getSecond());
+
+					LOOP_REF_DATA: for (IndexExposureData refData : ref) {
+						Iterator<IndexExposureData> otherIterator = other.iterator();
+						while (otherIterator.hasNext()) {
+							IndexExposureData otherData = otherIterator.next();
+							if (Equality.isEqual(refData.indexName, otherData.indexName)) {
+
+								output.add(createDiffData(refData, otherData));
+								otherIterator.remove();
+								continue LOOP_REF_DATA;
+							}
+						}
+						output.add(createDiffData(refData, null));
+
+					}
+					for (IndexExposureData otherData : other) {
+						output.add(createDiffData(null, otherData));
+
+					}
+				} else {
+					if (pinnedPair != null) {
+						output.addAll(createData(pinnedPair.getFirst(), pinnedPair.getSecond()));
+					}
+					for (Pair<@NonNull Schedule, @NonNull LNGScenarioModel> p : otherPairs) {
+						output.addAll(createData(p.getFirst(), p.getSecond()));
+					}
+				}
+				for (IndexExposureData d : output) {
+					for (YearMonth ym : d.exposures.keySet()) {
+						if (dateRange.getFirst() == null || ym.isBefore(dateRange.getFirst())) {
+							dateRange.setFirst(ym);
+						}
+						if (dateRange.getSecond() == null || ym.isAfter(dateRange.getSecond())) {
+							dateRange.setSecond(ym);
+						}
+					}
+				}
+
+				return output;
+			}
+
+			public List<@NonNull IndexExposureData> createData(final @NonNull Schedule schedule, final @NonNull LNGScenarioModel rootObject) {
+				final List<@NonNull IndexExposureData> output = new LinkedList<>();
 
 				final PricingModel pm = rootObject.getReferenceModel().getPricingModel();
 				final EList<CommodityIndex> indices = pm.getCommodityIndices();
-
-				overallExposures.clear();
 
 				List<Object> selected = (!selectionMode || selection == null) ? Collections.emptyList() : SelectionHelper.convertToList(selection, Object.class);
 				selected = selected.stream().filter(s -> s instanceof Slot || s instanceof SlotAllocation || s instanceof Cargo || s instanceof CargoAllocation).collect(Collectors.toList());
@@ -247,7 +273,6 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					if (exposures.size() != 0.0) {
 						final String currencyUnit = index.getCurrencyUnit();
 						final String volumeUnit = index.getVolumeUnit();
-						overallExposures.put(index.getName(), exposures);
 						output.add(new IndexExposureData(schedule, index.getName(), index, exposures, currencyUnit, volumeUnit));
 					}
 				}
@@ -255,6 +280,28 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			}
 
 		};
+	}
+
+	protected @NonNull IndexExposureData createDiffData(IndexExposureData pinData, IndexExposureData otherData) {
+
+		IndexExposureData modelData = pinData != null ? pinData : otherData;
+		Map<YearMonth, Double> exposuresByMonth = new HashMap<>();
+		IndexExposureData newData = new IndexExposureData(null, modelData.indexName, null, exposuresByMonth, modelData.currencyUnit, modelData.volumeUnit);
+
+		if (pinData != null) {
+			for (Map.Entry<YearMonth, Double> e : pinData.exposures.entrySet()) {
+				double val = exposuresByMonth.getOrDefault(e.getKey(), 0.0);
+				exposuresByMonth.put(e.getKey(), val + e.getValue());
+			}
+		}
+		if (otherData != null) {
+			for (Map.Entry<YearMonth, Double> e : otherData.exposures.entrySet()) {
+				double val = exposuresByMonth.getOrDefault(e.getKey(), 0.0);
+				exposuresByMonth.put(e.getKey(), val - e.getValue());
+			}
+		}
+
+		return newData;
 	}
 
 	protected void makeActions() {

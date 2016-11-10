@@ -16,20 +16,20 @@ import com.mmxlabs.models.lng.schedule.Schedule;
  */
 public class IndexExposureData {
 	public final String indexName;
-	public final NamedIndexContainer<?> index;
+//	public final NamedIndexContainer<?> index;
 	public final Map<YearMonth, Double> exposures;
-	public final @NonNull Schedule schedule;
+	public final Schedule schedule;
 
 	public final String currencyUnit;
 	public final String volumeUnit;
 
-	public IndexExposureData(final @NonNull Schedule schedule, final String name, final NamedIndexContainer<?> index, final Map<YearMonth, Double> exposuresByMonth, final String currencyUnit,
+	public IndexExposureData(final Schedule schedule, final String name, final NamedIndexContainer<?> index, final Map<YearMonth, Double> exposuresByMonth, final String currencyUnit,
 			final String volumeUnit
 	// final Map<YearMonth, Long> valueByMonth
 	) {
 		this.schedule = schedule;
 		this.indexName = name;
-		this.index = index;
+//		this.index = index;
 		this.exposures = exposuresByMonth;
 		// this.value = valueByMonth;
 		this.currencyUnit = currencyUnit;
