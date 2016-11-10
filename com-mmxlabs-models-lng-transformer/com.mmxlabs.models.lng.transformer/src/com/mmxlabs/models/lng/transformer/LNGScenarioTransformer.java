@@ -2366,12 +2366,36 @@ public class LNGScenarioTransformer {
 		if (LicenseFeatures.isPermitted("features:panama-canal")) {
 			orderedKeys.add(RouteOption.PANAMA);
 		}
+		
+		// set canal route consumptions and toll info
+		final PortModel portModel = ScenarioModelUtil.getPortModel(rootObject);
+		final CostModel costModel = ScenarioModelUtil.getCostModel(rootObject);
+
+		final Set<IVessel> optimiserVessels = new HashSet<>();
+		optimiserVessels.addAll(allVessels.values());
+		for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
+			final IVessel vessel = vesselAvailability.getVessel();
+			if (vessel != null) {
+				optimiserVessels.add(vessel);
+			}
+		}
+
+		final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
+		if (panamaCanalTariff != null) {
+			buildPanamaCosts(builder, vesselAssociation, vesselClassAssociation, optimiserVessels, panamaCanalTariff);
+			if (panamaCanalTariff.isSetAvailableFrom()) {
+				final LocalDate availableFrom = panamaCanalTariff.getAvailableFrom();
+				if (availableFrom != null) {
+					final int time = dateHelper.convertTime(availableFrom);
+					distanceProviderEditor.setRouteAvailableFrom(ERouteOption.PANAMA, time);
+				}
+			}
+		}
 
 		/*
 		 * Now fill out the distances from the distance model. Firstly we need to create the default distance matrix.
 		 */
 		final Set<RouteOption> seenRoutes = new HashSet<>();
-		final PortModel portModel = rootObject.getReferenceModel().getPortModel();
 		for (final Route r : portModel.getRoutes()) {
 			seenRoutes.add(r.getRouteOption());
 			// Store Route under it's name
@@ -2384,30 +2408,6 @@ public class LNGScenarioTransformer {
 				final int distance = dl.getFullDistance();
 
 				builder.setPortToPortDistance(from, to, mapRouteOption(r), distance);
-			}
-
-			final Set<IVessel> optimiserVessels = new HashSet<>();
-			optimiserVessels.addAll(allVessels.values());
-			for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
-				final IVessel vessel = vesselAvailability.getVessel();
-				if (vessel != null) {
-					optimiserVessels.add(vessel);
-				}
-			}
-
-			// set canal route consumptions and toll info
-			final CostModel costModel = rootObject.getReferenceModel().getCostModel();
-
-			final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
-			if (panamaCanalTariff != null) {
-				buildPanamaCosts(builder, vesselAssociation, vesselClassAssociation, optimiserVessels, panamaCanalTariff);
-				if (panamaCanalTariff.isSetAvailableFrom()) {
-					final LocalDate availableFrom = panamaCanalTariff.getAvailableFrom();
-					if (availableFrom != null) {
-						final int time = dateHelper.convertTime(availableFrom);
-						distanceProviderEditor.setRouteAvailableFrom(ERouteOption.PANAMA, time);
-					}
-				}
 			}
 
 			final Map<VesselClass, List<RouteCost>> vesselClassToRouteCostMap = costModel.getRouteCosts().stream() //
