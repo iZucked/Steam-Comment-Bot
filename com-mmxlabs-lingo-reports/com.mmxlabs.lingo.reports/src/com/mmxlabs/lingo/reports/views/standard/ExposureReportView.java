@@ -72,7 +72,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		super.dispose();
 	}
 
-	private Pair<YearMonth, YearMonth> dateRange = new Pair<>();
+	private final Pair<YearMonth, YearMonth> dateRange = new Pair<>();
 
 	private Exposures.ValueMode mode = ValueMode.VOLUME_MMBTU;
 	private boolean selectionMode = false;
@@ -205,23 +205,23 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			}
 
 			@Override
-			public @NonNull List<@NonNull IndexExposureData> createData(@Nullable Pair<@NonNull Schedule, @NonNull LNGScenarioModel> pinnedPair,
-					@NonNull List<@NonNull Pair<@NonNull Schedule, @NonNull LNGScenarioModel>> otherPairs) {
+			public @NonNull List<@NonNull IndexExposureData> createData(@Nullable final Pair<@NonNull Schedule, @NonNull LNGScenarioModel> pinnedPair,
+					@NonNull final List<@NonNull Pair<@NonNull Schedule, @NonNull LNGScenarioModel>> otherPairs) {
 				dateRange.setBoth(null, null);
 
 				final List<@NonNull IndexExposureData> output = new LinkedList<>();
 
 				if (pinnedPair != null && otherPairs.size() == 1) {
 					// Pin/Diff mode
-					List<IndexExposureData> ref = createData(pinnedPair.getFirst(), pinnedPair.getSecond());
+					final List<IndexExposureData> ref = createData(pinnedPair.getFirst(), pinnedPair.getSecond());
 
-					Pair<@NonNull Schedule, @NonNull LNGScenarioModel> p = otherPairs.get(0);
-					List<IndexExposureData> other = createData(p.getFirst(), p.getSecond());
+					final Pair<@NonNull Schedule, @NonNull LNGScenarioModel> p = otherPairs.get(0);
+					final List<IndexExposureData> other = createData(p.getFirst(), p.getSecond());
 
-					LOOP_REF_DATA: for (IndexExposureData refData : ref) {
-						Iterator<IndexExposureData> otherIterator = other.iterator();
+					LOOP_REF_DATA: for (final IndexExposureData refData : ref) {
+						final Iterator<IndexExposureData> otherIterator = other.iterator();
 						while (otherIterator.hasNext()) {
-							IndexExposureData otherData = otherIterator.next();
+							final IndexExposureData otherData = otherIterator.next();
 							if (Equality.isEqual(refData.indexName, otherData.indexName)) {
 
 								output.add(createDiffData(refData, otherData));
@@ -232,7 +232,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 						output.add(createDiffData(refData, null));
 
 					}
-					for (IndexExposureData otherData : other) {
+					for (final IndexExposureData otherData : other) {
 						output.add(createDiffData(null, otherData));
 
 					}
@@ -240,12 +240,12 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					if (pinnedPair != null) {
 						output.addAll(createData(pinnedPair.getFirst(), pinnedPair.getSecond()));
 					}
-					for (Pair<@NonNull Schedule, @NonNull LNGScenarioModel> p : otherPairs) {
+					for (final Pair<@NonNull Schedule, @NonNull LNGScenarioModel> p : otherPairs) {
 						output.addAll(createData(p.getFirst(), p.getSecond()));
 					}
 				}
-				for (IndexExposureData d : output) {
-					for (YearMonth ym : d.exposures.keySet()) {
+				for (final IndexExposureData d : output) {
+					for (final YearMonth ym : d.exposures.keySet()) {
 						if (dateRange.getFirst() == null || ym.isBefore(dateRange.getFirst())) {
 							dateRange.setFirst(ym);
 						}
@@ -282,21 +282,21 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		};
 	}
 
-	protected @NonNull IndexExposureData createDiffData(IndexExposureData pinData, IndexExposureData otherData) {
+	protected @NonNull IndexExposureData createDiffData(final IndexExposureData pinData, final IndexExposureData otherData) {
 
-		IndexExposureData modelData = pinData != null ? pinData : otherData;
-		Map<YearMonth, Double> exposuresByMonth = new HashMap<>();
-		IndexExposureData newData = new IndexExposureData(null, modelData.indexName, null, exposuresByMonth, modelData.currencyUnit, modelData.volumeUnit);
+		final IndexExposureData modelData = pinData != null ? pinData : otherData;
+		final Map<YearMonth, Double> exposuresByMonth = new HashMap<>();
+		final IndexExposureData newData = new IndexExposureData(null, modelData.indexName, null, exposuresByMonth, modelData.currencyUnit, modelData.volumeUnit);
 
 		if (pinData != null) {
-			for (Map.Entry<YearMonth, Double> e : pinData.exposures.entrySet()) {
-				double val = exposuresByMonth.getOrDefault(e.getKey(), 0.0);
+			for (final Map.Entry<YearMonth, Double> e : pinData.exposures.entrySet()) {
+				final double val = exposuresByMonth.getOrDefault(e.getKey(), 0.0);
 				exposuresByMonth.put(e.getKey(), val + e.getValue());
 			}
 		}
 		if (otherData != null) {
-			for (Map.Entry<YearMonth, Double> e : otherData.exposures.entrySet()) {
-				double val = exposuresByMonth.getOrDefault(e.getKey(), 0.0);
+			for (final Map.Entry<YearMonth, Double> e : otherData.exposures.entrySet()) {
+				final double val = exposuresByMonth.getOrDefault(e.getKey(), 0.0);
 				exposuresByMonth.put(e.getKey(), val - e.getValue());
 			}
 		}
