@@ -5,7 +5,7 @@
 package com.mmxlabs.lingo.reports.views.standard;
 
 import java.time.LocalDate;
-import java.time.YearMonth;
+import java.time.Year;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,14 +28,11 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.commercial.PurchaseContract;
-import com.mmxlabs.models.lng.commercial.SalesContract;
-import com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl;
-import com.mmxlabs.models.lng.commercial.impl.SalesContractImpl;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotAllocationType;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
@@ -49,32 +46,15 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 		super("com.mmxlabs.lingo.doc.Reports_VolumeTracking");
 	}
 
-	@SuppressWarnings("serial")
-	public final Map<Contract, CumulativeMap<Integer>> overallVolumes = new AutoInitialisingMap<Contract, CumulativeMap<Integer>>() {
-		@Override
-		protected CumulativeMap<Integer> autoValue() {
-			return new CumulativeMap<Integer>();
-		}
-	};
-
-	private static PurchaseContract otherPurchase = new PurchaseContractImpl() {
-		{
-			name = "Other Purchase";
-		}
-	};
-	private static SalesContract otherSales = new SalesContractImpl() {
-		{
-			name = "Other Sales";
-		}
-	};
-
 	public static class VolumeData {
-		public final Contract contract;
-		public final Map<Integer, Long> volumes;
+		public final String contract;
+		public final Map<Year, Long> volumes;
 		public final Schedule schedule;
+		private final boolean purchase;
 
-		public VolumeData(@NonNull final Schedule schedule, final Contract contract, final Map<Integer, Long> volumes) {
+		public VolumeData(final Schedule schedule, final boolean purchase, final String contract, final Map<Year, Long> volumes) {
 			this.schedule = schedule;
+			this.purchase = purchase;
 			this.contract = contract;
 			this.volumes = volumes;
 		}
@@ -112,13 +92,13 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 	 * @param calendar
 	 * @return
 	 */
-	private int getGasYear(final ZonedDateTime calendar) {
+	private Year getGasYear(final ZonedDateTime calendar) {
 		final LocalDate utc = calendar.toLocalDate();
 
 		// subtract one year from the reported year for dates prior to october
 		final int yearOffset = (utc.getMonthValue() < Calendar.OCTOBER) ? -1 : 0;
 
-		return utc.getYear() + yearOffset;
+		return Year.of(utc.getYear() + yearOffset);
 	}
 
 	@Override
@@ -139,17 +119,53 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 
 		return new AbstractSimpleTabularReportTransformer<VolumeData>() {
 			@Override
-			public @NonNull List<@NonNull VolumeData> createData(@Nullable Pair<@NonNull Schedule, @NonNull LNGScenarioModel> pinnedPair,
-					@NonNull List<@NonNull Pair<@NonNull Schedule, @NonNull LNGScenarioModel>> otherPairs) {
-				overallVolumes.clear();
+			public @NonNull List<@NonNull VolumeData> createData(@Nullable final Pair<@NonNull Schedule, @NonNull LNGScenarioModel> pinnedPair,
+					@NonNull final List<@NonNull Pair<@NonNull Schedule, @NonNull LNGScenarioModel>> otherPairs) {
+				dateRange.setBoth(null, null);
 
 				final List<@NonNull VolumeData> output = new LinkedList<>();
-				{
+
+				if (pinnedPair != null && otherPairs.size() == 1) {
+					// Pin/Diff mode
+					final List<VolumeData> ref = createData(pinnedPair.getFirst(), pinnedPair.getSecond());
+
+					final Pair<@NonNull Schedule, @NonNull LNGScenarioModel> p = otherPairs.get(0);
+					final List<VolumeData> other = createData(p.getFirst(), p.getSecond());
+
+					LOOP_REF_DATA: for (final VolumeData refData : ref) {
+						final Iterator<VolumeData> otherIterator = other.iterator();
+						while (otherIterator.hasNext()) {
+							final VolumeData otherData = otherIterator.next();
+							if (Equality.isEqual(refData.contract, otherData.contract) && refData.purchase == otherData.purchase) {
+
+								output.add(createDiffData(refData, otherData));
+								otherIterator.remove();
+								continue LOOP_REF_DATA;
+							}
+						}
+						output.add(createDiffData(refData, null));
+
+					}
+					for (final VolumeData otherData : other) {
+						output.add(createDiffData(null, otherData));
+
+					}
+				} else {
 					if (pinnedPair != null) {
 						output.addAll(createData(pinnedPair.getFirst(), pinnedPair.getSecond()));
 					}
-					for (Pair<@NonNull Schedule, @NonNull LNGScenarioModel> p : otherPairs) {
+					for (final Pair<@NonNull Schedule, @NonNull LNGScenarioModel> p : otherPairs) {
 						output.addAll(createData(p.getFirst(), p.getSecond()));
+					}
+				}
+				for (final VolumeData d : output) {
+					for (final Year ym : d.volumes.keySet()) {
+						if (dateRange.getFirst() == null || ym.isBefore(dateRange.getFirst())) {
+							dateRange.setFirst(ym);
+						}
+						if (dateRange.getSecond() == null || ym.isAfter(dateRange.getSecond())) {
+							dateRange.setSecond(ym);
+						}
 					}
 				}
 
@@ -158,61 +174,72 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 
 			public List<VolumeData> createData(final Schedule schedule, final LNGScenarioModel rootObject) {
 				final List<VolumeData> output = new ArrayList<VolumeData>();
-
+				final Map<String, Map<Year, Long>> purchaseVolumes = new HashMap<>();
+				final Map<String, Map<Year, Long>> salesVolumes = new HashMap<>();
+				
 				for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 					for (final SlotAllocation sa : ca.getSlotAllocations()) {
 						final long volume = sa.getVolumeTransferred();
-						Contract contract = sa.getContract();
+						final Contract contract = sa.getContract();
+						final String contractName;
 						if (contract == null) {
 							final Slot slot = sa.getSlot();
 							if (slot instanceof LoadSlot) {
-								contract = otherPurchase;
+								contractName = "Other purchases";
 							} else if (slot instanceof DischargeSlot) {
-								contract = otherSales;
+								contractName = "Other sales";
+							} else {
+								contractName = "Unknown";
+								assert false;
 							}
+						} else {
+							contractName = contract.getName();
 						}
-						final int year = getGasYear(sa.getSlotVisit().getStart());
-						overallVolumes.get(contract).plusEquals(year, volume);
+						assert contractName != null;
+						final Year year = getGasYear(sa.getSlotVisit().getStart());
+						if (sa.getSlotAllocationType() == SlotAllocationType.PURCHASE) {
+							final Map<Year, Long> m = purchaseVolumes.getOrDefault(contractName, new HashMap<>());
+							final long newValue = m.getOrDefault(year, 0L) + volume;
+							m.put(year, newValue);
+							purchaseVolumes.put(contractName, m);
+						} else if (sa.getSlotAllocationType() == SlotAllocationType.SALE) {
+							final Map<Year, Long> m = salesVolumes.getOrDefault(contractName, new HashMap<>());
+							final long newValue = m.getOrDefault(year, 0L) + volume;
+							m.put(year, newValue);
+							salesVolumes.put(contractName, m);
+						}
 					}
 				}
-
-				for (final Contract contract : overallVolumes.keySet()) {
-					output.add(new VolumeData(schedule, contract, overallVolumes.get(contract)));
+				for (final Map.Entry<String, Map<Year, Long>> e : purchaseVolumes.entrySet()) {
+					output.add(new VolumeData(schedule, true, e.getKey(), e.getValue()));
+				}
+				for (final Map.Entry<String, Map<Year, Long>> e : salesVolumes.entrySet()) {
+					output.add(new VolumeData(schedule, false, e.getKey(), e.getValue()));
 				}
 
 				return output;
 			}
 
-			/**
-			 * Returns the list of year / month labels for the entire known exposure data range. This may conceivably include months in which no transactions occur.
-			 * 
-			 * @return
-			 */
-			private List<Integer> yearRange() {
-				final List<Integer> result = new ArrayList<Integer>();
-				Integer earliest = null;
-				Integer latest = null;
+			protected @NonNull VolumeData createDiffData(final VolumeData pinData, final VolumeData otherData) {
 
-				for (final Map<Integer, Long> volumes : overallVolumes.values()) {
-					for (final Integer key : volumes.keySet()) {
-						if (earliest == null || earliest > key) {
-							earliest = key;
-						}
-						if (latest == null || latest < key) {
-							latest = key;
-						}
+				final VolumeData modelData = pinData != null ? pinData : otherData;
+				final Map<Year, Long> volumes = new HashMap<Year, Long>();
+				final VolumeData newData = new VolumeData(null, modelData.purchase, modelData.contract, volumes);
+
+				if (pinData != null) {
+					for (final Map.Entry<Year, Long> e : pinData.volumes.entrySet()) {
+						final long val = volumes.getOrDefault(e.getKey(), 0L);
+						volumes.put(e.getKey(), val + e.getValue());
+					}
+				}
+				if (otherData != null) {
+					for (final Map.Entry<Year, Long> e : otherData.volumes.entrySet()) {
+						final long val = volumes.getOrDefault(e.getKey(), 0L);
+						volumes.put(e.getKey(), val - e.getValue());
 					}
 				}
 
-				if (earliest == null || latest == null) {
-					return result;
-				}
-
-				for (int year = earliest; year <= latest; year++) {
-					result.add(year);
-				}
-
-				return result;
+				return newData;
 			}
 
 			@Override
@@ -254,30 +281,35 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 				result.add(new ColumnManager<VolumeData>("Contract") {
 					@Override
 					public String getColumnText(final VolumeData data) {
-						return data.contract.getName();
+						return data.contract;
 					}
 
 					@Override
 					public int compare(final VolumeData o1, final VolumeData o2) {
-						return o1.contract.getName().compareTo(o2.contract.getName());
+						return o1.contract.compareTo(o2.contract);
 					}
 				});
 
-				for (final int year : yearRange()) {
-					result.add(new ColumnManager<VolumeData>(String.format("%d", year)) {
-						@Override
-						public String getColumnText(final VolumeData data) {
-							final long result = data.volumes.containsKey(year) ? data.volumes.get(year) : 0;
-							return String.format("%,d", result);
-						}
+				if (dateRange != null && dateRange.getFirst() != null) {
+					Year year = dateRange.getFirst();
+					while (!year.isAfter(dateRange.getSecond())) {
+						final Year fYear = year;
+						result.add(new ColumnManager<VolumeData>(String.format("%d", fYear.getValue())) {
+							@Override
+							public String getColumnText(final VolumeData data) {
+								final long result = data.volumes.containsKey(fYear) ? data.volumes.get(fYear) : 0;
+								return String.format("%,d", result);
+							}
 
-						@Override
-						public int compare(final VolumeData o1, final VolumeData o2) {
-							final double result1 = o1.volumes.containsKey(year) ? o1.volumes.get(year) : 0;
-							final double result2 = o2.volumes.containsKey(year) ? o2.volumes.get(year) : 0;
-							return Double.compare(result1, result2);
-						}
-					});
+							@Override
+							public int compare(final VolumeData o1, final VolumeData o2) {
+								final double result1 = o1.volumes.containsKey(fYear) ? o1.volumes.get(fYear) : 0;
+								final double result2 = o2.volumes.containsKey(fYear) ? o2.volumes.get(fYear) : 0;
+								return Double.compare(result1, result2);
+							}
+						});
+						year = year.plusYears(1);
+					}
 				}
 
 				return result;
@@ -286,9 +318,6 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 		};
 	}
 
-	@Override
-	public void dispose() {
-		overallVolumes.clear();
-		super.dispose();
-	}
+	private final Pair<Year, Year> dateRange = new Pair<>();
+
 }
