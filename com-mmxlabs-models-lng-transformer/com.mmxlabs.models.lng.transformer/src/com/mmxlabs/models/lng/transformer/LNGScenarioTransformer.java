@@ -219,6 +219,11 @@ public class LNGScenarioTransformer {
 	@NonNull
 	private SeriesParser commodityIndices;
 
+	@Inject
+	@Named(LNGTransformerModule.Parser_Currency)
+	@NonNull
+	private SeriesParser currencyIndices;
+
 	@Inject(optional = true)
 	@Nullable
 	private List<ITransformerExtension> transformerExtensions;
@@ -477,10 +482,11 @@ public class LNGScenarioTransformer {
 			registerIndex(name, index, commodityIndices);
 			registerIndex(name, index, baseFuelIndices);
 			registerIndex(name, index, charterIndices);
+			registerIndex(name, index, currencyIndices);
 		}
 
-		for (UnitConversion factor : pricingModel.getConversionFactors()) {
-			registerConversionFactor(factor, commodityIndices, baseFuelIndices, charterIndices);
+		for (final UnitConversion factor : pricingModel.getConversionFactors()) {
+			registerConversionFactor(factor, commodityIndices, baseFuelIndices, charterIndices, currencyIndices);
 		}
 
 		// Now pre-compute our various curve data objects...
@@ -783,9 +789,9 @@ public class LNGScenarioTransformer {
 	}
 
 	private void registerConversionFactor(@NonNull final UnitConversion factor, @NonNull final SeriesParser... parsers) {
-		String name = PriceIndexUtils.createConversionFactorName(factor);
+		final String name = PriceIndexUtils.createConversionFactorName(factor);
 		if (name != null) {
-			for (SeriesParser parser : parsers) {
+			for (final SeriesParser parser : parsers) {
 				parser.addSeriesExpression(name, Double.toString(factor.getFactor()));
 			}
 		}
@@ -1409,7 +1415,7 @@ public class LNGScenarioTransformer {
 
 		// set hedging costs in provider
 		setHedgingCosts(dischargeSlot, discharge);
-		
+
 		// set additional misc costs in provider
 		setMiscCosts(dischargeSlot, discharge);
 
@@ -1555,7 +1561,7 @@ public class LNGScenarioTransformer {
 
 		// set hedging costs in provider
 		setHedgingCosts(loadSlot, load);
-		
+
 		// set additional misc costs in provider
 		setMiscCosts(loadSlot, load);
 

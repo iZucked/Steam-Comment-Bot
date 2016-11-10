@@ -82,6 +82,9 @@ public class LNGTransformerModule extends AbstractModule {
 	/**
 	 */
 	public static final String Parser_Charter = "Charter";
+	/**
+	 */
+	public static final String Parser_Currency = "Currency";
 
 	private final LNGScenarioModel scenario;
 
@@ -281,6 +284,15 @@ public class LNGTransformerModule extends AbstractModule {
 	@Named(Parser_BaseFuel)
 	@Singleton
 	private SeriesParser provideBaseFuelParser(final ShiftFunctionMapper shiftMapper) {
+		final SeriesParser parser = new SeriesParser();
+		parser.setShiftMapper(shiftMapper);
+		return parser;
+	}
+
+	@Provides
+	@Named(Parser_Currency)
+	@Singleton
+	private SeriesParser provideCurrencyParser(final ShiftFunctionMapper shiftMapper) {
 		final SeriesParser parser = new SeriesParser();
 		parser.setShiftMapper(shiftMapper);
 		return parser;
