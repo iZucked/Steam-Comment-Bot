@@ -278,11 +278,12 @@
           targetEClass="com.mmxlabs.models.lng.pricing.CommodityIndex">
     </factory>
     <factory
-          ID="com.mmxlabs.models.lng.pricing.editor.factory1"
+          ID="com.mmxlabs.models.lng.pricing.editor.currencyIndexFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Currency Index"
+          replacementEClass="com.mmxlabs.models.lng.pricing.DataIndex"
           replacementEReference="data"
-          targetEClass="com.mmxlabs.models.lng.pricing.editor.EObject1">
+          targetEClass="com.mmxlabs.models.lng.pricing.CurrencyIndex">
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.pricing.editor.factory.UnitConversion"
