@@ -1,20 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.lingo.reports/src" editDirectory="/com.mmxlabs.lingo.reports/src"
-    modelPluginID="com.mmxlabs.lingo.reports" modelName="model" editPluginClass="com.mmxlabs.lingo.reports.internal.Activator"
-    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
-    complianceLevel="7.0" copyrightFields="false" language="" usedGenPackages="../../com.mmxlabs.models.lng.cargo/model/cargo.genmodel#//cargo ../../com.mmxlabs.models.lng.commercial/model/commercial.genmodel#//commercial ../../com.mmxlabs.models.lng.fleet/model/fleet.genmodel#//fleet platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore ../../com.mmxlabs.models.lng.port/model/port.genmodel#//port ../../com.mmxlabs.models.lng.pricing/model/pricing.genmodel#//pricing ../../com.mmxlabs.models.lng.schedule/model/schedule.genmodel#//schedule ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.genmodel#//spotmarkets"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.lingo.reports/src" editDirectory=""
+    editorDirectory="" modelPluginID="com.mmxlabs.lingo.reports" modelName="model"
+    editPluginClass="com.mmxlabs.lingo.reports.internal.Activator" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    testsDirectory="" importerID="org.eclipse.emf.importer.ecore" complianceLevel="7.0"
+    copyrightFields="false" language="" usedGenPackages="../../com.mmxlabs.models.lng.cargo/model/cargo.genmodel#//cargo ../../com.mmxlabs.models.lng.commercial/model/commercial.genmodel#//commercial ../../com.mmxlabs.models.lng.fleet/model/fleet.genmodel#//fleet platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore ../../com.mmxlabs.models.lng.port/model/port.genmodel#//port ../../com.mmxlabs.models.lng.pricing/model/pricing.genmodel#//pricing ../../com.mmxlabs.models.lng.schedule/model/schedule.genmodel#//schedule ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.genmodel#//spotmarkets ../../com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime"
     operationReflection="true" importOrganizing="true">
   <foreignModel>schedulereport.ecore</foreignModel>
   <genPackages prefix="ScheduleReport" basePackage="com.mmxlabs.lingo.reports.views.schedule"
       disposableProviderFactory="true" ecorePackage="schedulereport.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="schedulereport.ecore#//ChangeType">
+      <genEnumLiterals ecoreEnumLiteral="schedulereport.ecore#//ChangeType/PNL"/>
+      <genEnumLiterals ecoreEnumLiteral="schedulereport.ecore#//ChangeType/DURATION"/>
+      <genEnumLiterals ecoreEnumLiteral="schedulereport.ecore#//ChangeType/CHARTERING"/>
+      <genEnumLiterals ecoreEnumLiteral="schedulereport.ecore#//ChangeType/VESSEL"/>
+      <genEnumLiterals ecoreEnumLiteral="schedulereport.ecore#//ChangeType/WIRING"/>
+    </genEnums>
     <genClasses ecoreClass="schedulereport.ecore#//Table">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Table/options"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Table/rows"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Table/cycleGroups"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Table/rowGroups"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Table/scenarios"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Table/pinnedScenario"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Table/userGroups"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Table/selectedElements"/>
     </genClasses>
     <genClasses ecoreClass="schedulereport.ecore#//Row">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//Row/visible"/>
@@ -24,6 +34,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//Row/name2"/>
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/target"/>
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/schedule"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/sequence"/>
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/cargoAllocation"/>
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/loadAllocation"/>
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/dischargeAllocation"/>
@@ -34,12 +45,15 @@
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/rowGroup"/>
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/scenario"/>
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/table"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//Row/linkedSequences"/>
     </genClasses>
     <genClasses ecoreClass="schedulereport.ecore#//CycleGroup">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//CycleGroup/description"/>
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//CycleGroup/rows"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//CycleGroup/index"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//CycleGroup/userGroup"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//CycleGroup/delta"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//CycleGroup/changeType"/>
     </genClasses>
     <genClasses ecoreClass="schedulereport.ecore#//RowGroup">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//RowGroup/rows"/>
@@ -47,6 +61,11 @@
     <genClasses ecoreClass="schedulereport.ecore#//UserGroup">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//UserGroup/comment"/>
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedulereport.ecore#//UserGroup/groups"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//UserGroup/delta"/>
+    </genClasses>
+    <genClasses ecoreClass="schedulereport.ecore#//DiffOptions">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//DiffOptions/filterSelectedElements"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedulereport.ecore#//DiffOptions/filterSelectedSequences"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
