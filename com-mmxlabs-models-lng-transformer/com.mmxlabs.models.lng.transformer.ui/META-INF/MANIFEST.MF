@@ -44,10 +44,10 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)";resolu
  org.apache.shiro.core,
  com.mmxlabs.license.features;bundle-version="[4.0.4,5.0.0)",
  com.mmxlabs.scenario.service.manifest;bundle-version="[4.0.4,5.0.0)",
- com.mmxlabs.rcp.common,
- com.mmxlabs.models.lng.cargo,
- com.mmxlabs.models.lng.analytics.editor,
- com.mmxlabs.models.lng.parameters
+ com.mmxlabs.rcp.common;bundle-version="[4.0.4,5.0.0)",
+ com.mmxlabs.models.lng.cargo;bundle-version="[4.0.4,5.0.0)",
+ com.mmxlabs.models.lng.analytics.editor;bundle-version="[4.0.4,5.0.0)",
+ com.mmxlabs.models.lng.parameters;bundle-version="[4.0.4,5.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: com.mmxlabs.models.ui.dates,
