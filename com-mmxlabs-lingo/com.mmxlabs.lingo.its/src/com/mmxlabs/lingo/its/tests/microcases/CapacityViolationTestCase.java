@@ -7,6 +7,8 @@ package com.mmxlabs.lingo.its.tests.microcases;
 import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +25,10 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 import com.google.common.collect.Lists;
+import com.google.inject.AbstractModule;
+import com.google.inject.Module;
+import com.google.inject.Provides;
+import com.google.inject.name.Named;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -36,6 +42,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
@@ -46,11 +53,16 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.cache.NotCaching;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptions;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.CapacityEvaluatedStateChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LatenessEvaluatedStateChecker;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.MinMaxUnconstrainedVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 
 @SuppressWarnings("unused")
@@ -64,6 +76,42 @@ public class CapacityViolationTestCase extends AbstractMicroTestCase {
 	private Vessel vessel;
 	private VesselAvailability vesselAvailability1;
 	private Cargo cargo1;
+	
+	
+	public class boilOffOverride implements IOptimiserInjectorService {
+
+		private boolean activateOverride = false;
+		private boolean minMaxVolumeAllocator = false;
+
+		public boilOffOverride(boolean activateOverride, boolean minMaxVolumeAllocator) {
+			this.activateOverride = activateOverride;
+			this.minMaxVolumeAllocator = minMaxVolumeAllocator;
+		}
+
+		@Override
+		public @Nullable Module requestModule(@NonNull ModuleType moduleType, @NonNull Collection<@NonNull String> hints) {
+			return null;
+		}
+
+		@Override
+		public @Nullable List<@NonNull Module> requestModuleOverrides(@NonNull ModuleType moduleType, @NonNull Collection<@NonNull String> hints) {
+			if (moduleType == ModuleType.Module_LNGTransformerModule) {
+				return Collections.<@NonNull Module> singletonList(new AbstractModule() {
+					@Override
+					protected void configure() {
+						if(minMaxVolumeAllocator)
+							bind(IVolumeAllocator.class).annotatedWith(NotCaching.class).to(MinMaxUnconstrainedVolumeAllocator.class);
+					}	
+					@Provides
+					@Named(LNGTransformerModule.COMMERCIAL_VOLUME_OVERCAPACITY)
+					private boolean commercialVolumeOverCapacity() {
+						return activateOverride;
+					}	
+				});
+			}
+			return null;
+		}
+	}
 
 	@BeforeClass
 	public static void hookIn() {
