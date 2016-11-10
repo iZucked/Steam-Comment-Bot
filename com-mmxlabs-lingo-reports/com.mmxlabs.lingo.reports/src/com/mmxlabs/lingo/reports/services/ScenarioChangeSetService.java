@@ -113,7 +113,6 @@ public class ScenarioChangeSetService {
 		@Override
 		public void partActivated(final MPart part) {
 			if (part != lastChangeSetViewPart) {
-				System.out.println("Changing bound view");
 				if (changeSetViewId.equals(part.getElementId()) || actionSetViewId.equals(part.getElementId())) {
 					lastChangeSetViewPart = part;
 					lastChangeSetViewObject = (ChangeSetView) part.getObject();
@@ -146,7 +145,6 @@ public class ScenarioChangeSetService {
 		@Override
 		public void partVisible(final MPart part) {
 			if (part != lastChangeSetViewPart) {
-				System.out.println("Changing bound view");
 				if (changeSetViewId.equals(part.getElementId()) || actionSetViewId.equals(part.getElementId())) {
 					lastChangeSetViewPart = part;
 					lastChangeSetViewObject = (ChangeSetView) part.getObject();
@@ -190,7 +188,6 @@ public class ScenarioChangeSetService {
 	}
 
 	private synchronized void fireListeners(@Nullable final ChangeSetRoot changeSetRoot, @Nullable final ChangeSet changeSet, @Nullable final ChangeSetRow changeSetRow, final boolean diffToBase) {
-		System.out.println("Firing listener update");
 		this.changeSetRoot = changeSetRoot;
 		this.changeSet = changeSet;
 		this.changeSetRow = changeSetRow;
