@@ -120,10 +120,19 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 		}
 
 		for (final UnitConversion factor : pricingModel.getConversionFactors()) {
-			final String proposal = PriceIndexUtils.createConversionFactorName(factor);
-			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
-				final String c = proposal.substring(contents.length());
-				list.add(new ContentProposal(c, proposal, String.format("Number of %s\'s per %s is %.6f", factor.getFrom(), factor.getTo(), factor.getFactor()), c.length()));
+			{
+				final String proposal = PriceIndexUtils.createConversionFactorName(factor);
+				if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
+					final String c = proposal.substring(contents.length());
+					list.add(new ContentProposal(c, proposal, String.format("Number of %s\'s per %s is %.6f", factor.getFrom(), factor.getTo(), factor.getFactor()), c.length()));
+				}
+			}
+			{
+				final String proposal = PriceIndexUtils.createReverseConversionFactorName(factor);
+				if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
+					final String c = proposal.substring(contents.length());
+					list.add(new ContentProposal(c, proposal, String.format("Number of %s\'s per %s is %.6f", factor.getTo(), factor.getFactor(), 1.0 / factor.getFactor()), c.length()));
+				}
 			}
 		}
 

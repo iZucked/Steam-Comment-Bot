@@ -72,6 +72,7 @@ public class Exposures {
 		pricingModel.getCommodityIndices().forEach(idx -> lookupData.commodityMap.put(idx.getName().toLowerCase(), idx));
 		pricingModel.getCurrencyIndices().forEach(idx -> lookupData.currencyMap.put(idx.getName().toLowerCase(), idx));
 		pricingModel.getConversionFactors().forEach(f -> lookupData.conversionMap.put(PriceIndexUtils.createConversionFactorName(f).toLowerCase(), f));
+		pricingModel.getConversionFactors().forEach(f -> lookupData.reverseConversionMap.put(PriceIndexUtils.createReverseConversionFactorName(f).toLowerCase(), f));
 
 		return lookupData;
 
@@ -310,7 +311,9 @@ public class Exposures {
 			n = new CurrencyNode(lookupData.currencyMap.get(parentNode.token.toLowerCase()));
 
 		} else if (lookupData.conversionMap.containsKey(parentNode.token.toLowerCase())) {
-			n = new ConversionNode(parentNode.token, lookupData.conversionMap.get(parentNode.token.toLowerCase()));
+			n = new ConversionNode(parentNode.token, lookupData.conversionMap.get(parentNode.token.toLowerCase()), false);
+		} else if (lookupData.reverseConversionMap.containsKey(parentNode.token.toLowerCase())) {
+			n = new ConversionNode(parentNode.token, lookupData.reverseConversionMap.get(parentNode.token.toLowerCase()), true);
 		} else {
 			// This should be a constant
 			try {
