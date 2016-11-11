@@ -790,9 +790,11 @@ public class LNGScenarioTransformer {
 
 	private void registerConversionFactor(@NonNull final UnitConversion factor, @NonNull final SeriesParser... parsers) {
 		final String name = PriceIndexUtils.createConversionFactorName(factor);
-		if (name != null) {
+		final String reverseName = PriceIndexUtils.createReverseConversionFactorName(factor);
+		if (name != null && reverseName != null) {
 			for (final SeriesParser parser : parsers) {
 				parser.addSeriesExpression(name, Double.toString(factor.getFactor()));
+				parser.addSeriesExpression(reverseName, Double.toString(1.0 / factor.getFactor()));
 			}
 		}
 	}
