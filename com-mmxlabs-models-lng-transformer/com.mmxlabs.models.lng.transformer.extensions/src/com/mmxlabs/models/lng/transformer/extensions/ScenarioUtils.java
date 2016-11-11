@@ -116,7 +116,7 @@ public class ScenarioUtils {
 		}
 		similaritySettings.setLowInterval(createSimilarityInterval(8, weight));
 		similaritySettings.setMedInterval(createSimilarityInterval(16, weight));
-		similaritySettings.setHighInterval(createSimilarityInterval(30, weight));
+		similaritySettings.setHighInterval(createSimilarityInterval(32, weight));
 		similaritySettings.setOutOfBoundsWeight(weight);
 
 		return similaritySettings;
