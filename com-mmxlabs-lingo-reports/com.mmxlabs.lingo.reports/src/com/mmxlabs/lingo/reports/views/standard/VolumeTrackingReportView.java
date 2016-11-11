@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.common.Equality;
@@ -41,6 +42,14 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  * @author Simon McGregor
  */
 public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrackingReportView.VolumeData> {
+
+	private final Pair<Year, Year> dateRange = new Pair<>();
+
+	private enum ValueMode {
+		VOLUME_MMBTU, VOLUME_M3, /* VOLUME_NATIVE -- link to exposures calcs, needs volume unit set on contract */
+	}
+
+	private ValueMode mode = ValueMode.VOLUME_MMBTU;
 
 	public VolumeTrackingReportView() {
 		super("com.mmxlabs.lingo.doc.Reports_VolumeTracking");
@@ -176,10 +185,21 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 				final List<VolumeData> output = new ArrayList<VolumeData>();
 				final Map<String, Map<Year, Long>> purchaseVolumes = new HashMap<>();
 				final Map<String, Map<Year, Long>> salesVolumes = new HashMap<>();
-				
+
 				for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 					for (final SlotAllocation sa : ca.getSlotAllocations()) {
-						final long volume = sa.getVolumeTransferred();
+						final long volume;
+						switch (mode) {
+						case VOLUME_M3:
+							volume = sa.getVolumeTransferred();
+							break;
+						case VOLUME_MMBTU:
+							volume = sa.getEnergyTransferred();
+							break;
+						default:
+							throw new IllegalArgumentException();
+						}
+
 						final Contract contract = sa.getContract();
 						final String contractName;
 						if (contract == null) {
@@ -318,6 +338,42 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 		};
 	}
 
-	private final Pair<Year, Year> dateRange = new Pair<>();
+	protected void makeActions() {
+		super.makeActions();
 
+		final Action modeToggle = new Action("Volume:", Action.AS_PUSH_BUTTON) {
+			public void run() {
+
+				final int modeIdx = (mode.ordinal() + 1) % ValueMode.values().length;
+				mode = ValueMode.values()[modeIdx];
+				setActionText(this, mode);
+				getViewSite().getActionBars().updateActionBars();
+				VolumeTrackingReportView.this.refresh();
+
+			}
+		};
+		setActionText(modeToggle, mode);
+
+		getViewSite().getActionBars().getToolBarManager().add(modeToggle);
+
+		getViewSite().getActionBars().getToolBarManager().update(true);
+	}
+
+	private void setActionText(final Action a, final ValueMode mode) {
+		String modeStr = null;
+		switch (mode) {
+		case VOLUME_MMBTU:
+			modeStr = "mmBtu";
+			break;
+		case VOLUME_M3:
+			modeStr = "m³";
+			break;
+		default:
+			assert false;
+			break;
+
+		}
+		assert modeStr != null;
+		a.setText("Volume: " + modeStr);
+	}
 }
