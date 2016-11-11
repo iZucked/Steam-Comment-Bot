@@ -115,15 +115,14 @@ public class ScenarioUtils {
 		if (System.getProperty("similarity.smallweight") != null) {
 			weight = 10_000;
 		}
-
-		similaritySettings.setLowInterval(createSimilarityInterval(8, 0));
-		similaritySettings.setMedInterval(createSimilarityInterval(16, 0));
-		similaritySettings.setHighInterval(createSimilarityInterval(30, 0));
-		similaritySettings.setOutOfBoundsWeight(0);
+		similaritySettings.setLowInterval(createSimilarityInterval(8, weight));
+		similaritySettings.setMedInterval(createSimilarityInterval(16, weight));
+		similaritySettings.setHighInterval(createSimilarityInterval(32, weight));
+		similaritySettings.setOutOfBoundsWeight(weight);
 
 		return similaritySettings;
 	}
-	
+
 	public static SimilaritySettings createUnweightedSimilaritySettings() {
 		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
 
@@ -131,39 +130,6 @@ public class ScenarioUtils {
 		similaritySettings.setMedInterval(createSimilarityInterval(16, 1));
 		similaritySettings.setHighInterval(createSimilarityInterval(30, 1));
 		similaritySettings.setOutOfBoundsWeight(1);
-
-		return similaritySettings;
-	}
-
-	public static SimilaritySettings createLowSimilaritySettings() {
-		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
-
-		similaritySettings.setLowInterval(createSimilarityInterval(8, 0));
-		similaritySettings.setMedInterval(createSimilarityInterval(16, 0));
-		similaritySettings.setHighInterval(createSimilarityInterval(30, 500_000));
-		similaritySettings.setOutOfBoundsWeight(5_000_000);
-
-		return similaritySettings;
-	}
-
-	public static SimilaritySettings createMediumSimilaritySettings() {
-		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
-
-		similaritySettings.setLowInterval(createSimilarityInterval(8, 0));
-		similaritySettings.setMedInterval(createSimilarityInterval(16, 250_000));
-		similaritySettings.setHighInterval(createSimilarityInterval(30, 500_000));
-		similaritySettings.setOutOfBoundsWeight(1_000_000);
-
-		return similaritySettings;
-	}
-
-	public static SimilaritySettings createHighSimilaritySettings() {
-		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
-
-		similaritySettings.setLowInterval(createSimilarityInterval(8, 250_000));
-		similaritySettings.setMedInterval(createSimilarityInterval(16, 500_000));
-		similaritySettings.setHighInterval(createSimilarityInterval(30, 1_000_000));
-		similaritySettings.setOutOfBoundsWeight(5_000_000);
 
 		return similaritySettings;
 	}
@@ -410,7 +376,7 @@ public class ScenarioUtils {
 			}
 		}
 	}
-	
+
 	public static void setLSOStageSeed(final OptimisationPlan plan, final int seed) {
 		for (final OptimisationStage stage : plan.getStages()) {
 			if (stage instanceof LocalSearchOptimisationStage) {
@@ -438,8 +404,7 @@ public class ScenarioUtils {
 		}
 	}
 
-	public static void setActionPlanStageParameters(final OptimisationPlan plan, final int totalEvalations, 
-			final int inRunEvaluations, final int searchDepth) {
+	public static void setActionPlanStageParameters(final OptimisationPlan plan, final int totalEvalations, final int inRunEvaluations, final int searchDepth) {
 		for (final OptimisationStage stage : plan.getStages()) {
 			if (stage instanceof ActionPlanOptimisationStage) {
 				final ActionPlanOptimisationStage actionPlanOptimisationStage = (ActionPlanOptimisationStage) stage;
