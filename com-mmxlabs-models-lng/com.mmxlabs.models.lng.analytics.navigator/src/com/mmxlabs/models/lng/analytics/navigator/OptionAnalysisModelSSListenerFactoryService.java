@@ -13,7 +13,7 @@ import org.eclipse.emf.ecore.EObject;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
-public class OptionAnalyisiModelSSListenerFactoryService {
+public class OptionAnalysisModelSSListenerFactoryService {
 
 	private final Map<IScenarioService, OptionAnalysisModelSSListener> map = new ConcurrentHashMap<>();
 
@@ -23,7 +23,7 @@ public class OptionAnalyisiModelSSListenerFactoryService {
 		map.put(service, listener);
 
 		// This can block fork off in thread.
-		new Thread("OptionAnalyisiModelSSListenerFactoryService:bind") {
+		new Thread("OptionAnalysisModelSSListenerFactoryService:bind") {
 			@Override
 			public void run() {
 				final Iterator<EObject> itr = service.getServiceModel().eAllContents();

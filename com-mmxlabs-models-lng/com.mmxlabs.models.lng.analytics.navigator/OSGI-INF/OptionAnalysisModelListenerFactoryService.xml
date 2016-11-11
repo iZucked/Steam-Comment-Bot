@@ -5,7 +5,7 @@
     All rights reserved.
 
 -->
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.mmxlabs.models.lng.analytics.navigator.OptionAnalyisiModelSSListenerFactoryService">
-   <implementation class="com.mmxlabs.models.lng.analytics.navigator.OptionAnalyisiModelSSListenerFactoryService"/>
-   <reference bind="bindScenarioService" cardinality="0..n" interface="com.mmxlabs.scenario.service.IScenarioService" name="IScenarioService" policy="dynamic" unbind="unbindScenarioService"/>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.mmxlabs.models.lng.analytics.navigator.OptionAnalysisModelSSListenerFactoryService">
+   <implementation class="com.mmxlabs.models.lng.analytics.navigator.OptionAnalysisModelSSListenerFactoryService"/>
+   <reference bind="bindScenarioService" cardinality="1..n" interface="com.mmxlabs.scenario.service.IScenarioService" name="IScenarioService" policy="dynamic" unbind="unbindScenarioService"/>
 </scr:component>
