@@ -33,7 +33,7 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 	
 	@Inject
 	private IBoilOffHelper inPortBoilOffHelper;
-
+	
 	@Inject
 	@NotCaching
 	private Provider<IEntityValueCalculator> entityValueCalculatorProvider;
@@ -133,33 +133,34 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 		final ILoadOption loadSlot = (ILoadOption) slots.get(0);
 
 		final AllocationAnnotation annotation = createNewAnnotation(allocationRecord, slots);
-
+		
+		
 		assert allocationRecord.allocationMode == AllocationMode.Shipped;
 		int cargoCV = annotation.getSlotCargoCV(loadSlot);
-
+		
+		long loadBoilOff = Calculator.convertM3ToMMBTu(inPortBoilOffHelper.getNBORate(vessel, slots.get(0).getPortType()),cargoCV);
+		
 		// how much room is there in the tanks?
-		final long availableCargoSpaceInMMBTU = Calculator.convertM3ToMMBTu(vessel.getCargoCapacity() - allocationRecord.startVolumeInM3, cargoCV);
-
+		long availableCargoSpaceInMMBTU = Calculator.convertM3ToMMBTu(vessel.getCargoCapacity() - allocationRecord.startVolumeInM3, cargoCV);
+		
+		if(inPortBoilOffHelper.isBoilOffCompensation()){
+			availableCargoSpaceInMMBTU += loadBoilOff;
+		}
+		
 		// how much fuel will be required over and above what we start with in the tanks?
 		// note: this is the fuel consumption plus any heel quantity required at discharge
 		final long fuelDeficitInMMBTU = Calculator.convertM3ToMMBTu(allocationRecord.requiredFuelVolumeInM3 - allocationRecord.startVolumeInM3 + allocationRecord.minEndVolumeInM3, cargoCV);
 
 		// greedy assumption: always load as much as possible
 		long loadVolumeInMMBTU = capValueWithZeroDefault(allocationRecord.maxVolumesInMMBtu.get(0), availableCargoSpaceInMMBTU);
-		
-		long loadBoilOff = inPortBoilOffHelper.getNBORate(vessel, slots.get(0).getPortType());
-
-		if(inPortBoilOffHelper.isBoilOffCompensation()){			
-			loadVolumeInMMBTU += Calculator.convertM3ToMMBTu(loadBoilOff, cargoCV);
-//			System.out.println("LV: " + Calculator.convertMMBTuToM3(loadVolumeInMMBTU, cargoCV));
-		}
 		// violate maximum load volume constraint when it has to be done to fuel the vessel
 		if (loadVolumeInMMBTU < fuelDeficitInMMBTU) {
 			loadVolumeInMMBTU = fuelDeficitInMMBTU;
 			// we should never be required to load more than the vessel can fit in its tanks
 			// assert (loadVolume <= availableCargoSpace);
 		}
-
+		
+		
 		// the amount of LNG available for discharge
 		long unusedVolumeInMMBTU = loadVolumeInMMBTU
 				+ Calculator.convertM3ToMMBTu(allocationRecord.startVolumeInM3 - allocationRecord.minEndVolumeInM3 - allocationRecord.requiredFuelVolumeInM3, cargoCV);
@@ -172,11 +173,11 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 		if (slots.size() == 2) {
 
 			final IDischargeOption dischargeSlot = (IDischargeOption) slots.get(1);
-
+			long dischargeBoilOff = Calculator.convertM3ToMMBTu(inPortBoilOffHelper.getNBORate(vessel, slots.get(1).getPortType()),annotation.getSlotCargoCV(dischargeSlot)) ;
 			// greedy assumption: always discharge as much as possible
 			final long dischargeVolumeInMMBTU = capValueWithZeroDefault(allocationRecord.maxVolumesInMMBtu.get(1), unusedVolumeInMMBTU);
 			annotation.setCommercialSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU);
-			annotation.setPhysicalSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU);
+			annotation.setPhysicalSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU - dischargeBoilOff);
 			unusedVolumeInMMBTU -= dischargeVolumeInMMBTU;
 
 		}
@@ -200,8 +201,9 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 				} else {
 					dischargeVolumeInMMBTU = unusedVolumeInMMBTU;
 				}
+				long dischargeBoilOff = Calculator.convertM3ToMMBTu(inPortBoilOffHelper.getNBORate(vessel, slots.get(1).getPortType()),annotation.getSlotCargoCV(dischargeSlot)) ;
 				annotation.setCommercialSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU);
-				annotation.setPhysicalSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU);
+				annotation.setPhysicalSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU -dischargeBoilOff);
 				unusedVolumeInMMBTU -= dischargeVolumeInMMBTU;
 
 				// more profitable ?
@@ -252,10 +254,9 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 			 * is contractually permissible (and CV-compatible with the next load port).
 			 */
 		}
-		
 
 		annotation.setCommercialSlotVolumeInMMBTu(loadSlot, loadVolumeInMMBTU);
-		annotation.setPhysicalSlotVolumeInMMBTu(loadSlot, loadVolumeInMMBTU);
+		annotation.setPhysicalSlotVolumeInMMBTu(loadSlot, loadVolumeInMMBTU - loadBoilOff);
 		annotation.setStartHeelVolumeInM3(allocationRecord.startVolumeInM3);
 		annotation.setRemainingHeelVolumeInM3(allocationRecord.minEndVolumeInM3 + Calculator.convertMMBTuToM3(unusedVolumeInMMBTU, cargoCV));
 		annotation.setFuelVolumeInM3(allocationRecord.requiredFuelVolumeInM3);
@@ -265,7 +266,7 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 			// annotation.setSlotVolumeInMMBTu(slot, Calculator.convertM3ToMMBTu(annotation.getSlotVolumeInM3(slot), annotation.getSlotCargoCV(slot)));
 			annotation.setCommercialSlotVolumeInM3(slot, Calculator.convertMMBTuToM3(annotation.getCommercialSlotVolumeInMMBTu(slot), annotation.getSlotCargoCV(slot)));
 			annotation.setPhysicalSlotVolumeInM3(slot, Calculator.convertMMBTuToM3(annotation.getPhysicalSlotVolumeInMMBTu(slot), annotation.getSlotCargoCV(slot)));
-			String x = "DEBUG";
+
 		}
 		return annotation;
 	}
@@ -280,23 +281,21 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 
 		final AllocationAnnotation annotation = createNewAnnotation(allocationRecord, slots);
 		int cargoCV = annotation.getSlotCargoCV(loadSlot);
+		
+		long loadBoilOff = Calculator.convertM3ToMMBTu(inPortBoilOffHelper.getNBORate(vessel, slots.get(0).getPortType()),cargoCV);
 
 		// how much room is there in the tanks?
-		final long availableCargoSpaceInMMBTU = Calculator.convertM3ToMMBTu(vessel.getCargoCapacity() - allocationRecord.startVolumeInM3, cargoCV);
-
+		long availableCargoSpaceInMMBTU = Calculator.convertM3ToMMBTu(vessel.getCargoCapacity() - allocationRecord.startVolumeInM3, cargoCV);
+		
+		if(inPortBoilOffHelper.isBoilOffCompensation()){
+			availableCargoSpaceInMMBTU += loadBoilOff;
+		}
 		// how much fuel will be required over and above what we start with in the tanks?
 		// note: this is the fuel consumption plus any heel quantity required at discharge
 		final long fuelDeficitInMMBTU = Calculator.convertM3ToMMBTu(allocationRecord.requiredFuelVolumeInM3 - allocationRecord.startVolumeInM3 + allocationRecord.minEndVolumeInM3, cargoCV);
 
 		// greedy assumption: always load as much as possible
 		long loadVolumeInMMBTU = Math.min(allocationRecord.minVolumesInMMBtu.get(0), availableCargoSpaceInMMBTU);
-		long loadBoilOff = inPortBoilOffHelper.getNBORate(vessel, slots.get(0).getPortType());
-//		System.out.println("LBMIN: " +loadBoilOff);
-		if(inPortBoilOffHelper.isBoilOffCompensation()){
-			
-			loadVolumeInMMBTU += Calculator.convertM3ToMMBTu(loadBoilOff, cargoCV);
-//			System.out.println("LVMIN: " + Calculator.convertMMBTuToM3(loadVolumeInMMBTU, cargoCV));
-		}
 		// violate maximum load volume constraint when it has to be done to fuel the vessel
 		if (loadVolumeInMMBTU < fuelDeficitInMMBTU) {
 			loadVolumeInMMBTU = fuelDeficitInMMBTU;
@@ -312,11 +311,12 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 		assert (unusedVolumeInMMBTU >= 0);
 
 		final IDischargeOption dischargeSlot = (IDischargeOption) slots.get(1);
-		{
+		{	
+			long dischargeBoilOff = Calculator.convertM3ToMMBTu(inPortBoilOffHelper.getNBORate(vessel, slots.get(1).getPortType()),annotation.getSlotCargoCV(dischargeSlot)) ;
 			// greedy assumption: always discharge as much as possible
 			final long dischargeVolumeInMMBTU = allocationRecord.minVolumesInMMBtu.get(1);
 			annotation.setCommercialSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU);
-			annotation.setPhysicalSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU);
+			annotation.setPhysicalSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU - dischargeVolumeInMMBTU);
 			unusedVolumeInMMBTU -= dischargeVolumeInMMBTU;
 		}
 
@@ -342,9 +342,11 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 			final long diff = loadVolumeInMMBTU - availableCargoSpaceInMMBTU;
 
 			long dischargeVolumeInMMBTU = annotation.getCommercialSlotVolumeInMMBTu(dischargeSlot);
+			long physicalDischargeVolumeInMMBTU = annotation.getPhysicalSlotVolumeInMMBTu(dischargeSlot);
 			dischargeVolumeInMMBTU -= diff;
+			physicalDischargeVolumeInMMBTU -= diff;
 			annotation.setCommercialSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU);
-			annotation.setPhysicalSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU);
+			annotation.setPhysicalSlotVolumeInMMBTu(dischargeSlot, physicalDischargeVolumeInMMBTU);
 			loadVolumeInMMBTU = availableCargoSpaceInMMBTU;
 		}
 		// Check load caps - max load
@@ -352,9 +354,11 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 			final long diff = loadVolumeInMMBTU - allocationRecord.maxVolumesInMMBtu.get(1);
 
 			long dischargeVolumeInMMBTU = annotation.getCommercialSlotVolumeInMMBTu(dischargeSlot);
+			long physicalDischargeVolumeInMMBTU = annotation.getCommercialSlotVolumeInMMBTu(dischargeSlot);
 			dischargeVolumeInMMBTU -= diff;
+			physicalDischargeVolumeInMMBTU -= diff;
 			annotation.setCommercialSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU);
-			annotation.setPhysicalSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU);
+			annotation.setPhysicalSlotVolumeInMMBTu(dischargeSlot, physicalDischargeVolumeInMMBTU);
 			loadVolumeInMMBTU = allocationRecord.maxVolumesInMMBtu.get(1);
 		}
 
@@ -367,9 +371,10 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 			annotation.setPhysicalSlotVolumeInMMBTu(dischargeSlot, 0);
 		}
 		
-	
+		
+
 		annotation.setCommercialSlotVolumeInMMBTu(loadSlot, loadVolumeInMMBTU);
-		annotation.setPhysicalSlotVolumeInMMBTu(loadSlot, loadVolumeInMMBTU);
+		annotation.setPhysicalSlotVolumeInMMBTu(loadSlot, loadVolumeInMMBTU -loadBoilOff);
 
 		annotation.setStartHeelVolumeInM3(allocationRecord.startVolumeInM3);
 		annotation.setRemainingHeelVolumeInM3(allocationRecord.minEndVolumeInM3 + Calculator.convertMMBTuToM3(unusedVolumeInMMBTU, cargoCV));
@@ -379,7 +384,7 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 			final IPortSlot slot = allocationRecord.slots.get(i);
 			// annotation.setSlotVolumeInMMBTu(slot, Calculator.convertM3ToMMBTu(annotation.getSlotVolumeInM3(slot), annotation.getSlotCargoCV(slot)));
 			annotation.setCommercialSlotVolumeInM3(slot, Calculator.convertMMBTuToM3(annotation.getCommercialSlotVolumeInMMBTu(slot), annotation.getSlotCargoCV(slot)));
-			annotation.setPhysicalSlotVolumeInM3(slot, Calculator.convertMMBTuToM3(annotation.getCommercialSlotVolumeInMMBTu(slot), annotation.getSlotCargoCV(slot)));
+			annotation.setPhysicalSlotVolumeInM3(slot, Calculator.convertMMBTuToM3(annotation.getPhysicalSlotVolumeInMMBTu(slot), annotation.getSlotCargoCV(slot)));
 		}
 		return annotation;
 	}

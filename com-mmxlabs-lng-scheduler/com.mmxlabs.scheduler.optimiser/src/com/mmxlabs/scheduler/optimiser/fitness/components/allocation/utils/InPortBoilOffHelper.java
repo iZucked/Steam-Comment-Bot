@@ -44,70 +44,12 @@ public class InPortBoilOffHelper implements IBoilOffHelper {
 	public long getNBORate(IVessel vessel, PortType portStatus){
 	
 			if(portStatus == PortType.Load)
-				return vessel.getVesselClass().getInPortNBORate(VesselState.Laden);
-			else if(portStatus == PortType.Discharge)
 				return vessel.getVesselClass().getInPortNBORate(VesselState.Ballast);
+			else if(portStatus == PortType.Discharge)
+				return vessel.getVesselClass().getInPortNBORate(VesselState.Laden);
 		
 		return 0;
 	}
 	
-	/**
-	 *  Increases the passed volume by the appropriate value based on the in port NBO rate and the duration of the
-	 *  port visit. Does not modify the value if 'boilOffCompensation' is false. Performs the calculations in terms
-	 *  the FuelUnit passed. Volume units should correspond to 'units'.
-	 */
-	@Override
-	public long compensateForBoilOff(IPortSlot slot, AllocationRecord record, long volume, FuelUnit units){
-		
-		long slotDuration  = record.portTimesRecord.getSlotDuration(slot)/24L;
-		IVessel vessel = record.vesselAvailability.getVessel();
-		long inPortNBORate = getNBORate(vessel,slot.getPortType());
-		int slotCV = record.slotCV.get(record.slots.indexOf(slot));
-		
-		
-		
-		long NBOBoilOff = 0;
-		if(units == FuelUnit.M3){
-			NBOBoilOff = (inPortNBORate*slotDuration);
-		} else if(units == FuelUnit.MMBTu){
-			NBOBoilOff = Calculator.convertM3ToMMBTu((slotDuration*inPortNBORate), slotCV);
-		}
-
-		if(boilOffCompensation){
-			if(slot.getPortType() == PortType.Load)	
-				return volume  + NBOBoilOff ;
-			else if(slot.getPortType() == PortType.Discharge)
-				return volume;
-		}
-		
-		return volume;
-	}
-	
-	/**
-	 *  Returns the physical volume by factoring in the in port boil off rate to the passed 'commercialVolume'. 'commercialVolume' should be in the same
-	 *  units as the FuelUnit passed.
-	 */
-	@Override
-	public long calculatePhysicalVolume(IPortSlot slot, AllocationRecord record, long commercialVolume, FuelUnit units){
-		
-		long slotDuration  = record.portTimesRecord.getSlotDuration(slot)/24L;
-		IVessel vessel = record.vesselAvailability.getVessel();
-		long inPortNBORate = getNBORate(vessel,slot.getPortType());
-		int slotCV = record.slotCV.get(record.slots.indexOf(slot));
-		
-		long NBOBoilOff = 0;
-		
-
-			if(units == FuelUnit.MMBTu){
-				NBOBoilOff = Calculator.convertM3ToMMBTu((slotDuration*inPortNBORate), slotCV);
-			}else if(units == FuelUnit.M3){
-				NBOBoilOff = (slotDuration*inPortNBORate);
-
-			}
-			
-		long volume = commercialVolume - NBOBoilOff;
-
-		return volume;
-	}
 
 }

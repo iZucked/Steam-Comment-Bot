@@ -1028,9 +1028,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			
 			
 				if(portType == PortType.Load){
-					inPortNBORateInM3PerDay = vesselClass.getInPortNBORate(VesselState.Laden);
-				}else{
 					inPortNBORateInM3PerDay = vesselClass.getInPortNBORate(VesselState.Ballast);
+				}else{
+					inPortNBORateInM3PerDay = vesselClass.getInPortNBORate(VesselState.Laden);
 				}
 			
 			

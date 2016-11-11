@@ -209,19 +209,12 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
 		// how much fuel will be required over and above what we start with in the tanks?
 		// note: this is the fuel consumption plus any heel quantity required at discharge
-		final long fuelDeficit = allocationRecord.requiredFuelVolumeInM3 - allocationRecord.startVolumeInM3 + allocationRecord.minEndVolumeInM3;
-		
+		final long fuelDeficit = allocationRecord.requiredFuelVolumeInM3 - allocationRecord.startVolumeInM3 + allocationRecord.minEndVolumeInM3;		
 		
 		long maxLoad = allocationRecord.maxVolumesInM3.get(0);
 		
 		// greedy assumption: always load as much as possible
 		long loadVolume = capValueWithZeroDefault(maxLoad, availableCargoSpace );
-		
-		
-		
-//		if(loadVolume < 0){
-//			loadVolume = 0;
-//		}
 		
 		
 		// violate maximum load volume constraint when it has to be done to fuel the vessel
@@ -232,7 +225,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			// assert (loadVolume <= availableCargoSpace);
 		}
 		
-		long dischargeBoilOff = inPortBoilOffHelper.getNBORate(vessel, slots.get(0).getPortType());
+		long dischargeBoilOff = inPortBoilOffHelper.getNBORate(vessel, slots.get(1).getPortType());
 		// the amount of LNG available for discharge
 		long unusedVolume = loadVolume + allocationRecord.startVolumeInM3 - allocationRecord.minEndVolumeInM3 - allocationRecord.requiredFuelVolumeInM3;
 
@@ -245,9 +238,10 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
 			final IDischargeOption dischargeSlot = (IDischargeOption) slots.get(1);
 			// greedy assumption: always discharge as much as possible
-			final long dischargeVolume = capValueWithZeroDefault(allocationRecord.maxVolumesInM3.get(1)-dischargeBoilOff, unusedVolume-dischargeBoilOff);
+			final long dischargeVolume = capValueWithZeroDefault(allocationRecord.maxVolumesInM3.get(1), unusedVolume ) ;
+	
 			annotation.setCommercialSlotVolumeInM3(dischargeSlot, dischargeVolume);
-			annotation.setPhysicalSlotVolumeInM3(dischargeSlot, dischargeVolume);
+			annotation.setPhysicalSlotVolumeInM3(dischargeSlot, dischargeVolume - dischargeBoilOff);
 			unusedVolume -= dischargeVolume;
 
 		}
@@ -271,8 +265,9 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				} else {
 					dischargeVolume = unusedVolume;
 				}
+				
 				annotation.setCommercialSlotVolumeInM3(dischargeSlot, dischargeVolume);
-				annotation.setPhysicalSlotVolumeInM3(dischargeSlot, dischargeVolume);
+				annotation.setPhysicalSlotVolumeInM3(dischargeSlot, dischargeVolume - dischargeBoilOff);
 				unusedVolume -= dischargeVolume;
 
 				// more profitable ?
@@ -325,8 +320,8 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		}
 
 		final ILoadOption loadSlot = (ILoadOption) slots.get(0);
-		annotation.setCommercialSlotVolumeInM3(loadSlot, loadVolume + loadBoilOff);
-		annotation.setPhysicalSlotVolumeInM3(loadSlot, loadVolume);
+		annotation.setCommercialSlotVolumeInM3(loadSlot, loadVolume);
+		annotation.setPhysicalSlotVolumeInM3(loadSlot, loadVolume - loadBoilOff);
 		annotation.setStartHeelVolumeInM3(allocationRecord.startVolumeInM3);
 		annotation.setRemainingHeelVolumeInM3(allocationRecord.minEndVolumeInM3 + unusedVolume);
 		annotation.setFuelVolumeInM3(allocationRecord.requiredFuelVolumeInM3);
