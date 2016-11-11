@@ -35,12 +35,12 @@ public class RawTreeParser extends ExpressionParser<Node> {
 				if (a == b)
 					return false;
 				switch (a) {
-				case '*':
-					return true;
 				case '%':
-					return b == '/' || b == '+' || b == '-';
-				case '/':
+					return true;
+				case '*':
 					return b == '+' || b == '-';
+				case '/':
+					return b == '/' || b == '+' || b == '-';
 				case '-':
 					return b == '+';
 				case '+':
