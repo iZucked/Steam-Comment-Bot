@@ -69,32 +69,6 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 		}
 	}
 
-	@SuppressWarnings("serial")
-	private static abstract class AutoInitialisingMap<K, V> extends HashMap<K, V> {
-		@Override
-		public V get(final Object key) {
-			if (containsKey(key) == false) {
-				put((K) key, autoValue());
-			}
-			return super.get(key);
-		}
-
-		abstract protected V autoValue();
-	}
-
-	@SuppressWarnings("serial")
-	private static class CumulativeMap<K> extends AutoInitialisingMap<K, Long> {
-		@Override
-		protected Long autoValue() {
-			return 0l;
-		}
-
-		public void plusEquals(final K key, final Long value) {
-			put(key, get(key) + value);
-		}
-
-	}
-
 	/**
 	 * Returns the gas year for a particular calendar date. The gas year starts in October and is based on UTC.
 	 * 
@@ -181,8 +155,8 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 				return output;
 			}
 
-			public List<VolumeData> createData(final Schedule schedule, final LNGScenarioModel rootObject) {
-				final List<VolumeData> output = new ArrayList<VolumeData>();
+			public List<@NonNull VolumeData> createData(final Schedule schedule, final LNGScenarioModel rootObject) {
+				final List<@NonNull VolumeData> output = new ArrayList<>();
 				final Map<String, Map<Year, Long>> purchaseVolumes = new HashMap<>();
 				final Map<String, Map<Year, Long>> salesVolumes = new HashMap<>();
 
