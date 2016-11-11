@@ -88,9 +88,9 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 				case '%':
 					return true;
 				case '*':
-					return b != '%';
-				case '/':
 					return b == '+' || b == '-';
+				case '/':
+					return b != '%';
 				case '+':
 					return b == '-';
 				case '-':
