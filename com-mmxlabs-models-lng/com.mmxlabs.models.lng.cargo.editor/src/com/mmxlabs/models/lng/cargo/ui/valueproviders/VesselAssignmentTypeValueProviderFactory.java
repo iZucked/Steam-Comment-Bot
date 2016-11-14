@@ -217,7 +217,10 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 				}
 
 				private boolean uniqueAvailability(List<VesselAvailability> vesselAvailability, VesselAvailability va) {
-					return vesselAvailability.stream().filter(v -> v.getVessel().equals(va.getVessel())).count() > 1;
+					if (va.getVessel() == null) {
+						return true;
+					}
+					return vesselAvailability.stream().filter(v -> va.getVessel().equals(v.getVessel())).count() > 1;
 				}
 
 				@Override
