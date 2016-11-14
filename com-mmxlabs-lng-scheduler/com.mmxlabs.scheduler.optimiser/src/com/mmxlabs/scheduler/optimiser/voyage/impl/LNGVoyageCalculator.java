@@ -713,8 +713,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				remainingHeelInM3 = 0;
 			}
 
-			violationsCount += checkCargoCapacityViolations(startHeelInM3, lngCommitmentInM3, loadDetails, loadSlot, dischargeDetails, dischargeSlot, minDischargeVolumeInM3, cargoCapacityInM3,
-					remainingHeelInM3);
+			violationsCount += checkCargoCapacityViolations(startHeelInM3, lngCommitmentInM3, loadSlot, dischargeSlot, minDischargeVolumeInM3, cargoCapacityInM3, remainingHeelInM3);
 
 			// Sanity checks
 			assert lngCommitmentInM3 >= 0;
@@ -857,8 +856,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		return violationsCount;
 	}
 
-	protected int checkCargoCapacityViolations(final long startHeelInM3, final long lngCommitmentInM3, final PortDetails loadDetails, final ILoadSlot loadSlot, final PortDetails dischargeDetails,
-			final IDischargeSlot dischargeSlot, final long minDischargeVolumeInM3, final long cargoCapacityInM3, final long remainingHeelInM3) {
+	protected int checkCargoCapacityViolations(final long startHeelInM3, final long lngCommitmentInM3, final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final long minDischargeVolumeInM3,
+			final long cargoCapacityInM3, final long remainingHeelInM3) {
 
 		int violationsCount = 0;
 		final long minLoadVolumeInM3 = loadSlot.getMinLoadVolume();
