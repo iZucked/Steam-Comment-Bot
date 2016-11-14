@@ -73,6 +73,9 @@ public final class PortOptions implements Cloneable, IOptionsSequenceElement {
 		if (obj instanceof PortOptions) {
 			final PortOptions vo = (PortOptions) obj;
 
+			if (cargoCV != vo.cargoCV) {
+				return false;
+			}
 			if (visitDuration != vo.visitDuration) {
 				return false;
 			}
@@ -97,14 +100,14 @@ public final class PortOptions implements Cloneable, IOptionsSequenceElement {
 
 	@Override
 	public String toString() {
-		return "PortOptions [availableTime=" + visitDuration + ", vessel=" + vessel + ", portSlot=" + portSlot + "]";
+		return "PortOptions [availableTime=" + visitDuration + ", vessel=" + vessel + ", portSlot=" + portSlot + " , cargoCV=" + cargoCV + "]";
 	}
 
 	@Override
 	public final int hashCode() {
-		return Objects.hashCode(visitDuration, portSlot, vessel);
+		return Objects.hashCode(visitDuration, portSlot, vessel, cargoCV);
 	}
-	
+
 	public int getCargoCVValue() {
 		return cargoCV;
 	}

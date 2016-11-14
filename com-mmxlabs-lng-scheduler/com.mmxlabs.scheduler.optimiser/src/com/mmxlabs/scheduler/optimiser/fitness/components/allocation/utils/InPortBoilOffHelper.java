@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -43,13 +45,22 @@ public class InPortBoilOffHelper implements IBoilOffHelper {
 	@Override
 	public long getNBORate(IVessel vessel, PortType portStatus){
 	
-			if(portStatus == PortType.Load)
-				return vessel.getVesselClass().getInPortNBORate(VesselState.Ballast);
-			else if(portStatus == PortType.Discharge)
+			if(portStatus == PortType.Load){
 				return vessel.getVesselClass().getInPortNBORate(VesselState.Laden);
-		
+			} else if(portStatus == PortType.Discharge){
+				return vessel.getVesselClass().getInPortNBORate(VesselState.Ballast);
+			}
 		return 0;
 	}
 	
+	@Override
+	public long getPortVisitNBOInM3(IVessel vessel, IPortSlot portSlot, AllocationRecord record){
+
+		PortType eventType = portSlot.getPortType();
+		final long dailyRateInM3 = getNBORate(vessel, eventType);
+		int eventDurationInHours = record.portTimesRecord.getSlotDuration(portSlot);
+		return (eventDurationInHours * dailyRateInM3) / 24L;
+	}
+
 
 }

@@ -18,5 +18,7 @@ public interface IBoilOffHelper {
 	
 	public boolean isBoilOffCompensation();
 
+	long getPortVisitNBOInM3(IVessel vessel, IPortSlot portSlot, AllocationRecord record);
+
 
 }
