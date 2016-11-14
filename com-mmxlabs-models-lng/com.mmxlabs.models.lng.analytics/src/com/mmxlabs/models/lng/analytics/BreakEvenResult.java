@@ -13,6 +13,7 @@ package com.mmxlabs.models.lng.analytics;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BreakEvenResult#getPrice <em>Price</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.BreakEvenResult#getPriceString <em>Price String</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBreakEvenResult()
@@ -45,5 +46,31 @@ public interface BreakEvenResult extends AnalysisResultDetail {
 	 * @generated
 	 */
 	void setPrice(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Price String</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Price String</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Price String</em>' attribute.
+	 * @see #setPriceString(String)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBreakEvenResult_PriceString()
+	 * @model
+	 * @generated
+	 */
+	String getPriceString();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.BreakEvenResult#getPriceString <em>Price String</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Price String</em>' attribute.
+	 * @see #getPriceString()
+	 * @generated
+	 */
+	void setPriceString(String value);
 
 } // BreakEvenResult

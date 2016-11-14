@@ -2052,13 +2052,22 @@ s	 * <!-- end-user-doc -->
 	int BREAK_EVEN_RESULT__PRICE = ANALYSIS_RESULT_DETAIL_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Price String</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_RESULT__PRICE_STRING = ANALYSIS_RESULT_DETAIL_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Break Even Result</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BREAK_EVEN_RESULT_FEATURE_COUNT = ANALYSIS_RESULT_DETAIL_FEATURE_COUNT + 1;
+	int BREAK_EVEN_RESULT_FEATURE_COUNT = ANALYSIS_RESULT_DETAIL_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ModeOptionRuleImpl <em>Mode Option Rule</em>}' class.
@@ -4172,6 +4181,17 @@ s	 * <!-- end-user-doc -->
 	EAttribute getBreakEvenResult_Price();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BreakEvenResult#getPriceString <em>Price String</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Price String</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenResult#getPriceString()
+	 * @see #getBreakEvenResult()
+	 * @generated
+	 */
+	EAttribute getBreakEvenResult_PriceString();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ModeOptionRule <em>Mode Option Rule</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5869,6 +5889,14 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute BREAK_EVEN_RESULT__PRICE = eINSTANCE.getBreakEvenResult_Price();
+
+		/**
+		 * The meta object literal for the '<em><b>Price String</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BREAK_EVEN_RESULT__PRICE_STRING = eINSTANCE.getBreakEvenResult_PriceString();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ModeOptionRuleImpl <em>Mode Option Rule</em>}' class.

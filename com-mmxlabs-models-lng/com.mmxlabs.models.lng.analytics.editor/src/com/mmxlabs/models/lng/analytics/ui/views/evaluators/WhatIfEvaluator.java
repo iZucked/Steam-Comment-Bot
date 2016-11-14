@@ -1,17 +1,20 @@
 package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
+import java.time.YearMonth;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
@@ -44,9 +47,12 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoEditingCommands;
+import com.mmxlabs.models.lng.commercial.parseutils.IndexConversion;
+import com.mmxlabs.models.lng.commercial.parseutils.MarkedUpNode;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
@@ -201,10 +207,16 @@ public class WhatIfEvaluator {
 				if (isBreakEvenRow(loadAllocation)) {
 					final BreakEvenResult r = AnalyticsFactory.eINSTANCE.createBreakEvenResult();
 					r.setPrice(loadAllocation.getPrice());
+					String priceString = getPriceString(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getReferenceModel().getPricingModel(),
+							((BuyOpportunity) row.getBuyOption()).getPriceExpression(), loadAllocation.getPrice(), YearMonth.from(loadAllocation.getSlotVisit().getStart()));
+					r.setPriceString(priceString);
 					res.setResultDetail(r);
 				} else if (isBreakEvenRow(dischargeAllocation)) {
 					final BreakEvenResult r = AnalyticsFactory.eINSTANCE.createBreakEvenResult();
 					r.setPrice(dischargeAllocation.getPrice());
+					String priceString = getPriceString(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getReferenceModel().getPricingModel(),
+							((SellOpportunity) row.getSellOption()).getPriceExpression(), dischargeAllocation.getPrice(), YearMonth.from(dischargeAllocation.getSlotVisit().getStart()));
+					r.setPriceString(priceString);
 					res.setResultDetail(r);
 				} else {
 					final ProfitAndLossResult r = AnalyticsFactory.eINSTANCE.createProfitAndLossResult();
@@ -268,6 +280,14 @@ public class WhatIfEvaluator {
 		return ref[0];
 	}
 
+	private static String getPriceString(@NonNull PricingModel pricingModel, @NonNull String expression, double breakevenPrice, @NonNull YearMonth date) {
+		if (expression.equals("?")) {
+			return String.format("%,.3f", breakevenPrice);
+		}
+		double rearrangedPrice = IndexConversion.getRearrangedPrice(pricingModel, expression, breakevenPrice, date);
+		return expression.replaceFirst(Pattern.quote("?"), String.format("%,.3f", rearrangedPrice));
+	}
+
 	private static Triple<SlotAllocation, SlotAllocation, CargoAllocation> finder(final LNGScenarioModel lngScenarioModel, final BaseCaseRow baseCaseRow, final IMapperClass mapper) {
 
 		CargoAllocation cargoAllocation = null;
@@ -326,7 +346,7 @@ public class WhatIfEvaluator {
 			if (slot != null) {
 				final String priceExpression = slot.getPriceExpression();
 				if (priceExpression != null) {
-					return priceExpression.equals("?");
+					return priceExpression.contains("?");
 				}
 			}
 		}
@@ -375,4 +395,8 @@ public class WhatIfEvaluator {
 	private static Predicate<ShippingOption> isNominated() {
 		return s -> s instanceof NominatedShippingOption;
 	}
+	
+//	private static String getIndex(String expression, double bePrice) {
+//		if (expression )
+//	}
 }

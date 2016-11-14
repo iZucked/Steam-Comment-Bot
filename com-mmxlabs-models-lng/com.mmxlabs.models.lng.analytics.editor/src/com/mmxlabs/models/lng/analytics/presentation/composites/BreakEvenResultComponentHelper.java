@@ -69,6 +69,7 @@ public class BreakEvenResultComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_priceEditor(detailComposite, topClass);
+		add_priceStringEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the price feature on BreakEvenResult
@@ -77,5 +78,14 @@ public class BreakEvenResultComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_priceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.BREAK_EVEN_RESULT__PRICE));
+	}
+
+	/**
+	 * Create the editor for the priceString feature on BreakEvenResult
+	 *
+	 * @generated
+	 */
+	protected void add_priceStringEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.BREAK_EVEN_RESULT__PRICE_STRING));
 	}
 }

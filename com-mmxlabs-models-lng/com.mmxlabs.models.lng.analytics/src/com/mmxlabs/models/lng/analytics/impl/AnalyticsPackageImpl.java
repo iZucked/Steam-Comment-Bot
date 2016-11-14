@@ -1977,6 +1977,15 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getBreakEvenResult_PriceString() {
+		return (EAttribute)breakEvenResultEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getModeOptionRule() {
 		return modeOptionRuleEClass;
 	}
@@ -2465,6 +2474,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 		breakEvenResultEClass = createEClass(BREAK_EVEN_RESULT);
 		createEAttribute(breakEvenResultEClass, BREAK_EVEN_RESULT__PRICE);
+		createEAttribute(breakEvenResultEClass, BREAK_EVEN_RESULT__PRICE_STRING);
 
 		modeOptionRuleEClass = createEClass(MODE_OPTION_RULE);
 
@@ -2776,6 +2786,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 		initEClass(breakEvenResultEClass, BreakEvenResult.class, "BreakEvenResult", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getBreakEvenResult_Price(), ecorePackage.getEDouble(), "price", null, 0, 1, BreakEvenResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBreakEvenResult_PriceString(), ecorePackage.getEString(), "priceString", null, 0, 1, BreakEvenResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(modeOptionRuleEClass, ModeOptionRule.class, "ModeOptionRule", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

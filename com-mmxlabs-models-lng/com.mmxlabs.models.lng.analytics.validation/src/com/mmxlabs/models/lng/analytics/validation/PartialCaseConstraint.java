@@ -76,11 +76,15 @@ public class PartialCaseConstraint extends AbstractModelMultiConstraint {
 
 			// First pass, find problem slots
 			processPartialCase(partialCase, (row, slot) -> {
-				if (slot != null && slot instanceof BuyOpportunity && "?".equals(((BuyOpportunity) slot).getPriceExpression())) {
-					loadQuestion.add(row);
+				if (slot != null && slot instanceof BuyOpportunity) {
+					String priceExpression = ((BuyOpportunity) slot).getPriceExpression();
+					if (priceExpression != null && priceExpression.contains("?")) {
+						loadQuestion.add(row);
+					}
 				}
 			}, (row, slot) -> {
-				if (slot != null && slot instanceof SellOpportunity && "?".equals(((SellOpportunity) slot).getPriceExpression())) {
+				String priceExpression = ((SellOpportunity) slot).getPriceExpression();
+				if (slot != null && slot instanceof SellOpportunity && priceExpression != null && priceExpression.contains("?")) {
 					dischargeQuestion.add(row);
 				}
 			});

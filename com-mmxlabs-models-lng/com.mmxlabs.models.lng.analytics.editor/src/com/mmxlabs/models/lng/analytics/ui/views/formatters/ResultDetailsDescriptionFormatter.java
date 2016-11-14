@@ -10,7 +10,7 @@ public class ResultDetailsDescriptionFormatter extends BaseFormatter {
 
 		if (object instanceof BreakEvenResult) {
 			final BreakEvenResult breakEvenResult = (BreakEvenResult) object;
-			return String.format("BE Price is %,.3f", breakEvenResult.getPrice());
+			return String.format("BE Price is %s", breakEvenResult.getPriceString());
 		} else if (object instanceof ProfitAndLossResult) {
 			ProfitAndLossResult profitAndLossResult = (ProfitAndLossResult) object;
 			return String.format("Cargo P&L is %,.1f", profitAndLossResult.getValue());

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.analytics.validation;
 
+import java.awt.image.IndexColorModel;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -17,10 +18,13 @@ import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.VolumeMode;
 import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
+import com.mmxlabs.models.lng.commercial.parseutils.IndexConversion;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -34,7 +38,7 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 
 		if (target instanceof BuyOpportunity) {
 			final BuyOpportunity slot = (BuyOpportunity) target;
-			if (!"?".equals(slot.getPriceExpression()) && slot.getPriceExpression() != null && !slot.getPriceExpression().equals("")) {
+			if (slot.getPriceExpression() != null && !slot.getPriceExpression().contains("?") && !slot.getPriceExpression().equals("")) {
 				final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, slot, AnalyticsPackage.eINSTANCE.getBuyOpportunity_PriceExpression(), slot.getPriceExpression(),
 						PriceIndexType.COMMODITY);
 				if (!result.isOk()) {
@@ -43,6 +47,20 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 
 					dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__PRICE_EXPRESSION);
 					failures.add(dsd);
+				}
+			}
+			if (slot.getPriceExpression() != null && slot.getPriceExpression().contains("?") && !slot.getPriceExpression().equals("?")) {
+				PricingModel pricingModel = getPricingModel(extraContext);
+				if (pricingModel != null) {
+					final boolean expressionValidForIndexConversion = IndexConversion.isExpressionValidForIndexConversion(pricingModel, slot.getPriceExpression());
+					if (!expressionValidForIndexConversion) {
+						final String message = String.format("%s", "Breakeven expression must be in form ?, ?%INDEX+CONSTANT or COEFFICIENT%INDEX+?.");
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+
+						dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__CONTRACT);
+						dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.BUY_OPPORTUNITY__PRICE_EXPRESSION);
+						failures.add(dsd);
+					}
 				}
 			}
 			if (slot.getContract() == null && (slot.getPriceExpression() == null || (slot.getPriceExpression() != null && slot.getPriceExpression().equals("")))) {
@@ -125,8 +143,7 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 		}
 		if (target instanceof SellOpportunity) {
 			final SellOpportunity slot = (SellOpportunity) target;
-			if (!"?".equals(slot.getPriceExpression()) && slot.getPriceExpression() != null && !slot.getPriceExpression().equals("")) {
-
+			if (slot.getPriceExpression() != null && !slot.getPriceExpression().contains("?") && !slot.getPriceExpression().equals("")) {
 				final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, slot, AnalyticsPackage.eINSTANCE.getSellOpportunity_PriceExpression(), slot.getPriceExpression(),
 						PriceIndexType.COMMODITY);
 				if (!result.isOk()) {
@@ -135,6 +152,20 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 
 					dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__PRICE_EXPRESSION);
 					failures.add(dsd);
+				}
+			}
+			if (slot.getPriceExpression() != null && slot.getPriceExpression().contains("?") && !slot.getPriceExpression().equals("?")) {
+				PricingModel pricingModel = getPricingModel(extraContext);
+				if (pricingModel != null) {
+					final boolean expressionValidForIndexConversion = IndexConversion.isExpressionValidForIndexConversion(pricingModel, slot.getPriceExpression());
+					if (!expressionValidForIndexConversion) {
+						final String message = String.format("%s", "Breakeven expression must be in form ?, ?%INDEX+CONSTANT or COEFFICIENT%INDEX+?.");
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+
+						dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__CONTRACT);
+						dsd.addEObjectAndFeature(slot, AnalyticsPackage.Literals.SELL_OPPORTUNITY__PRICE_EXPRESSION);
+						failures.add(dsd);
+					}
 				}
 			}
 			if (slot.getContract() == null && (slot.getPriceExpression() == null || (slot.getPriceExpression() != null && slot.getPriceExpression().equals("")))) {
@@ -209,5 +240,15 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 			}
 		}
 		return Activator.PLUGIN_ID;
+	}
+	
+	private static PricingModel getPricingModel(final IExtraValidationContext extraContext) {
+		if (extraContext.getRootObject() instanceof LNGScenarioModel) {
+			LNGScenarioModel model =
+			(LNGScenarioModel) extraContext.getRootObject();
+			return model.getReferenceModel().getPricingModel();
+		} else {
+			return null;
+		}
 	}
 }

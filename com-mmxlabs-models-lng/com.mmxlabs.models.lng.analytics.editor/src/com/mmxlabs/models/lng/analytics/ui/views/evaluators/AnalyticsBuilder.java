@@ -117,7 +117,7 @@ public class AnalyticsBuilder {
 				slot.setContract(buyOpportunity.getContract());
 			}
 			if (buyOpportunity.getPriceExpression() != null && !buyOpportunity.getPriceExpression().equals("")) {
-				slot.setPriceExpression(buyOpportunity.getPriceExpression());
+				slot.setPriceExpression(buyOpportunity.getPriceExpression().contains("?") ? "?" : buyOpportunity.getPriceExpression());
 			}
 			if (buyOpportunity.getDate() != null) {
 				slot.setWindowStart(buyOpportunity.getDate());
@@ -221,7 +221,7 @@ public class AnalyticsBuilder {
 				slot.setContract(sellOpportunity.getContract());
 			}
 			if (sellOpportunity.getPriceExpression() != null && !sellOpportunity.getPriceExpression().equals("")) {
-				slot.setPriceExpression(sellOpportunity.getPriceExpression());
+				slot.setPriceExpression(sellOpportunity.getPriceExpression().contains("?") ? "?" : sellOpportunity.getPriceExpression());
 			}
 			if (sellOpportunity.getDate() != null) {
 				slot.setWindowStart(sellOpportunity.getDate());

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.commercial.parseutils;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -16,6 +17,7 @@ public abstract class AbstractMarkedUpNode implements MarkedUpNode {
 	}
 
 	public List<MarkedUpNode> getChildren() {
-		throw new UnsupportedOperationException();
+//		throw new UnsupportedOperationException();
+		return Collections.EMPTY_LIST;
 	}
 }

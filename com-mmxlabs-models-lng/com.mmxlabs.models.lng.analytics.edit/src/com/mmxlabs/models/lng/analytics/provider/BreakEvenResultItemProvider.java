@@ -46,6 +46,7 @@ public class BreakEvenResultItemProvider extends AnalysisResultDetailItemProvide
 			super.getPropertyDescriptors(object);
 
 			addPricePropertyDescriptor(object);
+			addPriceStringPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -68,6 +69,28 @@ public class BreakEvenResultItemProvider extends AnalysisResultDetailItemProvide
 				 false,
 				 false,
 				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Price String feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPriceStringPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_BreakEvenResult_priceString_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BreakEvenResult_priceString_feature", "_UI_BreakEvenResult_type"),
+				 AnalyticsPackage.Literals.BREAK_EVEN_RESULT__PRICE_STRING,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -109,6 +132,7 @@ public class BreakEvenResultItemProvider extends AnalysisResultDetailItemProvide
 
 		switch (notification.getFeatureID(BreakEvenResult.class)) {
 			case AnalyticsPackage.BREAK_EVEN_RESULT__PRICE:
+			case AnalyticsPackage.BREAK_EVEN_RESULT__PRICE_STRING:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

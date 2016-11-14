@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BreakEvenResultImpl#getPrice <em>Price</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BreakEvenResultImpl#getPriceString <em>Price String</em>}</li>
  * </ul>
  *
  * @generated
@@ -44,6 +45,26 @@ public class BreakEvenResultImpl extends AnalysisResultDetailImpl implements Bre
 	 * @ordered
 	 */
 	protected double price = PRICE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPriceString() <em>Price String</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPriceString()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String PRICE_STRING_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getPriceString() <em>Price String</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPriceString()
+	 * @generated
+	 * @ordered
+	 */
+	protected String priceString = PRICE_STRING_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -90,11 +111,34 @@ public class BreakEvenResultImpl extends AnalysisResultDetailImpl implements Bre
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getPriceString() {
+		return priceString;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPriceString(String newPriceString) {
+		String oldPriceString = priceString;
+		priceString = newPriceString;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.BREAK_EVEN_RESULT__PRICE_STRING, oldPriceString, priceString));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case AnalyticsPackage.BREAK_EVEN_RESULT__PRICE:
 				return getPrice();
+			case AnalyticsPackage.BREAK_EVEN_RESULT__PRICE_STRING:
+				return getPriceString();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -109,6 +153,9 @@ public class BreakEvenResultImpl extends AnalysisResultDetailImpl implements Bre
 		switch (featureID) {
 			case AnalyticsPackage.BREAK_EVEN_RESULT__PRICE:
 				setPrice((Double)newValue);
+				return;
+			case AnalyticsPackage.BREAK_EVEN_RESULT__PRICE_STRING:
+				setPriceString((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -125,6 +172,9 @@ public class BreakEvenResultImpl extends AnalysisResultDetailImpl implements Bre
 			case AnalyticsPackage.BREAK_EVEN_RESULT__PRICE:
 				setPrice(PRICE_EDEFAULT);
 				return;
+			case AnalyticsPackage.BREAK_EVEN_RESULT__PRICE_STRING:
+				setPriceString(PRICE_STRING_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -139,6 +189,8 @@ public class BreakEvenResultImpl extends AnalysisResultDetailImpl implements Bre
 		switch (featureID) {
 			case AnalyticsPackage.BREAK_EVEN_RESULT__PRICE:
 				return price != PRICE_EDEFAULT;
+			case AnalyticsPackage.BREAK_EVEN_RESULT__PRICE_STRING:
+				return PRICE_STRING_EDEFAULT == null ? priceString != null : !PRICE_STRING_EDEFAULT.equals(priceString);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -155,6 +207,8 @@ public class BreakEvenResultImpl extends AnalysisResultDetailImpl implements Bre
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (price: ");
 		result.append(price);
+		result.append(", priceString: ");
+		result.append(priceString);
 		result.append(')');
 		return result.toString();
 	}

@@ -388,6 +388,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BreakEvenResult" eSuperTypes="#//AnalysisResultDetail">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="price" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ModeOptionRule" eSuperTypes="#//OptionRule"/>
   <eClassifiers xsi:type="ecore:EClass" name="OptionAnalysisModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">

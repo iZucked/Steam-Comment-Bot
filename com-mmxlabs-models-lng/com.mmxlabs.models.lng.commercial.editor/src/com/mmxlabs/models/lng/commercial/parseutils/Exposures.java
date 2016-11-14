@@ -157,7 +157,7 @@ public class Exposures {
 	 * @param date
 	 * @return
 	 */
-	private static @NonNull Node expandNode(@NonNull final Node parentNode, final LookupData lookupData) {
+	public static @NonNull Node expandNode(@NonNull final Node parentNode, final LookupData lookupData) {
 
 		if (lookupData.expressionCache.containsKey(parentNode.token)) {
 			return lookupData.expressionCache.get(parentNode.token);
@@ -268,7 +268,7 @@ public class Exposures {
 		return null;
 	}
 
-	private static MarkedUpNode markupNodes(@NonNull final Node parentNode, final LookupData lookupData) {
+	public static MarkedUpNode markupNodes(@NonNull final Node parentNode, final LookupData lookupData) {
 		MarkedUpNode n;
 
 		if (parentNode.token.equalsIgnoreCase("SHIFT")) {
@@ -314,6 +314,8 @@ public class Exposures {
 			n = new ConversionNode(parentNode.token, lookupData.conversionMap.get(parentNode.token.toLowerCase()), false);
 		} else if (lookupData.reverseConversionMap.containsKey(parentNode.token.toLowerCase())) {
 			n = new ConversionNode(parentNode.token, lookupData.reverseConversionMap.get(parentNode.token.toLowerCase()), true);
+		} else if (parentNode.token.equals("?")) {
+			n = new BreakevenNode();
 		} else {
 			// This should be a constant
 			try {
