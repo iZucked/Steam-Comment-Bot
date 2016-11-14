@@ -46,6 +46,7 @@ public class ExpressionParser<T> implements IExpressionParser<T> {
 		tok.wordChars('.', '.');
 		tok.wordChars('0', '9');
 		tok.wordChars('_', '_');
+		tok.wordChars('?', '?');
 
 		try {
 			return parse(tok);
