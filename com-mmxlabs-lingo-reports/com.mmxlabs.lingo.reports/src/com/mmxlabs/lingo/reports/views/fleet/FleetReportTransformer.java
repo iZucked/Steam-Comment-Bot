@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
@@ -153,6 +154,8 @@ public class FleetReportTransformer {
 						interestingEvents.add(sequence);
 						seenVessels.add(vesselAvailability.getVessel());
 					}
+				} else if (sequence.getSequenceType() == SequenceType.SPOT_VESSEL) {
+					interestingEvents.add(sequence);
 				}
 			}
 			allEvents.add(sequence);
@@ -177,9 +180,13 @@ public class FleetReportTransformer {
 				row.setName(sequence.getName());
 				row.setSequence(sequence);
 				final EList<Sequence> linkedSequences = row.getLinkedSequences();
+				if (sequence.getSequenceType() == SequenceType.SPOT_VESSEL || sequence.getSequenceType() == SequenceType.ROUND_TRIP) {
+					linkedSequences.add(sequence);
+				} else {
 				final List<Sequence> foundSequences = schedule.getSequences().stream().filter(s -> (s.getVesselAvailability() != null && s.getVesselAvailability().getVessel() != null
 						&& s.getVesselAvailability().getVessel().equals(sequence.getVesselAvailability().getVessel()))).collect(Collectors.toList());
 				linkedSequences.addAll(foundSequences);
+				}
 				rows.add(row);
 
 				elementToRowMap.put(sequence, row);
