@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.AfterClass;
@@ -29,10 +30,16 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
+import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
@@ -74,6 +81,122 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 		super.constructor();
 		// Set a default prompt in the past
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2014, 1, 1), LocalDate.of(2014, 3, 1));
+	}
+
+	/**
+	 * Test: test a nominal vessel start and end heel is present
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Category({ MicroTest.class })
+	public void testNominalHeel() throws Exception {
+
+		// Create the required basic elements
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		vesselClass.setMinHeel(500);
+
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 0);
+
+		// Construct the cargo scenario
+
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		evaluateWithLSOTest(scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			// Check spot index has been updated
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			// Check cargoes removed
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+
+			// Check correct cargoes remain and spot index has changed.
+			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
+
+			@Nullable
+			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
+			Assert.assertNotNull(schedule);
+
+			@Nullable
+			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), schedule);
+
+			Assert.assertNotNull(cargoAllocation);
+			final EList<Event> events = cargoAllocation.getEvents();
+			final Event firstEvent = events.get(0);
+			final Event lastEvent = events.get(events.size() - 1);
+
+			// Check safety heel present.
+			Assert.assertEquals(vesselClass.getMinHeel(), firstEvent.getHeelAtStart());
+			Assert.assertEquals(vesselClass.getMinHeel(), lastEvent.getHeelAtEnd());
+
+		});
+	}
+
+	/**
+	 * Test: Test a charter-in vessel start and end heel level. (Not strictly a nominal vessel issue, but implemented parallel test here also).
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Category({ MicroTest.class })
+	public void testCharterInHeel() throws Exception {
+
+		// Create the required basic elements
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		vesselClass.setMinHeel(500);
+
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "50000", 1);
+
+		// Construct the cargo scenario
+
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, 0, 1) // 0 is first market option
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		evaluateWithLSOTest(scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			// Check spot index has been updated
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			// Check cargoes removed
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+
+			// Check correct cargoes remain and spot index has changed.
+			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
+
+			@Nullable
+			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
+			Assert.assertNotNull(schedule);
+
+			@Nullable
+			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), schedule);
+
+			Assert.assertNotNull(cargoAllocation);
+			final EList<Event> events = cargoAllocation.getEvents();
+			final Event firstEvent = events.get(0);
+			final Event lastEvent = events.get(events.size() - 1);
+
+			// Check safety heel present.
+			Assert.assertEquals(vesselClass.getMinHeel(), firstEvent.getHeelAtStart());
+			Assert.assertEquals(vesselClass.getMinHeel(), lastEvent.getHeelAtEnd());
+
+		});
 	}
 
 	/**
@@ -282,7 +405,7 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 			return new AbstractRunnerHook() {
 
 				@Override
-				public @Nullable ISequences doGetPrestoredSequences(@NonNull final String stage, LNGDataTransformer dataTransformer) {
+				public @Nullable ISequences doGetPrestoredSequences(@NonNull final String stage, final LNGDataTransformer dataTransformer) {
 					if (IRunnerHook.STAGE_LSO.equals(stage)) {
 						final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
