@@ -322,9 +322,12 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 		final IHeelLevelAnnotation heelLevel = (IHeelLevelAnnotation) annotations.get(SchedulerConstants.AI_heelLevelInfo);
 
 		if (heelLevel != null) {
-			portVisit.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelLevel.getStartHeelInM3()));
-			portVisit.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(heelLevel.getEndHeelInM3()));
+			assert visitEvent.getStartHeelInM3() == heelLevel.getStartHeelInM3();
+			assert visitEvent.getEndHeelInM3() == heelLevel.getEndHeelInM3();
 		}
+
+		portVisit.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(visitEvent.getStartHeelInM3()));
+		portVisit.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(visitEvent.getEndHeelInM3()));
 
 		return portVisit;
 	}
