@@ -70,6 +70,7 @@ public class BreakEvenResultComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_priceEditor(detailComposite, topClass);
 		add_priceStringEditor(detailComposite, topClass);
+		add_cargoPNLEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the price feature on BreakEvenResult
@@ -87,5 +88,14 @@ public class BreakEvenResultComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_priceStringEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.BREAK_EVEN_RESULT__PRICE_STRING));
+	}
+
+	/**
+	 * Create the editor for the cargoPNL feature on BreakEvenResult
+	 *
+	 * @generated
+	 */
+	protected void add_cargoPNLEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.BREAK_EVEN_RESULT__CARGO_PNL));
 	}
 }

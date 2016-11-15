@@ -47,6 +47,7 @@ public class BreakEvenResultItemProvider extends AnalysisResultDetailItemProvide
 
 			addPricePropertyDescriptor(object);
 			addPriceStringPropertyDescriptor(object);
+			addCargoPNLPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -96,6 +97,28 @@ public class BreakEvenResultItemProvider extends AnalysisResultDetailItemProvide
 	}
 
 	/**
+	 * This adds a property descriptor for the Cargo PNL feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCargoPNLPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_BreakEvenResult_cargoPNL_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BreakEvenResult_cargoPNL_feature", "_UI_BreakEvenResult_type"),
+				 AnalyticsPackage.Literals.BREAK_EVEN_RESULT__CARGO_PNL,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns BreakEvenResult.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -133,6 +156,7 @@ public class BreakEvenResultItemProvider extends AnalysisResultDetailItemProvide
 		switch (notification.getFeatureID(BreakEvenResult.class)) {
 			case AnalyticsPackage.BREAK_EVEN_RESULT__PRICE:
 			case AnalyticsPackage.BREAK_EVEN_RESULT__PRICE_STRING:
+			case AnalyticsPackage.BREAK_EVEN_RESULT__CARGO_PNL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

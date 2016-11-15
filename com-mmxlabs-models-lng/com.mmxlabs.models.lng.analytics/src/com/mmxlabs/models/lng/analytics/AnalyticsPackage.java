@@ -2061,13 +2061,22 @@ s	 * <!-- end-user-doc -->
 	int BREAK_EVEN_RESULT__PRICE_STRING = ANALYSIS_RESULT_DETAIL_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Cargo PNL</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_RESULT__CARGO_PNL = ANALYSIS_RESULT_DETAIL_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Break Even Result</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BREAK_EVEN_RESULT_FEATURE_COUNT = ANALYSIS_RESULT_DETAIL_FEATURE_COUNT + 2;
+	int BREAK_EVEN_RESULT_FEATURE_COUNT = ANALYSIS_RESULT_DETAIL_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ModeOptionRuleImpl <em>Mode Option Rule</em>}' class.
@@ -4192,6 +4201,17 @@ s	 * <!-- end-user-doc -->
 	EAttribute getBreakEvenResult_PriceString();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BreakEvenResult#getCargoPNL <em>Cargo PNL</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cargo PNL</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BreakEvenResult#getCargoPNL()
+	 * @see #getBreakEvenResult()
+	 * @generated
+	 */
+	EAttribute getBreakEvenResult_CargoPNL();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ModeOptionRule <em>Mode Option Rule</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5897,6 +5917,14 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute BREAK_EVEN_RESULT__PRICE_STRING = eINSTANCE.getBreakEvenResult_PriceString();
+
+		/**
+		 * The meta object literal for the '<em><b>Cargo PNL</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BREAK_EVEN_RESULT__CARGO_PNL = eINSTANCE.getBreakEvenResult_CargoPNL();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ModeOptionRuleImpl <em>Mode Option Rule</em>}' class.

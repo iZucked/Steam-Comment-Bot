@@ -684,6 +684,21 @@ public class ProvisionalCargoItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 PricingFactory.eINSTANCE.createSuezCanalTugBand()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 PricingFactory.eINSTANCE.createSuezCanalTariff()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 PricingFactory.eINSTANCE.createSuezCanalTariffBand()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
 				 PricingFactory.eINSTANCE.createUnitConversion()));
 
 		newChildDescriptors.add

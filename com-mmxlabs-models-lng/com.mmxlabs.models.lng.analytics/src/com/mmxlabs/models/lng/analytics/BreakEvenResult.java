@@ -14,6 +14,7 @@ package com.mmxlabs.models.lng.analytics;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BreakEvenResult#getPrice <em>Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BreakEvenResult#getPriceString <em>Price String</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.BreakEvenResult#getCargoPNL <em>Cargo PNL</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBreakEvenResult()
@@ -72,5 +73,31 @@ public interface BreakEvenResult extends AnalysisResultDetail {
 	 * @generated
 	 */
 	void setPriceString(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Cargo PNL</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cargo PNL</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cargo PNL</em>' attribute.
+	 * @see #setCargoPNL(double)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBreakEvenResult_CargoPNL()
+	 * @model
+	 * @generated
+	 */
+	double getCargoPNL();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.BreakEvenResult#getCargoPNL <em>Cargo PNL</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cargo PNL</em>' attribute.
+	 * @see #getCargoPNL()
+	 * @generated
+	 */
+	void setCargoPNL(double value);
 
 } // BreakEvenResult

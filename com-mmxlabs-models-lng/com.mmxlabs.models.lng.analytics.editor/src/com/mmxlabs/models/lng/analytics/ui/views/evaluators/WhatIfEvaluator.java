@@ -211,6 +211,9 @@ public class WhatIfEvaluator {
 							((BuyOpportunity) row.getBuyOption()).getPriceExpression(), loadAllocation.getPrice(), YearMonth.from(loadAllocation.getSlotVisit().getStart()));
 					r.setPriceString(priceString);
 					res.setResultDetail(r);
+					if (cargoAllocation != null) {
+						r.setCargoPNL((double) cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss());
+					}
 				} else if (isBreakEvenRow(dischargeAllocation)) {
 					final BreakEvenResult r = AnalyticsFactory.eINSTANCE.createBreakEvenResult();
 					r.setPrice(dischargeAllocation.getPrice());
@@ -218,6 +221,9 @@ public class WhatIfEvaluator {
 							((SellOpportunity) row.getSellOption()).getPriceExpression(), dischargeAllocation.getPrice(), YearMonth.from(dischargeAllocation.getSlotVisit().getStart()));
 					r.setPriceString(priceString);
 					res.setResultDetail(r);
+					if (cargoAllocation != null) {
+						r.setCargoPNL((double) cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss());
+					}
 				} else {
 					final ProfitAndLossResult r = AnalyticsFactory.eINSTANCE.createProfitAndLossResult();
 					if (cargoAllocation != null) {
