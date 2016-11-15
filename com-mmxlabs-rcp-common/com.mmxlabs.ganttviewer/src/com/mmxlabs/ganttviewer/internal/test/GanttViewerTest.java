@@ -136,6 +136,11 @@ public class GanttViewerTest {
 			// TODO Auto-generated method stub
 			return null;
 		}
+
+		@Override
+		public boolean isVisibleByDefault(Object resource) {
+			return true;
+		}
 	}
 
 	public static void main(final String[] args) {

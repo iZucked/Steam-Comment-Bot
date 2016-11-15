@@ -17,6 +17,8 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
  */
 public interface IGanttChartContentProvider extends ITreeContentProvider {
 
+	boolean isVisibleByDefault(Object resource);
+	
 	Calendar getElementStartTime(Object element);
 
 	Calendar getElementEndTime(Object element);

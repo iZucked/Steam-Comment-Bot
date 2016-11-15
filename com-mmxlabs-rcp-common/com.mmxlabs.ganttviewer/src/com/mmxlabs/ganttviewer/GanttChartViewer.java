@@ -274,7 +274,7 @@ public class GanttChartViewer extends StructuredViewer {
 					final Image img = getLabelProviderImage(labelProvider, r);
 					section.setImage(img);
 					section.setData(r);
-					
+					section.setVisible(isVisibleByDefault(contentProvider, r));
 					final Map<String, GanttGroup> ganttGroups = new TreeMap<String, GanttGroup>();
 
 					if (treeContentProvider.hasChildren(r)) {
@@ -306,7 +306,7 @@ public class GanttChartViewer extends StructuredViewer {
 							eventMap.put(c, event);
 							event.setVerticalEventAlignment(SWT.CENTER);
 							event.setGanttSection(section);
-							
+
 							if (image != null) {
 								event.setImage(true);
 								event.setPicture(image);
@@ -472,6 +472,14 @@ public class GanttChartViewer extends StructuredViewer {
 			return null;
 		}
 		return image;
+	}
+
+	private boolean isVisibleByDefault(final IContentProvider contentProvider, final Object resource) {
+		if (contentProvider instanceof IGanttChartContentProvider) {
+			final IGanttChartContentProvider gcProvider = (IGanttChartContentProvider) contentProvider;
+			return gcProvider.isVisibleByDefault(resource);
+		}
+		return true;
 	}
 
 	private Calendar getEventStartDate(final IContentProvider contentProvider, final Object element) {
