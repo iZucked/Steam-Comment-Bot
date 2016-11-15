@@ -20,6 +20,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.RoundTripCargoEnd;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
@@ -700,6 +701,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						} else {
 							remainingHeelInM3 = 0;
 						}
+					} else if (toPortSlot instanceof RoundTripCargoEnd) {
+						final RoundTripCargoEnd endPortSlot = (RoundTripCargoEnd) toPortSlot;
+						remainingHeelInM3 = vessel.getVesselClass().getSafetyHeel();
 					} else {
 						remainingHeelInM3 = vesselClass.getSafetyHeel();
 					}
@@ -742,6 +746,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				final IPortSlot toPortSlot = lastVoyageDetailsElement.getOptions().getToPortSlot();
 				if (toPortSlot instanceof EndPortSlot) {
 					final EndPortSlot endPortSlot = (EndPortSlot) toPortSlot;
+
 					// TODO: Tricky here to get exact fuel volume, should there be some tolerance?
 					if (endPortSlot.isEndCold() && remainingHeelInM3 != endPortSlot.getTargetEndHeelInM3()) {
 						if (remainingHeelInM3 == 0) {
@@ -764,7 +769,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					++violationsCount;
 				}
 			}
-
 		}
 
 		// Sanity checks
