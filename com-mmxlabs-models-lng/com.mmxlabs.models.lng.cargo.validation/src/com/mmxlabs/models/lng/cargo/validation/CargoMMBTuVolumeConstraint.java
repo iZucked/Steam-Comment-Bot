@@ -94,7 +94,7 @@ public class CargoMMBTuVolumeConstraint extends AbstractModelMultiConstraint {
 			}
 			if (loadMinVolume > dischargeMaxVolume) {
 				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Cargo|" + cargo.getLoadName()
-						+ "] Min load volume greater than max discharge)."), IStatus.WARNING);
+						+ "] Min load volume greater than max discharge."), IStatus.WARNING);
 				for (final Slot slot : cargo.getSlots()) {
 					if (slot instanceof LoadSlot) {
 						status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
