@@ -274,11 +274,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Inject
 	@NonNull
 	private IPortExclusionProviderEditor portExclusionProvider;
-	
+
 	@Inject
 	@NonNull
 	private IRouteExclusionProviderEditor routeExclusionProvider;
-	
+
 	@Inject
 	@NonNull
 	private IReturnElementProviderEditor returnElementProvider;
@@ -725,7 +725,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				// choose a suitable end date for the optimisation and set all
 				// the elements in
 				// this list to have a time window around that end date
-				MutableTimeWindow mutableWindow = new MutableTimeWindow();
+				final MutableTimeWindow mutableWindow = new MutableTimeWindow();
 				slot.setTimeWindow(mutableWindow);
 				timeWindowProvider.setTimeWindows(element, Collections.singletonList(mutableWindow));
 				endSlotWindows.add(mutableWindow);
@@ -821,7 +821,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	// }
 
 	@Override
-	public void addOpenEndWindow(MutableTimeWindow window) {
+	public void addOpenEndWindow(final MutableTimeWindow window) {
 		openEndDateWindows.add(window);
 	}
 
@@ -852,9 +852,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	@NonNull
 	public IVesselAvailability createSpotVessel(final String name, final int spotIndex, @NonNull final ISpotCharterInMarket spotCharterInMarket) {
-		final IStartRequirement start = createStartRequirement(ANYWHERE, null, null);
-		final IEndRequirement end = createEndRequirement(Collections.singletonList(ANYWHERE), null, /* endCold */true, 0, false);
 		final IVesselClass vesselClass = spotCharterInMarket.getVesselClass();
+		final IStartRequirement start = createStartRequirement(ANYWHERE, null, createHeelOptions(vesselClass.getSafetyHeel(), 0, 0));
+		final IEndRequirement end = createEndRequirement(Collections.singletonList(ANYWHERE), null, /* endCold */true, vesselClass.getSafetyHeel(), false);
 		final ILongCurve dailyCharterInPrice = spotCharterInMarket.getDailyCharterInRateCurve();
 		final IVessel spotVessel = createVessel(name, vesselClass, vesselClass.getCargoCapacity());
 
@@ -961,7 +961,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			// Fleet vessels and spot vessels both run to the end of the optimisation if they don't have an end date.
 			if (!vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER) && !vesselInstanceType.equals(VesselInstanceType.ROUND_TRIP)) {
 
-				MutableTimeWindow mutableWindow = new MutableTimeWindow();
+				final MutableTimeWindow mutableWindow = new MutableTimeWindow();
 				endSlot.setTimeWindow(mutableWindow);
 				timeWindowProvider.setTimeWindows(endElement, Collections.singletonList(mutableWindow));
 				endSlotWindows.add(mutableWindow);
@@ -2015,8 +2015,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final IVessel roundTripCargoVessel = createVessel(name, roundTripCargoVesselClass, roundTripCargoVesselClass.getCargoCapacity());
 
-		final IVesselAvailability vesselAvailability = createVesselAvailability(roundTripCargoVessel, spotCharterInMarket.getDailyCharterInRateCurve(), VesselInstanceType.ROUND_TRIP,
-				createStartRequirement(), createEndRequirement(), spotCharterInMarket, -1);
+		final IStartRequirement start = createStartRequirement(ANYWHERE, null, createHeelOptions(roundTripCargoVesselClass.getSafetyHeel(), 0, 0));
+		final IEndRequirement end = createEndRequirement(Collections.singletonList(ANYWHERE), null, /* endCold */true, roundTripCargoVesselClass.getSafetyHeel(), false);
+
+		final IVesselAvailability vesselAvailability = createVesselAvailability(roundTripCargoVessel, spotCharterInMarket.getDailyCharterInRateCurve(), VesselInstanceType.ROUND_TRIP, start, end,
+				spotCharterInMarket, -1);
 
 		spotCharterInMarketProviderEditor.addSpotMarketAvailability(vesselAvailability, spotCharterInMarket, -1);
 		return vesselAvailability;

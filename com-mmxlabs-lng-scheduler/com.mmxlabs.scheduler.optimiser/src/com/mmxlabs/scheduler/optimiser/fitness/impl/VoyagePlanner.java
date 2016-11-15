@@ -30,6 +30,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
@@ -221,6 +222,9 @@ public class VoyagePlanner {
 			final IEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
 			options.setShouldBeCold(endRequirement.isEndCold());
 			options.setAllowCooldown(false);
+		} else if (thisPortSlot.getPortType() == PortType.Round_Trip_Cargo_End) {
+			options.setShouldBeCold(true);
+			options.setAllowCooldown(false);
 		} else {
 			options.setShouldBeCold(false);
 		}
@@ -272,9 +276,13 @@ public class VoyagePlanner {
 			vpoChoices.add(new RouteVoyagePlanChoice(previousOptions, options, distances, vessel, routeCostProvider));
 		}
 
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER && thisPortSlot.getPortType() == PortType.End)
-
-		{
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER && thisPortSlot.getPortType() == PortType.End) {
+			// The SchedulerBuilder should set options to trigger these values to be set above
+			assert !options.getAllowCooldown();
+			assert options.shouldBeCold();
+			options.setAllowCooldown(false);
+			options.setShouldBeCold(true);
+		} else if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP && thisPortSlot.getPortType() == PortType.Round_Trip_Cargo_End) {
 			// The SchedulerBuilder should set options to trigger these values to be set above
 			assert !options.getAllowCooldown();
 			assert options.shouldBeCold();
@@ -306,9 +314,19 @@ public class VoyagePlanner {
 
 		// Get starting heel for vessel
 		long heelVolumeInM3 = 0;
+		IStartRequirement startRequirement = startEndRequirementProvider.getStartRequirement(resource);
+
+		heelVolumeInM3 = startRequirement.getHeelOptions().getHeelLimit();
+
 		// For spot charters, start with the safety heel.
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER) {
-			heelVolumeInM3 = vesselAvailability.getVessel().getVesselClass().getSafetyHeel();
+			assert heelVolumeInM3 == vesselAvailability.getVessel().getVesselClass().getSafetyHeel();
+			// heelVolumeInM3 = vesselAvailability.getVessel().getVesselClass().getSafetyHeel();
+			assert heelVolumeInM3 >= 0;
+		}
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+			assert heelVolumeInM3 == vesselAvailability.getVessel().getVesselClass().getSafetyHeel();
+			// heelVolumeInM3 = vesselAvailability.getVessel().getVesselClass().getSafetyHeel();
 			assert heelVolumeInM3 >= 0;
 		}
 
@@ -1057,7 +1075,11 @@ public class VoyagePlanner {
 			final List<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlansMap, final List<@NonNull VoyagePlan> voyagePlansList,
 			final VoyagePlan originalPlan) {
 
+		assert planData.getStartHeelVolumeInM3() >= 0;
 		assert planData.getEndHeelVolumeInM3() >= 0;
+		assert planData.getPlan().getStartingHeelInM3() >= 0;
+		assert planData.getPlan().getLNGFuelVolume() >= 0;
+		assert planData.getPlan().getRemainingHeelInM3() >= 0;
 		// Generate heel level annotations
 		final Map<IPortSlot, IHeelLevelAnnotation> heelLevelAnnotations = new HashMap<IPortSlot, IHeelLevelAnnotation>();
 		{
