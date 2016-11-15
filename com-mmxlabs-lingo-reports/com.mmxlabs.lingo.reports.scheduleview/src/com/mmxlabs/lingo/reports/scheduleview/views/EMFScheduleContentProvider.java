@@ -10,22 +10,16 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.google.inject.Stage;
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -66,22 +60,24 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 					final EList<Sequence> sequences = ((Schedule) o).getSequences();
 					// find multiple availabilities
 					final Map<Vessel, List<Sequence>> availabilityMap = new HashMap<>();
-					final List<Sequence> unassigned = sequences.stream().filter(s -> s.getSequenceType() == SequenceType.VESSEL).sorted(
-							(a, b) -> a.getVesselAvailability().getStartBy() == null ? - 1 : b.getVesselAvailability().getStartBy() == null ? 1 : a.getVesselAvailability().getStartBy().compareTo(b.getVesselAvailability().getStartBy())).collect(Collectors.toList());
+					final List<Sequence> unassigned = sequences.stream().filter(s -> s.getSequenceType() == SequenceType.VESSEL)
+							.sorted((a, b) -> a.getVesselAvailability().getStartBy() == null ? -1
+									: b.getVesselAvailability().getStartBy() == null ? 1 : a.getVesselAvailability().getStartBy().compareTo(b.getVesselAvailability().getStartBy()))
+							.collect(Collectors.toList());
 					while (unassigned.size() > 0) {
 						@NonNull
-						final
-						Sequence thisSequence = unassigned.get(0);
-						final List<Sequence> matches = unassigned.stream().filter(s -> s.getVesselAvailability().getVessel().equals(thisSequence.getVesselAvailability().getVessel())).collect(Collectors.toList());
+						final Sequence thisSequence = unassigned.get(0);
+						final List<Sequence> matches = unassigned.stream().filter(s -> s.getVesselAvailability().getVessel().equals(thisSequence.getVesselAvailability().getVessel()))
+								.collect(Collectors.toList());
 						availabilityMap.put(thisSequence.getVesselAvailability().getVessel(), matches);
 						unassigned.removeAll(matches);
 					}
-					// find 
+					// find
 					for (final Sequence seq : sequences) {
 						// Skip nominal cargoes
 						if (
-//								seq.getSequenceType() == SequenceType.ROUND_TRIP || 
-								seq.getSequenceType() == SequenceType.VESSEL) {
+						// seq.getSequenceType() == SequenceType.ROUND_TRIP ||
+						seq.getSequenceType() == SequenceType.VESSEL) {
 							continue;
 						}
 						result.add(seq);
@@ -105,7 +101,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 			for (final Sequence seq : sequences) {
 				// Skip nominal cargoes
 				if (seq.getSequenceType() == SequenceType.ROUND_TRIP) {
-//					continue;
+					// continue;
 				}
 				seqs.add(seq);
 			}
@@ -254,5 +250,14 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 		}
 
 		return null;
+	}
+
+	@Override
+	public boolean isVisibleByDefault(final Object resource) {
+		if (resource instanceof Sequence) {
+			final Sequence sequence = (Sequence)resource;
+			return sequence.getSequenceType() != SequenceType.ROUND_TRIP;
+		}
+		return true;
 	}
 }
