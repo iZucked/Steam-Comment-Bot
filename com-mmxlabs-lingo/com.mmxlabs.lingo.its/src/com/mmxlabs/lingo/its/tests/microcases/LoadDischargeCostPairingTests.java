@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -46,6 +47,7 @@ public class LoadDischargeCostPairingTests extends AbstractMicroTestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Ignore("Proof of concept, no need to run generally")
 	@Test
 	@Category({ MicroTest.class })
 	public void testBasicCase() throws Exception {
