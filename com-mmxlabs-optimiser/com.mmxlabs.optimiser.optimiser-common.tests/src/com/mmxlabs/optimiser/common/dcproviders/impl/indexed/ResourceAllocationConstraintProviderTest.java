@@ -7,6 +7,7 @@ package com.mmxlabs.optimiser.common.dcproviders.impl.indexed;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -23,7 +24,7 @@ public class ResourceAllocationConstraintProviderTest {
 
 		Assert.assertNull(provider.getAllowedResources(obj1));
 
-		final Collection<IResource> resources = Collections.emptyList();
+		final @NonNull Collection<@NonNull IResource> resources = Collections.emptyList();
 
 		provider.setAllowedResources(obj1, resources);
 

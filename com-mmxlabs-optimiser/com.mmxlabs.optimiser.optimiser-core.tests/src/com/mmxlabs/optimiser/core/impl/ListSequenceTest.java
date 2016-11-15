@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -30,7 +31,7 @@ public class ListSequenceTest {
 		final ISequenceElement object1 = Mockito.mock(ISequenceElement.class, "1");
 		final ISequenceElement object2 = Mockito.mock(ISequenceElement.class, "2");
 
-		final List<ISequenceElement> l = CollectionsUtil.makeArrayList(object1, object2);
+		final List<@NonNull ISequenceElement> l = CollectionsUtil.makeArrayList(object1, object2);
 		final ListSequence sequence = new ListSequence(l);
 
 		Assert.assertSame(object1, sequence.get(0));
@@ -50,7 +51,7 @@ public class ListSequenceTest {
 		final ISequenceElement object1 = Mockito.mock(ISequenceElement.class, "1");
 		final ISequenceElement object2 = Mockito.mock(ISequenceElement.class, "2");
 
-		final List<ISequenceElement> l = CollectionsUtil.makeArrayList(object1, object2);
+		final List<@NonNull ISequenceElement> l = CollectionsUtil.makeArrayList(object1, object2);
 		final ListSequence sequence = new ListSequence(l);
 
 		final Iterator<ISequenceElement> iterator = sequence.iterator();
@@ -72,7 +73,7 @@ public class ListSequenceTest {
 		final ISequenceElement object1 = Mockito.mock(ISequenceElement.class, "1");
 		final ISequenceElement object2 = Mockito.mock(ISequenceElement.class, "2");
 
-		final List<ISequenceElement> l = CollectionsUtil.makeArrayList(object1, object2);
+		final List<@NonNull ISequenceElement> l = CollectionsUtil.makeArrayList(object1, object2);
 		final ListSequence sequence = new ListSequence(l);
 
 		final Iterator<ISequenceElement> iterator = sequence.iterator();
@@ -89,7 +90,7 @@ public class ListSequenceTest {
 
 		final ISequenceElement element = Mockito.mock(ISequenceElement.class, "1");
 
-		final List<ISequenceElement> l = CollectionsUtil.makeArrayList(element);
+		final List<@NonNull ISequenceElement> l = CollectionsUtil.makeArrayList(element);
 		final ListSequence sequence = new ListSequence(l);
 
 		Assert.assertEquals(1, sequence.size());
@@ -99,7 +100,7 @@ public class ListSequenceTest {
 
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testGet_2() {
-		final List<ISequenceElement> emptyList = Collections.emptyList();
+		final List<@NonNull ISequenceElement> emptyList = Collections.emptyList();
 		final ListSequence sequence = new ListSequence(emptyList);
 
 		sequence.get(0);
@@ -107,7 +108,7 @@ public class ListSequenceTest {
 
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testGet_3() {
-		final List<ISequenceElement> emptyList = Collections.emptyList();
+		final List<@NonNull ISequenceElement> emptyList = Collections.emptyList();
 		final ListSequence sequence = new ListSequence(emptyList);
 
 		sequence.get(-1);
@@ -119,7 +120,7 @@ public class ListSequenceTest {
 		final ISequenceElement object1 = Mockito.mock(ISequenceElement.class, "1");
 		final ISequenceElement object2 = Mockito.mock(ISequenceElement.class, "2");
 
-		final List<ISequenceElement> l = CollectionsUtil.makeArrayList(object1, object2);
+		final List<@NonNull ISequenceElement> l = CollectionsUtil.makeArrayList(object1, object2);
 		final ListSequence sequence = new ListSequence(l);
 
 		final ISegment segment = sequence.getSegment(0, 2);
@@ -161,7 +162,7 @@ public class ListSequenceTest {
 		final ISequenceElement object1 = Mockito.mock(ISequenceElement.class, "1");
 		final ISequenceElement object2 = Mockito.mock(ISequenceElement.class, "2");
 
-		final List<ISequenceElement> l = CollectionsUtil.makeArrayList(object1, object2);
+		final List<@NonNull ISequenceElement> l = CollectionsUtil.makeArrayList(object1, object2);
 		final ListSequence sequence = new ListSequence(l);
 
 		sequence.getSegment(-1, 2);
@@ -173,7 +174,7 @@ public class ListSequenceTest {
 		final ISequenceElement object1 = Mockito.mock(ISequenceElement.class, "1");
 		final ISequenceElement object2 = Mockito.mock(ISequenceElement.class, "2");
 
-		final List<ISequenceElement> l = CollectionsUtil.makeArrayList(object1, object2);
+		final List<@NonNull ISequenceElement> l = CollectionsUtil.makeArrayList(object1, object2);
 		final ListSequence sequence = new ListSequence(l);
 
 		sequence.getSegment(0, 3);
@@ -183,7 +184,7 @@ public class ListSequenceTest {
 	public void testSize() {
 		final ISequenceElement element = Mockito.mock(ISequenceElement.class, "1");
 
-		final List<ISequenceElement> l = CollectionsUtil.makeArrayList(element);
+		final List<@NonNull ISequenceElement> l = CollectionsUtil.makeArrayList(element);
 		final ListSequence sequence = new ListSequence(l);
 
 		Assert.assertEquals(1, sequence.size());
@@ -191,7 +192,7 @@ public class ListSequenceTest {
 
 	@Test
 	public void testToString() {
-		final List<ISequenceElement> l = Collections.emptyList();
+		final List<@NonNull ISequenceElement> l = Collections.emptyList();
 		final ListSequence sequence = new ListSequence(l);
 		Assert.assertNotNull(sequence.toString());
 	}
@@ -202,7 +203,7 @@ public class ListSequenceTest {
 		final ISequenceElement object1 = Mockito.mock(ISequenceElement.class, "1");
 		final ISequenceElement object2 = Mockito.mock(ISequenceElement.class, "2");
 
-		final List<ISequenceElement> l = CollectionsUtil.makeArrayList(object1, object2);
+		final List<@NonNull ISequenceElement> l = CollectionsUtil.makeArrayList(object1, object2);
 		final ListSequence sequence = new ListSequence(l);
 
 		Assert.assertSame(object1, sequence.first());
@@ -211,7 +212,7 @@ public class ListSequenceTest {
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testFirst2() {
 
-		final List<ISequenceElement> l = CollectionsUtil.makeArrayList();
+		final List<@NonNull ISequenceElement> l = CollectionsUtil.makeArrayList();
 		final ListSequence sequence = new ListSequence(l);
 
 		sequence.first();
@@ -223,7 +224,7 @@ public class ListSequenceTest {
 		final ISequenceElement object1 = Mockito.mock(ISequenceElement.class, "1");
 		final ISequenceElement object2 = Mockito.mock(ISequenceElement.class, "2");
 
-		final List<ISequenceElement> l = CollectionsUtil.makeArrayList(object1, object2);
+		final List<@NonNull ISequenceElement> l = CollectionsUtil.makeArrayList(object1, object2);
 		final ListSequence sequence = new ListSequence(l);
 
 		Assert.assertSame(object2, sequence.last());
@@ -232,7 +233,7 @@ public class ListSequenceTest {
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testLast2() {
 
-		final List<ISequenceElement> l = CollectionsUtil.makeArrayList();
+		final List<@NonNull ISequenceElement> l = CollectionsUtil.makeArrayList();
 		final ListSequence sequence = new ListSequence(l);
 
 		sequence.last();
@@ -244,11 +245,11 @@ public class ListSequenceTest {
 		final ISequenceElement object1 = Mockito.mock(ISequenceElement.class, "1");
 		final ISequenceElement object2 = Mockito.mock(ISequenceElement.class, "2");
 
-		final List<ISequenceElement> l1 = CollectionsUtil.makeArrayList(object1, object2);
-		final List<ISequenceElement> l2 = CollectionsUtil.makeArrayList(object1, object2);
+		final List<@NonNull ISequenceElement> l1 = CollectionsUtil.makeArrayList(object1, object2);
+		final List<@NonNull ISequenceElement> l2 = CollectionsUtil.makeArrayList(object1, object2);
 
-		final List<ISequenceElement> l3 = CollectionsUtil.makeArrayList(object1);
-		final List<ISequenceElement> l4 = CollectionsUtil.makeArrayList(object2);
+		final List<@NonNull ISequenceElement> l3 = CollectionsUtil.makeArrayList(object1);
+		final List<@NonNull ISequenceElement> l4 = CollectionsUtil.makeArrayList(object2);
 
 		final ListSequence sequence0 = new ListSequence(l1);
 		// Same list as sequence0

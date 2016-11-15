@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.ga;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * Factory interface to generate new {@link Individual}
  * 
@@ -19,5 +21,5 @@ public interface IIndividualFactory<I extends Individual<I>> {
 	 * 
 	 * @return
 	 */
-	I createIndividual();
+	@NonNull I createIndividual();
 }

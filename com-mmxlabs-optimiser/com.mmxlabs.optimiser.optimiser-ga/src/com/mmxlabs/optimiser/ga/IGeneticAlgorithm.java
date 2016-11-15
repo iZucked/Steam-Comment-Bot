@@ -6,6 +6,9 @@ package com.mmxlabs.optimiser.ga;
 
 import java.util.Random;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 public interface IGeneticAlgorithm<I extends Individual<I>> {
 
 	void init();
@@ -22,7 +25,7 @@ public interface IGeneticAlgorithm<I extends Individual<I>> {
 	 * 
 	 * @param mutatable
 	 */
-	void mutate(final I[] mutatable);
+	void mutate(final I @NonNull [] mutatable);
 
 	/**
 	 * Apply the crossover op taking random individual from the good array and replacing all the element in the bad array.
@@ -30,7 +33,7 @@ public interface IGeneticAlgorithm<I extends Individual<I>> {
 	 * @param good
 	 * @param bad
 	 */
-	void crossover(final I[] good, final I[] bad);
+	void crossover(final I @NonNull [] good, final I @NonNull [] bad);
 
 	/**
 	 * Evaluate the population, storing the top N values in the good array and the remaining into the bad array.
@@ -44,7 +47,7 @@ public interface IGeneticAlgorithm<I extends Individual<I>> {
 	 * @param bad
 	 *            Array of population - N individuals
 	 */
-	void evaluate(final int N, final I[] population, final I[] good, final I[] bad);
+	void evaluate(final int N, final @NonNull I @NonNull [] population, final @NonNull I @NonNull [] good, final @NonNull I @NonNull [] bad);
 
 	/**
 	 * Returns the change of a mutation occurring
@@ -93,7 +96,7 @@ public interface IGeneticAlgorithm<I extends Individual<I>> {
 	 * 
 	 * @return
 	 */
-	I getBestIndividual();
+	@Nullable I getBestIndividual();
 
 	/**
 	 * Returns the current best fitness

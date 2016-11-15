@@ -45,14 +45,12 @@ public final class EvaluationProcessRegistry implements IEvaluationProcessRegist
 		factoriesByName.remove(factory.getName());
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	@NonNull
 	public Collection<String> getEvaluationProcessNames() {
 		return factoriesByName.keySet();
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	@NonNull
 	public Collection<IEvaluationProcessFactory> getEvaluationProcessFactories() {

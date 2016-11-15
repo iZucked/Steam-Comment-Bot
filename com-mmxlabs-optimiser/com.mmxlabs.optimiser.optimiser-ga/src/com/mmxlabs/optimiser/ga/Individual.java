@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.ga;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * Interface defining the individual to pass into the {@link IGeneticAlgorithm}. Implementations are assumed to be mutable.
  * 
@@ -14,5 +16,5 @@ package com.mmxlabs.optimiser.ga;
  */
 public interface Individual<I extends Individual<I>> extends Cloneable {
 
-	I clone();
+	@NonNull I clone();
 }

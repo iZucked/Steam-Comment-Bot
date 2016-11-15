@@ -25,16 +25,13 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
  */
 public final class AnnotatedSolution implements IAnnotatedSolution {
 
-	@NonNull
-	private final ISequences fullSequences;
+	private final @NonNull ISequences fullSequences;
 
-	private final IEvaluationState evaluationState;
+	private final @NonNull IEvaluationState evaluationState;
 
-	@NonNull
-	private final IElementAnnotationsMap elementAnnotations = new HashMapAnnotations();
+	private final @NonNull IElementAnnotationsMap elementAnnotations = new HashMapAnnotations();
 
-	@NonNull
-	private final Map<String, Object> generalAnnotations = new HashMap<String, Object>();
+	private final @NonNull Map<String, Object> generalAnnotations = new HashMap<>();
 
 	public AnnotatedSolution(@NonNull final ISequences fullSequences, @NonNull final IEvaluationState evaluationState) {
 		this.fullSequences = fullSequences;

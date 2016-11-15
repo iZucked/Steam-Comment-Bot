@@ -7,6 +7,9 @@ package com.mmxlabs.optimiser.ga.impl;
 import java.util.Random;
 import java.util.TreeSet;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.ga.IGeneticAlgorithm;
 import com.mmxlabs.optimiser.ga.IIndividualEvaluator;
 import com.mmxlabs.optimiser.ga.IIndividualFactory;
@@ -36,23 +39,23 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements IG
 	/**
 	 * Complete population
 	 */
-	private final I[] population;
+	private final @NonNull I @NonNull [] population;
 
 	/**
 	 * Subset of population which are good and to be retained. There are {@link #N} items.
 	 */
-	private final I[] good;
+	private final @NonNull I @NonNull [] good;
 
 	/**
 	 * Subset of population which are bad and are to be replaced with new members. There are {@link #population#length} - {@link #N} items.
 	 */
 
-	private final I[] bad;
+	private final @NonNull I @NonNull [] bad;
 
 	/**
 	 * The best individual found so far
 	 */
-	private I bestIndividual;
+	private @Nullable I bestIndividual;
 
 	/**
 	 * The fitness of the {@link #bestIndividual}.
@@ -67,9 +70,9 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements IG
 		this.individualFactory = individualFactory;
 		this.mutateThreshold = mutateThreshold;
 		this.N = topN;
-		this.population = (I[]) new Individual[numElements];
-		good = (I[]) new Individual[N];
-		bad = (I[]) new Individual[population.length - N];
+		this.population = (@NonNull I @NonNull []) new Individual[numElements];
+		this.good = (@NonNull I @NonNull []) new Individual[N];
+		this.bad = (@NonNull I @NonNull []) new Individual[population.length - N];
 	}
 
 	/*
@@ -84,7 +87,7 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements IG
 
 		// Reset best state to unknown
 		bestFitness = Long.MAX_VALUE;
-		bestIndividual = (I) null;
+		bestIndividual = null;
 
 		// Calculate initial population fitness - update best state and populate
 		// good/bad arrays
@@ -128,36 +131,36 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements IG
 	 * com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual[])
 	 */
 	@Override
-	public final void evaluate(final int N, final I[] population, final I[] good, final I[] bad) {
+	public final void evaluate(final int N, final @NonNull I @NonNull [] population, final @NonNull I @NonNull [] good, final @NonNull I @NonNull [] bad) {
 
 		int badIdx = 0;
 
 		// TODO: We could record this between iterations, and only evaluate the
 		// bad population?
-		final TreeSet<Tuple<I>> topN = new TreeSet<Tuple<I>>();
+		final TreeSet<Tuple<@NonNull I>> topN = new TreeSet<>();
 
 		long worstFitness = Long.MAX_VALUE;
 
 		for (int idx = 0; idx < population.length; ++idx) {
-			final I individual = population[idx];
+			final @NonNull I individual = population[idx];
 			final long f = individualEvaluator.evaluate(individual);
 
 			// Fill up the TreeSet until we have N entries..
 			if (topN.size() < N) {
-				topN.add(new Tuple<I>(individual, idx, f));
+				topN.add(new Tuple<>(individual, idx, f));
 				worstFitness = topN.last().f;
 
 				// .. then process the rest populating the bad array
 			} else if (f < worstFitness) {
 				// remove lowest entry..
-				final Tuple<I> lowest = topN.pollLast();
+				final Tuple<@NonNull I> lowest = topN.pollLast();
 
 				// .. and add it to the bad array as it is no longer a top N
 				// entry
 				bad[badIdx++] = lowest.i;
 
 				// Add new entry into set
-				topN.add(new Tuple<I>(individual, idx, f));
+				topN.add(new Tuple<@NonNull I>(individual, idx, f));
 
 				// Record new worst fitness
 				worstFitness = topN.last().f;
@@ -169,12 +172,12 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements IG
 
 		// Update the good array with top N individuals
 		int goodIdx = 0;
-		for (final Tuple<I> t : topN) {
+		for (final Tuple<@NonNull I> t : topN) {
 			good[goodIdx++] = t.i;
 		}
 
 		// Record best entry;
-		final Tuple<I> t = topN.first();
+		final Tuple<@NonNull I> t = topN.first();
 		if (t.f < bestFitness) {
 			bestIndividual = t.i.clone(); // have to clone, because sometimes we are adjusted elsewhere
 			bestFitness = t.f;
@@ -237,7 +240,7 @@ public abstract class AbstractGAAlgorithm<I extends Individual<I>> implements IG
 	 * @see com.mmxlabs.optimiser.ga.bytearray.IGeneticAlgorithm#getBestIndividual()
 	 */
 	@Override
-	public final I getBestIndividual() {
+	public final @Nullable I getBestIndividual() {
 		return bestIndividual;
 	}
 

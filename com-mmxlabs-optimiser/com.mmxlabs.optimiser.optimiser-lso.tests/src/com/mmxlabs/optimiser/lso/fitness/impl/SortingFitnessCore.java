@@ -54,7 +54,6 @@ public final class SortingFitnessCore implements IFitnessCore {
 		return true;
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	@NonNull
 	public Collection<IFitnessComponent> getFitnessComponents() {

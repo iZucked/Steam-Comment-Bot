@@ -12,7 +12,6 @@ import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 
-@SuppressWarnings("null")
 public class AnnotatedSolutionTest {
 
 	@Test

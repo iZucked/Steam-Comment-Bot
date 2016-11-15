@@ -64,7 +64,7 @@ public final class MatrixProviderFitnessCore implements IFitnessCore {
 	 */
 	private long oldFitness;
 
-	private final IFitnessComponent component;
+	private final @NonNull IFitnessComponent component;
 
 	public MatrixProviderFitnessCore(@NonNull final String componentName) {
 		component = new MatrixProviderFitnessComponent(componentName, this);

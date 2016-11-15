@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.logging.ILoggingDataStore;
 import com.mmxlabs.optimiser.common.logging.impl.EvaluationNumberKey;
@@ -322,7 +324,7 @@ public class LSOLogger implements ILoggingDataStore {
 		return failedEvaluatedConstraintsMovesMap.get(constraint).get(move).get();
 	}
 
-	public void logSequence(IModifiableSequences sequence) {
+	public void logSequence(@NonNull IModifiableSequences sequence) {
 		SequencesCounts count = seenSequencesCount.get(sequence);
 		if (count == null) {
 			count = new SequencesCounts(0);

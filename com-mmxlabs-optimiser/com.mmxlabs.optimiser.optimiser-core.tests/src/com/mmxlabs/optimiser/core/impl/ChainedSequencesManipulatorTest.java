@@ -10,7 +10,6 @@ import org.mockito.Mockito;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 
-@SuppressWarnings("null")
 public class ChainedSequencesManipulatorTest {
 
 	@Test

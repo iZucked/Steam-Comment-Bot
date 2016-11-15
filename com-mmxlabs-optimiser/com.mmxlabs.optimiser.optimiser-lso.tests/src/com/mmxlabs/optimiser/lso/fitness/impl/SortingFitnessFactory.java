@@ -20,7 +20,6 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
  */
 public final class SortingFitnessFactory implements IFitnessCoreFactory {
 
-	@SuppressWarnings("null")
 	@Override
 	@NonNull
 	public Collection<String> getFitnessComponentNames() {
