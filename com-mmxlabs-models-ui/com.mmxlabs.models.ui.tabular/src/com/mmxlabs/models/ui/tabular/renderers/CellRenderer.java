@@ -25,6 +25,7 @@ import org.eclipse.swt.graphics.TextLayout;
  * @author chris.gross@us.ibm.com
  * @since 2.0.0
  */
+@SuppressWarnings("restriction")
 public class CellRenderer extends GridCellRenderer {
 
 	int leftMargin = 4;
@@ -509,6 +510,7 @@ public class CellRenderer extends GridCellRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+
 	public void setTree(boolean tree) {
 		super.setTree(tree);
 

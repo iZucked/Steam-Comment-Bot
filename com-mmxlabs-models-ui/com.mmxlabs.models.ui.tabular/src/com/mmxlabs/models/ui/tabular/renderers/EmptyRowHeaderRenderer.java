@@ -6,7 +6,6 @@ package com.mmxlabs.models.ui.tabular.renderers;
 
 import org.eclipse.nebula.widgets.grid.AbstractRenderer;
 import org.eclipse.nebula.widgets.grid.Grid;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 

@@ -11,7 +11,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.TextLayout;
 
 import com.mmxlabs.models.ui.tabular.TableColourPalette;
 import com.mmxlabs.models.ui.tabular.TableColourPalette.ColourElements;
@@ -32,7 +31,7 @@ public class NoIndexRowHeaderRenderer extends AbstractRenderer {
 
 	int bottomMargin = 3;
 
-	private TextLayout textLayout;
+//	private TextLayout textLayout;
 
 	/**
 	 * {@inheritDoc}

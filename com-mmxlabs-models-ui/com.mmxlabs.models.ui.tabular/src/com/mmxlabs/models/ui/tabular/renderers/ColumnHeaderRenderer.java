@@ -27,6 +27,7 @@ import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
  * @author chris.gross@us.ibm.com
  * @since 2.0.0
  */
+@SuppressWarnings("restriction")
 public class ColumnHeaderRenderer extends GridHeaderRenderer {
 
 	int leftMargin = 6;
@@ -97,7 +98,7 @@ public class ColumnHeaderRenderer extends GridHeaderRenderer {
 		// set the font to be used to display the text.
 		gc.setFont(column.getHeaderFont());
 
-		boolean flat = true;//(column.getParent().getCellSelectionEnabled() && !column.getMoveable());
+		boolean flat = true;// (column.getParent().getCellSelectionEnabled() && !column.getMoveable());
 
 		boolean drawSelected = ((isMouseDown() && isHover()));
 

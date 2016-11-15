@@ -11,7 +11,7 @@ import com.mmxlabs.rcp.common.editors.IReasonProvider;
 
 public class SimpleReasonProvider implements IReasonProvider {
 
-	private final Throwable throwable;
+	private final @NonNull Throwable throwable;
 
 	public SimpleReasonProvider(@NonNull final Throwable throwable) {
 		this.throwable = throwable;

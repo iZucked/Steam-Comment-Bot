@@ -29,6 +29,7 @@ import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
  * @author chris.gross@us.ibm.com
  * @since 2.0.0
  */
+@SuppressWarnings("restriction")
 public class ColumnGroupHeaderRenderer extends GridHeaderRenderer {
 	int leftMargin = 6;
 

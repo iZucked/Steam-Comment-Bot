@@ -36,6 +36,7 @@ import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -301,7 +302,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter.isAssignableFrom(IPropertySheetPage.class)) {
@@ -526,7 +526,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 		}
 	}
 
-	protected void createErrorPage(final Throwable t) {
+	protected void createErrorPage(final @NonNull Throwable t) {
 		getContainer().setLayout(new FillLayout());
 
 		boolean expandTechnicalDetails = false;
