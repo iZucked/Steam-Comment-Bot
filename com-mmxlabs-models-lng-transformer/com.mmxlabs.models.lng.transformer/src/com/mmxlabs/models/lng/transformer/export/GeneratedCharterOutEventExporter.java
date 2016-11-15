@@ -62,8 +62,11 @@ public class GeneratedCharterOutEventExporter extends BaseAnnotationExporter {
 		generatedCharterOutEvent.setStart(modelEntityMap.getDateFromHours(event.getStartTime(), event.getPort()));
 		generatedCharterOutEvent.setEnd(modelEntityMap.getDateFromHours(event.getEndTime(), event.getPort()));
 		generatedCharterOutEvent.setRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(event.getCharterOutRevenue()));
-		
+
 		generatedCharterOutEvent.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(event.getCharterCost()));
+
+		generatedCharterOutEvent.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(event.getStartHeelInM3()));
+		generatedCharterOutEvent.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(event.getEndHeelInM3()));
 
 		return generatedCharterOutEvent;
 	}

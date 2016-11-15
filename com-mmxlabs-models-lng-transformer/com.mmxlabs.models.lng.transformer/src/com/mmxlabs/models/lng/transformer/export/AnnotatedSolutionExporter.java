@@ -8,7 +8,6 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +50,6 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -60,6 +58,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * A utility class for turning an annotated solution into some EMF representation, for the presentation layer.
@@ -168,8 +167,6 @@ public class AnnotatedSolutionExporter {
 
 		final Sequence fobSequence = factory.createSequence();
 		final Sequence desSequence = factory.createSequence();
-		final Map<String, Long> desFitnessMap = new LinkedHashMap<String, Long>();
-		final Map<String, Long> fobFitnessMap = new LinkedHashMap<String, Long>();
 
 		for (final IResource resource : resources) {
 			assert resource != null;
@@ -179,7 +176,7 @@ public class AnnotatedSolutionExporter {
 
 			boolean isFOBSequence = false;
 			boolean isDESSequence = false;
-
+			boolean isRoundTripSequence = false;
 			final ISequence sequence = annotatedSolution.getFullSequences().getSequence(resource);
 			final VolumeAllocatedSequence scheduledSequence = scheduledSequences.getScheduledSequenceForResource(resource);
 			switch (vesselAvailability.getVesselInstanceType()) {
@@ -209,7 +206,7 @@ public class AnnotatedSolutionExporter {
 				eSequence.setSequenceType(SequenceType.SPOT_VESSEL);
 				if (sequence.size() < 2) {
 					continue;
-                                }
+				}
 
 				eSequence.setCharterInMarket(modelEntityMap.getModelObjectNullChecked(vesselAvailability.getSpotCharterInMarket(), CharterInMarket.class));
 				eSequence.unsetVesselAvailability();
@@ -220,7 +217,7 @@ public class AnnotatedSolutionExporter {
 				if (sequence.size() < 2) {
 					continue;
 				}
-
+				isRoundTripSequence = true;
 				eSequence.setCharterInMarket(modelEntityMap.getModelObjectNullChecked(vesselAvailability.getSpotCharterInMarket(), CharterInMarket.class));
 				eSequence.unsetVesselAvailability();
 				eSequence.setSpotIndex(vesselAvailability.getSpotIndex());
@@ -235,42 +232,17 @@ public class AnnotatedSolutionExporter {
 				}
 			}
 
-			if (!(isDESSequence || isFOBSequence)) {
+			if (!(isDESSequence || isFOBSequence || isRoundTripSequence)) {
 				sequences.add(eSequence);
 			}
-			{
-				// set sequence fitness values
-				@SuppressWarnings("unchecked")
-				final Map<IResource, Map<String, Long>> sequenceFitnesses = annotatedSolution.getGeneralAnnotation(SchedulerConstants.G_AI_fitnessPerRoute, Map.class);
 
-				if (sequenceFitnesses != null) {
-					final EList<Fitness> eSequenceFitness = eSequence.getFitnesses();
-					final Map<String, Long> sequenceFitness = sequenceFitnesses.get(resource);
-					for (final Map.Entry<String, Long> e : sequenceFitness.entrySet()) {
-
-						if (isDESSequence || isFOBSequence) {
-							final Map<String, Long> m = isFOBSequence ? fobFitnessMap : desFitnessMap;
-							long value = e.getValue();
-							if (m.containsKey(e.getKey())) {
-								value += m.get(e.getKey()).longValue();
-							}
-							m.put(e.getKey(), value);
-						} else {
-							final Fitness sf = ScheduleFactory.eINSTANCE.createFitness();
-							sf.setName(e.getKey());
-							sf.setFitnessValue(e.getValue());
-							eSequenceFitness.add(sf);
-						}
-					}
-
-				}
-			}
-
-			final EList<Event> events;
+			final List<Event> events;
 			if (isDESSequence) {
 				events = desSequence.getEvents();
 			} else if (isFOBSequence) {
 				events = fobSequence.getEvents();
+			} else if (isRoundTripSequence) {
+				events = new LinkedList<>();
 			} else {
 				events = eSequence.getEvents();
 			}
@@ -337,6 +309,9 @@ public class AnnotatedSolutionExporter {
 
 			final List<Event> eventsForElement = new ArrayList<Event>();
 			final List<IPortSlot> sequencePortSlots = scheduledSequence.getSequenceSlots();
+
+			// Flag for round trip cargoes. Split sequences at a discharge -> Load segment.
+			boolean lastEventWasDischarge = true;
 			for (int i = 0; i < sequencePortSlots.size(); ++i) {
 				final IPortSlot scheduledSlot = sequencePortSlots.get(i);
 				assert scheduledSlot != null;
@@ -351,14 +326,47 @@ public class AnnotatedSolutionExporter {
 					if (result != null) {
 						eventsForElement.add(result);
 					}
-
 				}
 
 				// this is messy, but we want to be sure stuff is in the right
 				// order or it won't make any sense.
 				Collections.sort(eventsForElement, eventComparator);
+
+				final boolean thisEventIsload = scheduledSlot.getPortType() == PortType.Load;
+
+				if (isRoundTripSequence && lastEventWasDischarge && thisEventIsload) {
+					if (!events.isEmpty()) {
+
+						// Setup next/prev events.
+						Event prev = null;
+						for (final Event event : events) {
+
+							if (prev != null) {
+								prev.setNextEvent(event);
+								event.setPreviousEvent(prev);
+							}
+							prev = event;
+						}
+
+						// Create new sequence, copying original data
+						final Sequence thisSequence = factory.createSequence();
+
+						thisSequence.setSequenceType(SequenceType.ROUND_TRIP);
+
+						thisSequence.setCharterInMarket(eSequence.getCharterInMarket());
+						thisSequence.unsetVesselAvailability();
+						thisSequence.setSpotIndex(eSequence.getSpotIndex());
+						thisSequence.getEvents().addAll(events);
+						events.clear();
+
+						sequences.add(thisSequence);
+					}
+				}
+
 				events.addAll(eventsForElement);
 				eventsForElement.clear();
+
+				lastEventWasDischarge = scheduledSlot.getPortType() == PortType.Discharge;
 			}
 
 			// Setup next/prev events.
@@ -371,30 +379,29 @@ public class AnnotatedSolutionExporter {
 				}
 				prev = event;
 			}
+			if (isRoundTripSequence) {
+				if (!events.isEmpty()) {
+					// Create new sequence, copying original data
+					final Sequence thisSequence = factory.createSequence();
+
+					thisSequence.setSequenceType(SequenceType.ROUND_TRIP);
+
+					thisSequence.setCharterInMarket(eSequence.getCharterInMarket());
+					thisSequence.unsetVesselAvailability();
+					thisSequence.setSpotIndex(eSequence.getSpotIndex());
+					thisSequence.getEvents().addAll(events);
+					events.clear();
+
+					sequences.add(thisSequence);
+				}
+			}
 		}
 
 		if (!fobSequence.getEvents().isEmpty()) {
 			sequences.add(fobSequence);
-
-			final EList<Fitness> fobSequenceFitness = fobSequence.getFitnesses();
-			for (final Map.Entry<String, Long> e : fobFitnessMap.entrySet()) {
-
-				final Fitness sf = ScheduleFactory.eINSTANCE.createFitness();
-				sf.setName(e.getKey());
-				sf.setFitnessValue(e.getValue());
-				fobSequenceFitness.add(sf);
-			}
 		}
 		if (!desSequence.getEvents().isEmpty()) {
 			sequences.add(desSequence);
-			final EList<Fitness> desSequenceFitness = desSequence.getFitnesses();
-			for (final Map.Entry<String, Long> e : desFitnessMap.entrySet()) {
-
-				final Fitness sf = ScheduleFactory.eINSTANCE.createFitness();
-				sf.setName(e.getKey());
-				sf.setFitnessValue(e.getValue());
-				desSequenceFitness.add(sf);
-			}
 		}
 
 		// Fix up start events with no port.

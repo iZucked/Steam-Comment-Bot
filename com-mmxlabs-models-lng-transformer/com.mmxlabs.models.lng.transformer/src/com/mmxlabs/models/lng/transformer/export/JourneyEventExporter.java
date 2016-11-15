@@ -64,6 +64,8 @@ public class JourneyEventExporter extends BaseAnnotationExporter {
 		// set up hire cost
 		journey.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(event.getCharterCost()));
 		
+		journey.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(event.getStartHeelInM3()));
+		journey.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(event.getEndHeelInM3()));
 		return journey;
 	}
 }
