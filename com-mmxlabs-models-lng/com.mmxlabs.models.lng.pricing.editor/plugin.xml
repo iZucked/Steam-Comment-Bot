@@ -278,11 +278,12 @@
           targetEClass="com.mmxlabs.models.lng.pricing.CommodityIndex">
     </factory>
     <factory
-          ID="com.mmxlabs.models.lng.pricing.editor.factory1"
+          ID="com.mmxlabs.models.lng.pricing.editor.currencyIndexFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Currency Index"
+          replacementEClass="com.mmxlabs.models.lng.pricing.DataIndex"
           replacementEReference="data"
-          targetEClass="com.mmxlabs.models.lng.pricing.editor.EObject1">
+          targetEClass="com.mmxlabs.models.lng.pricing.CurrencyIndex">
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.pricing.editor.factory.UnitConversion"
@@ -304,6 +305,12 @@
           id="com.mmxlabs.models.lng.pricing.presentation.composites.PanamaCanalTariffComponentHelper"
           inheritable="true"
           modelClass="com.mmxlabs.models.lng.pricing.PanamaCanalTariff">
+    </componentHelper>
+    <componentHelper
+          helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.SuezCanalTariffComponentHelper"
+          id="com.mmxlabs.models.lng.pricing.SuezCanalTariff"
+          inheritable="true"
+          modelClass="com.mmxlabs.models.lng.pricing.SuezCanalTariff">
     </componentHelper>
  </extension>
  <extension
@@ -384,6 +391,18 @@
                </test>
             </visibleWhen>
          </command>
+         <command
+               commandId="com.mmxlabs.models.lng.pricing.editor.commands.EditSuezCanalTariff"
+               style="push">
+               <visibleWhen
+                  checkEnabled="false">
+               <test
+                     args="features:suez-canal"
+                     forcePluginActivation="true"
+                     property="com.mmxlabs.license.features.enablement">
+               </test>
+            </visibleWhen>
+         </command>
       </menuContribution>
    </extension>
    <extension
@@ -393,6 +412,32 @@
             id="com.mmxlabs.models.lng.pricing.editor.commands.EditPanamaCanalTariff"
             name="Edit Panama Canal Tariff">
       </command>
+      <command
+            defaultHandler="com.mmxlabs.models.lng.pricing.ui.editorpart.SuezCanalTariffHandler"
+            id="com.mmxlabs.models.lng.pricing.editor.commands.EditSuezCanalTariff"
+            name="Edit Suez Canal Tariff">
+      </command>
+   </extension>
+   <extension
+         point="com.mmxlabs.models.ui.editorfactories">
+      <editorFactory
+            factoryClass="com.mmxlabs.models.lng.pricing.ui.displaycomposites.SuezCanalTariffBandInlineEditorFactory"
+            id="com.mmxlabs.models.lng.pricing.ui.displaycomposites.SuezCanalTariffBandInlineEditorFactory">
+         <FeatureAnyOf>
+            <EClassExtends
+                  EClass="com.mmxlabs.models.lng.pricing.SuezCanalTariffBand">
+            </EClassExtends>
+         </FeatureAnyOf>
+      </editorFactory>
+      <editorFactory
+            factoryClass="com.mmxlabs.models.lng.pricing.ui.displaycomposites.SuezCanalTariffTugBandInlineEditorFactory"
+            id="com.mmxlabs.models.lng.pricing.ui.displaycomposites.SuezCanalTariffTugBandInlineEditorFactory">
+         <FeatureAnyOf>
+            <EClassExtends
+                  EClass="com.mmxlabs.models.lng.pricing.SuezCanalTugBand">
+            </EClassExtends>
+         </FeatureAnyOf>
+      </editorFactory>
    </extension>
 
 </plugin>

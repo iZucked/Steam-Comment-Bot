@@ -18,6 +18,7 @@ public class LookupData {
 	public 	Map<String, CommodityIndex> commodityMap = new HashMap<>();
 	public Map<String, CurrencyIndex> currencyMap = new HashMap<>();
 	public Map<String, UnitConversion> conversionMap = new HashMap<>();
+	public Map<String, UnitConversion> reverseConversionMap = new HashMap<>();
 
 	public Map<String, Node> expressionCache = new HashMap<>();
 	public Map<String, MarkedUpNode> expressionCache2 = new HashMap<>();

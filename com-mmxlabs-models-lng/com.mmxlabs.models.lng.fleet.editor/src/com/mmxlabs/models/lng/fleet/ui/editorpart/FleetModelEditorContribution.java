@@ -63,7 +63,7 @@ public class FleetModelEditorContribution extends BaseJointModelEditorContributi
 			final EObject target = dcsd.getTarget();
 
 			if (target instanceof BaseFuel || target instanceof BaseFuelCost) {
-				 
+			
 				final EModelService modelService = editorPart.getSite().getService(EModelService.class);
 				final EPartService partService = editorPart.getSite().getService(EPartService.class);
 				final MApplication application = editorPart.getSite().getService(MApplication.class);

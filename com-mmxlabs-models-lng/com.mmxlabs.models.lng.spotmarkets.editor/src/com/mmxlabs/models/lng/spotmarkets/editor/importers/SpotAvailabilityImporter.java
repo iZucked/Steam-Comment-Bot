@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
 import com.mmxlabs.common.csv.IFieldMap;
+import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.importers.DataIndexImporter;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.util.importer.IMMXExportContext;
@@ -29,6 +30,8 @@ public class SpotAvailabilityImporter extends DefaultClassImporter {
 		final EReference reference = SpotMarketsPackage.Literals.SPOT_AVAILABILITY__CURVE;
 		final String lcrn = reference.getName().toLowerCase();
 
+		// Always set a default reference
+		instance.eSet(reference, PricingFactory.eINSTANCE.createDataIndex());
 		final IFieldMap subKeys = row.getSubMap(lcrn + DOT);
 		if (!subKeys.isEmpty()) {
 			final DataIndexImporter classImporter = new DataIndexImporter();
@@ -42,7 +45,6 @@ public class SpotAvailabilityImporter extends DefaultClassImporter {
 
 	@Override
 	protected void exportReference(EObject object, EReference reference, Map<String, String> result, IMMXExportContext context) {
-		// TODO Auto-generated method stub
 		super.exportReference(object, reference, result, context);
 	}
 }

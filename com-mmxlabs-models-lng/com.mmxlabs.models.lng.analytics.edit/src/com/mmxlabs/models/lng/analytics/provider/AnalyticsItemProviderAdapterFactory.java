@@ -27,6 +27,7 @@ import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
+import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.util.AnalyticsAdapterFactory;
 
@@ -409,6 +410,535 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.BuyMarket} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BuyMarketItemProvider buyMarketItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.BuyMarket}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBuyMarketAdapter() {
+		if (buyMarketItemProvider == null) {
+			buyMarketItemProvider = new BuyMarketItemProvider(this);
+		}
+
+		return buyMarketItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SellMarket} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SellMarketItemProvider sellMarketItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.SellMarket}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSellMarketAdapter() {
+		if (sellMarketItemProvider == null) {
+			sellMarketItemProvider = new SellMarketItemProvider(this);
+		}
+
+		return sellMarketItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.BuyReference} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BuyReferenceItemProvider buyReferenceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.BuyReference}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBuyReferenceAdapter() {
+		if (buyReferenceItemProvider == null) {
+			buyReferenceItemProvider = new BuyReferenceItemProvider(this);
+		}
+
+		return buyReferenceItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SellReference} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SellReferenceItemProvider sellReferenceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.SellReference}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSellReferenceAdapter() {
+		if (sellReferenceItemProvider == null) {
+			sellReferenceItemProvider = new SellReferenceItemProvider(this);
+		}
+
+		return sellReferenceItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.BaseCaseRow} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BaseCaseRowItemProvider baseCaseRowItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.BaseCaseRow}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBaseCaseRowAdapter() {
+		if (baseCaseRowItemProvider == null) {
+			baseCaseRowItemProvider = new BaseCaseRowItemProvider(this);
+		}
+
+		return baseCaseRowItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.PartialCaseRow} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PartialCaseRowItemProvider partialCaseRowItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.PartialCaseRow}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPartialCaseRowAdapter() {
+		if (partialCaseRowItemProvider == null) {
+			partialCaseRowItemProvider = new PartialCaseRowItemProvider(this);
+		}
+
+		return partialCaseRowItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ShippingOption} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ShippingOptionItemProvider shippingOptionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ShippingOption}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createShippingOptionAdapter() {
+		if (shippingOptionItemProvider == null) {
+			shippingOptionItemProvider = new ShippingOptionItemProvider(this);
+		}
+
+		return shippingOptionItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.FleetShippingOption} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected FleetShippingOptionItemProvider fleetShippingOptionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.FleetShippingOption}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createFleetShippingOptionAdapter() {
+		if (fleetShippingOptionItemProvider == null) {
+			fleetShippingOptionItemProvider = new FleetShippingOptionItemProvider(this);
+		}
+
+		return fleetShippingOptionItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected OptionalAvailabilityShippingOptionItemProvider optionalAvailabilityShippingOptionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createOptionalAvailabilityShippingOptionAdapter() {
+		if (optionalAvailabilityShippingOptionItemProvider == null) {
+			optionalAvailabilityShippingOptionItemProvider = new OptionalAvailabilityShippingOptionItemProvider(this);
+		}
+
+		return optionalAvailabilityShippingOptionItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.RoundTripShippingOption} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected RoundTripShippingOptionItemProvider roundTripShippingOptionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.RoundTripShippingOption}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createRoundTripShippingOptionAdapter() {
+		if (roundTripShippingOptionItemProvider == null) {
+			roundTripShippingOptionItemProvider = new RoundTripShippingOptionItemProvider(this);
+		}
+
+		return roundTripShippingOptionItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.NominatedShippingOption} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NominatedShippingOptionItemProvider nominatedShippingOptionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.NominatedShippingOption}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createNominatedShippingOptionAdapter() {
+		if (nominatedShippingOptionItemProvider == null) {
+			nominatedShippingOptionItemProvider = new NominatedShippingOptionItemProvider(this);
+		}
+
+		return nominatedShippingOptionItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.AnalysisResultRow} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected AnalysisResultRowItemProvider analysisResultRowItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.AnalysisResultRow}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createAnalysisResultRowAdapter() {
+		if (analysisResultRowItemProvider == null) {
+			analysisResultRowItemProvider = new AnalysisResultRowItemProvider(this);
+		}
+
+		return analysisResultRowItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ResultContainer} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ResultContainerItemProvider resultContainerItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ResultContainer}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createResultContainerAdapter() {
+		if (resultContainerItemProvider == null) {
+			resultContainerItemProvider = new ResultContainerItemProvider(this);
+		}
+
+		return resultContainerItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.AnalysisResultDetail} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected AnalysisResultDetailItemProvider analysisResultDetailItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.AnalysisResultDetail}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createAnalysisResultDetailAdapter() {
+		if (analysisResultDetailItemProvider == null) {
+			analysisResultDetailItemProvider = new AnalysisResultDetailItemProvider(this);
+		}
+
+		return analysisResultDetailItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ProfitAndLossResult} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ProfitAndLossResultItemProvider profitAndLossResultItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ProfitAndLossResult}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createProfitAndLossResultAdapter() {
+		if (profitAndLossResultItemProvider == null) {
+			profitAndLossResultItemProvider = new ProfitAndLossResultItemProvider(this);
+		}
+
+		return profitAndLossResultItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.BreakEvenResult} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BreakEvenResultItemProvider breakEvenResultItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.BreakEvenResult}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBreakEvenResultAdapter() {
+		if (breakEvenResultItemProvider == null) {
+			breakEvenResultItemProvider = new BreakEvenResultItemProvider(this);
+		}
+
+		return breakEvenResultItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ModeOptionRule} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ModeOptionRuleItemProvider modeOptionRuleItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ModeOptionRule}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createModeOptionRuleAdapter() {
+		if (modeOptionRuleItemProvider == null) {
+			modeOptionRuleItemProvider = new ModeOptionRuleItemProvider(this);
+		}
+
+		return modeOptionRuleItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected OptionAnalysisModelItemProvider optionAnalysisModelItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createOptionAnalysisModelAdapter() {
+		if (optionAnalysisModelItemProvider == null) {
+			optionAnalysisModelItemProvider = new OptionAnalysisModelItemProvider(this);
+		}
+
+		return optionAnalysisModelItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ResultSet} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ResultSetItemProvider resultSetItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ResultSet}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createResultSetAdapter() {
+		if (resultSetItemProvider == null) {
+			resultSetItemProvider = new ResultSetItemProvider(this);
+		}
+
+		return resultSetItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.BaseCase} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BaseCaseItemProvider baseCaseItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.BaseCase}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBaseCaseAdapter() {
+		if (baseCaseItemProvider == null) {
+			baseCaseItemProvider = new BaseCaseItemProvider(this);
+		}
+
+		return baseCaseItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.PartialCase} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PartialCaseItemProvider partialCaseItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.PartialCase}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPartialCaseAdapter() {
+		if (partialCaseItemProvider == null) {
+			partialCaseItemProvider = new PartialCaseItemProvider(this);
+		}
+
+		return partialCaseItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.MultipleResultGrouper} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MultipleResultGrouperItemProvider multipleResultGrouperItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.MultipleResultGrouper}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMultipleResultGrouperAdapter() {
+		if (multipleResultGrouperItemProvider == null) {
+			multipleResultGrouperItemProvider = new MultipleResultGrouperItemProvider(this);
+		}
+
+		return multipleResultGrouperItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.MultipleResultGrouperRow} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MultipleResultGrouperRowItemProvider multipleResultGrouperRowItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.MultipleResultGrouperRow}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMultipleResultGrouperRowAdapter() {
+		if (multipleResultGrouperRowItemProvider == null) {
+			multipleResultGrouperRowItemProvider = new MultipleResultGrouperRowItemProvider(this);
+		}
+
+		return multipleResultGrouperRowItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -556,6 +1086,29 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (provisionalCargoItemProvider != null) provisionalCargoItemProvider.dispose();
 		if (buyOpportunityItemProvider != null) buyOpportunityItemProvider.dispose();
 		if (sellOpportunityItemProvider != null) sellOpportunityItemProvider.dispose();
+		if (buyMarketItemProvider != null) buyMarketItemProvider.dispose();
+		if (sellMarketItemProvider != null) sellMarketItemProvider.dispose();
+		if (buyReferenceItemProvider != null) buyReferenceItemProvider.dispose();
+		if (sellReferenceItemProvider != null) sellReferenceItemProvider.dispose();
+		if (baseCaseRowItemProvider != null) baseCaseRowItemProvider.dispose();
+		if (partialCaseRowItemProvider != null) partialCaseRowItemProvider.dispose();
+		if (shippingOptionItemProvider != null) shippingOptionItemProvider.dispose();
+		if (fleetShippingOptionItemProvider != null) fleetShippingOptionItemProvider.dispose();
+		if (optionalAvailabilityShippingOptionItemProvider != null) optionalAvailabilityShippingOptionItemProvider.dispose();
+		if (roundTripShippingOptionItemProvider != null) roundTripShippingOptionItemProvider.dispose();
+		if (nominatedShippingOptionItemProvider != null) nominatedShippingOptionItemProvider.dispose();
+		if (analysisResultRowItemProvider != null) analysisResultRowItemProvider.dispose();
+		if (resultContainerItemProvider != null) resultContainerItemProvider.dispose();
+		if (analysisResultDetailItemProvider != null) analysisResultDetailItemProvider.dispose();
+		if (profitAndLossResultItemProvider != null) profitAndLossResultItemProvider.dispose();
+		if (breakEvenResultItemProvider != null) breakEvenResultItemProvider.dispose();
+		if (modeOptionRuleItemProvider != null) modeOptionRuleItemProvider.dispose();
+		if (optionAnalysisModelItemProvider != null) optionAnalysisModelItemProvider.dispose();
+		if (resultSetItemProvider != null) resultSetItemProvider.dispose();
+		if (baseCaseItemProvider != null) baseCaseItemProvider.dispose();
+		if (partialCaseItemProvider != null) partialCaseItemProvider.dispose();
+		if (multipleResultGrouperItemProvider != null) multipleResultGrouperItemProvider.dispose();
+		if (multipleResultGrouperRowItemProvider != null) multipleResultGrouperRowItemProvider.dispose();
 	}
 
 }

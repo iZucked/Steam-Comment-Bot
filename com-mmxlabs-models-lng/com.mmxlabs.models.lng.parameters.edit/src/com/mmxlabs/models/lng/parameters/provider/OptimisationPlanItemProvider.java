@@ -217,7 +217,7 @@ public class OptimisationPlanItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(ParametersPackage.Literals.OPTIMISATION_PLAN__STAGES,
-				 ParametersFactory.eINSTANCE.createBreakEvenOptmisationStage()));
+				 ParametersFactory.eINSTANCE.createBreakEvenOptimisationStage()));
 
 		newChildDescriptors.add
 			(createChildParameter

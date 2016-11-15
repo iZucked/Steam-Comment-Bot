@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.analytics.impl;
 
+import com.mmxlabs.models.lng.analytics.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -87,6 +88,29 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.PROVISIONAL_CARGO: return createProvisionalCargo();
 			case AnalyticsPackage.BUY_OPPORTUNITY: return createBuyOpportunity();
 			case AnalyticsPackage.SELL_OPPORTUNITY: return createSellOpportunity();
+			case AnalyticsPackage.BUY_MARKET: return createBuyMarket();
+			case AnalyticsPackage.SELL_MARKET: return createSellMarket();
+			case AnalyticsPackage.BUY_REFERENCE: return createBuyReference();
+			case AnalyticsPackage.SELL_REFERENCE: return createSellReference();
+			case AnalyticsPackage.BASE_CASE_ROW: return createBaseCaseRow();
+			case AnalyticsPackage.PARTIAL_CASE_ROW: return createPartialCaseRow();
+			case AnalyticsPackage.SHIPPING_OPTION: return createShippingOption();
+			case AnalyticsPackage.FLEET_SHIPPING_OPTION: return createFleetShippingOption();
+			case AnalyticsPackage.OPTIONAL_AVAILABILITY_SHIPPING_OPTION: return createOptionalAvailabilityShippingOption();
+			case AnalyticsPackage.ROUND_TRIP_SHIPPING_OPTION: return createRoundTripShippingOption();
+			case AnalyticsPackage.NOMINATED_SHIPPING_OPTION: return createNominatedShippingOption();
+			case AnalyticsPackage.ANALYSIS_RESULT_ROW: return createAnalysisResultRow();
+			case AnalyticsPackage.RESULT_CONTAINER: return createResultContainer();
+			case AnalyticsPackage.ANALYSIS_RESULT_DETAIL: return createAnalysisResultDetail();
+			case AnalyticsPackage.PROFIT_AND_LOSS_RESULT: return createProfitAndLossResult();
+			case AnalyticsPackage.BREAK_EVEN_RESULT: return createBreakEvenResult();
+			case AnalyticsPackage.MODE_OPTION_RULE: return createModeOptionRule();
+			case AnalyticsPackage.OPTION_ANALYSIS_MODEL: return createOptionAnalysisModel();
+			case AnalyticsPackage.RESULT_SET: return createResultSet();
+			case AnalyticsPackage.BASE_CASE: return createBaseCase();
+			case AnalyticsPackage.PARTIAL_CASE: return createPartialCase();
+			case AnalyticsPackage.MULTIPLE_RESULT_GROUPER: return createMultipleResultGrouper();
+			case AnalyticsPackage.MULTIPLE_RESULT_GROUPER_ROW: return createMultipleResultGrouperRow();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -102,6 +126,8 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 		switch (eDataType.getClassifierID()) {
 			case AnalyticsPackage.DESTINATION_TYPE:
 				return createDestinationTypeFromString(eDataType, initialValue);
+			case AnalyticsPackage.VOLUME_MODE:
+				return createVolumeModeFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -117,6 +143,8 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 		switch (eDataType.getClassifierID()) {
 			case AnalyticsPackage.DESTINATION_TYPE:
 				return convertDestinationTypeToString(eDataType, instanceValue);
+			case AnalyticsPackage.VOLUME_MODE:
+				return convertVolumeModeToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -281,6 +309,236 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public BuyMarket createBuyMarket() {
+		BuyMarketImpl buyMarket = new BuyMarketImpl();
+		return buyMarket;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SellMarket createSellMarket() {
+		SellMarketImpl sellMarket = new SellMarketImpl();
+		return sellMarket;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BuyReference createBuyReference() {
+		BuyReferenceImpl buyReference = new BuyReferenceImpl();
+		return buyReference;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SellReference createSellReference() {
+		SellReferenceImpl sellReference = new SellReferenceImpl();
+		return sellReference;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseCaseRow createBaseCaseRow() {
+		BaseCaseRowImpl baseCaseRow = new BaseCaseRowImpl();
+		return baseCaseRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PartialCaseRow createPartialCaseRow() {
+		PartialCaseRowImpl partialCaseRow = new PartialCaseRowImpl();
+		return partialCaseRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ShippingOption createShippingOption() {
+		ShippingOptionImpl shippingOption = new ShippingOptionImpl();
+		return shippingOption;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public FleetShippingOption createFleetShippingOption() {
+		FleetShippingOptionImpl fleetShippingOption = new FleetShippingOptionImpl();
+		return fleetShippingOption;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public OptionalAvailabilityShippingOption createOptionalAvailabilityShippingOption() {
+		OptionalAvailabilityShippingOptionImpl optionalAvailabilityShippingOption = new OptionalAvailabilityShippingOptionImpl();
+		return optionalAvailabilityShippingOption;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public RoundTripShippingOption createRoundTripShippingOption() {
+		RoundTripShippingOptionImpl roundTripShippingOption = new RoundTripShippingOptionImpl();
+		return roundTripShippingOption;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NominatedShippingOption createNominatedShippingOption() {
+		NominatedShippingOptionImpl nominatedShippingOption = new NominatedShippingOptionImpl();
+		return nominatedShippingOption;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AnalysisResultRow createAnalysisResultRow() {
+		AnalysisResultRowImpl analysisResultRow = new AnalysisResultRowImpl();
+		return analysisResultRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ResultContainer createResultContainer() {
+		ResultContainerImpl resultContainer = new ResultContainerImpl();
+		return resultContainer;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AnalysisResultDetail createAnalysisResultDetail() {
+		AnalysisResultDetailImpl analysisResultDetail = new AnalysisResultDetailImpl();
+		return analysisResultDetail;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ProfitAndLossResult createProfitAndLossResult() {
+		ProfitAndLossResultImpl profitAndLossResult = new ProfitAndLossResultImpl();
+		return profitAndLossResult;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BreakEvenResult createBreakEvenResult() {
+		BreakEvenResultImpl breakEvenResult = new BreakEvenResultImpl();
+		return breakEvenResult;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ModeOptionRule createModeOptionRule() {
+		ModeOptionRuleImpl modeOptionRule = new ModeOptionRuleImpl();
+		return modeOptionRule;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public OptionAnalysisModel createOptionAnalysisModel() {
+		OptionAnalysisModelImpl optionAnalysisModel = new OptionAnalysisModelImpl();
+		return optionAnalysisModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ResultSet createResultSet() {
+		ResultSetImpl resultSet = new ResultSetImpl();
+		return resultSet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseCase createBaseCase() {
+		BaseCaseImpl baseCase = new BaseCaseImpl();
+		return baseCase;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PartialCase createPartialCase() {
+		PartialCaseImpl partialCase = new PartialCaseImpl();
+		return partialCase;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MultipleResultGrouper createMultipleResultGrouper() {
+		MultipleResultGrouperImpl multipleResultGrouper = new MultipleResultGrouperImpl();
+		return multipleResultGrouper;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MultipleResultGrouperRow createMultipleResultGrouperRow() {
+		MultipleResultGrouperRowImpl multipleResultGrouperRow = new MultipleResultGrouperRowImpl();
+		return multipleResultGrouperRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public DestinationType createDestinationTypeFromString(EDataType eDataType, String initialValue) {
 		DestinationType result = DestinationType.get(initialValue);
 		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
@@ -293,6 +551,26 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * @generated
 	 */
 	public String convertDestinationTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VolumeMode createVolumeModeFromString(EDataType eDataType, String initialValue) {
+		VolumeMode result = VolumeMode.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertVolumeModeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

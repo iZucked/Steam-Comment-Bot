@@ -162,6 +162,8 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 				return createCapacityViolationTypeFromString(eDataType, initialValue);
 			case SchedulePackage.PORT_VISIT_LATENESS_TYPE:
 				return createPortVisitLatenessTypeFromString(eDataType, initialValue);
+			case SchedulePackage.SLOT_ALLOCATION_TYPE:
+				return createSlotAllocationTypeFromString(eDataType, initialValue);
 			case SchedulePackage.CALENDAR:
 				return createCalendarFromString(eDataType, initialValue);
 			case SchedulePackage.ITERABLE:
@@ -191,6 +193,8 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 				return convertCapacityViolationTypeToString(eDataType, instanceValue);
 			case SchedulePackage.PORT_VISIT_LATENESS_TYPE:
 				return convertPortVisitLatenessTypeToString(eDataType, instanceValue);
+			case SchedulePackage.SLOT_ALLOCATION_TYPE:
+				return convertSlotAllocationTypeToString(eDataType, instanceValue);
 			case SchedulePackage.CALENDAR:
 				return convertCalendarToString(eDataType, instanceValue);
 			case SchedulePackage.ITERABLE:
@@ -619,6 +623,26 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * @generated
 	 */
 	public String convertPortVisitLatenessTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SlotAllocationType createSlotAllocationTypeFromString(EDataType eDataType, String initialValue) {
+		SlotAllocationType result = SlotAllocationType.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertSlotAllocationTypeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

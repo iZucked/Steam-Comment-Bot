@@ -40,6 +40,9 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.pricing.SuezCanalTariff;
+import com.mmxlabs.models.lng.pricing.SuezCanalTariffBand;
+import com.mmxlabs.models.lng.pricing.SuezCanalTugBand;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -204,6 +207,27 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	private EClass panamaCanalTariffBandEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass suezCanalTugBandEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass suezCanalTariffEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass suezCanalTariffBandEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -687,6 +711,15 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getCostModel_SuezCanalTariff() {
+		return (EReference)costModelEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getPortsPriceMap() {
 		return portsPriceMapEClass;
 	}
@@ -903,6 +936,168 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getSuezCanalTugBand() {
+		return suezCanalTugBandEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSuezCanalTugBand_Tugs() {
+		return (EAttribute)suezCanalTugBandEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSuezCanalTugBand_BandStart() {
+		return (EAttribute)suezCanalTugBandEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSuezCanalTugBand_BandEnd() {
+		return (EAttribute)suezCanalTugBandEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getSuezCanalTariff() {
+		return suezCanalTariffEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSuezCanalTariff_Bands() {
+		return (EReference)suezCanalTariffEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSuezCanalTariff_TugBands() {
+		return (EReference)suezCanalTariffEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSuezCanalTariff_TugCost() {
+		return (EAttribute)suezCanalTariffEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSuezCanalTariff_MooringCost() {
+		return (EAttribute)suezCanalTariffEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSuezCanalTariff_PilotageCost() {
+		return (EAttribute)suezCanalTariffEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSuezCanalTariff_Disbursements() {
+		return (EAttribute)suezCanalTariffEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSuezCanalTariff_DiscountFactor() {
+		return (EAttribute)suezCanalTariffEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSuezCanalTariff_SdrToUSD() {
+		return (EAttribute)suezCanalTariffEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getSuezCanalTariffBand() {
+		return suezCanalTariffBandEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSuezCanalTariffBand_LadenTariff() {
+		return (EAttribute)suezCanalTariffBandEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSuezCanalTariffBand_BallastTariff() {
+		return (EAttribute)suezCanalTariffBandEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSuezCanalTariffBand_BandStart() {
+		return (EAttribute)suezCanalTariffBandEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSuezCanalTariffBand_BandEnd() {
+		return (EAttribute)suezCanalTariffBandEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getUnitConversion() {
 		return unitConversionEClass;
 	}
@@ -1000,6 +1195,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEReference(costModelEClass, COST_MODEL__COOLDOWN_COSTS);
 		createEReference(costModelEClass, COST_MODEL__BASE_FUEL_COSTS);
 		createEReference(costModelEClass, COST_MODEL__PANAMA_CANAL_TARIFF);
+		createEReference(costModelEClass, COST_MODEL__SUEZ_CANAL_TARIFF);
 
 		routeCostEClass = createEClass(ROUTE_COST);
 		createEReference(routeCostEClass, ROUTE_COST__ROUTE);
@@ -1052,6 +1248,27 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEAttribute(panamaCanalTariffBandEClass, PANAMA_CANAL_TARIFF_BAND__BALLAST_ROUNDTRIP_TARIFF);
 		createEAttribute(panamaCanalTariffBandEClass, PANAMA_CANAL_TARIFF_BAND__BAND_START);
 		createEAttribute(panamaCanalTariffBandEClass, PANAMA_CANAL_TARIFF_BAND__BAND_END);
+
+		suezCanalTugBandEClass = createEClass(SUEZ_CANAL_TUG_BAND);
+		createEAttribute(suezCanalTugBandEClass, SUEZ_CANAL_TUG_BAND__TUGS);
+		createEAttribute(suezCanalTugBandEClass, SUEZ_CANAL_TUG_BAND__BAND_START);
+		createEAttribute(suezCanalTugBandEClass, SUEZ_CANAL_TUG_BAND__BAND_END);
+
+		suezCanalTariffEClass = createEClass(SUEZ_CANAL_TARIFF);
+		createEReference(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__BANDS);
+		createEReference(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__TUG_BANDS);
+		createEAttribute(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__TUG_COST);
+		createEAttribute(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__MOORING_COST);
+		createEAttribute(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__PILOTAGE_COST);
+		createEAttribute(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__DISBURSEMENTS);
+		createEAttribute(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__DISCOUNT_FACTOR);
+		createEAttribute(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__SDR_TO_USD);
+
+		suezCanalTariffBandEClass = createEClass(SUEZ_CANAL_TARIFF_BAND);
+		createEAttribute(suezCanalTariffBandEClass, SUEZ_CANAL_TARIFF_BAND__LADEN_TARIFF);
+		createEAttribute(suezCanalTariffBandEClass, SUEZ_CANAL_TARIFF_BAND__BALLAST_TARIFF);
+		createEAttribute(suezCanalTariffBandEClass, SUEZ_CANAL_TARIFF_BAND__BAND_START);
+		createEAttribute(suezCanalTariffBandEClass, SUEZ_CANAL_TARIFF_BAND__BAND_END);
 
 		unitConversionEClass = createEClass(UNIT_CONVERSION);
 		createEAttribute(unitConversionEClass, UNIT_CONVERSION__FROM);
@@ -1199,6 +1416,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEReference(getCostModel_CooldownCosts(), this.getCooldownPrice(), null, "cooldownCosts", null, 0, -1, CostModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCostModel_BaseFuelCosts(), this.getBaseFuelCost(), null, "baseFuelCosts", null, 0, -1, CostModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCostModel_PanamaCanalTariff(), this.getPanamaCanalTariff(), null, "panamaCanalTariff", null, 0, 1, CostModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCostModel_SuezCanalTariff(), this.getSuezCanalTariff(), null, "suezCanalTariff", null, 0, 1, CostModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(routeCostEClass, RouteCost.class, "RouteCost", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRouteCost_Route(), thePortPackage.getRoute(), null, "route", null, 1, 1, RouteCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1271,6 +1489,27 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEAttribute(getPanamaCanalTariffBand_BandStart(), ecorePackage.getEInt(), "bandStart", null, 0, 1, PanamaCanalTariffBand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPanamaCanalTariffBand_BandEnd(), ecorePackage.getEInt(), "bandEnd", null, 0, 1, PanamaCanalTariffBand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(suezCanalTugBandEClass, SuezCanalTugBand.class, "SuezCanalTugBand", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getSuezCanalTugBand_Tugs(), ecorePackage.getEInt(), "tugs", null, 0, 1, SuezCanalTugBand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSuezCanalTugBand_BandStart(), ecorePackage.getEInt(), "bandStart", null, 0, 1, SuezCanalTugBand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSuezCanalTugBand_BandEnd(), ecorePackage.getEInt(), "bandEnd", null, 0, 1, SuezCanalTugBand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(suezCanalTariffEClass, SuezCanalTariff.class, "SuezCanalTariff", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSuezCanalTariff_Bands(), this.getSuezCanalTariffBand(), null, "bands", null, 0, -1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSuezCanalTariff_TugBands(), this.getSuezCanalTugBand(), null, "tugBands", null, 0, -1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSuezCanalTariff_TugCost(), ecorePackage.getEDouble(), "tugCost", null, 0, 1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSuezCanalTariff_MooringCost(), ecorePackage.getEDouble(), "mooringCost", null, 0, 1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSuezCanalTariff_PilotageCost(), ecorePackage.getEDouble(), "pilotageCost", null, 0, 1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSuezCanalTariff_Disbursements(), ecorePackage.getEDouble(), "disbursements", null, 0, 1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSuezCanalTariff_DiscountFactor(), ecorePackage.getEDouble(), "discountFactor", null, 0, 1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSuezCanalTariff_SdrToUSD(), ecorePackage.getEString(), "sdrToUSD", null, 0, 1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(suezCanalTariffBandEClass, SuezCanalTariffBand.class, "SuezCanalTariffBand", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getSuezCanalTariffBand_LadenTariff(), ecorePackage.getEDouble(), "ladenTariff", null, 0, 1, SuezCanalTariffBand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSuezCanalTariffBand_BallastTariff(), ecorePackage.getEDouble(), "ballastTariff", null, 0, 1, SuezCanalTariffBand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSuezCanalTariffBand_BandStart(), ecorePackage.getEInt(), "bandStart", null, 0, 1, SuezCanalTariffBand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSuezCanalTariffBand_BandEnd(), ecorePackage.getEInt(), "bandEnd", null, 0, 1, SuezCanalTariffBand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(unitConversionEClass, UnitConversion.class, "UnitConversion", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getUnitConversion_From(), ecorePackage.getEString(), "from", null, 0, 1, UnitConversion.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUnitConversion_To(), ecorePackage.getEString(), "to", null, 0, 1, UnitConversion.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1282,6 +1521,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		// Create annotations
 		// http://www.mmxlabs.com/models/ui/numberFormat
 		createNumberFormatAnnotations();
+		// http://www.mmxlabs.com/models/pricing/expressionType
+		createExpressionTypeAnnotations();
 	}
 
 	/**
@@ -1364,6 +1605,91 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 			 "formatString", "##,###,##0"
 		   });	
 		addAnnotation
+		  (getSuezCanalTugBand_Tugs(), 
+		   source, 
+		   new String[] {
+			 "unitPrefix", "$",
+			 "formatString", "#0.###"
+		   });	
+		addAnnotation
+		  (getSuezCanalTugBand_BandStart(), 
+		   source, 
+		   new String[] {
+			 "unitSuffix", "m3\r\n",
+			 "formatString", "##,###,##0"
+		   });	
+		addAnnotation
+		  (getSuezCanalTugBand_BandEnd(), 
+		   source, 
+		   new String[] {
+			 "unitSuffix", "m3\r\n",
+			 "formatString", "##,###,##0"
+		   });	
+		addAnnotation
+		  (getSuezCanalTariff_TugCost(), 
+		   source, 
+		   new String[] {
+			 "unitPrefix", "$",
+			 "formatString", "##,###,##0"
+		   });	
+		addAnnotation
+		  (getSuezCanalTariff_MooringCost(), 
+		   source, 
+		   new String[] {
+			 "unitPrefix", "$",
+			 "formatString", "##,###,##0"
+		   });	
+		addAnnotation
+		  (getSuezCanalTariff_PilotageCost(), 
+		   source, 
+		   new String[] {
+			 "unitPrefix", "$",
+			 "formatString", "##,###,##0"
+		   });	
+		addAnnotation
+		  (getSuezCanalTariff_Disbursements(), 
+		   source, 
+		   new String[] {
+			 "unitPrefix", "$",
+			 "formatString", "##,###,##0"
+		   });	
+		addAnnotation
+		  (getSuezCanalTariff_DiscountFactor(), 
+		   source, 
+		   new String[] {
+			 "scale", "100",
+			 "formatString", "##0.#",
+			 "unit", "%"
+		   });	
+		addAnnotation
+		  (getSuezCanalTariffBand_LadenTariff(), 
+		   source, 
+		   new String[] {
+			 "unitPrefix", "SDR",
+			 "formatString", "#0.###"
+		   });	
+		addAnnotation
+		  (getSuezCanalTariffBand_BallastTariff(), 
+		   source, 
+		   new String[] {
+			 "unitPrefix", "SDR",
+			 "formatString", "#0.###"
+		   });	
+		addAnnotation
+		  (getSuezCanalTariffBand_BandStart(), 
+		   source, 
+		   new String[] {
+			 "unitSuffix", "m3\r\n",
+			 "formatString", "##,###,##0"
+		   });	
+		addAnnotation
+		  (getSuezCanalTariffBand_BandEnd(), 
+		   source, 
+		   new String[] {
+			 "unitSuffix", "m3\r\n",
+			 "formatString", "##,###,##0"
+		   });	
+		addAnnotation
 		  (getUnitConversion_Factor(), 
 		   source, 
 		   new String[] {
@@ -1377,6 +1703,22 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 			 "scale", "100",
 			 "formatString", "##0.#",
 			 "unit", "%"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/pricing/expressionType</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createExpressionTypeAnnotations() {
+		String source = "http://www.mmxlabs.com/models/pricing/expressionType";	
+		addAnnotation
+		  (getSuezCanalTariff_SdrToUSD(), 
+		   source, 
+		   new String[] {
+			 "type", "currency"
 		   });
 	}
 

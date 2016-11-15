@@ -90,6 +90,10 @@ public class PriceIndexUtils {
 			if (name != null) {
 				indices.addSeriesExpression(name, Double.toString(factor.getFactor()));
 			}
+			final String reverseName = createReverseConversionFactorName(factor);
+			if (reverseName != null) {
+				indices.addSeriesExpression(reverseName, Double.toString(1.0 / factor.getFactor()));
+			}
 		}
 
 		return indices;
@@ -179,6 +183,15 @@ public class PriceIndexUtils {
 			return null;
 		}
 		return String.format("%ss_per_%s", from, to);
+	}
+
+	public static @Nullable String createReverseConversionFactorName(@NonNull final UnitConversion factor) {
+		final String from = getString(factor.getFrom());
+		final String to = getString(factor.getTo());
+		if (from.isEmpty() || to.isEmpty()) {
+			return null;
+		}
+		return String.format("%ss_per_%s", to, from);
 	}
 
 	private static @NonNull String getString(@Nullable final String str) {

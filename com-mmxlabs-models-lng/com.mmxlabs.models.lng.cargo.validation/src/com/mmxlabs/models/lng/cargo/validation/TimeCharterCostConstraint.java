@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.cargo.validation;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
@@ -35,30 +36,40 @@ public class TimeCharterCostConstraint extends AbstractModelMultiConstraint {
 		final EObject object = ctx.getTarget();
 		if (object instanceof VesselAvailability) {
 			final VesselAvailability vesselAvailability = (VesselAvailability) object;
-
 			final Vessel vessel = vesselAvailability.getVessel();
 			final String vesselName = vessel == null ? "<Unknown>" : vessel.getName();
 			if (vesselAvailability.isSetTimeCharterRate()) {
-
-				if (vesselAvailability.getTimeCharterRate() == null) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus(String.format("Missing charter expression for vessel %s", vesselName)));
-					dsd.addEObjectAndFeature(vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_TimeCharterRate());
-					failures.add(dsd);
-				} else {
-					final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_TimeCharterRate(),
-							vesselAvailability.getTimeCharterRate(), PriceIndexType.CHARTER);
-					if (!result.isOk()) {
-						final String message = String.format("[Vessel|'%s']%s", failures, result.getErrorDetails());
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-						dsd.addEObjectAndFeature(vesselAvailability, CargoPackage.Literals.VESSEL_AVAILABILITY__TIME_CHARTER_RATE);
-						failures.add(dsd);
-					}
-				}
+				addErrors(vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_TimeCharterRate(), "charter", ctx, failures);
+			}
+			if (vesselAvailability.isSetRepositioningFee()) {
+				addErrors(vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_RepositioningFee(), "repositioning", ctx, failures);
+			}
+			if (vesselAvailability.isSetBallastBonus()) {
+				addErrors(vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_BallastBonus(), "ballast bonus", ctx, failures);
 			}
 		}
 
 		return Activator.PLUGIN_ID;
 	}
+	
+	private void addErrors(VesselAvailability vesselAvailability, EAttribute attribute, String msg, final IValidationContext ctx, final List<IStatus> failures) {
+		Object feature = vesselAvailability.eGet(attribute);	
+		if (feature == null) {
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("Missing %s expression for vessel %s", msg, vesselAvailability.getVessel())));
+				dsd.addEObjectAndFeature(vesselAvailability, attribute);
+				failures.add(dsd);
+			} else {
+				final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, vesselAvailability, attribute,
+						(String) feature, PriceIndexType.CHARTER);
+				if (!result.isOk()) {
+					final String message = String.format("[Vessel|'%s']%s", vesselAvailability.getVessel().getName(), result.getErrorDetails());
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+					dsd.addEObjectAndFeature(vesselAvailability, attribute);
+					failures.add(dsd);
+				}
+			}
+	}
+
 
 }

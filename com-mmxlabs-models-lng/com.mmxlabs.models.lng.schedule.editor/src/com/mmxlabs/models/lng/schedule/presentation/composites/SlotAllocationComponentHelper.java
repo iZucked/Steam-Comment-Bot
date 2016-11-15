@@ -77,6 +77,7 @@ public class SlotAllocationComponentHelper extends BaseComponentHelper {
 		add_exposuresEditor(detailComposite, topClass);
 		add_physicalVolumeTransferredEditor(detailComposite, topClass);
 		add_physicalEnergyTransferredEditor(detailComposite, topClass);
+		add_slotAllocationTypeEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the slot feature on SlotAllocation
@@ -192,5 +193,14 @@ public class SlotAllocationComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_physicalEnergyTransferredEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SLOT_ALLOCATION__PHYSICAL_ENERGY_TRANSFERRED));
+	}
+
+	/**
+	 * Create the editor for the slotAllocationType feature on SlotAllocation
+	 *
+	 * @generated
+	 */
+	protected void add_slotAllocationTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SLOT_ALLOCATION__SLOT_ALLOCATION_TYPE));
 	}
 }

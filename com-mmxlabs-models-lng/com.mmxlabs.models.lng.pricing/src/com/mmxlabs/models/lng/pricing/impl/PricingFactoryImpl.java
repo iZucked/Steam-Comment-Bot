@@ -96,6 +96,9 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.PORTS_SPLIT_EXPRESSION_MAP: return createPortsSplitExpressionMap();
 			case PricingPackage.PANAMA_CANAL_TARIFF: return createPanamaCanalTariff();
 			case PricingPackage.PANAMA_CANAL_TARIFF_BAND: return createPanamaCanalTariffBand();
+			case PricingPackage.SUEZ_CANAL_TUG_BAND: return createSuezCanalTugBand();
+			case PricingPackage.SUEZ_CANAL_TARIFF: return createSuezCanalTariff();
+			case PricingPackage.SUEZ_CANAL_TARIFF_BAND: return createSuezCanalTariffBand();
 			case PricingPackage.UNIT_CONVERSION: return createUnitConversion();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -310,6 +313,36 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public PanamaCanalTariffBand createPanamaCanalTariffBand() {
 		PanamaCanalTariffBandImpl panamaCanalTariffBand = new PanamaCanalTariffBandImpl();
 		return panamaCanalTariffBand;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SuezCanalTugBand createSuezCanalTugBand() {
+		SuezCanalTugBandImpl suezCanalTugBand = new SuezCanalTugBandImpl();
+		return suezCanalTugBand;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SuezCanalTariff createSuezCanalTariff() {
+		SuezCanalTariffImpl suezCanalTariff = new SuezCanalTariffImpl();
+		return suezCanalTariff;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SuezCanalTariffBand createSuezCanalTariffBand() {
+		SuezCanalTariffBandImpl suezCanalTariffBand = new SuezCanalTariffBandImpl();
+		return suezCanalTariffBand;
 	}
 
 	/**

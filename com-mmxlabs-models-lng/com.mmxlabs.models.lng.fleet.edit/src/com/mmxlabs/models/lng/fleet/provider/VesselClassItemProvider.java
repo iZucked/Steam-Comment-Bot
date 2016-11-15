@@ -64,6 +64,7 @@ public class VesselClassItemProvider
 			addMinBaseFuelConsumptionPropertyDescriptor(object);
 			addHasReliqCapabilityPropertyDescriptor(object);
 			addInaccessibleRoutesPropertyDescriptor(object);
+			addScntPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -377,6 +378,28 @@ public class VesselClassItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Scnt feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addScntPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselClass_scnt_feature"),
+				 getString("_UI_VesselClass_scnt_description"),
+				 FleetPackage.Literals.VESSEL_CLASS__SCNT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -456,6 +479,7 @@ public class VesselClassItemProvider
 			case FleetPackage.VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION:
 			case FleetPackage.VESSEL_CLASS__HAS_RELIQ_CAPABILITY:
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_ROUTES:
+			case FleetPackage.VESSEL_CLASS__SCNT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:

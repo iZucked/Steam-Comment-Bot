@@ -8,7 +8,9 @@ package com.mmxlabs.models.lng.scenario.model;
 
 import java.time.LocalDate;
 
+import org.eclipse.emf.common.util.EList;
 import com.mmxlabs.models.lng.actuals.ActualsModel;
+import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -30,6 +32,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPromptPeriodEnd <em>Prompt Period End</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getReferenceModel <em>Reference Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getUserSettings <em>User Settings</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getOptionModels <em>Option Models</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel()
@@ -272,5 +275,21 @@ public interface LNGScenarioModel extends MMXRootObject {
 	 * @generated
 	 */
 	void setUserSettings(UserSettings value);
+
+	/**
+	 * Returns the value of the '<em><b>Option Models</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Option Models</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Option Models</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_OptionModels()
+	 * @model containment="true" resolveProxies="true" transient="true"
+	 * @generated
+	 */
+	EList<OptionAnalysisModel> getOptionModels();
 
 } // LNGScenarioModel

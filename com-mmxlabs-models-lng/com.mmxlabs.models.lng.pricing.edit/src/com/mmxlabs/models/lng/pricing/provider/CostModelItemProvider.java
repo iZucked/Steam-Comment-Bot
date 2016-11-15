@@ -73,6 +73,7 @@ public class CostModelItemProvider extends UUIDObjectItemProvider {
 			childrenFeatures.add(PricingPackage.Literals.COST_MODEL__COOLDOWN_COSTS);
 			childrenFeatures.add(PricingPackage.Literals.COST_MODEL__BASE_FUEL_COSTS);
 			childrenFeatures.add(PricingPackage.Literals.COST_MODEL__PANAMA_CANAL_TARIFF);
+			childrenFeatures.add(PricingPackage.Literals.COST_MODEL__SUEZ_CANAL_TARIFF);
 		}
 		return childrenFeatures;
 	}
@@ -133,6 +134,7 @@ public class CostModelItemProvider extends UUIDObjectItemProvider {
 			case PricingPackage.COST_MODEL__COOLDOWN_COSTS:
 			case PricingPackage.COST_MODEL__BASE_FUEL_COSTS:
 			case PricingPackage.COST_MODEL__PANAMA_CANAL_TARIFF:
+			case PricingPackage.COST_MODEL__SUEZ_CANAL_TARIFF:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -174,6 +176,11 @@ public class CostModelItemProvider extends UUIDObjectItemProvider {
 			(createChildParameter
 				(PricingPackage.Literals.COST_MODEL__PANAMA_CANAL_TARIFF,
 				 PricingFactory.eINSTANCE.createPanamaCanalTariff()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PricingPackage.Literals.COST_MODEL__SUEZ_CANAL_TARIFF,
+				 PricingFactory.eINSTANCE.createSuezCanalTariff()));
 	}
 
 }

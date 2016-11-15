@@ -38,7 +38,6 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Days;
-import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -436,7 +435,7 @@ public class CargoEditorMenuHelper {
 					}
 				} else if (assignmentOption instanceof VesselAvailability) {
 					final VesselAvailability vesselAvailability = (VesselAvailability) assignmentOption;
-					if (assignmentOption != cargo.getVesselAssignmentType()) {
+					if (vesselAvailability != cargo.getVesselAssignmentType()) {
 						vesselAvailabilityOptions.add(p);
 
 						// reassignMenuManager.add(new RunnableAction(p.getFirst(), () -> helper.assignCargoToVesselAvailability(String.format("Assign to %s", p.getFirst()), cargo,
@@ -1153,10 +1152,9 @@ public class CargoEditorMenuHelper {
 						final LocalDate cal = source.getWindowStartWithSlotOrPortTime().toLocalDate().withDayOfMonth(1);
 						final String yearMonthString = getKeyForDate(cal);
 
-						loadSlot.setWindowStart(cal);
-						loadSlot.setWindowStartTime(0);
 						// Subtract 1 hour to limit within calendar month
-						loadSlot.setWindowSize(Hours.between(cal, cal.plusMonths(1)) - 1);
+						loadSlot.setWindowSize(1);
+						loadSlot.setWindowSizeUnits(TimePeriod.MONTHS);
 
 						// Get existing names
 						final Set<String> usedIDStrings = new HashSet<>();

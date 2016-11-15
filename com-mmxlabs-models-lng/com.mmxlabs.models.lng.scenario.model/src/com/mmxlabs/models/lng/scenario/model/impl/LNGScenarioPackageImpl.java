@@ -100,7 +100,6 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		ActualsPackage.eINSTANCE.eClass();
 		AnalyticsPackage.eINSTANCE.eClass();
 		ParametersPackage.eINSTANCE.eClass();
-		SchedulePackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theLNGScenarioPackage.createPackageContents();
@@ -187,6 +186,15 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 */
 	public EReference getLNGScenarioModel_UserSettings() {
 		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getLNGScenarioModel_OptionModels() {
+		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -297,6 +305,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		createEAttribute(lngScenarioModelEClass, LNG_SCENARIO_MODEL__PROMPT_PERIOD_END);
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__REFERENCE_MODEL);
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__USER_SETTINGS);
+		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__OPTION_MODELS);
 
 		lngReferenceModelEClass = createEClass(LNG_REFERENCE_MODEL);
 		createEReference(lngReferenceModelEClass, LNG_REFERENCE_MODEL__PORT_MODEL);
@@ -338,12 +347,12 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		ActualsPackage theActualsPackage = (ActualsPackage)EPackage.Registry.INSTANCE.getEPackage(ActualsPackage.eNS_URI);
 		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
 		ParametersPackage theParametersPackage = (ParametersPackage)EPackage.Registry.INSTANCE.getEPackage(ParametersPackage.eNS_URI);
+		AnalyticsPackage theAnalyticsPackage = (AnalyticsPackage)EPackage.Registry.INSTANCE.getEPackage(AnalyticsPackage.eNS_URI);
 		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
 		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 		PricingPackage thePricingPackage = (PricingPackage)EPackage.Registry.INSTANCE.getEPackage(PricingPackage.eNS_URI);
 		CommercialPackage theCommercialPackage = (CommercialPackage)EPackage.Registry.INSTANCE.getEPackage(CommercialPackage.eNS_URI);
 		SpotMarketsPackage theSpotMarketsPackage = (SpotMarketsPackage)EPackage.Registry.INSTANCE.getEPackage(SpotMarketsPackage.eNS_URI);
-		AnalyticsPackage theAnalyticsPackage = (AnalyticsPackage)EPackage.Registry.INSTANCE.getEPackage(AnalyticsPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -362,6 +371,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		initEAttribute(getLNGScenarioModel_PromptPeriodEnd(), theDateTimePackage.getLocalDate(), "promptPeriodEnd", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGScenarioModel_ReferenceModel(), this.getLNGReferenceModel(), null, "referenceModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGScenarioModel_UserSettings(), theParametersPackage.getUserSettings(), null, "userSettings", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLNGScenarioModel_OptionModels(), theAnalyticsPackage.getOptionAnalysisModel(), null, "optionModels", null, 0, -1, LNGScenarioModel.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(lngReferenceModelEClass, LNGReferenceModel.class, "LNGReferenceModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getLNGReferenceModel_PortModel(), thePortPackage.getPortModel(), null, "portModel", null, 0, 1, LNGReferenceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

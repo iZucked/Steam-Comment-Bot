@@ -584,6 +584,24 @@
                </target>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.MultipleVesselAvailabilitiesConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.MultipleVesselAvailabilitiesConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Multiple Vessel Availabilities"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  A vessel cannot be given more than one availability for the same portfolio.
+               </description>
+               <target
+                     class="VesselAvailability">
+               </target>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.VesselEventDateConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.VesselEventDateConstraint"
                   lang="Java"
@@ -628,7 +646,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  Vessel {0} has time charter set, but no cost set.
+                  {0}
                </message>
                <description>
                   A time charter vessel should have a daily hire rate

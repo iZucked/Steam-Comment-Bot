@@ -158,6 +158,22 @@
                       class="UnitConversion">
                 </target>
              </constraint>
+             <constraint
+                   class="com.mmxlabs.models.lng.pricing.validation.CurrencyCurveNameOverlapConstraint"
+                   id="com.mmxlabs.models.lng.pricing.validation.CurrencyCurveNameOverlapConstraint"
+                   isEnabledByDefault="true"
+                   lang="java"
+                   mode="Batch"
+                   name="CurrencyCurveNameOverlapConstraint"
+                   severity="ERROR"
+                   statusCode="1">
+                <message>
+                   {0}
+                </message>
+                <target
+                      class="PricingModel">
+                </target>
+             </constraint>
              
          </constraints>
       </constraintProvider>

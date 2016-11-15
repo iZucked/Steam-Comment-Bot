@@ -12,10 +12,16 @@ import com.mmxlabs.models.lng.pricing.UnitConversion;
 public class ConversionNode extends AbstractMarkedUpNode {
 	private final String name;
 	private final UnitConversion factor;
+	private final boolean isReverse;
 
-	public ConversionNode(final String name, final UnitConversion factor) {
+	public boolean isReverse() {
+		return isReverse;
+	}
+
+	public ConversionNode(final String name, final UnitConversion factor, boolean isReverse) {
 		this.name = name;
 		this.factor = factor;
+		this.isReverse = isReverse;
 
 	}
 

@@ -37,6 +37,7 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getCapacity <em>Capacity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getFillCapacity <em>Fill Capacity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getScnt <em>Scnt</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
  * </ul>
@@ -139,6 +140,35 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @ordered
 	 */
 	protected boolean fillCapacityESet;
+
+	/**
+	 * The default value of the '{@link #getScnt() <em>Scnt</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getScnt()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int SCNT_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getScnt() <em>Scnt</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getScnt()
+	 * @generated
+	 * @ordered
+	 */
+	protected int scnt = SCNT_EDEFAULT;
+
+	/**
+	 * This is true if the Scnt attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean scntESet;
 
 	/**
 	 * The default value of the '{@link #isOverrideInaccessibleRoutes() <em>Override Inaccessible Routes</em>}' attribute.
@@ -351,6 +381,52 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getScnt() {
+		return scnt;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setScnt(int newScnt) {
+		int oldScnt = scnt;
+		scnt = newScnt;
+		boolean oldScntESet = scntESet;
+		scntESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__SCNT, oldScnt, scnt, !oldScntESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetScnt() {
+		int oldScnt = scnt;
+		boolean oldScntESet = scntESet;
+		scnt = SCNT_EDEFAULT;
+		scntESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__SCNT, oldScnt, SCNT_EDEFAULT, oldScntESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetScnt() {
+		return scntESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean isOverrideInaccessibleRoutes() {
 		return overrideInaccessibleRoutes;
 	}
@@ -445,6 +521,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return getCapacity();
 			case FleetPackage.VESSEL__FILL_CAPACITY:
 				return getFillCapacity();
+			case FleetPackage.VESSEL__SCNT:
+				return getScnt();
 			case FleetPackage.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES:
 				return isOverrideInaccessibleRoutes();
 			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
@@ -476,6 +554,9 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return;
 			case FleetPackage.VESSEL__FILL_CAPACITY:
 				setFillCapacity((Double)newValue);
+				return;
+			case FleetPackage.VESSEL__SCNT:
+				setScnt((Integer)newValue);
 				return;
 			case FleetPackage.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES:
 				setOverrideInaccessibleRoutes((Boolean)newValue);
@@ -510,6 +591,9 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__FILL_CAPACITY:
 				unsetFillCapacity();
 				return;
+			case FleetPackage.VESSEL__SCNT:
+				unsetScnt();
+				return;
 			case FleetPackage.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES:
 				setOverrideInaccessibleRoutes(OVERRIDE_INACCESSIBLE_ROUTES_EDEFAULT);
 				return;
@@ -537,6 +621,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return isSetCapacity();
 			case FleetPackage.VESSEL__FILL_CAPACITY:
 				return isSetFillCapacity();
+			case FleetPackage.VESSEL__SCNT:
+				return isSetScnt();
 			case FleetPackage.VESSEL__OVERRIDE_INACCESSIBLE_ROUTES:
 				return overrideInaccessibleRoutes != OVERRIDE_INACCESSIBLE_ROUTES_EDEFAULT;
 			case FleetPackage.VESSEL__INACCESSIBLE_ROUTES:
@@ -560,6 +646,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		if (capacityESet) result.append(capacity); else result.append("<unset>");
 		result.append(", fillCapacity: ");
 		if (fillCapacityESet) result.append(fillCapacity); else result.append("<unset>");
+		result.append(", scnt: ");
+		if (scntESet) result.append(scnt); else result.append("<unset>");
 		result.append(", overrideInaccessibleRoutes: ");
 		result.append(overrideInaccessibleRoutes);
 		result.append(", inaccessibleRoutes: ");

@@ -52,7 +52,7 @@ public class MigrateToV59 extends AbstractMigrationUnit {
 
 		createConversionFactor("MwH", "mmBtu", 3.409511, pricingModel, loader);
 		createConversionFactor("bbl", "mmBtu", 0.180136, pricingModel, loader);
-		createConversionFactor("therm", "mmBtu", 0.1, pricingModel, loader);
+		createConversionFactor("therm", "mmBtu", 10, pricingModel, loader);
 
 	}
 

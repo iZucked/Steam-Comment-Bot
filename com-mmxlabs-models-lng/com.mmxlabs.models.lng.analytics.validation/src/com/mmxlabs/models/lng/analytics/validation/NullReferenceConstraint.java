@@ -29,10 +29,8 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
  * 
  */
 public class NullReferenceConstraint extends AbstractModelConstraint {
-	private static final List<EReference> checkedReferences = CollectionsUtil.makeArrayList(
-			// TODO add any more refs to check here
-			AnalyticsPackage.eINSTANCE.getUnitCostMatrix_Vessel(), AnalyticsPackage.eINSTANCE.getShippingCostPlan_Vessel(), AnalyticsPackage.eINSTANCE.getProvisionalCargo_Vessel(),
-			AnalyticsPackage.eINSTANCE.getBuyOpportunity_Port(), AnalyticsPackage.eINSTANCE.getSellOpportunity_Port());
+	private static final List<EReference> checkedReferences = CollectionsUtil.makeArrayList(AnalyticsPackage.eINSTANCE.getUnitCostMatrix_Vessel(),
+			AnalyticsPackage.eINSTANCE.getShippingCostPlan_Vessel(), AnalyticsPackage.eINSTANCE.getProvisionalCargo_Vessel());
 
 	private static final HashMap<EClass, Set<EReference>> cacheByClass = new HashMap<EClass, Set<EReference>>();
 

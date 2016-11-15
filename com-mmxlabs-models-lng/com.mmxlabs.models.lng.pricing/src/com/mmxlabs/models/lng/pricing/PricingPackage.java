@@ -762,13 +762,22 @@ public interface PricingPackage extends EPackage {
 	int COST_MODEL__PANAMA_CANAL_TARIFF = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Suez Canal Tariff</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COST_MODEL__SUEZ_CANAL_TARIFF = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Cost Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COST_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int COST_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1270,6 +1279,198 @@ public interface PricingPackage extends EPackage {
 	int PANAMA_CANAL_TARIFF_BAND_FEATURE_COUNT = 5;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTugBandImpl <em>Suez Canal Tug Band</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.SuezCanalTugBandImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSuezCanalTugBand()
+	 * @generated
+	 */
+	int SUEZ_CANAL_TUG_BAND = 22;
+
+	/**
+	 * The feature id for the '<em><b>Tugs</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_TUG_BAND__TUGS = 0;
+
+	/**
+	 * The feature id for the '<em><b>Band Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_TUG_BAND__BAND_START = 1;
+
+	/**
+	 * The feature id for the '<em><b>Band End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_TUG_BAND__BAND_END = 2;
+
+	/**
+	 * The number of structural features of the '<em>Suez Canal Tug Band</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_TUG_BAND_FEATURE_COUNT = 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffImpl <em>Suez Canal Tariff</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSuezCanalTariff()
+	 * @generated
+	 */
+	int SUEZ_CANAL_TARIFF = 23;
+
+	/**
+	 * The feature id for the '<em><b>Bands</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_TARIFF__BANDS = 0;
+
+	/**
+	 * The feature id for the '<em><b>Tug Bands</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_TARIFF__TUG_BANDS = 1;
+
+	/**
+	 * The feature id for the '<em><b>Tug Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_TARIFF__TUG_COST = 2;
+
+	/**
+	 * The feature id for the '<em><b>Mooring Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_TARIFF__MOORING_COST = 3;
+
+	/**
+	 * The feature id for the '<em><b>Pilotage Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_TARIFF__PILOTAGE_COST = 4;
+
+	/**
+	 * The feature id for the '<em><b>Disbursements</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_TARIFF__DISBURSEMENTS = 5;
+
+	/**
+	 * The feature id for the '<em><b>Discount Factor</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_TARIFF__DISCOUNT_FACTOR = 6;
+
+	/**
+	 * The feature id for the '<em><b>Sdr To USD</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_TARIFF__SDR_TO_USD = 7;
+
+	/**
+	 * The number of structural features of the '<em>Suez Canal Tariff</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_TARIFF_FEATURE_COUNT = 8;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffBandImpl <em>Suez Canal Tariff Band</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffBandImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSuezCanalTariffBand()
+	 * @generated
+	 */
+	int SUEZ_CANAL_TARIFF_BAND = 24;
+
+	/**
+	 * The feature id for the '<em><b>Laden Tariff</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_TARIFF_BAND__LADEN_TARIFF = 0;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Tariff</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_TARIFF_BAND__BALLAST_TARIFF = 1;
+
+	/**
+	 * The feature id for the '<em><b>Band Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_TARIFF_BAND__BAND_START = 2;
+
+	/**
+	 * The feature id for the '<em><b>Band End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_TARIFF_BAND__BAND_END = 3;
+
+	/**
+	 * The number of structural features of the '<em>Suez Canal Tariff Band</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_TARIFF_BAND_FEATURE_COUNT = 4;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.UnitConversionImpl <em>Unit Conversion</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1277,7 +1478,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getUnitConversion()
 	 * @generated
 	 */
-	int UNIT_CONVERSION = 22;
+	int UNIT_CONVERSION = 25;
 
 	/**
 	 * The feature id for the '<em><b>From</b></em>' attribute.
@@ -1795,6 +1996,17 @@ public interface PricingPackage extends EPackage {
 	EReference getCostModel_PanamaCanalTariff();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.pricing.CostModel#getSuezCanalTariff <em>Suez Canal Tariff</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Suez Canal Tariff</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.CostModel#getSuezCanalTariff()
+	 * @see #getCostModel()
+	 * @generated
+	 */
+	EReference getCostModel_SuezCanalTariff();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PortsPriceMap <em>Ports Price Map</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2051,6 +2263,201 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPanamaCanalTariffBand_BandEnd();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.SuezCanalTugBand <em>Suez Canal Tug Band</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Suez Canal Tug Band</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTugBand
+	 * @generated
+	 */
+	EClass getSuezCanalTugBand();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SuezCanalTugBand#getTugs <em>Tugs</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Tugs</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTugBand#getTugs()
+	 * @see #getSuezCanalTugBand()
+	 * @generated
+	 */
+	EAttribute getSuezCanalTugBand_Tugs();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SuezCanalTugBand#getBandStart <em>Band Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Band Start</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTugBand#getBandStart()
+	 * @see #getSuezCanalTugBand()
+	 * @generated
+	 */
+	EAttribute getSuezCanalTugBand_BandStart();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SuezCanalTugBand#getBandEnd <em>Band End</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Band End</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTugBand#getBandEnd()
+	 * @see #getSuezCanalTugBand()
+	 * @generated
+	 */
+	EAttribute getSuezCanalTugBand_BandEnd();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff <em>Suez Canal Tariff</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Suez Canal Tariff</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTariff
+	 * @generated
+	 */
+	EClass getSuezCanalTariff();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getBands <em>Bands</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Bands</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTariff#getBands()
+	 * @see #getSuezCanalTariff()
+	 * @generated
+	 */
+	EReference getSuezCanalTariff_Bands();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getTugBands <em>Tug Bands</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Tug Bands</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTariff#getTugBands()
+	 * @see #getSuezCanalTariff()
+	 * @generated
+	 */
+	EReference getSuezCanalTariff_TugBands();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getTugCost <em>Tug Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Tug Cost</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTariff#getTugCost()
+	 * @see #getSuezCanalTariff()
+	 * @generated
+	 */
+	EAttribute getSuezCanalTariff_TugCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getMooringCost <em>Mooring Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Mooring Cost</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTariff#getMooringCost()
+	 * @see #getSuezCanalTariff()
+	 * @generated
+	 */
+	EAttribute getSuezCanalTariff_MooringCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getPilotageCost <em>Pilotage Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Pilotage Cost</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTariff#getPilotageCost()
+	 * @see #getSuezCanalTariff()
+	 * @generated
+	 */
+	EAttribute getSuezCanalTariff_PilotageCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getDisbursements <em>Disbursements</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Disbursements</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTariff#getDisbursements()
+	 * @see #getSuezCanalTariff()
+	 * @generated
+	 */
+	EAttribute getSuezCanalTariff_Disbursements();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getDiscountFactor <em>Discount Factor</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Discount Factor</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTariff#getDiscountFactor()
+	 * @see #getSuezCanalTariff()
+	 * @generated
+	 */
+	EAttribute getSuezCanalTariff_DiscountFactor();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getSdrToUSD <em>Sdr To USD</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sdr To USD</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTariff#getSdrToUSD()
+	 * @see #getSuezCanalTariff()
+	 * @generated
+	 */
+	EAttribute getSuezCanalTariff_SdrToUSD();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariffBand <em>Suez Canal Tariff Band</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Suez Canal Tariff Band</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTariffBand
+	 * @generated
+	 */
+	EClass getSuezCanalTariffBand();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariffBand#getLadenTariff <em>Laden Tariff</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Laden Tariff</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTariffBand#getLadenTariff()
+	 * @see #getSuezCanalTariffBand()
+	 * @generated
+	 */
+	EAttribute getSuezCanalTariffBand_LadenTariff();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariffBand#getBallastTariff <em>Ballast Tariff</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ballast Tariff</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTariffBand#getBallastTariff()
+	 * @see #getSuezCanalTariffBand()
+	 * @generated
+	 */
+	EAttribute getSuezCanalTariffBand_BallastTariff();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariffBand#getBandStart <em>Band Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Band Start</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTariffBand#getBandStart()
+	 * @see #getSuezCanalTariffBand()
+	 * @generated
+	 */
+	EAttribute getSuezCanalTariffBand_BandStart();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariffBand#getBandEnd <em>Band End</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Band End</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTariffBand#getBandEnd()
+	 * @see #getSuezCanalTariffBand()
+	 * @generated
+	 */
+	EAttribute getSuezCanalTariffBand_BandEnd();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.UnitConversion <em>Unit Conversion</em>}'.
@@ -2510,6 +2917,14 @@ public interface PricingPackage extends EPackage {
 		EReference COST_MODEL__PANAMA_CANAL_TARIFF = eINSTANCE.getCostModel_PanamaCanalTariff();
 
 		/**
+		 * The meta object literal for the '<em><b>Suez Canal Tariff</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COST_MODEL__SUEZ_CANAL_TARIFF = eINSTANCE.getCostModel_SuezCanalTariff();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PortsPriceMapImpl <em>Ports Price Map</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2712,6 +3127,156 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PANAMA_CANAL_TARIFF_BAND__BAND_END = eINSTANCE.getPanamaCanalTariffBand_BandEnd();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTugBandImpl <em>Suez Canal Tug Band</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.SuezCanalTugBandImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSuezCanalTugBand()
+		 * @generated
+		 */
+		EClass SUEZ_CANAL_TUG_BAND = eINSTANCE.getSuezCanalTugBand();
+
+		/**
+		 * The meta object literal for the '<em><b>Tugs</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUEZ_CANAL_TUG_BAND__TUGS = eINSTANCE.getSuezCanalTugBand_Tugs();
+
+		/**
+		 * The meta object literal for the '<em><b>Band Start</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUEZ_CANAL_TUG_BAND__BAND_START = eINSTANCE.getSuezCanalTugBand_BandStart();
+
+		/**
+		 * The meta object literal for the '<em><b>Band End</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUEZ_CANAL_TUG_BAND__BAND_END = eINSTANCE.getSuezCanalTugBand_BandEnd();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffImpl <em>Suez Canal Tariff</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSuezCanalTariff()
+		 * @generated
+		 */
+		EClass SUEZ_CANAL_TARIFF = eINSTANCE.getSuezCanalTariff();
+
+		/**
+		 * The meta object literal for the '<em><b>Bands</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SUEZ_CANAL_TARIFF__BANDS = eINSTANCE.getSuezCanalTariff_Bands();
+
+		/**
+		 * The meta object literal for the '<em><b>Tug Bands</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SUEZ_CANAL_TARIFF__TUG_BANDS = eINSTANCE.getSuezCanalTariff_TugBands();
+
+		/**
+		 * The meta object literal for the '<em><b>Tug Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUEZ_CANAL_TARIFF__TUG_COST = eINSTANCE.getSuezCanalTariff_TugCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Mooring Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUEZ_CANAL_TARIFF__MOORING_COST = eINSTANCE.getSuezCanalTariff_MooringCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Pilotage Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUEZ_CANAL_TARIFF__PILOTAGE_COST = eINSTANCE.getSuezCanalTariff_PilotageCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Disbursements</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUEZ_CANAL_TARIFF__DISBURSEMENTS = eINSTANCE.getSuezCanalTariff_Disbursements();
+
+		/**
+		 * The meta object literal for the '<em><b>Discount Factor</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUEZ_CANAL_TARIFF__DISCOUNT_FACTOR = eINSTANCE.getSuezCanalTariff_DiscountFactor();
+
+		/**
+		 * The meta object literal for the '<em><b>Sdr To USD</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUEZ_CANAL_TARIFF__SDR_TO_USD = eINSTANCE.getSuezCanalTariff_SdrToUSD();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffBandImpl <em>Suez Canal Tariff Band</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffBandImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSuezCanalTariffBand()
+		 * @generated
+		 */
+		EClass SUEZ_CANAL_TARIFF_BAND = eINSTANCE.getSuezCanalTariffBand();
+
+		/**
+		 * The meta object literal for the '<em><b>Laden Tariff</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUEZ_CANAL_TARIFF_BAND__LADEN_TARIFF = eINSTANCE.getSuezCanalTariffBand_LadenTariff();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Tariff</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUEZ_CANAL_TARIFF_BAND__BALLAST_TARIFF = eINSTANCE.getSuezCanalTariffBand_BallastTariff();
+
+		/**
+		 * The meta object literal for the '<em><b>Band Start</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUEZ_CANAL_TARIFF_BAND__BAND_START = eINSTANCE.getSuezCanalTariffBand_BandStart();
+
+		/**
+		 * The meta object literal for the '<em><b>Band End</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUEZ_CANAL_TARIFF_BAND__BAND_END = eINSTANCE.getSuezCanalTariffBand_BandEnd();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.UnitConversionImpl <em>Unit Conversion</em>}' class.

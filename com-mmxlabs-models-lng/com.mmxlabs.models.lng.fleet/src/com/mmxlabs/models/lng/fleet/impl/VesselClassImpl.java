@@ -55,6 +55,7 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getMinBaseFuelConsumption <em>Min Base Fuel Consumption</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#isHasReliqCapability <em>Has Reliq Capability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getScnt <em>Scnt</em>}</li>
  * </ul>
  *
  * @generated
@@ -319,6 +320,26 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 	 * @ordered
 	 */
 	protected EList<RouteOption> inaccessibleRoutes;
+
+	/**
+	 * The default value of the '{@link #getScnt() <em>Scnt</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getScnt()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int SCNT_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getScnt() <em>Scnt</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getScnt()
+	 * @generated
+	 * @ordered
+	 */
+	protected int scnt = SCNT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -712,6 +733,27 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getScnt() {
+		return scnt;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setScnt(int newScnt) {
+		int oldScnt = scnt;
+		scnt = newScnt;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__SCNT, oldScnt, scnt));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public EList<Vessel> collect(EList<AVesselSet<Vessel>> marked) {
@@ -790,6 +832,8 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 				return isHasReliqCapability();
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_ROUTES:
 				return getInaccessibleRoutes();
+			case FleetPackage.VESSEL_CLASS__SCNT:
+				return getScnt();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -854,6 +898,9 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 				getInaccessibleRoutes().clear();
 				getInaccessibleRoutes().addAll((Collection<? extends RouteOption>)newValue);
 				return;
+			case FleetPackage.VESSEL_CLASS__SCNT:
+				setScnt((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -914,6 +961,9 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_ROUTES:
 				getInaccessibleRoutes().clear();
 				return;
+			case FleetPackage.VESSEL_CLASS__SCNT:
+				setScnt(SCNT_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -958,6 +1008,8 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 				return hasReliqCapability != HAS_RELIQ_CAPABILITY_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_ROUTES:
 				return inaccessibleRoutes != null && !inaccessibleRoutes.isEmpty();
+			case FleetPackage.VESSEL_CLASS__SCNT:
+				return scnt != SCNT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -994,6 +1046,8 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 		result.append(hasReliqCapability);
 		result.append(", inaccessibleRoutes: ");
 		result.append(inaccessibleRoutes);
+		result.append(", scnt: ");
+		result.append(scnt);
 		result.append(')');
 		return result.toString();
 	}

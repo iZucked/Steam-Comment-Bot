@@ -71,6 +71,7 @@ public class VesselComponentHelper extends BaseComponentHelper {
 		add_inaccessiblePortsEditor(detailComposite, topClass);
 		add_capacityEditor(detailComposite, topClass);
 		add_fillCapacityEditor(detailComposite, topClass);
+		add_scntEditor(detailComposite, topClass);
 		add_overrideInaccessibleRoutesEditor(detailComposite, topClass);
 		add_inaccessibleRoutesEditor(detailComposite, topClass);
 	}
@@ -115,6 +116,15 @@ public class VesselComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_fillCapacityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__FILL_CAPACITY));
+	}
+
+	/**
+	 * Create the editor for the scnt feature on Vessel
+	 *
+	 * @generated
+	 */
+	protected void add_scntEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__SCNT));
 	}
 
 	/**

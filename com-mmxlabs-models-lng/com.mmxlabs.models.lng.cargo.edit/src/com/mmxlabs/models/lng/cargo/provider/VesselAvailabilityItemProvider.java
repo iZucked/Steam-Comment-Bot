@@ -12,6 +12,8 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -54,6 +56,7 @@ public class VesselAvailabilityItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addFleetPropertyDescriptor(object);
 			addVesselPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
 			addTimeCharterRatePropertyDescriptor(object);
@@ -64,8 +67,33 @@ public class VesselAvailabilityItemProvider
 			addEndAfterPropertyDescriptor(object);
 			addEndByPropertyDescriptor(object);
 			addForceHireCostOnlyEndRulePropertyDescriptor(object);
+			addOptionalPropertyDescriptor(object);
+			addRepositioningFeePropertyDescriptor(object);
+			addBallastBonusPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Fleet feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addFleetPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselAvailability_fleet_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_fleet_feature", "_UI_VesselAvailability_type"),
+				 CargoPackage.Literals.VESSEL_AVAILABILITY__FLEET,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -267,6 +295,72 @@ public class VesselAvailabilityItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Optional feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addOptionalPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselAvailability_optional_feature"),
+				 getString("_UI_VesselAvailability_optional_description"),
+				 CargoPackage.Literals.VESSEL_AVAILABILITY__OPTIONAL,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Repositioning Fee feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRepositioningFeePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselAvailability_repositioningFee_feature"),
+				 getString("_UI_VesselAvailability_repositioningFee_description"),
+				 CargoPackage.Literals.VESSEL_AVAILABILITY__REPOSITIONING_FEE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Ballast Bonus feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBallastBonusPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselAvailability_ballastBonus_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_ballastBonus_feature", "_UI_VesselAvailability_type"),
+				 CargoPackage.Literals.VESSEL_AVAILABILITY__BALLAST_BONUS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Entity feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -340,12 +434,20 @@ public class VesselAvailabilityItemProvider
 	public String getText(Object object) {
 		String label = "";
 		Vessel v = ((VesselAvailability) object).getVessel();
+		uniqueAvailability((VesselAvailability) object);
 		if(v != null){
 			label = v.getName();		
 		} else{
 			label = "<unspecified>";			
 		}
 		return label;
+	}
+	
+	private boolean uniqueAvailability(VesselAvailability va) {
+		EObject eContainer = va.eContainer();
+		EStructuralFeature eContainingFeature = va.eContainingFeature();
+		EReference eContainmentFeature = va.eContainmentFeature();
+		return false;
 	}
 
 	/**
@@ -360,12 +462,16 @@ public class VesselAvailabilityItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(VesselAvailability.class)) {
+			case CargoPackage.VESSEL_AVAILABILITY__FLEET:
 			case CargoPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
 			case CargoPackage.VESSEL_AVAILABILITY__START_AFTER:
 			case CargoPackage.VESSEL_AVAILABILITY__START_BY:
 			case CargoPackage.VESSEL_AVAILABILITY__END_AFTER:
 			case CargoPackage.VESSEL_AVAILABILITY__END_BY:
 			case CargoPackage.VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE:
+			case CargoPackage.VESSEL_AVAILABILITY__OPTIONAL:
+			case CargoPackage.VESSEL_AVAILABILITY__REPOSITIONING_FEE:
+			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__START_HEEL:

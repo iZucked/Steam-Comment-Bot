@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getAdditionalPNL <em>Additional PNL</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getCancellationFees <em>Cancellation Fees</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getHedgingValue <em>Hedging Value</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getMiscCostsValue <em>Misc Costs Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getExtraUpsidePNL <em>Extra Upside PNL</em>}</li>
  * </ul>
  *
@@ -128,6 +129,35 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * @ordered
 	 */
 	protected boolean hedgingValueESet;
+
+	/**
+	 * The default value of the '{@link #getMiscCostsValue() <em>Misc Costs Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMiscCostsValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int MISC_COSTS_VALUE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getMiscCostsValue() <em>Misc Costs Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMiscCostsValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected int miscCostsValue = MISC_COSTS_VALUE_EDEFAULT;
+
+	/**
+	 * This is true if the Misc Costs Value attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean miscCostsValueESet;
 
 	/**
 	 * The default value of the '{@link #getExtraUpsidePNL() <em>Extra Upside PNL</em>}' attribute.
@@ -307,6 +337,52 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getMiscCostsValue() {
+		return miscCostsValue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMiscCostsValue(int newMiscCostsValue) {
+		int oldMiscCostsValue = miscCostsValue;
+		miscCostsValue = newMiscCostsValue;
+		boolean oldMiscCostsValueESet = miscCostsValueESet;
+		miscCostsValueESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.BASIC_SLOT_PNL_DETAILS__MISC_COSTS_VALUE, oldMiscCostsValue, miscCostsValue, !oldMiscCostsValueESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetMiscCostsValue() {
+		int oldMiscCostsValue = miscCostsValue;
+		boolean oldMiscCostsValueESet = miscCostsValueESet;
+		miscCostsValue = MISC_COSTS_VALUE_EDEFAULT;
+		miscCostsValueESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, SchedulePackage.BASIC_SLOT_PNL_DETAILS__MISC_COSTS_VALUE, oldMiscCostsValue, MISC_COSTS_VALUE_EDEFAULT, oldMiscCostsValueESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetMiscCostsValue() {
+		return miscCostsValueESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public int getExtraUpsidePNL() {
 		return extraUpsidePNL;
 	}
@@ -339,6 +415,8 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 				return getCancellationFees();
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE:
 				return getHedgingValue();
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__MISC_COSTS_VALUE:
+				return getMiscCostsValue();
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL:
 				return getExtraUpsidePNL();
 		}
@@ -364,6 +442,9 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 				return;
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE:
 				setHedgingValue((Integer)newValue);
+				return;
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__MISC_COSTS_VALUE:
+				setMiscCostsValue((Integer)newValue);
 				return;
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL:
 				setExtraUpsidePNL((Integer)newValue);
@@ -392,6 +473,9 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE:
 				unsetHedgingValue();
 				return;
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__MISC_COSTS_VALUE:
+				unsetMiscCostsValue();
+				return;
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL:
 				setExtraUpsidePNL(EXTRA_UPSIDE_PNL_EDEFAULT);
 				return;
@@ -415,6 +499,8 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 				return isSetCancellationFees();
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE:
 				return isSetHedgingValue();
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__MISC_COSTS_VALUE:
+				return isSetMiscCostsValue();
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL:
 				return extraUpsidePNL != EXTRA_UPSIDE_PNL_EDEFAULT;
 		}
@@ -439,6 +525,8 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 		if (cancellationFeesESet) result.append(cancellationFees); else result.append("<unset>");
 		result.append(", hedgingValue: ");
 		if (hedgingValueESet) result.append(hedgingValue); else result.append("<unset>");
+		result.append(", miscCostsValue: ");
+		if (miscCostsValueESet) result.append(miscCostsValue); else result.append("<unset>");
 		result.append(", extraUpsidePNL: ");
 		result.append(extraUpsidePNL);
 		result.append(')');

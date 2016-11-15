@@ -40,6 +40,7 @@ import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.IOpenListener;
@@ -65,6 +66,10 @@ import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DragSource;
+import org.eclipse.swt.dnd.DragSourceEvent;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MenuDetectEvent;
@@ -171,6 +176,7 @@ import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
+import com.mmxlabs.rcp.common.dnd.BasicDragSource;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
@@ -1104,6 +1110,22 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		final WiringDiagramMouseListener listener = new WiringDiagramMouseListener();
 		getScenarioViewer().getGrid().addMouseMoveListener(listener);
 		getScenarioViewer().getGrid().addMouseListener(listener);
+
+		final DragSource source = new DragSource(getScenarioViewer().getControl(), DND.DROP_MOVE);
+		final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
+		source.setTransfer(types);
+
+		source.addDragListener(new BasicDragSource(viewer) {
+			@Override
+			public void dragStart(final DragSourceEvent event) {
+				if (getScenarioViewer().getGrid().getColumn(new Point(event.x, event.y)) == wiringColumn.getColumn()) {
+					event.doit = false;
+					return;
+				}
+
+				super.dragStart(event);
+			}
+		});
 	}
 
 	private <T extends ICellManipulator & ICellRenderer> GridViewerColumn addPNLColumn(final String columnName, final EStructuralFeature bookContainmentFeature, final T manipulator,

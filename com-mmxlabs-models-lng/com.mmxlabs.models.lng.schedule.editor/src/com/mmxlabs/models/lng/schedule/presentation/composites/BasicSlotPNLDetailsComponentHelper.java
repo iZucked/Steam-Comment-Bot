@@ -69,6 +69,7 @@ public class BasicSlotPNLDetailsComponentHelper extends BaseComponentHelper {
 		add_additionalPNLEditor(detailComposite, topClass);
 		add_cancellationFeesEditor(detailComposite, topClass);
 		add_hedgingValueEditor(detailComposite, topClass);
+		add_miscCostsValueEditor(detailComposite, topClass);
 		add_extraUpsidePNLEditor(detailComposite, topClass);
 	}
 	/**
@@ -104,6 +105,15 @@ public class BasicSlotPNLDetailsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_hedgingValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE));
+	}
+
+	/**
+	 * Create the editor for the miscCostsValue feature on BasicSlotPNLDetails
+	 *
+	 * @generated
+	 */
+	protected void add_miscCostsValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.BASIC_SLOT_PNL_DETAILS__MISC_COSTS_VALUE));
 	}
 
 	/**

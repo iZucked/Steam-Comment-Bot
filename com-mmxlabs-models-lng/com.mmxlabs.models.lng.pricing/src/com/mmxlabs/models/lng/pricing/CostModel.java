@@ -24,6 +24,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.pricing.CostModel#getCooldownCosts <em>Cooldown Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.CostModel#getBaseFuelCosts <em>Base Fuel Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.CostModel#getPanamaCanalTariff <em>Panama Canal Tariff</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.CostModel#getSuezCanalTariff <em>Suez Canal Tariff</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getCostModel()
@@ -120,5 +121,31 @@ public interface CostModel extends UUIDObject {
 	 * @generated
 	 */
 	void setPanamaCanalTariff(PanamaCanalTariff value);
+
+	/**
+	 * Returns the value of the '<em><b>Suez Canal Tariff</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Suez Canal Tariff</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Suez Canal Tariff</em>' containment reference.
+	 * @see #setSuezCanalTariff(SuezCanalTariff)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getCostModel_SuezCanalTariff()
+	 * @model containment="true"
+	 * @generated
+	 */
+	SuezCanalTariff getSuezCanalTariff();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.CostModel#getSuezCanalTariff <em>Suez Canal Tariff</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Suez Canal Tariff</em>' containment reference.
+	 * @see #getSuezCanalTariff()
+	 * @generated
+	 */
+	void setSuezCanalTariff(SuezCanalTariff value);
 
 } // CostModel

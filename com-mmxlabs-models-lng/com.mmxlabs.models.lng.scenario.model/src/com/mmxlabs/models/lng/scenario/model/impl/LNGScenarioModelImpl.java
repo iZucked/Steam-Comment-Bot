@@ -8,13 +8,19 @@ package com.mmxlabs.models.lng.scenario.model.impl;
 
 import java.time.LocalDate;
 
+import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.models.lng.actuals.ActualsModel;
+import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
@@ -38,6 +44,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getPromptPeriodEnd <em>Prompt Period End</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getReferenceModel <em>Reference Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getUserSettings <em>User Settings</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getOptionModels <em>Option Models</em>}</li>
  * </ul>
  *
  * @generated
@@ -150,6 +157,16 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * @ordered
 	 */
 	protected UserSettings userSettings;
+
+	/**
+	 * The cached value of the '{@link #getOptionModels() <em>Option Models</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOptionModels()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<OptionAnalysisModel> optionModels;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -597,6 +614,18 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<OptionAnalysisModel> getOptionModels() {
+		if (optionModels == null) {
+			optionModels = new EObjectContainmentEList.Resolving<OptionAnalysisModel>(OptionAnalysisModel.class, this, LNGScenarioPackage.LNG_SCENARIO_MODEL__OPTION_MODELS);
+		}
+		return optionModels;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -610,6 +639,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return basicSetReferenceModel(null, msgs);
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS:
 				return basicSetUserSettings(null, msgs);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__OPTION_MODELS:
+				return ((InternalEList<?>)getOptionModels()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -641,6 +672,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS:
 				if (resolve) return getUserSettings();
 				return basicGetUserSettings();
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__OPTION_MODELS:
+				return getOptionModels();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -650,6 +683,7 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -673,6 +707,10 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS:
 				setUserSettings((UserSettings)newValue);
+				return;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__OPTION_MODELS:
+				getOptionModels().clear();
+				getOptionModels().addAll((Collection<? extends OptionAnalysisModel>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -707,6 +745,9 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS:
 				setUserSettings((UserSettings)null);
 				return;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__OPTION_MODELS:
+				getOptionModels().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -733,6 +774,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return referenceModel != null;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS:
 				return userSettings != null;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__OPTION_MODELS:
+				return optionModels != null && !optionModels.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

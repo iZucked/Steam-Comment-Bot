@@ -200,10 +200,10 @@ public class ParametersSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ParametersPackage.BREAK_EVEN_OPTMISATION_STAGE: {
-				BreakEvenOptmisationStage breakEvenOptmisationStage = (BreakEvenOptmisationStage)theEObject;
-				T1 result = caseBreakEvenOptmisationStage(breakEvenOptmisationStage);
-				if (result == null) result = caseOptimisationStage(breakEvenOptmisationStage);
+			case ParametersPackage.BREAK_EVEN_OPTIMISATION_STAGE: {
+				BreakEvenOptimisationStage breakEvenOptimisationStage = (BreakEvenOptimisationStage)theEObject;
+				T1 result = caseBreakEvenOptimisationStage(breakEvenOptimisationStage);
+				if (result == null) result = caseOptimisationStage(breakEvenOptimisationStage);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -443,6 +443,21 @@ public class ParametersSwitch<@Nullable T1> extends Switch<T1> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Break Even Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Break Even Optimisation Stage</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseBreakEvenOptimisationStage(BreakEvenOptimisationStage object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Constraint And Fitness Settings</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -469,21 +484,6 @@ public class ParametersSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseOptimisationPlan(OptimisationPlan object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Break Even Optmisation Stage</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Break Even Optmisation Stage</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseBreakEvenOptmisationStage(BreakEvenOptmisationStage object) {
 		return null;
 	}
 

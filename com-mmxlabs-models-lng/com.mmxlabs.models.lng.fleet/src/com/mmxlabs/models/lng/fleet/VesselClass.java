@@ -35,6 +35,7 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getMinBaseFuelConsumption <em>Min Base Fuel Consumption</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#isHasReliqCapability <em>Has Reliq Capability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getScnt <em>Scnt</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass()
@@ -442,6 +443,32 @@ public interface VesselClass extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	EList<RouteOption> getInaccessibleRoutes();
+
+	/**
+	 * Returns the value of the '<em><b>Scnt</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Scnt</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Scnt</em>' attribute.
+	 * @see #setScnt(int)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_Scnt()
+	 * @model
+	 * @generated
+	 */
+	int getScnt();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClass#getScnt <em>Scnt</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Scnt</em>' attribute.
+	 * @see #getScnt()
+	 * @generated
+	 */
+	void setScnt(int value);
 
 } // end of  VesselClass
 

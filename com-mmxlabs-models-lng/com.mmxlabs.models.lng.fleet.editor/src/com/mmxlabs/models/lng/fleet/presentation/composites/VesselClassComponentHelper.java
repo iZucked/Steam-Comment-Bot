@@ -84,6 +84,7 @@ public class VesselClassComponentHelper extends BaseComponentHelper {
 		add_minBaseFuelConsumptionEditor(detailComposite, topClass);
 		add_hasReliqCapabilityEditor(detailComposite, topClass);
 		add_inaccessibleRoutesEditor(detailComposite, topClass);
+		add_scntEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the inaccessiblePorts feature on VesselClass
@@ -219,5 +220,14 @@ public class VesselClassComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_inaccessibleRoutesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(new RouteExclusionMultiInlineEditor(FleetPackage.Literals.VESSEL_CLASS__INACCESSIBLE_ROUTES));
+	}
+
+	/**
+	 * Create the editor for the scnt feature on VesselClass
+	 *
+	 * @generated
+	 */
+	protected void add_scntEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS__SCNT));
 	}
 }

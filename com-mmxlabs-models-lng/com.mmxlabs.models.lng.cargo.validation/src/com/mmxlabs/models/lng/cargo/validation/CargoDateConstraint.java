@@ -4,10 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
-import static org.ops4j.peaberry.Peaberry.osgiModule;
-
 import java.time.ZonedDateTime;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -17,13 +14,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.ops4j.peaberry.Peaberry;
-import org.osgi.framework.FrameworkUtil;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -34,12 +25,12 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.util.CargoTravelTimeUtils;
 import com.mmxlabs.models.lng.cargo.util.IShippingDaysRestrictionSpeedProvider;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
-import com.mmxlabs.models.lng.cargo.validation.utils.TravelTimeUtils;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
@@ -51,6 +42,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 
@@ -61,9 +53,6 @@ import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
  * 
  */
 public class CargoDateConstraint extends AbstractModelMultiConstraint {
-
-	@Inject
-	private IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider;
 
 	private static final String DATE_ORDER_ID = "com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_order";
 	private static final String TRAVEL_TIME_ID = "com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_travel_time";
@@ -76,15 +65,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	private static final int SENSIBLE_TRAVEL_TIME = 160;
 
 	public CargoDateConstraint() {
-		final Injector injector = Guice.createInjector(new AbstractModule() {
 
-			@Override
-			protected void configure() {
-				install(osgiModule(FrameworkUtil.getBundle(ShippingDaysRestrictionConstraint.class).getBundleContext()));
-				bind(IShippingDaysRestrictionSpeedProvider.class).toProvider(Peaberry.service(IShippingDaysRestrictionSpeedProvider.class).single());
-			}
-		});
-		injector.injectMembers(this);
 	}
 
 	/**
@@ -167,8 +148,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 				for (final VesselClass vc : usedClasses) {
 					maxSpeedKnots = Math.max(vc.getMaxSpeed(), maxSpeedKnots);
 				}
-				
-				final Integer minTime = TravelTimeUtils.getFobMinTimeInHours(from, to, cargo.getSortedSlots().get(0).getWindowStart(), cargo.getVesselAssignmentType(),
+
+				final Integer minTime = CargoTravelTimeUtils.getFobMinTimeInHours(from, to, cargo.getSortedSlots().get(0).getWindowStart(), cargo.getVesselAssignmentType(),
 						lngScenarioModel.getReferenceModel().getPortModel(), lngScenarioModel.getReferenceModel().getCostModel(), maxSpeedKnots);
 				int severity = IStatus.ERROR;
 				if (minTime == null) {
@@ -227,7 +208,9 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 		if ((availableTime / 24) > SENSIBLE_TRAVEL_TIME) {
 			final int severity = IStatus.WARNING;
 			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus(String.format("[Cargo|%s] Travel time is excessive (%d days); %d is a sensible maximum.", "'" + cargo.getLoadName() + "'", availableTime / 24L, SENSIBLE_TRAVEL_TIME)), severity);
+					(IConstraintStatus) ctx.createFailureStatus(
+							String.format("[Cargo|%s] Travel time is excessive (%d days); %d is a sensible maximum.", "'" + cargo.getLoadName() + "'", availableTime / 24L, SENSIBLE_TRAVEL_TIME)),
+					severity);
 			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
 			failures.add(status);
 		}
@@ -306,19 +289,20 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 			status.addEObjectAndFeature(to, CargoPackage.eINSTANCE.getSlot_WindowStart());
 			failures.add(status);
 		} else {
+			ServiceHelper.withCheckedService(IShippingDaysRestrictionSpeedProvider.class, shippingDaysSpeedProvider -> {
 
-			int travelTime = TravelTimeUtils.getDivertableDESMinRouteTimeInHours(from, from, to, shippingDaysSpeedProvider, TravelTimeUtils.getScenarioModel(extraContext), vessel,
-					TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel.getVesselClass(), true));
-			if (travelTime + from.getSlotOrPortDuration() > windowLength) {
-//				TODO Fix message
-				final String message = String.format("DES Purchase|%s] is paired with a sale at %s. However is will be late by %s", from.getName(),
-						to.getPort().getName(), //TravelTimeUtils.formatHours(travelTime + from.getSlotOrPortDuration()),
-						TravelTimeUtils.formatHours((travelTime + from.getSlotOrPortDuration()) - windowLength));
-				final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
-				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
-				dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargoModel_Cargoes());
-				failures.add(dsd);
-			}
+				int travelTime = CargoTravelTimeUtils.getDivertableDESMinRouteTimeInHours(from, from, to, shippingDaysSpeedProvider, ScenarioModelUtil.getPortModel(getScenarioModel(extraContext)),
+						vessel, CargoTravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel.getVesselClass(), true));
+				if (travelTime + from.getSlotOrPortDuration() > windowLength) {
+					final String message = String.format("Purchase|%s] is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey by %s",
+							from.getName(), to.getPort().getName(), TravelTimeUtils.formatHours(travelTime + from.getSlotOrPortDuration()),
+							TravelTimeUtils.formatHours((travelTime + from.getSlotOrPortDuration()) - windowLength));
+					final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
+					dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargoModel_Cargoes());
+					failures.add(dsd);
+				}
+			});
 		}
 
 	}
@@ -332,6 +316,14 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 		} else {
 			return null;
 		}
+	}
+
+	public static LNGScenarioModel getScenarioModel(final IExtraValidationContext extraContext) {
+		final MMXRootObject scenario = extraContext.getRootObject();
+		if (scenario instanceof LNGScenarioModel) {
+			return (LNGScenarioModel) scenario;
+		}
+		return null;
 	}
 
 }

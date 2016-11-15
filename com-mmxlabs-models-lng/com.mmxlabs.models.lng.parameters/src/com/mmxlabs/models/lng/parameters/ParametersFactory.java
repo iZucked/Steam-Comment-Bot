@@ -141,6 +141,15 @@ public interface ParametersFactory extends EFactory {
 	ResetInitialSequencesStage createResetInitialSequencesStage();
 
 	/**
+	 * Returns a new object of class '<em>Break Even Optimisation Stage</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Break Even Optimisation Stage</em>'.
+	 * @generated
+	 */
+	BreakEvenOptimisationStage createBreakEvenOptimisationStage();
+
+	/**
 	 * Returns a new object of class '<em>Constraint And Fitness Settings</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -157,15 +166,6 @@ public interface ParametersFactory extends EFactory {
 	 * @generated
 	 */
 	OptimisationPlan createOptimisationPlan();
-
-	/**
-	 * Returns a new object of class '<em>Break Even Optmisation Stage</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Break Even Optmisation Stage</em>'.
-	 * @generated
-	 */
-	BreakEvenOptmisationStage createBreakEvenOptmisationStage();
 
 	/**
 	 * Returns a new object of class '<em>Solution Builder Settings</em>'.

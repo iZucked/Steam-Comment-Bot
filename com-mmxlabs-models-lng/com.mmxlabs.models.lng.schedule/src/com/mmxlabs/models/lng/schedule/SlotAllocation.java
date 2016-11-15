@@ -32,6 +32,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getExposures <em>Exposures</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getPhysicalVolumeTransferred <em>Physical Volume Transferred</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getPhysicalEnergyTransferred <em>Physical Energy Transferred</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getSlotAllocationType <em>Slot Allocation Type</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotAllocation()
@@ -453,6 +454,35 @@ public interface SlotAllocation extends MMXObject {
 	 * @generated
 	 */
 	void setPhysicalEnergyTransferred(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Slot Allocation Type</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.schedule.SlotAllocationType}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Slot Allocation Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Slot Allocation Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.schedule.SlotAllocationType
+	 * @see #setSlotAllocationType(SlotAllocationType)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotAllocation_SlotAllocationType()
+	 * @model
+	 * @generated
+	 */
+	SlotAllocationType getSlotAllocationType();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getSlotAllocationType <em>Slot Allocation Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Slot Allocation Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.schedule.SlotAllocationType
+	 * @see #getSlotAllocationType()
+	 * @generated
+	 */
+	void setSlotAllocationType(SlotAllocationType value);
 
 	/**
 	 * <!-- begin-user-doc -->

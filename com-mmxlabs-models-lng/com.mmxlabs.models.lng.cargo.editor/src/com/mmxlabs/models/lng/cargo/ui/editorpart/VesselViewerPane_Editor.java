@@ -29,14 +29,12 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateTimeAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 
 public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
-
-	// TODO: Make these colours a preference so they can be consistently used across various UI parts
-	private final Color tcVessel = new Color(Display.getDefault(), 150, 210, 230);
 
 	private final IScenarioEditingLocation jointModelEditor;
 
@@ -56,8 +54,38 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 		addTypicalColumn("Class", new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_VesselClass(), jointModelEditor.getReferenceValueProviderCache(), editingDomain),
 				CargoPackage.eINSTANCE.getVesselAvailability_Vessel());
 
+		addTypicalColumn("Fleet", new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_Fleet(), editingDomain));
+		
+		addTypicalColumn("Optional", new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_Optional(), editingDomain));
+
 		addTypicalColumn("Charter", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_TimeCharterRate(), jointModelEditor.getEditingDomain()));
 
+		addTypicalColumn("Repositioning Fee", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_RepositioningFee(), jointModelEditor.getEditingDomain()) {@Override
+		public boolean canEdit(Object object) {
+			if (object instanceof VesselAvailability) {
+				if (((VesselAvailability) object).isOptional()) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return super.canEdit(object);
+			}
+		}});
+
+		addTypicalColumn("Ballast Bonus", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_BallastBonus(), jointModelEditor.getEditingDomain()) {@Override
+			public boolean canEdit(Object object) {
+			if (object instanceof VesselAvailability) {
+				if (((VesselAvailability) object).isOptional()) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return super.canEdit(object);
+			}
+		}});
+		
 		addTypicalColumn("Start Port",
 				new MultiplePortReferenceManipulator(CargoPackage.eINSTANCE.getVesselAvailability_StartAt(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(),
 						MMXCorePackage.eINSTANCE.getNamedObject_Name()));
@@ -75,40 +103,5 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 		addTypicalColumn("End By", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_EndBy(), jointModelEditor.getEditingDomain()));
 
 		setTitle("Vessels", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
-	}
-
-	protected ScenarioTableViewer constructViewer(final Composite parent) {
-		final ScenarioTableViewer scenarioTableViewer = super.constructViewer(parent);
-		scenarioTableViewer.setColourProvider(new IColorProvider() {
-
-			@Override
-			public Color getForeground(final Object element) {
-				return null;
-			}
-
-			@Override
-			public Color getBackground(final Object element) {
-
-				if (element instanceof VesselAvailability) {
-
-					final VesselAvailability vesselAvailability = (VesselAvailability) element;
-					if (vesselAvailability.isSetTimeCharterRate()) {
-						return tcVessel;
-					}
-				}
-				return null;
-			}
-
-		});
-		return scenarioTableViewer;
-
-	}
-
-	@Override
-	public void dispose() {
-
-		tcVessel.dispose();
-
-		super.dispose();
 	}
 }

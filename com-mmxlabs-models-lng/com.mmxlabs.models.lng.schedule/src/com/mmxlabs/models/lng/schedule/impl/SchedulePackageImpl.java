@@ -56,6 +56,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotAllocationType;
 import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
@@ -337,6 +338,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EEnum portVisitLatenessTypeEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum slotAllocationTypeEEnum = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1211,6 +1219,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getSlotAllocation_SlotAllocationType() {
+		return (EAttribute)slotAllocationEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getSlotAllocation__GetPort() {
 		return slotAllocationEClass.getEOperations().get(0);
 	}
@@ -1626,8 +1643,17 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getBasicSlotPNLDetails_ExtraUpsidePNL() {
+	public EAttribute getBasicSlotPNLDetails_MiscCostsValue() {
 		return (EAttribute)basicSlotPNLDetailsEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getBasicSlotPNLDetails_ExtraUpsidePNL() {
+		return (EAttribute)basicSlotPNLDetailsEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -1806,6 +1832,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EEnum getSlotAllocationType() {
+		return slotAllocationTypeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EDataType getCalendar() {
 		return calendarEDataType;
 	}
@@ -1902,6 +1937,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(slotAllocationEClass, SLOT_ALLOCATION__EXPOSURES);
 		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__PHYSICAL_VOLUME_TRANSFERRED);
 		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__PHYSICAL_ENERGY_TRANSFERRED);
+		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__SLOT_ALLOCATION_TYPE);
 		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_PORT);
 		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_CONTRACT);
 		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_NAME);
@@ -2018,6 +2054,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(basicSlotPNLDetailsEClass, BASIC_SLOT_PNL_DETAILS__ADDITIONAL_PNL);
 		createEAttribute(basicSlotPNLDetailsEClass, BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES);
 		createEAttribute(basicSlotPNLDetailsEClass, BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE);
+		createEAttribute(basicSlotPNLDetailsEClass, BASIC_SLOT_PNL_DETAILS__MISC_COSTS_VALUE);
 		createEAttribute(basicSlotPNLDetailsEClass, BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL);
 
 		eventGroupingEClass = createEClass(EVENT_GROUPING);
@@ -2043,6 +2080,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		fuelUnitEEnum = createEEnum(FUEL_UNIT);
 		capacityViolationTypeEEnum = createEEnum(CAPACITY_VIOLATION_TYPE);
 		portVisitLatenessTypeEEnum = createEEnum(PORT_VISIT_LATENESS_TYPE);
+		slotAllocationTypeEEnum = createEEnum(SLOT_ALLOCATION_TYPE);
 
 		// Create data types
 		calendarEDataType = createEDataType(CALENDAR);
@@ -2183,6 +2221,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getSlotAllocation_Exposures(), this.getExposureDetail(), null, "exposures", null, 0, -1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotAllocation_PhysicalVolumeTransferred(), ecorePackage.getEInt(), "physicalVolumeTransferred", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotAllocation_PhysicalEnergyTransferred(), ecorePackage.getEInt(), "physicalEnergyTransferred", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotAllocation_SlotAllocationType(), this.getSlotAllocationType(), "slotAllocationType", null, 0, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getSlotAllocation__GetPort(), thePortPackage.getPort(), "getPort", 1, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -2310,6 +2349,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getBasicSlotPNLDetails_AdditionalPNL(), ecorePackage.getEInt(), "additionalPNL", null, 0, 1, BasicSlotPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBasicSlotPNLDetails_CancellationFees(), ecorePackage.getEInt(), "cancellationFees", null, 0, 1, BasicSlotPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBasicSlotPNLDetails_HedgingValue(), ecorePackage.getEInt(), "hedgingValue", null, 0, 1, BasicSlotPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBasicSlotPNLDetails_MiscCostsValue(), ecorePackage.getEInt(), "miscCostsValue", null, 0, 1, BasicSlotPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBasicSlotPNLDetails_ExtraUpsidePNL(), ecorePackage.getEInt(), "extraUpsidePNL", null, 0, 1, BasicSlotPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(eventGroupingEClass, EventGrouping.class, "EventGrouping", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2362,6 +2402,10 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		addEEnumLiteral(portVisitLatenessTypeEEnum, PortVisitLatenessType.PROMPT);
 		addEEnumLiteral(portVisitLatenessTypeEEnum, PortVisitLatenessType.MID_TERM);
 		addEEnumLiteral(portVisitLatenessTypeEEnum, PortVisitLatenessType.BEYOND);
+
+		initEEnum(slotAllocationTypeEEnum, SlotAllocationType.class, "SlotAllocationType");
+		addEEnumLiteral(slotAllocationTypeEEnum, SlotAllocationType.PURCHASE);
+		addEEnumLiteral(slotAllocationTypeEEnum, SlotAllocationType.SALE);
 
 		// Initialize data types
 		initEDataType(calendarEDataType, Calendar.class, "Calendar", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

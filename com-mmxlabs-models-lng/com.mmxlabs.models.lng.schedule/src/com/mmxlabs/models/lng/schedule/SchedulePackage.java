@@ -1086,13 +1086,22 @@ public interface SchedulePackage extends EPackage {
 	int SLOT_ALLOCATION__PHYSICAL_ENERGY_TRANSFERRED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 12;
 
 	/**
+	 * The feature id for the '<em><b>Slot Allocation Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION__SLOT_ALLOCATION_TYPE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 13;
+
+	/**
 	 * The number of structural features of the '<em>Slot Allocation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 13;
+	int SLOT_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -4035,13 +4044,22 @@ public interface SchedulePackage extends EPackage {
 	int BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Misc Costs Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_SLOT_PNL_DETAILS__MISC_COSTS_VALUE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 4;
+
+	/**
 	 * The feature id for the '<em><b>Extra Upside PNL</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL = GENERAL_PNL_DETAILS_FEATURE_COUNT + 4;
+	int BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL = GENERAL_PNL_DETAILS_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Basic Slot PNL Details</em>' class.
@@ -4050,7 +4068,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_SLOT_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 5;
+	int BASIC_SLOT_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of operations of the '<em>Basic Slot PNL Details</em>' class.
@@ -4296,6 +4314,16 @@ public interface SchedulePackage extends EPackage {
 	int PORT_VISIT_LATENESS_TYPE = 37;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SlotAllocationType <em>Slot Allocation Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.SlotAllocationType
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotAllocationType()
+	 * @generated
+	 */
+	int SLOT_ALLOCATION_TYPE = 38;
+
+	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4303,7 +4331,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 38;
+	int CALENDAR = 39;
 
 
 	/**
@@ -4314,7 +4342,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 39;
+	int ITERABLE = 40;
 
 
 	/**
@@ -4325,7 +4353,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 40;
+	int OBJECT = 41;
 
 
 	/**
@@ -5261,6 +5289,17 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getSlotAllocation_PhysicalEnergyTransferred();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getSlotAllocationType <em>Slot Allocation Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Slot Allocation Type</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.SlotAllocation#getSlotAllocationType()
+	 * @see #getSlotAllocation()
+	 * @generated
+	 */
+	EAttribute getSlotAllocation_SlotAllocationType();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getPort() <em>Get Port</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5752,6 +5791,17 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getBasicSlotPNLDetails_HedgingValue();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getMiscCostsValue <em>Misc Costs Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Misc Costs Value</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getMiscCostsValue()
+	 * @see #getBasicSlotPNLDetails()
+	 * @generated
+	 */
+	EAttribute getBasicSlotPNLDetails_MiscCostsValue();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getExtraUpsidePNL <em>Extra Upside PNL</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5962,6 +6012,16 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getPortVisitLatenessType();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.SlotAllocationType <em>Slot Allocation Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Slot Allocation Type</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.SlotAllocationType
+	 * @generated
+	 */
+	EEnum getSlotAllocationType();
 
 	/**
 	 * Returns the meta object for data type '{@link java.util.Calendar <em>Calendar</em>}'.
@@ -6747,6 +6807,14 @@ public interface SchedulePackage extends EPackage {
 		EAttribute SLOT_ALLOCATION__PHYSICAL_ENERGY_TRANSFERRED = eINSTANCE.getSlotAllocation_PhysicalEnergyTransferred();
 
 		/**
+		 * The meta object literal for the '<em><b>Slot Allocation Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT_ALLOCATION__SLOT_ALLOCATION_TYPE = eINSTANCE.getSlotAllocation_SlotAllocationType();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Port</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -7143,6 +7211,14 @@ public interface SchedulePackage extends EPackage {
 		EAttribute BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE = eINSTANCE.getBasicSlotPNLDetails_HedgingValue();
 
 		/**
+		 * The meta object literal for the '<em><b>Misc Costs Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BASIC_SLOT_PNL_DETAILS__MISC_COSTS_VALUE = eINSTANCE.getBasicSlotPNLDetails_MiscCostsValue();
+
+		/**
 		 * The meta object literal for the '<em><b>Extra Upside PNL</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -7317,6 +7393,16 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EEnum PORT_VISIT_LATENESS_TYPE = eINSTANCE.getPortVisitLatenessType();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.SlotAllocationType <em>Slot Allocation Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.SlotAllocationType
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotAllocationType()
+		 * @generated
+		 */
+		EEnum SLOT_ALLOCATION_TYPE = eINSTANCE.getSlotAllocationType();
 
 		/**
 		 * The meta object literal for the '<em>Calendar</em>' data type.

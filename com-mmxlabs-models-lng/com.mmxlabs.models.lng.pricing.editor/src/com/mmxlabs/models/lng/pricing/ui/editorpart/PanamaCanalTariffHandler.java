@@ -44,7 +44,7 @@ public class PanamaCanalTariffHandler extends AbstractHandler {
 			return null;
 		}
 		if (scenarioEditingLocation.isLocked() == false) {
-			DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, costModel.getPanamaCanalTariff());
+			DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, panamaCanalTariff);
 		}
 
 		return null;
