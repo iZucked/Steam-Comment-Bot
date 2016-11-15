@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.IDeferment;
@@ -49,11 +50,11 @@ public class CargoModelImporter implements ISubmodelImporter {
 
 	private IClassImporter cargoGroupImporter;
 
-	private final HashMap<String, String> inputs = new HashMap<String, String>();
+	private final @NonNull Map<String, String> inputs = new HashMap<>();
 	private IClassImporter vesselAvailabilityImporter;
 	private IClassImporter vesselEventImporter;
-	public static final String EVENTS_KEY = "EVENTS";
-	public static final String VESSEL_AVAILABILITY_KEY = "VESSELSAVAILABILITIES";
+	public static final @NonNull String EVENTS_KEY = "EVENTS";
+	public static final @NonNull String VESSEL_AVAILABILITY_KEY = "VESSELSAVAILABILITIES";
 	{
 		inputs.put(CARGO_KEY, "Cargoes");
 		inputs.put(CARGO_GROUP_KEY, "Cargo Groups");
@@ -113,8 +114,10 @@ public class CargoModelImporter implements ISubmodelImporter {
 		}
 
 		if (inputs.containsKey(CARGO_KEY)) {
-			@SuppressWarnings("resource")
 			final CSVReader reader = inputs.get(CARGO_KEY);
+			if (reader == null) {
+				throw new IllegalStateException("No CSV Reader");
+			}
 			final Collection<EObject> values = cargoImporter.importObjects(CargoPackage.eINSTANCE.getCargo(), reader, context);
 			for (final EObject object : values) {
 				if (object instanceof Cargo) {

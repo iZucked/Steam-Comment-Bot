@@ -29,6 +29,7 @@ import com.mmxlabs.rcp.common.editors.IPartGotoTarget;
  * @author hinton
  * 
  */
+@SuppressWarnings("restriction")
 public class AnalyticsModelEditorContribution extends BaseJointModelEditorContribution<AnalyticsModel> implements IPropertySourceProvider, IPartGotoTarget {
 
 	@Override

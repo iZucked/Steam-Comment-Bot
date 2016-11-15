@@ -38,7 +38,6 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Days;
-import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -436,7 +435,7 @@ public class CargoEditorMenuHelper {
 					}
 				} else if (assignmentOption instanceof VesselAvailability) {
 					final VesselAvailability vesselAvailability = (VesselAvailability) assignmentOption;
-					if (assignmentOption != cargo.getVesselAssignmentType()) {
+					if (vesselAvailability != cargo.getVesselAssignmentType()) {
 						vesselAvailabilityOptions.add(p);
 
 						// reassignMenuManager.add(new RunnableAction(p.getFirst(), () -> helper.assignCargoToVesselAvailability(String.format("Assign to %s", p.getFirst()), cargo,

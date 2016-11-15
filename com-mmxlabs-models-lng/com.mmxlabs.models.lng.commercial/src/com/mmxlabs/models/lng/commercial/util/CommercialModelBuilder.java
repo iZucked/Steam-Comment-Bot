@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.commercial.util;
 
 import java.time.LocalDate;
-import java.time.YearMonth;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
@@ -90,7 +89,10 @@ public class CommercialModelBuilder {
 	 * @param book
 	 * @param rate
 	 */
-	public void setTaxRate(@NonNull BaseEntityBook book, @NonNull TaxRate rate) {
+	public void setTaxRate(BaseEntityBook book, @NonNull TaxRate rate) {
+		if (book == null) {
+			throw new NullPointerException();
+		}
 		book.getTaxRates().clear();
 		book.getTaxRates().add(rate);
 	}

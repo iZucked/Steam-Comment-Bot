@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.csv.CSVReader;
@@ -41,7 +42,7 @@ public class FuelCurveImporter {
 
 	}
 
-	public Map<String, Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>>> readConsumptions(final CSVReader reader, final IImportContext context) throws IOException {
+	public Map<String, Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>>> readConsumptions(final @NonNull CSVReader reader, final IImportContext context) throws IOException {
 
 		final NumberAttributeImporter nai = new NumberAttributeImporter(context.getDecimalSeparator());
 
@@ -102,7 +103,7 @@ public class FuelCurveImporter {
 		return result;
 	}
 
-	public void importFuelConsumptions(final CSVReader reader, final IMMXImportContext context) {
+	public void importFuelConsumptions(final @NonNull CSVReader reader, final IMMXImportContext context) {
 		try {
 			final Map<String, Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>>> consumptions = readConsumptions(reader, context);
 
