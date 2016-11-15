@@ -1,0 +1,22 @@
+package com.mmxlabs.models.lng.analytics.ui.views.formatters;
+
+import com.mmxlabs.models.lng.analytics.BreakEvenResult;
+import com.mmxlabs.models.lng.analytics.ProfitAndLossResult;
+import com.mmxlabs.models.ui.tabular.BaseFormatter;
+
+public class CargoResultDetailsDescriptionFormatter extends BaseFormatter {
+	@Override
+	public String render(final Object object) {
+
+		if (object instanceof ProfitAndLossResult) {
+			ProfitAndLossResult profitAndLossResult = (ProfitAndLossResult) object;
+			return String.format("%,.1f", profitAndLossResult.getValue());
+		}
+
+		if (object == null) {
+			return "";
+		} else {
+			return "";
+		}
+	}
+}

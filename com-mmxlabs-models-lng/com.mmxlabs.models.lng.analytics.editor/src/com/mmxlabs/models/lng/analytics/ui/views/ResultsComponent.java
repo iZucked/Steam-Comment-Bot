@@ -50,7 +50,9 @@ import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ResultContainer;
 import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView.SectionType;
+import com.mmxlabs.models.lng.analytics.ui.views.formatters.BEPriceResultDetailsDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
+import com.mmxlabs.models.lng.analytics.ui.views.formatters.CargoResultDetailsDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ResultDetailsDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.SellOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
@@ -261,9 +263,17 @@ public class ResultsComponent extends AbstractSandboxComponent {
 				AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SELL_OPTION);
 		createColumn(resultsViewer, "Shipping", new ResultsFormatterLabelProvider(new ShippingOptionDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SHIPPING), false,
 				AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SHIPPING);
-		createColumn(resultsViewer, "Details", new ResultsFormatterLabelProvider(new ResultDetailsDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAIL), false,
+		GridViewerColumn pAndL = createColumn(resultsViewer, "Cargo P&L", new ResultsFormatterLabelProvider(new CargoResultDetailsDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAIL), false,
+				AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAIL);
+		GridViewerColumn bePrice = createColumn(resultsViewer, "B/E Price", new ResultsFormatterLabelProvider(new BEPriceResultDetailsDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAIL), false,
 				AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAIL);
 
+		// set width for pricing columns
+		{
+			pAndL.getColumn().setWidth(100);
+			bePrice.getColumn().setWidth(100);
+		}
+		
 		final MenuManager mgr = new MenuManager();
 
 		final ResultsContextMenuManager listener = new ResultsContextMenuManager(resultsViewer, scenarioEditingLocation, optionModellerView, mgr);
