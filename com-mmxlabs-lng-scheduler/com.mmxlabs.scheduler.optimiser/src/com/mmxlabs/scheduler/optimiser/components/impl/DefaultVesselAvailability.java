@@ -30,12 +30,18 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 
 	private ILongCurve dailyCharterInRate;
 
+	private ILongCurve repositioningFee;
+	
+	private ILongCurve ballastBonus;
+
 	private IStartEndRequirement startRequirement;
 	private IStartEndRequirement endRequirement;
 
 	private ISpotCharterInMarket spotCharterInMarket;
 
 	private int spotIndex;
+	
+	private boolean optional;
 
 	public DefaultVesselAvailability(@NonNull final IVessel vessel, @NonNull final VesselInstanceType vesselInstanceType) {
 		this.vessel = vessel;
@@ -104,5 +110,32 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 	public void setSpotIndex(final int spotIndex) {
 		this.spotIndex = spotIndex;
 
+	}
+
+	@Override
+	public boolean isOptional() {
+		return this.optional;
+	}
+
+	public void setOptional(boolean optional) {
+		this.optional = optional;
+	}
+
+	@Override
+	public ILongCurve getRepositioningFee() {
+		return this.repositioningFee;
+	}
+
+	@Override
+	public ILongCurve getBallastBonus() {
+		return this.ballastBonus;
+	}
+
+	public void setRepositioningFee(ILongCurve repositioningFee) {
+		this.repositioningFee = repositioningFee;
+	}
+
+	public void setBallastBonus(ILongCurve ballastBonus) {
+		this.ballastBonus = ballastBonus;
 	}
 }

@@ -38,12 +38,16 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 	private final @NonNull IVessel vessel;
 
+	private int voyageStartTime;
+
 	public RouteVoyagePlanChoice(@Nullable final VoyageOptions previousOptions, @NonNull final VoyageOptions options,
-			@NonNull final List<@NonNull Pair<@NonNull ERouteOption, @NonNull Integer>> routeOptions, @NonNull final IVessel vessel, @NonNull final IRouteCostProvider routeCostProvider) {
+			@NonNull final List<@NonNull Pair<@NonNull ERouteOption, @NonNull Integer>> routeOptions, @NonNull final IVessel vessel, int voyageStartTime,
+			@NonNull final IRouteCostProvider routeCostProvider) {
 		this.previousOptions = previousOptions;
 		this.options = options;
 		this.routeOptions = routeOptions;
 		this.vessel = vessel;
+		this.voyageStartTime = voyageStartTime;
 		this.routeCostProvider = routeCostProvider;
 	}
 
@@ -100,7 +104,7 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 			}
 		}
 
-		final long routeCost = routeCostProvider.getRouteCost(entry.getFirst(), vessel, costType);
+		final long routeCost = routeCostProvider.getRouteCost(entry.getFirst(), vessel, voyageStartTime, costType);
 
 		options.setRoute(entry.getFirst(), entry.getSecond(), routeCost);
 

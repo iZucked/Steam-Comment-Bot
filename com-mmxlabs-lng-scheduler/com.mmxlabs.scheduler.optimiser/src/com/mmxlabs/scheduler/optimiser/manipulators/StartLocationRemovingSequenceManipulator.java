@@ -29,7 +29,7 @@ public class StartLocationRemovingSequenceManipulator implements ISequencesManip
 
 	@Inject
 	private IVesselProvider vesselProvider;
-
+	
 	private final Set<IResource> resourcesToManipulate = new HashSet<IResource>();
 
 	@Override
@@ -41,7 +41,7 @@ public class StartLocationRemovingSequenceManipulator implements ISequencesManip
 	}
 
 	private void manipulate(final IResource resource, final IModifiableSequence sequence) {
-		if (getShouldRemoveStartLocation(resource)) {
+		if (getShouldAlwaysRemoveStartLocation(resource) || getShouldConditionedRemoveStartLocation(resource, sequence)) {
 			sequence.remove(0);
 		}
 	}
@@ -53,7 +53,7 @@ public class StartLocationRemovingSequenceManipulator implements ISequencesManip
 	 * @param shouldRemoveStartLocation
 	 *            if true, start location will be removed, otherwise not.
 	 */
-	public void setShouldRemoveStartLocation(final IResource resource, final boolean shouldRemoveStartLocation) {
+	public void setShouldAlwaysRemoveStartLocation(final IResource resource, final boolean shouldRemoveStartLocation) {
 		if (shouldRemoveStartLocation) {
 			resourcesToManipulate.add(resource);
 		} else {
@@ -61,9 +61,19 @@ public class StartLocationRemovingSequenceManipulator implements ISequencesManip
 		}
 	}
 
-	public boolean getShouldRemoveStartLocation(final IResource resource) {
+	public boolean getShouldAlwaysRemoveStartLocation(final IResource resource) {
 		return resourcesToManipulate.contains(resource);
 	}
+	
+	public boolean getShouldConditionedRemoveStartLocation(final IResource resource, final IModifiableSequence sequence) {
+		final VesselInstanceType vesselInstanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
+		if ((vesselInstanceType != VesselInstanceType.DES_PURCHASE && vesselInstanceType != VesselInstanceType.FOB_SALE) && vesselProvider.getVesselAvailability(resource).isOptional()  && sequence.size() == 2) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 
 	/**
 	 */
@@ -73,10 +83,10 @@ public class StartLocationRemovingSequenceManipulator implements ISequencesManip
 		for (final IResource resource : data.getResources()) {
 			final VesselInstanceType vesselInstanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
 			if (vesselInstanceType == VesselInstanceType.ROUND_TRIP) {
-				setShouldRemoveStartLocation(resource, true);
+				setShouldAlwaysRemoveStartLocation(resource, true);
 			} else if (vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER)) {
-				setShouldRemoveStartLocation(resource, true);
-			}
+				setShouldAlwaysRemoveStartLocation(resource, true);
+			} 
 		}
 	}
 }

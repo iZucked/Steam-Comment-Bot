@@ -399,7 +399,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		if (ladenRoute == charterOutOption.getToCharterPort().getSecond()) {
 			dischargeToCharterPortCostType = CostType.RoundTripBallast;
 		}
-		final long dischargeToCharterPortRouteCosts = routeCostProvider.getRouteCost(charterOutOption.getToCharterPort().getSecond(), vessel, CostType.Ballast);
+		final long dischargeToCharterPortRouteCosts = routeCostProvider.getRouteCost(charterOutOption.getToCharterPort().getSecond(), vessel, ballastStartTime, CostType.Ballast);
 
 		final VoyageOptions dischargeToCharterPortVoyageOptions = new VoyageOptions(originalBallast.getOptions().getFromPortSlot(), charterOutPortSlot);
 		dischargeToCharterPortVoyageOptions.setRoute(charterOutOption.getToCharterPort().getSecond(), charterOutOption.getToCharterPort().getFirst(), dischargeToCharterPortRouteCosts);
@@ -410,12 +410,12 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		dischargeToCharterPortVoyageOptions.setWarm(originalBallast.getOptions().isWarm());
 		dischargeToCharterPortVoyageOptions.setAllowCooldown(false);
 		dischargeToCharterPortVoyageOptions.setCargoCVValue(originalBallast.getOptions().getCargoCVValue());
-//		if (vessel.getVesselClass().hasReliqCapability()) {
-//			// reliq vessels can only FBO/NBO
-//			dischargeToCharterPortVoyageOptions.setUseNBOForTravel(true);
-//			dischargeToCharterPortVoyageOptions.setUseFBOForSupplement(true);
-//			dischargeToCharterPortVoyageOptions.setUseNBOForIdle(true);
-//		}
+		// if (vessel.getVesselClass().hasReliqCapability()) {
+		// // reliq vessels can only FBO/NBO
+		// dischargeToCharterPortVoyageOptions.setUseNBOForTravel(true);
+		// dischargeToCharterPortVoyageOptions.setUseFBOForSupplement(true);
+		// dischargeToCharterPortVoyageOptions.setUseNBOForIdle(true);
+		// }
 
 		// (2) charter out
 
@@ -432,8 +432,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 		charterOutOption.setPortOptions(generatedCharterPortOptions);
 		// (3) ballast to return port
-
-		final long charterToReturnPortRouteCosts = routeCostProvider.getRouteCost(charterOutOption.getFromCharterPort().getSecond(), vessel, CostType.Ballast);
+		int startOfPostCharterVoyage = charterOutOption.getCharterStartTime() + charterOutOption.getCharterDuration();
+		final long charterToReturnPortRouteCosts = routeCostProvider.getRouteCost(charterOutOption.getFromCharterPort().getSecond(), vessel, startOfPostCharterVoyage, CostType.Ballast);
 
 		final VoyageOptions charterToReturnPortVoyageOptions = new VoyageOptions(charterOutPortSlot, originalBallast.getOptions().getToPortSlot());
 		charterToReturnPortVoyageOptions.setRoute(charterOutOption.getFromCharterPort().getSecond(), charterOutOption.getFromCharterPort().getFirst(), charterToReturnPortRouteCosts);
@@ -444,9 +444,9 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		charterToReturnPortVoyageOptions.setWarm(originalBallast.getOptions().isWarm());
 		charterToReturnPortVoyageOptions.setAllowCooldown(originalBallast.getOptions().getAllowCooldown());
 		charterToReturnPortVoyageOptions.setCargoCVValue(originalBallast.getOptions().getCargoCVValue());
-//		if (vessel.getVesselClass().hasReliqCapability()) {
-//			charterToReturnPortVoyageOptions.set
-//		}
+		// if (vessel.getVesselClass().hasReliqCapability()) {
+		// charterToReturnPortVoyageOptions.set
+		// }
 		// add options to new sequence
 		newRawSequence.add(dischargeToCharterPortVoyageOptions);
 		newRawSequence.add(generatedCharterPortOptions);

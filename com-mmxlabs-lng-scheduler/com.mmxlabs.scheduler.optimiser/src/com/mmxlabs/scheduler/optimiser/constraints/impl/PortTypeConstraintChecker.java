@@ -85,7 +85,9 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 
 		for (final IResource resource : loopResources) {
 			final ISequence sequence = sequences.getSequence(resource);
-			if (!checkSequence(sequence, messages, vesselProvider.getVesselAvailability(resource).getVesselInstanceType())) {
+			@NonNull
+			IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+			if (!checkSequence(sequence, messages, vesselAvailability.getVesselInstanceType(), vesselAvailability.isOptional())) {
 				if (messages == null) {
 					return false;
 				} else {
@@ -107,9 +109,10 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 	 * 
 	 * @param sequence
 	 * @param messages
+	 * @param isOptionalVesselAvailability TODO
 	 * @return
 	 */
-	public final boolean checkSequence(@NonNull final ISequence sequence, @Nullable final List<String> messages, @NonNull final VesselInstanceType instanceType) {
+	public final boolean checkSequence(@NonNull final ISequence sequence, @Nullable final List<String> messages, @NonNull final VesselInstanceType instanceType, boolean isOptionalVesselAvailability) {
 
 		if (instanceType == VesselInstanceType.FOB_SALE || instanceType == VesselInstanceType.DES_PURCHASE) {
 			int size = sequence.size();
@@ -143,7 +146,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			final PortType type = portTypeProvider.getPortType(t);
 			if (previous == null) {
 				if (!(((type == PortType.Start) && (instanceType != VesselInstanceType.SPOT_CHARTER)) || ((instanceType == VesselInstanceType.ROUND_TRIP) && (type == PortType.Load))
-						|| ((instanceType == VesselInstanceType.SPOT_CHARTER) && ((type == PortType.Load) || (type == PortType.End))))) {
+						|| (((instanceType == VesselInstanceType.SPOT_CHARTER) || ((instanceType == VesselInstanceType.FLEET || instanceType == VesselInstanceType.TIME_CHARTER)  && isOptionalVesselAvailability)) && ((type == PortType.Load) || (type == PortType.End))))) {
 					// must either start with Start and be not a spot charter,
 					// or must start with a load or an End and be a spot charter
 

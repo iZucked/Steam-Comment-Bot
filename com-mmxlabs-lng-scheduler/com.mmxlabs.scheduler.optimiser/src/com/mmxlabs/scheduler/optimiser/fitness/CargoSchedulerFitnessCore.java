@@ -6,9 +6,7 @@ package com.mmxlabs.scheduler.optimiser.fitness;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -23,7 +21,6 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.components.IdleTimeComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
@@ -138,16 +135,6 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 
 	@Override
 	public void annotate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution) {
-		// set up per-route fitness map, which components can put their fitness
-		// in
-		{
-			final Map<IResource, Map<String, Long>> fitnessPerRoute = new HashMap<IResource, Map<String, Long>>();
-			for (final IResource resource : solution.getFullSequences().getResources()) {
-				fitnessPerRoute.put(resource, new HashMap<String, Long>());
-			}
 
-			solution.setGeneralAnnotation(SchedulerConstants.G_AI_fitnessPerRoute, fitnessPerRoute);
-			// solution.setGeneralAnnotation(SchedulerConstants.G_AI_scheduledSequence, evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class));
-		}
 	}
 }

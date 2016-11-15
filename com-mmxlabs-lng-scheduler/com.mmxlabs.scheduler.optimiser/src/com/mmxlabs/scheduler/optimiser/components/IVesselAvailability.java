@@ -42,10 +42,34 @@ public interface IVesselAvailability {
 	IStartEndRequirement getEndRequirement();
 
 	/**
+	 * Returns the repositioning fee of the vessel.
+	 * 
+	 * @return repositioning fee
+	 */
+	@NonNull
+	ILongCurve getRepositioningFee();
+	
+	/**
+	 * Returns the ballast bonus of the vessel.
+	 * 
+	 * @return ballast bonus
+	 */
+	@NonNull
+	ILongCurve getBallastBonus();
+
+	/**
 	 * Returns the daily rate at which this vessel can be chartered in.
 	 * 
 	 * @return daily charter in price
 	 */
 	ILongCurve getDailyCharterInRate();
+
+	/**
+	 * A flag determining whether the charter is optional or not
+	 * 
+	 * @return
+	 */
+	boolean isOptional();
+
 
 }

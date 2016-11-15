@@ -24,6 +24,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 public final class HashMapVesselEditor implements IVesselProviderEditor {
 
 	private final Map<IResource, IVesselAvailability> resourceVesselAvailabilityMap = new HashMap<>();
+	private final Map<IResource, Boolean> resourceOptionalMap = new HashMap<>();
 	private final Map<IVesselAvailability, IResource> vesselAvailabilityResourceMap = new HashMap<>();
 	private final List<IResource> resources = new LinkedList<IResource>();
 
@@ -58,5 +59,16 @@ public final class HashMapVesselEditor implements IVesselProviderEditor {
 	@Override
 	public List<IResource> getSortedResources() {
 		return resources;
+	}
+
+	@Override
+	public boolean isResourceOptional(@NonNull IResource resource) {
+		Boolean optional = resourceOptionalMap.get(resource);
+		return optional == true;
+	}
+
+	@Override
+	public void setResourceOptional(@NonNull IResource resource, boolean optional) {
+		resourceOptionalMap.put(resource, optional);
 	}
 }

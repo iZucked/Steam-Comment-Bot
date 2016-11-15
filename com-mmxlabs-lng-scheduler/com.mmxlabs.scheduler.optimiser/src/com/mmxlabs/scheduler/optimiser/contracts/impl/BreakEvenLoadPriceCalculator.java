@@ -4,9 +4,13 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.inject.Inject;
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -18,14 +22,18 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.IBreakEvenPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  */
-public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBreakEvenPriceCalculator {
+public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBreakEvenPriceCalculator, IPriceIntervalProvider {
+	@Inject
+	private PriceIntervalProviderHelper priceIntervalProviderHelper;
 
 	private int price;
 
@@ -71,11 +79,32 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 
 	@Override
 	public PricingEventType getCalculatorPricingEventType(final ILoadOption loadOption, final IPortTimeWindowsRecord portTimeWindowsRecord) {
-		return PricingEventType.START_OF_LOAD_WINDOW;
+		return loadOption.getPricingEvent();
 	}
 
 	@Override
 	public int getCalculatorPricingDate(final ILoadOption loadOption, final IPortTimeWindowsRecord portTimeWindowsRecord) {
 		return IPortSlot.NO_PRICING_DATE;
 	}
+	
+	@Override
+	public List<int[]> getPriceIntervals(final IPortSlot slot, final int startOfRange, final int endOfRange, final IPortTimeWindowsRecord portTimeWindowRecord) {
+		final List<int[]> intervals = new LinkedList<>();
+		intervals.add(new int[] { startOfRange, price });
+		intervals.add(priceIntervalProviderHelper.getEndInterval(endOfRange));
+		return intervals;
+	}
+
+	@Override
+	public List<Integer> getPriceHourIntervals(final IPortSlot slot, final int start, final int end, final IPortTimeWindowsRecord portTimeWindowsRecord) {
+		final int[] intervals = new int[] { start, end };
+		if (slot instanceof ILoadOption) {
+			return priceIntervalProviderHelper.buildDateChangeCurveAsIntegerList(start, end, slot, intervals, portTimeWindowsRecord);
+		} else if (slot instanceof IDischargeOption) {
+			return priceIntervalProviderHelper.buildDateChangeCurveAsIntegerList(start, end, slot, intervals, portTimeWindowsRecord);
+		} else {
+			return null;
+		}
+	}
+
 }

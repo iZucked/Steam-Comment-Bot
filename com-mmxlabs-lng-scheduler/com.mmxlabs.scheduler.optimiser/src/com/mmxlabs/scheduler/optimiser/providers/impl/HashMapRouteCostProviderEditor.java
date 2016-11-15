@@ -10,6 +10,8 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
@@ -17,9 +19,9 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
 
 public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor {
 
-	private final Map<ERouteOption, Map<IVessel, EnumMap<CostType, Long>>> pricesByRouteClassAndState = new HashMap<>();
+	private final Map<ERouteOption, Map<IVessel, EnumMap<CostType, ILongCurve>>> pricesByRouteClassAndState = new HashMap<>();
 
-	private final Map<ERouteOption, Long> defaultPrices = new HashMap<>();
+	private final Map<ERouteOption, ILongCurve> defaultPrices = new HashMap<>();
 
 	private final Map<ERouteOption, Map<IVessel, Integer>> travelTimesByRouteAndClass = new HashMap<>();
 	private final Map<ERouteOption, Map<IVessel, EnumMap<VesselState, Long>>> baseFuelByRouteAndClass = new HashMap<>();
@@ -28,35 +30,36 @@ public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor 
 	/**
 	 */
 	@Override
-	public long getRouteCost(final @NonNull ERouteOption route, final @NonNull IVessel vessel, final @NonNull CostType vesselState) {
+	public long getRouteCost(final @NonNull ERouteOption route, final @NonNull IVessel vessel, final int voyageStartTime, final @NonNull CostType vesselState) {
 
 		// Special case DIRECT
 		if (route == ERouteOption.DIRECT) {
 			return 0L;
 		}
 
-		Long cost = get(pricesByRouteClassAndState, route, vessel, vesselState, null);
+		ILongCurve cost = get(pricesByRouteClassAndState, route, vessel, vesselState, null);
 
 		if (cost == null) {
 			cost = defaultPrices.get(route);
+
 		}
 		if (cost != null) {
-			return cost;
+			return cost.getValueAtPoint(voyageStartTime);
 		}
-		return 0;
+		return 0L;
 	}
 
 	/**
 	 */
 	@Override
-	public void setRouteCost(final @NonNull ERouteOption route, final @NonNull IVessel vessel, final @NonNull CostType costType, final long price) {
+	public void setRouteCost(final @NonNull ERouteOption route, final @NonNull IVessel vessel, final @NonNull CostType costType, final ILongCurve price) {
 		set(pricesByRouteClassAndState, route, vessel, costType, price, CostType.class);
 	}
 
 	/**
 	 */
 	@Override
-	public void setDefaultRouteCost(final ERouteOption route, final long price) {
+	public void setDefaultRouteCost(final ERouteOption route, final ILongCurve price) {
 		defaultPrices.put(route, price);
 	}
 

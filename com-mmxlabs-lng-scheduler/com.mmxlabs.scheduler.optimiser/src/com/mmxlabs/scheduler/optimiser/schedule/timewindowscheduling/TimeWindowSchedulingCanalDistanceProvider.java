@@ -46,7 +46,8 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 		return getMinimumTravelTimes(load, discharge, vessel, ladenStartTime, false);
 	}
 
-	public @NonNull LadenRouteData @NonNull [] getMinimumTravelTimes(@NonNull final IPort load, @NonNull final IPort discharge, @NonNull final IVessel vessel, final int ladenStartTime, boolean isLaden) {
+	public @NonNull LadenRouteData @NonNull [] getMinimumTravelTimes(@NonNull final IPort load, @NonNull final IPort discharge, @NonNull final IVessel vessel, final int ladenStartTime,
+			boolean isLaden) {
 		// get distances for this pairing (assumes that getAllDistanceValues() returns a copy of the data)
 		VesselState vesselState;
 		IRouteCostProvider.CostType costType;
@@ -57,7 +58,7 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 			vesselState = VesselState.Ballast;
 			costType = CostType.Ballast;
 		}
-		
+
 		List<@NonNull Pair<@NonNull ERouteOption, @NonNull Integer>> allDistanceValues = distanceProvider.getAllDistanceValues(load, discharge);
 		final IVesselClass vesselClass = vessel.getVesselClass();
 		assert vesselClass != null;
@@ -65,13 +66,12 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 		Collections.sort(allDistanceValues, new Comparator<Pair<@NonNull ERouteOption, @NonNull Integer>>() {
 			@Override
 			public int compare(final Pair<@NonNull ERouteOption, @NonNull Integer> o1, final Pair<@NonNull ERouteOption, @NonNull Integer> o2) {
-				if (routeCostProvider.getRouteCost(o1.getFirst(), vessel, costType) == routeCostProvider.getRouteCost(o2.getFirst(), vessel,
-						costType)) {
+				if (routeCostProvider.getRouteCost(o1.getFirst(), vessel, ladenStartTime, costType) == routeCostProvider.getRouteCost(o2.getFirst(), vessel, ladenStartTime, costType)) {
 					return Integer.compare(Calculator.getTimeFromSpeedDistance(vesselClass.getMaxSpeed(), o1.getSecond()) + routeCostProvider.getRouteTransitTime(o1.getFirst(), vessel),
 							Calculator.getTimeFromSpeedDistance(vesselClass.getMaxSpeed(), o2.getSecond()) + routeCostProvider.getRouteTransitTime(o2.getFirst(), vessel));
 				} else {
-					return Long.compare(routeCostProvider.getRouteCost(o1.getFirst(), vessel, costType),
-							routeCostProvider.getRouteCost(o2.getFirst(), vessel, costType));
+					return Long.compare(routeCostProvider.getRouteCost(o1.getFirst(), vessel, ladenStartTime, costType),
+							routeCostProvider.getRouteCost(o2.getFirst(), vessel, ladenStartTime, costType));
 				}
 			}
 		});
@@ -81,9 +81,8 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 
 		// remove dominated distances
 		for (int i = allDistanceValues.size() - 1; i > 0; i--) {
-			if ((routeCostProvider.getRouteCost(allDistanceValues.get(i).getFirst(), vessel, costType) >= routeCostProvider
-					.getRouteCost(allDistanceValues.get(i - 1).getFirst(), vessel, costType))
-					&& allDistanceValues.get(i).getSecond() > allDistanceValues.get(i - 1).getSecond()) {
+			if ((routeCostProvider.getRouteCost(allDistanceValues.get(i).getFirst(), vessel, ladenStartTime, costType) >= routeCostProvider.getRouteCost(allDistanceValues.get(i - 1).getFirst(),
+					vessel, ladenStartTime, costType)) && allDistanceValues.get(i).getSecond() > allDistanceValues.get(i - 1).getSecond()) {
 				allDistanceValues.remove(i);
 			}
 		}
@@ -99,7 +98,7 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 			final int nbotravelTime = Calculator.getTimeFromSpeedDistance(nboSpeed, d.getSecond());
 			final int transitTime = routeCostProvider.getRouteTransitTime(d.getFirst(), vessel);
 			times[i] = new LadenRouteData(mintravelTime + transitTime, nbotravelTime + transitTime,
-					OptimiserUnitConvertor.convertToInternalDailyCost(routeCostProvider.getRouteCost(d.getFirst(), vessel, costType)), d.getSecond(), transitTime);
+					OptimiserUnitConvertor.convertToInternalDailyCost(routeCostProvider.getRouteCost(d.getFirst(), vessel, ladenStartTime, costType)), d.getSecond(), transitTime);
 			i++;
 		}
 		return times;
@@ -138,6 +137,7 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 
 	/**
 	 * Return a list of potential end times based on different speeds a vessel can travel and routes it can take
+	 * 
 	 * @param load
 	 * @param discharge
 	 * @param vessel
@@ -146,7 +146,8 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 	 */
 	@Override
 	@NonNull
-	public List<Integer> getTimeDataForDifferentSpeedsAndRoutes(@NonNull final IPort load, @NonNull final IPort discharge, @NonNull final IVessel vessel, final int cv, final int startTime, final boolean isLaden) {
+	public List<Integer> getTimeDataForDifferentSpeedsAndRoutes(@NonNull final IPort load, @NonNull final IPort discharge, @NonNull final IVessel vessel, final int cv, final int startTime,
+			final boolean isLaden) {
 		int minSpeed;
 		if (isLaden) {
 			minSpeed = getNBOSpeed(vessel.getVesselClass(), VesselState.Laden, cv);
@@ -156,10 +157,10 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 		// round min and max speeds to allow better speed stepping
 		minSpeed = roundUpToNearest(minSpeed, 100);
 		int maxSpeed = roundDownToNearest(vessel.getVesselClass().getMaxSpeed(), 100);
-		
+
 		// min speed needs to be bounded!
 		minSpeed = Math.min(minSpeed, maxSpeed);
-		
+
 		// loop through speeds and canals
 		int speed = minSpeed;
 		@NonNull
@@ -178,11 +179,10 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 	}
 
 	private static int roundUpToNearest(int input, int rounding) {
-		return ((input + (rounding-1)) / rounding) * rounding;
+		return ((input + (rounding - 1)) / rounding) * rounding;
 	}
-	
+
 	private static int roundDownToNearest(int input, int rounding) {
 		return ((input) / rounding) * rounding;
 	}
 }
-

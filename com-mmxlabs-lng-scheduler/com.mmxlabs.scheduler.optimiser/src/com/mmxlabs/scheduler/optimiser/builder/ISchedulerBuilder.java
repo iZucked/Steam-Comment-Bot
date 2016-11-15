@@ -221,11 +221,14 @@ public interface ISchedulerBuilder {
 	 * @param vesselInstanceType
 	 * @param start
 	 * @param end
+	 * @param repositioningFee TODO
+	 * @param ballastBonus TODO
+	 * @param isOptional TODO
 	 * @return
 	 */
 	@NonNull
 	IVesselAvailability createVesselAvailability(@NonNull IVessel vessel, @NonNull ILongCurve dailyCharterInPrice, @NonNull VesselInstanceType vesselInstanceType, @NonNull IStartRequirement start,
-			@NonNull IEndRequirement end);
+			@NonNull IEndRequirement end, ILongCurve repositioningFee, ILongCurve ballastBonus, boolean isOptional);
 
 	@NonNull
 	public IStartRequirement createStartRequirement(@Nullable IPort fixedPort, @Nullable ITimeWindow timeWindow, @Nullable IHeelOptions heelOptions);
@@ -326,7 +329,7 @@ public interface ISchedulerBuilder {
 	 * @param state
 	 * @param tollPrice
 	 */
-	void setVesselRouteCost(final @NonNull ERouteOption route, @NonNull final IVessel vessel, final IRouteCostProvider.@NonNull CostType costType, final long tollPrice);
+	void setVesselRouteCost(final @NonNull ERouteOption route, @NonNull final IVessel vessel, final IRouteCostProvider.@NonNull CostType costType, final @NonNull ILongCurve tollPrice);
 
 	/**
 	 * Set the default toll associated with passing by a given route
@@ -336,7 +339,7 @@ public interface ISchedulerBuilder {
 	 * @param defaultPrice
 	 *            the associated toll in dollars
 	 */
-	void setDefaultRouteCost(@NonNull ERouteOption route, long defaultPrice);
+	void setDefaultRouteCost(@NonNull ERouteOption route, @NonNull ILongCurve defaultPrice);
 
 	/**
 	 * Set the extra time and fuel required for the given vessel to travel by the given route
@@ -738,6 +741,7 @@ public interface ISchedulerBuilder {
 
 	/**
 	 * Set Inaccessible Routes (canals) for a vessel
+	 * 
 	 * @param vessel
 	 * @param inaccessibleRoutes
 	 */
@@ -745,6 +749,7 @@ public interface ISchedulerBuilder {
 
 	/**
 	 * Set Inaccessible Routes (canals) for a class of vessel
+	 * 
 	 * @param vessel
 	 * @param inaccessibleRoutes
 	 */

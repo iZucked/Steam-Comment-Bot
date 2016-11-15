@@ -18,7 +18,9 @@ import org.mockito.Mockito;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
@@ -460,8 +462,8 @@ public class LNGVoyageCalculatorTest {
 
 		options.setAvailableTime(48);
 		final ERouteOption routeName = ERouteOption.SUEZ;
-		long routeCost = 200000;
-		options.setRoute(routeName, 15 * 24, routeCost);
+		ILongCurve routeCost = new ConstantValueLongCurve(200000L);
+		options.setRoute(routeName, 15 * 24, routeCost.getValueAtPoint(0));
 
 		final VoyageDetails details = new VoyageDetails(options);
 
@@ -524,8 +526,8 @@ public class LNGVoyageCalculatorTest {
 
 		final IVessel vessel = options.getVessel();
 
-		long routeCost = 200000;
-		options.setRoute(routeName, 15 * 24, routeCost);
+		ILongCurve routeCost = new ConstantValueLongCurve(200000L);
+		options.setRoute(routeName, 15 * 24, routeCost.getValueAtPoint(0));
 
 		routeCostProvider.setDefaultRouteCost(routeName, routeCost);
 		routeCostProvider.setRouteTransitTime(routeName, vessel, 24);

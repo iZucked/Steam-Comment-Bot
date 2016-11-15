@@ -31,17 +31,13 @@ public final class SchedulerConstants {
 	public static final String AI_capacityViolationInfo = "info-capacity-violation";
 	public static final String AI_portCostInfo = "info-port-cost";
 	public static final String AI_hedgingValue = "element-hedging-value";
+	public static final String AI_miscCostsValue = "element-misc-costs-value";
 	public static final String AI_cancellationFees = "element-cancellation-fees";
 	public static final String AI_charterOutProfitAndLoss = "generated-charter-out-profit-and-loss";
 	public static final String AI_profitAndLoss = "element-profit-and-loss";
 	public static final String AI_profitAndLossSlotDetails = "element-profit-and-loss-slot-details";
 	public static final String AI_latenessInfo = "info-lateness";
 	public static final String AI_similarityDifferences = "info-similarity-changes";
-
-	/**
-	 * A key for a per-route fitness map, which should be of type {@code Map<IResource, Map<String, Long>}. Each element in the map should map fitness function names to fitness values.
-	 */
-	public static final String G_AI_fitnessPerRoute = "general-info-fitness-per-route";
 
 	/**
 	 * A key for a per-route fitness map, which should be of type {@code Map<IResource, Map<String, Long>}. Each element in the map should map fitness function names to fitness values.
