@@ -315,11 +315,6 @@ public class ScheduleCalculator {
 				if (allocationAnnotation != null) {
 					elementAnnotations.setAnnotation(portElement, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
 				}
-
-				final IHeelLevelAnnotation heelLevelAnnotation = scheduledSequence.getHeelLevelAnnotation(portSlot);
-				if (heelLevelAnnotation != null) {
-					elementAnnotations.setAnnotation(portElement, SchedulerConstants.AI_heelLevelInfo, heelLevelAnnotation);
-				}
 			}
 		}
 	}

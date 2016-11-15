@@ -38,7 +38,11 @@ public class AllocationRecord {
 		/**
 		 * Typically DES or FOB deals. BOG ignored in volumes
 		 */
-		Transfer
+		Transfer,
+		/**
+		 * Custom mode, use the record max values as absolute values. Assume input data has already been checked.
+		 */
+		Custom 
 	}
 
 	/** The LNG volume which the vessel starts with (the start heel) */

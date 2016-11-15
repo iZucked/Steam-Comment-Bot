@@ -62,20 +62,21 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		final @NonNull List<@NonNull IPortSlot> slots = allocationRecord.slots;
 
 		final IVessel vessel = allocationRecord.nominatedVessel != null ? allocationRecord.nominatedVessel : allocationRecord.vesselAvailability.getVessel();
-		if (allocationRecord.allocationMode == AllocationMode.Actuals_Transfer) {
-			return calculateActualsTransferMode(allocationRecord, slots);
-		} else if (allocationRecord.allocationMode == AllocationMode.Actuals) {
+
+		switch (allocationRecord.allocationMode) {
+		case Actuals:
 			return calculateActualsShippedMode(allocationRecord, slots, vessel);
-		}
-
-		// Non-actuals code path
-
-		if (allocationRecord.allocationMode == AllocationMode.Transfer) { // Transfer, just find the common max and replicate.
-			return calculateTransferMode(allocationRecord, slots, vessel);
-		} else {
+		case Actuals_Transfer:
+			return calculateActualsTransferMode(allocationRecord, slots);
+		case Shipped:
 			return calculateShippedMode(allocationRecord, slots, vessel);
+		case Transfer:
+			return calculateTransferMode(allocationRecord, slots, vessel);
+		case Custom:
+			return calculateCustomMode(allocationRecord, slots, vessel);
+		default:
+			throw new IllegalStateException();
 		}
-
 	}
 
 	protected @NonNull AllocationAnnotation calculateActualsTransferMode(final AllocationRecord allocationRecord, final List<@NonNull IPortSlot> slots) {
@@ -305,6 +306,10 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		annotation.setRemainingHeelVolumeInM3(allocationRecord.minEndVolumeInM3 + unusedVolume);
 		annotation.setFuelVolumeInM3(allocationRecord.requiredFuelVolumeInM3);
 
+		assert annotation.getFuelVolumeInM3() >= 0;
+		assert annotation.getStartHeelVolumeInM3() >= 0;
+		assert annotation.getRemainingHeelVolumeInM3() >= 0;
+
 		// Copy across slot time information
 		for (int i = 0; i < slots.size(); i++) {
 			final IPortSlot slot = allocationRecord.slots.get(i);
@@ -476,5 +481,23 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				annotation.setSlotVolumeInM3(slot, 0);
 			}
 		}
+	}
+
+	protected @NonNull AllocationAnnotation calculateCustomMode(final @NonNull AllocationRecord allocationRecord, final @NonNull List<@NonNull IPortSlot> slots, final @NonNull IVessel vessel) {
+		assert allocationRecord.allocationMode == AllocationMode.Custom;
+
+		final AllocationAnnotation annotation = createNewAnnotation(allocationRecord, slots);
+
+		annotation.setStartHeelVolumeInM3(allocationRecord.startVolumeInM3);
+		annotation.setFuelVolumeInM3(allocationRecord.requiredFuelVolumeInM3);
+		annotation.setRemainingHeelVolumeInM3(allocationRecord.minEndVolumeInM3);
+		for (int i = 0; i < slots.size(); ++i) {
+			final IPortSlot slot = slots.get(i);
+
+			annotation.setSlotVolumeInM3(slot, allocationRecord.maxVolumesInM3.get(i));
+			annotation.setSlotVolumeInMMBTu(slot, allocationRecord.maxVolumesInMMBtu.get(i));
+		}
+
+		return annotation;
 	}
 }

@@ -715,8 +715,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 			violationsCount += checkCargoCapacityViolations(startHeelInM3, lngCommitmentInM3, loadSlot, dischargeSlot, minDischargeVolumeInM3, cargoCapacityInM3, remainingHeelInM3);
 
-			// Sanity checks
-			assert lngCommitmentInM3 >= 0;
 			// assert lngCommitmentInM3 <= cargoCapacityInM3;
 		} else {
 			// was not a Cargo sequence
@@ -768,6 +766,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			}
 
 		}
+
+		// Sanity checks
+		assert lngCommitmentInM3 >= 0;
 
 		final List<Integer> loadIndices = findLoadIndices(sequence);
 		final List<Integer> dischargeIndices = findDischargeIndices(sequence);
