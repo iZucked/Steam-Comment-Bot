@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.portrotation;
 
-import static com.mmxlabs.lingo.reports.views.schedule.ScheduleBasedReportBuilder.CARGO_REPORT_TYPE_ID;
-
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.HashMap;
@@ -19,7 +17,6 @@ import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
 import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EmfBlockColumnFactory;
-import com.mmxlabs.lingo.reports.components.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.views.formatters.AsDateTimeFormatter;
@@ -277,8 +274,8 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Heel Start", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
-					if (object instanceof PortVisit) {
-						final PortVisit pv = (PortVisit) object;
+					if (object instanceof Event) {
+						final Event pv = (Event) object;
 						return pv.getHeelAtStart();
 					}
 					return null;
@@ -289,8 +286,8 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Heel End", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
-					if (object instanceof PortVisit) {
-						final PortVisit pv = (PortVisit) object;
+					if (object instanceof Event) {
+						final Event pv = (Event) object;
 						return pv.getHeelAtEnd();
 					}
 					return null;
