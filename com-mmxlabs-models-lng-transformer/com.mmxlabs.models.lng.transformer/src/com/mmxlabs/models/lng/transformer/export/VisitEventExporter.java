@@ -132,6 +132,8 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			slotAllocation.setVolumeValue(OptimiserUnitConvertor.convertToExternalFixedCost(allocation.getSlotValue(slot)));
 			slotAllocation.setEnergyTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getCommercialSlotVolumeInMMBTu(slot)));
 			slotAllocation.setCv(OptimiserUnitConvertor.convertToExternalConversionFactor(allocation.getSlotCargoCV(slot)));
+			slotAllocation.setPhysicalVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getPhysicalSlotVolumeInM3(slot)));
+			slotAllocation.setPhysicalEnergyTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getPhysicalSlotVolumeInMMBTu(slot)));
 
 			sv.setSlotAllocation(slotAllocation);
 			slotAllocation.setCargoAllocation(eAllocation);
@@ -144,7 +146,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 		} else if (slot instanceof IVesselEventPortSlot) {
 			if (slot instanceof IGeneratedCharterOutVesselEventPortSlot) {
-				//GCO logic
+				// GCO logic
 				GeneratedCharterOut generatedCharterOutEvent = factory.createGeneratedCharterOut();
 				IGeneratedCharterOutVesselEvent event = ((IGeneratedCharterOutVesselEventPortSlot) slot).getVesselEvent();
 				generatedCharterOutEvent.setRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(event.getHireOutRevenue()));
@@ -252,14 +254,14 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			PortVisitLateness portVisitLateness = ScheduleFactory.eINSTANCE.createPortVisitLateness();
 			PortVisitLatenessType type = null;
 			Interval interval = latenessAnnotation.getIntervalWithoutFlex();
-			switch(interval) {
-			case PROMPT :
+			switch (interval) {
+			case PROMPT:
 				type = PortVisitLatenessType.PROMPT;
 				break;
-			case MID_TERM :
+			case MID_TERM:
 				type = PortVisitLatenessType.MID_TERM;
 				break;
-			case BEYOND :
+			case BEYOND:
 				type = PortVisitLatenessType.BEYOND;
 				break;
 			}
