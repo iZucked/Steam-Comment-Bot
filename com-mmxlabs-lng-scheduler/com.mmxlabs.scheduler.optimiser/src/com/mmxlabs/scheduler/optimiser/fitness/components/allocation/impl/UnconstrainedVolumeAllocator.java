@@ -30,7 +30,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
  * 
  */
 public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
-	
+
 	@Inject
 	private IBoilOffHelper inPortBoilOffHelper;
 
@@ -198,26 +198,25 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		assert allocationRecord.allocationMode == AllocationMode.Shipped;
 
 		final AllocationAnnotation annotation = createNewAnnotation(allocationRecord, slots);
-		
-		long loadBoilOffInM3 = inPortBoilOffHelper.getPortVisitNBOInM3(vessel,slots.get(0), allocationRecord);
-		
+
+		final long loadBoilOffInM3 = inPortBoilOffHelper.calculatePortVisitNBOInM3(vessel, slots.get(0), allocationRecord);
+
 		// how much room is there in the tanks?
 		long availableCargoSpace = vessel.getCargoCapacity() - allocationRecord.startVolumeInM3;
-		
-		if(inPortBoilOffHelper.isBoilOffCompensation()){
+
+		if (inPortBoilOffHelper.isBoilOffCompensation()) {
 			availableCargoSpace += loadBoilOffInM3;
 		}
 
 		// how much fuel will be required over and above what we start with in the tanks?
 		// note: this is the fuel consumption plus any heel quantity required at discharge
-		final long fuelDeficit = allocationRecord.requiredFuelVolumeInM3 - allocationRecord.startVolumeInM3 + allocationRecord.minEndVolumeInM3;		
-		
-		long maxLoad = allocationRecord.maxVolumesInM3.get(0);
-		
+		final long fuelDeficit = allocationRecord.requiredFuelVolumeInM3 - allocationRecord.startVolumeInM3 + allocationRecord.minEndVolumeInM3;
+
+		final long maxLoad = allocationRecord.maxVolumesInM3.get(0);
+
 		// greedy assumption: always load as much as possible
-		long loadVolume = capValueWithZeroDefault(maxLoad, availableCargoSpace );
-		
-		
+		long loadVolume = capValueWithZeroDefault(maxLoad, availableCargoSpace);
+
 		// violate maximum load volume constraint when it has to be done to fuel the vessel
 		if (loadVolume < fuelDeficit) {
 			loadVolume = fuelDeficit;
@@ -225,7 +224,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			// we should never be required to load more than the vessel can fit in its tanks
 			// assert (loadVolume <= availableCargoSpace);
 		}
-		
+
 		// the amount of LNG available for discharge
 		long unusedVolume = loadVolume + allocationRecord.startVolumeInM3 - allocationRecord.minEndVolumeInM3 - allocationRecord.requiredFuelVolumeInM3;
 
@@ -238,8 +237,8 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
 			final IDischargeOption dischargeSlot = (IDischargeOption) slots.get(1);
 			// greedy assumption: always discharge as much as possible
-			final long dischargeVolume = capValueWithZeroDefault(allocationRecord.maxVolumesInM3.get(1), unusedVolume ) ;
-	
+			final long dischargeVolume = capValueWithZeroDefault(allocationRecord.maxVolumesInM3.get(1), unusedVolume);
+
 			annotation.setCommercialSlotVolumeInM3(dischargeSlot, dischargeVolume);
 			annotation.setPhysicalSlotVolumeInM3(dischargeSlot, dischargeVolume);
 			unusedVolume -= dischargeVolume;
@@ -265,7 +264,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				} else {
 					dischargeVolume = unusedVolume;
 				}
-				
+
 				annotation.setCommercialSlotVolumeInM3(dischargeSlot, dischargeVolume);
 				annotation.setPhysicalSlotVolumeInM3(dischargeSlot, dischargeVolume);
 				unusedVolume -= dischargeVolume;
@@ -485,7 +484,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 	 * @param transferVolumeMMBTU
 	 * @param transferVolumeM3
 	 */
-	protected void setTransferVolume(final @NonNull AllocationRecord allocationRecord, @NonNull IPortSlot slot, final @NonNull AllocationAnnotation annotation, final long transferVolumeMMBTU,
+	protected void setTransferVolume(final @NonNull AllocationRecord allocationRecord, @NonNull final IPortSlot slot, final @NonNull AllocationAnnotation annotation, final long transferVolumeMMBTU,
 			final long transferVolumeM3) {
 		annotation.setCommercialSlotVolumeInMMBTu(slot, transferVolumeMMBTU);
 		if (transferVolumeM3 != -1) {

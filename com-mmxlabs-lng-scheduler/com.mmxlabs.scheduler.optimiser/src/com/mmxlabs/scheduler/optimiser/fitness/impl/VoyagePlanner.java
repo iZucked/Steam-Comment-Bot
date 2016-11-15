@@ -1078,7 +1078,7 @@ public class VoyagePlanner {
 	private void evaluateBrokenUpVoyagePlan(final @NonNull PlanEvaluationData planData, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime,
 			final List<@NonNull Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlansMap, final List<@NonNull VoyagePlan> voyagePlansList,
 			final VoyagePlan originalPlan) {
-//		System.out.println(planData.getEndHeelVolumeInM3());
+
 		assert planData.getEndHeelVolumeInM3() >= 0;
 		// Generate heel level annotations
 		final Map<IPortSlot, IHeelLevelAnnotation> heelLevelAnnotations = new HashMap<IPortSlot, IHeelLevelAnnotation>();
