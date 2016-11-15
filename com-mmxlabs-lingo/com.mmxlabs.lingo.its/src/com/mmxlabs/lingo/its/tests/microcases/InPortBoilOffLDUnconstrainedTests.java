@@ -1,12 +1,10 @@
 package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
-import org.eclipse.emf.common.util.EMap;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -20,16 +18,18 @@ import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 @RunWith(Parameterized.class)
 public class InPortBoilOffLDUnconstrainedTests extends InPortBoilOffTests {
 
-	private String name;
-	private int loadPortBoilOff;
-	private int dischargePortBoilOff;
-	private int vesselCapacity;
-	private CapacityViolationType[] expectedViolations;
-	private boolean compensateForBoilOff;
-	private int dischargeHours;
+	private final String name;
+	private final int loadPortBoilOff;
+	private final int dischargePortBoilOff;
+	private final int vesselCapacity;
+	private final CapacityViolationType[] expectedViolations;
+	private final boolean compensateForBoilOff;
+	private final int dischargeHours;
+	private final int expectedStartHeelInM3;
+	private final int expectedEndHeelInM3;
 
-	public InPortBoilOffLDUnconstrainedTests(String name, int loadPortBoilOff, int dischargePortBoilOff, int vesselCapacity, CapacityViolationType[] expectedViolations, boolean compensateForBoilOff,
-			int dischargeHours) {
+	public InPortBoilOffLDUnconstrainedTests(final String name, final int loadPortBoilOff, final int dischargePortBoilOff, final int vesselCapacity, final CapacityViolationType[] expectedViolations,
+			final boolean compensateForBoilOff, final int dischargeHours, final int expectedStartHeelInM3, final int expectedEndHeelInM3) {
 		this.name = name;
 		this.loadPortBoilOff = loadPortBoilOff;
 		this.dischargePortBoilOff = dischargePortBoilOff;
@@ -37,17 +37,26 @@ public class InPortBoilOffLDUnconstrainedTests extends InPortBoilOffTests {
 		this.expectedViolations = expectedViolations;
 		this.compensateForBoilOff = compensateForBoilOff;
 		this.dischargeHours = dischargeHours;
+		this.expectedStartHeelInM3 = expectedStartHeelInM3;
+		this.expectedEndHeelInM3 = expectedEndHeelInM3;
 	}
 
 	@Parameterized.Parameters(name = "{0}")
 	public static Collection testCases() {
 		return Arrays.asList(new Object[][] {
-				// Name, loadPortBoilOff, dischargePortBoilOff, vesselCapacity, expectedViolations, compensateForBoilOff, dischargeHours
-				{ "BasicNoBoilOff", 0, 0, 145_000, new CapacityViolationType[] {}, false, 24 }, { "BasicWithBoilOff", 1_000, 2_000, 145_000, new CapacityViolationType[] {}, false, 24 }, // Base case
-				{ "CompensationWithBoilOffOverCapped", 1_000, 2_000, 145_000, new CapacityViolationType[] {}, true, 24 }, // Boil off with compensation on, vessel capacity too large to allow compensate.
-				{ "CompensationWithBoilOff", 1_000, 2_000, 100_000, new CapacityViolationType[] {}, true, 24 }, // Boil off with compensation on, vessel capacity sufficiently low to allow it.
-				{ "CompensationWithExcessiveBoilOff", 200_000, 2_000, 100_000, new CapacityViolationType[] { CapacityViolationType.MAX_LOAD }, true, 24 }, // Excessive boil off, causes MAX_LOAD issue 
-				{ "LongDurationDischargeBoilOff", 1_000, 2_000, 100_000, new CapacityViolationType[] {}, true, 480 }, }); // Extended duration discharge event, within fuel limits.
+				// Name, loadPortBoilOff, dischargePortBoilOff, vesselCapacity, expectedViolations, compensateForBoilOff, dischargeHours, startHeel, endHeel
+				{ "BasicNoBoilOff", 0, 0, 145_000, new CapacityViolationType[] {}, false, 24, 0, 0 }, // Base case
+				{ "BasicWithBoilOff", 1_000, 2_000, 145_000, new CapacityViolationType[] {}, false, 24, 0, 0 }, // Base Boil off case
+				{ "CompensationWithBoilOffOverCapped", 1_000, 2_000, 145_000, new CapacityViolationType[] {}, true, 24, 0, 0 }, // Boil off with compensation on, vessel capacity too large to allow
+				// compensate.
+				{ "CompensationWithBoilOff", 1_000, 2_000, 100_000, new CapacityViolationType[] {}, true, 24, 0, 0 }, // Boil off with compensation on, vessel capacity sufficiently low to allow it.
+				{ "CompensationWithExcessiveBoilOff", 200_000, 2_000, 100_000, new CapacityViolationType[] { CapacityViolationType.MAX_LOAD }, true, 24, 0, 0 }, // Excessive boil off, causes MAX_LOAD
+																																									// issue
+				{ "LongDurationDischargeBoilOff", 1_000, 2_000, 100_000, new CapacityViolationType[] {}, true, 480, 0, 0 }, // Extended duration discharge event, within fuel limits.
+				{ "BoilOffWithHeel", 1_000, 2_000, 145_000, new CapacityViolationType[] {}, true, 24, 1000, 2000 }, // Check boiloff compensation if start and end heel are included
+				{ "BoilOffWithCappedHeel", 1_000, 2_000, 145_000, new CapacityViolationType[] {}, true, 24, 145_000, 2000 }, // Check that only boiloff volume is added when compensating for a full
+																																// heel.
+		});
 	}
 
 	@Test
@@ -66,41 +75,61 @@ public class InPortBoilOffLDUnconstrainedTests extends InPortBoilOffTests {
 				.withAssignmentFlags(false, false) //
 				.build();
 
+		vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.withStartHeel((double) expectedStartHeelInM3, 22.8, 9)//
+				.withEndHeel(expectedEndHeelInM3)//
+				.withStartWindow(LocalDateTime.of(2015, 12, 4, 7, 0, 0), LocalDateTime.of(2015, 12, 4, 13, 0, 0)) //
+				.withEndWindow(LocalDateTime.of(2015, 12, 30, 0, 0, 0)).build();
+
 		changeBoilOffRates(loadPortBoilOff, dischargePortBoilOff);
-		SimpleCargoAllocation result = runScenario(compensateForBoilOff, false);
+		final SimpleCargoAllocation result = runScenario(compensateForBoilOff, false);
 
-		int actualLoadVolumeInM3 = result.getLoadVolume();
-		int actualDischargeVolumeInM3 = result.getDischargeVolume();
-		
-		int actualStartHeelInM3 = result.getStartHeel();
-		int actualEndHeelInM3 = result.getEndHeel();
-		int expectedStartHeelInM3 = 0;
-		int expectedEndHeelInM3 = 0;
+		final int actualLoadVolumeInM3 = result.getLoadVolume();
+		final int actualDischargeVolumeInM3 = result.getDischargeVolume();
+		final int actualPhysicalLoadVolumeInM3 = result.getPhysicalLoadVolume();
+		final int actualPhysicalDischargeVolumeInM3 = result.getPhysicalDischargeVolume();
 
-		int portLoadMaxInM3 = result.getLoadAllocation().getSlot().getMaxQuantity();
-		int journeyIdleFuelInM3 = result.getJourneyIdelFuelVolumeInM3();
+		final int actualStartHeelInM3 = result.getStartHeel();
+		final int actualEndHeelInM3 = result.getEndHeel();
 
-		int expectedLoadVolumeInM3 = Math.min(vesselCapacity, portLoadMaxInM3) + expectedStartHeelInM3;
+		final int portLoadMaxInM3 = result.getLoadAllocation().getSlot().getMaxQuantity();
+		final int journeyIdleFuelInM3 = result.getJourneyIdelFuelVolumeInM3();
+
+		int expectedLoadVolumeInM3 = Math.min(vesselCapacity, portLoadMaxInM3);
 		// Compensate for boiloff?
 		if (compensateForBoilOff && vesselCapacity < portLoadMaxInM3) {
 			expectedLoadVolumeInM3 += loadPortBoilOff;
 		}
+
 		// Is the boiloff in excess of vessel capacity? Pass theoretical journey volume.
 		if (loadPortBoilOff >= vesselCapacity || dischargePortBoilOff >= vesselCapacity) {
 			expectedLoadVolumeInM3 = loadPortBoilOff + (dischargePortBoilOff * dischargeHours) / 24 + journeyIdleFuelInM3;
 		}
+		// Capped start heel
+		if (expectedStartHeelInM3 == 145_000) {
+			expectedLoadVolumeInM3 = expectedStartHeelInM3 + loadPortBoilOff;
+		}
 
-		int expectedDischargeVolumeInM3 = expectedLoadVolumeInM3 - loadPortBoilOff - journeyIdleFuelInM3 - (dischargePortBoilOff * dischargeHours) / 24 - expectedEndHeelInM3;
+		final int expectedPhysicalLoadVolumeInM3 = expectedLoadVolumeInM3 - loadPortBoilOff;
+
+		int expectedDischargeVolumeInM3 = expectedLoadVolumeInM3 - loadPortBoilOff - journeyIdleFuelInM3 - (dischargePortBoilOff * dischargeHours) / 24;
+		// Capped start heel
+		if (expectedStartHeelInM3 == 145_000) {
+			expectedDischargeVolumeInM3 = expectedDischargeVolumeInM3 - dischargePortBoilOff;
+		}
+
 		Assert.assertEquals(expectedLoadVolumeInM3, actualLoadVolumeInM3 + actualStartHeelInM3, ROUNDING_EPSILON);
-		Assert.assertEquals(expectedDischargeVolumeInM3, actualDischargeVolumeInM3 - actualEndHeelInM3, ROUNDING_EPSILON);
+		Assert.assertEquals(expectedDischargeVolumeInM3, actualDischargeVolumeInM3, ROUNDING_EPSILON);
+		Assert.assertEquals(expectedPhysicalLoadVolumeInM3, actualPhysicalLoadVolumeInM3 + actualStartHeelInM3, ROUNDING_EPSILON);
+		Assert.assertEquals(expectedDischargeVolumeInM3, actualPhysicalDischargeVolumeInM3, ROUNDING_EPSILON);
 
-		int expectedViolationCount = expectedViolations.length;
-		int actualViolationCount = result.getViolationsCount();
+		final int expectedViolationCount = expectedViolations.length;
+		final int actualViolationCount = result.getViolationsCount();
 		Assert.assertEquals(expectedViolationCount, actualViolationCount);
 
 		// CompensationWIthExcessiveBoilOff
 		if (actualViolationCount > 0) {
-			CapacityViolationType actualViolation = result.getLoadViolations().get(0).getKey();
+			final CapacityViolationType actualViolation = result.getLoadViolations().get(0).getKey();
 			Assert.assertEquals(expectedViolations[0], actualViolation);
 
 		}

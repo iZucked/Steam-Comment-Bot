@@ -87,6 +87,9 @@ public class InPortBoilOffLDDUnconstrainedTests extends InPortBoilOffTests {
 		final int actualLoadVolumeInM3 = result.getLoadVolume();
 		final int actualDischargeVolumeInM3 = result.getDischargeVolume();
 		final int actualDischargeVolumeBInM3 = result.getDischargeVolumeB();
+		int actualPhysicalLoadVolumeInM3 = result.getPhysicalLoadVolume();
+		int actualPhysicalDischargeVolumeInM3 = result.getPhysicalDischargeVolume();
+		int actualPhysicalDischargeVolumeBInM3 = result.getPhysicalDischargeVolumeB();
 
 		final int portLoadMaxInM3 = result.getLoadAllocation().getSlot().getMaxQuantity();
 		final int journeyIdleFuelInM3 = result.getJourneyIdelFuelVolumeInM3();
@@ -112,6 +115,8 @@ public class InPortBoilOffLDDUnconstrainedTests extends InPortBoilOffTests {
 		if (loadPortBoilOff >= vesselCapacity || dischargePortBoilOff >= vesselCapacity) {
 			expectedLoadVolumeInM3 = loadPortBoilOff + dischargePortBoilOff + journeyIdleFuelInM3;
 		}
+		
+		int expectedPhysicalLoadVolumeInM3 = expectedLoadVolumeInM3 - loadPortBoilOff;
 
 		// If the costs will be in excess of the available fuel
 		boolean excessiveFuelCost = false;
@@ -151,6 +156,10 @@ public class InPortBoilOffLDDUnconstrainedTests extends InPortBoilOffTests {
 		Assert.assertEquals(expectedLoadVolumeInM3, actualLoadVolumeInM3 + actualStartHeelInM3, ROUNDING_EPSILON);
 		Assert.assertEquals(expectedDischargeVolumeInM3, actualDischargeVolumeInM3, ROUNDING_EPSILON);
 		Assert.assertEquals(expectedDischargeVolumeBInM3 - expectedEndHeelInM3, actualDischargeVolumeBInM3 - actualEndHeelInM3, ROUNDING_EPSILON);
+		Assert.assertEquals(expectedPhysicalLoadVolumeInM3, actualPhysicalLoadVolumeInM3 + actualStartHeelInM3, ROUNDING_EPSILON);
+		Assert.assertEquals(expectedDischargeVolumeInM3, actualPhysicalDischargeVolumeInM3, ROUNDING_EPSILON);
+		Assert.assertEquals(expectedDischargeVolumeBInM3 - expectedEndHeelInM3, actualPhysicalDischargeVolumeBInM3 - actualEndHeelInM3, ROUNDING_EPSILON);
+
 
 		final int expectedViolationCount = expectedViolations.length;
 		final int actualViolationCount = result.getViolationsCount();

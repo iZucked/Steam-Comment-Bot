@@ -79,25 +79,25 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 	VesselStateAttributes attrLaden;
 	VesselStateAttributes attrBal;
 
-	private boolean writeScenario = true;
+	private final boolean writeScenario = true;
 
 	public class boilOffOverride implements IOptimiserInjectorService {
 
 		private boolean activateOverride = false;
 		private boolean minMaxVolumeAllocator = false;
 
-		public boilOffOverride(boolean activateOverride, boolean minMaxVolumeAllocator) {
+		public boilOffOverride(final boolean activateOverride, final boolean minMaxVolumeAllocator) {
 			this.activateOverride = activateOverride;
 			this.minMaxVolumeAllocator = minMaxVolumeAllocator;
 		}
 
 		@Override
-		public @Nullable Module requestModule(@NonNull ModuleType moduleType, @NonNull Collection<@NonNull String> hints) {
+		public @Nullable Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 			return null;
 		}
 
 		@Override
-		public @Nullable List<@NonNull Module> requestModuleOverrides(@NonNull ModuleType moduleType, @NonNull Collection<@NonNull String> hints) {
+		public @Nullable List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 			if (moduleType == ModuleType.Module_LNGTransformerModule) {
 				return Collections.<@NonNull Module> singletonList(new AbstractModule() {
 					@Override
@@ -160,7 +160,7 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 		portB.setDefaultWindowSize(0);
 	}
 
-	public void changeBoilOffRates(double loadPortBoilOff, double dischargePortBoilOff) {
+	public void changeBoilOffRates(final double loadPortBoilOff, final double dischargePortBoilOff) {
 
 		attrBal = vesselClass.getBallastAttributes();
 		attrBal.setInPortNBORate(dischargePortBoilOff);
@@ -171,9 +171,9 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 		vesselClass.setLadenAttributes(attrLaden);
 	}
 
-	SimpleCargoAllocation runScenario(boolean compensate, boolean minMax) {
+	SimpleCargoAllocation runScenario(final boolean compensate, final boolean minMax) {
 
-		List<SimpleCargoAllocation> SCAs = new ArrayList<SimpleCargoAllocation>();
+		final List<SimpleCargoAllocation> SCAs = new ArrayList<SimpleCargoAllocation>();
 		optimiseWithLSOTest(scenarioRunner -> {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
@@ -184,7 +184,7 @@ public class InPortBoilOffTests extends AbstractMicroTestCase {
 			if (writeScenario) {
 				try {
 					MicroCaseUtils.storeToFile(optimiserScenario, "Trips");
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					e.printStackTrace();
 				}
 			}
