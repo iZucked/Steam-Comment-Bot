@@ -105,6 +105,9 @@ import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.pricing.SuezCanalTariff;
+import com.mmxlabs.models.lng.pricing.SuezCanalTariffBand;
+import com.mmxlabs.models.lng.pricing.SuezCanalTugBand;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -166,6 +169,8 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenLoadPriceCalculat
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenSalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownLumpSumCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownPriceIndexedCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.PortfolioBreakEvenLoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.PortfolioBreakEvenSalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
 import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
@@ -175,6 +180,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IMiscCostsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
@@ -214,6 +220,11 @@ public class LNGScenarioTransformer {
 	@Named(LNGTransformerModule.Parser_Commodity)
 	@NonNull
 	private SeriesParser commodityIndices;
+
+	@Inject
+	@Named(LNGTransformerModule.Parser_Currency)
+	@NonNull
+	private SeriesParser currencyIndices;
 
 	@Inject(optional = true)
 	@Nullable
@@ -325,12 +336,20 @@ public class LNGScenarioTransformer {
 	private boolean shippingOnly;
 
 	@Inject
+	@Named(LNGTransformerHelper.HINT_PORTFOLIO_BREAKEVEN)
+	private boolean portfolioBreakevenFlag;
+
+	@Inject
 	@NonNull
 	private IPortVisitDurationProviderEditor portVisitDurationProviderEditor;
 
 	@Inject
 	@NonNull
 	private IHedgesProviderEditor hedgesProviderEditor;
+
+	@Inject
+	@NonNull
+	private IMiscCostsProviderEditor miscCostsProviderEditor;
 
 	@Inject
 	@NonNull
@@ -465,10 +484,11 @@ public class LNGScenarioTransformer {
 			registerIndex(name, index, commodityIndices);
 			registerIndex(name, index, baseFuelIndices);
 			registerIndex(name, index, charterIndices);
+			registerIndex(name, index, currencyIndices);
 		}
 
-		for (UnitConversion factor : pricingModel.getConversionFactors()) {
-			registerConversionFactor(factor, commodityIndices, baseFuelIndices, charterIndices);
+		for (final UnitConversion factor : pricingModel.getConversionFactors()) {
+			registerConversionFactor(factor, commodityIndices, baseFuelIndices, charterIndices, currencyIndices);
 		}
 
 		// Now pre-compute our various curve data objects...
@@ -771,10 +791,12 @@ public class LNGScenarioTransformer {
 	}
 
 	private void registerConversionFactor(@NonNull final UnitConversion factor, @NonNull final SeriesParser... parsers) {
-		String name = PriceIndexUtils.createConversionFactorName(factor);
-		if (name != null) {
-			for (SeriesParser parser : parsers) {
+		final String name = PriceIndexUtils.createConversionFactorName(factor);
+		final String reverseName = PriceIndexUtils.createReverseConversionFactorName(factor);
+		if (name != null && reverseName != null) {
+			for (final SeriesParser parser : parsers) {
 				parser.addSeriesExpression(name, Double.toString(factor.getFactor()));
+				parser.addSeriesExpression(reverseName, Double.toString(1.0 / factor.getFactor()));
 			}
 		}
 	}
@@ -1261,7 +1283,11 @@ public class LNGScenarioTransformer {
 
 			final String priceExpression = dischargeSlot.getPriceExpression();
 			if (IBreakEvenEvaluator.MARKER.equals(priceExpression)) {
-				dischargePriceCalculator = new BreakEvenSalesPriceCalculator();
+				if (portfolioBreakevenFlag) {
+					dischargePriceCalculator = new PortfolioBreakEvenSalesPriceCalculator();
+				} else {
+					dischargePriceCalculator = new BreakEvenSalesPriceCalculator();
+				}
 			} else {
 				final IExpression<ISeries> expression = commodityIndices.parse(priceExpression);
 				final ISeries parsed = expression.evaluate();
@@ -1391,10 +1417,11 @@ public class LNGScenarioTransformer {
 			contractTransformer.slotTransformed(dischargeSlot, discharge);
 		}
 
-		final long hedgeValue = OptimiserUnitConvertor.convertToInternalFixedCost(dischargeSlot.getHedges());
-		if (hedgeValue != 0) {
-			hedgesProviderEditor.setHedgeValue(discharge, hedgeValue);
-		}
+		// set hedging costs in provider
+		setHedgingCosts(dischargeSlot, discharge);
+
+		// set additional misc costs in provider
+		setMiscCosts(dischargeSlot, discharge);
 
 		final ILongCurve cancellationCurve = dateHelper.generateLongExpressionCurve(dischargeSlot.getCancellationExpression(), commodityIndices);
 		if (cancellationCurve != null) {
@@ -1423,7 +1450,11 @@ public class LNGScenarioTransformer {
 
 			final String priceExpression = loadSlot.getPriceExpression();
 			if (IBreakEvenEvaluator.MARKER.equals(priceExpression)) {
-				loadPriceCalculator = new BreakEvenLoadPriceCalculator();
+				if (portfolioBreakevenFlag) {
+					loadPriceCalculator = new PortfolioBreakEvenLoadPriceCalculator();
+				} else {
+					loadPriceCalculator = new BreakEvenLoadPriceCalculator();
+				}
 			} else {
 				final IExpression<ISeries> expression = commodityIndices.parse(priceExpression);
 				final ISeries parsed = expression.evaluate();
@@ -1532,10 +1563,11 @@ public class LNGScenarioTransformer {
 			addSpotSlotToCount((SpotSlot) loadSlot);
 		}
 
-		final long hedgeCost = OptimiserUnitConvertor.convertToInternalFixedCost(loadSlot.getHedges());
-		if (hedgeCost != 0) {
-			hedgesProviderEditor.setHedgeValue(load, hedgeCost);
-		}
+		// set hedging costs in provider
+		setHedgingCosts(loadSlot, load);
+
+		// set additional misc costs in provider
+		setMiscCosts(loadSlot, load);
 
 		final ILongCurve cancellationCurve = dateHelper.generateLongExpressionCurve(loadSlot.getCancellationExpression(), commodityIndices);
 		if (cancellationCurve != null) {
@@ -2345,11 +2377,35 @@ public class LNGScenarioTransformer {
 			orderedKeys.add(RouteOption.PANAMA);
 		}
 
+		// set canal route consumptions and toll info
+		final PortModel portModel = ScenarioModelUtil.getPortModel(rootObject);
+		final CostModel costModel = ScenarioModelUtil.getCostModel(rootObject);
+
+		final Set<IVessel> optimiserVessels = new HashSet<>();
+		optimiserVessels.addAll(allVessels.values());
+		for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
+			final IVessel vessel = vesselAvailability.getVessel();
+			if (vessel != null) {
+				optimiserVessels.add(vessel);
+			}
+		}
+
+		final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
+		if (panamaCanalTariff != null) {
+			buildPanamaCosts(builder, vesselAssociation, vesselClassAssociation, optimiserVessels, panamaCanalTariff);
+			if (panamaCanalTariff.isSetAvailableFrom()) {
+				final LocalDate availableFrom = panamaCanalTariff.getAvailableFrom();
+				if (availableFrom != null) {
+					final int time = dateHelper.convertTime(availableFrom);
+					distanceProviderEditor.setRouteAvailableFrom(ERouteOption.PANAMA, time);
+				}
+			}
+		}
+
 		/*
 		 * Now fill out the distances from the distance model. Firstly we need to create the default distance matrix.
 		 */
 		final Set<RouteOption> seenRoutes = new HashSet<>();
-		final PortModel portModel = rootObject.getReferenceModel().getPortModel();
 		for (final Route r : portModel.getRoutes()) {
 			seenRoutes.add(r.getRouteOption());
 			// Store Route under it's name
@@ -2362,30 +2418,6 @@ public class LNGScenarioTransformer {
 				final int distance = dl.getFullDistance();
 
 				builder.setPortToPortDistance(from, to, mapRouteOption(r), distance);
-			}
-
-			final Set<IVessel> optimiserVessels = new HashSet<>();
-			optimiserVessels.addAll(allVessels.values());
-			for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
-				final IVessel vessel = vesselAvailability.getVessel();
-				if (vessel != null) {
-					optimiserVessels.add(vessel);
-				}
-			}
-
-			// set canal route consumptions and toll info
-			final CostModel costModel = rootObject.getReferenceModel().getCostModel();
-
-			final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
-			if (panamaCanalTariff != null) {
-				buildPanamaCosts(builder, vesselAssociation, vesselClassAssociation, optimiserVessels, panamaCanalTariff);
-				if (panamaCanalTariff.isSetAvailableFrom()) {
-					final LocalDate availableFrom = panamaCanalTariff.getAvailableFrom();
-					if (availableFrom != null) {
-						final int time = dateHelper.convertTime(availableFrom);
-						distanceProviderEditor.setRouteAvailableFrom(ERouteOption.PANAMA, time);
-					}
-				}
 			}
 
 			final Map<VesselClass, List<RouteCost>> vesselClassToRouteCostMap = costModel.getRouteCosts().stream() //
@@ -2417,13 +2449,14 @@ public class LNGScenarioTransformer {
 								// continue;
 							} else {
 
-								builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Laden, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost()));
+								builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Laden,
+										new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost())));
 
 								builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Ballast,
-										OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
+										new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost())));
 
 								builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.RoundTripBallast,
-										OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
+										new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost())));
 							}
 						}
 					}
@@ -2495,9 +2528,96 @@ public class LNGScenarioTransformer {
 				totalBallastRoundTripCost *= multiplier;
 			}
 
-			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Laden, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalLadenCost)));
-			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastCost)));
-			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.RoundTripBallast, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastRoundTripCost)));
+			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Laden, new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalLadenCost))));
+			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Ballast,
+					new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastCost))));
+			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.RoundTripBallast,
+					new ConstantValueLongCurve(OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastRoundTripCost))));
+		}
+	}
+
+	public static void buildSuezCosts(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation,
+			@NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation, final Collection<IVessel> vesselAvailabilities, @NonNull final SuezCanalTariff suezCanalTariff,
+			final @NonNull SeriesParser currencyIndices, final @NonNull DateAndCurveHelper dateHelper) {
+
+		// Extract band information into a sorted list
+		final List<Pair<Integer, SuezCanalTariffBand>> bands = new LinkedList<>();
+		for (final SuezCanalTariffBand band : suezCanalTariff.getBands()) {
+			int upperBound = Integer.MAX_VALUE;
+			if (band.isSetBandEnd()) {
+				upperBound = band.getBandEnd();
+			}
+			bands.add(new Pair<>(upperBound, band));
+		}
+		// Sort the bands smallest to largest
+		Collections.sort(bands, (b1, b2) -> b1.getFirst().compareTo(b2.getFirst()));
+
+		for (final IVessel vessel : vesselAvailabilities) {
+			final int scnt;
+			assert vessel != null;
+			final Vessel eVessel = vesselAssociation.reverseLookup(vessel);
+			if (eVessel == null) {
+				// spot charter
+				final VesselClass eVesselClass = vesselClassAssociation.reverseLookupNullChecked(vessel.getVesselClass());
+				scnt = eVesselClass.getScnt();
+			} else {
+				scnt = eVessel.isSetScnt() ? eVessel.getScnt() : eVessel.getVesselClass().getScnt();
+			}
+			double ladenCostInSDR = 0.0;
+			double ballastCostInSDR = 0.0;
+			for (final Pair<Integer, SuezCanalTariffBand> p : bands) {
+				final SuezCanalTariffBand band = p.getSecond();
+				//// How much vessel capacity is used for this band calculation?
+				// First, find the largest value valid in this band
+				int contributingLevel = Math.min(scnt, p.getFirst());
+
+				// Next, subtract band lower bound to find the capacity contribution
+				contributingLevel = Math.max(0, contributingLevel - (band.isSetBandStart() ? band.getBandStart() : 0));
+
+				if (contributingLevel > 0) {
+					ladenCostInSDR += contributingLevel * band.getLadenTariff();
+					ballastCostInSDR += contributingLevel * band.getBallastTariff();
+				}
+			}
+
+			// If there is a markup %, apply it
+			if (suezCanalTariff.getDiscountFactor() != 0.0) {
+				final double multiplier = 1.0 - suezCanalTariff.getDiscountFactor();
+				ladenCostInSDR *= multiplier;
+				ballastCostInSDR *= multiplier;
+			}
+
+			int tugCount = 0;
+			for (final SuezCanalTugBand band : suezCanalTariff.getTugBands()) {
+				if (!band.isSetBandEnd() && scnt >= band.getBandStart()) {
+					tugCount = band.getTugs();
+					break;
+				} else if (!band.isSetBandStart() && scnt < band.getBandEnd()) {
+					tugCount = band.getTugs();
+					break;
+				} else if (scnt >= band.getBandStart() && scnt < band.getBandEnd()) {
+					tugCount = band.getTugs();
+					break;
+				}
+			}
+
+			final double extraCosts = (double) tugCount * suezCanalTariff.getTugCost() //
+					+ suezCanalTariff.getPilotageCost() //
+					+ suezCanalTariff.getMooringCost() //
+					+ suezCanalTariff.getDisbursements();
+
+			final String ladenExpression = String.format("(%.3f*%s)+%.3f", ladenCostInSDR, suezCanalTariff.getSdrToUSD(), extraCosts);
+			final String ballastExpression = String.format("(%.3f*%s)+%.3f", ballastCostInSDR, suezCanalTariff.getSdrToUSD(), extraCosts);
+
+			@Nullable
+			final ILongCurve ladenCostCurve = dateHelper.generateLongExpressionCurve(ladenExpression, currencyIndices);
+			assert ladenCostCurve != null;
+			builder.setVesselRouteCost(ERouteOption.SUEZ, vessel, CostType.Laden, ladenCostCurve);
+
+			final ILongCurve ballastCostCurve = dateHelper.generateLongExpressionCurve(ballastExpression, currencyIndices);
+			assert ballastCostCurve != null;
+			builder.setVesselRouteCost(ERouteOption.SUEZ, vessel, CostType.Ballast, ballastCostCurve);
+			builder.setVesselRouteCost(ERouteOption.SUEZ, vessel, CostType.RoundTripBallast, ballastCostCurve);
 		}
 	}
 
@@ -2643,10 +2763,27 @@ public class LNGScenarioTransformer {
 			}
 			assert dailyCharterInCurve != null;
 
+			final ILongCurve repositioningFeeCurve;
+			if (eVesselAvailability.isSetRepositioningFee()) {
+				repositioningFeeCurve = dateHelper.generateLongExpressionCurve(eVesselAvailability.getRepositioningFee(), charterIndices);
+			} else {
+				repositioningFeeCurve = new ConstantValueLongCurve(0);
+			}
+			assert repositioningFeeCurve != null;
+
+			final ILongCurve ballastBonusCurve;
+			if (eVesselAvailability.isSetBallastBonus()) {
+				ballastBonusCurve = dateHelper.generateLongExpressionCurve(eVesselAvailability.getBallastBonus(), charterIndices);
+			} else {
+				ballastBonusCurve = new ConstantValueLongCurve(0);
+			}
+			assert ballastBonusCurve != null;
+
 			final IVessel vessel = vesselAssociation.lookupNullChecked(eVessel);
 
 			final IVesselAvailability vesselAvailability = builder.createVesselAvailability(vessel, dailyCharterInCurve,
-					eVesselAvailability.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement);
+					eVesselAvailability.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, repositioningFeeCurve, ballastBonusCurve,
+					eVesselAvailability.isOptional());
 			vesselAvailabilityAssociation.add(eVesselAvailability, vesselAvailability);
 
 			modelEntityMap.addModelObject(eVesselAvailability, vesselAvailability);
@@ -2974,6 +3111,20 @@ public class LNGScenarioTransformer {
 			return ERouteOption.SUEZ;
 		}
 		throw new IllegalStateException();
+	}
+
+	private void setHedgingCosts(final Slot slot, final IPortSlot portSlot) {
+		final long hedgingCosts = OptimiserUnitConvertor.convertToInternalFixedCost(slot.getHedges());
+		if (hedgingCosts != 0) {
+			hedgesProviderEditor.setHedgeValue(portSlot, hedgingCosts);
+		}
+	}
+
+	private void setMiscCosts(final Slot slot, final IPortSlot portSlot) {
+		final long miscCosts = OptimiserUnitConvertor.convertToInternalFixedCost(slot.getMiscCosts()) * -1L; // make negative as cost
+		if (miscCosts != 0) {
+			miscCostsProviderEditor.setCostsValue(portSlot, miscCosts);
+		}
 	}
 
 }

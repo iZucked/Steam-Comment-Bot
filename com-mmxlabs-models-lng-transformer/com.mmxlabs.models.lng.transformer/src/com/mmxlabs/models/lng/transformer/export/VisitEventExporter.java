@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.PortVisitLatenessType;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotAllocationType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -99,7 +100,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			final SlotVisit sv = factory.createSlotVisit();
 			final SlotAllocation slotAllocation = factory.createSlotAllocation();
 			sv.setSlotAllocation(slotAllocation);
-
+			slotAllocation.setSlotAllocationType(slot instanceof ILoadOption ? SlotAllocationType.PURCHASE : SlotAllocationType.SALE);
 			output.getSlotAllocations().add(slotAllocation);
 			// TODO this will have to look at market-generated slots.
 			final Slot optSlot = modelEntityMap.getModelObject(slot, Slot.class);

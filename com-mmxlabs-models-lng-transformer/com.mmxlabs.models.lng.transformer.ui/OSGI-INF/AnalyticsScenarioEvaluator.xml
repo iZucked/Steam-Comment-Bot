@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.mmxlabs.models.lng.transformer.ui.analytics.AnalyticsScenarioEvaluator">
+   <implementation class="com.mmxlabs.models.lng.transformer.ui.analytics.AnalyticsScenarioEvaluator"/>
+   <service>
+      <provide interface="com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator"/>
+   </service>
+</scr:component>

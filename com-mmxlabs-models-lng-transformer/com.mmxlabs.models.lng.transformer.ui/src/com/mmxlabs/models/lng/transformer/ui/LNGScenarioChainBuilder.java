@@ -14,6 +14,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
@@ -24,6 +25,7 @@ import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGEvaluationTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGNoNominalInPromptTransformerUnit;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.stochasticactionsets.BreakEvenTransformerUnit;
 
 public class LNGScenarioChainBuilder {
 
@@ -119,7 +121,20 @@ public class LNGScenarioChainBuilder {
 		} else {
 			// Just evaluate the current scenario.
 			// TODO: Remove this step if we can get rid of the IAnnotatedSolutions.
-			LNGEvaluationTransformerUnit.chain(builder, 1);
+			boolean breakeven = false;
+			BreakEvenOptimisationStage beStage = null;
+			for (OptimisationStage stage : optimisationPlan.getStages()) {
+				if (stage instanceof BreakEvenOptimisationStage) {
+					breakeven = true;
+					beStage = (BreakEvenOptimisationStage) stage;
+					break;
+				}
+			}
+			if (breakeven && beStage != null) {
+				BreakEvenTransformerUnit.chain(builder, optimisationPlan.getUserSettings(), beStage, 100);
+			} else {
+				LNGEvaluationTransformerUnit.chain(builder, 1);
+			}
 		}
 		return builder.build();
 	}
