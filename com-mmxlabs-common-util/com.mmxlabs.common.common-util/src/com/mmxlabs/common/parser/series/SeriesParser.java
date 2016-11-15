@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.IntFunction;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -179,14 +178,14 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 			@Override
 			public IExpression<ISeries> createPrefixOperator(final char operator, final IExpression<ISeries> argument) {
 				if (operator == '-') {
-					return new IExpression<ISeries> () {
+					return new IExpression<ISeries>() {
 						@Override
 						public @NonNull ISeries evaluate() {
 							return new Minus(argument.evaluate());
 						}
 					};
 				}
-				
+
 				throw new RuntimeException("Unknown prefix op " + operator);
 			}
 		});

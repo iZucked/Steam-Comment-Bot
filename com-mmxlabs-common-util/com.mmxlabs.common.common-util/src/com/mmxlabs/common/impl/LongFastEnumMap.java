@@ -7,6 +7,8 @@ package com.mmxlabs.common.impl;
 import java.util.Arrays;
 import java.util.EnumMap;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * Fast {@link EnumMap}-like implementation to link longs to an {@link Enum}. This uses the enum ordinals to index an array, the size of which is specified in the constructor. Unlike {@link EnumMap},
  * this implementation does not type check the enum key, requires the number of enum elements to be specified rather than rely on internal trickery and avoids boxing/unboxing by using long primitives.
@@ -29,11 +31,11 @@ public final class LongFastEnumMap<K extends Enum<K>> {
 		Arrays.fill(values, defaultValue);
 	}
 
-	public final long get(final K key) {
+	public final long get(final @NonNull K key) {
 		return values[key.ordinal()];
 	}
 
-	public final void put(final K key, final long value) {
+	public final void put(final @NonNull K key, final long value) {
 		values[key.ordinal()] = value;
 	}
 

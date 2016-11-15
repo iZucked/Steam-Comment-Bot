@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.common.indexedobjects;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * A thing which maps a boolean to IIndexedObjects.
  * 
@@ -17,19 +19,19 @@ public interface IIndexBits<T extends IIndexedObject> {
 	 * @param element
 	 * @return
 	 */
-	public boolean isSet(T element);
+	boolean isSet(@NonNull T element);
 
 	/**
 	 * Set that an element is marked
 	 * 
 	 * @param element
 	 */
-	public void set(T element);
+	void set(@NonNull T element);
 
 	/**
 	 * Clear the mark against an element
 	 * 
 	 * @param element
 	 */
-	public void clear(T element);
+	void clear(@NonNull T element);
 }

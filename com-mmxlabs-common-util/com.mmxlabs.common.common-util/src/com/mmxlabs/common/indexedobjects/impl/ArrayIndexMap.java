@@ -7,6 +7,8 @@ package com.mmxlabs.common.indexedobjects.impl;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.indexedobjects.IIndexMap;
 import com.mmxlabs.common.indexedobjects.IIndexedObject;
 
@@ -66,7 +68,7 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 	}
 
 	@Override
-	public final U get(final T key) {
+	public final U get(final @NonNull T key) {
 		final int index = key.getIndex();
 		if (index >= contents.length) {
 			throw new NoSuchElementException("Index " + index + " exceeds maximum ever seen");

@@ -4,11 +4,7 @@
  */
 package com.mmxlabs.common.parser.series.functions;
 
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.ShiftFunctionMapper;

@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.common.caches;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.Pair;
 
 public abstract class AbstractCache<K, V> {
@@ -19,9 +21,9 @@ public abstract class AbstractCache<K, V> {
 		public Pair<K, V> evaluate(K key);
 	}
 
-	protected final IKeyEvaluator<K, V> evaluator;
+	protected final @NonNull IKeyEvaluator<K, V> evaluator;
 
-	public AbstractCache(final String name, final IKeyEvaluator<K, V> evaluator) {
+	public AbstractCache(final @NonNull String name, final @NonNull IKeyEvaluator<K, V> evaluator) {
 		this.evaluator = evaluator;
 		this.name = name;
 	}
@@ -49,7 +51,7 @@ public abstract class AbstractCache<K, V> {
 
 	public abstract void clear();
 
-	public abstract V get(final K key);
+	public abstract V get(final @NonNull K key);
 
 	public abstract int size();
 

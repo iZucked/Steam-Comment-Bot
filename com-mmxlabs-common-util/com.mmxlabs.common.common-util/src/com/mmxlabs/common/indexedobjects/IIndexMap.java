@@ -6,6 +6,8 @@ package com.mmxlabs.common.indexedobjects;
 
 import java.util.NoSuchElementException;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * A map from indexed objects to other objects, mainly for use in DCPs.
  * 
@@ -26,7 +28,7 @@ public interface IIndexMap<T extends IIndexedObject, U> {
 	 * @param key
 	 * @return
 	 */
-	public U maybeGet(T key);
+	public U maybeGet(@NonNull T key);
 
 	/**
 	 * Return the U associated with the given T, or throw a {@link NoSuchElementException} if there is no U.
@@ -34,7 +36,7 @@ public interface IIndexMap<T extends IIndexedObject, U> {
 	 * @param key
 	 * @return
 	 */
-	public U get(T key);
+	public U get(@NonNull T key);
 
 	/**
 	 * Associate the value U with key T
@@ -42,7 +44,7 @@ public interface IIndexMap<T extends IIndexedObject, U> {
 	 * @param key
 	 * @param value
 	 */
-	public void set(T key, U value);
+	public void set(@NonNull T key, U value);
 
 	/**
 	 * Get the values contained in this relation.

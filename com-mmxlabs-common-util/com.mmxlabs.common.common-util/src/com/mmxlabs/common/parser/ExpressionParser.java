@@ -49,7 +49,7 @@ public class ExpressionParser<T> implements IExpressionParser<T> {
 
 		try {
 			return parse(tok);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			return null;
 		}
 	}
@@ -58,7 +58,7 @@ public class ExpressionParser<T> implements IExpressionParser<T> {
 		final public boolean isUnary;
 		final public char name;
 
-		public Operator(boolean isUnary, char name) {
+		public Operator(final boolean isUnary, final char name) {
 			super();
 			this.isUnary = isUnary;
 			this.name = name;
@@ -66,8 +66,8 @@ public class ExpressionParser<T> implements IExpressionParser<T> {
 	}
 
 	private @NonNull IExpression<T> parse(final @NonNull StreamTokenizer tok) throws IOException {
-		final Stack<@NonNull Operator> operatorStack = new Stack<>();
-		final Stack<@NonNull IExpression<T>> fragmentStack = new Stack<>();
+		final Stack<Operator> operatorStack = new Stack<>();
+		final Stack<IExpression<T>> fragmentStack = new Stack<>();
 
 		boolean justPushedExpression = false;
 		boolean justSeenWord = false;
@@ -125,13 +125,16 @@ public class ExpressionParser<T> implements IExpressionParser<T> {
 					while (!operatorStack.isEmpty() && operatorStack.peek().isUnary) {
 						final Operator o = operatorStack.pop();
 						final IExpression<T> arg = fragmentStack.pop();
+						assert arg != null;
 						fragmentStack.push(prefixFactory.createPrefixOperator(o.name, arg));
 					}
 
 					if (!operatorStack.isEmpty() && infixFactory.isOperatorHigherPriority(operatorStack.peek().name, opChar)) {
 						final Operator o = operatorStack.pop();
-						final @NonNull IExpression<T> rhs = fragmentStack.pop();
-						final @NonNull IExpression<T> lhs = fragmentStack.pop();
+						final IExpression<T> rhs = fragmentStack.pop();
+						assert rhs != null;
+						final IExpression<T> lhs = fragmentStack.pop();
+						assert lhs != null;
 						fragmentStack.push(infixFactory.createInfixOperator(o.name, lhs, rhs));
 					}
 
@@ -150,38 +153,43 @@ public class ExpressionParser<T> implements IExpressionParser<T> {
 			final Operator o = operatorStack.pop();
 
 			if (o.isUnary) {
-				fragmentStack.push(prefixFactory.createPrefixOperator(o.name, fragmentStack.pop()));
+				final IExpression<T> r = fragmentStack.pop();
+				assert r != null;
+				fragmentStack.push(prefixFactory.createPrefixOperator(o.name, r));
 			} else {
 				final IExpression<T> rhs = fragmentStack.pop();
+				assert rhs != null;
 				final IExpression<T> lhs = fragmentStack.pop();
+				assert lhs != null;
 				fragmentStack.push(infixFactory.createInfixOperator(o.name, lhs, rhs));
 			}
 		}
-
-		return fragmentStack.pop();
+		final IExpression<T> r = fragmentStack.pop();
+		assert r != null;
+		return r;
 	}
 
-	public static void main(String args[]) {
+	public static void main(final String args[]) {
 
 	}
 
 	@Override
-	public void setPrefixOperatorFactory(IPrefixOperatorFactory<T> factory) {
+	public void setPrefixOperatorFactory(final IPrefixOperatorFactory<T> factory) {
 		this.prefixFactory = factory;
 	}
 
 	@Override
-	public void setInfixOperatorFactory(IInfixOperatorFactory<T> factory) {
+	public void setInfixOperatorFactory(final IInfixOperatorFactory<T> factory) {
 		this.infixFactory = factory;
 	}
 
 	@Override
-	public void setFunctionFactory(IFunctionFactory<T> factory) {
+	public void setFunctionFactory(final IFunctionFactory<T> factory) {
 		this.functionFactory = factory;
 	}
 
 	@Override
-	public void setTermFactory(ITermFactory<T> factory) {
+	public void setTermFactory(final ITermFactory<T> factory) {
 		this.termFactory = factory;
 	}
 }

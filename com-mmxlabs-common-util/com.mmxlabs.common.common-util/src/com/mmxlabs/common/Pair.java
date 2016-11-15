@@ -30,7 +30,7 @@ public class Pair<A, B> {
 	}
 
 	public Pair(final Pair<A, B> copy) {
-		setBoth(copy.getFirst(), copy.getSecond());
+		this(copy.getFirst(), copy.getSecond());
 	}
 
 	public final A getFirst() {
@@ -66,8 +66,11 @@ public class Pair<A, B> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = (prime * result) + ((first == null) ? 0 : first.hashCode());
-		result = (prime * result) + ((second == null) ? 0 : second.hashCode());
+		final A pFirst = first;
+		final B pSecond = second;
+
+		result = (prime * result) + ((pFirst == null) ? 0 : pFirst.hashCode());
+		result = (prime * result) + ((pSecond == null) ? 0 : pSecond.hashCode());
 		return result;
 	}
 
@@ -85,20 +88,23 @@ public class Pair<A, B> {
 			return false;
 		}
 
+		final A pFirst = first;
+		final B pSecond = second;
+
 		@SuppressWarnings("rawtypes")
 		final Pair other = (Pair) obj;
-		if (first == null) {
+		if (pFirst == null) {
 			if (other.first != null) {
 				return false;
 			}
-		} else if (!first.equals(other.first)) {
+		} else if (!pFirst.equals(other.first)) {
 			return false;
 		}
-		if (second == null) {
+		if (pSecond == null) {
 			if (other.second != null) {
 				return false;
 			}
-		} else if (!second.equals(other.second)) {
+		} else if (!pSecond.equals(other.second)) {
 			return false;
 		}
 		return true;

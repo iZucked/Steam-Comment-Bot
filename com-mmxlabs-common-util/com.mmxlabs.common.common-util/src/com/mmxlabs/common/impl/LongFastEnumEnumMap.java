@@ -6,6 +6,8 @@ package com.mmxlabs.common.impl;
 
 import java.util.Arrays;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * A two-dimensional EnumxEnum to long map implementation. See {@link LongFastEnumMap} for more details.
  * 
@@ -29,11 +31,11 @@ public final class LongFastEnumEnumMap<K extends Enum<K>, L extends Enum<L>> {
 		}
 	}
 
-	public final long get(final K key1, final L key2) {
+	public final long get(final @NonNull K key1, final @NonNull L key2) {
 		return values[key1.ordinal()][key2.ordinal()];
 	}
 
-	public final void put(final K key1, final L key2, final long value) {
+	public final void put(final @NonNull K key1, final @NonNull L key2, final long value) {
 		values[key1.ordinal()][key2.ordinal()] = value;
 	}
 

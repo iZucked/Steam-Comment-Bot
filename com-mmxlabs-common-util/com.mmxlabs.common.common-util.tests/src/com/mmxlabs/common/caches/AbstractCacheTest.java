@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.common.caches;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -81,7 +82,7 @@ public class AbstractCacheTest {
 
 	private class TestAbstractCache extends AbstractCache<String, Object> {
 
-		public TestAbstractCache(final String name, final com.mmxlabs.common.caches.AbstractCache.IKeyEvaluator<String, Object> evaluator) {
+		public TestAbstractCache(final @NonNull String name, final com.mmxlabs.common.caches.AbstractCache.@NonNull IKeyEvaluator<String, Object> evaluator) {
 			super(name, evaluator);
 		}
 

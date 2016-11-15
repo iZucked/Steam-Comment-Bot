@@ -7,6 +7,8 @@ package com.mmxlabs.common.caches;
 import java.lang.ref.SoftReference;
 import java.lang.reflect.Array;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.Pair;
 
 public final class SimpleCache<K, V> extends AbstractCache<K, V> {
@@ -20,7 +22,7 @@ public final class SimpleCache<K, V> extends AbstractCache<K, V> {
 			reference = new SoftReference<Pair<K, V>>(null);
 		}
 
-		public final V getAndUpdate(final IKeyEvaluator<K, V> evaluator, final K key) {
+		public final V getAndUpdate(final @NonNull IKeyEvaluator<K, V> evaluator, final @NonNull K key) {
 			final Pair<K, V> entry = reference.get();
 			queries++;
 			if ((entry != null) && key.equals(entry.getFirst())) {
@@ -47,12 +49,12 @@ public final class SimpleCache<K, V> extends AbstractCache<K, V> {
 
 	Entry[] entries;
 
-	public SimpleCache(final String name, final IKeyEvaluator<K, V> evaluator, final int size) {
+	public SimpleCache(final @NonNull String name, final @NonNull IKeyEvaluator<K, V> evaluator, final int size) {
 		this(name, evaluator, size, 2);
 	}
 
 	@SuppressWarnings("unchecked")
-	public SimpleCache(final String name, final IKeyEvaluator<K, V> evaluator, final int binCount, final int maxMisses) {
+	public SimpleCache(final @NonNull String name, final @NonNull IKeyEvaluator<K, V> evaluator, final int binCount, final int maxMisses) {
 		super(name, evaluator);
 		this.evictionThreshold = maxMisses;
 		this.entries = (Entry[]) Array.newInstance(Entry.class, binCount);

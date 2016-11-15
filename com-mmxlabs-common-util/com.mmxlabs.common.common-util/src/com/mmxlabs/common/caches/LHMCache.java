@@ -9,13 +9,15 @@ import java.lang.ref.SoftReference;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.Pair;
 
 public final class LHMCache<K, V> extends AbstractCache<K, V> {
 	final private LinkedHashMap<K, Reference<V>> map;
 
 	@SuppressWarnings("serial")
-	public LHMCache(final String name, final IKeyEvaluator<K, V> evaluator, final int intendedSize) {
+	public LHMCache(final @NonNull String name, final @NonNull IKeyEvaluator<K, V> evaluator, final int intendedSize) {
 		super(name, evaluator);
 
 		map = new LinkedHashMap<K, Reference<V>>(intendedSize + 1, 1, true) {

@@ -22,6 +22,8 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.recorder.conversion.ITypeConvertorService;
 import com.mmxlabs.common.recorder.conversion.impl.TypeConvertorService;
 
@@ -29,13 +31,13 @@ public class XmlStreamReader<T> {
 
 	private final InputStream stream;
 
-	private final T object;
+	private final @NonNull T object;
 
 	private final Map<String, Object> objectMap = new HashMap<String, Object>();
 
 	private final ITypeConvertorService conversionService = new TypeConvertorService();
 
-	public XmlStreamReader(final T object, final InputStream stream) {
+	public XmlStreamReader(final @NonNull T object, final InputStream stream) {
 		this.object = object;
 		this.stream = stream;
 	}
