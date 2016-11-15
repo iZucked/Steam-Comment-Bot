@@ -30,6 +30,8 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getCv <em>Cv</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getVolumeValue <em>Volume Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getExposures <em>Exposures</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getPhysicalVolumeTransferred <em>Physical Volume Transferred</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getPhysicalEnergyTransferred <em>Physical Energy Transferred</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotAllocation()
@@ -399,6 +401,58 @@ public interface SlotAllocation extends MMXObject {
 	 * @generated
 	 */
 	EList<ExposureDetail> getExposures();
+
+	/**
+	 * Returns the value of the '<em><b>Physical Volume Transferred</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Physical Volume Transferred</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Physical Volume Transferred</em>' attribute.
+	 * @see #setPhysicalVolumeTransferred(int)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotAllocation_PhysicalVolumeTransferred()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getPhysicalVolumeTransferred();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getPhysicalVolumeTransferred <em>Physical Volume Transferred</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Physical Volume Transferred</em>' attribute.
+	 * @see #getPhysicalVolumeTransferred()
+	 * @generated
+	 */
+	void setPhysicalVolumeTransferred(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Physical Energy Transferred</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Physical Energy Transferred</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Physical Energy Transferred</em>' attribute.
+	 * @see #setPhysicalEnergyTransferred(int)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotAllocation_PhysicalEnergyTransferred()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getPhysicalEnergyTransferred();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getPhysicalEnergyTransferred <em>Physical Energy Transferred</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Physical Energy Transferred</em>' attribute.
+	 * @see #getPhysicalEnergyTransferred()
+	 * @generated
+	 */
+	void setPhysicalEnergyTransferred(int value);
 
 	/**
 	 * <!-- begin-user-doc -->

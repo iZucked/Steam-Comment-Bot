@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.schedule.util;
 
+import java.util.List;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -13,6 +15,9 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
+import com.mmxlabs.models.lng.schedule.FuelAmount;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -157,6 +162,18 @@ public class ScheduleModelUtils {
 		}
 		return null;
 
+	}
+	
+	public static int sumFuelVolumes(List<FuelQuantity> fuels, FuelUnit fuelUnit) {
+		int fuelTotal = 0;
+		for (FuelQuantity fuel : fuels) {
+			for (FuelAmount fuelAmount : fuel.getAmounts()) {
+				if (fuelAmount.getUnit() == fuelUnit) {
+					fuelTotal += fuelAmount.getQuantity();
+				}
+			}
+		}
+		return fuelTotal;
 	}
 
 }
