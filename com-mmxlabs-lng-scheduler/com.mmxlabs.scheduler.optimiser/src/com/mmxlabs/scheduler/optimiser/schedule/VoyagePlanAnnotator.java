@@ -15,7 +15,10 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.events.impl.DischargeEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.GeneratedCharterOutEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.IdleEventImpl;
@@ -24,10 +27,13 @@ import com.mmxlabs.scheduler.optimiser.events.impl.LoadEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.PortVisitEventImpl;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.portcost.impl.PortCostAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
@@ -71,13 +77,28 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 	@Override
 	public void annotateFromVoyagePlan(final @NonNull VolumeAllocatedSequence scheduledSequence, final @NonNull IAnnotatedSolution solution) {
 		final VoyagePlanIterator vpi = new VoyagePlanIterator(scheduledSequence);
-
+		long currentHeelInM3 = 0;
+		boolean firstObject = true;
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(scheduledSequence.getResource());
+		final boolean recordHeel = !(vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE);
 		while (vpi.hasNextObject()) {
+			final boolean resetCurrentHeel = firstObject || vpi.nextObjectIsStartOfPlan();
+			firstObject = false;
+
 			final Object e = vpi.nextObject();
 			//
 			final int currentTime = vpi.getCurrentTime();
 			final VoyagePlan currentPlan = vpi.getCurrentPlan();
+
+			assert currentPlan.getLNGFuelVolume() >= 0;
+			assert currentPlan.getStartingHeelInM3() >= 0;
+			assert currentPlan.getRemainingHeelInM3() >= 0;
+
 			final long charterRatePerDay = currentPlan.getCharterInRatePerDay();
+			if (resetCurrentHeel) {
+				currentHeelInM3 = currentPlan.getStartingHeelInM3();
+			}
+
 			if (e instanceof PortDetails) {
 				final PortDetails details = (PortDetails) e;
 				final IPortSlot currentPortSlot = details.getOptions().getPortSlot();
@@ -106,7 +127,6 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 				{
 					final long cost = details.getPortCosts();
 					solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_portCostInfo, new PortCostAnnotation(cost));
-
 				}
 
 				final long consumption = details.getFuelConsumption(FuelComponent.Base);
@@ -125,6 +145,48 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 				visit.setStartTime(currentTime); // details.getStartTime()
 				visit.setEndTime(currentTime + visitDuration);
+
+				// Heel tracking
+				if (recordHeel) {
+					final long startHeelInM3 = currentHeelInM3;
+					if (currentPortSlot.getPortType() != PortType.End) {
+
+						if (currentPortSlot.getPortType() == PortType.Load) {
+							final IAllocationAnnotation allocationAnnotation = scheduledSequence.getAllocationAnnotation(currentPortSlot);
+
+							assert allocationAnnotation.getStartHeelVolumeInM3() >= 0;
+							assert allocationAnnotation.getFuelVolumeInM3() >= 0;
+							assert allocationAnnotation.getRemainingHeelVolumeInM3() >= 0;
+
+							assert allocationAnnotation.getStartHeelVolumeInM3() == currentPlan.getStartingHeelInM3();
+							assert allocationAnnotation.getFuelVolumeInM3() == currentPlan.getLNGFuelVolume();
+
+							currentHeelInM3 += allocationAnnotation.getSlotVolumeInM3(currentPortSlot);
+						} else if (currentPortSlot.getPortType() == PortType.Discharge) {
+							final IAllocationAnnotation allocationAnnotation = scheduledSequence.getAllocationAnnotation(currentPortSlot);
+
+							assert allocationAnnotation.getStartHeelVolumeInM3() >= 0;
+							assert allocationAnnotation.getFuelVolumeInM3() >= 0;
+							assert allocationAnnotation.getRemainingHeelVolumeInM3() >= 0;
+
+							assert allocationAnnotation.getStartHeelVolumeInM3() == currentPlan.getStartingHeelInM3();
+							assert allocationAnnotation.getFuelVolumeInM3() == currentPlan.getLNGFuelVolume();
+
+							currentHeelInM3 -= allocationAnnotation.getSlotVolumeInM3(currentPortSlot);
+						}
+						assert currentHeelInM3 + VoyagePlanner.ROUNDING_EPSILON >= 0;
+					} else {
+						if (currentPortSlot instanceof EndPortSlot) {
+							final EndPortSlot endPortSlot = (EndPortSlot) currentPortSlot;
+							// Assert disabled as it is not always possible to arrive with target heel (thus capacity violation should be triggered)
+							// assert currentHeelInM3 >= endPortSlot.getTargetEndHeelInM3();
+						}
+					}
+					final long endHeelInM3 = currentHeelInM3;
+
+					visit.setStartHeelInM3(startHeelInM3);
+					visit.setEndHeelInM3(endHeelInM3);
+				}
 			} else if (e instanceof VoyageDetails) {
 				final VoyageDetails details = (VoyageDetails) e;
 
@@ -154,7 +216,10 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 				journey.setDuration(travelTime);
 				journey.setHireCost(Calculator.quantityFromRateTime(charterRatePerDay, travelTime) / 24);
 				journey.setSpeed(details.getSpeed());
+				if (recordHeel) {
 
+					journey.setStartHeelInM3(currentHeelInM3);
+				}
 				for (final FuelComponent fuel : travelFuelComponents) {
 					for (final FuelUnit unit : FuelUnit.values()) {
 						final long consumption = details.getFuelConsumption(fuel, unit) + details.getRouteAdditionalConsumption(fuel, unit);
@@ -168,11 +233,16 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 							journey.setFuelPriceUnit(fuel, unit);
 							journey.setFuelUnitPrice(fuel, fuelUnitPrice);
 						}
+						if (FuelComponent.isLNGFuelComponent(fuel) && unit == FuelUnit.M3) {
+							currentHeelInM3 -= consumption;
+						}
 					}
 				}
-
+				if (recordHeel) {
+					assert currentHeelInM3 >= 0;
+					journey.setEndHeelInM3(currentHeelInM3);
+				}
 				journey.setVesselState(details.getOptions().getVesselState());
-
 				// solution.getElementAnnotations().setAnnotation(element,
 				// SchedulerConstants.AI_journeyInfo, journey);
 				solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_journeyInfo, journey);
@@ -192,6 +262,11 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 					// Calculate revenue
 					charterOut.setCharterOutRevenue(Calculator.quantityFromRateTime(details.getOptions().getCharterOutDailyRate(), idleTime) / 24L);
 					charterOut.setHireCost(Calculator.quantityFromRateTime(charterRatePerDay, idleTime) / 24);
+
+					if (recordHeel) {
+						charterOut.setStartHeelInM3(currentHeelInM3);
+						charterOut.setEndHeelInM3(currentHeelInM3);
+					}
 					solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_generatedCharterOutInfo, charterOut);
 
 				} else {
@@ -206,6 +281,8 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 					idle.setEndTime(currentTime + travelTime + idleTime);
 					idle.setSequenceElement(element);
 
+					idle.setStartHeelInM3(currentHeelInM3);
+
 					for (final FuelComponent fuel : idleFuelComponents) {
 						for (final FuelUnit unit : FuelUnit.values()) {
 							final long consumption = details.getFuelConsumption(fuel, unit);
@@ -219,7 +296,14 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 								idle.setFuelPriceUnit(fuel, unit);
 								idle.setFuelUnitPrice(fuel, details.getFuelUnitPrice(fuel));
 							}
+							if (FuelComponent.isLNGFuelComponent(fuel) && unit == FuelUnit.M3) {
+								currentHeelInM3 -= consumption;
+							}
 						}
+					}
+					if (recordHeel) {
+						assert currentHeelInM3 >= 0;
+						idle.setEndHeelInM3(currentHeelInM3);
 					}
 					idle.setVesselState(details.getOptions().getVesselState());
 
@@ -231,6 +315,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 					solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_idleInfo, idle);
 				}
+
 			} else {
 				throw new IllegalStateException("Unexpected element " + e);
 			}

@@ -28,6 +28,9 @@ public abstract class AbstractFuelUsingEventImpl extends AbstractScheduledEventI
 
 	private boolean cooldownPerformed;
 
+	private long startHeelInM3;
+	private long endHeelInM3;
+
 	@Override
 	public long getFuelConsumption(final FuelComponent fuel, final FuelUnit fuelUnit) {
 
@@ -101,4 +104,21 @@ public abstract class AbstractFuelUsingEventImpl extends AbstractScheduledEventI
 		this.cooldownPerformed = cooldownPerformed;
 	}
 
+	@Override
+	public long getStartHeelInM3() {
+		return startHeelInM3;
+	}
+
+	@Override
+	public long getEndHeelInM3() {
+		return endHeelInM3;
+	}
+
+	public void setStartHeelInM3(long startHeelInM3) {
+		this.startHeelInM3 = startHeelInM3;
+	}
+
+	public void setEndHeelInM3(long endHeelInM3) {
+		this.endHeelInM3 = endHeelInM3;
+	}
 }

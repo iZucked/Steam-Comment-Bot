@@ -69,7 +69,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class VoyagePlanner {
 
-	private static final int ROUNDING_EPSILON = 5;
+	public static final int ROUNDING_EPSILON = 5;
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -1064,8 +1064,6 @@ public class VoyagePlanner {
 			final IDetailsSequenceElement[] sequence = planData.getPlan().getSequence();
 			long currentHeelInM3 = planData.getPlan().getStartingHeelInM3();
 			long totalVoyageBOG = 0;
-			int voyageTime = 0;
-			IPortSlot optionalHeelUsePortSlot = null;
 			final int adjust = planData.getPlan().isIgnoreEnd() ? 1 : 0;
 			for (int i = 0; i < sequence.length - adjust; ++i) {
 				final IDetailsSequenceElement e = sequence[i];
@@ -1074,7 +1072,6 @@ public class VoyagePlanner {
 					final IPortSlot portSlot = portDetails.getOptions().getPortSlot();
 					final long start = currentHeelInM3;
 					if (portSlot.getPortType() != PortType.End) {
-						optionalHeelUsePortSlot = null;
 						if (planData.getAllocation() != null) {
 							if (portSlot.getPortType() == PortType.Load) {
 								currentHeelInM3 += planData.getAllocation().getSlotVolumeInM3(portSlot);
@@ -1104,20 +1101,9 @@ public class VoyagePlanner {
 					totalVoyageBOG += voyageBOGInM3;
 					currentHeelInM3 -= voyageBOGInM3;
 					assert currentHeelInM3 + ROUNDING_EPSILON >= 0;
-					voyageTime += voyageDetails.getTravelTime();
-					voyageTime += voyageDetails.getIdleTime();
-
 				}
 			}
-			// The optional heel use port slot has heel on board which may or may not have been used.
-			// The default code path assumes it has been used. However, if there is no NBO at all, we assume it did not exist,
-			// thus we need to update the data to accommodate.
-			if (optionalHeelUsePortSlot != null && voyageTime > 0 && totalVoyageBOG == 0) {
-				// Replace heel level annotation
-				heelLevelAnnotations.put(optionalHeelUsePortSlot, new HeelLevelAnnotation(0, 0));
-				// Update current heel - this will still be the start heel value as there was no boil-off
-				currentHeelInM3 = 0;
-			}
+
 			assert currentHeelInM3 + ROUNDING_EPSILON >= 0;
 
 			// Sanity check these calculations match expected values

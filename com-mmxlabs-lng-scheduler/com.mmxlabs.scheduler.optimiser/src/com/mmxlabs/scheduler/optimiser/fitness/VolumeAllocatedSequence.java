@@ -29,7 +29,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
-public class VolumeAllocatedSequence{
+public class VolumeAllocatedSequence {
 	private final @NonNull IResource resource;
 	private final @NonNull ISequence sequence;
 	private final int startTime;
@@ -55,10 +55,11 @@ public class VolumeAllocatedSequence{
 		public long capacityViolationSum;
 		public Pair<Interval, Long> latenessSum;
 		public List<@NonNull CapacityViolationType> capacityViolations = new ArrayList<>();
+
 		public List<CapacityViolationType> getCapacityViolations() {
 			return capacityViolations;
 		}
-	
+
 	}
 
 	private final Map<IPortSlot, SlotRecord> slotRecords;
@@ -122,11 +123,6 @@ public class VolumeAllocatedSequence{
 
 	}
 
-	public IHeelLevelAnnotation getHeelLevelAnnotation(final @NonNull IPortSlot portSlot) {
-		return getOrExceptionSlotRecord(portSlot).heelLevelAnnotation;
-	}
-	
-
 	public void addCapacityViolation(final @NonNull IPortSlot portSlot, @NonNull CapacityViolationType cvt) {
 
 		@NonNull
@@ -175,8 +171,8 @@ public class VolumeAllocatedSequence{
 	public long getIdleWeightedCost(final @NonNull IPortSlot portSlot) {
 		return getOrExceptionSlotRecord(portSlot).weightedIdleCost;
 	}
-	
-	public List<@NonNull CapacityViolationType> getCapacityViolations(final @NonNull IPortSlot portSlot){
+
+	public List<@NonNull CapacityViolationType> getCapacityViolations(final @NonNull IPortSlot portSlot) {
 		return getOrExceptionSlotRecord(portSlot).capacityViolations;
 	}
 
