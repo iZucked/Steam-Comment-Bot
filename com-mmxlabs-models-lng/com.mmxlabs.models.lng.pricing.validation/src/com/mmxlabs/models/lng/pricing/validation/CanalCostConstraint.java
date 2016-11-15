@@ -102,7 +102,7 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 						final DetailConstraintStatusDecorator result = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
 						result.addEObjectAndFeature(vesselClass, FleetPackage.eINSTANCE.getVesselClass_RouteParameters());
-//						return result;
+						return result;
 					}
 				}
 			}
