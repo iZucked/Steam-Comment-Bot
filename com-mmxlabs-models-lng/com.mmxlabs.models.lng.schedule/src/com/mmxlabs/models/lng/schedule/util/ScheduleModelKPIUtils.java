@@ -416,6 +416,10 @@ public class ScheduleModelKPIUtils {
 						}
 
 					}
+				} else if (event instanceof PortVisit) {
+					final PortVisit portVisit = (PortVisit) event;
+					total += portVisit.getCharterCost();
+					total += portVisit.getPortCost();
 				}
 				if (event instanceof FuelUsage) {
 					final FuelUsage fuelUsage = (FuelUsage) event;
