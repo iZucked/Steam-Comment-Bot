@@ -44,7 +44,7 @@ public class SimpleCargoAllocation {
 		eventCount = events.size();
 		
 
-		if (eventCount != 6 && eventCount != 9) {
+		if (eventCount != 2  && eventCount != 6 && eventCount != 9) {
 			throw new IllegalStateException(
 					"Expects Load/Discharge events with two journey and two idle events (6 events) or  Load/Discharge/Discharge events with three journey and three idle events (9 events)");
 		}
@@ -58,7 +58,7 @@ public class SimpleCargoAllocation {
 
 		// Process events list to get full set - which may or may not include nulls. For example we may be missing a Journey leg if there was no journey, or idle time if there was no idle.
 		Event[] processedEvents = new Event[eventCount];
-
+		
 		int currentIndex = 0;
 		for (Event e : events) {
 			if (e instanceof Journey || e instanceof Idle || e instanceof SlotVisit) {
@@ -74,6 +74,7 @@ public class SimpleCargoAllocation {
 			}
 			currentIndex++;
 		}
+		if(eventCount > 2){
 		ladenLeg = (Journey) processedEvents[1];
 		ladenIdle = (Idle) processedEvents[2];
 		ballastLeg = (Journey) processedEvents[4];
@@ -82,7 +83,12 @@ public class SimpleCargoAllocation {
 			ballastLegB = (Journey) processedEvents[7];
 			ballastIdleB = (Idle) processedEvents[8];
 		}
-
+		} else {
+			ladenLeg = null;
+			ladenIdle = null;
+			ballastLeg = null;
+			ballastIdle = null;
+		}
 	}
 
 	public Journey getLadenLeg() {
