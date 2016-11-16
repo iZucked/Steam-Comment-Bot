@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
@@ -57,6 +58,8 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
@@ -85,6 +88,7 @@ import com.mmxlabs.models.lng.schedule.util.CapacityUtils;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -560,9 +564,9 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 				private OptionalInt getDuration(final Object object) {
 					if (object instanceof EObject) {
-						PortVisit portVisit = ScheduleModelUtils.getMainEvent((EObject) object);
+						final PortVisit portVisit = ScheduleModelUtils.getMainEvent((EObject) object);
 						if (portVisit != null) {
-							Idle idle = ScheduleModelUtils.getLinkedIdleEvent(portVisit);
+							final Idle idle = ScheduleModelUtils.getLinkedIdleEvent(portVisit);
 							if (idle != null) {
 								return OptionalInt.of(idle.getDuration());
 							}
@@ -596,7 +600,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Ballast Idle", "Ballast idle days", ColumnType.NORMAL, new BaseFormatter() {
 				private OptionalInt getDuration(final Object object) {
 					if (object instanceof SlotVisit) {
-						SlotVisit slotVisit = (SlotVisit) object;
+						final SlotVisit slotVisit = (SlotVisit) object;
 						final Event event = ScheduleModelUtils.getLinkedIdleEvent(slotVisit);
 						if (event != null) {
 							return OptionalInt.of(event.getDuration());
@@ -631,9 +635,9 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 				private OptionalInt getDuration(final Object object) {
 					if (object instanceof EObject) {
-						PortVisit portVisit = ScheduleModelUtils.getMainEvent((EObject) object);
+						final PortVisit portVisit = ScheduleModelUtils.getMainEvent((EObject) object);
 						if (portVisit != null) {
-							Journey journey = ScheduleModelUtils.getLinkedJourneyEvent(portVisit);
+							final Journey journey = ScheduleModelUtils.getLinkedJourneyEvent(portVisit);
 							if (journey != null) {
 								return OptionalInt.of(journey.getDuration());
 							}
@@ -668,7 +672,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 				private OptionalInt getDuration(final Object object) {
 					if (object instanceof SlotVisit) {
-						SlotVisit slotVisit = (SlotVisit) object;
+						final SlotVisit slotVisit = (SlotVisit) object;
 						final Event event = ScheduleModelUtils.getLinkedJourneyEvent(slotVisit);
 						if (event != null) {
 							return OptionalInt.of(event.getDuration());
@@ -874,9 +878,9 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.lateness":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Lateness", null, ColumnType.NORMAL, new BaseFormatter() {
-				int getViolationCount(Object object) {
+				int getViolationCount(final Object object) {
 					if (object instanceof Row) {
-						Row row = (Row) object;
+						final Row row = (Row) object;
 						if (row.getTarget() instanceof EventGrouping) {
 							return LatenessUtils.getLatenessAfterFlex((EventGrouping) row.getTarget());
 						}
@@ -904,9 +908,9 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.capacity_violation":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Violation", null, ColumnType.NORMAL, new BaseFormatter() {
-				int getViolationCount(Object object) {
+				int getViolationCount(final Object object) {
 					if (object instanceof Row) {
-						Row row = (Row) object;
+						final Row row = (Row) object;
 						if (row.getTarget() instanceof EventGrouping) {
 							return CapacityUtils.getViolationCount((EventGrouping) row.getTarget());
 						}
@@ -931,6 +935,57 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 					return getViolationCount(object);
 				}
 			});
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.buy_entity":
+
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Buy Entity", null, ColumnType.NORMAL, Formatters.namedObjectFormatter, loadAllocationRef,
+					s.getSlotAllocation_Slot(), c.getSlot__GetSlotOrDelegatedEntity()));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.sell_entity":
+
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sell Entity", null, ColumnType.NORMAL, Formatters.namedObjectFormatter,
+					dischargeAllocationRef, s.getSlotAllocation_Slot(), c.getSlot__GetSlotOrDelegatedEntity()));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.shipping_entity":
+
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Shipping Entity", null, ColumnType.NORMAL, new BaseFormatter() {
+				@Override
+				public @Nullable String render(final Object object) {
+					if (object instanceof Row) {
+						final Row row = (Row) object;
+						final Sequence sequence = row.getSequence();
+						if (sequence == null) {
+							return null;
+						}
+						final VesselAvailability va = sequence.getVesselAvailability();
+						if (va != null) {
+							final BaseLegalEntity entity = va.getEntity();
+							if (entity != null) {
+								return entity.getName();
+							}
+						} else {
+							final CargoAllocation cargoAllocation = row.getCargoAllocation();
+							if (cargoAllocation != null && (sequence.getSequenceType() != SequenceType.DES_PURCHASE && sequence.getSequenceType() != SequenceType.FOB_SALE)) {
+
+								final SlotAllocation loadAllocation = row.getLoadAllocation();
+								if (loadAllocation != null) {
+									final Slot slot = loadAllocation.getSlot();
+									if (slot != null) {
+										final BaseLegalEntity entity = slot.getSlotOrDelegatedEntity();
+										if (entity != null) {
+											return entity.getName();
+										}
+									}
+								}
+							}
+
+						}
+						return null;
+					}
+
+					return super.render(object);
+				}
+			}));
 			break;
 		}
 	}
