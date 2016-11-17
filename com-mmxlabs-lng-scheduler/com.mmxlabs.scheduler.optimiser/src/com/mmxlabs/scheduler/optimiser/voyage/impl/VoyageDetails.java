@@ -22,11 +22,12 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 
 	private @NonNull VoyageOptions options;
 
-	private final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption = new LongFastEnumEnumMap<FuelComponent, FuelUnit>(FuelComponent.values().length, FuelUnit.values().length);
+	private final @NonNull LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption = new LongFastEnumEnumMap<FuelComponent, FuelUnit>(FuelComponent.values().length, FuelUnit.values().length);
 
-	private final LongFastEnumEnumMap<FuelComponent, FuelUnit> routeAdditionalConsumption = new LongFastEnumEnumMap<FuelComponent, FuelUnit>(FuelComponent.values().length, FuelUnit.values().length);
+	private final @NonNull LongFastEnumEnumMap<FuelComponent, FuelUnit> routeAdditionalConsumption = new LongFastEnumEnumMap<FuelComponent, FuelUnit>(FuelComponent.values().length,
+			FuelUnit.values().length);
 
-	private final LongFastEnumMap<FuelComponent> fuelUnitPrices = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
+	private final @NonNull LongFastEnumMap<FuelComponent> fuelUnitPrices = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
 
 	private int idleTime;
 
@@ -42,28 +43,18 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 		this.options = options;
 	}
 
-	public VoyageDetails(final int idleTime2, final int travelTime2, final int speed2, final int startTime2, final @NonNull VoyageOptions options,
-			final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption2, final LongFastEnumEnumMap<FuelComponent, FuelUnit> routeAdditionalConsumption2,
-			final LongFastEnumMap<FuelComponent> fuelUnitPrices2, final boolean cooldownPerformed) {
+	private VoyageDetails(final int idleTime2, final int travelTime2, final int speed2, final int startTime2, final @NonNull VoyageOptions options,
+			final @NonNull LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption2, final @NonNull LongFastEnumEnumMap<FuelComponent, FuelUnit> routeAdditionalConsumption2,
+			final @NonNull LongFastEnumMap<FuelComponent> fuelUnitPrices2, final boolean cooldownPerformed) {
 		this.idleTime = idleTime2;
 		this.travelTime = travelTime2;
 		this.speed = speed2;
 		this.startTime = startTime2;
 		this.options = options;
-		putAll(this.fuelConsumption, fuelConsumption2);
+		this.fuelConsumption.putAll(fuelConsumption2);
 		this.fuelUnitPrices.putAll(fuelUnitPrices2);
-		putAll(this.routeAdditionalConsumption, routeAdditionalConsumption2);
+		this.routeAdditionalConsumption.putAll(routeAdditionalConsumption2);
 		this.cooldownPerformed = cooldownPerformed;
-	}
-
-	// TODO: Add to LongFastEnumEnumMap
-	private final void putAll(final LongFastEnumEnumMap<FuelComponent, FuelUnit> dst, final LongFastEnumEnumMap<FuelComponent, FuelUnit> src) {
-
-		for (final FuelComponent fc : FuelComponent.values()) {
-			for (final FuelUnit fu : FuelUnit.values()) {
-				dst.put(fc, fu, src.get(fc, fu));
-			}
-		}
 	}
 
 	@Override
@@ -80,7 +71,7 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 		return routeAdditionalConsumption.get(fuel, fuelUnit);
 	}
 
-	public final void setRouteAdditionalConsumption(final FuelComponent fuel, final FuelUnit fuelUnit, final long consumption) {
+	public final void setRouteAdditionalConsumption(final @NonNull FuelComponent fuel, final @NonNull FuelUnit fuelUnit, final long consumption) {
 		routeAdditionalConsumption.put(fuel, fuelUnit, consumption);
 	}
 
@@ -120,12 +111,13 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 		this.travelTime = travelTime;
 	}
 
-	public final int getFuelUnitPrice(final FuelComponent fuel) {
+	public final int getFuelUnitPrice(final @NonNull FuelComponent fuel) {
 
+		// This cast is ok as #setFuelUnitPrice takes the input as an int
 		return (int) fuelUnitPrices.get(fuel);
 	}
 
-	public final void setFuelUnitPrice(final FuelComponent fuel, final int unitPrice) {
+	public final void setFuelUnitPrice(final @NonNull FuelComponent fuel, final int unitPrice) {
 		fuelUnitPrices.put(fuel, unitPrice);
 	}
 
