@@ -373,7 +373,7 @@ public class ListSelectionDialog extends Dialog {
 				
 				final ReversibleViewerComparator sorter = new ReversibleViewerComparator(new ViewerComparator() {
 					@Override
-					public int compare(Viewer viewer, Object arg0, Object arg1) {
+					public int compare(final Viewer viewer, final Object arg0, final Object arg1) {
 						//FIXME: SG 29/07/2016 - log file reported NPE here!
 						return provider.getText(arg0).compareTo(provider.getText(arg1));
 					}					
@@ -384,13 +384,13 @@ public class ListSelectionDialog extends Dialog {
 				tvc.getColumn().addSelectionListener(new SelectionListener() {
 
 					@Override
-					public void widgetSelected(SelectionEvent e) {
+					public void widgetSelected(final SelectionEvent e) {
 						viewer.setComparator(sorter.select());
 						viewer.refresh();
 					}
 
 					@Override
-					public void widgetDefaultSelected(SelectionEvent e) {
+					public void widgetDefaultSelected(final SelectionEvent e) {
 					}
 					
 				});
@@ -473,7 +473,7 @@ public class ListSelectionDialog extends Dialog {
 	 * @return 
 	 */
 	public CellLabelProvider addColumn(final String title, final ColumnLabelProvider columnLabelProvider) {
-		CellLabelProvider result = contentProvider.wrapColumnLabelProvider(columnLabelProvider, columns.isEmpty());
+		final CellLabelProvider result = contentProvider.wrapColumnLabelProvider(columnLabelProvider, columns.isEmpty());
 		this.columns.add(new Pair<String, CellLabelProvider>(title, result));
 		return result;
 	}
@@ -553,7 +553,7 @@ public class ListSelectionDialog extends Dialog {
 		final private ColumnLabelProvider clp;
 		final private boolean isFirstColumn;
 		
-		public WrappedColumnLabelProvider(ColumnLabelProvider clp, boolean isFirstColumn) {
+		public WrappedColumnLabelProvider(final ColumnLabelProvider clp, final boolean isFirstColumn) {
 			this.clp = clp;
 			this.isFirstColumn = isFirstColumn;
 		}
@@ -697,7 +697,7 @@ public class ListSelectionDialog extends Dialog {
 		
 		final ViewerComparator vc;
 		
-		public ReversibleViewerComparator(ViewerComparator vc) {
+		public ReversibleViewerComparator(final ViewerComparator vc) {
 			this.vc = vc;
 		}
 		
@@ -712,7 +712,7 @@ public class ListSelectionDialog extends Dialog {
 		}
 		
 		@Override
-		public int compare(Viewer viewer, Object a, Object b) {
+		public int compare(final Viewer viewer, final Object a, final Object b) {
 			return vc.compare(viewer, a, b) * direction;
 		}
 	}
