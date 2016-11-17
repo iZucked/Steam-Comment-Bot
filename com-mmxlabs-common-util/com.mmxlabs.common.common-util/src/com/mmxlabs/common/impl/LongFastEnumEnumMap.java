@@ -61,4 +61,13 @@ public final class LongFastEnumEnumMap<K extends Enum<K>, L extends Enum<L>> {
 
 		return Arrays.deepHashCode(values);
 	}
+
+	public final void putAll(final @NonNull LongFastEnumEnumMap<K, L> src) {
+		for (int i = 0; i < values.length; ++i) {
+			long[] row = values[i];
+			for (int j = 0; j < row.length; ++j) {
+				values[i][j] = src.values[i][j];
+			}
+		}
+	}
 }
