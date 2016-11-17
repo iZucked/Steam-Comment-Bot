@@ -23,6 +23,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.port.CapabilityGroup;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortCountryGroup;
 import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.PortCapability;
@@ -114,7 +115,9 @@ public class PortPickerDialog extends ListSelectionDialog {
 			@Override
 			public String getText(final Object element) {
 				final EObject second = ((Pair<?, EObject>) element).getSecond();
-				if (second instanceof PortGroup) {
+				if (second instanceof PortCountryGroup) {
+					return "Country Group";
+				} else if (second instanceof PortGroup) {
 					return "Port Group";
 				} else if (second instanceof CapabilityGroup) {
 					return "Capability Group";

@@ -111,6 +111,8 @@
         eType="#//Route" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="specialPortGroups" upperBound="-1"
         eType="#//CapabilityGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="portCountryGroups" upperBound="-1"
+        eType="#//PortCountryGroup" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CapabilityGroup">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="capability" lowerBound="1"
@@ -138,5 +140,11 @@
     <eLiterals name="DIRECT"/>
     <eLiterals name="SUEZ" value="1"/>
     <eLiterals name="PANAMA" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PortCountryGroup">
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
+      <eTypeArguments eClassifier="#//Port"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject"/>
   </eClassifiers>
 </ecore:EPackage>

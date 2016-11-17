@@ -87,6 +87,15 @@ public interface PortFactory extends EFactory {
 	Location createLocation();
 
 	/**
+	 * Returns a new object of class '<em>Country Group</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Country Group</em>'.
+	 * @generated
+	 */
+	PortCountryGroup createPortCountryGroup();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -21,6 +21,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getPortGroups <em>Port Groups</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getRoutes <em>Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getSpecialPortGroups <em>Special Port Groups</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getPortCountryGroups <em>Port Country Groups</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getPortModel()
@@ -91,5 +92,21 @@ public interface PortModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<CapabilityGroup> getSpecialPortGroups();
+
+	/**
+	 * Returns the value of the '<em><b>Port Country Groups</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.port.PortCountryGroup}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Port Country Groups</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Port Country Groups</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPortModel_PortCountryGroups()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<PortCountryGroup> getPortCountryGroups();
 
 } // PortModel

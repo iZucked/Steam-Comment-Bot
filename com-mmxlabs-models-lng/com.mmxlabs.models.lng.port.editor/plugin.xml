@@ -194,6 +194,10 @@
           commandProvider="com.mmxlabs.models.lng.port.ui.commands.RoutePortCommandProvider"
           id="com.mmxlabs.models.lng.port.ui.commands.RoutePortCommandProvider">
     </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.port.ui.commands.PortCountryGroupCommandProvider"
+          id="com.mmxlabs.models.lng.port.ui.commands.PortCountryGroupCommandProvider">
+    </ModelCommandProvider>
  </extension>
    <extension point="org.eclipse.ui.editors">
       <!-- @generated port -->
