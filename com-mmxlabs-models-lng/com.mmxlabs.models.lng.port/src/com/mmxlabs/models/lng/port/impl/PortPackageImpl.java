@@ -789,6 +789,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createNamedobjectAnnotations();
 		// http://www.mmxlabs.com/models/ui/numberFormat
 		createNumberFormatAnnotations();
+		// http://www.mmxlabs.com/models/csv
+		createCsvAnnotations();
 	}
 
 	/**
@@ -875,6 +877,28 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		   new String[] {
 			 "formatString", "-##0.###",
 			 "exportFormatString", "##0.###"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/csv</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createCsvAnnotations() {
+		String source = "http://www.mmxlabs.com/models/csv";	
+		addAnnotation
+		  (portGroupEClass, 
+		   source, 
+		   new String[] {
+			 "namePrefix", "Group"
+		   });	
+		addAnnotation
+		  (capabilityGroupEClass, 
+		   source, 
+		   new String[] {
+			 "namePrefix", "CapGroup"
 		   });
 	}
 

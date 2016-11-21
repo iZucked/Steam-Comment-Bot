@@ -102,11 +102,34 @@ public class PortModelImporter implements ISubmodelImporter {
 		final PortModel result = PortFactory.eINSTANCE.createPortModel();
 
 		final PortModel portModel = result;
-		
 
 		if (inputs.containsKey(PORT_KEY)) {
 			final CSVReader reader = inputs.get(PORT_KEY);
 			result.getPorts().addAll((Collection<? extends Port>) portImporter.importObjects(PortPackage.eINSTANCE.getPort(), reader, context));
+
+			// Register country groups before port groups for backward compatibility - untyped PortGroup names will replace newer country group names
+			// Create country groups
+			final Set<String> countries = portModel.getPorts().stream() //
+					.map(Port::getLocation) //
+					.filter(l -> l != null) //
+					.map(Location::getCountry).collect(Collectors.toSet());
+
+			final Set<String> groupNames = portModel.getPortCountryGroups().stream() //
+					.map(PortCountryGroup::getName)//
+					.collect(Collectors.toSet());
+
+			countries.removeAll(groupNames);
+
+			for (final String country : countries) {
+				if (country == null || country.isEmpty()) {
+					continue;
+				}
+				final PortCountryGroup g = PortFactory.eINSTANCE.createPortCountryGroup();
+				g.setName(country);
+				portModel.getPortCountryGroups().add(g);
+				context.registerNamedObject(g);
+			}
+
 		}
 		if (inputs.containsKey(PORT_GROUP_KEY)) {
 			final CSVReader reader = inputs.get(PORT_GROUP_KEY);
@@ -145,7 +168,7 @@ public class PortModelImporter implements ISubmodelImporter {
 				}
 			}
 		}
-		
+
 		if (portModel != null) {
 
 			for (final PortCapability capability : PortCapability.values()) {
@@ -165,29 +188,6 @@ public class PortModelImporter implements ISubmodelImporter {
 				}
 			}
 
-			// Create country groups
-			Set<String> countries = 
-				portModel.getPorts().stream() //
-					.map(Port::getLocation) //
-					.filter(l -> l != null) //
-					.map(Location::getCountry)
-					.collect(Collectors.toSet());
-			
-			Set<String> groupNames = portModel.getPortCountryGroups().stream() //
-					.map(PortCountryGroup::getName)//
-					.collect(Collectors.toSet());
-			
-			countries.removeAll(groupNames);
-			
-			for (String country : countries) {
-				if (country == null || country.isEmpty()) {
-					continue;
-				}
-				final PortCountryGroup g = PortFactory.eINSTANCE.createPortCountryGroup();
-				g.setName(country);
-				portModel.getPortCountryGroups().add(g);
-				context.registerNamedObject(g);
-			}
 		}
 		return result;
 	}
