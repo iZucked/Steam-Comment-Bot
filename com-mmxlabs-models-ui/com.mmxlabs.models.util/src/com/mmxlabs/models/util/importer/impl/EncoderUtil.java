@@ -4,7 +4,11 @@
  */
 package com.mmxlabs.models.util.importer.impl;
 
+import org.eclipse.emf.ecore.EAnnotation;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jdt.annotation.NonNull;
+
+import com.mmxlabs.models.mmxcore.NamedObject;
 
 public final class EncoderUtil {
 
@@ -25,5 +29,21 @@ public final class EncoderUtil {
 				// Do last as control character
 				.replaceAll(HTML_AMPERSAND, "&") //
 		;
+	}
+
+	public static String getTypedName(@NonNull final NamedObject namedObject) {
+
+		final String name = namedObject.getName();
+		if (name != null && !name.isEmpty()) {
+			final EClass eClass = namedObject.eClass();
+			final EAnnotation annotation = eClass.getEAnnotation("http://www.mmxlabs.com/models/csv");
+			if (annotation != null) {
+				final String namePrefix = annotation.getDetails().get("namePrefix");
+				if (namePrefix != null) {
+					return String.format("%s:%s", namePrefix, name);
+				}
+			}
+		}
+		return name;
 	}
 }

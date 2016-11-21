@@ -539,7 +539,8 @@ public class DefaultClassImporter extends AbstractClassImporter {
 								sb.append(",");
 							}
 							comma = true;
-							final String rawName = EncoderUtil.encode(no.getName());
+							final String typedName = EncoderUtil.getTypedName(no);
+							final String rawName = EncoderUtil.encode(typedName);
 							sb.append(rawName);
 						}
 					}
@@ -550,7 +551,9 @@ public class DefaultClassImporter extends AbstractClassImporter {
 				final Object o = object.eGet(reference);
 				if (o instanceof NamedObject) {
 					final NamedObject no = (NamedObject) o;
-					result.put(reference.getName(), no.getName());
+					final String typedName = EncoderUtil.getTypedName(no);
+
+					result.put(reference.getName(), typedName);
 				}
 			}
 		}

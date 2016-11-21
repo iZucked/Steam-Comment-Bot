@@ -22,6 +22,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.FileCSVReader;
 import com.mmxlabs.common.csv.IDeferment;
@@ -95,7 +96,13 @@ public class DefaultImportContext implements IMMXImportContext {
 
 	@Override
 	public void registerNamedObject(final NamedObject object) {
-		registerObjectWithName(object, object.getName());
+		final String typedName = EncoderUtil.getTypedName(object);
+		registerObjectWithName(object, typedName);
+
+		// For backward compatibility - register the untyped name if different.
+		if (!Equality.isEqual(typedName, object.getName())) {
+			registerObjectWithName(object, object.getName());
+		}
 
 		if (object instanceof OtherNamesObject) {
 			final OtherNamesObject otherNamesObject = (OtherNamesObject) object;
@@ -333,7 +340,8 @@ public class DefaultImportContext implements IMMXImportContext {
 		while (allObjects.hasNext()) {
 			final EObject o = allObjects.next();
 			if (o instanceof NamedObject) {
-				registerNamedObject((NamedObject) o);
+				final NamedObject namedObject = (NamedObject) o;
+				registerNamedObject(namedObject);
 			}
 		}
 	}
