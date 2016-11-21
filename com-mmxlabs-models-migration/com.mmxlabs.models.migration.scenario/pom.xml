@@ -6,10 +6,10 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.migration.parent</artifactId>
 		<groupId>com.mmxlabs.models.migration</groupId>
-		<version>4.0.4.RELEASE</version>
+		<version>4.0.5-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.models.migration.scenario</artifactId>
-	<version>4.0.4.RELEASE</version>
+	<version>4.0.5-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
