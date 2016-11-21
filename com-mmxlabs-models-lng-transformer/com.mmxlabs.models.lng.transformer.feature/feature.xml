@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.models.lng.transformer.feature"
       label="Models: LNG Transformer Feature"
-      version="4.0.4.RELEASE"
+      version="4.0.5.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description>
