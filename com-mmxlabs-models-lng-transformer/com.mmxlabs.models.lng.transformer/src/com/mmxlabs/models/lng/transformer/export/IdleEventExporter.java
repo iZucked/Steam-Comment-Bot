@@ -70,7 +70,8 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 		// set up hire cost
 		// Note: Cooldown duration is zero - this will need to be changed if cooldown duration becomes non-zero again. This will likely need API support
 		idle.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(event.getCharterCost()));
-
+		idle.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(event.getStartHeelInM3()));
+		idle.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(event.getEndHeelInM3()));
 		return idle;
 	}
 }

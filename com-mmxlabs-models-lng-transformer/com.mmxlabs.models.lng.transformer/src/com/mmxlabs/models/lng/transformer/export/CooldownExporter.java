@@ -30,7 +30,7 @@ public class CooldownExporter extends BaseAnnotationExporter {
 	}
 
 	@Override
-	public Event export(ISequenceElement element, Map<String, IElementAnnotation> annotations) {
+	public Event export(final ISequenceElement element, final Map<String, IElementAnnotation> annotations) {
 		final IIdleEvent event = (IIdleEvent) annotations.get(SchedulerConstants.AI_idleInfo);
 
 		if (event == null) {
@@ -49,6 +49,10 @@ public class CooldownExporter extends BaseAnnotationExporter {
 			cooldown.setCost(OptimiserUnitConvertor.convertToExternalFixedCost(event.getFuelCost(FuelComponent.Cooldown)));
 			cooldown.setStart(modelEntityMap.getDateFromHours(event.getEndTime(), ePort));
 			cooldown.setEnd(modelEntityMap.getDateFromHours(event.getEndTime(), ePort));
+
+			// Heel is identical to end of Idle. Note this could change when gasup is introduced
+			cooldown.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(event.getEndHeelInM3()));
+			cooldown.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(event.getEndHeelInM3()));
 
 			// Cooldown duration is zero - this will need to be changed if cooldown duration becomes non-zero again. This will likely need API support
 			// cooldown.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(event.getCharterCost()));

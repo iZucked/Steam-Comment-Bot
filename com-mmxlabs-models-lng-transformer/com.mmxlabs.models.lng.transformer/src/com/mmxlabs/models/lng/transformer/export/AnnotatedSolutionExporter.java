@@ -8,7 +8,6 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +29,11 @@ import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.Fitness;
+import com.mmxlabs.models.lng.schedule.Fuel;
+import com.mmxlabs.models.lng.schedule.FuelAmount;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUnit;
+import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -51,7 +55,6 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -338,7 +341,7 @@ public class AnnotatedSolutionExporter {
 				// order or it won't make any sense.
 				Collections.sort(eventsForElement, eventComparator);
 
-				boolean thisEventIsload = scheduledSlot.getPortType() == PortType.Load;
+				final boolean thisEventIsload = scheduledSlot.getPortType() == PortType.Load;
 
 				if (isRoundTripSequence && lastEventWasDischarge && thisEventIsload) {
 					if (!events.isEmpty()) {
@@ -355,7 +358,7 @@ public class AnnotatedSolutionExporter {
 						}
 
 						// Create new sequence, copying original data
-						Sequence thisSequence = factory.createSequence();
+						final Sequence thisSequence = factory.createSequence();
 
 						thisSequence.setSequenceType(SequenceType.ROUND_TRIP);
 
@@ -373,7 +376,6 @@ public class AnnotatedSolutionExporter {
 				eventsForElement.clear();
 
 				lastEventWasDischarge = scheduledSlot.getPortType() == PortType.Discharge;
-
 			}
 
 			// Setup next/prev events.
@@ -389,7 +391,7 @@ public class AnnotatedSolutionExporter {
 			if (isRoundTripSequence) {
 				if (!events.isEmpty()) {
 					// Create new sequence, copying original data
-					Sequence thisSequence = factory.createSequence();
+					final Sequence thisSequence = factory.createSequence();
 
 					thisSequence.setSequenceType(SequenceType.ROUND_TRIP);
 
