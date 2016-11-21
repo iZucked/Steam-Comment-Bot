@@ -554,13 +554,22 @@ public interface PortPackage extends EPackage {
 	int PORT_MODEL__SPECIAL_PORT_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Port Country Groups</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_MODEL__PORT_COUNTRY_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int PORT_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.CapabilityGroupImpl <em>Capability Group</em>}' class.
@@ -664,6 +673,52 @@ public interface PortPackage extends EPackage {
 	int LOCATION_FEATURE_COUNT = 3;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.PortCountryGroupImpl <em>Country Group</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.port.impl.PortCountryGroupImpl
+	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getPortCountryGroup()
+	 * @generated
+	 */
+	int PORT_COUNTRY_GROUP = 7;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_COUNTRY_GROUP__EXTENSIONS = TypesPackage.APORT_SET__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_COUNTRY_GROUP__UUID = TypesPackage.APORT_SET__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_COUNTRY_GROUP__NAME = TypesPackage.APORT_SET__NAME;
+
+	/**
+	 * The number of structural features of the '<em>Country Group</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_COUNTRY_GROUP_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.RouteOption <em>Route Option</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -671,7 +726,7 @@ public interface PortPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getRouteOption()
 	 * @generated
 	 */
-	int ROUTE_OPTION = 7;
+	int ROUTE_OPTION = 8;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.Port <em>Port</em>}'.
@@ -1076,6 +1131,17 @@ public interface PortPackage extends EPackage {
 	EReference getPortModel_SpecialPortGroups();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.port.PortModel#getPortCountryGroups <em>Port Country Groups</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Port Country Groups</em>'.
+	 * @see com.mmxlabs.models.lng.port.PortModel#getPortCountryGroups()
+	 * @see #getPortModel()
+	 * @generated
+	 */
+	EReference getPortModel_PortCountryGroups();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.CapabilityGroup <em>Capability Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1138,6 +1204,16 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getLocation_Lon();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.PortCountryGroup <em>Country Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Country Group</em>'.
+	 * @see com.mmxlabs.models.lng.port.PortCountryGroup
+	 * @generated
+	 */
+	EClass getPortCountryGroup();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.port.RouteOption <em>Route Option</em>}'.
@@ -1478,6 +1554,14 @@ public interface PortPackage extends EPackage {
 		EReference PORT_MODEL__SPECIAL_PORT_GROUPS = eINSTANCE.getPortModel_SpecialPortGroups();
 
 		/**
+		 * The meta object literal for the '<em><b>Port Country Groups</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORT_MODEL__PORT_COUNTRY_GROUPS = eINSTANCE.getPortModel_PortCountryGroups();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.CapabilityGroupImpl <em>Capability Group</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1528,6 +1612,16 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute LOCATION__LON = eINSTANCE.getLocation_Lon();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.PortCountryGroupImpl <em>Country Group</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.port.impl.PortCountryGroupImpl
+		 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getPortCountryGroup()
+		 * @generated
+		 */
+		EClass PORT_COUNTRY_GROUP = eINSTANCE.getPortCountryGroup();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.RouteOption <em>Route Option</em>}' enum.

@@ -27,6 +27,7 @@ import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
+import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.util.PortAdapterFactory;
 
@@ -248,6 +249,29 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.port.PortCountryGroup} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PortCountryGroupItemProvider portCountryGroupItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.port.PortCountryGroup}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPortCountryGroupAdapter() {
+		if (portCountryGroupItemProvider == null) {
+			portCountryGroupItemProvider = new PortCountryGroupItemProvider(this);
+		}
+
+		return portCountryGroupItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -380,6 +404,7 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 		if (portModelItemProvider != null) portModelItemProvider.dispose();
 		if (capabilityGroupItemProvider != null) capabilityGroupItemProvider.dispose();
 		if (locationItemProvider != null) locationItemProvider.dispose();
+		if (portCountryGroupItemProvider != null) portCountryGroupItemProvider.dispose();
 	}
 
 }

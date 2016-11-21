@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.port.CapabilityGroup;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortCountryGroup;
 import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -33,6 +34,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getPortGroups <em>Port Groups</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getRoutes <em>Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getSpecialPortGroups <em>Special Port Groups</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getPortCountryGroups <em>Port Country Groups</em>}</li>
  * </ul>
  *
  * @generated
@@ -77,6 +79,16 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * @ordered
 	 */
 	protected EList<CapabilityGroup> specialPortGroups;
+
+	/**
+	 * The cached value of the '{@link #getPortCountryGroups() <em>Port Country Groups</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortCountryGroups()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<PortCountryGroup> portCountryGroups;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -150,6 +162,18 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<PortCountryGroup> getPortCountryGroups() {
+		if (portCountryGroups == null) {
+			portCountryGroups = new EObjectContainmentEList<PortCountryGroup>(PortCountryGroup.class, this, PortPackage.PORT_MODEL__PORT_COUNTRY_GROUPS);
+		}
+		return portCountryGroups;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -161,6 +185,8 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 				return ((InternalEList<?>)getRoutes()).basicRemove(otherEnd, msgs);
 			case PortPackage.PORT_MODEL__SPECIAL_PORT_GROUPS:
 				return ((InternalEList<?>)getSpecialPortGroups()).basicRemove(otherEnd, msgs);
+			case PortPackage.PORT_MODEL__PORT_COUNTRY_GROUPS:
+				return ((InternalEList<?>)getPortCountryGroups()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -181,6 +207,8 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 				return getRoutes();
 			case PortPackage.PORT_MODEL__SPECIAL_PORT_GROUPS:
 				return getSpecialPortGroups();
+			case PortPackage.PORT_MODEL__PORT_COUNTRY_GROUPS:
+				return getPortCountryGroups();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -210,6 +238,10 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 				getSpecialPortGroups().clear();
 				getSpecialPortGroups().addAll((Collection<? extends CapabilityGroup>)newValue);
 				return;
+			case PortPackage.PORT_MODEL__PORT_COUNTRY_GROUPS:
+				getPortCountryGroups().clear();
+				getPortCountryGroups().addAll((Collection<? extends PortCountryGroup>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -234,6 +266,9 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 			case PortPackage.PORT_MODEL__SPECIAL_PORT_GROUPS:
 				getSpecialPortGroups().clear();
 				return;
+			case PortPackage.PORT_MODEL__PORT_COUNTRY_GROUPS:
+				getPortCountryGroups().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -254,6 +289,8 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 				return routes != null && !routes.isEmpty();
 			case PortPackage.PORT_MODEL__SPECIAL_PORT_GROUPS:
 				return specialPortGroups != null && !specialPortGroups.isEmpty();
+			case PortPackage.PORT_MODEL__PORT_COUNTRY_GROUPS:
+				return portCountryGroups != null && !portCountryGroups.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

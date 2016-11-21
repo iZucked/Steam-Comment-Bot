@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -17,7 +19,9 @@ import org.eclipse.emf.ecore.EObject;
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.port.CapabilityGroup;
+import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortCountryGroup;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -98,28 +102,34 @@ public class PortModelImporter implements ISubmodelImporter {
 		final PortModel result = PortFactory.eINSTANCE.createPortModel();
 
 		final PortModel portModel = result;
-		if (portModel != null) {
-			for (final PortCapability capability : PortCapability.values()) {
-				boolean found = false;
-				for (final CapabilityGroup g : portModel.getSpecialPortGroups()) {
-					if (g.getCapability().equals(capability)) {
-						found = true;
-						break;
-					}
-				}
-				if (found == false) {
-					final CapabilityGroup g = PortFactory.eINSTANCE.createCapabilityGroup();
-					g.setName("All " + capability.getName() + " Ports");
-					g.setCapability(capability);
-					portModel.getSpecialPortGroups().add(g);
-					context.registerNamedObject(g);
-				}
-			}
-		}
 
 		if (inputs.containsKey(PORT_KEY)) {
 			final CSVReader reader = inputs.get(PORT_KEY);
 			result.getPorts().addAll((Collection<? extends Port>) portImporter.importObjects(PortPackage.eINSTANCE.getPort(), reader, context));
+
+			// Register country groups before port groups for backward compatibility - untyped PortGroup names will replace newer country group names
+			// Create country groups
+			final Set<String> countries = portModel.getPorts().stream() //
+					.map(Port::getLocation) //
+					.filter(l -> l != null) //
+					.map(Location::getCountry).collect(Collectors.toSet());
+
+			final Set<String> groupNames = portModel.getPortCountryGroups().stream() //
+					.map(PortCountryGroup::getName)//
+					.collect(Collectors.toSet());
+
+			countries.removeAll(groupNames);
+
+			for (final String country : countries) {
+				if (country == null || country.isEmpty()) {
+					continue;
+				}
+				final PortCountryGroup g = PortFactory.eINSTANCE.createPortCountryGroup();
+				g.setName(country);
+				portModel.getPortCountryGroups().add(g);
+				context.registerNamedObject(g);
+			}
+
 		}
 		if (inputs.containsKey(PORT_GROUP_KEY)) {
 			final CSVReader reader = inputs.get(PORT_GROUP_KEY);
@@ -157,6 +167,27 @@ public class PortModelImporter implements ISubmodelImporter {
 					context.registerNamedObject(panama);
 				}
 			}
+		}
+
+		if (portModel != null) {
+
+			for (final PortCapability capability : PortCapability.values()) {
+				boolean found = false;
+				for (final CapabilityGroup g : portModel.getSpecialPortGroups()) {
+					if (g.getCapability().equals(capability)) {
+						found = true;
+						break;
+					}
+				}
+				if (found == false) {
+					final CapabilityGroup g = PortFactory.eINSTANCE.createCapabilityGroup();
+					g.setName("All " + capability.getName() + " Ports");
+					g.setCapability(capability);
+					portModel.getSpecialPortGroups().add(g);
+					context.registerNamedObject(g);
+				}
+			}
+
 		}
 		return result;
 	}

@@ -36,8 +36,13 @@ public class PortValueProviderFactory implements IReferenceValueProviderFactory 
 			} else if (referenceClass == PortPackage.eINSTANCE.getPortGroup()) {
 				return new SimpleReferenceValueProvider(portModel, PortPackage.eINSTANCE.getPortModel_PortGroups());
 			} else if (referenceClass == TypesPackage.eINSTANCE.getAPortSet()) {
-				return new MergedReferenceValueProvider(portModel, PortPackage.eINSTANCE.getPortModel_Ports(), PortPackage.eINSTANCE.getPortModel_PortGroups(),
-						PortPackage.eINSTANCE.getPortModel_SpecialPortGroups());
+//				return new MergedReferenceValueProvider(portModel, //
+//						PortPackage.eINSTANCE.getPortModel_Ports(), //
+//						PortPackage.eINSTANCE.getPortModel_PortGroups(), //
+//						PortPackage.eINSTANCE.getPortModel_SpecialPortGroups(), //
+//						PortPackage.eINSTANCE.getPortModel_PortCountryGroups() //
+//						);
+				return new PortSetValueProvider(portModel);
 			} else {
 				log.warn("Port value provider factory cannot produce provider for " + referenceClass.getName() + " from " + referenceClass.getEPackage().getNsURI() + ", " + "called with "
 						+ owner.getName() + "." + reference.getName());

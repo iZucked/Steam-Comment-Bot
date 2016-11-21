@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.port.util;
 
+import com.mmxlabs.models.lng.port.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -145,6 +146,17 @@ public class PortSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case PortPackage.PORT_COUNTRY_GROUP: {
+				PortCountryGroup portCountryGroup = (PortCountryGroup)theEObject;
+				T1 result = casePortCountryGroup(portCountryGroup);
+				if (result == null) result = caseAPortSet(portCountryGroup);
+				if (result == null) result = caseObjectSet(portCountryGroup);
+				if (result == null) result = caseUUIDObject(portCountryGroup);
+				if (result == null) result = caseNamedObject(portCountryGroup);
+				if (result == null) result = caseMMXObject(portCountryGroup);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -251,6 +263,21 @@ public class PortSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseLocation(Location object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Country Group</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Country Group</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 casePortCountryGroup(PortCountryGroup object) {
 		return null;
 	}
 

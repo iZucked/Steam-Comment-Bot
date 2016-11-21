@@ -68,6 +68,7 @@ public class PortModelComponentHelper extends BaseComponentHelper {
 		add_portGroupsEditor(detailComposite, topClass);
 		add_routesEditor(detailComposite, topClass);
 		add_specialPortGroupsEditor(detailComposite, topClass);
+		add_portCountryGroupsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the ports feature on PortModel
@@ -102,5 +103,14 @@ public class PortModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_specialPortGroupsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT_MODEL__SPECIAL_PORT_GROUPS));
+	}
+
+	/**
+	 * Create the editor for the portCountryGroups feature on PortModel
+	 *
+	 * @generated
+	 */
+	protected void add_portCountryGroupsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT_MODEL__PORT_COUNTRY_GROUPS));
 	}
 }

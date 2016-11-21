@@ -19,7 +19,7 @@ import com.mmxlabs.models.lng.types.PortCapability;
  * </ul>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getCapabilityGroup()
- * @model
+ * @model annotation="http://www.mmxlabs.com/models/csv namePrefix='CapGroup'"
  * @generated
  */
 public interface CapabilityGroup extends APortSet<Port> {

@@ -21,7 +21,7 @@ import com.mmxlabs.models.lng.types.APortSet;
  * </ul>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getPortGroup()
- * @model
+ * @model annotation="http://www.mmxlabs.com/models/csv namePrefix='Group'"
  * @generated
  */
 public interface PortGroup extends APortSet<Port> {

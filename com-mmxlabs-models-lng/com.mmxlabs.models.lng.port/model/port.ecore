@@ -74,9 +74,9 @@
     <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
       <eTypeArguments eClassifier="#//Port"/>
     </eGenericSuperTypes>
-    <eGenericSuperTypes eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//OtherNamesObject"/>
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//OtherNamesObject"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Route" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+  <eClassifiers xsi:type="ecore:EClass" name="Route" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="lines" upperBound="-1"
         eType="#//RouteLine" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="routeOption" eType="#//RouteOption"/>
@@ -85,6 +85,9 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PortGroup">
+    <eAnnotations source="http://www.mmxlabs.com/models/csv">
+      <details key="namePrefix" value="Group"/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="contents" upperBound="-1">
       <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
         <eTypeArguments eClassifier="#//Port"/>
@@ -94,7 +97,7 @@
       <eTypeArguments eClassifier="#//Port"/>
     </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="RouteLine" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+  <eClassifiers xsi:type="ecore:EClass" name="RouteLine" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eOperations name="getFullDistance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="from" lowerBound="1" eType="#//Port"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="to" lowerBound="1" eType="#//Port"/>
@@ -102,7 +105,7 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vias" upperBound="-1" eType="#//RouteLine"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="PortModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+  <eClassifiers xsi:type="ecore:EClass" name="PortModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
         eType="#//Port" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="portGroups" upperBound="-1"
@@ -111,8 +114,13 @@
         eType="#//Route" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="specialPortGroups" upperBound="-1"
         eType="#//CapabilityGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="portCountryGroups" upperBound="-1"
+        eType="#//PortCountryGroup" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CapabilityGroup">
+    <eAnnotations source="http://www.mmxlabs.com/models/csv">
+      <details key="namePrefix" value="CapGroup"/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="capability" lowerBound="1"
         eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//PortCapability"/>
     <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
@@ -138,5 +146,14 @@
     <eLiterals name="DIRECT"/>
     <eLiterals name="SUEZ" value="1"/>
     <eLiterals name="PANAMA" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PortCountryGroup">
+    <eAnnotations source="http://www.mmxlabs.com/models/csv">
+      <details key="namePrefix" value="CountryGroup"/>
+    </eAnnotations>
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
+      <eTypeArguments eClassifier="#//Port"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject"/>
   </eClassifiers>
 </ecore:EPackage>
