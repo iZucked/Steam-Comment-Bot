@@ -150,6 +150,8 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 		final IDetailsSequenceElement[] newSequence = currentSequence.clone();
 		final IAllocationAnnotation currentAllocation = volumeAllocator.get().allocate(vesselAvailability, vesselStartTime, vp, portTimesRecord);
 
+		final long startHeelInM3 = vp.getStartingHeelInM3();
+
 		if (originalLoad != null) {
 
 			// Get the new cargo allocation.
@@ -234,11 +236,13 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 			// }
 			// }
 			// }
-			long minPrice_Value = evaluateSalesPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, portTimesRecord, sequenceElements, originalDischarge, minPricePerMMBTu);
+			long minPrice_Value = evaluateSalesPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startHeelInM3, portTimesRecord, sequenceElements, originalDischarge,
+					minPricePerMMBTu);
 			while (minPrice_Value > 0) {
 				// Subtract $1
 				int l_minPricePerMMBTu = minPricePerMMBTu - OptimiserUnitConvertor.convertToInternalPrice(0.1);
-				long l_minPrice_Value = evaluateSalesPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, portTimesRecord, sequenceElements, originalDischarge, l_minPricePerMMBTu);
+				long l_minPrice_Value = evaluateSalesPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startHeelInM3, portTimesRecord, sequenceElements, originalDischarge,
+						l_minPricePerMMBTu);
 				if (l_minPrice_Value == Long.MAX_VALUE) {
 					break;
 				}
@@ -249,11 +253,13 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 			minPricePerMMBTu = Math.max(0, minPricePerMMBTu);
 
 			int maxPricePerMMBTu = 10 * Math.max(OptimiserUnitConvertor.convertToInternalPrice(5.0), minPricePerMMBTu);
-			long maxPrice_Value = evaluateSalesPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, portTimesRecord, sequenceElements, originalDischarge, maxPricePerMMBTu);
+			long maxPrice_Value = evaluateSalesPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startHeelInM3, portTimesRecord, sequenceElements, originalDischarge,
+					maxPricePerMMBTu);
 			while (maxPrice_Value < 0) {
 				// Add $1
 				int l_maxPricePerMMBTu = maxPricePerMMBTu + OptimiserUnitConvertor.convertToInternalPrice(1.0);
-				long l_maxPrice_Value = evaluateSalesPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, portTimesRecord, sequenceElements, originalDischarge, l_maxPricePerMMBTu);
+				long l_maxPrice_Value = evaluateSalesPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startHeelInM3, portTimesRecord, sequenceElements, originalDischarge,
+						l_maxPricePerMMBTu);
 				if (l_maxPrice_Value != Long.MAX_VALUE) {
 					maxPrice_Value = l_maxPrice_Value;
 					maxPricePerMMBTu = l_maxPricePerMMBTu;
@@ -263,8 +269,8 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 			// $90/mmBTu is max - anything much larger can cause overflow issues
 			maxPricePerMMBTu = Math.min(OptimiserUnitConvertor.convertToInternalPrice(90.0), maxPricePerMMBTu);
 
-			final int breakEvenPricePerMMBtu = search(minPricePerMMBTu, minPrice_Value, maxPricePerMMBTu, maxPrice_Value, vesselAvailability, vesselStartTime, vesselCharterRatePerDay, portTimesRecord,
-					sequenceElements, originalDischarge);
+			final int breakEvenPricePerMMBtu = search(minPricePerMMBTu, minPrice_Value, maxPricePerMMBTu, maxPrice_Value, vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startHeelInM3,
+					portTimesRecord, sequenceElements, originalDischarge);
 
 			// final IDischargeOption beSlot;
 			((IBreakEvenPriceCalculator) originalDischarge.getDischargePriceCalculator()).setPrice(breakEvenPricePerMMBtu);
@@ -285,7 +291,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 		return null;
 	}
 
-	private long evaluateSalesPrice(final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, final long vesselCharterRatePerDay,
+	private long evaluateSalesPrice(final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, final long vesselCharterRatePerDay, final long startHeelInM3,
 			final @NonNull IPortTimesRecord portTimesRecord, final @NonNull List<@NonNull ISequenceElement> sequenceElements, final @NonNull IDischargeOption originalDischarge,
 			final int currentPricePerMMBTu) {
 
@@ -296,7 +302,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 			newVoyagePlan = voyagePlanner.makeDESOrFOBVoyagePlan(vesselProvider.getResource(vesselAvailability), portTimesRecord);
 		} else {
-			newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vesselAvailability), vesselCharterRatePerDay, portTimesRecord, 0);
+			newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vesselAvailability), vesselCharterRatePerDay, portTimesRecord, startHeelInM3);
 		}
 		assert newVoyagePlan != null;
 
@@ -317,7 +323,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 	}
 
 	private int search(final int min, final long minValue, final int max, final long maxValue, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime,
-			final long vesselCharterRatePerDay, final @NonNull IPortTimesRecord portTimesRecord, final @NonNull List<@NonNull ISequenceElement> sequenceElements,
+			final long vesselCharterRatePerDay, final long startHeelInM3, final @NonNull IPortTimesRecord portTimesRecord, final @NonNull List<@NonNull ISequenceElement> sequenceElements,
 			final IDischargeOption originalDischarge) {
 
 		final int mid = min + ((max - min) / 2);
@@ -334,12 +340,12 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 			}
 		}
 
-		final long midValue = evaluateSalesPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, portTimesRecord, sequenceElements, originalDischarge, mid);
+		final long midValue = evaluateSalesPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startHeelInM3, portTimesRecord, sequenceElements, originalDischarge, mid);
 		assert midValue != Long.MAX_VALUE;
 		if (midValue > 0) {
-			return search(min, minValue, mid, midValue, vesselAvailability, vesselStartTime, vesselCharterRatePerDay, portTimesRecord, sequenceElements, originalDischarge);
+			return search(min, minValue, mid, midValue, vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startHeelInM3, portTimesRecord, sequenceElements, originalDischarge);
 		} else {
-			return search(mid, midValue, max, maxValue, vesselAvailability, vesselStartTime, vesselCharterRatePerDay, portTimesRecord, sequenceElements, originalDischarge);
+			return search(mid, midValue, max, maxValue, vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startHeelInM3, portTimesRecord, sequenceElements, originalDischarge);
 		}
 
 	}

@@ -14,6 +14,11 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  * 
  */
 public interface IFuelUsingEvent {
+
+	long getStartHeelInM3();
+
+	long getEndHeelInM3();
+
 	/**
 	 * Returns the fuel consumption per {@link FuelComponent} during this event.
 	 * 
@@ -45,6 +50,6 @@ public interface IFuelUsingEvent {
 	 * @return
 	 */
 	FuelUnit getFuelPriceUnit(FuelComponent fuel);
-	
+
 	boolean isCooldownPerformed();
 }

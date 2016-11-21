@@ -22,4 +22,8 @@ public interface IGeneratedCharterOutEvent extends IScheduledEvent {
 	IPort getPort();
 
 	long getCharterOutRevenue();
+
+	long getStartHeelInM3();
+
+	long getEndHeelInM3();
 }

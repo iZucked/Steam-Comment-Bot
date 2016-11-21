@@ -21,6 +21,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.RoundTripCargoEnd;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
@@ -701,6 +702,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						} else {
 							remainingHeelInM3 = 0;
 						}
+					} else if (toPortSlot instanceof RoundTripCargoEnd) {
+						final RoundTripCargoEnd endPortSlot = (RoundTripCargoEnd) toPortSlot;
+						remainingHeelInM3 = vessel.getVesselClass().getSafetyHeel();
 					} else {
 						remainingHeelInM3 = vesselClass.getSafetyHeel();
 					}
@@ -714,11 +718,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				remainingHeelInM3 = 0;
 			}
 
-			violationsCount += checkCargoCapacityViolations(startHeelInM3, lngCommitmentInM3, loadDetails, loadSlot, dischargeDetails, dischargeSlot, minDischargeVolumeInM3, cargoCapacityInM3,
-					remainingHeelInM3);
+			violationsCount += checkCargoCapacityViolations(startHeelInM3, lngCommitmentInM3, loadSlot, dischargeSlot, minDischargeVolumeInM3, cargoCapacityInM3, remainingHeelInM3);
 
-			// Sanity checks
-			assert lngCommitmentInM3 >= 0;
 			// assert lngCommitmentInM3 <= cargoCapacityInM3;
 		} else {
 			// was not a Cargo sequence
@@ -746,6 +747,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				final IPortSlot toPortSlot = lastVoyageDetailsElement.getOptions().getToPortSlot();
 				if (toPortSlot instanceof EndPortSlot) {
 					final EndPortSlot endPortSlot = (EndPortSlot) toPortSlot;
+
 					// TODO: Tricky here to get exact fuel volume, should there be some tolerance?
 					if (endPortSlot.isEndCold() && remainingHeelInM3 != endPortSlot.getTargetEndHeelInM3()) {
 						if (remainingHeelInM3 == 0) {
@@ -768,8 +770,10 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					++violationsCount;
 				}
 			}
-
 		}
+
+		// Sanity checks
+		assert lngCommitmentInM3 >= 0;
 
 		final List<Integer> loadIndices = findLoadIndices(sequence);
 		final List<Integer> dischargeIndices = findDischargeIndices(sequence);
@@ -878,8 +882,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		return violationsCount;
 	}
 
-	protected int checkCargoCapacityViolations(final long startHeelInM3, final long lngCommitmentInM3, final PortDetails loadDetails, final ILoadSlot loadSlot, final PortDetails dischargeDetails,
-			final IDischargeSlot dischargeSlot, final long minDischargeVolumeInM3, final long cargoCapacityInM3, final long remainingHeelInM3) {
+	protected int checkCargoCapacityViolations(final long startHeelInM3, final long lngCommitmentInM3, final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final long minDischargeVolumeInM3,
+			final long cargoCapacityInM3, final long remainingHeelInM3) {
 
 		int violationsCount = 0;
 		final long minLoadVolumeInM3 = loadSlot.getMinLoadVolume();

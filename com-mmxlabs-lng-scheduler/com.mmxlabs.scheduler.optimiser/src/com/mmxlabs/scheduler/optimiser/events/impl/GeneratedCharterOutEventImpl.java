@@ -18,6 +18,8 @@ public final class GeneratedCharterOutEventImpl extends AbstractScheduledEventIm
 	private IPort port;
 
 	private long charterOutRevenue;
+	private long startHeelInM3;
+	private long endHeelInM3;
 
 	@Override
 	public IPort getPort() {
@@ -35,5 +37,23 @@ public final class GeneratedCharterOutEventImpl extends AbstractScheduledEventIm
 
 	public void setCharterOutRevenue(long charterOutRevenue) {
 		this.charterOutRevenue = charterOutRevenue;
+	}
+
+	@Override
+	public long getStartHeelInM3() {
+		return startHeelInM3;
+	}
+
+	public void setStartHeelInM3(long startHeelInM3) {
+		this.startHeelInM3 = startHeelInM3;
+	}
+
+	@Override
+	public long getEndHeelInM3() {
+		return endHeelInM3;
+	}
+
+	public void setEndHeelInM3(long endHeelInM3) {
+		this.endHeelInM3 = endHeelInM3;
 	}
 }
