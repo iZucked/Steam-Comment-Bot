@@ -5,9 +5,9 @@
 	<parent>
 		<artifactId>com.mmxlabs.lingo.parent</artifactId>
 		<groupId>com.mmxlabs.lingo</groupId>
-		<version>4.0.4-SNAPSHOT</version>
+		<version>4.0.4.RELEASE</version>
 	</parent>
 	<artifactId>com.mmxlabs.lingo.app.headless</artifactId>
-	<version>4.0.4-SNAPSHOT</version>
+	<version>4.0.4.RELEASE</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
