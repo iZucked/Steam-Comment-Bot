@@ -7,6 +7,9 @@ package com.mmxlabs.models.lng.fleet.ui.displaycomposites;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.notify.Adapter;
@@ -14,10 +17,12 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -40,12 +45,16 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.google.common.collect.Sets;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
@@ -54,6 +63,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
+import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
@@ -68,12 +78,87 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 	private IDisplayComposite delegate;
 	private ICommandHandler commandHandler;
 	private TableViewer tableViewer;
+	private final Map<EStructuralFeature, IInlineEditor> feature2Editor = new HashMap<>();
+	private Set<EStructuralFeature> portFeatures = Sets.newHashSet(FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE, FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__IN_PORT_NBO_RATE);
 
 	public VSADetailComposite(final Composite parent, final int style, final FormToolkit toolkit) {
 		super(parent, style);
 		toolkit.adapt(this);
 		setLayout(new GridLayout(1, false));
-		delegate = new DefaultDetailComposite(this, style, toolkit);
+		delegate = new DefaultDetailComposite(this, style, toolkit) {
+			@Override
+			public IInlineEditor addInlineEditor(IInlineEditor editor) {
+
+				editor = super.addInlineEditor(editor);
+				if (editor != null) {
+					final EStructuralFeature f = editor.getFeature();
+					feature2Editor.put(f, editor);
+
+				}
+
+				return editor;
+			}
+
+			@Override
+			public void createControls(IDialogEditingContext dialogContext, MMXRootObject root, EObject object, EMFDataBindingContext dbc) {
+				this.object = object;
+				toolkit.adapt(this);
+				setDefaultHelpContext(object);
+
+				Group g_port = new Group(this, SWT.NONE);
+				toolkit.adapt(g_port);
+				g_port.setText("Port");
+				if (object.eContainingFeature() == FleetPackage.Literals.VESSEL_CLASS__LADEN_ATTRIBUTES) {
+					g_port.setText("Load port");
+				} else if (object.eContainingFeature() == FleetPackage.Literals.VESSEL_CLASS__BALLAST_ATTRIBUTES) {
+					g_port.setText("Discharge port");
+				}
+				g_port.setLayout(new GridLayout(2, false));
+				g_port.setLayoutData(GridDataFactory.fillDefaults().span(3, 1).grab(true, false).create());
+				for (final IInlineEditor editor : editors) {
+					if (portFeatures.contains(editor.getFeature())) {
+						final Label label = layoutProvider.showLabelFor(root, object, editor) ? new Label(g_port, SWT.NONE) : null;
+						editor.setLabel(label);
+						final Control control = editor.createControl(g_port, dbc, toolkit);
+						dialogContext.registerEditorControl(object, editor.getFeature(), control);
+
+						control.setLayoutData(layoutProvider.createEditorLayoutData(root, object, editor, control));
+						control.setData(LABEL_CONTROL_KEY, label);
+						control.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+						if (label != null) {
+							toolkit.adapt(label, true, false);
+							label.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+							label.setLayoutData(layoutProvider.createLabelLayoutData(root, object, editor, control, label));
+							dialogContext.registerEditorControl(object, editor.getFeature(), label);
+						}
+					}
+				}
+				Group g_voyage = new Group(this, SWT.NONE);
+				toolkit.adapt(g_voyage);
+				g_voyage.setLayout(new GridLayout(2, false));
+				g_voyage.setLayoutData(GridDataFactory.fillDefaults().span(3, 1).grab(true, false).create());
+				g_voyage.setText("Voyage");
+				for (final IInlineEditor editor : editors) {
+					if (!portFeatures.contains(editor.getFeature())) {
+						final Label label = layoutProvider.showLabelFor(root, object, editor) ? new Label(g_voyage, SWT.NONE) : null;
+						editor.setLabel(label);
+						final Control control = editor.createControl(g_voyage, dbc, toolkit);
+						dialogContext.registerEditorControl(object, editor.getFeature(), control);
+
+						control.setLayoutData(layoutProvider.createEditorLayoutData(root, object, editor, control));
+						control.setData(LABEL_CONTROL_KEY, label);
+						control.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+						if (label != null) {
+							toolkit.adapt(label, true, false);
+							label.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+							label.setLayoutData(layoutProvider.createLabelLayoutData(root, object, editor, control, label));
+							dialogContext.registerEditorControl(object, editor.getFeature(), label);
+						}
+					}
+				}
+			}
+		};
+
 		delegate.getComposite().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		@SuppressWarnings("unused")
 		final Label consumptionCurve = toolkit.createLabel(this, "Fuel Consumption");
@@ -155,7 +240,7 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 				final EditingDomain ed = commandHandler.getEditingDomain();
 				commandHandler.handleCommand(SetCommand.create(ed, element, attr, value)
 
-				, (EObject) element, attr);
+						, (EObject) element, attr);
 			}
 
 			@Override
@@ -330,4 +415,5 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 	public boolean checkVisibility(IDialogEditingContext context) {
 		return delegate.checkVisibility(context);
 	}
+
 }
