@@ -90,7 +90,7 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 				}
 			}
 			if (portName != null && dateStr != null && priceExpression != null) {
-				return String.format("%s | %s | %s", portName, dateStr, priceExpression);
+				return String.format("%s (%s) %s", portName, dateStr, priceExpression);
 			}
 			return String.format("Opp <not set>");
 		} else if (object instanceof BuyReference) {
