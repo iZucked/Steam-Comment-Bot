@@ -52,6 +52,8 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.CachingVolu
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.CheckingVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.IBoilOffHelper;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.InPortBoilOffHelper;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.CachingVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.DefaultEndEventScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IEndEventScheduler;
@@ -69,6 +71,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
  * 
  */
 public class LNGTransformerModule extends AbstractModule {
+	
+	public static final String COMMERCIAL_VOLUME_OVERCAPACITY = "COMMERCIAL_VOLUME_OVERCAPACITY";
+	
 	private final static int DEFAULT_VPO_CACHE_SIZE = 20_000;
 
 	public static final String EARLIEST_AND_LATEST_TIMES = "earliest-and-latest-times";
@@ -148,6 +153,20 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VolumeAllocatedSequenceCache)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(Boolean.FALSE);
 
+	}
+	
+	@Provides
+	@Named(COMMERCIAL_VOLUME_OVERCAPACITY)
+	private boolean commercialVolumeOverCapacity() {
+		return false;
+	}
+	
+	@Provides
+	private IBoilOffHelper provideInPortBoilOffHelper(@NonNull final Injector injector, @Named(COMMERCIAL_VOLUME_OVERCAPACITY) final boolean toggle){
+		final InPortBoilOffHelper helper = new InPortBoilOffHelper(toggle);
+//		injector.injectMembers(helper);
+		
+		return helper;
 	}
 
 	@Provides

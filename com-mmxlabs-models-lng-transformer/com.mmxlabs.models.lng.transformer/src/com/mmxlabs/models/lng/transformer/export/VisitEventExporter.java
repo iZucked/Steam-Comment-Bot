@@ -129,10 +129,12 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 			final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(slot);
 			slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
-			slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
+			slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getCommercialSlotVolumeInM3(slot)));
 			slotAllocation.setVolumeValue(OptimiserUnitConvertor.convertToExternalFixedCost(allocation.getSlotValue(slot)));
-			slotAllocation.setEnergyTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInMMBTu(slot)));
+			slotAllocation.setEnergyTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getCommercialSlotVolumeInMMBTu(slot)));
 			slotAllocation.setCv(OptimiserUnitConvertor.convertToExternalConversionFactor(allocation.getSlotCargoCV(slot)));
+			slotAllocation.setPhysicalVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getPhysicalSlotVolumeInM3(slot)));
+			slotAllocation.setPhysicalEnergyTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getPhysicalSlotVolumeInMMBTu(slot)));
 
 			sv.setSlotAllocation(slotAllocation);
 			slotAllocation.setCargoAllocation(eAllocation);
