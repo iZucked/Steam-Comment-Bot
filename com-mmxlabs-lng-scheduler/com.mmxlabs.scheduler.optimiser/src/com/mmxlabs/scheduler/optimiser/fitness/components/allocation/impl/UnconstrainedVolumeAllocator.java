@@ -13,7 +13,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil;
@@ -515,8 +514,8 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		for (int i = 0; i < slots.size(); ++i) {
 			final IPortSlot slot = slots.get(i);
 
-			annotation.setSlotVolumeInM3(slot, allocationRecord.maxVolumesInM3.get(i));
-			annotation.setSlotVolumeInMMBTu(slot, allocationRecord.maxVolumesInMMBtu.get(i));
+			annotation.setCommercialSlotVolumeInM3(slot, allocationRecord.maxVolumesInM3.get(i));
+			annotation.setCommercialSlotVolumeInMMBTu(slot, allocationRecord.maxVolumesInMMBtu.get(i));
 		}
 
 		return annotation;

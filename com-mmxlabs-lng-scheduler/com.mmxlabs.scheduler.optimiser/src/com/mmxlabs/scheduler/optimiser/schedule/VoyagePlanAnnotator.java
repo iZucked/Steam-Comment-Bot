@@ -177,7 +177,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 							assert allocationAnnotation.getStartHeelVolumeInM3() == currentPlan.getStartingHeelInM3();
 							assert allocationAnnotation.getFuelVolumeInM3() == currentPlan.getLNGFuelVolume();
 
-							currentHeelInM3 += allocationAnnotation.getSlotVolumeInM3(currentPortSlot);
+							currentHeelInM3 += allocationAnnotation.getPhysicalSlotVolumeInM3(currentPortSlot);
 						} else if (currentPortSlot.getPortType() == PortType.Discharge) {
 							final IAllocationAnnotation allocationAnnotation = scheduledSequence.getAllocationAnnotation(currentPortSlot);
 
@@ -188,7 +188,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 							assert allocationAnnotation.getStartHeelVolumeInM3() == currentPlan.getStartingHeelInM3();
 							assert allocationAnnotation.getFuelVolumeInM3() == currentPlan.getLNGFuelVolume();
 
-							currentHeelInM3 -= allocationAnnotation.getSlotVolumeInM3(currentPortSlot);
+							currentHeelInM3 -= allocationAnnotation.getPhysicalSlotVolumeInM3(currentPortSlot);
 						}
 						assert currentHeelInM3 + VoyagePlanner.ROUNDING_EPSILON >= 0;
 					} else {
