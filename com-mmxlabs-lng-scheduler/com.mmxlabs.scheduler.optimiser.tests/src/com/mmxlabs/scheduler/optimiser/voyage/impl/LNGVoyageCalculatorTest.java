@@ -1115,28 +1115,24 @@ public class LNGVoyageCalculatorTest {
 		final long remainingHeelInM3 = 0;
 
 		// No violations
-		final int violationCount = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadDetails, loadSlot, dischargeDetails, dischargeSlot, minDischargeInM3, cargoCapacityInM3,
-				remainingHeelInM3);
+		final int violationCount = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, minDischargeInM3, cargoCapacityInM3, remainingHeelInM3);
 		Assert.assertEquals(0, violationCount);
 
 		// MAX_LOAD + VESSEL_CAPACITY
 		loadSlot.setVolumeLimits(true, 150_000L, 150_000L);
-		final int violationCountB = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadDetails, loadSlot, dischargeDetails, dischargeSlot, minDischargeInM3, cargoCapacityInM3,
-				remainingHeelInM3);
+		final int violationCountB = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, minDischargeInM3, cargoCapacityInM3, remainingHeelInM3);
 		Assert.assertEquals(2, violationCountB);
 
 		// MIN_DISCHARGE
 		cargoCapacityInM3 = 150_000;
 		dischargeSlot.setVolumeLimits(true, 200_000L, 200_000L);
 		minDischargeInM3 = 200_000;
-		final int violationCountC = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadDetails, loadSlot, dischargeDetails, dischargeSlot, minDischargeInM3, cargoCapacityInM3,
-				remainingHeelInM3);
+		final int violationCountC = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, minDischargeInM3, cargoCapacityInM3, remainingHeelInM3);
 		Assert.assertEquals(1, violationCountC);
 
 		// MAX_LOAD + VESSEL_CAPACITY (MIN_DISCHARGE - not counted)
 		cargoCapacityInM3 = 50_000;
-		final int violationCountD = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadDetails, loadSlot, dischargeDetails, dischargeSlot, minDischargeInM3, cargoCapacityInM3,
-				remainingHeelInM3);
+		final int violationCountD = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, minDischargeInM3, cargoCapacityInM3, remainingHeelInM3);
 		Assert.assertEquals(2, violationCountD);
 	}
 
