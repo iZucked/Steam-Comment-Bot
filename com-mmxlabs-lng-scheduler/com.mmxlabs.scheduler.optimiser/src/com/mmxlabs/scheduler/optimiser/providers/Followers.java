@@ -50,4 +50,14 @@ final public class Followers<Q> implements Iterable<Q> {
 	public Iterator<Q> iterator() {
 		return backingList.iterator();
 	}
+
+	/**
+	 * Returns the underlying {@link List}. This method is intended for use in API's that operate on a List (such as the Java 8 stream API) and should not be used to manipulate the {@link Followers}
+	 * instance.
+	 * 
+	 * @return
+	 */
+	public List<Q> asList() {
+		return backingList;
+	}
 }

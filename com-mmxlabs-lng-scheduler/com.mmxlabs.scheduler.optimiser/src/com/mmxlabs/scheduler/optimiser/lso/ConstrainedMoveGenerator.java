@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import com.google.inject.Injector;
-import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
+import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -25,6 +25,7 @@ import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -96,10 +97,10 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	private SwapElementsInSequenceMoveGeneratorUnit swapElementsMoveGenerator;
 	private ElementSwapMoveGenerator elementSwapMoveGenerator;
 
+	private GuidedMoveGenerator guidedMoveGenerator;
+
 	// TODO: Inject
 	private boolean enableSwapElementsMoveGenerator = false;
-
-	// protected final IOptimisationContext context;
 
 	@Inject
 	private IAlternativeElementProvider alternativeElementProvider;
@@ -125,7 +126,8 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	@Inject
 	private IFollowersAndPreceders followersAndPreceders;
 
-	@Inject IOptimisationData data;
+	@Inject
+	IOptimisationData data;
 
 	public static final String LSO_MOVES_SCMG = "CMG_LSOMovesSCGM";
 
@@ -177,13 +179,17 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 				}
 			}
 		}
-		
+
+		if (false) {
+			this.guidedMoveGenerator = injector.getInstance(GuidedMoveGenerator.class);
+		}
+
 		if (isLoopingSCMG) {
 			this.sequencesMoveGenerator = new SequencesConstrainedLoopingMoveGeneratorUnit(this);
 		} else {
 			this.sequencesMoveGenerator = new SequencesConstrainedMoveGeneratorUnit(this);
 		}
-		
+
 		injector.injectMembers(sequencesMoveGenerator);
 
 		this.shuffleMoveGenerator = new ShuffleElementsMoveGenerator(this);
@@ -214,16 +220,18 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		checker.setMaxLateness(initialMaxLateness);
 
 	}
-	
-	public ArrayList<Pair<ISequenceElement, ISequenceElement>> getValidBreaks(){
-		
+
+	public ArrayList<Pair<ISequenceElement, ISequenceElement>> getValidBreaks() {
+
 		return validBreaks;
 	}
-	
-	
 
 	@Override
 	public IMove generateMove() {
+		if (guidedMoveGenerator != null) {
+			return guidedMoveGenerator.generateMove();
+		}
+
 		if (enableSwapElementsMoveGenerator && ((elementSwapMoveGenerator != null) && (random.nextDouble() < elementSwapMoveFrequency))) {
 			return elementSwapMoveGenerator.generateMove();
 		} else if ((optionalMoveGenerator != null) && (random.nextDouble() < optionalMoveFrequency)) {
@@ -272,6 +280,10 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		}
 
 		sequencesMoveGenerator.setSequences(sequences);
+
+		if (guidedMoveGenerator != null) {
+			guidedMoveGenerator.setSequences(sequences);
+		}
 	}
 
 	public Random getRandom() {
