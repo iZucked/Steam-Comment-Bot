@@ -86,7 +86,10 @@
       <genFeatures createChild="false" propertyDescription="The rate at which base fuel is used in a port"
           ecoreFeature="ecore:EAttribute fleet.ecore#//VesselStateAttributes/inPortBaseRate"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//VesselStateAttributes/fuelConsumption"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//VesselStateAttributes/serviceSpeed"/>
+      <genFeatures createChild="false" propertyDescription="A notional speed for the vessel."
+          ecoreFeature="ecore:EAttribute fleet.ecore#//VesselStateAttributes/serviceSpeed"/>
+      <genFeatures createChild="false" propertyDescription="The rate at which LNG boils off at a port"
+          ecoreFeature="ecore:EAttribute fleet.ecore#//VesselStateAttributes/inPortNBORate"/>
     </genClasses>
     <genClasses ecoreClass="fleet.ecore#//FuelConsumption">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//FuelConsumption/speed"/>
