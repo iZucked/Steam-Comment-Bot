@@ -61,6 +61,8 @@ public class SlotAllocationItemProvider
 			addEnergyTransferredPropertyDescriptor(object);
 			addCvPropertyDescriptor(object);
 			addVolumeValuePropertyDescriptor(object);
+			addPhysicalVolumeTransferredPropertyDescriptor(object);
+			addPhysicalEnergyTransferredPropertyDescriptor(object);
 			addSlotAllocationTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -287,6 +289,50 @@ public class SlotAllocationItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Physical Volume Transferred feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPhysicalVolumeTransferredPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotAllocation_physicalVolumeTransferred_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotAllocation_physicalVolumeTransferred_feature", "_UI_SlotAllocation_type"),
+				 SchedulePackage.Literals.SLOT_ALLOCATION__PHYSICAL_VOLUME_TRANSFERRED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Physical Energy Transferred feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPhysicalEnergyTransferredPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotAllocation_physicalEnergyTransferred_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotAllocation_physicalEnergyTransferred_feature", "_UI_SlotAllocation_type"),
+				 SchedulePackage.Literals.SLOT_ALLOCATION__PHYSICAL_ENERGY_TRANSFERRED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Slot Allocation Type feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -384,6 +430,8 @@ public class SlotAllocationItemProvider
 			case SchedulePackage.SLOT_ALLOCATION__ENERGY_TRANSFERRED:
 			case SchedulePackage.SLOT_ALLOCATION__CV:
 			case SchedulePackage.SLOT_ALLOCATION__VOLUME_VALUE:
+			case SchedulePackage.SLOT_ALLOCATION__PHYSICAL_VOLUME_TRANSFERRED:
+			case SchedulePackage.SLOT_ALLOCATION__PHYSICAL_ENERGY_TRANSFERRED:
 			case SchedulePackage.SLOT_ALLOCATION__SLOT_ALLOCATION_TYPE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

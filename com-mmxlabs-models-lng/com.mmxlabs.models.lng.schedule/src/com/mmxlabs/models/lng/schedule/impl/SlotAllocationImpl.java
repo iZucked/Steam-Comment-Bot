@@ -48,6 +48,8 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getCv <em>Cv</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getVolumeValue <em>Volume Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getExposures <em>Exposures</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getPhysicalVolumeTransferred <em>Physical Volume Transferred</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getPhysicalEnergyTransferred <em>Physical Energy Transferred</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getSlotAllocationType <em>Slot Allocation Type</em>}</li>
  * </ul>
  *
@@ -240,6 +242,46 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * @ordered
 	 */
 	protected EList<ExposureDetail> exposures;
+
+	/**
+	 * The default value of the '{@link #getPhysicalVolumeTransferred() <em>Physical Volume Transferred</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPhysicalVolumeTransferred()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int PHYSICAL_VOLUME_TRANSFERRED_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getPhysicalVolumeTransferred() <em>Physical Volume Transferred</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPhysicalVolumeTransferred()
+	 * @generated
+	 * @ordered
+	 */
+	protected int physicalVolumeTransferred = PHYSICAL_VOLUME_TRANSFERRED_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPhysicalEnergyTransferred() <em>Physical Energy Transferred</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPhysicalEnergyTransferred()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int PHYSICAL_ENERGY_TRANSFERRED_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getPhysicalEnergyTransferred() <em>Physical Energy Transferred</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPhysicalEnergyTransferred()
+	 * @generated
+	 * @ordered
+	 */
+	protected int physicalEnergyTransferred = PHYSICAL_ENERGY_TRANSFERRED_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getSlotAllocationType() <em>Slot Allocation Type</em>}' attribute.
@@ -760,6 +802,48 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getPhysicalVolumeTransferred() {
+		return physicalVolumeTransferred;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPhysicalVolumeTransferred(int newPhysicalVolumeTransferred) {
+		int oldPhysicalVolumeTransferred = physicalVolumeTransferred;
+		physicalVolumeTransferred = newPhysicalVolumeTransferred;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_ALLOCATION__PHYSICAL_VOLUME_TRANSFERRED, oldPhysicalVolumeTransferred, physicalVolumeTransferred));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getPhysicalEnergyTransferred() {
+		return physicalEnergyTransferred;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPhysicalEnergyTransferred(int newPhysicalEnergyTransferred) {
+		int oldPhysicalEnergyTransferred = physicalEnergyTransferred;
+		physicalEnergyTransferred = newPhysicalEnergyTransferred;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_ALLOCATION__PHYSICAL_ENERGY_TRANSFERRED, oldPhysicalEnergyTransferred, physicalEnergyTransferred));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public SlotAllocationType getSlotAllocationType() {
 		return slotAllocationType;
 	}
@@ -903,6 +987,10 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return getVolumeValue();
 			case SchedulePackage.SLOT_ALLOCATION__EXPOSURES:
 				return getExposures();
+			case SchedulePackage.SLOT_ALLOCATION__PHYSICAL_VOLUME_TRANSFERRED:
+				return getPhysicalVolumeTransferred();
+			case SchedulePackage.SLOT_ALLOCATION__PHYSICAL_ENERGY_TRANSFERRED:
+				return getPhysicalEnergyTransferred();
 			case SchedulePackage.SLOT_ALLOCATION__SLOT_ALLOCATION_TYPE:
 				return getSlotAllocationType();
 		}
@@ -952,6 +1040,12 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				getExposures().clear();
 				getExposures().addAll((Collection<? extends ExposureDetail>)newValue);
 				return;
+			case SchedulePackage.SLOT_ALLOCATION__PHYSICAL_VOLUME_TRANSFERRED:
+				setPhysicalVolumeTransferred((Integer)newValue);
+				return;
+			case SchedulePackage.SLOT_ALLOCATION__PHYSICAL_ENERGY_TRANSFERRED:
+				setPhysicalEnergyTransferred((Integer)newValue);
+				return;
 			case SchedulePackage.SLOT_ALLOCATION__SLOT_ALLOCATION_TYPE:
 				setSlotAllocationType((SlotAllocationType)newValue);
 				return;
@@ -1000,6 +1094,12 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 			case SchedulePackage.SLOT_ALLOCATION__EXPOSURES:
 				getExposures().clear();
 				return;
+			case SchedulePackage.SLOT_ALLOCATION__PHYSICAL_VOLUME_TRANSFERRED:
+				setPhysicalVolumeTransferred(PHYSICAL_VOLUME_TRANSFERRED_EDEFAULT);
+				return;
+			case SchedulePackage.SLOT_ALLOCATION__PHYSICAL_ENERGY_TRANSFERRED:
+				setPhysicalEnergyTransferred(PHYSICAL_ENERGY_TRANSFERRED_EDEFAULT);
+				return;
 			case SchedulePackage.SLOT_ALLOCATION__SLOT_ALLOCATION_TYPE:
 				setSlotAllocationType(SLOT_ALLOCATION_TYPE_EDEFAULT);
 				return;
@@ -1037,6 +1137,10 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return volumeValue != VOLUME_VALUE_EDEFAULT;
 			case SchedulePackage.SLOT_ALLOCATION__EXPOSURES:
 				return exposures != null && !exposures.isEmpty();
+			case SchedulePackage.SLOT_ALLOCATION__PHYSICAL_VOLUME_TRANSFERRED:
+				return physicalVolumeTransferred != PHYSICAL_VOLUME_TRANSFERRED_EDEFAULT;
+			case SchedulePackage.SLOT_ALLOCATION__PHYSICAL_ENERGY_TRANSFERRED:
+				return physicalEnergyTransferred != PHYSICAL_ENERGY_TRANSFERRED_EDEFAULT;
 			case SchedulePackage.SLOT_ALLOCATION__SLOT_ALLOCATION_TYPE:
 				return slotAllocationType != SLOT_ALLOCATION_TYPE_EDEFAULT;
 		}
@@ -1081,6 +1185,10 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 		result.append(cv);
 		result.append(", volumeValue: ");
 		result.append(volumeValue);
+		result.append(", physicalVolumeTransferred: ");
+		result.append(physicalVolumeTransferred);
+		result.append(", physicalEnergyTransferred: ");
+		result.append(physicalEnergyTransferred);
 		result.append(", slotAllocationType: ");
 		result.append(slotAllocationType);
 		result.append(')');

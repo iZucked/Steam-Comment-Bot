@@ -75,6 +75,8 @@ public class SlotAllocationComponentHelper extends BaseComponentHelper {
 		add_cvEditor(detailComposite, topClass);
 		add_volumeValueEditor(detailComposite, topClass);
 		add_exposuresEditor(detailComposite, topClass);
+		add_physicalVolumeTransferredEditor(detailComposite, topClass);
+		add_physicalEnergyTransferredEditor(detailComposite, topClass);
 		add_slotAllocationTypeEditor(detailComposite, topClass);
 	}
 	/**
@@ -173,6 +175,24 @@ public class SlotAllocationComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_exposuresEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SLOT_ALLOCATION__EXPOSURES));
+	}
+
+	/**
+	 * Create the editor for the physicalVolumeTransferred feature on SlotAllocation
+	 *
+	 * @generated
+	 */
+	protected void add_physicalVolumeTransferredEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SLOT_ALLOCATION__PHYSICAL_VOLUME_TRANSFERRED));
+	}
+
+	/**
+	 * Create the editor for the physicalEnergyTransferred feature on SlotAllocation
+	 *
+	 * @generated
+	 */
+	protected void add_physicalEnergyTransferredEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SLOT_ALLOCATION__PHYSICAL_ENERGY_TRANSFERRED));
 	}
 
 	/**

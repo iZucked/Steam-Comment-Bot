@@ -1068,13 +1068,31 @@ public interface SchedulePackage extends EPackage {
 	int SLOT_ALLOCATION__EXPOSURES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
 
 	/**
+	 * The feature id for the '<em><b>Physical Volume Transferred</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION__PHYSICAL_VOLUME_TRANSFERRED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
+
+	/**
+	 * The feature id for the '<em><b>Physical Energy Transferred</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION__PHYSICAL_ENERGY_TRANSFERRED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 12;
+
+	/**
 	 * The feature id for the '<em><b>Slot Allocation Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ALLOCATION__SLOT_ALLOCATION_TYPE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
+	int SLOT_ALLOCATION__SLOT_ALLOCATION_TYPE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The number of structural features of the '<em>Slot Allocation</em>' class.
@@ -1083,7 +1101,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 12;
+	int SLOT_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -5249,6 +5267,28 @@ public interface SchedulePackage extends EPackage {
 	EReference getSlotAllocation_Exposures();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getPhysicalVolumeTransferred <em>Physical Volume Transferred</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Physical Volume Transferred</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.SlotAllocation#getPhysicalVolumeTransferred()
+	 * @see #getSlotAllocation()
+	 * @generated
+	 */
+	EAttribute getSlotAllocation_PhysicalVolumeTransferred();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getPhysicalEnergyTransferred <em>Physical Energy Transferred</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Physical Energy Transferred</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.SlotAllocation#getPhysicalEnergyTransferred()
+	 * @see #getSlotAllocation()
+	 * @generated
+	 */
+	EAttribute getSlotAllocation_PhysicalEnergyTransferred();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getSlotAllocationType <em>Slot Allocation Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6749,6 +6789,22 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference SLOT_ALLOCATION__EXPOSURES = eINSTANCE.getSlotAllocation_Exposures();
+
+		/**
+		 * The meta object literal for the '<em><b>Physical Volume Transferred</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT_ALLOCATION__PHYSICAL_VOLUME_TRANSFERRED = eINSTANCE.getSlotAllocation_PhysicalVolumeTransferred();
+
+		/**
+		 * The meta object literal for the '<em><b>Physical Energy Transferred</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT_ALLOCATION__PHYSICAL_ENERGY_TRANSFERRED = eINSTANCE.getSlotAllocation_PhysicalEnergyTransferred();
 
 		/**
 		 * The meta object literal for the '<em><b>Slot Allocation Type</b></em>' attribute feature.

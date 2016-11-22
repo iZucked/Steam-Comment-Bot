@@ -1201,8 +1201,26 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSlotAllocation_SlotAllocationType() {
+	public EAttribute getSlotAllocation_PhysicalVolumeTransferred() {
 		return (EAttribute)slotAllocationEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSlotAllocation_PhysicalEnergyTransferred() {
+		return (EAttribute)slotAllocationEClass.getEStructuralFeatures().get(12);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSlotAllocation_SlotAllocationType() {
+		return (EAttribute)slotAllocationEClass.getEStructuralFeatures().get(13);
 	}
 
 	/**
@@ -1917,6 +1935,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__CV);
 		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__VOLUME_VALUE);
 		createEReference(slotAllocationEClass, SLOT_ALLOCATION__EXPOSURES);
+		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__PHYSICAL_VOLUME_TRANSFERRED);
+		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__PHYSICAL_ENERGY_TRANSFERRED);
 		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__SLOT_ALLOCATION_TYPE);
 		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_PORT);
 		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_CONTRACT);
@@ -2199,6 +2219,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getSlotAllocation_Cv(), ecorePackage.getEDouble(), "cv", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotAllocation_VolumeValue(), ecorePackage.getEInt(), "volumeValue", null, 0, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlotAllocation_Exposures(), this.getExposureDetail(), null, "exposures", null, 0, -1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotAllocation_PhysicalVolumeTransferred(), ecorePackage.getEInt(), "physicalVolumeTransferred", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotAllocation_PhysicalEnergyTransferred(), ecorePackage.getEInt(), "physicalEnergyTransferred", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotAllocation_SlotAllocationType(), this.getSlotAllocationType(), "slotAllocationType", null, 0, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getSlotAllocation__GetPort(), thePortPackage.getPort(), "getPort", 1, 1, IS_UNIQUE, IS_ORDERED);

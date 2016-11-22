@@ -22,6 +22,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getInPortBaseRate <em>In Port Base Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getFuelConsumption <em>Fuel Consumption</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getServiceSpeed <em>Service Speed</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getInPortNBORate <em>In Port NBO Rate</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselStateAttributes()
@@ -179,6 +180,33 @@ public interface VesselStateAttributes extends MMXObject {
 	 * @generated
 	 */
 	void setServiceSpeed(double value);
+
+	/**
+	 * Returns the value of the '<em><b>In Port NBO Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>In Port NBO Rate</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>In Port NBO Rate</em>' attribute.
+	 * @see #setInPortNBORate(double)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselStateAttributes_InPortNBORate()
+	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263/day' formatString='##0.###'"
+	 * @generated
+	 */
+	double getInPortNBORate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getInPortNBORate <em>In Port NBO Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>In Port NBO Rate</em>' attribute.
+	 * @see #getInPortNBORate()
+	 * @generated
+	 */
+	void setInPortNBORate(double value);
 
 } // end of  VesselStateAttributes
 
