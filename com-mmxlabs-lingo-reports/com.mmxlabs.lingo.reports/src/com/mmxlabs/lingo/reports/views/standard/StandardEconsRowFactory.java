@@ -57,18 +57,18 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 
 	public Collection<CargoEconsReportRow> createRows(@NonNull final EconsOptions options) {
 		List<CargoEconsReportRow> rows = new LinkedList<>();
-		rows.add(createRow(10, "Purchase Cost", "$", createBuyValuePrice(options)));
-		rows.add(createRow(20, "> Purchase Price", "$/mmBTu", createBuyPrice(options)));
-		rows.add(createRow(30, "> Volume", "mmBTu", createBuyVolumeMMBTuPrice(options)));
-		rows.add(createRow(40, "Shipping Cost", "$", createShippingCosts(options)));
-		rows.add(createRow(50, "> Bunkers", "$", createShippingBunkersTotal(options)));
-		rows.add(createRow(60, "> Port", "$", createShippingPortCosts(options)));
-		rows.add(createRow(70, "> Canal", "$", createShippingCanalCosts(options)));
-		rows.add(createRow(80, "> Boil-off", "$", createShippingBOGTotal(options), createBOGColourProvider(options)));
-		rows.add(createRow(90, "> Charter fees", "$", createShippingCharterCosts(options), createCharterFeesColourProvider(options)));
-		rows.add(createRow(100, "Sale Revenue", "$", createSellValuePrice(options)));
-		rows.add(createRow(110, "> Sales Price", "$/mmBTu", createSellPrice(options)));
-		rows.add(createRow(120, "> Volume", "mmBtu", createSellVolumeMMBTuPrice(options)));
+		rows.add(createRow(10, "Purchase", "$", createBuyValuePrice(options)));
+		rows.add(createRow(20, "- Price", "$/mmBTu", createBuyPrice(options)));
+		rows.add(createRow(30, "- Volume", "mmBTu", createBuyVolumeMMBTuPrice(options)));
+		rows.add(createRow(40, "Shipping", "$", createShippingCosts(options)));
+		rows.add(createRow(50, "- Bunkers", "$", createShippingBunkersTotal(options)));
+		rows.add(createRow(60, "- Port", "$", createShippingPortCosts(options)));
+		rows.add(createRow(70, "- Canal", "$", createShippingCanalCosts(options)));
+		rows.add(createRow(80, "- Boil-off", "$", createShippingBOGTotal(options), createBOGColourProvider(options)));
+		rows.add(createRow(90, "- Charter", "$", createShippingCharterCosts(options), createCharterFeesColourProvider(options)));
+		rows.add(createRow(100, "Sale", "$", createSellValuePrice(options)));
+		rows.add(createRow(110, "- Price", "$/mmBTu", createSellPrice(options)));
+		rows.add(createRow(120, "- Volume", "mmBtu", createSellVolumeMMBTuPrice(options)));
 		if (SecurityUtils.getSubject().isPermitted("features:report-equity-book")) {
 			rows.add(createRow(130, "Equity P&L", "$", createPNLEquity(options)));
 		}
