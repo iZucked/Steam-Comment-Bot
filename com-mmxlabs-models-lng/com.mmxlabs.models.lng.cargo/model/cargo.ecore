@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="cargo" nsURI="http://www.mmxlabs.com/models/lng/cargo/1/" nsPrefix="lng.cargo">
-  <eClassifiers xsi:type="ecore:EClass" name="CargoModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+  <eClassifiers xsi:type="ecore:EClass" name="CargoModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlots" upperBound="-1"
         eType="#//LoadSlot" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlots" upperBound="-1"
@@ -17,7 +17,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselTypeGroups" upperBound="-1"
         eType="#//VesselTypeGroup" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Cargo" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//AssignableElement">
+  <eClassifiers xsi:type="ecore:EClass" name="Cargo" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//AssignableElement">
     <eOperations name="getCargoType" lowerBound="1" eType="#//CargoType"/>
     <eOperations name="getSortedSlots" upperBound="-1" eType="#//Slot"/>
     <eOperations name="getLoadName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -26,7 +26,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="slots" upperBound="-1"
         eType="#//Slot" eOpposite="#//Slot/cargo"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Slot" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider">
+  <eClassifiers xsi:type="ecore:EClass" name="Slot" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider">
     <eOperations name="getSlotOrPortDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eOperations name="getSlotOrContractMinQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eOperations name="getSlotOrContractMaxQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
@@ -198,7 +198,7 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SpotSlot" abstract="true" interface="true"
-      eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+      eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="market" lowerBound="1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"/>
   </eClassifiers>
@@ -209,11 +209,11 @@
     <eLiterals name="FOB" value="1"/>
     <eLiterals name="DES" value="2"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CargoGroup" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="CargoGroup" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="cargoes" upperBound="-1"
         eType="#//Cargo"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VesselAvailability" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VesselAssignmentType">
+  <eClassifiers xsi:type="ecore:EClass" name="VesselAvailability" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VesselAssignmentType">
     <eOperations name="getStartByAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
     <eOperations name="getStartAfterAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
     <eOperations name="getEndByAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
@@ -275,7 +275,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VesselEvent" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider #//AssignableElement">
+  <eClassifiers xsi:type="ecore:EClass" name="VesselEvent" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider #//AssignableElement">
     <eOperations name="getStartByAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
     <eOperations name="getStartAfterAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="durationInDays" lowerBound="1"

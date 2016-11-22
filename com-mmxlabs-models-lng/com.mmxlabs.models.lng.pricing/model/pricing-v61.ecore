@@ -98,6 +98,8 @@
         eType="#//BaseFuelCost" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="panamaCanalTariff" eType="#//PanamaCanalTariff"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="suezCanalTariff" eType="#//SuezCanalTariff"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RouteCost" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="route" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Route"/>
@@ -227,6 +229,98 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unitPrefix" value="$"/>
+        <details key="formatString" value="#0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bandStart" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unitSuffix" value="m3&#xD;&#xA;"/>
+        <details key="formatString" value="##,###,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bandEnd" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unitSuffix" value="m3&#xD;&#xA;"/>
+        <details key="formatString" value="##,###,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SuezCanalTugBand">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tugs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unitPrefix" value="$"/>
+        <details key="formatString" value="#0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bandStart" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unitSuffix" value="m3&#xD;&#xA;"/>
+        <details key="formatString" value="##,###,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bandEnd" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unitSuffix" value="m3&#xD;&#xA;"/>
+        <details key="formatString" value="##,###,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SuezCanalTariff">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bands" upperBound="-1"
+        eType="#//SuezCanalTariffBand" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tugBands" upperBound="-1"
+        eType="#//SuezCanalTugBand" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tugCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unitPrefix" value="$"/>
+        <details key="formatString" value="##,###,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mooringCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unitPrefix" value="$"/>
+        <details key="formatString" value="##,###,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pilotageCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unitPrefix" value="$"/>
+        <details key="formatString" value="##,###,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="disbursements" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unitPrefix" value="$"/>
+        <details key="formatString" value="##,###,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="discountFactor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="scale" value="100"/>
+        <details key="formatString" value="##0.#"/>
+        <details key="unit" value="%"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sdrToUSD" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="currency"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SuezCanalTariffBand">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ladenTariff" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unitPrefix" value="SDR"/>
+        <details key="formatString" value="#0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastTariff" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unitPrefix" value="SDR"/>
         <details key="formatString" value="#0.###"/>
       </eAnnotations>
     </eStructuralFeatures>

@@ -218,6 +218,13 @@
         <details key="formatString" value="#0.###"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inPortNBORate" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="m³/day"/>
+        <details key="formatString" value="##0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FuelConsumption">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="speed" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">

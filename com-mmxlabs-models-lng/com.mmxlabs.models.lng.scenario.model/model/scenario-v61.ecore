@@ -17,6 +17,9 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="userSettings" eType="ecore:EClass ../../com.mmxlabs.models.lng.parameters/model/parameters.ecore#//UserSettings"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="optionModels" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.analytics/model/analytics.ecore#//OptionAnalysisModel"
+        transient="true" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LNGReferenceModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="portModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//PortModel"
