@@ -22,6 +22,7 @@ public final class PortOptions implements Cloneable, IOptionsSequenceElement {
 	private int visitDuration;
 	private IVessel vessel;
 	private @NonNull IPortSlot portSlot;
+	private int cargoCV;
 
 	public PortOptions(@NonNull final IPortSlot portSlot) {
 		this.portSlot = portSlot;
@@ -38,6 +39,7 @@ public final class PortOptions implements Cloneable, IOptionsSequenceElement {
 		this.portSlot = options.getPortSlot();
 		setVisitDuration(options.getVisitDuration());
 		setVessel(options.getVessel());
+		setCargoCVValue(options.getCargoCVValue());
 	}
 
 	public final int getVisitDuration() {
@@ -71,6 +73,9 @@ public final class PortOptions implements Cloneable, IOptionsSequenceElement {
 		if (obj instanceof PortOptions) {
 			final PortOptions vo = (PortOptions) obj;
 
+			if (cargoCV != vo.cargoCV) {
+				return false;
+			}
 			if (visitDuration != vo.visitDuration) {
 				return false;
 			}
@@ -95,11 +100,19 @@ public final class PortOptions implements Cloneable, IOptionsSequenceElement {
 
 	@Override
 	public String toString() {
-		return "PortOptions [availableTime=" + visitDuration + ", vessel=" + vessel + ", portSlot=" + portSlot + "]";
+		return "PortOptions [availableTime=" + visitDuration + ", vessel=" + vessel + ", portSlot=" + portSlot + " , cargoCV=" + cargoCV + "]";
 	}
 
 	@Override
 	public final int hashCode() {
-		return Objects.hashCode(visitDuration, portSlot, vessel);
+		return Objects.hashCode(visitDuration, portSlot, vessel, cargoCV);
+	}
+
+	public int getCargoCVValue() {
+		return cargoCV;
+	}
+
+	public void setCargoCVValue(final int cargoCV) {
+		this.cargoCV = cargoCV;
 	}
 }

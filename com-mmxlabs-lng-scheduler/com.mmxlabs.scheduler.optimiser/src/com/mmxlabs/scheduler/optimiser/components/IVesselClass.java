@@ -149,6 +149,17 @@ public interface IVesselClass {
 	 * @return
 	 */
 	void setBaseFuel(IBaseFuel baseFuel);
+	
+	/**
+	 * Returns the rate of NBO when the vessel is in port. Units are M3 Per Day
+	 * 
+	 * @param vesselState
+	 * @return
+	 */
+	long getInPortNBORate(VesselState vesselState);
+	
+	
+	
 
 	boolean hasReliqCapability();
 }

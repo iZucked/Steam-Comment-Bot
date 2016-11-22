@@ -44,6 +44,7 @@ public enum CapacityViolationType {
 	 */
 	LOST_HEEL("Lost Heel");
 
+
 	private final String displayName;
 
 	private CapacityViolationType(final String displayName) {

@@ -51,6 +51,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 public class LNGVoyageCalculatorTest {
@@ -461,7 +462,7 @@ public class LNGVoyageCalculatorTest {
 
 		options.setAvailableTime(48);
 		final ERouteOption routeName = ERouteOption.SUEZ;
-		ILongCurve routeCost = new ConstantValueLongCurve(200000L);
+		final ILongCurve routeCost = new ConstantValueLongCurve(200000L);
 		options.setRoute(routeName, 15 * 24, routeCost.getValueAtPoint(0));
 
 		final VoyageDetails details = new VoyageDetails(options);
@@ -525,7 +526,7 @@ public class LNGVoyageCalculatorTest {
 
 		final IVessel vessel = options.getVessel();
 
-		ILongCurve routeCost = new ConstantValueLongCurve(200000L);
+		final ILongCurve routeCost = new ConstantValueLongCurve(200000L);
 		options.setRoute(routeName, 15 * 24, routeCost.getValueAtPoint(0));
 
 		routeCostProvider.setDefaultRouteCost(routeName, routeCost);
@@ -606,8 +607,8 @@ public class LNGVoyageCalculatorTest {
 		final IVessel vessel = Mockito.mock(IVessel.class);
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setBaseFuel(new BaseFuel("test"));
-		ICurve baseFuelCurve = getMockedCurve(2);
-		IVesselBaseFuelCalculator baseFuelCalculator = createVesselBaseFuelCalculator(baseFuelCurve);
+		final ICurve baseFuelCurve = getMockedCurve(2);
+		final IVesselBaseFuelCalculator baseFuelCalculator = createVesselBaseFuelCalculator(baseFuelCurve);
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 		Mockito.when(vessel.getCargoCapacity()).thenReturn(Long.MAX_VALUE);
@@ -653,7 +654,7 @@ public class LNGVoyageCalculatorTest {
 		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
 		Mockito.when(portTimesRecord.getSlotTime(Matchers.<@NonNull IPortSlot> any())).thenReturn(0);
 
-		int i = baseFuelCalculator.getBaseFuelPrice(vessel, 100);
+		final int i = baseFuelCalculator.getBaseFuelPrice(vessel, 100);
 		calc.calculateVoyagePlan(plan, vessel, 0, baseFuelCalculator.getBaseFuelPrice(vessel, 100), portTimesRecord, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
@@ -682,14 +683,14 @@ public class LNGVoyageCalculatorTest {
 	}
 
 	private IVesselBaseFuelCalculator createVesselBaseFuelCalculator(final @NonNull ICurve curve) {
-		IVesselBaseFuelCalculator vbfc = new VesselBaseFuelCalculator();
+		final IVesselBaseFuelCalculator vbfc = new VesselBaseFuelCalculator();
 
-		Injector injector = Guice.createInjector(new AbstractModule() {
+		final Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
 			protected void configure() {
 				bind(ITimeZoneToUtcOffsetProvider.class).to(TimeZoneToUtcOffsetProvider.class);
-				IBaseFuelCurveProvider b = Mockito.mock(IBaseFuelCurveProvider.class);
+				final IBaseFuelCurveProvider b = Mockito.mock(IBaseFuelCurveProvider.class);
 				Mockito.when(b.getBaseFuelCurve(Mockito.any(IBaseFuel.class))).thenReturn(curve);
 
 				bind(IBaseFuelCurveProvider.class).toInstance(b);
@@ -701,14 +702,14 @@ public class LNGVoyageCalculatorTest {
 		return vbfc;
 	}
 
-	private ICurve getMockedCurve(int mainInt) {
-		ICurve curve = Mockito.mock(ICurve.class);
+	private ICurve getMockedCurve(final int mainInt) {
+		final ICurve curve = Mockito.mock(ICurve.class);
 
 		// create prices for different times (to test UTC)
-		int priceA = (int) OptimiserUnitConvertor.convertToInternalPrice(mainInt);
-		int priceB = (int) OptimiserUnitConvertor.convertToInternalFixedCost(0);
-		int timeA = 100;
-		int timeB = 0;
+		final int priceA = (int) OptimiserUnitConvertor.convertToInternalPrice(mainInt);
+		final int priceB = (int) OptimiserUnitConvertor.convertToInternalFixedCost(0);
+		final int timeA = 100;
+		final int timeB = 0;
 
 		// mock some return values
 		Mockito.when(curve.getValueAtPoint(timeA)).thenReturn(priceA);
@@ -768,8 +769,8 @@ public class LNGVoyageCalculatorTest {
 		final IVessel vessel = Mockito.mock(IVessel.class);
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setBaseFuel(new BaseFuel("test"));
-		ICurve baseFuelCurve = getMockedCurve(2);
-		IVesselBaseFuelCalculator baseFuelCalculator = createVesselBaseFuelCalculator(baseFuelCurve);
+		final ICurve baseFuelCurve = getMockedCurve(2);
+		final IVesselBaseFuelCalculator baseFuelCalculator = createVesselBaseFuelCalculator(baseFuelCurve);
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 		Mockito.when(vessel.getCargoCapacity()).thenReturn(Long.MAX_VALUE);
@@ -927,8 +928,8 @@ public class LNGVoyageCalculatorTest {
 		final IVessel vessel = Mockito.mock(IVessel.class);
 		final VesselClass vesselClass = new VesselClass();
 		final int baseFuelPrice = 2;
-		ICurve baseFuelCurve = getMockedCurve(2);
-		IVesselBaseFuelCalculator baseFuelCalculator = createVesselBaseFuelCalculator(baseFuelCurve);
+		final ICurve baseFuelCurve = getMockedCurve(2);
+		final IVesselBaseFuelCalculator baseFuelCalculator = createVesselBaseFuelCalculator(baseFuelCurve);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 
 		final PortSlot otherSlot = new StartPortSlot("start", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), null);
@@ -938,13 +939,13 @@ public class LNGVoyageCalculatorTest {
 		final PortDetails otherDetails = new PortDetails(new PortOptions(otherSlot));
 		final PortDetails loadDetails = new PortDetails(new PortOptions(loadSlot));
 		loadDetails.getOptions().setVisitDuration(48);
-		loadDetails.setFuelConsumption(FuelComponent.Base, 13000);
+		loadDetails.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, 13000);
 
 		// NOTE: this discharge slot is the tail of the sequence, and
 		// should not be evaluated in the VoyagePlan (to avoid double-counting
 		// when it occurs as the head of the next sequence)
 		final PortDetails dischargeDetails = new PortDetails(new PortOptions(dischargeSlot));
-		dischargeDetails.setFuelConsumption(FuelComponent.Base, 5000);
+		dischargeDetails.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, 5000);
 
 		loadSlot.setVolumeLimits(true, 0, 150L);
 		dischargeSlot.setVolumeLimits(true, 0, 30L);
@@ -1033,7 +1034,7 @@ public class LNGVoyageCalculatorTest {
 		// Check results
 		Assert.assertSame(options, details.getOptions());
 
-		Assert.assertEquals(target, details.getFuelConsumption(FuelComponent.Base));
+		Assert.assertEquals(target, details.getFuelConsumption(FuelComponent.Base, FuelUnit.MT));
 	}
 
 	public VesselClass createSampleVesselClass() {
@@ -1059,7 +1060,7 @@ public class LNGVoyageCalculatorTest {
 
 		vesselClass.setName("class-1");
 
-		IBaseFuel baseFuel = new BaseFuel("test");
+		final IBaseFuel baseFuel = new BaseFuel("test");
 		baseFuel.setEquivalenceFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(45.6));
 		vesselClass.setBaseFuel(baseFuel);
 
@@ -1092,6 +1093,49 @@ public class LNGVoyageCalculatorTest {
 
 		return options;
 	}
+
+	@Test
+	public void testCheckCargoCapacityViolations() {
+		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
+		final LoadSlot loadSlot = new LoadSlot("load", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ILoadPriceCalculator.class), 1_000_000, false, false);
+		final DischargeSlot dischargeSlot = new DischargeSlot("discharge", Mockito.mock(IPort.class), Mockito.mock(ITimeWindow.class), true, 0L, 0L, Mockito.mock(ISalesPriceCalculator.class), 0, 0);
+
+		loadSlot.setVolumeLimits(true, 0, 100_000L);
+		dischargeSlot.setVolumeLimits(true, 0, 100_000L);
+
+		loadSlot.setLoadPriceCalculator(new FixedPriceContract(1000));
+		dischargeSlot.setDischargePriceCalculator(new FixedPriceContract(1000));
+
+		final long startHeel = 0;
+		final long lngCommitmentInM3 = 0;
+		final PortDetails loadDetails = new PortDetails(new PortOptions(loadSlot));
+		final PortDetails dischargeDetails = new PortDetails(new PortOptions(dischargeSlot));
+		long minDischargeInM3 = 0;
+		long cargoCapacityInM3 = 140_000;
+		final long remainingHeelInM3 = 0;
+
+		// No violations
+		final int violationCount = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, minDischargeInM3, cargoCapacityInM3, remainingHeelInM3);
+		Assert.assertEquals(0, violationCount);
+
+		// MAX_LOAD + VESSEL_CAPACITY
+		loadSlot.setVolumeLimits(true, 150_000L, 150_000L);
+		final int violationCountB = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, minDischargeInM3, cargoCapacityInM3, remainingHeelInM3);
+		Assert.assertEquals(2, violationCountB);
+
+		// MIN_DISCHARGE
+		cargoCapacityInM3 = 150_000;
+		dischargeSlot.setVolumeLimits(true, 200_000L, 200_000L);
+		minDischargeInM3 = 200_000;
+		final int violationCountC = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, minDischargeInM3, cargoCapacityInM3, remainingHeelInM3);
+		Assert.assertEquals(1, violationCountC);
+
+		// MAX_LOAD + VESSEL_CAPACITY (MIN_DISCHARGE - not counted)
+		cargoCapacityInM3 = 50_000;
+		final int violationCountD = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, minDischargeInM3, cargoCapacityInM3, remainingHeelInM3);
+		Assert.assertEquals(2, violationCountD);
+	}
+
 	//
 	// TODO: Test load/discharge limits
 	//

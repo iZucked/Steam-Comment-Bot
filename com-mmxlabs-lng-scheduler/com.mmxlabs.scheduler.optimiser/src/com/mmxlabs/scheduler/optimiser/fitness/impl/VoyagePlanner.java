@@ -43,6 +43,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord.AllocationMode;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.IBoilOffHelper;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
@@ -71,6 +72,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public class VoyagePlanner {
 
 	public static final int ROUNDING_EPSILON = 5;
+
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -393,10 +395,29 @@ public class VoyagePlanner {
 				if (thisPortSlot == returnSlot) {
 					portOptions.setVisitDuration(0);
 				} else {
-					final int visitDuration = portTimesRecord.getSlotDuration(thisPortSlot);
+					final int visitDuration = portTimesRecord.getSlotDuration(thisPortSlot);	
 					portOptions.setVisitDuration(visitDuration);
 					assert actualsDataProvider.hasActuals(thisPortSlot) == false || actualsDataProvider.getVisitDuration(thisPortSlot) == visitDuration;
 				}
+				
+				final int cargoCV;
+			 	if (actualsDataProvider.hasActuals(thisPortSlot)) {
+			 		cargoCV = actualsDataProvider.getCVValue(thisPortSlot);
+			 	} else if (thisPortSlot instanceof IHeelOptionsPortSlot) {
+			 		final IHeelOptionsPortSlot heelOptionsSlot = (IHeelOptionsPortSlot) thisPortSlot;
+			 		cargoCV = heelOptionsSlot.getHeelOptions().getHeelCVValue();
+			 	} else if (thisPortSlot instanceof ILoadOption) {
+			 		final ILoadOption loadOption = (ILoadOption) thisPortSlot;
+			 		cargoCV = loadOption.getCargoCVValue();
+			 	} else {
+			 		if (previousOptions != null) {
+			 		 	cargoCV = previousOptions.getCargoCVValue();
+			 		} else {
+			 		 	cargoCV = 0;
+			 		}
+			 	}
+			 	
+			 	portOptions.setCargoCVValue(cargoCV);
 
 				voyageOrPortOptions.add(portOptions);
 
@@ -529,7 +550,7 @@ public class VoyagePlanner {
 						final long baseFuelConsumptionInMt = actualsDataProvider.getPortBaseFuelConsumptionInMT(portOptions.getPortSlot());
 						fuelConsumptions[FuelComponent.Base.ordinal()] += baseFuelConsumptionInMt;
 						fuelCosts[FuelComponent.Base.ordinal()] += Calculator.costFromConsumption(baseFuelConsumptionInMt, baseFuelPricePerMT);
-						portDetails.setFuelConsumption(FuelComponent.Base, baseFuelConsumptionInMt);
+						portDetails.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, baseFuelConsumptionInMt);
 					}
 					detailedSequence[idx] = portDetails;
 				} else if (element instanceof VoyageOptions) {
@@ -1065,6 +1086,7 @@ public class VoyagePlanner {
 
 		throw new IllegalArgumentException("Unknown from port slot");
 	}
+	
 
 	/**
 	 * Here, a single a voyage plan is evaluated, which may be part of what used to be a single voyage plan, e.g. if a charter out event was generated.
@@ -1086,19 +1108,24 @@ public class VoyagePlanner {
 			final IDetailsSequenceElement[] sequence = planData.getPlan().getSequence();
 			long currentHeelInM3 = planData.getPlan().getStartingHeelInM3();
 			long totalVoyageBOG = 0;
+
 			final int adjust = planData.getPlan().isIgnoreEnd() ? 1 : 0;
 			for (int i = 0; i < sequence.length - adjust; ++i) {
 				final IDetailsSequenceElement e = sequence[i];
 				if (e instanceof PortDetails) {
 					final PortDetails portDetails = (PortDetails) e;
+					
 					final IPortSlot portSlot = portDetails.getOptions().getPortSlot();
 					final long start = currentHeelInM3;
 					if (portSlot.getPortType() != PortType.End) {
+						totalVoyageBOG += portDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3);
+						currentHeelInM3 -= portDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3);
+
 						if (planData.getAllocation() != null) {
 							if (portSlot.getPortType() == PortType.Load) {
-								currentHeelInM3 += planData.getAllocation().getSlotVolumeInM3(portSlot);
+								currentHeelInM3 += planData.getAllocation().getCommercialSlotVolumeInM3(portSlot);
 							} else if (portSlot.getPortType() == PortType.Discharge) {
-								currentHeelInM3 -= planData.getAllocation().getSlotVolumeInM3(portSlot);
+								currentHeelInM3 -= planData.getAllocation().getCommercialSlotVolumeInM3(portSlot);
 							}
 						}
 						assert currentHeelInM3 + ROUNDING_EPSILON >= 0;

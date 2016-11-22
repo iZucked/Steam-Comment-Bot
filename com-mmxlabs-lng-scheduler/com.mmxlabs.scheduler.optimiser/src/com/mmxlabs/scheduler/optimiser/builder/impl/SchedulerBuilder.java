@@ -1356,7 +1356,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	public void setVesselClassStateParameters(@NonNull final IVesselClass vesselClass, final VesselState state, final int nboRateInM3PerDay, final int idleNBORateInM3PerDay,
-			final int idleConsumptionRateInMTPerDay, final IConsumptionRateCalculator consumptionRateCalculatorInMTPerDay, final int serviceSpeed) {
+			final int idleConsumptionRateInMTPerDay, final IConsumptionRateCalculator consumptionRateCalculatorInMTPerDay, final int serviceSpeed, final int inPortNBORateInM3PerDay) {
 
 		if (!vesselClasses.contains(vesselClass)) {
 			throw new IllegalArgumentException("IVesselClass was not created using this builder");
@@ -1374,6 +1374,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vc.setIdleConsumptionRate(state, idleConsumptionRateInMTPerDay);
 		vc.setConsumptionRate(state, consumptionRateCalculatorInMTPerDay);
 		vc.setServiceSpeed(state, serviceSpeed);
+		vc.setInPortNBORate(state, inPortNBORateInM3PerDay);
 	}
 
 	/**

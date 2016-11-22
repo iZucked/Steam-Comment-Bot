@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
 public class PortDetailsTest {
 
@@ -20,9 +21,9 @@ public class PortDetailsTest {
 		final FuelComponent c = FuelComponent.Base;
 		final long value = 100L;
 		final PortDetails details = new PortDetails(new PortOptions(Mockito.mock(IPortSlot.class)));
-		Assert.assertEquals(0, details.getFuelConsumption(c));
-		details.setFuelConsumption(c, value);
-		Assert.assertEquals(value, details.getFuelConsumption(c));
+		Assert.assertEquals(0, details.getFuelConsumption(c, FuelUnit.MT));
+		details.setFuelConsumption(c, FuelUnit.MT, value);
+		Assert.assertEquals(value, details.getFuelConsumption(c, FuelUnit.MT));
 	}
 
 	@Test
@@ -67,7 +68,7 @@ public class PortDetailsTest {
 		final PortDetails d = new PortDetails(new PortOptions(portSlot));
 
 		d.getOptions().setVisitDuration(duration);
-		d.setFuelConsumption(fuel, consumption);
+		d.setFuelConsumption(fuel, FuelUnit.MT, consumption);
 		return d;
 	}
 

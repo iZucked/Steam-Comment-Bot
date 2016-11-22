@@ -44,6 +44,8 @@ public final class VesselClass implements IVesselClass {
 	private final EnumMap<PortType, Long> inPortConsumptionRateInMTPerDay = new EnumMap<PortType, Long>(PortType.class);
 
 	private final EnumMap<VesselState, Long> idleNBORate = new EnumMap<VesselState, Long>(VesselState.class);
+	
+	private final EnumMap<VesselState, Long> inPortNBORate = new EnumMap<VesselState, Long>(VesselState.class);
 
 	private final EnumMap<VesselState, IConsumptionRateCalculator> consumptionRate = new EnumMap<VesselState, IConsumptionRateCalculator>(VesselState.class);
 
@@ -241,5 +243,14 @@ public final class VesselClass implements IVesselClass {
 
 	public void setHasReliqCapability(final boolean hasReliqCapability) {
 		this.hasReliqCapability = hasReliqCapability;
+	}
+	
+	@Override
+	public long getInPortNBORate(final VesselState vesselState) {
+		return CollectionsUtil.getValue(inPortNBORate, vesselState, 0L);
+	}
+	
+	public void setInPortNBORate(final VesselState state, final long nboRate) {
+		this.inPortNBORate.put(state, nboRate);
 	}
 }

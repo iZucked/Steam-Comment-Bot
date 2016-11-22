@@ -196,8 +196,8 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	@Override
-	public long getSlotVolumeInM3(final IPortSlot slot) {
-		return allocationAnnotation.getSlotVolumeInM3(slot);
+	public long getCommercialSlotVolumeInM3(final IPortSlot slot) {
+		return allocationAnnotation.getCommercialSlotVolumeInM3(slot);
 	}
 
 	@Override
@@ -211,8 +211,8 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	@Override
-	public long getSlotVolumeInMMBTu(final IPortSlot slot) {
-		return allocationAnnotation.getSlotVolumeInMMBTu(slot);
+	public long getCommercialSlotVolumeInMMBTu(final IPortSlot slot) {
+		return allocationAnnotation.getCommercialSlotVolumeInMMBTu(slot);
 	}
 
 	@Override
@@ -260,5 +260,15 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 		}
 
 		return false;
+	}
+
+	@Override
+	public long getPhysicalSlotVolumeInM3(@NonNull IPortSlot slot) {
+		return allocationAnnotation.getPhysicalSlotVolumeInM3(slot);
+	}
+
+	@Override
+	public long getPhysicalSlotVolumeInMMBTu(@NonNull IPortSlot slot) {
+		return allocationAnnotation.getPhysicalSlotVolumeInMMBTu(slot);
 	}
 }

@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -416,7 +417,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				// DO NOT INCLUDE THE LAST SEQUENCE ELEMENT IN THE TOTAL COST FOR THE PLAN
 				if (sequence.length == 1 || i < sequence.length - 1) {
 					for (final FuelComponent fc : FuelComponent.values()) {
-						fuelConsumptions[fc.ordinal()] += details.getFuelConsumption(fc);
+						fuelConsumptions[fc.ordinal()] += details.getFuelConsumption(fc, fc.getDefaultFuelUnit());
 					}
 				}
 
@@ -479,7 +480,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					if (details.getOptions().getToPortSlot() instanceof ILoadSlot) {
 						// TODO double check how/if this affects caching
 						// decisions
-						ILoadSlot loadSlot = (ILoadSlot) details.getOptions().getToPortSlot();
+						final ILoadSlot loadSlot = (ILoadSlot) details.getOptions().getToPortSlot();
 						cooldownCV = loadSlot.getCargoCVValue();
 						cooldownPort = loadSlot.getPort();
 					} else {
@@ -786,7 +787,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 		// set the LNG values for the voyages
 		// final int numVoyages = sequence.length / 2;
-		int offset = sequence.length > 1 ? 1 : 0;
+		final int offset = sequence.length > 1 ? 1 : 0;
 		for (int i = 0; i < sequence.length - offset; ++i) {
 			final Object element = sequence[i];
 			if (element instanceof VoyageDetails) {
@@ -827,6 +828,26 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					// final long currentTotal = voyagePlan.getTotalFuelCost(fc);
 					// voyagePlan.setTotalFuelCost(fc, currentTotal + Calculator.costFromConsumption(consumptionInMT, baseFuelPricePerMT));
 				}
+
+				final int cargoCVValue = details.getOptions().getCargoCVValue();
+				for (final FuelComponent fc : FuelComponent.getLNGFuelComponents()) {
+
+					// Existing consumption data is in M3, also store the MMBtu values
+					final long consumptionInM3 = details.getFuelConsumption(fc, FuelUnit.M3);
+					final long consumptionInMMBTu = Calculator.convertM3ToMMBTu(consumptionInM3, cargoCVValue);
+					details.setFuelConsumption(fc, FuelUnit.MMBTu, consumptionInMMBTu);
+
+					if (pricesPerMMBTu != null) {
+						// Set the LNG unit price
+						final int unitPrice = pricesPerMMBTu[i];
+						details.setFuelUnitPrice(fc, unitPrice);
+						// Sum up the voyage costs
+						final long currentTotal = voyagePlan.getTotalFuelCost(fc);
+						voyagePlan.setTotalFuelCost(fc, currentTotal + Calculator.costFromConsumption(consumptionInMMBTu, unitPrice));
+
+					}
+				}
+
 			}
 		}
 
@@ -995,18 +1016,28 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		 * The number of MT of base fuel or MT-equivalent of LNG required per hour during this port visit
 		 */
 		final long consumptionRateInMTPerDay;
+		final long inPortNBORateInM3PerDay;
 
 		final PortType portType = options.getPortSlot().getPortType();
 
 		// temporary kludge: ignore non-load non-discharge ports for port consumption
 		if (portType == PortType.Load || portType == PortType.Discharge) {
 			consumptionRateInMTPerDay = vesselClass.getInPortConsumptionRateInMTPerDay(portType);
+
+			if (portType == PortType.Load) {
+				inPortNBORateInM3PerDay = vesselClass.getInPortNBORate(VesselState.Laden);
+			} else {
+				inPortNBORateInM3PerDay = vesselClass.getInPortNBORate(VesselState.Ballast);
+			}
+
 		} else if (portType == PortType.End) {
 			// Maybe include hotel load for end events?
 			// consumptionRateInMTPerDay = vesselClass.getIdleConsumptionRate(VesselState.Ballast);
 			consumptionRateInMTPerDay = 0;
+			inPortNBORateInM3PerDay = 0;
 		} else {
 			consumptionRateInMTPerDay = 0;
+			inPortNBORateInM3PerDay = 0;
 		}
 
 		final int visitDuration = options.getVisitDuration();
@@ -1018,10 +1049,15 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 		final long minBaseFuelConsumptionInMT = Calculator.quantityFromRateTime(vesselClass.getMinBaseFuelConsumptionInMTPerDay(), visitDuration) / 24L;
 		if (minBaseFuelConsumptionInMT > requiredConsumptionInMT) {
-			details.setFuelConsumption(FuelComponent.Base, minBaseFuelConsumptionInMT);
+			details.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, minBaseFuelConsumptionInMT);
 		} else {
-			details.setFuelConsumption(FuelComponent.Base, requiredConsumptionInMT);
+			details.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, requiredConsumptionInMT);
 		}
+
+		// inPortBO
+		final long NBOinM3 = Calculator.quantityFromRateTime(inPortNBORateInM3PerDay, visitDuration) / 24L;
+		details.setFuelConsumption(FuelComponent.NBO, FuelUnit.M3, NBOinM3);
+
 	}
 
 	public void setRouteCostDataComponentProvider(final IRouteCostProvider provider) {
