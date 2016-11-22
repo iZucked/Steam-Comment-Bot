@@ -43,23 +43,23 @@ public class OptimisationSettingsOverrideModule extends AbstractModule {
 	private boolean enableFourOpt2() {
 		return true;
 	}
-	@Provides
-	@Named(LNGParameters_ActionPlanSettingsModule.ACTION_PLAN_TOTAL_EVALUATIONS)
-	private int actionPlanTotalEvals() {
-		return settings.getActionPlanTotalEvals();
-	}
-
-	@Provides
-	@Named(LNGParameters_ActionPlanSettingsModule.ACTION_PLAN_IN_RUN_EVALUATIONS)
-	private int actionPlanInRunEvals() {
-		return settings.getActionPlanInRunEvals();
-	}
-
-	@Provides
-	@Named(LNGParameters_ActionPlanSettingsModule.ACTION_PLAN_MAX_SEARCH_DEPTH)
-	private int actionPlanInRunSearchDepth() {
-		return settings.getActionPlanMaxSearchDepth();
-	}
+//	@Provides
+//	@Named(LNGParameters_ActionPlanSettingsModule.ACTION_PLAN_TOTAL_EVALUATIONS)
+//	private int actionPlanTotalEvals() {
+//		return settings.getActionPlanTotalEvals();
+//	}
+//
+//	@Provides
+//	@Named(LNGParameters_ActionPlanSettingsModule.ACTION_PLAN_IN_RUN_EVALUATIONS)
+//	private int actionPlanInRunEvals() {
+//		return settings.getActionPlanInRunEvals();
+//	}
+//
+//	@Provides
+//	@Named(LNGParameters_ActionPlanSettingsModule.ACTION_PLAN_MAX_SEARCH_DEPTH)
+//	private int actionPlanInRunSearchDepth() {
+//		return settings.getActionPlanMaxSearchDepth();
+//	}
 
 //	@Provides
 //	@Singleton
