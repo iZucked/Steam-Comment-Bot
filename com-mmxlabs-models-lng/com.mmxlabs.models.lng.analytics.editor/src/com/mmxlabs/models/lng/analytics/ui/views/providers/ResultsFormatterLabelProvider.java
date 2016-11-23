@@ -53,7 +53,7 @@ public class ResultsFormatterLabelProvider extends CellLabelProvider {
 				GroupNode g = groupNode.parentGroup;
 				while (g != null) {
 //					sb = g.name + " | " + sb;
-					sb = "";
+					sb = "5";
 					g = g.parentGroup;
 				}
 >>>>>>> 3ad7c67 Option modelling formatting

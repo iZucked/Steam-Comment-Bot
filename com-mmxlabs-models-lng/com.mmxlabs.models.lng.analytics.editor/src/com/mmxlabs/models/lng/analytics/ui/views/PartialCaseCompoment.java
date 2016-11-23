@@ -72,7 +72,8 @@ public class PartialCaseCompoment extends AbstractSandboxComponent {
 				final DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE | DND.DROP_LINK);
 				dropTarget.setTransfer(types);
 				dropTarget.addDropListener(listener);
-			});
+			}, false);
+			expandable.setLayoutData(GridDataFactory.fillDefaults().minSize(SWT.DEFAULT, 300).grab(false, true).create());
 
 			hookOpenEditor(partialCaseViewer);
 

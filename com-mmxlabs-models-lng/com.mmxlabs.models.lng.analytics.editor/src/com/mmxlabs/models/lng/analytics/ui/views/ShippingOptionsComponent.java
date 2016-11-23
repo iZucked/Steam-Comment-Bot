@@ -136,7 +136,7 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent {
 
 				}
 			});
-		});
+		}, false);
 
 		expandableShipping.addExpansionListener(expansionListener);
 		expandableShipping.setExpanded(expanded);

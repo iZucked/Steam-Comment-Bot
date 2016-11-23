@@ -120,18 +120,26 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		validationSupport = new DialogValidationSupport(new DefaultExtraValidationContext(getRootObject(), false));
 		validationSupport.setValidationTargets(Collections.singleton(getModel()));
-
-		mainComposite = new Composite(parent, SWT.NONE);
+		parent.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).create());
+//		Composite dummy = new Composite(parent, SWT.BORDER);
+//		dummy.setLayoutData(GridDataFactory.swtDefaults()//
+//				.grab(false, true)//
+//				.span(0,1)
+//				.align(SWT.CENTER,SWT.TOP)
+//				.create());
+		mainComposite = new Composite(parent, SWT.BORDER);
 		mainComposite.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
 		mainComposite.setLayoutData(GridDataFactory.swtDefaults()//
 				.grab(true, true)//
+				.align(SWT.CENTER,SWT.TOP)
+				.span(1,1)
 				.create());
 		mainComposite.setLayout(GridLayoutFactory.fillDefaults()//
 				.equalWidth(false) //
 				.numColumns(5) //
 				.spacing(0, 0) //
-				.margins(0, 0)//
+//				.margins(100, 0)//
 				.create());
 
 		{
@@ -153,7 +161,12 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					.grab(false, true)//
 					.span(1, 1) //
 					.align(SWT.FILL, SWT.FILL).create());
-			lhsComposite.setLayout(new GridLayout(1, true));
+			lhsComposite.setLayout(GridLayoutFactory.fillDefaults()//
+					.equalWidth(false) //
+					.numColumns(1) //
+					.spacing(0, 20) //
+					.margins(0, 0)//
+					.create());
 			final IExpansionListener lhsExpansionListener = new ExpansionAdapter() {
 
 				@Override
@@ -190,18 +203,18 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 			{
 				vesselsComponent = new VesselsComponent(OptionModellerView.this, validationErrors, () -> getModel());
-				hook.accept(vesselsComponent, false);
+				hook.accept(vesselsComponent, true);
 			}
 			{
 				vesselClassesComponent = new VesselClassesComponent(OptionModellerView.this, validationErrors, () -> getModel());
-				hook.accept(vesselClassesComponent, false);
+				hook.accept(vesselClassesComponent, true);
 			}
 		}
 
 		{
-			centralScrolledComposite = new ScrolledComposite(mainComposite, SWT.H_SCROLL | SWT.V_SCROLL);
+			centralScrolledComposite = new ScrolledComposite(mainComposite, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 			centralScrolledComposite.setLayoutData(GridDataFactory.swtDefaults()//
-					.grab(true, true)//
+					.grab(false, true)//
 					.align(SWT.FILL, SWT.FILL) //
 					.span(1, 1) //
 					.create());
@@ -224,7 +237,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				public void expansionStateChanged(final ExpansionEvent e) {
 					centralComposite.layout(true);
 					centralScrolledComposite.setMinSize(centralComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-
 				}
 			};
 
@@ -236,7 +248,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			};
 			{
 				baseCaseComponent = new BaseCaseComponent(OptionModellerView.this, validationErrors, () -> getModel());
-				hook.accept(baseCaseComponent, false);
+				hook.accept(baseCaseComponent, true);
 			}
 			{
 				partialCaseComponent = new PartialCaseCompoment(OptionModellerView.this, validationErrors, () -> getModel());
@@ -251,7 +263,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 			rhsScrolledComposite = new ScrolledComposite(mainComposite, SWT.V_SCROLL | SWT.V_SCROLL);
 			rhsScrolledComposite.setLayoutData(GridDataFactory.fillDefaults()//
-					.grab(true, true)//
+					.grab(false, true)//
 					.hint(200, SWT.DEFAULT) //
 					// .span(1, 1) //
 					.align(SWT.FILL, SWT.FILL).create());
@@ -291,14 +303,14 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			}
 			{
 
-				pnlDetailsComponent = new EmbeddedReportComponent(OptionModellerView.this, validationErrors, () -> getModel(), "com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport", "P&&L",
-						getViewSite(), childContext -> {
-							final Options options = new Options("pnl", null, false);
-							childContext.set(Options.class, options);
-						});
-				pnlDetailsComponent.createControls(rhsComposite, false, rhsExpansionListener, OptionModellerView.this);
-				inputWants.addAll(pnlDetailsComponent.getInputWants());
-				disposables.add(() -> pnlDetailsComponent.dispose());
+//				pnlDetailsComponent = new EmbeddedReportComponent(OptionModellerView.this, validationErrors, () -> getModel(), "com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport", "P&&L",
+//						getViewSite(), childContext -> {
+//							final Options options = new Options("pnl", null, false);
+//							childContext.set(Options.class, options);
+//						});
+//				pnlDetailsComponent.createControls(rhsComposite, false, rhsExpansionListener, OptionModellerView.this);
+//				inputWants.addAll(pnlDetailsComponent.getInputWants());
+//				disposables.add(() -> pnlDetailsComponent.dispose());
 
 			}
 		}

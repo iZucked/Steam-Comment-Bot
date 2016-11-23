@@ -49,7 +49,7 @@ public class OptionModelsComponent extends AbstractSandboxComponent {
 			final DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE);
 			dropTarget.setTransfer(types);
 			dropTarget.addDropListener(listener);
-		});
+		}, false);
 
 		expandable.addExpansionListener(expansionListener);
 		expandable.setExpanded(expanded);

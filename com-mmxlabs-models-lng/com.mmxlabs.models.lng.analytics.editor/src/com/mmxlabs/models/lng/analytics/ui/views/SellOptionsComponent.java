@@ -81,7 +81,7 @@ public class SellOptionsComponent extends AbstractSandboxComponent {
 			});
 			addSellButton.addMouseListener(OptionMenuHelper.createNewSellOptionMenuListener(addSellButton.getParent(), scenarioEditingLocation, modelProvider));
 
-		});
+		}, false);
 		sellOptionsViewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).hint(SWT.DEFAULT, 400).create());
 
 		hookDragSource(sellOptionsViewer);

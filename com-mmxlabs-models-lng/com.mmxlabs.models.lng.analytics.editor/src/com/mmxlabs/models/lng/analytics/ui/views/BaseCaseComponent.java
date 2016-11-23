@@ -135,10 +135,9 @@ public class BaseCaseComponent extends AbstractSandboxComponent {
 			dropTarget.addDropListener(listener);
 
 			expandableCompo.setTextClient(c);
-		});
-
+		}, false);
+		expandable.setLayoutData(GridDataFactory.fillDefaults().minSize(SWT.DEFAULT, 200).grab(false, true).create());
 		hookOpenEditor(baseCaseViewer);
-
 		final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 		final BaseCaseDropTargetListener listener = new BaseCaseDropTargetListener(scenarioEditingLocation, baseCaseViewer);
 		inputWants.add(model -> listener.setOptionAnalysisModel(model));

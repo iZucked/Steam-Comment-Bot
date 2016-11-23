@@ -90,11 +90,17 @@ public abstract class AbstractSandboxComponent {
 	}
 
 	protected ExpandableComposite wrapInExpandable(final Composite composite, final String name, final Function<Composite, Control> s) {
-		return wrapInExpandable(composite, name, s, null);
+		return wrapInExpandable(composite, name, s, null, false);
 	}
 
-	protected ExpandableComposite wrapInExpandable(final Composite composite, final String name, final Function<Composite, Control> s, @Nullable final Consumer<ExpandableComposite> customiser) {
-		final ExpandableComposite expandableCompo = new ExpandableComposite(composite, SWT.NONE);
+	protected ExpandableComposite wrapInExpandable(final Composite composite, final String name, final Function<Composite, Control> s, @Nullable final Consumer<ExpandableComposite> customiser, boolean expand) {
+		final ExpandableComposite expandableCompo;
+		if (!expand) {
+			expandableCompo = new ExpandableComposite(composite, SWT.BORDER, 0);
+		} else {
+			expandableCompo = new ExpandableComposite(composite, SWT.BORDER, ExpandableComposite.TWISTIE);
+		}
+		
 		expandableCompo.setText(name);
 		expandableCompo.setFont(boldFont);
 		expandableCompo.setLayout(new GridLayout(1, false));

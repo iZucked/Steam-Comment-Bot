@@ -79,7 +79,7 @@ public class BuyOptionsComponent extends AbstractSandboxComponent {
 				}
 			});
 			c.addMouseListener(OptionMenuHelper.createNewBuyOptionMenuListener(c.getParent(), scenarioEditingLocation, modelProvider));
-		});
+		}, false);
 
 		expandable.setExpanded(expanded);
 
