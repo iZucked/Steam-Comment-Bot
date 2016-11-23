@@ -120,7 +120,7 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 
 				if (element instanceof CargoAllocation) {
 					final CargoAllocation cargoAllocation = (CargoAllocation) element;
-					final boolean isFleet = !(cargoAllocation.getSequence().isSpotVessel() || cargoAllocation.getSequence().isTimeCharterVessel());
+					final boolean isFleet = cargoAllocation.getSequence() != null && (!(cargoAllocation.getSequence().isSpotVessel() || cargoAllocation.getSequence().isTimeCharterVessel()));
 					if (isFleet) {
 						return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 					}
@@ -557,7 +557,7 @@ public class StandardEconsRowFactory implements IEconsRowFactory {
 		}
 
 		// Add on chartering costs
-		if (cargoAllocation.getSequence().isSpotVessel() || cargoAllocation.getSequence().isTimeCharterVessel()) {
+		if (cargoAllocation.getSequence() == null || cargoAllocation.getSequence().isSpotVessel() || cargoAllocation.getSequence().isTimeCharterVessel()) {
 			shippingCost += charterCost;
 		}
 		return shippingCost;
