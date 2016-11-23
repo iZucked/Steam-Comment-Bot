@@ -28,6 +28,8 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridLayout;
@@ -61,6 +63,8 @@ public abstract class AbstractSandboxComponent {
 
 	protected final Image image_grey_add;
 
+	protected final Font boldFont;
+
 	protected AbstractSandboxComponent(final @NonNull IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors,
 			@NonNull Supplier<OptionAnalysisModel> modelProvider) {
 		this.scenarioEditingLocation = scenarioEditingLocation;
@@ -69,10 +73,19 @@ public abstract class AbstractSandboxComponent {
 
 		final ImageDescriptor baseAdd = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD);
 		image_grey_add = ImageDescriptor.createWithFlags(baseAdd, SWT.IMAGE_GRAY).createImage();
+
+		final Font systemFont = Display.getDefault().getSystemFont();
+		// Clone the font data
+		final FontData fd = new FontData(systemFont.getFontData()[0].toString());
+		// Set the bold bit.
+		fd.setStyle(fd.getStyle() | SWT.BOLD);
+
+		this.boldFont = new Font(Display.getDefault(), fd);
 	}
 
 	public void dispose() {
 		image_grey_add.dispose();
+		boldFont.dispose();
 	}
 
 	protected ExpandableComposite wrapInExpandable(final Composite composite, final String name, final Function<Composite, Control> s) {
@@ -82,6 +95,7 @@ public abstract class AbstractSandboxComponent {
 	protected ExpandableComposite wrapInExpandable(final Composite composite, final String name, final Function<Composite, Control> s, @Nullable final Consumer<ExpandableComposite> customiser) {
 		final ExpandableComposite expandableCompo = new ExpandableComposite(composite, SWT.NONE);
 		expandableCompo.setText(name);
+		expandableCompo.setFont(boldFont);
 		expandableCompo.setLayout(new GridLayout(1, false));
 
 		final Control client = s.apply(expandableCompo);
@@ -111,8 +125,9 @@ public abstract class AbstractSandboxComponent {
 	protected GridViewerColumn createColumn(final GridTreeViewer viewer, final String name, final ICellRenderer renderer, final boolean isTree, final ETypedElement... pathObjects) {
 		return createColumn(viewer, createLabelProvider(name, renderer, pathObjects), name, renderer, isTree, pathObjects);
 	}
-	
-	protected GridViewerColumn createColumn(final GridTreeViewer viewer, CellFormatterLabelProvider labelProvider, final String name, final ICellRenderer renderer, final boolean isTree, final ETypedElement... pathObjects) {
+
+	protected GridViewerColumn createColumn(final GridTreeViewer viewer, CellFormatterLabelProvider labelProvider, final String name, final ICellRenderer renderer, final boolean isTree,
+			final ETypedElement... pathObjects) {
 
 		final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER | SWT.WRAP);
 		gvc.getColumn().setTree(isTree);
@@ -128,163 +143,163 @@ public abstract class AbstractSandboxComponent {
 	private CellFormatterLabelProvider createLabelProvider(final String name, final ICellRenderer renderer, final ETypedElement... pathObjects) {
 		return new CellFormatterLabelProvider(renderer, pathObjects) {
 
-Image imgError = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/error.gif").createImage();
-Image imgWarn = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/warning.gif").createImage();
-Image imgInfo = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/information.gif").createImage();
-Image imgShippingRoundTrip = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/roundtrip.png").createImage();
-Image imgShippingFleet = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/fleet.png").createImage();
+			Image imgError = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/error.gif").createImage();
+			Image imgWarn = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/warning.gif").createImage();
+			Image imgInfo = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/information.gif").createImage();
+			Image imgShippingRoundTrip = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/roundtrip.png").createImage();
+			Image imgShippingFleet = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/fleet.png").createImage();
 
-Color colour_error = new Color(Display.getDefault(), new RGB(255, 100, 100));
-Color colour_warn = new Color(Display.getDefault(), new RGB(255, 255, 200));
-Color colour_info = new Color(Display.getDefault(), new RGB(200, 240, 240));
+			Color colour_error = new Color(Display.getDefault(), new RGB(255, 100, 100));
+			Color colour_warn = new Color(Display.getDefault(), new RGB(255, 255, 200));
+			Color colour_info = new Color(Display.getDefault(), new RGB(200, 240, 240));
 
-@Override
-protected @Nullable Image getImage(@NonNull final ViewerCell cell, @Nullable final Object element) {
+			@Override
+			protected @Nullable Image getImage(@NonNull final ViewerCell cell, @Nullable final Object element) {
 
-		if (validationErrors.containsKey(element)) {
-			final IStatus status = validationErrors.get(element);
-			if (!status.isOK()) {
-				if (status.matches(IStatus.ERROR)) {
-					return imgError;
-				}
-				if (status.matches(IStatus.WARNING)) {
-					return imgWarn;
-				}
-				if (status.matches(IStatus.INFO)) {
-					return imgWarn;
-				}
-			}
-		} else {
-			if (element instanceof RoundTripShippingOption) {
-				return imgShippingRoundTrip;
-			} else if (element instanceof FleetShippingOption) {
-				return imgShippingFleet;
-			}
-		}
-		return null;
-}
-
-@Override
-public String getToolTipText(final Object element) {
-
-		final Set<Object> targetElements = getTargetElements(name, element);
-
-		final StringBuilder sb = new StringBuilder();
-		for (final Object target : targetElements) {
-			if (validationErrors.containsKey(target)) {
-				final IStatus status = validationErrors.get(target);
-				if (!status.isOK()) {
-					if (sb.length() > 0) {
-						sb.append("\n");
+				if (validationErrors.containsKey(element)) {
+					final IStatus status = validationErrors.get(element);
+					if (!status.isOK()) {
+						if (status.matches(IStatus.ERROR)) {
+							return imgError;
+						}
+						if (status.matches(IStatus.WARNING)) {
+							return imgWarn;
+						}
+						if (status.matches(IStatus.INFO)) {
+							return imgWarn;
+						}
 					}
-					sb.append(status.getMessage());
-				}
-			}
-		}
-		if (sb.length() > 0) {
-			return sb.toString();
-		}
-		return super.getToolTipText(element);
-}
-
-private Set<Object> getTargetElements(final String name, final Object element) {
-		final Set<Object> targetElements = new HashSet<>();
-		targetElements.add(element);
-		// FIXME: Hacky!
-		if (element instanceof BaseCaseRow) {
-			final BaseCaseRow baseCaseRow = (BaseCaseRow) element;
-			if (name == null || "Buy".equals(name)) {
-				targetElements.add(baseCaseRow.getBuyOption());
-			}
-			if (name == null || "Sell".equals(name)) {
-				targetElements.add(baseCaseRow.getSellOption());
-			}
-			if (name == null || "Shipping".equals(name)) {
-				targetElements.add(baseCaseRow.getShipping());
-			}
-		}
-		if (element instanceof PartialCaseRow) {
-			final PartialCaseRow row = (PartialCaseRow) element;
-			if (name == null || "Buy".equals(name)) {
-				targetElements.addAll(row.getBuyOptions());
-			}
-			if (name == null || "Sell".equals(name)) {
-				targetElements.addAll(row.getSellOptions());
-			}
-			if (name == null || "Shipping".equals(name)) {
-				targetElements.add(row.getShipping());
-			}
-		}
-		targetElements.remove(null);
-		return targetElements;
-}
-
-@Override
-public void update(final ViewerCell cell) {
-		super.update(cell);
-
-		final GridItem item = (GridItem) cell.getItem();
-		item.setHeaderText("");
-		item.setHeaderImage(null);
-		cell.setBackground(null);
-		final Object element = cell.getElement();
-
-		final Set<Object> targetElements = getTargetElements(null, element);
-		IStatus s = org.eclipse.core.runtime.Status.OK_STATUS;
-		for (final Object e : targetElements) {
-			if (validationErrors.containsKey(e)) {
-				final IStatus status = validationErrors.get(e);
-				if (!status.isOK()) {
-					if (status.getSeverity() > s.getSeverity()) {
-						s = status;
+				} else {
+					if (element instanceof RoundTripShippingOption) {
+						return imgShippingRoundTrip;
+					} else if (element instanceof FleetShippingOption) {
+						return imgShippingFleet;
 					}
 				}
+				return null;
 			}
-		}
-		if (!s.isOK()) {
-			if (s.matches(IStatus.ERROR)) {
-				cell.setBackground(colour_error);
-				item.setBackground(colour_error);
-			} else if (s.matches(IStatus.WARNING)) {
-				cell.setBackground(colour_warn);
-				item.setBackground(colour_warn);
-			} else if (s.matches(IStatus.INFO)) {
-				cell.setBackground(colour_info);
-				item.setBackground(colour_info);
-			}
-		}
 
-		if (element instanceof BaseCaseRow || element instanceof PartialCaseRow) {
-			if (validationErrors.containsKey(element)) {
-				final IStatus status = validationErrors.get(element);
-				if (!status.isOK()) {
-					if (status.matches(IStatus.ERROR)) {
-						item.setHeaderImage(imgError);
-					} else if (status.matches(IStatus.WARNING)) {
-						item.setHeaderImage(imgWarn);
-					} else if (status.matches(IStatus.INFO)) {
-						item.setHeaderImage(imgInfo);
+			@Override
+			public String getToolTipText(final Object element) {
+
+				final Set<Object> targetElements = getTargetElements(name, element);
+
+				final StringBuilder sb = new StringBuilder();
+				for (final Object target : targetElements) {
+					if (validationErrors.containsKey(target)) {
+						final IStatus status = validationErrors.get(target);
+						if (!status.isOK()) {
+							if (sb.length() > 0) {
+								sb.append("\n");
+							}
+							sb.append(status.getMessage());
+						}
+					}
+				}
+				if (sb.length() > 0) {
+					return sb.toString();
+				}
+				return super.getToolTipText(element);
+			}
+
+			private Set<Object> getTargetElements(final String name, final Object element) {
+				final Set<Object> targetElements = new HashSet<>();
+				targetElements.add(element);
+				// FIXME: Hacky!
+				if (element instanceof BaseCaseRow) {
+					final BaseCaseRow baseCaseRow = (BaseCaseRow) element;
+					if (name == null || "Buy".equals(name)) {
+						targetElements.add(baseCaseRow.getBuyOption());
+					}
+					if (name == null || "Sell".equals(name)) {
+						targetElements.add(baseCaseRow.getSellOption());
+					}
+					if (name == null || "Shipping".equals(name)) {
+						targetElements.add(baseCaseRow.getShipping());
+					}
+				}
+				if (element instanceof PartialCaseRow) {
+					final PartialCaseRow row = (PartialCaseRow) element;
+					if (name == null || "Buy".equals(name)) {
+						targetElements.addAll(row.getBuyOptions());
+					}
+					if (name == null || "Sell".equals(name)) {
+						targetElements.addAll(row.getSellOptions());
+					}
+					if (name == null || "Shipping".equals(name)) {
+						targetElements.add(row.getShipping());
+					}
+				}
+				targetElements.remove(null);
+				return targetElements;
+			}
+
+			@Override
+			public void update(final ViewerCell cell) {
+				super.update(cell);
+
+				final GridItem item = (GridItem) cell.getItem();
+				item.setHeaderText("");
+				item.setHeaderImage(null);
+				cell.setBackground(null);
+				final Object element = cell.getElement();
+
+				final Set<Object> targetElements = getTargetElements(null, element);
+				IStatus s = org.eclipse.core.runtime.Status.OK_STATUS;
+				for (final Object e : targetElements) {
+					if (validationErrors.containsKey(e)) {
+						final IStatus status = validationErrors.get(e);
+						if (!status.isOK()) {
+							if (status.getSeverity() > s.getSeverity()) {
+								s = status;
+							}
+						}
+					}
+				}
+				if (!s.isOK()) {
+					if (s.matches(IStatus.ERROR)) {
+						cell.setBackground(colour_error);
+						item.setBackground(colour_error);
+					} else if (s.matches(IStatus.WARNING)) {
+						cell.setBackground(colour_warn);
+						item.setBackground(colour_warn);
+					} else if (s.matches(IStatus.INFO)) {
+						cell.setBackground(colour_info);
+						item.setBackground(colour_info);
+					}
+				}
+
+				if (element instanceof BaseCaseRow || element instanceof PartialCaseRow) {
+					if (validationErrors.containsKey(element)) {
+						final IStatus status = validationErrors.get(element);
+						if (!status.isOK()) {
+							if (status.matches(IStatus.ERROR)) {
+								item.setHeaderImage(imgError);
+							} else if (status.matches(IStatus.WARNING)) {
+								item.setHeaderImage(imgWarn);
+							} else if (status.matches(IStatus.INFO)) {
+								item.setHeaderImage(imgInfo);
+							}
+						}
 					}
 				}
 			}
-		}
-}
 
-@Override
-public void dispose() {
-		imgError.dispose();
-		imgWarn.dispose();
-		imgInfo.dispose();
-		imgShippingRoundTrip.dispose();
-		imgShippingFleet.dispose();
+			@Override
+			public void dispose() {
+				imgError.dispose();
+				imgWarn.dispose();
+				imgInfo.dispose();
+				imgShippingRoundTrip.dispose();
+				imgShippingFleet.dispose();
 
-		colour_error.dispose();
-		colour_info.dispose();
-		colour_warn.dispose();
-		super.dispose();
-}
+				colour_error.dispose();
+				colour_info.dispose();
+				colour_warn.dispose();
+				super.dispose();
+			}
 
-};
+		};
 	}
 
 	protected CellLabelProvider createWiringColumnLabelProvider() {
@@ -406,8 +421,6 @@ public void dispose() {
 
 		};
 	}
-	
-	
 
 	protected GridViewerColumn createColumn(final GridTreeViewer viewer, final String name, final CellLabelProvider labelProvider, final boolean isTree, final ETypedElement... pathObjects) {
 
