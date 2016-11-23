@@ -42,6 +42,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.optimiser.core.IModifiableSequences;

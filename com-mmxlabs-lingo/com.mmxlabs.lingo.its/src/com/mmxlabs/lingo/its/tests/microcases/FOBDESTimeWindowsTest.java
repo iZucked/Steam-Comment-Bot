@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;

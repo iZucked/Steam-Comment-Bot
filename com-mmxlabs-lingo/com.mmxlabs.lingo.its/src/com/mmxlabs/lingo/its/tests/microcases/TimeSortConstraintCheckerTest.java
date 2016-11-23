@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintChecker;
 
 /**

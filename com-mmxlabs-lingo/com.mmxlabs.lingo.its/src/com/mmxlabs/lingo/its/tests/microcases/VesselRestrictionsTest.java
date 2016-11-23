@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintChecker;
 
 @RunWith(value = ShiroRunner.class)

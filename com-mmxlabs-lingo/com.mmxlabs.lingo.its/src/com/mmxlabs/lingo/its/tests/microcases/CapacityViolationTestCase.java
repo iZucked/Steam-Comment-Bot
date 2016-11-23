@@ -46,6 +46,7 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.VolumeUnits;
