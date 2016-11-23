@@ -11,10 +11,10 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.cache.NotCaching;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -23,24 +23,19 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.IBreakEvenPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator.EvaluationMode;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
-import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
-import com.mmxlabs.scheduler.optimiser.schedule.ShippingCostHelper;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
-import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -61,19 +56,12 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	private ILNGVoyageCalculator voyageCalculator;
-
-	@Inject
 	private VoyagePlanner voyagePlanner;
 
-	@Inject
-	private ShippingCostHelper shippingCostHelper;
-
-	@Inject
-	private IActualsDataProvider actualsDataProvider;
-
-	@Inject
-	private IVesselBaseFuelCalculator vesselBaseFuelCalculator;
+	@FunctionalInterface
+	private interface Setter {
+		void accept(ILoadOption load, IDischargeOption discharge, long price);
+	}
 
 	@Override
 	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(final int vesselStartTime, final @NonNull IVesselAvailability vesselAvailability, final @NonNull VoyagePlan vp,
@@ -94,7 +82,6 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 		ILoadOption originalLoad = null;
 		IDischargeOption originalDischarge = null;
 		// Note: We do not handle multiple loads correctly!
-		int cvValue = 0;
 
 		for (int idx = 0; idx < currentSequence.length; ++idx) {
 
@@ -108,8 +95,6 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 					if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
 						isCargoPlan = true;
 						final ILoadOption loadOption = (ILoadOption) details.getOptions().getPortSlot();
-						// TODO: Average?
-						cvValue = loadOption.getCargoCVValue();
 						if (loadOption.getLoadPriceCalculator() instanceof IBreakEvenPriceCalculator) {
 							if (missingPurchasePrice || missingSalesPrice) {
 								// Already one missing price!
@@ -131,9 +116,6 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 					}
 				}
 				sequenceElements.add(portSlotProvider.getElement(details.getOptions().getPortSlot()));
-			} else if (obj instanceof VoyageDetails) {
-				final VoyageDetails details = (VoyageDetails) obj;
-				// currentTime += details.getOptions().getAvailableTime();
 			}
 		}
 
@@ -147,140 +129,66 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 			throw new IllegalStateException("Unable to breakeven with more than one missing price");
 		}
 
-		final IDetailsSequenceElement[] newSequence = currentSequence.clone();
-		final IAllocationAnnotation currentAllocation = volumeAllocator.get().allocate(vesselAvailability, vesselStartTime, vp, portTimesRecord);
-
-		final long startHeelInM3 = vp.getStartingHeelInM3();
-
-		if (originalLoad != null) {
-
-			// Get the new cargo allocation.
-
-			// Purchase price in mmbtu = (sales revenue - shipping cost) / load volume in mmbtu
-			final long totalShippingCost = shippingCostHelper.getShippingCosts(vp, vesselAvailability, false, true);
-			long totalSalesRevenue = 0;
-			long loadVolumeInM3 = 0;
-
-			{
-				final int offset = vp.isIgnoreEnd() ? 1 : 0;
-				for (int idx = 0; idx < currentSequence.length; ++idx) {
-
-					final Object obj = currentSequence[idx];
-					if (obj instanceof PortDetails) {
-						final PortDetails details = (PortDetails) obj;
-						if (idx != (currentSequence.length - offset)) {
-
-							if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
-								final IPortSlot portSlot = details.getOptions().getPortSlot();
-								loadVolumeInM3 += currentAllocation.getCommercialSlotVolumeInM3(portSlot);
-								// TODO: Average?
-							} else if (details.getOptions().getPortSlot().getPortType() == PortType.Discharge) {
-								final IPortSlot portSlot = details.getOptions().getPortSlot();
-								final long dischargeVolumeInMMBTu = currentAllocation.getCommercialSlotVolumeInMMBTu(portSlot);
-
-								final IDischargeOption dischargeOption = ((IDischargeOption) portSlot);
-								final int dischargePricePerMMBTu = dischargeOption.getDischargePriceCalculator().estimateSalesUnitPrice(dischargeOption, portTimesRecord, null);
-								totalSalesRevenue += Calculator.costFromConsumption(dischargeVolumeInMMBTu, dischargePricePerMMBTu);
-							}
-						}
-					}
-				}
-			}
-
-			final long breakEvenPurchaseCost = totalSalesRevenue - totalShippingCost;
-
-			final int breakEvenPurchasePricePerM3 = Calculator.getPerM3FromTotalAndVolumeInM3(breakEvenPurchaseCost, loadVolumeInM3);
-			final long breakEvenPurchasePricePerMMBTu = Calculator.costPerMMBTuFromM3(breakEvenPurchasePricePerM3, cvValue);
-
-			((IBreakEvenPriceCalculator) originalLoad.getLoadPriceCalculator()).setPrice((int) breakEvenPurchasePricePerMMBTu);
-
-			// Overwrite existing data
-			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
-				vp.setSequence(newSequence);
-			} else {
-				// TODO: Extract out further for custom base fuel pricing logic?
-				// Use forecast BF, but check for actuals later
-				final int baseFuelUnitPricePerMT;
-				if (actualsDataProvider.hasActuals(originalLoad)) {
-					baseFuelUnitPricePerMT = actualsDataProvider.getBaseFuelPricePerMT(originalLoad);
-				} else {
-					baseFuelUnitPricePerMT = vesselBaseFuelCalculator.getBaseFuelPrice(vesselAvailability.getVessel(), portTimesRecord);
-				}
-
-				voyageCalculator.calculateVoyagePlan(vp, vesselAvailability.getVessel(), startingHeelInM3, baseFuelUnitPricePerMT, portTimesRecord, newSequence);
-			}
-			final IAllocationAnnotation newAllocation = volumeAllocator.get().allocate(vesselAvailability, vesselStartTime, vp, portTimesRecord);
-			return new Pair<>(vp, newAllocation);
-		} else if (originalDischarge != null) {
-
+		if (originalLoad != null || originalDischarge != null) {
 			// Perform a binary search on sales price
 			// First find a valid interval
-			int minPricePerMMBTu = OptimiserUnitConvertor.convertToInternalPrice(5.0);// Integer.MAX_VALUE;
-			// for (int idx = 0; idx < currentSequence.length; ++idx) {
-			//
-			// final Object obj = currentSequence[idx];
-			// if (obj instanceof PortDetails) {
-			// final PortDetails details = (PortDetails) obj;
-			// if (idx != (currentSequence.length - 1)) {
-			//
-			// if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
-			// ILoadOption loadOption = (ILoadOption) details.getOptions().getPortSlot();
-			// // TODO: Average?
-			// cvValue = loadOption.getCargoCVValue();
-			// // TODO: Average?
-			// int p = currentAllocation.getSlotPricePerMMBTu(loadOption);
-			// if (p < minPricePerMMBTu) {
-			// minPricePerMMBTu = p;
-			// }
-			// }
-			// }
-			// }
-			// }
-			long minPrice_Value = evaluateSalesPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startHeelInM3, portTimesRecord, sequenceElements, originalDischarge,
-					minPricePerMMBTu);
-			while (minPrice_Value > 0) {
-				// Subtract $1
-				int l_minPricePerMMBTu = minPricePerMMBTu - OptimiserUnitConvertor.convertToInternalPrice(0.1);
-				long l_minPrice_Value = evaluateSalesPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startHeelInM3, portTimesRecord, sequenceElements, originalDischarge,
-						l_minPricePerMMBTu);
-				if (l_minPrice_Value == Long.MAX_VALUE) {
-					break;
-				}
-				minPricePerMMBTu = l_minPricePerMMBTu;
-				minPrice_Value = l_minPrice_Value;
+			int minPricePerMMBTu = OptimiserUnitConvertor.convertToInternalPrice(0.0);// Integer.MAX_VALUE;
+			int maxPricePerMMBTu = OptimiserUnitConvertor.convertToInternalPrice(40.0);// Integer.MAX_VALUE;
+
+			boolean isPurchase = false;
+			Setter priceSetter = null;
+			if (originalLoad != null) {
+				isPurchase = true;
+				priceSetter = (l, d, p) -> {
+					((IBreakEvenPriceCalculator) l.getLoadPriceCalculator()).setPrice((int) p);
+				};
+			} else if (originalDischarge != null) {
+				priceSetter = (l, d, p) -> {
+					((IBreakEvenPriceCalculator) d.getDischargePriceCalculator()).setPrice((int) p);
+				};
 			}
-			// Do not go below zero
-			minPricePerMMBTu = Math.max(0, minPricePerMMBTu);
+			assert priceSetter != null;
 
-			int maxPricePerMMBTu = 10 * Math.max(OptimiserUnitConvertor.convertToInternalPrice(5.0), minPricePerMMBTu);
-			long maxPrice_Value = evaluateSalesPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startHeelInM3, portTimesRecord, sequenceElements, originalDischarge,
-					maxPricePerMMBTu);
-			while (maxPrice_Value < 0) {
-				// Add $1
-				int l_maxPricePerMMBTu = maxPricePerMMBTu + OptimiserUnitConvertor.convertToInternalPrice(1.0);
-				long l_maxPrice_Value = evaluateSalesPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startHeelInM3, portTimesRecord, sequenceElements, originalDischarge,
-						l_maxPricePerMMBTu);
-				if (l_maxPrice_Value != Long.MAX_VALUE) {
-					maxPrice_Value = l_maxPrice_Value;
-					maxPricePerMMBTu = l_maxPricePerMMBTu;
-				}
+			long minPrice_Value = evaluateBreakEvenPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startingHeelInM3, portTimesRecord, sequenceElements, originalLoad,
+					originalDischarge, minPricePerMMBTu, priceSetter);
 
-			}
-			// $90/mmBTu is max - anything much larger can cause overflow issues
-			maxPricePerMMBTu = Math.min(OptimiserUnitConvertor.convertToInternalPrice(90.0), maxPricePerMMBTu);
+			// TODO: We originally had a chunk of code to extend price range so that we could (almost) ensure PNL of zero was in range - unless values were really crazy. Disable now we search for
+			// purchase price too.
 
-			final int breakEvenPricePerMMBtu = search(minPricePerMMBTu, minPrice_Value, maxPricePerMMBTu, maxPrice_Value, vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startHeelInM3,
-					portTimesRecord, sequenceElements, originalDischarge);
+			// if (isPurchase) {
+			// while (minPrice_Value > 0) {
+			// // Subtract $1
+			// minPricePerMMBTu -= OptimiserUnitConvertor.convertToInternalPrice(1.0);
+			// minPrice_Value = evaluateBreakEvenPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startingHeelInM3, portTimesRecord, sequenceElements, originalLoad,
+			// originalDischarge, minPricePerMMBTu, priceSetter);
+			// }
+			// // Do not go below zero
+			// minPricePerMMBTu = Math.max(0, minPricePerMMBTu);
+			//
+			// int maxPricePerMMBTu = 10 * minPricePerMMBTu;
+			long maxPrice_Value = evaluateBreakEvenPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startingHeelInM3, portTimesRecord, sequenceElements, originalLoad,
+					originalDischarge, maxPricePerMMBTu, priceSetter);
+			// while (maxPrice_Value < 0) {
+			// // Add $1
+			// maxPricePerMMBTu += OptimiserUnitConvertor.convertToInternalPrice(1.0);
+			// maxPrice_Value = evaluateBreakEvenPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startingHeelInM3, portTimesRecord, sequenceElements, originalLoad,
+			// originalDischarge, maxPricePerMMBTu, priceSetter);
+			// }
+			// // $90/mmBTu is max - anything much larger can cause overflow issues
+			// maxPricePerMMBTu = Math.min(OptimiserUnitConvertor.convertToInternalPrice(90.0), maxPricePerMMBTu);
+
+			final int breakEvenPricePerMMBtu = search(minPricePerMMBTu, minPrice_Value, maxPricePerMMBTu, maxPrice_Value, vesselAvailability, vesselStartTime, vesselCharterRatePerDay,
+					startingHeelInM3, portTimesRecord, sequenceElements, originalLoad, originalDischarge, isPurchase, priceSetter);
 
 			// final IDischargeOption beSlot;
-			((IBreakEvenPriceCalculator) originalDischarge.getDischargePriceCalculator()).setPrice(breakEvenPricePerMMBtu);
+			priceSetter.accept(originalLoad, originalDischarge, breakEvenPricePerMMBtu);
 			// Redundant? Search should have found this....
 
 			final VoyagePlan newVoyagePlan;
 			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 				newVoyagePlan = voyagePlanner.makeDESOrFOBVoyagePlan(vesselProvider.getResource(vesselAvailability), portTimesRecord);
 			} else {
-				newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vesselAvailability), vesselCharterRatePerDay, portTimesRecord, startHeelInM3);
+				newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vesselAvailability), vesselCharterRatePerDay, portTimesRecord, startingHeelInM3);
 			}
 			assert newVoyagePlan != null;
 			newVoyagePlan.setIgnoreEnd(vp.isIgnoreEnd());
@@ -291,12 +199,13 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 		return null;
 	}
 
-	private long evaluateSalesPrice(final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, final long vesselCharterRatePerDay, final long startHeelInM3,
-			final @NonNull IPortTimesRecord portTimesRecord, final @NonNull List<@NonNull ISequenceElement> sequenceElements, final @NonNull IDischargeOption originalDischarge,
-			final int currentPricePerMMBTu) {
+	private long evaluateBreakEvenPrice(final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, final long vesselCharterRatePerDay, final long startHeelInM3,
+			final @NonNull IPortTimesRecord portTimesRecord, final @NonNull List<@NonNull ISequenceElement> sequenceElements,
+
+			final @Nullable ILoadOption originalLoad, final @Nullable IDischargeOption originalDischarge, final int currentPricePerMMBTu, final Setter priceSetter) {
 
 		// Overwrite current break even price with test price
-		((IBreakEvenPriceCalculator) originalDischarge.getDischargePriceCalculator()).setPrice(currentPricePerMMBTu);
+		priceSetter.accept(originalLoad, originalDischarge, currentPricePerMMBTu);
 
 		final VoyagePlan newVoyagePlan;
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
@@ -313,9 +222,11 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 				vesselStartTime, null, null);
 		assert cargoAnnotation != null;
 
-		int slotPricePerMMBTu = cargoAnnotation.getFirst().getSlotPricePerMMBTu(cargoAnnotation.getFirst().getFirstSlot());
-		if (slotPricePerMMBTu < 0) {
-			return Long.MAX_VALUE;
+		for (final IPortSlot slot : cargoAnnotation.getFirst().getSlots()) {
+			final int slotPricePerMMBTu = cargoAnnotation.getFirst().getSlotPricePerMMBTu(slot);
+			if (slotPricePerMMBTu < 0) {
+				return Long.MAX_VALUE;
+			}
 		}
 
 		final long newPnLValue = cargoAnnotation.getSecond();
@@ -324,7 +235,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 
 	private int search(final int min, final long minValue, final int max, final long maxValue, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime,
 			final long vesselCharterRatePerDay, final long startHeelInM3, final @NonNull IPortTimesRecord portTimesRecord, final @NonNull List<@NonNull ISequenceElement> sequenceElements,
-			final IDischargeOption originalDischarge) {
+			final ILoadOption originalLoad, final IDischargeOption originalDischarge, boolean isPurchase, final Setter priceSetter) {
 
 		final int mid = min + ((max - min) / 2);
 
@@ -340,13 +251,20 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 			}
 		}
 
-		final long midValue = evaluateSalesPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startHeelInM3, portTimesRecord, sequenceElements, originalDischarge, mid);
+		long midValue = evaluateBreakEvenPrice(vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startHeelInM3, portTimesRecord, sequenceElements, originalLoad, originalDischarge, mid,
+				priceSetter);
 		assert midValue != Long.MAX_VALUE;
-		if (midValue > 0) {
-			return search(min, minValue, mid, midValue, vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startHeelInM3, portTimesRecord, sequenceElements, originalDischarge);
-		} else {
-			return search(mid, midValue, max, maxValue, vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startHeelInM3, portTimesRecord, sequenceElements, originalDischarge);
+
+		if (isPurchase) {
+			midValue = -midValue;
 		}
 
+		if (midValue > 0) {
+			return search(min, minValue, mid, midValue, vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startHeelInM3, portTimesRecord, sequenceElements, originalLoad, originalDischarge,
+					isPurchase, priceSetter);
+		} else {
+			return search(mid, midValue, max, maxValue, vesselAvailability, vesselStartTime, vesselCharterRatePerDay, startHeelInM3, portTimesRecord, sequenceElements, originalLoad, originalDischarge,
+					isPurchase, priceSetter);
+		}
 	}
 }
