@@ -4,6 +4,10 @@ import java.time.YearMonth;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -12,6 +16,7 @@ import java.util.regex.Pattern;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
@@ -46,9 +51,7 @@ import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseEvaluator.IM
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoEditingCommands;
 import com.mmxlabs.models.lng.commercial.parseutils.IndexConversion;
-import com.mmxlabs.models.lng.commercial.parseutils.MarkedUpNode;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -58,7 +61,6 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -141,21 +143,41 @@ public class WhatIfEvaluator {
 		}
 
 		// TODO: Command
-		CompoundCommand cmd = new CompoundCommand("Generate results");
+		final CompoundCommand cmd = new CompoundCommand("Generate results");
 		cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS, SetCommand.UNSET_VALUE));
 		// cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_GROUPS, SetCommand.UNSET_VALUE));
 		if (combinations.isEmpty()) {
-			singleEval(scenarioEditingLocation, targetPNL, model, baseCase, cmd);
+			final ResultSet resultSet = singleEval(scenarioEditingLocation, targetPNL, model, baseCase);
+			cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS, Collections.singletonList(resultSet)));
 		} else {
-			recursiveEval(0, combinations, scenarioEditingLocation, targetPNL, model, baseCase, new LinkedList<>(), cmd);
+			final List<Callable<Supplier<ResultSet>>> tasks = new LinkedList<>();
+			recursiveEval(0, combinations, scenarioEditingLocation, targetPNL, model, baseCase, new LinkedList<>(), tasks);
+			final List<Future<Supplier<ResultSet>>> futures = new LinkedList<>();
+			@NonNull
+			final ExecutorService executor = Executors.newFixedThreadPool(4);
+			tasks.forEach(task -> futures.add(executor.submit(task)));
+
+			for (final Future<Supplier<ResultSet>> f : futures) {
+				Supplier<ResultSet> resultSetSupplier;
+				try {
+					resultSetSupplier = f.get();
+					// This has a side effect of updating the result set....
+					// TODO: See if this could be done in the callable
+					final ResultSet rs = resultSetSupplier.get();
+					cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS, rs));
+				} catch (final Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
+
 		cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_GROUPS, groups));
 		if (!cmd.isEmpty()) {
 			scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, model, null);
 		}
 	}
 
-	private static ResultSet singleEval(final IScenarioEditingLocation scenarioEditingLocation, final long targetPNL, final OptionAnalysisModel model, final BaseCase baseCase, CompoundCommand cmd) {
+	private static ResultSet singleEval(final IScenarioEditingLocation scenarioEditingLocation, final long targetPNL, final OptionAnalysisModel model, final BaseCase baseCase) {
 
 		final ResultSet[] ref = new ResultSet[1];
 		BaseCaseEvaluator.generateScenario(scenarioEditingLocation, model, baseCase, (lngScenarioModel, mapper) -> {
@@ -207,7 +229,7 @@ public class WhatIfEvaluator {
 				if (isBreakEvenRow(loadAllocation)) {
 					final BreakEvenResult r = AnalyticsFactory.eINSTANCE.createBreakEvenResult();
 					r.setPrice(loadAllocation.getPrice());
-					String priceString = getPriceString(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getReferenceModel().getPricingModel(),
+					final String priceString = getPriceString(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getReferenceModel().getPricingModel(),
 							((BuyOpportunity) row.getBuyOption()).getPriceExpression(), loadAllocation.getPrice(), YearMonth.from(loadAllocation.getSlotVisit().getStart()));
 					r.setPriceString(priceString);
 					res.setResultDetail(r);
@@ -217,7 +239,7 @@ public class WhatIfEvaluator {
 				} else if (isBreakEvenRow(dischargeAllocation)) {
 					final BreakEvenResult r = AnalyticsFactory.eINSTANCE.createBreakEvenResult();
 					r.setPrice(dischargeAllocation.getPrice());
-					String priceString = getPriceString(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getReferenceModel().getPricingModel(),
+					final String priceString = getPriceString(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getReferenceModel().getPricingModel(),
 							((SellOpportunity) row.getSellOption()).getPriceExpression(), dischargeAllocation.getPrice(), YearMonth.from(dischargeAllocation.getSlotVisit().getStart()));
 					r.setPriceString(priceString);
 					res.setResultDetail(r);
@@ -278,19 +300,16 @@ public class WhatIfEvaluator {
 				resultSet.getRows().add(res);
 			}
 
-			cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS, Collections.singletonList(resultSet)));
-			// model.getResultSets().add(resultSet);
-
 			ref[0] = resultSet;
 		});
 		return ref[0];
 	}
 
-	private static String getPriceString(@NonNull PricingModel pricingModel, @NonNull String expression, double breakevenPrice, @NonNull YearMonth date) {
+	private static String getPriceString(@NonNull final PricingModel pricingModel, @NonNull final String expression, final double breakevenPrice, @NonNull final YearMonth date) {
 		if (expression.equals("?")) {
 			return String.format("%,.3f", breakevenPrice);
 		}
-		double rearrangedPrice = IndexConversion.getRearrangedPrice(pricingModel, expression, breakevenPrice, date);
+		final double rearrangedPrice = IndexConversion.getRearrangedPrice(pricingModel, expression, breakevenPrice, date);
 		return expression.replaceFirst(Pattern.quote("?"), String.format("%,.3f", rearrangedPrice));
 	}
 
@@ -361,10 +380,16 @@ public class WhatIfEvaluator {
 	}
 
 	private static void recursiveEval(final int listIdx, final List<List<Pair<EObject, Supplier<MultipleResultGrouperRow>>>> combinations, final IScenarioEditingLocation scenarioEditingLocation,
-			final long targetPNL, final OptionAnalysisModel model, final BaseCase baseCase, final List<Consumer<ResultSet>> mutliResultSetters, CompoundCommand cmd) {
+			final long targetPNL, final OptionAnalysisModel model, final BaseCase baseCase, final List<Consumer<ResultSet>> mutliResultSetters, final List<Callable<Supplier<ResultSet>>> tasks) {
 		if (listIdx == combinations.size()) {
-			final ResultSet rs = singleEval(scenarioEditingLocation, targetPNL, model, baseCase, cmd);
-			mutliResultSetters.forEach(s -> s.accept(rs));
+			final BaseCase copy = EcoreUtil.copy(baseCase);
+			tasks.add(() -> {
+				final ResultSet rs = singleEval(scenarioEditingLocation, targetPNL, model, copy);
+				return () -> {
+					mutliResultSetters.forEach(s -> s.accept(rs));
+					return rs;
+				};
+			});
 			return;
 		}
 		final List<Pair<EObject, Supplier<MultipleResultGrouperRow>>> options = combinations.get(listIdx);
@@ -373,7 +398,7 @@ public class WhatIfEvaluator {
 			final MultipleResultGrouperRow row = r.get();
 			final List<Consumer<ResultSet>> next = new LinkedList<>(mutliResultSetters);
 			next.add(rs -> row.getGroupResults().add(rs));
-			recursiveEval(listIdx + 1, combinations, scenarioEditingLocation, targetPNL, model, baseCase, next, cmd);
+			recursiveEval(listIdx + 1, combinations, scenarioEditingLocation, targetPNL, model, baseCase, next, tasks);
 		}
 	}
 
@@ -401,8 +426,8 @@ public class WhatIfEvaluator {
 	private static Predicate<ShippingOption> isNominated() {
 		return s -> s instanceof NominatedShippingOption;
 	}
-	
-//	private static String getIndex(String expression, double bePrice) {
-//		if (expression )
-//	}
+
+	// private static String getIndex(String expression, double bePrice) {
+	// if (expression )
+	// }
 }
