@@ -280,7 +280,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 				newVoyagePlan = voyagePlanner.makeDESOrFOBVoyagePlan(vesselProvider.getResource(vesselAvailability), portTimesRecord);
 			} else {
-				newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vesselAvailability), vesselCharterRatePerDay, portTimesRecord, 0);
+				newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vesselAvailability), vesselCharterRatePerDay, portTimesRecord, startHeelInM3);
 			}
 			assert newVoyagePlan != null;
 			newVoyagePlan.setIgnoreEnd(vp.isIgnoreEnd());
