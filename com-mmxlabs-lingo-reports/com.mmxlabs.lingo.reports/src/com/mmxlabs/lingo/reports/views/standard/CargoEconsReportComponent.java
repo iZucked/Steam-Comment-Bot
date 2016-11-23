@@ -41,6 +41,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.PropertySheet;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.views.standard.StandardEconsRowFactory.EconsOptions;
 import com.mmxlabs.lingo.reports.views.standard.StandardEconsRowFactory.EconsOptions.MarginBy;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -81,7 +82,7 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 	 */
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport";
 	private GridTableViewer viewer;
-	private Collection<org.eclipse.e4.ui.workbench.modeling.ISelectionListener> selectionListeners = new ConcurrentLinkedQueue<>();
+	private Collection<Pair<String, org.eclipse.e4.ui.workbench.modeling.ISelectionListener>> selectionListeners = new ConcurrentLinkedQueue<>();
 
 	/**
 	 * List of dynamically generated columns to be disposed on selection changes
@@ -126,8 +127,12 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 	@PreDestroy
 	public void dispose() {
 
-		for (org.eclipse.e4.ui.workbench.modeling.ISelectionListener selectionListener : selectionListeners) {
-			selectionService.removePostSelectionListener(selectionListener);
+		for (Pair<String, org.eclipse.e4.ui.workbench.modeling.ISelectionListener> p : selectionListeners) {
+			if (p.getFirst() == null) {
+				selectionService.removePostSelectionListener(p.getSecond());
+			} else {
+				selectionService.removePostSelectionListener(p.getFirst(), p.getSecond());
+			}
 		}
 
 	}
@@ -410,7 +415,7 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 		} else {
 			selectionService.addPostSelectionListener(selectionListener);
 		}
-		selectionListeners.add(selectionListener);
+		selectionListeners.add(new Pair<>(partId, selectionListener));
 	}
 
 	/**
