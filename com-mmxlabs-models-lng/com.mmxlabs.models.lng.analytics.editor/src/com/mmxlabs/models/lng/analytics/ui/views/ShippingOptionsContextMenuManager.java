@@ -1,18 +1,12 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
-import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -24,17 +18,10 @@ import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.widgets.Menu;
 
-import com.google.common.collect.Lists;
-import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.BreakEvenResult;
-import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
-import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
-import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.rcp.common.actions.RunnableAction;

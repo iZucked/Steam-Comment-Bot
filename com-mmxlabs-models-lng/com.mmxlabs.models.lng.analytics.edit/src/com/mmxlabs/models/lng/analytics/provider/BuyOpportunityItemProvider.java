@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.analytics.provider;
 
 
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 

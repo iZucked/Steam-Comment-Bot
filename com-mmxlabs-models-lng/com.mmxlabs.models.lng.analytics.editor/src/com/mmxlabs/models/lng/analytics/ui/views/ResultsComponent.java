@@ -1,6 +1,5 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
-import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,8 +8,6 @@ import java.util.function.Supplier;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
-import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -24,7 +21,6 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
-import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
@@ -35,9 +31,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -45,15 +39,12 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BreakEvenResult;
-import com.mmxlabs.models.lng.analytics.MultipleResultGrouper;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ResultContainer;
 import com.mmxlabs.models.lng.analytics.ResultSet;
-import com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView.SectionType;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BEPriceResultDetailsDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.CargoResultDetailsDescriptionFormatter;
-import com.mmxlabs.models.lng.analytics.ui.views.formatters.ResultDetailsDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.SellOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.ResultsFormatterLabelProvider;
@@ -72,8 +63,6 @@ public class ResultsComponent extends AbstractSandboxComponent {
 
 	private final Image image_filter;
 	private final Image image_grey_filter;
-	private final List<GridViewerColumn> sorterColumns = new LinkedList<>();
-	private GridTableViewer sorter;
 	private Composite clientArea;
 	private ExpandableComposite expandable;
 	private OptionModellerView optionModellerView;
@@ -119,10 +108,6 @@ public class ResultsComponent extends AbstractSandboxComponent {
 			layout.marginTop = 0;
 			clientArea.setLayout(layout);
 
-			sorter = new GridTableViewer(clientArea, SWT.NONE);
-			sorter.getGrid().setHeaderVisible(true);
-			sorter.getGrid().setCellSelectionEnabled(true);
-			sorter.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 			final Label c = new Label(clientArea, SWT.NONE);
 			c.setToolTipText("Toggle show only B/E cargoes");
 			if (filterConstantRows) {
@@ -156,58 +141,6 @@ public class ResultsComponent extends AbstractSandboxComponent {
 	public void refresh() {
 		resultsViewer.refresh();
 		resultsViewer.expandAll();
-
-		sorterColumns.forEach(c -> c.getColumn().dispose());
-		sorterColumns.clear();
-
-		final OptionAnalysisModel model = modelProvider.get();
-		// Only show the sorter if there are multiple items to sort by
-		if (model != null && model.getResultGroups().size() > 1) {
-			final List<MultipleResultGrouper> resultGroups = model.getResultGroups();
-			final MultipleResultGrouper lastOne = resultGroups.get(resultGroups.size() - 1);
-			for (final MultipleResultGrouper g : resultGroups) {
-				final GridViewerColumn gvc = new GridViewerColumn(sorter, SWT.NONE);
-				sorterColumns.add(gvc);
-				gvc.getColumn().setHeaderTooltip("Drag to change group order");
-				if (g == lastOne) {
-					gvc.getColumn().setText(g.getName());
-				} else {
-					gvc.getColumn().setText(g.getName() + " >>");
-				}
-				gvc.getColumn().setMoveable(true);
-				gvc.getColumn().setResizeable(false);
-				gvc.getColumn().pack();
-				gvc.getColumn().setData(g);
-				gvc.getColumn().setHeaderRenderer(new ResultSorterColumnHeaderRenderer());
-				gvc.getColumn().addListener(SWT.Move, new Listener() {
-
-					@Override
-					public void handleEvent(final Event event) {
-						final int[] order = sorter.getGrid().getColumnOrder();
-						final List<MultipleResultGrouper> newOrder = new LinkedList<>();
-						for (int i = 0; i < sorterColumns.size(); ++i) {
-							final GridViewerColumn gvc2 = sorterColumns.get(order[i]);
-							final MultipleResultGrouper g2 = (MultipleResultGrouper) gvc2.getColumn().getData();
-							newOrder.add(g2);
-						}
-						final Command command = SetCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_GROUPS, newOrder);
-						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(command, model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_GROUPS);
-
-						optionModellerView.refreshSections(false, EnumSet.of(SectionType.MIDDLE));
-						// resultsViewer.refresh();
-						// resultsViewer.expandAll();
-					}
-				});
-			}
-
-		}
-
-		// sorter.getGrid().layout(true);
-		// clientArea.layout(true);
-		// expandable.pack();
-		// expandable.layout(true);
-		// expandable.setSize(expandable.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		// expandable.layout();
 	}
 
 	private Control createResultsViewer(final Composite parent, final OptionModellerView optionModellerView) {
@@ -263,9 +196,11 @@ public class ResultsComponent extends AbstractSandboxComponent {
 				AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SELL_OPTION);
 		createColumn(resultsViewer, "Shipping", new ResultsFormatterLabelProvider(new ShippingOptionDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SHIPPING), false,
 				AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__SHIPPING);
-		GridViewerColumn pAndL = createColumn(resultsViewer, "Cargo P&L", new ResultsFormatterLabelProvider(new CargoResultDetailsDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAIL), false,
+		GridViewerColumn pAndL = createColumn(resultsViewer, "Cargo P&L",
+				new ResultsFormatterLabelProvider(new CargoResultDetailsDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAIL), false,
 				AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAIL);
-		GridViewerColumn bePrice = createColumn(resultsViewer, "B/E Price", new ResultsFormatterLabelProvider(new BEPriceResultDetailsDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAIL), false,
+		GridViewerColumn bePrice = createColumn(resultsViewer, "B/E Price",
+				new ResultsFormatterLabelProvider(new BEPriceResultDetailsDescriptionFormatter(), AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAIL), false,
 				AnalyticsPackage.Literals.ANALYSIS_RESULT_ROW__RESULT_DETAIL);
 
 		// set width for pricing columns
@@ -273,7 +208,7 @@ public class ResultsComponent extends AbstractSandboxComponent {
 			pAndL.getColumn().setWidth(100);
 			bePrice.getColumn().setWidth(100);
 		}
-		
+
 		final MenuManager mgr = new MenuManager();
 
 		final ResultsContextMenuManager listener = new ResultsContextMenuManager(resultsViewer, scenarioEditingLocation, optionModellerView, mgr);

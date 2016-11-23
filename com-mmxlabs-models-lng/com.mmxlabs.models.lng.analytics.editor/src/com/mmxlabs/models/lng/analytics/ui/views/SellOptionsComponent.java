@@ -28,7 +28,6 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
-import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.SellOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.CellFormatterLabelProvider;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.OptionsViewerContentProvider;

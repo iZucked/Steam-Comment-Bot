@@ -5,8 +5,6 @@ package com.mmxlabs.models.lng.analytics;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import org.eclipse.emf.common.util.EList;
 
-import org.eclipse.emf.ecore.EObject;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Option Analysis Model</b></em>'.
@@ -20,12 +18,10 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getSells <em>Sells</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getBaseCase <em>Base Case</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getShippingTemplates <em>Shipping Templates</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getRules <em>Rules</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getPartialCase <em>Partial Case</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getResultSets <em>Result Sets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#isUseTargetPNL <em>Use Target PNL</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getChildren <em>Children</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getResultGroups <em>Result Groups</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getOptionAnalysisModel()
@@ -106,22 +102,6 @@ public interface OptionAnalysisModel extends NamedObject {
 	 * @generated
 	 */
 	EList<SellOption> getSells();
-
-	/**
-	 * Returns the value of the '<em><b>Rules</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.OptionRule}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Rules</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Rules</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getOptionAnalysisModel_Rules()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<OptionRule> getRules();
 
 	/**
 	 * Returns the value of the '<em><b>Partial Case</b></em>' containment reference.
@@ -206,21 +186,5 @@ public interface OptionAnalysisModel extends NamedObject {
 	 * @generated
 	 */
 	EList<OptionAnalysisModel> getChildren();
-
-	/**
-	 * Returns the value of the '<em><b>Result Groups</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.MultipleResultGrouper}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Result Groups</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Result Groups</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getOptionAnalysisModel_ResultGroups()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<MultipleResultGrouper> getResultGroups();
 
 } // OptionAnalysisModel

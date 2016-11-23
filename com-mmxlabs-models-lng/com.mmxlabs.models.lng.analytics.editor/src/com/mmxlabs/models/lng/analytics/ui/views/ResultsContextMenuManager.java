@@ -125,7 +125,6 @@ public class ResultsContextMenuManager implements MenuDetectListener {
 		newModel.setPartialCase(AnalyticsFactory.eINSTANCE.createPartialCase());
 		// newModel.setPartialCase((PartialCase) copier.copy(optionAnalysisModel.getPartialCase()));
 		// newModel.getResultSets().addAll(copier.copyAll(optionAnalysisModel.getResultSets()));
-		newModel.getRules().addAll(copier.copyAll(optionAnalysisModel.getRules()));
 		newModel.setUseTargetPNL(optionAnalysisModel.isUseTargetPNL());
 		copier.copyReferences();
 		newModel.setBaseCase(createBaseCaseFromRS(resultSet, false, copier));

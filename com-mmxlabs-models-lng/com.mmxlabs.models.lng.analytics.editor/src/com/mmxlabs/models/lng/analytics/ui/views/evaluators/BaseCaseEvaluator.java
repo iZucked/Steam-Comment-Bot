@@ -29,7 +29,6 @@ import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
-import com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -67,6 +66,8 @@ public class BaseCaseEvaluator {
 		void addMapping(BuyOption buy, LoadSlot load);
 
 		void addMapping(SellOption sell, DischargeSlot discharge);
+
+		<T extends EObject> T getObject(@NonNull T port);
 
 	}
 
@@ -121,6 +122,17 @@ public class BaseCaseEvaluator {
 			}
 
 		}
+
+		public <T extends EObject> T getObject(@NonNull T copy) {
+
+			for (Map.Entry<EObject, EObject> e : copier.entrySet()) {
+				if (e.getValue() == copy) {
+					return (T) e.getKey();
+				}
+			}
+
+			return null;
+		}
 	}
 
 	public static LNGScenarioModel generateScenario(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel model, final BaseCase baseCase,
@@ -131,6 +143,7 @@ public class BaseCaseEvaluator {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 			final EcoreUtil.Copier copier = new Copier();
 			final LNGScenarioModel clone = (LNGScenarioModel) copier.copy(lngScenarioModel);
+			clone.getOptionModels().clear();
 			final OptionAnalysisModel clonedModel = (OptionAnalysisModel) copier.copy(model);
 			final BaseCase clonedBaseCase;
 			if (model.getBaseCase() == baseCase) {
@@ -142,13 +155,11 @@ public class BaseCaseEvaluator {
 			final IMapperClass mapper = new Mapper(copier);
 
 			clearData(clone, clonedModel, clonedBaseCase);
-
 			buildScenario(clone, clonedModel, clonedBaseCase, mapper);
 
 			callback.accept(clone, mapper);
 
 			return clone;
-
 		}
 		return null;
 	}

@@ -5,7 +5,6 @@ package com.mmxlabs.models.lng.analytics.provider;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 
-import com.mmxlabs.models.lng.analytics.BuyReference;
 import java.util.Collection;
 import java.util.List;
 
@@ -21,9 +20,7 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
-import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.analytics.BuyReference} object.

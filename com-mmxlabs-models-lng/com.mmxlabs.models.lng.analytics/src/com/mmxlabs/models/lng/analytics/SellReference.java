@@ -3,7 +3,6 @@
 package com.mmxlabs.models.lng.analytics;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 
 /**
  * <!-- begin-user-doc -->

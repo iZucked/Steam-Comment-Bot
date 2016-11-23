@@ -203,10 +203,6 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createResultContainerAdapter();
 			}
 			@Override
-			public Adapter caseOptionRule(OptionRule object) {
-				return createOptionRuleAdapter();
-			}
-			@Override
 			public Adapter caseAnalysisResultDetail(AnalysisResultDetail object) {
 				return createAnalysisResultDetailAdapter();
 			}
@@ -217,10 +213,6 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseBreakEvenResult(BreakEvenResult object) {
 				return createBreakEvenResultAdapter();
-			}
-			@Override
-			public Adapter caseModeOptionRule(ModeOptionRule object) {
-				return createModeOptionRuleAdapter();
 			}
 			@Override
 			public Adapter caseOptionAnalysisModel(OptionAnalysisModel object) {
@@ -237,14 +229,6 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter casePartialCase(PartialCase object) {
 				return createPartialCaseAdapter();
-			}
-			@Override
-			public Adapter caseMultipleResultGrouper(MultipleResultGrouper object) {
-				return createMultipleResultGrouperAdapter();
-			}
-			@Override
-			public Adapter caseMultipleResultGrouperRow(MultipleResultGrouperRow object) {
-				return createMultipleResultGrouperRowAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -685,20 +669,6 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.OptionRule <em>Option Rule</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.analytics.OptionRule
-	 * @generated
-	 */
-	public Adapter createOptionRuleAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.AnalysisResultDetail <em>Analysis Result Detail</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -737,20 +707,6 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createBreakEvenResultAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.ModeOptionRule <em>Mode Option Rule</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.analytics.ModeOptionRule
-	 * @generated
-	 */
-	public Adapter createModeOptionRuleAdapter() {
 		return null;
 	}
 
@@ -807,34 +763,6 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPartialCaseAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.MultipleResultGrouper <em>Multiple Result Grouper</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.analytics.MultipleResultGrouper
-	 * @generated
-	 */
-	public Adapter createMultipleResultGrouperAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.MultipleResultGrouperRow <em>Multiple Result Grouper Row</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.analytics.MultipleResultGrouperRow
-	 * @generated
-	 */
-	public Adapter createMultipleResultGrouperRowAdapter() {
 		return null;
 	}
 

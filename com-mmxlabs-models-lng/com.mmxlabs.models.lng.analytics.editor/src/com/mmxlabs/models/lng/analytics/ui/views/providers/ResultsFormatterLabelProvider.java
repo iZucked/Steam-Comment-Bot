@@ -11,9 +11,8 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
-import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.ui.views.providers.ResultsViewerContentProvider.GroupNode;
+import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocationType;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -45,17 +44,9 @@ public class ResultsFormatterLabelProvider extends CellLabelProvider {
 		cell.setText("");
 		cell.setFont(null);
 		if (feature == AnalyticsPackage.eINSTANCE.getAnalysisResultRow_BuyOption()) {
-			if (element instanceof GroupNode) {
-				GroupNode groupNode = (GroupNode) element;
-				String sb = groupNode.name;
-				GroupNode g = groupNode.parentGroup;
-				while (g != null) {
-					sb = g.name + " >> " + sb;
-					g = g.parentGroup;
-				}
+			if (element instanceof ResultSet) {
 
-				cell.setText(sb);
-				cell.setFont(boldFont);
+				cell.setText("");
 				((GridItem) cell.getItem()).setColumnSpan(0, 4);
 				return;
 			}

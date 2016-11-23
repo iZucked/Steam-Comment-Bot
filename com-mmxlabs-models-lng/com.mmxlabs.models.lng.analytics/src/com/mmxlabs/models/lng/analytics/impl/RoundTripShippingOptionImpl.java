@@ -5,8 +5,6 @@ package com.mmxlabs.models.lng.analytics.impl;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 
-import com.mmxlabs.models.lng.fleet.Vessel;
-
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import org.eclipse.emf.common.notify.Notification;
 

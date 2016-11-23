@@ -1,15 +1,11 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
-import javax.print.attribute.standard.MediaSize.ISO;
-
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.dnd.DND;
@@ -37,8 +33,6 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
-import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 
 public class BaseCaseDropTargetListener implements DropTargetListener {

@@ -2,8 +2,6 @@
  */
 package com.mmxlabs.models.lng.analytics;
 
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import java.time.LocalDate;
 

@@ -14,20 +14,11 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
-import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IChildCreationExtender;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
@@ -102,11 +93,9 @@ public class OptionAnalysisModelItemProvider
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SELLS);
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__BASE_CASE);
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
-			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RULES);
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS);
 			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__CHILDREN);
-			childrenFeatures.add(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_GROUPS);
 		}
 		return childrenFeatures;
 	}
@@ -169,11 +158,9 @@ public class OptionAnalysisModelItemProvider
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SELLS:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__BASE_CASE:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES:
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RULES:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__PARTIAL_CASE:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULT_SETS:
 			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__CHILDREN:
-			case AnalyticsPackage.OPTION_ANALYSIS_MODEL__RESULT_GROUPS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -253,11 +240,6 @@ public class OptionAnalysisModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RULES,
-				 AnalyticsFactory.eINSTANCE.createModeOptionRule()));
-
-		newChildDescriptors.add
-			(createChildParameter
 				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE,
 				 AnalyticsFactory.eINSTANCE.createPartialCase()));
 
@@ -270,11 +252,6 @@ public class OptionAnalysisModelItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__CHILDREN,
 				 AnalyticsFactory.eINSTANCE.createOptionAnalysisModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_GROUPS,
-				 AnalyticsFactory.eINSTANCE.createMultipleResultGrouper()));
 	}
 
 }

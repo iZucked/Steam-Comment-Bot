@@ -5,8 +5,6 @@ package com.mmxlabs.models.lng.analytics.impl;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption;
 
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import java.time.LocalDate;
 

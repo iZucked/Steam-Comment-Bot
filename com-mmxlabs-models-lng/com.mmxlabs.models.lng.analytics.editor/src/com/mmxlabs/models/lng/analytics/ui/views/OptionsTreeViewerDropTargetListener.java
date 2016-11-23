@@ -18,10 +18,6 @@ import org.eclipse.swt.events.DisposeListener;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.SellOption;
-import com.mmxlabs.models.lng.analytics.ShippingOption;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 

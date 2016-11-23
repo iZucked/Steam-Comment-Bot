@@ -1,16 +1,10 @@
 package com.mmxlabs.models.lng.analytics.ui.views.providers;
 
 import java.util.Collection;
-import java.util.List;
-
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
-import com.mmxlabs.models.lng.fleet.FleetModel;
-import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
 public class ShippingOptionsContentProvider implements ITreeContentProvider {

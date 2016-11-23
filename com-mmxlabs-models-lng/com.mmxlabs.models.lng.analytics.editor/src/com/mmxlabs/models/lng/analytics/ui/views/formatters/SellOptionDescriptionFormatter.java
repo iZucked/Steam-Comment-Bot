@@ -5,8 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Collection;
 
-import com.mmxlabs.models.lng.analytics.MultipleResultGrouper;
-import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
@@ -25,15 +23,10 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 		}
 
 		if (object instanceof PartialCaseRow) {
-			PartialCaseRow partialCaseRow = (PartialCaseRow) object;
-			Collection<?> sells = partialCaseRow.getSellOptions();
+			final PartialCaseRow partialCaseRow = (PartialCaseRow) object;
+			final Collection<?> sells = partialCaseRow.getSellOptions();
 
-			final MultipleResultGrouper g = findGroup(partialCaseRow);
-			if (g != null) {
-				return String.format("%s      %s", g.getName(), render(sells));
-			} else {
-				return render(sells);
-			}
+			return render(sells);
 
 		} else if (object instanceof Collection<?>) {
 			final Collection<?> collection = (Collection<?>) object;
@@ -91,7 +84,7 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 				final String n = port.getName();
 				if (n != null) {
 					if (n.length() > 15) {
-						portName = n.substring(0,15) + "...";
+						portName = n.substring(0, 15) + "...";
 					} else {
 						portName = n;
 					}
@@ -124,20 +117,5 @@ public class SellOptionDescriptionFormatter extends BaseFormatter {
 		} else {
 			return object.toString();
 		}
-	}
-
-	private MultipleResultGrouper findGroup(PartialCaseRow row) {
-		final OptionAnalysisModel model = (OptionAnalysisModel) row.eContainer().eContainer();
-		if (model.getResultGroups().size() < 2) {
-			return null;
-		}
-		for (final MultipleResultGrouper g : model.getResultGroups()) {
-			if (g.getFeatureName() == "sell") {
-				if (g.getReferenceRow() == row) {
-					return g;
-				}
-			}
-		}
-		return null;
 	}
 }

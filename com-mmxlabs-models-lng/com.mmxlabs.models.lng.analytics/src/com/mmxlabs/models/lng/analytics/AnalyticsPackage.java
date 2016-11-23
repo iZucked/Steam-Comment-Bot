@@ -1958,34 +1958,6 @@ s	 * <!-- end-user-doc -->
 	int RESULT_CONTAINER_FEATURE_COUNT = 4;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.OptionRule <em>Option Rule</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.OptionRule
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionRule()
-	 * @generated
-	 */
-	int OPTION_RULE = 29;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTION_RULE__NAME = 0;
-
-	/**
-	 * The number of structural features of the '<em>Option Rule</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTION_RULE_FEATURE_COUNT = 1;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.AnalysisResultDetailImpl <em>Analysis Result Detail</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1993,7 +1965,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAnalysisResultDetail()
 	 * @generated
 	 */
-	int ANALYSIS_RESULT_DETAIL = 30;
+	int ANALYSIS_RESULT_DETAIL = 29;
 
 	/**
 	 * The number of structural features of the '<em>Analysis Result Detail</em>' class.
@@ -2012,7 +1984,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getProfitAndLossResult()
 	 * @generated
 	 */
-	int PROFIT_AND_LOSS_RESULT = 31;
+	int PROFIT_AND_LOSS_RESULT = 30;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -2040,7 +2012,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenResult()
 	 * @generated
 	 */
-	int BREAK_EVEN_RESULT = 32;
+	int BREAK_EVEN_RESULT = 31;
 
 	/**
 	 * The feature id for the '<em><b>Price</b></em>' attribute.
@@ -2079,34 +2051,6 @@ s	 * <!-- end-user-doc -->
 	int BREAK_EVEN_RESULT_FEATURE_COUNT = ANALYSIS_RESULT_DETAIL_FEATURE_COUNT + 3;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ModeOptionRuleImpl <em>Mode Option Rule</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.ModeOptionRuleImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getModeOptionRule()
-	 * @generated
-	 */
-	int MODE_OPTION_RULE = 33;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MODE_OPTION_RULE__NAME = OPTION_RULE__NAME;
-
-	/**
-	 * The number of structural features of the '<em>Mode Option Rule</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MODE_OPTION_RULE_FEATURE_COUNT = OPTION_RULE_FEATURE_COUNT + 0;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl <em>Option Analysis Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2114,7 +2058,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionAnalysisModel()
 	 * @generated
 	 */
-	int OPTION_ANALYSIS_MODEL = 34;
+	int OPTION_ANALYSIS_MODEL = 32;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2171,22 +2115,13 @@ s	 * <!-- end-user-doc -->
 	int OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Rules</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTION_ANALYSIS_MODEL__RULES = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
-
-	/**
 	 * The feature id for the '<em><b>Partial Case</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL__PARTIAL_CASE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+	int OPTION_ANALYSIS_MODEL__PARTIAL_CASE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Result Sets</b></em>' containment reference list.
@@ -2195,7 +2130,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL__RESULT_SETS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
+	int OPTION_ANALYSIS_MODEL__RESULT_SETS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Use Target PNL</b></em>' attribute.
@@ -2204,7 +2139,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL__USE_TARGET_PNL = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 7;
+	int OPTION_ANALYSIS_MODEL__USE_TARGET_PNL = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Children</b></em>' containment reference list.
@@ -2213,16 +2148,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL__CHILDREN = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 8;
-
-	/**
-	 * The feature id for the '<em><b>Result Groups</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTION_ANALYSIS_MODEL__RESULT_GROUPS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 9;
+	int OPTION_ANALYSIS_MODEL__CHILDREN = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The number of structural features of the '<em>Option Analysis Model</em>' class.
@@ -2231,7 +2157,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTION_ANALYSIS_MODEL_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 10;
+	int OPTION_ANALYSIS_MODEL_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ResultSetImpl <em>Result Set</em>}' class.
@@ -2241,7 +2167,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getResultSet()
 	 * @generated
 	 */
-	int RESULT_SET = 35;
+	int RESULT_SET = 33;
 
 	/**
 	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
@@ -2278,7 +2204,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBaseCase()
 	 * @generated
 	 */
-	int BASE_CASE = 36;
+	int BASE_CASE = 34;
 
 	/**
 	 * The feature id for the '<em><b>Base Case</b></em>' containment reference list.
@@ -2315,7 +2241,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPartialCase()
 	 * @generated
 	 */
-	int PARTIAL_CASE = 37;
+	int PARTIAL_CASE = 35;
 
 	/**
 	 * The feature id for the '<em><b>Partial Case</b></em>' containment reference list.
@@ -2336,98 +2262,6 @@ s	 * <!-- end-user-doc -->
 	int PARTIAL_CASE_FEATURE_COUNT = 1;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MultipleResultGrouperImpl <em>Multiple Result Grouper</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.MultipleResultGrouperImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMultipleResultGrouper()
-	 * @generated
-	 */
-	int MULTIPLE_RESULT_GROUPER = 38;
-
-	/**
-	 * The feature id for the '<em><b>Group Results</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MULTIPLE_RESULT_GROUPER__GROUP_RESULTS = 0;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MULTIPLE_RESULT_GROUPER__NAME = 1;
-
-	/**
-	 * The feature id for the '<em><b>Reference Row</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MULTIPLE_RESULT_GROUPER__REFERENCE_ROW = 2;
-
-	/**
-	 * The feature id for the '<em><b>Feature Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MULTIPLE_RESULT_GROUPER__FEATURE_NAME = 3;
-
-	/**
-	 * The number of structural features of the '<em>Multiple Result Grouper</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MULTIPLE_RESULT_GROUPER_FEATURE_COUNT = 4;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MultipleResultGrouperRowImpl <em>Multiple Result Grouper Row</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.analytics.impl.MultipleResultGrouperRowImpl
-	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMultipleResultGrouperRow()
-	 * @generated
-	 */
-	int MULTIPLE_RESULT_GROUPER_ROW = 39;
-
-	/**
-	 * The feature id for the '<em><b>Group Results</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MULTIPLE_RESULT_GROUPER_ROW__GROUP_RESULTS = 0;
-
-	/**
-	 * The feature id for the '<em><b>Object</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MULTIPLE_RESULT_GROUPER_ROW__OBJECT = 1;
-
-	/**
-	 * The number of structural features of the '<em>Multiple Result Grouper Row</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MULTIPLE_RESULT_GROUPER_ROW_FEATURE_COUNT = 2;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.DestinationType <em>Destination Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2435,7 +2269,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getDestinationType()
 	 * @generated
 	 */
-	int DESTINATION_TYPE = 40;
+	int DESTINATION_TYPE = 36;
 
 
 	/**
@@ -2446,7 +2280,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVolumeMode()
 	 * @generated
 	 */
-	int VOLUME_MODE = 41;
+	int VOLUME_MODE = 37;
 
 
 	/**
@@ -4117,27 +3951,6 @@ s	 * <!-- end-user-doc -->
 	EReference getResultContainer_Events();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.OptionRule <em>Option Rule</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Option Rule</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.OptionRule
-	 * @generated
-	 */
-	EClass getOptionRule();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.OptionRule#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.OptionRule#getName()
-	 * @see #getOptionRule()
-	 * @generated
-	 */
-	EAttribute getOptionRule_Name();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.AnalysisResultDetail <em>Analysis Result Detail</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4210,16 +4023,6 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EAttribute getBreakEvenResult_CargoPNL();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ModeOptionRule <em>Mode Option Rule</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Mode Option Rule</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ModeOptionRule
-	 * @generated
-	 */
-	EClass getModeOptionRule();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel <em>Option Analysis Model</em>}'.
@@ -4329,103 +4132,6 @@ s	 * <!-- end-user-doc -->
 	EReference getPartialCase_PartialCase();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.MultipleResultGrouper <em>Multiple Result Grouper</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Multiple Result Grouper</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MultipleResultGrouper
-	 * @generated
-	 */
-	EClass getMultipleResultGrouper();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.MultipleResultGrouper#getGroupResults <em>Group Results</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Group Results</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MultipleResultGrouper#getGroupResults()
-	 * @see #getMultipleResultGrouper()
-	 * @generated
-	 */
-	EReference getMultipleResultGrouper_GroupResults();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MultipleResultGrouper#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MultipleResultGrouper#getName()
-	 * @see #getMultipleResultGrouper()
-	 * @generated
-	 */
-	EAttribute getMultipleResultGrouper_Name();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MultipleResultGrouper#getReferenceRow <em>Reference Row</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Reference Row</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MultipleResultGrouper#getReferenceRow()
-	 * @see #getMultipleResultGrouper()
-	 * @generated
-	 */
-	EReference getMultipleResultGrouper_ReferenceRow();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MultipleResultGrouper#getFeatureName <em>Feature Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Feature Name</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MultipleResultGrouper#getFeatureName()
-	 * @see #getMultipleResultGrouper()
-	 * @generated
-	 */
-	EAttribute getMultipleResultGrouper_FeatureName();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.MultipleResultGrouperRow <em>Multiple Result Grouper Row</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Multiple Result Grouper Row</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MultipleResultGrouperRow
-	 * @generated
-	 */
-	EClass getMultipleResultGrouperRow();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.analytics.MultipleResultGrouperRow#getGroupResults <em>Group Results</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Group Results</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MultipleResultGrouperRow#getGroupResults()
-	 * @see #getMultipleResultGrouperRow()
-	 * @generated
-	 */
-	EReference getMultipleResultGrouperRow_GroupResults();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.MultipleResultGrouperRow#getObject <em>Object</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Object</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MultipleResultGrouperRow#getObject()
-	 * @see #getMultipleResultGrouperRow()
-	 * @generated
-	 */
-	EReference getMultipleResultGrouperRow_Object();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getRules <em>Rules</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Rules</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getRules()
-	 * @see #getOptionAnalysisModel()
-	 * @generated
-	 */
-	EReference getOptionAnalysisModel_Rules();
-
-	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getPartialCase <em>Partial Case</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4468,17 +4174,6 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EReference getOptionAnalysisModel_Children();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getResultGroups <em>Result Groups</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Result Groups</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.OptionAnalysisModel#getResultGroups()
-	 * @see #getOptionAnalysisModel()
-	 * @generated
-	 */
-	EReference getOptionAnalysisModel_ResultGroups();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ResultSet <em>Result Set</em>}'.
@@ -5847,24 +5542,6 @@ s	 * <!-- end-user-doc -->
 		EReference RESULT_CONTAINER__EVENTS = eINSTANCE.getResultContainer_Events();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.OptionRule <em>Option Rule</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.OptionRule
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionRule()
-		 * @generated
-		 */
-		EClass OPTION_RULE = eINSTANCE.getOptionRule();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute OPTION_RULE__NAME = eINSTANCE.getOptionRule_Name();
-
-		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.AnalysisResultDetailImpl <em>Analysis Result Detail</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -5925,16 +5602,6 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute BREAK_EVEN_RESULT__CARGO_PNL = eINSTANCE.getBreakEvenResult_CargoPNL();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ModeOptionRuleImpl <em>Mode Option Rule</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.ModeOptionRuleImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getModeOptionRule()
-		 * @generated
-		 */
-		EClass MODE_OPTION_RULE = eINSTANCE.getModeOptionRule();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl <em>Option Analysis Model</em>}' class.
@@ -6023,82 +5690,6 @@ s	 * <!-- end-user-doc -->
 		EReference PARTIAL_CASE__PARTIAL_CASE = eINSTANCE.getPartialCase_PartialCase();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.MultipleResultGrouperImpl <em>Multiple Result Grouper</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.MultipleResultGrouperImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMultipleResultGrouper()
-		 * @generated
-		 */
-		EClass MULTIPLE_RESULT_GROUPER = eINSTANCE.getMultipleResultGrouper();
-
-		/**
-		 * The meta object literal for the '<em><b>Group Results</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference MULTIPLE_RESULT_GROUPER__GROUP_RESULTS = eINSTANCE.getMultipleResultGrouper_GroupResults();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MULTIPLE_RESULT_GROUPER__NAME = eINSTANCE.getMultipleResultGrouper_Name();
-
-		/**
-		 * The meta object literal for the '<em><b>Reference Row</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference MULTIPLE_RESULT_GROUPER__REFERENCE_ROW = eINSTANCE.getMultipleResultGrouper_ReferenceRow();
-
-		/**
-		 * The meta object literal for the '<em><b>Feature Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MULTIPLE_RESULT_GROUPER__FEATURE_NAME = eINSTANCE.getMultipleResultGrouper_FeatureName();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.MultipleResultGrouperRowImpl <em>Multiple Result Grouper Row</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.analytics.impl.MultipleResultGrouperRowImpl
-		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMultipleResultGrouperRow()
-		 * @generated
-		 */
-		EClass MULTIPLE_RESULT_GROUPER_ROW = eINSTANCE.getMultipleResultGrouperRow();
-
-		/**
-		 * The meta object literal for the '<em><b>Group Results</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference MULTIPLE_RESULT_GROUPER_ROW__GROUP_RESULTS = eINSTANCE.getMultipleResultGrouperRow_GroupResults();
-
-		/**
-		 * The meta object literal for the '<em><b>Object</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference MULTIPLE_RESULT_GROUPER_ROW__OBJECT = eINSTANCE.getMultipleResultGrouperRow_Object();
-
-		/**
-		 * The meta object literal for the '<em><b>Rules</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference OPTION_ANALYSIS_MODEL__RULES = eINSTANCE.getOptionAnalysisModel_Rules();
-
-		/**
 		 * The meta object literal for the '<em><b>Partial Case</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6129,14 +5720,6 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference OPTION_ANALYSIS_MODEL__CHILDREN = eINSTANCE.getOptionAnalysisModel_Children();
-
-		/**
-		 * The meta object literal for the '<em><b>Result Groups</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference OPTION_ANALYSIS_MODEL__RESULT_GROUPS = eINSTANCE.getOptionAnalysisModel_ResultGroups();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ResultSetImpl <em>Result Set</em>}' class.

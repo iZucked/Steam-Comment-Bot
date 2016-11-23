@@ -294,15 +294,6 @@ public interface AnalyticsFactory extends EFactory {
 	BreakEvenResult createBreakEvenResult();
 
 	/**
-	 * Returns a new object of class '<em>Mode Option Rule</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Mode Option Rule</em>'.
-	 * @generated
-	 */
-	ModeOptionRule createModeOptionRule();
-
-	/**
 	 * Returns a new object of class '<em>Option Analysis Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -337,24 +328,6 @@ public interface AnalyticsFactory extends EFactory {
 	 * @generated
 	 */
 	PartialCase createPartialCase();
-
-	/**
-	 * Returns a new object of class '<em>Multiple Result Grouper</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Multiple Result Grouper</em>'.
-	 * @generated
-	 */
-	MultipleResultGrouper createMultipleResultGrouper();
-
-	/**
-	 * Returns a new object of class '<em>Multiple Result Grouper Row</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Multiple Result Grouper Row</em>'.
-	 * @generated
-	 */
-	MultipleResultGrouperRow createMultipleResultGrouperRow();
 
 	/**
 	 * Returns the package supported by this factory.

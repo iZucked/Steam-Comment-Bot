@@ -54,8 +54,6 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyOption;
-import com.mmxlabs.models.lng.analytics.MultipleResultGrouper;
-import com.mmxlabs.models.lng.analytics.MultipleResultGrouperRow;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCase;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
@@ -536,10 +534,6 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				return new Pair<>(false, EnumSet.of(SectionType.SELLS, SectionType.MIDDLE));
 			} else if (notification.getNotifier() instanceof ShippingOption) {
 				return new Pair<>(false, EnumSet.of(SectionType.VESSEL, SectionType.MIDDLE));
-			} else if (notification.getNotifier() instanceof MultipleResultGrouper) {
-				return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
-			} else if (notification.getNotifier() instanceof MultipleResultGrouperRow) {
-				return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
 			} else if (notification.getNotifier() instanceof ResultSet) {
 				return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
 			} else if (notification.getNotifier() instanceof ResultSet) {

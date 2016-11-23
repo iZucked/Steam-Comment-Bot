@@ -1,8 +1,6 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
-import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.eclipse.core.runtime.IStatus;

@@ -27,7 +27,6 @@ import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
-import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.util.AnalyticsAdapterFactory;
 
@@ -778,29 +777,6 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ModeOptionRule} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ModeOptionRuleItemProvider modeOptionRuleItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ModeOptionRule}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createModeOptionRuleAdapter() {
-		if (modeOptionRuleItemProvider == null) {
-			modeOptionRuleItemProvider = new ModeOptionRuleItemProvider(this);
-		}
-
-		return modeOptionRuleItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -890,52 +866,6 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		}
 
 		return partialCaseItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.MultipleResultGrouper} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected MultipleResultGrouperItemProvider multipleResultGrouperItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.MultipleResultGrouper}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createMultipleResultGrouperAdapter() {
-		if (multipleResultGrouperItemProvider == null) {
-			multipleResultGrouperItemProvider = new MultipleResultGrouperItemProvider(this);
-		}
-
-		return multipleResultGrouperItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.MultipleResultGrouperRow} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected MultipleResultGrouperRowItemProvider multipleResultGrouperRowItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.MultipleResultGrouperRow}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createMultipleResultGrouperRowAdapter() {
-		if (multipleResultGrouperRowItemProvider == null) {
-			multipleResultGrouperRowItemProvider = new MultipleResultGrouperRowItemProvider(this);
-		}
-
-		return multipleResultGrouperRowItemProvider;
 	}
 
 	/**
@@ -1102,13 +1032,10 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (analysisResultDetailItemProvider != null) analysisResultDetailItemProvider.dispose();
 		if (profitAndLossResultItemProvider != null) profitAndLossResultItemProvider.dispose();
 		if (breakEvenResultItemProvider != null) breakEvenResultItemProvider.dispose();
-		if (modeOptionRuleItemProvider != null) modeOptionRuleItemProvider.dispose();
 		if (optionAnalysisModelItemProvider != null) optionAnalysisModelItemProvider.dispose();
 		if (resultSetItemProvider != null) resultSetItemProvider.dispose();
 		if (baseCaseItemProvider != null) baseCaseItemProvider.dispose();
 		if (partialCaseItemProvider != null) partialCaseItemProvider.dispose();
-		if (multipleResultGrouperItemProvider != null) multipleResultGrouperItemProvider.dispose();
-		if (multipleResultGrouperRowItemProvider != null) multipleResultGrouperRowItemProvider.dispose();
 	}
 
 }

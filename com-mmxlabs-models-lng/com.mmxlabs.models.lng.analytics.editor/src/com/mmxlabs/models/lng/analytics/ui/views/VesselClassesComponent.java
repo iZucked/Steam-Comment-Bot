@@ -1,8 +1,6 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
-import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.eclipse.core.runtime.IStatus;
@@ -16,7 +14,6 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.VesselDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.providers.VesselClassContentProvider;
-import com.mmxlabs.models.lng.analytics.ui.views.providers.VesselContentProvider;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 

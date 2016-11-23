@@ -8,14 +8,15 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -33,8 +34,6 @@ import com.mmxlabs.models.lng.analytics.BreakEvenResult;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
-import com.mmxlabs.models.lng.analytics.MultipleResultGrouper;
-import com.mmxlabs.models.lng.analytics.MultipleResultGrouperRow;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
@@ -46,8 +45,8 @@ import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator;
-import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator.BreakEvenMode;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseEvaluator.IMapperClass;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -58,9 +57,13 @@ import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -72,69 +75,34 @@ public class WhatIfEvaluator {
 		final long targetPNL = model.getBaseCase().getProfitAndLoss();
 
 		final BaseCase baseCase = AnalyticsFactory.eINSTANCE.createBaseCase();
-		int idx = 1;
-		final List<List<Pair<EObject, Supplier<MultipleResultGrouperRow>>>> combinations = new LinkedList<>();
-		final List<MultipleResultGrouper> groups = new LinkedList<>();
+		final List<List<Runnable>> combinations = new LinkedList<>();
 		for (final PartialCaseRow r : model.getPartialCase().getPartialCase()) {
 			final BaseCaseRow bcr = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
 			if (r.getBuyOptions().size() > 1) {
-				final MultipleResultGrouper g = AnalyticsFactory.eINSTANCE.createMultipleResultGrouper();
-				g.setReferenceRow(r);
-				g.setFeatureName("buy");
-				g.setName(String.format("{%d}", idx++));
-				final List<Pair<EObject, Supplier<MultipleResultGrouperRow>>> options = new LinkedList<>();
-				for (final BuyOption o : r.getBuyOptions()) {
-					final MultipleResultGrouperRow row = AnalyticsFactory.eINSTANCE.createMultipleResultGrouperRow();
-					row.setObject(o);
-					g.getGroupResults().add(row);
 
-					options.add(new Pair<EObject, Supplier<MultipleResultGrouperRow>>(o, () -> {
-						bcr.setBuyOption(o);
-						return row;
-					}));
+				final List<Runnable> options = new LinkedList<>();
+				for (final BuyOption o : r.getBuyOptions()) {
+					options.add(() -> bcr.setBuyOption(o));
 				}
-				groups.add(g);
 				combinations.add(options);
 			} else if (r.getBuyOptions().size() == 1) {
 				bcr.setBuyOption(r.getBuyOptions().get(0));
 			}
 
 			if (r.getSellOptions().size() > 1) {
-				final List<Pair<EObject, Supplier<MultipleResultGrouperRow>>> options = new LinkedList<>();
-				final MultipleResultGrouper g = AnalyticsFactory.eINSTANCE.createMultipleResultGrouper();
-				g.setReferenceRow(r);
-				g.setFeatureName("sell");
-				g.setName(String.format("{%d}", idx++));
+				final List<Runnable> options = new LinkedList<>();
 				for (final SellOption o : r.getSellOptions()) {
-					final MultipleResultGrouperRow row = AnalyticsFactory.eINSTANCE.createMultipleResultGrouperRow();
-					row.setObject(o);
-					g.getGroupResults().add(row);
-					options.add(new Pair<EObject, Supplier<MultipleResultGrouperRow>>(o, () -> {
-						bcr.setSellOption(o);
-						return row;
-					}));
+					options.add(() -> bcr.setSellOption(o));
 				}
-				groups.add(g);
 				combinations.add(options);
 			} else if (r.getSellOptions().size() == 1) {
 				bcr.setSellOption(r.getSellOptions().get(0));
 			}
 			if (r.getShipping().size() > 1) {
-				final List<Pair<EObject, Supplier<MultipleResultGrouperRow>>> options = new LinkedList<>();
-				final MultipleResultGrouper g = AnalyticsFactory.eINSTANCE.createMultipleResultGrouper();
-				g.setReferenceRow(r);
-				g.setFeatureName("shipping");
-				g.setName(String.format("{%d}", idx++));
+				final List<Runnable> options = new LinkedList<>();
 				for (final ShippingOption o : r.getShipping()) {
-					final MultipleResultGrouperRow row = AnalyticsFactory.eINSTANCE.createMultipleResultGrouperRow();
-					row.setObject(o);
-					g.getGroupResults().add(row);
-					options.add(new Pair<EObject, Supplier<MultipleResultGrouperRow>>(o, () -> {
-						bcr.setShipping(o);
-						return row;
-					}));
+					options.add(() -> bcr.setShipping(o));
 				}
-				groups.add(g);
 				combinations.add(options);
 			} else if (r.getShipping().size() == 1) {
 				bcr.setShipping(r.getShipping().get(0));
@@ -150,30 +118,83 @@ public class WhatIfEvaluator {
 			final ResultSet resultSet = singleEval(scenarioEditingLocation, targetPNL, model, baseCase);
 			cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS, Collections.singletonList(resultSet)));
 		} else {
-			final List<Callable<Supplier<ResultSet>>> tasks = new LinkedList<>();
-			recursiveEval(0, combinations, scenarioEditingLocation, targetPNL, model, baseCase, new LinkedList<>(), tasks);
-			final List<Future<Supplier<ResultSet>>> futures = new LinkedList<>();
+			final List<Callable<ResultSet>> tasks = new LinkedList<>();
+			recursiveEval(0, combinations, scenarioEditingLocation, targetPNL, model, baseCase, tasks);
+			final List<Future<ResultSet>> futures = new LinkedList<>();
+
+			// No point using more threads until we upgrade to Guice 4.x
+			final int numThreads = 1;
 			@NonNull
-			final ExecutorService executor = Executors.newFixedThreadPool(4);
+			final ExecutorService executor = Executors.newFixedThreadPool(numThreads);
 			tasks.forEach(task -> futures.add(executor.submit(task)));
 
-			for (final Future<Supplier<ResultSet>> f : futures) {
-				Supplier<ResultSet> resultSetSupplier;
+			for (final Future<ResultSet> f : futures) {
 				try {
-					resultSetSupplier = f.get();
-					// This has a side effect of updating the result set....
-					// TODO: See if this could be done in the callable
-					final ResultSet rs = resultSetSupplier.get();
-					cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS, rs));
+					final ResultSet rs = f.get();
+					if (rs != null) {
+						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS, rs));
+					}
 				} catch (final Exception e) {
 					e.printStackTrace();
 				}
 			}
+			executor.shutdown();
 		}
 
-		cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_GROUPS, groups));
 		if (!cmd.isEmpty()) {
 			scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, model, null);
+		}
+
+		if (true) {
+			// Debugging / sanity check code. Make sure we haven't accidently pulled in references to data in a temporary scenario.
+			// All references to elements (contained or otherwise) should all be in the same eResource
+			final Resource expected = model.eResource();
+			assert expected != null;
+			for (final ResultSet rs : model.getResultSets()) {
+				assert rs.eResource() == expected;
+				for (final AnalysisResultRow row : rs.getRows()) {
+					assert row.eResource() == expected;
+					if (row.getBuyOption() != null) {
+						assert row.getBuyOption().eResource() == expected;
+					}
+					if (row.getSellOption() != null) {
+						assert row.getSellOption().eResource() == expected;
+					}
+					if (row.getShipping() != null) {
+						assert row.getSellOption().eResource() == expected;
+					}
+					if (row.getResultDetail() != null) {
+						assert row.getResultDetail().eResource() == expected;
+					}
+					final ResultContainer c = row.getResultDetails();
+					if (c != null) {
+						assert c.eResource() == expected;
+						if (c.getCargoAllocation() != null) {
+							assert c.getCargoAllocation().eResource() == expected;
+
+							for (final Event e : c.getEvents()) {
+								assert e.eResource() == expected;
+								if (e.getSequence() != null) {
+									assert e.getSequence().eResource() == expected;
+								}
+								if (e.getNextEvent() != null) {
+									assert e.getNextEvent().eResource() == expected;
+								}
+								if (e.getPreviousEvent() != null) {
+									assert e.getPreviousEvent().eResource() == expected;
+								}
+							}
+							for (final SlotAllocation e : c.getSlotAllocations()) {
+								assert e.eResource() == expected;
+								final SlotVisit v = e.getSlotVisit();
+								if (v != null) {
+									assert v.getPort().eResource() == expected;
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -203,26 +224,47 @@ public class WhatIfEvaluator {
 				}
 
 				final Triple<SlotAllocation, SlotAllocation, CargoAllocation> t = finder(lngScenarioModel, row, mapper);
-				final SlotAllocation loadAllocation = t.getFirst();
-				final SlotAllocation dischargeAllocation = t.getSecond();
-				final CargoAllocation cargoAllocation = t.getThird();
+				SlotAllocation loadAllocation = t.getFirst();
+				SlotAllocation dischargeAllocation = t.getSecond();
+				CargoAllocation cargoAllocation = t.getThird();
+				final EcoreUtil.Copier copier = new EcoreUtil.Copier();
+				if (loadAllocation != null) {
+					copier.copy(loadAllocation.getSlotVisit());
+					loadAllocation = (SlotAllocation) copier.copy(loadAllocation);
+				}
+				if (dischargeAllocation != null) {
+					copier.copy(dischargeAllocation.getSlotVisit());
+					dischargeAllocation = (SlotAllocation) copier.copy(dischargeAllocation);
+				}
+				if (cargoAllocation != null) {
+					copier.copyAll(cargoAllocation.getEvents());
+					cargoAllocation = (CargoAllocation) copier.copy(cargoAllocation);
+				}
+				copier.copyReferences();
 
 				// Move containership of schedule objects to the container.
 				final ResultContainer container = AnalyticsFactory.eINSTANCE.createResultContainer();
 				if (cargoAllocation != null) {
 					container.setCargoAllocation(cargoAllocation);
-					container.getEvents().addAll(cargoAllocation.getEvents());
+					for (final Event e : cargoAllocation.getEvents()) {
+						e.setSequence(null);
+						container.getEvents().add(e);
+					}
 				}
 				if (loadAllocation != null) {
 					container.getSlotAllocations().add(loadAllocation);
-					if (!container.getEvents().contains(loadAllocation.getSlotVisit())) {
-						container.getEvents().add(loadAllocation.getSlotVisit());
+					final SlotVisit v = loadAllocation.getSlotVisit();
+					if (v != null && !container.getEvents().contains(v)) {
+						v.setSequence(null);
+						container.getEvents().add(v);
 					}
 				}
 				if (dischargeAllocation != null) {
 					container.getSlotAllocations().add(dischargeAllocation);
-					if (!container.getEvents().contains(dischargeAllocation.getSlotVisit())) {
-						container.getEvents().add(dischargeAllocation.getSlotVisit());
+					final SlotVisit v = dischargeAllocation.getSlotVisit();
+					if (v != null && !container.getEvents().contains(v)) {
+						v.setSequence(null);
+						container.getEvents().add(v);
 					}
 				}
 
@@ -284,9 +326,11 @@ public class WhatIfEvaluator {
 						}
 					}
 				}
-				res.setResultDetails(container);
 				// Clear old references
 				if (container.getCargoAllocation() != null) {
+					fixModelReferences(container.getCargoAllocation(), mapper);
+
+					container.getCargoAllocation().unsetSequence();
 					container.getCargoAllocation().unsetInputCargo();
 				}
 				for (final SlotAllocation slotAllocation : container.getSlotAllocations()) {
@@ -296,6 +340,23 @@ public class WhatIfEvaluator {
 				for (final OpenSlotAllocation openSlotAllocation : container.getOpenSlotAllocations()) {
 					openSlotAllocation.unsetSlot();
 				}
+				// Check for non-contained events - clear them.
+				// Re-map non-contained data elements
+				for (final Event e : container.getEvents()) {
+					fixModelReferences(e, mapper);
+
+					if (e.getNextEvent() != null) {
+						if (!container.getEvents().contains(e.getNextEvent())) {
+							e.setNextEvent(null);
+						}
+					}
+					if (e.getPreviousEvent() != null) {
+						if (!container.getEvents().contains(e.getPreviousEvent())) {
+							e.setPreviousEvent(null);
+						}
+					}
+				}
+				res.setResultDetails(container);
 
 				resultSet.getRows().add(res);
 			}
@@ -303,6 +364,81 @@ public class WhatIfEvaluator {
 			ref[0] = resultSet;
 		});
 		return ref[0];
+	}
+
+	/**
+	 * Recurse through the object tree ensuring any non-contained references are from the real data model and not one of the copies. Remove references to generated cargo data etc.
+	 * 
+	 * @param object
+	 * @param mapper
+	 */
+	private static void fixModelReferences(final EObject object, final IMapperClass mapper) {
+		final EClass cls = object.eClass();
+		for (final EReference ref : cls.getEAllReferences()) {
+			if (ref.isContainment()) {
+				if (ref.isMany()) {
+					final List<EObject> children = (List<EObject>) object.eGet(ref);
+					for (final EObject child : children) {
+						fixModelReferences(child, mapper);
+					}
+				} else {
+					final EObject child = (EObject) object.eGet(ref);
+					if (child != null) {
+						fixModelReferences(child, mapper);
+					}
+				}
+			} else {
+				if (ref.isMany()) {
+					final List<EObject> children = (List<EObject>) object.eGet(ref);
+					for (final EObject child : children) {
+						if (!(child instanceof Event || child instanceof SlotAllocation)) {
+							final EObject replacement = mapper.getObject(child);
+							if (checkIt(object, ref, child, replacement) && replacement != null) {
+								object.eSet(ref, replacement);
+							} else {
+								object.eUnset(ref);
+							}
+						}
+					}
+				} else {
+					final EObject child = (EObject) object.eGet(ref);
+					if (!(child instanceof Event || child instanceof SlotAllocation)) {
+						if (child != null) {
+							final EObject replacement = mapper.getObject(child);
+							if (checkIt(object, ref, child, replacement) && replacement != null) {
+								object.eSet(ref, replacement);
+							} else {
+								object.eUnset(ref);
+							}
+						}
+					}
+				}
+			}
+		}
+
+	}
+
+	/**
+	 * Check the child reference and return false if it is something we want to exclude from the results - e.g. elements of the Schedule model.
+	 * 
+	 * @param object
+	 * @param ref
+	 * @param child
+	 * @param replacement
+	 * @return
+	 */
+	private static boolean checkIt(final EObject object, final EReference ref, final EObject child, final EObject replacement) {
+		if (child instanceof Sequence) {
+			return false;
+		}
+		if (child instanceof Slot) {
+			return false;
+		}
+		if (child instanceof Cargo) {
+			return false;
+		}
+
+		return true;
 	}
 
 	private static String getPriceString(@NonNull final PricingModel pricingModel, @NonNull final String expression, final double breakevenPrice, @NonNull final YearMonth date) {
@@ -379,26 +515,19 @@ public class WhatIfEvaluator {
 		return false;
 	}
 
-	private static void recursiveEval(final int listIdx, final List<List<Pair<EObject, Supplier<MultipleResultGrouperRow>>>> combinations, final IScenarioEditingLocation scenarioEditingLocation,
-			final long targetPNL, final OptionAnalysisModel model, final BaseCase baseCase, final List<Consumer<ResultSet>> mutliResultSetters, final List<Callable<Supplier<ResultSet>>> tasks) {
+	private static void recursiveEval(final int listIdx, final List<List<Runnable>> combinations, final IScenarioEditingLocation scenarioEditingLocation, final long targetPNL,
+			final OptionAnalysisModel model, final BaseCase baseCase, final List<Callable<ResultSet>> tasks) {
 		if (listIdx == combinations.size()) {
 			final BaseCase copy = EcoreUtil.copy(baseCase);
 			tasks.add(() -> {
-				final ResultSet rs = singleEval(scenarioEditingLocation, targetPNL, model, copy);
-				return () -> {
-					mutliResultSetters.forEach(s -> s.accept(rs));
-					return rs;
-				};
+				return singleEval(scenarioEditingLocation, targetPNL, model, copy);
 			});
 			return;
 		}
-		final List<Pair<EObject, Supplier<MultipleResultGrouperRow>>> options = combinations.get(listIdx);
-		for (final Pair<EObject, Supplier<MultipleResultGrouperRow>> p : options) {
-			final Supplier<MultipleResultGrouperRow> r = p.getSecond();
-			final MultipleResultGrouperRow row = r.get();
-			final List<Consumer<ResultSet>> next = new LinkedList<>(mutliResultSetters);
-			next.add(rs -> row.getGroupResults().add(rs));
-			recursiveEval(listIdx + 1, combinations, scenarioEditingLocation, targetPNL, model, baseCase, next, tasks);
+		final List<Runnable> options = combinations.get(listIdx);
+		for (final Runnable r : options) {
+			r.run();
+			recursiveEval(listIdx + 1, combinations, scenarioEditingLocation, targetPNL, model, baseCase, tasks);
 		}
 	}
 
@@ -409,8 +538,8 @@ public class WhatIfEvaluator {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
-		ServiceHelper.<IAnalyticsScenarioEvaluator> withService(IAnalyticsScenarioEvaluator.class,
-				evaluator -> evaluator.breakEvenEvaluate(lngScenarioModel, userSettings, parentForFork, targetPNL, useTargetPNL ? BreakEvenMode.PORTFOLIO : BreakEvenMode.POINT_TO_POINT));
+		ServiceHelper.<IAnalyticsScenarioEvaluator> withService(IAnalyticsScenarioEvaluator.class, evaluator -> evaluator.breakEvenEvaluate(lngScenarioModel, userSettings, parentForFork, targetPNL,
+				useTargetPNL ? IAnalyticsScenarioEvaluator.BreakEvenMode.PORTFOLIO : IAnalyticsScenarioEvaluator.BreakEvenMode.POINT_TO_POINT));
 	}
 
 	public static Predicate<BuyOption> isDESPurchase() {
@@ -427,7 +556,4 @@ public class WhatIfEvaluator {
 		return s -> s instanceof NominatedShippingOption;
 	}
 
-	// private static String getIndex(String expression, double bePrice) {
-	// if (expression )
-	// }
 }

@@ -379,9 +379,6 @@
         eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//Event"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="OptionRule" abstract="true" interface="true">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AnalysisResultDetail"/>
   <eClassifiers xsi:type="ecore:EClass" name="ProfitAndLossResult" eSuperTypes="#//AnalysisResultDetail">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
@@ -391,7 +388,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoPNL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ModeOptionRule" eSuperTypes="#//OptionRule"/>
   <eClassifiers xsi:type="ecore:EClass" name="OptionAnalysisModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="buys" upperBound="-1" eType="#//BuyOption"
         containment="true"/>
@@ -401,8 +397,6 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="shippingTemplates" upperBound="-1"
         eType="#//ShippingOption" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" upperBound="-1"
-        eType="#//OptionRule" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="partialCase" eType="#//PartialCase"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="resultSets" upperBound="-1"
@@ -410,8 +404,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="useTargetPNL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
         eType="#//OptionAnalysisModel" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="resultGroups" upperBound="-1"
-        eType="#//MultipleResultGrouper" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ResultSet">
     <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//AnalysisResultRow"
@@ -431,17 +423,5 @@
     <eLiterals name="NOT_SPECIFIED"/>
     <eLiterals name="FIXED" value="1"/>
     <eLiterals name="RANGE" value="2"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MultipleResultGrouper">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="groupResults" upperBound="-1"
-        eType="#//MultipleResultGrouperRow" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="referenceRow" eType="#//PartialCaseRow"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="featureName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MultipleResultGrouperRow">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="groupResults" upperBound="-1"
-        eType="#//ResultSet"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="object" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
   </eClassifiers>
 </ecore:EPackage>

@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.views;
 
-import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridHeaderRenderer;
 import org.eclipse.nebula.widgets.grid.internal.SortArrowRenderer;

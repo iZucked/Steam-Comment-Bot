@@ -31,12 +31,8 @@ import com.mmxlabs.models.lng.analytics.DestinationType;
 import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.FuelCost;
 import com.mmxlabs.models.lng.analytics.Journey;
-import com.mmxlabs.models.lng.analytics.ModeOptionRule;
-import com.mmxlabs.models.lng.analytics.MultipleResultGrouper;
-import com.mmxlabs.models.lng.analytics.MultipleResultGrouperRow;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
-import com.mmxlabs.models.lng.analytics.OptionRule;
 import com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption;
 import com.mmxlabs.models.lng.analytics.PartialCase;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
@@ -281,13 +277,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass optionRuleEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass analysisResultDetailEClass = null;
 
 	/**
@@ -303,13 +292,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	private EClass breakEvenResultEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass modeOptionRuleEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -338,20 +320,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	private EClass partialCaseEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass multipleResultGrouperEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass multipleResultGrouperRowEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1914,24 +1882,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getOptionRule() {
-		return optionRuleEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getOptionRule_Name() {
-		return (EAttribute)optionRuleEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getAnalysisResultDetail() {
 		return analysisResultDetailEClass;
 	}
@@ -1988,15 +1938,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	public EAttribute getBreakEvenResult_CargoPNL() {
 		return (EAttribute)breakEvenResultEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getModeOptionRule() {
-		return modeOptionRuleEClass;
 	}
 
 	/**
@@ -2094,79 +2035,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getMultipleResultGrouper() {
-		return multipleResultGrouperEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getMultipleResultGrouper_GroupResults() {
-		return (EReference)multipleResultGrouperEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getMultipleResultGrouper_Name() {
-		return (EAttribute)multipleResultGrouperEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getMultipleResultGrouper_ReferenceRow() {
-		return (EReference)multipleResultGrouperEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getMultipleResultGrouper_FeatureName() {
-		return (EAttribute)multipleResultGrouperEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getMultipleResultGrouperRow() {
-		return multipleResultGrouperRowEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getMultipleResultGrouperRow_GroupResults() {
-		return (EReference)multipleResultGrouperRowEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getMultipleResultGrouperRow_Object() {
-		return (EReference)multipleResultGrouperRowEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getOptionAnalysisModel_Rules() {
+	public EReference getOptionAnalysisModel_PartialCase() {
 		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -2175,7 +2044,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getOptionAnalysisModel_PartialCase() {
+	public EReference getOptionAnalysisModel_ResultSets() {
 		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -2184,17 +2053,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getOptionAnalysisModel_ResultSets() {
-		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getOptionAnalysisModel_UseTargetPNL() {
-		return (EAttribute)optionAnalysisModelEClass.getEStructuralFeatures().get(7);
+		return (EAttribute)optionAnalysisModelEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -2203,16 +2063,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	public EReference getOptionAnalysisModel_Children() {
-		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(8);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getOptionAnalysisModel_ResultGroups() {
-		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(9);
+		return (EReference)optionAnalysisModelEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -2473,9 +2324,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(resultContainerEClass, RESULT_CONTAINER__SLOT_ALLOCATIONS);
 		createEReference(resultContainerEClass, RESULT_CONTAINER__EVENTS);
 
-		optionRuleEClass = createEClass(OPTION_RULE);
-		createEAttribute(optionRuleEClass, OPTION_RULE__NAME);
-
 		analysisResultDetailEClass = createEClass(ANALYSIS_RESULT_DETAIL);
 
 		profitAndLossResultEClass = createEClass(PROFIT_AND_LOSS_RESULT);
@@ -2486,19 +2334,15 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEAttribute(breakEvenResultEClass, BREAK_EVEN_RESULT__PRICE_STRING);
 		createEAttribute(breakEvenResultEClass, BREAK_EVEN_RESULT__CARGO_PNL);
 
-		modeOptionRuleEClass = createEClass(MODE_OPTION_RULE);
-
 		optionAnalysisModelEClass = createEClass(OPTION_ANALYSIS_MODEL);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__BUYS);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__SELLS);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__BASE_CASE);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
-		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__RULES);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__RESULT_SETS);
 		createEAttribute(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__USE_TARGET_PNL);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__CHILDREN);
-		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__RESULT_GROUPS);
 
 		resultSetEClass = createEClass(RESULT_SET);
 		createEReference(resultSetEClass, RESULT_SET__ROWS);
@@ -2510,16 +2354,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 		partialCaseEClass = createEClass(PARTIAL_CASE);
 		createEReference(partialCaseEClass, PARTIAL_CASE__PARTIAL_CASE);
-
-		multipleResultGrouperEClass = createEClass(MULTIPLE_RESULT_GROUPER);
-		createEReference(multipleResultGrouperEClass, MULTIPLE_RESULT_GROUPER__GROUP_RESULTS);
-		createEAttribute(multipleResultGrouperEClass, MULTIPLE_RESULT_GROUPER__NAME);
-		createEReference(multipleResultGrouperEClass, MULTIPLE_RESULT_GROUPER__REFERENCE_ROW);
-		createEAttribute(multipleResultGrouperEClass, MULTIPLE_RESULT_GROUPER__FEATURE_NAME);
-
-		multipleResultGrouperRowEClass = createEClass(MULTIPLE_RESULT_GROUPER_ROW);
-		createEReference(multipleResultGrouperRowEClass, MULTIPLE_RESULT_GROUPER_ROW__GROUP_RESULTS);
-		createEReference(multipleResultGrouperRowEClass, MULTIPLE_RESULT_GROUPER_ROW__OBJECT);
 
 		// Create enums
 		destinationTypeEEnum = createEEnum(DESTINATION_TYPE);
@@ -2589,7 +2423,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		nominatedShippingOptionEClass.getESuperTypes().add(this.getShippingOption());
 		profitAndLossResultEClass.getESuperTypes().add(this.getAnalysisResultDetail());
 		breakEvenResultEClass.getESuperTypes().add(this.getAnalysisResultDetail());
-		modeOptionRuleEClass.getESuperTypes().add(this.getOptionRule());
 		optionAnalysisModelEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 
 		// Initialize classes and features; add operations and parameters
@@ -2786,9 +2619,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getResultContainer_SlotAllocations(), theSchedulePackage.getSlotAllocation(), null, "slotAllocations", null, 0, -1, ResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getResultContainer_Events(), theSchedulePackage.getEvent(), null, "events", null, 0, -1, ResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(optionRuleEClass, OptionRule.class, "OptionRule", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getOptionRule_Name(), ecorePackage.getEString(), "name", null, 0, 1, OptionRule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
 		initEClass(analysisResultDetailEClass, AnalysisResultDetail.class, "AnalysisResultDetail", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(profitAndLossResultEClass, ProfitAndLossResult.class, "ProfitAndLossResult", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2799,19 +2629,15 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getBreakEvenResult_PriceString(), ecorePackage.getEString(), "priceString", null, 0, 1, BreakEvenResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBreakEvenResult_CargoPNL(), ecorePackage.getEDouble(), "cargoPNL", null, 0, 1, BreakEvenResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(modeOptionRuleEClass, ModeOptionRule.class, "ModeOptionRule", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
 		initEClass(optionAnalysisModelEClass, OptionAnalysisModel.class, "OptionAnalysisModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getOptionAnalysisModel_Buys(), this.getBuyOption(), null, "buys", null, 0, -1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptionAnalysisModel_Sells(), this.getSellOption(), null, "sells", null, 0, -1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptionAnalysisModel_BaseCase(), this.getBaseCase(), null, "baseCase", null, 0, 1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptionAnalysisModel_ShippingTemplates(), this.getShippingOption(), null, "shippingTemplates", null, 0, -1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getOptionAnalysisModel_Rules(), this.getOptionRule(), null, "rules", null, 0, -1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptionAnalysisModel_PartialCase(), this.getPartialCase(), null, "partialCase", null, 0, 1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptionAnalysisModel_ResultSets(), this.getResultSet(), null, "resultSets", null, 0, -1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getOptionAnalysisModel_UseTargetPNL(), ecorePackage.getEBoolean(), "useTargetPNL", null, 0, 1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptionAnalysisModel_Children(), this.getOptionAnalysisModel(), null, "children", null, 0, -1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getOptionAnalysisModel_ResultGroups(), this.getMultipleResultGrouper(), null, "resultGroups", null, 0, -1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(resultSetEClass, ResultSet.class, "ResultSet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getResultSet_Rows(), this.getAnalysisResultRow(), null, "rows", null, 0, -1, ResultSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2823,16 +2649,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 		initEClass(partialCaseEClass, PartialCase.class, "PartialCase", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPartialCase_PartialCase(), this.getPartialCaseRow(), null, "partialCase", null, 0, -1, PartialCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(multipleResultGrouperEClass, MultipleResultGrouper.class, "MultipleResultGrouper", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getMultipleResultGrouper_GroupResults(), this.getMultipleResultGrouperRow(), null, "groupResults", null, 0, -1, MultipleResultGrouper.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getMultipleResultGrouper_Name(), ecorePackage.getEString(), "name", null, 0, 1, MultipleResultGrouper.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getMultipleResultGrouper_ReferenceRow(), this.getPartialCaseRow(), null, "referenceRow", null, 0, 1, MultipleResultGrouper.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getMultipleResultGrouper_FeatureName(), ecorePackage.getEString(), "featureName", null, 0, 1, MultipleResultGrouper.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(multipleResultGrouperRowEClass, MultipleResultGrouperRow.class, "MultipleResultGrouperRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getMultipleResultGrouperRow_GroupResults(), this.getResultSet(), null, "groupResults", null, 0, -1, MultipleResultGrouperRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getMultipleResultGrouperRow_Object(), ecorePackage.getEObject(), null, "object", null, 0, 1, MultipleResultGrouperRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(destinationTypeEEnum, DestinationType.class, "DestinationType");

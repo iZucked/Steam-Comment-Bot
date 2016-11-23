@@ -7,7 +7,6 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.util.LocalSelectionTransfer;

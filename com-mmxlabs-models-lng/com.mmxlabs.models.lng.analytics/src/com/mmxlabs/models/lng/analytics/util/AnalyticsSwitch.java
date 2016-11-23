@@ -287,12 +287,6 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case AnalyticsPackage.OPTION_RULE: {
-				OptionRule optionRule = (OptionRule)theEObject;
-				T result = caseOptionRule(optionRule);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case AnalyticsPackage.ANALYSIS_RESULT_DETAIL: {
 				AnalysisResultDetail analysisResultDetail = (AnalysisResultDetail)theEObject;
 				T result = caseAnalysisResultDetail(analysisResultDetail);
@@ -310,13 +304,6 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				BreakEvenResult breakEvenResult = (BreakEvenResult)theEObject;
 				T result = caseBreakEvenResult(breakEvenResult);
 				if (result == null) result = caseAnalysisResultDetail(breakEvenResult);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case AnalyticsPackage.MODE_OPTION_RULE: {
-				ModeOptionRule modeOptionRule = (ModeOptionRule)theEObject;
-				T result = caseModeOptionRule(modeOptionRule);
-				if (result == null) result = caseOptionRule(modeOptionRule);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -343,18 +330,6 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 			case AnalyticsPackage.PARTIAL_CASE: {
 				PartialCase partialCase = (PartialCase)theEObject;
 				T result = casePartialCase(partialCase);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case AnalyticsPackage.MULTIPLE_RESULT_GROUPER: {
-				MultipleResultGrouper multipleResultGrouper = (MultipleResultGrouper)theEObject;
-				T result = caseMultipleResultGrouper(multipleResultGrouper);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case AnalyticsPackage.MULTIPLE_RESULT_GROUPER_ROW: {
-				MultipleResultGrouperRow multipleResultGrouperRow = (MultipleResultGrouperRow)theEObject;
-				T result = caseMultipleResultGrouperRow(multipleResultGrouperRow);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -798,21 +773,6 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Option Rule</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Option Rule</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseOptionRule(OptionRule object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Analysis Result Detail</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -854,21 +814,6 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseBreakEvenResult(BreakEvenResult object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Mode Option Rule</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Mode Option Rule</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseModeOptionRule(ModeOptionRule object) {
 		return null;
 	}
 
@@ -929,36 +874,6 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePartialCase(PartialCase object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Multiple Result Grouper</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Multiple Result Grouper</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseMultipleResultGrouper(MultipleResultGrouper object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Multiple Result Grouper Row</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Multiple Result Grouper Row</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseMultipleResultGrouperRow(MultipleResultGrouperRow object) {
 		return null;
 	}
 

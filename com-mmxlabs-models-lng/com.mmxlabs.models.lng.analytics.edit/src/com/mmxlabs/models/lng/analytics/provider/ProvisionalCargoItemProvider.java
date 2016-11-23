@@ -334,11 +334,6 @@ public class ProvisionalCargoItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
-				 AnalyticsFactory.eINSTANCE.createModeOptionRule()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
 				 AnalyticsFactory.eINSTANCE.createOptionAnalysisModel()));
 
 		newChildDescriptors.add
@@ -355,16 +350,6 @@ public class ProvisionalCargoItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
 				 AnalyticsFactory.eINSTANCE.createPartialCase()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
-				 AnalyticsFactory.eINSTANCE.createMultipleResultGrouper()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
-				 AnalyticsFactory.eINSTANCE.createMultipleResultGrouperRow()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -575,6 +560,11 @@ public class ProvisionalCargoItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
 				 PortFactory.eINSTANCE.createLocation()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 PortFactory.eINSTANCE.createPortCountryGroup()));
 
 		newChildDescriptors.add
 			(createChildParameter
