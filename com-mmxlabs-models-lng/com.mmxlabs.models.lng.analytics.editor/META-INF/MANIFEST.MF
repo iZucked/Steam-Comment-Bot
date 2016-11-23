@@ -53,6 +53,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.types,
  org.eclipse.jface,
  org.eclipse.emf.ecore,
- com.mmxlabs.models.lng.commercial.editor
+ com.mmxlabs.models.lng.commercial.editor,
+ com.mmxlabs.models.lng.schedule
 Bundle-ActivationPolicy: lazy
 Import-Package: org.slf4j;version="1.6.4"
