@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.sound.midi.Receiver;
+
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -66,7 +68,7 @@ public class PartialCaseWiringDiagram implements PaintListener {
 	private final Color InvalidWireColour = Display.getDefault().getSystemColor(SWT.COLOR_DARK_RED);
 
 	static final Color ValidTerminalColour = Light_Green;
-	static final Color MixedTerminalColour = Light_Blue;
+	static final Color MixedTerminalColour = Light_Green;
 	private final Color RewirableColour = Grey;// Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
 	private final Color FixedWireColour = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
@@ -131,7 +133,7 @@ public class PartialCaseWiringDiagram implements PaintListener {
 
 	@Override
 	public synchronized void paintControl(final PaintEvent e) {
-
+		final int multi_offset = 4;
 		if (!wiringColumn.getColumn().isVisible()) {
 			return;
 		}
@@ -150,8 +152,8 @@ public class PartialCaseWiringDiagram implements PaintListener {
 		// Copy ref in case of concurrent change during paint
 		final OptionAnalysisModel root = table;
 		// Get a list of terminal positions from subclass
-		Map<PartialCaseRow, Integer> rowIndices = new HashMap<>();
-		Map<Integer, PartialCaseRow> indexToRow = new HashMap<>();
+		final Map<PartialCaseRow, Integer> rowIndices = new HashMap<>();
+		final Map<Integer, PartialCaseRow> indexToRow = new HashMap<>();
 
 		final List<Float> terminalPositions = getTerminalPositions(rowIndices, indexToRow);
 		final GC graphics = e.gc;
@@ -170,21 +172,14 @@ public class PartialCaseWiringDiagram implements PaintListener {
 		graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
 
 		// draw paths
-		for (PartialCaseRow row : root.getPartialCase().getPartialCase()) {
-			// EList<ChangeSetRow> rows = diffToBase ? changeSet.getChangeSetRowsToBase() : changeSet.getChangeSetRowsToPrevious();
-			// for (final ChangeSetRow row : rows)
+		for (final PartialCaseRow row : root.getPartialCase().getPartialCase()) {
+			if (true) {
+				// Skip line rendering
+				continue;
+			}
 			{
-
-				// if (!row.isWiringChange()) {
-				// continue;
-				// }
-				// if (row.getRhsWiringLink() == null) {
-				// continue;
-				// }
-				// ChangeSetRow otherRow = row.getRhsWiringLink();
-
 				BaseCaseRow other = null;
-				for (BaseCaseRow bcr : root.getBaseCase().getBaseCase()) {
+				for (final BaseCaseRow bcr : root.getBaseCase().getBaseCase()) {
 					if (row.getBuyOptions().contains(bcr.getBuyOption())) {
 						other = bcr;
 						break;
@@ -192,7 +187,7 @@ public class PartialCaseWiringDiagram implements PaintListener {
 				}
 				PartialCaseRow otherRow = null;
 				if (other != null) {
-					for (PartialCaseRow pcr : root.getPartialCase().getPartialCase()) {
+					for (final PartialCaseRow pcr : root.getPartialCase().getPartialCase()) {
 						if (pcr.getSellOptions().contains(other.getSellOption())) {
 							otherRow = pcr;
 							break;
@@ -266,15 +261,18 @@ public class PartialCaseWiringDiagram implements PaintListener {
 			if (!row.getBuyOptions().isEmpty()) {
 
 				if (row.getBuyOptions().size() == 1) {
-					BuyOption option = row.getBuyOptions().get(0);
-					boolean isSpot = option instanceof BuyMarket;
+					final BuyOption option = row.getBuyOptions().get(0);
+					final boolean isSpot = option instanceof BuyMarket;
 
-					boolean isFOB = AnalyticsBuilder.isShipped(option);
+					final boolean isFOB = AnalyticsBuilder.isShipped(option);
 
 					final Color terminalColour = ValidTerminalColour;// : InvalidTerminalColour;
 					drawTerminal(true, !isFOB, terminalColour, false, isSpot, ca, graphics, midpoint);
 				} else {
 					final Color terminalColour = MixedTerminalColour;
+					final Rectangle offsetR = new Rectangle(ca.x + multi_offset, ca.y, ca.width, ca.height);
+
+					drawTerminal(true, true, terminalColour, false, false, offsetR, graphics, midpoint + multi_offset);
 					drawTerminal(true, true, terminalColour, false, false, ca, graphics, midpoint);
 				}
 
@@ -285,16 +283,18 @@ public class PartialCaseWiringDiagram implements PaintListener {
 			if (!row.getSellOptions().isEmpty()) {
 
 				if (row.getSellOptions().size() == 1) {
-					SellOption option = row.getSellOptions().get(0);
-					boolean isSpot = option instanceof SellMarket;
+					final SellOption option = row.getSellOptions().get(0);
+					final boolean isSpot = option instanceof SellMarket;
 
-					boolean isDES = AnalyticsBuilder.isShipped(option);
+					final boolean isDES = AnalyticsBuilder.isShipped(option);
 
 					final Color terminalColour = ValidTerminalColour;// : InvalidTerminalColour;
 					drawTerminal(false, isDES, terminalColour, false, isSpot, ca, graphics, midpoint);
 				} else {
 					final Color terminalColour = MixedTerminalColour;
-					drawTerminal(false, true, terminalColour, false, false, ca, graphics, midpoint);
+					final Rectangle offsetR = new Rectangle(ca.x - multi_offset, ca.y, ca.width, ca.height);
+					drawTerminal(false, true, terminalColour, false, false, ca, graphics, midpoint+ multi_offset);
+					drawTerminal(false, true, terminalColour, false, false, offsetR, graphics, midpoint );
 				}
 
 			}
@@ -345,7 +345,7 @@ public class PartialCaseWiringDiagram implements PaintListener {
 		grid.redraw();
 	}
 
-	protected List<Float> getTerminalPositions(Map<PartialCaseRow, Integer> rTI, Map<Integer, PartialCaseRow> iTR) {
+	protected List<Float> getTerminalPositions(final Map<PartialCaseRow, Integer> rTI, final Map<Integer, PartialCaseRow> iTR) {
 
 		// Determine the mid-point in each row and generate an ordered list of heights.
 
@@ -361,13 +361,13 @@ public class PartialCaseWiringDiagram implements PaintListener {
 		heights[0] = grid.getHeaderHeight();
 		{
 			int idx = 1;
-			for (GridItem item : items) {
+			for (final GridItem item : items) {
 				if (item.isVisible()) {
 					heights[idx] = 1 + heights[idx - 1] + item.getHeight();
 
-					Object data = item.getData();
+					final Object data = item.getData();
 					if (data instanceof PartialCaseRow) {
-						PartialCaseRow changeSetRow = (PartialCaseRow) data;
+						final PartialCaseRow changeSetRow = (PartialCaseRow) data;
 						rTI.put(changeSetRow, idx - 1);
 						iTR.put(idx - 1, changeSetRow);
 					}
@@ -382,7 +382,7 @@ public class PartialCaseWiringDiagram implements PaintListener {
 		// heights[idx] = 1 + heights[idx - 1] + item.getHeight();
 		// }
 		// Find the row at the top of the table and get it's "height" so we can adjust it later
-		ScrollBar verticalBar = grid.getVerticalBar();
+		final ScrollBar verticalBar = grid.getVerticalBar();
 		final int vPod = verticalBar == null ? 0 : verticalBar.getSelection();
 		final int hOffset = (verticalBar == null || vPod >= heights.length) ? 0 : (heights[vPod]) - grid.getHeaderHeight();
 		// Pass 2 get mid-points
