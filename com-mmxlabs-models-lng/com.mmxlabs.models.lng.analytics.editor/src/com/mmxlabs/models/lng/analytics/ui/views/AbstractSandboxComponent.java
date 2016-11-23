@@ -78,7 +78,8 @@ public abstract class AbstractSandboxComponent {
 		// Clone the font data
 		final FontData fd = new FontData(systemFont.getFontData()[0].toString());
 		// Set the bold bit.
-		fd.setStyle(fd.getStyle() | SWT.BOLD);
+//		fd.setStyle(fd.getStyle() | SWT.BOLD);
+		fd.setHeight(fd.getHeight() + 2);
 
 		this.boldFont = new Font(Display.getDefault(), fd);
 	}
