@@ -19,7 +19,9 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.Module;
+import com.google.inject.name.Names;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
@@ -48,6 +50,7 @@ import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModul
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
+import com.mmxlabs.models.lng.transformer.stochasticactionsets.BreakEvenOptimiser;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
@@ -59,11 +62,14 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
@@ -187,7 +193,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			if (breakEvenMode == BreakEvenMode.POINT_TO_POINT) {
 				hints = new String[] {};
 			} else {
-				hints = new String[] { LNGTransformerHelper.HINT_DISABLE_CACHES };
+				hints = new String[] { LNGEvaluationModule.HINT_PORTFOLIO_BREAKEVEN, LNGTransformerHelper.HINT_DISABLE_CACHES };
 			}
 			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, null, optimisationPlan, LNGSchedulerJobUtils.createLocalEditingDomain(), null, null, null,
 					false, hints);
@@ -264,13 +270,15 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 						evaluationInjector = optimiserDataTransformer.getInjector().createChildInjector(modules);
 					}
 
-					final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
-					{
-						final Injector childInjector = evaluationInjector.createChildInjector(new ExporterExtensionsModule());
-						childInjector.injectMembers(exporter);
-					}
 					try (PerChainUnitScopeImpl scope = evaluationInjector.getInstance(PerChainUnitScopeImpl.class)) {
 						scope.enter();
+						final BreakEvenOptimiser instance = evaluationInjector.getInstance(BreakEvenOptimiser.class);
+						instance.optimise(rawSequences, OptimiserUnitConvertor.convertToInternalFixedCost(targetProfitAndLoss));
+						final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
+						{
+							final Injector childInjector = evaluationInjector.createChildInjector(new ExporterExtensionsModule());
+							childInjector.injectMembers(exporter);
+						}
 
 						final IOptimisationData optimisationData = evaluationInjector.getInstance(IOptimisationData.class);
 						final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(evaluationInjector, optimisationData, rawSequences).getFirst();
