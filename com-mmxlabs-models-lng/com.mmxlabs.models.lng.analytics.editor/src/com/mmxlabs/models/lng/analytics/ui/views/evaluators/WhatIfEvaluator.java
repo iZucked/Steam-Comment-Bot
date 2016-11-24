@@ -1,13 +1,11 @@
 package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
 import java.time.YearMonth;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
@@ -62,7 +60,6 @@ import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.ServiceHelper;
@@ -110,35 +107,23 @@ public class WhatIfEvaluator {
 			baseCase.getBaseCase().add(bcr);
 		}
 
-		// TODO: Command
 		final CompoundCommand cmd = new CompoundCommand("Generate results");
 		cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS, SetCommand.UNSET_VALUE));
-		// cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_GROUPS, SetCommand.UNSET_VALUE));
 		if (combinations.isEmpty()) {
 			final ResultSet resultSet = singleEval(scenarioEditingLocation, targetPNL, model, baseCase);
-			cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS, Collections.singletonList(resultSet)));
-		} else {
-			final List<Callable<ResultSet>> tasks = new LinkedList<>();
-			recursiveEval(0, combinations, scenarioEditingLocation, targetPNL, model, baseCase, tasks);
-			final List<Future<ResultSet>> futures = new LinkedList<>();
-
-			// No point using more threads until we upgrade to Guice 4.x
-			final int numThreads = 1;
-			@NonNull
-			final ExecutorService executor = Executors.newFixedThreadPool(numThreads);
-			tasks.forEach(task -> futures.add(executor.submit(task)));
-
-			for (final Future<ResultSet> f : futures) {
-				try {
-					final ResultSet rs = f.get();
-					if (rs != null) {
-						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS, rs));
-					}
-				} catch (final Exception e) {
-					e.printStackTrace();
-				}
+			if (resultSet != null) {
+				cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS, Collections.singletonList(resultSet)));
 			}
-			executor.shutdown();
+		} else {
+			long a = System.currentTimeMillis();
+			final List<BaseCase> tasks = new LinkedList<>();
+			recursiveEval(0, combinations, scenarioEditingLocation, targetPNL, model, baseCase, tasks);
+			Collection<ResultSet> results = multiEval(scenarioEditingLocation, targetPNL, model, tasks);
+			if (!results.isEmpty()) {
+				cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS, new LinkedList<>(results)));
+			}
+			long b = System.currentTimeMillis();
+			System.out.printf("Eval %d\n", b - a);
 		}
 
 		if (!cmd.isEmpty()) {
@@ -204,15 +189,15 @@ public class WhatIfEvaluator {
 		BaseCaseEvaluator.generateScenario(scenarioEditingLocation, model, baseCase, (lngScenarioModel, mapper) -> {
 
 			// DEBUG: Pass in the scenario instance
-			final ScenarioInstance parentForFork = null;// scenarioEditingLocation.getScenarioInstance()
+			final ScenarioInstance parentForFork =  scenarioEditingLocation.getScenarioInstance();
 			evaluateScenario(lngScenarioModel, parentForFork, model.isUseTargetPNL(), targetPNL);
 
 			if (lngScenarioModel.getScheduleModel().getSchedule() == null) {
 				return;
 			}
+			Schedule schedule = lngScenarioModel.getScheduleModel().getSchedule();
 
 			final ResultSet resultSet = AnalyticsFactory.eINSTANCE.createResultSet();
-
 			for (final BaseCaseRow row : baseCase.getBaseCase()) {
 				final AnalysisResultRow res = AnalyticsFactory.eINSTANCE.createAnalysisResultRow();
 				res.setBuyOption(row.getBuyOption());
@@ -223,7 +208,7 @@ public class WhatIfEvaluator {
 					res.setShipping(row.getShipping());
 				}
 
-				final Triple<SlotAllocation, SlotAllocation, CargoAllocation> t = finder(lngScenarioModel, row, mapper);
+				final Triple<SlotAllocation, SlotAllocation, CargoAllocation> t = finder(schedule, row, mapper);
 				SlotAllocation loadAllocation = t.getFirst();
 				SlotAllocation dischargeAllocation = t.getSecond();
 				CargoAllocation cargoAllocation = t.getThird();
@@ -296,7 +281,7 @@ public class WhatIfEvaluator {
 					res.setResultDetail(r);
 				}
 				if ((loadAllocation == null && row.getBuyOption() != null) || (dischargeAllocation == null && row.getSellOption() != null)) {
-					final Pair<OpenSlotAllocation, OpenSlotAllocation> p = finder2(lngScenarioModel, row, mapper);
+					final Pair<OpenSlotAllocation, OpenSlotAllocation> p = finder2(schedule, row, mapper);
 					if (p.getFirst() != null) {
 						assert loadAllocation == null;
 						container.getOpenSlotAllocations().add(p.getFirst());
@@ -366,6 +351,181 @@ public class WhatIfEvaluator {
 		return ref[0];
 	}
 
+	private static Collection<ResultSet> multiEval(final IScenarioEditingLocation scenarioEditingLocation, final long targetPNL, final OptionAnalysisModel model, final List<BaseCase> baseCases) {
+
+		final ConcurrentLinkedQueue<ResultSet> ref = new ConcurrentLinkedQueue<>();
+		BaseCaseEvaluator.generateFullScenario(scenarioEditingLocation, model, (lngScenarioModel, shippingMap, mapper) -> {
+
+			// DEBUG: Pass in the scenario instance
+			final ScenarioInstance parentForFork = null;// scenarioEditingLocation.getScenarioInstance()
+			final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
+			userSettings.setBuildActionSets(false);
+			userSettings.setGenerateCharterOuts(false);
+			userSettings.setShippingOnly(false);
+			userSettings.setSimilarityMode(SimilarityMode.OFF);
+
+			ServiceHelper.<IAnalyticsScenarioEvaluator> withService(IAnalyticsScenarioEvaluator.class,
+					evaluator -> evaluator.multiEvaluate(lngScenarioModel, userSettings, parentForFork, targetPNL,
+							model.isUseTargetPNL() ? IAnalyticsScenarioEvaluator.BreakEvenMode.PORTFOLIO : IAnalyticsScenarioEvaluator.BreakEvenMode.POINT_TO_POINT, baseCases, mapper, shippingMap,
+							(baseCase, schedule) -> {
+
+								final ResultSet resultSet = AnalyticsFactory.eINSTANCE.createResultSet();
+
+								for (final BaseCaseRow row : baseCase.getBaseCase()) {
+									final AnalysisResultRow res = AnalyticsFactory.eINSTANCE.createAnalysisResultRow();
+									res.setBuyOption(row.getBuyOption());
+									res.setSellOption(row.getSellOption());
+									if ((!AnalyticsBuilder.isShipped(row.getBuyOption()) || !AnalyticsBuilder.isShipped(row.getSellOption())) && AnalyticsBuilder.isShipped(row.getShipping())) {
+										res.setShipping(null);
+									} else {
+										res.setShipping(row.getShipping());
+									}
+
+									final Triple<SlotAllocation, SlotAllocation, CargoAllocation> t = finder(schedule, row, mapper);
+									SlotAllocation loadAllocation = t.getFirst();
+									SlotAllocation dischargeAllocation = t.getSecond();
+									CargoAllocation cargoAllocation = t.getThird();
+									final EcoreUtil.Copier copier = new EcoreUtil.Copier();
+									if (loadAllocation != null) {
+										copier.copy(loadAllocation.getSlotVisit());
+										loadAllocation = (SlotAllocation) copier.copy(loadAllocation);
+									}
+									if (dischargeAllocation != null) {
+										copier.copy(dischargeAllocation.getSlotVisit());
+										dischargeAllocation = (SlotAllocation) copier.copy(dischargeAllocation);
+									}
+									if (cargoAllocation != null) {
+										copier.copyAll(cargoAllocation.getEvents());
+										cargoAllocation = (CargoAllocation) copier.copy(cargoAllocation);
+									}
+									copier.copyReferences();
+
+									// Move containership of schedule objects to the container.
+									final ResultContainer container = AnalyticsFactory.eINSTANCE.createResultContainer();
+									if (cargoAllocation != null) {
+										container.setCargoAllocation(cargoAllocation);
+										for (final Event e : cargoAllocation.getEvents()) {
+											e.setSequence(null);
+											container.getEvents().add(e);
+										}
+									}
+									if (loadAllocation != null) {
+										container.getSlotAllocations().add(loadAllocation);
+										final SlotVisit v = loadAllocation.getSlotVisit();
+										if (v != null && !container.getEvents().contains(v)) {
+											v.setSequence(null);
+											container.getEvents().add(v);
+										}
+									}
+									if (dischargeAllocation != null) {
+										container.getSlotAllocations().add(dischargeAllocation);
+										final SlotVisit v = dischargeAllocation.getSlotVisit();
+										if (v != null && !container.getEvents().contains(v)) {
+											v.setSequence(null);
+											container.getEvents().add(v);
+										}
+									}
+
+									if (isBreakEvenRow(loadAllocation)) {
+										final BreakEvenResult r = AnalyticsFactory.eINSTANCE.createBreakEvenResult();
+										r.setPrice(loadAllocation.getPrice());
+										final String priceString = getPriceString(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getReferenceModel().getPricingModel(),
+												((BuyOpportunity) row.getBuyOption()).getPriceExpression(), loadAllocation.getPrice(), YearMonth.from(loadAllocation.getSlotVisit().getStart()));
+										r.setPriceString(priceString);
+										res.setResultDetail(r);
+										if (cargoAllocation != null) {
+											r.setCargoPNL((double) cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss());
+										}
+									} else if (isBreakEvenRow(dischargeAllocation)) {
+										final BreakEvenResult r = AnalyticsFactory.eINSTANCE.createBreakEvenResult();
+										r.setPrice(dischargeAllocation.getPrice());
+										final String priceString = getPriceString(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getReferenceModel().getPricingModel(),
+												((SellOpportunity) row.getSellOption()).getPriceExpression(), dischargeAllocation.getPrice(),
+												YearMonth.from(dischargeAllocation.getSlotVisit().getStart()));
+										r.setPriceString(priceString);
+										res.setResultDetail(r);
+										if (cargoAllocation != null) {
+											r.setCargoPNL((double) cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss());
+										}
+									} else {
+										final ProfitAndLossResult r = AnalyticsFactory.eINSTANCE.createProfitAndLossResult();
+										if (cargoAllocation != null) {
+											r.setValue((double) cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss());
+										}
+										res.setResultDetail(r);
+									}
+									if ((loadAllocation == null && row.getBuyOption() != null) || (dischargeAllocation == null && row.getSellOption() != null)) {
+										final Pair<OpenSlotAllocation, OpenSlotAllocation> p = finder2(schedule, row, mapper);
+										if (p.getFirst() != null) {
+											assert loadAllocation == null;
+											container.getOpenSlotAllocations().add(p.getFirst());
+
+											final double value = (double) p.getFirst().getGroupProfitAndLoss().getProfitAndLoss();
+											if (res.getResultDetail() != null && res.getResultDetail() instanceof ProfitAndLossResult) {
+												final ProfitAndLossResult profitAndLossResult = (ProfitAndLossResult) res.getResultDetail();
+												profitAndLossResult.setValue(profitAndLossResult.getValue() + value);
+											} else {
+												final ProfitAndLossResult r = AnalyticsFactory.eINSTANCE.createProfitAndLossResult();
+												r.setValue(value);
+												res.setResultDetail(r);
+											}
+										}
+										if (p.getSecond() != null) {
+											assert dischargeAllocation == null;
+											container.getOpenSlotAllocations().add(p.getSecond());
+
+											final double value = (double) p.getSecond().getGroupProfitAndLoss().getProfitAndLoss();
+											if (res.getResultDetail() != null && res.getResultDetail() instanceof ProfitAndLossResult) {
+												final ProfitAndLossResult profitAndLossResult = (ProfitAndLossResult) res.getResultDetail();
+												profitAndLossResult.setValue(profitAndLossResult.getValue() + value);
+											} else {
+												final ProfitAndLossResult r = AnalyticsFactory.eINSTANCE.createProfitAndLossResult();
+												r.setValue(value);
+												res.setResultDetail(r);
+											}
+										}
+									}
+									// Clear old references
+									if (container.getCargoAllocation() != null) {
+										fixModelReferences(container.getCargoAllocation(), mapper);
+
+										container.getCargoAllocation().unsetSequence();
+										container.getCargoAllocation().unsetInputCargo();
+									}
+									for (final SlotAllocation slotAllocation : container.getSlotAllocations()) {
+										slotAllocation.unsetSlot();
+										slotAllocation.unsetSpotMarket();
+									}
+									for (final OpenSlotAllocation openSlotAllocation : container.getOpenSlotAllocations()) {
+										openSlotAllocation.unsetSlot();
+									}
+									// Check for non-contained events - clear them.
+									// Re-map non-contained data elements
+									for (final Event e : container.getEvents()) {
+										fixModelReferences(e, mapper);
+
+										if (e.getNextEvent() != null) {
+											if (!container.getEvents().contains(e.getNextEvent())) {
+												e.setNextEvent(null);
+											}
+										}
+										if (e.getPreviousEvent() != null) {
+											if (!container.getEvents().contains(e.getPreviousEvent())) {
+												e.setPreviousEvent(null);
+											}
+										}
+									}
+									res.setResultDetails(container);
+
+									resultSet.getRows().add(res);
+								}
+								ref.add(resultSet);
+							}));
+
+		});
+		return ref;
+	}
+
 	/**
 	 * Recurse through the object tree ensuring any non-contained references are from the real data model and not one of the copies. Remove references to generated cargo data etc.
 	 * 
@@ -392,7 +552,7 @@ public class WhatIfEvaluator {
 					final List<EObject> children = (List<EObject>) object.eGet(ref);
 					for (final EObject child : children) {
 						if (!(child instanceof Event || child instanceof SlotAllocation)) {
-							final EObject replacement = mapper.getObject(child);
+							final EObject replacement = mapper.getOriginal(child);
 							if (checkIt(object, ref, child, replacement) && replacement != null) {
 								object.eSet(ref, replacement);
 							} else {
@@ -404,7 +564,7 @@ public class WhatIfEvaluator {
 					final EObject child = (EObject) object.eGet(ref);
 					if (!(child instanceof Event || child instanceof SlotAllocation)) {
 						if (child != null) {
-							final EObject replacement = mapper.getObject(child);
+							final EObject replacement = mapper.getOriginal(child);
 							if (checkIt(object, ref, child, replacement) && replacement != null) {
 								object.eSet(ref, replacement);
 							} else {
@@ -449,13 +609,12 @@ public class WhatIfEvaluator {
 		return expression.replaceFirst(Pattern.quote("?"), String.format("%,.3f", rearrangedPrice));
 	}
 
-	private static Triple<SlotAllocation, SlotAllocation, CargoAllocation> finder(final LNGScenarioModel lngScenarioModel, final BaseCaseRow baseCaseRow, final IMapperClass mapper) {
+	private static Triple<SlotAllocation, SlotAllocation, CargoAllocation> finder(final Schedule schedule, final BaseCaseRow baseCaseRow, final IMapperClass mapper) {
 
 		CargoAllocation cargoAllocation = null;
 		SlotAllocation loadAllocation = null;
 		SlotAllocation dischargeAllocation = null;
 
-		final Schedule schedule = lngScenarioModel.getScheduleModel().getSchedule();
 		final EList<SlotAllocation> slotAllocations = schedule.getSlotAllocations();
 
 		final LoadSlot loadSlot = mapper.get(baseCaseRow.getBuyOption());
@@ -479,11 +638,9 @@ public class WhatIfEvaluator {
 		return new Triple<>(loadAllocation, dischargeAllocation, cargoAllocation);
 	}
 
-	private static Pair<OpenSlotAllocation, OpenSlotAllocation> finder2(final LNGScenarioModel lngScenarioModel, final BaseCaseRow baseCaseRow, final IMapperClass mapper) {
+	private static Pair<OpenSlotAllocation, OpenSlotAllocation> finder2(Schedule schedule, final BaseCaseRow baseCaseRow, final IMapperClass mapper) {
 		OpenSlotAllocation loadAllocation = null;
 		OpenSlotAllocation dischargeAllocation = null;
-
-		final Schedule schedule = lngScenarioModel.getScheduleModel().getSchedule();
 
 		final LoadSlot loadSlot = mapper.get(baseCaseRow.getBuyOption());
 		final DischargeSlot dischargeSlot = mapper.get(baseCaseRow.getSellOption());
@@ -516,14 +673,13 @@ public class WhatIfEvaluator {
 	}
 
 	private static void recursiveEval(final int listIdx, final List<List<Runnable>> combinations, final IScenarioEditingLocation scenarioEditingLocation, final long targetPNL,
-			final OptionAnalysisModel model, final BaseCase baseCase, final List<Callable<ResultSet>> tasks) {
+			final OptionAnalysisModel model, final BaseCase baseCase, final List<BaseCase> tasks) {
 		if (listIdx == combinations.size()) {
 			final BaseCase copy = EcoreUtil.copy(baseCase);
-			tasks.add(() -> {
-				return singleEval(scenarioEditingLocation, targetPNL, model, copy);
-			});
+			tasks.add(copy);
 			return;
 		}
+
 		final List<Runnable> options = combinations.get(listIdx);
 		for (final Runnable r : options) {
 			r.run();

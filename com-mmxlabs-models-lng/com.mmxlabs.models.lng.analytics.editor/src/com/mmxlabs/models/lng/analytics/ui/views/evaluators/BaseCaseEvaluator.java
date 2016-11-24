@@ -1,7 +1,9 @@
 package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -15,6 +17,7 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.util.TriConsumer;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
@@ -24,6 +27,7 @@ import com.mmxlabs.models.lng.analytics.FleetShippingOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.OptionalAvailabilityShippingOption;
+import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
@@ -50,6 +54,7 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.TimePeriod;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.ServiceHelper;
@@ -67,7 +72,9 @@ public class BaseCaseEvaluator {
 
 		void addMapping(SellOption sell, DischargeSlot discharge);
 
-		<T extends EObject> T getObject(@NonNull T port);
+		<T extends EObject> T getCopy(@NonNull T original);
+
+		<T extends EObject> T getOriginal(@NonNull T copy);
 
 	}
 
@@ -123,7 +130,7 @@ public class BaseCaseEvaluator {
 
 		}
 
-		public <T extends EObject> T getObject(@NonNull T copy) {
+		public <T extends EObject> T getOriginal(@NonNull T copy) {
 
 			for (Map.Entry<EObject, EObject> e : copier.entrySet()) {
 				if (e.getValue() == copy) {
@@ -132,6 +139,10 @@ public class BaseCaseEvaluator {
 			}
 
 			return null;
+		}
+
+		public <T extends EObject> T getCopy(@NonNull T original) {
+			return (T) copier.get(original);
 		}
 	}
 
@@ -158,6 +169,29 @@ public class BaseCaseEvaluator {
 			buildScenario(clone, clonedModel, clonedBaseCase, mapper);
 
 			callback.accept(clone, mapper);
+
+			return clone;
+		}
+		return null;
+	}
+
+	public static LNGScenarioModel generateFullScenario(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel model,
+			final TriConsumer<LNGScenarioModel, Map<ShippingOption, VesselAssignmentType>, IMapperClass> callback) {
+
+		final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
+		if (rootObject instanceof LNGScenarioModel) {
+			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			final EcoreUtil.Copier copier = new Copier();
+			final LNGScenarioModel clone = (LNGScenarioModel) copier.copy(lngScenarioModel);
+			clone.getOptionModels().clear();
+			final OptionAnalysisModel clonedModel = (OptionAnalysisModel) copier.copy(model);
+			copier.copyReferences();
+			final IMapperClass mapper = new Mapper(copier);
+
+			clearData(clone, clonedModel, null);
+			Map<ShippingOption, VesselAssignmentType> shippingMap = buildFullScenario(clone, clonedModel, mapper);
+
+			callback.accept(clone, shippingMap, mapper);
 
 			return clone;
 		}
@@ -193,7 +227,7 @@ public class BaseCaseEvaluator {
 
 	}
 
-	protected static void buildScenario(final LNGScenarioModel clone, final OptionAnalysisModel clonedModel, final BaseCase clonedBaseCase, final IMapperClass mapper) {
+	protected static void buildScenario(final LNGScenarioModel clone, final OptionAnalysisModel clonedModel, final @NonNull BaseCase clonedBaseCase, final IMapperClass mapper) {
 
 		Map<FleetShippingOption, VesselAvailability> shippingMap = createShipping(clone, clonedBaseCase);
 
@@ -220,6 +254,27 @@ public class BaseCaseEvaluator {
 			}
 		}
 
+	}
+
+	protected static Map<ShippingOption, VesselAssignmentType> buildFullScenario(final LNGScenarioModel clone, final OptionAnalysisModel clonedModel, final IMapperClass mapper) {
+
+		Map<ShippingOption, VesselAssignmentType> shippingMap = createShipping(clone, clonedModel);
+
+		for (final BuyOption buy : clonedModel.getBuys()) {
+			final LoadSlot loadSlot = AnalyticsBuilder.makeLoadSlot(buy, clone);
+			mapper.addMapping(buy, loadSlot);
+			if (loadSlot != null && !clone.getCargoModel().getLoadSlots().contains(loadSlot)) {
+				clone.getCargoModel().getLoadSlots().add(loadSlot);
+			}
+		}
+		for (final SellOption sell : clonedModel.getSells()) {
+			final DischargeSlot dischargeSlot = AnalyticsBuilder.makeDischargeSlot(sell, clone);
+			mapper.addMapping(sell, dischargeSlot);
+			if (dischargeSlot != null && !clone.getCargoModel().getDischargeSlots().contains(dischargeSlot)) {
+				clone.getCargoModel().getDischargeSlots().add(dischargeSlot);
+			}
+		}
+		return shippingMap;
 	}
 
 	public static Cargo makeCargo(final LNGScenarioModel clone, Map<FleetShippingOption, VesselAvailability> shippingMap, final BaseCaseRow row, final LoadSlot loadSlot,
@@ -458,7 +513,101 @@ public class BaseCaseEvaluator {
 		return availabilitiesMap;
 	}
 
-	protected static void clearData(final LNGScenarioModel clone, final OptionAnalysisModel model, final BaseCase bc) {
+	protected static Map<ShippingOption, VesselAssignmentType> createShipping(final LNGScenarioModel clone, final OptionAnalysisModel model) {
+		Map<ShippingOption, VesselAssignmentType> availabilitiesMap = new HashMap<>();
+
+		for (final ShippingOption shipping : model.getShippingTemplates()) {
+
+			if (shipping instanceof OptionalAvailabilityShippingOption) {
+				// Do not re-add
+				if (availabilitiesMap.containsKey(shipping)) {
+					continue;
+				}
+				final OptionalAvailabilityShippingOption optionalAvailabilityShippingOption = (OptionalAvailabilityShippingOption) shipping;
+				final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+				vesselAvailability.setTimeCharterRate(optionalAvailabilityShippingOption.getHireCost());
+				final Vessel vessel = optionalAvailabilityShippingOption.getVessel();
+				vesselAvailability.setVessel(vessel);
+				vesselAvailability.setEntity(optionalAvailabilityShippingOption.getEntity());
+
+				if (optionalAvailabilityShippingOption.isUseSafetyHeel()) {
+					vesselAvailability.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
+					vesselAvailability.getStartHeel().setVolumeAvailable(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getStartHeel().setCvValue(22.8);
+					vesselAvailability.getStartHeel().setPricePerMMBTU(0.1);
+
+					vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+					vesselAvailability.getEndHeel().setTargetEndHeel(vessel.getVesselClass().getMinHeel());
+				}
+
+				vesselAvailability.setStartAfter(optionalAvailabilityShippingOption.getStart().atStartOfDay());
+				vesselAvailability.setStartBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
+				vesselAvailability.setEndAfter(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
+				vesselAvailability.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
+				vesselAvailability.setOptional(true);
+				vesselAvailability.setFleet(false);
+				vesselAvailability.setBallastBonus(optionalAvailabilityShippingOption.getBallastBonus());
+				vesselAvailability.setRepositioningFee(optionalAvailabilityShippingOption.getRepositioningFee());
+				if (optionalAvailabilityShippingOption.getStartPort() != null) {
+					EList<APortSet<Port>> startAt = vesselAvailability.getStartAt();
+					startAt.clear();
+					startAt.add(optionalAvailabilityShippingOption.getStartPort());
+				}
+				if (optionalAvailabilityShippingOption.getEndPort() != null) {
+					EList<APortSet<Port>> endAt = vesselAvailability.getEndAt();
+					endAt.clear();
+					endAt.add(optionalAvailabilityShippingOption.getEndPort());
+				}
+				clone.getCargoModel().getVesselAvailabilities().add(vesselAvailability);
+				availabilitiesMap.put(optionalAvailabilityShippingOption, vesselAvailability);
+
+			} else if (shipping instanceof FleetShippingOption) {
+				// Do not re-add
+				if (availabilitiesMap.containsKey(shipping)) {
+					continue;
+				}
+				final FleetShippingOption fleetShippingOption = (FleetShippingOption) shipping;
+				final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+				vesselAvailability.setTimeCharterRate(fleetShippingOption.getHireCost());
+				final Vessel vessel = fleetShippingOption.getVessel();
+				vesselAvailability.setVessel(vessel);
+				vesselAvailability.setEntity(fleetShippingOption.getEntity());
+
+				if (fleetShippingOption.isUseSafetyHeel()) {
+					vesselAvailability.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
+					vesselAvailability.getStartHeel().setVolumeAvailable(vessel.getVesselClass().getMinHeel());
+					vesselAvailability.getStartHeel().setCvValue(22.8);
+					vesselAvailability.getStartHeel().setPricePerMMBTU(0.1);
+
+					vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+					vesselAvailability.getEndHeel().setTargetEndHeel(vessel.getVesselClass().getMinHeel());
+				}
+				vesselAvailability.setOptional(false);
+				vesselAvailability.setFleet(true);
+				clone.getCargoModel().getVesselAvailabilities().add(vesselAvailability);
+				availabilitiesMap.put(fleetShippingOption, vesselAvailability);
+
+			} else if (shipping instanceof RoundTripShippingOption) {
+				final RoundTripShippingOption roundTripShippingOption = (RoundTripShippingOption) shipping;
+				final CharterInMarket market = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
+				final String baseName = SHIPPING_OPTION_DESCRIPTION_FORMATTER.render(roundTripShippingOption);
+				@NonNull
+				final Set<String> usedIDStrings = clone.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().stream().map(c -> c.getName()).collect(Collectors.toSet());
+				final String id = AnalyticsBuilder.getUniqueID(baseName, usedIDStrings);
+				market.setName(id);
+				market.setCharterInRate(roundTripShippingOption.getHireCost());
+				market.setVesselClass(roundTripShippingOption.getVesselClass());
+				clone.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().add(market);
+
+				availabilitiesMap.put(roundTripShippingOption, market);
+			}
+		}
+
+		return availabilitiesMap;
+	}
+
+	// If bc is null, assume we want all data
+	protected static void clearData(final LNGScenarioModel clone, final OptionAnalysisModel model, final @Nullable BaseCase bc) {
 
 		clone.getScheduleModel().setSchedule(null);
 
@@ -466,13 +615,13 @@ public class BaseCaseEvaluator {
 		final Set<DischargeSlot> keepDischarges = new HashSet<>();
 
 		for (final BuyOption buy : model.getBuys()) {
-			if (buy instanceof BuyReference && isUsed(buy, bc)) {
+			if (buy instanceof BuyReference && (bc == null || isUsed(buy, bc))) {
 				final BuyReference buyReference = (BuyReference) buy;
 				keepLoads.add(buyReference.getSlot());
 			}
 		}
 		for (final SellOption sell : model.getSells()) {
-			if (sell instanceof SellReference && isUsed(sell, bc)) {
+			if (sell instanceof SellReference && (bc == null || isUsed(sell, bc))) {
 				final SellReference sellReference = (SellReference) sell;
 				keepDischarges.add(sellReference.getSlot());
 			}
@@ -485,6 +634,8 @@ public class BaseCaseEvaluator {
 		clone.getCargoModel().getVesselEvents().clear();
 		clone.getCargoModel().getVesselAvailabilities().clear();
 
+		clone.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
+		
 		for (final LoadSlot loadSlot : keepLoads) {
 			loadSlot.setCargo(null);
 		}
@@ -512,5 +663,4 @@ public class BaseCaseEvaluator {
 		}
 		return false;
 	}
-
 }
