@@ -58,6 +58,14 @@ public class IndexConversionsTest {
 	}
 	
 	@Test
+	public void test__X_PLUS_QM() {
+		final String expression = "HH+?";
+		Form form = testExpression(expression);
+		assert form == Form.X_PLUS_C;
+	}
+	
+
+	@Test
 	public void test__X_PLUS_C_COMPLEX() {
 		final String expression = "HH+1";
 		Form form = testExpression(expression);
@@ -156,6 +164,18 @@ public class IndexConversionsTest {
 		Assert.assertEquals(8.37, parseExpression, 0.001);
 	}
 
+	@Test
+	public void test__calculation_X_PLUS_Q() {
+		final String expression = "HH+?";
+		@Nullable
+		MarkedUpNode testGraphRearrangement = testGraphRearrangement(expression, Form.X_PLUS_C, 10);
+		String rearrangedExpression = IndexConversion.getExpression(testGraphRearrangement);
+		System.out.println(rearrangedExpression);
+		Assert.assertEquals("((10.0)-((1.0)*(HH)))", rearrangedExpression);
+		double parseExpression = parseExpression(rearrangedExpression);
+		Assert.assertEquals(5.0, parseExpression, 0.001);
+	}
+
 	
 	private Form testExpression(final String expression) {
 		final MarkedUpNode markedUpNode = getParentMarkedUpNode(expression);
@@ -171,6 +191,7 @@ public class IndexConversionsTest {
 	
 	private @Nullable MarkedUpNode testGraphRearrangement(final String expression, Form form, double price) {
 		final MarkedUpNode markedUpNode = getParentMarkedUpNode(expression);
+		System.out.println(IndexConversion.getExpression(markedUpNode));
 		@Nullable MarkedUpNode rearrangedGraph = IndexConversion.rearrangeGraph(price, markedUpNode, form);
 		return rearrangedGraph;
 	}
