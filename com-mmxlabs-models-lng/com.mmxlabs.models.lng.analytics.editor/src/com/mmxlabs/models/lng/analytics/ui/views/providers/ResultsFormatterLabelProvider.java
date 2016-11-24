@@ -44,20 +44,7 @@ public class ResultsFormatterLabelProvider extends CellLabelProvider {
 		cell.setText("");
 		cell.setFont(null);
 		if (feature == AnalyticsPackage.eINSTANCE.getAnalysisResultRow_BuyOption()) {
-<<<<<<< Upstream, based on branch 'master' of git@codebasehq.com:mmxlabs/repositories/com-mmxlabs-models-lng.git
 			if (element instanceof ResultSet) {
-=======
-			if (element instanceof GroupNode) {
-				GroupNode groupNode = (GroupNode) element;
-				String sb = groupNode.name;
-				GroupNode g = groupNode.parentGroup;
-				while (g != null) {
-//					sb = g.name + " | " + sb;
-					sb = "5";
-					g = g.parentGroup;
-				}
->>>>>>> 3ad7c67 Option modelling formatting
-
 				cell.setText("");
 				((GridItem) cell.getItem()).setColumnSpan(0, 4);
 				return;

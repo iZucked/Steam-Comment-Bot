@@ -272,7 +272,7 @@ public class PartialCaseWiringDiagram implements PaintListener {
 					final Color terminalColour = MixedTerminalColour;
 					final Rectangle offsetR = new Rectangle(ca.x + multi_offset, ca.y, ca.width, ca.height);
 
-					drawTerminal(true, true, terminalColour, false, false, offsetR, graphics, midpoint + multi_offset);
+					drawTerminal(true, true, terminalColour, false, false, offsetR, graphics, midpoint);
 					drawTerminal(true, true, terminalColour, false, false, ca, graphics, midpoint);
 				}
 
@@ -292,9 +292,9 @@ public class PartialCaseWiringDiagram implements PaintListener {
 					drawTerminal(false, isDES, terminalColour, false, isSpot, ca, graphics, midpoint);
 				} else {
 					final Color terminalColour = MixedTerminalColour;
-					final Rectangle offsetR = new Rectangle(ca.x - multi_offset, ca.y, ca.width, ca.height);
-					drawTerminal(false, true, terminalColour, false, false, ca, graphics, midpoint+ multi_offset);
-					drawTerminal(false, true, terminalColour, false, false, offsetR, graphics, midpoint );
+					final Rectangle offsetR = new Rectangle(ca.x + multi_offset, ca.y, ca.width, ca.height);
+					drawTerminal(false, true, terminalColour, false, false, offsetR, graphics, midpoint - multi_offset+1);
+					drawTerminal(false, true, terminalColour, false, false, ca, graphics, midpoint);
 				}
 
 			}

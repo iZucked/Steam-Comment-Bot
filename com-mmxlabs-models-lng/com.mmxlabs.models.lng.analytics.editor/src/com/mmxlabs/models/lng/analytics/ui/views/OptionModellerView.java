@@ -127,7 +127,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 //				.span(0,1)
 //				.align(SWT.CENTER,SWT.TOP)
 //				.create());
-		mainComposite = new Composite(parent, SWT.BORDER);
+		mainComposite = new Composite(parent, SWT.NONE);
 		mainComposite.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
 		mainComposite.setLayoutData(GridDataFactory.swtDefaults()//
@@ -212,7 +212,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		}
 
 		{
-			centralScrolledComposite = new ScrolledComposite(mainComposite, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+			centralScrolledComposite = new ScrolledComposite(mainComposite, SWT.H_SCROLL | SWT.V_SCROLL);
 			centralScrolledComposite.setLayoutData(GridDataFactory.swtDefaults()//
 					.grab(false, true)//
 					.align(SWT.FILL, SWT.FILL) //

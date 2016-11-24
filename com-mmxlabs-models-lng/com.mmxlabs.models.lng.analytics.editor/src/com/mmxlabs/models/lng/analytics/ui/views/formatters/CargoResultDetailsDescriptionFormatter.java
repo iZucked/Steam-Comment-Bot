@@ -10,10 +10,10 @@ public class CargoResultDetailsDescriptionFormatter extends BaseFormatter {
 
 		if (object instanceof ProfitAndLossResult) {
 			ProfitAndLossResult profitAndLossResult = (ProfitAndLossResult) object;
-			return String.format("%,.1f", profitAndLossResult.getValue());
+			return String.format("%,.3fm", profitAndLossResult.getValue() / 1_000_000);
 		} else if (object instanceof BreakEvenResult) {
 			BreakEvenResult breakEvenResult = (BreakEvenResult) object;
-			return String.format("%,.1f", breakEvenResult.getCargoPNL());
+			return String.format("%,.3fm", breakEvenResult.getCargoPNL() / 1_000_000);
 		}
 
 		if (object == null) {

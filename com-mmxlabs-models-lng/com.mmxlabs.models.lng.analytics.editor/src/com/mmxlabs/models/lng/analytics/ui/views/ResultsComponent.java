@@ -1,10 +1,12 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
@@ -12,6 +14,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -20,12 +23,16 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridLayout;
@@ -40,6 +47,7 @@ import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BreakEvenResult;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.ProfitAndLossResult;
 import com.mmxlabs.models.lng.analytics.ResultContainer;
 import com.mmxlabs.models.lng.analytics.ResultSet;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BEPriceResultDetailsDescriptionFormatter;
@@ -67,6 +75,10 @@ public class ResultsComponent extends AbstractSandboxComponent {
 	private ExpandableComposite expandable;
 	private OptionModellerView optionModellerView;
 
+	// column sorting
+	final ArrayList<GridColumn> columnSortOrder = new ArrayList<GridColumn>();
+	boolean sortDescending = false;
+
 	protected ResultsComponent(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors,
 			@NonNull final Supplier<OptionAnalysisModel> modelProvider) {
 		super(scenarioEditingLocation, validationErrors, modelProvider);
@@ -85,19 +97,19 @@ public class ResultsComponent extends AbstractSandboxComponent {
 		expandable = wrapInExpandable(parent, "Results", p -> createResultsViewer(p, optionModellerView), expandableCompo -> {
 
 			clientArea = new Composite(expandableCompo, SWT.NONE) {
-				public Point computeSize(final int wHint, final int hHint) {
-					final Point p = super.computeSize(wHint, hHint);
-					// p.x = Math.max(200, p.x);
-					p.y = 30;// (sorter == null || sorter.getGrid().isDisposed()) ? 16 : sorter.getGrid().getHeaderHeight();
-					return p;
-				}
-
-				public Point computeSize(final int wHint, final int hHint, final boolean changed) {
-					final Point p = super.computeSize(wHint, hHint, changed);
-					// p.x = Math.max(200, p.x);
-					p.y = 30;// (sorter == null || sorter.getGrid().isDisposed()) ? 16 : sorter.getGrid().getHeaderHeight();
-					return p;
-				}
+//				public Point computeSize(final int wHint, final int hHint) {
+//					final Point p = super.computeSize(wHint, hHint);
+//					// p.x = Math.max(200, p.x);
+//					p.y = 30;// (sorter == null || sorter.getGrid().isDisposed()) ? 16 : sorter.getGrid().getHeaderHeight();
+//					return p;
+//				}
+//
+//				public Point computeSize(final int wHint, final int hHint, final boolean changed) {
+//					final Point p = super.computeSize(wHint, hHint, changed);
+//					// p.x = Math.max(200, p.x);
+//					p.y = 30;// (sorter == null || sorter.getGrid().isDisposed()) ? 16 : sorter.getGrid().getHeaderHeight();
+//					return p;
+//				}
 			};
 			// clientArea.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
 			final GridLayout layout = new GridLayout(2, false);
@@ -108,31 +120,32 @@ public class ResultsComponent extends AbstractSandboxComponent {
 			layout.marginTop = 0;
 			clientArea.setLayout(layout);
 
-			final Label c = new Label(clientArea, SWT.NONE);
-			c.setToolTipText("Toggle show only B/E cargoes");
-			if (filterConstantRows) {
-				c.setImage(image_filter);
-			} else {
-				c.setImage(image_grey_filter);
-			}
 
-			clientArea.setLayoutData(GridDataFactory.fillDefaults().hint(200, 30).grab(true, true).create());
-			c.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).hint(16, 16).grab(false, false).create());
-
-			c.addMouseListener(new MouseAdapter() {
-				public void mouseDown(final MouseEvent e) {
-					filterConstantRows = !filterConstantRows;
-					if (filterConstantRows) {
-						c.setImage(image_filter);
-					} else {
-						c.setImage(image_grey_filter);
-					}
-					refresh();
-				}
-
-			});
+			clientArea.setLayoutData(GridDataFactory.fillDefaults().hint(200, 0).grab(true, true).create());
+//			c.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).hint(16, 16).grab(false, false).create());
+//
+//			final Label c = new Label(clientArea, SWT.NONE);
+//			c.setToolTipText("Toggle show only B/E cargoes");
+//			if (filterConstantRows) {
+//				c.setImage(image_filter);
+//			} else {
+//				c.setImage(image_grey_filter);
+//			}
+//			c.addMouseListener(new MouseAdapter() {
+//				public void mouseDown(final MouseEvent e) {
+//					filterConstantRows = !filterConstantRows;
+//					if (filterConstantRows) {
+//						c.setImage(image_filter);
+//					} else {
+//						c.setImage(image_grey_filter);
+//					}
+//					refresh();
+//				}
+//
+//			});
 			expandableCompo.setTextClient(clientArea);
-		});
+		}, false);
+		expandable.setLayoutData(GridDataFactory.fillDefaults().minSize(SWT.DEFAULT, 300).grab(false, true).create());
 		expandable.setExpanded(expanded);
 		expandable.addExpansionListener(expansionListener);
 	}
@@ -251,8 +264,126 @@ public class ResultsComponent extends AbstractSandboxComponent {
 		});
 		inputWants.add(model -> resultsViewer.setInput(model));
 		inputWants.add(model -> resultsDiagram.setRoot(model));
-
+		
+		// sort order
+		addSortableColumn(resultsViewer, bePrice, bePrice.getColumn());
+		addSortableColumn(resultsViewer, pAndL, pAndL.getColumn());
+		
+		resultsViewer.setComparator(new ViewerComparator() {
+			@Override
+			public int compare(Viewer viewer, Object e1, Object e2) {
+				int comparable = 0;
+				if (e1 instanceof ResultSet && e2 instanceof ResultSet) {
+					ResultSet r1 = (ResultSet) e1;
+					ResultSet r2 = (ResultSet) e2;
+					for (GridColumn gridColumn : getColumnSortOrder()) {
+						if (gridColumn == bePrice.getColumn()) {
+							Double breakeven1 = findBreakEvenResult(r1);
+							Double breakeven2 = findBreakEvenResult(r2);
+							if (breakeven1 != null && breakeven2 == null) {
+								comparable = -1;
+							} else if (breakeven1 == null && breakeven2 != null) {
+								comparable = 1;
+							} else if (breakeven1 == null && breakeven2 == null) {
+								comparable = 0;
+							} else {
+								comparable = Double.compare(breakeven1, breakeven2);
+							}
+						} else if (gridColumn == pAndL.getColumn()) {
+							Double profit1 = findLargestProfit(r1);
+							Double profit2 = findLargestProfit(r2);
+							if (profit1 != null && profit2 == null) {
+								return -1;
+							} else if (profit1 == null && profit2 != null) {
+								return 1;
+							} else if (profit1 == null && profit1 == null) {
+								comparable = 0;
+							} else {
+								comparable = Double.compare(profit1, profit2);
+							}
+						}
+						if (comparable != 0) {
+							break;
+						}
+					}
+				} else if (e1 instanceof ResultSet) {
+					return -1;
+				} else if (e2 instanceof ResultSet) {
+					return 1;
+				}
+				return comparable * (isSortDescending()?-1 : 1);
+			}
+		});
 		return resultsViewer.getControl();
+	}
+	
+	private Double findBreakEvenResult(ResultSet rs) {
+		for (AnalysisResultRow analysisResultRow : rs.getRows()) {
+			if (analysisResultRow.getResultDetail() instanceof BreakEvenResult) {
+				return ((BreakEvenResult) analysisResultRow.getResultDetail()).getPrice();
+			}
+		}
+		return null;
+	}
+	
+	private Double findLargestProfit(ResultSet rs) {
+		@NonNull
+		List<ProfitAndLossResult> results = rs.getRows().stream().filter(r -> r.getResultDetail() instanceof ProfitAndLossResult) //
+		.map(r -> (ProfitAndLossResult) r.getResultDetail()) //
+		.sorted((a,b) -> Double.compare(a.getValue(), b.getValue())) //
+		.collect(Collectors.toList());
+		
+		if (results.size() == 0) {
+			return null;
+		} else {
+			return results.get(results.size() -1).getValue();
+		}
+	}
+
+	public void addSortableColumn(final ColumnViewer viewer, final GridViewerColumn column, final GridColumn tColumn) {
+		if (getColumnSortOrder().contains(tColumn)) {
+			return;
+		}
+		
+		getColumnSortOrder().add(tColumn);
+
+		column.getColumn().addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetDefaultSelected(final SelectionEvent e) {
+			}
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+
+				sortColumnsBy(tColumn);
+				viewer.refresh(false);
+			}
+
+		});
+	}
+
+	public void sortColumnsBy(final GridColumn tColumn) {
+		if (getColumnSortOrder().get(0) == tColumn) {
+			setSortDescending(!isSortDescending());
+		} else {
+			setSortDescending(false);
+			getColumnSortOrder().get(0).setSort(SWT.NONE);
+			getColumnSortOrder().remove(tColumn);
+			getColumnSortOrder().add(0, tColumn);
+		}
+		tColumn.setSort(isSortDescending() ? SWT.UP : SWT.DOWN);
+	}
+
+	public ArrayList<GridColumn> getColumnSortOrder() {
+		return columnSortOrder;
+	}
+
+	public void setSortDescending(boolean sortDescending) {
+		this.sortDescending = sortDescending;
+	}
+
+	public boolean isSortDescending() {
+		return sortDescending;
 	}
 
 	@Override

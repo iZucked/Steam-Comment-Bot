@@ -26,17 +26,7 @@ public class BuyOptionDescriptionFormatter extends BaseFormatter {
 		if (object instanceof PartialCaseRow) {
 			final PartialCaseRow partialCaseRow = (PartialCaseRow) object;
 			final Collection<?> buys = partialCaseRow.getBuyOptions();
-
-<<<<<<< Upstream, based on branch 'master' of git@codebasehq.com:mmxlabs/repositories/com-mmxlabs-models-lng.git
 			return render(buys);
-=======
-			final MultipleResultGrouper g = findGroup(partialCaseRow);
-			if (g != null) {
-				return String.format("%s", render(buys));
-			} else {
-				return render(buys);
-			}
->>>>>>> 1eb0d25 Changes for displaying sandbox on large screen in advance fo demo
 
 		} else if (object instanceof Collection<?>) {
 			final Collection<?> collection = (Collection<?>) object;

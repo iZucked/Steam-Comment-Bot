@@ -89,7 +89,7 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent {
 
 				LocalMenuHelper helper = new LocalMenuHelper(addShipping.getParent());
 				{
-					helper.addAction(new RunnableAction("Nominated vessel", () -> {
+					helper.addAction(new RunnableAction("Nomination", () -> {
 						final NominatedShippingOption opt = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
 
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
@@ -98,7 +98,7 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent {
 
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 					}));
-					helper.addAction(new RunnableAction("Round trip vessel", () -> {
+					helper.addAction(new RunnableAction("Round trip", () -> {
 						final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
 
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
@@ -107,8 +107,8 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent {
 
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 					}));
-					helper.addAction(new RunnableAction("Fleet vessel", () -> {
-						final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
+					helper.addAction(new RunnableAction("Availability", () -> {
+						final FleetShippingOption opt = AnalyticsFactory.eINSTANCE.createOptionalAvailabilityShippingOption();
 						AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 								AddCommand.create(scenarioEditingLocation.getEditingDomain(), modelProvider.get(), AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
