@@ -42,7 +42,7 @@ public class OptionModelsComponent extends AbstractSandboxComponent {
 	@Override
 	public void createControls(final Composite parent, boolean expanded, final IExpansionListener expansionListener, final OptionModellerView optionModellerView) {
 
-		final ExpandableComposite expandable = wrapInExpandable(parent, "Options history", p -> createOptionsTreeViewer(p, optionModellerView), expandableCompo -> {
+		final ExpandableComposite expandable = wrapInExpandable(parent, "Models", p -> createOptionsTreeViewer(p, optionModellerView), expandableCompo -> {
 
 			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 			final OptionsTreeViewerDropTargetListener listener = new OptionsTreeViewerDropTargetListener(scenarioEditingLocation, optionsTreeViewer);

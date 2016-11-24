@@ -3,8 +3,10 @@ package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 import java.time.YearMonth;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -117,7 +119,8 @@ public class WhatIfEvaluator {
 		} else {
 			long a = System.currentTimeMillis();
 			final List<BaseCase> tasks = new LinkedList<>();
-			recursiveEval(0, combinations, scenarioEditingLocation, targetPNL, model, baseCase, tasks);
+			recursiveTaskCreator(0, combinations, scenarioEditingLocation, targetPNL, model, baseCase, tasks);
+			filterTasks(tasks);
 			Collection<ResultSet> results = multiEval(scenarioEditingLocation, targetPNL, model, tasks);
 			if (!results.isEmpty()) {
 				cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS, new LinkedList<>(results)));
@@ -181,6 +184,31 @@ public class WhatIfEvaluator {
 				}
 			}
 		}
+	}
+
+	private static void filterTasks(List<BaseCase> tasks) {
+		Set<BaseCase> duplicates = new HashSet<>();
+		for (BaseCase baseCase1 : tasks) {
+			for (BaseCase baseCase2 : tasks) {
+				if (duplicates.contains(baseCase1)
+						|| duplicates.contains(baseCase2)
+						|| baseCase1 == baseCase2
+						|| baseCase1.getBaseCase().size() != baseCase2.getBaseCase().size()){
+					continue;
+				}
+				for (BaseCaseRow baseCase1Row : baseCase1.getBaseCase()) {
+					for (BaseCaseRow baseCase2Row : baseCase2.getBaseCase()) {
+						if (baseCase1Row.getBuyOption() == baseCase2Row.getBuyOption()
+								&& baseCase1Row.getSellOption() == baseCase2Row.getSellOption()
+								&& baseCase1Row.getShipping() == baseCase2Row.getShipping()
+								) {
+							duplicates.add(baseCase2);
+						}
+					}					
+				}
+			}			
+		}
+		tasks.removeAll(duplicates);
 	}
 
 	private static ResultSet singleEval(final IScenarioEditingLocation scenarioEditingLocation, final long targetPNL, final OptionAnalysisModel model, final BaseCase baseCase) {
@@ -606,7 +634,7 @@ public class WhatIfEvaluator {
 			return String.format("%,.3f", breakevenPrice);
 		}
 		final double rearrangedPrice = IndexConversion.getRearrangedPrice(pricingModel, expression, breakevenPrice, date);
-		return expression.replaceFirst(Pattern.quote("?"), String.format("%,.3f", rearrangedPrice));
+		return expression.replaceFirst(Pattern.quote("?"), String.format("%,.2f", rearrangedPrice));
 	}
 
 	private static Triple<SlotAllocation, SlotAllocation, CargoAllocation> finder(final Schedule schedule, final BaseCaseRow baseCaseRow, final IMapperClass mapper) {
@@ -672,10 +700,11 @@ public class WhatIfEvaluator {
 		return false;
 	}
 
-	private static void recursiveEval(final int listIdx, final List<List<Runnable>> combinations, final IScenarioEditingLocation scenarioEditingLocation, final long targetPNL,
+	private static void recursiveTaskCreator(final int listIdx, final List<List<Runnable>> combinations, final IScenarioEditingLocation scenarioEditingLocation, final long targetPNL,
 			final OptionAnalysisModel model, final BaseCase baseCase, final List<BaseCase> tasks) {
 		if (listIdx == combinations.size()) {
 			final BaseCase copy = EcoreUtil.copy(baseCase);
+			filterShipping(copy);
 			tasks.add(copy);
 			return;
 		}
@@ -683,7 +712,18 @@ public class WhatIfEvaluator {
 		final List<Runnable> options = combinations.get(listIdx);
 		for (final Runnable r : options) {
 			r.run();
-			recursiveEval(listIdx + 1, combinations, scenarioEditingLocation, targetPNL, model, baseCase, tasks);
+			recursiveTaskCreator(listIdx + 1, combinations, scenarioEditingLocation, targetPNL, model, baseCase, tasks);
+		}
+	}
+
+	private static void filterShipping(BaseCase copy) {
+		for (BaseCaseRow baseCaseRow : copy.getBaseCase()) {
+			if (baseCaseRow.getBuyOption() != null
+					&& ((baseCaseRow.getBuyOption() instanceof BuyReference && ((BuyReference)baseCaseRow.getBuyOption()).getSlot().isDESPurchase())
+					|| (baseCaseRow.getBuyOption() instanceof BuyOpportunity && ((BuyOpportunity)baseCaseRow.getBuyOption()).isDesPurchase()))
+							) {
+				baseCaseRow.setShipping(null);
+			}
 		}
 	}
 
