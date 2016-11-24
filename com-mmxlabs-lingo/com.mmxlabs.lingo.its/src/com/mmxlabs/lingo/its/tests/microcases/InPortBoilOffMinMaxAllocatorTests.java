@@ -91,9 +91,7 @@ public class InPortBoilOffMinMaxAllocatorTests extends InPortBoilOffTests {
 		final int journeyFuelInM3 = result.getJourneyFuelVolumeInM3();
 
 		int actualStartHeelInM3 = result.getStartHeel();
-		int actualEndHeelInM3 = result.getEndHeel();
 		int expectedStartHeelInM3 = 0;
-		int expectedEndHeelInM3 = 0;
 
 		int expectedLoadVolumeInM3 = Math.min(vesselCapacity, portLoadMaxInM3) + expectedStartHeelInM3;
 		// Compensate for boiloff?
@@ -109,9 +107,9 @@ public class InPortBoilOffMinMaxAllocatorTests extends InPortBoilOffTests {
 
 		final int expectedDischargeVolumeInM3 = expectedLoadVolumeInM3 - loadPortBoilOff - journeyFuelInM3 - (dischargePortBoilOff * dischargeHours) / 24;
 		Assert.assertEquals(expectedLoadVolumeInM3, actualLoadVolumeInM3 + actualStartHeelInM3, ROUNDING_EPSILON);
-		Assert.assertEquals(expectedDischargeVolumeInM3 - expectedEndHeelInM3, actualDischargeVolumeInM3 - actualEndHeelInM3, ROUNDING_EPSILON);
-		Assert.assertEquals(expectedPhysicalLoadVolumeInM3, actualPhysicalLoadVolumeInM3, ROUNDING_EPSILON);
-		Assert.assertEquals(expectedDischargeVolumeInM3, actualPhysicalDischargeVolumeInM3 - actualEndHeelInM3, ROUNDING_EPSILON);
+		Assert.assertEquals(expectedDischargeVolumeInM3, actualDischargeVolumeInM3, ROUNDING_EPSILON);
+		Assert.assertEquals(expectedPhysicalLoadVolumeInM3, actualPhysicalLoadVolumeInM3 + actualStartHeelInM3, ROUNDING_EPSILON);
+		Assert.assertEquals(expectedDischargeVolumeInM3, actualPhysicalDischargeVolumeInM3, ROUNDING_EPSILON);
 
 		final int expectedViolationCount = expectedViolations.length;
 		final int actualViolationCount = result.getViolationsCount();

@@ -20,7 +20,8 @@ import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 
 /**
- *  Test cases for load and discharge events with NBO when using Load-Discharge-Discharge.
+ * Test cases for load and discharge events with NBO when using Load-Discharge-Discharge.
+ * 
  * @author NSteadman
  */
 @RunWith(Parameterized.class)
@@ -34,8 +35,8 @@ public class InPortBoilOffLDDUnconstrainedTests extends InPortBoilOffTests {
 	private final boolean compensateForBoilOff;
 	private final int[] portDischargeRanges;
 
-	public InPortBoilOffLDDUnconstrainedTests(final String name, final int loadPortBoilOff, final int dischargePortBoilOff, final int vesselCapacity, final CapacityViolationType[] expectedViolations, final boolean compensateForBoilOff,
-			final int[] portDischargeRanges) {
+	public InPortBoilOffLDDUnconstrainedTests(final String name, final int loadPortBoilOff, final int dischargePortBoilOff, final int vesselCapacity, final CapacityViolationType[] expectedViolations,
+			final boolean compensateForBoilOff, final int[] portDischargeRanges) {
 		this.name = name;
 		this.loadPortBoilOff = loadPortBoilOff;
 		this.dischargePortBoilOff = dischargePortBoilOff;
@@ -51,9 +52,30 @@ public class InPortBoilOffLDDUnconstrainedTests extends InPortBoilOffTests {
 				// Name, loadPortBoilOff, dischargePortBoilOff, vesselCapacity, expectedViolations, compensateForBoilOff, portDischargeVolumes
 				{ "BasicNoBoilOff", 0, 0, 145_000, new CapacityViolationType[] {}, false, new int[] { 60_000, 70_000, 60_000, 70_000 } }, // Base case
 				{ "BasicWithBoilOff", 1_000, 1_000, 145_000, new CapacityViolationType[] {}, false, new int[] { 60_000, 70_000, 60_000, 70_000 } }, // Acceptable levels of boil off, no compensation
-				{ "BasicWithBoilOffSecondExceeded", 1_000, 2_000, 145_000, new CapacityViolationType[] {}, false, new int[] { 60_000, 70_000, 60_000, 70_000 } }, // Boil off high enough that cannot make max volume on both discharges, no compensation
-				{ "BasicWithBoilOffBothExceeded", 1_000, 20_000, 145_000, new CapacityViolationType[] { CapacityViolationType.MIN_DISCHARGE }, false, new int[] { 60_000, 70_000, 60_000, 70_000 } }, // Boil off sufficiently high to prevent achieving min discharge on both slots
-				{ "DoubleMinFailure", 1_000, 1_000, 100_000, new CapacityViolationType[] { CapacityViolationType.MIN_DISCHARGE }, false, new int[] { 60_000, 70_000, 60_000, 70_000 } }, // Boil off sufficiently high to prevent achieving min discharge on both slots
+				{ "BasicWithBoilOffSecondExceeded", 1_000, 2_000, 145_000, new CapacityViolationType[] {}, false, new int[] { 60_000, 70_000, 60_000, 70_000 } }, // Boil off high enough that cannot
+																																									// make max volume on both
+																																									// discharges, no compensation
+				{ "BasicWithBoilOffBothExceeded", 1_000, 20_000, 145_000, new CapacityViolationType[] { CapacityViolationType.MIN_DISCHARGE }, false, new int[] { 60_000, 70_000, 60_000, 70_000 } }, // Boil
+																																																		// off
+																																																		// sufficiently
+																																																		// high
+																																																		// to
+																																																		// prevent
+																																																		// achieving
+																																																		// min
+																																																		// discharge
+																																																		// on
+																																																		// both
+																																																		// slots
+				{ "DoubleMinFailure", 1_000, 1_000, 100_000, new CapacityViolationType[] { CapacityViolationType.MIN_DISCHARGE }, false, new int[] { 60_000, 70_000, 60_000, 70_000 } }, // Boil off
+																																															// sufficiently
+																																															// high to
+																																															// prevent
+																																															// achieving
+																																															// min
+																																															// discharge
+																																															// on both
+																																															// slots
 				{ "CompensationWithBoilOff", 1_000, 1_000, 135_000, new CapacityViolationType[] {}, true, new int[] { 60_000, 70_000, 60_000, 70_000 } }, // Boil off with compensation turned on.
 
 		});
@@ -87,17 +109,17 @@ public class InPortBoilOffLDDUnconstrainedTests extends InPortBoilOffTests {
 		final int actualLoadVolumeInM3 = result.getLoadVolume();
 		final int actualDischargeVolumeInM3 = result.getDischargeVolume();
 		final int actualDischargeVolumeBInM3 = result.getDischargeVolumeB();
-		int actualPhysicalLoadVolumeInM3 = result.getPhysicalLoadVolume();
-		int actualPhysicalDischargeVolumeInM3 = result.getPhysicalDischargeVolume();
-		int actualPhysicalDischargeVolumeBInM3 = result.getPhysicalDischargeVolumeB();
+		final int actualPhysicalLoadVolumeInM3 = result.getPhysicalLoadVolume();
+		final int actualPhysicalDischargeVolumeInM3 = result.getPhysicalDischargeVolume();
+		final int actualPhysicalDischargeVolumeBInM3 = result.getPhysicalDischargeVolumeB();
 
 		final int portLoadMaxInM3 = result.getLoadAllocation().getSlot().getMaxQuantity();
 		final int journeyFuelInM3 = result.getJourneyFuelVolumeInM3();
-		
-		int actualStartHeelInM3 = result.getStartHeel();
-		int actualEndHeelInM3 = result.getEndHeel();
-		int expectedStartHeelInM3 = 0;
-		int expectedEndHeelInM3 = 0;
+
+		final int actualStartHeelInM3 = result.getStartHeel();
+		final int actualEndHeelInM3 = result.getEndHeel();
+		final int expectedStartHeelInM3 = 0;
+		final int expectedEndHeelInM3 = 0;
 
 		// Fuel Cost if maxDischarges can be met
 		final int targetTotalCost = portDischargeRanges[1] + portDischargeRanges[3] + journeyFuelInM3 + loadPortBoilOff + (2 * dischargePortBoilOff);
@@ -115,8 +137,8 @@ public class InPortBoilOffLDDUnconstrainedTests extends InPortBoilOffTests {
 		if (loadPortBoilOff >= vesselCapacity || dischargePortBoilOff >= vesselCapacity) {
 			expectedLoadVolumeInM3 = loadPortBoilOff + dischargePortBoilOff + journeyFuelInM3;
 		}
-		
-		int expectedPhysicalLoadVolumeInM3 = expectedLoadVolumeInM3 - loadPortBoilOff;
+
+		final int expectedPhysicalLoadVolumeInM3 = expectedLoadVolumeInM3 - loadPortBoilOff;
 
 		// If the costs will be in excess of the available fuel
 		boolean excessiveFuelCost = false;
@@ -155,11 +177,10 @@ public class InPortBoilOffLDDUnconstrainedTests extends InPortBoilOffTests {
 
 		Assert.assertEquals(expectedLoadVolumeInM3, actualLoadVolumeInM3 + actualStartHeelInM3, ROUNDING_EPSILON);
 		Assert.assertEquals(expectedDischargeVolumeInM3, actualDischargeVolumeInM3, ROUNDING_EPSILON);
-		Assert.assertEquals(expectedDischargeVolumeBInM3 - expectedEndHeelInM3, actualDischargeVolumeBInM3 - actualEndHeelInM3, ROUNDING_EPSILON);
+		Assert.assertEquals(expectedDischargeVolumeBInM3, actualDischargeVolumeBInM3, ROUNDING_EPSILON);
 		Assert.assertEquals(expectedPhysicalLoadVolumeInM3, actualPhysicalLoadVolumeInM3 + actualStartHeelInM3, ROUNDING_EPSILON);
 		Assert.assertEquals(expectedDischargeVolumeInM3, actualPhysicalDischargeVolumeInM3, ROUNDING_EPSILON);
-		Assert.assertEquals(expectedDischargeVolumeBInM3 - expectedEndHeelInM3, actualPhysicalDischargeVolumeBInM3 - actualEndHeelInM3, ROUNDING_EPSILON);
-
+		Assert.assertEquals(expectedDischargeVolumeBInM3, actualPhysicalDischargeVolumeBInM3, ROUNDING_EPSILON);
 
 		final int expectedViolationCount = expectedViolations.length;
 		final int actualViolationCount = result.getViolationsCount();

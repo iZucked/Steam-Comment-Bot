@@ -62,8 +62,6 @@ import com.mmxlabs.models.lng.schedule.impl.JourneyImpl;
 import com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl;
 import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 
-@SuppressWarnings("unused")
-@RunWith(value = ShiroRunner.class)
 public class InPortBoilOffTests extends AbstractMicroTestCase {
 
 	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");
