@@ -78,6 +78,11 @@ public class IndexConversion {
 
 	@Nullable
 	public static MarkedUpNode rearrangeGraph(double price, MarkedUpNode parent, Form form) {
+		if (form == Form.X_PLUS_C) {
+			// Convert to a different form
+			processCommodityNode(parent);
+			form = getForm(parent);
+		}
 		ConstantNode breakEvenPriceNode = new ConstantNode(price);
 		BreakEvenType breakEvenType = getBreakEvenType(parent);
 		if (form == Form.M_X && breakEvenType == BreakEvenType.COEFFICIENT) {
@@ -146,6 +151,19 @@ public class IndexConversion {
 			}
 		}
 		return null;
+	}
+
+	private static void processCommodityNode(MarkedUpNode node) {
+		for (int i = 0; i < node.getChildren().size(); i++) {
+			MarkedUpNode child = node.getChildren().get(i);
+			if (child instanceof CommodityNode) {
+				MarkedUpNode mult = new OperatorNode("*");
+				mult.addChildNode(new ConstantNode(1));
+				mult.addChildNode(child);
+				node.getChildren().set(i, mult);
+			}
+			processCommodityNode(child);
+		}
 	}
 
 	private static void replaceBreakEvenWithConstant(MarkedUpNode indexOperator, MarkedUpNode indexOperator_c) {
@@ -253,6 +271,8 @@ public class IndexConversion {
 			s = ((CurrencyNode) node).getIndex().getName();
 		} else if (node instanceof ConversionNode) {
 			s = ((ConversionNode) node).getName();
+		} else if (node instanceof BreakevenNode) {
+			s = "?";
 		}
 		return String.format("(%s)", s);
 	}
