@@ -272,8 +272,11 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 					try (PerChainUnitScopeImpl scope = evaluationInjector.getInstance(PerChainUnitScopeImpl.class)) {
 						scope.enter();
-						final BreakEvenOptimiser instance = evaluationInjector.getInstance(BreakEvenOptimiser.class);
-						instance.optimise(rawSequences, OptimiserUnitConvertor.convertToInternalFixedCost(targetProfitAndLoss));
+
+						if (breakEvenMode == BreakEvenMode.PORTFOLIO) {
+							final BreakEvenOptimiser instance = evaluationInjector.getInstance(BreakEvenOptimiser.class);
+							instance.optimise(rawSequences, OptimiserUnitConvertor.convertToInternalFixedCost(targetProfitAndLoss));
+						}
 						final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
 						{
 							final Injector childInjector = evaluationInjector.createChildInjector(new ExporterExtensionsModule());
