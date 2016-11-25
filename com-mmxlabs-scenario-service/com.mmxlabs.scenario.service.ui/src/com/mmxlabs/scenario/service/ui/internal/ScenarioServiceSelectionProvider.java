@@ -147,7 +147,7 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 
 	@Override
 	public void setPinnedPair(final ScenarioInstance pinInstance, final ScenarioInstance otherInstance, final boolean block) {
-		if (pin != pinInstance) {
+		if (pin != pinInstance || !selection.contains(otherInstance)) {
 
 			for (final ScenarioInstance scenarioInstance : new ArrayList<>(selection)) {
 				assert scenarioInstance != null;
