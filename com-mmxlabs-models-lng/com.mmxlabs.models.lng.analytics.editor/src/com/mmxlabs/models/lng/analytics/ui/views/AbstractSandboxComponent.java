@@ -106,8 +106,9 @@ public abstract class AbstractSandboxComponent {
 		expandableCompo.setLayout(new GridLayout(1, false));
 
 		final Control client = s.apply(expandableCompo);
-		GridDataFactory.generate(expandableCompo, 2, 2);
-
+//		GridDataFactory.generate(expandableCompo, 2, 2);
+//		GridDataFactory.generate(, 2, 2);
+		expandableCompo.setLayoutData(GridDataFactory.fillDefaults().minSize(SWT.DEFAULT, 400).grab(true, true).create());
 		expandableCompo.setClient(client);
 
 		if (customiser != null) {
