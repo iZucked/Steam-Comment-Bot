@@ -7,6 +7,7 @@ package com.mmxlabs.optimiser.core.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -176,20 +177,20 @@ public final class ModifiableSequences implements IModifiableSequences {
 	@Override
 	public boolean equals(final Object obj) {
 
-		if (obj instanceof ModifiableSequences) {
-			return sequenceMap.equals(((ModifiableSequences) obj).sequenceMap) && unusedElements.equals(((ModifiableSequences) obj).unusedElements);
-		} else if (obj instanceof ISequences) {
-			final ISequences seq = (ISequences) obj;
-			if (size() != seq.size()) {
+		if (obj == this) {
+			return true;
+		}
+		if (obj instanceof ISequences) {
+			final ISequences other = (ISequences) obj;
+			if (size() != other.size()) {
 				return false;
 			}
 
-			if (!this.getSequences().equals(seq.getSequences())) {
+			if (!this.getSequences().equals(other.getSequences())) {
 				return false;
 			}
 
-			if (!this.getUnusedElements().equals(seq.getUnusedElements())) {
-				// TODO this is suggesting order is important, which it shouldn't be.
+			if (!new HashSet<>(this.getUnusedElements()).equals(new HashSet<>(other.getUnusedElements()))) {
 				return false;
 			}
 
@@ -203,7 +204,7 @@ public final class ModifiableSequences implements IModifiableSequences {
 	@Override
 	public int hashCode() {
 
-		return Objects.hashCode(this.resources, this.sequenceMap, this.unusedElements);
+		return Objects.hashCode(this.resources, this.sequenceMap, new HashSet<>(this.unusedElements));
 	}
 
 	@SuppressWarnings("null")
