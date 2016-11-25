@@ -93,7 +93,7 @@ public class InPortBoilOffLDUnconstrainedTests extends InPortBoilOffTests {
 		final int actualEndHeelInM3 = result.getEndHeel();
 
 		final int portLoadMaxInM3 = result.getLoadAllocation().getSlot().getMaxQuantity();
-		final int journeyIdleFuelInM3 = result.getJourneyIdelFuelVolumeInM3();
+		final int journeyFuelInM3 = result.getJourneyFuelVolumeInM3();
 
 		int expectedLoadVolumeInM3 = Math.min(vesselCapacity, portLoadMaxInM3);
 		// Compensate for boiloff?
@@ -103,7 +103,7 @@ public class InPortBoilOffLDUnconstrainedTests extends InPortBoilOffTests {
 
 		// Is the boiloff in excess of vessel capacity? Pass theoretical journey volume.
 		if (loadPortBoilOff >= vesselCapacity || dischargePortBoilOff >= vesselCapacity) {
-			expectedLoadVolumeInM3 = loadPortBoilOff + (dischargePortBoilOff * dischargeHours) / 24 + journeyIdleFuelInM3;
+			expectedLoadVolumeInM3 = loadPortBoilOff + (dischargePortBoilOff * dischargeHours) / 24 + journeyFuelInM3;
 		}
 		// Capped start heel
 		if (expectedStartHeelInM3 == 145_000) {
@@ -112,7 +112,7 @@ public class InPortBoilOffLDUnconstrainedTests extends InPortBoilOffTests {
 
 		final int expectedPhysicalLoadVolumeInM3 = expectedLoadVolumeInM3 - loadPortBoilOff;
 
-		int expectedDischargeVolumeInM3 = expectedLoadVolumeInM3 - loadPortBoilOff - journeyIdleFuelInM3 - (dischargePortBoilOff * dischargeHours) / 24;
+		int expectedDischargeVolumeInM3 = expectedLoadVolumeInM3 - loadPortBoilOff - journeyFuelInM3 - (dischargePortBoilOff * dischargeHours) / 24;
 		// Capped start heel
 		if (expectedStartHeelInM3 == 145_000) {
 			expectedDischargeVolumeInM3 = expectedDischargeVolumeInM3 - dischargePortBoilOff;

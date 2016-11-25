@@ -35,8 +35,8 @@ public class InPortBoilOffMinMaxAllocatorTests extends InPortBoilOffTests {
 	private final int dischargeHours;
 	private final String priceExpression;
 
-	public InPortBoilOffMinMaxAllocatorTests(final String name, final int loadPortBoilOff, final int dischargePortBoilOff, final int vesselCapacity, final CapacityViolationType[] expectedViolations, final boolean compensateForBoilOff,
-			final int dischargeHours, final String priceExpression) {
+	public InPortBoilOffMinMaxAllocatorTests(final String name, final int loadPortBoilOff, final int dischargePortBoilOff, final int vesselCapacity, final CapacityViolationType[] expectedViolations,
+			final boolean compensateForBoilOff, final int dischargeHours, final String priceExpression) {
 		this.name = name;
 		this.loadPortBoilOff = loadPortBoilOff;
 		this.dischargePortBoilOff = dischargePortBoilOff;
@@ -88,8 +88,8 @@ public class InPortBoilOffMinMaxAllocatorTests extends InPortBoilOffTests {
 		int actualPhysicalDischargeVolumeInM3 = result.getPhysicalDischargeVolume();
 
 		final int portLoadMaxInM3 = result.getLoadAllocation().getSlot().getMaxQuantity();
-		final int journeyIdleFuelInM3 = result.getJourneyIdelFuelVolumeInM3();
-		
+		final int journeyFuelInM3 = result.getJourneyFuelVolumeInM3();
+
 		int actualStartHeelInM3 = result.getStartHeel();
 		int actualEndHeelInM3 = result.getEndHeel();
 		int expectedStartHeelInM3 = 0;
@@ -102,12 +102,12 @@ public class InPortBoilOffMinMaxAllocatorTests extends InPortBoilOffTests {
 		}
 		// Is the boiloff in excess of vessel capacity? Or is sale price lower than purchase ? Pass theoretical journey volume.
 		if (loadPortBoilOff >= vesselCapacity || dischargePortBoilOff >= vesselCapacity || Integer.parseInt(priceExpression) < 9) {
-			expectedLoadVolumeInM3 = loadPortBoilOff + (dischargePortBoilOff * dischargeHours) / 24 + journeyIdleFuelInM3;
+			expectedLoadVolumeInM3 = loadPortBoilOff + (dischargePortBoilOff * dischargeHours) / 24 + journeyFuelInM3;
 		}
-		
+
 		int expectedPhysicalLoadVolumeInM3 = expectedLoadVolumeInM3 - loadPortBoilOff;
 
-		final int expectedDischargeVolumeInM3 = expectedLoadVolumeInM3 - loadPortBoilOff - journeyIdleFuelInM3 - (dischargePortBoilOff * dischargeHours) / 24;
+		final int expectedDischargeVolumeInM3 = expectedLoadVolumeInM3 - loadPortBoilOff - journeyFuelInM3 - (dischargePortBoilOff * dischargeHours) / 24;
 		Assert.assertEquals(expectedLoadVolumeInM3, actualLoadVolumeInM3 + actualStartHeelInM3, ROUNDING_EPSILON);
 		Assert.assertEquals(expectedDischargeVolumeInM3 - expectedEndHeelInM3, actualDischargeVolumeInM3 - actualEndHeelInM3, ROUNDING_EPSILON);
 		Assert.assertEquals(expectedPhysicalLoadVolumeInM3, actualPhysicalLoadVolumeInM3, ROUNDING_EPSILON);

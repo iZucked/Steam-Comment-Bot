@@ -92,7 +92,7 @@ public class InPortBoilOffLDDUnconstrainedTests extends InPortBoilOffTests {
 		int actualPhysicalDischargeVolumeBInM3 = result.getPhysicalDischargeVolumeB();
 
 		final int portLoadMaxInM3 = result.getLoadAllocation().getSlot().getMaxQuantity();
-		final int journeyIdleFuelInM3 = result.getJourneyIdelFuelVolumeInM3();
+		final int journeyFuelInM3 = result.getJourneyFuelVolumeInM3();
 		
 		int actualStartHeelInM3 = result.getStartHeel();
 		int actualEndHeelInM3 = result.getEndHeel();
@@ -100,7 +100,7 @@ public class InPortBoilOffLDDUnconstrainedTests extends InPortBoilOffTests {
 		int expectedEndHeelInM3 = 0;
 
 		// Fuel Cost if maxDischarges can be met
-		final int targetTotalCost = portDischargeRanges[1] + portDischargeRanges[3] + journeyIdleFuelInM3 + loadPortBoilOff + (2 * dischargePortBoilOff);
+		final int targetTotalCost = portDischargeRanges[1] + portDischargeRanges[3] + journeyFuelInM3 + loadPortBoilOff + (2 * dischargePortBoilOff);
 		// Difference between min and max discharge on second discharge slot
 		final int dischargeBVolumeRange = portDischargeRanges[3] - portDischargeRanges[2];
 		// Difference between min and max discharge on first discharge slot
@@ -113,7 +113,7 @@ public class InPortBoilOffLDDUnconstrainedTests extends InPortBoilOffTests {
 		}
 		// Is the boiloff in excess of vessel capacity? Pass theoretical journey volume.
 		if (loadPortBoilOff >= vesselCapacity || dischargePortBoilOff >= vesselCapacity) {
-			expectedLoadVolumeInM3 = loadPortBoilOff + dischargePortBoilOff + journeyIdleFuelInM3;
+			expectedLoadVolumeInM3 = loadPortBoilOff + dischargePortBoilOff + journeyFuelInM3;
 		}
 		
 		int expectedPhysicalLoadVolumeInM3 = expectedLoadVolumeInM3 - loadPortBoilOff;
@@ -139,7 +139,7 @@ public class InPortBoilOffLDDUnconstrainedTests extends InPortBoilOffTests {
 			}
 		}
 
-		int expectedDischargeVolumeBInM3 = portDischargeRanges[3] - journeyIdleFuelInM3;
+		int expectedDischargeVolumeBInM3 = portDischargeRanges[3] - journeyFuelInM3;
 		if (excessiveFuelCost) {
 			// Fuel excess doesn't prevent the second discharge slot meeting its minimum, first discharge unaffected
 			if (fuelCostExcess <= dischargeBVolumeRange) {
@@ -149,7 +149,7 @@ public class InPortBoilOffLDDUnconstrainedTests extends InPortBoilOffTests {
 				expectedDischargeVolumeBInM3 = portDischargeRanges[2];
 				// Fuel excess could cause both discharges to meet minimum volumes
 			} else {
-				expectedDischargeVolumeBInM3 = expectedLoadVolumeInM3 - loadPortBoilOff - portDischargeRanges[0] - (dischargePortBoilOff * 2) - journeyIdleFuelInM3;
+				expectedDischargeVolumeBInM3 = expectedLoadVolumeInM3 - loadPortBoilOff - portDischargeRanges[0] - (dischargePortBoilOff * 2) - journeyFuelInM3;
 			}
 		}
 
