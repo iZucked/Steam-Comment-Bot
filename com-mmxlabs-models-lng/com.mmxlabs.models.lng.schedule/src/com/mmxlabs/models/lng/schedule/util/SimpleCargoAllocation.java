@@ -23,16 +23,12 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
  */
 public class SimpleCargoAllocation {
 
-	private final Journey ladenLeg;
-	private final Journey ballastLeg;
-	private Journey ballastLegB;
-	private final Idle ladenIdle;
-	private final Idle ballastIdle;
-	private Idle ballastIdleB;
+	private final Journey[] journeyLegs = new Journey[3];
+	private final Idle[] idleLegs = new Idle[3];
 	private final SlotAllocation loadAllocation;
 	private final SlotAllocation dischargeAllocation;
 	private SlotAllocation dischargeAllocationB;
-	private CargoAllocation cargoAllocation;
+	private final CargoAllocation cargoAllocation;
 	private final int eventCount;
 	private int startHeel;
 	private int endHeel;
@@ -42,9 +38,8 @@ public class SimpleCargoAllocation {
 		// Simple processing - assuming single load/discharge pairing
 		final EList<Event> events = cargoAllocation.getEvents();
 		eventCount = events.size();
-		
 
-		if (eventCount != 2  && eventCount != 6 && eventCount != 9) {
+		if (eventCount > 6 && eventCount != 9) {
 			throw new IllegalStateException(
 					"Expects Load/Discharge events with two journey and two idle events (6 events) or  Load/Discharge/Discharge events with three journey and three idle events (9 events)");
 		}
@@ -57,10 +52,11 @@ public class SimpleCargoAllocation {
 		}
 
 		// Process events list to get full set - which may or may not include nulls. For example we may be missing a Journey leg if there was no journey, or idle time if there was no idle.
-		Event[] processedEvents = new Event[eventCount];
-		
+		final Event[] processedEvents = new Event[eventCount];
+
+		int voyageIdx = -1;
 		int currentIndex = 0;
-		for (Event e : events) {
+		for (final Event e : events) {
 			if (e instanceof Journey || e instanceof Idle || e instanceof SlotVisit) {
 				processedEvents[currentIndex] = e;
 				if (currentIndex == 0) {
@@ -72,47 +68,39 @@ public class SimpleCargoAllocation {
 			} else {
 				throw new IllegalStateException("Unexpected event type");
 			}
+			if (e instanceof SlotVisit) {
+				voyageIdx++;
+			} else if (e instanceof Journey) {
+				journeyLegs[voyageIdx] = (Journey) e;
+			} else if (e instanceof Idle) {
+				idleLegs[voyageIdx] = (Idle) e;
+			}
 			currentIndex++;
-		}
-		if(eventCount > 2){
-		ladenLeg = (Journey) processedEvents[1];
-		ladenIdle = (Idle) processedEvents[2];
-		ballastLeg = (Journey) processedEvents[4];
-		ballastIdle = (Idle) processedEvents[5];
-		if (eventCount == 9) {
-			ballastLegB = (Journey) processedEvents[7];
-			ballastIdleB = (Idle) processedEvents[8];
-		}
-		} else {
-			ladenLeg = null;
-			ladenIdle = null;
-			ballastLeg = null;
-			ballastIdle = null;
 		}
 	}
 
 	public Journey getLadenLeg() {
-		return ladenLeg;
+		return journeyLegs[0];
 	}
 
 	public Journey getBallastLeg() {
-		return ballastLeg;
+		return journeyLegs[1];
 	}
 
 	public Journey getBallastLegB() {
-		return ballastLegB;
+		return journeyLegs[2];
 	}
 
 	public Idle getLadenIdle() {
-		return ladenIdle;
+		return idleLegs[0];
 	}
 
 	public Idle getBallastIdle() {
-		return ballastIdle;
+		return idleLegs[1];
 	}
 
 	public Idle getBallastIdleB() {
-		return ballastIdleB;
+		return idleLegs[2];
 	}
 
 	public SlotAllocation getLoadAllocation() {
@@ -130,7 +118,7 @@ public class SimpleCargoAllocation {
 	public int getLoadVolume() {
 		return loadAllocation.getVolumeTransferred();
 	}
-	
+
 	public int getPhysicalLoadVolume() {
 		return loadAllocation.getPhysicalVolumeTransferred();
 	}
@@ -138,7 +126,7 @@ public class SimpleCargoAllocation {
 	public int getDischargeVolume() {
 		return dischargeAllocation.getVolumeTransferred();
 	}
-	
+
 	public int getPhysicalDischargeVolume() {
 		return dischargeAllocation.getPhysicalVolumeTransferred();
 	}
@@ -146,7 +134,7 @@ public class SimpleCargoAllocation {
 	public int getDischargeVolumeB() {
 		return dischargeAllocationB.getVolumeTransferred();
 	}
-	
+
 	public int getPhysicalDischargeVolumeB() {
 		return dischargeAllocationB.getPhysicalVolumeTransferred();
 	}
@@ -167,17 +155,21 @@ public class SimpleCargoAllocation {
 		return dischargeAllocationB.getSlotVisit().getViolations();
 	}
 
-	public int getJourneyIdelFuelVolumeInM3() {
-		int journeyIdleFuel = 0;
-		journeyIdleFuel += ScheduleModelUtils.sumFuelVolumes(ladenIdle.getFuels(), FuelUnit.M3);
-		journeyIdleFuel += ScheduleModelUtils.sumFuelVolumes(ladenLeg.getFuels(), FuelUnit.M3);
-		journeyIdleFuel += ScheduleModelUtils.sumFuelVolumes(ballastIdle.getFuels(), FuelUnit.M3);
-		journeyIdleFuel += ScheduleModelUtils.sumFuelVolumes(ballastLeg.getFuels(), FuelUnit.M3);
-		if (eventCount == 9) {
-			journeyIdleFuel += ScheduleModelUtils.sumFuelVolumes(ballastIdleB.getFuels(), FuelUnit.M3);
-			journeyIdleFuel += ScheduleModelUtils.sumFuelVolumes(ballastLegB.getFuels(), FuelUnit.M3);
+	public int getJourneyFuelVolumeInM3() {
+		int journeyFuelInM3 = 0;
+		for (int i = 0; i < journeyLegs.length; ++i) {
+			Journey j = journeyLegs[i];
+			if (j != null) {
+				journeyFuelInM3 += ScheduleModelUtils.sumFuelVolumes(j.getFuels(), FuelUnit.M3);
+			}
 		}
-		return journeyIdleFuel;
+		for (int i = 0; i < idleLegs.length; ++i) {
+			Idle idle = idleLegs[i];
+			if (idle != null) {
+				journeyFuelInM3 += ScheduleModelUtils.sumFuelVolumes(idle.getFuels(), FuelUnit.M3);
+			}
+		}
+		return journeyFuelInM3;
 	}
 
 	public int getViolationsCount() {
