@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.RouteDistanceLineCache;
 
@@ -82,9 +83,20 @@ public class TravelTimeUtils {
 	}
 
 	public static int getDistance(@NonNull final Route route, @NonNull final Port from, @NonNull final Port to) {
-		final RouteDistanceLineCache cache = (RouteDistanceLineCache) Platform.getAdapterManager().loadAdapter(route, RouteDistanceLineCache.class.getName());
-		if (cache != null) {
-			return cache.getDistance(from, to);
+
+		if (Platform.isRunning()) {
+
+			final RouteDistanceLineCache cache = (RouteDistanceLineCache) Platform.getAdapterManager().loadAdapter(route, RouteDistanceLineCache.class.getName());
+			if (cache != null) {
+				return cache.getDistance(from, to);
+			}
+		} else {
+			for (final RouteLine dl : route.getLines()) {
+				if (dl.getFrom().equals(from) && dl.getTo().equals(to)) {
+					return dl.getDistance();
+				}
+			}
+			return Integer.MAX_VALUE;
 		}
 		return Integer.MAX_VALUE;
 	}
