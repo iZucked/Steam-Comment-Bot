@@ -9,7 +9,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -59,9 +58,7 @@ public class LNGScenarioChainBuilder {
 
 		final ChainBuilder builder = new ChainBuilder(dataTransformer);
 		if (createOptimiser) {
-
-			// TODO: Make a stage
-			if (LicenseFeatures.isPermitted("features:no-nominal-in-prompt")) {
+			if (hints.contains(LNGTransformerHelper.HINT_NO_NOMINALS_IN_PROMPT)) {
 				LNGNoNominalInPromptTransformerUnit.chain(builder, optimisationPlan.getUserSettings(), 1);
 			}
 

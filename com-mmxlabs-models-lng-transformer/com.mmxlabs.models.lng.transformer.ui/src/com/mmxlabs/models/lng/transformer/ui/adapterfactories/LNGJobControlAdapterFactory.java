@@ -60,7 +60,8 @@ public class LNGJobControlAdapterFactory implements IAdapterFactory {
 				return (T) new LNGSchedulerEvaluationJobControl(descriptor);
 			}
 		}
-		return (T)null;
+		return (T) null;
+
 	}
 
 	@Override

@@ -338,6 +338,10 @@ public class LNGScenarioTransformer {
 	private boolean shippingOnly;
 
 	@Inject
+	@Named(LNGTransformerHelper.HINT_NO_NOMINALS_IN_PROMPT)
+	private boolean noNominalsInPrompt;
+
+	@Inject
 	@Named(LNGTransformerHelper.HINT_SPOT_CARGO_MARKETS)
 	private boolean withSpotCargoMarkets;
 
@@ -1053,7 +1057,7 @@ public class LNGScenarioTransformer {
 			}
 
 			boolean isSoftRequired = false;
-			if (LicenseFeatures.isPermitted("features:no-nominal-in-prompt")) {
+			if (noNominalsInPrompt) {
 				if (eCargo.getSpotIndex() == NOMINAL_CARGO_INDEX) {
 					final LocalDate promptPeriodEnd = rootObject.getPromptPeriodEnd();
 					if (promptPeriodEnd != null) {

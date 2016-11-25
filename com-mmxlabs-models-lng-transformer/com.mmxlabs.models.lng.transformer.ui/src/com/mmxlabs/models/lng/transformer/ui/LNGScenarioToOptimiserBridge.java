@@ -36,7 +36,9 @@ import com.mmxlabs.models.lng.transformer.CopiedModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
+import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGInitialSequencesModule;
@@ -48,8 +50,10 @@ import com.mmxlabs.models.lng.transformer.period.PeriodExporter;
 import com.mmxlabs.models.lng.transformer.period.PeriodTransformer;
 import com.mmxlabs.models.lng.transformer.period.ScenarioEntityMapping;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.rcp.common.ecore.RunnableCommand;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -296,6 +300,51 @@ public class LNGScenarioToOptimiserBridge {
 		}
 
 		return targetOriginalScenario;
+
+	}
+
+	/**
+	 * Returns a {@link Schedule} for the *optimiser* data
+	 * 
+	 * @param rawSequences
+	 * @param extraAnnotations
+	 */
+	@NonNull
+	public Schedule createShedule(@NonNull final ISequences rawSequences, @Nullable final Map<String, Object> extraAnnotations) {
+
+		final Injector injector;
+		{
+			final Collection<@NonNull IOptimiserInjectorService> services = optimiserDataTransformer.getModuleServices();
+			final List<Module> modules = new LinkedList<>();
+			modules.add(new InitialSequencesModule(optimiserDataTransformer.getInitialSequences()));
+			modules.add(new InputSequencesModule(rawSequences));
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(
+					new LNGParameters_EvaluationSettingsModule(optimiserDataTransformer.getUserSettings(), optimiserDataTransformer.getSolutionBuilderSettings().getConstraintAndFitnessSettings()),
+					services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
+			injector = optimiserDataTransformer.getInjector().createChildInjector(modules);
+		}
+
+		// new LNGExportTransformer(eveal/optimisationTransofrmer, hints);
+		// exporter == transformer.createASE();
+		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
+		{
+			final Injector childInjector = injector.createChildInjector(new ExporterExtensionsModule());
+			childInjector.injectMembers(exporter);
+		}
+		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			scope.enter();
+
+			final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
+			final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(injector, optimisationData, rawSequences).getFirst();
+
+			// Copy extra annotations - e.g. fitness information
+			if (extraAnnotations != null) {
+				extraAnnotations.entrySet().forEach(e -> solution.setGeneralAnnotation(e.getKey(), e.getValue()));
+			}
+
+			return exporter.exportAnnotatedSolution(optimiserDataTransformer.getModelEntityMap(), solution);
+		}
 
 	}
 

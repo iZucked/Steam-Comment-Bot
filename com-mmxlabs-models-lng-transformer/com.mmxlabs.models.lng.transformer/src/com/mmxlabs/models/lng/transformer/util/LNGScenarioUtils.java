@@ -41,6 +41,7 @@ public class LNGScenarioUtils {
 		for (final VesselEvent event : cargoModel.getVesselEvents()) {
 			allDates.add(event.getStartByAsDateTime());
 			allDates.add(event.getStartAfterAsDateTime());
+			assert !allDates.contains(null);
 		}
 		for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
 			if (vesselAvailability.isSetStartBy())
@@ -52,14 +53,20 @@ public class LNGScenarioUtils {
 				allDates.add(vesselAvailability.getEndByAsDateTime());
 			if (vesselAvailability.isSetEndAfter())
 				allDates.add(vesselAvailability.getEndAfterAsDateTime());
+			
+			assert !allDates.contains(null);
 		}
 		for (final Slot s : cargoModel.getLoadSlots()) {
 			allDates.add(s.getWindowStartWithSlotOrPortTimeWithFlex());
 			allDates.add(s.getWindowEndWithSlotOrPortTimeWithFlex());
+			
+			assert !allDates.contains(null);
 		}
 		for (final Slot s : cargoModel.getDischargeSlots()) {
 			allDates.add(s.getWindowStartWithSlotOrPortTimeWithFlex());
 			allDates.add(s.getWindowEndWithSlotOrPortTimeWithFlex());
+			
+			assert !allDates.contains(null);
 		}
 
 		earliestTime = allDates.isEmpty() ? EarliestDate : Collections.min(allDates);
