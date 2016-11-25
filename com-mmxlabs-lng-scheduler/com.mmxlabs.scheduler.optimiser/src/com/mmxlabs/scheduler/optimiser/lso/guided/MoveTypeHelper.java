@@ -21,7 +21,8 @@ public class MoveTypeHelper {
 		// Is element locked? Then we can not do anything
 		final List<MoveTypes> moveTypes = new LinkedList<>();
 
-		if (helper.isLockedToVessel(element)) {
+		// We get here with non-shipped slots!
+		if (helper.isLockedToVessel(element) && resource != null && !helper.isOptional(element)) {// && helper.isShipped(element)) {
 			// TODO: Strictly we could shift within the sequence
 			// moveTypes.add(MoveTypes.Swap_Slot/*_InSequence*/);
 			return moveTypes;

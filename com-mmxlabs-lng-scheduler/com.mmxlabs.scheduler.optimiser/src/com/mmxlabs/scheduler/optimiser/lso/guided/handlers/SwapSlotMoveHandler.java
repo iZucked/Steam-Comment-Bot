@@ -48,8 +48,21 @@ public class SwapSlotMoveHandler implements IMoveHandler {
 		if (fromResource == null) {
 
 			builder.withElementA(null, slot);
+
 			// TODO: Find a way to populate the candidate set
-			return null;
+			if (helper.isLoadSlot(slot)) {
+				for (ISequenceElement e : followersAndPreceders.getValidFollowers(slot)) {
+					Iterables.addAll(candidates, followersAndPreceders.getValidPreceders(e));
+				}
+				candidates.remove(slot);
+			} else if (helper.isDischargeSlot(slot)) {
+				for (ISequenceElement e : followersAndPreceders.getValidPreceders(slot)) {
+					Iterables.addAll(candidates, followersAndPreceders.getValidFollowers(e));
+				}
+				candidates.remove(slot);
+			}
+
+//			return null;
 
 		} else {
 			final int index = slotLocation.getSecond().intValue();
@@ -68,7 +81,7 @@ public class SwapSlotMoveHandler implements IMoveHandler {
 			}
 			builder.withElementA(fromResource, slot);
 
-			// Suggest we may want to consider the surrounding elements for further changes.	
+			// Suggest we may want to consider the surrounding elements for further changes.
 			hints.addSuggestedElements(slot_minus_1);
 			hints.addSuggestedElements(slot_plus_1);
 		}
@@ -118,6 +131,7 @@ public class SwapSlotMoveHandler implements IMoveHandler {
 			if (fromResource == null) {
 				if (!helper.isOptional(candidate)) {
 					if (helper.isStrictOptional()) {
+						foundElementB = false;
 						elementHints.clear();
 						continue;
 					} else {

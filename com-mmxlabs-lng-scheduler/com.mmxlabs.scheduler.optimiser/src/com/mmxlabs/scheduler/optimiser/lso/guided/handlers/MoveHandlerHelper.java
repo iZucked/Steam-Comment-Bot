@@ -40,6 +40,9 @@ public class MoveHandlerHelper {
 			}
 
 			if (e == element) {
+				if (segmentStart == -1) {
+					segmentStart = i;
+				}
 				break;
 			}
 		}
@@ -54,11 +57,14 @@ public class MoveHandlerHelper {
 			final ISequenceElement e = fromSequence.get(i);
 			// Iterate through elements (they should be loads) until we reach a discharge.
 			// The segment ends at the first non-discharge element.
+			if (helper.isStartOrEndSlot(e)) {
+				break;
+			}
 			if (!foundDischarge) {
 				if (helper.isDischargeSlot(e)) {
 					foundDischarge = true;
 				} else {
-					assert helper.isLoadSlot(e);
+					assert helper.isLoadSlot(e) ;
 				}
 			} else {
 				if (!helper.isDischargeSlot(e)) {

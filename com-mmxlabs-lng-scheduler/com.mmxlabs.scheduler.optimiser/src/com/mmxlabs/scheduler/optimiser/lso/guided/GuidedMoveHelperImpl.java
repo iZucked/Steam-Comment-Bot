@@ -6,11 +6,9 @@ import java.util.List;
 import java.util.Random;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.google.inject.name.Named;
 import com.mmxlabs.optimiser.common.dcproviders.ILockedElementsProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
@@ -19,6 +17,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -32,7 +31,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
-@Singleton
+@PerChainUnitScope
 public class GuidedMoveHelperImpl implements IGuidedMoveHelper {
 
 	@Inject
@@ -64,9 +63,13 @@ public class GuidedMoveHelperImpl implements IGuidedMoveHelper {
 	private final @NonNull List<IResource> desPurchaseResources = new LinkedList<>();
 	private final @NonNull List<IResource> fobSaleResources = new LinkedList<>();
 
-	@Inject
-	@Named("GUIDED_MOVE_HELPER_RANDOM")
-	private Random random;
+//	@Inject
+//	@Named("GUIDED_MOVE_HELPER_RANDOM")
+	private Random random = new Random(1);
+
+	public void setRandom(Random random) {
+		this.random = random;
+	}
 
 	@Inject
 	private void processInformation(final IOptimisationData optimisationData) {
@@ -236,6 +239,7 @@ public class GuidedMoveHelperImpl implements IGuidedMoveHelper {
 				return false;
 			}
 		}
+		
 		return true;
 	}
 
@@ -247,7 +251,7 @@ public class GuidedMoveHelperImpl implements IGuidedMoveHelper {
 
 	@Override
 	public boolean isStrictOptional() {
-		return true;
+		return false;
 	}
 
 	@Override

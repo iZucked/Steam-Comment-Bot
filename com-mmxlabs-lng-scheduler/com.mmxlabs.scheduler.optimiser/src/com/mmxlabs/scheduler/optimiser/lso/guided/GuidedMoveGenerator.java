@@ -17,6 +17,7 @@ import com.google.common.collect.Sets;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -50,6 +51,9 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 	private MoveTypeHelper moveTypeHelper;
 
 	@Inject
+	private IOptionalElementsProvider optionalElementsProvider;
+
+	@Inject
 	private IGuidedMoveHelper helper;
 
 	@Inject
@@ -68,7 +72,13 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 	@Inject
 	private void findAllTargetElements(@NonNull IOptimisationData optimisationData) {
 
-		allTargetElements = optimisationData.getSequenceElements().stream().filter(e -> validElementTypes.contains(portTypeProvider.getPortType(e))).collect(Collectors.toList());
+		allTargetElements = optimisationData.getSequenceElements().stream() //
+				.filter(e -> validElementTypes.contains(portTypeProvider.getPortType(e))) //
+				.collect(Collectors.toList());
+	}
+
+	public void setTargetElements(Collection<ISequenceElement> targetElements) {
+		allTargetElements = new ArrayList<>(targetElements);
 	}
 
 	@Override
@@ -85,6 +95,11 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 		final List<IMove> discoveredMoves = new LinkedList<>();
 		int checkPointIndex = -1;
 		IModifiableSequences currentSequences = new ModifiableSequences(providedSequences);
+
+		long existingUnusedCompulsarySlotCount = currentSequences.getUnusedElements().stream() //
+				.filter(e -> optionalElementsProvider.isElementRequired(e)) //
+				.count();
+
 		for (int i = 0; i < num_tries; ++i) {
 
 			// Generate a move step
@@ -99,16 +114,32 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 			move.apply(currentSequences);
 			hintManager.chain(moveData.getSecond());
 
+			// Strictly we remove the original slots from this set and reject the state if there are any slots left rather than just see if there is an overall increase in number as this allows
+			// "swimming" slot violations.
+			long newUnusedCompulsarySlotCount = currentSequences.getUnusedElements().stream() //
+					.filter(e -> optionalElementsProvider.isElementRequired(e)) //
+					.count();
 			// If the current state passes the constraint checkers, then maybe return it.
-			if (//hintManager.getOpenCompulsarySlots().isEmpty() &&
-					helper.doesMovePassConstraints(currentSequences)) {
+			if (
+			// hintManager.getOpenCompulsarySlots().isEmpty() && //
+			newUnusedCompulsarySlotCount <= existingUnusedCompulsarySlotCount //
+					&& helper.doesMovePassConstraints(currentSequences)) {
+
 				// Record this state as valid in case we do not find a valid state later on
 				checkPointIndex = i;
-				if (helper.getSharedRandom().nextDouble() < 0.05) {
-					return new CompoundMove(discoveredMoves);
-				}
+
+				// Sometimes we want to continue searching as the solution may pass constraints, but have other issues - such as increase lateness or other violations.
+				// However the extra search can also introduce unnecessary changes.
+				// if (helper.getSharedRandom().nextDouble() < 0.05) {
+				return new CompoundMove(discoveredMoves);
+				// }
 			}
 
+		}
+
+		// If we have an empty move, return null
+		if (discoveredMoves.isEmpty()) {
+			return null;
 		}
 
 		if (checkPointIndex != -1) {

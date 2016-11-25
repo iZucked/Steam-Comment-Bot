@@ -66,7 +66,7 @@ public class InsertCargoVesselMoveHandler implements IMoveHandler {
 				final Followers<ISequenceElement> preceders = followersAndPreceders.getValidPreceders(element);
 
 				filteredUnusedSequenceElements = unusedSequenceElements.stream()//
-						.filter(e -> helper.isFOBPurchase(e))//
+						.filter(e -> helper.isLoadSlot(e))//
 						.filter(e -> preceders.contains(e))//
 						.collect(Collectors.toList());
 			} else if (helper.isFOBPurchase(element)) {
@@ -77,7 +77,7 @@ public class InsertCargoVesselMoveHandler implements IMoveHandler {
 				final Followers<ISequenceElement> followers = followersAndPreceders.getValidFollowers(element);
 
 				filteredUnusedSequenceElements = unusedSequenceElements.stream() //
-						.filter(e -> helper.isDESSale(e))//
+						.filter(e -> helper.isDischargeSlot(e))//
 						.filter(e -> followers.contains(e))//
 						.collect(Collectors.toList());
 			} else {
@@ -94,7 +94,13 @@ public class InsertCargoVesselMoveHandler implements IMoveHandler {
 
 			// Assume we can, in principle, use and fleet vessel
 			final List<IResource> validTargetResources = new LinkedList<>();
-			validTargetResources.addAll(helper.getAllVesselResources());
+			if (helper.isDESPurchase(other)) {
+				validTargetResources.add(helper.getDESPurchaseResource(other));
+			} else if (helper.isFOBSale(other)) {
+				validTargetResources.add(helper.getFOBSaleResource(other));
+			} else {
+				validTargetResources.addAll(helper.getAllVesselResources());
+			}
 
 			// Filter the valid target resource list to the common set.
 			for (final ISequenceElement e : orderedCargoElements) {
@@ -115,7 +121,7 @@ public class InsertCargoVesselMoveHandler implements IMoveHandler {
 			final Followers<ISequenceElement> preceders = followersAndPreceders.getValidPreceders(orderedCargoElements.get(0));
 
 			// Get list of followers for last element.
-			final Followers<ISequenceElement> followers = followersAndPreceders.getValidPreceders(orderedCargoElements.get(orderedCargoElements.size() - 1));
+			final Followers<ISequenceElement> followers = followersAndPreceders.getValidFollowers(orderedCargoElements.get(orderedCargoElements.size() - 1));
 
 			// Build up a list of all valid insertion points. For all valid elements that can go before the first element in the insertion list, see if it's following element could also follow the
 			// last element in the insert sequence
