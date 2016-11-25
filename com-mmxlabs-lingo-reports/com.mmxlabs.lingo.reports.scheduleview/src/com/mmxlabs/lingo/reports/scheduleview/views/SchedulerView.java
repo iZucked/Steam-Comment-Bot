@@ -101,7 +101,6 @@ import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
-import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -511,14 +510,31 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 							final Color lineColour = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 
 							for (final ChangeSetRow csRow : csRows) {
-								if (csRow.isVesselChange()) {
-									{
-										final SlotAllocation oldAllocation = csRow.getOriginalLoadAllocation();
-										final SlotAllocation newAllocation = csRow.getNewLoadAllocation();
+								{
+									final SlotAllocation oldAllocation = csRow.getOriginalLoadAllocation();
+									final SlotAllocation newAllocation = csRow.getNewLoadAllocation();
+
+									if (oldAllocation != null && newAllocation != null) {
+
+										if (differentSequenceChecker.apply(oldAllocation, newAllocation)) {
+											final GanttEvent oldEvent = internalMap.get(oldAllocation.getSlotVisit());
+											final GanttEvent newEvent = internalMap.get(newAllocation.getSlotVisit());
+
+											if (oldEvent != null && newEvent != null) {
+												ganttChart.getGanttComposite().addConnection(oldEvent, newEvent, lineColour);
+											}
+										}
+									}
+								}
+								{
+									ChangeSetRow rhsWiringLink = csRow.getRhsWiringLink();
+									if (rhsWiringLink != null) {
+										final SlotAllocation oldAllocation = rhsWiringLink.getOriginalDischargeAllocation();
+										final SlotAllocation newAllocation = csRow.getNewDischargeAllocation();
 
 										if (oldAllocation != null && newAllocation != null) {
-
 											if (differentSequenceChecker.apply(oldAllocation, newAllocation)) {
+
 												final GanttEvent oldEvent = internalMap.get(oldAllocation.getSlotVisit());
 												final GanttEvent newEvent = internalMap.get(newAllocation.getSlotVisit());
 
@@ -528,9 +544,10 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 											}
 										}
 									}
-									{
+									ChangeSetRow lhsWiringLink = csRow.getLhsWiringLink();
+									if (lhsWiringLink != null) {
+										final SlotAllocation newAllocation = lhsWiringLink.getNewDischargeAllocation();
 										final SlotAllocation oldAllocation = csRow.getOriginalDischargeAllocation();
-										final SlotAllocation newAllocation = csRow.getNewDischargeAllocation();
 
 										if (oldAllocation != null && newAllocation != null) {
 											if (differentSequenceChecker.apply(oldAllocation, newAllocation)) {
