@@ -238,6 +238,9 @@ public class ChangeSetView implements IAdaptable {
 			if (viewer.getControl().isDisposed()) {
 				return;
 			}
+			
+			// Reset selection
+			scenarioComparisonService.setSelectedElements(Collections.emptySet());
 
 			// TODO: Extract vessel columns and generate.
 			final Set<String> vesselnames = new LinkedHashSet<>();
