@@ -85,6 +85,8 @@ public class OptionAnalysisModelSSListener extends ScenarioServiceListener {
 				for (final EObject plan : new HashSet<EObject>(objectToFragmentMap.keySet())) {
 					removeFragment(plan);
 				}
+				
+				scenarioModel = null;
 			}
 		}
 

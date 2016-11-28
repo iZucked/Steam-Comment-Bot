@@ -68,7 +68,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
-import com.mmxlabs.models.ui.properties.views.Options;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
@@ -336,6 +335,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	@Override
 	protected void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject) {
 		doDisplayScenarioInstance(scenarioInstance, rootObject, null);
+
+		updateActions(getEditingDomain());
 	}
 
 	void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject, @Nullable OptionAnalysisModel model) {
