@@ -20,6 +20,12 @@ public class HintManager {
 
 	private Collection<ISequenceElement> suggestedElements = new LinkedHashSet<>();
 
+	private Collection<ISequenceElement> usedElements = new LinkedHashSet<>();
+
+	public Collection<ISequenceElement> getUsedElements() {
+		return usedElements;
+	}
+
 	public Collection<ISequenceElement> getProblemElements() {
 		return problemElements;
 	}
@@ -31,6 +37,7 @@ public class HintManager {
 	public void chain(@NonNull Hints hints) {
 		problemElements.addAll(hints.getProblemElements());
 		suggestedElements.addAll(hints.getSuggestedElements());
+		usedElements.addAll(hints.getUsedElements());
 
 		// Filter
 		{
@@ -57,5 +64,6 @@ public class HintManager {
 	public void reset() {
 		problemElements.clear();
 		suggestedElements.clear();
+		usedElements.clear();
 	}
 }

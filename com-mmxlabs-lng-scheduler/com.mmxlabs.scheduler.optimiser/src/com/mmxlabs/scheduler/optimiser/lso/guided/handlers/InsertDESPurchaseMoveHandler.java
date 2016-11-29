@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.lso.guided.handlers;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -15,8 +16,8 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.scheduler.optimiser.lso.IFollowersAndPreceders;
-import com.mmxlabs.scheduler.optimiser.lso.guided.IGuidedMoveHelper;
 import com.mmxlabs.scheduler.optimiser.lso.guided.Hints;
+import com.mmxlabs.scheduler.optimiser.lso.guided.IGuidedMoveHelper;
 import com.mmxlabs.scheduler.optimiser.lso.guided.LookupManager;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.InsertDESPurchaseMove;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
@@ -37,7 +38,7 @@ public class InsertDESPurchaseMoveHandler implements IMoveHandler {
 	private @NonNull IFollowersAndPreceders followersAndPreceders;
 
 	@Override
-	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final @NonNull ISequenceElement desPurchase) {
+	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final @NonNull ISequenceElement desPurchase, @NonNull Collection<ISequenceElement> forbiddenElements) {
 		final ISequences sequences = state.getSequences();
 
 		final IResource desPurchaseResource = helper.getDESPurchaseResource(desPurchase);
@@ -47,6 +48,7 @@ public class InsertDESPurchaseMoveHandler implements IMoveHandler {
 
 		final Followers<ISequenceElement> validFollowers = followersAndPreceders.getValidFollowers(desPurchase);
 		final List<ISequenceElement> followers = Lists.newArrayList(validFollowers);
+		followers.removeAll(forbiddenElements);
 		Collections.shuffle(followers, helper.getSharedRandom());
 
 		final Hints hints = new Hints();

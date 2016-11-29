@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.lso.guided.handlers;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -26,7 +27,7 @@ public class RemoveCargoMoveHandler implements IMoveHandler {
 	private @NonNull MoveHandlerHelper moveHelper;
 
 	@Override
-	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final ISequenceElement element) {
+	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final ISequenceElement element, @NonNull Collection<ISequenceElement> forbiddenElements) {
 		final ISequences sequences = state.getSequences();
 
 		final Hints hints = new Hints();

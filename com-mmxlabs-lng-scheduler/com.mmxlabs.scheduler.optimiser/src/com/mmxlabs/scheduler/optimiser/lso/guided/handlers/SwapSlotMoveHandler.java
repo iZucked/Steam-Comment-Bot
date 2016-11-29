@@ -1,6 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.lso.guided.handlers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -34,7 +35,7 @@ public class SwapSlotMoveHandler implements IMoveHandler {
 	private @NonNull IFollowersAndPreceders followersAndPreceders;
 
 	@Override
-	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final ISequenceElement slot) {
+	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final ISequenceElement slot, @NonNull Collection<ISequenceElement> forbiddenElements) {
 		final ISequences sequences = state.getSequences();
 
 		final SwapElementsMove.Builder builder = SwapElementsMove.Builder.newMove();
@@ -62,7 +63,7 @@ public class SwapSlotMoveHandler implements IMoveHandler {
 				candidates.remove(slot);
 			}
 
-//			return null;
+			// return null;
 
 		} else {
 			final int index = slotLocation.getSecond().intValue();
@@ -89,6 +90,7 @@ public class SwapSlotMoveHandler implements IMoveHandler {
 		final List<Pair<IResource, ISequenceElement>> elementHints = new LinkedList<>();
 		boolean foundElementB = false;
 		final List<ISequenceElement> candidateList = new ArrayList<>(candidates);
+		candidateList.removeAll(forbiddenElements);
 		Collections.shuffle(candidateList, helper.getSharedRandom());
 		for (final ISequenceElement candidate : candidateList) {
 			foundElementB = false;
@@ -134,7 +136,7 @@ public class SwapSlotMoveHandler implements IMoveHandler {
 					elementHints.clear();
 					continue;
 				}
-				
+
 				if (!helper.isOptional(candidate)) {
 					if (helper.isStrictOptional()) {
 						foundElementB = false;

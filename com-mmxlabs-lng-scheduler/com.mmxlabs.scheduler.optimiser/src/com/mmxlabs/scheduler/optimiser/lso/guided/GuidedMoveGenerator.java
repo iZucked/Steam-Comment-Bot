@@ -67,7 +67,7 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 
 	private ISequences providedSequences;
 
-	private List<ISequenceElement> allTargetElements = new LinkedList<>();
+	private List<@NonNull ISequenceElement> allTargetElements = new LinkedList<>();
 
 	@Inject
 	private void findAllTargetElements(@NonNull IOptimisationData optimisationData) {
@@ -152,7 +152,7 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 
 	private Pair<IMove, Hints> getNextMove(final @NonNull ISequences sequences) {
 
-		final List<ISequenceElement> targetElements = getNextElements();
+		final List<@NonNull ISequenceElement> targetElements = getNextElements();
 
 		Collections.shuffle(targetElements, helper.getSharedRandom());
 		final LookupManager lookupManager = lookupManagerProvider.get();
@@ -171,8 +171,9 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 			for (final MoveTypes type : moveOptions) {
 				final IMoveHandler handler = getMoveHandler(type);
 				if (handler != null) {
-					final Pair<IMove, Hints> moveData = handler.handleMove(lookupManager, element);
+					final Pair<IMove, Hints> moveData = handler.handleMove(lookupManager, element, hintManager.getUsedElements());
 					if (moveData != null) {
+						moveData.getSecond().usedElement(element);
 						return moveData;
 					}
 				}
@@ -183,13 +184,13 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 
 	}
 
-	protected List<ISequenceElement> getNextElements() {
+	protected List<@NonNull ISequenceElement> getNextElements() {
 		// Find a set of elements to consider next
-		final List<ISequenceElement> targetElements = new LinkedList<>();
+		final List<@NonNull ISequenceElement> targetElements = new LinkedList<>();
 		{
-			final Collection<ISequenceElement> problemElements = hintManager.getProblemElements();
+			final Collection<@NonNull ISequenceElement> problemElements = hintManager.getProblemElements();
 			if (problemElements.isEmpty()) {
-				final Collection<ISequenceElement> suggestedElements = hintManager.getSuggestedElements();
+				final Collection<@NonNull ISequenceElement> suggestedElements = hintManager.getSuggestedElements();
 				if (suggestedElements.isEmpty()) {
 					targetElements.addAll(allTargetElements);
 				} else {
@@ -199,6 +200,10 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 				targetElements.addAll(problemElements);
 			}
 		}
+		
+		// Do not try to move "used" elements again
+		targetElements.removeAll(hintManager.getUsedElements());
+		
 		// TODO, this should be filtered up front
 		return targetElements;// .stream().filter(e -> validElementTypes.contains(portTypeProvider.getPortType(e))).collect(Collectors.toList());
 	}

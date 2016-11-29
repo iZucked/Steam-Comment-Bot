@@ -1,5 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.lso.guided.handlers;
 
+import java.util.Collection;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -26,5 +28,5 @@ public interface IMoveHandler {
 	 * @return
 	 */
 	@Nullable
-	Pair<IMove, Hints> handleMove(@NonNull LookupManager state, @NonNull ISequenceElement element);
+	Pair<IMove, Hints> handleMove(@NonNull LookupManager state, @NonNull ISequenceElement element, @NonNull Collection<ISequenceElement> forbiddenElements);
 }

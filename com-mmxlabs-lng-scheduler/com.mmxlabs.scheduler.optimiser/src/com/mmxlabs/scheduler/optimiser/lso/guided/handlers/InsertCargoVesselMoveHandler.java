@@ -1,6 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.lso.guided.handlers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -26,6 +27,8 @@ import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
 public class InsertCargoVesselMoveHandler implements IMoveHandler {
 
+	
+	
 	@Inject
 	private @NonNull IGuidedMoveHelper helper;
 
@@ -33,7 +36,7 @@ public class InsertCargoVesselMoveHandler implements IMoveHandler {
 	private @NonNull IFollowersAndPreceders followersAndPreceders;
 
 	@Override
-	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final ISequenceElement element) {
+	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final ISequenceElement element, @NonNull Collection<ISequenceElement> forbiddenElements) {
 		final ISequences sequences = state.getSequences();
 
 		final Hints hints = new Hints();
@@ -68,6 +71,7 @@ public class InsertCargoVesselMoveHandler implements IMoveHandler {
 				filteredUnusedSequenceElements = unusedSequenceElements.stream()//
 						.filter(e -> helper.isLoadSlot(e))//
 						.filter(e -> preceders.contains(e))//
+						.filter(e -> !forbiddenElements.contains(e)) //
 						.collect(Collectors.toList());
 			} else if (helper.isFOBPurchase(element)) {
 				// Find a valid set of DES Sales
@@ -79,6 +83,7 @@ public class InsertCargoVesselMoveHandler implements IMoveHandler {
 				filteredUnusedSequenceElements = unusedSequenceElements.stream() //
 						.filter(e -> helper.isDischargeSlot(e))//
 						.filter(e -> followers.contains(e))//
+						.filter(e -> !forbiddenElements.contains(e)) //
 						.collect(Collectors.toList());
 			} else {
 				// Invalid element type passed to method

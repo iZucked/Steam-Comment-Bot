@@ -11,6 +11,8 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 public class Hints {
 
 	private final List<ISequenceElement> problemElements = new LinkedList<>();
+	
+	private final List<ISequenceElement> usedElements = new LinkedList<>();
 
 	private final List<ISequenceElement> suggestedElements = new LinkedList<>();
 
@@ -25,6 +27,10 @@ public class Hints {
 	public void fixedElement(@NonNull final ISequenceElement element) {
 
 	}
+	
+	public void usedElement(@NonNull final ISequenceElement element) {
+		usedElements.add(element);
+	}
 
 	public List<ISequenceElement> getProblemElements() {
 		return problemElements;
@@ -32,6 +38,10 @@ public class Hints {
 
 	public List<ISequenceElement> getSuggestedElements() {
 		return suggestedElements;
+	}
+	
+	public List<ISequenceElement> getUsedElements() {
+		return usedElements;
 	}
 
 	public void addSuggestedElement(@NonNull final ISequenceElement element) {

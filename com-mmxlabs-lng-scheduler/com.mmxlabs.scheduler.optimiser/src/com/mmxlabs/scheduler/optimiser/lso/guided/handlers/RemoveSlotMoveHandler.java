@@ -1,5 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.lso.guided.handlers;
 
+import java.util.Collection;
+
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -23,7 +25,7 @@ public class RemoveSlotMoveHandler implements IMoveHandler {
 	private @NonNull IGuidedMoveHelper helper;
 
 	@Override
-	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final @NonNull ISequenceElement element) {
+	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final @NonNull ISequenceElement element, @NonNull Collection<ISequenceElement> forbiddenElements) {
 		final ISequences sequences = state.getSequences();
 
 		final Hints hints = new Hints();

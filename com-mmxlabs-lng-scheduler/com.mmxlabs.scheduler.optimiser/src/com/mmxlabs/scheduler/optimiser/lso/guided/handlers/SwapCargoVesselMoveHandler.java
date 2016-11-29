@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.lso.guided.handlers;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -34,7 +35,7 @@ public class SwapCargoVesselMoveHandler implements IMoveHandler {
 	private @NonNull IFollowersAndPreceders followersAndPreceders;
 
 	@Override
-	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final ISequenceElement element) {
+	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final ISequenceElement element, @NonNull Collection<ISequenceElement> forbiddenElements) {
 		final ISequences sequences = state.getSequences();
 
 		final Hints hints = new Hints();

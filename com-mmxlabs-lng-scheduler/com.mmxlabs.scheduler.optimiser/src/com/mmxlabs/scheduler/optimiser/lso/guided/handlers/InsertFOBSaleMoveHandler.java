@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.lso.guided.handlers;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class InsertFOBSaleMoveHandler implements IMoveHandler {
 	private @NonNull IFollowersAndPreceders followersAndPreceders;
 
 	@Override
-	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final ISequenceElement fobSale) {
+	public Pair<IMove, Hints> handleMove(final @NonNull LookupManager state, final ISequenceElement fobSale, @NonNull Collection<ISequenceElement> forbiddenElements) {
 		final ISequences sequences = state.getSequences();
 		final IResource fobSaleResource = helper.getFOBSaleResource(fobSale);
 
@@ -42,6 +43,7 @@ public class InsertFOBSaleMoveHandler implements IMoveHandler {
 
 		final Followers<ISequenceElement> validFollowers = followersAndPreceders.getValidPreceders(fobSale);
 		final List<ISequenceElement> preceders = Lists.newArrayList(validFollowers);
+		preceders.removeAll(forbiddenElements);
 		Collections.shuffle(preceders, helper.getSharedRandom());
 
 		final Hints hints = new Hints();
