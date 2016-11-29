@@ -332,7 +332,9 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 			// Adjust unused volume for new discharge volume
 			unusedVolumeInMMBTU += currentDischargeVolumeInMMBTU;
 			unusedVolumeInMMBTU -= dischargeVolumeInMMBTU;
-			loadVolumeInMMBTU -= unusedVolumeInMMBTU;
+			if (allocationRecord.preferShortLoadOverLeftoverHeel) {
+				loadVolumeInMMBTU -= unusedVolumeInMMBTU;
+			}
 		}
 
 		// Check load caps - vessel capacity
@@ -347,8 +349,8 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 			annotation.setPhysicalSlotVolumeInMMBTu(dischargeSlot, physicalDischargeVolumeInMMBTU);
 			loadVolumeInMMBTU = availableCargoSpaceInMMBTU;
 		}
-		// Check load caps - max load
-		if (loadVolumeInMMBTU > allocationRecord.maxVolumesInMMBtu.get(1)) {
+		// Check load caps - max load // check we can reach boiloff
+		if (loadVolumeInMMBTU > allocationRecord.maxVolumesInMMBtu.get(0)) {
 			final long diff = loadVolumeInMMBTU - allocationRecord.maxVolumesInMMBtu.get(1);
 
 			long dischargeVolumeInMMBTU = annotation.getCommercialSlotVolumeInMMBTu(dischargeSlot);
@@ -357,7 +359,7 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 			physicalDischargeVolumeInMMBTU -= diff;
 			annotation.setCommercialSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU);
 			annotation.setPhysicalSlotVolumeInMMBTu(dischargeSlot, physicalDischargeVolumeInMMBTU);
-			loadVolumeInMMBTU = allocationRecord.maxVolumesInMMBtu.get(1);
+			loadVolumeInMMBTU = allocationRecord.maxVolumesInMMBtu.get(0);
 		}
 
 		// Finally check for negative discharge volumes
