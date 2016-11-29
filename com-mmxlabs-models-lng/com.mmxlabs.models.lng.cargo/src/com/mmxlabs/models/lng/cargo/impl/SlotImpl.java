@@ -2059,12 +2059,12 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public String getSlotOrContractCancellationExpression() {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+		return (String) eGetWithDefault(CargoPackage.Literals.SLOT__CANCELLATION_EXPRESSION);
 	}
 
 	/**
