@@ -1423,7 +1423,7 @@ public class LNGScenarioTransformer {
 		// set additional misc costs in provider
 		setMiscCosts(dischargeSlot, discharge);
 
-		final ILongCurve cancellationCurve = dateHelper.generateLongExpressionCurve(dischargeSlot.getCancellationExpression(), commodityIndices);
+		final ILongCurve cancellationCurve = dateHelper.generateLongExpressionCurve(dischargeSlot.getSlotOrContractCancellationExpression(), commodityIndices);
 		if (cancellationCurve != null) {
 			cancellationFeeProviderEditor.setCancellationExpression(discharge, cancellationCurve);
 		}
@@ -1569,7 +1569,7 @@ public class LNGScenarioTransformer {
 		// set additional misc costs in provider
 		setMiscCosts(loadSlot, load);
 
-		final ILongCurve cancellationCurve = dateHelper.generateLongExpressionCurve(loadSlot.getCancellationExpression(), commodityIndices);
+		final ILongCurve cancellationCurve = dateHelper.generateLongExpressionCurve(loadSlot.getSlotOrContractCancellationExpression(), commodityIndices);
 		if (cancellationCurve != null) {
 			cancellationFeeProviderEditor.setCancellationExpression(load, cancellationCurve);
 		}
