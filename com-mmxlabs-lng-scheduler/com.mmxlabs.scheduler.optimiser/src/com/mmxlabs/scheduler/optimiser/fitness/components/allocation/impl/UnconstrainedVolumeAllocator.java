@@ -101,7 +101,9 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			annotation.setSlotDuration(slot, 0);
 
 			annotation.setCommercialSlotVolumeInM3(slot, allocationRecord.maxVolumesInM3.get(i));
+			annotation.setPhysicalSlotVolumeInM3(slot, allocationRecord.maxVolumesInM3.get(i));
 			annotation.setCommercialSlotVolumeInMMBTu(slot, allocationRecord.maxVolumesInMMBtu.get(i));
+			annotation.setPhysicalSlotVolumeInMMBTu(slot, allocationRecord.maxVolumesInMMBtu.get(i));
 			annotation.setSlotCargoCV(slot, allocationRecord.slotCV.get(i));
 		}
 		// Copy over the return slot time if present
@@ -149,6 +151,8 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			// Actuals mode, take values directly
 			annotation.setCommercialSlotVolumeInM3(slot, allocationRecord.maxVolumesInM3.get(i));
 			annotation.setCommercialSlotVolumeInMMBTu(slot, allocationRecord.maxVolumesInMMBtu.get(i));
+			annotation.setPhysicalSlotVolumeInM3(slot, allocationRecord.maxVolumesInM3.get(i));
+			annotation.setPhysicalSlotVolumeInMMBTu(slot, allocationRecord.maxVolumesInMMBtu.get(i));
 			annotation.setSlotCargoCV(slot, allocationRecord.slotCV.get(i));
 
 			// First slot
