@@ -1396,7 +1396,7 @@ public class LNGScenarioTransformer {
 			hedgesProviderEditor.setHedgeValue(discharge, hedgeValue);
 		}
 
-		final ILongCurve cancellationCurve = dateHelper.generateLongExpressionCurve(dischargeSlot.getCancellationExpression(), commodityIndices);
+		final ILongCurve cancellationCurve = dateHelper.generateLongExpressionCurve(dischargeSlot.getSlotOrContractCancellationExpression(), commodityIndices);
 		if (cancellationCurve != null) {
 			cancellationFeeProviderEditor.setCancellationExpression(discharge, cancellationCurve);
 		}
@@ -1537,7 +1537,7 @@ public class LNGScenarioTransformer {
 			hedgesProviderEditor.setHedgeValue(load, hedgeCost);
 		}
 
-		final ILongCurve cancellationCurve = dateHelper.generateLongExpressionCurve(loadSlot.getCancellationExpression(), commodityIndices);
+		final ILongCurve cancellationCurve = dateHelper.generateLongExpressionCurve(loadSlot.getSlotOrContractCancellationExpression(), commodityIndices);
 		if (cancellationCurve != null) {
 			cancellationFeeProviderEditor.setCancellationExpression(load, cancellationCurve);
 		}
