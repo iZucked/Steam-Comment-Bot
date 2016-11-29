@@ -129,6 +129,12 @@ public class SwapSlotMoveHandler implements IMoveHandler {
 			}
 
 			if (fromResource == null) {
+				if (candidateResource == null) {
+					foundElementB = false;
+					elementHints.clear();
+					continue;
+				}
+				
 				if (!helper.isOptional(candidate)) {
 					if (helper.isStrictOptional()) {
 						foundElementB = false;
