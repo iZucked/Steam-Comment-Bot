@@ -86,7 +86,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		for (final IResource resource : loopResources) {
 			final ISequence sequence = sequences.getSequence(resource);
 			@NonNull
-			IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 			if (!checkSequence(sequence, messages, vesselAvailability.getVesselInstanceType(), vesselAvailability.isOptional())) {
 				if (messages == null) {
 					return false;
@@ -109,16 +109,18 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 	 * 
 	 * @param sequence
 	 * @param messages
-	 * @param isOptionalVesselAvailability TODO
+	 * @param isOptionalVesselAvailability
+	 *            TODO
 	 * @return
 	 */
-	public final boolean checkSequence(@NonNull final ISequence sequence, @Nullable final List<String> messages, @NonNull final VesselInstanceType instanceType, boolean isOptionalVesselAvailability) {
+	public final boolean checkSequence(@NonNull final ISequence sequence, @Nullable final List<String> messages, @NonNull final VesselInstanceType instanceType,
+			final boolean isOptionalVesselAvailability) {
 
 		if (instanceType == VesselInstanceType.FOB_SALE || instanceType == VesselInstanceType.DES_PURCHASE) {
-			int size = sequence.size();
+			final int size = sequence.size();
 			if (size == 2) {
-				PortType ptStart = portTypeProvider.getPortType(sequence.get(0));
-				PortType ptEnd = portTypeProvider.getPortType(sequence.get(1));
+				final PortType ptStart = portTypeProvider.getPortType(sequence.get(0));
+				final PortType ptEnd = portTypeProvider.getPortType(sequence.get(1));
 				return ptStart == PortType.Start && ptEnd == PortType.End;
 			}
 			// if (size == 3) {
@@ -128,10 +130,10 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			// return ptStart == PortType.Start && ptEnd == PortType.End && (pt1 == PortType.Load || pt1 == PortType.Discharge);
 			// }
 			if (size == 4) {
-				PortType ptStart = portTypeProvider.getPortType(sequence.get(0));
-				PortType pt1 = portTypeProvider.getPortType(sequence.get(1));
-				PortType pt2 = portTypeProvider.getPortType(sequence.get(2));
-				PortType ptEnd = portTypeProvider.getPortType(sequence.get(3));
+				final PortType ptStart = portTypeProvider.getPortType(sequence.get(0));
+				final PortType pt1 = portTypeProvider.getPortType(sequence.get(1));
+				final PortType pt2 = portTypeProvider.getPortType(sequence.get(2));
+				final PortType ptEnd = portTypeProvider.getPortType(sequence.get(3));
 				return ptStart == PortType.Start && ptEnd == PortType.End && pt1 == PortType.Load && pt2 == PortType.Discharge;
 			}
 
@@ -146,7 +148,9 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			final PortType type = portTypeProvider.getPortType(t);
 			if (previous == null) {
 				if (!(((type == PortType.Start) && (instanceType != VesselInstanceType.SPOT_CHARTER)) || ((instanceType == VesselInstanceType.ROUND_TRIP) && (type == PortType.Load))
-						|| (((instanceType == VesselInstanceType.SPOT_CHARTER) || ((instanceType == VesselInstanceType.FLEET || instanceType == VesselInstanceType.TIME_CHARTER)  && isOptionalVesselAvailability)) && ((type == PortType.Load) || (type == PortType.End))))) {
+						|| (((instanceType == VesselInstanceType.SPOT_CHARTER)
+								|| ((instanceType == VesselInstanceType.FLEET || instanceType == VesselInstanceType.TIME_CHARTER) && isOptionalVesselAvailability))
+								&& ((type == PortType.Load) || (type == PortType.End))))) {
 					// must either start with Start and be not a spot charter,
 					// or must start with a load or an End and be a spot charter
 
@@ -304,6 +308,14 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		if (secondType != PortType.Discharge && firstType == PortType.Load) {
 			return false;
 		}
+		final VesselInstanceType instanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
+		if (instanceType == VesselInstanceType.ROUND_TRIP) {
+			// No Discharge followed by a load permitted here....
+			if (firstType == PortType.Discharge && secondType == PortType.Load) {
+				return false;
+			}
+		}
+
 		return true;
 	}
 
