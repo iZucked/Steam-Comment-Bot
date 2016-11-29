@@ -217,6 +217,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					.align(SWT.FILL, SWT.FILL) //
 					.span(1, 1) //
 					.create());
+//			centralScrolledComposite.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 20).create());
 			centralScrolledComposite.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
 			centralScrolledComposite.setLayout(new GridLayout());
@@ -228,8 +229,18 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			// centralComposite.setBackgroundMode(SWT.INHERIT_FORCE);
 			centralScrolledComposite.setBackgroundMode(SWT.INHERIT_FORCE);
 			centralScrolledComposite.setContent(centralComposite);
+			centralComposite.setLayoutData(GridDataFactory.swtDefaults()//
+					.grab(false, true)//
+					.span(1, 1) //
+					.align(SWT.FILL, SWT.FILL).create());
 
-			centralComposite.setLayout(new GridLayout(1, true));
+			centralComposite.setLayout(GridLayoutFactory.fillDefaults()
+					.equalWidth(true) //
+					.numColumns(1) //
+					.spacing(0, 20) //
+//					.margins(100, 0)//
+					.create());
+			
 			final IExpansionListener centralExpansionListener = new ExpansionAdapter() {
 
 				@Override
@@ -239,7 +250,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				}
 			};
 
-			centralComposite.setLayout(new GridLayout(1, true));
+//			centralComposite.setLayout(new GridLayout(1, true));
 			final BiConsumer<AbstractSandboxComponent, Boolean> hook = (component, expand) -> {
 				component.createControls(centralComposite, expand, centralExpansionListener, OptionModellerView.this);
 				inputWants.addAll(component.getInputWants());

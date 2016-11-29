@@ -189,23 +189,24 @@ public class WhatIfEvaluator {
 	private static void filterTasks(List<BaseCase> tasks) {
 		Set<BaseCase> duplicates = new HashSet<>();
 		for (BaseCase baseCase1 : tasks) {
-			for (BaseCase baseCase2 : tasks) {
+			DUPLICATE_TEST: for (BaseCase baseCase2 : tasks) {
 				if (duplicates.contains(baseCase1)
 						|| duplicates.contains(baseCase2)
 						|| baseCase1 == baseCase2
 						|| baseCase1.getBaseCase().size() != baseCase2.getBaseCase().size()){
 					continue;
 				}
-				for (BaseCaseRow baseCase1Row : baseCase1.getBaseCase()) {
-					for (BaseCaseRow baseCase2Row : baseCase2.getBaseCase()) {
-						if (baseCase1Row.getBuyOption() == baseCase2Row.getBuyOption()
-								&& baseCase1Row.getSellOption() == baseCase2Row.getSellOption()
-								&& baseCase1Row.getShipping() == baseCase2Row.getShipping()
-								) {
-							duplicates.add(baseCase2);
-						}
-					}					
+				for (int i = 0; i < baseCase1.getBaseCase().size(); i++) {
+					BaseCaseRow baseCase1Row = baseCase1.getBaseCase().get(i);
+					BaseCaseRow baseCase2Row = baseCase2.getBaseCase().get(i);
+					if (baseCase1Row.getBuyOption() != baseCase2Row.getBuyOption()
+							|| baseCase1Row.getSellOption() != baseCase2Row.getSellOption()
+							|| baseCase1Row.getShipping() != baseCase2Row.getShipping()
+							) {
+						continue DUPLICATE_TEST;
+					}
 				}
+				duplicates.add(baseCase2);
 			}			
 		}
 		tasks.removeAll(duplicates);
@@ -217,7 +218,8 @@ public class WhatIfEvaluator {
 		BaseCaseEvaluator.generateScenario(scenarioEditingLocation, model, baseCase, (lngScenarioModel, mapper) -> {
 
 			// DEBUG: Pass in the scenario instance
-			final ScenarioInstance parentForFork =  scenarioEditingLocation.getScenarioInstance();
+//			final ScenarioInstance parentForFork =  scenarioEditingLocation.getScenarioInstance();
+			final ScenarioInstance parentForFork =  null;
 			evaluateScenario(lngScenarioModel, parentForFork, model.isUseTargetPNL(), targetPNL);
 
 			if (lngScenarioModel.getScheduleModel().getSchedule() == null) {
