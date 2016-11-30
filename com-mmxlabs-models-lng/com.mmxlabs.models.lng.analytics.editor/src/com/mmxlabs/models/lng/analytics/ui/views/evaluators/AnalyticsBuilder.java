@@ -1186,7 +1186,7 @@ public class AnalyticsBuilder {
 	
 	public static Collection<APortSet<Port>> getPortRestrictions(ShippingOption option) {
 		if (option == null) {
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 		} else if (option instanceof FleetShippingOption) {
 			return ((FleetShippingOption) option).getVessel().getInaccessiblePorts();
 		} else if (option instanceof RoundTripShippingOption) {
@@ -1194,7 +1194,7 @@ public class AnalyticsBuilder {
 		} else if (option instanceof NominatedShippingOption) {
 			((NominatedShippingOption) option).getNominatedVessel().getInaccessiblePorts();
 		}
-		return Collections.EMPTY_LIST;
+		return Collections.emptyList();
 	}
 	
 	public static Set<AVesselSet<Vessel>> getBuyVesselRestrictions(BuyOption buy) {
