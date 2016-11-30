@@ -190,24 +190,19 @@ public class WhatIfEvaluator {
 		Set<BaseCase> duplicates = new HashSet<>();
 		for (BaseCase baseCase1 : tasks) {
 			DUPLICATE_TEST: for (BaseCase baseCase2 : tasks) {
-				if (duplicates.contains(baseCase1)
-						|| duplicates.contains(baseCase2)
-						|| baseCase1 == baseCase2
-						|| baseCase1.getBaseCase().size() != baseCase2.getBaseCase().size()){
+				if (duplicates.contains(baseCase1) || duplicates.contains(baseCase2) || baseCase1 == baseCase2 || baseCase1.getBaseCase().size() != baseCase2.getBaseCase().size()) {
 					continue;
 				}
 				for (int i = 0; i < baseCase1.getBaseCase().size(); i++) {
 					BaseCaseRow baseCase1Row = baseCase1.getBaseCase().get(i);
 					BaseCaseRow baseCase2Row = baseCase2.getBaseCase().get(i);
-					if (baseCase1Row.getBuyOption() != baseCase2Row.getBuyOption()
-							|| baseCase1Row.getSellOption() != baseCase2Row.getSellOption()
-							|| baseCase1Row.getShipping() != baseCase2Row.getShipping()
-							) {
+					if (baseCase1Row.getBuyOption() != baseCase2Row.getBuyOption() || baseCase1Row.getSellOption() != baseCase2Row.getSellOption()
+							|| baseCase1Row.getShipping() != baseCase2Row.getShipping()) {
 						continue DUPLICATE_TEST;
 					}
 				}
 				duplicates.add(baseCase2);
-			}			
+			}
 		}
 		tasks.removeAll(duplicates);
 	}
@@ -218,8 +213,8 @@ public class WhatIfEvaluator {
 		BaseCaseEvaluator.generateScenario(scenarioEditingLocation, model, baseCase, (lngScenarioModel, mapper) -> {
 
 			// DEBUG: Pass in the scenario instance
-//			final ScenarioInstance parentForFork =  scenarioEditingLocation.getScenarioInstance();
-			final ScenarioInstance parentForFork =  null;
+			// final ScenarioInstance parentForFork = scenarioEditingLocation.getScenarioInstance();
+			final ScenarioInstance parentForFork = null;
 			evaluateScenario(lngScenarioModel, parentForFork, model.isUseTargetPNL(), targetPNL);
 
 			if (lngScenarioModel.getScheduleModel().getSchedule() == null) {
@@ -286,8 +281,19 @@ public class WhatIfEvaluator {
 				if (isBreakEvenRow(loadAllocation)) {
 					final BreakEvenResult r = AnalyticsFactory.eINSTANCE.createBreakEvenResult();
 					r.setPrice(loadAllocation.getPrice());
-					final String priceString = getPriceString(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getReferenceModel().getPricingModel(),
-							((BuyOpportunity) row.getBuyOption()).getPriceExpression(), loadAllocation.getPrice(), YearMonth.from(loadAllocation.getSlotVisit().getStart()));
+
+					final String priceExpression;
+					if (row.getBuyOption() instanceof BuyOpportunity) {
+						final BuyOpportunity buyOpportunity = (BuyOpportunity) row.getBuyOption();
+						priceExpression = buyOpportunity.getPriceExpression();
+					} else if (row.getBuyOption() instanceof BuyReference) {
+						final BuyReference buyOpportunity = (BuyReference) row.getBuyOption();
+						priceExpression = buyOpportunity.getSlot().getPriceExpression();
+					} else {
+						priceExpression = "";
+					}
+					final String priceString = getPriceString(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getReferenceModel().getPricingModel(), priceExpression,
+							loadAllocation.getPrice(), YearMonth.from(loadAllocation.getSlotVisit().getStart()));
 					r.setPriceString(priceString);
 					res.setResultDetail(r);
 					if (cargoAllocation != null) {
@@ -720,10 +726,8 @@ public class WhatIfEvaluator {
 
 	private static void filterShipping(BaseCase copy) {
 		for (BaseCaseRow baseCaseRow : copy.getBaseCase()) {
-			if (baseCaseRow.getBuyOption() != null
-					&& ((baseCaseRow.getBuyOption() instanceof BuyReference && ((BuyReference)baseCaseRow.getBuyOption()).getSlot().isDESPurchase())
-					|| (baseCaseRow.getBuyOption() instanceof BuyOpportunity && ((BuyOpportunity)baseCaseRow.getBuyOption()).isDesPurchase()))
-							) {
+			if (baseCaseRow.getBuyOption() != null && ((baseCaseRow.getBuyOption() instanceof BuyReference && ((BuyReference) baseCaseRow.getBuyOption()).getSlot().isDESPurchase())
+					|| (baseCaseRow.getBuyOption() instanceof BuyOpportunity && ((BuyOpportunity) baseCaseRow.getBuyOption()).isDesPurchase()))) {
 				baseCaseRow.setShipping(null);
 			}
 		}
