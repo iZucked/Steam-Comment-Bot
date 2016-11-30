@@ -218,7 +218,7 @@ public class GuidedMoveGenerator implements IConstrainedMoveGeneratorUnit {
 		case Insert_FOB_Sale:
 			return injector.getInstance(InsertFOBSaleMoveHandler.class);
 		case Insert_Slot:
-			break;
+			return injector.getInstance(InsertCargoVesselMoveHandler.class);
 		case Insert_Vessel_Event:
 			break;
 		case Move_Vessel_Event:
