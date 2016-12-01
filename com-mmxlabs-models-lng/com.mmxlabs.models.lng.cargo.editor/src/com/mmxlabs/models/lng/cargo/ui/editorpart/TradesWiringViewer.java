@@ -611,11 +611,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							cargoes.add(cargo);
 						}
 					}
-					populateMultipleSelectionMenu(cargoes);
+					populateMultipleSelectionMenu(cargoes, selection);
 				}
 			}
 
-			private void populateMultipleSelectionMenu(final Set<Cargo> cargoes) {
+			private void populateMultipleSelectionMenu(final Set<Cargo> cargoes, IStructuredSelection selection) {
 				if (menu == null) {
 					menu = mgr.createContextMenu(scenarioViewer.getGrid());
 				}
@@ -623,6 +623,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 				final IMenuListener listener = menuHelper.createMultipleSelectionMenuListener(cargoes);
 				listener.menuAboutToShow(mgr);
+				
+				if (contextMenuExtensions != null) {
+					for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
+						ext.contributeToMenu(scenarioEditingLocation, selection, mgr);
+					}
+				}
+				
 				menu.setVisible(true);
 			}
 		});

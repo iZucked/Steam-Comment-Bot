@@ -397,7 +397,6 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 
 	@Override
 	public void contributeToMenu(@NonNull IScenarioEditingLocation scenarioEditingLocation, @NonNull IStructuredSelection selection, @NonNull MenuManager menuManager) {
-		// TODO Auto-generated method stub
 
 	}
 }
