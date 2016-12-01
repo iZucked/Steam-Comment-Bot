@@ -324,7 +324,7 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 		}
 		// Check load caps - max load // check we can reach boiloff
 		if (loadVolumeInMMBTU > allocationRecord.maxVolumesInMMBtu.get(0)) {
-			final long diff = loadVolumeInMMBTU - allocationRecord.maxVolumesInMMBtu.get(1);
+			final long diff = loadVolumeInMMBTU - allocationRecord.maxVolumesInMMBtu.get(0);
 
 			long dischargeVolumeInMMBTU = annotation.getSlotVolumeInMMBTu(dischargeSlot);
 			dischargeVolumeInMMBTU -= diff;
