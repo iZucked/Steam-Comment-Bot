@@ -6,10 +6,10 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.ui.parent</artifactId>
 		<groupId>com.mmxlabs.models.ui</groupId>
-		<version>4.0.5.RELEASE</version>
+		<version>4.0.6-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.models.ui.runtime.feature</artifactId>
-	<version>4.0.5.RELEASE</version>
+	<version>4.0.6-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 
 
