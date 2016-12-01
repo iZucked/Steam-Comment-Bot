@@ -82,6 +82,12 @@ public class CollectedAssignment {
 			sortedElements.add(e);
 		}
 
+		sortWrappedAssignableElements(sortedElements);
+		// Unwrap list
+		return sortedElements.stream().map(e -> e.getAssignableElement()).collect(Collectors.toList());
+	}
+
+	public static void sortWrappedAssignableElements(final List<@NonNull WrappedAssignableElement> sortedElements) {
 		Collections.sort(sortedElements, (a, b) -> {
 
 			final OrderingHint hint = AssignmentEditorHelper.checkOrdering(a, b);
@@ -112,7 +118,5 @@ public class CollectedAssignment {
 			}
 
 		});
-		// Unwrap list
-		return sortedElements.stream().map(e -> e.getAssignableElement()).collect(Collectors.toList());
 	}
 }
