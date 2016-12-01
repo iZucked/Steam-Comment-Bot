@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Ganttchart Plug-in
 Bundle-SymbolicName: com.mmxlabs.org.eclipse.nebula.widgets.ganttchart
-Bundle-Version: 4.0.5.RELEASE
+Bundle-Version: 4.0.6.qualifier
 Require-Bundle: org.eclipse.swt;bundle-version="3.7.2",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
 Export-Package: org.eclipse.nebula.widgets.ganttchart,
