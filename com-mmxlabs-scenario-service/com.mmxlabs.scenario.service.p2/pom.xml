@@ -4,12 +4,12 @@
 	<parent>
 		<artifactId>com.mmxlabs.scenario.service.parent</artifactId>
 		<groupId>com.mmxlabs.scenario.service</groupId>
-		<version>4.0.5-SNAPSHOT</version>
+		<version>4.0.5.RELEASE</version>
 		<relativePath>..</relativePath>
 	</parent>
 
 	<artifactId>com.mmxlabs.scenario.service.p2</artifactId>
-	<version>4.0.5-SNAPSHOT</version>
+	<version>4.0.5.RELEASE</version>
 	<packaging>eclipse-repository</packaging>
 	<name>Scenario Service p2 Repository</name>
 </project>
