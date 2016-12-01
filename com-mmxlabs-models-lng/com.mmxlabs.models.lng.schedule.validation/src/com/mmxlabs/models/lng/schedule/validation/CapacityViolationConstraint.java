@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
@@ -35,6 +36,10 @@ public class CapacityViolationConstraint extends AbstractModelMultiConstraint {
 			}
 		}
 
+		if (target == null) {
+			return Status.OK_STATUS;
+		}
+		
 		final String nameString = target instanceof NamedObject ? String.format("[%s] ", ((NamedObject) target).getName()) : "";
 		final String message;
 
