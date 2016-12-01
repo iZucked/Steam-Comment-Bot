@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,15 +12,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 
-import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.common.collect.Lists;
 import com.google.inject.Injector;
-import com.google.inject.Key;
 import com.google.inject.Module;
-import com.google.inject.name.Names;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
@@ -34,11 +31,16 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
+import com.mmxlabs.models.lng.cargo.util.scheduling.WrappedAssignableElement;
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -62,8 +64,6 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -121,12 +121,12 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 	}
 
 	@Override
-	public void breakEvenEvaluate(@NonNull LNGScenarioModel lngScenarioModel, @NonNull UserSettings userSettings, @Nullable ScenarioInstance parentForFork, long targetProfitAndLoss,
-			BreakEvenMode breakEvenMode) {
+	public void breakEvenEvaluate(@NonNull final LNGScenarioModel lngScenarioModel, @NonNull final UserSettings userSettings, @Nullable final ScenarioInstance parentForFork,
+			final long targetProfitAndLoss, final BreakEvenMode breakEvenMode) {
 		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 		if (breakEvenMode == BreakEvenMode.PORTFOLIO) {
 			optimisationPlan.getStages().clear();
-			BreakEvenOptimisationStage breakEvenOptimisationStage = ParametersFactory.eINSTANCE.createBreakEvenOptimisationStage();
+			final BreakEvenOptimisationStage breakEvenOptimisationStage = ParametersFactory.eINSTANCE.createBreakEvenOptimisationStage();
 			breakEvenOptimisationStage.setTargetProfitAndLoss(targetProfitAndLoss);
 			optimisationPlan.getStages().add(breakEvenOptimisationStage);
 		}
@@ -175,12 +175,13 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 	}
 
 	@Override
-	public void multiEvaluate(@NonNull LNGScenarioModel lngScenarioModel, @NonNull UserSettings userSettings, @Nullable ScenarioInstance parentForFork, long targetProfitAndLoss,
-			BreakEvenMode breakEvenMode, List<BaseCase> baseCases, IMapperClass mapper, Map<ShippingOption, VesselAssignmentType> shippingMap, BiConsumer<BaseCase, Schedule> resultHandler) {
+	public void multiEvaluate(@NonNull final LNGScenarioModel lngScenarioModel, @NonNull final UserSettings userSettings, @Nullable final ScenarioInstance parentForFork,
+			final long targetProfitAndLoss, final BreakEvenMode breakEvenMode, final List<BaseCase> baseCases, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap,
+			final BiConsumer<BaseCase, Schedule> resultHandler) {
 		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 		if (breakEvenMode == BreakEvenMode.PORTFOLIO) {
 			optimisationPlan.getStages().clear();
-			BreakEvenOptimisationStage breakEvenOptimisationStage = ParametersFactory.eINSTANCE.createBreakEvenOptimisationStage();
+			final BreakEvenOptimisationStage breakEvenOptimisationStage = ParametersFactory.eINSTANCE.createBreakEvenOptimisationStage();
 			breakEvenOptimisationStage.setTargetProfitAndLoss(targetProfitAndLoss);
 			optimisationPlan.getStages().add(breakEvenOptimisationStage);
 		}
@@ -199,19 +200,22 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 					false, hints);
 
 			@NonNull
-			LNGScenarioToOptimiserBridge bridge = scenarioRunner.getScenarioToOptimiserBridge();
+			final LNGScenarioToOptimiserBridge bridge = scenarioRunner.getScenarioToOptimiserBridge();
 
-			ModelEntityMap modelEntityMap = bridge.getInjector().getInstance(ModelEntityMap.class);
+			final ModelEntityMap modelEntityMap = bridge.getInjector().getInstance(ModelEntityMap.class);
+			final PortModel portModel = ScenarioModelUtil.getPortModel(bridge.getScenario());
 
-			List<IPortSlot> unused = new LinkedList<>();
-			for (BaseCase baseCase : baseCases) {
+			final List<IPortSlot> unused = new LinkedList<>();
+			for (final BaseCase baseCase : baseCases) {
 
-				final Map<VesselAssignmentType, List<Slot>> m_ToGenerate = new LinkedHashMap<>();
+				final Map<VesselAssignmentType, List<WrappedAssignableElement>> m_ToGenerate = new LinkedHashMap<>();
+				final Map<WrappedAssignableElement, List<Slot>> assignableMap = new LinkedHashMap<>();
 				final Map<IResource, IModifiableSequence> m_preCreated = new LinkedHashMap<>();
-				for (BaseCaseRow row : baseCase.getBaseCase()) {
-					LoadSlot load = mapper.get(row.getBuyOption());
-					DischargeSlot discharge = mapper.get(row.getSellOption());
-					ShippingOption shipping = row.getShipping();
+
+				for (final BaseCaseRow row : baseCase.getBaseCase()) {
+					final LoadSlot load = mapper.get(row.getBuyOption());
+					final DischargeSlot discharge = mapper.get(row.getSellOption());
+					final ShippingOption shipping = row.getShipping();
 
 					if (row.getBuyOption() == null || row.getSellOption() == null) {
 
@@ -225,36 +229,57 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 					}
 
 					if (AnalyticsBuilder.isNonShipped(row) == ShippingType.NonShipped) {
-						Pair<IResource, IModifiableSequence> p = SequenceHelper.createFOBDESSequence(bridge, load, discharge);
+						final Pair<IResource, IModifiableSequence> p = SequenceHelper.createFOBDESSequence(bridge, load, discharge);
 						m_preCreated.put(p.getFirst(), p.getSecond());
 
 						continue;
 					}
-					ShippingOption copyOfShipping = mapper.getCopy(shipping);
-					VesselAssignmentType key = shippingMap.get(copyOfShipping);
-					List<Slot> slots = m_ToGenerate.computeIfAbsent(key, k -> new LinkedList<>());
-					slots.add(load);
-					slots.add(discharge);
+					final ShippingOption copyOfShipping = mapper.getCopy(shipping);
+					final VesselAssignmentType key = shippingMap.get(copyOfShipping);
+
+					VesselClass vesselClass = null;
+					if (key instanceof VesselAvailability) {
+						final VesselAvailability vesselAvailability = (VesselAvailability) key;
+						final com.mmxlabs.models.lng.fleet.Vessel vessel = vesselAvailability.getVessel();
+						vesselClass = vessel.getVesselClass();
+					} else if (key instanceof CharterInMarket) {
+						final CharterInMarket charterInMarket = (CharterInMarket) key;
+						vesselClass = charterInMarket.getVesselClass();
+					}
+
+					final List<WrappedAssignableElement> sortableElements = m_ToGenerate.computeIfAbsent(key, k -> new LinkedList<>());
+					final List<Slot> sortedSlots = Lists.newArrayList(load, discharge);
+
+					final WrappedAssignableElement e = new WrappedAssignableElement(sortedSlots, vesselClass, portModel, null);
+					sortableElements.add(e);
+
+					assignableMap.put(e, sortedSlots);
 				}
 
-				for (Map.Entry<VesselAssignmentType, List<Slot>> e : m_ToGenerate.entrySet()) {
-					VesselAssignmentType t = e.getKey();
+				for (final Map.Entry<VesselAssignmentType, List<WrappedAssignableElement>> e : m_ToGenerate.entrySet()) {
+					final List<Slot> orderedSlots = new LinkedList<>();
+					CollectedAssignment.sortWrappedAssignableElements(e.getValue());
+					for (final WrappedAssignableElement w : e.getValue()) {
+						orderedSlots.addAll(assignableMap.get(w));
+					}
+
+					final VesselAssignmentType t = e.getKey();
 					if (t instanceof VesselAvailability) {
-						VesselAvailability vesselAvailability = (VesselAvailability) t;
-						Pair<IResource, IModifiableSequence> p = SequenceHelper.makeSequence(bridge, vesselAvailability, e.getValue());
-						ISequence old = m_preCreated.put(p.getFirst(), p.getSecond());
+						final VesselAvailability vesselAvailability = (VesselAvailability) t;
+						final Pair<IResource, IModifiableSequence> p = SequenceHelper.makeSequence(bridge, vesselAvailability, orderedSlots);
+						final ISequence old = m_preCreated.put(p.getFirst(), p.getSecond());
 						assert old == null;
 
 					} else if (t instanceof CharterInMarket) {
-						CharterInMarket charterInMarket = (CharterInMarket) t;
-						Pair<IResource, IModifiableSequence> p = SequenceHelper.makeSequence(bridge, charterInMarket, -1, e.getValue());
-						ISequence old = m_preCreated.put(p.getFirst(), p.getSecond());
+						final CharterInMarket charterInMarket = (CharterInMarket) t;
+						final Pair<IResource, IModifiableSequence> p = SequenceHelper.makeSequence(bridge, charterInMarket, -1, orderedSlots);
+						final ISequence old = m_preCreated.put(p.getFirst(), p.getSecond());
 						assert old == null;
 					}
 				}
-				ModifiableSequences rawSequences = new ModifiableSequences(new ArrayList<>(m_preCreated.keySet()), m_preCreated);
+				final ModifiableSequences rawSequences = new ModifiableSequences(new ArrayList<>(m_preCreated.keySet()), m_preCreated);
 				{
-					LNGDataTransformer optimiserDataTransformer = bridge.getDataTransformer();
+					final LNGDataTransformer optimiserDataTransformer = bridge.getDataTransformer();
 					final Injector evaluationInjector;
 					{
 						final Collection<@NonNull IOptimiserInjectorService> services = optimiserDataTransformer.getModuleServices();
