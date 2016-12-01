@@ -324,9 +324,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 			}
 		}
-		listenToScenarioSelection();
-
-		packAll(mainComposite);
+	
 
 		final IActionBars actionBars = getViewSite().getActionBars();
 
@@ -340,6 +338,10 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
 
 		updateActions(getEditingDomain());
+		
+		listenToScenarioSelection();
+
+		packAll(mainComposite);
 
 	}
 
