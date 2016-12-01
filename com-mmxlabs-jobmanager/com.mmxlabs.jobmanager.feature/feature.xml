@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.jobmanager.feature"
       label="Jobmanager Feature"
-      version="4.0.5.qualifier"
+      version="4.0.5.RELEASE"
       provider-name="Minimax Labs Ltd.">
 
    <description url="http://www.example.com/description">
