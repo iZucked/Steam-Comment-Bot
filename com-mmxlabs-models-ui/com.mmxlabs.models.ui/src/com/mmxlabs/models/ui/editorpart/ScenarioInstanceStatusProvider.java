@@ -7,7 +7,7 @@ package com.mmxlabs.models.ui.editorpart;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
@@ -19,7 +19,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  */
 public class ScenarioInstanceStatusProvider extends DefaultStatusProvider {
 	private ScenarioInstance scenarioInstance;
-	final EContentAdapter validationAdapter = new EContentAdapter() {
+	final AdapterImpl validationAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
@@ -36,9 +36,10 @@ public class ScenarioInstanceStatusProvider extends DefaultStatusProvider {
 	}
 
 	public void dispose() {
-
-		scenarioInstance.eAdapters().remove(validationAdapter);
-		scenarioInstance = null;
+		if (scenarioInstance != null) {
+			scenarioInstance.eAdapters().remove(validationAdapter);
+			scenarioInstance = null;
+		}
 
 	}
 
