@@ -58,6 +58,8 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentPara
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.IBoilOffHelper;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.InPortBoilOffHelper;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
@@ -108,6 +110,7 @@ public class ScheduleTestModule extends AbstractModule {
 		bind(VesselBaseFuelCalculator.class).in(Singleton.class);
 
 		bind(IEndEventScheduler.class).to(DefaultEndEventScheduler.class);
+		bind(IBoilOffHelper.class).toInstance(new InPortBoilOffHelper(true));
 
 		// if (Platform.isRunning()) {
 		// bind(IFitnessFunctionRegistry.class).toProvider(service(IFitnessFunctionRegistry.class).single());
@@ -307,7 +310,7 @@ public class ScheduleTestModule extends AbstractModule {
 		lcp.setHighWeight(Interval.BEYOND, 1);
 		return lcp;
 	}
-	
+
 	@Provides
 	@Named(VoyagePlanOptimiser.VPO_SPEED_STEPPING)
 	private boolean isVPOSpeedStepping() {
