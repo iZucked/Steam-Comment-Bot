@@ -161,7 +161,7 @@ public class AnalyticsBuilder {
 
 	public static int getVesselCapacityInM3(ShippingOption shippingOption) {
 		if (shippingOption instanceof FleetShippingOption) {
-			return ((FleetShippingOption) shippingOption).getVessel().getCapacity();
+			return ((FleetShippingOption) shippingOption).getVessel().getVesselOrVesselClassCapacity();
 		} else if (shippingOption instanceof RoundTripShippingOption) {
 			return ((RoundTripShippingOption) shippingOption).getVesselClass().getCapacity();
 		} else if (shippingOption instanceof NominatedShippingOption) {
