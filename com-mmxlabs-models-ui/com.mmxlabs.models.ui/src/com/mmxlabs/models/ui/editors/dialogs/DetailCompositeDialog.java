@@ -635,6 +635,15 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 				if (newInstance instanceof NamedObject) {
 					((NamedObject) newInstance).setName("New " + factory.getLabel());
 				}
+				
+				if (inputs.size() == 1) {
+					if (displayCompositeFactory == null) {
+						// Note, now that we do this here rather than in doCreateFormContent we may show the wrong factory for an object *should* the input be of mixed type. (This is not a currently
+						// expected behaviour - 2015-03-23)
+						displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(newInstance.eClass());
+					}
+				}
+				
 				// If inputs is now one (i.e. initially zero) trigger a relayout
 				// if (inputs.size() == 1) {
 				// }
