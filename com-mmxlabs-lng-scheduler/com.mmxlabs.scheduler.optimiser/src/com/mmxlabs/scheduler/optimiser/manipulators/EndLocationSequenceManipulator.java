@@ -268,6 +268,10 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	 * @param ports
 	 */
 	private final void returnToClosestInSet(final @NonNull IResource resource, final @NonNull IModifiableSequence sequence, final @NonNull Collection<@NonNull IPort> ports) {
+		if (sequence.size() < 2) {
+			return;
+		}
+		
 		final ISequenceElement lastVisit = sequence.get(sequence.size() - 2);
 		final IPort fromPort = portProvider.getPortForElement(lastVisit);
 		final ITimeWindow timeWindow = portSlotProvider.getPortSlot(lastVisit).getTimeWindow();
