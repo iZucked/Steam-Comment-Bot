@@ -306,8 +306,21 @@ public class WhatIfEvaluator {
 				} else if (isBreakEvenRow(dischargeAllocation)) {
 					final BreakEvenResult r = AnalyticsFactory.eINSTANCE.createBreakEvenResult();
 					r.setPrice(dischargeAllocation.getPrice());
-					final String priceString = getPriceString(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getReferenceModel().getPricingModel(),
-							((SellOpportunity) row.getSellOption()).getPriceExpression(), dischargeAllocation.getPrice(), YearMonth.from(dischargeAllocation.getSlotVisit().getStart()));
+
+					final String priceExpression;
+
+					if (row.getSellOption() instanceof SellOpportunity) {
+						final SellOpportunity sellOpportunity = (SellOpportunity) row.getSellOption();
+						priceExpression = sellOpportunity.getPriceExpression();
+					} else if (row.getSellOption() instanceof SellReference) {
+						final SellReference sellOpportunity = (SellReference) row.getSellOption();
+						priceExpression = sellOpportunity.getSlot().getPriceExpression();
+					} else {
+						priceExpression = "";
+					}
+
+					final String priceString = getPriceString(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getReferenceModel().getPricingModel(), priceExpression,
+							dischargeAllocation.getPrice(), YearMonth.from(dischargeAllocation.getSlotVisit().getStart()));
 					r.setPriceString(priceString);
 					res.setResultDetail(r);
 					if (cargoAllocation != null) {
