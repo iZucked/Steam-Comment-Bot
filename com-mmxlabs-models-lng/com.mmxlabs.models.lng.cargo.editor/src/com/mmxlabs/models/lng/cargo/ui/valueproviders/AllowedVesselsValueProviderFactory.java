@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -60,6 +61,9 @@ public class AllowedVesselsValueProviderFactory implements IReferenceValueProvid
 
 		final IReferenceValueProvider vesselClassProvider = vesselClassProviderFactory.createReferenceValueProvider(FleetPackage.Literals.FLEET_MODEL,
 				FleetPackage.Literals.FLEET_MODEL__VESSEL_CLASSES, rootObject);
+		
+		final IReferenceValueProvider vesselGroupProvider = vesselClassProviderFactory.createReferenceValueProvider(FleetPackage.Literals.FLEET_MODEL,
+				FleetPackage.Literals.FLEET_MODEL__VESSEL_GROUPS, rootObject);
 
 		if (reference == CargoPackage.Literals.SLOT__ALLOWED_VESSELS || reference == CargoPackage.Literals.VESSEL_EVENT__ALLOWED_VESSELS) {
 			return new IReferenceValueProvider() {
@@ -68,6 +72,7 @@ public class AllowedVesselsValueProviderFactory implements IReferenceValueProvid
 					// get a list of globally permissible values
 					final List<Pair<String, EObject>> vesselResult = vesselProvider.getAllowedValues(target, field);
 					final List<Pair<String, EObject>> vesselClassResult = vesselClassProvider.getAllowedValues(target, field);
+					final List<Pair<String, EObject>> vesselGroupResult = vesselGroupProvider.getAllowedValues(target, field);
 
 					// // determine the current value for the target object
 					// final VesselAssignmentType currentValue;
@@ -114,6 +119,22 @@ public class AllowedVesselsValueProviderFactory implements IReferenceValueProvid
 
 						final boolean display = true;
 
+						if (display) {
+							result.add(pair);
+						}
+					}
+					for (final Pair<String, EObject> pair : vesselGroupResult) {
+						final VesselGroup vessel = (VesselGroup) pair.getSecond();
+						if (vessel == null) {
+							continue;
+						}
+						if (vessel.getVessels().isEmpty()) {
+							continue;
+						}
+					 
+						
+						final boolean display = true;
+						
 						if (display) {
 							result.add(pair);
 						}
