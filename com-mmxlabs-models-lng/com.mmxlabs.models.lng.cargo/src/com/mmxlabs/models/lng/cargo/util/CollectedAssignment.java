@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.util;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,7 +47,8 @@ public class CollectedAssignment {
 		this.vesselAvailability = null;
 		this.charterInMarket = charterInMarket;
 		this.spotIndex = spotIndex;
-		this.assignments = sortAssignments(assignments, portModel, dateProvider);
+		// -1 is the nominal cargoes, so no need to sort
+		this.assignments = spotIndex == -1 ? assignments : sortAssignments(assignments, portModel, dateProvider);
 	}
 
 	public @NonNull List<@NonNull AssignableElement> getAssignedObjects() {
@@ -81,14 +83,18 @@ public class CollectedAssignment {
 			final WrappedAssignableElement e = new WrappedAssignableElement(ae, portModel, dateProvider);
 			sortedElements.add(e);
 		}
-
 		sortWrappedAssignableElements(sortedElements);
 		// Unwrap list
 		return sortedElements.stream().map(e -> e.getAssignableElement()).collect(Collectors.toList());
 	}
 
 	public static void sortWrappedAssignableElements(final List<@NonNull WrappedAssignableElement> sortedElements) {
-		Collections.sort(sortedElements, (a, b) -> {
+		Comparator<? super @NonNull WrappedAssignableElement> comparator = createComparator();
+		Collections.sort(sortedElements, comparator);
+	}
+
+	public static Comparator<@NonNull WrappedAssignableElement> createComparator() {
+		Comparator<@NonNull WrappedAssignableElement> comparator = (a, b) -> {
 
 			final OrderingHint hint = AssignmentEditorHelper.checkOrdering(a, b);
 			switch (hint) {
@@ -98,9 +104,16 @@ public class CollectedAssignment {
 				return -1;
 			case AMBIGUOUS:
 			default:
-				int c = Integer.compare(a.getSequenceHint(), b.getSequenceHint());
-				if (c != 0) {
-					return c;
+				int c = 0;
+				// Sequence hints of zero are unset, to avoid the sequence hint checks
+				// Note is still possible that this can cause comparator contract issues.
+				// In BugzId: 2290 a overlaps b and b overlaps c, but a and c do not overlap.
+				// The date sorting (used as no overlap) says a<c, however sequence hints (used due to overlap) say b<a and c<b implying c<a!
+				if (a.getSequenceHint() != 0 && b.getSequenceHint() != 0) {
+					c = Integer.compare(a.getSequenceHint(), b.getSequenceHint());
+					if (c != 0) {
+						return c;
+					}
 				}
 				c = a.getStartWindow().getSecond().compareTo(b.getStartWindow().getSecond());
 				if (c != 0) {
@@ -117,6 +130,7 @@ public class CollectedAssignment {
 				return c;
 			}
 
-		});
+		};
+		return comparator;
 	}
 }

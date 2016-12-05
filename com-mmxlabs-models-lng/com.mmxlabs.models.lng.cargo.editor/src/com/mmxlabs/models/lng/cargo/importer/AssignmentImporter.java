@@ -61,7 +61,7 @@ public class AssignmentImporter {
 				}
 				final Integer spotIndex = spotIndexTmp;
 				final String[] assignedObjectNames = assignedObjects.split(",");
-				int index = 0;
+				int index = 1;
 				for (final String aon : assignedObjectNames) {
 					final int seq = index++;
 					context.doLater(new IDeferment() {
@@ -93,6 +93,10 @@ public class AssignmentImporter {
 												assignableElement.setVesselAssignmentType(charterInMarket);
 												assignableElement.setSpotIndex(spotIndex.intValue());
 											}
+											// Do not set round trip caroges
+											if (spotIndex.intValue() != -1) {
+												assignableElement.setSequenceHint(seq);
+											}
 										} else {
 											final Vessel v = (Vessel) context.getNamedObject(vesselAssignment.trim(), FleetPackage.Literals.VESSEL);
 											if (v != null) {
@@ -100,8 +104,8 @@ public class AssignmentImporter {
 														((LNGScenarioModel) context.getRootObject()).getCargoModel().getVesselAvailabilities());
 												assignableElement.setVesselAssignmentType(availability);
 											}
+											assignableElement.setSequenceHint(seq);
 										}
-										assignableElement.setSequenceHint(seq);
 									}
 								} else if (vesselName != null && !vesselName.isEmpty()) {
 									// Old style
