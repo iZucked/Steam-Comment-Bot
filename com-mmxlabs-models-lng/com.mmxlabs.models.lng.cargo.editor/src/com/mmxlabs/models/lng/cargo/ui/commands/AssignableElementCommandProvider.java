@@ -7,7 +7,9 @@ package com.mmxlabs.models.lng.cargo.ui.commands;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.internal.resources.projectvariables.ParentVariableResolver;
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -15,6 +17,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 
 import com.mmxlabs.models.common.commandservice.AbstractModelCommandProvider;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -33,14 +36,36 @@ public class AssignableElementCommandProvider extends AbstractModelCommandProvid
 	}
 
 	@Override
-	public Command provideAdditionalAfterCommand(EditingDomain editingDomain, MMXRootObject rootObject, Map<EObject, EObject> overrides, Set<EObject> editSet, Class<? extends Command> commandClass,
-			CommandParameter parameter, Command input) {
+	public Command provideAdditionalAfterCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
+			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
 
 		if (parameter.getFeature() == CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE) {
+			final CompoundCommand cmd = new CompoundCommand();
 			if (!(parameter.getEValue() instanceof CharterInMarket)) {
 				// Clear value
-				return SetCommand.create(editingDomain, parameter.getOwner(), CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE);
+				cmd.append(SetCommand.create(editingDomain, parameter.getOwner(), CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
 			}
+			// Reset the sequence hint to avoid sort issues. See BugzId: 2290
+			cmd.append(SetCommand.create(editingDomain, parameter.getOwner(), CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, SetCommand.UNSET_VALUE));
+			return cmd;
+		}
+		if (parameter.getFeature() == CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX) {
+			// Reset the sequence hint to avoid sort issues. See BugzId: 2290
+			return SetCommand.create(editingDomain, parameter.getOwner(), CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, SetCommand.UNSET_VALUE);
+		}
+
+		// Various fields which can change the relative ordering of AssignableElements
+		if ((parameter.getFeature() == CargoPackage.Literals.SLOT__PORT) //
+				|| (parameter.getFeature() == CargoPackage.Literals.SLOT__WINDOW_SIZE) //
+				|| (parameter.getFeature() == CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS) //
+				|| (parameter.getFeature() == CargoPackage.Literals.SLOT__WINDOW_START) //
+				|| (parameter.getFeature() == CargoPackage.Literals.SLOT__WINDOW_START_TIME) //
+				|| (parameter.getFeature() == CargoPackage.Literals.SLOT__DURATION)) {
+			final Slot slot = (Slot) parameter.getOwner();
+			if (slot.getCargo() != null) {
+				return SetCommand.create(editingDomain, slot.getCargo(), CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, SetCommand.UNSET_VALUE);
+			}
+
 		}
 
 		return null;
