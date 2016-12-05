@@ -424,9 +424,10 @@ public class LNGSchedulerJobUtils {
 
 		// Create all the new vessel assignment objects.
 		for (final Sequence sequence : schedule.getSequences()) {
+			boolean isRoundTrip = sequence.isSetCharterInMarket() && sequence.getSpotIndex() == -1;
 
 			// final AVesselSet<Vessel> assignment = sequence.isSpotVessel() ? sequence.getVesselClass() : (sequence.isSetVesselAvailability() ? sequence.getVesselAvailability().getVessel() : null);
-			int index = 0;
+			int index = 1;
 			for (final Event event : sequence.getEvents()) {
 				AssignableElement object = null;
 				if (event instanceof SlotVisit) {
@@ -445,7 +446,11 @@ public class LNGSchedulerJobUtils {
 				}
 
 				if (object != null) {
-					cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, index++));
+					if (isRoundTrip) {
+						cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, SetCommand.UNSET_VALUE));
+					} else {
+						cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, index++));
+					}
 					if (sequence.isSetVesselAvailability()) {
 
 						cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, sequence.getVesselAvailability()));
