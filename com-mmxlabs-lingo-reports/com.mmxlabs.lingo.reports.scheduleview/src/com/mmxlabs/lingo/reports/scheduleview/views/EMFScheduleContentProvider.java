@@ -60,7 +60,9 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 					final EList<Sequence> sequences = ((Schedule) o).getSequences();
 					// find multiple availabilities
 					final Map<Vessel, List<Sequence>> availabilityMap = new HashMap<>();
-					final List<Sequence> unassigned = sequences.stream().filter(s -> s.getSequenceType() == SequenceType.VESSEL)
+					final List<Sequence> unassigned = sequences.stream() //
+							.filter(s -> s.getSequenceType() == SequenceType.VESSEL)
+							.filter(s -> s.getVesselAvailability() != null) //
 							.sorted((a, b) -> a.getVesselAvailability().getStartBy() == null ? -1
 									: b.getVesselAvailability().getStartBy() == null ? 1 : a.getVesselAvailability().getStartBy().compareTo(b.getVesselAvailability().getStartBy()))
 							.collect(Collectors.toList());
