@@ -26,6 +26,7 @@ import com.mmxlabs.models.ui.valueproviders.SimpleReferenceValueProvider;
 public class CargoValueProviderFactory implements IReferenceValueProviderFactory {
 
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yyyy");
+
 	@Override
 	public IReferenceValueProvider createReferenceValueProvider(final EClass owner, final EReference reference, final MMXRootObject rootObject) {
 		if (rootObject instanceof LNGScenarioModel) {
@@ -41,11 +42,18 @@ public class CargoValueProviderFactory implements IReferenceValueProviderFactory
 						if (referenceValue instanceof VesselAvailability) {
 							final VesselAvailability vesselAvailability = (VesselAvailability) referenceValue;
 							final Vessel vessel = vesselAvailability.getVessel();
-							boolean uniqueAvailability = uniqueAvailability(cm.getVesselAvailabilities(), vesselAvailability);
+							final boolean uniqueAvailability = uniqueAvailability(cm.getVesselAvailabilities(), vesselAvailability);
 							if (vessel != null && uniqueAvailability) {
 								return vessel.getName();
 							} else if (vessel != null && !uniqueAvailability) {
-								return String.format("%s (%s)", vessel.getName(), vesselAvailability.getStartAfter() == null ? formatter.format(vesselAvailability.getStartBy()): formatter.format(vesselAvailability.getStartAfter()));
+								final String startByStr = vesselAvailability.getStartBy() != null ? formatter.format(vesselAvailability.getStartBy()) : null;
+								final String startAfterStr = vesselAvailability.getStartAfter() != null ? formatter.format(vesselAvailability.getStartAfter()) : null;
+								final String dateString = startByStr != null ? startByStr : startAfterStr;
+								if (dateString != null) {
+									return String.format("%s (%s)", vessel.getName(), dateString);
+								} else {
+									return vessel.getName();
+								}
 							} else {
 								return "";
 							}
@@ -54,7 +62,7 @@ public class CargoValueProviderFactory implements IReferenceValueProviderFactory
 						return super.getName(referer, feature, referenceValue);
 					}
 
-					private boolean uniqueAvailability(List<VesselAvailability> vesselAvailability, VesselAvailability va) {
+					private boolean uniqueAvailability(final List<VesselAvailability> vesselAvailability, final VesselAvailability va) {
 						if (va == null || (va != null && va.getVessel() == null)) {
 							return true;
 						}
@@ -62,16 +70,16 @@ public class CargoValueProviderFactory implements IReferenceValueProviderFactory
 					}
 
 					@Override
-					protected boolean isRelevantTarget(Object target, Object feature) {
+					protected boolean isRelevantTarget(final Object target, final Object feature) {
 						// check for a change to a vessel availability
-						boolean isContainingReferenceSuperType = (containingReference.getEReferenceType().isSuperTypeOf(((EObject) target).eClass()));
+						final boolean isContainingReferenceSuperType = (containingReference.getEReferenceType().isSuperTypeOf(((EObject) target).eClass()));
 						// check for a change to the vessel reference
 						boolean isFeatureVessel = false;
 						if (feature instanceof EReference) {
 							isFeatureVessel = FleetPackage.Literals.VESSEL.equals(((EReference) feature).getEReferenceType());
 						}
 						// check for a change to the list of vessel availabilities
-						boolean featureIsContainingReference = feature == containingReference;
+						final boolean featureIsContainingReference = feature == containingReference;
 						return (isFeatureVessel && isContainingReferenceSuperType) || featureIsContainingReference;
 					}
 
