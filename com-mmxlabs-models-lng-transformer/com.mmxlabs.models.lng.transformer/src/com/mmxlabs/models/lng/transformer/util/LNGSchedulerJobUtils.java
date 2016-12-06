@@ -182,7 +182,7 @@ public class LNGSchedulerJobUtils {
 					if (force || mostRecentCommand.getLabel().startsWith(LABEL_PREFIX)) {
 						final CommandStack stack = editingDomain.getCommandStack();
 						if (stack instanceof MMXAdaptersAwareCommandStack) {
-							((MMXAdaptersAwareCommandStack) stack).undo(null);
+							((MMXAdaptersAwareCommandStack) stack).undo(false);
 						} else {
 							stack.undo();
 						}
