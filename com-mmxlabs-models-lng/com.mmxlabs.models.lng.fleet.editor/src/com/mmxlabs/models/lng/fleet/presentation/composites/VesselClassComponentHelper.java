@@ -225,9 +225,10 @@ public class VesselClassComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the scnt feature on VesselClass
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_scntEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS__SCNT));
+		// BugzId: 1039 - Disabled until ready to release
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS__SCNT));
 	}
 }
