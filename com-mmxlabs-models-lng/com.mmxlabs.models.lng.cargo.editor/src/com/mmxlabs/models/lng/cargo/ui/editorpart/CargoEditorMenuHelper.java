@@ -269,10 +269,7 @@ public class CargoEditorMenuHelper {
 					}
 					if (!foundDESPurchase) {
 						createAssignmentMenus(manager, dischargeSlot.getCargo());
-
 					}
-
-					createAssignmentMenus(manager, dischargeSlot.getCargo());
 				}
 				final Contract contract = dischargeSlot.getContract();
 				if (contract == null || contract.getContractType() == ContractType.BOTH) {
