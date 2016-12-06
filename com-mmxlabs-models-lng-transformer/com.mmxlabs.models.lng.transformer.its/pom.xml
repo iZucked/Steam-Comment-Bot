@@ -110,6 +110,8 @@
 
 					<product>org.eclipse.sdk.ide</product>
 					<application>org.eclipse.ui.ide.workbench</application>
+					
+					<argLine>-ea</argLine>
 
 					<useUIHarness>true</useUIHarness>
 					<useUIThread>true</useUIThread>
