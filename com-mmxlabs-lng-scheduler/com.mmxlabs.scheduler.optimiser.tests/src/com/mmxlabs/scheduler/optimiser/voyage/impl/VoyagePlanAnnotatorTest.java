@@ -41,6 +41,7 @@ import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -159,7 +160,7 @@ public class VoyagePlanAnnotatorTest {
 
 		final VoyagePlan plan1 = new VoyagePlan();
 		plan1.setSequence(new IDetailsSequenceElement[] { loadDetails1, voyageDetails1, dischargeDetails1, voyageDetails2, loadDetails2 });
-		PortTimesRecord portTimesRecord1 = new PortTimesRecord();
+		AllocationAnnotation portTimesRecord1 = new AllocationAnnotation();
 		portTimesRecord1.setSlotTime(loadSlot1, 0);
 		portTimesRecord1.setSlotTime(dischargeSlot1, 100);
 		portTimesRecord1.setSlotDuration(loadSlot1, loadVisitDuration1);
@@ -169,7 +170,7 @@ public class VoyagePlanAnnotatorTest {
 
 		final VoyagePlan plan2 = new VoyagePlan();
 		plan2.setSequence(new IDetailsSequenceElement[] { loadDetails2, voyageDetails3, dischargeDetails2 });
-		PortTimesRecord portTimesRecord2 = new PortTimesRecord();
+		AllocationAnnotation portTimesRecord2 = new AllocationAnnotation();
 		portTimesRecord2.setSlotTime(loadSlot2, 200);
 		portTimesRecord2.setSlotTime(dischargeSlot2, 300);
 		portTimesRecord2.setSlotDuration(loadSlot2, loadVisitDuration2);
