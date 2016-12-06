@@ -296,7 +296,7 @@ public class PriceIntervalProviderHelper {
 		final int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) canal.ladenTimeAtMaxSpeed, (int) canal.ladenTimeAtNBOSpeed);
 		long[] fuelCosts = getLegFuelCosts(salesPrice, boiloffRateM3, vesselClass, cv, times, canal.ladenRouteDistance, equivalenceFactor, vesselBaseFuelCalculator.getBaseFuelPrice(vesselClass, times[0]), canal.transitTime, loadDuration, isLaden);
 
-		final long charterCost = OptimiserUnitConvertor.convertToInternalDailyCost((charterRatePerDay * (times[1] - times[0])) / 24L); // note: converting charter rate to same scale as fuel costs
+		final long charterCost = OptimiserUnitConvertor.convertToInternalDailyCost((charterRatePerDay * (long)(times[1] - times[0])) / 24L); // note: converting charter rate to same scale as fuel costs
 		final long cost = canal.ladenRouteCost + fuelCosts[TOTAL_BOILOFF_COSTS_INDEX] + fuelCosts[TOTAL_BUNKER_COSTS_INDEX] + charterCost;
 		return cost;
 	}
