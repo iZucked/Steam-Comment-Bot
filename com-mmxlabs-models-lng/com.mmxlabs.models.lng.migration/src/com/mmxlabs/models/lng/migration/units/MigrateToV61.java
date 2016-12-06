@@ -31,14 +31,29 @@ public class MigrateToV61 extends AbstractMigrationUnit {
 
 	@Override
 	protected void doMigrationWithHelper(final MetamodelLoader loader, final EObjectWrapper model) {
-		EObjectWrapper cargoModel = model.getRef("cargoModel");
-		List<EObjectWrapper> availabilities = cargoModel.getRefAsList("vesselAvailabilities");
-		// Consumer to update the cancellation fee as an expression
+		final EObjectWrapper cargoModel = model.getRef("cargoModel");
+		final List<EObjectWrapper> availabilities = cargoModel.getRefAsList("vesselAvailabilities");
+
+		// Consumer to update the set the fleet flag by default
 		final Consumer<EObjectWrapper> availabilityUpdater = (va) -> {
 			va.setAttrib("fleet", true);
 		};
 		if (availabilities != null) {
 			availabilities.forEach(availabilityUpdater);
+		}
+
+		// Update for new sequence hint definition. 0 is unset and round trip cargoes have no hint.
+		final List<EObjectWrapper> cargoes = cargoModel.getRefAsList("cargoes");
+		if (cargoes != null) {
+			cargoes.forEach(c -> {
+				int spotIndex = (Integer) c.getAttrib("spotIndex");
+				if (spotIndex == -1) {
+					c.setAttrib("sequenceHint", 0);
+				} else {
+					int currentHint = (Integer) c.getAttrib("sequenceHint");
+					c.setAttrib("sequenceHint", 1 + currentHint);
+				}
+			});
 		}
 	}
 }
