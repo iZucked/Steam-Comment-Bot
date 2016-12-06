@@ -9,10 +9,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
@@ -27,43 +23,26 @@ import com.mmxlabs.scenario.service.model.ScenarioLock;
  */
 public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 	private CommandProviderAwareEditingDomain editingDomain;
-	private final ScenarioInstance instance;
+	private final Object lockableObject;
+	private final ScenarioLock lock;
 	/**
 	 * Used to determine when we are executing changes.
 	 */
 	private final AtomicInteger stackDepth = new AtomicInteger(0);
-	/**
-	 * Change adapter to enfore use of command framework to make changes.
-	 */
-	private final EContentAdapter externalChangeAdapter = new EContentAdapter() {
-		@Override
-		public void notifyChanged(final Notification notification) {
-
-			super.notifyChanged(notification);
-
-			if (notification.getEventType() == Notification.REMOVING_ADAPTER) {
-				return;
-			}
-			if (notification.isTouch()) {
-				return;
-			}
-
-			final EStructuralFeature feature = (EStructuralFeature) notification.getFeature();
-			if (feature != null && !feature.isTransient() && stackDepth.get() == 0) {
-				throw new IllegalStateException("Model is changed outside of EMF Command Framework");
-			}
-
-		}
-	};
 
 	public MMXAdaptersAwareCommandStack(final ScenarioInstance instance) {
-		this.instance = instance;
+		this(null, instance, instance.getLock(ScenarioLock.EDITORS));
 	}
 
 	public MMXAdaptersAwareCommandStack(final CommandProviderAwareEditingDomain editingDomain, final ScenarioInstance instance) {
+		this(editingDomain, instance, instance.getLock(ScenarioLock.EDITORS));
+	}
+
+	public MMXAdaptersAwareCommandStack(final CommandProviderAwareEditingDomain editingDomain, final Object lockObject, ScenarioLock lock) {
 		this.editingDomain = editingDomain;
-		this.instance = instance;
-		instance.eAdapters().add(externalChangeAdapter);
+		this.lockableObject = lockObject;
+		this.lock = lock;
+		// instance.eAdapters().add(externalChangeAdapter);
 	}
 
 	@Override
@@ -74,7 +53,7 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 			if (!command.canExecute()) {
 				throwExceptionOnBadCommand(command);
 			}
-			synchronized (instance) {
+			synchronized (lockableObject) {
 				final boolean isEnabled = editingDomain.isEnabled();
 				if (isEnabled) {
 					editingDomain.setAdaptersEnabled(false);
@@ -109,7 +88,7 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 
 	@Override
 	public void undo() {
-		undo(ScenarioLock.EDITORS);
+		undo(true);
 	}
 
 	/**
@@ -117,11 +96,10 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 	 * 
 	 * @param lockKey
 	 */
-	public void undo(@Nullable final String lockKey) {
-		if (lockKey == null) {
+	public void undo(boolean useLock) {
+		if (!useLock) {
 			reallyUndo();
 		} else {
-			final ScenarioLock lock = instance.getLock(lockKey);
 			if (lock.awaitClaim()) {
 				try {
 					reallyUndo();
@@ -157,7 +135,6 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 
 	@Override
 	public void redo() {
-		final ScenarioLock lock = instance.getLock(ScenarioLock.EDITORS);
 		if (lock.awaitClaim()) {
 			stackDepth.incrementAndGet();
 			try {
@@ -190,7 +167,7 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 	public void setEditingDomain(final CommandProviderAwareEditingDomain editingDomain) {
 		this.editingDomain = editingDomain;
 	}
-	
+
 	@Override
 	protected void handleError(Exception exception) {
 		throw new RuntimeException(exception);
