@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.cargo.ui.commands;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.core.internal.resources.projectvariables.ParentVariableResolver;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
