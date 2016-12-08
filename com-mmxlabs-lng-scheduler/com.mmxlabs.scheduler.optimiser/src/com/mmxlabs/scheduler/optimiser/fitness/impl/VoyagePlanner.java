@@ -1118,9 +1118,6 @@ public class VoyagePlanner {
 					final IPortSlot portSlot = portDetails.getOptions().getPortSlot();
 					final long start = currentHeelInM3;
 					if (portSlot.getPortType() != PortType.End) {
-						totalVoyageBOG += portDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3);
-						currentHeelInM3 -= portDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3);
-
 						if (planData.getAllocation() != null) {
 							if (portSlot.getPortType() == PortType.Load) {
 								currentHeelInM3 += planData.getAllocation().getCommercialSlotVolumeInM3(portSlot);
@@ -1128,6 +1125,10 @@ public class VoyagePlanner {
 								currentHeelInM3 -= planData.getAllocation().getCommercialSlotVolumeInM3(portSlot);
 							}
 						}
+						
+						totalVoyageBOG += portDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3);
+						currentHeelInM3 -= portDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3);
+
 						assert currentHeelInM3 + ROUNDING_EPSILON >= 0;
 					} else {
 						if (portSlot instanceof EndPortSlot) {

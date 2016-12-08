@@ -128,29 +128,29 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 					final long cost = details.getPortCosts();
 					solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_portCostInfo, new PortCostAnnotation(cost));
 				}
-				
+
 				for (final FuelComponent fuel : FuelComponent.values()) {
 					for (final FuelUnit unit : FuelUnit.values()) {
 						final long consumption = details.getFuelConsumption(fuel, unit);
 
 						visit.setFuelConsumption(fuel, unit, consumption);
 						if (unit == fuel.getPricingFuelUnit()) {
-							
+
 							final int fuelUnitPrice = details.getFuelUnitPrice(fuel);
 							final long cost = Calculator.costFromConsumption(consumption, fuelUnitPrice);
-											
+
 							visit.setFuelCost(fuel, cost);
 							visit.setFuelPriceUnit(fuel, unit);
 							visit.setFuelUnitPrice(fuel, fuelUnitPrice);
 						}
 					}
 				}
-//				final long consumption = details.getFuelConsumption(FuelComponent.Base, FuelUnit.MT);
-//				visit.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, consumption);
-//				final long cost = Calculator.costFromConsumption(consumption, details.getFuelUnitPrice(FuelComponent.Base));
-//				visit.setFuelCost(FuelComponent.Base, cost);
-//				visit.setFuelPriceUnit(FuelComponent.Base, FuelComponent.Base.getPricingFuelUnit());
-//				visit.setFuelUnitPrice(FuelComponent.Base, details.getFuelUnitPrice(FuelComponent.Base));
+				// final long consumption = details.getFuelConsumption(FuelComponent.Base, FuelUnit.MT);
+				// visit.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, consumption);
+				// final long cost = Calculator.costFromConsumption(consumption, details.getFuelUnitPrice(FuelComponent.Base));
+				// visit.setFuelCost(FuelComponent.Base, cost);
+				// visit.setFuelPriceUnit(FuelComponent.Base, FuelComponent.Base.getPricingFuelUnit());
+				// visit.setFuelUnitPrice(FuelComponent.Base, details.getFuelUnitPrice(FuelComponent.Base));
 				visit.setName("visit");
 				visit.setSequenceElement(element);
 				visit.setPortSlot(currentPortSlot);
@@ -177,7 +177,8 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 							assert allocationAnnotation.getStartHeelVolumeInM3() == currentPlan.getStartingHeelInM3();
 							assert allocationAnnotation.getFuelVolumeInM3() == currentPlan.getLNGFuelVolume();
 
-							currentHeelInM3 += allocationAnnotation.getPhysicalSlotVolumeInM3(currentPortSlot);
+							// TODO: Probably should be physical here and then ignore the port BOG.
+							currentHeelInM3 += allocationAnnotation.getCommercialSlotVolumeInM3(currentPortSlot);
 						} else if (currentPortSlot.getPortType() == PortType.Discharge) {
 							final IAllocationAnnotation allocationAnnotation = scheduledSequence.getAllocationAnnotation(currentPortSlot);
 
@@ -188,7 +189,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 							assert allocationAnnotation.getStartHeelVolumeInM3() == currentPlan.getStartingHeelInM3();
 							assert allocationAnnotation.getFuelVolumeInM3() == currentPlan.getLNGFuelVolume();
 
-							currentHeelInM3 -= allocationAnnotation.getPhysicalSlotVolumeInM3(currentPortSlot);
+							currentHeelInM3 -= allocationAnnotation.getCommercialSlotVolumeInM3(currentPortSlot);
 						}
 						assert currentHeelInM3 + VoyagePlanner.ROUNDING_EPSILON >= 0;
 					} else {
