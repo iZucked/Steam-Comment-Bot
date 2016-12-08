@@ -1137,9 +1137,11 @@ public class ChangeSetView implements IAdaptable {
 					if (data instanceof ChangeSet) {
 						gc.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 						final int s = gc.getLineStyle();
-						gc.setLineStyle(SWT.LINE_SOLID);
-						gc.drawLine(getBounds().x, getBounds().y, getBounds().width + getBounds().x, getBounds().y);
+						gc.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
+//						gc.setLineStyle(SWT.LINE_DOT);
+//						gc.drawLine(getBounds().x, getBounds().y, getBounds().width + getBounds().x, getBounds().y);
 						gc.setLineStyle(SWT.LINE_DOT);
+//						gc.setLineWidth(1);
 						gc.drawLine(getBounds().x, getBounds().y + getBounds().height, getBounds().width + getBounds().x, getBounds().y + getBounds().height);
 						gc.setLineStyle(s);
 					}
@@ -1492,7 +1494,7 @@ public class ChangeSetView implements IAdaptable {
 				cell.setForeground(null);
 				if (element instanceof ChangeSet) {
 
-					// cell.setFont(italicBoldFont);
+					cell.setFont(boldFont);
 
 					final ChangeSet changeSet = (ChangeSet) element;
 					final Metrics scenarioMetrics = changeSet.getCurrentMetrics();
@@ -1577,6 +1579,9 @@ public class ChangeSetView implements IAdaptable {
 				cell.setForeground(null);
 				if (element instanceof ChangeSet) {
 
+					
+					cell.setFont(boldFont);
+					
 					final ChangeSet changeSet = (ChangeSet) element;
 					final Metrics scenarioMetrics = changeSet.getCurrentMetrics();
 					final DeltaMetrics deltaMetrics;
@@ -2124,7 +2129,7 @@ public class ChangeSetView implements IAdaptable {
 				cell.setFont(null);
 				double delta = 0;
 				if (element instanceof ChangeSet) {
-					// cell.setFont(boldFont);
+					cell.setFont(boldFont);
 					final ChangeSet changeSet = (ChangeSet) element;
 					final List<ChangeSetRow> rows;
 					if (diffToBase) {
