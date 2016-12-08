@@ -54,10 +54,12 @@ import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.provider.PinnedScheduleFormatter;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
@@ -87,7 +89,6 @@ import com.mmxlabs.models.lng.schedule.util.CapacityUtils;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
-import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
@@ -158,16 +159,78 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Vessel", null, ColumnType.NORMAL, new VesselAssignmentFormatter(), targetObjectRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.loadwindow": {
-			final ETypedElement[][] paths = new ETypedElement[][] { { loadAllocationRef, s.getSlotAllocation_Slot(), c.getSlot_WindowStart() },
-					{ targetObjectRef, s.getVesselEventVisit_VesselEvent(), c.getVesselEvent_StartAfter() } };
+
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
-					new MultiObjectEmfBlockColumnFactory(columnID, "Load/Start Window", "Load or vessel event window start date", ColumnType.NORMAL, Formatters.asLocalDateFormatter, paths));
+					new SimpleEmfBlockColumnFactory(columnID, "Load/Start Window", "Load or vessel event window start date", ColumnType.NORMAL, new BaseFormatter() {
+						@Override
+						public String render(final Object object) {
+
+							if (object instanceof Row) {
+								final Row row = (Row) object;
+								final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+								if (openSlotAllocation != null) {
+									final Slot slot = openSlotAllocation.getSlot();
+									if (slot instanceof LoadSlot) {
+										return Formatters.asLocalDateFormatter.render(slot.getWindowStart());
+
+									}
+								}
+								final SlotAllocation slotAllocation = row.getLoadAllocation();
+								if (slotAllocation != null) {
+									final Slot slot = slotAllocation.getSlot();
+									if (slot instanceof LoadSlot) {
+										final BaseLegalEntity entity = slot.getSlotOrDelegatedEntity();
+										if (entity != null) {
+											return Formatters.asLocalDateFormatter.render(slot.getWindowStart());
+										}
+									}
+								}
+								if (row.getTarget() instanceof VesselEventVisit) {
+									final VesselEventVisit visit = (VesselEventVisit) row.getTarget();
+									final VesselEvent event = visit.getVesselEvent();
+									if (event != null) {
+										return Formatters.asLocalDateFormatter.render(event.getStartAfter());
+
+									}
+								}
+							}
+							return "";
+						}
+					}));
+
 			break;
 		}
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.dischargewindow": {
-			final ETypedElement[][] paths = new ETypedElement[][] { { dischargeAllocationRef, s.getSlotAllocation_Slot(), c.getSlot_WindowStart() } };
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
-					new MultiObjectEmfBlockColumnFactory(columnID, "Discharge Window", "Discharge window start date", ColumnType.NORMAL, Formatters.asLocalDateFormatter, paths));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Discharge Window", "Discharge window start date", ColumnType.NORMAL,
+
+					new BaseFormatter() {
+						@Override
+						public String render(final Object object) {
+
+							if (object instanceof Row) {
+								final Row row = (Row) object;
+								final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+								if (openSlotAllocation != null) {
+									final Slot slot = openSlotAllocation.getSlot();
+									if (slot instanceof DischargeSlot) {
+										return Formatters.asLocalDateFormatter.render(slot.getWindowStart());
+
+									}
+								}
+								final SlotAllocation slotAllocation = row.getDischargeAllocation();
+								if (slotAllocation != null) {
+									final Slot slot = slotAllocation.getSlot();
+									if (slot instanceof DischargeSlot) {
+										final BaseLegalEntity entity = slot.getSlotOrDelegatedEntity();
+										if (entity != null) {
+											return Formatters.asLocalDateFormatter.render(slot.getWindowStart());
+										}
+									}
+								}
+							}
+							return "";
+						}
+					}));
 			break;
 		}
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.loaddate": {
@@ -269,14 +332,93 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			}));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.buyport": {
-			final ETypedElement[][] paths = new ETypedElement[][] { { loadAllocationRef, s.getSlotAllocation_Slot(), c.getSlot_Port(), name }, { targetObjectRef, s.getEvent_Port(), name } };
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new MultiObjectEmfBlockColumnFactory(columnID, "Buy/Start Port", null, ColumnType.NORMAL, Formatters.objectFormatter, paths));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Buy/Start Port", null, ColumnType.NORMAL, new BaseFormatter() {
+				@Override
+				public String render(final Object object) {
+
+					if (object instanceof Row) {
+						final Row row = (Row) object;
+						final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+						if (openSlotAllocation != null) {
+							final Slot slot = openSlotAllocation.getSlot();
+							if (slot instanceof LoadSlot) {
+								final Port port = slot.getPort();
+								if (port != null) {
+									return port.getName();
+								}
+							}
+						}
+						final SlotAllocation slotAllocation = row.getLoadAllocation();
+						if (slotAllocation != null) {
+							final Slot slot = slotAllocation.getSlot();
+							if (slot instanceof LoadSlot) {
+								final Port port = slot.getPort();
+								if (port != null) {
+									return port.getName();
+								}
+							}
+						}
+						if (row.getTarget() instanceof Event) {
+							final Event event = (Event) row.getTarget();
+							final Port port = event.getPort();
+							if (port != null) {
+								return port.getName();
+							}
+						}
+					}
+					return "";
+				}
+			}));
 		}
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.sellport": {
-			final ETypedElement[][] paths = new ETypedElement[][] { { dischargeAllocationRef, s.getSlotAllocation_Slot(), c.getSlot_Port(), name },
-					{ targetObjectRef, s.getVesselEventVisit_VesselEvent(), c.getCharterOutEvent_RelocateTo(), name } };
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new MultiObjectEmfBlockColumnFactory(columnID, "Sell/End Port", null, ColumnType.NORMAL, Formatters.objectFormatter, paths));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sell/End Port", null, ColumnType.NORMAL, new BaseFormatter() {
+				@Override
+				public String render(final Object object) {
+
+					if (object instanceof Row) {
+						final Row row = (Row) object;
+						final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+						if (openSlotAllocation != null) {
+							final Slot slot = openSlotAllocation.getSlot();
+							if (slot instanceof DischargeSlot) {
+								final Port port = slot.getPort();
+								if (port != null) {
+									return port.getName();
+								}
+							}
+						}
+						final SlotAllocation slotAllocation = row.getDischargeAllocation();
+						if (slotAllocation != null) {
+							final Slot slot = slotAllocation.getSlot();
+							if (slot instanceof DischargeSlot) {
+								final Port port = slot.getPort();
+								if (port != null) {
+									return port.getName();
+								}
+							}
+						}
+						if (row.getTarget() instanceof VesselEventVisit) {
+							final VesselEventVisit visit = (VesselEventVisit) row.getTarget();
+							final VesselEvent event = visit.getVesselEvent();
+							if (event instanceof CharterOutEvent) {
+								final CharterOutEvent charterOutEvent = (CharterOutEvent) event;
+								final Port port = charterOutEvent.getRelocateTo();
+								if (port != null) {
+									return port.getName();
+								}
+							}
+							if (event != null) {
+								final Port port = event.getPort();
+								if (port != null) {
+									return port.getName();
+								}
+							}
+						}
+					}
+					return "";
+				}
+			}));
 		}
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.buyvolume_m3":
@@ -938,13 +1080,71 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.buy_entity":
 
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Buy Entity", null, ColumnType.NORMAL, Formatters.namedObjectFormatter, loadAllocationRef,
-					s.getSlotAllocation_Slot(), c.getSlot__GetSlotOrDelegatedEntity()));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Buy Entity", null, ColumnType.NORMAL, new BaseFormatter() {
+				@Override
+				public String render(final Object object) {
+
+					if (object instanceof Row) {
+						final Row row = (Row) object;
+						final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+						if (openSlotAllocation != null) {
+							final Slot slot = openSlotAllocation.getSlot();
+							if (slot instanceof LoadSlot) {
+								final BaseLegalEntity entity = slot.getSlotOrDelegatedEntity();
+								if (entity != null) {
+									return entity.getName();
+								}
+							}
+						}
+						final SlotAllocation slotAllocation = row.getLoadAllocation();
+						if (slotAllocation != null) {
+							final Slot slot = slotAllocation.getSlot();
+							if (slot instanceof LoadSlot) {
+								final BaseLegalEntity entity = slot.getSlotOrDelegatedEntity();
+								if (entity != null) {
+									return entity.getName();
+								}
+							}
+						}
+					}
+					return "";
+				}
+			}));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.sell_entity":
 
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sell Entity", null, ColumnType.NORMAL, Formatters.namedObjectFormatter,
-					dischargeAllocationRef, s.getSlotAllocation_Slot(), c.getSlot__GetSlotOrDelegatedEntity()));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sell Entity", null, ColumnType.NORMAL,
+
+					new BaseFormatter() {
+						@Override
+						public String render(final Object object) {
+
+							if (object instanceof Row) {
+								final Row row = (Row) object;
+								final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+								if (openSlotAllocation != null) {
+									final Slot slot = openSlotAllocation.getSlot();
+									if (slot instanceof DischargeSlot) {
+										final BaseLegalEntity entity = slot.getSlotOrDelegatedEntity();
+										if (entity != null) {
+											return entity.getName();
+										}
+									}
+								}
+								final SlotAllocation slotAllocation = row.getDischargeAllocation();
+								if (slotAllocation != null) {
+									final Slot slot = slotAllocation.getSlot();
+									if (slot instanceof DischargeSlot) {
+										final BaseLegalEntity entity = slot.getSlotOrDelegatedEntity();
+										if (entity != null) {
+											return entity.getName();
+										}
+									}
+								}
+							}
+							return "";
+						}
+					}));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.shipping_entity":
 
