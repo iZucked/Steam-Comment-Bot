@@ -53,6 +53,9 @@ public class VesselStateColourScheme extends ColourScheme {
 			}
 		} else if (element instanceof VesselEventVisit) {
 			VesselEventVisit vev = (VesselEventVisit) element;
+			if (isOutsideTimeWindow(vev)) {
+				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Late_Event, ColourElements.Background);
+			}
 			if (vev.getVesselEvent() instanceof DryDockEvent) {
 				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_DryDock, ColourElements.Background);
 			} else if (vev.getVesselEvent() instanceof CharterOutEvent) {
@@ -78,11 +81,6 @@ public class VesselStateColourScheme extends ColourScheme {
 				} else if (visit.getSlotAllocation().getSlot() instanceof DischargeSlot) {
 					return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Discharge, ColourElements.Background);
 				}
-			}
-		} else if (element instanceof VesselEventVisit) {
-			final VesselEventVisit vev = (VesselEventVisit) element;
-			if (isOutsideTimeWindow(vev)) {
-				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Late_Event, ColourElements.Background);
 			}
 		}
 		return null;
