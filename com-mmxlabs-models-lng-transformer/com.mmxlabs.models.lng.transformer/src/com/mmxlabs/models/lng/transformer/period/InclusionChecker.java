@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.period;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +66,9 @@ public class InclusionChecker {
 		public ZonedDateTime upperBoundary;
 		@Nullable
 		public ZonedDateTime upperCutoff;
+		
+		@Nullable LocalDate promptStart = null;
+		@Nullable LocalDate promptEnd = null;
 	}
 
 	@NonNull
