@@ -39,6 +39,7 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -107,6 +108,7 @@ import com.mmxlabs.models.lng.types.util.SetUtils;
  */
 public class PeriodTransformer {
 
+	private static final int NOMINAL_INDEX = -1;
 	@Inject(optional = true)
 	private Iterable<IPeriodTransformerExtension> extensions;
 
@@ -140,12 +142,12 @@ public class PeriodTransformer {
 	@NonNull
 	public NonNullPair<LNGScenarioModel, EditingDomain> transform(@NonNull final LNGScenarioModel wholeScenario, @NonNull final UserSettings userSettings,
 			@NonNull final IScenarioEntityMapping mapping) {
-		final PeriodRecord periodRecord = createPeriodRecord(userSettings);
+		final PeriodRecord periodRecord = createPeriodRecord(userSettings, wholeScenario);
 		return transform(wholeScenario, periodRecord, mapping);
 	}
 
 	@NonNull
-	public PeriodRecord createPeriodRecord(@NonNull final UserSettings userSettings) {
+	public PeriodRecord createPeriodRecord(@NonNull final UserSettings userSettings, LNGScenarioModel scenario) {
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 
@@ -171,6 +173,11 @@ public class PeriodTransformer {
 			periodRecord.upperCutoff = upperBoundary.plusMonths(boundaryFlexInMonths);
 		}
 
+		if (scenario != null) {
+			periodRecord.promptStart = scenario.getPromptPeriodStart();
+			periodRecord.promptEnd = scenario.getPromptPeriodEnd();
+		}
+		
 		return periodRecord;
 	}
 
@@ -337,7 +344,7 @@ public class PeriodTransformer {
 				final int idx = p.getSecond();
 				final int[] m = mapping.get(p.getFirst());
 				// Blank out mapping
-				m[idx] = -1;
+				m[idx] = NOMINAL_INDEX;
 				for (int i = idx; i < m.length; ++i) {
 					if (m[i] >= 0) {
 						m[i]--;
@@ -350,7 +357,7 @@ public class PeriodTransformer {
 		for (final Map.Entry<CharterInMarket, int[]> e : mapping.entrySet()) {
 			final int[] m = e.getValue();
 			for (int i = 0; i < m.length; ++i) {
-				if (m[i] != -1) {
+				if (m[i] != NOMINAL_INDEX) {
 					periodMapping.setSpotCharterInMapping(e.getKey(), i, m[i]);
 				}
 			}
@@ -400,6 +407,10 @@ public class PeriodTransformer {
 		for (final List<Slot> slotList : new List[] { cargoModel.getLoadSlots(), cargoModel.getDischargeSlots() }) {
 			for (final Slot slot : slotList) {
 				if (inclusionChecker.getObjectInclusionType(slot, objectToPortVisitMap, periodRecord).getFirst() == InclusionType.Out) {
+					if (slot.getCargo() != null && isNominalInPrompt(slot.getCargo(), periodRecord)) {
+						// break out if part of a nominal cargo
+						continue;
+					}
 					slot.setLocked(true);
 				}
 			}
@@ -509,13 +520,17 @@ public class PeriodTransformer {
 					final NonNullPair<Slot, Slot> slots = inclusionChecker.getFirstAndLastSlots(cargo);
 					if (pos == Position.After) {
 						if (inclusionChecker.getObjectInclusionType(slots.getFirst(), objectToPortVisitMap, periodRecord).getFirst() == InclusionType.In) {
-							lockDownSlotDates(slotAllocationMap, slots.getSecond());
+							if (!isNominalInPrompt(cargo, periodRecord)) {
+								lockDownSlotDates(slotAllocationMap, slots.getSecond());
+							}
 						} else {
 							lockDownCargoDates(slotAllocationMap, cargo);
 						}
 					} else {
 						if (inclusionChecker.getObjectInclusionType(slots.getSecond(), objectToPortVisitMap, periodRecord).getFirst() == InclusionType.In) {
-							lockDownSlotDates(slotAllocationMap, slots.getFirst());
+							if (!isNominalInPrompt(cargo, periodRecord)) {
+								lockDownSlotDates(slotAllocationMap, slots.getFirst());
+							}
 						} else {
 							lockDownCargoDates(slotAllocationMap, cargo);
 						}
@@ -716,6 +731,31 @@ public class PeriodTransformer {
 			}
 		}
 		slot.setLocked(true);
+	}
+	
+	private boolean isNominalInPrompt(@NonNull Cargo cargo, @NonNull PeriodRecord periodRecord) {
+		if (cargo.getSlots().get(0).getName().contains("CMI_21")) {
+			int z = 0;
+		}
+		if (!isInPrompt(cargo, periodRecord)) {
+			return false;
+		}
+		VesselAssignmentType vesselAssignmentType = cargo.getVesselAssignmentType();
+		if (vesselAssignmentType instanceof CharterInMarket) {
+			if (cargo.getSpotIndex() == NOMINAL_INDEX && LicenseFeatures.isPermitted("features:no-nominal-in-prompt")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isInPrompt(@NonNull Cargo cargo, @NonNull PeriodRecord periodRecord) {
+		Slot first = cargo.getSlots().get(0);
+		if (periodRecord.promptEnd != null && first.getWindowStart().isBefore(periodRecord.promptEnd)) {
+			// start is within the prompt
+			return true;
+		}
+		return false;
 	}
 
 	protected List<Slot> getExtraDependenciesForSlot(final Slot slot) {

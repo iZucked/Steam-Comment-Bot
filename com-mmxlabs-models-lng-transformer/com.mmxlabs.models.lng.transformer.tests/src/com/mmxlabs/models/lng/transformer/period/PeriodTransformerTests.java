@@ -74,7 +74,7 @@ public class PeriodTransformerTests {
 
 		final UserSettings settings = ParametersFactory.eINSTANCE.createUserSettings();
 
-		final PeriodRecord periodRecord = transformer.createPeriodRecord(settings);
+		final PeriodRecord periodRecord = transformer.createPeriodRecord(settings, null);
 
 		Assert.assertNotNull(periodRecord);
 		Assert.assertNull(periodRecord.lowerCutoff);
@@ -95,7 +95,7 @@ public class PeriodTransformerTests {
 
 		settings.setPeriodStart(PeriodTestUtils.createYearMonth(2014, Calendar.FEBRUARY));
 
-		final PeriodRecord periodRecord = transformer.createPeriodRecord(settings);
+		final PeriodRecord periodRecord = transformer.createPeriodRecord(settings, null);
 
 		Assert.assertNotNull(periodRecord);
 		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1), periodRecord.lowerCutoff);
@@ -115,7 +115,7 @@ public class PeriodTransformerTests {
 
 		settings.setPeriodEnd(PeriodTestUtils.createYearMonth(2014, Calendar.FEBRUARY));
 
-		final PeriodRecord periodRecord = transformer.createPeriodRecord(settings);
+		final PeriodRecord periodRecord = transformer.createPeriodRecord(settings, null);
 
 		Assert.assertNotNull(periodRecord);
 		Assert.assertNull(periodRecord.lowerCutoff);
@@ -136,7 +136,7 @@ public class PeriodTransformerTests {
 		settings.setPeriodStart(PeriodTestUtils.createYearMonth(2014, Calendar.FEBRUARY));
 		settings.setPeriodEnd(PeriodTestUtils.createYearMonth(2014, Calendar.JULY));
 
-		final PeriodRecord periodRecord = transformer.createPeriodRecord(settings);
+		final PeriodRecord periodRecord = transformer.createPeriodRecord(settings, null);
 
 		Assert.assertNotNull(periodRecord);
 		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1), periodRecord.lowerCutoff);
