@@ -12,7 +12,7 @@ import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 
-public class MigrateToV61 extends AbstractMigrationUnit {
+public class MigrateToV62 extends AbstractMigrationUnit {
 
 	@Override
 	public String getScenarioContext() {
