@@ -215,6 +215,8 @@ public class TestCalculations {
 						.thenReturn(allocationAnnotation);
 			}
 
+			Mockito.when(allocationAnnotation.getSlotCargoCV(loadSlot)).thenReturn(2_000_000);
+			Mockito.when(allocationAnnotation.getSlotCargoCV(dischargeSlot)).thenReturn(2_000_000);
 			Mockito.when(allocationAnnotation.getSlotTime(loadSlot)).thenReturn(25);
 			Mockito.when(allocationAnnotation.getSlotDuration(loadSlot)).thenReturn(1);
 

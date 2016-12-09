@@ -71,7 +71,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class VoyagePlanner {
 
-	public static final int ROUNDING_EPSILON = 5;
+	public static final int ROUNDING_EPSILON = 0;
 
 
 	@Inject
