@@ -42,7 +42,7 @@ public class MultiEnumInlineEditor extends BasicAttributeInlineEditor {
 	protected EEnum myEnum;
 	protected Enumerator[] enumerators;
 
-	public MultiEnumInlineEditor(EStructuralFeature feature) {
+	public MultiEnumInlineEditor(final EStructuralFeature feature) {
 		super(feature);
 		myEnum = (EEnum) ((EAttribute) feature).getEAttributeType();
 		enumerators = new Enumerator[myEnum.getELiterals().size()];
@@ -63,15 +63,15 @@ public class MultiEnumInlineEditor extends BasicAttributeInlineEditor {
 		gl.marginHeight = 0;
 
 		// final Label label = new Label(buttonAndLabel, SWT.NONE);
-//		label = toolkit.createLabel(buttonAndLabel, "");
-//		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-//		final Button button = new Button(buttonAndLabel, SWT.NONE);
+		// label = toolkit.createLabel(buttonAndLabel, "");
+		// label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		// final Button button = new Button(buttonAndLabel, SWT.NONE);
 		final Button button = toolkit.createButton(buttonAndLabel, "Edit", SWT.NONE);
 
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				final List<Object> o = openDialogBox(parent);
 				if (o != null) {
 					doSetValue(o, false);
@@ -80,33 +80,33 @@ public class MultiEnumInlineEditor extends BasicAttributeInlineEditor {
 			}
 		});
 
-//		theLabel = label;
+		// theLabel = label;
 
 		return super.wrapControl(buttonAndLabel);
 	}
 
 	@Override
-	protected Command createSetCommand(Object value) {
+	protected Command createSetCommand(final Object value) {
 		final CompoundCommand setter = CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, feature, (Collection<?>) value);
 		return setter;
 	}
 
 	@Override
 	protected void updateDisplay(final Object value) {
-		List<Enumerator> selectedValues = (List<Enumerator>) value;
+		final List<Enumerator> selectedValues = (List<Enumerator>) value;
 		final StringBuilder sb = new StringBuilder();
 		for (final Enumerator obj : selectedValues) {
 			if (sb.length() > 0)
 				sb.append(", ");
 			sb.append(obj.getName());
 		}
-//		theLabel.setText(sb.toString());
+		// theLabel.setText(sb.toString());
 	}
 
-	protected List<Object> openDialogBox(Control cellEditorWindow) {
-		ListSelectionDialog dlg = new ListSelectionDialog(cellEditorWindow.getShell(), enumerators, new ArrayContentProvider(), new LabelProvider() {
+	protected List<Object> openDialogBox(final Control cellEditorWindow) {
+		final ListSelectionDialog dlg = new ListSelectionDialog(cellEditorWindow.getShell(), enumerators, new ArrayContentProvider(), new LabelProvider() {
 			@Override
-			public String getText(Object element) {
+			public String getText(final Object element) {
 				return ((Enumerator) element).getName();
 			}
 		}, "Select values:");
@@ -115,8 +115,10 @@ public class MultiEnumInlineEditor extends BasicAttributeInlineEditor {
 		dlg.setInitialSelections(((Collection<?>) getValue()).toArray());
 		dlg.setBlockOnOpen(true);
 		dlg.open();
-		Object[] result = dlg.getResult();
-
+		final Object[] result = dlg.getResult();
+		if (result == null) {
+			return null;
+		}
 		return Arrays.asList(result);
 	}
 }
