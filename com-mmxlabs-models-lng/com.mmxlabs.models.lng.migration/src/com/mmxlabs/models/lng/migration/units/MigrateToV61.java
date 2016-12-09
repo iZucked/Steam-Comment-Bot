@@ -5,14 +5,13 @@
 package com.mmxlabs.models.lng.migration.units;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 
-public class MigrateToV62 extends AbstractMigrationUnit {
+public class MigrateToV61 extends AbstractMigrationUnit {
 
 	@Override
 	public String getScenarioContext() {
@@ -21,25 +20,29 @@ public class MigrateToV62 extends AbstractMigrationUnit {
 
 	@Override
 	public int getScenarioSourceVersion() {
-		return 61;
+		return 60;
 	}
 
 	@Override
 	public int getScenarioDestinationVersion() {
-		return 62;
+		return 61;
 	}
 
 	@Override
 	protected void doMigrationWithHelper(final MetamodelLoader loader, final EObjectWrapper model) {
+		// Update for new sequence hint definition. 0 is unset and round trip cargoes have no hint.
 		final EObjectWrapper cargoModel = model.getRef("cargoModel");
-		final List<EObjectWrapper> availabilities = cargoModel.getRefAsList("vesselAvailabilities");
-
-		// Consumer to update the set the fleet flag by default
-		final Consumer<EObjectWrapper> availabilityUpdater = (va) -> {
-			va.setAttrib("fleet", true);
-		};
-		if (availabilities != null) {
-			availabilities.forEach(availabilityUpdater);
+		final List<EObjectWrapper> cargoes = cargoModel.getRefAsList("cargoes");
+		if (cargoes != null) {
+			cargoes.forEach(c -> {
+				int spotIndex = (Integer) c.getAttrib("spotIndex");
+				if (spotIndex == -1) {
+					c.setAttrib("sequenceHint", 0);
+				} else {
+					int currentHint = (Integer) c.getAttrib("sequenceHint");
+					c.setAttrib("sequenceHint", 1 + currentHint);
+				}
+			});
 		}
 	}
 }

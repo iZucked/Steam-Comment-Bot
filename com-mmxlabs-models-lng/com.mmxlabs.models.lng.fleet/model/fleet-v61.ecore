@@ -49,8 +49,6 @@
         <details key="exportFormatString" value="#.###"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scnt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
-        unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="overrideInaccessibleRoutes"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="inaccessibleRoutes" upperBound="-1"
@@ -145,7 +143,6 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="inaccessibleRoutes" upperBound="-1"
         eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scnt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
       <eTypeArguments eClassifier="#//Vessel"/>
     </eGenericSuperTypes>
@@ -216,13 +213,6 @@
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="kts"/>
         <details key="formatString" value="#0.###"/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inPortNBORate" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
-      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="unit" value="m³/day"/>
-        <details key="formatString" value="##0.###"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>

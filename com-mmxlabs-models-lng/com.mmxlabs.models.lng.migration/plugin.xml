@@ -465,6 +465,13 @@
              to="60">
        </MigrationUnit>
        <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV61"
+             context="com.mmxlabs.lingo"
+             from="60"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV61"
+             to="61">
+       </MigrationUnit>       
+       <MigrationUnit
              class="com.mmxlabs.models.lng.migration.units.MigrateToV62"
              context="com.mmxlabs.lingo"
              from="61"

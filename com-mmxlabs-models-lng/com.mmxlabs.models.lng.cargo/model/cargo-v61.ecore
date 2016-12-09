@@ -137,12 +137,6 @@
         <details key="formatString" value="-###,###,##0"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="miscCosts" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
-      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="unitPrefix" value="$"/>
-        <details key="formatString" value="-###,###,##0"/>
-      </eAnnotations>
-    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="allowedVessels" upperBound="-1">
       <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
         <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
@@ -218,7 +212,6 @@
     <eOperations name="getStartAfterAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
     <eOperations name="getEndByAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
     <eOperations name="getEndAfterAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fleet" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="entity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeCharterRate" lowerBound="1"
@@ -255,25 +248,6 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="forceHireCostOnlyEndRule"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repositioningFee" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" unsettable="true">
-      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="unit" value="$/day"/>
-      </eAnnotations>
-      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
-        <details key="type" value="charter"/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastBonus" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" unsettable="true">
-      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="unit" value="$/day"/>
-      </eAnnotations>
-      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
-        <details key="type" value="charter"/>
-      </eAnnotations>
-    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VesselEvent" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider #//AssignableElement">
     <eOperations name="getStartByAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
