@@ -25,6 +25,7 @@ import org.junit.runners.Parameterized;
 
 import com.google.common.base.Joiner;
 import com.google.inject.Injector;
+import com.mmxlabs.common.time.Months;
 import com.mmxlabs.lingo.its.tests.category.OptimisationTest;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
@@ -53,12 +54,19 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 	private @NonNull final String scenarioURL;
 	private @Nullable final YearMonth periodStart;
 	private @Nullable final YearMonth periodEnd;
+	private final boolean runGCO;
 
 	public AdvancedOptimisationTester(@Nullable final String _unused_method_prefix_, @NonNull final String scenarioURL, @Nullable final YearMonth periodStart, @Nullable final YearMonth periodEnd) {
+		this(_unused_method_prefix_, scenarioURL, periodStart, periodEnd, false);
+
+	}
+
+	public AdvancedOptimisationTester(@Nullable final String _unused_method_prefix_, @NonNull final String scenarioURL, @Nullable final YearMonth periodStart, @Nullable final YearMonth periodEnd,
+			boolean runGCO) {
 		this.scenarioURL = scenarioURL;
 		this.periodStart = periodStart;
 		this.periodEnd = periodEnd;
-
+		this.runGCO = runGCO;
 	}
 
 	@Test
@@ -159,18 +167,130 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 		runAdvancedOptimisationTestCase(true, SimilarityMode.HIGH, true, false);
 	}
 
+	@Test
+	@Category(OptimisationTest.class)
+	public void advancedOptimisation_Full_NoSimilarity_GCO() throws Exception {
+		runAdvancedOptimisationTestCase(false, SimilarityMode.OFF, false, true);
+	}
+
+	@Test
+	@Category(OptimisationTest.class)
+	public void advancedOptimisation_Full_LowSimilarity_GCO() throws Exception {
+		runAdvancedOptimisationTestCase(false, SimilarityMode.LOW, false, true);
+	}
+
+	@Test
+	@Category(OptimisationTest.class)
+	public void advancedOptimisation_Full_MediumSimilarity_GCO() throws Exception {
+		runAdvancedOptimisationTestCase(false, SimilarityMode.MEDIUM, false, true);
+	}
+
+	@Test
+	@Category(OptimisationTest.class)
+	public void advancedOptimisation_Full_HighSimilarity_GCO() throws Exception {
+		runAdvancedOptimisationTestCase(false, SimilarityMode.HIGH, false, true);
+	}
+
+	@Ignore("Not yet permitted")
+	@Test
+	@Category(OptimisationTest.class)
+	public void advancedOptimisation_Full_NoSimilarity_ActionSet_GCO() throws Exception {
+		runAdvancedOptimisationTestCase(false, SimilarityMode.OFF, true, true);
+	}
+
+	@Test
+	@Category(OptimisationTest.class)
+	public void advancedOptimisation_Full_LowSimilarity_ActionSet_GCO() throws Exception {
+		runAdvancedOptimisationTestCase(false, SimilarityMode.LOW, true, true);
+	}
+
+	@Test
+	@Category(OptimisationTest.class)
+	public void advancedOptimisation_Full_MediumSimilarity_ActionSet_GCO() throws Exception {
+		runAdvancedOptimisationTestCase(false, SimilarityMode.MEDIUM, true, true);
+	}
+
+	@Test
+	@Category(OptimisationTest.class)
+	public void advancedOptimisation_Full_HighSimilarity_ActionSet_GCO() throws Exception {
+		runAdvancedOptimisationTestCase(false, SimilarityMode.HIGH, true, true);
+	}
+
+	@Test
+	@Category(OptimisationTest.class)
+	public void advancedOptimisation_Limited_NoSimilarity_GCO() throws Exception {
+		runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, false, true);
+	}
+
+	@Test
+	@Category(OptimisationTest.class)
+	public void advancedOptimisation_Limited_LowSimilarity_GCO() throws Exception {
+		runAdvancedOptimisationTestCase(true, SimilarityMode.LOW, false, true);
+	}
+
+	@Test
+	@Category(OptimisationTest.class)
+	public void advancedOptimisation_Limited_MediumSimilarity_GCO() throws Exception {
+		runAdvancedOptimisationTestCase(true, SimilarityMode.MEDIUM, false, true);
+	}
+
+	@Test
+	@Category(OptimisationTest.class)
+	public void advancedOptimisation_Limited_HighSimilarity_GCO() throws Exception {
+		runAdvancedOptimisationTestCase(true, SimilarityMode.HIGH, false, true);
+	}
+
+	@Ignore("Not yet permitted")
+	@Test
+	@Category(OptimisationTest.class)
+	public void advancedOptimisation_Limited_NoSimilarity_ActionSet_GCO() throws Exception {
+		runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, true, true);
+	}
+
+	@Test
+	@Category(OptimisationTest.class)
+	public void advancedOptimisation_Limited_LowSimilarity_ActionSet_GCO() throws Exception {
+		runAdvancedOptimisationTestCase(true, SimilarityMode.LOW, true, true);
+	}
+
+	@Test
+	@Category(OptimisationTest.class)
+	public void advancedOptimisation_Limited_MediumSimilarity_ActionSet_GCO() throws Exception {
+		runAdvancedOptimisationTestCase(true, SimilarityMode.MEDIUM, true, true);
+	}
+
+	@Test
+	@Category(OptimisationTest.class)
+	public void advancedOptimisation_Limited_HighSimilarity_ActionSet_GCO() throws Exception {
+		runAdvancedOptimisationTestCase(true, SimilarityMode.HIGH, true, true);
+	}
+
 	@SuppressWarnings("unused")
 	private void runAdvancedOptimisationTestCase(final boolean limitedIterations, @NonNull final SimilarityMode mode, final boolean withActionSets, final boolean withGeneratedCharterOuts)
 			throws Exception {
+
+		if (withGeneratedCharterOuts) {
+			Assume.assumeTrue(runGCO);
+		}
 
 		if (withActionSets) {
 			// Preconditions check - ensure period, otherwise ignore test case
 			Assume.assumeTrue(periodStart != null);
 			Assume.assumeTrue(periodEnd != null);
+
+			// Should match OptimisationHelper (Repeated null checks for null analysis code)
+			if (periodStart != null && periodEnd != null) {
+				Assume.assumeTrue(Months.between(periodStart, periodEnd) <= 6);
+			}
+			if (periodStart != null && periodEnd != null) {
+				Assume.assumeTrue(Months.between(periodStart, periodEnd) < 3 || mode != SimilarityMode.LOW);
+			}
 		}
 
 		// Only run full iterations if the flag is set
-		if (limitedIterations) {
+		if (limitedIterations)
+
+		{
 			Assume.assumeTrue(RUN_LIMITED_ITERATION_CASES);
 		} else {
 			Assume.assumeTrue(RUN_FULL_ITERATION_CASES);
