@@ -157,8 +157,7 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 			loadVolumeInMMBTU = fuelDeficitInMMBTU;
 			// we should never be required to load more than the vessel can fit in its tanks
 			// assert (loadVolume <= availableCargoSpace);
-		}
-		
+		}		
 		
 		// the amount of LNG available for discharge
 		long unusedVolumeInMMBTU = loadVolumeInMMBTU
@@ -310,11 +309,11 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 		assert (unusedVolumeInMMBTU >= 0);
 
 		final IDischargeOption dischargeSlot = (IDischargeOption) slots.get(1);
-		{	
+		{
 			// greedy assumption: always discharge as much as possible
 			final long dischargeVolumeInMMBTU = allocationRecord.minVolumesInMMBtu.get(1);
 			annotation.setCommercialSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU);
-			annotation.setPhysicalSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU - dischargeVolumeInMMBTU);
+			annotation.setPhysicalSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU);
 			unusedVolumeInMMBTU -= dischargeVolumeInMMBTU;
 		}
 
@@ -351,7 +350,7 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 		}
 		// Check load caps - max load // check we can reach boiloff
 		if (loadVolumeInMMBTU > allocationRecord.maxVolumesInMMBtu.get(0)) {
-			final long diff = loadVolumeInMMBTU - allocationRecord.maxVolumesInMMBtu.get(1);
+			final long diff = loadVolumeInMMBTU - allocationRecord.maxVolumesInMMBtu.get(0);
 
 			long dischargeVolumeInMMBTU = annotation.getCommercialSlotVolumeInMMBTu(dischargeSlot);
 			long physicalDischargeVolumeInMMBTU = annotation.getCommercialSlotVolumeInMMBTu(dischargeSlot);
