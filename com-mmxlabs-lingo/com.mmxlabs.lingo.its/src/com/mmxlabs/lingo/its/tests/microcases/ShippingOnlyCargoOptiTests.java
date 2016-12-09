@@ -5,35 +5,14 @@
 package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.LocalDate;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.util.CommercialModelFinder;
-import com.mmxlabs.models.lng.fleet.util.FleetModelBuilder;
-import com.mmxlabs.models.lng.fleet.util.FleetModelFinder;
-import com.mmxlabs.models.lng.parameters.ParametersFactory;
-import com.mmxlabs.models.lng.parameters.SimilarityMode;
-import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.port.util.PortModelFinder;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
-import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
-import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
-import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 
 /**
  * Test cases to make sure "shipping only" mode does not cause wiring changes.
