@@ -1,12 +1,9 @@
 package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
-import org.eclipse.emf.common.util.EMap;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -15,7 +12,6 @@ import org.junit.runners.Parameterized;
 
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
-import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 
 /**
@@ -119,7 +115,6 @@ public class InPortBoilOffMinMaxAllocatorTests extends InPortBoilOffTests {
 		if (actualViolationCount > 0) {
 			final CapacityViolationType actualViolation = result.getLoadViolations().get(0).getKey();
 			Assert.assertEquals(expectedViolations[0], actualViolation);
-
 		}
 	}
 }
