@@ -948,9 +948,10 @@ public class LNGScenarioTransformer {
 				final long maxHeel = heelOptions.isSetVolumeAvailable() ? OptimiserUnitConvertor.convertToInternalVolume(heelOptions.getVolumeAvailable()) : 0l;
 				final long totalHireRevenue = OptimiserUnitConvertor.convertToInternalDailyCost(charterOut.getHireRate()) * (long) charterOut.getDurationInDays();
 				final long repositioning = OptimiserUnitConvertor.convertToInternalFixedCost(charterOut.getRepositioningFee());
+				final long ballastBonus = OptimiserUnitConvertor.convertToInternalFixedCost(charterOut.getBallastBonus());
 				builderSlot = builder.createCharterOutEvent(event.getName(), window, port, endPort, durationHours, maxHeel,
 						OptimiserUnitConvertor.convertToInternalConversionFactor(heelOptions.getCvValue()), OptimiserUnitConvertor.convertToInternalPrice(heelOptions.getPricePerMMBTU()),
-						totalHireRevenue, repositioning);
+						totalHireRevenue, repositioning, ballastBonus);
 			} else if (event instanceof DryDockEvent) {
 				builderSlot = builder.createDrydockEvent(event.getName(), window, port, durationHours);
 			} else if (event instanceof MaintenanceEvent) {
@@ -2797,7 +2798,7 @@ public class LNGScenarioTransformer {
 			assert dailyCharterInCurve != null;
 
 			final ILongCurve repositioningFeeCurve;
-			if (eVesselAvailability.isSetRepositioningFee()) {
+			if (eVesselAvailability.getRepositioningFee() != null && !eVesselAvailability.getRepositioningFee().isEmpty()) {
 				repositioningFeeCurve = dateHelper.generateLongExpressionCurve(eVesselAvailability.getRepositioningFee(), charterIndices);
 			} else {
 				repositioningFeeCurve = new ConstantValueLongCurve(0);
@@ -2805,7 +2806,7 @@ public class LNGScenarioTransformer {
 			assert repositioningFeeCurve != null;
 
 			final ILongCurve ballastBonusCurve;
-			if (eVesselAvailability.isSetBallastBonus()) {
+			if (eVesselAvailability.getBallastBonus() != null && !eVesselAvailability.getBallastBonus().isEmpty()) {
 				ballastBonusCurve = dateHelper.generateLongExpressionCurve(eVesselAvailability.getBallastBonus(), charterIndices);
 			} else {
 				ballastBonusCurve = new ConstantValueLongCurve(0);
