@@ -32,9 +32,11 @@ import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -367,6 +369,28 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			return (port == null) ? "" : ("At " + port) + (idle.isLaden() ? " (Laden" : " (Ballast") + " idle)";
 		} else if (element instanceof Sequence) {
 			return getText(element);
+		} else if (element instanceof VesselEventVisit) {
+			VesselEventVisit vesselEventVisit = (VesselEventVisit) element;
+			VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
+			if (vesselEvent instanceof CharterOutEvent) {
+				CharterOutEvent charterOutEvent = (CharterOutEvent) vesselEvent;
+				if (charterOutEvent.getRelocateTo() != null) {
+					final Port fromPort = charterOutEvent.getPort();
+					final Port toPort = charterOutEvent.getRelocateTo();
+
+					if (fromPort != null && toPort != null) {
+						String fromPortName = fromPort.getName();
+						String toPortName = toPort.getName();
+						if (fromPortName != null && toPortName != null) {
+
+							return String.format("Charter %s to %s", fromPortName, toPortName);
+						}
+					}
+
+				}
+				return (port == null) ? "" : ("Charter at " + port);
+			}
+			return (port == null) ? "" : ("At " + port);
 		} else if (element instanceof Event) {
 			return (port == null) ? "" : ("At " + port) + (element instanceof Cooldown ? " (Cooldown)" : ""); // + displayTypeName;
 		} else if (element instanceof SlotVisit) {
