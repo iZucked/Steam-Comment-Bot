@@ -19,6 +19,15 @@ public class GeneratedCharterOutVesselEvent implements IGeneratedCharterOutVesse
 	private int heelUnitPrice;
 	private long hireCost;
 	private long repositioning;
+	private long ballastBonus;
+
+	public long getBallastBonus() {
+		return ballastBonus;
+	}
+
+	public void setBallastBonus(long ballastBonus) {
+		this.ballastBonus = ballastBonus;
+	}
 
 	public GeneratedCharterOutVesselEvent() {
 		super();
@@ -166,6 +175,7 @@ public class GeneratedCharterOutVesselEvent implements IGeneratedCharterOutVesse
 					&& this.heelUnitPrice == other.heelUnitPrice //
 					&& this.hireCost == other.hireCost //
 					&& this.repositioning == other.repositioning //
+					&& this.ballastBonus == other.ballastBonus //
 					// && Objects.equals(this.startPort, other.startPort) //
 //					&& Objects.equals(this.endPort, other.endPort) //
 					&& Objects.equals(this.timeWindow, other.timeWindow); //

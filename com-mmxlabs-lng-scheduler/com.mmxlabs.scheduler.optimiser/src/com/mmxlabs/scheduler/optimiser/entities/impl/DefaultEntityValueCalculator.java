@@ -447,7 +447,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final long shippingCost = shippingCostHelper.getShippingCosts(plan, vesselAvailability, true, includeTimeCharterInFitness);
 			if (firstPortSlot.getPortType() == PortType.CharterOut || isGeneratedCharterOutPlan) {
 				final IVesselEventPortSlot vesselEventPortSlot = (IVesselEventPortSlot) firstPortSlot;
-				revenue = vesselEventPortSlot.getVesselEvent().getHireOutRevenue() + vesselEventPortSlot.getVesselEvent().getRepositioning();
+				revenue = vesselEventPortSlot.getVesselEvent().getHireOutRevenue() //
+						+ vesselEventPortSlot.getVesselEvent().getRepositioning()
+						+ vesselEventPortSlot.getVesselEvent().getBallastBonus();
 			} else {
 				revenue = 0;
 			}

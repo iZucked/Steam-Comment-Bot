@@ -120,7 +120,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProviderEditor;
@@ -1426,27 +1425,27 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	@NonNull
 	public IVesselEventPortSlot createCharterOutEvent(final String id, final ITimeWindow arrival, final IPort fromPort, final IPort toPort, final int durationHours, final long maxHeelOut,
-			final int heelCVValue, final int heelUnitPrice, final long totalHireRevenue, final long repositioning) {
-		return createVesselEvent(id, PortType.CharterOut, arrival, fromPort, toPort, durationHours, maxHeelOut, heelCVValue, heelUnitPrice, totalHireRevenue, repositioning);
+			final int heelCVValue, final int heelUnitPrice, final long totalHireRevenue, final long repositioning, final long ballastBonus) {
+		return createVesselEvent(id, PortType.CharterOut, arrival, fromPort, toPort, durationHours, maxHeelOut, heelCVValue, heelUnitPrice, totalHireRevenue, repositioning, ballastBonus);
 	}
 
 	@Override
 	@NonNull
 	public IVesselEventPortSlot createDrydockEvent(final String id, final ITimeWindow arrival, final IPort port, final int durationHours) {
-		return createVesselEvent(id, PortType.DryDock, arrival, port, port, durationHours, 0, 0, 0, 0, 0);
+		return createVesselEvent(id, PortType.DryDock, arrival, port, port, durationHours, 0, 0, 0, 0, 0, 0);
 	}
 
 	@Override
 	@NonNull
 	public IVesselEventPortSlot createMaintenanceEvent(final String id, final ITimeWindow arrival, final IPort port, final int durationHours) {
-		return createVesselEvent(id, PortType.Maintenance, arrival, port, port, durationHours, 0, 0, 0, 0, 0);
+		return createVesselEvent(id, PortType.Maintenance, arrival, port, port, durationHours, 0, 0, 0, 0, 0, 0);
 	}
 
 	/**
 	 */
 	@NonNull
 	public IVesselEventPortSlot createVesselEvent(final String id, final PortType portType, final ITimeWindow arrival, final IPort fromPort, final IPort toPort, final int durationHours,
-			final long maxHeelOut, final int heelCVValue, final int heelUnitPrice, final long totalHireRevenue, final long repositioning) {
+			final long maxHeelOut, final int heelCVValue, final int heelUnitPrice, final long totalHireRevenue, final long repositioning, final long ballastBonus) {
 		final VesselEvent event = new VesselEvent();
 
 		// TODO should start port and end port be set on this single sequence
@@ -1464,6 +1463,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		event.setHeelUnitPrice(heelUnitPrice);
 		event.setHireOutRevenue(totalHireRevenue);
 		event.setRepositioning(repositioning);
+		event.setBallastBonus(ballastBonus);
 
 		final VesselEventPortSlot slot = new VesselEventPortSlot(id, event.getEndPort(), event.getTimeWindow(), event);
 		slot.setPortType(portType);

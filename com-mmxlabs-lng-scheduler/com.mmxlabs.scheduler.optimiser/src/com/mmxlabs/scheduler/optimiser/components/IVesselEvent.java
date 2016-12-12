@@ -77,4 +77,8 @@ public interface IVesselEvent extends IHeelOptions {
 	 * 
 	 */
 	void setHireOutRevenue(long hireCost);
+
+	long getBallastBonus();
+
+	void setBallastBonus(long ballastBonus);
 }

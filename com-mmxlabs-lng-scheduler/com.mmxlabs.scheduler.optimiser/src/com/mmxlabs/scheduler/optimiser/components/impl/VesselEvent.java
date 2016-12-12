@@ -17,6 +17,11 @@ public class VesselEvent implements IVesselEvent {
 	private int heelUnitPrice;
 	private long hireOutRevenue;
 	private long repositioning;
+	private long ballastBonus;
+
+	public long getBallastBonus() {
+		return ballastBonus;
+	}
 
 	public VesselEvent() {
 		super();
@@ -131,5 +136,10 @@ public class VesselEvent implements IVesselEvent {
 	@Override
 	public void setRepositioning(final long repositioning) {
 		this.repositioning = repositioning;
+	}
+
+	public void setBallastBonus(long ballastBonus) {
+		this.ballastBonus = ballastBonus;
+
 	}
 }

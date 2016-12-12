@@ -167,7 +167,7 @@ public interface ISchedulerBuilder {
 	 */
 	@NonNull
 	IVesselEventPortSlot createCharterOutEvent(@NonNull String id, @NonNull ITimeWindow arrivalTimeWindow, @NonNull IPort startPort, @NonNull IPort endPort, int durationHours, long maxHeelOut,
-			int heelCVValue, int heelUnitPrice, final long hireRevenue, final long repositioning);
+			int heelCVValue, int heelUnitPrice, final long hireRevenue, final long repositioning, final long ballastBonus);
 
 	/**
 	 * Create a dry dock event
