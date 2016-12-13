@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>com.mmxlabs.lingo.reports</groupId>
 		<artifactId>com.mmxlabs.lingo.reports.parent</artifactId>
-		<version>4.0.7-SNAPSHOT</version>
+		<version>4.0.7.RELEASE</version>
 		<relativePath>..</relativePath>
 	</parent>
 
 	<artifactId>com.mmxlabs.lingo.reports.p2</artifactId>
-	<version>4.0.7-SNAPSHOT</version>
+	<version>4.0.7.RELEASE</version>
 	<packaging>eclipse-repository</packaging>
 	<name>Lingo Reports: p2 Repository</name>
 </project>
