@@ -469,7 +469,7 @@ public class LNGScenarioTransformer {
 			registerIndex(name, index, charterIndices);
 		}
 
-		for (UnitConversion factor : pricingModel.getConversionFactors()) {
+		for (final UnitConversion factor : pricingModel.getConversionFactors()) {
 			registerConversionFactor(factor, commodityIndices, baseFuelIndices, charterIndices);
 		}
 
@@ -773,9 +773,9 @@ public class LNGScenarioTransformer {
 	}
 
 	private void registerConversionFactor(@NonNull final UnitConversion factor, @NonNull final SeriesParser... parsers) {
-		String name = PriceIndexUtils.createConversionFactorName(factor);
+		final String name = PriceIndexUtils.createConversionFactorName(factor);
 		if (name != null) {
-			for (SeriesParser parser : parsers) {
+			for (final SeriesParser parser : parsers) {
 				parser.addSeriesExpression(name, Double.toString(factor.getFactor()));
 			}
 		}
@@ -1021,6 +1021,22 @@ public class LNGScenarioTransformer {
 				}
 			}
 
+			boolean isSoftRequired = false;
+			if (LicenseFeatures.isPermitted("features:no-nominal-in-prompt")) {
+				if (eCargo.getSpotIndex() == NOMINAL_CARGO_INDEX) {
+					final LocalDate promptPeriodEnd = rootObject.getPromptPeriodEnd();
+					if (promptPeriodEnd != null) {
+						final List<Slot> sortedSlots = eCargo.getSortedSlots();
+						if (!sortedSlots.isEmpty()) {
+							final Slot slot = sortedSlots.get(0);
+							if (slot.getWindowStartWithSlotOrPortTime().toLocalDate().isBefore(promptPeriodEnd)) {
+								isSoftRequired = true;
+							}
+						}
+					}
+				}
+			}
+
 			for (final Slot slot : eCargo.getSortedSlots()) {
 				boolean isTransfer = false;
 
@@ -1032,7 +1048,7 @@ public class LNGScenarioTransformer {
 					final ITimeWindow twForBinding = getTimeWindowForSlotBinding(loadSlot, load, portAssociation.lookupNullChecked(loadSlot.getPort()));
 					configureLoadSlotRestrictions(builder, portAssociation, allDischargePorts, loadSlot, load, twForBinding);
 					isTransfer = (((LoadSlot) slot).getTransferFrom() != null);
-					if (eCargo.getSpotIndex() == NOMINAL_CARGO_INDEX) {
+					if (isSoftRequired) {
 						setSlotAsSoftRequired(builder, slot, load);
 					}
 				} else if (slot instanceof DischargeSlot) {
@@ -1042,7 +1058,7 @@ public class LNGScenarioTransformer {
 					final ITimeWindow twForBinding = getTimeWindowForSlotBinding(dischargeSlot, discharge, portAssociation.lookupNullChecked(dischargeSlot.getPort()));
 					configureDischargeSlotRestrictions(builder, portAssociation, allLoadPorts, dischargeSlot, discharge, twForBinding);
 					isTransfer = (((DischargeSlot) slot).getTransferTo() != null);
-					if (eCargo.getSpotIndex() == NOMINAL_CARGO_INDEX) {
+					if (isSoftRequired) {
 						setSlotAsSoftRequired(builder, slot, discharge);
 					}
 				}
