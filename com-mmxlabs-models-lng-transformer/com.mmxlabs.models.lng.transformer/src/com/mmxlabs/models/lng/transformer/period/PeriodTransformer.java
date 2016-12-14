@@ -696,13 +696,11 @@ public class PeriodTransformer {
 	public void lockDownCargoDates(final Map<Slot, SlotAllocation> slotAllocationMap, final Cargo cargo) {
 
 		final VesselAssignmentType vat = cargo.getVesselAssignmentType();
-		final AVesselSet<Vessel> lockedVessel;
+		  AVesselSet<Vessel> lockedVessel = null;
 		if (vat instanceof VesselAvailability) {
 			lockedVessel = (((VesselAvailability) vat).getVessel());
 		} else if (vat instanceof CharterInMarket) {
 			lockedVessel = (((CharterInMarket) vat).getVesselClass());
-		} else {
-			throw new IllegalStateException();
 		}
 
 		for (final Slot slot : cargo.getSlots()) {
@@ -732,9 +730,10 @@ public class PeriodTransformer {
 				slot.setWindowStartTime(localStart.getHour());
 			}
 
-			slot.getAllowedVessels().clear();
-			assert lockedVessel != null;
-			slot.getAllowedVessels().add(lockedVessel);
+			if (lockedVessel != null) {
+				slot.getAllowedVessels().clear();
+				slot.getAllowedVessels().add(lockedVessel);
+			}
 			slot.setLocked(true);
 		}
 		cargo.setAllowRewiring(false);
