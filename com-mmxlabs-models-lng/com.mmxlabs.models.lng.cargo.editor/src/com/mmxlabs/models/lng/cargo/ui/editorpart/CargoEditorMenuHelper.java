@@ -1146,9 +1146,34 @@ public class CargoEditorMenuHelper {
 					} else {
 						loadSlot = cec.createNewSpotLoad(setCommands, cargoModel, isDesPurchaseOrFobSale, market);
 						// Get start of month and create full sized window
-						final LocalDate cal = source.getWindowStartWithSlotOrPortTime().toLocalDate().withDayOfMonth(1);
-						final String yearMonthString = getKeyForDate(cal);
+						ZonedDateTime cal = source.getWindowStartWithSlotOrPortTime();
+						// Take into account travel time
+						if (!dischargeSlot.isFOBSale()) {
 
+							AVesselSet<? extends Vessel> assignedVessel = null;
+							if (loadSlot.getCargo() != null) {
+								final VesselAssignmentType vesselAssignmentType = loadSlot.getCargo().getVesselAssignmentType();
+								if (vesselAssignmentType instanceof VesselAvailability) {
+									assignedVessel = ((VesselAvailability) vesselAssignmentType).getVessel();
+								} else if (vesselAssignmentType instanceof CharterInMarket) {
+									assignedVessel = ((CharterInMarket) vesselAssignmentType).getVesselClass();
+								}
+							}
+							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel);
+							cal = cal.minusHours(travelTime);
+							cal = cal.minusHours(loadSlot.getSlotOrPortDuration());
+						}
+
+
+						if (loadSlot.isDESPurchase()) {
+							loadSlot.setPort(source.getPort());
+						}
+						// Set back to start of month
+						cal = cal.withDayOfMonth(1).withHour(0);
+						final LocalDate loadCal = cal.toLocalDate();
+						final String yearMonthString = getKeyForDate(loadCal);
+						loadSlot.setWindowStart(loadCal);
+						loadSlot.setWindowStartTime(0);
 						// Subtract 1 hour to limit within calendar month
 						loadSlot.setWindowSize(1);
 						loadSlot.setWindowSizeUnits(TimePeriod.MONTHS);
