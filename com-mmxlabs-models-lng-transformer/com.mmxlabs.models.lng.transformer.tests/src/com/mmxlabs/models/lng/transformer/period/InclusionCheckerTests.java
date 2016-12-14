@@ -188,7 +188,7 @@ public class InclusionCheckerTests {
 		// Completely in
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 7);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 8);
-		
+
 		Mockito.when(loadPortVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 21));
 		Mockito.when(loadPortVisit.getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 22));
 		Mockito.when(dischargePortVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 24));
@@ -314,7 +314,7 @@ public class InclusionCheckerTests {
 		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
 	}
 
-	@Ignore ("WIP")
+	@Ignore("WIP")
 	@Test
 	public void testCargoInclusion_UpperBounds_Late() {
 
@@ -346,13 +346,11 @@ public class InclusionCheckerTests {
 		final PortVisit dischargePortVisit = Mockito.mock(PortVisit.class);
 		objectToPortVisitMap.put(dischargeSlot, dischargePortVisit);
 
-
 		// Completely out
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 20);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 22);
-		
-		
-		Mockito.when(loadPortVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 22,1));
+
+		Mockito.when(loadPortVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 22, 1));
 		Mockito.when(loadPortVisit.getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 24));
 		Mockito.when(dischargePortVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 26));
 		Mockito.when(dischargePortVisit.getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 27));
@@ -368,7 +366,7 @@ public class InclusionCheckerTests {
 		// Discharge slot in boundary area
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 15);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 15, 23);
-		
+
 		Mockito.when(loadPortVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 15));
 		Mockito.when(loadPortVisit.getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 16));
 		Mockito.when(dischargePortVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 20));
@@ -490,13 +488,19 @@ public class InclusionCheckerTests {
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 9);
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 13);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 14);
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Boundary, Position.Before), checker.getObjectInclusionType(event, objectToPortVisitMap, periodRecord));
+
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 7);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 8);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 11);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 12);
 		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(event, objectToPortVisitMap, periodRecord));
 
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 10);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 10);
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 10);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 11);
-		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(event, objectToPortVisitMap, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Boundary, Position.Both), checker.getObjectInclusionType(event, objectToPortVisitMap, periodRecord));
 
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 11, 1);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 12);
