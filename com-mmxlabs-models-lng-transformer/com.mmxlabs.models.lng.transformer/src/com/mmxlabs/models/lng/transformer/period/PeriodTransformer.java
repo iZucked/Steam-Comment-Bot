@@ -88,6 +88,7 @@ import com.mmxlabs.models.lng.transformer.period.InclusionChecker.Position;
 import com.mmxlabs.models.lng.transformer.period.extensions.IPeriodTransformerExtension;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 
@@ -694,6 +695,14 @@ public class PeriodTransformer {
 
 	public void lockDownCargoDates(final Map<Slot, SlotAllocation> slotAllocationMap, final Cargo cargo) {
 
+		final VesselAssignmentType vat = cargo.getVesselAssignmentType();
+		  AVesselSet<Vessel> lockedVessel = null;
+		if (vat instanceof VesselAvailability) {
+			lockedVessel = (((VesselAvailability) vat).getVessel());
+		} else if (vat instanceof CharterInMarket) {
+			lockedVessel = (((CharterInMarket) vat).getVesselClass());
+		}
+
 		for (final Slot slot : cargo.getSlots()) {
 			if (slot instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) slot;
@@ -720,6 +729,12 @@ public class PeriodTransformer {
 				slot.setWindowStart(localStart.toLocalDate());
 				slot.setWindowStartTime(localStart.getHour());
 			}
+
+			if (lockedVessel != null) {
+				slot.getAllowedVessels().clear();
+				slot.getAllowedVessels().add(lockedVessel);
+			}
+			slot.setLocked(true);
 		}
 		cargo.setAllowRewiring(false);
 		if (cargo.getCargoType() == CargoType.FLEET) {
