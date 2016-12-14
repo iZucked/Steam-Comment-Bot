@@ -96,24 +96,25 @@ public class InclusionChecker {
 			if (periodRecord.lowerCutoff != null) {
 				final PortVisit portVisit = scheduledEventMap.get(lastSlot);
 				if (getScheduledEnd(lastSlot, portVisit).isBefore(periodRecord.lowerCutoff)) {
-					Event evt = portVisit.getNextEvent();
-					while (evt != null && !(evt instanceof PortVisit)) {
-						evt = evt.getNextEvent();
-					}
+					if (portVisit != null) {
+						Event evt = portVisit.getNextEvent();
+						while (evt != null && !(evt instanceof PortVisit)) {
+							evt = evt.getNextEvent();
+						}
 
-					if (evt instanceof PortVisit) {
-						final PortVisit portVisit2 = (PortVisit) evt;
-						if (periodRecord.lowerBoundary != null) {
-							if (!evt.getStart().isBefore(periodRecord.lowerBoundary)) {
-								return new NonNullPair<>(InclusionType.Boundary, Position.Before);
-							}
-						} else {
-							if (!evt.getStart().isBefore(periodRecord.lowerCutoff)) {
-								return new NonNullPair<>(InclusionType.Boundary, Position.Before);
+						if (evt instanceof PortVisit) {
+							final PortVisit portVisit2 = (PortVisit) evt;
+							if (periodRecord.lowerBoundary != null) {
+								if (!evt.getStart().isBefore(periodRecord.lowerBoundary)) {
+									return new NonNullPair<>(InclusionType.Boundary, Position.Before);
+								}
+							} else {
+								if (!evt.getStart().isBefore(periodRecord.lowerCutoff)) {
+									return new NonNullPair<>(InclusionType.Boundary, Position.Before);
+								}
 							}
 						}
 					}
-
 					return new NonNullPair<>(InclusionType.Out, Position.Before);
 				}
 			}
@@ -141,9 +142,9 @@ public class InclusionChecker {
 			}
 		} else if (object instanceof Slot) {
 			final Slot slot = (Slot) object;
-			
+
 			// This should just be open positions and thus are only IN or OUT
-			
+
 			if (periodRecord.upperBoundary != null) {
 				if (slot.getWindowStartWithSlotOrPortTime().isAfter(periodRecord.upperBoundary)) {
 					return new NonNullPair<>(InclusionType.Out, Position.After);
@@ -166,24 +167,24 @@ public class InclusionChecker {
 			if (periodRecord.lowerCutoff != null) {
 				final ZonedDateTime cal = getScheduledStart(event, scheduledEventMap.get(event)).plusDays(event.getDurationInDays());
 				if (cal.isBefore(periodRecord.lowerCutoff)) {
+					if (portVisit != null) {
+						Event evt = portVisit.getNextEvent();
+						while (evt != null && !(evt instanceof PortVisit)) {
+							evt = evt.getNextEvent();
+						}
 
-					Event evt = portVisit.getNextEvent();
-					while (evt != null && !(evt instanceof PortVisit)) {
-						evt = evt.getNextEvent();
-					}
-
-					if (evt instanceof PortVisit) {
-						if (periodRecord.lowerBoundary != null) {
-							if (!evt.getStart().isBefore(periodRecord.lowerBoundary)) {
-								return new NonNullPair<>(InclusionType.Boundary, Position.Before);
-							}
-						} else {
-							if (!evt.getStart().isBefore(periodRecord.lowerCutoff)) {
-								return new NonNullPair<>(InclusionType.Boundary, Position.Before);
+						if (evt instanceof PortVisit) {
+							if (periodRecord.lowerBoundary != null) {
+								if (!evt.getStart().isBefore(periodRecord.lowerBoundary)) {
+									return new NonNullPair<>(InclusionType.Boundary, Position.Before);
+								}
+							} else {
+								if (!evt.getStart().isBefore(periodRecord.lowerCutoff)) {
+									return new NonNullPair<>(InclusionType.Boundary, Position.Before);
+								}
 							}
 						}
 					}
-
 					return new NonNullPair<>(InclusionType.Out, Position.Before);
 				}
 			}
