@@ -200,7 +200,7 @@ public class EventsAfterBoundaryTests extends AbstractMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
-			Assert.assertTrue(optimiserScenario.getCargoModel().getVesselEvents().isEmpty());
+			Assert.assertTrue(optimiserScenario.getCargoModel().getCargoes().isEmpty());
 
 			final VesselAvailability vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
 			final List<APortSet<Port>> endAt = vesselAvailability.getEndAt();
