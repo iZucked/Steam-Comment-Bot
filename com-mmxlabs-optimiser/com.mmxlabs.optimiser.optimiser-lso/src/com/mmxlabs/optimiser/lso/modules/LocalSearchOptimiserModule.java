@@ -39,7 +39,7 @@ import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
  */
 public class LocalSearchOptimiserModule extends AbstractModule {
 
-	public static final boolean instrumenting = true;
+	public static final boolean instrumenting = false;
 
 	public static final String CLEAN_STATE_NUMBER_OF_ITERATIONS = "CleanState-NumberOfIterations";
 	public static final String LSO_NUMBER_OF_ITERATIONS = "LSO-NumberOfIterations";
