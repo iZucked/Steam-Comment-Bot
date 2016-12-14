@@ -177,7 +177,7 @@ public class PeriodTransformer {
 			periodRecord.promptStart = scenario.getPromptPeriodStart();
 			periodRecord.promptEnd = scenario.getPromptPeriodEnd();
 		}
-		
+
 		return periodRecord;
 	}
 
@@ -214,6 +214,37 @@ public class PeriodTransformer {
 		final Map<VesselAvailability, Event> map = output.getScheduleModel().getSchedule().getSequences().stream() //
 				.filter(s -> s.getVesselAvailability() != null) //
 				.collect(Collectors.toMap(Sequence::getVesselAvailability, s -> s.getEvents().get(s.getEvents().size() - 1)));
+
+		for (Sequence seq : output.getScheduleModel().getSchedule().getSequences()) {
+			VesselAvailability va = seq.getVesselAvailability();
+			if (va != null) {
+				// Do we have an end date set?
+				if (va.isSetEndBy() && seq.getEvents().size() > 0) {
+					ZonedDateTime endDate = va.getEndByAsDateTime();
+					Event endEvent = seq.getEvents().get(seq.getEvents().size() - 1);
+					// Does the vessel end late?
+					if (endEvent.getEnd().isAfter(endDate)) {
+						// Is the required vessel end date in or before the boundary?
+						if (periodRecord.lowerBoundary != null) {
+							if (periodRecord.lowerBoundary.isAfter(endDate)) {
+								// Is the last event (slot or vessel event) "locked"? (OUT or BOUNDARY)
+								Event evt = endEvent.getPreviousEvent();
+								while (evt != null && !(evt instanceof PortVisit)) {
+									evt = evt.getPreviousEvent();
+								}
+								if (evt instanceof PortVisit) {
+									PortVisit portVisit = (PortVisit) evt;
+									if (inclusionChecker.getObjectInVesselAvailabilityRange(portVisit, va) == InclusionType.Out) {
+										// Change the vessel availability end date to match exported end date
+										va.setEndBy(endEvent.getEnd().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 
 		// Set initial end conditions - if open, use the evaluated end date to keep long ballast leg P&L the same
 		for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
@@ -406,7 +437,7 @@ public class PeriodTransformer {
 	private void lockOpenSlots(@NonNull final CargoModel cargoModel, @NonNull final PeriodRecord periodRecord, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap) {
 		for (final List<Slot> slotList : new List[] { cargoModel.getLoadSlots(), cargoModel.getDischargeSlots() }) {
 			for (final Slot slot : slotList) {
-				if (inclusionChecker.getObjectInclusionType(slot, objectToPortVisitMap, periodRecord).getFirst() == InclusionType.Out) {
+				if (inclusionChecker.getObjectInclusionType(slot, objectToPortVisitMap, periodRecord).getFirst() != InclusionType.In) {
 					if (slot.getCargo() != null && isNominalInPrompt(slot.getCargo(), periodRecord)) {
 						// break out if part of a nominal cargo
 						continue;
@@ -439,8 +470,7 @@ public class PeriodTransformer {
 				inclusionChecker.getObjectInclusionType(vesselAvailability, objectToPortVisitMap, periodRecord);
 				vesselsToRemove.add(vesselAvailability);
 				@Nullable
-				final
-				VesselAvailability originalFromCopy = mapping.getOriginalFromCopy(vesselAvailability);
+				final VesselAvailability originalFromCopy = mapping.getOriginalFromCopy(vesselAvailability);
 				assert originalFromCopy != null; // We should not be null in the transformer
 				mapping.registerRemovedOriginal(originalFromCopy);
 
@@ -464,8 +494,7 @@ public class PeriodTransformer {
 		}
 		for (final VesselEvent event : eventsToRemove) {
 			@Nullable
-			final
-			VesselEvent originalFromCopy = mapping.getOriginalFromCopy(event);
+			final VesselEvent originalFromCopy = mapping.getOriginalFromCopy(event);
 			assert originalFromCopy != null; // We should not be null in the transformer
 			mapping.registerRemovedOriginal(originalFromCopy);
 		}
@@ -641,8 +670,7 @@ public class PeriodTransformer {
 		// Delete slots and cargoes outside of range.
 		for (final Slot slot : slotsToRemove) {
 			@Nullable
-			final
-			Slot originalFromCopy = mapping.getOriginalFromCopy(slot);
+			final Slot originalFromCopy = mapping.getOriginalFromCopy(slot);
 			assert originalFromCopy != null; // We should not be null in the transformer
 			mapping.registerRemovedOriginal(originalFromCopy);
 			if (slot instanceof LoadSlot) {
@@ -657,8 +685,7 @@ public class PeriodTransformer {
 		for (final Cargo cargo : cargoesToRemove) {
 			// cargoModel.getCargoes().remove(cargo);
 			@Nullable
-			final
-			Cargo originalFromCopy = mapping.getOriginalFromCopy(cargo);
+			final Cargo originalFromCopy = mapping.getOriginalFromCopy(cargo);
 			assert originalFromCopy != null; // We should not be null in the transformer
 			mapping.registerRemovedOriginal(originalFromCopy);
 			internalDomain.getCommandStack().execute(DeleteCommand.create(internalDomain, cargo));
@@ -732,11 +759,9 @@ public class PeriodTransformer {
 		}
 		slot.setLocked(true);
 	}
-	
+
 	private boolean isNominalInPrompt(@NonNull Cargo cargo, @NonNull PeriodRecord periodRecord) {
-		if (cargo.getSlots().get(0).getName().contains("CMI_21")) {
-			int z = 0;
-		}
+
 		if (!isInPrompt(cargo, periodRecord)) {
 			return false;
 		}
