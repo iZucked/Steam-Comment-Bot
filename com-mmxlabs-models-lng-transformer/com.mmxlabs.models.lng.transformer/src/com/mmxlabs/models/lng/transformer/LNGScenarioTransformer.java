@@ -198,6 +198,8 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEva
  */
 public class LNGScenarioTransformer {
 
+	private static final int NOMINAL_CARGO_INDEX = -1;
+
 	private static final Logger log = LoggerFactory.getLogger(LNGScenarioTransformer.class);
 
 	private final @NonNull LNGScenarioModel rootObject;
@@ -854,7 +856,7 @@ public class LNGScenarioTransformer {
 				if (vesselAvailability == null) {
 					vesselAvailability = spotCharterInToShortCargoAvailability.get(vesselAssignmentType);
 				}
-				isNominalVessel = spotIndex == -1;
+				isNominalVessel = spotIndex == NOMINAL_CARGO_INDEX;
 			}
 
 			if (vesselAvailability == null) {
@@ -1052,6 +1054,9 @@ public class LNGScenarioTransformer {
 					final ITimeWindow twForBinding = getTimeWindowForSlotBinding(loadSlot, load, portAssociation.lookupNullChecked(loadSlot.getPort()));
 					configureLoadSlotRestrictions(builder, portAssociation, allDischargePorts, loadSlot, load, twForBinding);
 					isTransfer = (((LoadSlot) slot).getTransferFrom() != null);
+					if (eCargo.getSpotIndex() == NOMINAL_CARGO_INDEX) {
+						setSlotAsSoftRequired(builder, slot, load);
+					}
 				} else if (slot instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 					final IDischargeOption discharge = (IDischargeOption) slotMap.get(dischargeSlot);
@@ -1059,6 +1064,9 @@ public class LNGScenarioTransformer {
 					final ITimeWindow twForBinding = getTimeWindowForSlotBinding(dischargeSlot, discharge, portAssociation.lookupNullChecked(dischargeSlot.getPort()));
 					configureDischargeSlotRestrictions(builder, portAssociation, allLoadPorts, dischargeSlot, discharge, twForBinding);
 					isTransfer = (((DischargeSlot) slot).getTransferTo() != null);
+					if (eCargo.getSpotIndex() == NOMINAL_CARGO_INDEX) {
+						setSlotAsSoftRequired(builder, slot, discharge);
+					}
 				}
 
 				// remember any slots which were part of a ship-to-ship transfer
@@ -1069,7 +1077,6 @@ public class LNGScenarioTransformer {
 			}
 
 			final ICargo cargo = builder.createCargo(slots, shippingOnly ? false : eCargo.isAllowRewiring());
-
 			modelEntityMap.addModelObject(eCargo, cargo);
 		}
 
@@ -1103,9 +1110,7 @@ public class LNGScenarioTransformer {
 
 				// Make optional
 				load = createLoadOption(builder, portAssociation, vesselAssociation, vesselClassAssociation, contractTransformers, modelEntityMap, loadSlot);
-				if (!loadSlot.isOptional()) {
-					builder.setSoftRequired(load);
-				}
+				setSlotAsSoftRequired(builder, loadSlot, load);
 			}
 
 			configureLoadSlotRestrictions(builder, portAssociation, allDischargePorts, loadSlot, load,
@@ -1125,13 +1130,17 @@ public class LNGScenarioTransformer {
 			final IDischargeOption discharge;
 			{
 				discharge = createDischargeOption(builder, portAssociation, vesselAssociation, vesselClassAssociation, contractTransformers, modelEntityMap, dischargeSlot);
-				if (!dischargeSlot.isOptional()) {
-					builder.setSoftRequired(discharge);
-				}
+				setSlotAsSoftRequired(builder, dischargeSlot, discharge);
 			}
 
 			configureDischargeSlotRestrictions(builder, portAssociation, allLoadPorts, dischargeSlot, discharge,
 					getTimeWindowForSlotBinding(dischargeSlot, discharge, portAssociation.lookup(dischargeSlot.getPort())));
+		}
+	}
+
+	private void setSlotAsSoftRequired(final ISchedulerBuilder builder, final Slot eSlot, final IPortSlot slot) {
+		if (!eSlot.isOptional()) {
+			builder.setSoftRequired(slot);
 		}
 	}
 
@@ -2824,7 +2833,7 @@ public class LNGScenarioTransformer {
 
 				{
 					final IVesselAvailability roundTripOption = builder.createRoundTripCargoVessel("RoundTrip-" + charterCost.getName(), spotCharterInMarket);
-					final NonNullPair<CharterInMarket, Integer> key = new NonNullPair<>(charterCost, -1);
+					final NonNullPair<CharterInMarket, Integer> key = new NonNullPair<>(charterCost, NOMINAL_CARGO_INDEX);
 					spotCharterInToAvailability.put(key, roundTripOption);
 					allVesselAvailabilities.add(roundTripOption);
 					vesselToAvailabilities.put(roundTripOption.getVessel(), Collections.singleton(roundTripOption));

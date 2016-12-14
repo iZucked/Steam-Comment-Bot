@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 
 /**
@@ -66,9 +67,11 @@ public class InclusionChecker {
 		public ZonedDateTime upperBoundary;
 		@Nullable
 		public ZonedDateTime upperCutoff;
-		
-		@Nullable LocalDate promptStart = null;
-		@Nullable LocalDate promptEnd = null;
+
+		@Nullable
+		LocalDate promptStart = null;
+		@Nullable
+		LocalDate promptEnd = null;
 	}
 
 	@NonNull
@@ -85,12 +88,53 @@ public class InclusionChecker {
 			final Slot firstSlot = slots.getFirst();
 			final Slot lastSlot = slots.getSecond();
 			if (periodRecord.upperCutoff != null) {
-				if (getScheduledStart(firstSlot, scheduledEventMap.get(firstSlot)).isAfter(periodRecord.upperCutoff)) {
+				final PortVisit portVisit = scheduledEventMap.get(firstSlot);
+				if (getScheduledStart(firstSlot, portVisit).isAfter(periodRecord.upperCutoff)) {
+
+					Event evt = portVisit.getPreviousEvent();
+					while (evt != null && !(evt instanceof PortVisit)) {
+						evt = evt.getPreviousEvent();
+					}
+
+					if (evt instanceof PortVisit) {
+						final PortVisit portVisit2 = (PortVisit) evt;
+
+						if (periodRecord.upperBoundary != null) {
+							if (!evt.getStart().isAfter(periodRecord.upperBoundary)) {
+								return new NonNullPair<>(InclusionType.Boundary, Position.After);
+							}
+
+						} else {
+							if (!evt.getStart().isAfter(periodRecord.upperCutoff)) {
+								return new NonNullPair<>(InclusionType.Boundary, Position.After);
+							}
+						}
+					}
+
 					return new NonNullPair<>(InclusionType.Out, Position.After);
 				}
 			}
 			if (periodRecord.lowerCutoff != null) {
-				if (getScheduledEnd(lastSlot, scheduledEventMap.get(lastSlot)).isBefore(periodRecord.lowerCutoff)) {
+				final PortVisit portVisit = scheduledEventMap.get(lastSlot);
+				if (getScheduledEnd(lastSlot, portVisit).isBefore(periodRecord.lowerCutoff)) {
+					Event evt = portVisit.getNextEvent();
+					while (evt != null && !(evt instanceof PortVisit)) {
+						evt = evt.getNextEvent();
+					}
+
+					if (evt instanceof PortVisit) {
+						final PortVisit portVisit2 = (PortVisit) evt;
+						if (periodRecord.lowerBoundary != null) {
+							if (!evt.getEnd().isBefore(periodRecord.lowerBoundary)) {
+								return new NonNullPair<>(InclusionType.Boundary, Position.Before);
+							}
+						} else {
+							if (!evt.getEnd().isBefore(periodRecord.lowerCutoff)) {
+								return new NonNullPair<>(InclusionType.Boundary, Position.Before);
+							}
+						}
+					}
+
 					return new NonNullPair<>(InclusionType.Out, Position.Before);
 				}
 			}
