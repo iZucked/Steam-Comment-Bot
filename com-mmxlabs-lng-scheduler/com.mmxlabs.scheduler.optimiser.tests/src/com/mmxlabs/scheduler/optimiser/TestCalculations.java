@@ -225,7 +225,9 @@ public class TestCalculations {
 			// Load enough to cover boil-off
 			Mockito.when(allocationAnnotation.getSlotVolumeInM3(loadSlot)).thenReturn(2200L);
 			Mockito.when(allocationAnnotation.getSlotVolumeInM3(dischargeSlot)).thenReturn(0L);
+			Mockito.when(allocationAnnotation.getFuelVolumeInM3()).thenReturn(2200L);
 
+			
 			// Schedule sequence
 			final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
 			final ISequences sequences = new Sequences(Collections.singletonList(resource), CollectionsUtil.<IResource, ISequence> makeHashMap(resource, sequence));
@@ -673,6 +675,7 @@ public class TestCalculations {
 			Mockito.when(allocationAnnotation.getSlotVolumeInM3(loadSlot)).thenReturn(3300L);
 			Mockito.when(allocationAnnotation.getSlotVolumeInM3(dischargeSlot)).thenReturn(0L);
 			Mockito.when(allocationAnnotation.getSlotCargoCV(Matchers.<IPortSlot> any())).thenReturn(cargoCVValue);
+			Mockito.when(allocationAnnotation.getFuelVolumeInM3()).thenReturn(3300L);
 
 			// Schedule sequence
 			final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
@@ -1111,6 +1114,7 @@ public class TestCalculations {
 			// Load enough to cover boil-off
 			Mockito.when(allocationAnnotation.getSlotVolumeInM3(loadSlot)).thenReturn(1150L);
 			Mockito.when(allocationAnnotation.getSlotVolumeInM3(dischargeSlot)).thenReturn(0L);
+			Mockito.when(allocationAnnotation.getFuelVolumeInM3()).thenReturn(1150L);
 
 			// Schedule sequence
 			final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
