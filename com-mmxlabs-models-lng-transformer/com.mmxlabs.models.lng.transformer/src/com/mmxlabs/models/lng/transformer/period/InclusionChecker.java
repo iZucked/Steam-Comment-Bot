@@ -90,27 +90,6 @@ public class InclusionChecker {
 			if (periodRecord.upperCutoff != null) {
 				final PortVisit portVisit = scheduledEventMap.get(firstSlot);
 				if (getScheduledStart(firstSlot, portVisit).isAfter(periodRecord.upperCutoff)) {
-
-					Event evt = portVisit.getPreviousEvent();
-					while (evt != null && !(evt instanceof PortVisit)) {
-						evt = evt.getPreviousEvent();
-					}
-
-					if (evt instanceof PortVisit) {
-						final PortVisit portVisit2 = (PortVisit) evt;
-
-						if (periodRecord.upperBoundary != null) {
-							if (!evt.getStart().isAfter(periodRecord.upperBoundary)) {
-								return new NonNullPair<>(InclusionType.Boundary, Position.After);
-							}
-
-						} else {
-							if (!evt.getStart().isAfter(periodRecord.upperCutoff)) {
-								return new NonNullPair<>(InclusionType.Boundary, Position.After);
-							}
-						}
-					}
-
 					return new NonNullPair<>(InclusionType.Out, Position.After);
 				}
 			}
@@ -125,11 +104,11 @@ public class InclusionChecker {
 					if (evt instanceof PortVisit) {
 						final PortVisit portVisit2 = (PortVisit) evt;
 						if (periodRecord.lowerBoundary != null) {
-							if (!evt.getEnd().isBefore(periodRecord.lowerBoundary)) {
+							if (!evt.getStart().isBefore(periodRecord.lowerBoundary)) {
 								return new NonNullPair<>(InclusionType.Boundary, Position.Before);
 							}
 						} else {
-							if (!evt.getEnd().isBefore(periodRecord.lowerCutoff)) {
+							if (!evt.getStart().isBefore(periodRecord.lowerCutoff)) {
 								return new NonNullPair<>(InclusionType.Boundary, Position.Before);
 							}
 						}
@@ -162,6 +141,9 @@ public class InclusionChecker {
 			}
 		} else if (object instanceof Slot) {
 			final Slot slot = (Slot) object;
+			
+			// This should just be open positions and thus are only IN or OUT
+			
 			if (periodRecord.upperBoundary != null) {
 				if (slot.getWindowStartWithSlotOrPortTime().isAfter(periodRecord.upperBoundary)) {
 					return new NonNullPair<>(InclusionType.Out, Position.After);
@@ -174,6 +156,8 @@ public class InclusionChecker {
 			}
 		} else if (object instanceof VesselEvent) {
 			final VesselEvent event = (VesselEvent) object;
+			final PortVisit portVisit = scheduledEventMap.get(event);
+
 			if (periodRecord.upperCutoff != null) {
 				if (getScheduledStart(event, scheduledEventMap.get(event)).isAfter(periodRecord.upperCutoff)) {
 					return new NonNullPair<>(InclusionType.Out, Position.After);
@@ -182,12 +166,48 @@ public class InclusionChecker {
 			if (periodRecord.lowerCutoff != null) {
 				final ZonedDateTime cal = getScheduledStart(event, scheduledEventMap.get(event)).plusDays(event.getDurationInDays());
 				if (cal.isBefore(periodRecord.lowerCutoff)) {
+
+					Event evt = portVisit.getNextEvent();
+					while (evt != null && !(evt instanceof PortVisit)) {
+						evt = evt.getNextEvent();
+					}
+
+					if (evt instanceof PortVisit) {
+						if (periodRecord.lowerBoundary != null) {
+							if (!evt.getStart().isBefore(periodRecord.lowerBoundary)) {
+								return new NonNullPair<>(InclusionType.Boundary, Position.Before);
+							}
+						} else {
+							if (!evt.getStart().isBefore(periodRecord.lowerCutoff)) {
+								return new NonNullPair<>(InclusionType.Boundary, Position.Before);
+							}
+						}
+					}
+
 					return new NonNullPair<>(InclusionType.Out, Position.Before);
 				}
 			}
-			// TODO: Check duration
-			if (event instanceof CharterOutEvent) {
-				// TODO: If in boundary, limit available vessels to assigned vessel
+			{
+				InclusionType type = InclusionType.In;
+				Position pos = Position.Unknown;
+				if (periodRecord.upperBoundary != null) {
+					if (event.getStartByAsDateTime().plusDays(event.getDurationInDays()).isAfter(periodRecord.upperBoundary)) {
+						type = InclusionType.Boundary;
+						pos = Position.After;
+					}
+				}
+				if (periodRecord.lowerBoundary != null) {
+					if (event.getStartAfterAsDateTime().isBefore(periodRecord.lowerBoundary)) {
+						type = InclusionType.Boundary;
+						if (pos != Position.Unknown) {
+							pos = Position.Both;
+						} else {
+							pos = Position.Before;
+						}
+					}
+
+				}
+				return new NonNullPair<>(type, pos);
 			}
 		} else if (object instanceof VesselAvailability) {
 			final VesselAvailability vesselAvailability = (VesselAvailability) object;
