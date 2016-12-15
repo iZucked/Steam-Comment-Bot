@@ -98,6 +98,7 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
+		userSettings.setWithSpotCargoMarkets(true);
 
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
