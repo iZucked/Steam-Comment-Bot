@@ -71,9 +71,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
  * 
  */
 public class LNGTransformerModule extends AbstractModule {
-	
+
 	public static final String COMMERCIAL_VOLUME_OVERCAPACITY = "COMMERCIAL_VOLUME_OVERCAPACITY";
-	
+
 	private final static int DEFAULT_VPO_CACHE_SIZE = 20_000;
 
 	public static final String EARLIEST_AND_LATEST_TIMES = "earliest-and-latest-times";
@@ -97,6 +97,8 @@ public class LNGTransformerModule extends AbstractModule {
 
 	private final boolean shippingOnly;
 
+	private final boolean withSpotCargoMarkets;
+
 	private final boolean hintEnableCache;
 
 	/**
@@ -105,6 +107,7 @@ public class LNGTransformerModule extends AbstractModule {
 		this.scenario = scenario;
 		this.shippingOnly = hints.contains(LNGTransformerHelper.HINT_SHIPPING_ONLY);
 		this.hintEnableCache = !hints.contains(LNGTransformerHelper.HINT_DISABLE_CACHES);
+		this.withSpotCargoMarkets = hints.contains(LNGTransformerHelper.HINT_SPOT_CARGO_MARKETS);
 		assert scenario != null;
 	}
 
@@ -115,6 +118,7 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_SHIPPING_ONLY)).toInstance(shippingOnly);
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_DISABLE_CACHES)).toInstance(hintEnableCache);
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_PORTFOLIO_BREAKEVEN)).toInstance(!hintEnableCache);
+		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_SPOT_CARGO_MARKETS)).toInstance(withSpotCargoMarkets);
 
 		bind(LNGScenarioModel.class).toInstance(scenario);
 		// bind(OptimiserSettings.class).toInstance(optimiserSettings);
@@ -154,18 +158,18 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_ProfitandLossCache)).toInstance(Boolean.FALSE);
 
 	}
-	
+
 	@Provides
 	@Named(COMMERCIAL_VOLUME_OVERCAPACITY)
 	private boolean commercialVolumeOverCapacity() {
 		return false;
 	}
-	
+
 	@Provides
-	private IBoilOffHelper provideInPortBoilOffHelper(@NonNull final Injector injector, @Named(COMMERCIAL_VOLUME_OVERCAPACITY) final boolean toggle){
+	private IBoilOffHelper provideInPortBoilOffHelper(@NonNull final Injector injector, @Named(COMMERCIAL_VOLUME_OVERCAPACITY) final boolean toggle) {
 		final InPortBoilOffHelper helper = new InPortBoilOffHelper(toggle);
-//		injector.injectMembers(helper);
-		
+		// injector.injectMembers(helper);
+
 		return helper;
 	}
 

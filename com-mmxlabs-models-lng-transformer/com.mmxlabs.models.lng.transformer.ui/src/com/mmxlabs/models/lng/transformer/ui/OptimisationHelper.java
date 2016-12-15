@@ -98,6 +98,10 @@ public final class OptimisationHelper {
 	public static final String SWTBOT_SHIPPING_ONLY_ON = SWTBOT_SHIPPING_ONLY_PREFIX + ".On";
 	public static final String SWTBOT_SHIPPING_ONLY_OFF = SWTBOT_SHIPPING_ONLY_PREFIX + ".Off";
 
+	public static final String SWTBOT_WITH_SPOT_CARGO_MARKETS_PREFIX = "swtbot.withspotcargomarkets";
+	public static final String SWTBOT_WITH_SPOT_CARGO_MARKETS_ON = SWTBOT_WITH_SPOT_CARGO_MARKETS_PREFIX + ".On";
+	public static final String SWTBOT_WITH_SPOT_CARGO_MARKETS_OFF = SWTBOT_WITH_SPOT_CARGO_MARKETS_PREFIX + ".Off";
+
 	public static final String SWTBOT_CLEAN_STATE_PREFIX = "swtbot.cleanstate";
 	public static final String SWTBOT_CLEAN_STATE_ON = SWTBOT_CLEAN_STATE_PREFIX + ".On";
 	public static final String SWTBOT_CLEAN_STATE_OFF = SWTBOT_CLEAN_STATE_PREFIX + ".Off";
@@ -401,8 +405,15 @@ public final class OptimisationHelper {
 				optionAdded = true;
 				enabledOptionAdded = true;
 			}
-			// dialog.addOption(DataSection.Main, null, editingDomian, "Shipping Only Optimisation", copy, defaultSettings, DataType.Boolean,
-			// ParametersPackage.eINSTANCE.getOptimiserSettings_ShippingOnly());
+			{
+				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+				choiceData.addChoice("Off", Boolean.FALSE);
+				choiceData.addChoice("On", Boolean.TRUE);
+				dialog.addOption(DataSection.Toggles, null, editingDomain, "Spot cargo markets: ", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_WITH_SPOT_CARGO_MARKETS_PREFIX,
+						ParametersPackage.eINSTANCE.getUserSettings_WithSpotCargoMarkets());
+				optionAdded = true;
+				enabledOptionAdded = true;
+			}
 		}
 		// if (SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation")) {
 		{

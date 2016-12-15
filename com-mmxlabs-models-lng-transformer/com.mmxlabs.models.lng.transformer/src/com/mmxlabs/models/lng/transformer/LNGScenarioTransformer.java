@@ -338,6 +338,10 @@ public class LNGScenarioTransformer {
 	private boolean shippingOnly;
 
 	@Inject
+	@Named(LNGTransformerHelper.HINT_SPOT_CARGO_MARKETS)
+	private boolean withSpotCargoMarkets;
+
+	@Inject
 	@Named(LNGTransformerHelper.HINT_PORTFOLIO_BREAKEVEN)
 	private boolean portfolioBreakevenFlag;
 
@@ -1653,6 +1657,10 @@ public class LNGScenarioTransformer {
 
 		// Not needed for a shipping only optimisation
 		if (shippingOnly) {
+			return;
+		}
+
+		if (!withSpotCargoMarkets) {
 			return;
 		}
 
