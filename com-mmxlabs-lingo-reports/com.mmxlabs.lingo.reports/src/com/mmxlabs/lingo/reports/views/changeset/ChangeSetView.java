@@ -1637,12 +1637,12 @@ public class ChangeSetView implements IAdaptable {
 		return createLambdaLabelProvider(true, false, change -> {
 
 			return ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(change, ScheduleModelKPIUtils::getAdditionalProfitAndLoss)
-					+ ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(change, ScheduleModelKPIUtils::getCancellationFees);
+					- ChangeSetTransformerUtil.getOriginalRowProfitAndLossValue(change, ScheduleModelKPIUtils::getCancellationFees);
 		}, change ->
 
 		{
 			return ChangeSetTransformerUtil.getNewRowProfitAndLossValue(change, ScheduleModelKPIUtils::getAdditionalProfitAndLoss)
-					+ ChangeSetTransformerUtil.getNewRowProfitAndLossValue(change, ScheduleModelKPIUtils::getCancellationFees);
+					- ChangeSetTransformerUtil.getNewRowProfitAndLossValue(change, ScheduleModelKPIUtils::getCancellationFees);
 		});
 	}
 
