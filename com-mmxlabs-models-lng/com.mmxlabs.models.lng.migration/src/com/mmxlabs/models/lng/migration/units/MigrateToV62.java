@@ -28,6 +28,10 @@ public class MigrateToV62 extends AbstractMigrationUnit {
 
 	@Override
 	protected void doMigrationWithHelper(final MetamodelLoader loader, final EObjectWrapper model) {
-
+		// All existing settings would have been optimised with spot cargo markets enabled.
+		final EObjectWrapper userSettings = model.getRef("userSettings");
+		if (userSettings != null) {
+			userSettings.setAttrib("withSpotCargoMarkets", Boolean.TRUE);
+		}
 	}
 }

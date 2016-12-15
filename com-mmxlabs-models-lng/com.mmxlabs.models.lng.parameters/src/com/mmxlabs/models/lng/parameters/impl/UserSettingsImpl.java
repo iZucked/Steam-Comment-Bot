@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getPeriodEnd <em>Period End</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isShippingOnly <em>Shipping Only</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isGenerateCharterOuts <em>Generate Charter Outs</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isWithSpotCargoMarkets <em>With Spot Cargo Markets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isBuildActionSets <em>Build Action Sets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getSimilarityMode <em>Similarity Mode</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isCleanStateOptimisation <em>Clean State Optimisation</em>}</li>
@@ -137,6 +138,26 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * @ordered
 	 */
 	protected boolean generateCharterOuts = GENERATE_CHARTER_OUTS_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isWithSpotCargoMarkets() <em>With Spot Cargo Markets</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isWithSpotCargoMarkets()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean WITH_SPOT_CARGO_MARKETS_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isWithSpotCargoMarkets() <em>With Spot Cargo Markets</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isWithSpotCargoMarkets()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean withSpotCargoMarkets = WITH_SPOT_CARGO_MARKETS_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isBuildActionSets() <em>Build Action Sets</em>}' attribute.
@@ -388,6 +409,27 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isWithSpotCargoMarkets() {
+		return withSpotCargoMarkets;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setWithSpotCargoMarkets(boolean newWithSpotCargoMarkets) {
+		boolean oldWithSpotCargoMarkets = withSpotCargoMarkets;
+		withSpotCargoMarkets = newWithSpotCargoMarkets;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__WITH_SPOT_CARGO_MARKETS, oldWithSpotCargoMarkets, withSpotCargoMarkets));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public boolean isBuildActionSets() {
 		return buildActionSets;
@@ -487,6 +529,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return isShippingOnly();
 			case ParametersPackage.USER_SETTINGS__GENERATE_CHARTER_OUTS:
 				return isGenerateCharterOuts();
+			case ParametersPackage.USER_SETTINGS__WITH_SPOT_CARGO_MARKETS:
+				return isWithSpotCargoMarkets();
 			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
 				return isBuildActionSets();
 			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:
@@ -518,6 +562,9 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return;
 			case ParametersPackage.USER_SETTINGS__GENERATE_CHARTER_OUTS:
 				setGenerateCharterOuts((Boolean)newValue);
+				return;
+			case ParametersPackage.USER_SETTINGS__WITH_SPOT_CARGO_MARKETS:
+				setWithSpotCargoMarkets((Boolean)newValue);
 				return;
 			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
 				setBuildActionSets((Boolean)newValue);
@@ -555,6 +602,9 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 			case ParametersPackage.USER_SETTINGS__GENERATE_CHARTER_OUTS:
 				setGenerateCharterOuts(GENERATE_CHARTER_OUTS_EDEFAULT);
 				return;
+			case ParametersPackage.USER_SETTINGS__WITH_SPOT_CARGO_MARKETS:
+				setWithSpotCargoMarkets(WITH_SPOT_CARGO_MARKETS_EDEFAULT);
+				return;
 			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
 				setBuildActionSets(BUILD_ACTION_SETS_EDEFAULT);
 				return;
@@ -587,6 +637,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return shippingOnly != SHIPPING_ONLY_EDEFAULT;
 			case ParametersPackage.USER_SETTINGS__GENERATE_CHARTER_OUTS:
 				return generateCharterOuts != GENERATE_CHARTER_OUTS_EDEFAULT;
+			case ParametersPackage.USER_SETTINGS__WITH_SPOT_CARGO_MARKETS:
+				return withSpotCargoMarkets != WITH_SPOT_CARGO_MARKETS_EDEFAULT;
 			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
 				return buildActionSets != BUILD_ACTION_SETS_EDEFAULT;
 			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:
@@ -617,6 +669,8 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 		result.append(shippingOnly);
 		result.append(", generateCharterOuts: ");
 		result.append(generateCharterOuts);
+		result.append(", withSpotCargoMarkets: ");
+		result.append(withSpotCargoMarkets);
 		result.append(", buildActionSets: ");
 		result.append(buildActionSets);
 		result.append(", similarityMode: ");
