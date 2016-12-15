@@ -71,6 +71,21 @@ public class ParameterModesDialogTest {
 
 		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SHIPPING_ONLY_OFF).click(), u -> Assert.assertFalse(u.isShippingOnly()));
 	}
+	@Test
+	public void testSetWithSpotCargoMarkets_On() throws Exception {
+		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		settings.setWithSpotCargoMarkets(false);
+		
+		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_WITH_SPOT_CARGO_MARKETS_ON).click(), u -> Assert.assertTrue(u.isWithSpotCargoMarkets()));
+	}
+	
+	@Test
+	public void testSetWithSpotCargoMarketsy_Off() throws Exception {
+		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		settings.setWithSpotCargoMarkets(true);
+		
+		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_WITH_SPOT_CARGO_MARKETS_OFF).click(), u -> Assert.assertFalse(u.isWithSpotCargoMarkets()));
+	}
 
 	@Test
 	public void testSetGenerateCharterOuts_On() throws Exception {

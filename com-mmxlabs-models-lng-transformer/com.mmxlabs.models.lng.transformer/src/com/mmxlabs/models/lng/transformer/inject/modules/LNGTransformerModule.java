@@ -89,11 +89,14 @@ public class LNGTransformerModule extends AbstractModule {
 
 	private final boolean shippingOnly;
 
+	private final boolean withSpotCargoMarkets;
+
 	/**
 	 */
 	public LNGTransformerModule(@NonNull final LNGScenarioModel scenario, @NonNull final Collection<@NonNull String> hints) {
 		this.scenario = scenario;
 		this.shippingOnly = hints.contains(LNGTransformerHelper.HINT_SHIPPING_ONLY);
+		this.withSpotCargoMarkets = hints.contains(LNGTransformerHelper.HINT_SPOT_CARGO_MARKETS);		
 		assert scenario != null;
 	}
 
@@ -102,6 +105,7 @@ public class LNGTransformerModule extends AbstractModule {
 		install(new ScheduleBuilderModule());
 
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_SHIPPING_ONLY)).toInstance(shippingOnly);
+		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_SPOT_CARGO_MARKETS)).toInstance(withSpotCargoMarkets);
 
 		bind(LNGScenarioModel.class).toInstance(scenario);
 		// bind(OptimiserSettings.class).toInstance(optimiserSettings);

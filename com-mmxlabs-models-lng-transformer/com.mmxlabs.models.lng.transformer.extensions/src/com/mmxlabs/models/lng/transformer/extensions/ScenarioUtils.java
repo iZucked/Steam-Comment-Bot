@@ -138,6 +138,7 @@ public class ScenarioUtils {
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setShippingOnly(false);
+		userSettings.setWithSpotCargoMarkets(true);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 		userSettings.setFloatingDaysLimit(15);
 		return userSettings;

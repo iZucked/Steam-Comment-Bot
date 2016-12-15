@@ -44,6 +44,7 @@ public class LNGTransformerHelper {
 	public static final @NonNull String HINT_CLEAN_STATE_EVALUATOR = "hint-lngtransformer-clean-state-evaluator";
 
 	public static final @NonNull String HINT_SHIPPING_ONLY = "hint-lngtransformer-shipping-only";
+	public static final @NonNull String HINT_SPOT_CARGO_MARKETS = "hint-lngtransformer-spot-cargo-markets";
 
 	@NonNull
 	public static Set<@NonNull String> getHints(@NonNull final UserSettings userSettings, @NonNull final String @Nullable... initialHints) {
@@ -64,6 +65,8 @@ public class LNGTransformerHelper {
 		}
 		if (userSettings.isShippingOnly()) {
 			hints.add(HINT_SHIPPING_ONLY);
+		} else if (userSettings.isWithSpotCargoMarkets()) {
+			hints.add(HINT_SPOT_CARGO_MARKETS);
 		}
 
 		// Too late for LNGScenarioRunner, but add to hints for modules in case it is needed in the future.
