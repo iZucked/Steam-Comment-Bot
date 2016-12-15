@@ -738,6 +738,7 @@ public class WhatIfEvaluator {
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setShippingOnly(false);
+		userSettings.setWithSpotCargoMarkets(true);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
 		ServiceHelper.<IAnalyticsScenarioEvaluator> withService(IAnalyticsScenarioEvaluator.class, evaluator -> evaluator.breakEvenEvaluate(lngScenarioModel, userSettings, parentForFork, targetPNL,

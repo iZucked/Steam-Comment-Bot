@@ -41,5 +41,12 @@ public class MigrateToV62 extends AbstractMigrationUnit {
 		if (availabilities != null) {
 			availabilities.forEach(availabilityUpdater);
 		}
+
+		// All existing settings would have been optimised with spot cargo markets enabled.
+		final EObjectWrapper userSettings = model.getRef("userSettings");
+		if (userSettings != null) {
+			userSettings.setAttrib("withSpotCargoMarkets", Boolean.TRUE);
+		}
+
 	}
 }

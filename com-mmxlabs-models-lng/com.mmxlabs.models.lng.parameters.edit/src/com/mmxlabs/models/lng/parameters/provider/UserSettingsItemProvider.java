@@ -71,6 +71,7 @@ public class UserSettingsItemProvider
 			addPeriodEndPropertyDescriptor(object);
 			addShippingOnlyPropertyDescriptor(object);
 			addGenerateCharterOutsPropertyDescriptor(object);
+			addWithSpotCargoMarketsPropertyDescriptor(object);
 			addBuildActionSetsPropertyDescriptor(object);
 			addSimilarityModePropertyDescriptor(object);
 			addCleanStateOptimisationPropertyDescriptor(object);
@@ -159,6 +160,28 @@ public class UserSettingsItemProvider
 				 getString("_UI_UserSettings_generateCharterOuts_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_UserSettings_generateCharterOuts_feature", "_UI_UserSettings_type"),
 				 ParametersPackage.Literals.USER_SETTINGS__GENERATE_CHARTER_OUTS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the With Spot Cargo Markets feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addWithSpotCargoMarketsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UserSettings_withSpotCargoMarkets_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UserSettings_withSpotCargoMarkets_feature", "_UI_UserSettings_type"),
+				 ParametersPackage.Literals.USER_SETTINGS__WITH_SPOT_CARGO_MARKETS,
 				 true,
 				 false,
 				 false,
@@ -298,6 +321,7 @@ public class UserSettingsItemProvider
 			case ParametersPackage.USER_SETTINGS__PERIOD_END:
 			case ParametersPackage.USER_SETTINGS__SHIPPING_ONLY:
 			case ParametersPackage.USER_SETTINGS__GENERATE_CHARTER_OUTS:
+			case ParametersPackage.USER_SETTINGS__WITH_SPOT_CARGO_MARKETS:
 			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
 			case ParametersPackage.USER_SETTINGS__SIMILARITY_MODE:
 			case ParametersPackage.USER_SETTINGS__CLEAN_STATE_OPTIMISATION:

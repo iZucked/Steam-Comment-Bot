@@ -107,13 +107,22 @@ public interface ParametersPackage extends EPackage {
 	int USER_SETTINGS__GENERATE_CHARTER_OUTS = 3;
 
 	/**
+	 * The feature id for the '<em><b>With Spot Cargo Markets</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__WITH_SPOT_CARGO_MARKETS = 4;
+
+	/**
 	 * The feature id for the '<em><b>Build Action Sets</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__BUILD_ACTION_SETS = 4;
+	int USER_SETTINGS__BUILD_ACTION_SETS = 5;
 
 	/**
 	 * The feature id for the '<em><b>Similarity Mode</b></em>' attribute.
@@ -122,7 +131,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__SIMILARITY_MODE = 5;
+	int USER_SETTINGS__SIMILARITY_MODE = 6;
 
 	/**
 	 * The feature id for the '<em><b>Clean State Optimisation</b></em>' attribute.
@@ -131,7 +140,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__CLEAN_STATE_OPTIMISATION = 6;
+	int USER_SETTINGS__CLEAN_STATE_OPTIMISATION = 7;
 
 	/**
 	 * The feature id for the '<em><b>Floating Days Limit</b></em>' attribute.
@@ -140,7 +149,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__FLOATING_DAYS_LIMIT = 7;
+	int USER_SETTINGS__FLOATING_DAYS_LIMIT = 8;
 
 	/**
 	 * The number of structural features of the '<em>User Settings</em>' class.
@@ -149,7 +158,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS_FEATURE_COUNT = 8;
+	int USER_SETTINGS_FEATURE_COUNT = 9;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.
@@ -1047,6 +1056,17 @@ public interface ParametersPackage extends EPackage {
 	EAttribute getUserSettings_GenerateCharterOuts();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isWithSpotCargoMarkets <em>With Spot Cargo Markets</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>With Spot Cargo Markets</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings#isWithSpotCargoMarkets()
+	 * @see #getUserSettings()
+	 * @generated
+	 */
+	EAttribute getUserSettings_WithSpotCargoMarkets();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isBuildActionSets <em>Build Action Sets</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1750,6 +1770,14 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute USER_SETTINGS__GENERATE_CHARTER_OUTS = eINSTANCE.getUserSettings_GenerateCharterOuts();
+
+		/**
+		 * The meta object literal for the '<em><b>With Spot Cargo Markets</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER_SETTINGS__WITH_SPOT_CARGO_MARKETS = eINSTANCE.getUserSettings_WithSpotCargoMarkets();
 
 		/**
 		 * The meta object literal for the '<em><b>Build Action Sets</b></em>' attribute feature.

@@ -221,6 +221,7 @@ public class BaseCaseEvaluator {
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setShippingOnly(false);
+		userSettings.setWithSpotCargoMarkets(true);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
 		ServiceHelper.<IAnalyticsScenarioEvaluator> withService(IAnalyticsScenarioEvaluator.class, evaluator -> evaluator.evaluate(lngScenarioModel, userSettings, scenarioInstance, fork, forkName));
