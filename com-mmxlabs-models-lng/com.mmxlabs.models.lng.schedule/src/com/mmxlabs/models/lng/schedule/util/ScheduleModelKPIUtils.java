@@ -268,7 +268,7 @@ public class ScheduleModelKPIUtils {
 					final SlotPNLDetails slotPNLDetails = (SlotPNLDetails) generalPNLDetails;
 					for (final GeneralPNLDetails details : slotPNLDetails.getGeneralPNLDetails()) {
 						if (details instanceof BasicSlotPNLDetails) {
-							addnPNL -= ((BasicSlotPNLDetails) details).getCancellationFees();
+							addnPNL += ((BasicSlotPNLDetails) details).getCancellationFees();
 						}
 					}
 				}
