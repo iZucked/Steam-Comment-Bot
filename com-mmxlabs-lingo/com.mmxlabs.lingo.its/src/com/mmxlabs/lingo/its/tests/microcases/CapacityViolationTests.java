@@ -68,7 +68,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 
 @SuppressWarnings("unused")
 @RunWith(value = ShiroRunner.class)
-public class CapacityViolationTestCase extends AbstractMicroTestCase {
+public class CapacityViolationTests extends AbstractMicroTestCase {
 
 	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");
 	private static List<String> addedFeatures = new LinkedList<>();
