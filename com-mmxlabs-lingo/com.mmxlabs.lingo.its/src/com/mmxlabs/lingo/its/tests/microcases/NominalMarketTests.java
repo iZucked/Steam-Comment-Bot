@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.its.tests.microcases;
 import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -340,6 +341,159 @@ public class NominalMarketTests extends AbstractMicroTestCase {
 
 	}
 
+	/**
+	 * Test that BugzId: 2304 has been fixed.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Category({ MicroTest.class })
+	public void testPromptNominalOptimisedIn_ShipOnly() throws Exception {
+
+		// Create the required basic elements
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "200000", 1);
+
+		// Construct the cargo scenario
+
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
+				.withOptional(false) //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "7") //
+				.withOptional(false) //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2016, 12, 5));
+
+		evaluateWithLSOTest(true, plan -> {
+
+			plan.getUserSettings().setShippingOnly(true);
+			ScenarioUtils.setLSOStageIterations(plan, 10_000);
+			// No hill climb
+			ScenarioUtils.setHillClimbStageIterations(plan, 0);
+		}, null, scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			// Check spot index has been updated
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			// Check cargo still exists
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+		}, null);
+
+	}
+
+	/**
+	 * Test that the correction to BugzId: 2304 has been fixed. (Initial fixes made all nominal cargoes optional, thus bad P&L caroges were optimised out)
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Category({ MicroTest.class })
+	public void testOutOfPromptButInPeriodNominalOptimisedStaysIn_ShipOnly() throws Exception {
+
+		// Create the required basic elements
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "200000", 1);
+
+		// Construct the cargo scenario
+
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "7") //
+				.withOptional(false) //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
+				.withOptional(false) //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2015, 11, 1));
+
+		evaluateWithLSOTest(true, plan -> {
+			plan.getUserSettings().setPeriodStart(YearMonth.of(2015, 10));
+			plan.getUserSettings().setPeriodEnd(YearMonth.of(2016, 1));
+			
+			plan.getUserSettings().setShippingOnly(true);
+			ScenarioUtils.setLSOStageIterations(plan, 10_000);
+			// No hill climb
+			ScenarioUtils.setHillClimbStageIterations(plan, 0);
+		}, null, scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			// Check spot index has been updated
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			// Check cargo still exists
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+		}, null);
+
+	}
+
+	/**
+	 * A cargo in the prompt, but outside the optimisation period should not be unpaired. 
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Category({ MicroTest.class })
+	public void testOutOfPeriodButInPromptNominalOptimisedStaysNominal() throws Exception {
+		
+		// Create the required basic elements
+		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
+		
+		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, "200000", 0);
+		
+		// Construct the cargo scenario
+		
+		// Create cargo 1, cargo 2
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "7") //
+				.withOptional(false) //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2015, 12, 11), portFinder.findPort("Dominion Cove Point LNG"), null, entity, "5") //
+				.withOptional(false) //
+				.build() //
+				.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
+				.withAssignmentFlags(false, false) //
+				.build();
+		
+		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2015, 10, 1), LocalDate.of(2016, 1, 1));
+		
+		evaluateWithLSOTest(true, plan -> {
+			plan.getUserSettings().setPeriodStart(YearMonth.of(2015, 10));
+			plan.getUserSettings().setPeriodEnd(YearMonth.of(2015, 12));
+			plan.getUserSettings().setShippingOnly(true);
+			ScenarioUtils.setLSOStageIterations(plan, 10_000);
+			// No hill climb
+			ScenarioUtils.setHillClimbStageIterations(plan, 0);
+		}, null, scenarioRunner -> {
+			
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+			
+			// Check spot index has been updated
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			// Check cargo still exists
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+			Assert.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+		}, null);
+		
+	}
+	
 	/**
 	 * Aim of test is to try and ensure a) the action set can work with these solutions correctly and b) support the filtering correctly. (I.e ensure highly profitable but nominal cargoes are not
 	 * used).
