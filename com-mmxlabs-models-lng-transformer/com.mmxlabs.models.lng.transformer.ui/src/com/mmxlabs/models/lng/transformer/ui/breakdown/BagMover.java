@@ -70,7 +70,8 @@ public class BagMover {
 	private static final int MOVE_TYPE_UNUSED_DISCHARGE_SWAPPED = 6;
 	private static final int MOVE_TYPE_UNUSED_LOAD_SWAPPED = 7;
 
-	// Random rdm = new Random(0);
+	private static final int RECURSION_LIMIT = 20;
+
 	private int depthStart = 1;
 	private int depthEnd = 8;
 
@@ -109,19 +110,23 @@ public class BagMover {
 	@Named(LNGParameters_ActionPlanSettingsModule.ACTION_PLAN_MAX_SEARCH_DEPTH)
 	private int MAX_SEARCH_STATES;
 
-	private int max = 0;
-
+	
 	public Collection<JobState> search(@NonNull final ISequences currentRawSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, final int moveType, final long[] currentMetrics, @NonNull final JobStore jobStore,
 			@Nullable final List<ISequenceElement> targetElements, final List<Difference> differencesList, @NonNull final BreakdownSearchData searchData,
 			@Nullable Collection<@NonNull IResource> currentChangedResources) {
+		return search(currentRawSequences, similarityState, changes, changeSets, tryDepth, moveType, currentMetrics, jobStore, targetElements, differencesList, searchData, currentChangedResources, 0);
+	}
+	
+	public Collection<JobState> search(@NonNull final ISequences currentRawSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
+			@NonNull final List<ChangeSet> changeSets, final int tryDepth, final int moveType, final long[] currentMetrics, @NonNull final JobStore jobStore,
+			@Nullable final List<ISequenceElement> targetElements, final List<Difference> differencesList, @NonNull final BreakdownSearchData searchData,
+			@Nullable Collection<@NonNull IResource> currentChangedResources, int recursion) {
+		// get data structures from job
 		final List<JobState> newStates = new LinkedList<>();
 		final BreakdownSearchStatistics searchStatistics = searchData.getSearchStatistics();
 		final Random rdm = searchData.getRandom();
 		searchStatistics.logStateSeen();
-		if (searchStatistics.getStatesSeen() > max) {
-			max = searchStatistics.getStatesSeen();
-		}
 		if (searchStatistics.getStatesSeen() > MAX_SEARCH_STATES) {
 			return newStates;
 		}
@@ -168,7 +173,6 @@ public class BagMover {
 		final IModifiableSequences currentFullSequences = sequencesManipulator.createManipulatedSequences(currentRawSequences);
 
 		if (tryDepth == 0 || differencesList.size() == 0) {
-			// boolean contains = true;
 			boolean failedEvaluation = false;
 
 			final long @Nullable [] thisMetrics = evaluationHelper.evaluateState(currentRawSequences, currentFullSequences, currentChangedResources, similarityState, searchStatistics);
@@ -209,9 +213,6 @@ public class BagMover {
 					if (changesCount == 0) {
 						jobState.mode = JobStateMode.LEAF;
 					}
-
-					// Found a usable state, we no longer need to store limited states.
-					// jobStore.setFoundBranch();
 
 					newStates.add(jobState);
 
@@ -323,7 +324,18 @@ public class BagMover {
 						targetElements, ChangeChecker.copyDifferenceList(differencesList), searchData, currentChangedResources));
 			}
 		}
-		// (3) finish
+		// (3) if not able to fix the particular difference, try again
+		if (newStates.size() == 0) {
+			if (recursion < RECURSION_LIMIT) {
+				return search(currentRawSequences, similarityState, changes, changeSets, tryDepth, moveType, currentMetrics, jobStore, targetElements, ChangeChecker.copyDifferenceList(differencesList), searchData, currentChangedResources, recursion+1);
+			} else {
+				searchData.getSearchStatistics().logEvaluationsFailedConstraints();
+				JobState failedState = new JobState(searchData);
+				failedState.mode = JobStateMode.INVALID;
+				newStates.add(failedState);
+			}
+		}
+		// (4) finish
 		return newStates;
 	}
 
@@ -404,6 +416,7 @@ public class BagMover {
 		ISequenceElement otherLoad = null;
 		ISequenceElement originalDischarge = null;
 		IResource otherResource = null;
+		int firstLoadIdx = -1;
 		LOOP: for (final IResource r : copy.getResources()) {
 			final IModifiableSequence s = copy.getModifiableSequence(r);
 
@@ -418,6 +431,7 @@ public class BagMover {
 					}
 					otherResource = r;
 					s.set(j, prev);
+					firstLoadIdx = j;
 					swapped = true;
 					break LOOP;
 				}
@@ -431,19 +445,15 @@ public class BagMover {
 		// Swap the current load element with the original one.
 		for (int j = 0; j < currentResource.size(); ++j) {
 			if (currentResource.get(j) == prev) {
+				if (resource.getIndex() == otherResource.getIndex() && firstLoadIdx == j) {
+					continue;
+				}
 				currentResource.set(j, otherLoad);
 				swapped = true;
 				break;
 			}
 		}
 
-		// FIXME: GEtting a solution where we swap loads within a resource. Seems like discharge has not moved. However, my debuggin attempts do not show the load on this resource....
-		if (copy.equals(currentSequences)) {
-			// assert false;
-		}
-		if (resource.getIndex() == otherResource.getIndex()) {
-			return Collections.emptyList();
-		}
 		final Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
 		changedResources.add(resource);
 		changedResources.add(otherResource);
@@ -510,11 +520,9 @@ public class BagMover {
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final IResource resource, @NonNull final ISequenceElement prev, @NonNull final ISequenceElement current,
 			final long[] currentMetrics, @NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements, @NonNull final List<Difference> differences,
 			@NonNull final BreakdownSearchData searchData, @Nullable final Collection<@NonNull IResource> currentChangedResources) {
-
 		if (!(portSlotProvider.getPortSlot(current) instanceof IDischargeSlot)) {
 			return Collections.emptyList();
 		}
-
 		// Find the matching discharge for load
 		final int originalDischargeIdx = similarityState.getDischargeForLoad(prev);
 		if (isElementUnused(currentSequences, similarityState.getElementForIndex(originalDischargeIdx))) {
@@ -530,6 +538,7 @@ public class BagMover {
 		ISequenceElement otherLoad = null;
 		IResource otherResource = null;
 		ISequence otherResourceSequence = null;
+		int firstDischargeSwapIdx = -1;
 		LOOP: for (final IResource r : copy.getResources()) {
 			assert r != null;
 			final IModifiableSequence s = copy.getModifiableSequence(r);
@@ -543,6 +552,7 @@ public class BagMover {
 					otherLoad = s.get(j - 1);
 					otherResource = r;
 					s.set(j, current);
+					firstDischargeSwapIdx = j;
 					otherResourceSequence = s;
 					swapped = true;
 					break LOOP;
@@ -556,17 +566,13 @@ public class BagMover {
 		assert otherResource != null;
 		for (int j = 0; j < currentResource.size(); ++j) {
 			if (currentResource.get(j) == current) {
+				if (resource.getIndex() == otherResource.getIndex() && firstDischargeSwapIdx == j) {
+					continue;
+				}
 				currentResource.set(j, originalDischarge);
 				swapped = true;
 				break;
-
 			}
-		}
-		if (copy.equals(currentSequences)) {
-			// assert false;
-		}
-		if (resource.getIndex() == otherResource.getIndex()) {
-			return Collections.emptyList();
 		}
 
 		final Collection<@NonNull IResource> changedResources = new HashSet<>(currentChangedResources);
