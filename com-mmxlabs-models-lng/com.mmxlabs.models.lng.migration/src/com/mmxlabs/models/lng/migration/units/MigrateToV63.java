@@ -21,12 +21,12 @@ public class MigrateToV63 extends AbstractMigrationUnit {
 
 	@Override
 	public int getScenarioSourceVersion() {
-		return 61;
+		return 62;
 	}
 
 	@Override
 	public int getScenarioDestinationVersion() {
-		return 62;
+		return 63;
 	}
 
 	@Override
@@ -41,12 +41,5 @@ public class MigrateToV63 extends AbstractMigrationUnit {
 		if (availabilities != null) {
 			availabilities.forEach(availabilityUpdater);
 		}
-
-		// All existing settings would have been optimised with spot cargo markets enabled.
-		final EObjectWrapper userSettings = model.getRef("userSettings");
-		if (userSettings != null) {
-			userSettings.setAttrib("withSpotCargoMarkets", Boolean.TRUE);
-		}
-
 	}
 }
