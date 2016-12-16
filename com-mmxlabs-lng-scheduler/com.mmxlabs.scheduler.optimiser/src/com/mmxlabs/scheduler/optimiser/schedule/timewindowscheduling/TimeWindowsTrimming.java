@@ -188,7 +188,8 @@ public class TimeWindowsTrimming {
 						portTimeWindowRecord.getSlotFeasibleTimeWindow(load).getExclusiveEnd(), loadZeroPrices);
 				final List<int[]> dischargeIntervals = priceIntervalProviderHelper.getComplexPriceIntervals(load, discharge, (IPriceIntervalProvider) load.getLoadPriceCalculator(),
 						(IPriceIntervalProvider) discharge.getDischargePriceCalculator(), portTimeWindowRecord, false);
-				List<int[]> boiloffPricingIntervals = getDischargePriceIntervalsIndependentOfLoad(portTimeWindowRecord, discharge);
+//				List<int[]> boiloffPricingIntervals = getDischargePriceIntervalsIndependentOfLoad(portTimeWindowRecord, discharge);
+				List<int[]> boiloffPricingIntervals = dischargeIntervals;
 				trimLoadAndDischargeWindowsWithRouteChoice(portTimeWindowRecord, load, discharge, loadIntervals, dischargeIntervals, boiloffPricingIntervals, false);
 			} else if ((priceIntervalProviderHelper.isLoadPricingEventTime(load, portTimeWindowRecord)
 					|| priceIntervalProviderHelper.isPricingDateSpecified(load, PriceIntervalProviderHelper.getPriceEventFromSlotOrContract(load, portTimeWindowRecord)))
@@ -309,20 +310,22 @@ public class TimeWindowsTrimming {
 		int bestPurchaseDetailsIdx = 0;
 		int bestSalesDetailsIdx = salesIntervals.length - 1;
 		final int loadVolumeMMBTU = OptimiserUnitConvertor.convertToExternalVolume(load.getMaxLoadVolumeMMBTU());
-		LadenRouteData bestCanalDetails = null;
+		LadenRouteData bestCanalDetails = sortedCanalTimes[0];
 		long bestMargin = Long.MIN_VALUE;
-		for (int purchaseIndex = bestPurchaseDetailsIdx; purchaseIndex < purchaseIntervals.length; purchaseIndex++) {
-			for (int salesIndex = bestSalesDetailsIdx; salesIndex >= 0; salesIndex--) {
-				final int salesPrice = boiloffIntervals[purchaseIndex].price; // inverted!
-				NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[purchaseIndex], salesIntervals[salesIndex], loadDuration, salesPrice, 0, sortedCanalTimes, vessel.getVesselClass().getNBORate(VesselState.Laden), vessel.getVesselClass(), load.getCargoCVValue(), true);
-				final long estimatedCostMMBTU = totalEstimatedJourneyCostDetails.getSecond() / loadVolumeMMBTU;
-
-				final long newMargin = purchaseIntervals[purchaseIndex].price - salesIntervals[salesIndex].price - estimatedCostMMBTU; // inverted!
-				if (newMargin > bestMargin) {
-					bestMargin = newMargin;
-					bestPurchaseDetailsIdx = purchaseIndex;
-					bestSalesDetailsIdx = salesIndex;
-					bestCanalDetails = totalEstimatedJourneyCostDetails.getFirst();
+		if (purchaseIntervals.length > 1 || salesIntervals.length > 1) {
+			for (int purchaseIndex = bestPurchaseDetailsIdx; purchaseIndex < purchaseIntervals.length; purchaseIndex++) {
+				for (int salesIndex = bestSalesDetailsIdx; salesIndex >= 0; salesIndex--) {
+					final int salesPrice = boiloffIntervals[purchaseIndex].price; // inverted!
+					NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[purchaseIndex], salesIntervals[salesIndex], loadDuration, salesPrice, 0, sortedCanalTimes, vessel.getVesselClass().getNBORate(VesselState.Laden), vessel.getVesselClass(), load.getCargoCVValue(), true);
+					final long estimatedCostMMBTU = totalEstimatedJourneyCostDetails.getSecond() / loadVolumeMMBTU;
+	
+					final long newMargin = purchaseIntervals[purchaseIndex].price - salesIntervals[salesIndex].price - estimatedCostMMBTU; // inverted!
+					if (newMargin > bestMargin) {
+						bestMargin = newMargin;
+						bestPurchaseDetailsIdx = purchaseIndex;
+						bestSalesDetailsIdx = salesIndex;
+						bestCanalDetails = totalEstimatedJourneyCostDetails.getFirst();
+					}
 				}
 			}
 		}
@@ -350,18 +353,29 @@ public class TimeWindowsTrimming {
 		int bestPurchaseDetailsIdx = purchaseIntervals.length - 1;
 		int bestSalesDetailsIdx = 0;
 		final int loadVolumeMMBTU = OptimiserUnitConvertor.convertToExternalVolume(load.getMaxLoadVolumeMMBTU());
-		LadenRouteData bestCanalDetails = null;
+		LadenRouteData bestCanalDetails = sortedCanalTimes[0];
 		long bestMargin = Long.MIN_VALUE;
-		for (int purchaseIndex = bestPurchaseDetailsIdx; purchaseIndex >= 0; purchaseIndex--) {
-			for (int salesIndex = bestSalesDetailsIdx; salesIndex < salesIntervals.length; salesIndex++) {
-				NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[purchaseIndex], boiloffIntervals[salesIndex], loadDuration, salesIntervals[salesIndex].price, 0, sortedCanalTimes, vessel.getVesselClass().getNBORate(VesselState.Laden), vessel.getVesselClass(), load.getCargoCVValue(), true);
-				final long estimatedCostMMBTU = totalEstimatedJourneyCostDetails.getSecond() / loadVolumeMMBTU;
-				final long newMargin = salesIntervals[salesIndex].price - purchaseIntervals[purchaseIndex].price - estimatedCostMMBTU;
-				if (newMargin > bestMargin) {
-					bestMargin = newMargin;
-					bestPurchaseDetailsIdx = purchaseIndex;
-					bestSalesDetailsIdx = salesIndex;
-					bestCanalDetails = totalEstimatedJourneyCostDetails.getFirst();
+		if (purchaseIntervals.length > 1 || salesIntervals.length > 1) {
+			for (int purchaseIndex = bestPurchaseDetailsIdx; purchaseIndex >= 0; purchaseIndex--) {
+				for (int salesIndex = bestSalesDetailsIdx; salesIndex < salesIntervals.length; salesIndex++) {
+					NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCostDetails;
+					try {
+					totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[purchaseIndex],
+							boiloffIntervals[salesIndex], loadDuration, salesIntervals[salesIndex].price, 0, sortedCanalTimes, vessel.getVesselClass().getNBORate(VesselState.Laden),
+							vessel.getVesselClass(), load.getCargoCVValue(), true);
+					} catch (ArrayIndexOutOfBoundsException a) {
+						totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[purchaseIndex],
+								boiloffIntervals[salesIndex], loadDuration, salesIntervals[salesIndex].price, 0, sortedCanalTimes, vessel.getVesselClass().getNBORate(VesselState.Laden),
+								vessel.getVesselClass(), load.getCargoCVValue(), true);
+					}
+					final long estimatedCostMMBTU = totalEstimatedJourneyCostDetails.getSecond() / loadVolumeMMBTU;
+					final long newMargin = salesIntervals[salesIndex].price - purchaseIntervals[purchaseIndex].price - estimatedCostMMBTU;
+					if (newMargin > bestMargin) {
+						bestMargin = newMargin;
+						bestPurchaseDetailsIdx = purchaseIndex;
+						bestSalesDetailsIdx = salesIndex;
+						bestCanalDetails = totalEstimatedJourneyCostDetails.getFirst();
+					}
 				}
 			}
 		}
@@ -377,25 +391,21 @@ public class TimeWindowsTrimming {
 
 		int bestPurchaseDetailsIdx = purchaseIntervals.length - 1;
 		int bestSalesDetailsIdx = 0;
-		final int loadVolumeMMBTU = OptimiserUnitConvertor.convertToExternalVolume(load.getMaxLoadVolumeMMBTU());
-		LadenRouteData bestCanalDetails = null;
 		long bestMargin = Long.MAX_VALUE;
-//		System.out.println("vessel:"+vesselAvailability.getVessel().getName());
-		for (int purchaseIndex = bestPurchaseDetailsIdx; purchaseIndex >= 0; purchaseIndex--) {
-			for (int salesIndex = bestSalesDetailsIdx; salesIndex < salesIntervals.length; salesIndex++) {
-				long charterRatePerDay = schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselAvailability, vesselStartTime, purchaseIntervals[purchaseIndex].start);
-				NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[purchaseIndex], salesIntervals[salesIndex], // D to E
-						loadDuration, boiloffIntervals[purchaseIndex].price, charterRatePerDay, sortedCanalTimes, vesselAvailability.getVessel().getVesselClass().getNBORate(VesselState.Ballast), vesselAvailability.getVessel().getVesselClass(), load.getCargoCVValue(), false);
-				final long estimatedCostMMBTU = totalEstimatedJourneyCostDetails.getSecond() / loadVolumeMMBTU;
-				if (vesselAvailability.getVessel().getName().contains("Mel")) {
-//					System.out.println(String.format("time: %s cost: %s", salesIntervals[salesIndex].start, totalEstimatedJourneyCostDetails.getSecond()));
-				}
-				final long newMargin = totalEstimatedJourneyCostDetails.getSecond();
-				if (newMargin < bestMargin) {
-					bestMargin = newMargin;
-					bestPurchaseDetailsIdx = purchaseIndex;
-					bestSalesDetailsIdx = salesIndex;
-					bestCanalDetails = totalEstimatedJourneyCostDetails.getFirst();
+		if (purchaseIntervals.length > 1 || salesIntervals.length > 1) {
+			for (int purchaseIndex = bestPurchaseDetailsIdx; purchaseIndex >= 0; purchaseIndex--) {
+				for (int salesIndex = bestSalesDetailsIdx; salesIndex < salesIntervals.length; salesIndex++) {
+					long charterRatePerDay = schedulerCalculationUtils.getVesselCharterInRatePerDay(vesselAvailability, vesselStartTime, purchaseIntervals[purchaseIndex].start);
+					NonNullPair<LadenRouteData, Long> totalEstimatedJourneyCostDetails = priceIntervalProviderHelper.getTotalEstimatedJourneyCost(purchaseIntervals[purchaseIndex],
+							salesIntervals[salesIndex], // D to E
+							loadDuration, boiloffIntervals[purchaseIndex].price, charterRatePerDay, sortedCanalTimes, vesselAvailability.getVessel().getVesselClass().getNBORate(VesselState.Ballast),
+							vesselAvailability.getVessel().getVesselClass(), load.getCargoCVValue(), false);
+					final long newMargin = totalEstimatedJourneyCostDetails.getSecond();
+					if (newMargin < bestMargin) {
+						bestMargin = newMargin;
+						bestPurchaseDetailsIdx = purchaseIndex;
+						bestSalesDetailsIdx = salesIndex;
+					}
 				}
 			}
 		}

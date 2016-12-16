@@ -48,6 +48,12 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 
 	public @NonNull LadenRouteData @NonNull [] getMinimumTravelTimes(@NonNull final IPort load, @NonNull final IPort discharge, @NonNull final IVessel vessel, final int ladenStartTime,
 			boolean isLaden) {
+		if (load == discharge) {
+			// shortcut for same port
+			return new LadenRouteData[] { new LadenRouteData(0, 0,
+					0, 0, 0)};
+		}
+		
 		// get distances for this pairing (assumes that getAllDistanceValues() returns a copy of the data)
 		VesselState vesselState;
 		IRouteCostProvider.CostType costType;

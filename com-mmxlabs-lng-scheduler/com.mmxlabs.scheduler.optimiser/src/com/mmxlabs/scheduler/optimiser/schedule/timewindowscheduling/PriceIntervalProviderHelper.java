@@ -327,6 +327,9 @@ public class PriceIntervalProviderHelper {
 
 		// estimate speed and rate
 		final int nboSpeed = vesselClass.getConsumptionRate(vesselState).getSpeed(Calculator.convertM3ToMT(boiloffRateM3, cv, equivalenceFactor));
+		if (totalLegLengthInHours == 0) {
+			int z = 0;
+		}
 		final int naturalSpeed = Calculator.speedFromDistanceTime(distance, totalLegLengthInHours);
 		final int speed = Math.min(Math.max(nboSpeed, naturalSpeed), vesselClass.getMaxSpeed()); // the speed bounded by NBO and Max
 		final long rate = vesselClass.getConsumptionRate(vesselState).getRate(speed);
