@@ -47,6 +47,9 @@ public class CharterOutEventMaker {
 		event.setSequenceHint(sequenceHint);
 
 		event.setSpotIndex(0);
+		if (!event.getAllowedVessels().isEmpty()) {
+			throw new IllegalStateException("set vessel restrictions after setting vessel assignment");
+		}
 		event.getAllowedVessels().clear();
 		event.getAllowedVessels().add(vesselAvailability.getVessel());
 		return this;
