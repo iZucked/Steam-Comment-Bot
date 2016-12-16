@@ -310,7 +310,7 @@ public class PeriodTransformer {
 			}
 		}
 		// Filter out vessel events
-		filterVesselEvents(internalDomain, eventDependencies.getThird(), cargoModel, mapping);
+		filterVesselEvents(internalDomain, eventDependencies.getThird(), cargoModel, mapping, periodRecord, objectToPortVisitMap);
 
 		// Filter out vessels
 		filterVesselAvailabilities(internalDomain, periodRecord, cargoModel, mapping, objectToPortVisitMap);
@@ -489,14 +489,19 @@ public class PeriodTransformer {
 	}
 
 	public void filterVesselEvents(@NonNull final EditingDomain internalDomain, @NonNull final Set<VesselEvent> eventsToRemove, @NonNull final CargoModel cargoModel,
-			@NonNull final IScenarioEntityMapping mapping) {
+			@NonNull final IScenarioEntityMapping mapping, @NonNull final PeriodRecord periodRecord, @NonNull final Map<EObject, PortVisit> scheduledEventMap) {
 		for (final VesselEvent event : cargoModel.getVesselEvents()) {
 			if (event instanceof CharterOutEvent) {
 				// If in boundary, limit available vessels to assigned vessel
-				event.getAllowedVessels().clear();
-				final VesselAvailability vesselAvailability = ((VesselAvailability) event.getVesselAssignmentType());
-				if (vesselAvailability != null) {
-					event.getAllowedVessels().add(vesselAvailability.getVessel());
+
+				@NonNull
+				NonNullPair<InclusionType, Position> p = inclusionChecker.getObjectInclusionType(event, scheduledEventMap, periodRecord);
+				if (p.getFirst() != InclusionType.In) {
+					event.getAllowedVessels().clear();
+					final VesselAvailability vesselAvailability = ((VesselAvailability) event.getVesselAssignmentType());
+					if (vesselAvailability != null) {
+						event.getAllowedVessels().add(vesselAvailability.getVessel());
+					}
 				}
 			}
 		}

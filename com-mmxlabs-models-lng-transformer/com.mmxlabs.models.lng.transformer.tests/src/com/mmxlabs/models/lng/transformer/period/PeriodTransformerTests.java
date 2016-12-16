@@ -1592,7 +1592,7 @@ public class PeriodTransformerTests {
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> eventDependencies = transformer.findVesselEventsToRemoveAndDependencies(mockSchedule, periodRecord, copyScenarioModel.getCargoModel(),
 				objectToPortVisitMap);
-		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getCargoModel(), mapping);
+		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getCargoModel(), mapping, periodRecord, new HashMap<>());
 
 		// No change to original
 		Assert.assertTrue(scenarioModel.getCargoModel().getVesselEvents().contains(event));
@@ -1641,7 +1641,7 @@ public class PeriodTransformerTests {
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> eventDependencies = transformer.findVesselEventsToRemoveAndDependencies(mockSchedule, periodRecord, copyScenarioModel.getCargoModel(),
 				objectToPortVisitMap);
-		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getCargoModel(), mapping);
+		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getCargoModel(), mapping, periodRecord, new HashMap<>());
 
 		// No change to original
 		Assert.assertTrue(scenarioModel.getCargoModel().getVesselEvents().contains(event));
@@ -1689,7 +1689,7 @@ public class PeriodTransformerTests {
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> eventDependencies = transformer.findVesselEventsToRemoveAndDependencies(mockSchedule, periodRecord, copyScenarioModel.getCargoModel(),
 				objectToPortVisitMap);
-		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getCargoModel(), mapping);
+		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getCargoModel(), mapping, periodRecord, new HashMap<>());
 
 		// No change to original
 		Assert.assertTrue(scenarioModel.getCargoModel().getVesselEvents().contains(event));
@@ -1737,7 +1737,7 @@ public class PeriodTransformerTests {
 		Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> eventDependencies = transformer.findVesselEventsToRemoveAndDependencies(mockSchedule, periodRecord, copyScenarioModel.getCargoModel(),
 				objectToPortVisitMap);
-		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getCargoModel(), mapping);
+		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getCargoModel(), mapping, periodRecord, new HashMap<>());
 
 		// No change to original
 		Assert.assertTrue(scenarioModel.getCargoModel().getVesselEvents().contains(event));
