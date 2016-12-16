@@ -191,6 +191,13 @@ public class PeriodTransformer {
 		// Take a copy to manipulate.
 		final LNGScenarioModel output = copyScenario(wholeScenario, mapping);
 
+		// Do not allow the prompt period to extend past the optimisation period
+		if (periodRecord.upperBoundary != null && periodRecord.promptEnd != null) {
+
+			if (periodRecord.upperBoundary.isBefore(periodRecord.promptEnd.atStartOfDay(ZoneId.of("UTC")))) {
+				output.setPromptPeriodEnd(periodRecord.upperBoundary.toLocalDate());
+			}
+		}
 		// Evaluate copy!
 		final EditingDomain internalDomain = createEditingDomain(output);
 
@@ -696,7 +703,7 @@ public class PeriodTransformer {
 	public void lockDownCargoDates(final Map<Slot, SlotAllocation> slotAllocationMap, final Cargo cargo) {
 
 		final VesselAssignmentType vat = cargo.getVesselAssignmentType();
-		  AVesselSet<Vessel> lockedVessel = null;
+		AVesselSet<Vessel> lockedVessel = null;
 		if (vat instanceof VesselAvailability) {
 			lockedVessel = (((VesselAvailability) vat).getVessel());
 		} else if (vat instanceof CharterInMarket) {
