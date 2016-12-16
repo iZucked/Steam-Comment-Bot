@@ -428,8 +428,13 @@ public class LNGScenarioTransformer {
 		if (rootObject.isSetPromptPeriodStart()) {
 			promptPeriodProviderEditor.setStartOfPromptPeriod(dateHelper.convertTime(rootObject.getPromptPeriodStart()));
 		}
+
 		if (rootObject.isSetPromptPeriodEnd()) {
 			promptPeriodProviderEditor.setEndOfPromptPeriod(dateHelper.convertTime(rootObject.getPromptPeriodEnd()));
+		}
+
+		if (rootObject.isSetSchedulingEndDate()) {
+			promptPeriodProviderEditor.setEndOfSchedulingPeriod(dateHelper.convertTime(rootObject.getSchedulingEndDate()));
 		}
 
 		/**
