@@ -30,6 +30,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getActualsModel <em>Actuals Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPromptPeriodStart <em>Prompt Period Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPromptPeriodEnd <em>Prompt Period End</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getSchedulingEndDate <em>Scheduling End Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getReferenceModel <em>Reference Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getUserSettings <em>User Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getOptionModels <em>Option Models</em>}</li>
@@ -223,6 +224,59 @@ public interface LNGScenarioModel extends MMXRootObject {
 	 * @generated
 	 */
 	boolean isSetPromptPeriodEnd();
+
+	/**
+	 * Returns the value of the '<em><b>Scheduling End Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Scheduling End Date</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Scheduling End Date</em>' attribute.
+	 * @see #isSetSchedulingEndDate()
+	 * @see #unsetSchedulingEndDate()
+	 * @see #setSchedulingEndDate(LocalDate)
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_SchedulingEndDate()
+	 * @model unsettable="true" dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
+	LocalDate getSchedulingEndDate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getSchedulingEndDate <em>Scheduling End Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Scheduling End Date</em>' attribute.
+	 * @see #isSetSchedulingEndDate()
+	 * @see #unsetSchedulingEndDate()
+	 * @see #getSchedulingEndDate()
+	 * @generated
+	 */
+	void setSchedulingEndDate(LocalDate value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getSchedulingEndDate <em>Scheduling End Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetSchedulingEndDate()
+	 * @see #getSchedulingEndDate()
+	 * @see #setSchedulingEndDate(LocalDate)
+	 * @generated
+	 */
+	void unsetSchedulingEndDate();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getSchedulingEndDate <em>Scheduling End Date</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Scheduling End Date</em>' attribute is set.
+	 * @see #unsetSchedulingEndDate()
+	 * @see #getSchedulingEndDate()
+	 * @see #setSchedulingEndDate(LocalDate)
+	 * @generated
+	 */
+	boolean isSetSchedulingEndDate();
 
 	/**
 	 * Returns the value of the '<em><b>Reference Model</b></em>' containment reference.

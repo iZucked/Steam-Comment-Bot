@@ -59,6 +59,7 @@ public class LNGScenarioModelItemProvider
 
 			addPromptPeriodStartPropertyDescriptor(object);
 			addPromptPeriodEndPropertyDescriptor(object);
+			addSchedulingEndDatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -99,6 +100,28 @@ public class LNGScenarioModelItemProvider
 				 getString("_UI_LNGScenarioModel_promptPeriodEnd_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_LNGScenarioModel_promptPeriodEnd_feature", "_UI_LNGScenarioModel_type"),
 				 LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodEnd(),
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Scheduling End Date feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSchedulingEndDatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_LNGScenarioModel_schedulingEndDate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_LNGScenarioModel_schedulingEndDate_feature", "_UI_LNGScenarioModel_type"),
+				 LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SchedulingEndDate(),
 				 true,
 				 false,
 				 false,
@@ -181,6 +204,7 @@ public class LNGScenarioModelItemProvider
 		switch (notification.getFeatureID(LNGScenarioModel.class)) {
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_START:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_END:
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULING_END_DATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__CARGO_MODEL:
