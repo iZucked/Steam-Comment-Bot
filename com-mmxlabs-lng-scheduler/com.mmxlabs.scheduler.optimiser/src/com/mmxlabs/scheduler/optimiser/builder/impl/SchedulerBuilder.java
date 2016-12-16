@@ -115,6 +115,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
@@ -388,6 +389,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@NonNull
 	private final Map<IPort, MarkToMarket> fobPurchaseMTMPortMap = new HashMap<IPort, MarkToMarket>();
+
+	@Inject
+	@NonNull
+	private IPromptPeriodProviderEditor promptPeriodProviderEditor;
 
 	@Inject
 	@NonNull
@@ -1117,45 +1122,24 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			}
 		}
 
-		// 0 == return to current load,
-		// 1 == return to farthest in time load
-		// 2== end window
-		// 3 == discharge + 60
-		// 4 == discharge (minus spot) + 60
-		final int rule = 4;
+		final int windowAdder;
 		final int latestTime;
-		if (rule == 0) {
-			/**
-			 * The shortest time which the slowest vessel in the fleet can take to get from the latest discharge back to the load for that discharge.
-			 */
-			int maxFastReturnTime = 0;
-			if ((dischargePort != null) && (loadPort != null)) {
-				final int returnDistance = portDistanceProvider.getMaximumValue(dischargePort, loadPort);
-				// what's the slowest vessel class
-				int slowestMaxSpeed = Integer.MAX_VALUE;
-				for (final IVesselClass vesselClass : vesselClasses) {
-					if (vesselClass == virtualClass) {
-						continue;
-					}
-					slowestMaxSpeed = Math.min(slowestMaxSpeed, vesselClass.getMaxSpeed());
-				}
-				maxFastReturnTime = Math.max(maxFastReturnTime, Calculator.getTimeFromSpeedDistance(slowestMaxSpeed, returnDistance));
-			} else {
-				latestDischarge = 0;
-				maxFastReturnTime = 0;
-			}
-			latestTime = Math.max(endOfLatestWindow + (24 * minDaysFromLastEventToEnd), maxFastReturnTime + latestDischarge);
-		} else if (rule == 1) {
-			/**
-			 * The shortest time which the slowest vessel in the fleet can take to get from the latest discharge back to the load for that discharge.
-			 */
-			int maxFastReturnTime = 0;
-			if ((dischargePort != null)) {
-				for (final ILoadOption loadSlot : loadSlots) {
-					final int returnDistance = portDistanceProvider.getMaximumValue(dischargePort, loadSlot.getPort());
-					if (returnDistance == Integer.MAX_VALUE) {
-						continue;
-					}
+		if (promptPeriodProviderEditor.getEndOfSchedulingPeriod() == Integer.MAX_VALUE) {
+
+			// 0 == return to current load,
+			// 1 == return to farthest in time load
+			// 2== end window
+			// 3 == discharge + 60
+			// 4 == discharge (minus spot) + 60
+			final int rule = 4;
+			
+			if (rule == 0) {
+				/**
+				 * The shortest time which the slowest vessel in the fleet can take to get from the latest discharge back to the load for that discharge.
+				 */
+				int maxFastReturnTime = 0;
+				if ((dischargePort != null) && (loadPort != null)) {
+					final int returnDistance = portDistanceProvider.getMaximumValue(dischargePort, loadPort);
 					// what's the slowest vessel class
 					int slowestMaxSpeed = Integer.MAX_VALUE;
 					for (final IVesselClass vesselClass : vesselClasses) {
@@ -1165,35 +1149,65 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 						slowestMaxSpeed = Math.min(slowestMaxSpeed, vesselClass.getMaxSpeed());
 					}
 					maxFastReturnTime = Math.max(maxFastReturnTime, Calculator.getTimeFromSpeedDistance(slowestMaxSpeed, returnDistance));
+				} else {
+					latestDischarge = 0;
+					maxFastReturnTime = 0;
 				}
+				latestTime = Math.max(endOfLatestWindow + (24 * minDaysFromLastEventToEnd), maxFastReturnTime + latestDischarge);
+			} else if (rule == 1) {
+				/**
+				 * The shortest time which the slowest vessel in the fleet can take to get from the latest discharge back to the load for that discharge.
+				 */
+				int maxFastReturnTime = 0;
+				if ((dischargePort != null)) {
+					for (final ILoadOption loadSlot : loadSlots) {
+						final int returnDistance = portDistanceProvider.getMaximumValue(dischargePort, loadSlot.getPort());
+						if (returnDistance == Integer.MAX_VALUE) {
+							continue;
+						}
+						// what's the slowest vessel class
+						int slowestMaxSpeed = Integer.MAX_VALUE;
+						for (final IVesselClass vesselClass : vesselClasses) {
+							if (vesselClass == virtualClass) {
+								continue;
+							}
+							slowestMaxSpeed = Math.min(slowestMaxSpeed, vesselClass.getMaxSpeed());
+						}
+						maxFastReturnTime = Math.max(maxFastReturnTime, Calculator.getTimeFromSpeedDistance(slowestMaxSpeed, returnDistance));
+					}
+				} else {
+					latestDischarge = 0;
+					maxFastReturnTime = 0;
+				}
+				latestTime = Math.max(endOfLatestWindow + (24 * minDaysFromLastEventToEnd), maxFastReturnTime + latestDischarge);
+			} else if (rule == 2) {
+				latestTime = Math.max(endOfLatestWindow, latestDischarge);
+			} else if (rule == 3) {
+				latestTime = Math.max(endOfLatestWindow, latestDischarge) + 60 * 24;
+			} else if (rule == 4) {
+
+				// Include all time windows *except* spot market slots
+				final OptionalInt optionalMax = sequenceElements.stream() //
+						.filter(element -> !spotMarketSlots.isSpotMarketSlot(element)) //
+						.filter(element -> !timeWindowProvider.getTimeWindows(element).isEmpty()) //
+						.mapToInt(element -> timeWindowProvider.getTimeWindows(element).get(0).getExclusiveEnd()) //
+						.max();
+				final int lastFoundTime = optionalMax.isPresent() ? optionalMax.getAsInt() : 0;
+
+				latestTime = Math.max(lastFoundTime, latestDischarge) + 60 * 24;
 			} else {
-				latestDischarge = 0;
-				maxFastReturnTime = 0;
+				// Invalid rule
+				assert false;
 			}
-			latestTime = Math.max(endOfLatestWindow + (24 * minDaysFromLastEventToEnd), maxFastReturnTime + latestDischarge);
-		} else if (rule == 2) {
-			latestTime = Math.max(endOfLatestWindow, latestDischarge);
-		} else if (rule == 3) {
-			latestTime = Math.max(endOfLatestWindow, latestDischarge) + 60 * 24;
-		} else if (rule == 4) {
-
-			// Include all time windows *except* spot market slots
-			final OptionalInt optionalMax = sequenceElements.stream() //
-					.filter(element -> !spotMarketSlots.isSpotMarketSlot(element)) //
-					.filter(element -> !timeWindowProvider.getTimeWindows(element).isEmpty()) //
-					.mapToInt(element -> timeWindowProvider.getTimeWindows(element).get(0).getExclusiveEnd()) //
-					.max();
-			final int lastFoundTime = optionalMax.isPresent() ? optionalMax.getAsInt() : 0;
-
-			latestTime = Math.max(lastFoundTime, latestDischarge) + 60 * 24;
+			windowAdder = (rule == 3 || rule == 4) ? 0 : 35 * 24;
+			promptPeriodProviderEditor.setEndOfSchedulingPeriod(latestTime);	
 		} else {
-			// Invalid rule
-			assert false;
+			windowAdder = 0;
+			latestTime = promptPeriodProviderEditor.getEndOfSchedulingPeriod();
 		}
-
 		startEndRequirementProvider.setNotionalEndTime(latestTime);
 
-		final int windowAdder = (rule == 3 || rule == 4) ? 0 : 35 * 24;
+		
 		for (final MutableTimeWindow window : endSlotWindows) {
 			window.setInclusiveStart(latestTime - 1);
 			window.setExclusiveEnd(latestTime + windowAdder);
@@ -1247,7 +1261,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * Generate a new return option for each load port in the solution.
 	 */
 	private void createRoundtripCargoReturnElements() {
-//		for (final IPortSlot portSlot : permittedRoundTripVesselSlots) {
+		// for (final IPortSlot portSlot : permittedRoundTripVesselSlots) {
 		for (final IPortSlot portSlot : loadSlots) {
 			if (portSlot instanceof ILoadOption) {
 				final ILoadOption loadOption = (ILoadOption) portSlot;

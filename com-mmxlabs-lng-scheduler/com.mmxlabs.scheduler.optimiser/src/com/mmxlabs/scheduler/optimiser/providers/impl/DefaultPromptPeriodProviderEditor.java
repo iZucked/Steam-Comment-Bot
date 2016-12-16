@@ -10,6 +10,17 @@ public class DefaultPromptPeriodProviderEditor implements IPromptPeriodProviderE
 
 	private int startOfPromptPeriod = Integer.MIN_VALUE;
 	private int endOfPromptPeriod = Integer.MAX_VALUE;
+	private int endOfSchedulingPeriod = Integer.MAX_VALUE;
+
+	@Override
+	public int getEndOfSchedulingPeriod() {
+		return endOfSchedulingPeriod;
+	}
+
+	@Override
+	public void setEndOfSchedulingPeriod(int endOfSchedulingPeriod) {
+		this.endOfSchedulingPeriod = endOfSchedulingPeriod;
+	}
 
 	@Override
 	public int getStartOfPromptPeriod() {
