@@ -17,6 +17,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MenuDetectEvent;
@@ -30,6 +31,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -75,7 +77,7 @@ public class PromptToolbarEditor extends ControlContribution {
 
 	private DateTime periodStartEditor;
 	private DateTime periodEndEditor;
-	private DateTime scheduleEndEditor;
+	private DateTime scheduleHorizonEditor;
 
 	private boolean locked = false;
 
@@ -101,24 +103,24 @@ public class PromptToolbarEditor extends ControlContribution {
 				}
 			} else if (notification.getFeature() == LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SchedulingEndDate()) {
 				if (newValue != null) {
-					lbl3.setText(" Scheduling end: ");
-
 					final LocalDate date = (LocalDate) newValue;
-					scheduleEndEditor.setYear(date.getYear());
-					scheduleEndEditor.setMonth(date.getMonthValue() - 1);
-					scheduleEndEditor.setDay(date.getDayOfMonth());
-					scheduleEndEditor.setEnabled(true);
-
+					scheduleHorizonEditor.setYear(date.getYear());
+					scheduleHorizonEditor.setMonth(date.getMonthValue() - 1);
+					scheduleHorizonEditor.setDay(date.getDayOfMonth());
+					setScheduleHorizonControl(scheduleHorizonEditor);
 				} else {
-					lbl3.setText(" No scheduling end: ");
-					scheduleEndEditor.setEnabled(false);
-
+					setScheduleHorizonControl(lbl4);
+					scheduleHorizonEditor.setYear(2000);
+					scheduleHorizonEditor.setMonth(0);
+					scheduleHorizonEditor.setDay(1);
 				}
 			}
 		}
 	};
 	private Button btn90Day;
 	private Label lbl3;
+	private Label lbl4;
+	private Composite scheduleHorizonComposite;
 
 	public PromptToolbarEditor(final String id, final EditingDomain editingDomain, final LNGScenarioModel scenarioModel) {
 		super(id);
@@ -168,11 +170,11 @@ public class PromptToolbarEditor extends ControlContribution {
 
 		final Label lbl2 = new Label(pparent, SWT.NONE);
 		lbl2.setText(" to ");
-		lbl2.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP). create());
+		lbl2.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP).create());
 
 		periodEndEditor = new DateTime(pparent, SWT.DATE | SWT.BORDER | SWT.DROP_DOWN);
-//		.setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
-		periodEndEditor.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP). create());
+		// .setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
+		periodEndEditor.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP).create());
 
 		{
 			if (scenarioModel.isSetPromptPeriodEnd()) {
@@ -225,32 +227,39 @@ public class PromptToolbarEditor extends ControlContribution {
 		btn90Day.addListener(SWT.Resize, new LimitWidgetHeightListener(pparent, btn90Day));
 
 		lbl3 = new Label(pparent, SWT.NONE);
-		lbl3.setText(" No Scheduling end ");
-		lbl3.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP). create());
-
+		lbl3.setText(" Schedule horizon:  ");
+		lbl3.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP).create());
 		hookScheduleEndDateMenu(lbl3);
 
-		scheduleEndEditor = new DateTime(pparent, SWT.DATE | SWT.BORDER | SWT.DROP_DOWN);
-		scheduleEndEditor.setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
-		hookScheduleEndDateMenu(scheduleEndEditor);
+		scheduleHorizonComposite = new Composite(pparent, SWT.NONE);
+		scheduleHorizonComposite.setLayout(new StackLayout());
+		scheduleHorizonComposite.setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
+
+		scheduleHorizonEditor = new DateTime(scheduleHorizonComposite, SWT.DATE | SWT.BORDER | SWT.DROP_DOWN);
+		hookScheduleEndDateMenu(scheduleHorizonEditor);
+
+		lbl4 = new Label(scheduleHorizonComposite, SWT.BORDER);
+		lbl4.setText("Open");
+		lbl4.setAlignment(SWT.CENTER);
+		lbl4.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		hookScheduleEndDateMenu(lbl4);
 
 		{
 			if (scenarioModel.isSetSchedulingEndDate()) {
-				lbl3.setText(" Scheduling end ");
 				final LocalDate date = scenarioModel.getSchedulingEndDate();
-				scheduleEndEditor.setYear(date.getYear());
-				scheduleEndEditor.setMonth(date.getMonthValue() - 1);
-				scheduleEndEditor.setDay(date.getDayOfMonth());
-				scheduleEndEditor.setEnabled(true);
-				// periodEndEnabled.setSelection(true);
+				scheduleHorizonEditor.setYear(date.getYear());
+				scheduleHorizonEditor.setMonth(date.getMonthValue() - 1);
+				scheduleHorizonEditor.setDay(date.getDayOfMonth());
+				setScheduleHorizonControl(scheduleHorizonEditor);
 			} else {
-				lbl3.setText(" No Scheduling end ");
-				scheduleEndEditor.setEnabled(false);
-				// setDefaultPromptCommand.append(SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SchedulingEndDate(), LocalDate.now().plusDays(90)));
+				scheduleHorizonEditor.setYear(0);
+				scheduleHorizonEditor.setMonth(0);
+				scheduleHorizonEditor.setDay(0);
+				setScheduleHorizonControl(lbl4);
 			}
 		}
-	 
-		scheduleEndEditor.addMouseListener(new MouseListener() {
+
+		lbl4.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseUp(final MouseEvent e) {
@@ -270,12 +279,12 @@ public class PromptToolbarEditor extends ControlContribution {
 				}
 			}
 		});
-	 
-		scheduleEndEditor.addSelectionListener(new SelectionListener() {
+
+		scheduleHorizonEditor.addSelectionListener(new SelectionListener() {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				final LocalDate date = LocalDate.of(scheduleEndEditor.getYear(), scheduleEndEditor.getMonth() + 1, scheduleEndEditor.getDay());
+				final LocalDate date = LocalDate.of(scheduleHorizonEditor.getYear(), scheduleHorizonEditor.getMonth() + 1, scheduleHorizonEditor.getDay());
 				final Command cmd = SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SchedulingEndDate(), date);
 				editingDomain.getCommandStack().execute(cmd);
 			}
@@ -300,9 +309,9 @@ public class PromptToolbarEditor extends ControlContribution {
 	private void hookScheduleEndDateMenu(final Control control) {
 		final MenuManager mgr2 = new MenuManager();
 		control.addDisposeListener(new DisposeListener() {
-			
+
 			@Override
-			public void widgetDisposed(DisposeEvent e) {
+			public void widgetDisposed(final DisposeEvent e) {
 				mgr2.dispose();
 			}
 		});
@@ -317,14 +326,12 @@ public class PromptToolbarEditor extends ControlContribution {
 					control.setMenu(menu);
 				}
 				if (scenarioModel.isSetSchedulingEndDate()) {
-					mgr2.add(new RunnableAction("Remove schedule end date", () -> {
+					mgr2.add(new RunnableAction("Set schedule horizon to open", () -> {
 						final Command cmd = SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SchedulingEndDate(), SetCommand.UNSET_VALUE);
 						editingDomain.getCommandStack().execute(cmd);
 					}));
-					// mgr.getMenu().setVisible(true);
-
 				} else {
-					mgr2.add(new RunnableAction("Set schedule end date", () -> {
+					mgr2.add(new RunnableAction("Set schedule horizon date", () -> {
 						final Command cmd = SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SchedulingEndDate(), LocalDate.now().plusMonths(6));
 						editingDomain.getCommandStack().execute(cmd);
 					}));
@@ -354,8 +361,13 @@ public class PromptToolbarEditor extends ControlContribution {
 		periodStartEditor.setEnabled(!locked);
 		periodEndEditor.setEnabled(!locked);
 		if (scenarioModel != null) {
-			scheduleEndEditor.setEnabled(!locked && scenarioModel.isSetSchedulingEndDate());
+			scheduleHorizonEditor.setEnabled(!locked && scenarioModel.isSetSchedulingEndDate());
 		}
 		btn90Day.setEnabled(!locked);
+	}
+
+	private void setScheduleHorizonControl(final Control control) {
+		((StackLayout) scheduleHorizonComposite.getLayout()).topControl = control;
+		scheduleHorizonComposite.layout();
 	}
 }
