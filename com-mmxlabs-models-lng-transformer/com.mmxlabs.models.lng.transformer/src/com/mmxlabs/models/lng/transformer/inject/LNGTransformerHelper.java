@@ -68,11 +68,8 @@ public class LNGTransformerHelper {
 		}
 		if (userSettings.isShippingOnly()) {
 			hints.add(HINT_SHIPPING_ONLY);
-		} else {
-			// TODO: Don't forget to enable by default in existing optimisations when added to data-model!
-			if (userSettings.isWithSpotCargoMarkets()) {
-				hints.add(HINT_SPOT_CARGO_MARKETS);
-			}
+		} else if (userSettings.isWithSpotCargoMarkets()) {
+			hints.add(HINT_SPOT_CARGO_MARKETS);
 		}
 
 		// Too late for LNGScenarioRunner, but add to hints for modules in case it is needed in the future.
