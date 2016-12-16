@@ -36,6 +36,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getActualsModel <em>Actuals Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getPromptPeriodStart <em>Prompt Period Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getPromptPeriodEnd <em>Prompt Period End</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getSchedulingEndDate <em>Scheduling End Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getReferenceModel <em>Reference Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getUserSettings <em>User Settings</em>}</li>
  * </ul>
@@ -130,6 +131,35 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * @ordered
 	 */
 	protected boolean promptPeriodEndESet;
+
+	/**
+	 * The default value of the '{@link #getSchedulingEndDate() <em>Scheduling End Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSchedulingEndDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final LocalDate SCHEDULING_END_DATE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getSchedulingEndDate() <em>Scheduling End Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSchedulingEndDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected LocalDate schedulingEndDate = SCHEDULING_END_DATE_EDEFAULT;
+
+	/**
+	 * This is true if the Scheduling End Date attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean schedulingEndDateESet;
 
 	/**
 	 * The cached value of the '{@link #getReferenceModel() <em>Reference Model</em>}' containment reference.
@@ -465,6 +495,52 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public LocalDate getSchedulingEndDate() {
+		return schedulingEndDate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSchedulingEndDate(LocalDate newSchedulingEndDate) {
+		LocalDate oldSchedulingEndDate = schedulingEndDate;
+		schedulingEndDate = newSchedulingEndDate;
+		boolean oldSchedulingEndDateESet = schedulingEndDateESet;
+		schedulingEndDateESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULING_END_DATE, oldSchedulingEndDate, schedulingEndDate, !oldSchedulingEndDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetSchedulingEndDate() {
+		LocalDate oldSchedulingEndDate = schedulingEndDate;
+		boolean oldSchedulingEndDateESet = schedulingEndDateESet;
+		schedulingEndDate = SCHEDULING_END_DATE_EDEFAULT;
+		schedulingEndDateESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULING_END_DATE, oldSchedulingEndDate, SCHEDULING_END_DATE_EDEFAULT, oldSchedulingEndDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetSchedulingEndDate() {
+		return schedulingEndDateESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public LNGReferenceModel getReferenceModel() {
 		if (referenceModel != null && referenceModel.eIsProxy()) {
 			InternalEObject oldReferenceModel = (InternalEObject)referenceModel;
@@ -635,6 +711,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return getPromptPeriodStart();
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_END:
 				return getPromptPeriodEnd();
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULING_END_DATE:
+				return getSchedulingEndDate();
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL:
 				if (resolve) return getReferenceModel();
 				return basicGetReferenceModel();
@@ -667,6 +745,9 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_END:
 				setPromptPeriodEnd((LocalDate)newValue);
+				return;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULING_END_DATE:
+				setSchedulingEndDate((LocalDate)newValue);
 				return;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL:
 				setReferenceModel((LNGReferenceModel)newValue);
@@ -701,6 +782,9 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_END:
 				unsetPromptPeriodEnd();
 				return;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULING_END_DATE:
+				unsetSchedulingEndDate();
+				return;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL:
 				setReferenceModel((LNGReferenceModel)null);
 				return;
@@ -729,6 +813,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return isSetPromptPeriodStart();
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_END:
 				return isSetPromptPeriodEnd();
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULING_END_DATE:
+				return isSetSchedulingEndDate();
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL:
 				return referenceModel != null;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS:
@@ -751,6 +837,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 		if (promptPeriodStartESet) result.append(promptPeriodStart); else result.append("<unset>");
 		result.append(", promptPeriodEnd: ");
 		if (promptPeriodEndESet) result.append(promptPeriodEnd); else result.append("<unset>");
+		result.append(", schedulingEndDate: ");
+		if (schedulingEndDateESet) result.append(schedulingEndDate); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

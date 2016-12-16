@@ -176,8 +176,17 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getLNGScenarioModel_SchedulingEndDate() {
+		return (EAttribute)lngScenarioModelEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getLNGScenarioModel_ReferenceModel() {
-		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(5);
+		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -186,7 +195,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * @generated
 	 */
 	public EReference getLNGScenarioModel_UserSettings() {
-		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(6);
+		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -295,6 +304,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__ACTUALS_MODEL);
 		createEAttribute(lngScenarioModelEClass, LNG_SCENARIO_MODEL__PROMPT_PERIOD_START);
 		createEAttribute(lngScenarioModelEClass, LNG_SCENARIO_MODEL__PROMPT_PERIOD_END);
+		createEAttribute(lngScenarioModelEClass, LNG_SCENARIO_MODEL__SCHEDULING_END_DATE);
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__REFERENCE_MODEL);
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__USER_SETTINGS);
 
@@ -360,6 +370,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		initEReference(getLNGScenarioModel_ActualsModel(), theActualsPackage.getActualsModel(), null, "actualsModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLNGScenarioModel_PromptPeriodStart(), theDateTimePackage.getLocalDate(), "promptPeriodStart", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLNGScenarioModel_PromptPeriodEnd(), theDateTimePackage.getLocalDate(), "promptPeriodEnd", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLNGScenarioModel_SchedulingEndDate(), theDateTimePackage.getLocalDate(), "schedulingEndDate", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGScenarioModel_ReferenceModel(), this.getLNGReferenceModel(), null, "referenceModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGScenarioModel_UserSettings(), theParametersPackage.getUserSettings(), null, "userSettings", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

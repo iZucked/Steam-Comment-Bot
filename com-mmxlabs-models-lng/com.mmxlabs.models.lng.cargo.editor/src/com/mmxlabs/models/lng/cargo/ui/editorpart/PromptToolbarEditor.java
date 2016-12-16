@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.time.LocalDate;
+
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Notification;
@@ -12,9 +13,16 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.ControlContribution;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.MenuDetectEvent;
+import org.eclipse.swt.events.MenuDetectListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
@@ -25,9 +33,11 @@ import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
 
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
+import com.mmxlabs.rcp.common.actions.RunnableAction;
 
 public class PromptToolbarEditor extends ControlContribution {
 
@@ -46,10 +56,10 @@ public class PromptToolbarEditor extends ControlContribution {
 			final Composite toolbarComposite = pparent.getParent();
 			// Get the height of the composite.
 			int toolbarHeight = toolbarComposite.getSize().y;
-			// Fix issue in workbench. On opening the application, the toolbar height is 44 allowing large buttons. However the real hight is only 22 (and this is correct when opening an editor after
+			// Fix issue in workbench. On opening the application, the toolbar height is 44 allowing large buttons. However the real height is only 22 (and this is correct when opening an editor after
 			// the application has opened). This will probably cause issues on e.g. Alex's machine when running at high resolution (3840x2160 -- icons are already tiny on this mode).
-			if (toolbarHeight > 22) {
-				toolbarHeight = 22;
+			if (toolbarHeight > 23) {
+				toolbarHeight = 23;
 			}
 			final Point size = btn.getSize();
 
@@ -65,6 +75,7 @@ public class PromptToolbarEditor extends ControlContribution {
 
 	private DateTime periodStartEditor;
 	private DateTime periodEndEditor;
+	private DateTime scheduleEndEditor;
 
 	private boolean locked = false;
 
@@ -88,10 +99,26 @@ public class PromptToolbarEditor extends ControlContribution {
 					periodEndEditor.setDay(date.getDayOfMonth());
 					periodEndEditor.setEnabled(true);
 				}
+			} else if (notification.getFeature() == LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SchedulingEndDate()) {
+				if (newValue != null) {
+					lbl3.setText(" Scheduling end: ");
+
+					final LocalDate date = (LocalDate) newValue;
+					scheduleEndEditor.setYear(date.getYear());
+					scheduleEndEditor.setMonth(date.getMonthValue() - 1);
+					scheduleEndEditor.setDay(date.getDayOfMonth());
+					scheduleEndEditor.setEnabled(true);
+
+				} else {
+					lbl3.setText(" No scheduling end: ");
+					scheduleEndEditor.setEnabled(false);
+
+				}
 			}
 		}
 	};
 	private Button btn90Day;
+	private Label lbl3;
 
 	public PromptToolbarEditor(final String id, final EditingDomain editingDomain, final LNGScenarioModel scenarioModel) {
 		super(id);
@@ -103,25 +130,24 @@ public class PromptToolbarEditor extends ControlContribution {
 	protected Control createControl(final Composite ppparent) {
 
 		final Composite pparent = new Composite(ppparent, SWT.NONE);
-		pparent.setLayout(GridLayoutFactory.fillDefaults().numColumns(6).equalWidth(false).spacing(3, 0).margins(0, 0).create());
+		pparent.setLayout(GridLayoutFactory.fillDefaults().numColumns(8).equalWidth(false).spacing(3, 0).margins(0, 0).create());
 
 		final Label lbl = new Label(pparent, SWT.NONE);
 		lbl.setText("Prompt:");
-		lbl.setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
+		lbl.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP).minSize(1000, -1).create());
 
 		final CompoundCommand setDefaultPromptCommand = new CompoundCommand("Set default prompt");
 
 		periodStartEditor = new DateTime(pparent, SWT.DATE | SWT.BORDER | SWT.DROP_DOWN);
 		periodStartEditor.setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
 		{
-                        if (scenarioModel.isSetPromptPeriodStart()) {
+			if (scenarioModel.isSetPromptPeriodStart()) {
 				final LocalDate date = scenarioModel.getPromptPeriodStart();
 				periodStartEditor.setYear(date.getYear());
 				periodStartEditor.setMonth(date.getMonthValue() - 1);
 				periodStartEditor.setDay(date.getDayOfMonth());
 			} else {
-				setDefaultPromptCommand
-						.append(SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodStart(), LocalDate.now()));
+				setDefaultPromptCommand.append(SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodStart(), LocalDate.now()));
 			}
 		}
 		periodStartEditor.addSelectionListener(new SelectionListener() {
@@ -142,9 +168,12 @@ public class PromptToolbarEditor extends ControlContribution {
 
 		final Label lbl2 = new Label(pparent, SWT.NONE);
 		lbl2.setText(" to ");
+		lbl2.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP). create());
 
 		periodEndEditor = new DateTime(pparent, SWT.DATE | SWT.BORDER | SWT.DROP_DOWN);
-		periodEndEditor.setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
+//		.setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
+		periodEndEditor.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP). create());
+
 		{
 			if (scenarioModel.isSetPromptPeriodEnd()) {
 				final LocalDate date = scenarioModel.getPromptPeriodEnd();
@@ -154,8 +183,7 @@ public class PromptToolbarEditor extends ControlContribution {
 				// periodEndEnabled.setSelection(true);
 			} else {
 
-				setDefaultPromptCommand
-						.append(SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodEnd(), LocalDate.now().plusDays(90)));
+				setDefaultPromptCommand.append(SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodEnd(), LocalDate.now().plusDays(90)));
 			}
 		}
 		periodEndEditor.addSelectionListener(new SelectionListener() {
@@ -196,6 +224,69 @@ public class PromptToolbarEditor extends ControlContribution {
 		// Limit height to toolbar height.
 		btn90Day.addListener(SWT.Resize, new LimitWidgetHeightListener(pparent, btn90Day));
 
+		lbl3 = new Label(pparent, SWT.NONE);
+		lbl3.setText(" No Scheduling end ");
+		lbl3.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.TOP). create());
+
+		hookScheduleEndDateMenu(lbl3);
+
+		scheduleEndEditor = new DateTime(pparent, SWT.DATE | SWT.BORDER | SWT.DROP_DOWN);
+		scheduleEndEditor.setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
+		hookScheduleEndDateMenu(scheduleEndEditor);
+
+		{
+			if (scenarioModel.isSetSchedulingEndDate()) {
+				lbl3.setText(" Scheduling end ");
+				final LocalDate date = scenarioModel.getSchedulingEndDate();
+				scheduleEndEditor.setYear(date.getYear());
+				scheduleEndEditor.setMonth(date.getMonthValue() - 1);
+				scheduleEndEditor.setDay(date.getDayOfMonth());
+				scheduleEndEditor.setEnabled(true);
+				// periodEndEnabled.setSelection(true);
+			} else {
+				lbl3.setText(" No Scheduling end ");
+				scheduleEndEditor.setEnabled(false);
+				// setDefaultPromptCommand.append(SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SchedulingEndDate(), LocalDate.now().plusDays(90)));
+			}
+		}
+	 
+		scheduleEndEditor.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseUp(final MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseDown(final MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseDoubleClick(final MouseEvent e) {
+				if (!scenarioModel.isSetSchedulingEndDate()) {
+					final Command cmd = SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SchedulingEndDate(), LocalDate.now().plusMonths(9));
+					editingDomain.getCommandStack().execute(cmd);
+				}
+			}
+		});
+	 
+		scheduleEndEditor.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				final LocalDate date = LocalDate.of(scheduleEndEditor.getYear(), scheduleEndEditor.getMonth() + 1, scheduleEndEditor.getDay());
+				final Command cmd = SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SchedulingEndDate(), date);
+				editingDomain.getCommandStack().execute(cmd);
+			}
+
+			@Override
+			public void widgetDefaultSelected(final SelectionEvent e) {
+
+			}
+
+		});
+
 		// Listen to further changes
 		scenarioModel.eAdapters().add(adapter);
 
@@ -204,6 +295,44 @@ public class PromptToolbarEditor extends ControlContribution {
 		}
 
 		return pparent;
+	}
+
+	private void hookScheduleEndDateMenu(final Control control) {
+		final MenuManager mgr2 = new MenuManager();
+		control.addDisposeListener(new DisposeListener() {
+			
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				mgr2.dispose();
+			}
+		});
+		control.addMenuDetectListener(new MenuDetectListener() {
+			Menu menu;
+
+			@Override
+			public void menuDetected(final MenuDetectEvent e) {
+				mgr2.removeAll();
+				if (menu == null) {
+					menu = mgr2.createContextMenu(control);
+					control.setMenu(menu);
+				}
+				if (scenarioModel.isSetSchedulingEndDate()) {
+					mgr2.add(new RunnableAction("Remove schedule end date", () -> {
+						final Command cmd = SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SchedulingEndDate(), SetCommand.UNSET_VALUE);
+						editingDomain.getCommandStack().execute(cmd);
+					}));
+					// mgr.getMenu().setVisible(true);
+
+				} else {
+					mgr2.add(new RunnableAction("Set schedule end date", () -> {
+						final Command cmd = SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SchedulingEndDate(), LocalDate.now().plusMonths(6));
+						editingDomain.getCommandStack().execute(cmd);
+					}));
+				}
+				menu.setVisible(true);
+				mgr2.setVisible(true);
+			}
+		});
 	}
 
 	@Override
@@ -224,6 +353,9 @@ public class PromptToolbarEditor extends ControlContribution {
 		this.locked = locked;
 		periodStartEditor.setEnabled(!locked);
 		periodEndEditor.setEnabled(!locked);
+		if (scenarioModel != null) {
+			scheduleEndEditor.setEnabled(!locked && scenarioModel.isSetSchedulingEndDate());
+		}
 		btn90Day.setEnabled(!locked);
 	}
 }
