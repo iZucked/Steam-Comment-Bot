@@ -278,9 +278,6 @@ public class ScenarioComparisonTransformer {
 						if (groupProfitAndLoss != null) {
 							pnl += groupProfitAndLoss.getProfitAndLoss();
 						}
-						if (newGroupProfitAndLoss instanceof CargoAllocation) {
-							final CargoAllocation cargoAllocation = (CargoAllocation) newGroupProfitAndLoss;
-						}
 					}
 					final EventGrouping newEventGrouping = row.getNewEventGrouping();
 					if (newEventGrouping != null) {
@@ -299,8 +296,8 @@ public class ScenarioComparisonTransformer {
 					}
 					final EventGrouping originalEventGrouping = row.getOriginalEventGrouping();
 					if (originalEventGrouping != null) {
-						lateness = LatenessUtils.getLatenessExcludingFlex(originalEventGrouping);
-						violations = ScheduleModelKPIUtils.getCapacityViolationCount(originalEventGrouping);
+						lateness -= LatenessUtils.getLatenessExcludingFlex(originalEventGrouping);
+						violations -= ScheduleModelKPIUtils.getCapacityViolationCount(originalEventGrouping);
 					}
 				}
 			}
