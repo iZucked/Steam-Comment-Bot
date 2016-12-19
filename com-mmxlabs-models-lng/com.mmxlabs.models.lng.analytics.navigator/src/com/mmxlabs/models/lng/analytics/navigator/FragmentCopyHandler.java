@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
@@ -37,6 +39,7 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
@@ -156,17 +159,17 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 							}
 						}
 
-						Consumer<ShippingOption> updateShipping = (option) -> {
+						final Consumer<ShippingOption> updateShipping = (option) -> {
 							if (option == null) {
 								return;
 							}
 							if (option instanceof NominatedShippingOption) {
-								NominatedShippingOption opt = (NominatedShippingOption) option;
+								final NominatedShippingOption opt = (NominatedShippingOption) option;
 								if (opt.getNominatedVessel() != null) {
 									opt.setNominatedVessel(vesselMapping.get(opt.getNominatedVessel().getName()));
 								}
 							} else if (option instanceof FleetShippingOption) {
-								FleetShippingOption opt = (FleetShippingOption) option;
+								final FleetShippingOption opt = (FleetShippingOption) option;
 								if (opt.getVessel() != null) {
 									opt.setVessel(vesselMapping.get(opt.getVessel().getName()));
 								}
@@ -174,24 +177,28 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 									opt.setEntity(entityMapping.get(opt.getEntity().getName()));
 								}
 							} else if (option instanceof RoundTripShippingOption) {
-								RoundTripShippingOption opt = (RoundTripShippingOption) option;
+								final RoundTripShippingOption opt = (RoundTripShippingOption) option;
 								if (opt.getVesselClass() != null) {
 									opt.setVesselClass(vesselClassMapping.get(opt.getVesselClass().getName()));
 								}
 							}
 						};
 
-//						for (BaseCaseRow row : copyModel.getBaseCase().getBaseCase()) {
-//							updateShipping.accept(row.getShipping());
-//						}
-//						for (PartialCaseRow row : copyModel.getPartialCase().getPartialCase()) {
-//							updateShipping.accept(row.getShipping());
-//						}
-						for (ShippingOption opt : copyModel.getShippingTemplates()) {
+						// for (BaseCaseRow row : copyModel.getBaseCase().getBaseCase()) {
+						// updateShipping.accept(row.getShipping());
+						// }
+						// for (PartialCaseRow row : copyModel.getPartialCase().getPartialCase()) {
+						// updateShipping.accept(row.getShipping());
+						// }
+						for (final ShippingOption opt : copyModel.getShippingTemplates()) {
 							updateShipping.accept(opt);
 						}
-						target.setDirty(true);
-						targetModel.getOptionModels().add(copyModel);
+						// target.setDirty(true);
+						// targetModel.getOptionModels().add(copyModel);
+
+						final EditingDomain domain = (EditingDomain) target.getAdapters().get(EditingDomain.class);
+						domain.getCommandStack().execute(AddCommand.create(domain, targetModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_OptionModels(), copyModel));
+
 						return true;
 					}
 				}
@@ -203,63 +210,63 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 
 	}
 
-	private Map<String, Port> generatePortMapping(LNGScenarioModel lngScenarioModel) {
-		PortModel model = ScenarioModelUtil.getPortModel(lngScenarioModel);
+	private Map<String, Port> generatePortMapping(final LNGScenarioModel lngScenarioModel) {
+		final PortModel model = ScenarioModelUtil.getPortModel(lngScenarioModel);
 		return model.getPorts().stream().collect(Collectors.toMap(NamedObject::getName, Function.identity()));
 	}
 
-	private Map<String, BaseLegalEntity> generateEntityMapping(LNGScenarioModel lngScenarioModel) {
-		CommercialModel model = ScenarioModelUtil.getCommercialModel(lngScenarioModel);
+	private Map<String, BaseLegalEntity> generateEntityMapping(final LNGScenarioModel lngScenarioModel) {
+		final CommercialModel model = ScenarioModelUtil.getCommercialModel(lngScenarioModel);
 		return model.getEntities().stream().collect(Collectors.toMap(NamedObject::getName, Function.identity()));
 	}
 
-	private Map<String, PurchaseContract> generatePurchaseContractMapping(LNGScenarioModel lngScenarioModel) {
-		CommercialModel model = ScenarioModelUtil.getCommercialModel(lngScenarioModel);
+	private Map<String, PurchaseContract> generatePurchaseContractMapping(final LNGScenarioModel lngScenarioModel) {
+		final CommercialModel model = ScenarioModelUtil.getCommercialModel(lngScenarioModel);
 		return model.getPurchaseContracts().stream().collect(Collectors.toMap(NamedObject::getName, Function.identity()));
 	}
 
-	private Map<String, SalesContract> generateSalesContractMapping(LNGScenarioModel lngScenarioModel) {
-		CommercialModel model = ScenarioModelUtil.getCommercialModel(lngScenarioModel);
+	private Map<String, SalesContract> generateSalesContractMapping(final LNGScenarioModel lngScenarioModel) {
+		final CommercialModel model = ScenarioModelUtil.getCommercialModel(lngScenarioModel);
 		return model.getSalesContracts().stream().collect(Collectors.toMap(NamedObject::getName, Function.identity()));
 	}
 
-	private Map<String, SpotMarket> generateDESSaleMarketMapping(LNGScenarioModel lngScenarioModel) {
-		SpotMarketsModel model = ScenarioModelUtil.getSpotMarketsModel(lngScenarioModel);
+	private Map<String, SpotMarket> generateDESSaleMarketMapping(final LNGScenarioModel lngScenarioModel) {
+		final SpotMarketsModel model = ScenarioModelUtil.getSpotMarketsModel(lngScenarioModel);
 		return model.getDesSalesSpotMarket().getMarkets().stream().collect(Collectors.toMap(NamedObject::getName, Function.identity()));
 	}
 
-	private Map<String, SpotMarket> generateFOBSaleMarketMapping(LNGScenarioModel lngScenarioModel) {
-		SpotMarketsModel model = ScenarioModelUtil.getSpotMarketsModel(lngScenarioModel);
+	private Map<String, SpotMarket> generateFOBSaleMarketMapping(final LNGScenarioModel lngScenarioModel) {
+		final SpotMarketsModel model = ScenarioModelUtil.getSpotMarketsModel(lngScenarioModel);
 		return model.getFobSalesSpotMarket().getMarkets().stream().collect(Collectors.toMap(NamedObject::getName, Function.identity()));
 	}
 
-	private Map<String, SpotMarket> generateFOBPurchaseMarketMapping(LNGScenarioModel lngScenarioModel) {
-		SpotMarketsModel model = ScenarioModelUtil.getSpotMarketsModel(lngScenarioModel);
+	private Map<String, SpotMarket> generateFOBPurchaseMarketMapping(final LNGScenarioModel lngScenarioModel) {
+		final SpotMarketsModel model = ScenarioModelUtil.getSpotMarketsModel(lngScenarioModel);
 		return model.getFobPurchasesSpotMarket().getMarkets().stream().collect(Collectors.toMap(NamedObject::getName, Function.identity()));
 	}
 
-	private Map<String, SpotMarket> generateDESPurchaseMarketMapping(LNGScenarioModel lngScenarioModel) {
-		SpotMarketsModel model = ScenarioModelUtil.getSpotMarketsModel(lngScenarioModel);
+	private Map<String, SpotMarket> generateDESPurchaseMarketMapping(final LNGScenarioModel lngScenarioModel) {
+		final SpotMarketsModel model = ScenarioModelUtil.getSpotMarketsModel(lngScenarioModel);
 		return model.getDesPurchaseSpotMarket().getMarkets().stream().collect(Collectors.toMap(NamedObject::getName, Function.identity()));
 	}
 
-	private Map<String, LoadSlot> generateLoadMapping(LNGScenarioModel lngScenarioModel) {
-		CargoModel model = ScenarioModelUtil.getCargoModel(lngScenarioModel);
+	private Map<String, LoadSlot> generateLoadMapping(final LNGScenarioModel lngScenarioModel) {
+		final CargoModel model = ScenarioModelUtil.getCargoModel(lngScenarioModel);
 		return model.getLoadSlots().stream().collect(Collectors.toMap(NamedObject::getName, Function.identity()));
 	}
 
-	private Map<String, DischargeSlot> generateDischargeMapping(LNGScenarioModel lngScenarioModel) {
-		CargoModel model = ScenarioModelUtil.getCargoModel(lngScenarioModel);
+	private Map<String, DischargeSlot> generateDischargeMapping(final LNGScenarioModel lngScenarioModel) {
+		final CargoModel model = ScenarioModelUtil.getCargoModel(lngScenarioModel);
 		return model.getDischargeSlots().stream().collect(Collectors.toMap(NamedObject::getName, Function.identity()));
 	}
 
-	private Map<String, Vessel> generateVesselMapping(LNGScenarioModel lngScenarioModel) {
-		FleetModel model = ScenarioModelUtil.getFleetModel(lngScenarioModel);
+	private Map<String, Vessel> generateVesselMapping(final LNGScenarioModel lngScenarioModel) {
+		final FleetModel model = ScenarioModelUtil.getFleetModel(lngScenarioModel);
 		return model.getVessels().stream().collect(Collectors.toMap(NamedObject::getName, Function.identity()));
 	}
 
-	private Map<String, VesselClass> generateVesselClassMapping(LNGScenarioModel lngScenarioModel) {
-		FleetModel model = ScenarioModelUtil.getFleetModel(lngScenarioModel);
+	private Map<String, VesselClass> generateVesselClassMapping(final LNGScenarioModel lngScenarioModel) {
+		final FleetModel model = ScenarioModelUtil.getFleetModel(lngScenarioModel);
 		return model.getVesselClasses().stream().collect(Collectors.toMap(NamedObject::getName, Function.identity()));
 	}
 
