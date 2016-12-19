@@ -1,6 +1,9 @@
 package com.mmxlabs.lingo.reports.services;
 
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -38,7 +41,7 @@ public class ScenarioChangeSetService {
 	private boolean diffToBase;
 	private ChangeSetRoot changeSetRoot;
 	private ChangeSet changeSet;
-	private ChangeSetRow changeSetRow;
+	private Collection<ChangeSetRow> changeSetRows;
 
 	private final ConcurrentLinkedQueue<IScenarioChangeSetListener> listeners = new ConcurrentLinkedQueue<>();
 
@@ -56,8 +59,8 @@ public class ScenarioChangeSetService {
 	}
 
 	@Nullable
-	public ChangeSetRow getSelectedChangeSetRows() {
-		return changeSetRow;
+	public Collection<ChangeSetRow> getSelectedChangeSetRows() {
+		return changeSetRows;
 	}
 
 	// Keeping this reference as we probably need to extract out the diff to base value from here
@@ -78,14 +81,14 @@ public class ScenarioChangeSetService {
 					final boolean diffToBase = false;
 					ChangeSetRoot root = null;
 					ChangeSet set = null;
-					ChangeSetRow row = null;
+					final List<ChangeSetRow> rows = new LinkedList<>();
 
 					final Iterator<?> itr = structuredSelection.iterator();
 					while (itr.hasNext()) {
 						Object o = itr.next();
 						if (o instanceof ChangeSetRow) {
 							final ChangeSetRow r = (ChangeSetRow) o;
-							row = r;
+							rows.add(r);
 							o = r.eContainer();
 						}
 						if (o instanceof ChangeSet) {
@@ -99,7 +102,7 @@ public class ScenarioChangeSetService {
 						}
 					}
 
-					fireListeners(root, set, row, diffToBase);
+					fireListeners(root, set, rows, diffToBase);
 					return;
 				}
 
@@ -176,7 +179,7 @@ public class ScenarioChangeSetService {
 	}
 
 	public void triggerListener(final IScenarioChangeSetListener l) {
-		l.changeSetChanged(changeSetRoot, changeSet, changeSetRow, diffToBase);
+		l.changeSetChanged(changeSetRoot, changeSet, changeSetRows, diffToBase);
 	}
 
 	public void addListener(final IScenarioChangeSetListener l) {
@@ -187,13 +190,14 @@ public class ScenarioChangeSetService {
 		listeners.remove(l);
 	}
 
-	private synchronized void fireListeners(@Nullable final ChangeSetRoot changeSetRoot, @Nullable final ChangeSet changeSet, @Nullable final ChangeSetRow changeSetRow, final boolean diffToBase) {
+	private synchronized void fireListeners(@Nullable final ChangeSetRoot changeSetRoot, @Nullable final ChangeSet changeSet, @Nullable final Collection<ChangeSetRow> changeSetRows,
+			final boolean diffToBase) {
 		this.changeSetRoot = changeSetRoot;
 		this.changeSet = changeSet;
-		this.changeSetRow = changeSetRow;
+		this.changeSetRows = changeSetRows;
 		this.diffToBase = diffToBase;
 		for (final IScenarioChangeSetListener l : listeners) {
-			l.changeSetChanged(changeSetRoot, changeSet, changeSetRow, diffToBase);
+			l.changeSetChanged(changeSetRoot, changeSet, changeSetRows, diffToBase);
 		}
 	}
 }

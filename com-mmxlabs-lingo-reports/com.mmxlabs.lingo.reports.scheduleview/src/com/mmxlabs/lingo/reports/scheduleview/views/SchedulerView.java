@@ -497,16 +497,16 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 					};
 
 					final boolean isDiffToBase = scenarioChangeSetService.isDiffToBase();
-					final ChangeSet changeSet = scenarioChangeSetService.getChangeSet();
-
+					// final ChangeSet changeSet = scenarioChangeSetService.getChangeSet();
+					final Collection<ChangeSetRow> csRows = scenarioChangeSetService.getSelectedChangeSetRows();
 					{
-						if (changeSet != null) {
-							final List<ChangeSetRow> csRows;
-							if (isDiffToBase) {
-								csRows = changeSet.getChangeSetRowsToBase();
-							} else {
-								csRows = changeSet.getChangeSetRowsToPrevious();
-							}
+						if (csRows != null) {
+							// final List<ChangeSetRow> csRows;
+							// if (isDiffToBase) {
+							// csRows = changeSet.getChangeSetRowsToBase();
+							// } else {
+							// csRows = changeSet.getChangeSetRowsToPrevious();
+							// }
 							final Color lineColour = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 
 							for (final ChangeSetRow csRow : csRows) {
@@ -1293,7 +1293,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 	private final IScenarioChangeSetListener scenarioChangeSetListener = new IScenarioChangeSetListener() {
 		@Override
-		public void changeSetChanged(@Nullable final ChangeSetRoot changeSetRoot, @Nullable final ChangeSet changeSet, @Nullable final ChangeSetRow changeSetRow, final boolean diffToBase) {
+		public void changeSetChanged(@Nullable final ChangeSetRoot changeSetRoot, @Nullable final ChangeSet changeSet, @Nullable final Collection<ChangeSetRow> changeSetRows, final boolean diffToBase) {
 			ViewerHelper.refresh(viewer, true);
 		}
 	};
