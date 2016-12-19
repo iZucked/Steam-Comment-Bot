@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.its.internal;
 
+import java.util.Locale;
+
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.ops4j.peaberry.Export;
 import org.osgi.framework.BundleContext;
@@ -56,6 +58,10 @@ public class Activator extends AbstractUIPlugin {
 		// Bind our module together with the hooks to the eclipse registry to get plugin extensions.
 		Injector injector = Guice.createInjector(new ExtensionConfigurationModule(getBundle().getBundleContext()), new ParameterModesExtensionModule());
 		injector.injectMembers(this);
+
+		// Enforce UK Locale Needed for running tests on build server. Keeps date format consistent.
+		// Also in the AbstractOptimisationResultTester, but does not seem to always work...
+		Locale.setDefault(Locale.UK);
 	}
 
 	/*
@@ -67,7 +73,6 @@ public class Activator extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
-		
 
 		parameterModesRegistry.unput();
 		parameterModesRegistry = null;
