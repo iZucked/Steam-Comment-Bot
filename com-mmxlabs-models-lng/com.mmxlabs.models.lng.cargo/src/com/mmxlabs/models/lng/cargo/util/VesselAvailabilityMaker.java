@@ -97,7 +97,7 @@ public class VesselAvailabilityMaker {
 		if (fee != null) {
 			vesselAvailability.setRepositioningFee(fee);
 		} else {
-			vesselAvailability.unsetRepositioningFee();
+			vesselAvailability.setRepositioningFee("");
 		}
 		return this;
 	}
@@ -106,7 +106,7 @@ public class VesselAvailabilityMaker {
 		if (fee != null) {
 			vesselAvailability.setBallastBonus(fee);
 		} else {
-			vesselAvailability.unsetBallastBonus();
+			vesselAvailability.setBallastBonus("");
 		}
 		return this;
 	}

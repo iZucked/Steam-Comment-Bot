@@ -345,15 +345,6 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	protected String repositioningFee = REPOSITIONING_FEE_EDEFAULT;
 
 	/**
-	 * This is true if the Repositioning Fee attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean repositioningFeeESet;
-
-	/**
 	 * The default value of the '{@link #getBallastBonus() <em>Ballast Bonus</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -372,15 +363,6 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @ordered
 	 */
 	protected String ballastBonus = BALLAST_BONUS_EDEFAULT;
-
-	/**
-	 * This is true if the Ballast Bonus attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean ballastBonusESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -905,33 +887,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	public void setRepositioningFee(String newRepositioningFee) {
 		String oldRepositioningFee = repositioningFee;
 		repositioningFee = newRepositioningFee;
-		boolean oldRepositioningFeeESet = repositioningFeeESet;
-		repositioningFeeESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__REPOSITIONING_FEE, oldRepositioningFee, repositioningFee, !oldRepositioningFeeESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetRepositioningFee() {
-		String oldRepositioningFee = repositioningFee;
-		boolean oldRepositioningFeeESet = repositioningFeeESet;
-		repositioningFee = REPOSITIONING_FEE_EDEFAULT;
-		repositioningFeeESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.VESSEL_AVAILABILITY__REPOSITIONING_FEE, oldRepositioningFee, REPOSITIONING_FEE_EDEFAULT, oldRepositioningFeeESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetRepositioningFee() {
-		return repositioningFeeESet;
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__REPOSITIONING_FEE, oldRepositioningFee, repositioningFee));
 	}
 
 	/**
@@ -951,33 +908,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	public void setBallastBonus(String newBallastBonus) {
 		String oldBallastBonus = ballastBonus;
 		ballastBonus = newBallastBonus;
-		boolean oldBallastBonusESet = ballastBonusESet;
-		ballastBonusESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS, oldBallastBonus, ballastBonus, !oldBallastBonusESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetBallastBonus() {
-		String oldBallastBonus = ballastBonus;
-		boolean oldBallastBonusESet = ballastBonusESet;
-		ballastBonus = BALLAST_BONUS_EDEFAULT;
-		ballastBonusESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS, oldBallastBonus, BALLAST_BONUS_EDEFAULT, oldBallastBonusESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetBallastBonus() {
-		return ballastBonusESet;
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS, oldBallastBonus, ballastBonus));
 	}
 
 	/**
@@ -1257,10 +1189,10 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				setOptional(OPTIONAL_EDEFAULT);
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__REPOSITIONING_FEE:
-				unsetRepositioningFee();
+				setRepositioningFee(REPOSITIONING_FEE_EDEFAULT);
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS:
-				unsetBallastBonus();
+				setBallastBonus(BALLAST_BONUS_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -1303,9 +1235,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__OPTIONAL:
 				return optional != OPTIONAL_EDEFAULT;
 			case CargoPackage.VESSEL_AVAILABILITY__REPOSITIONING_FEE:
-				return isSetRepositioningFee();
+				return REPOSITIONING_FEE_EDEFAULT == null ? repositioningFee != null : !REPOSITIONING_FEE_EDEFAULT.equals(repositioningFee);
 			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS:
-				return isSetBallastBonus();
+				return BALLAST_BONUS_EDEFAULT == null ? ballastBonus != null : !BALLAST_BONUS_EDEFAULT.equals(ballastBonus);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1357,9 +1289,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		result.append(", optional: ");
 		result.append(optional);
 		result.append(", repositioningFee: ");
-		if (repositioningFeeESet) result.append(repositioningFee); else result.append("<unset>");
+		result.append(repositioningFee);
 		result.append(", ballastBonus: ");
-		if (ballastBonusESet) result.append(ballastBonus); else result.append("<unset>");
+		result.append(ballastBonus);
 		result.append(')');
 		return result.toString();
 	}

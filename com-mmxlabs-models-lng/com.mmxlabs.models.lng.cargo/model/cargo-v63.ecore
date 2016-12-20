@@ -257,7 +257,7 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="optional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="repositioningFee" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" unsettable="true">
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="$/day"/>
       </eAnnotations>
@@ -266,7 +266,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastBonus" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" unsettable="true">
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="$/day"/>
       </eAnnotations>
@@ -301,16 +301,6 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="relocateTo" lowerBound="1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"
         unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="heelOptions" lowerBound="1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//HeelOptions"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repositioningFee" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
-      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="unit" value="$"/>
-        <details key="formatString" value="###,##0"/>
-      </eAnnotations>
-    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="hireRate" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
@@ -319,12 +309,22 @@
       </eAnnotations>
       <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
         <details key="type" value="charter"/>
-      </eAnnotations>      
+      </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="heelOptions" lowerBound="1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//HeelOptions"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastBonus" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="$"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repositioningFee" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="$"/>
+        <details key="formatString" value="###,##0"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>

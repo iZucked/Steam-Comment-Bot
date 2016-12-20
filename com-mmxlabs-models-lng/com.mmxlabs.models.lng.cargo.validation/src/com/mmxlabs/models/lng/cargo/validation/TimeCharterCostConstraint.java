@@ -41,12 +41,6 @@ public class TimeCharterCostConstraint extends AbstractModelMultiConstraint {
 			if (vesselAvailability.isSetTimeCharterRate()) {
 				addErrors(vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_TimeCharterRate(), "charter", ctx, failures);
 			}
-			if (vesselAvailability.isSetRepositioningFee()) {
-				addErrors(vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_RepositioningFee(), "repositioning", ctx, failures);
-			}
-			if (vesselAvailability.isSetBallastBonus()) {
-				addErrors(vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_BallastBonus(), "ballast bonus", ctx, failures);
-			}
 		}
 
 		return Activator.PLUGIN_ID;

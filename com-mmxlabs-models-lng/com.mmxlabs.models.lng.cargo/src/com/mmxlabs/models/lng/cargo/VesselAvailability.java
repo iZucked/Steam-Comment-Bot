@@ -515,11 +515,9 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Repositioning Fee</em>' attribute.
-	 * @see #isSetRepositioningFee()
-	 * @see #unsetRepositioningFee()
 	 * @see #setRepositioningFee(String)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_RepositioningFee()
-	 * @model unsettable="true" required="true"
+	 * @model required="true"
 	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$/day'"
 	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='charter'"
 	 * @generated
@@ -531,35 +529,10 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Repositioning Fee</em>' attribute.
-	 * @see #isSetRepositioningFee()
-	 * @see #unsetRepositioningFee()
 	 * @see #getRepositioningFee()
 	 * @generated
 	 */
 	void setRepositioningFee(String value);
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getRepositioningFee <em>Repositioning Fee</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetRepositioningFee()
-	 * @see #getRepositioningFee()
-	 * @see #setRepositioningFee(String)
-	 * @generated
-	 */
-	void unsetRepositioningFee();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getRepositioningFee <em>Repositioning Fee</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Repositioning Fee</em>' attribute is set.
-	 * @see #unsetRepositioningFee()
-	 * @see #getRepositioningFee()
-	 * @see #setRepositioningFee(String)
-	 * @generated
-	 */
-	boolean isSetRepositioningFee();
 
 	/**
 	 * Returns the value of the '<em><b>Ballast Bonus</b></em>' attribute.
@@ -570,11 +543,9 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Ballast Bonus</em>' attribute.
-	 * @see #isSetBallastBonus()
-	 * @see #unsetBallastBonus()
 	 * @see #setBallastBonus(String)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_BallastBonus()
-	 * @model unsettable="true" required="true"
+	 * @model required="true"
 	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$/day'"
 	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='charter'"
 	 * @generated
@@ -586,35 +557,10 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Ballast Bonus</em>' attribute.
-	 * @see #isSetBallastBonus()
-	 * @see #unsetBallastBonus()
 	 * @see #getBallastBonus()
 	 * @generated
 	 */
 	void setBallastBonus(String value);
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonus <em>Ballast Bonus</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetBallastBonus()
-	 * @see #getBallastBonus()
-	 * @see #setBallastBonus(String)
-	 * @generated
-	 */
-	void unsetBallastBonus();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonus <em>Ballast Bonus</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Ballast Bonus</em>' attribute is set.
-	 * @see #unsetBallastBonus()
-	 * @see #getBallastBonus()
-	 * @see #setBallastBonus(String)
-	 * @generated
-	 */
-	boolean isSetBallastBonus();
 
 	/**
 	 * <!-- begin-user-doc -->
