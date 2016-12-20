@@ -261,20 +261,20 @@ public class ScheduleModelKPIUtils {
 	}
 
 	public static long getCancellationFees(@Nullable final ProfitAndLossContainer profitAndLossContainer) {
-		long addnPNL = 0;
+		long cancellationFees = 0;
 		if (profitAndLossContainer != null) {
 			for (final GeneralPNLDetails generalPNLDetails : profitAndLossContainer.getGeneralPNLDetails()) {
 				if (generalPNLDetails instanceof SlotPNLDetails) {
 					final SlotPNLDetails slotPNLDetails = (SlotPNLDetails) generalPNLDetails;
 					for (final GeneralPNLDetails details : slotPNLDetails.getGeneralPNLDetails()) {
 						if (details instanceof BasicSlotPNLDetails) {
-							addnPNL -= ((BasicSlotPNLDetails) details).getCancellationFees();
+							cancellationFees += ((BasicSlotPNLDetails) details).getCancellationFees();
 						}
 					}
 				}
 			}
 		}
-		return addnPNL;
+		return cancellationFees;
 	}
 
 	public static long getAdditionalShippingProfitAndLoss(@Nullable final ProfitAndLossContainer profitAndLossContainer) {
