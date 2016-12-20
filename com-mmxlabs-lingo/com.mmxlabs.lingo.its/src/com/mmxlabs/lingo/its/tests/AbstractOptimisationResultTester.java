@@ -247,13 +247,17 @@ public class AbstractOptimisationResultTester {
 	 */
 
 	public void testReports(final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
+		testReports(scenarioURL, reportID, shortName, extension, null);
+	}
+
+	public void testReports(final URL scenarioURL, final String reportID, final String shortName, final String extension, @Nullable Consumer<ScenarioInstance> preAction) throws Exception {
 
 		final URI uri = URI.createURI(FileLocator.toFileURL(scenarioURL).toString().replaceAll(" ", "%20"));
 		ServiceHelper.withCheckedOptionalService(IScenarioCipherProvider.class, scenarioCipherProvider -> {
 			final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, scenarioCipherProvider);
 			Assert.assertNotNull(instance);
 			MigrationHelper.migrateAndLoad(instance);
-			ReportTester.testReports(instance, scenarioURL, reportID, shortName, extension);
+			ReportTester.testReports(instance, scenarioURL, reportID, shortName, extension, preAction);
 		});
 	}
 

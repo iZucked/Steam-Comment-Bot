@@ -8,11 +8,14 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.function.Consumer;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -61,7 +64,7 @@ public abstract class AbstractReportTester_LiNGO extends AbstractReportTester {
 	}
 
 	@Override
-	protected void testReports(final String reportID, final String shortName, final String extension) throws Exception {
+	protected void testReports(final String reportID, final String shortName, final String extension, @Nullable Consumer<ScenarioInstance> preAction) throws Exception {
 		Assert.assertTrue(cache.containsKey(key));
 
 		final Pair<URL, ScenarioInstance> triple = cache.get(key);
@@ -71,6 +74,7 @@ public abstract class AbstractReportTester_LiNGO extends AbstractReportTester {
 		final ScenarioInstance instance = triple.getSecond();
 		Assert.assertNotNull(instance);
 		Assert.assertNotNull(instance.getInstance());
-		ReportTester.testReports(instance, url, reportID, shortName, extension);
+
+		ReportTester.testReports(instance, url, reportID, shortName, extension, preAction);
 	}
 }

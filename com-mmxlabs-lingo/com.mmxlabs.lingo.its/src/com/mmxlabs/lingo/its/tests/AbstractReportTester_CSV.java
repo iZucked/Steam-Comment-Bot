@@ -8,7 +8,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
@@ -49,11 +51,12 @@ public abstract class AbstractReportTester_CSV extends AbstractReportTester {
 	}
 
 	@Override
-	protected void testReports(final String reportID, final String shortName, final String extension) throws Exception {
+	protected void testReports(final String reportID, final String shortName, final String extension, @Nullable Consumer<ScenarioInstance> preAction) throws Exception {
 		final Pair<URL, LNGScenarioModel> pair = cache.get(key);
 		final URL url = pair.getFirst();
 		final LNGScenarioModel scenarioModel = pair.getSecond();
 		ScenarioInstance instance = LNGScenarioRunnerCreator.createScenarioInstance(scenarioModel, url);
-		ReportTester.testReports(instance, url, reportID, shortName, extension);
+		
+		ReportTester.testReports(instance, url, reportID, shortName, extension, preAction);
 	}
 }

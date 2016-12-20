@@ -70,6 +70,9 @@ public class ReportTesterHelper {
 
 	public static final String CHANGESET_REPORT_ID = "com.mmxlabs.lingo.reports.views.changeset.ChangeSetView";
 	public static final String CHANGESET_REPORT_SHORTNAME = "ChangeSetReport";
+	
+	public static final String EXPOSURES_REPORT_ID = "com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView";
+	public static final String EXPOSURES_REPORT_SHORTNAME = "ExposuresReport";
 
 	@FunctionalInterface
 	interface IScenarioSelection {

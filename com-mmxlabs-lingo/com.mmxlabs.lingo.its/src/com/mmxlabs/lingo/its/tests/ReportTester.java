@@ -11,8 +11,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.function.Consumer;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.jdt.annotation.Nullable;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,11 +37,15 @@ public class ReportTester {
 	// Never commit as true
 	private static final boolean storeReports = false;
 
-	public static void testReports(final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
+	public static void testReports(final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String shortName, final String extension, @Nullable Consumer<ScenarioInstance> preAction) throws Exception {
 
 		// A side-effect is the initial evaluation.
 		final LNGScenarioRunner runner = LNGScenarioRunnerCreator.createScenarioRunnerForEvaluation((LNGScenarioModel) instance.getInstance(), true);
 
+		if (preAction != null) {
+			preAction.accept(instance);
+		}
+		
 		final ReportTesterHelper reportTester = new ReportTesterHelper();
 		final IReportContents reportContents = reportTester.getReportContents(instance, reportID);
 
