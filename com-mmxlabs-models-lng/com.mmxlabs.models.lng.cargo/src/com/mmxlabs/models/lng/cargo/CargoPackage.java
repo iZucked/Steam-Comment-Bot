@@ -4452,13 +4452,31 @@ public interface CargoPackage extends EPackage {
 	int CHARTER_OUT_EVENT__RELOCATE_TO = VESSEL_EVENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Hire Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__HIRE_RATE = VESSEL_EVENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Heel Options</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_EVENT__HEEL_OPTIONS = VESSEL_EVENT_FEATURE_COUNT + 1;
+	int CHARTER_OUT_EVENT__HEEL_OPTIONS = VESSEL_EVENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Bonus</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__BALLAST_BONUS = VESSEL_EVENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Repositioning Fee</b></em>' attribute.
@@ -4467,16 +4485,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_EVENT__REPOSITIONING_FEE = VESSEL_EVENT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Hire Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_OUT_EVENT__HIRE_RATE = VESSEL_EVENT_FEATURE_COUNT + 3;
+	int CHARTER_OUT_EVENT__REPOSITIONING_FEE = VESSEL_EVENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Charter Out Event</em>' class.
@@ -4485,7 +4494,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 4;
+	int CHARTER_OUT_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -6111,6 +6120,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getCharterOutEvent_HireRate();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getBallastBonus <em>Ballast Bonus</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ballast Bonus</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterOutEvent#getBallastBonus()
+	 * @see #getCharterOutEvent()
+	 * @generated
+	 */
+	EAttribute getCharterOutEvent_BallastBonus();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getEndPort() <em>Get End Port</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7277,6 +7297,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CHARTER_OUT_EVENT__HIRE_RATE = eINSTANCE.getCharterOutEvent_HireRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Bonus</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_OUT_EVENT__BALLAST_BONUS = eINSTANCE.getCharterOutEvent_BallastBonus();
 
 		/**
 		 * The meta object literal for the '<em><b>Get End Port</b></em>' operation.

@@ -66,9 +66,10 @@ public class CharterOutEventComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_relocateToEditor(detailComposite, topClass);
-		add_heelOptionsEditor(detailComposite, topClass);
-		add_repositioningFeeEditor(detailComposite, topClass);
 		add_hireRateEditor(detailComposite, topClass);
+		add_heelOptionsEditor(detailComposite, topClass);
+		add_ballastBonusEditor(detailComposite, topClass);
+		add_repositioningFeeEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the relocateTo feature on CharterOutEvent
@@ -101,5 +102,14 @@ public class CharterOutEventComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_hireRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CHARTER_OUT_EVENT__HIRE_RATE));
+	}
+
+	/**
+	 * Create the editor for the ballastBonus feature on CharterOutEvent
+	 *
+	 * @generated
+	 */
+	protected void add_ballastBonusEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CHARTER_OUT_EVENT__BALLAST_BONUS));
 	}
 }

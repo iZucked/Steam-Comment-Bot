@@ -29,9 +29,10 @@ import com.mmxlabs.models.lng.port.Port;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getRelocateTo <em>Relocate To</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getHeelOptions <em>Heel Options</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getRepositioningFee <em>Repositioning Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getHireRate <em>Hire Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getHeelOptions <em>Heel Options</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getBallastBonus <em>Ballast Bonus</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getRepositioningFee <em>Repositioning Fee</em>}</li>
  * </ul>
  *
  * @generated
@@ -57,6 +58,26 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	protected boolean relocateToESet;
 
 	/**
+	 * The default value of the '{@link #getHireRate() <em>Hire Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHireRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int HIRE_RATE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getHireRate() <em>Hire Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHireRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected int hireRate = HIRE_RATE_EDEFAULT;
+
+	/**
 	 * The cached value of the '{@link #getHeelOptions() <em>Heel Options</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -65,6 +86,26 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * @ordered
 	 */
 	protected HeelOptions heelOptions;
+
+	/**
+	 * The default value of the '{@link #getBallastBonus() <em>Ballast Bonus</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBallastBonus()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int BALLAST_BONUS_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getBallastBonus() <em>Ballast Bonus</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBallastBonus()
+	 * @generated
+	 * @ordered
+	 */
+	protected int ballastBonus = BALLAST_BONUS_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getRepositioningFee() <em>Repositioning Fee</em>}' attribute.
@@ -85,26 +126,6 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * @ordered
 	 */
 	protected int repositioningFee = REPOSITIONING_FEE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getHireRate() <em>Hire Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getHireRate()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int HIRE_RATE_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getHireRate() <em>Hire Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getHireRate()
-	 * @generated
-	 * @ordered
-	 */
-	protected int hireRate = HIRE_RATE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -299,6 +320,27 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getBallastBonus() {
+		return ballastBonus;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setBallastBonus(int newBallastBonus) {
+		int oldBallastBonus = ballastBonus;
+		ballastBonus = newBallastBonus;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CHARTER_OUT_EVENT__BALLAST_BONUS, oldBallastBonus, ballastBonus));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public Port getEndPort() {
@@ -331,13 +373,15 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 			case CargoPackage.CHARTER_OUT_EVENT__RELOCATE_TO:
 				if (resolve) return getRelocateTo();
 				return basicGetRelocateTo();
+			case CargoPackage.CHARTER_OUT_EVENT__HIRE_RATE:
+				return getHireRate();
 			case CargoPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS:
 				if (resolve) return getHeelOptions();
 				return basicGetHeelOptions();
+			case CargoPackage.CHARTER_OUT_EVENT__BALLAST_BONUS:
+				return getBallastBonus();
 			case CargoPackage.CHARTER_OUT_EVENT__REPOSITIONING_FEE:
 				return getRepositioningFee();
-			case CargoPackage.CHARTER_OUT_EVENT__HIRE_RATE:
-				return getHireRate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -353,14 +397,17 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 			case CargoPackage.CHARTER_OUT_EVENT__RELOCATE_TO:
 				setRelocateTo((Port)newValue);
 				return;
+			case CargoPackage.CHARTER_OUT_EVENT__HIRE_RATE:
+				setHireRate((Integer)newValue);
+				return;
 			case CargoPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS:
 				setHeelOptions((HeelOptions)newValue);
 				return;
+			case CargoPackage.CHARTER_OUT_EVENT__BALLAST_BONUS:
+				setBallastBonus((Integer)newValue);
+				return;
 			case CargoPackage.CHARTER_OUT_EVENT__REPOSITIONING_FEE:
 				setRepositioningFee((Integer)newValue);
-				return;
-			case CargoPackage.CHARTER_OUT_EVENT__HIRE_RATE:
-				setHireRate((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -377,14 +424,17 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 			case CargoPackage.CHARTER_OUT_EVENT__RELOCATE_TO:
 				unsetRelocateTo();
 				return;
+			case CargoPackage.CHARTER_OUT_EVENT__HIRE_RATE:
+				setHireRate(HIRE_RATE_EDEFAULT);
+				return;
 			case CargoPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS:
 				setHeelOptions((HeelOptions)null);
 				return;
+			case CargoPackage.CHARTER_OUT_EVENT__BALLAST_BONUS:
+				setBallastBonus(BALLAST_BONUS_EDEFAULT);
+				return;
 			case CargoPackage.CHARTER_OUT_EVENT__REPOSITIONING_FEE:
 				setRepositioningFee(REPOSITIONING_FEE_EDEFAULT);
-				return;
-			case CargoPackage.CHARTER_OUT_EVENT__HIRE_RATE:
-				setHireRate(HIRE_RATE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -400,12 +450,14 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 		switch (featureID) {
 			case CargoPackage.CHARTER_OUT_EVENT__RELOCATE_TO:
 				return isSetRelocateTo();
-			case CargoPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS:
-				return heelOptions != null;
-			case CargoPackage.CHARTER_OUT_EVENT__REPOSITIONING_FEE:
-				return repositioningFee != REPOSITIONING_FEE_EDEFAULT;
 			case CargoPackage.CHARTER_OUT_EVENT__HIRE_RATE:
 				return hireRate != HIRE_RATE_EDEFAULT;
+			case CargoPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS:
+				return heelOptions != null;
+			case CargoPackage.CHARTER_OUT_EVENT__BALLAST_BONUS:
+				return ballastBonus != BALLAST_BONUS_EDEFAULT;
+			case CargoPackage.CHARTER_OUT_EVENT__REPOSITIONING_FEE:
+				return repositioningFee != REPOSITIONING_FEE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -434,10 +486,12 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (repositioningFee: ");
-		result.append(repositioningFee);
-		result.append(", hireRate: ");
+		result.append(" (hireRate: ");
 		result.append(hireRate);
+		result.append(", ballastBonus: ");
+		result.append(ballastBonus);
+		result.append(", repositioningFee: ");
+		result.append(repositioningFee);
 		result.append(')');
 		return result.toString();
 	}

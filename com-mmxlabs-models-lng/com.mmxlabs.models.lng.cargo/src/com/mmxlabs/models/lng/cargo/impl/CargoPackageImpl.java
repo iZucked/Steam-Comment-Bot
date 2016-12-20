@@ -1341,7 +1341,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EReference getCharterOutEvent_HeelOptions() {
-		return (EReference)charterOutEventEClass.getEStructuralFeatures().get(1);
+		return (EReference)charterOutEventEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1350,7 +1350,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getCharterOutEvent_RepositioningFee() {
-		return (EAttribute)charterOutEventEClass.getEStructuralFeatures().get(2);
+		return (EAttribute)charterOutEventEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -1359,6 +1359,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getCharterOutEvent_HireRate() {
+		return (EAttribute)charterOutEventEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCharterOutEvent_BallastBonus() {
 		return (EAttribute)charterOutEventEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -1632,9 +1641,10 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		charterOutEventEClass = createEClass(CHARTER_OUT_EVENT);
 		createEReference(charterOutEventEClass, CHARTER_OUT_EVENT__RELOCATE_TO);
-		createEReference(charterOutEventEClass, CHARTER_OUT_EVENT__HEEL_OPTIONS);
-		createEAttribute(charterOutEventEClass, CHARTER_OUT_EVENT__REPOSITIONING_FEE);
 		createEAttribute(charterOutEventEClass, CHARTER_OUT_EVENT__HIRE_RATE);
+		createEReference(charterOutEventEClass, CHARTER_OUT_EVENT__HEEL_OPTIONS);
+		createEAttribute(charterOutEventEClass, CHARTER_OUT_EVENT__BALLAST_BONUS);
+		createEAttribute(charterOutEventEClass, CHARTER_OUT_EVENT__REPOSITIONING_FEE);
 		createEOperation(charterOutEventEClass, CHARTER_OUT_EVENT___GET_END_PORT);
 
 		assignableElementEClass = createEClass(ASSIGNABLE_ELEMENT);
@@ -1899,9 +1909,10 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEClass(charterOutEventEClass, CharterOutEvent.class, "CharterOutEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCharterOutEvent_RelocateTo(), thePortPackage.getPort(), null, "relocateTo", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCharterOutEvent_HeelOptions(), theFleetPackage.getHeelOptions(), null, "heelOptions", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCharterOutEvent_RepositioningFee(), ecorePackage.getEInt(), "repositioningFee", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterOutEvent_HireRate(), ecorePackage.getEInt(), "hireRate", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCharterOutEvent_HeelOptions(), theFleetPackage.getHeelOptions(), null, "heelOptions", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterOutEvent_BallastBonus(), ecorePackage.getEInt(), "ballastBonus", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterOutEvent_RepositioningFee(), ecorePackage.getEInt(), "repositioningFee", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getCharterOutEvent__GetEndPort(), thePortPackage.getPort(), "getEndPort", 1, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -2052,17 +2063,23 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 			 "formatString", "##0"
 		   });	
 		addAnnotation
-		  (getCharterOutEvent_RepositioningFee(), 
-		   source, 
-		   new String[] {
-			 "unit", "$",
-			 "formatString", "###,##0"
-		   });	
-		addAnnotation
 		  (getCharterOutEvent_HireRate(), 
 		   source, 
 		   new String[] {
 			 "unit", "$/day",
+			 "formatString", "###,##0"
+		   });	
+		addAnnotation
+		  (getCharterOutEvent_BallastBonus(), 
+		   source, 
+		   new String[] {
+			 "unit", "$"
+		   });	
+		addAnnotation
+		  (getCharterOutEvent_RepositioningFee(), 
+		   source, 
+		   new String[] {
+			 "unit", "$",
 			 "formatString", "###,##0"
 		   });
 	}
@@ -2101,6 +2118,12 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   });	
 		addAnnotation
 		  (getVesselAvailability_BallastBonus(), 
+		   source, 
+		   new String[] {
+			 "type", "charter"
+		   });	
+		addAnnotation
+		  (getCharterOutEvent_HireRate(), 
 		   source, 
 		   new String[] {
 			 "type", "charter"

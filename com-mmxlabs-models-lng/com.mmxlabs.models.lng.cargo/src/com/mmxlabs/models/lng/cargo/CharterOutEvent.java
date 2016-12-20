@@ -19,9 +19,10 @@ import com.mmxlabs.models.lng.port.Port;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getRelocateTo <em>Relocate To</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getHeelOptions <em>Heel Options</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getRepositioningFee <em>Repositioning Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getHireRate <em>Hire Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getHeelOptions <em>Heel Options</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getBallastBonus <em>Ballast Bonus</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getRepositioningFee <em>Repositioning Fee</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCharterOutEvent()
@@ -148,6 +149,7 @@ public interface CharterOutEvent extends VesselEvent {
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCharterOutEvent_HireRate()
 	 * @model required="true"
 	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$/day' formatString='###,##0'"
+	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='charter'"
 	 * @generated
 	 */
 	int getHireRate();
@@ -161,6 +163,33 @@ public interface CharterOutEvent extends VesselEvent {
 	 * @generated
 	 */
 	void setHireRate(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Ballast Bonus</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Ballast Bonus</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Ballast Bonus</em>' attribute.
+	 * @see #setBallastBonus(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCharterOutEvent_BallastBonus()
+	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$'"
+	 * @generated
+	 */
+	int getBallastBonus();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getBallastBonus <em>Ballast Bonus</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Ballast Bonus</em>' attribute.
+	 * @see #getBallastBonus()
+	 * @generated
+	 */
+	void setBallastBonus(int value);
 
 	/**
 	 * <!-- begin-user-doc -->

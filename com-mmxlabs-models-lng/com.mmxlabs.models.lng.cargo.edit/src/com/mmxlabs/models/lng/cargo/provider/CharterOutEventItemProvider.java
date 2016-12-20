@@ -52,8 +52,9 @@ public class CharterOutEventItemProvider
 			super.getPropertyDescriptors(object);
 
 			addRelocateToPropertyDescriptor(object);
-			addRepositioningFeePropertyDescriptor(object);
 			addHireRatePropertyDescriptor(object);
+			addBallastBonusPropertyDescriptor(object);
+			addRepositioningFeePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -116,6 +117,28 @@ public class CharterOutEventItemProvider
 				 getString("_UI_CharterOutEvent_hireRate_feature"),
 				 getString("_UI_CharterOutEvent_hireRate_description"),
 				 CargoPackage.Literals.CHARTER_OUT_EVENT__HIRE_RATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Ballast Bonus feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBallastBonusPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterOutEvent_ballastBonus_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOutEvent_ballastBonus_feature", "_UI_CharterOutEvent_type"),
+				 CargoPackage.Literals.CHARTER_OUT_EVENT__BALLAST_BONUS,
 				 true,
 				 false,
 				 false,
@@ -191,8 +214,9 @@ public class CharterOutEventItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(CharterOutEvent.class)) {
-			case CargoPackage.CHARTER_OUT_EVENT__REPOSITIONING_FEE:
 			case CargoPackage.CHARTER_OUT_EVENT__HIRE_RATE:
+			case CargoPackage.CHARTER_OUT_EVENT__BALLAST_BONUS:
+			case CargoPackage.CHARTER_OUT_EVENT__REPOSITIONING_FEE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case CargoPackage.CHARTER_OUT_EVENT__HEEL_OPTIONS:
