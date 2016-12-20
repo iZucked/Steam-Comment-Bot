@@ -350,7 +350,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 			if (limitedIterations) {
 				// Limit for quick optimisation
 				// LSO Limit
-				ScenarioUtils.setLSOStageIterations(optimisationPlan, 10_000);
+				ScenarioUtils.setLSOStageIterations(optimisationPlan, 15_000);
 				// Hill climb limit
 				ScenarioUtils.setHillClimbStageIterations(optimisationPlan, 1_000);
 
