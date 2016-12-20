@@ -31,6 +31,7 @@ import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
@@ -46,8 +47,8 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.util.importer.registry.IAttributeImporterExtension.IEDataTypeMatch;
 import com.mmxlabs.rcp.common.SelectionHelper;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -405,5 +406,26 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		}
 		assert modeStr != null;
 		a.setText("Units: " + modeStr);
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> adapter) {
+
+		if (IReportContents.class.isAssignableFrom(adapter)) {
+
+			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
+			util.setRowHeadersIncluded(true);
+			util.setShowBackgroundColours(true);
+			final String contents = util.convert();
+			return (T) new IReportContents() {
+
+				@Override
+				public String getStringContents() {
+					return contents;
+				}
+			};
+
+		}
+		return super.getAdapter(adapter);
 	}
 }
