@@ -18,6 +18,7 @@ import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.BaseFuelCostFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.CanalCostFormatter;
+import com.mmxlabs.lingo.reports.views.fleet.formatters.CharterCostFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterDaysFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterRevenueFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.LNGCostFormatter;
@@ -70,7 +71,7 @@ public class StandardFleetColumnFactory implements IFleetColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.chartercosts":
 			columnManager.registerColumn(FLEET_REPORT_TYPE_ID,
-					new SimpleEmfBlockColumnFactory(columnID, "Charter ($)", "Total chartering costs", ColumnType.NORMAL, new PortCostFormatter(), ScheduleReportPackage.Literals.ROW__SEQUENCE));
+					new SimpleEmfBlockColumnFactory(columnID, "Charter ($)", "Total chartering costs", ColumnType.NORMAL, new CharterCostFormatter(false), ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 		case COLUMN_BLOCK_GCO_VESSEL: {
 
