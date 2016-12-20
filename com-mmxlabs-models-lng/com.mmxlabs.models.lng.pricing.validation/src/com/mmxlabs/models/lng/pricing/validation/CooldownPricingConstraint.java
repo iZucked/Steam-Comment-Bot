@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.pricing.validation;
 
+import java.time.YearMonth;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -18,6 +20,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.base.Joiner;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
@@ -61,6 +64,10 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 					dcsd.addEObjectAndFeature(c, PricingPackage.Literals.PORTS_EXPRESSION_MAP__EXPRESSION);
 					failures.add(dcsd);
+				} else {
+					if (!c.isLumpsum()) {
+						PriceExpressionUtils.constrainPriceExpression(ctx, c, PricingPackage.Literals.PORTS_EXPRESSION_MAP__EXPRESSION, c.getExpression(), 0.0, 90.0, null, failures);
+					}
 				}
 			}
 		}
