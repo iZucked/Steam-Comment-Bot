@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Tests
 Bundle-SymbolicName: com.mmxlabs.rcp.common.tests
-Bundle-Version: 4.0.8.RELEASE
+Bundle-Version: 4.0.9.qualifier
 Bundle-Activator: com.mmxlabs.rcp.common.tests.internal.Activator
 Bundle-Vendor: Minimaxlabs Ltd.
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
