@@ -79,7 +79,7 @@
 					<useUIHarness>true</useUIHarness>
 					<useUIThread>true</useUIThread>
 
-					<argLine>-Dlingo.suppress.dialogs=true -Dlingo.enc.keyfile=${lingo.enc.keyfile}</argLine>
+					<argLine>-nl en_GB -Dlingo.suppress.dialogs=true -Dlingo.enc.keyfile=${lingo.enc.keyfile}</argLine>
 
 					<!-- Automatically start these bundles at specified run level. These contain the services required for test execution -->
 					<bundleStartLevel>
