@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="LiNGO" uid="com.mmxlabs.lingo.app.product.id" id="com.mmxlabs.lingo.product.product" application="com.mmxlabs.lingo.app.application" version="4.0.8.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="LiNGO" uid="com.mmxlabs.lingo.app.product.id" id="com.mmxlabs.lingo.product.product" application="com.mmxlabs.lingo.app.application" version="4.0.9.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="icons/logo-square-16.png"/>
