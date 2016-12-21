@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.types.TimePeriod;
 
@@ -93,7 +94,7 @@ public class RepositioningAndBallastBonusesTests extends AbstractMicroTestCase {
 			Assert.assertNull(lateness2);
 			
 			CargoAllocation cargoAllocation = lngScenarioModel.getScheduleModel().getSchedule().getCargoAllocations().stream()
-					.filter(c -> c.getInputCargo().equals(cargo)).findFirst().get();
+					.filter(c -> ScheduleModelUtils.matchingSlots(cargo, c)).findFirst().get();
 			assert cargoAllocation != null;
 			Assert.assertEquals(cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss(), 6042139L);
 			StartEvent start = getStartEvent(vesselAvailability);
@@ -156,7 +157,7 @@ public class RepositioningAndBallastBonusesTests extends AbstractMicroTestCase {
 			Assert.assertNull(lateness2);
 			
 			CargoAllocation cargoAllocation = lngScenarioModel.getScheduleModel().getSchedule().getCargoAllocations().stream()
-					.filter(c -> c.getInputCargo().equals(cargo)).findFirst().get();
+					.filter(c -> ScheduleModelUtils.matchingSlots(cargo, c)).findFirst().get();
 			assert cargoAllocation != null;
 			Assert.assertEquals(String.format("Expected %s was %s", 6042139, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss()), cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss(), 6042139L);
 			StartEvent start = getStartEvent(vesselAvailability);

@@ -30,8 +30,8 @@ import com.mmxlabs.lingo.reports.views.standard.KPIReportView;
 import com.mmxlabs.lingo.reports.views.standard.LatenessReportView;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * Helper class to open up a view, set the scenario selection provider to the given instance and adapt the result to a {@link IReportContents} instance.
@@ -82,7 +82,7 @@ public class ReportTesterHelper {
 	}
 
 	@Nullable
-	public IReportContents getReportContents(final ScenarioInstance scenario, final String reportID) throws InterruptedException {
+	public IReportContents getReportContents(final ScenarioResult scenario, final String reportID) throws InterruptedException {
 		return getReportContents(reportID, (v, p) -> {
 
 			final IProvideEditorInputScenario scenarioInputProvider = v.getAdapter(IProvideEditorInputScenario.class);
@@ -96,7 +96,7 @@ public class ReportTesterHelper {
 	}
 
 	@Nullable
-	public IReportContents getReportContents(final @NonNull ScenarioInstance pinScenario, @NonNull final ScenarioInstance ref, final String reportID) throws InterruptedException {
+	public IReportContents getReportContents(final @NonNull ScenarioResult pinScenario, @NonNull final ScenarioResult ref, final String reportID) throws InterruptedException {
 		return getReportContents(reportID, (v, p) -> {
 			p.deselectAll(true);
 			p.select(pinScenario, true);

@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
@@ -64,7 +65,8 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertSame(cargo1, cargoAllocation.getCargoAllocation().getInputCargo());
+
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
 			Assert.assertEquals(4_000_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
 			Assert.assertEquals(4_000_000 / 20, cargoAllocation.getLoadAllocation().getVolumeTransferred());
@@ -103,7 +105,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertSame(cargo1, cargoAllocation.getCargoAllocation().getInputCargo());
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
 			Assert.assertEquals(200_000 * 20, cargoAllocation.getLoadAllocation().getEnergyTransferred());
 			Assert.assertEquals(200_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
@@ -136,7 +138,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertSame(cargo1, cargoAllocation.getCargoAllocation().getInputCargo());
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 			// Expect max-load for break-even
 			Assert.assertEquals(4_000_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
 			Assert.assertEquals(4_000_000 / 20, cargoAllocation.getLoadAllocation().getVolumeTransferred());
@@ -171,7 +173,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertSame(cargo1, cargoAllocation.getCargoAllocation().getInputCargo());
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
 			Assert.assertEquals(3_500_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
 			Assert.assertEquals(3_500_000 / 20, cargoAllocation.getLoadAllocation().getVolumeTransferred());
@@ -204,7 +206,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertSame(cargo1, cargoAllocation.getCargoAllocation().getInputCargo());
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
 			Assert.assertEquals(4_000_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
 			Assert.assertEquals(4_000_000 / 20, cargoAllocation.getLoadAllocation().getVolumeTransferred());
@@ -237,7 +239,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertSame(cargo1, cargoAllocation.getCargoAllocation().getInputCargo());
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 			// Expect max-load for break-even
 			Assert.assertEquals(4_000_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
 			Assert.assertEquals(4_000_000 / 20, cargoAllocation.getLoadAllocation().getVolumeTransferred());
@@ -272,7 +274,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertSame(cargo1, cargoAllocation.getCargoAllocation().getInputCargo());
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
 			Assert.assertEquals(3_500_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
 			Assert.assertEquals(3_500_000 / 20, cargoAllocation.getLoadAllocation().getVolumeTransferred());
@@ -314,7 +316,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertSame(cargo1, cargoAllocation.getCargoAllocation().getInputCargo());
+			Assert.assertTrue (ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
 			Assert.assertEquals(3_500_000, cargoAllocation.getDischargeAllocation().getEnergyTransferred());
 			Assert.assertEquals(3_500_000 / 20, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
@@ -351,7 +353,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertSame(cargo1, cargoAllocation.getCargoAllocation().getInputCargo());
+			Assert.assertTrue (ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
 			Assert.assertEquals(2_500_000, cargoAllocation.getDischargeAllocation().getEnergyTransferred());
 			Assert.assertEquals(2_500_000 / 20, cargoAllocation.getDischargeAllocation().getVolumeTransferred());
@@ -389,7 +391,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertSame(cargo1, cargoAllocation.getCargoAllocation().getInputCargo());
+			Assert.assertTrue (ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
 			Assert.assertEquals(2_950_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
 			Assert.assertEquals(2_950_000 / 20, cargoAllocation.getLoadAllocation().getVolumeTransferred());
@@ -428,7 +430,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertSame(cargo1, cargoAllocation.getCargoAllocation().getInputCargo());
+			Assert.assertTrue (ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
 			Assert.assertEquals(2_950_000, cargoAllocation.getLoadAllocation().getEnergyTransferred());
 			Assert.assertEquals(Math.floor(2_950_000.0 / 23.7), cargoAllocation.getLoadAllocation().getVolumeTransferred(), 0.01);
@@ -467,7 +469,7 @@ public class MinMaxVolumeAllocatorTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertSame(cargo1, cargoAllocation.getCargoAllocation().getInputCargo());
+			Assert.assertTrue (ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
 			Assert.assertEquals(150_000, cargoAllocation.getLoadAllocation().getVolumeTransferred());
 			Assert.assertEquals(150_000 * 23.7, cargoAllocation.getLoadAllocation().getEnergyTransferred(), 0.0);

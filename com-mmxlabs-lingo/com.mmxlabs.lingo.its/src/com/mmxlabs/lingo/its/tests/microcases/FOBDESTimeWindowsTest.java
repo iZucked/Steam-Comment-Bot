@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
@@ -62,7 +63,7 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 
 			CargoAllocation cargoAllocation = null;
 			for (final CargoAllocation ca : schedule.getCargoAllocations()) {
-				if (ca.getInputCargo() == cargo1) {
+				if (ScheduleModelUtils.matchingSlots(cargo1, ca)) {
 					cargoAllocation = ca;
 					break;
 				}
@@ -104,7 +105,7 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 
 			CargoAllocation cargoAllocation = null;
 			for (final CargoAllocation ca : schedule.getCargoAllocations()) {
-				if (ca.getInputCargo() == cargo1) {
+				if (ScheduleModelUtils.matchingSlots(cargo1, ca)) {
 					cargoAllocation = ca;
 					break;
 				}
@@ -145,7 +146,7 @@ public class FOBDESTimeWindowsTest extends AbstractMicroTestCase {
 
 			CargoAllocation cargoAllocation = null;
 			for (final CargoAllocation ca : schedule.getCargoAllocations()) {
-				if (ca.getInputCargo() == cargo1) {
+				if (ScheduleModelUtils.matchingSlots(cargo1, ca)) {
 					cargoAllocation = ca;
 					break;
 				}

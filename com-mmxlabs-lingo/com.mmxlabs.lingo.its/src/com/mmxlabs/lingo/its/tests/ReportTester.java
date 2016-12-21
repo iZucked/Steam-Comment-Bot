@@ -21,8 +21,10 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * Helper class to open up a view, set the scenario selection provider to the given instance and adapt the result to a {@link IReportContents} instance.
@@ -40,14 +42,16 @@ public class ReportTester {
 	public static void testReports(final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String shortName, final String extension, @Nullable Consumer<ScenarioInstance> preAction) throws Exception {
 
 		// A side-effect is the initial evaluation.
-		final LNGScenarioRunner runner = LNGScenarioRunnerCreator.createScenarioRunnerForEvaluation((LNGScenarioModel) instance.getInstance(), true);
+		LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance.getInstance();
+		final LNGScenarioRunner runner = LNGScenarioRunnerCreator.createScenarioRunnerForEvaluation(lngScenarioModel, true);
 
 		if (preAction != null) {
 			preAction.accept(instance);
 		}
 		
 		final ReportTesterHelper reportTester = new ReportTesterHelper();
-		final IReportContents reportContents = reportTester.getReportContents(instance, reportID);
+		ScenarioResult scenarioResult = new ScenarioResult(instance, ScenarioModelUtil.getScheduleModel(lngScenarioModel));
+		final IReportContents reportContents = reportTester.getReportContents(scenarioResult, reportID);
 
 		Assert.assertNotNull(reportContents);
 		final String actualContents = reportContents.getStringContents();
@@ -96,7 +100,11 @@ public class ReportTester {
 		final LNGScenarioRunner refRunner = LNGScenarioRunnerCreator.createScenarioRunnerForEvaluation((LNGScenarioModel) refInstance.getInstance(), true);
 
 		final ReportTesterHelper reportTester = new ReportTesterHelper();
-		final IReportContents reportContents = reportTester.getReportContents(pinInstance, refInstance, reportID);
+
+		ScenarioResult pinResult = new ScenarioResult(pinInstance, ScenarioModelUtil.getScheduleModel((LNGScenarioModel) pinInstance.getInstance()));
+		ScenarioResult refResult = new ScenarioResult(refInstance, ScenarioModelUtil.getScheduleModel((LNGScenarioModel) refInstance.getInstance()));
+
+		final IReportContents reportContents = reportTester.getReportContents(pinResult, refResult, reportID);
 
 		Assert.assertNotNull(reportContents);
 		final String actualContents = reportContents.getStringContents();

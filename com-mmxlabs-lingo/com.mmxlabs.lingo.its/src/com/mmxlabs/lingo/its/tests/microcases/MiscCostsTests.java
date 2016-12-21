@@ -7,16 +7,13 @@ package com.mmxlabs.lingo.its.tests.microcases;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.swt.internal.C;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
-import com.mmxlabs.lingo.reports.views.standard.KPIReportTransformer;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -29,6 +26,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.types.TimePeriod;
 
@@ -93,7 +91,7 @@ public class MiscCostsTests extends AbstractMicroTestCase {
 			Assert.assertNull(lateness2);
 			
 			CargoAllocation cargoAllocation = lngScenarioModel.getScheduleModel().getSchedule().getCargoAllocations().stream()
-					.filter(c -> c.getInputCargo().equals(cargo)).findFirst().get();
+					.filter(c -> ScheduleModelUtils.matchingSlots(cargo, c)).findFirst().get();
 			assert cargoAllocation != null;
 			Assert.assertEquals(cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss(), 6042139L);
 			StartEvent start = getStartEvent(vesselAvailability);
@@ -156,7 +154,7 @@ public class MiscCostsTests extends AbstractMicroTestCase {
 			Assert.assertNull(lateness2);
 			
 			CargoAllocation cargoAllocation = lngScenarioModel.getScheduleModel().getSchedule().getCargoAllocations().stream()
-					.filter(c -> c.getInputCargo().equals(cargo)).findFirst().get();
+					.filter(c -> ScheduleModelUtils.matchingSlots(cargo, c)).findFirst().get();
 			assert cargoAllocation != null;
 			Assert.assertEquals(String.format("Expected %s was %s", 6042139, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss()), cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss(), 6_042_139L - 1_000_000L);
 			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 6_042_139L - 1_000_000L);
@@ -217,7 +215,7 @@ public class MiscCostsTests extends AbstractMicroTestCase {
 			Assert.assertNull(lateness2);
 			
 			CargoAllocation cargoAllocation = lngScenarioModel.getScheduleModel().getSchedule().getCargoAllocations().stream()
-					.filter(c -> c.getInputCargo().equals(cargo)).findFirst().get();
+					.filter(c -> ScheduleModelUtils.matchingSlots(cargo, c)).findFirst().get();
 			assert cargoAllocation != null;
 			Assert.assertEquals(String.format("Expected %s was %s", 6042139, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss()), cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss(), 6_042_139L - 1_000_000L);
 			Assert.assertEquals(ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 6_042_139L - 1_000_000L);

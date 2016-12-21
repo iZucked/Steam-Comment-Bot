@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
@@ -49,7 +50,7 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertSame(cargo1, cargoAllocation.getCargoAllocation().getInputCargo());
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
 			Assert.assertEquals(7.0, cargoAllocation.getLoadAllocation().getPrice(), 0.001);
 
@@ -81,7 +82,7 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertSame(cargo1, cargoAllocation.getCargoAllocation().getInputCargo());
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
 			Assert.assertEquals(7.0, cargoAllocation.getDischargeAllocation().getPrice(), 0.001);
 
@@ -113,7 +114,7 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertSame(cargo1, cargoAllocation.getCargoAllocation().getInputCargo());
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
 			Assert.assertEquals(7.0, cargoAllocation.getDischargeAllocation().getPrice(), 0.001);
 
@@ -145,7 +146,7 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertSame(cargo1, cargoAllocation.getCargoAllocation().getInputCargo());
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
 			Assert.assertEquals(7.0, cargoAllocation.getLoadAllocation().getPrice(), 0.001);
 
@@ -182,7 +183,7 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertSame(cargo1, cargoAllocation.getCargoAllocation().getInputCargo());
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
 			Assert.assertEquals(6.558, cargoAllocation.getLoadAllocation().getPrice(), 0.001);
 
@@ -219,7 +220,7 @@ public class BreakEvenTests extends AbstractMicroTestCase {
 			Assert.assertEquals(1, schedule.getCargoAllocations().size());
 
 			final SimpleCargoAllocation cargoAllocation = new SimpleCargoAllocation(schedule.getCargoAllocations().get(0));
-			Assert.assertSame(cargo1, cargoAllocation.getCargoAllocation().getInputCargo());
+			Assert.assertTrue(ScheduleModelUtils.matchingSlots(cargo1, cargoAllocation.getCargoAllocation()));
 
 			Assert.assertEquals(7.454, cargoAllocation.getDischargeAllocation().getPrice(), 0.001);
 
