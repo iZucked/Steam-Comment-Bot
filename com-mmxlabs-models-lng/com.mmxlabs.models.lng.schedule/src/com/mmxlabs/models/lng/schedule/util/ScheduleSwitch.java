@@ -47,6 +47,7 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.mmxcore.MMXResultRoot;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
@@ -111,6 +112,7 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 				ScheduleModel scheduleModel = (ScheduleModel)theEObject;
 				T result = caseScheduleModel(scheduleModel);
 				if (result == null) result = caseUUIDObject(scheduleModel);
+				if (result == null) result = caseMMXResultRoot(scheduleModel);
 				if (result == null) result = caseMMXObject(scheduleModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -904,6 +906,21 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseUUIDObject(UUIDObject object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>MMX Result Root</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>MMX Result Root</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMMXResultRoot(MMXResultRoot object) {
 		return null;
 	}
 

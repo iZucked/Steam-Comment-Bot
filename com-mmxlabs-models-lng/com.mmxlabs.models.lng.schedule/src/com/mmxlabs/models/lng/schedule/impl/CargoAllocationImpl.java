@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
@@ -41,8 +42,8 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getEvents <em>Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getSlotAllocations <em>Slot Allocations</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getInputCargo <em>Input Cargo</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getSequence <em>Sequence</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getCargoType <em>Cargo Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -88,25 +89,6 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	protected EList<SlotAllocation> slotAllocations;
 
 	/**
-	 * The cached value of the '{@link #getInputCargo() <em>Input Cargo</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getInputCargo()
-	 * @generated
-	 * @ordered
-	 */
-	protected Cargo inputCargo;
-
-	/**
-	 * This is true if the Input Cargo reference has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean inputCargoESet;
-
-	/**
 	 * The cached value of the '{@link #getSequence() <em>Sequence</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -124,6 +106,26 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * @ordered
 	 */
 	protected boolean sequenceESet;
+
+	/**
+	 * The default value of the '{@link #getCargoType() <em>Cargo Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCargoType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final CargoType CARGO_TYPE_EDEFAULT = CargoType.FLEET;
+
+	/**
+	 * The cached value of the '{@link #getCargoType() <em>Cargo Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCargoType()
+	 * @generated
+	 * @ordered
+	 */
+	protected CargoType cargoType = CARGO_TYPE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -197,69 +199,6 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 			generalPNLDetails = new EObjectContainmentEList<GeneralPNLDetails>(GeneralPNLDetails.class, this, SchedulePackage.CARGO_ALLOCATION__GENERAL_PNL_DETAILS);
 		}
 		return generalPNLDetails;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Cargo getInputCargo() {
-		if (inputCargo != null && inputCargo.eIsProxy()) {
-			InternalEObject oldInputCargo = (InternalEObject)inputCargo;
-			inputCargo = (Cargo)eResolveProxy(oldInputCargo);
-			if (inputCargo != oldInputCargo) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.CARGO_ALLOCATION__INPUT_CARGO, oldInputCargo, inputCargo));
-			}
-		}
-		return inputCargo;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Cargo basicGetInputCargo() {
-		return inputCargo;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setInputCargo(Cargo newInputCargo) {
-		Cargo oldInputCargo = inputCargo;
-		inputCargo = newInputCargo;
-		boolean oldInputCargoESet = inputCargoESet;
-		inputCargoESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__INPUT_CARGO, oldInputCargo, inputCargo, !oldInputCargoESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetInputCargo() {
-		Cargo oldInputCargo = inputCargo;
-		boolean oldInputCargoESet = inputCargoESet;
-		inputCargo = null;
-		inputCargoESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, SchedulePackage.CARGO_ALLOCATION__INPUT_CARGO, oldInputCargo, null, oldInputCargoESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetInputCargo() {
-		return inputCargoESet;
 	}
 
 	/**
@@ -342,6 +281,27 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public CargoType getCargoType() {
+		return cargoType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCargoType(CargoType newCargoType) {
+		CargoType oldCargoType = cargoType;
+		cargoType = newCargoType == null ? CARGO_TYPE_EDEFAULT : newCargoType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE, oldCargoType, cargoType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EList<SlotAllocation> getSlotAllocations() {
 		if (slotAllocations == null) {
 			slotAllocations = new EObjectWithInverseResolvingEList<SlotAllocation>(SlotAllocation.class, this, SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS, SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION);
@@ -355,14 +315,14 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * @generated NOT
 	 */
 	public String getName() {
-		if (isSetInputCargo()) {
-			return getInputCargo().getLoadName();
-		} else {
+//		if (isSetInputCargo()) {
+//			return getInputCargo().getLoadName();
+//		} else {
 			for (SlotAllocation slotAllocation : getSlotAllocations()) {
 				// TODO: First load allocation?
 				return slotAllocation.getName();
 			}
-		}
+//		}
 		return "";
 	}
 
@@ -415,12 +375,11 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 				return getEvents();
 			case SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS:
 				return getSlotAllocations();
-			case SchedulePackage.CARGO_ALLOCATION__INPUT_CARGO:
-				if (resolve) return getInputCargo();
-				return basicGetInputCargo();
 			case SchedulePackage.CARGO_ALLOCATION__SEQUENCE:
 				if (resolve) return getSequence();
 				return basicGetSequence();
+			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
+				return getCargoType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -449,11 +408,11 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 				getSlotAllocations().clear();
 				getSlotAllocations().addAll((Collection<? extends SlotAllocation>)newValue);
 				return;
-			case SchedulePackage.CARGO_ALLOCATION__INPUT_CARGO:
-				setInputCargo((Cargo)newValue);
-				return;
 			case SchedulePackage.CARGO_ALLOCATION__SEQUENCE:
 				setSequence((Sequence)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
+				setCargoType((CargoType)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -479,11 +438,11 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 			case SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS:
 				getSlotAllocations().clear();
 				return;
-			case SchedulePackage.CARGO_ALLOCATION__INPUT_CARGO:
-				unsetInputCargo();
-				return;
 			case SchedulePackage.CARGO_ALLOCATION__SEQUENCE:
 				unsetSequence();
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
+				setCargoType(CARGO_TYPE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -505,10 +464,10 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 				return events != null && !events.isEmpty();
 			case SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS:
 				return slotAllocations != null && !slotAllocations.isEmpty();
-			case SchedulePackage.CARGO_ALLOCATION__INPUT_CARGO:
-				return isSetInputCargo();
 			case SchedulePackage.CARGO_ALLOCATION__SEQUENCE:
 				return isSetSequence();
+			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
+				return cargoType != CARGO_TYPE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -572,6 +531,22 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 				return getName();
 		}
 		return super.eInvoke(operationID, arguments);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (cargoType: ");
+		result.append(cargoType);
+		result.append(')');
+		return result.toString();
 	}
 
 } // end of CargoAllocationImpl

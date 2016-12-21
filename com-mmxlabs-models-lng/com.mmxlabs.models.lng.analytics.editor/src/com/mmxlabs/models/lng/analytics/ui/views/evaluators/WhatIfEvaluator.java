@@ -352,7 +352,7 @@ public class WhatIfEvaluator {
 					fixModelReferences(container.getCargoAllocation(), mapper);
 
 					container.getCargoAllocation().unsetSequence();
-					container.getCargoAllocation().unsetInputCargo();
+//					container.getCargoAllocation().unsetInputCargo();
 				}
 				for (final SlotAllocation slotAllocation : container.getSlotAllocations()) {
 					slotAllocation.unsetSlot();
@@ -526,7 +526,7 @@ public class WhatIfEvaluator {
 										fixModelReferences(container.getCargoAllocation(), mapper);
 
 										container.getCargoAllocation().unsetSequence();
-										container.getCargoAllocation().unsetInputCargo();
+//										container.getCargoAllocation().unsetInputCargo();
 									}
 									for (final SlotAllocation slotAllocation : container.getSlotAllocations()) {
 										slotAllocation.unsetSlot();

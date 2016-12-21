@@ -662,7 +662,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					aSet.remove(null);
 				} else if (a instanceof CargoAllocation) {
 					final CargoAllocation cargoAllocation = (CargoAllocation) a;
-					aSet.add(cargoAllocation.getInputCargo());
+//					aSet.add(cargoAllocation.getInputCargo());
 					for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 						aSet.add(slotAllocation.getSlot());
 					}

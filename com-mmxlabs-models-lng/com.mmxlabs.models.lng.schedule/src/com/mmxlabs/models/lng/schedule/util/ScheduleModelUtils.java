@@ -4,11 +4,14 @@
  */
 package com.mmxlabs.models.lng.schedule.util;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -143,7 +146,7 @@ public class ScheduleModelUtils {
 		return null;
 	}
 
-	public static @Nullable Journey getLinkedJourneyEvent(PortVisit portVisit) {
+	public static @Nullable Journey getLinkedJourneyEvent(final PortVisit portVisit) {
 		final Event evt = portVisit.getNextEvent();
 		if (evt instanceof Journey) {
 			return (Journey) evt;
@@ -152,7 +155,7 @@ public class ScheduleModelUtils {
 
 	}
 
-	public static @Nullable Idle getLinkedIdleEvent(PortVisit portVisit) {
+	public static @Nullable Idle getLinkedIdleEvent(final PortVisit portVisit) {
 		Event evt = portVisit.getNextEvent();
 		if (evt instanceof Journey) {
 			evt = evt.getNextEvent();
@@ -164,10 +167,10 @@ public class ScheduleModelUtils {
 
 	}
 	
-	public static int sumFuelVolumes(List<FuelQuantity> fuels, FuelUnit fuelUnit) {
+	public static int sumFuelVolumes(final List<FuelQuantity> fuels, final FuelUnit fuelUnit) {
 		int fuelTotal = 0;
-		for (FuelQuantity fuel : fuels) {
-			for (FuelAmount fuelAmount : fuel.getAmounts()) {
+		for (final FuelQuantity fuel : fuels) {
+			for (final FuelAmount fuelAmount : fuel.getAmounts()) {
 				if (fuelAmount.getUnit() == fuelUnit) {
 					fuelTotal += fuelAmount.getQuantity();
 				}
@@ -176,4 +179,25 @@ public class ScheduleModelUtils {
 		return fuelTotal;
 	}
 
+	/**
+	 * Match on same slots (although not, we are not checking order)
+	 * 
+	 * @param cargo
+	 * @param cargoAllocation
+	 * @return
+	 */
+	public static boolean matchingSlots(@Nullable final Cargo cargo, @Nullable final CargoAllocation cargoAllocation) {
+		if (cargo == null || cargoAllocation == null) {
+			return false;
+		}
+		if (cargo.getSlots().size() == cargoAllocation.getSlotAllocations().size()) {
+
+			final Set<String> cargoIDs = new HashSet<>();
+			final Set<String> allocationIDs = new HashSet<>();
+			cargo.getSlots().forEach(s -> cargoIDs.add(s.getName()));
+			cargoAllocation.getSlotAllocations().forEach(s -> allocationIDs.add(s.getName()));
+			return cargoIDs.equals(allocationIDs);
+		}
+		return false;
+	}
 }

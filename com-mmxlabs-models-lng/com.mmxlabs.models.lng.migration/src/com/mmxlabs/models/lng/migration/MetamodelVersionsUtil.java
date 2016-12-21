@@ -924,9 +924,9 @@ public class MetamodelVersionsUtil {
 	}
 
 	public static MetamodelLoader createV30Loader(final Map<URI, PackageData> extraPackages) {
-		
+
 		final MetamodelLoader loader = new MetamodelLoader();
-		
+
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore-v2.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_MMXCore);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.types/model/lngtypes-v30.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_LNGTypes);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.port/model/port-v30.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_PortModel);
@@ -940,21 +940,21 @@ public class MetamodelVersionsUtil {
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.parameters/model/parameters-v30.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ParametersModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.scenario.model/model/scenario-v30.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ScenarioModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.actuals/model/actuals-v30.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ActualsModel);
-		
+
 		if (extraPackages != null) {
 			for (final Map.Entry<URI, PackageData> e : extraPackages.entrySet()) {
 				loader.loadEPackage(e.getKey(), e.getValue());
 			}
 		}
 		EcoreUtil.resolveAll(loader.getResourceSet());
-		
+
 		return loader;
 	}
-	
+
 	public static MetamodelLoader createV31Loader(final Map<URI, PackageData> extraPackages) {
-		
+
 		final MetamodelLoader loader = new MetamodelLoader();
-		
+
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore-v2.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_MMXCore);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.types/model/lngtypes-v31.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_LNGTypes);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.port/model/port-v31.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_PortModel);
@@ -968,14 +968,14 @@ public class MetamodelVersionsUtil {
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.parameters/model/parameters-v31.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ParametersModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.scenario.model/model/scenario-v31.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ScenarioModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.actuals/model/actuals-v31.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ActualsModel);
-		
+
 		if (extraPackages != null) {
 			for (final Map.Entry<URI, PackageData> e : extraPackages.entrySet()) {
 				loader.loadEPackage(e.getKey(), e.getValue());
 			}
 		}
 		EcoreUtil.resolveAll(loader.getResourceSet());
-		
+
 		return loader;
 	}
 
@@ -1070,12 +1070,42 @@ public class MetamodelVersionsUtil {
 		return loader;
 	}
 
-	public static MetamodelLoader createVNLoaderTemplate22Onwards(final int n, final Map<URI, PackageData> extraPackages) {
-
+	public static MetamodelLoader createVNLoaderTemplate22to63(final int n, final Map<URI, PackageData> extraPackages) {
+		assert n >= 22 && n < 64;
 		final MetamodelLoader loader = new MetamodelLoader();
 
 		loader.loadEPackage(URI.createPlatformPluginURI(String.format("/com.mmxlabs.models.datetime/model/datetime-v1.ecore", n), true), ModelsLNGMigrationConstants.PKG_DATA_DateTime);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore-v2.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_MMXCore);
+
+		loader.loadEPackage(URI.createPlatformPluginURI(String.format("/com.mmxlabs.models.lng.types/model/lngtypes-v%d.ecore", n), true), ModelsLNGMigrationConstants.PKG_DATA_LNGTypes);
+		loader.loadEPackage(URI.createPlatformPluginURI(String.format("/com.mmxlabs.models.lng.port/model/port-v%d.ecore", n), true), ModelsLNGMigrationConstants.PKG_DATA_PortModel);
+		loader.loadEPackage(URI.createPlatformPluginURI(String.format("/com.mmxlabs.models.lng.pricing/model/pricing-v%d.ecore", n), true), ModelsLNGMigrationConstants.PKG_DATA_PricingModel);
+		loader.loadEPackage(URI.createPlatformPluginURI(String.format("/com.mmxlabs.models.lng.fleet/model/fleet-v%d.ecore", n), true), ModelsLNGMigrationConstants.PKG_DATA_FleetModel);
+		loader.loadEPackage(URI.createPlatformPluginURI(String.format("/com.mmxlabs.models.lng.commercial/model/commercial-v%d.ecore", n), true), ModelsLNGMigrationConstants.PKG_DATA_CommercialModel);
+		loader.loadEPackage(URI.createPlatformPluginURI(String.format("/com.mmxlabs.models.lng.spotmarkets/model/spotmarkets-v%d.ecore", n), true),
+				ModelsLNGMigrationConstants.PKG_DATA_SpotMarketsModel);
+		loader.loadEPackage(URI.createPlatformPluginURI(String.format("/com.mmxlabs.models.lng.cargo/model/cargo-v%d.ecore", n), true), ModelsLNGMigrationConstants.PKG_DATA_CargoModel);
+		loader.loadEPackage(URI.createPlatformPluginURI(String.format("/com.mmxlabs.models.lng.schedule/model/schedule-v%d.ecore", n), true), ModelsLNGMigrationConstants.PKG_DATA_ScheduleModel);
+		loader.loadEPackage(URI.createPlatformPluginURI(String.format("/com.mmxlabs.models.lng.analytics/model/analytics-v%d.ecore", n), true), ModelsLNGMigrationConstants.PKG_DATA_AnalyticsModel);
+		loader.loadEPackage(URI.createPlatformPluginURI(String.format("/com.mmxlabs.models.lng.parameters/model/parameters-v%d.ecore", n), true), ModelsLNGMigrationConstants.PKG_DATA_ParametersModel);
+		loader.loadEPackage(URI.createPlatformPluginURI(String.format("/com.mmxlabs.models.lng.scenario.model/model/scenario-v%d.ecore", n), true), ModelsLNGMigrationConstants.PKG_DATA_ScenarioModel);
+		loader.loadEPackage(URI.createPlatformPluginURI(String.format("/com.mmxlabs.models.lng.actuals/model/actuals-v%d.ecore", n), true), ModelsLNGMigrationConstants.PKG_DATA_ActualsModel);
+
+		if (extraPackages != null) {
+			for (final Map.Entry<URI, PackageData> e : extraPackages.entrySet()) {
+				loader.loadEPackage(e.getKey(), e.getValue());
+			}
+		}
+		EcoreUtil.resolveAll(loader.getResourceSet());
+		return loader;
+	}
+
+	public static MetamodelLoader createVNLoaderTemplate64Onwards(final int n, final Map<URI, PackageData> extraPackages) {
+
+		final MetamodelLoader loader = new MetamodelLoader();
+
+		loader.loadEPackage(URI.createPlatformPluginURI(String.format("/com.mmxlabs.models.datetime/model/datetime-v1.ecore", n), true), ModelsLNGMigrationConstants.PKG_DATA_DateTime);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore-v3.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_MMXCore);
 
 		loader.loadEPackage(URI.createPlatformPluginURI(String.format("/com.mmxlabs.models.lng.types/model/lngtypes-v%d.ecore", n), true), ModelsLNGMigrationConstants.PKG_DATA_LNGTypes);
 		loader.loadEPackage(URI.createPlatformPluginURI(String.format("/com.mmxlabs.models.lng.port/model/port-v%d.ecore", n), true), ModelsLNGMigrationConstants.PKG_DATA_PortModel);
@@ -1105,8 +1135,10 @@ public class MetamodelVersionsUtil {
 			return MetamodelVersionsUtil.createVNLoaderTemplate0to5(version, extraPackages);
 		} else if (version < 22) {
 			return MetamodelVersionsUtil.createVNLoaderTemplate6to21(version, extraPackages);
+		} else if (version < 64) {
+			return MetamodelVersionsUtil.createVNLoaderTemplate22to63(version, extraPackages);
 		} else {
-			return createVNLoaderTemplate22Onwards(version, extraPackages);
+			return createVNLoaderTemplate64Onwards(version, extraPackages);
 		}
 	}
 }

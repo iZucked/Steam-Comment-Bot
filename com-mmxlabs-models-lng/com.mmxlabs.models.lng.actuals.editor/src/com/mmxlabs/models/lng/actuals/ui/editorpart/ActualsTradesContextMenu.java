@@ -15,6 +15,7 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.IStructuredSelection;
 
 import com.mmxlabs.models.lng.actuals.ActualsFactory;
 import com.mmxlabs.models.lng.actuals.ActualsModel;
@@ -56,6 +57,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
@@ -210,7 +212,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 				final Schedule schedule = scheduleModel.getSchedule();
 				if (schedule != null) {
 					for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
-						if (cargoAllocation.getInputCargo() == cargo) {
+						if (ScheduleModelUtils.matchingSlots(cargo, cargoAllocation)) {
 							int ladenBaseFuelConsumptionInMT = 0;
 							int ballastBaseFuelConsumptionInMT = 0;
 
@@ -391,5 +393,11 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 				DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, cargoActuals);
 			}
 		}
+	}
+
+	@Override
+	public void contributeToMenu(@NonNull IScenarioEditingLocation scenarioEditingLocation, @NonNull IStructuredSelection selection, @NonNull MenuManager menuManager) {
+		// TODO Auto-generated method stub
+
 	}
 }

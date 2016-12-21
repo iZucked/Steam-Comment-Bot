@@ -10,7 +10,7 @@
    <extension
          point="com.mmxlabs.models.migration.MigrationContext">
       <MigrationContext
-            latestVersion="63"
+            latestVersion="64"
             name="com.mmxlabs.lingo">
       </MigrationContext>
    </extension>

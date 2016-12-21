@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.schedule;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
@@ -18,8 +19,8 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getSlotAllocations <em>Slot Allocations</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getInputCargo <em>Input Cargo</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getSequence <em>Sequence</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getCargoType <em>Cargo Type</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCargoAllocation()
@@ -44,59 +45,6 @@ public interface CargoAllocation extends MMXObject, ProfitAndLossContainer, Even
 	 * @generated
 	 */
 	EList<SlotAllocation> getSlotAllocations();
-
-	/**
-	 * Returns the value of the '<em><b>Input Cargo</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Input Cargo</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Input Cargo</em>' reference.
-	 * @see #isSetInputCargo()
-	 * @see #unsetInputCargo()
-	 * @see #setInputCargo(Cargo)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCargoAllocation_InputCargo()
-	 * @model unsettable="true" required="true"
-	 * @generated
-	 */
-	Cargo getInputCargo();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getInputCargo <em>Input Cargo</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Input Cargo</em>' reference.
-	 * @see #isSetInputCargo()
-	 * @see #unsetInputCargo()
-	 * @see #getInputCargo()
-	 * @generated
-	 */
-	void setInputCargo(Cargo value);
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getInputCargo <em>Input Cargo</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetInputCargo()
-	 * @see #getInputCargo()
-	 * @see #setInputCargo(Cargo)
-	 * @generated
-	 */
-	void unsetInputCargo();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getInputCargo <em>Input Cargo</em>}' reference is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Input Cargo</em>' reference is set.
-	 * @see #unsetInputCargo()
-	 * @see #getInputCargo()
-	 * @see #setInputCargo(Cargo)
-	 * @generated
-	 */
-	boolean isSetInputCargo();
 
 	/**
 	 * Returns the value of the '<em><b>Sequence</b></em>' reference.
@@ -150,6 +98,35 @@ public interface CargoAllocation extends MMXObject, ProfitAndLossContainer, Even
 	 * @generated
 	 */
 	boolean isSetSequence();
+
+	/**
+	 * Returns the value of the '<em><b>Cargo Type</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.cargo.CargoType}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cargo Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cargo Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.cargo.CargoType
+	 * @see #setCargoType(CargoType)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCargoAllocation_CargoType()
+	 * @model
+	 * @generated
+	 */
+	CargoType getCargoType();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getCargoType <em>Cargo Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cargo Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.cargo.CargoType
+	 * @see #getCargoType()
+	 * @generated
+	 */
+	void setCargoType(CargoType value);
 
 	/**
 	 * <!-- begin-user-doc -->

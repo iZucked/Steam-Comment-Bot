@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
+import com.mmxlabs.models.mmxcore.MMXResultRoot;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
@@ -22,7 +23,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @model
  * @generated
  */
-public interface ScheduleModel extends UUIDObject {
+public interface ScheduleModel extends UUIDObject, MMXResultRoot {
 	/**
 	 * Returns the value of the '<em><b>Schedule</b></em>' containment reference.
 	 * <!-- begin-user-doc -->

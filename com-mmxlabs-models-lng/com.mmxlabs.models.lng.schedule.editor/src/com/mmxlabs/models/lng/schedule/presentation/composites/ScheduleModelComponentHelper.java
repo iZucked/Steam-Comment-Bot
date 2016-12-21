@@ -44,6 +44,7 @@ public class ScheduleModelComponentHelper extends BaseComponentHelper {
 	public ScheduleModelComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
+		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.MMX_RESULT_ROOT));
 	}
 	
 	/**

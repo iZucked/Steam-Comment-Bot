@@ -13,9 +13,11 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -53,8 +55,8 @@ public class CargoAllocationItemProvider
 			addGroupProfitAndLossPropertyDescriptor(object);
 			addEventsPropertyDescriptor(object);
 			addSlotAllocationsPropertyDescriptor(object);
-			addInputCargoPropertyDescriptor(object);
 			addSequencePropertyDescriptor(object);
+			addCargoTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -95,28 +97,6 @@ public class CargoAllocationItemProvider
 				 getString("_UI_CargoAllocation_slotAllocations_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_slotAllocations_feature", "_UI_CargoAllocation_type"),
 				 SchedulePackage.Literals.CARGO_ALLOCATION__SLOT_ALLOCATIONS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Input Cargo feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addInputCargoPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CargoAllocation_inputCargo_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_inputCargo_feature", "_UI_CargoAllocation_type"),
-				 SchedulePackage.Literals.CARGO_ALLOCATION__INPUT_CARGO,
 				 true,
 				 false,
 				 true,
@@ -170,6 +150,28 @@ public class CargoAllocationItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Cargo Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCargoTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_cargoType_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_cargoType_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__CARGO_TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -183,7 +185,6 @@ public class CargoAllocationItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS);
 			childrenFeatures.add(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS);
-			childrenFeatures.add(SchedulePackage.Literals.CARGO_ALLOCATION__INPUT_CARGO);
 		}
 		return childrenFeatures;
 	}
@@ -222,10 +223,7 @@ public class CargoAllocationItemProvider
 	public String getText(Object object) {
 		CargoAllocation cargoAllocation = (CargoAllocation)object;
 		String text = getString("_UI_CargoAllocation_type");
-		Cargo cargo = cargoAllocation.getInputCargo();
-		if (cargo != null) {
-			text += " " + cargo.getLoadName();
-		}
+		text += " " + cargoAllocation.getName();
 		return text;
 	}
 
@@ -241,6 +239,9 @@ public class CargoAllocationItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(CargoAllocation.class)) {
+			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 			case SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS:
 			case SchedulePackage.CARGO_ALLOCATION__GENERAL_PNL_DETAILS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));

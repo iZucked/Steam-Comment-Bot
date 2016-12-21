@@ -67,8 +67,8 @@ public class CargoAllocationComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_slotAllocationsEditor(detailComposite, topClass);
-		add_inputCargoEditor(detailComposite, topClass);
 		add_sequenceEditor(detailComposite, topClass);
+		add_cargoTypeEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the slotAllocations feature on CargoAllocation
@@ -80,20 +80,20 @@ public class CargoAllocationComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Create the editor for the inputCargo feature on CargoAllocation
-	 *
-	 * @generated
-	 */
-	protected void add_inputCargoEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__INPUT_CARGO));
-	}
-
-	/**
 	 * Create the editor for the sequence feature on CargoAllocation
 	 *
 	 * @generated
 	 */
 	protected void add_sequenceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__SEQUENCE));
+	}
+
+	/**
+	 * Create the editor for the cargoType feature on CargoAllocation
+	 *
+	 * @generated
+	 */
+	protected void add_cargoTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__CARGO_TYPE));
 	}
 }

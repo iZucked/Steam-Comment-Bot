@@ -33,3 +33,4 @@ Bundle-Activator: com.mmxlabs.models.lng.scenario.internal.Activator
 Import-Package: com.google.inject;version="1.3.0",
  com.mmxlabs.models.lng.pricing.importers,
  org.slf4j;version="1.6.4"
+Service-Component: OSGI-INF/*.xml

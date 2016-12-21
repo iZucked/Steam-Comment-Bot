@@ -538,22 +538,22 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION__SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Input Cargo</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__INPUT_CARGO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
-
-	/**
 	 * The feature id for the '<em><b>Sequence</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__SEQUENCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int CARGO_ALLOCATION__SEQUENCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Cargo Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__CARGO_TYPE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Cargo Allocation</em>' class.
@@ -5018,17 +5018,6 @@ public interface SchedulePackage extends EPackage {
 	EReference getCargoAllocation_SlotAllocations();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getInputCargo <em>Input Cargo</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Input Cargo</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getInputCargo()
-	 * @see #getCargoAllocation()
-	 * @generated
-	 */
-	EReference getCargoAllocation_InputCargo();
-
-	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getSequence <em>Sequence</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5038,6 +5027,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getCargoAllocation_Sequence();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getCargoType <em>Cargo Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cargo Type</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getCargoType()
+	 * @see #getCargoAllocation()
+	 * @generated
+	 */
+	EAttribute getCargoAllocation_CargoType();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getName() <em>Get Name</em>}' operation.
@@ -6601,20 +6601,20 @@ public interface SchedulePackage extends EPackage {
 		EReference CARGO_ALLOCATION__SLOT_ALLOCATIONS = eINSTANCE.getCargoAllocation_SlotAllocations();
 
 		/**
-		 * The meta object literal for the '<em><b>Input Cargo</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_ALLOCATION__INPUT_CARGO = eINSTANCE.getCargoAllocation_InputCargo();
-
-		/**
 		 * The meta object literal for the '<em><b>Sequence</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference CARGO_ALLOCATION__SEQUENCE = eINSTANCE.getCargoAllocation_Sequence();
+
+		/**
+		 * The meta object literal for the '<em><b>Cargo Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CARGO_ALLOCATION__CARGO_TYPE = eINSTANCE.getCargoAllocation_CargoType();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Name</b></em>' operation.

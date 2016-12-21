@@ -348,7 +348,8 @@ public class Exposures {
 			for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 				if (!filterOn.isEmpty()) {
 					final boolean include = filterOn.contains(slotAllocation) || filterOn.contains(slotAllocation.getSlot()) || filterOn.contains(cargoAllocation)
-							|| filterOn.contains(cargoAllocation.getInputCargo());
+						//|| filterOn.contains(cargoAllocation.getInputCargo())
+							;
 					if (!include) {
 						continue;
 					}

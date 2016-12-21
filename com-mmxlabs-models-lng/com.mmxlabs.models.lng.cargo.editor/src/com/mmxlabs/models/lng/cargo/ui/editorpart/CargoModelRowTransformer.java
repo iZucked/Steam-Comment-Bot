@@ -81,7 +81,7 @@ public class CargoModelRowTransformer {
 		final Map<Slot, OpenSlotAllocation> openAllocationMap = new HashMap<>();
 		if (schedule != null) {
 			for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
-				cargoAllocationMap.put(cargoAllocation.getInputCargo(), cargoAllocation);
+//				cargoAllocationMap.put(cargoAllocation.getInputCargo(), cargoAllocation);
 			}
 			for (final OpenSlotAllocation openAllocation : schedule.getOpenSlotAllocations()) {
 				openAllocationMap.put(openAllocation.getSlot(), openAllocation);

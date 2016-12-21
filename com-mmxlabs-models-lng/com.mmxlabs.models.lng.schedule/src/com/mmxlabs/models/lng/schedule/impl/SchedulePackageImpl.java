@@ -994,7 +994,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getCargoAllocation_InputCargo() {
+	public EReference getCargoAllocation_Sequence() {
 		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -1003,8 +1003,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getCargoAllocation_Sequence() {
-		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(2);
+	public EAttribute getCargoAllocation_CargoType() {
+		return (EAttribute)cargoAllocationEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1909,8 +1909,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		cargoAllocationEClass = createEClass(CARGO_ALLOCATION);
 		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__SLOT_ALLOCATIONS);
-		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__INPUT_CARGO);
 		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__SEQUENCE);
+		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__CARGO_TYPE);
 		createEOperation(cargoAllocationEClass, CARGO_ALLOCATION___GET_NAME);
 
 		marketAllocationEClass = createEClass(MARKET_ALLOCATION);
@@ -2128,6 +2128,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		// Add supertypes to classes
 		scheduleModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		scheduleModelEClass.getESuperTypes().add(theMMXCorePackage.getMMXResultRoot());
 		scheduleEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		fitnessEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		cargoAllocationEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
@@ -2192,8 +2193,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEClass(cargoAllocationEClass, CargoAllocation.class, "CargoAllocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCargoAllocation_SlotAllocations(), this.getSlotAllocation(), this.getSlotAllocation_CargoAllocation(), "slotAllocations", null, 1, -1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCargoAllocation_InputCargo(), theCargoPackage.getCargo(), null, "inputCargo", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoAllocation_Sequence(), this.getSequence(), null, "sequence", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCargoAllocation_CargoType(), theCargoPackage.getCargoType(), "cargoType", null, 0, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getCargoAllocation__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
 
