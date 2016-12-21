@@ -129,7 +129,6 @@ public class PeriodTestUtils {
 		final CargoAllocation cargoAllocation = ScheduleFactory.eINSTANCE.createCargoAllocation();
 		scenarioModel.getScheduleModel().getSchedule().getCargoAllocations().add(cargoAllocation);
 
-		cargoAllocation.setInputCargo(cargo);
 		cargoAllocation.getSlotAllocations().add(loadAllocation);
 		cargoAllocation.getSlotAllocations().add(dischargeAllocation);
 

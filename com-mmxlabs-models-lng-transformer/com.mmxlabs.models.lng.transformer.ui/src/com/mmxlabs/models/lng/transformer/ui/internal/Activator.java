@@ -28,6 +28,7 @@ import com.mmxlabs.models.ui.validation.ValidationPlugin;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -49,21 +50,22 @@ public class Activator extends ValidationPlugin {
 	private final IScenarioServiceSelectionChangedListener scenarioServiceSelectionChangedListener = new IScenarioServiceSelectionChangedListener() {
 
 		@Override
-		public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> selected, boolean block) {
+		public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioResult> selected, boolean block) {
 
 			setJobProperty(selected, true);
 		}
 
 		@Override
-		public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected, boolean block) {
+		public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioResult> deselected, boolean block) {
 			setJobProperty(deselected, false);
 		}
 
-		private void setJobProperty(final Collection<ScenarioInstance> selected, final boolean showInTaskbar) {
+		private void setJobProperty(final Collection<ScenarioResult> selected, final boolean showInTaskbar) {
 			final IEclipseJobManager jobManager = jobManagerServiceTracker.getService();
 			if (jobManager != null) {
 
-				for (final ScenarioInstance instance : selected) {
+				for (final ScenarioResult result : selected) {
+					ScenarioInstance instance = result.getScenarioInstance();
 					final Object object = instance.getInstance();
 					if (object instanceof MMXRootObject) {
 
@@ -84,11 +86,11 @@ public class Activator extends ValidationPlugin {
 		}
 
 		@Override
-		public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin, boolean block) {
+		public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioResult oldPin, final ScenarioResult newPin, boolean block) {
 		}
 
 		@Override
-		public void selectionChanged(ScenarioInstance pinned, Collection<ScenarioInstance> others, boolean block) {
+		public void selectionChanged(ScenarioResult pinned, Collection<ScenarioResult> others, boolean block) {
 
 		}
 	};

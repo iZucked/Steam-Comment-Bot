@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
@@ -101,12 +102,12 @@ public class CargoExistenceCheckTest {
 		Assert.assertEquals("Same number of cargoes in the output as in the input", numOfInputCargoes, result.getCargoAllocations().size());
 
 		for (final CargoAllocation ca : result.getCargoAllocations()) {
-
-			final Cargo c = ca.getInputCargo();
-
-			Assert.assertTrue("Input cargo is in output", inputCargoes.contains(c));
-
-			inputCargoes.remove(c);
+			for (final Cargo c : inputCargoes) {
+				if (ScheduleModelUtils.matchingSlots(c, ca)) {
+					inputCargoes.remove(c);
+					break;
+				}
+			}
 		}
 
 		Assert.assertEquals("All cargoes in output", 0, inputCargoes.size());

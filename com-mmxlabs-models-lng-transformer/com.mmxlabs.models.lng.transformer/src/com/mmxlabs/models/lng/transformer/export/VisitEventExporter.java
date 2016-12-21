@@ -10,6 +10,9 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -41,6 +44,8 @@ import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEven
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil;
+import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil.DetailedCargoType;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
@@ -66,6 +71,9 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 	private IPortTypeProvider portTypeProvider;
 	@Inject
 	private IPortSlotEventProvider portSlotEventProvider;
+
+	@Inject
+	private CargoTypeUtil cargoTypeUtil;
 
 	private final HashMap<IPortSlot, CargoAllocation> allocations = new HashMap<IPortSlot, CargoAllocation>();
 	private Port lastPortVisited = null;
@@ -124,6 +132,36 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 				}
 
 				output.getCargoAllocations().add(eAllocation);
+
+				@NonNull
+				final DetailedCargoType type = cargoTypeUtil.getDetailedCargoType(allocation.getSlots());
+				
+				CargoType cargoType = null;
+				switch (type) {
+				case DES_PURCHASE:
+					cargoType = CargoType.DES;
+					break;
+				case DIVERTABLE_DES_PURCHASE:
+					cargoType = CargoType.DES;
+					break;
+				case DIVERTABLE_FOB_SALE:
+					cargoType = CargoType.FOB;
+					break;
+				case FOB_SALE:
+					cargoType = CargoType.FOB;
+					break;
+				case SHIPPED:
+					cargoType = CargoType.FLEET;
+					break;
+				case OPEN_DES_SALE:
+				case OPEN_FOB_PURCHASE:
+				case UNKNOWN:
+				default:
+					break;
+
+				}
+				assert cargoType != null;
+				eAllocation.setCargoType(cargoType);
 			}
 			eAllocation.getSlotAllocations().add(slotAllocation);
 
@@ -148,8 +186,8 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 		} else if (slot instanceof IVesselEventPortSlot) {
 			if (slot instanceof IGeneratedCharterOutVesselEventPortSlot) {
 				// GCO logic
-				GeneratedCharterOut generatedCharterOutEvent = factory.createGeneratedCharterOut();
-				IGeneratedCharterOutVesselEvent event = ((IGeneratedCharterOutVesselEventPortSlot) slot).getVesselEvent();
+				final GeneratedCharterOut generatedCharterOutEvent = factory.createGeneratedCharterOut();
+				final IGeneratedCharterOutVesselEvent event = ((IGeneratedCharterOutVesselEventPortSlot) slot).getVesselEvent();
 				generatedCharterOutEvent.setRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(event.getHireOutRevenue()));
 
 				portVisit = generatedCharterOutEvent;
@@ -252,9 +290,9 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 		}
 		final ILatenessAnnotation latenessAnnotation = (ILatenessAnnotation) annotations.get(SchedulerConstants.AI_latenessInfo);
 		if (latenessAnnotation != null) {
-			PortVisitLateness portVisitLateness = ScheduleFactory.eINSTANCE.createPortVisitLateness();
+			final PortVisitLateness portVisitLateness = ScheduleFactory.eINSTANCE.createPortVisitLateness();
 			PortVisitLatenessType type = null;
-			Interval interval = latenessAnnotation.getIntervalWithoutFlex();
+			final Interval interval = latenessAnnotation.getIntervalWithoutFlex();
 			switch (interval) {
 			case PROMPT:
 				type = PortVisitLatenessType.PROMPT;

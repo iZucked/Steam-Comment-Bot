@@ -77,7 +77,6 @@ public class LNGSchedulerJobUtilsTests {
 			schedule.getSequences().add(sequence);
 
 			final CargoAllocation cargoAllocation = ScheduleFactory.eINSTANCE.createCargoAllocation();
-			cargoAllocation.setInputCargo(cargo);
 			cargoAllocation.setSequence(sequence);
 			schedule.getCargoAllocations().add(cargoAllocation);
 			{

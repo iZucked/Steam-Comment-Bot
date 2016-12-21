@@ -13,13 +13,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.google.common.collect.Lists;
-import com.google.inject.name.Named;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
@@ -81,17 +81,14 @@ public class CargoAllowedVesselConstraintCheckTest {
 		// get the cargo that was constrained out of the results.
 		for (final CargoAllocation ca : result.getCargoAllocations()) {
 
-			final Cargo c = ca.getInputCargo();
-
-			if (c.equals(constrainedCargo)) {
+			if (ScheduleModelUtils.matchingSlots(constrainedCargo, ca)) {
 				// found the constrained cargo
 				// now get the name of the vessel and see it it matches the one class four vessel.
 				final Vessel av = ca.getSequence().getVesselAvailability().getVessel();
 
 				final boolean namesMatch = av.getName().equals(vesselsClassFour.get(0).getName());
-				
-				if (!namesMatch
-						) {
+
+				if (!namesMatch) {
 					int ii = 0;
 				}
 				Assert.assertTrue("Only vessel class four used", namesMatch);

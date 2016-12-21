@@ -370,7 +370,7 @@ public class LNGSchedulerJobUtils {
 				setCargoSlots.add(slot);
 			}
 			// Finally match the CargoAllocation to the Cargo object
-			cmd.append(SetCommand.create(domain, allocation, SchedulePackage.eINSTANCE.getCargoAllocation_InputCargo(), loadCargo));
+			// cmd.append(SetCommand.create(domain, allocation, SchedulePackage.eINSTANCE.getCargoAllocation_InputCargo(), loadCargo));
 		}
 
 		// Add the unset commands first so they do not overwrite the set commands

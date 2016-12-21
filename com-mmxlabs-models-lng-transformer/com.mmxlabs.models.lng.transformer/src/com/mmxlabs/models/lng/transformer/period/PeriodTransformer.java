@@ -909,7 +909,7 @@ public class PeriodTransformer {
 					if (event instanceof SlotVisit) {
 						final SlotVisit slotVisit = (SlotVisit) event;
 						// Get the cargo for the set of visits., set start/end heel links
-						final Cargo cargo = slotVisit.getSlotAllocation().getCargoAllocation().getInputCargo();
+						final Cargo cargo = slotVisit.getSlotAllocation().getSlot().getCargo();
 						endConditionMap.put(cargo, slotVisit);
 
 						// skip to next segment - start of next sequence. Otherwise this could e.g. cargo discharge slot.
@@ -967,7 +967,7 @@ public class PeriodTransformer {
 			boolean foundCargo = false;
 			while (currentEvent.getPreviousEvent() != null) {
 				if (currentEvent instanceof SlotVisit) {
-					previousCargoes.add(((SlotVisit) currentEvent).getSlotAllocation().getCargoAllocation().getInputCargo());
+					previousCargoes.add(((SlotVisit) currentEvent).getSlotAllocation().getSlot().getCargo());
 					foundCargo = true;
 					break;
 				} else if (currentEvent instanceof PortVisit) {
