@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 
 public class ColourSchemeUtil {
@@ -86,13 +87,19 @@ public class ColourSchemeUtil {
 
 	public static boolean isOutsideTimeWindow(final Event ev) {
 		final ZonedDateTime start = ev.getStart();
-		if (ev instanceof VesselEventVisit && start.isAfter(((VesselEventVisit) ev).getVesselEvent().getStartByAsDateTime())) {
-			return true;
+		if (ev instanceof VesselEventVisit) {
+			final VesselEventVisit vesselEventVisit = (VesselEventVisit) ev;
+			if (LatenessUtils.isLateExcludingFlex(vesselEventVisit)) {
+				// Only highlight if over 24 hours
+				if (LatenessUtils.getLatenessInHours(vesselEventVisit) > 24) {
+					return true;
+				}
+			}
 		}
 
 		if (ev instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) ev;
-			Slot slot = visit.getSlotAllocation().getSlot();
+			final Slot slot = visit.getSlotAllocation().getSlot();
 			if (slot != null) {
 				if (visit.getStart().isAfter(slot.getWindowEndWithSlotOrPortTime())) {
 					return true;
