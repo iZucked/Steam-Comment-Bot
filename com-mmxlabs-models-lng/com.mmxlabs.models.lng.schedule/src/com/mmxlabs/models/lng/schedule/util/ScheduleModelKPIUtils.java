@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -397,6 +398,10 @@ public class ScheduleModelKPIUtils {
 				} else if (event instanceof Idle) {
 					final Idle idle = (Idle) event;
 					total += idle.getCharterCost();
+				} else if (event instanceof Cooldown) {
+					final Cooldown cooldown = (Cooldown) event;
+					total += cooldown.getCharterCost();
+					total += cooldown.getCost();
 				} else if (event instanceof GeneratedCharterOut) {
 					final GeneratedCharterOut generatedCharterOut = (GeneratedCharterOut) event;
 					total += generatedCharterOut.getCharterCost();
