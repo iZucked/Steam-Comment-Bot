@@ -69,9 +69,9 @@ public class VesselEventViewerPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Latest Start", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselEvent_StartBy(), jointModelEditor.getEditingDomain()));
 		addTypicalColumn("Port", new SingleReferenceManipulator(CargoPackage.eINSTANCE.getVesselEvent_Port(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain()));
 		addTypicalColumn("Duration", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getVesselEvent_DurationInDays(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("Vessels",
-				new VesselEventVesselsManipulator(CargoPackage.eINSTANCE.getVesselEvent_AllowedVessels(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(),
-						MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+		addTypicalColumn("Vessel", new AssignmentManipulator(jointModelEditor));
+		addTypicalColumn("Allowed Vessels", new VesselEventVesselsManipulator(CargoPackage.eINSTANCE.getVesselEvent_AllowedVessels(), jointModelEditor.getReferenceValueProviderCache(),
+				jointModelEditor.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 		setTitle("Vessel Events", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 
 		// IElementComparer to handle selection objects from e.g. schedule
