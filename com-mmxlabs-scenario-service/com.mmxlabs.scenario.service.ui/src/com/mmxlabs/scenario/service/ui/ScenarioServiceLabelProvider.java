@@ -93,12 +93,10 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 			if (object instanceof ScenarioInstance) {
 				final IScenarioServiceSelectionProvider service = selectionProviderTracker.getService();
 				if (service != null) {
-					if (service.isSelected((ScenarioInstance) object)) {
-						if (service.getPinnedInstance() == object) {
-							return pinImage;
-						} else {
-							return showEnabledImage;
-						}
+					if (service.isPinned((ScenarioInstance) object)) {
+						return pinImage;
+					} else if (service.isSelected((ScenarioInstance) object)) {
+						return showEnabledImage;
 					} else {
 						return showDisabledImage;
 					}

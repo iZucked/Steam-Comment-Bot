@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -17,6 +19,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * Basic scenario selection service implementation
@@ -27,25 +30,25 @@ import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 public class ScenarioServiceSelectionProvider implements IScenarioServiceSelectionProvider {
 	private final List<IScenarioServiceSelectionChangedListener> listeners = new LinkedList<IScenarioServiceSelectionChangedListener>();
 
-	private final HashSet<ScenarioInstance> selection = new HashSet<ScenarioInstance>();
+	private final Set<ScenarioResult> selection = new HashSet<>();
 
-	private ScenarioInstance pin = null;
+	private @Nullable ScenarioResult pin = null;
 
 	@Override
-	public void select(final ScenarioInstance instance) {
+	public void select(final ScenarioResult instance) {
 		select(instance, false);
 	}
 
-	private void doSelect(@NonNull final ScenarioInstance instance, final boolean block) {
+	private void doSelect(@NonNull final ScenarioResult instance, final boolean block) {
 		if (!isSelected(instance)) {
 			// Enforce one pin, one other scenario.
 			if (pin != null && selection.size() > 1) {
-				for (final ScenarioInstance scenarioInstance : new ArrayList<>(selection)) {
+				for (final ScenarioResult scenarioInstance : new ArrayList<>(selection)) {
 					assert scenarioInstance != null;
-					if (scenarioInstance == instance) {
+					if (Objects.equals(scenarioInstance, instance)) {
 						continue;
 					}
-					if (scenarioInstance == pin) {
+					if (Objects.equals(scenarioInstance, pin)) {
 						continue;
 					}
 					doDeselect(scenarioInstance, block);
@@ -57,9 +60,14 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 	}
 
 	@Override
-	public void select(final ScenarioInstance instance, final boolean block) {
+	public void select(final ScenarioResult instance, final boolean block) {
 		doSelect(instance, block);
 		fireSelectionChangedEvent(block);
+	}
+
+	@Override
+	public void deselect(final ScenarioResult instance) {
+		deselect(instance, false);
 	}
 
 	@Override
@@ -67,9 +75,9 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 		deselect(instance, false);
 	}
 
-	private void doDeselect(@NonNull final ScenarioInstance instance, final boolean block) {
+	private void doDeselect(@NonNull final ScenarioResult instance, final boolean block) {
 		if (isSelected(instance)) {
-			if (instance == pin) {
+			if (Objects.equals(instance, pin)) {
 				doSetPinnedInstance(null, block);
 			} else {
 				selection.remove(instance);
@@ -79,8 +87,21 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 	}
 
 	@Override
-	public void deselect(@NonNull final ScenarioInstance instance, final boolean block) {
+	public void deselect(@NonNull final ScenarioResult instance, final boolean block) {
 		doDeselect(instance, block);
+		fireSelectionChangedEvent(block);
+	}
+
+	@Override
+	public void deselect(@NonNull final ScenarioInstance instance, final boolean block) {
+		if (selection.isEmpty() == false) {
+			final Set<ScenarioResult> copy = new HashSet<>(selection);
+			for (final ScenarioResult result : copy) {
+				if (result.getScenarioInstance() == instance) {
+					doDeselect(result, block);
+				}
+			}
+		}
 		fireSelectionChangedEvent(block);
 	}
 
@@ -92,10 +113,10 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 	@Override
 	public void deselectAll(final boolean block) {
 		if (selection.isEmpty() == false) {
-			final HashSet<ScenarioInstance> copy = new HashSet<ScenarioInstance>(selection);
+			final Set<ScenarioResult> copy = new HashSet<>(selection);
 			selection.clear();
-			setPinnedInstance(null);
-			final List<ScenarioInstance> others = new LinkedList<>(selection);
+			setPinnedInstance((ScenarioResult) null);
+			final List<ScenarioResult> others = new LinkedList<>(selection);
 			others.remove(pin);
 			fireDeselectedEvent(copy, block);
 		}
@@ -104,13 +125,23 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 	}
 
 	@Override
-	public boolean isSelected(@NonNull final ScenarioInstance instance) {
+	public boolean isSelected(@NonNull final ScenarioResult instance) {
 		return selection.contains(instance);
+	}
+
+	@Override
+	public boolean isSelected(@NonNull final ScenarioInstance instance) {
+		for (final ScenarioResult result : selection) {
+			if (result.getScenarioInstance() == instance) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@SuppressWarnings("null")
 	@Override
-	public Collection<ScenarioInstance> getSelection() {
+	public Collection<ScenarioResult> getSelection() {
 		return Collections.unmodifiableSet(selection);
 	}
 
@@ -127,7 +158,7 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 	/**
 	 * @param instance
 	 */
-	public void toggleSelection(@NonNull final ScenarioInstance instance, final boolean block) {
+	public void toggleSelection(@NonNull final ScenarioResult instance, final boolean block) {
 		if (isSelected(instance)) {
 			deselect(instance, block);
 		} else {
@@ -136,25 +167,32 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 	}
 
 	@Override
-	public ScenarioInstance getPinnedInstance() {
+	public ScenarioResult getPinnedInstance() {
 		return pin;
 	}
 
 	@Override
 	public void setPinnedInstance(final ScenarioInstance instance) {
+		ScenarioResult scenarioResult = new ScenarioResult(instance);
+		setPinnedInstance(scenarioResult, false);
+	}
+
+	@Override
+	public void setPinnedInstance(final ScenarioResult instance) {
 		setPinnedInstance(instance, false);
 	}
 
 	@Override
-	public void setPinnedPair(final ScenarioInstance pinInstance, final ScenarioInstance otherInstance, final boolean block) {
-		if (pin != pinInstance || !selection.contains(otherInstance)) {
+	public void setPinnedPair(final ScenarioResult pinInstance, final ScenarioResult otherInstance, final boolean block) {
+		if (!Objects.equals(pin, pinInstance) || !selection.contains(otherInstance)) {
 
-			for (final ScenarioInstance scenarioInstance : new ArrayList<>(selection)) {
+			// Deselect results which are not part of the selection pair.
+			for (final ScenarioResult scenarioInstance : new ArrayList<>(selection)) {
 				assert scenarioInstance != null;
-				if (scenarioInstance == pinInstance) {
+				if (Objects.equals(scenarioInstance, pinInstance)) {
 					continue;
 				}
-				if (scenarioInstance == otherInstance) {
+				if (Objects.equals(scenarioInstance, otherInstance)) {
 					continue;
 				}
 				doDeselect(scenarioInstance, block);
@@ -168,9 +206,9 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 		}
 	}
 
-	private void doSetPinnedInstance(@Nullable final ScenarioInstance instance, final boolean block) {
-		if (pin != instance) {
-			final ScenarioInstance oldPin = pin;
+	private void doSetPinnedInstance(@Nullable final ScenarioResult instance, final boolean block) {
+		if (!Objects.equals(pin, instance)) {
+			final ScenarioResult oldPin = pin;
 			pin = instance;
 			if (instance != null && !isSelected(instance)) {
 				doSelect(instance, block);
@@ -179,9 +217,9 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 			}
 			// Enforce one pin, one other scenario.
 			if (pin != null && selection.size() > 2) {
-				for (final ScenarioInstance scenarioInstance : new ArrayList<>(selection)) {
+				for (final ScenarioResult scenarioInstance : new ArrayList<>(selection)) {
 					assert scenarioInstance != null;
-					if (scenarioInstance == pin) {
+					if (Objects.equals(scenarioInstance, pin)) {
 						continue;
 					}
 					doDeselect(scenarioInstance, block);
@@ -192,46 +230,62 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 	}
 
 	@Override
-	public void setPinnedInstance(@Nullable final ScenarioInstance instance, final boolean block) {
+	public void setPinnedInstance(@Nullable final ScenarioResult instance, final boolean block) {
 		doSetPinnedInstance(instance, block);
 		fireSelectionChangedEvent(block);
 	}
 
-	private void fireSelectedEvent(@NonNull Collection<ScenarioInstance> instances, boolean block) {
+	private void fireSelectedEvent(@NonNull final Collection<ScenarioResult> instances, final boolean block) {
 		for (final IScenarioServiceSelectionChangedListener listener : listeners) {
 			listener.selected(this, instances, block);
 		}
 	}
 
-	private void fireSelectedEvent(@NonNull ScenarioInstance instance, boolean block) {
+	private void fireSelectedEvent(@NonNull final ScenarioResult instance, final boolean block) {
 		for (final IScenarioServiceSelectionChangedListener listener : listeners) {
 			listener.selected(this, Collections.singleton(instance), block);
 		}
 	}
 
-	private void fireDeselectedEvent(@NonNull ScenarioInstance instance, boolean block) {
+	private void fireDeselectedEvent(@NonNull final ScenarioResult instance, final boolean block) {
 		for (final IScenarioServiceSelectionChangedListener listener : listeners) {
 			listener.deselected(this, Collections.singleton(instance), block);
 		}
 	}
 
-	private void fireDeselectedEvent(@NonNull Collection<ScenarioInstance> instances, boolean block) {
+	private void fireDeselectedEvent(@NonNull final Collection<ScenarioResult> instances, final boolean block) {
 		for (final IScenarioServiceSelectionChangedListener listener : listeners) {
 			listener.deselected(this, instances, block);
 		}
 	}
 
-	private void firePinnedEvent(@Nullable ScenarioInstance oldPin, @Nullable ScenarioInstance newPin, boolean block) {
+	private void firePinnedEvent(@Nullable final ScenarioResult oldPin, @Nullable final ScenarioResult newPin, final boolean block) {
 		for (final IScenarioServiceSelectionChangedListener listener : listeners) {
 			listener.pinned(this, oldPin, newPin, block);
 		}
 	}
 
 	private void fireSelectionChangedEvent(final boolean block) {
-		final List<ScenarioInstance> others = new LinkedList<>(selection);
+		final List<ScenarioResult> others = new LinkedList<>(selection);
 		others.remove(pin);
 		for (final IScenarioServiceSelectionChangedListener listener : listeners) {
 			listener.selectionChanged(pin, others, block);
 		}
 	}
+
+	@Override
+	public boolean isPinned(@NonNull final ScenarioResult result) {
+		return pin != null && Objects.equals(pin, result);
+	}
+
+	@Override
+	public boolean isPinned(@NonNull final ScenarioInstance instance) {
+		if (pin != null) {
+			if (pin.getScenarioInstance() == instance) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }

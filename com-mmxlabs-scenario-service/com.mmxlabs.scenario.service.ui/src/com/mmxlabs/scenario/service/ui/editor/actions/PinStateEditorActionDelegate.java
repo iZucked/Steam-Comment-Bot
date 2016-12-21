@@ -18,6 +18,7 @@ import org.eclipse.ui.IEditorPart;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
 import com.mmxlabs.scenario.service.ui.internal.ScenarioServiceSelectionProvider;
@@ -30,22 +31,22 @@ public class PinStateEditorActionDelegate implements IEditorActionDelegate, IAct
 	private final IScenarioServiceSelectionChangedListener selectionChangedListener = new IScenarioServiceSelectionChangedListener() {
 
 		@Override
-		public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> selected, boolean block) {
+		public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioResult> selected, boolean block) {
 
 		}
 
 		@Override
-		public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin, boolean block) {
+		public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioResult oldPin, final ScenarioResult newPin, boolean block) {
 
 		}
 
 		@Override
-		public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected, boolean block) {
+		public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioResult> deselected, boolean block) {
 
 		}
 
 		@Override
-		public void selectionChanged(ScenarioInstance pinned, Collection<ScenarioInstance> others, boolean block) {
+		public void selectionChanged(ScenarioResult pinned, Collection<ScenarioResult> others, boolean block) {
 			updateActionState();
 		}
 	};
@@ -109,7 +110,7 @@ public class PinStateEditorActionDelegate implements IEditorActionDelegate, IAct
 			if (input instanceof IScenarioServiceEditorInput) {
 				final ScenarioInstance instance = ((IScenarioServiceEditorInput) input).getScenarioInstance();
 				if (selectionProvider.getPinnedInstance() == instance) {
-					selectionProvider.setPinnedInstance(null);
+					selectionProvider.setPinnedInstance((ScenarioResult) null);
 				} else {
 					selectionProvider.setPinnedInstance(instance);
 				}

@@ -14,10 +14,10 @@ public class PinStatePropertyTester extends PropertyTester {
 	@Override
 	public boolean test(final Object receiver, final String property, final Object[] args, final Object expectedValue) {
 		if (receiver instanceof ScenarioInstance) {
+			ScenarioInstance scenarioInstance = (ScenarioInstance) receiver;
 			if (property.equals("pinned")) {
 				final ScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
-				final ScenarioInstance pinned = selectionProvider.getPinnedInstance();
-				return pinned == receiver;
+				return selectionProvider.isPinned(scenarioInstance);
 			}
 		}
 		return false;

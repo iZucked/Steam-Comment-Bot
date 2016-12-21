@@ -10,6 +10,7 @@ import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ScenarioServicePartListener implements IPartListener {
 
@@ -61,7 +62,7 @@ public class ScenarioServicePartListener implements IPartListener {
 				}
 				if (!selectionProvider.isSelected(scenarioInstance)) {
 					lastAutoSelection = scenarioInstance;
-					selectionProvider.select(scenarioInstance);
+					selectionProvider.select(new ScenarioResult(scenarioInstance));
 				}
 			}
 		}
@@ -84,7 +85,7 @@ public class ScenarioServicePartListener implements IPartListener {
 				}
 				if (!selectionProvider.isSelected(scenarioInstance)) {
 					lastAutoSelection = scenarioInstance;
-					selectionProvider.select(scenarioInstance);
+					selectionProvider.select(new ScenarioResult(scenarioInstance));
 				}
 			}
 		}

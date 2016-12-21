@@ -25,29 +25,33 @@ public interface IScenarioServiceSelectionProvider {
 	 * @return
 	 */
 	@NonNull
-	Collection<ScenarioInstance> getSelection();
+	Collection<ScenarioResult> getSelection();
 
 	/**
 	 * @return the currently pinned instance; this is always a member of the selection.
 	 */
 	@Nullable
-	ScenarioInstance getPinnedInstance();
+	ScenarioResult getPinnedInstance();
 
 	/**
 	 * Set pinned scenario. Do not block.
 	 */
-	void setPinnedInstance(@Nullable ScenarioInstance referenceInstance);
+	void setPinnedInstance(@Nullable ScenarioResult pinnedResult);
+
+	void setPinnedInstance(@Nullable ScenarioInstance pinnedInstance);
 
 	/**
 	 * Set pinned scenario. If block is true, do not return until UI is fully refreshed.
 	 */
-	void setPinnedInstance(@Nullable ScenarioInstance referenceInstance, boolean block);
+	void setPinnedInstance(@Nullable ScenarioResult referenceInstance, boolean block);
 
-	void setPinnedPair(@NonNull ScenarioInstance pinInstance, @NonNull ScenarioInstance otherInstance, boolean block);
+	void setPinnedPair(@NonNull ScenarioResult pinInstance, @NonNull ScenarioResult otherInstance, boolean block);
 
 	void addSelectionChangedListener(@NonNull IScenarioServiceSelectionChangedListener listener);
 
 	void removeSelectionChangedListener(@NonNull IScenarioServiceSelectionChangedListener listener);
+
+	boolean isSelected(@NonNull ScenarioResult scenarioResult);
 
 	boolean isSelected(@NonNull ScenarioInstance instance);
 
@@ -64,21 +68,29 @@ public interface IScenarioServiceSelectionProvider {
 	/**
 	 * Select a scenario. Do not block.
 	 */
-	void select(@NonNull ScenarioInstance scenarioInstance);
+	void select(@NonNull ScenarioResult scenarioInstance);
 
 	/**
 	 * Select a scenario. If block is true, do not return until UI is fully refreshed.
 	 */
-	void select(@NonNull ScenarioInstance scenarioInstance, boolean block);
+	void select(@NonNull ScenarioResult scenarioInstance, boolean block);
 
 	/**
 	 * Deselect a scenario. Do not block.
 	 */
+	void deselect(@NonNull ScenarioResult scenarioResult);
+
 	void deselect(@NonNull ScenarioInstance scenarioInstance);
 
 	/**
 	 * Deselect a scenario. If block is true, do not return until UI is fully refreshed.
 	 */
+	void deselect(@NonNull ScenarioResult scenarioResult, boolean block);
+
 	void deselect(@NonNull ScenarioInstance scenarioInstance, boolean block);
+
+	boolean isPinned(@NonNull ScenarioResult result);
+
+	boolean isPinned(@NonNull ScenarioInstance instance);
 
 }
