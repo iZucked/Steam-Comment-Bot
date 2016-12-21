@@ -61,6 +61,15 @@ public interface MMXCoreFactory extends EFactory {
 	MMXRootObject createMMXRootObject();
 
 	/**
+	 * Returns a new object of class '<em>MMX Result Root</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>MMX Result Root</em>'.
+	 * @generated
+	 */
+	MMXResultRoot createMMXResultRoot();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

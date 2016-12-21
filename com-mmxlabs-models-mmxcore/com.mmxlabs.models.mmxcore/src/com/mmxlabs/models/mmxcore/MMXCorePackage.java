@@ -433,6 +433,34 @@ public interface MMXCorePackage extends EPackage {
 	int MMX_ROOT_OBJECT_OPERATION_COUNT = UUID_OBJECT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.mmxcore.impl.MMXResultRootImpl <em>MMX Result Root</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.mmxcore.impl.MMXResultRootImpl
+	 * @see com.mmxlabs.models.mmxcore.impl.MMXCorePackageImpl#getMMXResultRoot()
+	 * @generated
+	 */
+	int MMX_RESULT_ROOT = 5;
+
+	/**
+	 * The number of structural features of the '<em>MMX Result Root</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_RESULT_ROOT_FEATURE_COUNT = 0;
+
+	/**
+	 * The number of operations of the '<em>MMX Result Root</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_RESULT_ROOT_OPERATION_COUNT = 0;
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.mmxcore.MMXObject <em>MMX Object</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -557,6 +585,16 @@ public interface MMXCorePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getMMXRootObject();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.mmxcore.MMXResultRoot <em>MMX Result Root</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>MMX Result Root</em>'.
+	 * @see com.mmxlabs.models.mmxcore.MMXResultRoot
+	 * @generated
+	 */
+	EClass getMMXResultRoot();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -687,6 +725,16 @@ public interface MMXCorePackage extends EPackage {
 		 * @generated
 		 */
 		EClass MMX_ROOT_OBJECT = eINSTANCE.getMMXRootObject();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.mmxcore.impl.MMXResultRootImpl <em>MMX Result Root</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.mmxcore.impl.MMXResultRootImpl
+		 * @see com.mmxlabs.models.mmxcore.impl.MMXCorePackageImpl#getMMXResultRoot()
+		 * @generated
+		 */
+		EClass MMX_RESULT_ROOT = eINSTANCE.getMMXResultRoot();
 
 	}
 

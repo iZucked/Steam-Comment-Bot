@@ -182,6 +182,29 @@ public class MMXCoreItemProviderAdapterFactory extends MMXCoreAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.mmxcore.MMXResultRoot} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MMXResultRootItemProvider mmxResultRootItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.mmxcore.MMXResultRoot}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMMXResultRootAdapter() {
+		if (mmxResultRootItemProvider == null) {
+			mmxResultRootItemProvider = new MMXResultRootItemProvider(this);
+		}
+
+		return mmxResultRootItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -314,6 +337,7 @@ public class MMXCoreItemProviderAdapterFactory extends MMXCoreAdapterFactory imp
 		if (otherNamesObjectItemProvider != null) otherNamesObjectItemProvider.dispose();
 		if (uuidObjectItemProvider != null) uuidObjectItemProvider.dispose();
 		if (mmxRootObjectItemProvider != null) mmxRootObjectItemProvider.dispose();
+		if (mmxResultRootItemProvider != null) mmxResultRootItemProvider.dispose();
 	}
 
 }

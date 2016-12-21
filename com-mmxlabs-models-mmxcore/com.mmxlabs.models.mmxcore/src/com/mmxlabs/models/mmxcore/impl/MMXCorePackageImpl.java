@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.mmxcore.MMXResultRoot;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.OtherNamesObject;
@@ -60,6 +61,13 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * @generated
 	 */
 	private EClass mmxRootObjectEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass mmxResultRootEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -237,6 +245,15 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getMMXResultRoot() {
+		return mmxResultRootEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public MMXCoreFactory getMMXCoreFactory() {
 		return (MMXCoreFactory)getEFactoryInstance();
 	}
@@ -276,6 +293,8 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		createEAttribute(uuidObjectEClass, UUID_OBJECT__UUID);
 
 		mmxRootObjectEClass = createEClass(MMX_ROOT_OBJECT);
+
+		mmxResultRootEClass = createEClass(MMX_RESULT_ROOT);
 	}
 
 	/**
@@ -333,6 +352,8 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		initEAttribute(getUUIDObject_Uuid(), ecorePackage.getEString(), "uuid", null, 1, 1, UUIDObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(mmxRootObjectEClass, MMXRootObject.class, "MMXRootObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(mmxResultRootEClass, MMXResultRoot.class, "MMXResultRoot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

@@ -110,6 +110,12 @@ public class MMXCoreSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case MMXCorePackage.MMX_RESULT_ROOT: {
+				MMXResultRoot mmxResultRoot = (MMXResultRoot)theEObject;
+				T result = caseMMXResultRoot(mmxResultRoot);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -187,6 +193,21 @@ public class MMXCoreSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseMMXRootObject(MMXRootObject object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>MMX Result Root</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>MMX Result Root</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMMXResultRoot(MMXResultRoot object) {
 		return null;
 	}
 
