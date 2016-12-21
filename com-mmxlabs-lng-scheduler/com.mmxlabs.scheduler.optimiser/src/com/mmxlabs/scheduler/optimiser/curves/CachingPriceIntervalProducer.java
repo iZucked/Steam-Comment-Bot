@@ -31,7 +31,7 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 	@Inject
 	private PriceIntervalProviderHelper priceIntervalProviderUtil;
 
-	private final class CacheKey {
+	private static final class CacheKey {
 
 		protected final int startTime;
 		protected final int endTime;
