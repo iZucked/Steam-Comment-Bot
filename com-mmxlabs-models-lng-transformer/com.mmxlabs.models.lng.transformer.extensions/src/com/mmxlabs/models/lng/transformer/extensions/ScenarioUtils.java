@@ -364,6 +364,14 @@ public class ScenarioUtils {
 			}
 		}
 	}
+	public static void setLSOStageSeed(final OptimisationPlan plan, final int seed) {
+		for (final OptimisationStage stage : plan.getStages()) {
+			if (stage instanceof LocalSearchOptimisationStage) {
+				final LocalSearchOptimisationStage localSearchOptimisationStage = (LocalSearchOptimisationStage) stage;
+				localSearchOptimisationStage.setSeed(seed);
+			}
+		}
+	}
 
 	public static void setCleanStateStageIterations(final OptimisationPlan plan, final int iterations) {
 		for (final OptimisationStage stage : plan.getStages()) {
