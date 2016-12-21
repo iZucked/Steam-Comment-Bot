@@ -38,6 +38,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -64,6 +65,8 @@ import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MenuDetectEvent;
+import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.TreeEvent;
 import org.eclipse.swt.events.TreeListener;
 import org.eclipse.swt.graphics.Font;
@@ -73,6 +76,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -115,6 +119,7 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
+import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IScenarioServiceListener;
 import com.mmxlabs.scenario.service.impl.ScenarioServiceListener;
@@ -238,7 +243,7 @@ public class ChangeSetView implements IAdaptable {
 			if (viewer.getControl().isDisposed()) {
 				return;
 			}
-			
+
 			// Reset selection
 			scenarioComparisonService.setSelectedElements(Collections.emptySet());
 
@@ -737,8 +742,7 @@ public class ChangeSetView implements IAdaptable {
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("Price");
 			gvc.getColumn().setWidth(50);
-			gvc.setLabelProvider(createDeltaLabelProvider(false, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_LOAD_ALLOCATION, ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_LOAD_ALLOCATION,
-					SchedulePackage.Literals.SLOT_ALLOCATION__PRICE));
+			gvc.setLabelProvider(createPriceLabelProvider(true));
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 		}
 		{
@@ -791,8 +795,7 @@ public class ChangeSetView implements IAdaptable {
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("Price");
 			gvc.getColumn().setWidth(50);
-			gvc.setLabelProvider(createDeltaLabelProvider(false, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION,
-					ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__PRICE));
+			gvc.setLabelProvider(createPriceLabelProvider(false));
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 		}
 		{
@@ -1109,6 +1112,12 @@ public class ChangeSetView implements IAdaptable {
 			}
 		});
 
+		{
+			final MenuManager mgr = new MenuManager();
+			final ContextMenuManager listener = new ContextMenuManager(mgr);
+			viewer.getGrid().addMenuDetectListener(listener);
+		}
+
 	}
 
 	protected void createSpacerColumn() {
@@ -1138,10 +1147,10 @@ public class ChangeSetView implements IAdaptable {
 						gc.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 						final int s = gc.getLineStyle();
 						gc.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
-//						gc.setLineStyle(SWT.LINE_DOT);
-//						gc.drawLine(getBounds().x, getBounds().y, getBounds().width + getBounds().x, getBounds().y);
+						// gc.setLineStyle(SWT.LINE_DOT);
+						// gc.drawLine(getBounds().x, getBounds().y, getBounds().width + getBounds().x, getBounds().y);
 						gc.setLineStyle(SWT.LINE_DOT);
-//						gc.setLineWidth(1);
+						// gc.setLineWidth(1);
 						gc.drawLine(getBounds().x, getBounds().y + getBounds().height, getBounds().width + getBounds().x, getBounds().y + getBounds().height);
 						gc.setLineStyle(s);
 					}
@@ -1341,8 +1350,14 @@ public class ChangeSetView implements IAdaptable {
 						double delta = metrics.getPnlDelta();
 
 						delta = delta / 1000000.0;
-
-						cell.setText(String.format("%s%,.3G", metrics.getPnlDelta() < 0 ? "↓" : "↑", Math.abs(delta)));
+						if (Math.abs(delta) < 0.0001) {
+							delta = 0;
+						}
+						if (delta == 0) {
+							cell.setText("0.00");
+						} else {
+							cell.setText(String.format("%s%,.3G", metrics.getPnlDelta() < 0 ? "↓" : "↑", Math.abs(delta)));
+						}
 					}
 				}
 				if (element instanceof ChangeSetRow) {
@@ -1370,6 +1385,9 @@ public class ChangeSetView implements IAdaptable {
 						delta += t.intValue();
 					}
 					delta = delta / 1000000.0;
+					if (Math.abs(delta) < 0.0001) {
+						delta = 0;
+					}
 					if (delta != 0) {
 						cell.setText(String.format("%s %,.3G", delta < 0 ? "↓" : "↑", Math.abs(delta)));
 					}
@@ -1579,9 +1597,8 @@ public class ChangeSetView implements IAdaptable {
 				cell.setForeground(null);
 				if (element instanceof ChangeSet) {
 
-					
 					cell.setFont(boldFont);
-					
+
 					final ChangeSet changeSet = (ChangeSet) element;
 					final Metrics scenarioMetrics = changeSet.getCurrentMetrics();
 					final DeltaMetrics deltaMetrics;
@@ -2187,4 +2204,219 @@ public class ChangeSetView implements IAdaptable {
 		// FIXME: If this causes the view to be created the selection will not be correct. However attempting to re-set the selection does not appear to work.
 		partService.showPart(viewId, PartState.VISIBLE);
 	}
+
+	private CellLabelProvider createPriceLabelProvider(final boolean isLoad) {
+
+		final Function<ChangeSetRow, Number> calcF;
+		final Function<ChangeSetRow, Number> calcT;
+		if (isLoad) {
+			calcF = change -> getNumber(ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__PRICE, change);
+			calcT = change -> getNumber(ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__PRICE, change);
+		} else {
+			calcF = change -> getNumber(ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__PRICE, change);
+			calcT = change -> getNumber(ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__PRICE, change);
+		}
+		final ToDoubleBiFunction<Number, Number> deltaDoubleUpdater = (f, t) -> {
+			double delta = 0.0;
+			if (f != null) {
+				delta -= f.doubleValue();
+			}
+			if (t != null) {
+				delta += t.doubleValue();
+			}
+			return delta;
+		};
+
+		return new CellLabelProvider() {
+
+			@Override
+			public void update(final ViewerCell cell) {
+				final Object element = cell.getElement();
+				cell.setText("");
+				cell.setFont(null);
+				double delta = 0;
+				if (element instanceof ChangeSet) {
+					// cell.setFont(boldFont);
+					final ChangeSet changeSet = (ChangeSet) element;
+					final List<ChangeSetRow> rows;
+					if (diffToBase) {
+						rows = changeSet.getChangeSetRowsToBase();
+					} else {
+						rows = changeSet.getChangeSetRowsToPrevious();
+					}
+					if (rows != null) {
+						for (final ChangeSetRow change : rows) {
+							delta += deltaDoubleUpdater.applyAsDouble(calcF.apply(change), calcT.apply(change));
+						}
+					}
+				} else if (element instanceof ChangeSetRow) {
+
+					final ChangeSetRow change = (ChangeSetRow) element;
+					delta += deltaDoubleUpdater.applyAsDouble(calcF.apply(change), calcT.apply(change));
+
+					if (isLoad) {
+						final SlotAllocation allocation = change.getNewLoadAllocation();
+						if (allocation != null) {
+							final Slot slot = allocation.getSlot();
+							if (slot != null) {
+								final String expr = slot.getPriceExpression();
+								if (expr != null && expr.contains("?")) {
+									cell.setText(String.format("=%,.2f", allocation.getPrice()));
+									return;
+								}
+							}
+						}
+					} else {
+						final SlotAllocation allocation = change.getNewDischargeAllocation();
+						if (allocation != null) {
+							final Slot slot = allocation.getSlot();
+							if (slot != null) {
+								final String expr = slot.getPriceExpression();
+								if (expr != null && expr.contains("?")) {
+									cell.setText(String.format("=%,.2f", allocation.getPrice()));
+									return;
+								}
+							}
+						}
+					}
+				}
+				if (Math.abs(delta) > 0.009) {
+					cell.setText(String.format("%s %,.2f", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+				}
+			}
+
+			@Override
+			public String getToolTipText(final Object element) {
+				if (element instanceof ChangeSetRow) {
+
+					final ChangeSetRow change = (ChangeSetRow) element;
+
+					if (isLoad) {
+						final SlotAllocation allocation = change.getNewLoadAllocation();
+						if (allocation != null) {
+							final Slot slot = allocation.getSlot();
+							if (slot != null) {
+								final String expr = slot.getPriceExpression();
+								if (expr != null && expr.contains("?")) {
+									return String.format("Break-even price is %,.2f", allocation.getPrice());
+								}
+							}
+						}
+					} else {
+						final SlotAllocation allocation = change.getNewDischargeAllocation();
+						if (allocation != null) {
+							final Slot slot = allocation.getSlot();
+							if (slot != null) {
+								final String expr = slot.getPriceExpression();
+								if (expr != null && expr.contains("?")) {
+									return String.format("Break-even price is %,.2f", allocation.getPrice());
+								}
+							}
+						}
+					}
+				}
+
+				return null;
+			}
+		};
+	}
+
+	private class ContextMenuManager implements MenuDetectListener {
+
+		private final @NonNull MenuManager mgr;
+
+		private Menu menu;
+
+		public ContextMenuManager(@NonNull final MenuManager mgr) {
+			this.mgr = mgr;
+		}
+
+		@Override
+		public void menuDetected(final MenuDetectEvent e) {
+			final Grid grid = viewer.getGrid();
+			if (menu == null) {
+				menu = mgr.createContextMenu(grid);
+			}
+			mgr.removeAll();
+
+			final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+			final GridItem[] items = grid.getSelection();
+			if (items.length > 1) {
+				final Set<ChangeSet> selectedSets = new LinkedHashSet<>();
+				final Iterator<?> itr = selection.iterator();
+				while (itr.hasNext()) {
+					final Object obj = itr.next();
+					if (obj instanceof ChangeSet) {
+						selectedSets.add((ChangeSet) obj);
+					} else if (obj instanceof ChangeSetRow) {
+						final ChangeSetRow changeSetRow = (ChangeSetRow) obj;
+						selectedSets.add((ChangeSet) changeSetRow.eContainer());
+					}
+				}
+				boolean showMenu = false;
+				if (selectedSets.size() > 1) {
+					if (ChangeSetView.this.viewMode == ViewMode.COMPARE) {
+
+						mgr.add(new RunnableAction("Merge changes", () -> {
+							final ChangeSet firstChangeSet = selectedSets.iterator().next();
+							selectedSets.remove(firstChangeSet);
+							for (final ChangeSet cs : selectedSets) {
+								firstChangeSet.getChangeSetRowsToBase().addAll(cs.getChangeSetRowsToBase());
+								firstChangeSet.getChangeSetRowsToPrevious().addAll(cs.getChangeSetRowsToPrevious());
+								if (firstChangeSet.getCurrentMetrics() != null) {
+									final int pnl = firstChangeSet.getCurrentMetrics().getPnl();
+									firstChangeSet.getCurrentMetrics().setPnl(pnl + cs.getCurrentMetrics().getPnl());
+
+									final int capacity = firstChangeSet.getCurrentMetrics().getCapacity();
+									firstChangeSet.getCurrentMetrics().setCapacity(capacity + cs.getCurrentMetrics().getCapacity());
+
+									final int lateness = firstChangeSet.getCurrentMetrics().getLateness();
+									firstChangeSet.getCurrentMetrics().setLateness(lateness + cs.getCurrentMetrics().getLateness());
+								}
+								if (firstChangeSet.getMetricsToBase() != null) {
+									final int pnl = firstChangeSet.getMetricsToBase().getPnlDelta();
+									firstChangeSet.getMetricsToBase().setPnlDelta(pnl + cs.getMetricsToBase().getPnlDelta());
+
+									final int capacity = firstChangeSet.getMetricsToBase().getCapacityDelta();
+									firstChangeSet.getMetricsToBase().setCapacityDelta(capacity + cs.getMetricsToBase().getCapacityDelta());
+
+									final int lateness = firstChangeSet.getMetricsToBase().getLatenessDelta();
+									firstChangeSet.getMetricsToBase().setLatenessDelta(lateness + cs.getMetricsToBase().getLatenessDelta());
+								}
+								if (firstChangeSet.getMetricsToPrevious() != null) {
+									final int pnl = firstChangeSet.getMetricsToPrevious().getPnlDelta();
+									firstChangeSet.getMetricsToPrevious().setPnlDelta(pnl + cs.getMetricsToPrevious().getPnlDelta());
+
+									final int capacity = firstChangeSet.getMetricsToPrevious().getCapacityDelta();
+									firstChangeSet.getMetricsToPrevious().setCapacityDelta(capacity + cs.getMetricsToPrevious().getCapacityDelta());
+
+									final int lateness = firstChangeSet.getMetricsToPrevious().getLatenessDelta();
+									firstChangeSet.getMetricsToPrevious().setLatenessDelta(lateness + cs.getMetricsToPrevious().getLatenessDelta());
+								}
+								if (cs.getCurrentScenarioRef() != null) {
+									cs.getCurrentScenarioRef().close();
+								}
+								if (cs.getBaseScenarioRef() != null) {
+									cs.getBaseScenarioRef().close();
+								}
+								if (cs.getPrevScenarioRef() != null) {
+									cs.getPrevScenarioRef().close();
+								}
+
+							}
+							final ChangeSetRoot root = (ChangeSetRoot) firstChangeSet.eContainer();
+							root.getChangeSets().removeAll(selectedSets);
+							viewer.refresh();
+						}));
+						showMenu = true;
+					}
+
+				}
+				if (showMenu) {
+					menu.setVisible(true);
+				}
+			}
+		}
+	}
+
 }
