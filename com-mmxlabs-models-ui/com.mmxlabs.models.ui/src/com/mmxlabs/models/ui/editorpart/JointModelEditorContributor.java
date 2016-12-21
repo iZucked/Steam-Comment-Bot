@@ -7,14 +7,11 @@ package com.mmxlabs.models.ui.editorpart;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorActionBarContributor;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPropertyListener;
@@ -26,17 +23,11 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 
-import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceDiffingEditorInput;
-
 public class JointModelEditorContributor extends MultiPageEditorActionBarContributor implements IPropertyListener, IEditorActionBarContributor {
 
 	protected IEditorPart activeEditor;
 	protected UndoAction undoAction;
 	protected RedoAction redoAction;
-	private Action applyAction;
-	private Action cancelAction;
-	private ActionContributionItem applyContributionItem;
-	private ActionContributionItem cancelContributionItem;
 	private IPartListener partListener;
 	private IWorkbenchPage page;
 
@@ -52,40 +43,6 @@ public class JointModelEditorContributor extends MultiPageEditorActionBarContrib
 		redoAction = new RedoAction();
 		redoAction.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_REDO));
 		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
-
-		applyAction = new Action("Apply") {
-			@Override
-			public void run() {
-				if (activeEditor != null) {
-					final IEditorInput editorInput = activeEditor.getEditorInput();
-					if (editorInput instanceof IScenarioServiceDiffingEditorInput) {
-						final IScenarioServiceDiffingEditorInput ssInput = (IScenarioServiceDiffingEditorInput) editorInput;
-						ssInput.getDiffEditHandler().onPreEditorApply();
-						activeEditor.getSite().getPage().closeEditor(activeEditor, false);
-						ssInput.getDiffEditHandler().onEditorApply();
-					}
-				}
-			}
-		};
-
-		cancelAction = new Action("Cancel") {
-			@Override
-			public void run() {
-
-				if (activeEditor != null) {
-					final IEditorInput editorInput = activeEditor.getEditorInput();
-					if (editorInput instanceof IScenarioServiceDiffingEditorInput) {
-						final IScenarioServiceDiffingEditorInput ssInput = (IScenarioServiceDiffingEditorInput) editorInput;
-						ssInput.getDiffEditHandler().onPreEditorCancel();
-						activeEditor.getSite().getPage().closeEditor(activeEditor, false);
-						ssInput.getDiffEditHandler().onEditorCancel();
-					}
-				}
-			}
-		};
-
-		applyContributionItem = new ActionContributionItem(applyAction);
-		cancelContributionItem = new ActionContributionItem(cancelAction);
 
 		partListener = new IPartListener() {
 
@@ -183,14 +140,8 @@ public class JointModelEditorContributor extends MultiPageEditorActionBarContrib
 	}
 
 	public void deactivate() {
-		activeEditor.removePropertyListener(this);
 		if (activeEditor != null) {
-			final IEditorInput editorInput = activeEditor.getEditorInput();
-			if (editorInput instanceof IScenarioServiceDiffingEditorInput) {
-				getActionBars().getStatusLineManager().remove(applyContributionItem);
-				getActionBars().getStatusLineManager().remove(cancelContributionItem);
-				getActionBars().updateActionBars();
-			}
+			activeEditor.removePropertyListener(this);
 		}
 		undoAction.setActiveWorkbenchPart(null);
 		redoAction.setActiveWorkbenchPart(null);
@@ -201,14 +152,8 @@ public class JointModelEditorContributor extends MultiPageEditorActionBarContrib
 	}
 
 	public void activate() {
-		activeEditor.addPropertyListener(this);
 		if (activeEditor != null) {
-			final IEditorInput editorInput = activeEditor.getEditorInput();
-			if (editorInput instanceof IScenarioServiceDiffingEditorInput) {
-				getActionBars().getStatusLineManager().add(applyContributionItem);
-				getActionBars().getStatusLineManager().add(cancelContributionItem);
-				getActionBars().updateActionBars();
-			}
+			activeEditor.addPropertyListener(this);
 		}
 		undoAction.setActiveWorkbenchPart(activeEditor);
 		redoAction.setActiveWorkbenchPart(activeEditor);

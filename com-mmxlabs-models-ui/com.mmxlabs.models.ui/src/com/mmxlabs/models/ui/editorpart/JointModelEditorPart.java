@@ -58,8 +58,6 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IPartListener;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -72,8 +70,6 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
 import org.eclipse.ui.views.properties.PropertySheetPage;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,8 +94,6 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
-import com.mmxlabs.scenario.service.ui.editing.IDiffEditHandler;
-import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceDiffingEditorInput;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 
@@ -204,11 +198,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 	private ScenarioLock referenceLock;
 
-	private IPartListener referencePinPartListener;
-
 	private IScenarioServiceSelectionProvider scenarioSelectionProvider;
-
-	private IDiffEditHandler diffEditHandler;
 
 	public JointModelEditorPart() {
 	}
@@ -355,70 +345,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			setPartName(input.getName());
 			final MMXRootObject root;
 			final ScenarioInstance instance;
-			if (input instanceof IScenarioServiceDiffingEditorInput) {
-				final IScenarioServiceDiffingEditorInput ssInput = (IScenarioServiceDiffingEditorInput) input;
-
-				updateTitleImage(ssInput);
-
-				instance = ssInput.getCurrentScenarioInstance();
-
-				diffEditHandler = ssInput.getDiffEditHandler();
-
-				referenceInstance = ssInput.getReferenceScenarioInstance();
-				referenceLock = referenceInstance.getLock(ScenarioLock.EDITORS);
-
-				// TODO: Sensible?
-				referenceLock.awaitClaim();
-
-				final BundleContext bundleContext = Activator.getDefault().getBundle().getBundleContext();
-				final ServiceReference<IScenarioServiceSelectionProvider> serviceReference = bundleContext.getServiceReference(IScenarioServiceSelectionProvider.class);
-				scenarioSelectionProvider = bundleContext.getService(serviceReference);
-				if (scenarioSelectionProvider != null) {
-					referencePinPartListener = new IPartListener() {
-
-						@Override
-						public void partOpened(final IWorkbenchPart part) {
-							if (part == JointModelEditorPart.this) {
-								// Ensure pin is set.
-								setPinMode();
-							}
-
-						}
-
-						@Override
-						public void partDeactivated(final IWorkbenchPart part) {
-							// TODO Auto-generated method stub
-
-						}
-
-						@Override
-						public void partClosed(final IWorkbenchPart part) {
-							// TODO Auto-generated method stub
-
-						}
-
-						@Override
-						public void partBroughtToTop(final IWorkbenchPart part) {
-							if (part == JointModelEditorPart.this) {
-								// Ensure pin is set.
-								setPinMode();
-							}
-
-						}
-
-						@Override
-						public void partActivated(final IWorkbenchPart part) {
-							if (part == JointModelEditorPart.this) {
-								// Ensure pin is set.
-								setPinMode();
-							}
-
-						}
-					};
-					getSite().getPage().addPartListener(referencePinPartListener);
-
-				}
-			} else if (input instanceof IScenarioServiceEditorInput) {
+			if (input instanceof IScenarioServiceEditorInput) {
 
 				final IScenarioServiceEditorInput ssInput = (IScenarioServiceEditorInput) input;
 
@@ -511,7 +438,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			validationContextStack.clear();
 			validationContextStack.push(new DefaultExtraValidationContext(getRootObject(), false));
 
-			setPinMode();
 			setLocked(!editorLock.isAvailable());
 		} catch (final Throwable t) {
 			// Clean up internal data structures etc
@@ -595,27 +521,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 		setPageText(pageIndex, "Error");
 	}
 
-	protected void setPinMode() {
-
-		if (scenarioSelectionProvider != null) {
-			if (scenarioSelectionProvider.getPinnedInstance() != referenceInstance) {
-				scenarioSelectionProvider.deselectAll();
-				scenarioSelectionProvider.select(scenarioInstance);
-				scenarioSelectionProvider.setPinnedInstance(referenceInstance);
-			}
-		}
-	}
-
-	protected void unsetPinMode() {
-
-		if (scenarioSelectionProvider != null) {
-			if (scenarioSelectionProvider.getPinnedInstance() == referenceInstance) {
-				scenarioSelectionProvider.deselect(scenarioInstance);
-				scenarioSelectionProvider.setPinnedInstance(null);
-			}
-		}
-	}
-
 	private void updateTitleImage(final IEditorInput editorInput) {
 		if (scenarioInstance == null) {
 			return;
@@ -675,18 +580,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 		if (referenceLock != null) {
 			referenceLock.release();
 			referenceLock = null;
-		}
-
-		unsetPinMode();
-
-		if (diffEditHandler != null) {
-			diffEditHandler.onEditorDisposed();
-			diffEditHandler = null;
-		}
-
-		if (referencePinPartListener != null) {
-			getSite().getPage().removePartListener(referencePinPartListener);
-			referencePinPartListener = null;
 		}
 
 		if (editorLock != null) {

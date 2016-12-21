@@ -356,7 +356,7 @@ public abstract class EMFViewerPane implements IPropertyListener, Listener {
 		
 		if (toolBarManager != null) {
 			toolBarManager.dispose();
-			toolBarManager = null;
+//			toolBarManager = null;
 		}
 	}
 
