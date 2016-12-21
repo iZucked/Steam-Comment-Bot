@@ -13,7 +13,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -51,6 +50,7 @@ import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  */
@@ -103,12 +103,13 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			public List<ColumnManager<IndexExposureData>> getColumnManagers(@NonNull final ISelectedDataProvider selectedDataProvider) {
 				final ArrayList<ColumnManager<IndexExposureData>> result = new ArrayList<ColumnManager<IndexExposureData>>();
 
-				if (selectedDataProvider.getScenarioInstances().size() > 1) {
+				if (selectedDataProvider.getScenarioResults().size() > 1) {
 					result.add(new ColumnManager<IndexExposureData>("Scenario") {
 
 						@Override
 						public String getColumnText(final IndexExposureData data) {
-							final ScenarioInstance scenarioInstance = selectedDataProvider.getScenarioInstance(data.schedule);
+							final ScenarioResult scenarioResult = data.scenarioResult;
+							final ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
 							if (scenarioInstance != null) {
 								return scenarioInstance.getName();
 							}
@@ -206,8 +207,8 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			}
 
 			@Override
-			public @NonNull List<@NonNull IndexExposureData> createData(@Nullable final Pair<@NonNull Schedule, @NonNull LNGScenarioModel> pinnedPair,
-					@NonNull final List<@NonNull Pair<@NonNull Schedule, @NonNull LNGScenarioModel>> otherPairs) {
+			public @NonNull List<@NonNull IndexExposureData> createData(@Nullable final Pair<@NonNull Schedule, @NonNull ScenarioResult> pinnedPair,
+					@NonNull final List<@NonNull Pair<@NonNull Schedule, @NonNull ScenarioResult>> otherPairs) {
 				dateRange.setBoth(null, null);
 
 				final List<@NonNull IndexExposureData> output = new LinkedList<>();
@@ -216,7 +217,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					// Pin/Diff mode
 					final List<IndexExposureData> ref = createData(pinnedPair.getFirst(), pinnedPair.getSecond());
 
-					final Pair<@NonNull Schedule, @NonNull LNGScenarioModel> p = otherPairs.get(0);
+					final Pair<@NonNull Schedule, @NonNull ScenarioResult> p = otherPairs.get(0);
 					final List<IndexExposureData> other = createData(p.getFirst(), p.getSecond());
 
 					LOOP_REF_DATA: for (final IndexExposureData refData : ref) {
@@ -241,7 +242,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					if (pinnedPair != null) {
 						output.addAll(createData(pinnedPair.getFirst(), pinnedPair.getSecond()));
 					}
-					for (final Pair<@NonNull Schedule, @NonNull LNGScenarioModel> p : otherPairs) {
+					for (final Pair<@NonNull Schedule, @NonNull ScenarioResult> p : otherPairs) {
 						output.addAll(createData(p.getFirst(), p.getSecond()));
 					}
 				}
@@ -259,10 +260,14 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				return output;
 			}
 
-			public List<@NonNull IndexExposureData> createData(final @NonNull Schedule schedule, final @NonNull LNGScenarioModel rootObject) {
+			public List<@NonNull IndexExposureData> createData(final @NonNull Schedule schedule, final @NonNull ScenarioResult scenarioResult) {
 				final List<@NonNull IndexExposureData> output = new LinkedList<>();
 
-				final PricingModel pm = rootObject.getReferenceModel().getPricingModel();
+				LNGScenarioModel rootObject = scenarioResult.getTypedRoot(LNGScenarioModel.class);
+				if (rootObject == null) {
+					return output;
+				}
+				final PricingModel pm = ScenarioModelUtil.getPricingModel(rootObject);
 				final EList<CommodityIndex> indices = pm.getCommodityIndices();
 
 				List<Object> selected = (!selectionMode || selection == null) ? Collections.emptyList() : SelectionHelper.convertToList(selection, Object.class);
@@ -274,7 +279,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					if (exposures.size() != 0.0) {
 						final String currencyUnit = index.getCurrencyUnit();
 						final String volumeUnit = index.getVolumeUnit();
-						output.add(new IndexExposureData(schedule, index.getName(), index, exposures, currencyUnit, volumeUnit));
+						output.add(new IndexExposureData(scenarioResult, schedule, index.getName(), index, exposures, currencyUnit, volumeUnit));
 					}
 				}
 				return output;
@@ -287,7 +292,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 		final IndexExposureData modelData = pinData != null ? pinData : otherData;
 		final Map<YearMonth, Double> exposuresByMonth = new HashMap<>();
-		final IndexExposureData newData = new IndexExposureData(null, modelData.indexName, null, exposuresByMonth, modelData.currencyUnit, modelData.volumeUnit);
+		final IndexExposureData newData = new IndexExposureData(null, null, modelData.indexName, null, exposuresByMonth, modelData.currencyUnit, modelData.volumeUnit);
 
 		if (pinData != null) {
 			for (final Map.Entry<YearMonth, Double> e : pinData.exposures.entrySet()) {
@@ -323,8 +328,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				}
 
 				@NonNull
-				final Collection<@NonNull ScenarioInstance> scenarioInstances = currentSelectedDataProvider.getScenarioInstances();
-				for (final ScenarioInstance instance : scenarioInstances) {
+				final Collection<@NonNull ScenarioResult> scenarioResults = currentSelectedDataProvider.getScenarioResults();
+				for (final ScenarioResult scenarioResult : scenarioResults) {
+					final ScenarioInstance instance = scenarioResult.getScenarioInstance();
 
 					try (ModelReference ref = instance.getReference("ExposuresReportView")) {
 

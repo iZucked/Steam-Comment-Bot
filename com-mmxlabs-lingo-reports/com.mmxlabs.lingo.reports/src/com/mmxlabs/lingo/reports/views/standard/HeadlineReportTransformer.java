@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * Content provider for the {@link CargoReportView}.
@@ -75,7 +76,7 @@ class HeadlineReportTransformer {
 	}
 
 	@NonNull
-	public RowData transform(@NonNull final Schedule schedule, @NonNull final ScenarioInstance scenarioInstance) {
+	public RowData transform(@NonNull final Schedule schedule, @NonNull final ScenarioResult scenarioResult) {
 
 		long totalMtMPNL = 0L;
 		long totalIdleHours = 0L;
@@ -109,6 +110,7 @@ class HeadlineReportTransformer {
 
 		final long totalCapacityViolationCount = ScheduleModelKPIUtils.getScheduleViolationCount(schedule);
 
+		ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
 		return new RowData(scenarioInstance.getName(), totalTradingPNL + totalShippingPNL + totalUpstreamPNL, totalTradingPNL, totalShippingPNL, totalUpstreamPNL, totalMtMPNL, totalIdleHours,
 				totalGCOHours, totalGCORevenue, totalCapacityViolationCount, totalLatenessHoursIncludingFlex, totalLatenessHoursExcludingFlex);
 	}

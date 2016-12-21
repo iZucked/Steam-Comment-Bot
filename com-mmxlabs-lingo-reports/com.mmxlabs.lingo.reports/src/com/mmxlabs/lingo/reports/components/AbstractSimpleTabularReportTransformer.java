@@ -14,8 +14,8 @@ import org.eclipse.swt.graphics.Image;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * Generic content provider for simple table views.
@@ -67,8 +67,8 @@ public abstract class AbstractSimpleTabularReportTransformer<T> {
 
 	abstract public List<ColumnManager<T>> getColumnManagers(@NonNull ISelectedDataProvider selectedDataProvider);
 
-//	abstract public @NonNull List<@NonNull T> createData(@NonNull Schedule schedule, @NonNull LNGScenarioModel rootObject);
+	// abstract public @NonNull List<@NonNull T> createData(@NonNull Schedule schedule, @NonNull LNGScenarioModel rootObject);
 
 	@NonNullByDefault
-	public abstract List<@NonNull T> createData(@Nullable Pair<Schedule, LNGScenarioModel> pinnedPair, List<Pair<Schedule, LNGScenarioModel>> otherPairs) ;
+	public abstract List<@NonNull T> createData(@Nullable Pair<Schedule, ScenarioResult> pinnedPair, List<Pair<Schedule, ScenarioResult>> otherPairs);
 }

@@ -26,10 +26,12 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ActionSetTransformer {
 
@@ -37,7 +39,7 @@ public class ActionSetTransformer {
 
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 
-		final List<ScenarioInstance> stages = new LinkedList<>();
+		final List<ScenarioResult> stages = new LinkedList<>();
 
 		// Try forks
 		{
@@ -49,13 +51,13 @@ public class ActionSetTransformer {
 				for (final Container cc : c.getElements()) {
 					if (!foundBase && (cc.getName().equals("base") || cc.getName().equalsIgnoreCase(String.format("ActionSet-base")))) {
 						if (cc instanceof ScenarioInstance) {
-							stages.add(0, (ScenarioInstance) cc);
+							stages.add(0, new ScenarioResult((ScenarioInstance) cc));
 							foundBase = true;
 						}
 					}
 					if (cc.getName().equals(Integer.toString(i)) || cc.getName().equalsIgnoreCase(String.format("ActionSet-%d", i))) {
 						if (cc instanceof ScenarioInstance) {
-							stages.add((ScenarioInstance) cc);
+							stages.add(new ScenarioResult((ScenarioInstance) cc));
 							found = true;
 							i++;
 						}
@@ -76,14 +78,14 @@ public class ActionSetTransformer {
 				for (final Container cc : c.getElements()) {
 					if (!foundBase && (cc.getName().equals("base") || cc.getName().equalsIgnoreCase(String.format("ActionSet-base")))) {
 						if (cc instanceof ScenarioInstance) {
-							stages.add(0, (ScenarioInstance) cc);
+							stages.add(0, new ScenarioResult((ScenarioInstance) cc));
 							foundBase = true;
 						}
 					}
 
 					if (cc.getName().equals(Integer.toString(i)) || cc.getName().equalsIgnoreCase(String.format("ActionSet-%d", i))) {
 						if (cc instanceof ScenarioInstance) {
-							stages.add((ScenarioInstance) cc);
+							stages.add(new ScenarioResult((ScenarioInstance) cc));
 							found = true;
 							i++;
 						}
@@ -97,8 +99,8 @@ public class ActionSetTransformer {
 
 		try {
 			monitor.beginTask("Opening action sets", stages.size());
-			ScenarioInstance prev = null;
-			for (final ScenarioInstance current : stages) {
+			ScenarioResult prev = null;
+			for (final ScenarioResult current : stages) {
 				if (prev != null) {
 					root.getChangeSets().add(buildChangeSet(stages.get(0), prev, current));
 				}
@@ -114,10 +116,10 @@ public class ActionSetTransformer {
 
 	}
 
-	private ChangeSet buildChangeSet(final ScenarioInstance base, final ScenarioInstance prev, final ScenarioInstance current) {
-		final ModelReference baseReference = base.getReference("ActionSetTransformer:1");
-		final ModelReference prevReference = prev.getReference("ActionSetTransformer:2");
-		final ModelReference currentReference = current.getReference("ActionSetTransformer:3");
+	private ChangeSet buildChangeSet(final ScenarioResult base, final ScenarioResult prev, final ScenarioResult current) {
+		final ModelReference baseReference = base.getScenarioInstance().getReference("ActionSetTransformer:1");
+		final ModelReference prevReference = prev.getScenarioInstance().getReference("ActionSetTransformer:2");
+		final ModelReference currentReference = current.getScenarioInstance().getReference("ActionSetTransformer:3");
 
 		// Pre-Load
 		baseReference.getInstance();
@@ -138,7 +140,7 @@ public class ActionSetTransformer {
 		return changeSet;
 	}
 
-	private void generateDifferences(final ScenarioInstance from, final ScenarioInstance to, final ChangeSet changeSet, final boolean isBase) {
+	private void generateDifferences(final ScenarioResult from, final ScenarioResult to, final ChangeSet changeSet, final boolean isBase) {
 		final EquivalanceGroupBuilder equivalanceGroupBuilder = new EquivalanceGroupBuilder();
 
 		final Set<EObject> fromInterestingElements = new LinkedHashSet<>();
@@ -146,8 +148,17 @@ public class ActionSetTransformer {
 		final Set<EObject> fromAllElements = new LinkedHashSet<>();
 		final Set<EObject> toAllElements = new LinkedHashSet<>();
 
-		final Schedule fromSchedule = ((LNGScenarioModel) from.getInstance()).getScheduleModel().getSchedule();
-		final Schedule toSchedule = ((LNGScenarioModel) to.getInstance()).getScheduleModel().getSchedule();
+		final ScheduleModel fromScheduleModel = from.getTypedResult(ScheduleModel.class);
+		final ScheduleModel toScheduleModel = to.getTypedResult(ScheduleModel.class);
+		if (fromScheduleModel == null || toScheduleModel == null) {
+			return;
+		}
+
+		final Schedule fromSchedule = fromScheduleModel.getSchedule();
+		final Schedule toSchedule = toScheduleModel.getSchedule();
+		if (fromSchedule == null || toSchedule == null) {
+			return;
+		}
 
 		ChangeSetTransformerUtil.extractElements(fromSchedule, fromInterestingElements, fromAllElements);
 		ChangeSetTransformerUtil.extractElements(toSchedule, toInterestingElements, toAllElements);

@@ -6,7 +6,9 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.model.impl;
 
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
@@ -79,6 +81,36 @@ public class ChangesetFactoryImpl extends EFactoryImpl implements ChangesetFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public Object createFromString(EDataType eDataType, String initialValue) {
+		switch (eDataType.getClassifierID()) {
+			case ChangesetPackage.SCENARIO_RESULT:
+				return createScenarioResultFromString(eDataType, initialValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String convertToString(EDataType eDataType, Object instanceValue) {
+		switch (eDataType.getClassifierID()) {
+			case ChangesetPackage.SCENARIO_RESULT:
+				return convertScenarioResultToString(eDataType, instanceValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ChangeSetRoot createChangeSetRoot() {
 		ChangeSetRootImpl changeSetRoot = new ChangeSetRootImpl();
 		return changeSetRoot;
@@ -122,6 +154,24 @@ public class ChangesetFactoryImpl extends EFactoryImpl implements ChangesetFacto
 	public ChangeSetRow createChangeSetRow() {
 		ChangeSetRowImpl changeSetRow = new ChangeSetRowImpl();
 		return changeSetRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ScenarioResult createScenarioResultFromString(EDataType eDataType, String initialValue) {
+		return (ScenarioResult)super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertScenarioResultToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/**

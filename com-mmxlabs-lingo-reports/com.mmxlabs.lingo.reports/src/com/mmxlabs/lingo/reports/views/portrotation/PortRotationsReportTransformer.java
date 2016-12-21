@@ -15,7 +15,7 @@ import com.mmxlabs.lingo.reports.ScheduledEventCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class PortRotationsReportTransformer {
 	private final PortRotationBasedReportBuilder builder;
@@ -29,7 +29,7 @@ public class PortRotationsReportTransformer {
 
 			private int numberOfSchedules;
 			private boolean isPinned;
-			private final Map<Object, ScenarioInstance> elementToInstanceMap = new HashMap<>();
+			private final Map<Object, ScenarioResult> elementToInstanceMap = new HashMap<>();
 			private final Map<Object, LNGScenarioModel> elementToModelMap = new HashMap<>();
 			private final List<Object> elementList = new ArrayList<>();
 
@@ -47,15 +47,15 @@ public class PortRotationsReportTransformer {
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioResult, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
 				numberOfSchedules++;
 				isPinned |= pinned;
-				final Collection<? extends Object> collectElements = super.collectElements(scenarioInstance, scenarioModel, schedule, pinned);
+				final Collection<? extends Object> collectElements = super.collectElements(scenarioResult, scenarioModel, schedule, pinned);
 				elementList.addAll(collectElements);
-				elementToInstanceMap.put(schedule, scenarioInstance);
+				elementToInstanceMap.put(schedule, scenarioResult);
 				elementToModelMap.put(schedule, scenarioModel);
 				for (final Object element : collectElements) {
-					elementToInstanceMap.put(element, scenarioInstance);
+					elementToInstanceMap.put(element, scenarioResult);
 					elementToModelMap.put(element, scenarioModel);
 				}
 				return collectElements;

@@ -14,9 +14,9 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="baseScenarioRef" eType="ecore:EClass ../../com.mmxlabs.scenario.service.model/model/scenario.service.ecore#//ModelReference"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="prevScenarioRef" eType="ecore:EClass ../../com.mmxlabs.scenario.service.model/model/scenario.service.ecore#//ModelReference"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="currentScenarioRef" eType="ecore:EClass ../../com.mmxlabs.scenario.service.model/model/scenario.service.ecore#//ModelReference"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="baseScenario" eType="ecore:EClass ../../com.mmxlabs.scenario.service.model/model/scenario.service.ecore#//ScenarioInstance"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="prevScenario" eType="ecore:EClass ../../com.mmxlabs.scenario.service.model/model/scenario.service.ecore#//ScenarioInstance"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="currentScenario" eType="ecore:EClass ../../com.mmxlabs.scenario.service.model/model/scenario.service.ecore#//ScenarioInstance"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseScenario" eType="#//ScenarioResult"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="prevScenario" eType="#//ScenarioResult"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentScenario" eType="#//ScenarioResult"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="changeSetRowsToBase" upperBound="-1"
         eType="#//ChangeSetRow" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="changeSetRowsToPrevious"
@@ -73,4 +73,5 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="newOpenDischargeAllocation"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//OpenSlotAllocation"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="ScenarioResult" instanceClassName="com.mmxlabs.scenario.service.ui.ScenarioResult"/>
 </ecore:EPackage>

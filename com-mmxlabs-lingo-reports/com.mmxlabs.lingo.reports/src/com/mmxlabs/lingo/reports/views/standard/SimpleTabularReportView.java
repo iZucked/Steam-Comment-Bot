@@ -51,9 +51,8 @@ import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransform
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.EmptyColumnHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.RowHeaderRenderer;
@@ -62,7 +61,7 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  */
@@ -87,7 +86,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	protected final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 
 		@Override
-		public void selectionChanged(final @NonNull ISelectedDataProvider selectedDataProvider, final @Nullable ScenarioInstance pinned, final Collection<@NonNull ScenarioInstance> others,
+		public void selectionChanged(final @NonNull ISelectedDataProvider selectedDataProvider, final @Nullable ScenarioResult pinned, final Collection<@NonNull ScenarioResult> others,
 				final boolean block) {
 
 			final Runnable r = new Runnable() {
@@ -98,34 +97,25 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 					columnManagers.clear();
 
 					int numberOfSchedules = 0;
-					Pair<Schedule, LNGScenarioModel> pinnedPair = null;
-					List<Pair<Schedule, LNGScenarioModel>> otherPairs = new LinkedList<>();
-					// List<T> pinnedData = null;
+					Pair<Schedule, ScenarioResult> pinnedPair = null;
+					List<Pair<Schedule, ScenarioResult>> otherPairs = new LinkedList<>();
 					if (pinned != null) {
-						final LNGScenarioModel pinnedScenarioModel = selectedDataProvider.getScenarioModel(pinned);
-						if (pinnedScenarioModel != null) {
-							final Schedule schedule = ScenarioModelUtil.findSchedule(pinnedScenarioModel);
+						final ScheduleModel scheduleModel = pinned.getTypedResult(ScheduleModel.class);
+						if (scheduleModel != null) {
+							final Schedule schedule = scheduleModel.getSchedule();
 							if (schedule != null) {
-								@Nullable
-								final LNGScenarioModel scenarioModel = selectedDataProvider.getScenarioModel(schedule);
-								if (scenarioModel != null) {
-									pinnedPair = new Pair<>(schedule, scenarioModel);
-									numberOfSchedules++;
-								}
+								pinnedPair = new Pair<>(schedule, pinned);
+								numberOfSchedules++;
 							}
 						}
 					}
-					for (final ScenarioInstance other : others) {
-						final LNGScenarioModel otherScenarioModel = selectedDataProvider.getScenarioModel(other);
-						if (otherScenarioModel != null) {
-							final Schedule schedule = ScenarioModelUtil.findSchedule(otherScenarioModel);
+					for (final ScenarioResult other : others) {
+						final ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
+						if (scheduleModel != null) {
+							final Schedule schedule = scheduleModel.getSchedule();
 							if (schedule != null) {
-								@Nullable
-								final LNGScenarioModel scenarioModel = selectedDataProvider.getScenarioModel(schedule);
-								if (scenarioModel != null) {
-									otherPairs.add(new Pair<>(schedule, scenarioModel));
-									numberOfSchedules++;
-								}
+								otherPairs.add(new Pair<>(schedule, other));
+								numberOfSchedules++;
 							}
 						}
 					}

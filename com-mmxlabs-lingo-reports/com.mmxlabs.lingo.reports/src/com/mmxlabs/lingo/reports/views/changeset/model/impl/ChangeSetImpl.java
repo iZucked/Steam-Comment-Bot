@@ -24,7 +24,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.scenario.service.model.ModelReference;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * <!-- begin-user-doc -->
@@ -101,34 +101,64 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	protected ModelReference currentScenarioRef;
 
 	/**
-	 * The cached value of the '{@link #getBaseScenario() <em>Base Scenario</em>}' reference.
+	 * The default value of the '{@link #getBaseScenario() <em>Base Scenario</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getBaseScenario()
 	 * @generated
 	 * @ordered
 	 */
-	protected ScenarioInstance baseScenario;
+	protected static final ScenarioResult BASE_SCENARIO_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getPrevScenario() <em>Prev Scenario</em>}' reference.
+	 * The cached value of the '{@link #getBaseScenario() <em>Base Scenario</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBaseScenario()
+	 * @generated
+	 * @ordered
+	 */
+	protected ScenarioResult baseScenario = BASE_SCENARIO_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPrevScenario() <em>Prev Scenario</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getPrevScenario()
 	 * @generated
 	 * @ordered
 	 */
-	protected ScenarioInstance prevScenario;
+	protected static final ScenarioResult PREV_SCENARIO_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getCurrentScenario() <em>Current Scenario</em>}' reference.
+	 * The cached value of the '{@link #getPrevScenario() <em>Prev Scenario</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPrevScenario()
+	 * @generated
+	 * @ordered
+	 */
+	protected ScenarioResult prevScenario = PREV_SCENARIO_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getCurrentScenario() <em>Current Scenario</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getCurrentScenario()
 	 * @generated
 	 * @ordered
 	 */
-	protected ScenarioInstance currentScenario;
+	protected static final ScenarioResult CURRENT_SCENARIO_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getCurrentScenario() <em>Current Scenario</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCurrentScenario()
+	 * @generated
+	 * @ordered
+	 */
+	protected ScenarioResult currentScenario = CURRENT_SCENARIO_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getChangeSetRowsToBase() <em>Change Set Rows To Base</em>}' containment reference list.
@@ -384,15 +414,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ScenarioInstance getBaseScenario() {
-		if (baseScenario != null && baseScenario.eIsProxy()) {
-			InternalEObject oldBaseScenario = (InternalEObject)baseScenario;
-			baseScenario = (ScenarioInstance)eResolveProxy(oldBaseScenario);
-			if (baseScenario != oldBaseScenario) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET__BASE_SCENARIO, oldBaseScenario, baseScenario));
-			}
-		}
+	public ScenarioResult getBaseScenario() {
 		return baseScenario;
 	}
 
@@ -401,17 +423,8 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ScenarioInstance basicGetBaseScenario() {
-		return baseScenario;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setBaseScenario(ScenarioInstance newBaseScenario) {
-		ScenarioInstance oldBaseScenario = baseScenario;
+	public void setBaseScenario(ScenarioResult newBaseScenario) {
+		ScenarioResult oldBaseScenario = baseScenario;
 		baseScenario = newBaseScenario;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__BASE_SCENARIO, oldBaseScenario, baseScenario));
@@ -422,15 +435,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ScenarioInstance getPrevScenario() {
-		if (prevScenario != null && prevScenario.eIsProxy()) {
-			InternalEObject oldPrevScenario = (InternalEObject)prevScenario;
-			prevScenario = (ScenarioInstance)eResolveProxy(oldPrevScenario);
-			if (prevScenario != oldPrevScenario) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET__PREV_SCENARIO, oldPrevScenario, prevScenario));
-			}
-		}
+	public ScenarioResult getPrevScenario() {
 		return prevScenario;
 	}
 
@@ -439,17 +444,8 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ScenarioInstance basicGetPrevScenario() {
-		return prevScenario;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setPrevScenario(ScenarioInstance newPrevScenario) {
-		ScenarioInstance oldPrevScenario = prevScenario;
+	public void setPrevScenario(ScenarioResult newPrevScenario) {
+		ScenarioResult oldPrevScenario = prevScenario;
 		prevScenario = newPrevScenario;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__PREV_SCENARIO, oldPrevScenario, prevScenario));
@@ -460,15 +456,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ScenarioInstance getCurrentScenario() {
-		if (currentScenario != null && currentScenario.eIsProxy()) {
-			InternalEObject oldCurrentScenario = (InternalEObject)currentScenario;
-			currentScenario = (ScenarioInstance)eResolveProxy(oldCurrentScenario);
-			if (currentScenario != oldCurrentScenario) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET__CURRENT_SCENARIO, oldCurrentScenario, currentScenario));
-			}
-		}
+	public ScenarioResult getCurrentScenario() {
 		return currentScenario;
 	}
 
@@ -477,17 +465,8 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ScenarioInstance basicGetCurrentScenario() {
-		return currentScenario;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setCurrentScenario(ScenarioInstance newCurrentScenario) {
-		ScenarioInstance oldCurrentScenario = currentScenario;
+	public void setCurrentScenario(ScenarioResult newCurrentScenario) {
+		ScenarioResult oldCurrentScenario = currentScenario;
 		currentScenario = newCurrentScenario;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__CURRENT_SCENARIO, oldCurrentScenario, currentScenario));
@@ -604,14 +583,11 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 				if (resolve) return getCurrentScenarioRef();
 				return basicGetCurrentScenarioRef();
 			case ChangesetPackage.CHANGE_SET__BASE_SCENARIO:
-				if (resolve) return getBaseScenario();
-				return basicGetBaseScenario();
+				return getBaseScenario();
 			case ChangesetPackage.CHANGE_SET__PREV_SCENARIO:
-				if (resolve) return getPrevScenario();
-				return basicGetPrevScenario();
+				return getPrevScenario();
 			case ChangesetPackage.CHANGE_SET__CURRENT_SCENARIO:
-				if (resolve) return getCurrentScenario();
-				return basicGetCurrentScenario();
+				return getCurrentScenario();
 			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_BASE:
 				return getChangeSetRowsToBase();
 			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_PREVIOUS:
@@ -647,13 +623,13 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 				setCurrentScenarioRef((ModelReference)newValue);
 				return;
 			case ChangesetPackage.CHANGE_SET__BASE_SCENARIO:
-				setBaseScenario((ScenarioInstance)newValue);
+				setBaseScenario((ScenarioResult)newValue);
 				return;
 			case ChangesetPackage.CHANGE_SET__PREV_SCENARIO:
-				setPrevScenario((ScenarioInstance)newValue);
+				setPrevScenario((ScenarioResult)newValue);
 				return;
 			case ChangesetPackage.CHANGE_SET__CURRENT_SCENARIO:
-				setCurrentScenario((ScenarioInstance)newValue);
+				setCurrentScenario((ScenarioResult)newValue);
 				return;
 			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_BASE:
 				getChangeSetRowsToBase().clear();
@@ -694,13 +670,13 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 				setCurrentScenarioRef((ModelReference)null);
 				return;
 			case ChangesetPackage.CHANGE_SET__BASE_SCENARIO:
-				setBaseScenario((ScenarioInstance)null);
+				setBaseScenario(BASE_SCENARIO_EDEFAULT);
 				return;
 			case ChangesetPackage.CHANGE_SET__PREV_SCENARIO:
-				setPrevScenario((ScenarioInstance)null);
+				setPrevScenario(PREV_SCENARIO_EDEFAULT);
 				return;
 			case ChangesetPackage.CHANGE_SET__CURRENT_SCENARIO:
-				setCurrentScenario((ScenarioInstance)null);
+				setCurrentScenario(CURRENT_SCENARIO_EDEFAULT);
 				return;
 			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_BASE:
 				getChangeSetRowsToBase().clear();
@@ -734,11 +710,11 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 			case ChangesetPackage.CHANGE_SET__CURRENT_SCENARIO_REF:
 				return currentScenarioRef != null;
 			case ChangesetPackage.CHANGE_SET__BASE_SCENARIO:
-				return baseScenario != null;
+				return BASE_SCENARIO_EDEFAULT == null ? baseScenario != null : !BASE_SCENARIO_EDEFAULT.equals(baseScenario);
 			case ChangesetPackage.CHANGE_SET__PREV_SCENARIO:
-				return prevScenario != null;
+				return PREV_SCENARIO_EDEFAULT == null ? prevScenario != null : !PREV_SCENARIO_EDEFAULT.equals(prevScenario);
 			case ChangesetPackage.CHANGE_SET__CURRENT_SCENARIO:
-				return currentScenario != null;
+				return CURRENT_SCENARIO_EDEFAULT == null ? currentScenario != null : !CURRENT_SCENARIO_EDEFAULT.equals(currentScenario);
 			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_BASE:
 				return changeSetRowsToBase != null && !changeSetRowsToBase.isEmpty();
 			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_PREVIOUS:
@@ -747,6 +723,26 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 				return currentMetrics != null;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (baseScenario: ");
+		result.append(baseScenario);
+		result.append(", prevScenario: ");
+		result.append(prevScenario);
+		result.append(", currentScenario: ");
+		result.append(currentScenario);
+		result.append(')');
+		return result.toString();
 	}
 
 } //ChangeSetImpl

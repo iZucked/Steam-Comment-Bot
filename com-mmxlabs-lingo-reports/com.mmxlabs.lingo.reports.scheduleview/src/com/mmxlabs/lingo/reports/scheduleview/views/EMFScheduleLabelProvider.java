@@ -56,7 +56,7 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * @author hinton
@@ -138,9 +138,9 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 						if (selectedScenariosService.getPinnedScenario() != null) {
 							// Do nothing now we have a pin icon
 						} else {
-							final ScenarioInstance instance = selectedDataProvider.getScenarioInstance(sequence);
+							final ScenarioResult instance = selectedDataProvider.getScenarioResult(sequence);
 							if (instance != null) {
-								seqText += "\n" + instance.getName();
+								seqText += "\n" + instance.getScenarioInstance().getName();
 							}
 						}
 					}

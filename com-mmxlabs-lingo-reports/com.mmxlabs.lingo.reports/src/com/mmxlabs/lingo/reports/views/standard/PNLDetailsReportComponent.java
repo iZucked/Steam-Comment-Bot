@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.properties.views.DetailPropertiesViewComponent;
@@ -111,7 +112,7 @@ public class PNLDetailsReportComponent extends DetailPropertiesViewComponent {
 						final Schedule schedule = scheduleModel.getSchedule();
 						if (scheduleModel.getSchedule() != null) {
 							for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
-								if (cargo.equals(cargoAllocation.getInputCargo())) {
+								if (ScheduleModelUtils.matchingSlots(cargo, cargoAllocation)) {
 									adaptedObject.add(cargoAllocation);
 									return;
 								}
@@ -135,7 +136,7 @@ public class PNLDetailsReportComponent extends DetailPropertiesViewComponent {
 							if (slot.getCargo() != null) {
 								final Cargo cargo = slot.getCargo();
 								for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
-									if (cargo.equals(cargoAllocation.getInputCargo())) {
+									if (ScheduleModelUtils.matchingSlots(cargo, cargoAllocation)) {
 										adaptedObject.add(cargoAllocation);
 										return;
 									}
@@ -236,5 +237,6 @@ public class PNLDetailsReportComponent extends DetailPropertiesViewComponent {
 		for (final ScheduleModel scheduleModel : hookedSchedules) {
 			scheduleModel.eAdapters().remove(contentAdapter);
 		}
+		hookedSchedules.clear();
 	}
 }

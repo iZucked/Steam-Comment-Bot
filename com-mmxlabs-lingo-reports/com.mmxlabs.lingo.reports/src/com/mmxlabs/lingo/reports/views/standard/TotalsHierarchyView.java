@@ -37,8 +37,6 @@ import org.eclipse.ui.part.ViewPart;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
@@ -46,12 +44,13 @@ import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * A view which displays the cost breakdown as a hierarchy, thus
@@ -94,22 +93,22 @@ public class TotalsHierarchyView extends ViewPart {
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 
 		@Override
-		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
 			final Runnable r = new Runnable() {
 				@Override
 				public void run() {
 					int numberOfSchedules = others.size() + (pinned == null ? 0 : 1);
-					List<ScenarioInstance> instances = new LinkedList<>(others);
+					List<ScenarioResult> instances = new LinkedList<>(others);
 					if (pinned != null) {
 						instances.add(0, pinned);
 					}
 
 					final TreeData dummy = new TreeData("");
 					if (instances.size() == 1) {
-						for (final ScenarioInstance other : instances) {
-							LNGScenarioModel instance = selectedDataProvider.getScenarioModel(other);
-							if (instance != null) {
-								final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+						for (final ScenarioResult other : instances) {
+							ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
+							if (scheduleModel != null) {
+								final Schedule schedule = scheduleModel.getSchedule();
 								if (schedule != null) {
 									dummy.addChild(createCostsTreeData(schedule));
 									break;
@@ -118,12 +117,12 @@ public class TotalsHierarchyView extends ViewPart {
 						}
 					} else {
 
-						for (final ScenarioInstance other : instances) {
-							LNGScenarioModel instance = selectedDataProvider.getScenarioModel(other);
-							if (instance != null) {
-								final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+						for (final ScenarioResult other : instances) {
+							ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
+							if (scheduleModel != null) {
+								final Schedule schedule = scheduleModel.getSchedule();
 								if (schedule != null) {
-									final String scheduleName = other.getName();
+									final String scheduleName = other.getScenarioInstance().getName();
 
 									// final String scheduleName = schedule.getName();
 									// don't sum costs and profits, because it's meaningless

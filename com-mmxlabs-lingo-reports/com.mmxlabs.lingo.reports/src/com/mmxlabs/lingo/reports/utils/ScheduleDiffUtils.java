@@ -141,7 +141,7 @@ public class ScheduleDiffUtils {
 				}
 			}
 
-			if (checkNextPortDifferences && ref.getInputCargo().getCargoType() == CargoType.FLEET) {
+			if (checkNextPortDifferences && ref.getCargoType() == CargoType.FLEET) {
 				final Event caLastEvent = ca.getEvents().get(ca.getEvents().size() - 1);
 				final Event refLastEvent = ref.getEvents().get(ref.getEvents().size() - 1);
 

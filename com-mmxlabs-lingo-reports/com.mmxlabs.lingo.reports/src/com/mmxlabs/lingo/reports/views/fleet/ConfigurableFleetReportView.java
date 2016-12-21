@@ -52,6 +52,7 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * A customisable report for fleet based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available for
@@ -146,13 +147,13 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 	private final IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
 
 		@Override
-		public void compareDataUpdate(@NonNull final ISelectedDataProvider selectedDataProvider, @NonNull final ScenarioInstance pin, @NonNull final ScenarioInstance other, @NonNull final Table table,
+		public void compareDataUpdate(@NonNull final ISelectedDataProvider selectedDataProvider, @NonNull final ScenarioResult pin, @NonNull final ScenarioResult other, @NonNull final Table table,
 				@NonNull final List<LNGScenarioModel> rootObjects, @NonNull final Map<EObject, Set<EObject>> equivalancesMap) {
 			ViewerHelper.refresh(viewer, true);
 		}
 
 		@Override
-		public void multiDataUpdate(@NonNull final ISelectedDataProvider selectedDataProvider, @NonNull final Collection<ScenarioInstance> others, @NonNull final Table table,
+		public void multiDataUpdate(@NonNull final ISelectedDataProvider selectedDataProvider, @NonNull final Collection<ScenarioResult> others, @NonNull final Table table,
 				@NonNull final List<LNGScenarioModel> rootObjects) {
 			ViewerHelper.refresh(viewer, true);
 		}
@@ -167,7 +168,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 
 		@Override
-		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
 
 			final Runnable r = new Runnable() {
 				@Override
@@ -179,10 +180,10 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 
 					elementCollector.beginCollecting(pinned != null);
 					if (pinned != null) {
-						elementCollector.collectElements(pinned, selectedDataProvider.getScenarioModel(pinned), true);
+						elementCollector.collectElements(pinned, true);
 					}
-					for (final ScenarioInstance other : others) {
-						elementCollector.collectElements(other, selectedDataProvider.getScenarioModel(other), false);
+					for (final ScenarioResult other : others) {
+						elementCollector.collectElements(other, false);
 					}
 					elementCollector.endCollecting();
 					ViewerHelper.setInput(viewer, true, table.getRows());

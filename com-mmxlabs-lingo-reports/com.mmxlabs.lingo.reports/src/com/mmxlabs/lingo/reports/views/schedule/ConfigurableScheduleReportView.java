@@ -49,7 +49,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * A customisable report for schedule based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available
@@ -114,7 +114,7 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 	private IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
 
 		@Override
-		public void compareDataUpdate(@NonNull ISelectedDataProvider selectedDataProvider, @NonNull ScenarioInstance pin, @NonNull ScenarioInstance other, @NonNull Table table,
+		public void compareDataUpdate(@NonNull ISelectedDataProvider selectedDataProvider, @NonNull ScenarioResult pin, @NonNull ScenarioResult other, @NonNull Table table,
 				@NonNull List<LNGScenarioModel> rootObjects, @NonNull Map<EObject, Set<EObject>> equivalancesMap) {
 			clearInputEquivalents();
 			builder.refreshPNLColumns(rootObjects);
@@ -130,7 +130,7 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 		}
 
 		@Override
-		public void multiDataUpdate(@NonNull ISelectedDataProvider selectedDataProvider, @NonNull Collection<ScenarioInstance> others, @NonNull Table table,
+		public void multiDataUpdate(@NonNull ISelectedDataProvider selectedDataProvider, @NonNull Collection<ScenarioResult> others, @NonNull Table table,
 				@NonNull List<LNGScenarioModel> rootObjects) {
 			clearInputEquivalents();
 			builder.refreshPNLColumns(rootObjects);

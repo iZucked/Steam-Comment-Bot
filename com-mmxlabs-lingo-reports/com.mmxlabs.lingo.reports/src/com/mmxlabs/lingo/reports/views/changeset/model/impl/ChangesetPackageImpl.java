@@ -8,6 +8,7 @@ package com.mmxlabs.lingo.reports.views.changeset.model.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
@@ -22,6 +23,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * <!-- begin-user-doc -->
@@ -64,6 +66,13 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	private EClass changeSetRowEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType scenarioResultEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -207,8 +216,8 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getChangeSet_BaseScenario() {
-		return (EReference)changeSetEClass.getEStructuralFeatures().get(5);
+	public EAttribute getChangeSet_BaseScenario() {
+		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -216,8 +225,8 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getChangeSet_PrevScenario() {
-		return (EReference)changeSetEClass.getEStructuralFeatures().get(6);
+	public EAttribute getChangeSet_PrevScenario() {
+		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -225,8 +234,8 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getChangeSet_CurrentScenario() {
-		return (EReference)changeSetEClass.getEStructuralFeatures().get(7);
+	public EAttribute getChangeSet_CurrentScenario() {
+		return (EAttribute)changeSetEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -558,6 +567,15 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EDataType getScenarioResult() {
+		return scenarioResultEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ChangesetFactory getChangesetFactory() {
 		return (ChangesetFactory)getEFactoryInstance();
 	}
@@ -590,9 +608,9 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		createEReference(changeSetEClass, CHANGE_SET__BASE_SCENARIO_REF);
 		createEReference(changeSetEClass, CHANGE_SET__PREV_SCENARIO_REF);
 		createEReference(changeSetEClass, CHANGE_SET__CURRENT_SCENARIO_REF);
-		createEReference(changeSetEClass, CHANGE_SET__BASE_SCENARIO);
-		createEReference(changeSetEClass, CHANGE_SET__PREV_SCENARIO);
-		createEReference(changeSetEClass, CHANGE_SET__CURRENT_SCENARIO);
+		createEAttribute(changeSetEClass, CHANGE_SET__BASE_SCENARIO);
+		createEAttribute(changeSetEClass, CHANGE_SET__PREV_SCENARIO);
+		createEAttribute(changeSetEClass, CHANGE_SET__CURRENT_SCENARIO);
 		createEReference(changeSetEClass, CHANGE_SET__CHANGE_SET_ROWS_TO_BASE);
 		createEReference(changeSetEClass, CHANGE_SET__CHANGE_SET_ROWS_TO_PREVIOUS);
 		createEReference(changeSetEClass, CHANGE_SET__CURRENT_METRICS);
@@ -632,6 +650,9 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		createEReference(changeSetRowEClass, CHANGE_SET_ROW__NEW_OPEN_LOAD_ALLOCATION);
 		createEReference(changeSetRowEClass, CHANGE_SET_ROW__ORIGINAL_OPEN_DISCHARGE_ALLOCATION);
 		createEReference(changeSetRowEClass, CHANGE_SET_ROW__NEW_OPEN_DISCHARGE_ALLOCATION);
+
+		// Create data types
+		scenarioResultEDataType = createEDataType(SCENARIO_RESULT);
 	}
 
 	/**
@@ -678,9 +699,9 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		initEReference(getChangeSet_BaseScenarioRef(), theScenarioServicePackage.getModelReference(), null, "baseScenarioRef", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSet_PrevScenarioRef(), theScenarioServicePackage.getModelReference(), null, "prevScenarioRef", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSet_CurrentScenarioRef(), theScenarioServicePackage.getModelReference(), null, "currentScenarioRef", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getChangeSet_BaseScenario(), theScenarioServicePackage.getScenarioInstance(), null, "baseScenario", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getChangeSet_PrevScenario(), theScenarioServicePackage.getScenarioInstance(), null, "prevScenario", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getChangeSet_CurrentScenario(), theScenarioServicePackage.getScenarioInstance(), null, "currentScenario", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSet_BaseScenario(), this.getScenarioResult(), "baseScenario", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSet_PrevScenario(), this.getScenarioResult(), "prevScenario", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSet_CurrentScenario(), this.getScenarioResult(), "currentScenario", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSet_ChangeSetRowsToBase(), this.getChangeSetRow(), null, "changeSetRowsToBase", null, 0, -1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSet_ChangeSetRowsToPrevious(), this.getChangeSetRow(), null, "changeSetRowsToPrevious", null, 0, -1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSet_CurrentMetrics(), this.getMetrics(), null, "currentMetrics", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -720,6 +741,9 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		initEReference(getChangeSetRow_NewOpenLoadAllocation(), theSchedulePackage.getOpenSlotAllocation(), null, "newOpenLoadAllocation", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSetRow_OriginalOpenDischargeAllocation(), theSchedulePackage.getOpenSlotAllocation(), null, "originalOpenDischargeAllocation", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSetRow_NewOpenDischargeAllocation(), theSchedulePackage.getOpenSlotAllocation(), null, "newOpenDischargeAllocation", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		// Initialize data types
+		initEDataType(scenarioResultEDataType, ScenarioResult.class, "ScenarioResult", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

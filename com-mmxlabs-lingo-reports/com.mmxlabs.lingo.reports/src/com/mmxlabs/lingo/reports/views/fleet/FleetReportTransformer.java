@@ -37,7 +37,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class FleetReportTransformer {
 
@@ -93,7 +93,7 @@ public class FleetReportTransformer {
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final LNGScenarioModel scenarioModel, final Schedule schedule, final boolean isPinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioInstance, final LNGScenarioModel scenarioModel, final Schedule schedule, final boolean isPinned) {
 				this.isPinned |= isPinned;
 
 				numberOfSchedules++;
@@ -141,7 +141,7 @@ public class FleetReportTransformer {
 		};
 	}
 
-	public List<Row> generateRows(final Table dataModelInstance, final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean isPinned) {
+	public List<Row> generateRows(final Table dataModelInstance, final ScenarioResult scenarioInstance, final Schedule schedule, final boolean isPinned) {
 
 		final List<EObject> interestingEvents = new LinkedList<EObject>();
 		final Set<EObject> allEvents = new HashSet<EObject>();
@@ -164,7 +164,7 @@ public class FleetReportTransformer {
 		return generateRows(dataModelInstance, scenarioInstance, schedule, interestingEvents, allEvents, isPinned);
 	}
 
-	public List<Row> generateRows(final Table tableModelInstance, final ScenarioInstance scenarioInstance, final Schedule schedule, final List<EObject> interestingElements,
+	public List<Row> generateRows(final Table tableModelInstance, final ScenarioResult scenarioInstance, final Schedule schedule, final List<EObject> interestingElements,
 			final Set<EObject> allElements, final boolean isReferenceSchedule) {
 		final List<Row> rows = new ArrayList<>(interestingElements.size());
 
@@ -183,9 +183,9 @@ public class FleetReportTransformer {
 				if (sequence.getSequenceType() == SequenceType.SPOT_VESSEL || sequence.getSequenceType() == SequenceType.ROUND_TRIP) {
 					linkedSequences.add(sequence);
 				} else {
-				final List<Sequence> foundSequences = schedule.getSequences().stream().filter(s -> (s.getVesselAvailability() != null && s.getVesselAvailability().getVessel() != null
-						&& s.getVesselAvailability().getVessel().equals(sequence.getVesselAvailability().getVessel()))).collect(Collectors.toList());
-				linkedSequences.addAll(foundSequences);
+					final List<Sequence> foundSequences = schedule.getSequences().stream().filter(s -> (s.getVesselAvailability() != null && s.getVesselAvailability().getVessel() != null
+							&& s.getVesselAvailability().getVessel().equals(sequence.getVesselAvailability().getVessel()))).collect(Collectors.toList());
+					linkedSequences.addAll(foundSequences);
 				}
 				rows.add(row);
 
@@ -206,7 +206,7 @@ public class FleetReportTransformer {
 		}
 
 		for (final Row row : rows) {
-			row.setScenario(scenarioInstance);
+			row.setScenario(scenarioInstance.getScenarioInstance());
 			row.setSchedule(schedule);
 		}
 
@@ -236,7 +236,7 @@ public class FleetReportTransformer {
 				equivalents.add(slotAllocation.getSlotVisit());
 			}
 			row.getInputEquivalents().addAll(allocation.getEvents());
-			row.getInputEquivalents().add(allocation.getInputCargo());
+			// row.getInputEquivalents().add(allocation.getInputCargo());
 		} else if (a instanceof SlotVisit) {
 			final SlotVisit slotVisit = (SlotVisit) a;
 
@@ -246,7 +246,7 @@ public class FleetReportTransformer {
 				row.getInputEquivalents().add(slotAllocation.getSlotVisit());
 			}
 			row.getInputEquivalents().addAll(allocation.getEvents());
-			row.getInputEquivalents().add(allocation.getInputCargo());
+			// row.getInputEquivalents().add(allocation.getInputCargo());
 		} else if (a instanceof VesselEventVisit) {
 			final VesselEventVisit vesselEventVisit = (VesselEventVisit) a;
 			row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(vesselEventVisit, vesselEventVisit.getVesselEvent()));

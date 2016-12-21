@@ -35,27 +35,39 @@ import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ScenarioComparisonTransformer {
 
 	public ChangeSetRoot createDataModel(final ISelectedDataProvider selectedDataProvider, final Map<EObject, Set<EObject>> equivalancesMap, @NonNull final Table table,
-			@NonNull final ScenarioInstance from, @NonNull final ScenarioInstance to, final IProgressMonitor monitor) {
+			@NonNull final ScenarioResult from, @NonNull final ScenarioResult to, final IProgressMonitor monitor) {
 		monitor.beginTask("Opening change sets", 1);
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 		assert root != null;
 
-		try (final ModelReference toRef = to.getReference("ScenarioComparisonTransformer:1")) {
+		try (final ModelReference toRef = to.getScenarioInstance().getReference("ScenarioComparisonTransformer:1")) {
 			toRef.getInstance();
-			try (final ModelReference fromRef = from.getReference("ScenarioComparisonTransformer:2")) {
+			try (final ModelReference fromRef = from.getScenarioInstance().getReference("ScenarioComparisonTransformer:2")) {
 				fromRef.getInstance();
-				final Schedule toSchedule = selectedDataProvider.getSchedule(to.getInstance());
-				final Schedule fromSchedule = selectedDataProvider.getSchedule(from.getInstance());
+				final ScheduleModel toScheduleModel = to.getTypedResult(ScheduleModel.class);
+				final ScheduleModel fromScheduleModel = from.getTypedResult(ScheduleModel.class);
+
+				if (fromScheduleModel == null) {
+					return root;
+				}
+				if (toScheduleModel == null) {
+					return root;
+				}
+
+				final Schedule toSchedule = toScheduleModel.getSchedule();
+				final Schedule fromSchedule = fromScheduleModel.getSchedule();
 
 				if (fromSchedule == null) {
 					return root;
@@ -63,7 +75,6 @@ public class ScenarioComparisonTransformer {
 				if (toSchedule == null) {
 					return root;
 				}
-
 				final List<ChangeSet> changeSets = new LinkedList<>();
 
 				// Convert into new data model.
@@ -143,12 +154,12 @@ public class ScenarioComparisonTransformer {
 	}
 
 	@NonNull
-	private ChangeSet createChangeSet(@NonNull final ChangeSetRoot root, @NonNull final ScenarioInstance prev, @NonNull final ScenarioInstance current) {
+	private ChangeSet createChangeSet(@NonNull final ChangeSetRoot root, @NonNull final ScenarioResult prev, @NonNull final ScenarioResult current) {
 		final ChangeSet changeSet = ChangesetFactory.eINSTANCE.createChangeSet();
 
 		// final ModelReference baseReference = base.getReference();
-		final ModelReference prevReference = prev.getReference("ScenarioComparisonTransformer:3");
-		final ModelReference currentReference = current.getReference("ScenarioComparisonTransformer:4");
+		final ModelReference prevReference = prev.getScenarioInstance().getReference("ScenarioComparisonTransformer:3");
+		final ModelReference currentReference = current.getScenarioInstance().getReference("ScenarioComparisonTransformer:4");
 
 		// Pre-Load
 		// baseReference.getInstance();

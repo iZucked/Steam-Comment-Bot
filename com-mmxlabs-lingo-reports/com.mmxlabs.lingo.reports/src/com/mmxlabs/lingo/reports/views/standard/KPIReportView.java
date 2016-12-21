@@ -50,9 +50,8 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.standard.KPIReportTransformer.RowData;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
@@ -60,7 +59,7 @@ import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class KPIReportView extends ViewPart {
 
@@ -90,7 +89,7 @@ public class KPIReportView extends ViewPart {
 		KPIReportTransformer transformer = new KPIReportTransformer();
 
 		@Override
-		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
 			final Runnable r = new Runnable() {
 				@Override
 				public void run() {
@@ -100,9 +99,9 @@ public class KPIReportView extends ViewPart {
 					int numberOfSchedules = 0;
 					List<RowData> pinnedData = null;
 					if (pinned != null) {
-						final LNGScenarioModel instance = selectedDataProvider.getScenarioModel(pinned);
-						if (instance != null) {
-							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+						ScheduleModel scheduleModel = pinned.getTypedResult(ScheduleModel.class);
+						if (scheduleModel != null) {
+							final Schedule schedule = scheduleModel.getSchedule();
 							if (schedule != null) {
 								pinnedData = transformer.transform(schedule, pinned, null);
 								rowElements.addAll(pinnedData);
@@ -110,10 +109,10 @@ public class KPIReportView extends ViewPart {
 							}
 						}
 					}
-					for (final ScenarioInstance other : others) {
-						final LNGScenarioModel instance = selectedDataProvider.getScenarioModel(other);
-						if (instance != null) {
-							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+					for (final ScenarioResult other : others) {
+						ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
+						if (scheduleModel != null) {
+							final Schedule schedule = scheduleModel.getSchedule();
 							if (schedule != null) {
 								rowElements.addAll(transformer.transform(schedule, other, pinnedData));
 								numberOfSchedules++;

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
@@ -16,74 +17,70 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 class SelectedDataProviderImpl implements ISelectedDataProvider {
 
-	private final List<ScenarioInstance> scenarioInstances = new LinkedList<>();
-	private final List<LNGScenarioModel> scenarioModels = new LinkedList<>();
-
-	private final Map<ScenarioInstance, LNGScenarioModel> instanceToModelMap = new HashMap<>();
-	private final Map<EObject, ScenarioInstance> scenarioInstanceMap = new HashMap<>();
-	private final Map<EObject, LNGScenarioModel> scenarioModelMap = new HashMap<>();
+	private final List<ScenarioResult> scenarioResults = new LinkedList<>();
+	// private final List<LNGScenarioModel> scenarioModels = new LinkedList<>();
+	//
+	// private final Map<ScenarioResult, LNGScenarioModel> instanceToModelMap = new HashMap<>();
+	private final Map<EObject, ScenarioResult> scenarioInstanceMap = new HashMap<>();
+	// private final Map<EObject, LNGScenarioModel> scenarioModelMap = new HashMap<>();
 	private final Map<EObject, Schedule> scheduleMap = new HashMap<>();
-	private ScenarioInstance pinnedScenarioInstance;
+	private ScenarioResult pinnedScenarioInstance;
 
-	public void addScenario(@NonNull final ScenarioInstance scenarioInstance, @NonNull final LNGScenarioModel scenarioModel, @Nullable final Schedule schedule,
-			@NonNull final Collection<EObject> children) {
-		scenarioInstances.add(scenarioInstance);
-		scenarioModels.add(scenarioModel);
+	public void addScenario(@NonNull final ScenarioResult scenarioResult, @Nullable final Schedule schedule, @NonNull final Collection<EObject> children) {
+		scenarioResults.add(scenarioResult);
 
 		for (final EObject e : children) {
-			scenarioInstanceMap.put(e, scenarioInstance);
-			scenarioModelMap.put(e, scenarioModel);
+			scenarioInstanceMap.put(e, scenarioResult);
 			scheduleMap.put(e, schedule);
 		}
-		instanceToModelMap.put(scenarioInstance, scenarioModel);
+	}
+
+	// @Override
+	// public Collection<LNGScenarioModel> getScenarioModels() {
+	// return scenarioModels;
+	// }
+
+	@Override
+	public List<ScenarioResult> getScenarioResults() {
+		return scenarioResults;
 	}
 
 	@Override
-	public Collection<LNGScenarioModel> getScenarioModels() {
-		return scenarioModels;
-	}
-
-	@Override
-	public Collection<ScenarioInstance> getScenarioInstances() {
-		return scenarioInstances;
-	}
-
-	@Override
-	public ScenarioInstance getScenarioInstance(final EObject eObject) {
+	public ScenarioResult getScenarioResult(final EObject eObject) {
 		return scenarioInstanceMap.get(eObject);
 	}
 
-	@Override
-	public LNGScenarioModel getScenarioModel(final EObject eObject) {
-		return scenarioModelMap.get(eObject);
-	}
+	// @Override
+	// public LNGScenarioModel getScenarioModel(final EObject eObject) {
+	// return scenarioModelMap.get(eObject);
+	// }
 
-	@Override
-	public @NonNull LNGScenarioModel getScenarioModel(@NonNull ScenarioInstance scenarioInstance) {
-		return instanceToModelMap.get(scenarioInstance);
-	}
+	// @Override
+	// public @NonNull LNGScenarioModel getScenarioModel(@NonNull ScenarioInstance scenarioInstance) {
+	// return instanceToModelMap.get(scenarioInstance);
+	// }
 
 	@Override
 	public Schedule getSchedule(final EObject eObject) {
 		return scheduleMap.get(eObject);
 	}
 
-	@Override
-	public ScenarioInstance getPinnedScenarioInstance() {
-		return pinnedScenarioInstance;
-	}
+	// @Override
+	// public ScenarioResult getPinnedScenarioResult() {
+	// return pinnedScenarioInstance;
+	// }
 
 	@Override
 	public boolean isPinnedObject(EObject eObject) {
 
-		return getScenarioInstance(eObject) == pinnedScenarioInstance;
+		return Objects.equals(getScenarioResult(eObject), pinnedScenarioInstance);
 	}
 
-	public void setPinnedScenarioInstance(ScenarioInstance pinnedScenarioInstance) {
+	public void setPinnedScenarioInstance(ScenarioResult pinnedScenarioInstance) {
 		this.pinnedScenarioInstance = pinnedScenarioInstance;
 	}
 }

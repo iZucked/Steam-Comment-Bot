@@ -32,7 +32,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.rcp.common.RunnerHelper;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ScenarioComparisonService {
 
@@ -57,7 +57,7 @@ public class ScenarioComparisonService {
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 
 		@Override
-		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
 			scheduleRebuildCompare(selectedDataProvider, pinned, others, block);
 		}
 	};
@@ -98,9 +98,10 @@ public class ScenarioComparisonService {
 
 	}
 
-	private void scheduleRebuildCompare(@NonNull final ISelectedDataProvider selectedDataProvider, @Nullable final ScenarioInstance pinned, @NonNull final Collection<ScenarioInstance> others,
+	private void scheduleRebuildCompare(@NonNull final ISelectedDataProvider selectedDataProvider, @Nullable final ScenarioResult pinned, @NonNull final Collection<ScenarioResult> others,
 			final boolean block) {
 		lastResult = null;
+		selectedElements.clear();
 		final int value = counter.incrementAndGet();
 		if (PlatformUI.isWorkbenchRunning()) {
 
@@ -120,8 +121,8 @@ public class ScenarioComparisonService {
 
 	}
 
-	private void doRebuildCompare(final int value, @NonNull final ISelectedDataProvider selectedDataProvider, @Nullable final ScenarioInstance pinned,
-			@NonNull final Collection<ScenarioInstance> others) {
+	private void doRebuildCompare(final int value, @NonNull final ISelectedDataProvider selectedDataProvider, @Nullable final ScenarioResult pinned,
+			@NonNull final Collection<ScenarioResult> others) {
 
 		final List<ICustomRelatedSlotHandler> customRelatedSlotHandlers = new LinkedList<>();
 		if (customRelatedSlotHandlerExtensions != null) {
@@ -152,6 +153,7 @@ public class ScenarioComparisonService {
 			}
 		}
 
+		selectedElements.clear();
 		lastResult = result;
 	}
 

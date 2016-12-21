@@ -126,6 +126,7 @@ import com.mmxlabs.scenario.service.impl.ScenarioServiceListener;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ChangeSetView implements IAdaptable {
 
@@ -165,7 +166,7 @@ public class ChangeSetView implements IAdaptable {
 	private final IScenarioComparisonServiceListener listener = new IScenarioComparisonServiceListener() {
 
 		@Override
-		public void multiDataUpdate(final ISelectedDataProvider selectedDataProvider, final Collection<ScenarioInstance> others, final Table table, final List<LNGScenarioModel> rootObjects) {
+		public void multiDataUpdate(final ISelectedDataProvider selectedDataProvider, final Collection<ScenarioResult> others, final Table table, final List<LNGScenarioModel> rootObjects) {
 			if (ChangeSetView.this.viewMode == ViewMode.COMPARE) {
 				cleanUpVesselColumns();
 				setEmptyData();
@@ -173,7 +174,7 @@ public class ChangeSetView implements IAdaptable {
 		}
 
 		@Override
-		public void compareDataUpdate(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pin, final ScenarioInstance other, final Table table,
+		public void compareDataUpdate(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pin, final ScenarioResult other, final Table table,
 				final List<LNGScenarioModel> rootObjects, final Map<EObject, Set<EObject>> equivalancesMap) {
 			if (ChangeSetView.this.viewMode == ViewMode.COMPARE) {
 				cleanUpVesselColumns();
@@ -212,7 +213,7 @@ public class ChangeSetView implements IAdaptable {
 		}
 	};
 
-	private final Map<ScenarioInstance, ScenarioInstanceDeletedListener> listenerMap = new HashMap<>();
+	private final Map<ScenarioResult, ScenarioInstanceDeletedListener> listenerMap = new HashMap<>();
 
 	private Font boldFont;
 
@@ -869,7 +870,7 @@ public class ChangeSetView implements IAdaptable {
 							}
 							if (o instanceof ChangeSet) {
 								final ChangeSet changeSet = (ChangeSet) o;
-								final ScenarioInstance other;
+								final ScenarioResult other;
 								if (diffToBase) {
 									other = changeSet.getBaseScenario();
 								} else {
@@ -1826,10 +1827,10 @@ public class ChangeSetView implements IAdaptable {
 		}
 	}
 
-	protected void removeListener(@Nullable final ScenarioInstance scenarioInstance) {
+	protected void removeListener(@Nullable final ScenarioResult scenarioInstance) {
 		if (scenarioInstance != null) {
 			final IScenarioServiceListener listener = listenerMap.get(scenarioInstance);
-			final IScenarioService scenarioService = scenarioInstance.getScenarioService();
+			final IScenarioService scenarioService = scenarioInstance.getScenarioInstance().getScenarioService();
 			if (scenarioService != null && listener != null) {
 				scenarioService.removeScenarioServiceListener(listener);
 			}
@@ -1838,11 +1839,11 @@ public class ChangeSetView implements IAdaptable {
 		}
 	}
 
-	protected void createListener(@Nullable final ScenarioInstance scenarioInstance) {
+	protected void createListener(@Nullable final ScenarioResult scenarioInstance) {
 		if (scenarioInstance != null) {
-			final IScenarioService scenarioService = scenarioInstance.getScenarioService();
+			final IScenarioService scenarioService = scenarioInstance.getScenarioInstance().getScenarioService();
 			if (scenarioService != null) {
-				final ScenarioInstanceDeletedListener listener = new ScenarioInstanceDeletedListener(scenarioInstance, this);
+				final ScenarioInstanceDeletedListener listener = new ScenarioInstanceDeletedListener(scenarioInstance.getScenarioInstance(), this);
 				listenerMap.put(scenarioInstance, listener);
 				scenarioService.addScenarioServiceListener(listener);
 			}
@@ -1987,8 +1988,9 @@ public class ChangeSetView implements IAdaptable {
 		diagram.setChangeSetRoot(ChangesetFactory.eINSTANCE.createChangeSetRoot());
 		this.root = null;
 		{
-			for (final Map.Entry<ScenarioInstance, ScenarioInstanceDeletedListener> e : listenerMap.entrySet()) {
-				final ScenarioInstance scenarioInstance = e.getKey();
+			for (final Map.Entry<ScenarioResult, ScenarioInstanceDeletedListener> e : listenerMap.entrySet()) {
+				final ScenarioResult scenarioResult = e.getKey();
+				final ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
 				final IScenarioService scenarioService = scenarioInstance.getScenarioService();
 				final ScenarioInstanceDeletedListener listener = e.getValue();
 				if (scenarioService != null && listener != null) {

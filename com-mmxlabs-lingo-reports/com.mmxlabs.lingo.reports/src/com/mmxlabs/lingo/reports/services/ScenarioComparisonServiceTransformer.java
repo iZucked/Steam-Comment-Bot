@@ -43,7 +43,6 @@ import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
-import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -61,7 +60,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ScenarioComparisonServiceTransformer {
 
@@ -155,11 +154,11 @@ public class ScenarioComparisonServiceTransformer {
 		public final List<LNGScenarioModel> rootObjects;
 		public final Map<EObject, Set<EObject>> equivalancesMap;
 		ISelectedDataProvider selectedDataProvider;
-		final ScenarioInstance pinned;
-		final Collection<ScenarioInstance> others;
+		final ScenarioResult pinned;
+		final Collection<ScenarioResult> others;
 
-		public TransformResult(final Table table, final Map<EObject, Set<EObject>> equivalancesMap, final List<LNGScenarioModel> rootObjects, final ScenarioInstance pinned,
-				final Collection<ScenarioInstance> others) {
+		public TransformResult(final Table table, final Map<EObject, Set<EObject>> equivalancesMap, final List<LNGScenarioModel> rootObjects, final ScenarioResult pinned,
+				final Collection<ScenarioResult> others) {
 			this.table = table;
 			this.equivalancesMap = equivalancesMap;
 			this.rootObjects = rootObjects;
@@ -169,7 +168,7 @@ public class ScenarioComparisonServiceTransformer {
 	}
 
 	@NonNull
-	public static TransformResult transform(final ScenarioInstance pinned, final Collection<ScenarioInstance> others, @NonNull ISelectedDataProvider selectedDataProvider,
+	public static TransformResult transform(final ScenarioResult pinned, final Collection<ScenarioResult> others, @NonNull ISelectedDataProvider selectedDataProvider,
 			final ScheduleDiffUtils scheduleDiffUtils, final List<ICustomRelatedSlotHandler> customRelatedSlotHandlers) {
 
 		final Table table = ScheduleReportFactory.eINSTANCE.createTable();
@@ -178,10 +177,10 @@ public class ScenarioComparisonServiceTransformer {
 
 		elementCollector.beginCollecting(pinned != null);
 		if (pinned != null) {
-			elementCollector.collectElements(pinned, selectedDataProvider.getScenarioModel(pinned), true);
+			elementCollector.collectElements(pinned, true);
 		}
-		for (final ScenarioInstance other : others) {
-			elementCollector.collectElements(other, selectedDataProvider.getScenarioModel(other), false);
+		for (final ScenarioResult other : others) {
+			elementCollector.collectElements(other, false);
 		}
 		elementCollector.endCollecting();
 		final TransformResult result = new TransformResult(table, transformer.equivalancesMap, transformer.rootObjects, pinned, others);
@@ -228,7 +227,7 @@ public class ScenarioComparisonServiceTransformer {
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean isPinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioResult, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean isPinned) {
 				this.isPinned |= isPinned;
 
 				numberOfSchedules++;
@@ -244,7 +243,7 @@ public class ScenarioComparisonServiceTransformer {
 				}
 				table.getScenarios().add(scenarioModel);
 
-				return generateRows(table, scenarioInstance, schedule, isPinned);
+				return generateRows(table, scenarioResult, schedule, isPinned);
 			}
 
 			LNGScenarioModel findScenarioModel(final Schedule schedule) {
@@ -319,7 +318,7 @@ public class ScenarioComparisonServiceTransformer {
 		};
 	}
 
-	public List<Row> generateRows(final Table dataModelInstance, final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean isPinned) {
+	public List<Row> generateRows(final Table dataModelInstance, final ScenarioResult scenarioResult, final Schedule schedule, final boolean isPinned) {
 
 		final List<EObject> interestingEvents = new LinkedList<EObject>();
 		final Set<EObject> allEvents = new HashSet<EObject>();
@@ -337,11 +336,11 @@ public class ScenarioComparisonServiceTransformer {
 			allEvents.add(openSlotAllocation);
 		}
 
-		return generateRows(dataModelInstance, scenarioInstance, schedule, interestingEvents, allEvents, isPinned);
+		return generateRows(dataModelInstance, scenarioResult, schedule, interestingEvents, allEvents, isPinned);
 	}
 
-	public List<Row> generateRows(final Table tableModelInstance, final ScenarioInstance scenarioInstance, final Schedule schedule, final List<EObject> interestingElements,
-			final Set<EObject> allElements, final boolean isReferenceSchedule) {
+	public List<Row> generateRows(final Table tableModelInstance, final ScenarioResult scenarioResult, final Schedule schedule, final List<EObject> interestingElements, final Set<EObject> allElements,
+			final boolean isReferenceSchedule) {
 		final List<Row> rows = new ArrayList<Row>(interestingElements.size());
 
 		if (isReferenceSchedule) {
@@ -480,7 +479,7 @@ public class ScenarioComparisonServiceTransformer {
 		}
 
 		for (final Row row : rows) {
-			row.setScenario(scenarioInstance);
+			row.setScenario(scenarioResult.getScenarioInstance());
 			row.setSchedule(schedule);
 		}
 
@@ -510,10 +509,10 @@ public class ScenarioComparisonServiceTransformer {
 				equivalents.add(slotAllocation.getSlotVisit());
 			}
 			equivalents.addAll(allocation.getEvents());
-			Cargo inputCargo = allocation.getInputCargo();
-			if (inputCargo != null) {
-				equivalents.add(inputCargo);
-			}
+			// Cargo inputCargo = allocation.getInputCargo();
+			// if (inputCargo != null) {
+			// equivalents.add(inputCargo);
+			// }
 		} else if (a instanceof SlotVisit) {
 			final SlotVisit slotVisit = (SlotVisit) a;
 
@@ -523,7 +522,7 @@ public class ScenarioComparisonServiceTransformer {
 				equivalents.add(slotAllocation.getSlotVisit());
 			}
 			equivalents.addAll(allocation.getEvents());
-			equivalents.add(allocation.getInputCargo());
+			// equivalents.add(allocation.getInputCargo());
 		} else if (a instanceof VesselEventVisit) {
 			final VesselEventVisit vesselEventVisit = (VesselEventVisit) a;
 			equivalents.addAll(Lists.<EObject> newArrayList(vesselEventVisit, vesselEventVisit.getVesselEvent()));

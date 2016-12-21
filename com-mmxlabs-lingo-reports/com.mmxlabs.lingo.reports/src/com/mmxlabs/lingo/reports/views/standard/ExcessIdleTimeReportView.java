@@ -6,7 +6,6 @@ package com.mmxlabs.lingo.reports.views.standard;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
@@ -25,17 +24,14 @@ import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Idle;
-import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * @author hinton
@@ -140,9 +136,9 @@ public class ExcessIdleTimeReportView extends EMFReportView {
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioResult, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
 
-				final Collection<? extends Object> collectedElements = super.collectElements(scenarioInstance, scenarioModel, schedule, pinned);
+				final Collection<? extends Object> collectedElements = super.collectElements(scenarioResult, scenarioModel, schedule, pinned);
 				final List<EObject> elements = new ArrayList<>(collectedElements.size());
 				for (final Object o : collectedElements) {
 					if (o instanceof EObject) {

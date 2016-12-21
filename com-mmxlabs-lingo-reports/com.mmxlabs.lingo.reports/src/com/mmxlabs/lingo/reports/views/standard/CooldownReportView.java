@@ -36,6 +36,7 @@ import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * A report which displays the cooldowns in the selected schedules.
@@ -157,9 +158,9 @@ public class CooldownReportView extends EMFReportView {
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioResult, final LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
 
-				final Collection<? extends Object> collectedElements = super.collectElements(scenarioInstance, scenarioModel, schedule, pinned);
+				final Collection<? extends Object> collectedElements = super.collectElements(scenarioResult, scenarioModel, schedule, pinned);
 				final List<EObject> elements = new ArrayList<>(collectedElements.size());
 				for (final Object o : collectedElements) {
 					if (o instanceof EObject) {

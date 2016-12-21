@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.reports.views;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * Interface designed for use with unit tests. Some reports work with the active editor, however during unit test this information is not always present. This interface is designed to be obtained via
@@ -17,5 +18,5 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  */
 public interface IProvideEditorInputScenario {
 
-	void provideScenarioInstance(@Nullable ScenarioInstance scenarioInstance);
+	void provideScenarioInstance(@Nullable ScenarioResult scenarioInstance);
 }

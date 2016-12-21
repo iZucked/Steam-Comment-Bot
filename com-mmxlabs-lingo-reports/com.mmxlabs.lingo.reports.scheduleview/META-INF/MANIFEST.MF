@@ -25,7 +25,8 @@ Require-Bundle: org.eclipse.help;bundle-version="3.5.0",
  org.eclipse.e4.core.contexts,
  com.mmxlabs.rcp.common;bundle-version="[4.0.9,5.0.0)",
  com.mmxlabs.models.ui.tabular;bundle-version="[4.0.9,5.0.0)",
- com.mmxlabs.org.eclipse.nebula.widgets.ganttchart;bundle-version="[4.0.9,5.0.0)"
+ com.mmxlabs.org.eclipse.nebula.widgets.ganttchart;bundle-version="[4.0.9,5.0.0)",
+ com.mmxlabs.scenario.service.ui;bundle-version="[4.0.9,5.0.0)" 
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.lingo.reports.scheduleview.views,

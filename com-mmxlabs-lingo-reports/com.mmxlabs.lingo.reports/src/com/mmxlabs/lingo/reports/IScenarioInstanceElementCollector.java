@@ -7,7 +7,7 @@ package com.mmxlabs.lingo.reports;
 import java.util.Collection;
 
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * Used to collect data elements from potentially multiple scenarios when compiling reports (collectElements(...) typically returns a list of RowData for each schedule instance).
@@ -30,5 +30,5 @@ public interface IScenarioInstanceElementCollector {
 	 * Notify the implementor of each scenario under consideration. Passes in a flag to indicate that the given scenario is pinned. Up to one pinned scenario is expected to be presented at one time.
 	 * 
 	 */
-	public Collection<? extends Object> collectElements(ScenarioInstance scenarioInstance, final LNGScenarioModel rootObject, final boolean isPinned);
+	public Collection<? extends Object> collectElements(ScenarioResult scenarioResult, final boolean isPinned);
 }

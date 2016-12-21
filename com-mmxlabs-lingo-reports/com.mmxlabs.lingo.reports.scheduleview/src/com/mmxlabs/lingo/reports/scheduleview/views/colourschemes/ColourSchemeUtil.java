@@ -122,8 +122,12 @@ public class ColourSchemeUtil {
 			if (obj instanceof SlotVisit) {
 				final SlotVisit slotVisit = (SlotVisit) obj;
 				final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
-				final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
-				cargo = cargoAllocation.getInputCargo();
+				if (slotAllocation != null) {
+					Slot slot = slotAllocation.getSlot();
+					if (slot != null) {
+						cargo = slot.getCargo();
+					}
+				}
 			} else if (obj instanceof VesselEventVisit) {
 				break;
 			}
@@ -189,10 +193,7 @@ public class ColourSchemeUtil {
 			if (slot instanceof LoadSlot) {
 				final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
 				if (cargoAllocation != null) {
-					final Cargo inputCargo = cargoAllocation.getInputCargo();
-					if (inputCargo != null) {
-						return inputCargo.getCargoType() == CargoType.FOB;
-					}
+					return cargoAllocation.getCargoType() == CargoType.FOB;
 				}
 			} else {
 				isFOB = ((DischargeSlot) slot).isFOBSale();
@@ -206,9 +207,9 @@ public class ColourSchemeUtil {
 		if (slot instanceof LoadSlot) {
 			return ((LoadSlot) slot).isDESPurchase();
 		} else {
-			Cargo inputCargo = visit.getSlotAllocation().getCargoAllocation().getInputCargo();
-			if (inputCargo != null) {
-				return inputCargo.getCargoType() == CargoType.DES;
+			CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
+			if (cargoAllocation != null) {
+				return cargoAllocation.getCargoType() == CargoType.DES;
 			}
 		}
 		return false;

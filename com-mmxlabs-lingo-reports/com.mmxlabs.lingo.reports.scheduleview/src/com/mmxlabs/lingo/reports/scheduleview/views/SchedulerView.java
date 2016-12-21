@@ -122,7 +122,7 @@ import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener, IPreferenceChangeListener {
 
@@ -580,7 +580,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 								// Change alpha for pinned elements
 								final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 								if (selectedDataProvider != null) {
-									if (selectedDataProvider.getScenarioInstance(evt) == selectedScenariosService.getPinnedScenario()) {
+									if (selectedDataProvider.isPinnedObject(evt)) {
 										ganttEvent.setStatusAlpha(50);
 									}
 								}
@@ -753,7 +753,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 						if (event instanceof SlotVisit) {
 							final SlotVisit slotVisit = (SlotVisit) event;
 							setInputEquivalents(event, Arrays.asList(new Object[] { slotVisit.getSlotAllocation(), slotVisit.getSlotAllocation().getSlot(),
-									slotVisit.getSlotAllocation().getCargoAllocation(), slotVisit.getSlotAllocation().getCargoAllocation().getInputCargo() }));
+									slotVisit.getSlotAllocation().getCargoAllocation() /* , slotVisit.getSlotAllocation().getCargoAllocation().getInputCargo() */ }));
 
 							// } else if (event instanceof Idle) {
 							// setInputEquivalents(event, Arrays.asList(new Object[] { ((Idle) event).getSlotAllocation().getCargoAllocation() }));
@@ -767,7 +767,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 								equivalents.add(sa.getSlot());
 							}
 							equivalents.addAll(allocation.getEvents());
-							equivalents.add(allocation.getInputCargo());
+							// equivalents.add(allocation.getInputCargo());
 
 							setInputEquivalents(allocation, equivalents);
 
@@ -1061,7 +1061,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 				for (final Object o : sel.toList()) {
 					if (o instanceof CargoAllocation) {
 						final CargoAllocation allocation = (CargoAllocation) o;
-						objects.add(allocation.getInputCargo());
+						// objects.add(allocation.getInputCargo());
 						objects.addAll(allocation.getEvents());
 						for (final SlotAllocation sa : allocation.getSlotAllocations()) {
 							objects.add(sa.getSlotVisit());
@@ -1156,7 +1156,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		return new ScheduleElementCollector() {
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final LNGScenarioModel scenarioModel, final Schedule schedule) {
+			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioInstance, final LNGScenarioModel scenarioModel, final Schedule schedule) {
 				return Collections.singleton(schedule);
 			}
 
@@ -1167,7 +1167,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final LNGScenarioModel scenarioModel, final Schedule schedule, final boolean isPinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioInstance, final LNGScenarioModel scenarioModel, final Schedule schedule, final boolean isPinned) {
 
 				final List<Event> interestingEvents = new LinkedList<Event>();
 				for (final Sequence sequence : schedule.getSequences()) {
@@ -1244,7 +1244,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 
 		@Override
-		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
 			final Runnable r = new Runnable() {
 				@Override
 				public void run() {
@@ -1252,10 +1252,10 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 					final IScenarioInstanceElementCollector elementCollector = getElementCollector();
 					elementCollector.beginCollecting(pinned != null);
 					if (pinned != null) {
-						rowElements.addAll(elementCollector.collectElements(pinned, (LNGScenarioModel) pinned.getInstance(), true));
+						rowElements.addAll(elementCollector.collectElements(pinned, true));
 					}
-					for (final ScenarioInstance other : others) {
-						rowElements.addAll(elementCollector.collectElements(other, (LNGScenarioModel) other.getInstance(), false));
+					for (final ScenarioResult other : others) {
+						rowElements.addAll(elementCollector.collectElements(other, false));
 					}
 					elementCollector.endCollecting();
 					ViewerHelper.setInput(viewer, true, rowElements);
@@ -1278,14 +1278,14 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		}
 
 		@Override
-		public void compareDataUpdate(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pin, final ScenarioInstance other, final Table table,
+		public void compareDataUpdate(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pin, final ScenarioResult other, final Table table,
 				final List<LNGScenarioModel> rootObjects, final Map<EObject, Set<EObject>> equivalancesMap) {
 			// Do Nothing
 			SchedulerView.this.table = table;
 		}
 
 		@Override
-		public void multiDataUpdate(final ISelectedDataProvider selectedDataProvider, final Collection<ScenarioInstance> others, final Table table, final List<LNGScenarioModel> rootObjects) {
+		public void multiDataUpdate(final ISelectedDataProvider selectedDataProvider, final Collection<ScenarioResult> others, final Table table, final List<LNGScenarioModel> rootObjects) {
 			// Do Nothing
 			SchedulerView.this.table = table;
 		}

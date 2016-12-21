@@ -10,7 +10,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.scenario.service.model.ModelReference;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * <!-- begin-user-doc -->
@@ -170,82 +170,82 @@ public interface ChangeSet extends EObject {
 	void setCurrentScenarioRef(ModelReference value);
 
 	/**
-	 * Returns the value of the '<em><b>Base Scenario</b></em>' reference.
+	 * Returns the value of the '<em><b>Base Scenario</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Base Scenario</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Base Scenario</em>' reference.
-	 * @see #setBaseScenario(ScenarioInstance)
+	 * @return the value of the '<em>Base Scenario</em>' attribute.
+	 * @see #setBaseScenario(ScenarioResult)
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet_BaseScenario()
-	 * @model
+	 * @model dataType="com.mmxlabs.lingo.reports.views.changeset.model.ScenarioResult"
 	 * @generated
 	 */
-	ScenarioInstance getBaseScenario();
+	ScenarioResult getBaseScenario();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getBaseScenario <em>Base Scenario</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getBaseScenario <em>Base Scenario</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Base Scenario</em>' reference.
+	 * @param value the new value of the '<em>Base Scenario</em>' attribute.
 	 * @see #getBaseScenario()
 	 * @generated
 	 */
-	void setBaseScenario(ScenarioInstance value);
+	void setBaseScenario(ScenarioResult value);
 
 	/**
-	 * Returns the value of the '<em><b>Prev Scenario</b></em>' reference.
+	 * Returns the value of the '<em><b>Prev Scenario</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Prev Scenario</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Prev Scenario</em>' reference.
-	 * @see #setPrevScenario(ScenarioInstance)
+	 * @return the value of the '<em>Prev Scenario</em>' attribute.
+	 * @see #setPrevScenario(ScenarioResult)
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet_PrevScenario()
-	 * @model
+	 * @model dataType="com.mmxlabs.lingo.reports.views.changeset.model.ScenarioResult"
 	 * @generated
 	 */
-	ScenarioInstance getPrevScenario();
+	ScenarioResult getPrevScenario();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getPrevScenario <em>Prev Scenario</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getPrevScenario <em>Prev Scenario</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Prev Scenario</em>' reference.
+	 * @param value the new value of the '<em>Prev Scenario</em>' attribute.
 	 * @see #getPrevScenario()
 	 * @generated
 	 */
-	void setPrevScenario(ScenarioInstance value);
+	void setPrevScenario(ScenarioResult value);
 
 	/**
-	 * Returns the value of the '<em><b>Current Scenario</b></em>' reference.
+	 * Returns the value of the '<em><b>Current Scenario</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Current Scenario</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Current Scenario</em>' reference.
-	 * @see #setCurrentScenario(ScenarioInstance)
+	 * @return the value of the '<em>Current Scenario</em>' attribute.
+	 * @see #setCurrentScenario(ScenarioResult)
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet_CurrentScenario()
-	 * @model
+	 * @model dataType="com.mmxlabs.lingo.reports.views.changeset.model.ScenarioResult"
 	 * @generated
 	 */
-	ScenarioInstance getCurrentScenario();
+	ScenarioResult getCurrentScenario();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getCurrentScenario <em>Current Scenario</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getCurrentScenario <em>Current Scenario</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Current Scenario</em>' reference.
+	 * @param value the new value of the '<em>Current Scenario</em>' attribute.
 	 * @see #getCurrentScenario()
 	 * @generated
 	 */
-	void setCurrentScenario(ScenarioInstance value);
+	void setCurrentScenario(ScenarioResult value);
 
 	/**
 	 * Returns the value of the '<em><b>Change Set Rows To Base</b></em>' containment reference list.

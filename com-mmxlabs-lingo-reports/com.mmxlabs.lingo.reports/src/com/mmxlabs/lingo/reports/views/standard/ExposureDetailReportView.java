@@ -42,8 +42,6 @@ import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ExposureDetail;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -51,14 +49,12 @@ import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
-import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
-import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  */
@@ -73,7 +69,6 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 		viewer = new GridTreeViewer(parent);
 		GridViewerHelper.configureLookAndFeel(viewer);
 
-		
 		viewer.getGrid().setHeaderVisible(true);
 		viewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
 
@@ -284,7 +279,7 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 
 		@Override
-		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
 			final Runnable r = new Runnable() {
 				@Override
 				public void run() {
@@ -293,20 +288,18 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 
 					if (pinned != null) {
 						@Nullable
-						final LNGScenarioModel scenarioModel = selectedDataProvider.getScenarioModel(pinned);
-						if (scenarioModel != null) {
-							final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioModel);
+						final ScheduleModel scheduleModel = pinned.getTypedResult(ScheduleModel.class);
+						if (scheduleModel != null) {
 							final Schedule schedule = scheduleModel.getSchedule();
 							if (schedule != null) {
 								schedule.getCargoAllocations().forEach(ca -> slotAllocations.addAll(ca.getSlotAllocations()));
 							}
 						}
 					}
-					for (final ScenarioInstance other : others) {
+					for (final ScenarioResult other : others) {
 						@Nullable
-						final LNGScenarioModel scenarioModel = selectedDataProvider.getScenarioModel(other);
-						if (scenarioModel != null) {
-							final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioModel);
+						final ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
+						if (scheduleModel != null) {
 							final Schedule schedule = scheduleModel.getSchedule();
 							if (schedule != null) {
 								schedule.getCargoAllocations().forEach(ca -> slotAllocations.addAll(ca.getSlotAllocations()));

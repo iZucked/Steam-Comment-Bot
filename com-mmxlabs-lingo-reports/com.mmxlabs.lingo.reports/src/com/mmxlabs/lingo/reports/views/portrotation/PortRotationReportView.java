@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * 
@@ -61,7 +62,7 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 
 	private PortRotationsReportTransformer transformer;
 
-	private Map<Object, ScenarioInstance> elementToInstanceMap;
+	private Map<Object, ScenarioResult> elementToInstanceMap;
 	private Map<Object, LNGScenarioModel> elementToModelMap;
 
 	private List<Object> elements;
@@ -73,16 +74,16 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 
 		@Override
-		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<@NonNull ScenarioInstance> others, final boolean block) {
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<@NonNull ScenarioResult> others, final boolean block) {
 
 			ViewerHelper.setInput(viewer, block, () -> {
 				elements.clear();
 				elementCollector.beginCollecting(pinned != null);
 				if (pinned != null) {
-					elementCollector.collectElements(pinned, selectedDataProvider.getScenarioModel(pinned), true);
+					elementCollector.collectElements(pinned, true);
 				}
-				for (final ScenarioInstance other : others) {
-					elementCollector.collectElements(other, selectedDataProvider.getScenarioModel(other), false);
+				for (final ScenarioResult other : others) {
+					elementCollector.collectElements(other, false);
 				}
 				elementCollector.endCollecting();
 				return elements;
@@ -269,12 +270,12 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 		manager.addColumns(PortRotationBasedReportBuilder.PORT_ROTATION_REPORT_TYPE_ID, getBlockManager());
 	}
 
-	public void mapInputs(final Map<Object, ScenarioInstance> elementToInstanceMap, final Map<Object, LNGScenarioModel> elementToModelMap) {
+	public void mapInputs(final Map<Object, ScenarioResult> elementToInstanceMap, final Map<Object, LNGScenarioModel> elementToModelMap) {
 		this.elementToInstanceMap = elementToInstanceMap;
 		this.elementToModelMap = elementToModelMap;
 	}
 
-	public ScenarioInstance getScenarioInstance(final Object key) {
+	public ScenarioResult getScenarioInstance(final Object key) {
 		if (elementToInstanceMap != null) {
 			return elementToInstanceMap.get(key);
 		}

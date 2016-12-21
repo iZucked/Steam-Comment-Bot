@@ -46,7 +46,7 @@ import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * @author Simon Goodall
@@ -153,7 +153,7 @@ public class CapacityViolationReportView extends EMFReportView {
 					objects.add(sa.getSlotVisit());
 				}
 				objects.add(cargoAllocation);
-				objects.add(cargoAllocation.getInputCargo());
+				// objects.add(cargoAllocation.getInputCargo());
 			} else {
 				objects.add(slotAllocation);
 			}
@@ -186,7 +186,7 @@ public class CapacityViolationReportView extends EMFReportView {
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioResult, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
 
 				final List<EObject> rows = new LinkedList<EObject>();
 

@@ -41,7 +41,6 @@ import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.IProvideEditorInputScenario;
 import com.mmxlabs.lingo.reports.views.standard.HeadlineReportTransformer.RowData;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -51,6 +50,7 @@ import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 /**
@@ -151,7 +151,7 @@ public class HeadlineReportView extends ViewPart {
 		private final HeadlineReportTransformer transformer = new HeadlineReportTransformer();
 
 		@Override
-		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
 			final Runnable r = new Runnable() {
 				@Override
 				public void run() {
@@ -159,19 +159,19 @@ public class HeadlineReportView extends ViewPart {
 					RowData pPinnedData = null;
 					final List<Object> rowElements = new LinkedList<>();
 					if (pinned != null) {
-						final LNGScenarioModel instance = selectedDataProvider.getScenarioModel(pinned);
-						if (instance != null) {
-							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+						final ScheduleModel scheduleModel = pinned.getTypedResult(ScheduleModel.class);
+						if (scheduleModel != null) {
+							final Schedule schedule = scheduleModel.getSchedule();
 							if (schedule != null) {
 								pPinnedData = transformer.transform(schedule, pinned);
 							}
 						}
 					}
 
-					for (final ScenarioInstance other : others) {
-						final LNGScenarioModel instance = selectedDataProvider.getScenarioModel(other);
-						if (instance != null) {
-							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+					for (final ScenarioResult other : others) {
+						final ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
+						if (scheduleModel != null) {
+							final Schedule schedule = scheduleModel.getSchedule();
 							if (schedule != null) {
 								if (pPinnedData != null) {
 									rowElements.add(transformer.transform(schedule, other));
@@ -596,7 +596,7 @@ public class HeadlineReportView extends ViewPart {
 		if (IProvideEditorInputScenario.class.isAssignableFrom(adapter)) {
 			return (T) new IProvideEditorInputScenario() {
 				@Override
-				public void provideScenarioInstance(ScenarioInstance scenarioInstance) {
+				public void provideScenarioInstance(ScenarioResult scenarioResult) {
 
 					if (HeadlineReportView.this.modelReference != null) {
 						HeadlineReportView.this.modelReference.close();
@@ -605,7 +605,8 @@ public class HeadlineReportView extends ViewPart {
 					HeadlineReportView.this.currentActiveEditor = null;
 					ScheduleModel scheduleModel = null;
 
-					if (scenarioInstance != null) {
+					if (scenarioResult != null) {
+						ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
 						if (!scenarioInstance.isLoadFailure()) {
 							HeadlineReportView.this.modelReference = scenarioInstance.getReference("HeadlineReportView:2");
 							final EObject instance = modelReference.getInstance();

@@ -54,6 +54,7 @@ import com.mmxlabs.lingo.reports.views.standard.TotalsTransformer.RowData;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
@@ -61,6 +62,7 @@ import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class TotalsReportView extends ViewPart {
 
@@ -89,7 +91,7 @@ public class TotalsReportView extends ViewPart {
 		private final TotalsTransformer transformer = new TotalsTransformer();
 
 		@Override
-		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
 
 			final Runnable r = new Runnable() {
 				@Override
@@ -98,22 +100,22 @@ public class TotalsReportView extends ViewPart {
 					int numberOfSchedules = 0;
 					List<RowData> pinnedData = null;
 					if (pinned != null) {
-						LNGScenarioModel instance = selectedDataProvider.getScenarioModel(pinned);
-						if (instance != null) {
-							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+						ScheduleModel scheduleModel = pinned.getTypedResult(ScheduleModel.class);
+						if (scheduleModel != null) {
+							final Schedule schedule = scheduleModel.getSchedule();
 							if (schedule != null) {
-								pinnedData = transformer.transform(schedule, pinned.getName(), null);
+								pinnedData = transformer.transform(schedule, pinned.getScenarioInstance().getName(), null);
 								rowElements.addAll(pinnedData);
 								numberOfSchedules++;
 							}
 						}
 					}
-					for (final ScenarioInstance other : others) {
-						LNGScenarioModel instance = selectedDataProvider.getScenarioModel(other);
-						if (instance != null) {
-							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+					for (final ScenarioResult other : others) {
+						ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
+						if (scheduleModel != null) {
+							final Schedule schedule = scheduleModel.getSchedule();
 							if (schedule != null) {
-								rowElements.addAll(transformer.transform(schedule, other.getName(), pinnedData));
+								rowElements.addAll(transformer.transform(schedule, other.getScenarioInstance().getName(), pinnedData));
 								numberOfSchedules++;
 							}
 						}

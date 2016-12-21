@@ -290,7 +290,7 @@ public class CargoEconsReportComponent /* extends ViewPart */ {
 										final Schedule schedule = scheduleModel.getSchedule();
 										if (schedule != null) {
 											for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
-												if (cargo == cargoAllocation.getInputCargo()) {
+												if (ScheduleModelUtils.matchingSlots(cargo, cargoAllocation)) {
 													validObjects.add(cargoAllocation);
 													break;
 												}

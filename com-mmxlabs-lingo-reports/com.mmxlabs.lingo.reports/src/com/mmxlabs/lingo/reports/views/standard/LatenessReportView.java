@@ -34,6 +34,7 @@ import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * @author hinton
@@ -175,7 +176,7 @@ public class LatenessReportView extends EMFReportView {
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioInstance, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
 
 				final Collection<? extends Object> collectedElements = super.collectElements(scenarioInstance, scenarioModel, schedule, pinned);
 				final List<EObject> elements = new ArrayList<>(collectedElements.size());

@@ -69,7 +69,7 @@ import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * Base class for views which show things from the EMF output model.
@@ -88,7 +88,7 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 
 	private final Map<String, List<EObject>> allObjectsByKey = new LinkedHashMap<>();
 	private final Map<String, Integer> keyPresentInSchedulesCount = new LinkedHashMap<>();
-	private final Map<Object, WeakReference<ScenarioInstance>> elementMapping = new WeakHashMap<>();
+	private final Map<Object, WeakReference<ScenarioResult>> elementMapping = new WeakHashMap<>();
 
 	private final ColumnBlockManager blockManager = new ColumnBlockManager();
 
@@ -98,7 +98,7 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 
 		@Override
-		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
 			final Runnable r = new Runnable() {
 				@Override
 				public void run() {
@@ -115,14 +115,14 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 					final IScenarioInstanceElementCollector elementCollector = getElementCollector();
 					elementCollector.beginCollecting(pinned != null);
 					if (pinned != null) {
-						final Collection<? extends Object> elements = elementCollector.collectElements(pinned, selectedDataProvider.getScenarioModel(pinned), true);
+						final Collection<? extends Object> elements = elementCollector.collectElements(pinned, true);
 						for (final Object e : elements) {
 							elementMapping.put(e, new WeakReference<>(pinned));
 						}
 						rowElements.addAll(elements);
 					}
-					for (final ScenarioInstance other : others) {
-						final Collection<? extends Object> elements = elementCollector.collectElements(other, selectedDataProvider.getScenarioModel(other), false);
+					for (final ScenarioResult other : others) {
+						final Collection<? extends Object> elements = elementCollector.collectElements(other, false);
 						for (final Object e : elements) {
 							elementMapping.put(e, new WeakReference<>(other));
 						}
@@ -148,17 +148,17 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 				final EObject eObject = (EObject) object;
 				final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 				if (selectedDataProvider != null) {
-					ScenarioInstance instance = selectedDataProvider.getScenarioInstance(eObject);
+					ScenarioResult instance = selectedDataProvider.getScenarioResult(eObject);
 					if (instance != null) {
-						return instance.getName();
+						return instance.getScenarioInstance().getName();
 					}
 					if (elementMapping.containsKey(eObject)) {
-						final WeakReference<ScenarioInstance> ref = elementMapping.get(eObject);
+						final WeakReference<ScenarioResult> ref = elementMapping.get(eObject);
 						if (ref != null) {
 							instance = ref.get();
 						}
 						if (instance != null) {
-							return instance.getName();
+							return instance.getScenarioInstance().getName();
 						}
 					}
 				}

@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.standard;
 
-import java.time.ZonedDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,30 +11,23 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.time.Hours;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
-import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
-import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * Content provider for the {@link CargoReportView}.
@@ -90,7 +82,9 @@ public class KPIReportTransformer {
 
 	}
 
-	public final List<RowData> transform(final Schedule schedule, final ScenarioInstance scenarioInstance, @Nullable final List<RowData> pinnedData) {
+	public final List<RowData> transform(final Schedule schedule, final ScenarioResult scenarioResult, @Nullable final List<RowData> pinnedData) {
+		final ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
+		
 		final List<RowData> output = new LinkedList<>();
 		long totalCost = 0l;
 		long totalMtMPNL = 0l;

@@ -35,6 +35,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocationType;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * Class to display a report describing the total volume of gas transactions for each contract (purchase & sales) for each gas year (with additional rows for "other purchase" and "other sales").
@@ -56,12 +57,14 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 	}
 
 	public static class VolumeData {
+		public final ScenarioResult scenarioResult;
 		public final String contract;
 		public final Map<Year, Long> volumes;
 		public final Schedule schedule;
 		private final boolean purchase;
 
-		public VolumeData(final Schedule schedule, final boolean purchase, final String contract, final Map<Year, Long> volumes) {
+		public VolumeData(ScenarioResult scenarioResult, final Schedule schedule, final boolean purchase, final String contract, final Map<Year, Long> volumes) {
+			this.scenarioResult = scenarioResult;
 			this.schedule = schedule;
 			this.purchase = purchase;
 			this.contract = contract;
@@ -102,8 +105,8 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 
 		return new AbstractSimpleTabularReportTransformer<VolumeData>() {
 			@Override
-			public @NonNull List<@NonNull VolumeData> createData(@Nullable final Pair<@NonNull Schedule, @NonNull LNGScenarioModel> pinnedPair,
-					@NonNull final List<@NonNull Pair<@NonNull Schedule, @NonNull LNGScenarioModel>> otherPairs) {
+			public @NonNull List<@NonNull VolumeData> createData(@Nullable final Pair<@NonNull Schedule, @NonNull ScenarioResult> pinnedPair,
+					@NonNull final List<@NonNull Pair<@NonNull Schedule, @NonNull ScenarioResult>> otherPairs) {
 				dateRange.setBoth(null, null);
 
 				final List<@NonNull VolumeData> output = new LinkedList<>();
@@ -112,7 +115,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 					// Pin/Diff mode
 					final List<VolumeData> ref = createData(pinnedPair.getFirst(), pinnedPair.getSecond());
 
-					final Pair<@NonNull Schedule, @NonNull LNGScenarioModel> p = otherPairs.get(0);
+					final Pair<@NonNull Schedule, @NonNull ScenarioResult> p = otherPairs.get(0);
 					final List<VolumeData> other = createData(p.getFirst(), p.getSecond());
 
 					LOOP_REF_DATA: for (final VolumeData refData : ref) {
@@ -137,7 +140,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 					if (pinnedPair != null) {
 						output.addAll(createData(pinnedPair.getFirst(), pinnedPair.getSecond()));
 					}
-					for (final Pair<@NonNull Schedule, @NonNull LNGScenarioModel> p : otherPairs) {
+					for (final Pair<@NonNull Schedule, @NonNull ScenarioResult> p : otherPairs) {
 						output.addAll(createData(p.getFirst(), p.getSecond()));
 					}
 				}
@@ -155,7 +158,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 				return output;
 			}
 
-			public List<@NonNull VolumeData> createData(final Schedule schedule, final LNGScenarioModel rootObject) {
+			public List<@NonNull VolumeData> createData(final Schedule schedule, final ScenarioResult scenarioResult) {
 				final List<@NonNull VolumeData> output = new ArrayList<>();
 				final Map<String, Map<Year, Long>> purchaseVolumes = new HashMap<>();
 				final Map<String, Map<Year, Long>> salesVolumes = new HashMap<>();
@@ -205,10 +208,10 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 					}
 				}
 				for (final Map.Entry<String, Map<Year, Long>> e : purchaseVolumes.entrySet()) {
-					output.add(new VolumeData(schedule, true, e.getKey(), e.getValue()));
+					output.add(new VolumeData(scenarioResult, schedule, true, e.getKey(), e.getValue()));
 				}
 				for (final Map.Entry<String, Map<Year, Long>> e : salesVolumes.entrySet()) {
-					output.add(new VolumeData(schedule, false, e.getKey(), e.getValue()));
+					output.add(new VolumeData(scenarioResult, schedule, false, e.getKey(), e.getValue()));
 				}
 
 				return output;
@@ -218,7 +221,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 
 				final VolumeData modelData = pinData != null ? pinData : otherData;
 				final Map<Year, Long> volumes = new HashMap<Year, Long>();
-				final VolumeData newData = new VolumeData(null, modelData.purchase, modelData.contract, volumes);
+				final VolumeData newData = new VolumeData(null, null, modelData.purchase, modelData.contract, volumes);
 
 				if (pinData != null) {
 					for (final Map.Entry<Year, Long> e : pinData.volumes.entrySet()) {
@@ -240,14 +243,17 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 			public List<ColumnManager<VolumeData>> getColumnManagers(@NonNull final ISelectedDataProvider selectedDataProvider) {
 				final ArrayList<ColumnManager<VolumeData>> result = new ArrayList<ColumnManager<VolumeData>>();
 
-				if (selectedDataProvider.getScenarioInstances().size() > 1) {
+				if (selectedDataProvider.getScenarioResults().size() > 1) {
 					result.add(new ColumnManager<VolumeData>("Scenario") {
 
 						@Override
 						public String getColumnText(final VolumeData data) {
-							final ScenarioInstance scenarioInstance = selectedDataProvider.getScenarioInstance(data.schedule);
-							if (scenarioInstance != null) {
-								return scenarioInstance.getName();
+							final ScenarioResult scenarioResult = data.scenarioResult;
+							if (scenarioResult != null) {
+								ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
+								if (scenarioInstance != null) {
+									return scenarioInstance.getName();
+								}
 							}
 							return null;
 						}

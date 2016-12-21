@@ -153,7 +153,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.cargotype":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Cargo Type", "", ColumnType.NORMAL, Formatters.objectFormatter, cargoAllocationRef,
-					s.getCargoAllocation_InputCargo(), c.getCargo__GetCargoType()));
+					s.getCargoAllocation_CargoType()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.vessel":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Vessel", null, ColumnType.NORMAL, new VesselAssignmentFormatter(), targetObjectRef));

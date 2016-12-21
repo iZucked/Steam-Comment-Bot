@@ -41,20 +41,21 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class StandardPortRotationColumnFactory implements IPortRotationColumnFactory {
 
 	private static class EventStartDateComparator implements Comparable<EventStartDateComparator> {
 		Event event;
 
-		public EventStartDateComparator(Event event) {
+		public EventStartDateComparator(final Event event) {
 			this.event = event;
 		}
 
 		@Override
-		public int compareTo(EventStartDateComparator o) {
+		public int compareTo(final EventStartDateComparator o) {
 			if (o != null) {
-				Event other = o.event;
+				final Event other = o.event;
 				if (other != null) {
 					if (event.getStart().equals(other.getStart())) {
 						if (event.getPreviousEvent() != null && event.getPreviousEvent().equals(other)) {
@@ -108,9 +109,12 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			final PinnedScheduleFormatter containingScheduleFormatter = new PinnedScheduleFormatter(pinImage) {
 				@Override
 				public String render(final Object object) {
-					ScenarioInstance scenarioInstance = builder.getReport().getScenarioInstance(object);
-					if (scenarioInstance != null) {
-						return scenarioInstance.getName();
+					final ScenarioResult scenarioResult = builder.getReport().getScenarioInstance(object);
+					if (scenarioResult != null) {
+						final ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
+						if (scenarioInstance != null) {
+							return scenarioInstance.getName();
+						}
 					}
 					return null;
 				}
@@ -144,7 +148,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 
 				@Override
 				public Comparable getComparable(final Object object) {
-					String str = render(object);
+					final String str = render(object);
 					if (str == null) {
 						return "";
 					}
@@ -157,7 +161,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Start Date", null, ColumnType.NORMAL,
 					new AsDateTimeFormatter(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT), true) {
 						@Override
-						public String render(Object o) {
+						public String render(final Object o) {
 							return super.render(((Event) o).getStart());
 						}
 

@@ -7,31 +7,27 @@ package com.mmxlabs.lingo.reports.views.standard;
 import java.time.YearMonth;
 import java.util.Map;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  */
 public class IndexExposureData {
 	public final String indexName;
-//	public final NamedIndexContainer<?> index;
 	public final Map<YearMonth, Double> exposures;
+	public final ScenarioResult scenarioResult;
 	public final Schedule schedule;
 
 	public final String currencyUnit;
 	public final String volumeUnit;
 
-	public IndexExposureData(final Schedule schedule, final String name, final NamedIndexContainer<?> index, final Map<YearMonth, Double> exposuresByMonth, final String currencyUnit,
-			final String volumeUnit
-	// final Map<YearMonth, Long> valueByMonth
-	) {
+	public IndexExposureData(ScenarioResult scenarioResult, final Schedule schedule, final String name, final NamedIndexContainer<?> index, final Map<YearMonth, Double> exposuresByMonth,
+			final String currencyUnit, final String volumeUnit) {
+		this.scenarioResult = scenarioResult;
 		this.schedule = schedule;
 		this.indexName = name;
-//		this.index = index;
 		this.exposures = exposuresByMonth;
-		// this.value = valueByMonth;
 		this.currencyUnit = currencyUnit;
 		this.volumeUnit = volumeUnit;
 	}

@@ -14,13 +14,13 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public interface IScenarioComparisonServiceListener {
 	void diffOptionChanged(EDiffOption d, Object oldValue, Object newValue);
 
-	void compareDataUpdate(@NonNull ISelectedDataProvider selectedDataProvider, @NonNull ScenarioInstance pin, @NonNull ScenarioInstance other, @NonNull Table table,
+	void compareDataUpdate(@NonNull ISelectedDataProvider selectedDataProvider, @NonNull ScenarioResult pin, @NonNull ScenarioResult other, @NonNull Table table,
 			@NonNull List<LNGScenarioModel> rootObjects, @NonNull Map<EObject, Set<EObject>> equivalancesMap);
 
-	void multiDataUpdate(@NonNull ISelectedDataProvider selectedDataProvider, @NonNull Collection<ScenarioInstance> others, @NonNull Table table, @NonNull List<LNGScenarioModel> rootObjects);
+	void multiDataUpdate(@NonNull ISelectedDataProvider selectedDataProvider, @NonNull Collection<ScenarioResult> others, @NonNull Table table, @NonNull List<LNGScenarioModel> rootObjects);
 }

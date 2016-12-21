@@ -5,6 +5,7 @@
 package com.mmxlabs.lingo.reports.views.vertical;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,6 +27,10 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.vertical.providers.EventProvider;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
@@ -33,7 +38,7 @@ import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * New version of the vertical report, with a separate event per display cell.
@@ -78,21 +83,24 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 
 		@Override
-		public void selectionChanged(final @NonNull ISelectedDataProvider selectedDataProvider, final @Nullable ScenarioInstance pinned, final @NonNull Collection<@NonNull ScenarioInstance> others,
+		public void selectionChanged(final @NonNull ISelectedDataProvider selectedDataProvider, final @Nullable ScenarioResult pinned, final @NonNull Collection<@NonNull ScenarioResult> others,
 				final boolean block) {
 
 			final Runnable r = new Runnable() {
 				@Override
 				public void run() {
-					final List<@NonNull ScenarioInstance> scenarios = new LinkedList<>(others);
+					final List<@NonNull ScenarioResult> scenarios = new LinkedList<>(others);
 					if (pinned != null) {
 						scenarios.add(0, pinned);
 					}
 					if (!scenarios.isEmpty()) {
 						@SuppressWarnings("null")
-						final ScenarioInstance scenario = scenarios.get(0);
-						ViewerHelper.setInput(gridViewer, true, selectedDataProvider.getScenarioModel(scenario));
-						setCurrentScenario(scenario);
+						final ScenarioResult result = scenarios.get(0);
+						final LNGScenarioModel scenario = result.getTypedRoot(LNGScenarioModel.class);
+						final ScheduleModel scheduleModel = result.getTypedResult(ScheduleModel.class);
+						final Schedule schedule = scheduleModel == null ? null : scheduleModel.getSchedule();
+						ViewerHelper.setInput(gridViewer, true, scenario);
+						setCurrentScenario(result);
 					} else {
 						ViewerHelper.setInput(gridViewer, true, (Object) null);
 						setCurrentScenario(null);
@@ -228,7 +236,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	 */
 	protected abstract List<CalendarColumn> createCalendarCols(final ScheduleSequenceData data);
 
-	protected void setCurrentScenario(@Nullable ScenarioInstance instance) {
+	protected void setCurrentScenario(@Nullable final ScenarioResult instance) {
 		// For sub classes
 	}
 }

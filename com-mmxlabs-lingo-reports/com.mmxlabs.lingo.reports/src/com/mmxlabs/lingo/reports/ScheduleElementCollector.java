@@ -7,13 +7,11 @@ package com.mmxlabs.lingo.reports;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.eclipse.jdt.annotation.Nullable;
-
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * Base class for things which collect stuff from the most recent schedule in a scenario.
@@ -26,36 +24,24 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  */
 public abstract class ScheduleElementCollector implements IScenarioInstanceElementCollector {
 	@Override
-	public Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final LNGScenarioModel rootObject, final boolean pinned) {
-		final Schedule lastScheduleFromScenario = getLastScheduleFromScenario(rootObject);
+	public Collection<? extends Object> collectElements(final ScenarioResult scenarioResult, boolean pinned) {
+
+		LNGScenarioModel scenarioModel = scenarioResult.getTypedRoot(LNGScenarioModel.class);
+		ScheduleModel scheduleModel = scenarioResult.getTypedResult(ScheduleModel.class);
+
+		final Schedule lastScheduleFromScenario = scheduleModel == null ? null : scheduleModel.getSchedule();
 		if (lastScheduleFromScenario != null)
-			return collectElements(scenarioInstance, rootObject, lastScheduleFromScenario, pinned);
+			return collectElements(scenarioResult, scenarioModel, lastScheduleFromScenario, pinned);
 		else
 			return Collections.emptySet();
 	}
 
-	protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final LNGScenarioModel rootObject, final Schedule schedule) {
-		return collectElements(scenarioInstance, rootObject, schedule, false);
+	protected Collection<? extends Object> collectElements(final ScenarioResult scenarioResult, final LNGScenarioModel rootObject, final Schedule schedule) {
+		return collectElements(scenarioResult, rootObject, schedule, false);
 	}
 
-	protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final LNGScenarioModel rootObject, final Schedule schedule, final boolean pinned) {
-		return collectElements(scenarioInstance, rootObject, schedule);
-	}
-
-	/**
-	 */
-	public @Nullable Schedule getLastScheduleFromScenario(final @Nullable LNGScenarioModel scenario) {
-		if (scenario == null) {
-			return null;
-		}
-
-		final ScheduleModel scheduleModel = scenario.getScheduleModel();
-		if (scheduleModel != null) {
-			if (scheduleModel.getSchedule() != null) {
-				return scheduleModel.getSchedule();
-			}
-		}
-		return null;
+	protected Collection<? extends Object> collectElements(final ScenarioResult scenarioResult, final LNGScenarioModel rootObject, final Schedule schedule, final boolean pinned) {
+		return collectElements(scenarioResult, rootObject, schedule);
 	}
 
 	@Override

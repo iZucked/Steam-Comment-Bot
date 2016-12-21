@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.formatters;
 
-import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -12,11 +11,9 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 
 public class VesselAssignmentFormatter extends BaseFormatter {
@@ -25,16 +22,11 @@ public class VesselAssignmentFormatter extends BaseFormatter {
 
 		if (object instanceof CargoAllocation) {
 			final CargoAllocation cargoAllocation = (CargoAllocation) object;
-			// final Sequence sequence = cargoAllocation.getSequence();
-			// if (sequence != null) {
-			// if (!sequence.isFleetVessel()) {
-			final Cargo inputCargo = cargoAllocation.getInputCargo();
-			if (inputCargo == null) {
-				return null;
-			}
-			switch (inputCargo.getCargoType()) {
+			 
+			switch (cargoAllocation.getCargoType()) {
 			case DES:
-				for (final Slot slot : inputCargo.getSortedSlots()) {
+				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
+					Slot slot = slotAllocation.getSlot();
 					if (slot instanceof LoadSlot) {
 						final LoadSlot loadSlot = (LoadSlot) slot;
 						if (loadSlot.isDESPurchase()) {
@@ -47,7 +39,8 @@ public class VesselAssignmentFormatter extends BaseFormatter {
 					}
 				}
 			case FOB:
-				for (final Slot slot : inputCargo.getSortedSlots()) {
+				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
+					Slot slot = slotAllocation.getSlot();
 					if (slot instanceof DischargeSlot) {
 						final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 						if (dischargeSlot.isFOBSale()) {
@@ -60,17 +53,16 @@ public class VesselAssignmentFormatter extends BaseFormatter {
 					}
 				}
 			case FLEET:
-				final VesselAssignmentType vesselAssignmentType = inputCargo.getVesselAssignmentType();
-
-				if (vesselAssignmentType instanceof VesselAvailability) {
-					final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
+				Sequence sequence = cargoAllocation.getSequence();
+				if (sequence.isSetVesselAvailability()) {
+					final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
 					final Vessel vessel = vesselAvailability.getVessel();
 					if (vessel != null) {
 						return vessel.getName();
 					}
-				} else if (vesselAssignmentType instanceof CharterInMarket) {
-					final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
-					return formatCharterInMarket(charterInMarket, inputCargo.getSpotIndex());
+				} else if (sequence.isSetCharterInMarket()) {
+					final CharterInMarket charterInMarket = sequence.getCharterInMarket();
+					return formatCharterInMarket(charterInMarket, sequence.getSpotIndex());
 				}
 				break;
 			default:

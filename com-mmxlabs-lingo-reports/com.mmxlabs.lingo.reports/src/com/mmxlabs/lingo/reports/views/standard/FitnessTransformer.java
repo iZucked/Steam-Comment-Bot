@@ -10,11 +10,10 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * Content provider for the {@link CargoReportView}.
@@ -42,22 +41,20 @@ public class FitnessTransformer {
 	}
 
 	@NonNull
-	public List<RowData> transform(@NonNull Schedule schedule, @NonNull final ISelectedDataProvider selectedDataProvider, @Nullable final List<RowData> pinnedData) {
+	public List<RowData> transform(final ScenarioResult scenarioResult, @NonNull final Schedule schedule, @Nullable final List<RowData> pinnedData) {
 		final List<RowData> rowDataList = new LinkedList<>();
 
-		final LNGScenarioModel lngScenarioModel = selectedDataProvider.getScenarioModel(schedule);
-		if (lngScenarioModel != null) {
-			for (final Fitness f : schedule.getFitnesses()) {
-				final long raw = f.getFitnessValue();
-				final Long deltaFitness = pinnedData == null ? null : getDelta(f.getName(), raw, pinnedData);
-				rowDataList.add(createRow(selectedDataProvider.getScenarioInstance(schedule), f.getName(), raw, deltaFitness));
-			}
+		for (final Fitness f : schedule.getFitnesses()) {
+			final long raw = f.getFitnessValue();
+			final Long deltaFitness = pinnedData == null ? null : getDelta(f.getName(), raw, pinnedData);
+			rowDataList.add(createRow(scenarioResult, f.getName(), raw, deltaFitness));
 		}
 		return rowDataList;
 	}
 
-	private RowData createRow(ScenarioInstance scenarioInstance, final String f, final Long raw, final Long deltaFitness) {
-		String name = scenarioInstance == null ? "" : scenarioInstance.getName();
+	private RowData createRow(final ScenarioResult scenarioResult, final String f, final Long raw, final Long deltaFitness) {
+		final ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
+		final String name = scenarioInstance == null ? "" : scenarioInstance.getName();
 		return new RowData(name, f, raw, deltaFitness);
 	}
 

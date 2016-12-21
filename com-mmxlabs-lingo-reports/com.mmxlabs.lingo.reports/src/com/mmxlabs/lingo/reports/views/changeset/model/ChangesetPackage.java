@@ -8,6 +8,7 @@ package com.mmxlabs.lingo.reports.views.changeset.model;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -153,7 +154,7 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET__CURRENT_SCENARIO_REF = 4;
 
 	/**
-	 * The feature id for the '<em><b>Base Scenario</b></em>' reference.
+	 * The feature id for the '<em><b>Base Scenario</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -162,7 +163,7 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET__BASE_SCENARIO = 5;
 
 	/**
-	 * The feature id for the '<em><b>Prev Scenario</b></em>' reference.
+	 * The feature id for the '<em><b>Prev Scenario</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -171,7 +172,7 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET__PREV_SCENARIO = 6;
 
 	/**
-	 * The feature id for the '<em><b>Current Scenario</b></em>' reference.
+	 * The feature id for the '<em><b>Current Scenario</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -580,6 +581,17 @@ public interface ChangesetPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '<em>Scenario Result</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.scenario.service.ui.ScenarioResult
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangesetPackageImpl#getScenarioResult()
+	 * @generated
+	 */
+	int SCENARIO_RESULT = 5;
+
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot <em>Change Set Root</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -666,37 +678,37 @@ public interface ChangesetPackage extends EPackage {
 	EReference getChangeSet_CurrentScenarioRef();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getBaseScenario <em>Base Scenario</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getBaseScenario <em>Base Scenario</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Base Scenario</em>'.
+	 * @return the meta object for the attribute '<em>Base Scenario</em>'.
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getBaseScenario()
 	 * @see #getChangeSet()
 	 * @generated
 	 */
-	EReference getChangeSet_BaseScenario();
+	EAttribute getChangeSet_BaseScenario();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getPrevScenario <em>Prev Scenario</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getPrevScenario <em>Prev Scenario</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Prev Scenario</em>'.
+	 * @return the meta object for the attribute '<em>Prev Scenario</em>'.
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getPrevScenario()
 	 * @see #getChangeSet()
 	 * @generated
 	 */
-	EReference getChangeSet_PrevScenario();
+	EAttribute getChangeSet_PrevScenario();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getCurrentScenario <em>Current Scenario</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getCurrentScenario <em>Current Scenario</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Current Scenario</em>'.
+	 * @return the meta object for the attribute '<em>Current Scenario</em>'.
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getCurrentScenario()
 	 * @see #getChangeSet()
 	 * @generated
 	 */
-	EReference getChangeSet_CurrentScenario();
+	EAttribute getChangeSet_CurrentScenario();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getChangeSetRowsToBase <em>Change Set Rows To Base</em>}'.
@@ -1092,6 +1104,17 @@ public interface ChangesetPackage extends EPackage {
 	EReference getChangeSetRow_NewOpenDischargeAllocation();
 
 	/**
+	 * Returns the meta object for data type '{@link com.mmxlabs.scenario.service.ui.ScenarioResult <em>Scenario Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>Scenario Result</em>'.
+	 * @see com.mmxlabs.scenario.service.ui.ScenarioResult
+	 * @model instanceClass="com.mmxlabs.scenario.service.ui.ScenarioResult"
+	 * @generated
+	 */
+	EDataType getScenarioResult();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1183,28 +1206,28 @@ public interface ChangesetPackage extends EPackage {
 		EReference CHANGE_SET__CURRENT_SCENARIO_REF = eINSTANCE.getChangeSet_CurrentScenarioRef();
 
 		/**
-		 * The meta object literal for the '<em><b>Base Scenario</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Base Scenario</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference CHANGE_SET__BASE_SCENARIO = eINSTANCE.getChangeSet_BaseScenario();
+		EAttribute CHANGE_SET__BASE_SCENARIO = eINSTANCE.getChangeSet_BaseScenario();
 
 		/**
-		 * The meta object literal for the '<em><b>Prev Scenario</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Prev Scenario</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference CHANGE_SET__PREV_SCENARIO = eINSTANCE.getChangeSet_PrevScenario();
+		EAttribute CHANGE_SET__PREV_SCENARIO = eINSTANCE.getChangeSet_PrevScenario();
 
 		/**
-		 * The meta object literal for the '<em><b>Current Scenario</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Current Scenario</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference CHANGE_SET__CURRENT_SCENARIO = eINSTANCE.getChangeSet_CurrentScenario();
+		EAttribute CHANGE_SET__CURRENT_SCENARIO = eINSTANCE.getChangeSet_CurrentScenario();
 
 		/**
 		 * The meta object literal for the '<em><b>Change Set Rows To Base</b></em>' containment reference list feature.
@@ -1499,6 +1522,16 @@ public interface ChangesetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CHANGE_SET_ROW__NEW_OPEN_DISCHARGE_ALLOCATION = eINSTANCE.getChangeSetRow_NewOpenDischargeAllocation();
+
+		/**
+		 * The meta object literal for the '<em>Scenario Result</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.scenario.service.ui.ScenarioResult
+		 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangesetPackageImpl#getScenarioResult()
+		 * @generated
+		 */
+		EDataType SCENARIO_RESULT = eINSTANCE.getScenarioResult();
 
 	}
 

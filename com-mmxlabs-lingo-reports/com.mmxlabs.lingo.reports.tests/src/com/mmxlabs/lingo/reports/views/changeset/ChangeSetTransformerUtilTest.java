@@ -1119,7 +1119,7 @@ public class ChangeSetTransformerUtilTest {
 	@NonNull
 	private CargoAllocation createCargoAllocation(final Cargo cargo, final SlotAllocation... slotsAllocations) {
 		final CargoAllocation cargoAllocation = Mockito.mock(CargoAllocation.class);
-		Mockito.when(cargoAllocation.getInputCargo()).thenReturn(cargo);
+//		Mockito.when(cargoAllocation.getInputCargo()).thenReturn(cargo);
 
 		final EList<SlotAllocation> slotList = new BasicEList<>();
 		for (final SlotAllocation slotsAllocation : slotsAllocations) {
