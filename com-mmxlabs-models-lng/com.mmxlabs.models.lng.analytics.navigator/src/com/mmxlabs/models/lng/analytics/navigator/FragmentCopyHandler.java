@@ -58,6 +58,11 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 	@Override
 	public boolean copy(@NonNull final ScenarioFragment scenarioFragment, @NonNull final ScenarioInstance target) {
 
+		// Below code does not properly code/reattach data into the new scenario. Still leaves references to original data model 
+		if (true) {
+			return false;
+		}
+		
 		final ScenarioInstance source = scenarioFragment.getScenarioInstance();
 
 		try (ModelReference sourceReference = source.getReference("FragmentCopyHandler:1")) {
