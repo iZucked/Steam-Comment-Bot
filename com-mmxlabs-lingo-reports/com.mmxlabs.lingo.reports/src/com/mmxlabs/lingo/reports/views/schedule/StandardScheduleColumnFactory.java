@@ -153,8 +153,8 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 					new SimpleEmfBlockColumnFactory(columnID, "D-ID", "The discharge ID for discharge slots", ColumnType.NORMAL, Formatters.objectFormatter, name2ObjectRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.cargotype":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Cargo Type", "", ColumnType.NORMAL, Formatters.objectFormatter, cargoAllocationRef,
-					s.getCargoAllocation_CargoType()));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Cargo Type", "", ColumnType.NORMAL, Formatters.objectFormatter, cargoAllocationRef, s.getCargoAllocation_CargoType()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.vessel":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Vessel", null, ColumnType.NORMAL, new VesselAssignmentFormatter(), targetObjectRef));
@@ -179,10 +179,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 								if (slotAllocation != null) {
 									final Slot slot = slotAllocation.getSlot();
 									if (slot instanceof LoadSlot) {
-										final BaseLegalEntity entity = slot.getSlotOrDelegatedEntity();
-										if (entity != null) {
-											return Formatters.asLocalDateFormatter.render(slot.getWindowStart());
-										}
+										return Formatters.asLocalDateFormatter.render(slot.getWindowStart());
 									}
 								}
 								if (row.getTarget() instanceof VesselEventVisit) {
@@ -220,10 +217,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 								if (slotAllocation != null) {
 									final Slot slot = slotAllocation.getSlot();
 									if (slot instanceof DischargeSlot) {
-										final BaseLegalEntity entity = slot.getSlotOrDelegatedEntity();
-										if (entity != null) {
-											return Formatters.asLocalDateFormatter.render(slot.getWindowStart());
-										}
+										return Formatters.asLocalDateFormatter.render(slot.getWindowStart());
 									}
 								}
 							}
