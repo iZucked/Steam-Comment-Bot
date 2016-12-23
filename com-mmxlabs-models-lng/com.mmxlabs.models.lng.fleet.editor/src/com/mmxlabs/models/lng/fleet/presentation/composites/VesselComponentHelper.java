@@ -78,6 +78,9 @@ public class VesselComponentHelper extends BaseComponentHelper {
 		add_inaccessibleRoutesOverrideEditor(detailComposite, topClass);
 		add_inaccessibleRoutesEditor(detailComposite, topClass);
 		add_baseFuelEditor(detailComposite, topClass);
+		add_inPortBaseFuelEditor(detailComposite, topClass);
+		add_pilotLightBaseFuelEditor(detailComposite, topClass);
+		add_idleBaseFuelEditor(detailComposite, topClass);
 		add_capacityEditor(detailComposite, topClass);
 		add_fillCapacityEditor(detailComposite, topClass);
 		add_ladenAttributesEditor(detailComposite, topClass);
@@ -332,5 +335,32 @@ public class VesselComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_baseFuelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__BASE_FUEL));
+	}
+
+	/**
+	 * Create the editor for the inPortBaseFuel feature on Vessel
+	 *
+	 * @generated
+	 */
+	protected void add_inPortBaseFuelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__IN_PORT_BASE_FUEL));
+	}
+
+	/**
+	 * Create the editor for the pilotLightBaseFuel feature on Vessel
+	 *
+	 * @generated
+	 */
+	protected void add_pilotLightBaseFuelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__PILOT_LIGHT_BASE_FUEL));
+	}
+
+	/**
+	 * Create the editor for the idleBaseFuel feature on Vessel
+	 *
+	 * @generated
+	 */
+	protected void add_idleBaseFuelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__IDLE_BASE_FUEL));
 	}
 }

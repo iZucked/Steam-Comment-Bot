@@ -28,6 +28,9 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isInaccessibleRoutesOverride <em>Inaccessible Routes Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getBaseFuel <em>Base Fuel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getInPortBaseFuel <em>In Port Base Fuel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getPilotLightBaseFuel <em>Pilot Light Base Fuel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getIdleBaseFuel <em>Idle Base Fuel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity <em>Fill Capacity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getLadenAttributes <em>Laden Attributes</em>}</li>
@@ -1007,6 +1010,165 @@ public interface Vessel extends AVesselSet<Vessel> {
 	boolean isSetBaseFuel();
 
 	/**
+	 * Returns the value of the '<em><b>In Port Base Fuel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>In Port Base Fuel</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>In Port Base Fuel</em>' reference.
+	 * @see #isSetInPortBaseFuel()
+	 * @see #unsetInPortBaseFuel()
+	 * @see #setInPortBaseFuel(BaseFuel)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_InPortBaseFuel()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	BaseFuel getInPortBaseFuel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getInPortBaseFuel <em>In Port Base Fuel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>In Port Base Fuel</em>' reference.
+	 * @see #isSetInPortBaseFuel()
+	 * @see #unsetInPortBaseFuel()
+	 * @see #getInPortBaseFuel()
+	 * @generated
+	 */
+	void setInPortBaseFuel(BaseFuel value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getInPortBaseFuel <em>In Port Base Fuel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetInPortBaseFuel()
+	 * @see #getInPortBaseFuel()
+	 * @see #setInPortBaseFuel(BaseFuel)
+	 * @generated
+	 */
+	void unsetInPortBaseFuel();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getInPortBaseFuel <em>In Port Base Fuel</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>In Port Base Fuel</em>' reference is set.
+	 * @see #unsetInPortBaseFuel()
+	 * @see #getInPortBaseFuel()
+	 * @see #setInPortBaseFuel(BaseFuel)
+	 * @generated
+	 */
+	boolean isSetInPortBaseFuel();
+
+	/**
+	 * Returns the value of the '<em><b>Pilot Light Base Fuel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Pilot Light Base Fuel</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Pilot Light Base Fuel</em>' reference.
+	 * @see #isSetPilotLightBaseFuel()
+	 * @see #unsetPilotLightBaseFuel()
+	 * @see #setPilotLightBaseFuel(BaseFuel)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_PilotLightBaseFuel()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	BaseFuel getPilotLightBaseFuel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getPilotLightBaseFuel <em>Pilot Light Base Fuel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Pilot Light Base Fuel</em>' reference.
+	 * @see #isSetPilotLightBaseFuel()
+	 * @see #unsetPilotLightBaseFuel()
+	 * @see #getPilotLightBaseFuel()
+	 * @generated
+	 */
+	void setPilotLightBaseFuel(BaseFuel value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getPilotLightBaseFuel <em>Pilot Light Base Fuel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetPilotLightBaseFuel()
+	 * @see #getPilotLightBaseFuel()
+	 * @see #setPilotLightBaseFuel(BaseFuel)
+	 * @generated
+	 */
+	void unsetPilotLightBaseFuel();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getPilotLightBaseFuel <em>Pilot Light Base Fuel</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Pilot Light Base Fuel</em>' reference is set.
+	 * @see #unsetPilotLightBaseFuel()
+	 * @see #getPilotLightBaseFuel()
+	 * @see #setPilotLightBaseFuel(BaseFuel)
+	 * @generated
+	 */
+	boolean isSetPilotLightBaseFuel();
+
+	/**
+	 * Returns the value of the '<em><b>Idle Base Fuel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Idle Base Fuel</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Idle Base Fuel</em>' reference.
+	 * @see #isSetIdleBaseFuel()
+	 * @see #unsetIdleBaseFuel()
+	 * @see #setIdleBaseFuel(BaseFuel)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_IdleBaseFuel()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	BaseFuel getIdleBaseFuel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getIdleBaseFuel <em>Idle Base Fuel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Idle Base Fuel</em>' reference.
+	 * @see #isSetIdleBaseFuel()
+	 * @see #unsetIdleBaseFuel()
+	 * @see #getIdleBaseFuel()
+	 * @generated
+	 */
+	void setIdleBaseFuel(BaseFuel value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getIdleBaseFuel <em>Idle Base Fuel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetIdleBaseFuel()
+	 * @see #getIdleBaseFuel()
+	 * @see #setIdleBaseFuel(BaseFuel)
+	 * @generated
+	 */
+	void unsetIdleBaseFuel();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getIdleBaseFuel <em>Idle Base Fuel</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Idle Base Fuel</em>' reference is set.
+	 * @see #unsetIdleBaseFuel()
+	 * @see #getIdleBaseFuel()
+	 * @see #setIdleBaseFuel(BaseFuel)
+	 * @generated
+	 */
+	boolean isSetIdleBaseFuel();
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
@@ -1037,6 +1199,30 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	BaseFuel getVesselOrDelegateBaseFuel();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	BaseFuel getVesselOrDelegateIdleBaseFuel();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	BaseFuel getVesselOrDelegatePilotLightBaseFuel();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	BaseFuel getVesselOrDelegateInPortBaseFuel();
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -15,6 +15,7 @@ import org.eclipse.ui.PlatformUI;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.CurrencyIndex;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -53,10 +54,13 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
 
 			final EObject target = dcsd.getTarget();
-			if (target instanceof CommodityIndex || target instanceof CharterIndex || target instanceof BaseFuelIndex) {
+			if (target instanceof CommodityIndex || target instanceof CharterIndex || target instanceof BaseFuelIndex || target instanceof CurrencyIndex) {
 				return true;
 			}
 			if (target instanceof IndexPoint) {
+				return true;
+			}
+			if (target instanceof PricingModel) {
 				return true;
 			}
 			if (target instanceof UnitConversion) {
@@ -86,7 +90,7 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 				}
 				return;
 			}
-			if (target instanceof CommodityIndex || target instanceof CharterIndex || target instanceof BaseFuelIndex) {
+			if (target instanceof CommodityIndex || target instanceof CharterIndex || target instanceof BaseFuelIndex || target instanceof CurrencyIndex) {
 				if (indexPane != null) {
 					editorPart.setActivePage(indexPage);
 					indexPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);

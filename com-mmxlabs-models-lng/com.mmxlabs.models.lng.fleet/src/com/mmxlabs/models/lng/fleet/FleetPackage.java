@@ -307,13 +307,40 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__BASE_FUEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 8;
 
 	/**
+	 * The feature id for the '<em><b>In Port Base Fuel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__IN_PORT_BASE_FUEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 9;
+
+	/**
+	 * The feature id for the '<em><b>Pilot Light Base Fuel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__PILOT_LIGHT_BASE_FUEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 10;
+
+	/**
+	 * The feature id for the '<em><b>Idle Base Fuel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__IDLE_BASE_FUEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 11;
+
+	/**
 	 * The feature id for the '<em><b>Capacity</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 9;
+	int VESSEL__CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 12;
 
 	/**
 	 * The feature id for the '<em><b>Fill Capacity</b></em>' attribute.
@@ -322,7 +349,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__FILL_CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 10;
+	int VESSEL__FILL_CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 13;
 
 	/**
 	 * The feature id for the '<em><b>Laden Attributes</b></em>' containment reference.
@@ -331,7 +358,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__LADEN_ATTRIBUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 11;
+	int VESSEL__LADEN_ATTRIBUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 14;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Attributes</b></em>' containment reference.
@@ -340,7 +367,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__BALLAST_ATTRIBUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 12;
+	int VESSEL__BALLAST_ATTRIBUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 15;
 
 	/**
 	 * The feature id for the '<em><b>Min Speed</b></em>' attribute.
@@ -349,7 +376,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__MIN_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 13;
+	int VESSEL__MIN_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 16;
 
 	/**
 	 * The feature id for the '<em><b>Max Speed</b></em>' attribute.
@@ -358,7 +385,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__MAX_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 14;
+	int VESSEL__MAX_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 17;
 
 	/**
 	 * The feature id for the '<em><b>Safety Heel</b></em>' attribute.
@@ -367,7 +394,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__SAFETY_HEEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 15;
+	int VESSEL__SAFETY_HEEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 18;
 
 	/**
 	 * The feature id for the '<em><b>Warming Time</b></em>' attribute.
@@ -376,7 +403,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__WARMING_TIME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 16;
+	int VESSEL__WARMING_TIME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 19;
 
 	/**
 	 * The feature id for the '<em><b>Cooling Volume</b></em>' attribute.
@@ -385,7 +412,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__COOLING_VOLUME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 17;
+	int VESSEL__COOLING_VOLUME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 20;
 
 	/**
 	 * The feature id for the '<em><b>Scnt</b></em>' attribute.
@@ -394,7 +421,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__SCNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 18;
+	int VESSEL__SCNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 21;
 
 	/**
 	 * The feature id for the '<em><b>Route Parameters Override</b></em>' attribute.
@@ -403,7 +430,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__ROUTE_PARAMETERS_OVERRIDE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 19;
+	int VESSEL__ROUTE_PARAMETERS_OVERRIDE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 22;
 
 	/**
 	 * The feature id for the '<em><b>Route Parameters</b></em>' containment reference list.
@@ -412,7 +439,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__ROUTE_PARAMETERS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 20;
+	int VESSEL__ROUTE_PARAMETERS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 23;
 
 	/**
 	 * The feature id for the '<em><b>Pilot Light Rate</b></em>' attribute.
@@ -421,7 +448,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__PILOT_LIGHT_RATE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 21;
+	int VESSEL__PILOT_LIGHT_RATE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 24;
 
 	/**
 	 * The feature id for the '<em><b>Min Base Fuel Consumption</b></em>' attribute.
@@ -430,7 +457,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__MIN_BASE_FUEL_CONSUMPTION = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 22;
+	int VESSEL__MIN_BASE_FUEL_CONSUMPTION = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 25;
 
 	/**
 	 * The feature id for the '<em><b>Has Reliq Capability Override</b></em>' attribute.
@@ -439,7 +466,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__HAS_RELIQ_CAPABILITY_OVERRIDE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 23;
+	int VESSEL__HAS_RELIQ_CAPABILITY_OVERRIDE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 26;
 
 	/**
 	 * The feature id for the '<em><b>Has Reliq Capability</b></em>' attribute.
@@ -448,7 +475,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__HAS_RELIQ_CAPABILITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 24;
+	int VESSEL__HAS_RELIQ_CAPABILITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 27;
 
 	/**
 	 * The feature id for the '<em><b>Notes</b></em>' attribute.
@@ -457,7 +484,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__NOTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 25;
+	int VESSEL__NOTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 28;
 
 	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
@@ -466,7 +493,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 26;
+	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 29;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl <em>Vessel State Attributes</em>}' class.
@@ -1040,6 +1067,39 @@ public interface FleetPackage extends EPackage {
 	EReference getVessel_BaseFuel();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.Vessel#getInPortBaseFuel <em>In Port Base Fuel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>In Port Base Fuel</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getInPortBaseFuel()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EReference getVessel_InPortBaseFuel();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.Vessel#getPilotLightBaseFuel <em>Pilot Light Base Fuel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Pilot Light Base Fuel</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getPilotLightBaseFuel()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EReference getVessel_PilotLightBaseFuel();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.Vessel#getIdleBaseFuel <em>Idle Base Fuel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Idle Base Fuel</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getIdleBaseFuel()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EReference getVessel_IdleBaseFuel();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.FleetModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1580,6 +1640,30 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference VESSEL__BASE_FUEL = eINSTANCE.getVessel_BaseFuel();
+
+		/**
+		 * The meta object literal for the '<em><b>In Port Base Fuel</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL__IN_PORT_BASE_FUEL = eINSTANCE.getVessel_InPortBaseFuel();
+
+		/**
+		 * The meta object literal for the '<em><b>Pilot Light Base Fuel</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL__PILOT_LIGHT_BASE_FUEL = eINSTANCE.getVessel_PilotLightBaseFuel();
+
+		/**
+		 * The meta object literal for the '<em><b>Idle Base Fuel</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL__IDLE_BASE_FUEL = eINSTANCE.getVessel_IdleBaseFuel();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl <em>Model</em>}' class.

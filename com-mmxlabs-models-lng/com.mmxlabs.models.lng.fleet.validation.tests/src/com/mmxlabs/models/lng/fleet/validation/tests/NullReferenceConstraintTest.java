@@ -63,6 +63,9 @@ public class NullReferenceConstraintTest {
 		final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
 		// create and set values for fields that start out as null
 		vessel.setBaseFuel(FleetFactory.eINSTANCE.createBaseFuel());
+		vessel.setIdleBaseFuel(FleetFactory.eINSTANCE.createBaseFuel());
+		vessel.setPilotLightBaseFuel(FleetFactory.eINSTANCE.createBaseFuel());
+		vessel.setInPortBaseFuel(FleetFactory.eINSTANCE.createBaseFuel());		
 		vessel.setBallastAttributes(FleetFactory.eINSTANCE.createVesselStateAttributes());
 		vessel.setLadenAttributes(FleetFactory.eINSTANCE.createVesselStateAttributes());
 

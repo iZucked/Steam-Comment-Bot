@@ -39,6 +39,7 @@ public class SimpleCargoAllocation {
 		final EList<Event> events = cargoAllocation.getEvents();
 		eventCount = events.size();
 
+
 		if (eventCount > 6 && eventCount != 9) {
 			throw new IllegalStateException(
 					"Expects Load/Discharge events with two journey and two idle events (6 events) or  Load/Discharge/Discharge events with three journey and three idle events (9 events)");
@@ -55,6 +56,7 @@ public class SimpleCargoAllocation {
 		final Event[] processedEvents = new Event[eventCount];
 
 		int voyageIdx = -1;
+
 		int currentIndex = 0;
 		for (final Event e : events) {
 			if (e instanceof Journey || e instanceof Idle || e instanceof SlotVisit) {
@@ -77,6 +79,7 @@ public class SimpleCargoAllocation {
 			}
 			currentIndex++;
 		}
+
 	}
 
 	public Journey getLadenLeg() {

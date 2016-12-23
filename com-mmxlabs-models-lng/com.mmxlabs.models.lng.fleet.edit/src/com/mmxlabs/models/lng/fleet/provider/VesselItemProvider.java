@@ -59,6 +59,9 @@ public class VesselItemProvider
 			addInaccessibleRoutesOverridePropertyDescriptor(object);
 			addInaccessibleRoutesPropertyDescriptor(object);
 			addBaseFuelPropertyDescriptor(object);
+			addInPortBaseFuelPropertyDescriptor(object);
+			addPilotLightBaseFuelPropertyDescriptor(object);
+			addIdleBaseFuelPropertyDescriptor(object);
 			addCapacityPropertyDescriptor(object);
 			addFillCapacityPropertyDescriptor(object);
 			addMinSpeedPropertyDescriptor(object);
@@ -630,6 +633,72 @@ public class VesselItemProvider
 				 getString("_UI_Vessel_baseFuel_feature"),
 				 getString("_UI_Vessel_baseFuel_description"),
 				 FleetPackage.Literals.VESSEL__BASE_FUEL,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the In Port Base Fuel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addInPortBaseFuelPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_inPortBaseFuel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_inPortBaseFuel_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__IN_PORT_BASE_FUEL,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Pilot Light Base Fuel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPilotLightBaseFuelPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_pilotLightBaseFuel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_pilotLightBaseFuel_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__PILOT_LIGHT_BASE_FUEL,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Idle Base Fuel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addIdleBaseFuelPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_idleBaseFuel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_idleBaseFuel_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__IDLE_BASE_FUEL,
 				 true,
 				 false,
 				 true,

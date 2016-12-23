@@ -47,6 +47,9 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isInaccessibleRoutesOverride <em>Inaccessible Routes Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getBaseFuel <em>Base Fuel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getInPortBaseFuel <em>In Port Base Fuel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getPilotLightBaseFuel <em>Pilot Light Base Fuel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getIdleBaseFuel <em>Idle Base Fuel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getCapacity <em>Capacity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getFillCapacity <em>Fill Capacity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getLadenAttributes <em>Laden Attributes</em>}</li>
@@ -216,6 +219,63 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @ordered
 	 */
 	protected boolean baseFuelESet;
+
+	/**
+	 * The cached value of the '{@link #getInPortBaseFuel() <em>In Port Base Fuel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInPortBaseFuel()
+	 * @generated
+	 * @ordered
+	 */
+	protected BaseFuel inPortBaseFuel;
+
+	/**
+	 * This is true if the In Port Base Fuel reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean inPortBaseFuelESet;
+
+	/**
+	 * The cached value of the '{@link #getPilotLightBaseFuel() <em>Pilot Light Base Fuel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPilotLightBaseFuel()
+	 * @generated
+	 * @ordered
+	 */
+	protected BaseFuel pilotLightBaseFuel;
+
+	/**
+	 * This is true if the Pilot Light Base Fuel reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean pilotLightBaseFuelESet;
+
+	/**
+	 * The cached value of the '{@link #getIdleBaseFuel() <em>Idle Base Fuel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getIdleBaseFuel()
+	 * @generated
+	 * @ordered
+	 */
+	protected BaseFuel idleBaseFuel;
+
+	/**
+	 * This is true if the Idle Base Fuel reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean idleBaseFuelESet;
 
 	/**
 	 * The default value of the '{@link #getCapacity() <em>Capacity</em>}' attribute.
@@ -1634,6 +1694,42 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public BaseFuel getVesselOrDelegateIdleBaseFuel() {
+		if (getReference() != null && !isSetIdleBaseFuel()) {
+			return getReference().getIdleBaseFuel();
+		}
+		return getIdleBaseFuel();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public BaseFuel getVesselOrDelegatePilotLightBaseFuel() {
+		if (getReference() != null && !isSetPilotLightBaseFuel()) {
+			return getReference().getPilotLightBaseFuel();
+		}
+		return getPilotLightBaseFuel();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public BaseFuel getVesselOrDelegateInPortBaseFuel() {
+		if (getReference() != null && !isSetInPortBaseFuel()) {
+			return getReference().getInPortBaseFuel();
+		}
+		return getInPortBaseFuel();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public BaseFuel basicGetBaseFuel() {
@@ -1675,6 +1771,195 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 */
 	public boolean isSetBaseFuel() {
 		return baseFuelESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseFuel getInPortBaseFuel() {
+		if (inPortBaseFuel != null && inPortBaseFuel.eIsProxy()) {
+			InternalEObject oldInPortBaseFuel = (InternalEObject)inPortBaseFuel;
+			inPortBaseFuel = (BaseFuel)eResolveProxy(oldInPortBaseFuel);
+			if (inPortBaseFuel != oldInPortBaseFuel) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.VESSEL__IN_PORT_BASE_FUEL, oldInPortBaseFuel, inPortBaseFuel));
+			}
+		}
+		return inPortBaseFuel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseFuel basicGetInPortBaseFuel() {
+		return inPortBaseFuel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setInPortBaseFuel(BaseFuel newInPortBaseFuel) {
+		BaseFuel oldInPortBaseFuel = inPortBaseFuel;
+		inPortBaseFuel = newInPortBaseFuel;
+		boolean oldInPortBaseFuelESet = inPortBaseFuelESet;
+		inPortBaseFuelESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__IN_PORT_BASE_FUEL, oldInPortBaseFuel, inPortBaseFuel, !oldInPortBaseFuelESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetInPortBaseFuel() {
+		BaseFuel oldInPortBaseFuel = inPortBaseFuel;
+		boolean oldInPortBaseFuelESet = inPortBaseFuelESet;
+		inPortBaseFuel = null;
+		inPortBaseFuelESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__IN_PORT_BASE_FUEL, oldInPortBaseFuel, null, oldInPortBaseFuelESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetInPortBaseFuel() {
+		return inPortBaseFuelESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseFuel getPilotLightBaseFuel() {
+		if (pilotLightBaseFuel != null && pilotLightBaseFuel.eIsProxy()) {
+			InternalEObject oldPilotLightBaseFuel = (InternalEObject)pilotLightBaseFuel;
+			pilotLightBaseFuel = (BaseFuel)eResolveProxy(oldPilotLightBaseFuel);
+			if (pilotLightBaseFuel != oldPilotLightBaseFuel) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.VESSEL__PILOT_LIGHT_BASE_FUEL, oldPilotLightBaseFuel, pilotLightBaseFuel));
+			}
+		}
+		return pilotLightBaseFuel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseFuel basicGetPilotLightBaseFuel() {
+		return pilotLightBaseFuel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPilotLightBaseFuel(BaseFuel newPilotLightBaseFuel) {
+		BaseFuel oldPilotLightBaseFuel = pilotLightBaseFuel;
+		pilotLightBaseFuel = newPilotLightBaseFuel;
+		boolean oldPilotLightBaseFuelESet = pilotLightBaseFuelESet;
+		pilotLightBaseFuelESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__PILOT_LIGHT_BASE_FUEL, oldPilotLightBaseFuel, pilotLightBaseFuel, !oldPilotLightBaseFuelESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetPilotLightBaseFuel() {
+		BaseFuel oldPilotLightBaseFuel = pilotLightBaseFuel;
+		boolean oldPilotLightBaseFuelESet = pilotLightBaseFuelESet;
+		pilotLightBaseFuel = null;
+		pilotLightBaseFuelESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__PILOT_LIGHT_BASE_FUEL, oldPilotLightBaseFuel, null, oldPilotLightBaseFuelESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetPilotLightBaseFuel() {
+		return pilotLightBaseFuelESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseFuel getIdleBaseFuel() {
+		if (idleBaseFuel != null && idleBaseFuel.eIsProxy()) {
+			InternalEObject oldIdleBaseFuel = (InternalEObject)idleBaseFuel;
+			idleBaseFuel = (BaseFuel)eResolveProxy(oldIdleBaseFuel);
+			if (idleBaseFuel != oldIdleBaseFuel) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.VESSEL__IDLE_BASE_FUEL, oldIdleBaseFuel, idleBaseFuel));
+			}
+		}
+		return idleBaseFuel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseFuel basicGetIdleBaseFuel() {
+		return idleBaseFuel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setIdleBaseFuel(BaseFuel newIdleBaseFuel) {
+		BaseFuel oldIdleBaseFuel = idleBaseFuel;
+		idleBaseFuel = newIdleBaseFuel;
+		boolean oldIdleBaseFuelESet = idleBaseFuelESet;
+		idleBaseFuelESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__IDLE_BASE_FUEL, oldIdleBaseFuel, idleBaseFuel, !oldIdleBaseFuelESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetIdleBaseFuel() {
+		BaseFuel oldIdleBaseFuel = idleBaseFuel;
+		boolean oldIdleBaseFuelESet = idleBaseFuelESet;
+		idleBaseFuel = null;
+		idleBaseFuelESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__IDLE_BASE_FUEL, oldIdleBaseFuel, null, oldIdleBaseFuelESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetIdleBaseFuel() {
+		return idleBaseFuelESet;
 	}
 
 	/**
@@ -1779,6 +2064,15 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__BASE_FUEL:
 				if (resolve) return getBaseFuel();
 				return basicGetBaseFuel();
+			case FleetPackage.VESSEL__IN_PORT_BASE_FUEL:
+				if (resolve) return getInPortBaseFuel();
+				return basicGetInPortBaseFuel();
+			case FleetPackage.VESSEL__PILOT_LIGHT_BASE_FUEL:
+				if (resolve) return getPilotLightBaseFuel();
+				return basicGetPilotLightBaseFuel();
+			case FleetPackage.VESSEL__IDLE_BASE_FUEL:
+				if (resolve) return getIdleBaseFuel();
+				return basicGetIdleBaseFuel();
 			case FleetPackage.VESSEL__CAPACITY:
 				return getCapacity();
 			case FleetPackage.VESSEL__FILL_CAPACITY:
@@ -1853,6 +2147,15 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return;
 			case FleetPackage.VESSEL__BASE_FUEL:
 				setBaseFuel((BaseFuel)newValue);
+				return;
+			case FleetPackage.VESSEL__IN_PORT_BASE_FUEL:
+				setInPortBaseFuel((BaseFuel)newValue);
+				return;
+			case FleetPackage.VESSEL__PILOT_LIGHT_BASE_FUEL:
+				setPilotLightBaseFuel((BaseFuel)newValue);
+				return;
+			case FleetPackage.VESSEL__IDLE_BASE_FUEL:
+				setIdleBaseFuel((BaseFuel)newValue);
 				return;
 			case FleetPackage.VESSEL__CAPACITY:
 				setCapacity((Integer)newValue);
@@ -1944,6 +2247,15 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__BASE_FUEL:
 				unsetBaseFuel();
 				return;
+			case FleetPackage.VESSEL__IN_PORT_BASE_FUEL:
+				unsetInPortBaseFuel();
+				return;
+			case FleetPackage.VESSEL__PILOT_LIGHT_BASE_FUEL:
+				unsetPilotLightBaseFuel();
+				return;
+			case FleetPackage.VESSEL__IDLE_BASE_FUEL:
+				unsetIdleBaseFuel();
+				return;
 			case FleetPackage.VESSEL__CAPACITY:
 				unsetCapacity();
 				return;
@@ -2024,6 +2336,12 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return inaccessibleRoutes != null && !inaccessibleRoutes.isEmpty();
 			case FleetPackage.VESSEL__BASE_FUEL:
 				return isSetBaseFuel();
+			case FleetPackage.VESSEL__IN_PORT_BASE_FUEL:
+				return isSetInPortBaseFuel();
+			case FleetPackage.VESSEL__PILOT_LIGHT_BASE_FUEL:
+				return isSetPilotLightBaseFuel();
+			case FleetPackage.VESSEL__IDLE_BASE_FUEL:
+				return isSetIdleBaseFuel();
 			case FleetPackage.VESSEL__CAPACITY:
 				return isSetCapacity();
 			case FleetPackage.VESSEL__FILL_CAPACITY:
