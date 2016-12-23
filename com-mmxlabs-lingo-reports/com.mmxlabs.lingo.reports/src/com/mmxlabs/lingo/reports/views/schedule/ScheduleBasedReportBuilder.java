@@ -235,7 +235,6 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 				column.pack();
 			}
 		}
-
 	}
 
 	public EmfBlockColumnFactory getTotalPNLColumnFactory(final String columnId, @Nullable final EStructuralFeature bookContainmentFeature) {
