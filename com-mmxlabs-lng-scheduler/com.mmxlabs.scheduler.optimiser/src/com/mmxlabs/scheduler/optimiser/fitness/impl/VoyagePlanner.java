@@ -20,6 +20,7 @@ import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumerPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplierPortSlot;
@@ -39,8 +40,10 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord.AllocationMode;
+import com.mmxlabs.scheduler.optimiser.providers.ActualsBaseFuelHelper;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCooldownDataProvider;
@@ -54,9 +57,10 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEva
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.IdleFuelChoice;
+import com.mmxlabs.scheduler.optimiser.voyage.LNGFuelKeys;
 import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
@@ -75,6 +79,9 @@ public class VoyagePlanner {
 
 	@Inject
 	private IVesselProvider vesselProvider;
+
+	@Inject
+	private IBaseFuelProvider baseFuelProvider;
 
 	@Inject
 	private IDistanceProvider distanceProvider;
@@ -109,6 +116,9 @@ public class VoyagePlanner {
 
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
+
+	@Inject
+	private ActualsBaseFuelHelper actualsBaseFuelHelper;
 
 	@Inject
 	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
@@ -188,7 +198,7 @@ public class VoyagePlanner {
 		options.setCargoCVValue(cargoCV);
 
 		// Convert rate to MT equivalent per day
-		final int nboRateInMTPerDay = (int) Calculator.convertM3ToMT(vessel.getNBORate(vesselState), cargoCV, vessel.getBaseFuel().getEquivalenceFactor());
+		final int nboRateInMTPerDay = (int) Calculator.convertM3ToMT(vessel.getNBORate(vesselState), cargoCV, vessel.getTravelBaseFuel().getEquivalenceFactor());
 		if (nboRateInMTPerDay > 0) {
 			final int nboSpeed = vessel.getConsumptionRate(vesselState).getSpeed(nboRateInMTPerDay);
 			options.setNBOSpeed(nboSpeed);
@@ -508,7 +518,7 @@ public class VoyagePlanner {
 					heelInM3Range[1] = endHeelInM3;
 				} else {
 					// set base fuel price in VPO
-					final Triple<IVessel, IResource, Integer> vesselTriple = setVesselAndBaseFuelPrice(portTimesRecord, vesselAvailability.getVessel(), resource);
+					final Triple<IVessel, IResource, int[]> vesselTriple = setVesselAndBaseFuelPrice(portTimesRecord, vesselAvailability.getVessel(), resource);
 
 					final boolean roundTripCargoEnd = ((PortOptions) voyageOrPortOptions.get(0)).getPortSlot().getPortType() == PortType.Round_Trip_Cargo_End;
 
@@ -547,6 +557,8 @@ public class VoyagePlanner {
 	private long generateActualsVoyagePlan(final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime,
 			final @NonNull List<@NonNull Pair<VoyagePlan, IPortTimesRecord>> voyagePlansMap, final @NonNull List<@NonNull VoyagePlan> voyagePlansList,
 			final @NonNull List<@NonNull IOptionsSequenceElement> voyageOrPortOptions, final @NonNull IPortTimesRecord portTimesRecord, final long[] startHeelVolumeInM3) {
+
+		IVessel vessel = vesselAvailability.getVessel();
 
 		final VoyagePlan plan = new VoyagePlan();
 		// Replace with actuals later if needed
@@ -588,7 +600,7 @@ public class VoyagePlanner {
 			long lngCommitmentInM3 = 0;
 			long endHeelInM3 = 0;
 
-			int baseFuelPricePerMT = 0;
+			int[] baseFuelPricesPerMT = new int[baseFuelProvider.getNumberOfBaseFuels()];
 			idx = -1;
 			final IDetailsSequenceElement[] detailedSequence = new IDetailsSequenceElement[voyageOrPortOptions.size()];
 			for (final IOptionsSequenceElement element : voyageOrPortOptions) {
@@ -610,26 +622,25 @@ public class VoyagePlanner {
 							assert startHeelVolumeInM3[1] == actualsDataProvider.getStartHeelInM3(portOptions.getPortSlot());
 							// plan.setStartingHeelInM3(startHeelVolumeInM3);
 
-							baseFuelPricePerMT = actualsDataProvider.getBaseFuelPricePerMT(portOptions.getPortSlot());
+							baseFuelPricesPerMT = actualsBaseFuelHelper.getActualisedOrForecastBaseFuelPrices(vesselAvailability.getVessel(), portTimesRecord, portOptions.getPortSlot());
 
 						}
 					}
-					portDetails.setFuelUnitPrice(FuelComponent.Base, baseFuelPricePerMT);
-					portDetails.setFuelUnitPrice(FuelComponent.IdleBase, baseFuelPricePerMT);
-					portDetails.setFuelUnitPrice(FuelComponent.Base_Supplemental, baseFuelPricePerMT);
-					portDetails.setFuelUnitPrice(FuelComponent.PilotLight, baseFuelPricePerMT);
-					portDetails.setFuelUnitPrice(FuelComponent.IdlePilotLight, baseFuelPricePerMT);
+					portDetails.setFuelUnitPrice(FuelComponent.Base, baseFuelPricesPerMT[vessel.getInPortBaseFuel().getIndex()]);
 
 					// Port Fuel Consumption
 					if (idx < voyageOrPortOptions.size() - 1) {
 						final long baseFuelConsumptionInMt = actualsDataProvider.getPortBaseFuelConsumptionInMT(portOptions.getPortSlot());
 						fuelConsumptions[FuelComponent.Base.ordinal()] += baseFuelConsumptionInMt;
-						fuelCosts[FuelComponent.Base.ordinal()] += Calculator.costFromConsumption(baseFuelConsumptionInMt, baseFuelPricePerMT);
-						portDetails.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, baseFuelConsumptionInMt);
+						fuelCosts[FuelComponent.Base.ordinal()] += Calculator.costFromConsumption(baseFuelConsumptionInMt, baseFuelPricesPerMT[vessel.getTravelBaseFuel().getIndex()]);
+						portDetails.setFuelConsumption(vessel.getInPortBaseFuelInMT(), baseFuelConsumptionInMt);
 					}
 					detailedSequence[idx] = portDetails;
 				} else if (element instanceof VoyageOptions) {
 					final VoyageOptions voyageOptions = (VoyageOptions) element;
+					final IBaseFuel baseFuel = vessel.getTravelBaseFuel();
+					final IBaseFuel idleBaseFuel = vessel.getIdleBaseFuel();
+					final IBaseFuel pilotLightBaseFuel = vessel.getPilotLightBaseFuel();
 
 					final VoyageDetails voyageDetails = new VoyageDetails(voyageOptions);
 
@@ -640,18 +651,16 @@ public class VoyagePlanner {
 					voyageDetails.setSpeed(10);
 
 					// Base Fuel
-
-					voyageDetails.setFuelUnitPrice(FuelComponent.Base, baseFuelPricePerMT);
-					voyageDetails.setFuelUnitPrice(FuelComponent.IdleBase, baseFuelPricePerMT);
-					voyageDetails.setFuelUnitPrice(FuelComponent.Base_Supplemental, baseFuelPricePerMT);
-					voyageDetails.setFuelUnitPrice(FuelComponent.PilotLight, baseFuelPricePerMT);
-					voyageDetails.setFuelUnitPrice(FuelComponent.IdlePilotLight, baseFuelPricePerMT);
+					voyageDetails.setFuelUnitPrice(FuelComponent.Base, baseFuelPricesPerMT[baseFuel.getIndex()]);
+					voyageDetails.setFuelUnitPrice(FuelComponent.Base_Supplemental, baseFuelPricesPerMT[baseFuel.getIndex()]);
+					voyageDetails.setFuelUnitPrice(FuelComponent.IdleBase, baseFuelPricesPerMT[idleBaseFuel.getIndex()]);
+					voyageDetails.setFuelUnitPrice(FuelComponent.PilotLight, baseFuelPricesPerMT[pilotLightBaseFuel.getIndex()]);
+					voyageDetails.setFuelUnitPrice(FuelComponent.IdlePilotLight, baseFuelPricesPerMT[pilotLightBaseFuel.getIndex()]);
 
 					final long baseFuelConsumptionInMt = actualsDataProvider.getNextVoyageBaseFuelConsumptionInMT(voyageOptions.getFromPortSlot());
-					voyageDetails.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, baseFuelConsumptionInMt);
-
+					voyageDetails.setFuelConsumption(vessel.getTravelBaseFuelInMT(), baseFuelConsumptionInMt);
 					fuelConsumptions[FuelComponent.Base.ordinal()] += baseFuelConsumptionInMt;
-					fuelCosts[FuelComponent.Base.ordinal()] += Calculator.costFromConsumption(baseFuelConsumptionInMt, baseFuelPricePerMT);
+					fuelCosts[FuelComponent.Base.ordinal()] += Calculator.costFromConsumption(baseFuelConsumptionInMt, baseFuelPricesPerMT[baseFuel.getIndex()]);
 
 					// LNG
 					long lngInM3;
@@ -666,7 +675,7 @@ public class VoyagePlanner {
 
 						voyageDetails.setFuelUnitPrice(FuelComponent.NBO, lngSalesPricePerMMBTu);
 
-						voyageDetails.setFuelConsumption(FuelComponent.NBO, FuelUnit.M3, lngInM3);
+						voyageDetails.setFuelConsumption(LNGFuelKeys.NBO_In_m3, lngInM3);
 					} else {
 						assert voyageOptions.getVesselState() == VesselState.Ballast;
 						// Volume after discharging
@@ -689,11 +698,11 @@ public class VoyagePlanner {
 						// Take of end heel, this is now our laden BOG quantity;
 						lngInM3 -= endHeelInM3;
 						voyageDetails.setFuelUnitPrice(FuelComponent.NBO, lngSalesPricePerMMBTu);
-						voyageDetails.setFuelConsumption(FuelComponent.NBO, FuelUnit.M3, lngInM3);
+						voyageDetails.setFuelConsumption(LNGFuelKeys.NBO_In_m3, lngInM3);
 					}
 
 					final long consumptionInMMBTu = Calculator.convertM3ToMMBTu(lngInM3, cargoCV);
-					voyageDetails.setFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu, consumptionInMMBTu);
+					voyageDetails.setFuelConsumption(LNGFuelKeys.NBO_In_mmBtu, consumptionInMMBTu);
 
 					fuelConsumptions[FuelComponent.NBO.ordinal()] += lngInM3;
 					fuelCosts[FuelComponent.NBO.ordinal()] += Calculator.costFromConsumption(consumptionInMMBTu, lngSalesPricePerMMBTu);
@@ -720,11 +729,24 @@ public class VoyagePlanner {
 			plan.setLNGFuelVolume(lngCommitmentInM3);
 
 			// Set the totals
+			long baseFuelCost = 0;
+			long LNGFuelCost = 0;
+			long cooldownFuelCost = 0;
 			for (final FuelComponent fc : FuelComponent.values()) {
-				plan.setFuelConsumption(fc, fuelConsumptions[fc.ordinal()]);
-				plan.setTotalFuelCost(fc, fuelCosts[fc.ordinal()]);
-			}
+				if (fc == FuelComponent.Cooldown) {
+					cooldownFuelCost += fuelCosts[fc.ordinal()];
+				} else if (FuelComponent.isLNGFuelComponent(fc)) {
+					LNGFuelCost += fuelCosts[fc.ordinal()];
+				} else if (FuelComponent.isBaseFuelComponent(fc)) {
+					baseFuelCost += fuelCosts[fc.ordinal()];
+				} else {
+					throw new IllegalStateException();
+				}
 
+			}
+			plan.setBaseFuelCost(baseFuelCost);
+			plan.setLngFuelCost(LNGFuelCost);
+			plan.setCooldownCost(cooldownFuelCost);
 			plan.setTotalRouteCost(totalRouteCost);
 
 		}
@@ -959,7 +981,7 @@ public class VoyagePlanner {
 		// Populate final plan details
 		if (voyageOrPortOptions.size() > 0) {
 			// set base fuel price in VPO
-			final Triple<@NonNull IVessel, @Nullable IResource, @NonNull Integer> vesselTriple = setVesselAndBaseFuelPrice(portTimesRecord, vesselAvailability.getVessel(), resource);
+			final Triple<@NonNull IVessel, @Nullable IResource, int[]> vesselTriple = setVesselAndBaseFuelPrice(portTimesRecord, vesselAvailability.getVessel(), resource);
 			final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, portTimesRecord, voyagePlanOptimiser, heelInM3Range, vesselCharterInRatePerDay,
 					vesselAvailability.getVesselInstanceType(), vesselTriple, vpoChoices, startingTime);
 			// voyagePlanOptimiser.reset();
@@ -1052,13 +1074,14 @@ public class VoyagePlanner {
 		return new Pair<>(currentPlan, annotation);
 	}
 
-	final private @NonNull Triple<@NonNull IVessel, @Nullable IResource, @NonNull Integer> setVesselAndBaseFuelPrice(@NonNull final IPortTimesRecord portTimesRecord, @NonNull final IVessel vessel,
+	final private @NonNull Triple<@NonNull IVessel, @Nullable IResource, int[]> setVesselAndBaseFuelPrice(@NonNull final IPortTimesRecord portTimesRecord, @NonNull final IVessel vessel,
 			@NonNull final IResource resource) {
 
-		Triple<@NonNull IVessel, @Nullable IResource, @NonNull Integer> t = new Triple<>(vessel, resource, vesselBaseFuelCalculator.getBaseFuelPrice(vessel, portTimesRecord));
+		Triple<@NonNull IVessel, @Nullable IResource, int[]> t = new Triple<>(vessel, resource, vesselBaseFuelCalculator.getBaseFuelPrices(vessel, portTimesRecord));
 		if (portTimesRecord.getFirstSlot() instanceof ILoadOption) {
 			if (actualsDataProvider.hasActuals(portTimesRecord.getFirstSlot())) {
-				t = new Triple<>(vessel, resource, actualsDataProvider.getBaseFuelPricePerMT(portTimesRecord.getFirstSlot()));
+				// Note: older versions of multi-base-fuels code used t.getThrid() rather then actuals provider
+				t = new Triple<>(vessel, resource, actualsBaseFuelHelper.getActualisedOrForecastBaseFuelPrices(t.getFirst(), portTimesRecord, portTimesRecord.getFirstSlot()));
 			}
 		}
 		return t;
@@ -1077,7 +1100,7 @@ public class VoyagePlanner {
 	@Nullable
 	final public VoyagePlan getOptimisedVoyagePlan(final @NonNull List<@NonNull IOptionsSequenceElement> voyageOrPortOptionsSubsequence, final @NonNull IPortTimesRecord portTimesRecord,
 			final @NonNull IVoyagePlanOptimiser optimiser, final long @NonNull [] heelVolumeRangeInM3, final long vesselCharterInRatePerDay, final @NonNull VesselInstanceType vesselInstanceType,
-			final Triple<@NonNull IVessel, @Nullable IResource, @NonNull Integer> vesselTriple, @NonNull final List<@NonNull IVoyagePlanChoice> vpoChoices, int startingTime) {
+			final Triple<@NonNull IVessel, @Nullable IResource, int[]> vesselTriple, @NonNull final List<@NonNull IVoyagePlanChoice> vpoChoices, int startingTime) {
 
 		// Run sequencer evaluation
 		final VoyagePlan result = optimiser.optimise(vesselTriple.getSecond(), vesselTriple.getFirst(), heelVolumeRangeInM3.clone(), vesselTriple.getThird(), vesselCharterInRatePerDay,
@@ -1207,9 +1230,9 @@ public class VoyagePlanner {
 							}
 						}
 
-						totalVoyageBOG += portDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3);
+						totalVoyageBOG += portDetails.getFuelConsumption(LNGFuelKeys.NBO_In_m3);
 						if (portSlot.getPortType() == PortType.Discharge) {
-							currentHeelInM3 -= portDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3);
+							currentHeelInM3 -= portDetails.getFuelConsumption(LNGFuelKeys.NBO_In_m3);
 						}
 
 						assert currentHeelInM3 + ROUNDING_EPSILON >= 0;
@@ -1227,9 +1250,9 @@ public class VoyagePlanner {
 				} else if (e instanceof VoyageDetails) {
 					final VoyageDetails voyageDetails = (VoyageDetails) e;
 					long voyageBOGInM3 = 0;
-					for (final FuelComponent fuel : FuelComponent.getLNGFuelComponents()) {
-						voyageBOGInM3 += voyageDetails.getFuelConsumption(fuel, FuelUnit.M3);
-						voyageBOGInM3 += voyageDetails.getRouteAdditionalConsumption(fuel, FuelUnit.M3);
+					for (final FuelKey fk : LNGFuelKeys.LNG_In_m3) {
+						voyageBOGInM3 += voyageDetails.getFuelConsumption(fk);
+						voyageBOGInM3 += voyageDetails.getRouteAdditionalConsumption(fk);
 					}
 					totalVoyageBOG += voyageBOGInM3;
 					currentHeelInM3 -= voyageBOGInM3;

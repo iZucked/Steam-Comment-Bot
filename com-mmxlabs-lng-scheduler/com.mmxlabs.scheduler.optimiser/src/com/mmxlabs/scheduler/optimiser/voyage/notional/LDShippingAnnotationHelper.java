@@ -7,9 +7,10 @@ package com.mmxlabs.scheduler.optimiser.voyage.notional;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
+import com.mmxlabs.scheduler.optimiser.voyage.LNGFuelKeys;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -25,9 +26,10 @@ public class LDShippingAnnotationHelper {
 		final PortDetails loadDetails = (PortDetails) realPlan.getSequence()[0];
 		// Load Details
 		shippingAnnotation.loadPort = loadDetails.getOptions().getPortSlot().getPort();
-		for (final FuelComponent fc : FuelComponent.getBaseFuelComponents()) {
-			shippingAnnotation.loadBunkersInMT += loadDetails.getFuelConsumption(fc, FuelUnit.MT);
-		}
+		final IVessel vessel = loadDetails.getOptions().getVessel();
+
+		shippingAnnotation.loadBunkersInMT += loadDetails.getFuelConsumption(vessel.getInPortBaseFuelInMT());
+
 		shippingAnnotation.loadHireHours = loadDetails.getOptions().getVisitDuration();
 		shippingAnnotation.loadPortCosts = loadDetails.getPortCosts();
 		shippingAnnotation.startOfLoading = allocationAnnotation.getSlotTime(loadDetails.getOptions().getPortSlot());
@@ -39,9 +41,9 @@ public class LDShippingAnnotationHelper {
 		final PortDetails loadDetails = (PortDetails) realPlan.getSequence()[0];
 		// Load Details
 		shippingAnnotation.loadPort = loadDetails.getOptions().getPortSlot().getPort();
-		for (final FuelComponent fc : FuelComponent.getBaseFuelComponents()) {
-			shippingAnnotation.loadBunkersInMT += loadDetails.getFuelConsumption(fc, FuelUnit.MT);
-		}
+		final IVessel vessel = loadDetails.getOptions().getVessel();
+		
+		shippingAnnotation.loadBunkersInMT += loadDetails.getFuelConsumption(vessel.getInPortBaseFuelInMT());
 		shippingAnnotation.loadHireHours = loadDetails.getOptions().getVisitDuration();
 		shippingAnnotation.loadPortCosts = loadDetails.getPortCosts();
 		shippingAnnotation.startOfLoading = startOfLoadingTime;
@@ -56,16 +58,18 @@ public class LDShippingAnnotationHelper {
 		shippingAnnotation.ladenHireHours = ladenLeg.getTravelTime() + ladenLeg.getIdleTime();
 		shippingAnnotation.ladenSpeed = ladenLeg.getSpeed();
 		shippingAnnotation.ladenCanalCosts = ladenLeg.getOptions().getRouteCost();
+		final IVessel vessel = ladenLeg.getOptions().getVessel();
 
-		for (final FuelComponent fc : FuelComponent.getBaseFuelComponents()) {
-			shippingAnnotation.ladenBunkersInMT += ladenLeg.getFuelConsumption(fc, FuelUnit.MT);
-			shippingAnnotation.ladenBunkersInMT += ladenLeg.getRouteAdditionalConsumption(fc, FuelUnit.MT);
+		for (FuelKey fk : vessel.getVoyageFuelKeys()) {
+			shippingAnnotation.ladenBunkersInMT += ladenLeg.getFuelConsumption(fk);
+			shippingAnnotation.ladenBunkersInMT += ladenLeg.getRouteAdditionalConsumption(fk);
 		}
 		// lng
 		long ladenBOGInM3 = 0L;
-		for (final FuelComponent fc : FuelComponent.getLNGFuelComponents()) {
-			ladenBOGInM3 += ladenLeg.getFuelConsumption(fc, FuelUnit.M3);
-			ladenBOGInM3 += ladenLeg.getRouteAdditionalConsumption(fc, FuelUnit.M3);
+
+		for (final FuelKey fk : LNGFuelKeys.LNG_In_m3) {
+			ladenBOGInM3 += ladenLeg.getFuelConsumption(fk);
+			ladenBOGInM3 += ladenLeg.getRouteAdditionalConsumption(fk);
 		}
 		shippingAnnotation.ladenBOInM3 = ladenBOGInM3;
 		shippingAnnotation.ladenBOInMMBTu = Calculator.convertM3ToMMBTu(ladenBOGInM3, ladenLeg.getOptions().getCargoCVValue());
@@ -76,25 +80,22 @@ public class LDShippingAnnotationHelper {
 
 		// Discharge Details
 		shippingAnnotation.dischargePort = dischargeDetails.getOptions().getPortSlot().getPort();
-
-		for (final FuelComponent fc : FuelComponent.getBaseFuelComponents()) {
-			shippingAnnotation.dischargeBunkersInMT += dischargeDetails.getFuelConsumption(fc, FuelUnit.MT);
-		}
+		final IVessel vessel = dischargeDetails.getOptions().getVessel();
+		shippingAnnotation.dischargeBunkersInMT += dischargeDetails.getFuelConsumption(vessel.getInPortBaseFuelInMT());
 		shippingAnnotation.dischargeHireHours = dischargeDetails.getOptions().getVisitDuration();
 		shippingAnnotation.dischargePortCosts = dischargeDetails.getPortCosts();
 		shippingAnnotation.startOfDischarge = allocationAnnotation.getSlotTime(dischargeDetails.getOptions().getPortSlot());
 		shippingAnnotation.completionOfDischarge = shippingAnnotation.startOfDischarge + allocationAnnotation.getSlotDuration(dischargeDetails.getOptions().getPortSlot());
 	}
 
-	public static void extractDischargeDetails(final @NonNull VoyagePlan realPlan, final int startOfDischargeTime, final int dischargeDuration, final @NonNull LDShippingAnnotation shippingAnnotation) {
+	public static void extractDischargeDetails(final @NonNull VoyagePlan realPlan, final int startOfDischargeTime, final int dischargeDuration,
+			final @NonNull LDShippingAnnotation shippingAnnotation) {
 		final PortDetails dischargeDetails = (PortDetails) realPlan.getSequence()[2];
 
 		// Discharge Details
 		shippingAnnotation.dischargePort = dischargeDetails.getOptions().getPortSlot().getPort();
-
-		for (final FuelComponent fc : FuelComponent.getBaseFuelComponents()) {
-			shippingAnnotation.dischargeBunkersInMT += dischargeDetails.getFuelConsumption(fc, FuelUnit.MT);
-		}
+		final IVessel vessel = dischargeDetails.getOptions().getVessel();
+		shippingAnnotation.dischargeBunkersInMT += dischargeDetails.getFuelConsumption(vessel.getInPortBaseFuelInMT());
 		shippingAnnotation.dischargeHireHours = dischargeDetails.getOptions().getVisitDuration();
 		shippingAnnotation.dischargePortCosts = dischargeDetails.getPortCosts();
 		shippingAnnotation.startOfDischarge = startOfDischargeTime;
@@ -110,15 +111,18 @@ public class LDShippingAnnotationHelper {
 		shippingAnnotation.ballastSpeed = ballastLeg.getSpeed();
 		shippingAnnotation.ballastCanalCosts = ballastLeg.getOptions().getRouteCost();
 
-		for (final FuelComponent fc : FuelComponent.getBaseFuelComponents()) {
-			shippingAnnotation.ballastBunkersInMT += ballastLeg.getFuelConsumption(fc, FuelUnit.MT);
-			shippingAnnotation.ballastBunkersInMT += ballastLeg.getRouteAdditionalConsumption(fc, FuelUnit.MT);
+		final IVessel vessel = ballastLeg.getOptions().getVessel();
+
+		for (FuelKey fk : vessel.getVoyageFuelKeys()) {
+			shippingAnnotation.ballastBunkersInMT += ballastLeg.getFuelConsumption(fk);
+			shippingAnnotation.ballastBunkersInMT += ballastLeg.getRouteAdditionalConsumption(fk);
 		}
+
 		// lng
 		long ballastBOGInM3 = 0L;
-		for (final FuelComponent fc : FuelComponent.getLNGFuelComponents()) {
-			ballastBOGInM3 += ballastLeg.getFuelConsumption(fc, FuelUnit.M3);
-			ballastBOGInM3 += ballastLeg.getRouteAdditionalConsumption(fc, FuelUnit.M3);
+		for (final FuelKey fk : LNGFuelKeys.LNG_In_m3) {
+			ballastBOGInM3 += ballastLeg.getFuelConsumption(fk);
+			ballastBOGInM3 += ballastLeg.getRouteAdditionalConsumption(fk);
 		}
 		shippingAnnotation.ballastBOInM3 = ballastBOGInM3;
 		shippingAnnotation.ballastBOInMMBTu = Calculator.convertM3ToMMBTu(ballastBOGInM3, ballastLeg.getOptions().getCargoCVValue());
@@ -132,12 +136,12 @@ public class LDShippingAnnotationHelper {
 		shippingAnnotation.nextPortDate = allocationAnnotation.getSlotTime(allocationAnnotation.getReturnSlot());
 	}
 
-	public static void updateBunkerCosts(final @NonNull LDShippingAnnotation shippingAnnotation, final int bunkerPricePerMT) {
+	public static void updateBunkerCosts(final @NonNull LDShippingAnnotation shippingAnnotation, final int refBaseFuelPrice) {
 
-		shippingAnnotation.loadBunkersCost = Calculator.costFromConsumption(shippingAnnotation.loadBunkersInMT, bunkerPricePerMT);
-		shippingAnnotation.ladenBunkersCost = Calculator.costFromConsumption(shippingAnnotation.ladenBunkersInMT, bunkerPricePerMT);
-		shippingAnnotation.dischargeBunkersCost = Calculator.costFromConsumption(shippingAnnotation.dischargeBunkersInMT, bunkerPricePerMT);
-		shippingAnnotation.ballastBunkersCost = Calculator.costFromConsumption(shippingAnnotation.ballastBunkersInMT, bunkerPricePerMT);
+		shippingAnnotation.loadBunkersCost += Calculator.costFromConsumption(shippingAnnotation.loadBunkersInMT, refBaseFuelPrice);
+		shippingAnnotation.ladenBunkersCost += Calculator.costFromConsumption(shippingAnnotation.ladenBunkersInMT, refBaseFuelPrice);
+		shippingAnnotation.dischargeBunkersCost += Calculator.costFromConsumption(shippingAnnotation.dischargeBunkersInMT, refBaseFuelPrice);
+		shippingAnnotation.ballastBunkersCost += Calculator.costFromConsumption(shippingAnnotation.ballastBunkersInMT, refBaseFuelPrice);
 	}
 
 	public static void updateBunkerCosts(final @NonNull LDShippingAnnotation shippingAnnotation, final int voyageBunkerPricePerMT, final int portBunkerPricePerMT) {
@@ -161,9 +165,9 @@ public class LDShippingAnnotationHelper {
 		shippingAnnotation.ballastCharterCost = Calculator.quantityFromRateTime(charterCostPerDay, shippingAnnotation.ballastHireHours) / 24L;
 	}
 
-	public static void updateCosts(final @NonNull LDShippingAnnotation shippingAnnotation, final long charterCostPerDay, final int lngCostPerMMBTu, final int bunkerPricePerMT) {
+	public static void updateCosts(final @NonNull LDShippingAnnotation shippingAnnotation, final long charterCostPerDay, final int lngCostPerMMBTu, final int referenceBaseFuelRate) {
 		updateCharterCosts(shippingAnnotation, charterCostPerDay);
-		updateBunkerCosts(shippingAnnotation, bunkerPricePerMT);
+		updateBunkerCosts(shippingAnnotation, referenceBaseFuelRate);
 		updateLNGCosts(shippingAnnotation, lngCostPerMMBTu);
 		// TODO: neccessary?
 		shippingAnnotation.ladenCostsExcludingBOG = shippingAnnotation.ladenBunkersCost + shippingAnnotation.ladenCanalCosts + shippingAnnotation.ladenCharterCost + shippingAnnotation.ladenMiscCosts;
@@ -185,9 +189,9 @@ public class LDShippingAnnotationHelper {
 		shippingAnnotation.ladenCostsExcludingBOG += shippingAnnotation.ladenBunkersCost;
 		shippingAnnotation.ladenCostsExcludingBOG += shippingAnnotation.ladenCanalCosts;
 		shippingAnnotation.ladenCostsExcludingBOG += shippingAnnotation.ladenMiscCosts;
-		
+
 		shippingAnnotation.ladenCostsIncludingBOG = shippingAnnotation.ladenCostsExcludingBOG + shippingAnnotation.ladenBOCost;
-		
+
 		shippingAnnotation.ballastCostsExcludingBOG = 0;
 		shippingAnnotation.ballastCostsExcludingBOG += shippingAnnotation.dischargePortCosts;
 		shippingAnnotation.ballastCostsExcludingBOG += shippingAnnotation.dischargeCharterCost;
@@ -201,8 +205,8 @@ public class LDShippingAnnotationHelper {
 
 		shippingAnnotation.ballastCostsIncludingBOG = shippingAnnotation.ballastBOCost + shippingAnnotation.ballastCostsExcludingBOG;
 
-
 	}
+
 	public static long getTotalShippingCost(final @NonNull LDShippingAnnotation shippingAnnotation, final boolean includeBOG) {
 
 		long totalCosts = 0L;

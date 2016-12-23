@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +92,7 @@ public final class GeneralTestUtils {
 		return fitnessEvaluator;
 	}
 
-	public static LocalSearchOptimiser buildOptimiser(@NonNull final IOptimisationContext context, IOptimisationData data, @NonNull final Random random, final int numberOfIterations,
+	public static LocalSearchOptimiser buildOptimiser(@NonNull final IOptimisationContext context, final IOptimisationData data, @NonNull final Random random, final int numberOfIterations,
 			final int stepSize, final IOptimiserProgressMonitor monitor) {
 
 		final EvaluationProcessInstantiator evaluationProcessInstantiator = new EvaluationProcessInstantiator();
@@ -157,4 +158,11 @@ public final class GeneralTestUtils {
 		}).getInstance(LinearSimulatedAnnealingFitnessEvaluator.class);
 	}
 
+	
+	public static int[] makeBaseFuelPrices(final int price) {
+		final int[] m = new int[10];
+		Arrays.fill(m, price);
+		// Mockito.when(m.get(Matchers.any(in[].class))).thenReturn(price);
+		return m;
+	}
 }

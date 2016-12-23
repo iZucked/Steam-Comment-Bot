@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -110,23 +111,27 @@ public class VesselTest {
 
 	@Test
 	public void testGetSetBaseFuel() {
-		final IBaseFuel b = new BaseFuel("test");
+		SimpleIndexingContext context = new SimpleIndexingContext();
+		context.registerType(IBaseFuel.class);
+		final IBaseFuel b = new BaseFuel(context, "test");
 		final Vessel vessel = new Vessel("name", 123456);
-		Assert.assertEquals(null, vessel.getBaseFuel());
-		vessel.setBaseFuel(b);
-		Assert.assertEquals(b.getName(), vessel.getBaseFuel().getName());
+		Assert.assertEquals(null, vessel.getTravelBaseFuel());
+		vessel.setTravelBaseFuel(b);
+		Assert.assertEquals(b.getName(), vessel.getTravelBaseFuel().getName());
 	}
 
 	@Test
 	public void testGetSetBaseFuelConversionFactor() {
+		SimpleIndexingContext context = new SimpleIndexingContext();
+		context.registerType(IBaseFuel.class);
 		final int value = 100;
 		final Vessel vessel = new Vessel("name", 123456);
-		Assert.assertEquals(null, vessel.getBaseFuel());
-		IBaseFuel baseFuel = new BaseFuel("test");
+		Assert.assertEquals(null, vessel.getTravelBaseFuel());
+		IBaseFuel baseFuel = new BaseFuel(context, "test");
 		baseFuel.setEquivalenceFactor(100);
-		vessel.setBaseFuel(baseFuel);
+		vessel.setTravelBaseFuel(baseFuel);
 
-		Assert.assertEquals(value, vessel.getBaseFuel().getEquivalenceFactor());
+		Assert.assertEquals(value, vessel.getTravelBaseFuel().getEquivalenceFactor());
 	}
 
 	@Test

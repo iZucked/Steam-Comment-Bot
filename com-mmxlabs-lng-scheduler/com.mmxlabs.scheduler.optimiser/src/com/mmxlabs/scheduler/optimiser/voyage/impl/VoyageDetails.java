@@ -11,6 +11,7 @@ import com.google.common.base.Objects;
 import com.mmxlabs.common.impl.LongFastEnumEnumMap;
 import com.mmxlabs.common.impl.LongFastEnumMap;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
 /**
@@ -23,21 +24,16 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 
 	private @NonNull VoyageOptions options;
 
-	private final @NonNull LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption = new LongFastEnumEnumMap<FuelComponent, FuelUnit>(FuelComponent.values().length, FuelUnit.values().length);
+	private final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption = new LongFastEnumEnumMap<>(FuelComponent.values().length, FuelUnit.values().length);
 
-	private final @NonNull LongFastEnumEnumMap<FuelComponent, FuelUnit> routeAdditionalConsumption = new LongFastEnumEnumMap<FuelComponent, FuelUnit>(FuelComponent.values().length,
-			FuelUnit.values().length);
+	private final LongFastEnumEnumMap<FuelComponent, FuelUnit> routeAdditionalConsumption = new LongFastEnumEnumMap<>(FuelComponent.values().length, FuelUnit.values().length);
 
-	private final @NonNull LongFastEnumMap<FuelComponent> fuelUnitPrices = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
+	private final LongFastEnumMap<FuelComponent> fuelUnitPrices = new LongFastEnumMap<>(FuelComponent.values().length);
 
 	private int idleTime;
-
 	private int travelTime;
-
 	private int speed;
-
 	private int startTime;
-
 	private boolean cooldownPerformed;
 
 	public VoyageDetails(@NonNull final VoyageOptions options) {
@@ -45,7 +41,7 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 	}
 
 	private VoyageDetails(final int idleTime2, final int travelTime2, final int speed2, final int startTime2, final @NonNull VoyageOptions options,
-			final @NonNull LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption2, final @NonNull LongFastEnumEnumMap<FuelComponent, FuelUnit> routeAdditionalConsumption2,
+			final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption2, final @NonNull LongFastEnumEnumMap<FuelComponent, FuelUnit> routeAdditionalConsumption2,
 			final @NonNull LongFastEnumMap<FuelComponent> fuelUnitPrices2, final boolean cooldownPerformed) {
 		this.idleTime = idleTime2;
 		this.travelTime = travelTime2;
@@ -63,17 +59,20 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 		return new VoyageDetails(idleTime, travelTime, speed, startTime, new VoyageOptions(options), fuelConsumption, routeAdditionalConsumption, fuelUnitPrices, cooldownPerformed);
 	}
 
-	public final long getFuelConsumption(final @NonNull FuelComponent fuel, final @NonNull FuelUnit fuelUnit) {
-
-		return fuelConsumption.get(fuel, fuelUnit);
+	public final long getFuelConsumption(final @NonNull FuelKey fuelKey) {
+		return fuelConsumption.get(fuelKey.getFuelComponent(), fuelKey.getFuelUnit());
 	}
 
-	public final long getRouteAdditionalConsumption(final @NonNull FuelComponent fuel, final @NonNull FuelUnit fuelUnit) {
-		return routeAdditionalConsumption.get(fuel, fuelUnit);
+	public final long getRouteAdditionalConsumption(final @NonNull FuelKey fuelKey) {
+		return routeAdditionalConsumption.get(fuelKey.getFuelComponent(), fuelKey.getFuelUnit());
 	}
 
-	public final void setRouteAdditionalConsumption(final @NonNull FuelComponent fuel, final @NonNull FuelUnit fuelUnit, final long consumption) {
-		routeAdditionalConsumption.put(fuel, fuelUnit, consumption);
+	public void setFuelConsumption(final @NonNull FuelKey fuelKey, final long consumption) {
+		fuelConsumption.put(fuelKey.getFuelComponent(), fuelKey.getFuelUnit(), consumption);
+	}
+
+	public void setRouteAdditionalConsumption(final @NonNull FuelKey fuelKey, final long consumption) {
+		routeAdditionalConsumption.put(fuelKey.getFuelComponent(), fuelKey.getFuelUnit(), consumption);
 	}
 
 	public final int getIdleTime() {
@@ -92,8 +91,8 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 		return travelTime;
 	}
 
-	public final void setFuelConsumption(final @NonNull FuelComponent fuel, final @NonNull FuelUnit fuelUnit, final long consumption) {
-		fuelConsumption.put(fuel, fuelUnit, consumption);
+	public final void resetFuelConsumption() {
+		fuelConsumption.clear();
 	}
 
 	public final void setIdleTime(final int idleTime) {
@@ -112,33 +111,35 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 		this.travelTime = travelTime;
 	}
 
-	public final int getFuelUnitPrice(final @NonNull FuelComponent fuel) {
-
-		// This cast is ok as #setFuelUnitPrice takes the input as an int
-		return (int) fuelUnitPrices.get(fuel);
+	public final int getFuelUnitPrice(final @NonNull FuelComponent baseFuel) {
+		return (int) fuelUnitPrices.get(baseFuel);
 	}
 
-	public final void setFuelUnitPrice(final @NonNull FuelComponent fuel, final int unitPrice) {
-		fuelUnitPrices.put(fuel, unitPrice);
+	public final void setFuelUnitPrice(final @NonNull FuelComponent baseFuel, final int unitPrice) {
+		fuelUnitPrices.put(baseFuel, unitPrice);
 	}
 
 	@Override
 	public final boolean equals(final Object obj) {
+
+		if (obj == this) {
+			return true;
+		}
 
 		if (obj instanceof VoyageDetails) {
 			final VoyageDetails d = (VoyageDetails) obj;
 
 			// Ensure all fields are present here
 			// @formatter:off
-			return Objects.equal(speed,  d.speed)
-				&& Objects.equal(idleTime,  d.idleTime)
-				&& Objects.equal(travelTime,  d.travelTime)
-				&& Objects.equal(startTime,  d.startTime)
+			return speed == d.speed
+				&& cooldownPerformed == d.cooldownPerformed
+				&& idleTime ==  d.idleTime
+				&& travelTime ==  d.travelTime
+				&& startTime ==  d.startTime
 				&& Objects.equal(options,  d.options)
+				&& Objects.equal(fuelUnitPrices,  d.fuelUnitPrices)
 				&& Objects.equal(fuelConsumption,  d.fuelConsumption)
 				&& Objects.equal(routeAdditionalConsumption,  d.routeAdditionalConsumption)
-				&& Objects.equal(fuelUnitPrices,  d.fuelUnitPrices)
-				&& Objects.equal(cooldownPerformed,  d.cooldownPerformed)
 				;
 				// @formatter:on
 		}

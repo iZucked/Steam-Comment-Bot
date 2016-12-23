@@ -113,9 +113,9 @@ public class SimpleSchedulerTest {
 		baseFuCurveProviderEditor.setBaseFuelCurve(baseFuel, new ConstantValueCurve(7000));
 
 		// TODO: Setup start/end ports correctly
-		final IVessel vessel1 = builder.createVessel("vessel-1", 12000, 20000, 150000000, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
-		final IVessel vessel2 = builder.createVessel("vessel-2", 12000, 20000, 150000000, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
-		final IVessel vessel3 = builder.createVessel("vessel-3", 12000, 20000, 150000000, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
+		final IVessel vessel1 = builder.createVessel("vessel-1", 12000, 20000, 150000000, 0, baseFuel, baseFuel, baseFuel, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
+		final IVessel vessel2 = builder.createVessel("vessel-2", 12000, 20000, 150000000, 0, baseFuel, baseFuel, baseFuel, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
+		final IVessel vessel3 = builder.createVessel("vessel-3", 12000, 20000, 150000000, 0, baseFuel, baseFuel, baseFuel, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
 
 		// set up basefuel curve
 		final StepwiseIntegerCurve baseFuelCurve = new StepwiseIntegerCurve();

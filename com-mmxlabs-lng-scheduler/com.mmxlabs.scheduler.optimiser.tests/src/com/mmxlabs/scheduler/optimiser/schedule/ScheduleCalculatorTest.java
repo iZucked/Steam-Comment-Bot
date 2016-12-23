@@ -65,6 +65,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
@@ -81,6 +82,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvid
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultBaseFuelProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImpl;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapBaseFuelCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteExclusionProvider;
@@ -114,6 +116,7 @@ public class ScheduleCalculatorTest {
 		final IStartEndRequirementProvider startEndRequirementProvider = mock(IStartEndRequirementProvider.class);
 		final IShippingHoursRestrictionProvider shippingHoursRestrictionProvider = mock(IShippingHoursRestrictionProvider.class);
 		final IRouteExclusionProvider routeExclusionProvider = new HashMapRouteExclusionProvider();
+		final IBaseFuelProvider baseFuelProvider = new DefaultBaseFuelProvider();
 		class TestModule extends AbstractModule {
 
 			@Provides
@@ -153,6 +156,7 @@ public class ScheduleCalculatorTest {
 
 			@Override
 			protected void configure() {
+				bind(IBaseFuelProvider.class).toInstance(baseFuelProvider);
 				bind(IShippingHoursRestrictionProvider.class).toInstance(shippingHoursRestrictionProvider);
 				bind(IMarkToMarketProvider.class).toInstance(markToMarketProvider);
 				bind(IPortSlotProvider.class).toInstance(portSlotProvider);

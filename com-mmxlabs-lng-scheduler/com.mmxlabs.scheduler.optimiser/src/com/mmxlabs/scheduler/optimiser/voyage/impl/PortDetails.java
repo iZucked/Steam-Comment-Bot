@@ -4,14 +4,14 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
-import java.util.EnumMap;
-
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.mmxlabs.common.impl.LongFastEnumEnumMap;
+import com.mmxlabs.common.impl.LongFastEnumMap;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
 /**
@@ -26,54 +26,47 @@ public final class PortDetails implements IDetailsSequenceElement, Cloneable {
 	private @NonNull PortOptions options;
 
 	private final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption = new LongFastEnumEnumMap<FuelComponent, FuelUnit>(FuelComponent.values().length, FuelUnit.values().length);
-	private final EnumMap<FuelComponent, Integer> fuelPrice = new EnumMap<FuelComponent, Integer>(FuelComponent.class);
-
+	private final LongFastEnumMap<FuelComponent> fuelUnitPrices = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
 	private long portCosts;
 
 	public PortDetails(final @NonNull PortOptions options) {
 		this.options = options;
 	}
 
-	private PortDetails(final @NonNull PortOptions options,final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption2, final EnumMap<FuelComponent, Integer> fuelPrice, final long portCosts) {
+	private PortDetails(final @NonNull PortOptions options, final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption2, final LongFastEnumMap<FuelComponent> fuelPrice, final long portCosts) {
 		this.options = options;
 		this.portCosts = portCosts;
-		putAll(this.fuelConsumption, fuelConsumption2);
-
-		this.fuelPrice.putAll(fuelPrice);
+		this.fuelConsumption.putAll(fuelConsumption2);
+		this.fuelUnitPrices.putAll(fuelPrice);
 	}
 
-	// TODO: Add to LongFastEnumEnumMap
-		private final void putAll(final LongFastEnumEnumMap<FuelComponent, FuelUnit> dst, final LongFastEnumEnumMap<FuelComponent, FuelUnit> src) {
+	public final void resetFuelConsumption() {
+		// fuelConsumption.clear();
+	}
 
-			for (final FuelComponent fc : FuelComponent.values()) {
-				for (final FuelUnit fu : FuelUnit.values()) {
-					dst.put(fc, fu, src.get(fc, fu));
-				}
-			}
-		}
+	public final long getFuelConsumption(final FuelKey fuelKey) {
+//		assert !fuelKey.getBaseFuel().getName().contains("fake");
+
+		return fuelConsumption.get(fuelKey.getFuelComponent(), fuelKey.getFuelUnit());
+	}
+
+	public void setFuelConsumption(@NonNull FuelKey fk, long consumption) {
+//		assert !fk.getBaseFuel().getName().contains("fake");
+		fuelConsumption.put(fk.getFuelComponent(), fk.getFuelUnit(), consumption);
+	}
+
+	// public Collection<FuelKey> getFuelConsumptionKeys() {
+	// return fuelConsumption.keySet();
+	// }
 
 	/**
 	 */
-	public final int getFuelUnitPrice(final FuelComponent fuel) {
-		if (!fuelPrice.containsKey(fuel)) {
-			return 0;
-		}
-		return fuelPrice.get(fuel);
+	public final int getFuelUnitPrice(final @NonNull FuelComponent baseFuel) {
+		return (int) fuelUnitPrices.get(baseFuel);
 	}
 
-	public final void setFuelConsumption(final @NonNull FuelComponent fuel, final @NonNull FuelUnit fuelUnit, final long consumption) {
-		fuelConsumption.put(fuel, fuelUnit, consumption);
-	}
-	
-	public final long getFuelConsumption(final @NonNull FuelComponent fuel, final @NonNull FuelUnit fuelUnit) {
-
-		return fuelConsumption.get(fuel, fuelUnit);
-	}
-
-	/**
-	 */
-	public final void setFuelUnitPrice(final FuelComponent fuel, final int price) {
-		fuelPrice.put(fuel, price);
+	public final void setFuelUnitPrice(final @NonNull FuelComponent baseFuel, final int unitPrice) {
+		fuelUnitPrices.put(baseFuel, unitPrice);
 	}
 
 	/**
@@ -93,9 +86,9 @@ public final class PortDetails implements IDetailsSequenceElement, Cloneable {
 			final PortDetails d = (PortDetails) obj;
 
 			// @formatter:off
-			return Objects.equal(fuelConsumption, d.fuelConsumption)
-				&& Objects.equal(fuelPrice, d.fuelPrice)
-				&& Objects.equal(portCosts, d.portCosts)
+			return portCosts ==  d.portCosts
+				&&  Objects.equal(fuelUnitPrices, d.fuelUnitPrices)
+				&& Objects.equal(fuelConsumption, d.fuelConsumption)
 				&& Objects.equal(options, d.options)
 						;
 			// @formatter:on
@@ -106,7 +99,7 @@ public final class PortDetails implements IDetailsSequenceElement, Cloneable {
 
 	@Override
 	public final int hashCode() {
-		return Objects.hashCode(options, fuelConsumption, fuelPrice, portCosts);
+		return Objects.hashCode(options, fuelConsumption, fuelUnitPrices, portCosts);
 	}
 
 	@Override
@@ -115,7 +108,7 @@ public final class PortDetails implements IDetailsSequenceElement, Cloneable {
 		return MoreObjects.toStringHelper(PortDetails.class)
 				.add("options", options)
 				.add("fuelConsumption", fuelConsumption)
-				.add("fuelPrice", fuelPrice)
+				.add("fuelPrice", fuelUnitPrices)
 				.add("portCosts", portCosts)
 				.toString();
 		// @formatter:on
@@ -123,7 +116,7 @@ public final class PortDetails implements IDetailsSequenceElement, Cloneable {
 
 	@Override
 	public PortDetails clone() {
-		return new PortDetails(new PortOptions(options), fuelConsumption, fuelPrice, portCosts);
+		return new PortDetails(new PortOptions(options), fuelConsumption, fuelUnitPrices, portCosts);
 	}
 
 	public long getPortCosts() {
@@ -133,6 +126,4 @@ public final class PortDetails implements IDetailsSequenceElement, Cloneable {
 	public void setPortCosts(final long portCosts) {
 		this.portCosts = portCosts;
 	}
-	
-	
 }

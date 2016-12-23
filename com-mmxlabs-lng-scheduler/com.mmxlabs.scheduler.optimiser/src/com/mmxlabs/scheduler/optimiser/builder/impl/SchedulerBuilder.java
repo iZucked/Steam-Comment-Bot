@@ -104,6 +104,7 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
@@ -143,6 +144,9 @@ import com.mmxlabs.scheduler.optimiser.shared.port.IPortProvider;
  * @author Simon Goodall
  */
 public final class SchedulerBuilder implements ISchedulerBuilder {
+
+	@Inject
+	private IBaseFuelProviderEditor baseFuelProvider;
 
 	@NonNull
 	private final List<IBuilderExtension> extensions = new LinkedList<IBuilderExtension>();
@@ -416,6 +420,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public SchedulerBuilder() {
 		indexingContext.registerType(SequenceElement.class);
 		indexingContext.registerType(Resource.class);
+		indexingContext.registerType(IBaseFuel.class);
+		// Manual "hack" to get index 0 for the LNG base fuel before other versions are registered
+		final int lngIndex = indexingContext.assignIndex(IBaseFuel.LNG);
+		assert lngIndex == IBaseFuel.LNG.getIndex();
 	}
 
 	// @Inject to trigger call after constructor
@@ -425,7 +433,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		ANYWHERE = portProvider.getAnywherePort();
 
 		// setup fake vessels for virtual elements.
-		virtualVessel = createVessel("virtual", 0, 0, Long.MAX_VALUE, 0, createBaseFuel("fakeFuel", 0), 0, 0, 0, 0, false);
+		virtualVessel = createVessel("virtual", 0, 0, Long.MAX_VALUE, 0, createBaseFuel("fakeFuel", 0), createBaseFuel("fakeIdleFuel", 0), createBaseFuel("fakeInPortFuel", 0),
+				createBaseFuel("fakePilotLightFuel", 0), 0, 0, 0, 0, false);
 	}
 
 	/**
@@ -1162,8 +1171,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	@NonNull
-	public IVessel createVessel(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final long safetyHeelInM3, final IBaseFuel baseFuel, final int pilotLightRate,
-			final int warmupTimeHours, final long cooldownVolumeM3, final int minBaseFuelConsumptionPerDay, final boolean hasReliqCapability) {
+	public IVessel createVessel(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final long safetyHeelInM3, final IBaseFuel baseFuel, final IBaseFuel idleBaseFuel, final IBaseFuel inPortBaseFuel, final IBaseFuel pilotLightBaseFuel,
+			final int pilotLightRate, final int warmupTimeHours, final long cooldownVolumeM3, final int minBaseFuelConsumptionPerDay, final boolean hasReliqCapability) {
 
 		final Vessel vessel = new Vessel(name, capacityInM3);
 
@@ -1178,7 +1187,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vessel.setPilotLightRate(pilotLightRate);
 		vessel.setMinBaseFuelConsumptionInMTPerDay(minBaseFuelConsumptionPerDay);
 
-		vessel.setBaseFuel(baseFuel);
+		vessel.setTravelBaseFuel(baseFuel);
+		vessel.setIdleBaseFuel(idleBaseFuel);
+		vessel.setPilotLightBaseFuel(pilotLightBaseFuel);
+		vessel.setInPortBaseFuel(inPortBaseFuel);
 
 		vessel.setHasReliqCapability(hasReliqCapability);
 
@@ -1190,8 +1202,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	@NonNull
 	public IBaseFuel createBaseFuel(final String name, final int equivalenceFactor) {
-		final BaseFuel baseFuel = new BaseFuel(name);
+		final BaseFuel baseFuel = new BaseFuel(indexingContext, name);
 		baseFuel.setEquivalenceFactor(equivalenceFactor);
+		baseFuelProvider.registerBaseFuel(baseFuel);
+
 		return baseFuel;
 	}
 

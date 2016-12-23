@@ -8,6 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -103,7 +104,25 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	/**
 	 * Base fuel price per MT (from a {@link ILoadOption})
 	 */
-	int getBaseFuelPricePerMT(@NonNull IPortSlot slot);
+	int getPortBaseFuelPricePerMT(@NonNull IPortSlot slot);
+
+	int getNextVoyageBaseFuelPricePerMT(@NonNull IPortSlot slot);
+
+	int getNextIdleBaseFuelPricePerMT(@NonNull IPortSlot slot);
+
+	int getNextVoyagePilotBaseFuelPricePerMT(@NonNull IPortSlot slot);
+
+	@NonNull
+	IBaseFuel getPortBaseFuel(@NonNull IPortSlot slot);
+
+	@NonNull
+	IBaseFuel getNextVoyageBaseFuel(@NonNull IPortSlot slot);
+
+	@NonNull
+	IBaseFuel getNextIdleBaseFuel(@NonNull IPortSlot slot);
+
+	@NonNull
+	IBaseFuel getNextVoyagePilotBaseFuel(@NonNull IPortSlot slot);
 
 	/**
 	 * Charter rate per day (from a {@link ILoadOption})

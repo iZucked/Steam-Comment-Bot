@@ -125,7 +125,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 		return toPortSlot;
 	}
 
-	public final IVessel getVessel() {
+	public final @NonNull IVessel getVessel() {
 		return vessel;
 	}
 

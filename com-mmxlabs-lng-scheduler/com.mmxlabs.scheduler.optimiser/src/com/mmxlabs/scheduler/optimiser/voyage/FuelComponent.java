@@ -126,10 +126,62 @@ public enum FuelComponent {
 		return false;
 	}
 
+	public static boolean isBaseFuelComponent(final @NonNull FuelComponent fc) {
+		for (FuelComponent fc2 : getBaseFuelComponents()) {
+			if (fc == fc2) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean useBaseFuel(final @NonNull FuelComponent fc) {
+		if (fc == FuelComponent.Base || fc == FuelComponent.Base_Supplemental) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean useIdleBaseFuel(final @NonNull FuelComponent fc) {
+
+		if (fc == FuelComponent.IdleBase) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean usePilotLightBaseFuel(final @NonNull FuelComponent fc) {
+		for (FuelComponent fc2 : getPilotLightFuelComponents()) {
+			if (fc == fc2) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 */
 	public @NonNull FuelUnit getPricingFuelUnit() {
 		return pricingFuelUnit;
+	}
+
+	public static boolean isIdleComponent(FuelComponent fc) {
+		if (fc == FuelComponent.IdleNBO || fc == FuelComponent.IdleBase || fc == FuelComponent.IdlePilotLight) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isTravelComponent(FuelComponent fc) {
+		if (fc == FuelComponent.NBO //
+				|| fc == FuelComponent.FBO //
+				|| fc == FuelComponent.Base //
+				|| fc == FuelComponent.Base_Supplemental //
+				|| fc == FuelComponent.PilotLight) {
+			return true;
+		}
+		return false;
 	}
 
 }

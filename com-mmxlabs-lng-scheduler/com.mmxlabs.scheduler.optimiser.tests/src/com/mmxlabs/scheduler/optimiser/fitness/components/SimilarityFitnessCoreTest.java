@@ -86,7 +86,6 @@ public class SimilarityFitnessCoreTest {
 				return sequences;
 			}
 
-
 			@Provides
 			@Singleton
 			@Named(OptimiserConstants.SEQUENCE_TYPE_INPUT)
@@ -244,8 +243,7 @@ public class SimilarityFitnessCoreTest {
 
 			@Override
 			public <T> T getData(final String key, final Class<T> cls) {
-				// TODO Auto-generated method stub
-				return (T) null;
+				return cls.cast(null);
 			}
 		};
 		return evaluationState;

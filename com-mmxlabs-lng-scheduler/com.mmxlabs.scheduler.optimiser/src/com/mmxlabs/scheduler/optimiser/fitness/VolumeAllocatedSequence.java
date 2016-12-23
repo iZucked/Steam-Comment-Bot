@@ -33,8 +33,10 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.LNGFuelKeys;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
@@ -404,7 +406,7 @@ public class VolumeAllocatedSequence {
 						assert allocationAnnotation.getFuelVolumeInM3() == currentPlan.getLNGFuelVolume();
 
 						currentHeelInM3 -= allocationAnnotation.getPhysicalSlotVolumeInM3(portSlot);
-						currentHeelInM3 -= details.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3);
+						currentHeelInM3 -= details.getFuelConsumption(LNGFuelKeys.NBO_In_m3);
 					} else if (portSlot instanceof IHeelOptionSupplierPortSlot) {
 						// If the portSlot is a supplier, then the previous heel should be used as the starting heel rather than the voyage plan start.
 						if (previousHeelInM3 != -1L) {
@@ -455,15 +457,13 @@ public class VolumeAllocatedSequence {
 					assert currentHeelInM3 >= 0;
 					final long startHeelInM3 = currentHeelInM3;
 
-					for (final FuelComponent fuel : FuelComponent.getTravelFuelComponents()) {
-						final long consumption = voyageDetails.getFuelConsumption(fuel, FuelUnit.M3) + voyageDetails.getRouteAdditionalConsumption(fuel, FuelUnit.M3);
-						if (FuelComponent.isLNGFuelComponent(fuel)) {
-							currentHeelInM3 -= consumption;
-						}
+					for (final FuelKey fuel : LNGFuelKeys.Travel_LNG_In_m3) {
+						final long consumptionInM3 = voyageDetails.getFuelConsumption(fuel) + voyageDetails.getRouteAdditionalConsumption(fuel);
+						currentHeelInM3 -= consumptionInM3;
 					}
 					final long endOfTravelHeel = currentHeelInM3;
 
-					final long consumption = voyageDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3) + voyageDetails.getRouteAdditionalConsumption(FuelComponent.IdleNBO, FuelUnit.M3);
+					final long consumption = voyageDetails.getFuelConsumption(LNGFuelKeys.IdleNBO_In_m3) + voyageDetails.getRouteAdditionalConsumption(LNGFuelKeys.IdleNBO_In_m3);
 					currentHeelInM3 -= consumption;
 
 					final SlotRecord record = getOrCreateSlotRecord(options.getFromPortSlot());

@@ -13,6 +13,7 @@ import org.junit.Test;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.BaseFuel;
@@ -36,46 +37,10 @@ public class SchedulerBuilderTest {
 
 	@Ignore
 	@Test
-	public void testCreateLoadSlot() {
-		fail("Not yet implemented");
-	}
-
-	// @Test(expected = IllegalArgumentException.class)
-	// public void testCreateLoadSlot2() {
-	//
-	// final SchedulerBuilder builder = createScheduleBuilder();
-	//
-	// final IPort port = Mockito.mock(IPort.class);
-	// final ITimeWindow window = TimeWindowMaker.createInclusiveInclusive(0, 0, 0, false);
-	//
-	// final ILoadPriceCalculator contract = Mockito.mock(ILoadPriceCalculator.class);
-	//
-	// builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
-	// }
-
-	@Ignore
-	@Test
-	public void testCreateDischargeSlot() {
-		fail("Not yet implemented");
-	}
-
-	// @Test(expected = IllegalArgumentException.class)
-	// public void testCreateDischargeSlot2() {
-	//
-	// final SchedulerBuilder builder = createScheduleBuilder();
-	//
-	// final IPort port = Mockito.mock(IPort.class);
-	// final ITimeWindow window = TimeWindowMaker.createInclusiveInclusive(0, 0, 0, false);
-	//
-	// final ISalesPriceCalculator curve = Mockito.mock(ISalesPriceCalculator.class);
-	//
-	// builder.createDischargeSlot("id", port, window, 0, 0, 0, Long.MAX_VALUE, curve, 0, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false,
-	// DEFAULT_VOLUME_LIMIT_IS_M3);
-	// }
-
-	@Ignore
-	@Test
-	public void testCreateVesselClass() {
+	public void testCreateVessel() {
+		final SimpleIndexingContext indexingContext = new SimpleIndexingContext();
+		indexingContext.registerType(IBaseFuel.class);
+		indexingContext.assignIndex(IBaseFuel.LNG);
 
 		final SchedulerBuilder builder = createScheduleBuilder();
 
@@ -84,9 +49,9 @@ public class SchedulerBuilderTest {
 		final long capacity = 3L;
 		final int safetyHeel = 4;
 
-		final IBaseFuel baseFuel = new BaseFuel("test");
+		final IBaseFuel baseFuel = new BaseFuel(indexingContext, "test");
 		baseFuel.setEquivalenceFactor(1000);
-		final IVessel vessel = builder.createVessel("name", minSpeed, maxSpeed, capacity, safetyHeel, baseFuel, 0, 35353, 10101, 0, false);
+		final IVessel vessel = builder.createVessel("name", minSpeed, maxSpeed, capacity, safetyHeel, baseFuel, baseFuel, baseFuel, baseFuel, 0, 35353, 10101, 0, false);
 		// createVesselClass("name", minSpeed,
 		// maxSpeed, capacity, safetyHeel, 700;
 
@@ -94,13 +59,48 @@ public class SchedulerBuilderTest {
 		Assert.assertEquals(maxSpeed, vessel.getMaxSpeed());
 		Assert.assertEquals(capacity, vessel.getCargoCapacity());
 		Assert.assertEquals(safetyHeel, vessel.getSafetyHeel());
-		Assert.assertEquals(baseFuel, vessel.getBaseFuel());
-		Assert.assertEquals(1000, vessel.getBaseFuel().getEquivalenceFactor());
+		Assert.assertEquals(baseFuel, vessel.getTravelBaseFuel());
+		Assert.assertEquals(1000, vessel.getTravelBaseFuel().getEquivalenceFactor());
 
 		Assert.assertEquals(35353, vessel.getWarmupTime());
 		Assert.assertEquals(10101, vessel.getCooldownVolume());
 
 		fail("Not yet implemented - Internal state checks");
+	}
+
+	@Test
+	public void testMultipleFuelVessel() {
+		final SimpleIndexingContext indexingContext = new SimpleIndexingContext();
+		indexingContext.registerType(IBaseFuel.class);
+		indexingContext.assignIndex(IBaseFuel.LNG);
+
+		final IBaseFuel baseFuel = new BaseFuel(indexingContext, "BASE");
+		baseFuel.setEquivalenceFactor(1_000);
+		final IBaseFuel idleBaseFuel = new BaseFuel(indexingContext, "IDLE");
+		idleBaseFuel.setEquivalenceFactor(2_000);
+		final IBaseFuel inPortBaseFuel = new BaseFuel(indexingContext, "PORT");
+		inPortBaseFuel.setEquivalenceFactor(3_000);
+		final IBaseFuel pilotLightBaseFuel = new BaseFuel(indexingContext, "PILOT");
+		pilotLightBaseFuel.setEquivalenceFactor(4_000);
+
+		final int minSpeed = 1;
+		final int maxSpeed = 2;
+		final long capacity = 3L;
+		final int safetyHeel = 4;
+
+		final SchedulerBuilder builder = createScheduleBuilder();
+		final IVessel vessel = builder.createVessel("name", minSpeed, maxSpeed, capacity, safetyHeel, baseFuel, idleBaseFuel, inPortBaseFuel, pilotLightBaseFuel, 0, 35353, 10101, 0,
+				false);
+		Assert.assertEquals(baseFuel, vessel.getTravelBaseFuel());
+		Assert.assertEquals(idleBaseFuel, vessel.getIdleBaseFuel());
+		Assert.assertEquals(inPortBaseFuel, vessel.getInPortBaseFuel());
+		Assert.assertEquals(pilotLightBaseFuel, vessel.getPilotLightBaseFuel());
+
+		Assert.assertEquals(1_000, vessel.getTravelBaseFuel().getEquivalenceFactor());
+		Assert.assertEquals(2_000, vessel.getIdleBaseFuel().getEquivalenceFactor());
+		Assert.assertEquals(3_000, vessel.getInPortBaseFuel().getEquivalenceFactor());
+		Assert.assertEquals(4_000, vessel.getPilotLightBaseFuel().getEquivalenceFactor());
+
 	}
 
 	private SchedulerBuilder createScheduleBuilder() {

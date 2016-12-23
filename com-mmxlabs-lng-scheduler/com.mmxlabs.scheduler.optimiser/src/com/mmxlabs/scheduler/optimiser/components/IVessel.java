@@ -4,11 +4,15 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
+import java.util.Collection;
+
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
 
 /**
  * A {@link IVessel} is an extended version of the {@link IResource} interface and contains attributes specific to a vessel.
@@ -17,6 +21,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * 
  * @author Simon Goodall
  */
+@NonNullByDefault
 public interface IVessel {
 
 	/**
@@ -146,14 +151,56 @@ public interface IVessel {
 	 * 
 	 * @return
 	 */
-	IBaseFuel getBaseFuel();
+	IBaseFuel getTravelBaseFuel();
 
 	/**
 	 * Set the base fuel used by this vessel class.
 	 * 
 	 * @return
 	 */
-	void setBaseFuel(IBaseFuel baseFuel);
+	void setTravelBaseFuel(IBaseFuel baseFuel);
+
+	/**
+	 * Get the in port base fuel used by this vessel class.
+	 * 
+	 * @return
+	 */
+	IBaseFuel getInPortBaseFuel();
+
+	/**
+	 * Set the in port base fuel used by this vessel class.
+	 * 
+	 * @return
+	 */
+	void setInPortBaseFuel(IBaseFuel baseFuel);
+
+	/**
+	 * Get the pilot light base fuel used by this vessel class.
+	 * 
+	 * @return
+	 */
+	IBaseFuel getPilotLightBaseFuel();
+
+	/**
+	 * Set the pilot light base fuel used by this vessel class.
+	 * 
+	 * @return
+	 */
+	void setPilotLightBaseFuel(IBaseFuel baseFuel);
+
+	/**
+	 * Get the idle base fuel used by this vessel class.
+	 * 
+	 * @return
+	 */
+	IBaseFuel getIdleBaseFuel();
+
+	/**
+	 * Set the idle base fuel used by this vessel class.
+	 * 
+	 * @return
+	 */
+	void setIdleBaseFuel(IBaseFuel baseFuel);
 
 	/**
 	 * Returns the rate of NBO when the vessel is in port. Units are M3 Per Day
@@ -164,4 +211,26 @@ public interface IVessel {
 	long getInPortNBORate(VesselState vesselState);
 
 	boolean hasReliqCapability();
+
+	FuelKey getTravelBaseFuelInMT();
+
+	FuelKey getSupplementalTravelBaseFuelInMT();
+
+	FuelKey getIdleBaseFuelInMT();
+
+	FuelKey getPilotLightFuelInMT();
+
+	FuelKey getIdlePilotLightFuelInMT();
+
+	FuelKey getInPortBaseFuelInMT();
+
+	Collection<FuelKey> getPortFuelKeys();
+
+	Collection<FuelKey> getTravelFuelKeys();
+
+	Collection<FuelKey> getIdleFuelKeys();
+
+	Collection<FuelKey> getVoyageFuelKeys();
+
+	Collection<FuelKey> getAllFuelKeys();
 }

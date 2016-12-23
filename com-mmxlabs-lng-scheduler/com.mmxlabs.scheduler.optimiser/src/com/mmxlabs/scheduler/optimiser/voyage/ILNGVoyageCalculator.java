@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.voyage;
 
 import java.util.List;
 
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
@@ -51,7 +52,7 @@ public interface ILNGVoyageCalculator {
 	 * @param sequence
 	 * @return Returns zero for a feasible journey, or a positive integer indicating a relative ranking of problems due to e.g. capacity violations. Returns a negative for a infeasible journey.
 	 */
-	int calculateVoyagePlan(VoyagePlan voyagePlan, IVessel vessel, long[] startHeelRangeInM3, int baseFuelPricePerMT, IPortTimesRecord voyageRecord, IDetailsSequenceElement... sequence);
+	int calculateVoyagePlan(VoyagePlan voyagePlan, IVessel vessel, long[] startHeelRangeInM3, int[] baseFuelPricePerMT, IPortTimesRecord voyageRecord, IDetailsSequenceElement... sequence);
 
 	/**
 	 * Given a sequence containing {@link IPortDetails}, {@link IVoyageOptions} and other objects, create and return a new sequence with fuel cost information attached to corresponding appropriate

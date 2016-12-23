@@ -14,23 +14,13 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public class VoyagePlanTest {
 
 	@Test
-	public void testGetSetFuelConsumption() {
-		final FuelComponent c = FuelComponent.Base;
-		final long value = 100L;
-		final VoyagePlan plan = new VoyagePlan();
-		Assert.assertEquals(0, plan.getFuelConsumption(c));
-		plan.setFuelConsumption(c, value);
-		Assert.assertEquals(value, plan.getFuelConsumption(c));
-	}
-
-	@Test
 	public void testGetSetTotalFuelCost() {
 		final FuelComponent c = FuelComponent.Base;
 		final long value = 100L;
 		final VoyagePlan plan = new VoyagePlan();
-		Assert.assertEquals(0, plan.getTotalFuelCost(c));
-		plan.setTotalFuelCost(c, value);
-		Assert.assertEquals(value, plan.getTotalFuelCost(c));
+		Assert.assertEquals(0, plan.getBaseFuelCost());
+		plan.setBaseFuelCost(value);
+		Assert.assertEquals(value, plan.getBaseFuelCost());
 	}
 
 	@Test
@@ -46,19 +36,19 @@ public class VoyagePlanTest {
 	public void testEquals() {
 		final IDetailsSequenceElement[] seq1 = new IDetailsSequenceElement[0];
 
-		final FuelComponent fuel1 = FuelComponent.Base;
-		final FuelComponent fuel2 = FuelComponent.Base_Supplemental;
-		final FuelComponent fuel3 = FuelComponent.NBO;
-		final FuelComponent fuel4 = FuelComponent.FBO;
+		final VoyagePlan plan1 = make(seq1, 6, 7, 8, 9, 10, 11, 12, 13, 100, false);
+		final VoyagePlan plan2 = make(seq1, 6, 7, 8, 9, 10, 11, 12, 13, 100, false);
 
-		final VoyagePlan plan1 = make(seq1, fuel1, 5, fuel2, 6, 100);
-		final VoyagePlan plan2 = make(seq1, fuel1, 5, fuel2, 6, 100);
-
-		final VoyagePlan plan3 = make(seq1, fuel3, 5, fuel2, 6, 100);
-		final VoyagePlan plan4 = make(seq1, fuel1, 25, fuel2, 6, 100);
-		final VoyagePlan plan5 = make(seq1, fuel1, 5, fuel4, 6, 100);
-		final VoyagePlan plan6 = make(seq1, fuel1, 5, fuel2, 26, 100);
-		final VoyagePlan plan7 = make(seq1, fuel1, 5, fuel2, 26, 100);
+		final VoyagePlan plan3 = make(seq1, 26, 7, 8, 9, 10, 11, 12, 13, 100, false);
+		final VoyagePlan plan4 = make(seq1, 6, 27, 8, 9, 10, 11, 12, 13, 100, false);
+		final VoyagePlan plan5 = make(seq1, 6, 7, 28, 9, 10, 11, 12, 13, 100, false);
+		final VoyagePlan plan6 = make(seq1, 6, 7, 8, 29, 10, 11, 12, 13, 100, false);
+		final VoyagePlan plan7 = make(seq1, 6, 7, 8, 9, 210, 11, 12, 13, 100, false);
+		final VoyagePlan plan8 = make(seq1, 6, 7, 8, 9, 10, 211, 12, 13, 100, false);
+		final VoyagePlan plan9 = make(seq1, 6, 7, 8, 9, 10, 11, 212, 13, 100, false);
+		final VoyagePlan plan10 = make(seq1, 6, 7, 8, 9, 10, 11, 12, 213, 100, false);
+		final VoyagePlan plan11 = make(seq1, 6, 7, 8, 9, 10, 11, 12, 13, 2100, false);
+		final VoyagePlan plan12 = make(seq1, 6, 7, 8, 9, 10, 11, 12, 13, 100, true);
 
 		Assert.assertTrue(plan1.equals(plan1));
 		Assert.assertTrue(plan1.equals(plan2));
@@ -69,24 +59,43 @@ public class VoyagePlanTest {
 		Assert.assertFalse(plan1.equals(plan5));
 		Assert.assertFalse(plan1.equals(plan6));
 		Assert.assertFalse(plan1.equals(plan7));
+		Assert.assertFalse(plan1.equals(plan8));
+		Assert.assertFalse(plan1.equals(plan9));
+		Assert.assertFalse(plan1.equals(plan10));
+		Assert.assertFalse(plan1.equals(plan11));
+		Assert.assertFalse(plan1.equals(plan12));
 
 		Assert.assertFalse(plan3.equals(plan1));
 		Assert.assertFalse(plan4.equals(plan1));
 		Assert.assertFalse(plan5.equals(plan1));
 		Assert.assertFalse(plan6.equals(plan1));
 		Assert.assertFalse(plan7.equals(plan1));
+		Assert.assertFalse(plan8.equals(plan1));
+		Assert.assertFalse(plan9.equals(plan1));
+		Assert.assertFalse(plan10.equals(plan1));
+		Assert.assertFalse(plan10.equals(plan1));
+		Assert.assertFalse(plan11.equals(plan1));
+		Assert.assertFalse(plan12.equals(plan1));
 
 		Assert.assertFalse(plan1.equals(new Object()));
 	}
 
-	VoyagePlan make(final IDetailsSequenceElement[] sequence, final FuelComponent fuel1, final long consumption, final FuelComponent fuel2, final long cost, final int cvtQty) {
+	VoyagePlan make(final IDetailsSequenceElement[] sequence, final long baseFuelCost, final long charterInRate, final long cooldownCost, final long lngFuelCost, final long lngFuelVolume,
+			final long remainingHeel, final long startingHeel, final long totalRouteCost, final int cvtQty, boolean ignoreEnd) {
 
 		final VoyagePlan p = new VoyagePlan();
 
 		p.setSequence(sequence);
-		p.setFuelConsumption(fuel1, consumption);
-		p.setTotalFuelCost(fuel2, cost);
+		p.setBaseFuelCost(baseFuelCost);
+		p.setCharterInRatePerDay(charterInRate);
+		p.setCooldownCost(cooldownCost);
+		p.setLngFuelCost(lngFuelCost);
+		p.setLNGFuelVolume(lngFuelVolume);
+		p.setRemainingHeelInM3(remainingHeel);
+		p.setStartingHeelInM3(startingHeel);
+		p.setTotalRouteCost(totalRouteCost);
 		p.setViolationsCount(cvtQty);
+		p.setIgnoreEnd(ignoreEnd);
 
 		return p;
 	}

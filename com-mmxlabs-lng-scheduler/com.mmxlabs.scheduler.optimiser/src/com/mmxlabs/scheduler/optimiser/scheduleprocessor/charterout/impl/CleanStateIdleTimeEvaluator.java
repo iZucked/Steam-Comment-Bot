@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -17,6 +18,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
@@ -50,9 +52,11 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.LNGFuelKeys;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -188,7 +192,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 			bigVoyageStartingHeelRangeInM3[1] = bigVoyagePlan.getStartingHeelInM3();
 
 			voyageCalculator.calculateVoyagePlan(upToCharterPlan, vesselAvailability.getVessel(), bigVoyageStartingHeelRangeInM3,
-					vesselBaseFuelCalculator.getBaseFuelPrice(vesselAvailability.getVessel(), preCharteringTimes), preCharteringTimes, upToCharterPlan.getSequence());
+					vesselBaseFuelCalculator.getBaseFuelPrices(vesselAvailability.getVessel(), preCharteringTimes), preCharteringTimes, upToCharterPlan.getSequence());
 			// remaining heel may have been overwritten
 			upToCharterPlan.setRemainingHeelInM3(firstPlanRemainingHeel);
 
@@ -213,7 +217,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 			charterToEndPlanStartingHeelRangeInM3[1] = charterToEndPlan.getStartingHeelInM3();
 
 			voyageCalculator.calculateVoyagePlan(charterToEndPlan, vesselAvailability.getVessel(), charterToEndPlanStartingHeelRangeInM3,
-					vesselBaseFuelCalculator.getBaseFuelPrice(vesselAvailability.getVessel(), postCharteringTimes), postCharteringTimes, charterToEndPlan.getSequence());
+					vesselBaseFuelCalculator.getBaseFuelPrices(vesselAvailability.getVessel(), postCharteringTimes), postCharteringTimes, charterToEndPlan.getSequence());
 			// remaining heel may have been overwritten
 			charterToEndPlan.setStartingHeelInM3(secondPlanStartHeel);
 			charterToEndPlan.setRemainingHeelInM3(secondPlanRemainingHeel);
@@ -526,7 +530,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		// // We will use the VPO to optimise fuel and route choices
 		// vpo.reset();
 		//
-		int baseFuelPricePerMT = vesselBaseFuelCalculator.getBaseFuelPrice(vessel, bigSequence.getPortTimesRecord());
+		int[] baseFuelPricesPerMT = vesselBaseFuelCalculator.getBaseFuelPrices(vessel, bigSequence.getPortTimesRecord());
 		// vpo.setVessel(vessel, null, baseFuelPrice);
 		// vpo.setVesselCharterInRatePerDay();
 		//
@@ -554,7 +558,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		// Calculate our new plan
 		// final VoyagePlan newVoyagePlan = vpo.optimise();
 
-		final VoyagePlan newVoyagePlan = vpo.optimise(null, vessel, startHeelVolumeRangeInM3, baseFuelPricePerMT, originalVoyagePlan.getCharterInRatePerDay(), bigSequence.getPortTimesRecord(),
+		final VoyagePlan newVoyagePlan = vpo.optimise(null, vessel, startHeelVolumeRangeInM3, baseFuelPricesPerMT, originalVoyagePlan.getCharterInRatePerDay(), bigSequence.getPortTimesRecord(),
 				bigSequence.getSequence(), vpoChoices, startingTime);
 
 		return newVoyagePlan;
@@ -627,9 +631,9 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 
 	private long getTotalBoilOffForVoyage(final VoyageDetails voyageDetails) {
 		long totalBoilOffM3 = 0;
-		for (final FuelComponent fc : FuelComponent.getLNGFuelComponents()) {
-			totalBoilOffM3 += voyageDetails.getFuelConsumption(fc, FuelUnit.M3);
-			totalBoilOffM3 += voyageDetails.getRouteAdditionalConsumption(fc, FuelUnit.M3);
+		for (final FuelKey fk : LNGFuelKeys.LNG_In_m3) {
+			totalBoilOffM3 += voyageDetails.getFuelConsumption(fk);
+			totalBoilOffM3 += voyageDetails.getRouteAdditionalConsumption(fk);
 		}
 		return totalBoilOffM3;
 	}

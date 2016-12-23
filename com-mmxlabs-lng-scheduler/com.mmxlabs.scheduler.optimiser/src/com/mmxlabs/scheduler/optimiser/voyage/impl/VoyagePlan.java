@@ -6,10 +6,9 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.Arrays;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
-import com.mmxlabs.common.impl.LongFastEnumMap;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.CachingVoyagePlanOptimiser;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 /**
  * Implementation of {@link VoyagePlan}. A {@link VoyagePlan} is a collections of elements - {@link PortDetails} and {@link VoyageDetails} representing a related set of voyages. For example a
@@ -27,10 +26,13 @@ public final class VoyagePlan implements Cloneable {
 
 	private IDetailsSequenceElement[] sequence;
 	private long charterInRatePerDay;
-	private final LongFastEnumMap<FuelComponent> fuelConsumptions;
-	private final LongFastEnumMap<FuelComponent> routeAdditionalConsumption;
-	private final LongFastEnumMap<FuelComponent> fuelCosts;
 	private long lngFuelVolume;
+	private long lngFuelCost;
+	private long cooldownCost;
+	private long baseFuelCost;
+	private long totalRouteCost;
+	private long startHeelCost;
+
 	private int violationsCount;
 	private boolean ignoreEnd;
 
@@ -38,21 +40,14 @@ public final class VoyagePlan implements Cloneable {
 	private long remainingHeelInM3;
 
 	public VoyagePlan() {
-		fuelConsumptions = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
-		routeAdditionalConsumption = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
-		fuelCosts = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
 		ignoreEnd = true;
 	}
 
-	protected VoyagePlan(final IDetailsSequenceElement[] sequence, final long charterInRatePerDay, final long fuelVolume, final LongFastEnumMap<FuelComponent> fuelConsumptions,
-			final LongFastEnumMap<FuelComponent> routeAdditionalConsumption, final LongFastEnumMap<FuelComponent> fuelCosts, final int violationsCount, final boolean ignoreEnd,
+	protected VoyagePlan(final IDetailsSequenceElement[] sequence, final long charterInRatePerDay, final long fuelVolume, final int violationsCount, final boolean ignoreEnd,
 			final long startingHeelInM3, final long remainingHeelInM3) {
 		super();
 		this.sequence = sequence;
 		this.charterInRatePerDay = charterInRatePerDay;
-		this.fuelConsumptions = fuelConsumptions;
-		this.routeAdditionalConsumption = routeAdditionalConsumption;
-		this.fuelCosts = fuelCosts;
 		this.lngFuelVolume = fuelVolume;
 		this.violationsCount = violationsCount;
 		this.ignoreEnd = ignoreEnd;
@@ -60,32 +55,32 @@ public final class VoyagePlan implements Cloneable {
 		this.remainingHeelInM3 = remainingHeelInM3;
 	}
 
-	public final long getFuelConsumption(final FuelComponent fuel) {
-		return fuelConsumptions.get(fuel);
+	public long getLngFuelCost() {
+		return lngFuelCost;
 	}
 
-	public final void setFuelConsumption(final FuelComponent fuel, final long consumption) {
+	public void setLngFuelCost(final long lngFuelCost) {
 		assert !locked;
-		fuelConsumptions.put(fuel, consumption);
+
+		this.lngFuelCost = lngFuelCost;
 	}
 
-	public final long getRouteAdditionalConsumption(final FuelComponent fuel) {
-		
-		return routeAdditionalConsumption.get(fuel);
+	public long getCooldownCost() {
+		return cooldownCost;
 	}
 
-	public final void setRouteAdditionalConsumption(final FuelComponent fuel, final long consumption) {
+	public void setCooldownCost(final long cooldownCost) {
 		assert !locked;
-		routeAdditionalConsumption.put(fuel, consumption);
+		this.cooldownCost = cooldownCost;
 	}
 
-	public final long getTotalFuelCost(final FuelComponent fuel) {
-		return fuelCosts.get(fuel);
+	public long getBaseFuelCost() {
+		return baseFuelCost;
 	}
 
-	public final void setTotalFuelCost(final FuelComponent fuel, final long cost) {
+	public void setBaseFuelCost(final long baseFuelCost) {
 		assert !locked;
-		fuelCosts.put(fuel, cost);
+		this.baseFuelCost = baseFuelCost;
 	}
 
 	/**
@@ -125,16 +120,17 @@ public final class VoyagePlan implements Cloneable {
 			// Ensure all fields are present here
 			// @formatter:off
 			return Objects.equal(lngFuelVolume, plan.lngFuelVolume)
+					&& Objects.equal(ignoreEnd, plan.ignoreEnd)
 					&& Objects.equal(charterInRatePerDay, plan.charterInRatePerDay)
+					&& Objects.equal(lngFuelCost, plan.lngFuelCost)
+					&& Objects.equal(cooldownCost, plan.cooldownCost)
+					&& Objects.equal(baseFuelCost, plan.baseFuelCost)
 					&& Objects.equal(violationsCount, plan.violationsCount)
-					&& Objects.equal(fuelConsumptions, plan.fuelConsumptions)
-					&& Objects.equal(routeAdditionalConsumption, plan.routeAdditionalConsumption)
-					&& Objects.equal(fuelCosts, plan.fuelCosts)
 					&& Objects.equal(startingHeelInM3, plan.startingHeelInM3)
+					&& Objects.equal(totalRouteCost, plan.totalRouteCost)
 					&& Objects.equal(remainingHeelInM3, plan.remainingHeelInM3)
 					&& Objects.equal(startHeelCost, plan.startHeelCost)
 					&& Arrays.deepEquals(sequence, plan.sequence)
-
 					;
 			// @formatter:on
 		}
@@ -150,8 +146,19 @@ public final class VoyagePlan implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "VoyagePlan [sequence=" + Arrays.toString(sequence) + ", charterInRatePerDay=" + charterInRatePerDay + ", fuelConsumptions=" + fuelConsumptions + ", routeAdditionalConsumption="
-				+ routeAdditionalConsumption + ", fuelCosts=" + fuelCosts + "]";
+		return MoreObjects.toStringHelper(VoyagePlan.class) //
+				.add("sequence", Arrays.toString(sequence)) //
+				.add("charterInRatePerDay", charterInRatePerDay) //
+				.add("totalRouteCost", totalRouteCost) //
+				.add("lngFuelVolume", lngFuelVolume) //
+				.add("lngFuelCost", lngFuelCost) //
+				.add("cooldownCost", cooldownCost) //
+				.add("baseFuelCost", baseFuelCost) //
+				.add("violationsCount", violationsCount) //
+				.add("startingHeelInM3", startingHeelInM3) //
+				.add("remainingHeelInM3", remainingHeelInM3) //
+				.add("ignoreEnd", ignoreEnd) //
+				.toString();
 	}
 
 	@Override
@@ -167,8 +174,7 @@ public final class VoyagePlan implements Cloneable {
 				clonedSequence[k++] = o;
 			}
 		}
-		return new VoyagePlan(clonedSequence, charterInRatePerDay, lngFuelVolume, fuelConsumptions, routeAdditionalConsumption, fuelCosts, violationsCount, ignoreEnd, startingHeelInM3,
-				remainingHeelInM3);
+		return new VoyagePlan(clonedSequence, charterInRatePerDay, lngFuelVolume, violationsCount, ignoreEnd, startingHeelInM3, remainingHeelInM3);
 	}
 
 	/**
@@ -187,9 +193,6 @@ public final class VoyagePlan implements Cloneable {
 	public final long getLNGFuelVolume() {
 		return lngFuelVolume;
 	}
-
-	private long totalRouteCost;
-	private long startHeelCost;
 
 	public void setTotalRouteCost(final long routeCost) {
 		assert !locked;
@@ -210,7 +213,7 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	public void setIgnoreEnd(final boolean ignoreEnd) {
-//		assert !locked;
+		// assert !locked;
 		this.ignoreEnd = ignoreEnd;
 	}
 

@@ -7,8 +7,11 @@ package com.mmxlabs.scheduler.optimiser.providers.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -35,6 +38,7 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 
 	private final Map<IPortSlot, Integer> lngPricePerMMBTu = new HashMap<>();
 	private final Map<IPortSlot, Integer> baseFuelPricePerMT = new HashMap<>();
+	private final Map<IPortSlot, IBaseFuel> baseFuel = new HashMap<>();
 	private final Map<IPortSlot, Long> charterRatePerDay = new HashMap<>();
 	private final Map<IPortSlot, Long> routeCosts = new HashMap<>();
 	private final Map<IPortSlot, Integer> distance = new HashMap<>();
@@ -103,11 +107,6 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 	}
 
 	@Override
-	public int getBaseFuelPricePerMT(final IPortSlot slot) {
-		return baseFuelPricePerMT.get(slot);
-	}
-
-	@Override
 	public long getPortBaseFuelConsumptionInMT(final IPortSlot slot) {
 		return portBaseFuelConsumptionInMT.get(slot);
 	}
@@ -140,7 +139,7 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 	@Override
 	public void createLoadSlotActuals(final ILoadOption slot, final int arrivalTime, final int visitDuration, final long portCosts, final int cargoCV, final long startHeelInM3,
 			final long lngLoadVolumeInM3, final long lngLoadVolumeInMMBTu, final int purchasePricePerMMBTu, final long portBaseFuelConsumptionInMT, final long ladenBaseFuelConsumptionInMT,
-			final int baseFuelPricePerMT, final long charterRatePerDay, final int distance, final long routeCosts, final ERouteOption route) {
+			final IBaseFuel baseFuel, final int baseFuelPricePerMT, final long charterRatePerDay, final int distance, final long routeCosts, final ERouteOption route) {
 
 		this.actualsPresent.put(slot, true);
 
@@ -157,6 +156,7 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 		this.endHeelInM3.put(slot, 0L);
 		this.lngPricePerMMBTu.put(slot, purchasePricePerMMBTu);
 		this.baseFuelPricePerMT.put(slot, baseFuelPricePerMT);
+		this.baseFuel.put(slot, baseFuel);
 		this.charterRatePerDay.put(slot, charterRatePerDay);
 		this.distance.put(slot, distance);
 		this.routeCosts.put(slot, routeCosts);
@@ -230,6 +230,48 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 	public ERouteOption getNextVoyageRoute(final IPortSlot slot) {
 		return nextVoyageRoute.get(slot);
 	}
+	
+	@Override
+	public int getPortBaseFuelPricePerMT(@NonNull IPortSlot slot) {
+		return baseFuelPricePerMT.get(slot);
+	}
+
+	@Override
+	public int getNextVoyageBaseFuelPricePerMT(@NonNull IPortSlot slot) {
+		return baseFuelPricePerMT.get(slot);
+	}
+
+	@Override
+	public int getNextIdleBaseFuelPricePerMT(@NonNull IPortSlot slot) {
+		return baseFuelPricePerMT.get(slot);
+	}
+
+	@Override
+	public int getNextVoyagePilotBaseFuelPricePerMT(@NonNull IPortSlot slot) {
+		return baseFuelPricePerMT.get(slot);
+	}
+
+	@Override
+	public @NonNull IBaseFuel getPortBaseFuel(@NonNull IPortSlot slot) {
+		return baseFuel.get(slot);
+	}
+
+	@Override
+	public @NonNull IBaseFuel getNextVoyageBaseFuel(@NonNull IPortSlot slot) {
+		return baseFuel.get(slot);
+
+	}
+
+	@Override
+	public @NonNull IBaseFuel getNextIdleBaseFuel(@NonNull IPortSlot slot) {
+		return baseFuel.get(slot);
+
+	}
+
+	@Override
+	public @NonNull IBaseFuel getNextVoyagePilotBaseFuel(@NonNull IPortSlot slot) {
+		return baseFuel.get(slot);
+	}
 
 	@Override
 	public long getCapacityCosts(final IPortSlot slot) {
@@ -263,6 +305,5 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 		this.capacityCosts.put(slot, capacityCosts);
 		this.crewBonusCosts.put(slot, crewBonusCosts);
 		this.insuranceCosts.put(slot, 0l);
-
 	}
 }

@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
-import com.mmxlabs.common.Equality;
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.mmxlabs.common.indexedobjects.IIndexingContext;
+import com.mmxlabs.common.indexedobjects.impl.IndexedObject;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 
 /**
@@ -13,19 +16,20 @@ import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
  * @author achurchill
  * 
  */
-public class BaseFuel implements IBaseFuel {
+public class BaseFuel extends IndexedObject implements IBaseFuel {
 	/**
 	 * The name of the base fuel
 	 */
-	private String name;
+	private @NonNull String name;
 
 	/**
 	 * Equivalence factor for converting base fuel to lng
 	 */
 	private int equivalenceFactor;
 
-	public BaseFuel(final String name) {
-		setName(name);
+	public BaseFuel(final @NonNull IIndexingContext context, final @NonNull String name) {
+		super(context);
+		this.name = name;
 	}
 
 	@Override
@@ -33,32 +37,39 @@ public class BaseFuel implements IBaseFuel {
 		return name;
 	}
 
-	public void setName(final String name) {
+	public void setName(final @NonNull String name) {
 		this.name = name;
 	}
-	
-	@Override
-	public boolean equals(final Object obj) {
+//
+//	@Override
+//	public boolean equals(final Object obj) {
+//		if (obj == this) {
+//			return true;
+//		}
+//		if (obj instanceof BaseFuel) {
+//			final BaseFuel p = (BaseFuel) obj;
+//			return index == p.getIndex();
+//			// if (!Equality.isEqual(name, p.getName())) {
+//			// return false;
+//			// }
+//			//
+//			// if (!Equality.isEqual(getEquivalenceFactor(), p.getEquivalenceFactor())) {
+//			// return false;
+//			// }
+//			// return true;
+//		}
+//
+//		return false;
+//	}
+//
+//	@Override
+//	public int hashCode() {
+//		return index;
+//	}
 
-		if (obj instanceof BaseFuel) {
-			final BaseFuel p = (BaseFuel) obj;
-			if (!Equality.isEqual(name, p.getName())) {
-				return false;
-			}
-
-			if (!Equality.isEqual(getEquivalenceFactor(), p.getEquivalenceFactor())) {
-				return false;
-			}
-			return true;
-		}
-
-		return false;
-	}
-
-	
 	@Override
 	public String toString() {
-		return getName();
+		return name;
 	}
 
 	@Override
@@ -70,5 +81,4 @@ public class BaseFuel implements IBaseFuel {
 	public void setEquivalenceFactor(int factor) {
 		equivalenceFactor = factor;
 	}
-	
 }

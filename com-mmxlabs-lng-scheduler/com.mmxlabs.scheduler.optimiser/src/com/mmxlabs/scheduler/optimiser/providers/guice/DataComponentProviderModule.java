@@ -36,6 +36,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProvider;
@@ -112,6 +114,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultAllowedVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultBaseFuelProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImpl;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultFOBDESCompatibilityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultNextLoadDateProvider;
@@ -372,6 +375,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashMapBaseFuelCurveEditor baseFuelCurveEditor = new HashMapBaseFuelCurveEditor();
 		bind(IBaseFuelCurveProvider.class).toInstance(baseFuelCurveEditor);
 		bind(IBaseFuelCurveProviderEditor.class).toInstance(baseFuelCurveEditor);
+
+		bind(DefaultBaseFuelProvider.class).in(Singleton.class);
+		bind(IBaseFuelProvider.class).to(DefaultBaseFuelProvider.class);
+		bind(IBaseFuelProviderEditor.class).to(DefaultBaseFuelProvider.class);
 
 		bind(DefaultPromptPeriodProviderEditor.class).in(Singleton.class);
 		bind(IPromptPeriodProvider.class).to(DefaultPromptPeriodProviderEditor.class);

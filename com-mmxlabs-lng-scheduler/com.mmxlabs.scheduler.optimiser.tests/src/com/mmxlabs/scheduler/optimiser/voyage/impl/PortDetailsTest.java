@@ -9,21 +9,24 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
 public class PortDetailsTest {
 
 	@Test
 	public void testGetSetFuelConsumption() {
-
 		final FuelComponent c = FuelComponent.Base;
+		final IBaseFuel bf = Mockito.mock(IBaseFuel.class);
+		FuelKey fk = new FuelKey(c, FuelUnit.MT, bf);
 		final long value = 100L;
 		final PortDetails details = new PortDetails(new PortOptions(Mockito.mock(IPortSlot.class)));
-		Assert.assertEquals(0, details.getFuelConsumption(c, FuelUnit.MT));
-		details.setFuelConsumption(c, FuelUnit.MT, value);
-		Assert.assertEquals(value, details.getFuelConsumption(c, FuelUnit.MT));
+		Assert.assertEquals(0, details.getFuelConsumption(fk));
+		details.setFuelConsumption(fk, value);
+		Assert.assertEquals(value, details.getFuelConsumption(fk));
 	}
 
 	@Test
@@ -35,16 +38,18 @@ public class PortDetailsTest {
 		final FuelComponent fuel1 = FuelComponent.Base;
 		final FuelComponent fuel2 = FuelComponent.NBO;
 
+		IBaseFuel bf = Mockito.mock(IBaseFuel.class);
+
 		final CapacityViolationType cvt1 = CapacityViolationType.FORCED_COOLDOWN;
 		final CapacityViolationType cvt2 = CapacityViolationType.VESSEL_CAPACITY;
 
-		final PortDetails details1 = make(1, slot1, fuel1, 5);
-		final PortDetails details2 = make(1, slot1, fuel1, 5);
+		final PortDetails details1 = make(1, slot1, fuel1, bf, 5);
+		final PortDetails details2 = make(1, slot1, fuel1, bf, 5);
 
-		final PortDetails details3 = make(21, slot1, fuel1, 5);
-		final PortDetails details4 = make(1, slot2, fuel1, 5);
-		final PortDetails details5 = make(1, slot1, fuel2, 5);
-		final PortDetails details6 = make(1, slot1, fuel1, 25);
+		final PortDetails details3 = make(21, slot1, fuel1, bf, 5);
+		final PortDetails details4 = make(1, slot2, fuel1, bf, 5);
+		final PortDetails details5 = make(1, slot1, fuel2, IBaseFuel.LNG, 5);
+		final PortDetails details6 = make(1, slot1, fuel1, bf, 25);
 
 		Assert.assertTrue(details1.equals(details1));
 		Assert.assertTrue(details1.equals(details2));
@@ -63,12 +68,14 @@ public class PortDetailsTest {
 		Assert.assertFalse(details1.equals(new Object()));
 	}
 
-	PortDetails make(final int duration, final @NonNull IPortSlot portSlot, final FuelComponent fuel, final long consumption) {
+	PortDetails make(final int duration, final @NonNull IPortSlot portSlot, FuelComponent fuel, final IBaseFuel bf, final long consumption) {
 
 		final PortDetails d = new PortDetails(new PortOptions(portSlot));
+		// final IVesselClass vesselClass = d.getOptions().getVessel().getVesselClass();
 
 		d.getOptions().setVisitDuration(duration);
-		d.setFuelConsumption(fuel, FuelUnit.MT, consumption);
+
+		d.setFuelConsumption(new FuelKey(fuel, fuel.getDefaultFuelUnit(), bf), consumption);
 		return d;
 	}
 

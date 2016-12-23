@@ -15,11 +15,11 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 
 public class Hints {
 
-	private final List<ISequenceElement> problemElements = new LinkedList<>();
+	private final @NonNull List<@NonNull ISequenceElement> problemElements = new LinkedList<>();
 
-	private final List<ISequenceElement> usedElements = new LinkedList<>();
+	private final @NonNull List<@NonNull ISequenceElement> usedElements = new LinkedList<>();
 
-	private final List<ISequenceElement> suggestedElements = new LinkedList<>();
+	private final @NonNull List<@NonNull ISequenceElement> suggestedElements = new LinkedList<>();
 
 	private final List<Pair<ISequenceElement, GuidedMoveTypes>> suggestedElementMoves = new LinkedList<>();
 
@@ -39,15 +39,15 @@ public class Hints {
 		usedElements.add(element);
 	}
 
-	public List<ISequenceElement> getProblemElements() {
+	public @NonNull List<@NonNull ISequenceElement> getProblemElements() {
 		return problemElements;
 	}
 
-	public List<ISequenceElement> getSuggestedElements() {
+	public @NonNull List<@NonNull ISequenceElement> getSuggestedElements() {
 		return suggestedElements;
 	}
 
-	public List<ISequenceElement> getUsedElements() {
+	public @NonNull List<@NonNull ISequenceElement> getUsedElements() {
 		return usedElements;
 	}
 
@@ -60,13 +60,13 @@ public class Hints {
 		this.suggestedElements.add(element);
 	}
 
-	public void addSuggestedElements(final ISequenceElement... elements) {
+	public void addSuggestedElements(final @NonNull ISequenceElement... elements) {
 		for (final ISequenceElement element : elements) {
 			this.suggestedElements.add(element);
 		}
 	}
 
-	public void addSuggestedElements(final @NonNull Iterable<ISequenceElement> elements) {
+	public void addSuggestedElements(final @NonNull Iterable<@NonNull ISequenceElement> elements) {
 		for (final ISequenceElement element : elements) {
 			this.suggestedElements.add(element);
 		}

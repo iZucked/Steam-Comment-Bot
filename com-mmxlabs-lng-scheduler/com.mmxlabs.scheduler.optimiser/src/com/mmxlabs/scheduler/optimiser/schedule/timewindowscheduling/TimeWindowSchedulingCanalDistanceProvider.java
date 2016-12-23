@@ -96,7 +96,7 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 		final LadenRouteData @NonNull [] times = new @NonNull LadenRouteData[allDistanceValues.size()];
 		int i = 0;
 		for (final DistanceMatrixEntry d : allDistanceValues) {
-			vessel.getBaseFuel().getEquivalenceFactor();
+			vessel.getTravelBaseFuel().getEquivalenceFactor();
 			final int mintravelTime = Calculator.getTimeFromSpeedDistance(vessel.getMaxSpeed(), d.getDistance());
 			final int nboSpeed = Math.min(Math.max(getNBOSpeed(vessel, vesselState), vessel.getMinSpeed()), vessel.getMaxSpeed());
 			final int nbotravelTime = Calculator.getTimeFromSpeedDistance(nboSpeed, d.getDistance());
@@ -122,7 +122,7 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 
 	private int getNBOSpeed(@NonNull final IVessel vessel, @NonNull final VesselState vesselState, final int cv) {
 		final long nboRateInM3PerHour = vessel.getNBORate(vesselState);
-		final long nboProvidedInMT = Calculator.convertM3ToMT(nboRateInM3PerHour, cv, vessel.getBaseFuel().getEquivalenceFactor());
+		final long nboProvidedInMT = Calculator.convertM3ToMT(nboRateInM3PerHour, cv, vessel.getTravelBaseFuel().getEquivalenceFactor());
 		return vessel.getConsumptionRate(vesselState).getSpeed(nboProvidedInMT);
 	}
 

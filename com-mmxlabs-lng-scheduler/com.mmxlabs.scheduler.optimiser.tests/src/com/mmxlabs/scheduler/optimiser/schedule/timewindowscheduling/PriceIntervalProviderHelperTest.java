@@ -44,6 +44,7 @@ import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.curves.IntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.PriceIntervalProducer;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.GeneralTestUtils;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
@@ -127,7 +128,7 @@ public class PriceIntervalProviderHelperTest {
 		Mockito.when(vessel.getConsumptionRate(Mockito.any())).thenReturn(consumptionRateCalculator);
 		final IBaseFuel baseFuel = Mockito.mock(IBaseFuel.class);
 		Mockito.when(baseFuel.getEquivalenceFactor()).thenReturn(44100);
-		Mockito.when(vessel.getBaseFuel()).thenReturn(baseFuel);
+		Mockito.when(vessel.getTravelBaseFuel()).thenReturn(baseFuel);
 		return vessel;
 	}
 
@@ -584,7 +585,8 @@ public class PriceIntervalProviderHelperTest {
 			}
 		});
 		final IVesselBaseFuelCalculator vesselBaseFuelCalculator = Mockito.mock(IVesselBaseFuelCalculator.class);
-		when(vesselBaseFuelCalculator.getBaseFuelPrice(Matchers.<IVessel> any(), Mockito.anyInt())).thenReturn(OptimiserUnitConvertor.convertToInternalDailyRate(220));
+		final int[] baseFuels = GeneralTestUtils.makeBaseFuelPrices(OptimiserUnitConvertor.convertToInternalDailyRate(220));		
+		when(vesselBaseFuelCalculator.getBaseFuelPrices(Matchers.<IVessel> any(), Mockito.anyInt())).thenReturn(baseFuels);
 		final Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
@@ -685,7 +687,8 @@ public class PriceIntervalProviderHelperTest {
 		});
 
 		final IVesselBaseFuelCalculator vesselBaseFuelCalculator = Mockito.mock(IVesselBaseFuelCalculator.class);
-		when(vesselBaseFuelCalculator.getBaseFuelPrice(Matchers.<IVessel> any(), Mockito.anyInt())).thenReturn(OptimiserUnitConvertor.convertToInternalDailyRate(220));
+		final int[] baseFuels = GeneralTestUtils.makeBaseFuelPrices(0);		
+		when(vesselBaseFuelCalculator.getBaseFuelPrices(Matchers.<IVessel> any(), Mockito.anyInt())).thenReturn(baseFuels);
 
 		final Injector injector = Guice.createInjector(new AbstractModule() {
 

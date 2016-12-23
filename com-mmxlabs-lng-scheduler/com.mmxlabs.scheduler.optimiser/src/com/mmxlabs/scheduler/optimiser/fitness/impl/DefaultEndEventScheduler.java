@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplier;
@@ -43,6 +44,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.IdleFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
+import com.mmxlabs.scheduler.optimiser.voyage.LNGFuelKeys;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
@@ -233,7 +235,7 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 				finalOptions.setCargoCVValue(cargoCV);
 
 				// Convert rate to MT equivalent per day
-				final int nboRateInMTPerDay = (int) Calculator.convertM3ToMT(vessel.getNBORate(VesselState.Ballast), cargoCV, vessel.getBaseFuel().getEquivalenceFactor());
+				final int nboRateInMTPerDay = (int) Calculator.convertM3ToMT(vessel.getNBORate(VesselState.Ballast), cargoCV, vessel.getTravelBaseFuel().getEquivalenceFactor());
 				if (nboRateInMTPerDay > 0) {
 					final int nboSpeed = vessel.getConsumptionRate(VesselState.Ballast).getSpeed(nboRateInMTPerDay);
 					finalOptions.setNBOSpeed(nboSpeed);
@@ -328,16 +330,21 @@ public class DefaultEndEventScheduler implements IEndEventScheduler {
 							cost += finalOptions.getRouteCost();
 							// Charter cost
 							cost += hireRatePerDay * (long) availableTime / 24L;
-
+							IBaseFuel voyageBaseFuel = vessel.getTravelBaseFuel();
+							IBaseFuel pilotLightBaseFuel = vessel.getPilotLightBaseFuel();
 							// Bunker Cost estimate
-							final long bunkerInMT = voyageDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.MT) + voyageDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT)
-									+ voyageDetails.getFuelConsumption(FuelComponent.PilotLight, FuelUnit.MT) + voyageDetails.getRouteAdditionalConsumption(FuelComponent.Base, FuelUnit.MT)
-									+ voyageDetails.getRouteAdditionalConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT)
-									+ voyageDetails.getRouteAdditionalConsumption(FuelComponent.PilotLight, FuelUnit.MT);
+							final long bunkerInMT = voyageDetails.getFuelConsumption(vessel.getTravelBaseFuelInMT()) //
+									+ voyageDetails.getFuelConsumption(vessel.getSupplementalTravelBaseFuelInMT())//
+									+ voyageDetails.getFuelConsumption(vessel.getPilotLightFuelInMT())//
+									+ voyageDetails.getRouteAdditionalConsumption(vessel.getTravelBaseFuelInMT())//
+									+ voyageDetails.getRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT())//
+									+ voyageDetails.getRouteAdditionalConsumption(vessel.getPilotLightFuelInMT());
 							cost += Calculator.costFromConsumption(bunkerInMT, bunkerPricePerMT);
 
-							final long lngInM3 = voyageDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3) + voyageDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3)
-									+ voyageDetails.getRouteAdditionalConsumption(FuelComponent.NBO, FuelUnit.M3) + voyageDetails.getRouteAdditionalConsumption(FuelComponent.FBO, FuelUnit.M3);
+							final long lngInM3 = voyageDetails.getFuelConsumption(LNGFuelKeys.NBO_In_m3)//
+									+ voyageDetails.getFuelConsumption(LNGFuelKeys.FBO_In_m3)//
+									+ voyageDetails.getRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3) //
+									+ voyageDetails.getRouteAdditionalConsumption(LNGFuelKeys.FBO_In_m3);
 							// LNG Cost Estimate.
 							final long lngInMMBTu = Calculator.convertM3ToMMBTu(lngInM3, cargoCV);
 							cost += Calculator.costFromConsumption(lngInMMBTu,

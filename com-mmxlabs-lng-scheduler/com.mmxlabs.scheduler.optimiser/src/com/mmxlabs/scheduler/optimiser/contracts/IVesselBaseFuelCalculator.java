@@ -17,7 +17,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
  */
 @NonNullByDefault
 public interface IVesselBaseFuelCalculator extends ICalculator {
-	int getBaseFuelPrice(IVessel vessel, int voyagePlanStartTime);
+	int[] getBaseFuelPrices(IVessel vessel, int voyagePlanStartTime);
 
-	int getBaseFuelPrice(IVessel vessel, IPortTimesRecord portTimesRecord);
+	int[] getBaseFuelPrices(IVessel vessel, IPortTimesRecord portTimesRecord);
 }

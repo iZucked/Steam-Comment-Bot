@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -24,9 +25,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class ScheduleFitnessEvaluator {
 
-	private Collection<ICargoSchedulerFitnessComponent> fitnessComponents;
+	private @NonNull Collection<@NonNull ICargoSchedulerFitnessComponent> fitnessComponents = Collections.emptySet();
 
-	public long evaluateSchedule(final ISequences sequences, final ProfitAndLossSequences scheduledSequences) {
+	public long evaluateSchedule(final @NonNull ISequences sequences, final @NonNull ProfitAndLossSequences scheduledSequences) {
 
 		// Evaluate fitness components
 		final long[] fitnesses = new long[fitnessComponents.size()];
@@ -51,7 +52,7 @@ public class ScheduleFitnessEvaluator {
 		return fitnessComponents;
 	}
 
-	public void setFitnessComponents(final Collection<ICargoSchedulerFitnessComponent> fitnessComponents) {
+	public void setFitnessComponents(final @NonNull Collection<ICargoSchedulerFitnessComponent> fitnessComponents) {
 		this.fitnessComponents = fitnessComponents;
 	}
 

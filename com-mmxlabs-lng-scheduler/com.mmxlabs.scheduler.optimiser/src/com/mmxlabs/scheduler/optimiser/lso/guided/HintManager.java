@@ -20,43 +20,43 @@ public class HintManager {
 	@Inject
 	private IPortTypeProvider portTypeProvider;
 
-	private Collection<ISequenceElement> problemElements = new LinkedHashSet<>();
+	private final @NonNull Collection<@NonNull ISequenceElement> problemElements = new LinkedHashSet<>();
 
-	private Collection<ISequenceElement> suggestedElements = new LinkedHashSet<>();
+	private final @NonNull Collection<@NonNull ISequenceElement> suggestedElements = new LinkedHashSet<>();
 
-	private Collection<ISequenceElement> usedElements = new LinkedHashSet<>();
+	private final @NonNull Collection<@NonNull ISequenceElement> usedElements = new LinkedHashSet<>();
 
-	public Collection<ISequenceElement> getUsedElements() {
+	public @NonNull Collection<@NonNull ISequenceElement> getUsedElements() {
 		return usedElements;
 	}
 
-	public Collection<ISequenceElement> getProblemElements() {
+	public @NonNull Collection<@NonNull ISequenceElement> getProblemElements() {
 		return problemElements;
 	}
 
-	public Collection<ISequenceElement> getSuggestedElements() {
+	public @NonNull Collection<@NonNull ISequenceElement> getSuggestedElements() {
 		return suggestedElements;
 	}
 
-	public void chain(@NonNull Hints hints) {
+	public void chain(@NonNull final Hints hints) {
 		problemElements.addAll(hints.getProblemElements());
 		suggestedElements.addAll(hints.getSuggestedElements());
 		usedElements.addAll(hints.getUsedElements());
 
 		// Filter
 		{
-			Iterator<ISequenceElement> itr = problemElements.iterator();
+			final Iterator<ISequenceElement> itr = problemElements.iterator();
 			while (itr.hasNext()) {
-				ISequenceElement e = itr.next();
+				final ISequenceElement e = itr.next();
 				if (!GuidedMoveGenerator.validElementTypes.contains(portTypeProvider.getPortType(e))) {
 					itr.remove();
 				}
 			}
 		}
 		{
-			Iterator<ISequenceElement> itr = suggestedElements.iterator();
+			final Iterator<@NonNull ISequenceElement> itr = suggestedElements.iterator();
 			while (itr.hasNext()) {
-				ISequenceElement e = itr.next();
+				final ISequenceElement e = itr.next();
 				if (!GuidedMoveGenerator.validElementTypes.contains(portTypeProvider.getPortType(e))) {
 					itr.remove();
 				}

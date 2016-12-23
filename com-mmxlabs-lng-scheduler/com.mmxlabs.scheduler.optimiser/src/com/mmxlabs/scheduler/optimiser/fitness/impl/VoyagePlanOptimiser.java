@@ -58,12 +58,12 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	public static class Record {
 
-		public Record(@Nullable IResource resource, @NonNull IVessel vessel, long[] startHeelRangeInM3, int baseFuelPricePerMT, long vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
+		public Record(@Nullable IResource resource, @NonNull IVessel vessel, long[] startHeelRangeInM3, int[] baseFuelPricesPerMT, long vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
 				List<@NonNull IOptionsSequenceElement> basicSequence, List<@NonNull IVoyagePlanChoice> choices, int startingTime) {
 			this.resource = resource;
 			this.vessel = vessel;
 			this.startHeelRangeInM3 = startHeelRangeInM3;
-			this.baseFuelPricePerMT = baseFuelPricePerMT;
+			this.baseFuelPricesPerMT = baseFuelPricesPerMT;
 			this.vesselCharterInRatePerDay = vesselCharterInRatePerDay;
 			this.portTimesRecord = portTimesRecord;
 			this.basicSequence = basicSequence;
@@ -79,7 +79,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		public final IVessel vessel;
 
-		public final int baseFuelPricePerMT;
+		public final int[] baseFuelPricesPerMT;
 
 		public final long vesselCharterInRatePerDay;
 		public final long[] startHeelRangeInM3;
@@ -113,10 +113,10 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 * @return
 	 */
 	@Override
-	public VoyagePlan optimise(IResource resource, IVessel vessel, long[] startHeelRangeInM3, int baseFuelPricePerMT, long vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
+	public VoyagePlan optimise(IResource resource, IVessel vessel, long[] startHeelRangeInM3, int[] baseFuelPricesPerMT, long vesselCharterInRatePerDay, IPortTimesRecord portTimesRecord,
 			List<@NonNull IOptionsSequenceElement> basicSequence, List<@NonNull IVoyagePlanChoice> choices, int startingTime) {
 
-		Record record = new Record(resource, vessel, startHeelRangeInM3, baseFuelPricePerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence, choices, startingTime);
+		Record record = new Record(resource, vessel, startHeelRangeInM3, baseFuelPricesPerMT, vesselCharterInRatePerDay, portTimesRecord, basicSequence, choices, startingTime);
 
 		InternalState state = new InternalState();
 		runLoop(record, state, 0);
@@ -380,10 +380,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			return Long.MAX_VALUE;
 		}
 
-		long cost = 0;
-		for (final FuelComponent fuel : FuelComponent.values()) {
-			cost += plan.getTotalFuelCost(fuel);
-		}
+		long cost = plan.getBaseFuelCost() + plan.getCooldownCost() + plan.getLngFuelCost();
 		cost += plan.getStartHeelCost();
 		// cost -= plan.getStartHeelCost();
 
@@ -402,7 +399,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		currentPlan.setCharterInRatePerDay(record.vesselCharterInRatePerDay);
 
 		// Calculate voyage plan
-		int violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, record.vessel, record.startHeelRangeInM3, record.baseFuelPricePerMT, record.portTimesRecord,
+		int violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, record.vessel, record.startHeelRangeInM3, record.baseFuelPricesPerMT, record.portTimesRecord,
 				currentSequence.toArray(new IDetailsSequenceElement[0]));
 
 		if (violationCount == Integer.MAX_VALUE) {

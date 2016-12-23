@@ -37,15 +37,7 @@ public class ShippingCostHelper {
 
 	public long getFuelCosts(final @NonNull VoyagePlan plan) {
 
-		// @formatter:off
-		final long fuelCost = plan.getTotalFuelCost(FuelComponent.Base)
-				+ plan.getTotalFuelCost(FuelComponent.Base_Supplemental)
-				+ plan.getTotalFuelCost(FuelComponent.Cooldown)
-				+ plan.getTotalFuelCost(FuelComponent.IdleBase)
-				+ plan.getTotalFuelCost(FuelComponent.IdlePilotLight) 
-				+ plan.getTotalFuelCost(FuelComponent.PilotLight);
-		// @formatter:on
-		return fuelCost;
+		return plan.getBaseFuelCost() + plan.getCooldownCost();
 	}
 
 	public long getPortCosts(final @NonNull IVessel vessel, final @NonNull VoyagePlan plan) {

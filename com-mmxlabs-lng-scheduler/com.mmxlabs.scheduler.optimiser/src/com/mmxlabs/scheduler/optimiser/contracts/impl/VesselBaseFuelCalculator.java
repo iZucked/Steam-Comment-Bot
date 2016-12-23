@@ -13,6 +13,7 @@ import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
@@ -26,27 +27,59 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 public class VesselBaseFuelCalculator implements IVesselBaseFuelCalculator {
 
 	@Inject
-	private IBaseFuelCurveProvider baseFuelProvider;
+	private IBaseFuelProvider baseFuelProvider;
+
+	@Inject
+	private IBaseFuelCurveProvider baseFuelCurveProvider;
 
 	@Inject
 	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
 
 	@Override
-	public int getBaseFuelPrice(final IVessel vessel, final int voyagePlanStartTime) {
-		final IBaseFuel bf = vessel.getBaseFuel();
+	public int[] getBaseFuelPrices(final IVessel vessel, final int voyagePlanStartTime) {
+		final IBaseFuel bf = vessel.getTravelBaseFuel();
+		final IBaseFuel idleBf = vessel.getIdleBaseFuel();
+		final IBaseFuel pilotLightBf = vessel.getPilotLightBaseFuel();
+		final IBaseFuel inPortBf = vessel.getInPortBaseFuel();
 
-		final ICurve curve = baseFuelProvider.getBaseFuelCurve(bf);
-		if (curve != null) {
-			return curve.getValueAtPoint(voyagePlanStartTime);
+		final int[] fuelPrices = new int[baseFuelProvider.getNumberOfBaseFuels()];
+		{
+			final ICurve curve = baseFuelCurveProvider.getBaseFuelCurve(bf);
+			if (curve != null) {
+				int price = curve.getValueAtPoint(voyagePlanStartTime);
+				fuelPrices[bf.getIndex()] = price;
+			}
 		}
-		return 0;
+		{
+			final ICurve curve = baseFuelCurveProvider.getBaseFuelCurve(idleBf);
+			if (curve != null) {
+				int price = curve.getValueAtPoint(voyagePlanStartTime);
+				fuelPrices[idleBf.getIndex()] = price;
+			}
+		}
+		{
+			final ICurve curve = baseFuelCurveProvider.getBaseFuelCurve(pilotLightBf);
+			if (curve != null) {
+				int price = curve.getValueAtPoint(voyagePlanStartTime);
+				fuelPrices[pilotLightBf.getIndex()] = price;
+			}
+		}
+		{
+			final ICurve curve = baseFuelCurveProvider.getBaseFuelCurve(inPortBf);
+			if (curve != null) {
+				int price = curve.getValueAtPoint(voyagePlanStartTime);
+				fuelPrices[inPortBf.getIndex()] = price;
+			}
+		}
+
+		return fuelPrices;
 	}
 
 	@Override
-	public int getBaseFuelPrice(final IVessel vessel, final IPortTimesRecord portTimesRecord) {
+	public int[] getBaseFuelPrices(final IVessel vessel, final IPortTimesRecord portTimesRecord) {
 		int startOfLoad = portTimesRecord.getFirstSlotTime();
 		int startOfLoadUTC = timeZoneToUtcOffsetProvider.UTC(startOfLoad, portTimesRecord.getFirstSlot());
-		return getBaseFuelPrice(vessel, startOfLoadUTC);
+		return getBaseFuelPrices(vessel, startOfLoadUTC);
 	}
 
 }

@@ -9,8 +9,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
+import com.mmxlabs.scheduler.optimiser.voyage.LNGFuelKeys;
 
 public class LNGVoyageCalculatorEndHeelStateTests {
 
@@ -66,8 +65,8 @@ public class LNGVoyageCalculatorEndHeelStateTests {
 		ballastDetails.setIdleTime(24);
 
 		// Need some NBO
-		ballastDetails.setFuelConsumption(FuelComponent.NBO, FuelUnit.M3, 24);
-		ballastDetails.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3, 24);
+		ballastDetails.setFuelConsumption(LNGFuelKeys.NBO_In_m3, 24);
+		ballastDetails.setFuelConsumption(LNGFuelKeys.IdleNBO_In_m3, 24);
 
 		int heelState = calc.getExpectedCargoEndHeelState(12, ballastDetails);
 		Assert.assertEquals(LNGVoyageCalculator.STATE_COLD_MIN_HEEL, heelState);
@@ -87,8 +86,8 @@ public class LNGVoyageCalculatorEndHeelStateTests {
 		ballastDetails.setIdleTime(6);
 
 		// Need some NBO
-		ballastDetails.setFuelConsumption(FuelComponent.NBO, FuelUnit.M3, 24);
-		ballastDetails.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3, 0);
+		ballastDetails.setFuelConsumption(LNGFuelKeys.NBO_In_m3, 24);
+		ballastDetails.setFuelConsumption(LNGFuelKeys.IdleNBO_In_m3, 0);
 
 		int heelState = calc.getExpectedCargoEndHeelState(12, ballastDetails);
 		Assert.assertEquals(LNGVoyageCalculator.STATE_COLD_WARMING_TIME, heelState);
@@ -108,8 +107,8 @@ public class LNGVoyageCalculatorEndHeelStateTests {
 		ballastDetails.setIdleTime(0);
 
 		// Need some NBO
-		ballastDetails.setFuelConsumption(FuelComponent.NBO, FuelUnit.M3, 0);
-		ballastDetails.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3, 0);
+		ballastDetails.setFuelConsumption(LNGFuelKeys.NBO_In_m3, 0);
+		ballastDetails.setFuelConsumption(LNGFuelKeys.IdleNBO_In_m3, 0);
 
 		int heelState = calc.getExpectedCargoEndHeelState(12, ballastDetails);
 		Assert.assertEquals(LNGVoyageCalculator.STATE_COLD_WARMING_TIME, heelState);
@@ -129,8 +128,8 @@ public class LNGVoyageCalculatorEndHeelStateTests {
 		ballastDetails.setIdleTime(0);
 
 		// Need some NBO
-		ballastDetails.setFuelConsumption(FuelComponent.NBO, FuelUnit.M3, 0);
-		ballastDetails.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3, 0);
+		ballastDetails.setFuelConsumption(LNGFuelKeys.NBO_In_m3, 0);
+		ballastDetails.setFuelConsumption(LNGFuelKeys.IdleNBO_In_m3, 0);
 
 		int heelState = calc.getExpectedCargoEndHeelState(12, ballastDetails);
 		Assert.assertEquals(LNGVoyageCalculator.STATE_WARM, heelState);
@@ -150,8 +149,8 @@ public class LNGVoyageCalculatorEndHeelStateTests {
 		ballastDetails.setIdleTime(24);
 
 		// Need some NBO
-		ballastDetails.setFuelConsumption(FuelComponent.NBO, FuelUnit.M3, 24);
-		ballastDetails.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3, 0);
+		ballastDetails.setFuelConsumption(LNGFuelKeys.NBO_In_m3, 24);
+		ballastDetails.setFuelConsumption(LNGFuelKeys.IdleNBO_In_m3, 0);
 
 		int heelState = calc.getExpectedCargoEndHeelState(12, ballastDetails);
 		Assert.assertEquals(LNGVoyageCalculator.STATE_WARM, heelState);

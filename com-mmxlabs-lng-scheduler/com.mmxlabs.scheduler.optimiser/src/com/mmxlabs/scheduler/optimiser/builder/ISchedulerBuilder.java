@@ -104,8 +104,9 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	IVessel createVessel(@NonNull String name, int minSpeed, int maxSpeed, long capacity, long safetyHeel, @NonNull IBaseFuel baseFuel, int pilotLightRate, int warmupTimeInHours,
-			long cooldownVolumeInM3, int minBaseFuelConsumptionPerDay, boolean hasReliqCapability);
+	IVessel createVessel(@NonNull String name, int minSpeed, int maxSpeed, long capacity, long safetyHeel, @NonNull IBaseFuel baseFuel, @NonNull IBaseFuel idleBaseFuel,
+			@NonNull IBaseFuel inPortBaseFuel, @NonNull IBaseFuel pilotLightBaseFuel,int pilotLightRate, int warmupTimeInHours, long cooldownVolumeInM3, int minBaseFuelConsumptionPerDay,
+			boolean hasReliqCapability);
 
 	/**
 	 * Set {@link IVessel} parameters that depend upon the {@link VesselState}.
