@@ -8,9 +8,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.ToIntBiFunction;
+import java.util.function.ToLongBiFunction;
 
-import com.mmxlabs.common.util.ToLongTriFunction;
+import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
@@ -19,33 +21,39 @@ import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
+import com.mmxlabs.scheduler.optimiser.voyage.LNGFuelKeys;
 
+@SuppressWarnings("unchecked")
 public class FuelExportHelper {
 
-	public static final Map<Fuel, FuelComponent[]> portFuelComponentNames = new HashMap<Fuel, FuelComponent[]>();
-	public static final Map<Fuel, FuelComponent[]> travelFuelComponentNames = new HashMap<Fuel, FuelComponent[]>();
-	public static final Map<Fuel, FuelComponent[]> idleFuelComponentNames = new HashMap<Fuel, FuelComponent[]>();
+	public static final Map<Fuel, List<Function<IVessel, FuelKey>>> portFuelComponentNames = new HashMap<>();
+	public static final Map<Fuel, List<Function<IVessel, FuelKey>>> travelFuelComponentNames = new HashMap<>();
+	public static final Map<Fuel, List<Function<IVessel, FuelKey>>> idleFuelComponentNames = new HashMap<>();
+
+	// private static final Map<FuelComponent, Fuel> fuelComponentNamesReverse = new HashMap<>();
 
 	public static final Map<Fuel, FuelUnit[]> displayFuelUnits = new HashMap<Fuel, FuelUnit[]>();
 
 	public static final Map<FuelUnit, com.mmxlabs.models.lng.schedule.FuelUnit> modelUnits = new HashMap<FuelUnit, com.mmxlabs.models.lng.schedule.FuelUnit>();
 
 	static {
-		portFuelComponentNames.put(Fuel.BASE_FUEL, new FuelComponent[] { FuelComponent.Base });
-		portFuelComponentNames.put(Fuel.NBO, new FuelComponent[] { FuelComponent.NBO });
+		portFuelComponentNames.put(Fuel.BASE_FUEL, Lists.newArrayList((vc) -> vc.getInPortBaseFuelInMT()));
+		portFuelComponentNames.put(Fuel.NBO, Lists.newArrayList((vc) -> LNGFuelKeys.NBO_In_m3, (vc) -> LNGFuelKeys.NBO_In_mmBtu));
 
-		travelFuelComponentNames.put(Fuel.BASE_FUEL, new FuelComponent[] { FuelComponent.Base, FuelComponent.Base_Supplemental });
-		travelFuelComponentNames.put(Fuel.PILOT_LIGHT, new FuelComponent[] { FuelComponent.PilotLight });
+		travelFuelComponentNames.put(Fuel.BASE_FUEL, Lists.newArrayList((vc) -> vc.getTravelBaseFuelInMT(), (vc) -> vc.getSupplementalTravelBaseFuelInMT()));
+		travelFuelComponentNames.put(Fuel.PILOT_LIGHT, Lists.newArrayList((vc) -> vc.getPilotLightFuelInMT()));
 
-		travelFuelComponentNames.put(Fuel.NBO, new FuelComponent[] { FuelComponent.NBO });
-		travelFuelComponentNames.put(Fuel.FBO, new FuelComponent[] { FuelComponent.FBO });
+		travelFuelComponentNames.put(Fuel.NBO, Lists.newArrayList((vc) -> LNGFuelKeys.NBO_In_m3, (vc) -> LNGFuelKeys.NBO_In_mmBtu));
+		travelFuelComponentNames.put(Fuel.FBO, Lists.newArrayList((vc) -> LNGFuelKeys.FBO_In_m3, (vc) -> LNGFuelKeys.FBO_In_mmBtu));
 
-		idleFuelComponentNames.put(Fuel.BASE_FUEL, new FuelComponent[] { FuelComponent.IdleBase });
-		idleFuelComponentNames.put(Fuel.PILOT_LIGHT, new FuelComponent[] { FuelComponent.IdlePilotLight });
-		idleFuelComponentNames.put(Fuel.NBO, new FuelComponent[] { FuelComponent.IdleNBO });
+		idleFuelComponentNames.put(Fuel.BASE_FUEL, Lists.newArrayList((vc) -> vc.getIdleBaseFuelInMT()));
+		idleFuelComponentNames.put(Fuel.PILOT_LIGHT, Lists.newArrayList((vc) -> vc.getIdlePilotLightFuelInMT()));
+		idleFuelComponentNames.put(Fuel.NBO, Lists.newArrayList((vc) -> LNGFuelKeys.IdleNBO_In_m3, (vc) -> LNGFuelKeys.IdleNBO_In_mmBtu));
 
 		displayFuelUnits.put(Fuel.PILOT_LIGHT, new FuelUnit[] { FuelUnit.MT });
 		displayFuelUnits.put(Fuel.BASE_FUEL, new FuelUnit[] { FuelUnit.MT });
@@ -55,13 +63,24 @@ public class FuelExportHelper {
 		modelUnits.put(FuelUnit.M3, com.mmxlabs.models.lng.schedule.FuelUnit.M3);
 		modelUnits.put(FuelUnit.MT, com.mmxlabs.models.lng.schedule.FuelUnit.MT);
 		modelUnits.put(FuelUnit.MMBTu, com.mmxlabs.models.lng.schedule.FuelUnit.MMBTU);
+		// for (final FuelComponent fc : FuelComponent.getBaseFuelComponentsNoPilot()) {
+		// fuelComponentNamesReverse.put(fc, Fuel.BASE_FUEL);
+		// }
+		// for (final FuelComponent fc : FuelComponent.getPilotLightFuelComponents()) {
+		// fuelComponentNamesReverse.put(fc, Fuel.PILOT_LIGHT);
+		// }
+		//
+		// fuelComponentNamesReverse.put(FuelComponent.NBO, Fuel.NBO);
+		// fuelComponentNamesReverse.put(FuelComponent.IdleNBO, Fuel.NBO);
+		// fuelComponentNamesReverse.put(FuelComponent.FBO, Fuel.FBO);
 	}
 
-	public static <T> List<FuelQuantity> exportFuelData(final T details, final IVessel vessel, final Map<Fuel, FuelComponent[]> fuelMap,
-			final ToLongTriFunction<T, FuelComponent, FuelUnit> consumptionProvider, final ToIntBiFunction<T, FuelComponent> priceProvider, ModelEntityMap modelEntityMap) {
+	public static <T> List<FuelQuantity> exportFuelData(final T details, final IVessel vessel, final Map<Fuel, List<Function<IVessel, FuelKey>>> fuelMap,
+			final ToLongBiFunction<T, FuelKey> consumptionProvider, final ToIntBiFunction<T, FuelComponent> priceProvider, ModelEntityMap modelEntityMap) {
 
-		final List<FuelQuantity> result = new LinkedList<FuelQuantity>();
-		for (final Map.Entry<Fuel, FuelComponent[]> entry : fuelMap.entrySet()) {
+		// TODO: If we allow mixed HFO/MDO on a leg, then this needs to change...
+		final List<FuelQuantity> result = new LinkedList<>();
+		for (final Map.Entry<Fuel, List<Function<IVessel, FuelKey>>> entry : fuelMap.entrySet()) {
 			long totalCost = 0;
 			boolean matters = false;
 
@@ -73,18 +92,27 @@ public class FuelExportHelper {
 				long totalUnitPrice = 0;
 				int count = 0;
 
-				for (final FuelComponent component : entry.getValue()) {
-					final long consumption = consumptionProvider.applyAsLong(details, component, unit);
+				IBaseFuel baseFuel = null;
+				for (final Function<IVessel, FuelKey> f : entry.getValue()) {
+					FuelKey fuelKey = f.apply(vessel);
+					if (baseFuel != null) {
+						assert baseFuel == fuelKey.getBaseFuel();
+					}
+					baseFuel = fuelKey.getBaseFuel();
 
-					totalConsumption += consumption;
-					if (unit == component.getPricingFuelUnit()) {
-						final int unitPrice = priceProvider.applyAsInt(details, component);
-						if (unitPrice != 0) {
-							totalUnitPrice += unitPrice;
-							count++;
+					if (fuelKey.getFuelUnit() == unit) {
+						final long consumption = consumptionProvider.applyAsLong(details, fuelKey);
 
-							final long cost = Calculator.costFromConsumption(unitPrice, consumption);
-							totalCost += cost;
+						totalConsumption += consumption;
+						if (unit == fuelKey.getFuelComponent().getPricingFuelUnit()) {
+							final int unitPrice = priceProvider.applyAsInt(details, fuelKey.getFuelComponent());
+							if (unitPrice != 0) {
+								totalUnitPrice += unitPrice;
+								count++;
+
+								final long cost = Calculator.costFromConsumption(unitPrice, consumption);
+								totalCost += cost;
+							}
 						}
 					}
 				}
@@ -101,8 +129,8 @@ public class FuelExportHelper {
 				}
 				if (matters) {
 
-					if (entry.getKey() == Fuel.BASE_FUEL || entry.getKey() == Fuel.PILOT_LIGHT) {
-						quantity.setBaseFuel(modelEntityMap.getModelObject(vessel.getBaseFuel(), BaseFuel.class));
+					if (baseFuel != null) {
+						quantity.setBaseFuel(modelEntityMap.getModelObject(baseFuel, BaseFuel.class));
 					}
 					quantity.setCost(OptimiserUnitConvertor.convertToExternalFixedCost(totalCost));
 					result.add(quantity);

@@ -25,10 +25,10 @@ import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.LNGFuelKeys;
+import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
@@ -59,8 +59,8 @@ public class ContractNotionalVoyageUtils {
 	@Nullable
 	public VoyagePlan createFOBPurchaseRealLadenNotionalBallastVoyagePlan(@NonNull final VoyageCalculatorFuelChoice fuelChoice, @NonNull final ERouteOption routeOption, @NonNull final IVessel calculationVessel,
 			@NonNull final IVesselAvailability resourceVesselAvailability, final int vesselCharterInRatePerDay, final long startHeelInM3, final long loadVolumeInMMBTu, @NonNull final ILoadOption buy,
-			final int loadTime, @NonNull final IPort destinationPort, final int dischargeTime, final int dischargeDuration, final int salesPricePerMMBTu, final int baseFuelCostPerMT,
-			@NonNull final VoyagePlan actualVoyagePlan, final int notionalSpeed, @Nullable final ShippingAnnotation shipAnnotation) {
+			final int loadTime, @NonNull final IPort destinationPort, final int dischargeTime, final int dischargeDuration, final int salesPricePerMMBTu,
+			final int[] baseFuelCostPerMT, @NonNull final VoyagePlan actualVoyagePlan, final int notionalSpeed, @Nullable final ShippingAnnotation shipAnnotation) {
 
 		// Calculate the notional voyage
 		final IResource resource = vesselProvider.getResource(resourceVesselAvailability);
@@ -77,15 +77,14 @@ public class ContractNotionalVoyageUtils {
 		assert notionalVoyagePlan != null;
 
 		return createFOBPurchaseRealLadenNotionalBallastVoyagePlan(fuelChoice, routeOption, calculationVessel, resourceVesselAvailability, vesselCharterInRatePerDay, startHeelInM3, loadVolumeInMMBTu,
-				buy, loadTime, loadDuration, destinationPort, dischargeTime, dischargeDuration, salesPricePerMMBTu, baseFuelCostPerMT, actualVoyagePlan, notionalVoyagePlan, notionalSpeed,
-				shipAnnotation);
+				buy, loadTime, destinationPort, dischargeTime, dischargeDuration, salesPricePerMMBTu, baseFuelCostPerMT, actualVoyagePlan, notionalSpeed, shipAnnotation);
 	}
 
 	@Nullable
 	public VoyagePlan createFOBPurchaseRealLadenNotionalBallastVoyagePlan(@NonNull final VoyageCalculatorFuelChoice fuelChoice, @NonNull final ERouteOption routeOption, @NonNull final IVessel calculationVessel,
 			@NonNull final IVesselAvailability resourceVesselAvailability, final long vesselCharterInRatePerDay, final long startHeelInM3, final long loadVolumeInMMBTu, @NonNull final ILoadOption buy,
 			final int loadTime, final int loadDuration, @NonNull final IPort destinationPort, final int dischargeTime, final int dischargeDuration, final int salesPricePerMMBTu,
-			final int baseFuelCostPerMT, @NonNull final VoyagePlan actualVoyagePlan, @NonNull VoyagePlan notionalVoyagePlan, final int notionalSpeed,
+			int[] baseFuelCostPerMT, @NonNull final VoyagePlan actualVoyagePlan, @NonNull VoyagePlan notionalVoyagePlan, final int notionalSpeed,
 			@Nullable final ShippingAnnotation shipAnnotation) {
 
 		assert ((VoyageDetails) notionalVoyagePlan.getSequence()[3]).getSpeed() / 100 == notionalSpeed / 100;
@@ -103,10 +102,10 @@ public class ContractNotionalVoyageUtils {
 		notionalSequence[2] = ((PortDetails) actualSequence[2]).clone();
 
 		// Blend across LNG fuel components
-		for (final FuelComponent fc : FuelComponent.getLNGFuelComponents()) {
-			for (final FuelUnit fu : FuelUnit.values()) {
-				final long v = ((VoyageDetails) actualSequence[3]).getFuelConsumption(fc, fu);
-				((VoyageDetails) notionalSequence[3]).setFuelConsumption(fc, fu, v);
+		for (final FuelKey[] fkp : LNGFuelKeys.LNG_In_m3_mmBtu_Pair) {
+			for (final FuelKey fk : fkp) {
+				final long v = ((VoyageDetails) actualSequence[3]).getFuelConsumption(fk);
+				((VoyageDetails) notionalSequence[3]).setFuelConsumption(fk, v);
 			}
 		}
 
@@ -218,7 +217,7 @@ public class ContractNotionalVoyageUtils {
 
 				portDuration[arrayIdx] += portDetails.getOptions().getVisitDuration();
 				portCosts[arrayIdx] += portDetails.getPortCosts();
-				portBaseFuelInMT[arrayIdx] += portDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.MT);
+				portBaseFuelInMT[arrayIdx] += portDetails.getFuelConsumption(vessel.getInPortBaseFuelInMT());
 			} else if (obj instanceof VoyageDetails) {
 				final int arrayIdx;
 				final VoyageDetails voyageDetails = (VoyageDetails) obj;
@@ -232,30 +231,29 @@ public class ContractNotionalVoyageUtils {
 				distance[arrayIdx] += voyageDetails.getOptions().getDistance();
 				travelTime[arrayIdx] += voyageDetails.getTravelTime();
 				idleTime[arrayIdx] += voyageDetails.getIdleTime();
+				voyageBaseFuelInMT[arrayIdx] += voyageDetails.getFuelConsumption(vessel.getTravelBaseFuelInMT())
+						+ voyageDetails.getFuelConsumption(vessel.getSupplementalTravelBaseFuelInMT()) + voyageDetails.getFuelConsumption(vessel.getPilotLightFuelInMT());
 
-				voyageBaseFuelInMT[arrayIdx] += voyageDetails.getFuelConsumption(FuelComponent.Base, FuelUnit.MT) + voyageDetails.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT)
-						+ voyageDetails.getFuelConsumption(FuelComponent.PilotLight, FuelUnit.MT);
+				voyageBaseFuelInMT[arrayIdx] += voyageDetails.getRouteAdditionalConsumption(vessel.getTravelBaseFuelInMT())
+						+ voyageDetails.getRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT())
+						+ voyageDetails.getRouteAdditionalConsumption(vessel.getPilotLightFuelInMT());
 
-				voyageBaseFuelInMT[arrayIdx] += voyageDetails.getRouteAdditionalConsumption(FuelComponent.Base, FuelUnit.MT)
-						+ voyageDetails.getRouteAdditionalConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT)
-						+ voyageDetails.getRouteAdditionalConsumption(FuelComponent.PilotLight, FuelUnit.MT);
+				voyageIdleBaseFuelInMT[arrayIdx] += voyageDetails.getFuelConsumption(vessel.getIdleBaseFuelInMT()) //
+						+ voyageDetails.getFuelConsumption(vessel.getIdlePilotLightFuelInMT());
 
-				voyageIdleBaseFuelInMT[arrayIdx] += +voyageDetails.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT)
-						+ voyageDetails.getFuelConsumption(FuelComponent.IdlePilotLight, FuelUnit.MT);
+				voyageNBOInM3[arrayIdx] += voyageDetails.getFuelConsumption(LNGFuelKeys.NBO_In_m3);
+				voyageIdleNBOInM3[arrayIdx] += voyageDetails.getFuelConsumption(LNGFuelKeys.IdleNBO_In_m3);
+				voyageFBOInM3[arrayIdx] += voyageDetails.getFuelConsumption(LNGFuelKeys.FBO_In_m3);
 
-				voyageNBOInM3[arrayIdx] += voyageDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3);
-				voyageIdleNBOInM3[arrayIdx] += voyageDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3);
-				voyageFBOInM3[arrayIdx] += voyageDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3);
+				voyageNBOInMMBTu[arrayIdx] += voyageDetails.getFuelConsumption(LNGFuelKeys.NBO_In_mmBtu);
+				voyageIdleNBOInMMBTu[arrayIdx] += voyageDetails.getFuelConsumption(LNGFuelKeys.IdleNBO_In_mmBtu);
+				voyageFBOInMMBTu[arrayIdx] += voyageDetails.getFuelConsumption(LNGFuelKeys.FBO_In_mmBtu);
 
-				voyageNBOInMMBTu[arrayIdx] += voyageDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu);
-				voyageIdleNBOInMMBTu[arrayIdx] += voyageDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu);
-				voyageFBOInMMBTu[arrayIdx] += voyageDetails.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu);
+				voyageNBOInM3[arrayIdx] += voyageDetails.getRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3);
+				voyageFBOInM3[arrayIdx] += voyageDetails.getRouteAdditionalConsumption(LNGFuelKeys.FBO_In_m3);
 
-				voyageNBOInM3[arrayIdx] += voyageDetails.getRouteAdditionalConsumption(FuelComponent.NBO, FuelUnit.M3);
-				voyageFBOInM3[arrayIdx] += voyageDetails.getRouteAdditionalConsumption(FuelComponent.FBO, FuelUnit.M3);
-
-				voyageNBOInMMBTu[arrayIdx] += voyageDetails.getRouteAdditionalConsumption(FuelComponent.NBO, FuelUnit.MMBTu);
-				voyageFBOInMMBTu[arrayIdx] += voyageDetails.getRouteAdditionalConsumption(FuelComponent.FBO, FuelUnit.MMBTu);
+				voyageNBOInMMBTu[arrayIdx] += voyageDetails.getRouteAdditionalConsumption(LNGFuelKeys.NBO_In_mmBtu);
+				voyageFBOInMMBTu[arrayIdx] += voyageDetails.getRouteAdditionalConsumption(LNGFuelKeys.FBO_In_mmBtu);
 
 				// Note: Multiple load/discharges will not store correct speed!
 				assert speed[arrayIdx] == 0;

@@ -30,6 +30,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadOption;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProviderEditor;
@@ -68,6 +69,7 @@ public class ActualsTransformer implements ITransformerExtension {
 				final int baseFuelPricePerMT = OptimiserUnitConvertor.convertToInternalPrice(cargoActuals.getBaseFuelPrice());
 				final int vesselCharterCostPerDay = (int) OptimiserUnitConvertor.convertToInternalDailyCost(cargoActuals.getCharterRatePerDay());
 				final long insuranceCosts = (int) OptimiserUnitConvertor.convertToInternalDailyCost(cargoActuals.getInsurancePremium());
+				final IVessel vessel = modelEntityMap.getOptimiserObjectNullChecked(cargoActuals.getVessel(), IVessel.class);
 
 				// FIXME: It is possible that SlotActuals order is not chronological
 				IPortSlot lastSlot = null;
@@ -102,8 +104,10 @@ public class ActualsTransformer implements ITransformerExtension {
 						final LoadActuals loadActuals = (LoadActuals) slotActuals;
 						final long startHeelInM3 = OptimiserUnitConvertor.convertToInternalVolume(loadActuals.getStartingHeelM3());
 						actualsDataProviderEditor.createLoadSlotActuals((ILoadOption) portSlot, arrivalTime, visitDuration, portCosts, cargoCV, startHeelInM3, lngVolumeInM3, lngVolumeInMMBTu,
-								lngPricePerMMBTu, portBaseFuelConsumptionInMT, baseFuelConsumptionInMT, baseFuelPricePerMT, vesselCharterCostPerDay, distance, routeCosts, route);
+								lngPricePerMMBTu, portBaseFuelConsumptionInMT, baseFuelConsumptionInMT, vessel.getTravelBaseFuel(), baseFuelPricePerMT, vesselCharterCostPerDay, distance,
+								routeCosts, route);
 
+						
 						actualsDataProviderEditor.createLoadSlotExtraActuals((ILoadOption) portSlot, capacityCosts, crewBonusCosts, insuranceCosts);
 
 						// Slight hack - getting internal implementation, but currently best way to ensure actual CV is used

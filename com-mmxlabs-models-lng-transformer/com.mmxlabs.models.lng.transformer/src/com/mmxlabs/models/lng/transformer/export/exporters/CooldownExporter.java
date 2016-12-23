@@ -14,8 +14,7 @@ import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
+import com.mmxlabs.scheduler.optimiser.voyage.LNGFuelKeys;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -27,7 +26,8 @@ public class CooldownExporter {
 	public @Nullable Cooldown export(final VoyageDetails voyageDetails, final VolumeAllocatedSequence volumeAllocatedSequence, final int currentTime) {
 
 		if (voyageDetails.isCooldownPerformed()) {
-			final long cooldownVolume = voyageDetails.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3);
+
+			final long cooldownVolume = voyageDetails.getFuelConsumption(LNGFuelKeys.Cooldown_In_m3);
 
 			Port ePort = modelEntityMap.getModelObject(voyageDetails.getOptions().getToPortSlot().getPort(), Port.class);
 
@@ -45,7 +45,7 @@ public class CooldownExporter {
 
 			final VoyagePlan voyagePlan = volumeAllocatedSequence.getVoyagePlan(voyageDetails.getOptions().getFromPortSlot());
 
-			cooldown.setCost(OptimiserUnitConvertor.convertToExternalFixedCost(voyagePlan.getTotalFuelCost(FuelComponent.Cooldown)));
+			cooldown.setCost(OptimiserUnitConvertor.convertToExternalFixedCost(voyagePlan.getCooldownCost()));
 			cooldown.setStart(modelEntityMap.getDateFromHours(currentTime, ePort));
 			cooldown.setEnd(modelEntityMap.getDateFromHours(currentTime, ePort));
 

@@ -57,44 +57,45 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 	private IVesselProvider vesselProvider;
 
 	@Override
-	public long calculateNonCharterVariableCosts(ILoadSlot loadA, IDischargeSlot dischargeA, ILoadSlot loadB, IDischargeSlot dischargeB, IVessel vessel) {
-		ITimeWindow startA = loadA.getTimeWindow();
-		ITimeWindow endA = dischargeA.getTimeWindow();
+	public long calculateNonCharterVariableCosts(final ILoadSlot loadA, final IDischargeSlot dischargeA, final ILoadSlot loadB, final IDischargeSlot dischargeB, final IVessel vessel) {
+		final ITimeWindow startA = loadA.getTimeWindow();
+		final ITimeWindow endA = dischargeA.getTimeWindow();
 		// Pair<ERouteOption,Integer> quickestTravelTimeA = distanceProvider.getQuickestTravelTime(vessel, loadA.getPort(), dischargeA.getPort(), startA.getInclusiveStart(),
 		// vessel.getVesselClass().getMaxSpeed());
-		ITimeWindow startB = loadB.getTimeWindow();
-		ITimeWindow endB = dischargeB.getTimeWindow();
+		final ITimeWindow startB = loadB.getTimeWindow();
+		final ITimeWindow endB = dischargeB.getTimeWindow();
 
 		// Pair<ERouteOption,Integer> quickestTravelTimeB = distanceProvider.getQuickestTravelTime(vessel, loadB.getPort(), dischargeB.getPort(), startA.getInclusiveStart(),
 		// vessel.getVesselClass().getMaxSpeed());
 		// int earliestStartB = Math.max(endB.getInclusiveStart() - quickestTravelTimeB.getSecond(), startB.getInclusiveStart());
 		@NonNull
-		Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTimeAToB = distanceProvider.getQuickestTravelTime(vessel, dischargeA.getPort(), loadB.getPort(), vessel.getMaxSpeed(),
+		final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTimeAToB = distanceProvider.getQuickestTravelTime(vessel, dischargeA.getPort(), loadB.getPort(), vessel.getMaxSpeed(),
 				AvailableRouteChoices.OPTIMAL);
-		int salesPrice = dischargeA.getDischargePriceCalculator().getEstimatedSalesPrice(loadA, dischargeB, endA.getInclusiveStart());
-		long[] legFuelCosts = PriceIntervalProviderHelper.getLegFuelCosts(salesPrice, vessel.getNBORate(VesselState.Ballast), vessel, loadA.getCargoCVValue(),
+		final int salesPrice = dischargeA.getDischargePriceCalculator().getEstimatedSalesPrice(loadA, dischargeB, endA.getInclusiveStart());
+		final int[] baseFuelPrices = vesselBaseFuelCalculator.getBaseFuelPrices(vessel, startA.getInclusiveStart());		
+		final long[] legFuelCosts = PriceIntervalProviderHelper.getLegFuelCosts(salesPrice, vessel.getNBORate(VesselState.Ballast), vessel, loadA.getCargoCVValue(),
 				new int[] { endA.getInclusiveStart(), endA.getInclusiveStart() + quickestTravelTimeAToB.getSecond() },
-				distanceProvider.getDistance(quickestTravelTimeAToB.getFirst(), dischargeA.getPort(), loadB.getPort(), vessel), vessel.getBaseFuel().getEquivalenceFactor(),
-				vesselBaseFuelCalculator.getBaseFuelPrice(vessel, startA.getInclusiveStart()), routeCostProvider.getRouteTransitTime(quickestTravelTimeAToB.getFirst(), vessel),
+				distanceProvider.getDistance(quickestTravelTimeAToB.getFirst(), dischargeA.getPort(), loadB.getPort(), vessel), vessel.getTravelBaseFuel().getEquivalenceFactor(),
+				baseFuelPrices, routeCostProvider.getRouteTransitTime(quickestTravelTimeAToB.getFirst(), vessel),
 				portVisitDurationProvider.getVisitDuration(dischargeA.getPort(), PortType.Discharge), false);
 
 		return LongStream.of(legFuelCosts).sum() + routeCostProvider.getRouteCost(quickestTravelTimeAToB.getFirst(), vessel, endA.getInclusiveStart(), CostType.RoundTripBallast);
 	}
 
 	@Override
-	public Long[][][] createCargoToCargoCostMatrix(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels) {
-		Map<List<IPortSlot>, Integer> cargoMap = getCargoMap(cargoes);
-		Map<IVesselAvailability, Integer> vesselMap = getVesselMap(vessels);
-		Long[][][] costs = new Long[cargoes.size()][cargoes.size()][vessels.size()];
-		for (List<IPortSlot> cargoA : cargoes) {
-			ILoadSlot loadA = getLoadSlot(cargoA);
-			IDischargeSlot dischargeA = getDischargeSlot(cargoA);
+	public Long[][][] createCargoToCargoCostMatrix(final List<List<IPortSlot>> cargoes, final List<IVesselAvailability> vessels) {
+		final Map<List<IPortSlot>, Integer> cargoMap = getCargoMap(cargoes);
+		final Map<IVesselAvailability, Integer> vesselMap = getVesselMap(vessels);
+		final Long[][][] costs = new Long[cargoes.size()][cargoes.size()][vessels.size()];
+		for (final List<IPortSlot> cargoA : cargoes) {
+			final ILoadSlot loadA = getLoadSlot(cargoA);
+			final IDischargeSlot dischargeA = getDischargeSlot(cargoA);
 			if (loadA != null && dischargeA != null) {
-				for (List<IPortSlot> cargoB : cargoes) {
-					for (IVesselAvailability vessel : vessels) {
-						ILoadSlot loadB = getLoadSlot(cargoB);
-						IDischargeSlot dischargeB = getDischargeSlot(cargoB);
-						long cost = calculateNonCharterVariableCosts(loadA, dischargeA, loadB, dischargeB, vessel.getVessel());
+				for (final List<IPortSlot> cargoB : cargoes) {
+					for (final IVesselAvailability vessel : vessels) {
+						final ILoadSlot loadB = getLoadSlot(cargoB);
+						final IDischargeSlot dischargeB = getDischargeSlot(cargoB);
+						final long cost = calculateNonCharterVariableCosts(loadA, dischargeA, loadB, dischargeB, vessel.getVessel());
 						costs[cargoMap.get(cargoA)][cargoMap.get(cargoB)][vesselMap.get(vessel)] = cost;
 					}
 				}
@@ -110,19 +111,20 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 	 * @param vessels
 	 * @return
 	 */
-	public int[][][] getMinCargoToCargoTravelTimesPerVessel(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels) {
-		Map<List<IPortSlot>, Integer> cargoMap = getCargoMap(cargoes);
-		Map<IVesselAvailability, Integer> vesselMap = getVesselMap(vessels);
-		int[][][] times = new int[cargoes.size()][cargoes.size()][vessels.size()];
-		for (List<IPortSlot> cargoA : cargoes) {
-			ILoadSlot loadA = getLoadSlot(cargoA);
-			IDischargeSlot dischargeA = getDischargeSlot(cargoA);
+	@Override
+	public int[][][] getMinCargoToCargoTravelTimesPerVessel(final List<List<IPortSlot>> cargoes, final List<IVesselAvailability> vessels) {
+		final Map<List<IPortSlot>, Integer> cargoMap = getCargoMap(cargoes);
+		final Map<IVesselAvailability, Integer> vesselMap = getVesselMap(vessels);
+		final int[][][] times = new int[cargoes.size()][cargoes.size()][vessels.size()];
+		for (final List<IPortSlot> cargoA : cargoes) {
+			final ILoadSlot loadA = getLoadSlot(cargoA);
+			final IDischargeSlot dischargeA = getDischargeSlot(cargoA);
 			if (loadA != null && dischargeA != null) {
 				for (List<IPortSlot> cargoB : cargoes) {
 					for (IVesselAvailability vessel : vessels) {
 						ILoadSlot loadB = getLoadSlot(cargoB);
 						@NonNull
-						Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTimeAToB = distanceProvider.getQuickestTravelTime(vessel.getVessel(), dischargeA.getPort(), loadB.getPort(),
+						final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTimeAToB = distanceProvider.getQuickestTravelTime(vessel.getVessel(), dischargeA.getPort(), loadB.getPort(),
 								vessel.getVessel().getMaxSpeed(), AvailableRouteChoices.OPTIMAL);
 						times[cargoMap.get(cargoA)][cargoMap.get(cargoB)][vesselMap.get(vessel)] = quickestTravelTimeAToB.getSecond()
 								+ elementDurationProvider.getElementDuration(portSlotProvider.getElement(dischargeA), vesselProvider.getResource(vessel));
@@ -140,17 +142,19 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 	 * @param vessels
 	 * @return
 	 */
-	public int[][] getMinCargoStartToEndSlotTravelTimesPerVessel(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels) {
-		Map<List<IPortSlot>, Integer> cargoMap = getCargoMap(cargoes);
-		Map<IVesselAvailability, Integer> vesselMap = getVesselMap(vessels);
-		int[][] times = new int[cargoes.size()][vessels.size()];
-		for (List<IPortSlot> cargoA : cargoes) {
-			ILoadSlot loadA = getLoadSlot(cargoA);
-			IDischargeSlot dischargeA = getDischargeSlot(cargoA);
-			for (IVesselAvailability vessel : vessels) {
+	@Override
+	public int[][] getMinCargoStartToEndSlotTravelTimesPerVessel(final List<List<IPortSlot>> cargoes, final List<IVesselAvailability> vessels) {
+		final Map<List<IPortSlot>, Integer> cargoMap = getCargoMap(cargoes);
+		final Map<IVesselAvailability, Integer> vesselMap = getVesselMap(vessels);
+		final int[][] times = new int[cargoes.size()][vessels.size()];
+		for (final List<IPortSlot> cargoA : cargoes) {
+			final ILoadSlot loadA = getLoadSlot(cargoA);
+			final IDischargeSlot dischargeA = getDischargeSlot(cargoA);
+			for (final IVesselAvailability vessel : vessels) {
 				@NonNull
 				Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTimeAToB = distanceProvider.getQuickestTravelTime(vessel.getVessel(), loadA.getPort(), dischargeA.getPort(),
 						vessel.getVessel().getMaxSpeed(), AvailableRouteChoices.OPTIMAL);
+
 				times[cargoMap.get(cargoA)][vesselMap.get(vessel)] = quickestTravelTimeAToB.getSecond()
 						+ elementDurationProvider.getElementDuration(portSlotProvider.getElement(loadA), vesselProvider.getResource(vessel));
 			}
@@ -158,8 +162,8 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 		return times;
 	}
 
-	private ILoadSlot getLoadSlot(List<IPortSlot> cargo) {
-		for (IPortSlot portSlot : cargo) {
+	private ILoadSlot getLoadSlot(final List<IPortSlot> cargo) {
+		for (final IPortSlot portSlot : cargo) {
 			if (portSlot instanceof ILoadSlot) {
 				return (ILoadSlot) portSlot;
 			}
@@ -167,26 +171,27 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 		return null;
 	}
 
-	private IDischargeSlot getDischargeSlot(List<IPortSlot> cargo) {
+
+	private IDischargeSlot getDischargeSlot(final List<IPortSlot> cargo) {
 		if (cargo.get(cargo.size() - 1) instanceof IDischargeSlot) {
 			return (IDischargeSlot) cargo.get(cargo.size() - 1);
 		}
 		return null;
 	}
 
-	private Map<List<IPortSlot>, Integer> getCargoMap(List<List<IPortSlot>> cargoes) {
-		Map<List<IPortSlot>, Integer> cargoMap = new HashMap<>();
+	private Map<List<IPortSlot>, Integer> getCargoMap(final List<List<IPortSlot>> cargoes) {
+		final Map<List<IPortSlot>, Integer> cargoMap = new HashMap<>();
 		for (int i = 0; i < cargoes.size(); i++) {
-			List<IPortSlot> cargo = cargoes.get(i);
+			final List<IPortSlot> cargo = cargoes.get(i);
 			cargoMap.put(cargo, i);
 		}
 		return cargoMap;
 	}
 
-	private Map<IVesselAvailability, Integer> getVesselMap(List<IVesselAvailability> vessels) {
-		Map<IVesselAvailability, Integer> vesselMap = new HashMap<>();
+	private Map<IVesselAvailability, Integer> getVesselMap(final List<IVesselAvailability> vessels) {
+		final Map<IVesselAvailability, Integer> vesselMap = new HashMap<>();
 		for (int i = 0; i < vessels.size(); i++) {
-			IVesselAvailability vessel = vessels.get(i);
+			final IVesselAvailability vessel = vessels.get(i);
 			vesselMap.put(vessel, i);
 		}
 		return vesselMap;

@@ -15,6 +15,7 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -156,12 +157,12 @@ public class RedirectionContract implements ILoadPriceCalculator {
 				}
 
 				final int utcLoadTime = timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadSlot);
-				final int baseFuelPriceInMT = vesselBaseFuelCalculator.getBaseFuelPrice(vesselAvailability.getVessel(), utcLoadTime);
+				final int[] baseFuelPricesInMT = vesselBaseFuelCalculator.getBaseFuelPrices(vesselAvailability.getVessel(), utcLoadTime);
 				// final VoyagePlan plan = redirVCC.calculateShippingCosts(loadSlot.getPort(), baseSalesMarketPort, originalLoadTime, loadDuration, baseDischargeTime, dischargeDuration,
 				// vesselAvailability.getVessel(), vesselCharterInRatePerDay, startHeelInM3, vesselAvailability.getVessel().getVesselClass().getMaxSpeed(), loadSlot.getCargoCVValue(), route,
 				// vesselAvailability.getVessel().getVesselClass().getBaseFuelUnitPrice(), dischargePricePerMMBTu);
 				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadSlot.getPort(), baseSalesMarketPort, originalLoadTime, loadDuration, baseDischargeTime, dischargeDuration,
-						vesselAvailability.getVessel(), vesselCharterInRatePerDay, startHeelInM3, vesselAvailability.getVessel().getMaxSpeed(), loadSlot.getCargoCVValue(), route, baseFuelPriceInMT,
+						vesselAvailability.getVessel(), vesselCharterInRatePerDay, startHeelInM3, vesselAvailability.getVessel().getMaxSpeed(), loadSlot.getCargoCVValue(), route, baseFuelPricesInMT,
 						dischargePricePerMMBTu);
 				if (plan == null) {
 					return Integer.MAX_VALUE;
@@ -192,10 +193,10 @@ public class RedirectionContract implements ILoadPriceCalculator {
 				final long vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, vesselStartTime, timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadSlot));
 
 				final int utcLoadTime = timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadSlot);
-				final int baseFuelPriceInMT = vesselBaseFuelCalculator.getBaseFuelPrice(vesselAvailability.getVessel(), utcLoadTime);
+				final int[] baseFuelPricesInMT = vesselBaseFuelCalculator.getBaseFuelPrices(vesselAvailability.getVessel(), utcLoadTime);
 
 				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadSlot.getPort(), dischargeSlot.getPort(), originalLoadTime, loadDuration, dischargeTime, dischargeDuration,
-						vesselAvailability.getVessel(), vesselCharterInRatePerDay, startHeelInM3, vesselAvailability.getVessel().getMaxSpeed(), loadSlot.getCargoCVValue(), route, baseFuelPriceInMT,
+						vesselAvailability.getVessel(), vesselCharterInRatePerDay, startHeelInM3, vesselAvailability.getVessel().getMaxSpeed(), loadSlot.getCargoCVValue(), route, baseFuelPricesInMT,
 						dischargePricePerMMBTu);
 
 				if (plan == null) {
@@ -267,7 +268,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 			// TODO: E.g. Model based on distance @ max speed?
 			final int baseDischargeTime = transferTime;
 			final int utcLoadTime = timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadOption);
-			final int baseFuelPriceInMT = vesselBaseFuelCalculator.getBaseFuelPrice(vessel, utcLoadTime);
+			final int[] baseFuelPricesInMT = vesselBaseFuelCalculator.getBaseFuelPrices(vessel, utcLoadTime);
 			{
 				final ERouteOption route = ERouteOption.DIRECT;
 				// Notional Costs - Purchase port to base destination
@@ -283,7 +284,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 				}
 
 				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadOption.getPort(), baseSalesMarketPort, originalLoadTime, loadDuration, baseDischargeTime, dischargeDuration, vessel,
-						vesselCharterInRatePerDay, startHeelInM3, vessel.getMaxSpeed(), loadOption.getCargoCVValue(), route, baseFuelPriceInMT, actualSalesPricePerMMBTu);
+						vesselCharterInRatePerDay, startHeelInM3, vessel.getMaxSpeed(), loadOption.getCargoCVValue(), route, baseFuelPricesInMT, actualSalesPricePerMMBTu);
 				if (plan == null) {
 					return Integer.MAX_VALUE;
 				}
@@ -316,7 +317,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 						timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadOption));
 
 				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadOption.getPort(), dischargeOption.getPort(), originalLoadTime, loadDuration, transferTime, dischargeDuration, vessel,
-						vesselCharterInRatePerDay, startHeelInM3, notionalVesselAvailability.getVessel().getMaxSpeed(), loadOption.getCargoCVValue(), route, baseFuelPriceInMT,
+						vesselCharterInRatePerDay, startHeelInM3, notionalVesselAvailability.getVessel().getMaxSpeed(), loadOption.getCargoCVValue(), route, baseFuelPricesInMT,
 						actualSalesPricePerMMBTu);
 
 				if (plan == null) {

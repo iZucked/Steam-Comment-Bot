@@ -27,12 +27,12 @@ public class TransformerHelper {
 	/**
 	 */
 	@NonNull
-	public static IVessel buildIVessel(@NonNull final ISchedulerBuilder builder, Vessel eVessel, @NonNull final IBaseFuel baseFuel) {
+	public static IVessel buildIVessel(@NonNull final ISchedulerBuilder builder, Vessel eVessel, @NonNull final IBaseFuel baseFuel, @NonNull final IBaseFuel idleBaseFuel, @NonNull final IBaseFuel inPortBaseFuel, @NonNull final IBaseFuel pilotLightBaseFuel) {
 
 		@NonNull
 		final IVessel vc = builder.createVessel(eVessel.getName(), OptimiserUnitConvertor.convertToInternalSpeed(eVessel.getVesselOrDelegateMinSpeed()),
 				OptimiserUnitConvertor.convertToInternalSpeed(eVessel.getVesselOrDelegateMaxSpeed()), OptimiserUnitConvertor.convertToInternalVolume((int) (eVessel.getVesselOrDelegateCapacity() * eVessel.getVesselOrDelegateFillCapacity())),
-				OptimiserUnitConvertor.convertToInternalVolume(eVessel.getVesselOrDelegateSafetyHeel()), baseFuel, OptimiserUnitConvertor.convertToInternalDailyRate(eVessel.getVesselOrDelegatePilotLightRate()),
+				OptimiserUnitConvertor.convertToInternalVolume(eVessel.getVesselOrDelegateSafetyHeel()), baseFuel, idleBaseFuel, inPortBaseFuel, pilotLightBaseFuel, OptimiserUnitConvertor.convertToInternalDailyRate(eVessel.getVesselOrDelegatePilotLightRate()),
 				eVessel.getVesselOrDelegateWarmingTime(), OptimiserUnitConvertor.convertToInternalVolume(eVessel.getVesselOrDelegateCoolingVolume()),
 				OptimiserUnitConvertor.convertToInternalDailyRate(eVessel.getVesselOrDelegateMinBaseFuelConsumption()), eVessel.getVesselOrDelegateHasReliqCapability());
 

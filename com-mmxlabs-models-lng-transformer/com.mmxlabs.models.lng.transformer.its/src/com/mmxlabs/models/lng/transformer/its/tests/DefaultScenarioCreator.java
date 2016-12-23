@@ -319,6 +319,8 @@ public class DefaultScenarioCreator {
 			final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
 			fleetModel.getVessels().add(vessel);
 
+			final BaseFuel baseFuel = createDefaultBaseFuel();
+
 			final DefaultVesselStateAttributesCreator dvsac = new DefaultVesselStateAttributesCreator();
 
 			final CharterInMarket charterInMarket = spotMarketsModelBuilder.createCharterInMarket("market-" + vessel.getName(), vessel, "0", spotCharterCount);
@@ -326,7 +328,12 @@ public class DefaultScenarioCreator {
 			vessel.setLadenAttributes(dvsac.createVesselStateAttributes(defaultMinSpeed, defaultMaxSpeed));
 			vessel.setBallastAttributes(dvsac.createVesselStateAttributes(defaultMinSpeed, defaultMaxSpeed));
 			vessel.setName(name);
-			vessel.setBaseFuel(createDefaultBaseFuel());
+
+			vessel.setBaseFuel(baseFuel);
+			vessel.setInPortBaseFuel(baseFuel);
+			vessel.setIdleBaseFuel(baseFuel);
+			vessel.setPilotLightBaseFuel(baseFuel);
+			
 			vessel.setMinSpeed(defaultMinSpeed);
 			vessel.setMaxSpeed(defaultMaxSpeed);
 			vessel.setCapacity(defaultCapacity);

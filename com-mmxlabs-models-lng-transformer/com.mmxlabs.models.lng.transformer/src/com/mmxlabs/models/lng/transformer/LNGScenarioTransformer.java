@@ -2973,9 +2973,32 @@ public class LNGScenarioTransformer {
 
 		for (final Vessel eVessel : fleetModel.getVessels()) {
 			assert eVessel != null;
+			// TODO: TEMPORARY FIX: Populate fleet data with default values for additional fuel types.
 
-			final IBaseFuel oBaseFuel = modelEntityMap.getOptimiserObjectNullChecked(eVessel.getVesselOrDelegateBaseFuel(), IBaseFuel.class);
-			final IVessel oVessel = TransformerHelper.buildIVessel(builder, eVessel, oBaseFuel);
+			final IBaseFuel oTravelBaseFuel = modelEntityMap.getOptimiserObjectNullChecked(eVessel.getVesselOrDelegateBaseFuel(), IBaseFuel.class);
+			IBaseFuel oIdleBaseFuel = null;
+			BaseFuel eIdleBaseFuel = eVessel.getVesselOrDelegateIdleBaseFuel();
+			if (eIdleBaseFuel != null) {
+				oIdleBaseFuel = modelEntityMap.getOptimiserObjectNullChecked(eIdleBaseFuel, IBaseFuel.class);
+			} else {
+				oIdleBaseFuel = oTravelBaseFuel;
+			}
+			IBaseFuel oInPortBaseFuel = null;
+			BaseFuel eInPortBaseFuel = eVessel.getVesselOrDelegateInPortBaseFuel();
+			if (eInPortBaseFuel != null) {
+				oInPortBaseFuel = modelEntityMap.getOptimiserObjectNullChecked(eInPortBaseFuel, IBaseFuel.class);
+			} else {
+				oInPortBaseFuel = oTravelBaseFuel;
+			}
+			IBaseFuel oPilotLightBaseFuel = null;
+			BaseFuel ePilotLightBaseFuel = eVessel.getVesselOrDelegatePilotLightBaseFuel();
+			if (ePilotLightBaseFuel != null) {
+				oPilotLightBaseFuel = modelEntityMap.getOptimiserObjectNullChecked(ePilotLightBaseFuel, IBaseFuel.class);
+			} else {
+				oPilotLightBaseFuel = oTravelBaseFuel;
+			}
+
+			final IVessel oVessel = TransformerHelper.buildIVessel(builder, eVessel, oTravelBaseFuel, oIdleBaseFuel, oInPortBaseFuel, oPilotLightBaseFuel);
 
 			/*
 			 * set up inaccessible ports by applying resource allocation constraints
