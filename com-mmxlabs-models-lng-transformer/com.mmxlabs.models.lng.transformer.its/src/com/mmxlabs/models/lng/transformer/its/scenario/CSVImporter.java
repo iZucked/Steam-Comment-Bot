@@ -208,6 +208,7 @@ public class CSVImporter {
 		scenarioModel.setCargoModel((CargoModel) importSubModel(importerRegistry, context, dataMap, CargoPackage.eINSTANCE.getCargoModel()));
 		// scenarioModel.setAssignmentModel((AssignmentModel) importSubModel(importerRegistry, context, dataMap, AssignmentPackage.eINSTANCE.getAssignmentModel()));
 		scenarioModel.setScheduleModel((ScheduleModel) importSubModel(importerRegistry, context, dataMap, SchedulePackage.eINSTANCE.getScheduleModel()));
+		scenarioModel.setAnalyticsModel(((AnalyticsModel) importSubModel(importerRegistry, context, dataMap, AnalyticsPackage.eINSTANCE.getAnalyticsModel())));
 
 		final LNGReferenceModel referenceModel = LNGScenarioFactory.eINSTANCE.createLNGReferenceModel();
 		scenarioModel.setReferenceModel(referenceModel);
@@ -219,7 +220,6 @@ public class CSVImporter {
 		referenceModel.setCommercialModel((CommercialModel) importSubModel(importerRegistry, context, dataMap, CommercialPackage.eINSTANCE.getCommercialModel()));
 		referenceModel.setSpotMarketsModel((SpotMarketsModel) importSubModel(importerRegistry, context, dataMap, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel()));
 		// scenarioModel.setParametersModel((ParametersModel) importSubModel(importerRegistry, context, dataMap, ParametersPackage.eINSTANCE.getParametersModel()));
-		referenceModel.setAnalyticsModel(((AnalyticsModel) importSubModel(importerRegistry, context, dataMap, AnalyticsPackage.eINSTANCE.getAnalyticsModel())));
 
 		importExtraModels(scenarioModel, importerRegistry, context, dataMap);
 
