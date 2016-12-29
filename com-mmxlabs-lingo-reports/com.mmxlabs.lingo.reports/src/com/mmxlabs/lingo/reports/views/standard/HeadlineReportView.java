@@ -159,9 +159,9 @@ public class HeadlineReportView extends ViewPart {
 					RowData pPinnedData = null;
 					final List<Object> rowElements = new LinkedList<>();
 					if (pinned != null) {
-						final ScheduleModel scheduleModel = pinned.getTypedResult(ScheduleModel.class);
-						if (scheduleModel != null) {
-							final Schedule schedule = scheduleModel.getSchedule();
+						final ScheduleModel other_scheduleModel = pinned.getTypedResult(ScheduleModel.class);
+						if (other_scheduleModel != null) {
+							final Schedule schedule = other_scheduleModel.getSchedule();
 							if (schedule != null) {
 								pPinnedData = transformer.transform(schedule, pinned);
 							}
@@ -169,14 +169,14 @@ public class HeadlineReportView extends ViewPart {
 					}
 
 					for (final ScenarioResult other : others) {
-						final ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
-						if (scheduleModel != null) {
-							final Schedule schedule = scheduleModel.getSchedule();
+						final ScheduleModel other_scheduleModel = other.getTypedResult(ScheduleModel.class);
+						if (other_scheduleModel != null) {
+							final Schedule schedule = other_scheduleModel.getSchedule();
 							if (schedule != null) {
 								if (pPinnedData != null) {
 									rowElements.add(transformer.transform(schedule, other));
 								} else {
-									if (scheduleModel != null && schedule == scheduleModel.getSchedule()) {
+									if (HeadlineReportView.this.scheduleModel != null && schedule == HeadlineReportView.this.scheduleModel.getSchedule()) {
 										rowElements.add(transformer.transform(schedule, other));
 									}
 								}
