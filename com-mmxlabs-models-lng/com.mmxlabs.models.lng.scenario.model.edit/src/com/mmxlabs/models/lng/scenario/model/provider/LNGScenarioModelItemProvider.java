@@ -147,7 +147,7 @@ public class LNGScenarioModelItemProvider
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ActualsModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings());
-			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_OptionModels());
+			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AnalyticsModel());
 		}
 		return childrenFeatures;
 	}
@@ -212,7 +212,7 @@ public class LNGScenarioModelItemProvider
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ACTUALS_MODEL:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS:
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__OPTION_MODELS:
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -257,8 +257,8 @@ public class LNGScenarioModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_OptionModels(),
-				 AnalyticsFactory.eINSTANCE.createOptionAnalysisModel()));
+				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AnalyticsModel(),
+				 AnalyticsFactory.eINSTANCE.createAnalyticsModel()));
 	}
 
 }

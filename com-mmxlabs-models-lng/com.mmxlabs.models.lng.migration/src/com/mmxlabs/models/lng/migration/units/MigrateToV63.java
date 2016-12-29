@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.migration.units;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
@@ -35,11 +34,19 @@ public class MigrateToV63 extends AbstractMigrationUnit {
 		final List<EObjectWrapper> availabilities = cargoModel.getRefAsList("vesselAvailabilities");
 
 		// Consumer to update the set the fleet flag by default
-		final Consumer<EObjectWrapper> availabilityUpdater = (va) -> {
-			va.setAttrib("fleet", true);
-		};
 		if (availabilities != null) {
-			availabilities.forEach(availabilityUpdater);
+			availabilities.forEach(va -> va.setAttrib("fleet", true));
+		}
+
+		// Move any existing analytics models.
+		final EObjectWrapper referenceModel = model.getRef("referenceModel");
+		if (referenceModel != null) {
+			final EObjectWrapper analysisModel = referenceModel.getRef("analyticsModel");
+			if (analysisModel != null) {
+				model.setRef("analyticsModel", analysisModel);
+				// Should have been cleared by above call....
+				referenceModel.unsetFeature("analyticsModel");
+			}
 		}
 	}
 }

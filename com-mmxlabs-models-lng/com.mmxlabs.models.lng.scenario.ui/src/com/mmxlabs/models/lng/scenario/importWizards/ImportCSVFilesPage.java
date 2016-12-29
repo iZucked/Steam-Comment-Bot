@@ -437,7 +437,7 @@ public class ImportCSVFilesPage extends WizardPage {
 		} else if (subModel instanceof SpotMarketsModel) {
 			referenceModel.setSpotMarketsModel((SpotMarketsModel) subModel);
 		} else if (subModel instanceof AnalyticsModel) {
-			referenceModel.setAnalyticsModel((AnalyticsModel) subModel);
+			scenarioModel.setAnalyticsModel((AnalyticsModel) subModel);
 		} else if (subModel instanceof CargoModel) {
 			scenarioModel.setCargoModel((CargoModel) subModel);
 		} else if (subModel instanceof ActualsModel) {

@@ -11,6 +11,8 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.models.lng.analytics.AnalyticsModel;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
@@ -73,7 +75,8 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 				if (target == source) {
 					final OptionAnalysisModel copyModel = EcoreUtil.copy(sourceModel);
 					final LNGScenarioModel targetModel = (LNGScenarioModel) sourceReference.getInstance();
-					targetModel.getOptionModels().add(copyModel);
+					AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(targetModel);
+					analyticsModel.getOptionModels().add(copyModel);
 					target.setDirty(true);
 					return true;
 				} else {
@@ -202,7 +205,9 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 						// targetModel.getOptionModels().add(copyModel);
 
 						final EditingDomain domain = (EditingDomain) target.getAdapters().get(EditingDomain.class);
-						domain.getCommandStack().execute(AddCommand.create(domain, targetModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_OptionModels(), copyModel));
+						AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(targetModel);
+
+						domain.getCommandStack().execute(AddCommand.create(domain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels(), copyModel));
 
 						return true;
 					}

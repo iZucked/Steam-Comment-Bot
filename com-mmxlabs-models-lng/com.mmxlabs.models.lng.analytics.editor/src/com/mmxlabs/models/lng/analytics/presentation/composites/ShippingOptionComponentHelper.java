@@ -9,6 +9,7 @@ package com.mmxlabs.models.lng.analytics.presentation.composites;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 
 import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 

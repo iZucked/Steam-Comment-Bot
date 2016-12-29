@@ -84,7 +84,6 @@ public class LNGReferenceModelItemProvider extends UUIDObjectItemProvider {
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_PricingModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_CommercialModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_SpotMarketsModel());
-			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_AnalyticsModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_CostModel());
 		}
 		return childrenFeatures;
@@ -146,7 +145,6 @@ public class LNGReferenceModelItemProvider extends UUIDObjectItemProvider {
 			case LNGScenarioPackage.LNG_REFERENCE_MODEL__PRICING_MODEL:
 			case LNGScenarioPackage.LNG_REFERENCE_MODEL__COMMERCIAL_MODEL:
 			case LNGScenarioPackage.LNG_REFERENCE_MODEL__SPOT_MARKETS_MODEL:
-			case LNGScenarioPackage.LNG_REFERENCE_MODEL__ANALYTICS_MODEL:
 			case LNGScenarioPackage.LNG_REFERENCE_MODEL__COST_MODEL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -189,11 +187,6 @@ public class LNGReferenceModelItemProvider extends UUIDObjectItemProvider {
 			(createChildParameter
 				(LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_SpotMarketsModel(),
 				 SpotMarketsFactory.eINSTANCE.createSpotMarketsModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_AnalyticsModel(),
-				 AnalyticsFactory.eINSTANCE.createAnalyticsModel()));
 
 		newChildDescriptors.add
 			(createChildParameter

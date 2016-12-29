@@ -18,6 +18,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.util.TriConsumer;
+import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
@@ -154,7 +155,8 @@ public class BaseCaseEvaluator {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 			final EcoreUtil.Copier copier = new Copier();
 			final LNGScenarioModel clone = (LNGScenarioModel) copier.copy(lngScenarioModel);
-			clone.getOptionModels().clear();
+			final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(clone);
+			analyticsModel.getOptionModels().clear();
 			final OptionAnalysisModel clonedModel = (OptionAnalysisModel) copier.copy(model);
 			final BaseCase clonedBaseCase;
 			if (model.getBaseCase() == baseCase) {
@@ -183,7 +185,8 @@ public class BaseCaseEvaluator {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 			final EcoreUtil.Copier copier = new Copier();
 			final LNGScenarioModel clone = (LNGScenarioModel) copier.copy(lngScenarioModel);
-			clone.getOptionModels().clear();
+			final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(clone);
+			analyticsModel.getOptionModels().clear();
 			final OptionAnalysisModel clonedModel = (OptionAnalysisModel) copier.copy(model);
 			copier.copyReferences();
 			final IMapperClass mapper = new Mapper(copier);
@@ -636,7 +639,7 @@ public class BaseCaseEvaluator {
 		clone.getCargoModel().getVesselAvailabilities().clear();
 
 		clone.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().clear();
-		
+
 		for (final LoadSlot loadSlot : keepLoads) {
 			loadSlot.setCargo(null);
 		}
