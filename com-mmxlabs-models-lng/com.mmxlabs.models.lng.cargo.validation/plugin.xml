@@ -566,24 +566,6 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.cargo.validation.VesselUniqueAvailabilityConstraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.VesselUniqueAvailabilityConstraint"
-                  lang="Java"
-                  mode="Batch"
-                  name="Vessel Availability Is Unique"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  {0}
-               </message>
-               <description>
-                  A vessel cannot be given more than one availability for the same portfolio.
-               </description>
-               <target
-                     class="VesselAvailability">
-               </target>
-            </constraint>
-            <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.MultipleVesselAvailabilitiesConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.MultipleVesselAvailabilitiesConstraint"
                   lang="Java"
