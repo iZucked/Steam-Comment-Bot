@@ -26,6 +26,7 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -50,6 +51,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.analytics.AnalysisResultRow;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
+import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
@@ -62,6 +64,7 @@ import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
@@ -382,7 +385,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				setModel(model);
 			} else if (rootObject instanceof LNGScenarioModel) {
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-				if (lngScenarioModel.getOptionModels().isEmpty()) {
+				final @NonNull AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(lngScenarioModel);
+
+				if (analyticsModel.getOptionModels().isEmpty()) {
 					setModel(null);
 					createNewLink = new Link(mainComposite.getParent(), SWT.NONE);
 					createNewLink.addListener(SWT.Selection, new Listener() {
@@ -395,7 +400,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 							model.setPartialCase(AnalyticsFactory.eINSTANCE.createPartialCase());
 
 							final CompoundCommand cmd = new CompoundCommand("Create sandbox");
-							cmd.append(AddCommand.create(getEditingDomain(), rootObject, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_OptionModels(), Collections.singletonList(model)));
+							cmd.append(AddCommand.create(getEditingDomain(), analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels(), Collections.singletonList(model)));
 							getEditingDomain().getCommandStack().execute(cmd);
 
 							doDisplayScenarioInstance(getScenarioInstance(), getRootObject(), model);
@@ -423,7 +428,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				} else {
 					WeakReference<OptionAnalysisModel> root = getCurrentRoot();
 					if (root == null || (root != null && root.get() == null)) {
-						setCurrentRoot(new WeakReference<OptionAnalysisModel>(lngScenarioModel.getOptionModels().get(0)));
+						setCurrentRoot(new WeakReference<OptionAnalysisModel>(analyticsModel.getOptionModels().get(0)));
 					}
 					WeakReference<OptionAnalysisModel> modelToUse = navigationHistory.get(getCurrentRoot().get());
 					setModel(modelToUse == null || (modelToUse != null && modelToUse.get() == null) ? rootOptionsModel : modelToUse.get());
@@ -449,7 +454,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private final EContentAdapter deletedOptionModelAdapter = new EContentAdapter() {
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if (notification.getFeature() == LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_OptionModels()) {
+			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels()) {
 				if (notification.getEventType() == Notification.REMOVE) {
 					if (model != null && notification.getOldValue() == model) {
 						displayScenarioInstance(getScenarioInstance());

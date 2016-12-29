@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -113,6 +114,16 @@ public final class ScenarioModelUtil {
 			throw new IllegalArgumentException("Invalid scenario model");
 		}
 		return costModel;
+	}
+	
+	@NonNull
+	public static AnalyticsModel getAnalyticsModel(@NonNull final LNGScenarioModel lngScenarioModel) {
+	 
+		final AnalyticsModel analyticsModel = lngScenarioModel.getAnalyticsModel();
+		if (analyticsModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		return analyticsModel;
 	}
 
 	@NonNull

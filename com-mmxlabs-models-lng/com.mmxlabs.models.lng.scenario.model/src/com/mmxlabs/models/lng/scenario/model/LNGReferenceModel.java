@@ -29,7 +29,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGReferenceModel#getPricingModel <em>Pricing Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGReferenceModel#getCommercialModel <em>Commercial Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGReferenceModel#getSpotMarketsModel <em>Spot Markets Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGReferenceModel#getAnalyticsModel <em>Analytics Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGReferenceModel#getCostModel <em>Cost Model</em>}</li>
  * </ul>
  *
@@ -167,32 +166,6 @@ public interface LNGReferenceModel extends UUIDObject {
 	 * @generated
 	 */
 	void setSpotMarketsModel(SpotMarketsModel value);
-
-	/**
-	 * Returns the value of the '<em><b>Analytics Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Analytics Model</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Analytics Model</em>' containment reference.
-	 * @see #setAnalyticsModel(AnalyticsModel)
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGReferenceModel_AnalyticsModel()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	AnalyticsModel getAnalyticsModel();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGReferenceModel#getAnalyticsModel <em>Analytics Model</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Analytics Model</em>' containment reference.
-	 * @see #getAnalyticsModel()
-	 * @generated
-	 */
-	void setAnalyticsModel(AnalyticsModel value);
 
 	/**
 	 * Returns the value of the '<em><b>Cost Model</b></em>' containment reference.

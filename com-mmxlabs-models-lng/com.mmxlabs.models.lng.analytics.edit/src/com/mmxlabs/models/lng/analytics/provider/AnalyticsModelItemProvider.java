@@ -91,6 +91,7 @@ public class AnalyticsModelItemProvider
 			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__ROUND_TRIP_MATRICES);
 			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__SHIPPING_COST_PLANS);
 			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__CARGO_SANDBOXES);
+			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTION_MODELS);
 		}
 		return childrenFeatures;
 	}
@@ -148,6 +149,7 @@ public class AnalyticsModelItemProvider
 			case AnalyticsPackage.ANALYTICS_MODEL__ROUND_TRIP_MATRICES:
 			case AnalyticsPackage.ANALYTICS_MODEL__SHIPPING_COST_PLANS:
 			case AnalyticsPackage.ANALYTICS_MODEL__CARGO_SANDBOXES:
+			case AnalyticsPackage.ANALYTICS_MODEL__OPTION_MODELS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -179,6 +181,11 @@ public class AnalyticsModelItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.ANALYTICS_MODEL__CARGO_SANDBOXES,
 				 AnalyticsFactory.eINSTANCE.createCargoSandbox()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTION_MODELS,
+				 AnalyticsFactory.eINSTANCE.createOptionAnalysisModel()));
 	}
 
 }

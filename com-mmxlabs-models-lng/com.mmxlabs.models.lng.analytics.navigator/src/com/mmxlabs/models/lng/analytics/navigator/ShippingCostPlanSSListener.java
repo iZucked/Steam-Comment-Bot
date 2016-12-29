@@ -62,7 +62,7 @@ public class ShippingCostPlanSSListener extends ScenarioServiceListener {
 		 */
 		private void processScenario() {
 			final LNGScenarioModel rootObject = (LNGScenarioModel) scenarioInstance.getInstance();
-			analyticsModel = rootObject.getReferenceModel().getAnalyticsModel();
+			analyticsModel = rootObject.getAnalyticsModel();
 
 			if (analyticsModel != null) {
 				for (final ShippingCostPlan plan : analyticsModel.getShippingCostPlans()) {
@@ -79,21 +79,22 @@ public class ShippingCostPlanSSListener extends ScenarioServiceListener {
 		public void dispose() {
 
 			manager.dispose();
-			if (analyticsModel != null ) {
-			analyticsModel.eAdapters().remove(ModelAdapter.this);
+			if (analyticsModel != null) {
+				analyticsModel.eAdapters().remove(ModelAdapter.this);
 
-			for (final ShippingCostPlan plan : analyticsModel.getShippingCostPlans()) {
-				removeFragment(plan);
-			}
-			for (final CargoSandbox box : analyticsModel.getCargoSandboxes()) {
-				removeFragment(box);
-			}
+				for (final ShippingCostPlan plan : analyticsModel.getShippingCostPlans()) {
+					removeFragment(plan);
+				}
+				for (final CargoSandbox box : analyticsModel.getCargoSandboxes()) {
+					removeFragment(box);
+				}
 
-			// Safety check - previous step should have removed all the fragments, but just in case, remove anything left over.
-			for (final EObject plan : new HashSet<EObject>(objectToFragmentMap.keySet())) {
-				removeFragment(plan);
+				// Safety check - previous step should have removed all the fragments, but just in case, remove anything left over.
+				for (final EObject plan : new HashSet<EObject>(objectToFragmentMap.keySet())) {
+					removeFragment(plan);
+				}
 			}
-		}}
+		}
 
 		@Override
 		protected void missedNotifications(final List<Notification> missed) {

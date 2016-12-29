@@ -170,7 +170,7 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 		subModels.add(scenarioModel.getReferenceModel().getCostModel());
 		subModels.add(scenarioModel.getReferenceModel().getCommercialModel());
 		subModels.add(scenarioModel.getReferenceModel().getSpotMarketsModel());
-		subModels.add(scenarioModel.getReferenceModel().getAnalyticsModel());
+		subModels.add(scenarioModel.getAnalyticsModel());
 
 		subModels.add(scenarioModel.getCargoModel());
 //		subModels.add(scenarioModel.getActualsModel());

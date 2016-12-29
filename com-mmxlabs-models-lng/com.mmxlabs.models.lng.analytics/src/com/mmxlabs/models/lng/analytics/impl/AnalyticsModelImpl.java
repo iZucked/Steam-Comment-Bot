@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.CargoSandbox;
+import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
 import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
@@ -33,6 +34,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getSelectedMatrix <em>Selected Matrix</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getShippingCostPlans <em>Shipping Cost Plans</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getCargoSandboxes <em>Cargo Sandboxes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getOptionModels <em>Option Models</em>}</li>
  * </ul>
  *
  * @generated
@@ -77,6 +79,16 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * @ordered
 	 */
 	protected EList<CargoSandbox> cargoSandboxes;
+
+	/**
+	 * The cached value of the '{@link #getOptionModels() <em>Option Models</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOptionModels()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<OptionAnalysisModel> optionModels;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -181,6 +193,18 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<OptionAnalysisModel> getOptionModels() {
+		if (optionModels == null) {
+			optionModels = new EObjectContainmentEList<OptionAnalysisModel>(OptionAnalysisModel.class, this, AnalyticsPackage.ANALYTICS_MODEL__OPTION_MODELS);
+		}
+		return optionModels;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -190,6 +214,8 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				return ((InternalEList<?>)getShippingCostPlans()).basicRemove(otherEnd, msgs);
 			case AnalyticsPackage.ANALYTICS_MODEL__CARGO_SANDBOXES:
 				return ((InternalEList<?>)getCargoSandboxes()).basicRemove(otherEnd, msgs);
+			case AnalyticsPackage.ANALYTICS_MODEL__OPTION_MODELS:
+				return ((InternalEList<?>)getOptionModels()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -211,6 +237,8 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				return getShippingCostPlans();
 			case AnalyticsPackage.ANALYTICS_MODEL__CARGO_SANDBOXES:
 				return getCargoSandboxes();
+			case AnalyticsPackage.ANALYTICS_MODEL__OPTION_MODELS:
+				return getOptionModels();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -239,6 +267,10 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				getCargoSandboxes().clear();
 				getCargoSandboxes().addAll((Collection<? extends CargoSandbox>)newValue);
 				return;
+			case AnalyticsPackage.ANALYTICS_MODEL__OPTION_MODELS:
+				getOptionModels().clear();
+				getOptionModels().addAll((Collection<? extends OptionAnalysisModel>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -263,6 +295,9 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 			case AnalyticsPackage.ANALYTICS_MODEL__CARGO_SANDBOXES:
 				getCargoSandboxes().clear();
 				return;
+			case AnalyticsPackage.ANALYTICS_MODEL__OPTION_MODELS:
+				getOptionModels().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -283,6 +318,8 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				return shippingCostPlans != null && !shippingCostPlans.isEmpty();
 			case AnalyticsPackage.ANALYTICS_MODEL__CARGO_SANDBOXES:
 				return cargoSandboxes != null && !cargoSandboxes.isEmpty();
+			case AnalyticsPackage.ANALYTICS_MODEL__OPTION_MODELS:
+				return optionModels != null && !optionModels.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

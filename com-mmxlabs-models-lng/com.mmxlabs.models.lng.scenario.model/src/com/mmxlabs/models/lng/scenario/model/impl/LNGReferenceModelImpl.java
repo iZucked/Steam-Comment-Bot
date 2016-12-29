@@ -36,7 +36,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGReferenceModelImpl#getPricingModel <em>Pricing Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGReferenceModelImpl#getCommercialModel <em>Commercial Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGReferenceModelImpl#getSpotMarketsModel <em>Spot Markets Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGReferenceModelImpl#getAnalyticsModel <em>Analytics Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGReferenceModelImpl#getCostModel <em>Cost Model</em>}</li>
  * </ul>
  *
@@ -92,16 +91,6 @@ public class LNGReferenceModelImpl extends UUIDObjectImpl implements LNGReferenc
 	 * @ordered
 	 */
 	protected SpotMarketsModel spotMarketsModel;
-
-	/**
-	 * The cached value of the '{@link #getAnalyticsModel() <em>Analytics Model</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAnalyticsModel()
-	 * @generated
-	 * @ordered
-	 */
-	protected AnalyticsModel analyticsModel;
 
 	/**
 	 * The cached value of the '{@link #getCostModel() <em>Cost Model</em>}' containment reference.
@@ -467,72 +456,6 @@ public class LNGReferenceModelImpl extends UUIDObjectImpl implements LNGReferenc
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AnalyticsModel getAnalyticsModel() {
-		if (analyticsModel != null && analyticsModel.eIsProxy()) {
-			InternalEObject oldAnalyticsModel = (InternalEObject)analyticsModel;
-			analyticsModel = (AnalyticsModel)eResolveProxy(oldAnalyticsModel);
-			if (analyticsModel != oldAnalyticsModel) {
-				InternalEObject newAnalyticsModel = (InternalEObject)analyticsModel;
-				NotificationChain msgs = oldAnalyticsModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_REFERENCE_MODEL__ANALYTICS_MODEL, null, null);
-				if (newAnalyticsModel.eInternalContainer() == null) {
-					msgs = newAnalyticsModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_REFERENCE_MODEL__ANALYTICS_MODEL, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_REFERENCE_MODEL__ANALYTICS_MODEL, oldAnalyticsModel, analyticsModel));
-			}
-		}
-		return analyticsModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AnalyticsModel basicGetAnalyticsModel() {
-		return analyticsModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetAnalyticsModel(AnalyticsModel newAnalyticsModel, NotificationChain msgs) {
-		AnalyticsModel oldAnalyticsModel = analyticsModel;
-		analyticsModel = newAnalyticsModel;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_REFERENCE_MODEL__ANALYTICS_MODEL, oldAnalyticsModel, newAnalyticsModel);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setAnalyticsModel(AnalyticsModel newAnalyticsModel) {
-		if (newAnalyticsModel != analyticsModel) {
-			NotificationChain msgs = null;
-			if (analyticsModel != null)
-				msgs = ((InternalEObject)analyticsModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_REFERENCE_MODEL__ANALYTICS_MODEL, null, msgs);
-			if (newAnalyticsModel != null)
-				msgs = ((InternalEObject)newAnalyticsModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_REFERENCE_MODEL__ANALYTICS_MODEL, null, msgs);
-			msgs = basicSetAnalyticsModel(newAnalyticsModel, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_REFERENCE_MODEL__ANALYTICS_MODEL, newAnalyticsModel, newAnalyticsModel));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public CostModel getCostModel() {
 		if (costModel != null && costModel.eIsProxy()) {
 			InternalEObject oldCostModel = (InternalEObject)costModel;
@@ -612,8 +535,6 @@ public class LNGReferenceModelImpl extends UUIDObjectImpl implements LNGReferenc
 				return basicSetCommercialModel(null, msgs);
 			case LNGScenarioPackage.LNG_REFERENCE_MODEL__SPOT_MARKETS_MODEL:
 				return basicSetSpotMarketsModel(null, msgs);
-			case LNGScenarioPackage.LNG_REFERENCE_MODEL__ANALYTICS_MODEL:
-				return basicSetAnalyticsModel(null, msgs);
 			case LNGScenarioPackage.LNG_REFERENCE_MODEL__COST_MODEL:
 				return basicSetCostModel(null, msgs);
 		}
@@ -643,9 +564,6 @@ public class LNGReferenceModelImpl extends UUIDObjectImpl implements LNGReferenc
 			case LNGScenarioPackage.LNG_REFERENCE_MODEL__SPOT_MARKETS_MODEL:
 				if (resolve) return getSpotMarketsModel();
 				return basicGetSpotMarketsModel();
-			case LNGScenarioPackage.LNG_REFERENCE_MODEL__ANALYTICS_MODEL:
-				if (resolve) return getAnalyticsModel();
-				return basicGetAnalyticsModel();
 			case LNGScenarioPackage.LNG_REFERENCE_MODEL__COST_MODEL:
 				if (resolve) return getCostModel();
 				return basicGetCostModel();
@@ -675,9 +593,6 @@ public class LNGReferenceModelImpl extends UUIDObjectImpl implements LNGReferenc
 				return;
 			case LNGScenarioPackage.LNG_REFERENCE_MODEL__SPOT_MARKETS_MODEL:
 				setSpotMarketsModel((SpotMarketsModel)newValue);
-				return;
-			case LNGScenarioPackage.LNG_REFERENCE_MODEL__ANALYTICS_MODEL:
-				setAnalyticsModel((AnalyticsModel)newValue);
 				return;
 			case LNGScenarioPackage.LNG_REFERENCE_MODEL__COST_MODEL:
 				setCostModel((CostModel)newValue);
@@ -709,9 +624,6 @@ public class LNGReferenceModelImpl extends UUIDObjectImpl implements LNGReferenc
 			case LNGScenarioPackage.LNG_REFERENCE_MODEL__SPOT_MARKETS_MODEL:
 				setSpotMarketsModel((SpotMarketsModel)null);
 				return;
-			case LNGScenarioPackage.LNG_REFERENCE_MODEL__ANALYTICS_MODEL:
-				setAnalyticsModel((AnalyticsModel)null);
-				return;
 			case LNGScenarioPackage.LNG_REFERENCE_MODEL__COST_MODEL:
 				setCostModel((CostModel)null);
 				return;
@@ -737,8 +649,6 @@ public class LNGReferenceModelImpl extends UUIDObjectImpl implements LNGReferenc
 				return commercialModel != null;
 			case LNGScenarioPackage.LNG_REFERENCE_MODEL__SPOT_MARKETS_MODEL:
 				return spotMarketsModel != null;
-			case LNGScenarioPackage.LNG_REFERENCE_MODEL__ANALYTICS_MODEL:
-				return analyticsModel != null;
 			case LNGScenarioPackage.LNG_REFERENCE_MODEL__COST_MODEL:
 				return costModel != null;
 		}

@@ -10,6 +10,7 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -28,8 +29,12 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
+import com.mmxlabs.models.lng.analytics.AnalyticsModel;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.rcp.common.editors.IPartGotoTarget;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -54,6 +59,12 @@ public class CreateSandboxHandler extends AbstractHandler {
 
 					try (ModelReference reference = instance.getReference("CreateSandboxHandler")) {
 						final EObject rootObject = reference.getInstance();
+						if (!(rootObject instanceof LNGScenarioModel)) {
+							continue;
+						}
+						
+						final @NonNull AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel((LNGScenarioModel) rootObject);
+
 						final EditingDomain domain = (EditingDomain) instance.getAdapters().get(EditingDomain.class);
 						final Display display = PlatformUI.getWorkbench().getDisplay();
 
@@ -84,7 +95,7 @@ public class CreateSandboxHandler extends AbstractHandler {
 							model.setPartialCase(AnalyticsFactory.eINSTANCE.createPartialCase());
 
 							final CompoundCommand cmd = new CompoundCommand("Create sandbox");
-							cmd.append(AddCommand.create(domain, rootObject, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_OptionModels(), Collections.singletonList(model)));
+							cmd.append(AddCommand.create(domain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels(), Collections.singletonList(model)));
 							domain.getCommandStack().execute(cmd);
 
 							final IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();

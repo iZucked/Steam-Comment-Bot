@@ -20,10 +20,12 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.widgets.Display;
 
+import com.mmxlabs.models.lng.analytics.AnalyticsModel;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.scenario.service.IScenarioService;
@@ -62,12 +64,12 @@ public class OptionAnalysisModelSSListener extends ScenarioServiceListener {
 		 */
 		private void processScenario() {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) scenarioInstance.getInstance();
-
-			for (final OptionAnalysisModel plan : scenarioModel.getOptionModels()) {
+			AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
+			for (final OptionAnalysisModel plan : analyticsModel.getOptionModels()) {
 				createFragment(plan);
 			}
 
-			scenarioModel.eAdapters().add(ModelAdapter.this);
+			analyticsModel.eAdapters().add(ModelAdapter.this);
 			this.scenarioModel = scenarioModel;
 		}
 
@@ -75,9 +77,9 @@ public class OptionAnalysisModelSSListener extends ScenarioServiceListener {
 
 			manager.dispose();
 			if (scenarioModel != null) {
-				scenarioModel.eAdapters().remove(ModelAdapter.this);
-
-				for (final OptionAnalysisModel plan : scenarioModel.getOptionModels()) {
+				AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
+				analyticsModel.eAdapters().remove(ModelAdapter.this);
+				for (final OptionAnalysisModel plan : analyticsModel.getOptionModels()) {
 					removeFragment(plan);
 				}
 
@@ -85,7 +87,7 @@ public class OptionAnalysisModelSSListener extends ScenarioServiceListener {
 				for (final EObject plan : new HashSet<EObject>(objectToFragmentMap.keySet())) {
 					removeFragment(plan);
 				}
-				
+
 				scenarioModel = null;
 			}
 		}
@@ -108,7 +110,7 @@ public class OptionAnalysisModelSSListener extends ScenarioServiceListener {
 				return;
 			}
 
-			if (notification.getFeature() == LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_OptionModels()) {
+			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels()) {
 				if (notification.getEventType() == Notification.ADD) {
 					final EObject eObj = (EObject) notification.getNewValue();
 					createFragment(eObj);
