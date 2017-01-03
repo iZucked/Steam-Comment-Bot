@@ -242,6 +242,11 @@ public abstract class AbstractVerticalReportVisualiser {
 		final LocalDate eventStart = getLocalDateFor(visit.getStart());
 		final LocalDate eventEnd = getLocalDateFor(visit.getEnd());
 
+		// This check fixes empty FOB/DES column we had.
+		if (eventStart.equals(eventEnd)) {
+			return !eventStart.equals(day);
+		}
+		
 		return (nextDay.isBefore(eventStart) || (eventEnd.isAfter(day) == false));
 	}
 
