@@ -5,7 +5,7 @@
     All rights reserved.
 
 -->
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" deactivate="dispose" immediate="true" name="com.mmxlabs.lingo.reports.services.ScenarioComparisonService">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" deactivate="dispose" immediate="false" name="com.mmxlabs.lingo.reports.services.ScenarioComparisonService">
    <implementation class="com.mmxlabs.lingo.reports.services.ScenarioComparisonService"/>
    <service>
       <provide interface="com.mmxlabs.lingo.reports.services.ScenarioComparisonService"/>
