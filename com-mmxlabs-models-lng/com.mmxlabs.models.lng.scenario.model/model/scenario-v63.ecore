@@ -13,6 +13,8 @@
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="promptPeriodEnd" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"
         unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schedulingEndDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"
+        unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="referenceModel" eType="#//LNGReferenceModel"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="userSettings" eType="ecore:EClass ../../com.mmxlabs.models.lng.parameters/model/parameters.ecore#//UserSettings"
