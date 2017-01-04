@@ -69,6 +69,16 @@ public abstract class EMFViewerPane implements IPropertyListener, Listener {
 	protected ToolBar systemBar;
 	protected ViewForm control;
 
+	protected int minToolbarHeight = SWT.DEFAULT;
+
+	public int getMinToolbarHeight() {
+		return minToolbarHeight;
+	}
+
+	public void setMinToolbarHeight(int minToolbarHeight) {
+		this.minToolbarHeight = minToolbarHeight;
+	}
+
 	protected MouseListener mouseListener = new MouseAdapter() {
 		@Override
 		public void mouseDown(MouseEvent e) {
@@ -245,7 +255,6 @@ public abstract class EMFViewerPane implements IPropertyListener, Listener {
 		}
 		@Override
 		public void dispose() {
-			// TODO Auto-generated method stub
 			super.dispose();
 		}
 	}
@@ -301,7 +310,6 @@ public abstract class EMFViewerPane implements IPropertyListener, Listener {
 					}
 				}
 			});
-
 			updateTitles();
 			control.setTopLeft(titleLabel);
 
@@ -309,7 +317,25 @@ public abstract class EMFViewerPane implements IPropertyListener, Listener {
 			// getViewPart().addPropertyListener(this);
 
 			// Action bar.
-			actionBar = new ToolBar(control, SWT.FLAT | SWT.WRAP);
+			actionBar = new ToolBar(control, SWT.FLAT | SWT.WRAP) {
+
+				@Override
+				protected void checkSubclass() {
+
+				}
+
+				@Override
+				public Point computeSize(int wHint, int hHint) {
+					Point p = super.computeSize(wHint, hHint);
+					return new Point(p.x, Math.max(getMinToolbarHeight(), p.y));
+				}
+
+				@Override
+				public Point computeSize(int wHint, int hHint, boolean b) {
+					Point p = super.computeSize(wHint, hHint, b);
+					return new Point(p.x, Math.max(getMinToolbarHeight(), p.y));
+				}
+			};
 			hookFocus(actionBar);
 			control.setTopCenter(actionBar);
 
@@ -353,10 +379,10 @@ public abstract class EMFViewerPane implements IPropertyListener, Listener {
 			pullDownImage.dispose();
 			pullDownImage = null;
 		}
-		
+
 		if (toolBarManager != null) {
 			toolBarManager.dispose();
-//			toolBarManager = null;
+			// toolBarManager = null;
 		}
 	}
 
@@ -484,8 +510,8 @@ public abstract class EMFViewerPane implements IPropertyListener, Listener {
 	private void showTitleLabelMenu(MouseEvent e) {
 		Menu menu = new Menu(titleLabel);
 
-		boolean isMaximized = control.getParent() instanceof SashForm ? ((SashForm) control.getParent()).getMaximizedControl() != null : control.getParent() instanceof CTabFolder
-				&& ((CTabFolder) control.getParent()).getMaximized();
+		boolean isMaximized = control.getParent() instanceof SashForm ? ((SashForm) control.getParent()).getMaximizedControl() != null
+				: control.getParent() instanceof CTabFolder && ((CTabFolder) control.getParent()).getMaximized();
 
 		MenuItem restoreItem = new MenuItem(menu, SWT.NONE);
 		restoreItem.setText(CommonUIPlugin.INSTANCE.getString("_UI_Restore_menu_item"));
