@@ -729,6 +729,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		// set up toolbars
 		final ToolBarManager toolbar = getToolBarManager();
 
+		setMinToolbarHeight(30);
 		promptToolbarEditor = new PromptToolbarEditor("prompt", scenarioEditingLocation.getEditingDomain(), (LNGScenarioModel) scenarioEditingLocation.getRootObject());
 		toolbar.add(promptToolbarEditor);
 
