@@ -29,11 +29,6 @@ import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.Fitness;
-import com.mmxlabs.models.lng.schedule.Fuel;
-import com.mmxlabs.models.lng.schedule.FuelAmount;
-import com.mmxlabs.models.lng.schedule.FuelQuantity;
-import com.mmxlabs.models.lng.schedule.FuelUnit;
-import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -340,10 +335,11 @@ public class AnnotatedSolutionExporter {
 				// this is messy, but we want to be sure stuff is in the right
 				// order or it won't make any sense.
 				Collections.sort(eventsForElement, eventComparator);
+				events.addAll(eventsForElement);
+				eventsForElement.clear();
+				final boolean thisEventIsSequenceEnd = scheduledSlot.getPortType() == PortType.Round_Trip_Cargo_End;
 
-				final boolean thisEventIsload = scheduledSlot.getPortType() == PortType.Load;
-
-				if (isRoundTripSequence && lastEventWasDischarge && thisEventIsload) {
+				if (isRoundTripSequence && thisEventIsSequenceEnd) {
 					if (!events.isEmpty()) {
 
 						// Setup next/prev events.
@@ -371,9 +367,6 @@ public class AnnotatedSolutionExporter {
 						sequences.add(thisSequence);
 					}
 				}
-
-				events.addAll(eventsForElement);
-				eventsForElement.clear();
 
 				lastEventWasDischarge = scheduledSlot.getPortType() == PortType.Discharge;
 			}
